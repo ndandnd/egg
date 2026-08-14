@@ -4,6 +4,7 @@
 #
 #SBATCH --job-name=egg-phase2
 #SBATCH --output=slurm-%x-%A_%a.out
+#SBATCH --mail-type=END,FAIL,REQUEUE
 #SBATCH --requeue
 #SBATCH --array=0-31
 #SBATCH --cpus-per-task=4
