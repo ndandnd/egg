@@ -50,7 +50,7 @@ The most reusable bridge is to treat the EVSP solver as an economic oracle. It c
 
 Luca Deori, Kostas Margellos, and Maria Prandini, "Price of anarchy in electric vehicle charging control games: When Nash equilibria achieve social welfare," *Automatica* 96 (2018), 150-158. DOI: `10.1016/j.automatica.2018.06.043`.
 
-Local source: `lit reviews/1251251.pdf`.
+Local source: `../papers/1251251.pdf`.
 
 ### Application and mathematical mechanism
 
@@ -155,7 +155,7 @@ This would quantify the economic effect of fleet concentration, service coupling
 
 Izabela Zoltowska, "Demand shifting bids in energy auction with non-convexities and transmission constraints," *Energy Economics* 53 (2016), 17-27. DOI: `10.1016/j.eneco.2015.05.016`.
 
-Local source: `lit reviews/1245125.pdf`.
+Local source: `../papers/1245125.pdf`.
 
 ### Clearing model
 
@@ -257,7 +257,7 @@ This creates a minimum-uplift settlement with a certificate that no operationall
 
 Peng Zou, Qixin Chen, Qing Xia, Guannan He, Chongqing Kang, and Antonio J. Conejo, "Pool equilibria including strategic storage," *Applied Energy* 177 (2016), 260-270. DOI: `10.1016/j.apenergy.2016.05.105`.
 
-Local source: `lit reviews/523523.pdf`.
+Local source: `../papers/523523.pdf`.
 
 ### Strategic model
 
@@ -352,7 +352,7 @@ With multiple fleet operators, each operator could offer mutually exclusive duty
 
 Xichen Fang, Hongye Guo, Xian Zhang, Xuanyuan Wang, and Qixin Chen, "An efficient and incentive-compatible market design for energy storage participation," *Applied Energy* 311 (2022), 118731. DOI: `10.1016/j.apenergy.2022.118731`.
 
-Local source: `lit reviews/525.pdf`.
+Local source: `../papers/525.pdf`.
 
 ### Bidding and clearing mechanism
 
@@ -465,7 +465,7 @@ For one fleet treated as a single multidimensional agent, exact VCG remains conc
 
 Z. Wu, F. Guo, J. Polak, and G. Strbac, "Evaluating grid-interactive electric bus operation and demand response with load management tariff," *Applied Energy* 255 (2019), 113798. DOI: `10.1016/j.apenergy.2019.113798`.
 
-Local source: `lit reviews/5.pdf`.
+Local source: `../papers/5.pdf`.
 
 ### Actual method and application
 
@@ -537,7 +537,7 @@ The economic question is then whether prices or payments adequately compensate g
 
 Zhilin Lu, Mingbo Liu, Chong Tang, and Wentian Lu, "Operational scheduling of intercity passenger transportation company participating in energy and reserve markets," *International Journal of Electrical Power & Energy Systems* 125 (2021), 106541. DOI: `10.1016/j.ijepes.2020.106541`.
 
-Local source: `lit reviews/4.pdf`.
+Local source: `../papers/4.pdf`.
 
 ### Actual method and application
 
@@ -621,7 +621,7 @@ The economic gap is not "vehicles move toward high LMPs"; Lu et al. already show
 
 Qi Wang, Chunyi Huang, Chengmin Wang, Kangping Li, and Ning Xie, "Joint optimization of bidding and pricing strategy for electric vehicle aggregator considering multi-agent interactions," *Applied Energy* 360 (2024), 122810. DOI: `10.1016/j.apenergy.2024.122810`.
 
-Local source: `lit reviews/3.pdf`.
+Local source: `../papers/3.pdf`.
 
 ### Actual method and application
 
@@ -696,7 +696,7 @@ The contribution must be certified combinatorial response or learning of its swi
 
 Konstantinos D. Afentoulis and Stylianos I. Vagropoulos, "Are current demand response baseline designs suitable for electric vehicles? Policy insights from the independent aggregation business model," *Applied Energy* 396 (2025), 126281. DOI: `10.1016/j.apenergy.2025.126281`.
 
-Local source: `lit reviews/11.pdf`.
+Local source: `../papers/11.pdf`.
 
 ### Actual method and application
 

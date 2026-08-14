@@ -1,5 +1,16 @@
 # Price-Maker EV Fleet Research Handoff
 
+> **HISTORICAL DOCUMENT (frozen 2026-08-14, banner added later the same
+> day).** This handoff described the repository state *before* the research
+> rounds of 2026-08-14 and the subsequent restructure. Read it for provenance
+> and for the Section 4 audit tables; for current state start at the root
+> `README.md`. Path mapping after the restructure: the supplied article
+> files referred to below as `lit reviews/` are committed under
+> `ref/papers/`; the literature documents this handoff asked to create exist
+> under `ref/`; the `context/` archive lives at `ref/context/`. Statements
+> such as "the remote has no commits" and "these files are local and
+> uncommitted" are historical. The body below is preserved verbatim.
+
 Date: 2026-08-14  
 Repository: `https://github.com/ndandnd/egg`  
 Local root: `/Users/nathan.cho/Documents/egg`

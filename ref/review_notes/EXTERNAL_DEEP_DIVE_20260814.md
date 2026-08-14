@@ -9,7 +9,7 @@ search summaries, not on an end-to-end read of the paper. Treat each entry as
 that will support a manuscript claim. Papers that must be acquired in full are
 flagged in `../READING_QUEUE.md`.
 
-Purpose: the 17-paper full-text audit (see `../../HANDOFF_PRICE_MAKER_20260814.md`
+Purpose: the 17-paper full-text audit (see `../context/HANDOFF_PRICE_MAKER_20260814.md`
 Sections 3-4) established what the *domain* literature already covers. This scan
 asks a different question: which *methodological* literatures already exist for
 the pieces we thought we might have to invent, and do they threaten or enable

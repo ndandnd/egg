@@ -3,7 +3,7 @@
 Last updated: 2026-08-14
 
 This is the live hypotheses-and-decisions file requested by
-`../HANDOFF_PRICE_MAKER_20260814.md` Section 9. Evidence base: the 17-paper
+`context/HANDOFF_PRICE_MAKER_20260814.md` Section 9. Evidence base: the 17-paper
 full-text audit (`review_notes/BIDDING_GAMES_20260814.md`,
 `review_notes/MARKET_MECHANISMS_AND_BUS_DR_20260814.md`,
 `review_notes/ROUTE_AND_RESPONSE_LEARNING_20260814.md`) plus the
@@ -195,12 +195,16 @@ papers.
 
 ## 4. Decision points now open
 
-1. **Flagship first paper.** Candidates: (i) Direction B price-taking
-   exclusive-group menu design on Partille data (bounded, institutional,
-   novel); (ii) Phase-1 price-feedback study (Claude's original Track-A
-   fallback: oscillation/damping with real duties — publishable but closer to
-   known territory, per the audit's warnings about Wei/Wang/Song). This
-   choice does not block Phase 0/1, which serve both.
+1. **Flagship first paper — RECOMMENDED, NOT YET SELECTED.** Current
+   recommendation (2026-08-14, consistent with `BRAINSTORM_20260814.md`
+   Section 4): the Chapter I package B1+B2+B3 ("damping is stabilization" +
+   stabilized master + internal uplift atlas) on evspv2g_dp instances, with
+   B18a (exclusive-group menu design) as the strongest independent second
+   paper. Earlier candidates remain fallbacks: (i) Direction B menu design on
+   Partille data; (ii) Phase-1 price-feedback study (closer to known
+   territory per the audit's warnings about Wei/Wang/Song). The user has not
+   yet ratified this choice; it does not block Phase 0/1, which serve all
+   candidates.
 2. **Read-first list** before committing claims: DW-bilevel preprint (2025),
    Karasavvidis 2024, Zero Regrets, Cut-and-Play, IPG tutorial — see
    `READING_QUEUE.md`.

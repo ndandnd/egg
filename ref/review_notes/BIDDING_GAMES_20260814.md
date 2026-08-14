@@ -10,7 +10,7 @@ The cross-paper conclusion is sharp: endogenous electricity prices, strategic EV
 
 ## 1. Gonzalez Vaya and Andersson (2015)
 
-Source: `lit reviews/Optimal_Bidding_Strategy_of_a_Plug-In_Electric_Vehicle_Aggregator_in_Day-Ahead_Electricity_Markets_Under_Uncertainty.pdf`
+Source: `../papers/Optimal_Bidding_Strategy_of_a_Plug-In_Electric_Vehicle_Aggregator_in_Day-Ahead_Electricity_Markets_Under_Uncertainty.pdf`
 
 ### Actual method and game structure
 
@@ -63,7 +63,7 @@ The precise missing object is a price-making best response whose feasible set is
 
 ## 2. Wu et al. (2016)
 
-Source: `lit reviews/A_Game_Theoretic_Approach_to_Risk-Based_Optimal_Bidding_Strategies_for_Electric_Vehicle_Aggregators_in_Electricity_Markets_With_Variable_Wind_Energy_Resources.pdf`
+Source: `../papers/A_Game_Theoretic_Approach_to_Risk-Based_Optimal_Bidding_Strategies_for_Electric_Vehicle_Aggregators_in_Electricity_Markets_With_Variable_Wind_Energy_Resources.pdf`
 
 ### Actual method and game structure
 
@@ -118,7 +118,7 @@ The strategic response is a smooth aggregate fleet program augmented by regressi
 
 ## 3. Toquica et al. (2020)
 
-Source: `lit reviews/main3234.pdf`, titled *Power market equilibrium considering an EV storage aggregator exposed to marginal prices - A bilevel optimization approach*.
+Source: `../papers/main3234.pdf`, titled *Power market equilibrium considering an EV storage aggregator exposed to marginal prices - A bilevel optimization approach*.
 
 ### Actual method and game structure
 

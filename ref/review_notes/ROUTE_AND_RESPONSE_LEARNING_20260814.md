@@ -8,12 +8,12 @@ This note consolidates a close reading of six locally supplied full-text papers 
 
 The evidence base is the following local PDFs only:
 
-1. `lit reviews/1-s2.0-S0306261925005549-main.pdf` — Xie and Xu (2025).
-2. `lit reviews/main2.pdf` — Ding, Li, and Jian (2022).
-3. `lit reviews/main1.pdf` — Subramanian et al. (2022).
-4. `lit reviews/Learning_the_Price_Response_of_Spatiotemporal_EV_Charging_Flow_A_Graph-Attentive_Surrogate_Model.pdf` — Chen et al. (2026).
-5. `lit reviews/Network_Equilibrium_of_Coupled_Transportation_and_Power_Distribution_Systems.pdf` — Wei et al. (2018).
-6. `lit reviews/12.pdf` — Song et al. (2025).
+1. `../papers/1-s2.0-S0306261925005549-main.pdf` — Xie and Xu (2025).
+2. `../papers/main2.pdf` — Ding, Li, and Jian (2022).
+3. `../papers/main1.pdf` — Subramanian et al. (2022).
+4. `../papers/Learning_the_Price_Response_of_Spatiotemporal_EV_Charging_Flow_A_Graph-Attentive_Surrogate_Model.pdf` — Chen et al. (2026).
+5. `../papers/Network_Equilibrium_of_Coupled_Transportation_and_Power_Distribution_Systems.pdf` — Wei et al. (2018).
+6. `../papers/12.pdf` — Song et al. (2025).
 
 No web search or secondary summary was used for the substantive claims below. Page references are to the PDF/article pages visible in the supplied files. “Novelty killed” is deliberately conservative: it means a generic claim should not be made without a narrower qualifier; it does not imply that every adjacent variant has been exhausted.
 

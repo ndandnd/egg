@@ -310,12 +310,13 @@ Earlier direction letters map as: A -> I+III, B -> III (B18), C -> III (B19),
 D -> cross-cutting (B31), E -> cross-cutting (B32). Nothing is dropped; the
 microgrid/dictator frame re-centers them.
 
-**First paper decision:** Chapter I's B1+B2+B3 package, on evspv2g_dp
-instances. Rationale: unique claim with verified white space, direct reuse of
-existing code, natural co-author alignment (Lodi: CG/IPG; Scaglione:
-microgrids), and it establishes the spine every later chapter cites. B18a
-(exclusive-group menus, Nordic data) is the strongest independent second
-paper and can proceed in parallel with EVSP-DR machinery.
+**First-paper recommendation (decision pending user approval; see
+`RESEARCH_DIRECTIONS.md` Section 4):** Chapter I's B1+B2+B3 package, on
+evspv2g_dp instances. Rationale: unique claim with verified white space,
+direct reuse of existing code, natural co-author alignment (Lodi: CG/IPG;
+Scaglione: microgrids), and it establishes the spine every later chapter
+cites. B18a (exclusive-group menus, Nordic data) is the strongest independent
+second paper and can proceed in parallel with EVSP-DR machinery.
 
 ## 5. Decision gates and falsification tests (additions to handoff 8.7)
 
