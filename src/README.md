@@ -79,10 +79,9 @@ python3 -m egglab.collect runs -o runs/all.csv
    (regime solve, loop iteration, grid point) with atomic writes, and rerunning
    the same command resumes — a preempted task loses at most one in-flight
    MILP solve. Both submit scripts request Slurm `END`, `FAIL`, and `REQUEUE`
-   email notifications; pass `--mail-user=you@example.edu` to `sbatch` to
-   override the cluster account default. No time limits needed on solves (set
-   `--time-limit` only if you want anytime behavior; the gap is recorded either
-   way).
+   email notifications to `nc437@cornell.edu`. No time limits needed on solves
+   (set `--time-limit` only if you want anytime behavior; the gap is recorded
+   either way).
 4. Ship results back:
 
 ```bash
