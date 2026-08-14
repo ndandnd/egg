@@ -195,20 +195,45 @@ papers.
 
 ## 4. Decision points now open
 
-1. **Flagship first paper — RECOMMENDED, NOT YET SELECTED.** Current
-   recommendation (2026-08-14, consistent with `BRAINSTORM_20260814.md`
-   Section 4): the Chapter I package B1+B2+B3 ("damping is stabilization" +
-   stabilized master + internal uplift atlas) on evspv2g_dp instances, with
-   B18a (exclusive-group menu design) as the strongest independent second
-   paper. Earlier candidates remain fallbacks: (i) Direction B menu design on
-   Partille data; (ii) Phase-1 price-feedback study (closer to known
-   territory per the audit's warnings about Wei/Wang/Song). The user has not
-   yet ratified this choice; it does not block Phase 0/1, which serve all
-   candidates.
-2. **Read-first list** before committing claims: DW-bilevel preprint (2025),
+1. **Flagship first paper — RATIFIED 2026-08-14 (evening).** The user adopted
+   the external priority lists that name the Chapter I package B1+B2+B3
+   ("damping is stabilization" + stabilized master + internal uplift atlas)
+   as the flagship, with B18a (exclusive-group menu design, gated on reading
+   Karasavvidis 2024) as the independent backup paper. Execution order
+   adopted (Sol/Fable5 lists, recorded verbatim in the git history of this
+   turn):
+   1. Phase 0 + minimal Phase 1 loop — start immediately (implemented in
+      `src/`, this repository).
+   2. Chapter I B1/B2/B3 — flagship; B1's minimal cycling instance is
+      pen-and-paper; B2/B3 design is specified after Phase 0/1 milestones
+      return.
+   3. Phase 2 boundary mapping — run early; adjudicates the ML direction
+      (B31 only if duty switches are frequent and material).
+   4. B18 duty-package bids — backup paper; verify current bid-format rules
+      first.
+   5. B15/B16 decentralization/settlement comparison — after B3 uplift
+      results exist.
+   6. B9 discrete monopsony — nearly free (same oracle at marginal-outlay
+      prices); implemented as a regime in `src/`.
+   7. B24 energy deadheading — quick economic screen only.
+   Later: multi-fleet games, reverse-Stackelberg tariffs, stochastic
+   recourse, reserve certification (too many moving pieces before the
+   single-fleet response is understood). Future-frontier ideas B35-B39
+   recorded in `BRAINSTORM_20260814.md`.
+2. **Dataset decision (2026-08-14):** synthetic instances first (implemented
+   in `src/`); a frozen, simplified subset of the GIRO/Transdev data
+   (github.com/ndandnd/evsp-dr) later — the user will supply subset details.
+   Dataset provenance notes: `context/GIRO_DATASET_HANDOFF_20260814.md`.
+   The GIRO problem itself is NOT the target; freeze a small trip subset with
+   simplified deadheads and disclose the fidelity level per that handoff.
+3. **Compute:** Unicorn cluster (Slurm, Gurobi licensed). Jobs must be
+   preemption-safe: checkpoint + requeue + idempotent resume (implemented in
+   `src/`). Collect MIP/LP statistics on every solve; results flow back to
+   GitHub via `src/cluster/sync_results.sh`.
+4. **Read-first list** before committing claims: DW-bilevel preprint (2025),
    Karasavvidis 2024, Zero Regrets, Cut-and-Play, IPG tutorial — see
    `READING_QUEUE.md`.
-3. **Unchanged decision gates** from handoff Section 8.7 remain in force,
+5. **Unchanged decision gates** from handoff Section 8.7 remain in force,
    especially: if Phase-2 shows duty switches are rare and charging-only
    response explains nearly everything, lean toward B/C (market design) and
    away from heavy route-learning claims.

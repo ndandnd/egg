@@ -1,15 +1,107 @@
 # src
 
-Code for this project: experiment harnesses, price-formation loops,
-stabilized-master wrappers, analysis scripts — runnable locally and on the
-Unicorn cluster.
+Phase 0/1/2 experiment infrastructure for the price-maker EVSP
+(execution plan: `../ref/RESEARCH_DIRECTIONS.md` Section 4; idea catalog:
+`../ref/BRAINSTORM_20260814.md`).
 
-Boundaries and conventions:
-- The EVSP-DR and evspv2g_dp solvers remain separate repositories and are
-  called as *oracles* (see `ref/context/HANDOFF_PRICE_MAKER_20260814.md`
-  Section 7); do not vendor their code here without an explicit interface
-  and versioning decision.
-- Every run must emit the provenance record defined in `result/README.md`
-  and label its oracle exactness tier (fixed-realization exposure /
-  re-realization / restricted pool / capped DP / completed exact pricing).
-- Bibliography tooling lives in `ref/tools/`, not here.
+## What's here
+
+```
+egglab/            the library
+  instance.py      EVSP instances + synthetic generator (+ GIRO-subset loader stub)
+  market.py        affine price formation p_t = a_t + b_t (U_t + L_t); welfare accounting
+  solver.py        MILP backend (Gurobi via python-mip if licensed, else CBC) + stats
+  evsp.py          the EVSP MILP oracle + replay validation
+  regimes.py       uncontrolled / taker / strategic (B9) / dictator solves
+  loops.py         Phase-1 price fixed-point iteration, cycle detection
+  boundary.py      Phase-2 switch-boundary sweeps (economic vs tie-flip switches)
+  records.py       Phase-0 logging contract (JSONL + provenance)
+  checkpoint.py    atomic checkpoints (preemption-safe restart)
+  collect.py       JSONL -> CSV aggregation
+experiments/       CLI drivers (cell-indexed for Slurm arrays, resumable)
+cluster/           Slurm submit scripts + results sync
+tests/             smoke tests (CBC, seconds)
+```
+
+## The model (Phase-1 physics, documented choices)
+
+Vehicle-indexed connection MILP: binary arcs chain compatible trips directly
+or **via the depot**, where hourly charging variables live in the dwell
+window. Vehicles start full; SOC tracked exactly along chains (big-M linking);
+terminal policy: SOC after pull-in >= `soc_end_kwh` (explicit knob — see the
+terminal-energy discussion in `../ref/context/`). Charging only at the depot;
+no V2G yet (Chapter IV extensions). All energy regimes are MILPs:
+
+- **taker**: linear cost `sum p_t L_t` at posted prices;
+- **strategic (B9)** and **dictator**: convex separable quadratics (bill /
+  true system-cost integral) represented by epigraph tangents (default 16
+  segments; records carry both the model objective and the exactly recomputed
+  objective, so PWL error is always visible);
+- **uncontrolled**: flat-price schedule + charge-on-arrival policy.
+
+Every solve is certified for the stated model (`exact-milp` tier): the
+records include root-LP value, MIP bound, gap, sizes, wall times, backend —
+so the LP/MIP integrality gap is measured on every oracle call (relevant to
+B10/B37). `evsp.validate_solution` replays every solution against the
+instance physics independently of the MILP.
+
+## Datasets
+
+Synthetic first (`instance.synthetic_instance`: two terminals + depot; tight
+battery so midday charging is mandatory and price-responsive). A frozen,
+simplified GIRO subset comes later via `instance.load_frozen_subset` — the
+freeze must follow `../ref/context/GIRO_DATASET_HANDOFF_20260814.md` (variant
+choice, deadhead fidelity disclosure, manifest, hashes).
+
+## Run locally
+
+```bash
+cd src
+pip install -r requirements.txt          # CBC bundled; Gurobi auto-detected
+python3 -m pytest tests/ -q              # smoke (~5 s)
+python3 experiments/run_phase1.py --list # enumerate cells
+python3 experiments/run_phase1.py --cell 0 --out runs/phase1
+python3 experiments/run_phase2.py --cell 0 --out runs/phase2
+python3 -m egglab.collect runs -o runs/all.csv
+```
+
+## Run on the Unicorn cluster (Slurm + Gurobi)
+
+1. Clone the repo, `pip install -r src/requirements.txt` in your env; make
+   sure `gurobipy` imports and the license resolves (`GRB_LICENSE_FILE`).
+   `egglab.solver.backend()` prints which backend is active.
+2. Edit the environment block in `cluster/submit_phase*.sub` once (module
+   loads / venv path), size `--array` to `--list`'s cell count.
+3. `sbatch cluster/submit_phase1.sub` (and phase2). **Preemption safety:**
+   jobs are `--requeue`; every driver checkpoints after each work unit
+   (regime solve, loop iteration, grid point) with atomic writes, and rerunning
+   the same command resumes — a preempted task loses at most one in-flight
+   MILP solve. No time limits needed on solves (set `--time-limit` only if
+   you want anytime behavior; the gap is recorded either way).
+4. Ship results back:
+
+```bash
+bash cluster/sync_results.sh phase1   # aggregates runs/phase1 -> result/phase1/<stamp>/
+                                      # (records.csv + checkpoint summaries) and git push
+```
+
+Raw `runs/` stays on the cluster (gitignored); only distilled results enter
+git, so analysis here always has the CSVs + outcome summaries.
+
+## Statistics collected per solve (Phase-0 contract)
+
+instance hash/name/size, price vector, regime, oracle tier, schedule hash,
+load vector + hash, fleet, deadhead minutes, energy, ops/energy cost split,
+model objective, solver backend/status/objective/bound/MIP-gap/root-LP
+value/LP-vs-MIP gap/wall times/variable-constraint-integer counts, PWL
+segment count, git commit, host, Slurm job/array/restart IDs, timestamp.
+
+## First sanity results (2026-08-14, CBC, seed 0, 8 trips)
+
+- Undamped taker iteration (alpha=1, b=0.05) found a **2-cycle** at
+  iteration 3 — the cobweb phenomenon that anchors flagship theorem B1.
+- Phase-2 sweep on one slot found 2 economic switches (load jumps of 14 and
+  57 kWh); tie-flip switches (alternative optima with identical loads) are
+  flagged separately so the switch statistic is honest.
+- Welfare ladder ordered as theory predicts (uncontrolled > taker >=
+  strategic >= dictator; the last three coincide at this tiny scale).

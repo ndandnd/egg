@@ -318,6 +318,56 @@ Scaglione: microgrids), and it establishes the spine every later chapter
 cites. B18a (exclusive-group menus, Nordic data) is the strongest independent
 second paper and can proceed in parallel with EVSP-DR machinery.
 
+### Future-frontier additions (added 2026-08-14 evening, supplied by the user
+from external LLM brainstorming; abstract-level, kill tests as given)
+
+- **B35 [LATER] Incentives under bounded computation ("the price of a time
+  limit").** Make the exactness-tier hierarchy an economic primitive: the
+  operator's counterfactual and no-deviation solves are branch-and-price runs
+  with budgets, so every payment (VCG, uplift, convex-hull) is computed from
+  an anytime bound, not a true optimum. Which settlement rules retain
+  (approximate) incentive compatibility when computed from certified LP
+  bounds? Can a bidder exploit the operator's time limit by submitting
+  hard-to-price instances? Do monotone certificates restore truthfulness
+  where Nisan-Ronen-style approximate VCG loses it? Kill test: the
+  approximate-mechanism-design literature already covers settlement from
+  certified bounds in combinatorial exchanges.
+- **B36 [LATER] Endogenous timing: the chicken-and-egg as a commitment
+  game.** In a Hamilton-Slutsky endogenous-timing game, does the indivisible
+  fleet prefer to commit quantities before price formation (inelastic bids)
+  or respond after (price-responsive bids)? Bid-format choice = timing
+  choice; gives B18 a strategic foundation. Plausibly kinks make commitment
+  strictly valuable where smooth players are indifferent. Kill test:
+  endogenous-timing results already cover finite/discrete strategy sets
+  transferably.
+- **B37 [STRONG-LATER] "How wrong is the virtual battery?" — certified
+  aggregation error.** Compute certified inner and outer approximations of
+  the true trip-covering load-flexibility set (projection of the duty
+  polytope onto load space) via column generation; prove hardness of exact
+  aggregation; bound the error vs fleet size (Shapley-Folkman/B4 gives the
+  O(1/N) upper end; the interesting result is the small-fleet/microgrid
+  lower end). The quantitative indictment justifying the thesis; strengthens
+  B19 (the inner approximation is the sellable capacity product). Kill test:
+  the TCL/EV flexibility-aggregation (zonotope/virtual-battery) literature
+  already has tight bounds for set-partitioning-constrained loads.
+- **B38 [LATER] Forward contracting / two-settlement for a discrete
+  monopsonist.** Allaz-Vila says forwards erode market power for smooth
+  players; with a piecewise-constant marginal-outlay response, small forward
+  positions can flip whole duties, so the classical result may fail or
+  reverse. Pairs with B9; same oracle at contract-adjusted prices. Kill
+  test: storage two-settlement papers already handle nonconvex responders.
+- **B39 [LATER] The slow loop: timetable design as the outer
+  chicken-and-egg.** Service design shapes the flexibility set being priced
+  (slack minutes, interlining freedom, depot placement are purchases of
+  flexibility): flexibility-aware timetabling under endogenous prices, the
+  investment-timescale feedback loop. Highest model risk; check the joint
+  timetabling-and-charging literature first.
+
+External reviewer's ranking of these: B35 and B37 are load-bearing for the
+thesis identity (one makes the exactness regime a contribution, the other
+makes "atomic matters" a theorem rather than a premise); B36 cheapest to
+check; B38/B39 optional breadth.
+
 ## 5. Decision gates and falsification tests (additions to handoff 8.7)
 
 - If the 2025 DW-bilevel preprint or any found paper already delays

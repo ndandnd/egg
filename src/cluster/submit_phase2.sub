@@ -1,0 +1,22 @@
+#!/bin/bash
+# Phase 2 array job — Unicorn cluster (Slurm). See submit_phase1.sub for the
+# preemption/requeue and environment notes; identical pattern.
+#
+#SBATCH --job-name=egg-phase2
+#SBATCH --output=slurm-%x-%A_%a.out
+#SBATCH --requeue
+#SBATCH --array=0-31
+#SBATCH --cpus-per-task=4
+#SBATCH --mem=8G
+#SBATCH --time=24:00:00
+
+set -euo pipefail
+cd "${SLURM_SUBMIT_DIR:-$(pwd)}"
+
+# --- environment (EDIT ME for Unicorn) -------------------------------------
+# module load gurobi python
+# source /path/to/venv/bin/activate
+export GRB_LICENSE_FILE="${GRB_LICENSE_FILE:-$HOME/gurobi.lic}"
+# ---------------------------------------------------------------------------
+
+python experiments/run_phase2.py --cell "${SLURM_ARRAY_TASK_ID}" --out runs/phase2

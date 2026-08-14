@@ -24,9 +24,11 @@ extensions.
 
 Evidence limits: only the 17 supplied papers are full-text audited; all other
 catalogued works (305 of 322) are abstract-level or grey and must be verified
-before manuscript use. The flagship first paper is **recommended but not yet
-selected** (`ref/RESEARCH_DIRECTIONS.md` Section 4). No solver code exists in
-this repository yet.
+before manuscript use. The flagship (Chapter I: B1-B3) and the execution
+priorities were ratified on 2026-08-14 (`ref/RESEARCH_DIRECTIONS.md` Section
+4). Phase 0/1/2 experiment infrastructure lives in `src/` (synthetic
+instances now; frozen GIRO subset later; Unicorn/Slurm-ready with
+preemption-safe checkpointing).
 
 ## Layout
 
