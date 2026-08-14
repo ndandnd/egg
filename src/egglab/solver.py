@@ -38,7 +38,13 @@ def detect_backend() -> str:
         m = mip.Model(solver_name="GRB")
         del m
         return "GRB"
-    except Exception:
+    except Exception as exc:
+        require_grb = os.environ.get("EGGLAB_REQUIRE_GRB", "").lower()
+        if require_grb in {"1", "true", "yes", "on"}:
+            raise RuntimeError(
+                "Gurobi is required (EGGLAB_REQUIRE_GRB is set) but could not "
+                "be initialized"
+            ) from exc
         return "CBC"
 
 

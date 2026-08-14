@@ -67,11 +67,13 @@ python3 -m egglab.collect runs -o runs/all.csv
 
 ## Run on the Unicorn cluster (Slurm + Gurobi)
 
-1. Clone the repo, `pip install -r src/requirements.txt` in your env; make
-   sure `gurobipy` imports and the license resolves (`GRB_LICENSE_FILE`).
-   `egglab.solver.backend()` prints which backend is active.
-2. Edit the environment block in `cluster/submit_phase*.sub` once (module
-   loads / venv path), size `--array` to `--list`'s cell count.
+1. Clone the repo and install `src/requirements.txt` in your env. On Unicorn,
+   the submitted jobs source `cluster/unicorn_env.sh`, which activates the
+   `/home/nc437/evsp_env` conda prefix, uses the shared
+   `/share/apps/software/gurobi/gurobi.lic`, and requires Gurobi rather than
+   silently falling back to CBC. `egglab.solver.backend()` prints the active
+   backend.
+2. Size `--array` to `--list`'s cell count if defaults change.
 3. `sbatch cluster/submit_phase1.sub` (and phase2). **Preemption safety:**
    jobs are `--requeue`; every driver checkpoints after each work unit
    (regime solve, loop iteration, grid point) with atomic writes, and rerunning
