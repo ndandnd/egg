@@ -11,6 +11,36 @@ abstract-level external scan
 (`review_notes/EXTERNAL_DEEP_DIVE_20260814.md`). Claims sourced only from the
 external scan are marked "(scan)" and carry its verification debts.
 
+## 0. REFRAMING OF 2026-08-14 (microgrid / dictator / V2G round)
+
+A second research round (four parallel deep scans; synthesis in
+`review_notes/MICROGRID_DICTATOR_V2G_SYNTHESIS_20260814.md`, full reports in
+`review_notes/agents/`, consolidated idea catalog and recommended thesis arc
+in `BRAINSTORM_20260814.md`) re-centered the project:
+
+- The team's two existing artifacts are the *endpoints* of the thesis:
+  EVSP-DR = the price-taker regime; the Cho-Lodi-Scaglione microgrid
+  manuscript (arXiv:2508.06752, V2G + solar + storage + fossil generation,
+  column generation) = the benevolent-dictator regime. The open territory is
+  everything between: price formation, decomposition-as-coordination, the
+  welfare ladder, and mechanism design — with the microgrid as the setting
+  where the fleet is the dominant load and every effect is first-order.
+- Working umbrella title: **"Price formation for indivisible mobile
+  flexibility: from benevolent dictator to market."** The Section 1 thesis
+  question below remains valid as the market-facing half of this umbrella.
+- The recommended chapter arc and first-paper choice now live in
+  `BRAINSTORM_20260814.md` Section 4 (Chapter I = decomposition-as-price-
+  formation on the microgrid manuscript's machinery; Chapter II = four-regime
+  welfare ladder; Chapter III = decentralization mechanisms including
+  Direction B's bid menus; Chapter IV = V2G/locational/resilience technology
+  extensions). Directions A-E below map into that arc as: A -> I+III,
+  B -> III, C -> III, D -> cross-cutting, E -> cross-cutting/later.
+- Key new coordination facts: Scaglione co-authored arXiv:2505.04532
+  (logistics <-> LMP fixed-point equilibrium) — position jointly; the
+  dictator formulation is public, so Chapter I has timing pressure.
+
+Sections 1-5 below predate this reframing and remain valid within it.
+
 ## 1. Umbrella thesis (unchanged, reaffirmed)
 
 > **Exact markets and incentives for nonconvex mobile flexibility.**

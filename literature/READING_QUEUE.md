@@ -88,6 +88,73 @@ Ordered by how directly they gate a live decision (see
   Infrastructure Engineering, DOI `10.1111/mice.13134`. Branch-and-price,
   TOU + partial charging + limited chargers.
 
+## Abstract-only — priority reads from the microgrid/dictator/V2G round (2026-08-14)
+
+Gating the Chapter I-IV claims in `BRAINSTORM_20260814.md`; per-paper context
+in `review_notes/agents/`.
+
+1. Yao, Liu, Scaglione, Bekhor, Zhang (2025), *Integrated equilibrium model
+   for electrified logistics and power systems*, arXiv:2505.04532.
+   **Coordinate internally before drafting.**
+2. Anunrojwong, Balseiro, Besbes, Xu, *Battery Operations in Electricity
+   Markets: Strategic Behavior and Distortions*, SSRN 4877753. Gates B8.
+3. Jiang, Nie, Skoulakis (2026), *The Welfare Gap of Strategic Storage*,
+   arXiv:2602.19660. Gates B8.
+4. Najafi, Fripp (2023), *Market-based coordination of price-responsive
+   demand using Dantzig-Wolfe decomposition*, Energy & AI, DOI
+   `10.1016/j.egyai.2023.100277`. Gates B1/B2 differentiation.
+5. Andrianesis, Bertsimas, Caramanis, Hogan (2021), *Computation of Convex
+   Hull Prices... Dantzig-Wolfe*, IEEE TPWRS, DOI
+   `10.1109/tpwrs.2021.3122000` (already queued above; now gates B3).
+6. Briant, Lemarechal, Meurdesoif, Michel, Perrot, Vanderbeck (2008),
+   *Comparison of Bundle and Classical Column Generation*, Math. Programming.
+7. du Merle, Villeneuve, Desrosiers, Hansen (1999), *Stabilized Column
+   Generation*, Discrete Mathematics, DOI `10.1016/s0012-365x(98)00213-1`.
+8. Frangioni (2002), *Generalized Bundle Methods*, SIAM J. Optimization, DOI
+   `10.1137/s1052623498342186`; and Pessoa, Sadykov, Uchoa, Vanderbeck
+   (2018), IJOC, DOI `10.1287/ijoc.2017.0784`.
+9. Gribik, Hogan, Pope (2007), *Market-Clearing Electricity Prices and Energy
+   Uplift* (working paper); O'Neill, Sotkiewicz, Hobbs, Rothkopf, Stewart
+   (2005), EJOR, DOI `10.1016/j.ejor.2003.12.011`; Baumol, Fabian (1964),
+   Management Science, DOI `10.1287/mnsc.11.1.1`; Scarf (1994), JEP, DOI
+   `10.1257/jep.8.4.111`. The pricing-under-indivisibility spine.
+10. Ma, Callaway, Hiskens (2013), IEEE TCST, DOI `10.1109/tcst.2011.2174059`;
+    Gan, Topcu, Low (2013), IEEE TPWRS, DOI `10.1109/TPWRS.2012.2210288`;
+    Roozbehani, Dahleh, Mitter (2012), IEEE TPWRS, DOI
+    `10.1109/tpwrs.2012.2195037`. The oscillation/damping canon.
+11. Cornélusse, Savelli, Paoletti, Giannitrapani, Vicino (2019), *A community
+    microgrid architecture with an internal local market*, Applied Energy,
+    DOI `10.1016/j.apenergy.2019.03.109`. The no-vehicles dictator<->market
+    precedent.
+12. Yetkin, Augustino, Lamadrid, Snyder (2024), *Co-optimizing the smart grid
+    and electric public transit bus system*, Optimization and Engineering,
+    DOI `10.1007/s11081-023-09878-w`. Main published dictator-with-fleet
+    competitor; same journal as the team's submission.
+13. Dolatabadi, Dong, Bhuiyan, Zeng, O'Neill, Severson (2025), *Leveraging
+    Electric School Buses for Disaster Recovery... Branch-and-Price*,
+    arXiv:2510.14131. Most method-similar external group.
+14. Manzolli et al. (2024), *Aggregator-supported strategy for electric bus
+    fleet charging*, Energy, DOI `10.1016/j.energy.2024.132497`.
+15. Wu, Guo, Polak, Strbac (2019) — already audited full-text; re-read
+    against the microgrid framing.
+16. Bailey, Brown, Myers, Shaffer, Wolak (2025), *Unintended Consequences of
+    Time-of-Use Pricing*, AER: Insights, DOI `10.1257/aeri.20240476`; and
+    Kuehnbach, Stute, Klingler (2021), avalanche effects, DOI
+    `10.1016/j.esr.2020.100608`. Empirical self-defeating-taker anchors.
+17. Klein, Schiffer (2023), *EV Charge Scheduling with Flexible Service
+    Operations*, Transportation Science, DOI `10.1287/trsc.2022.0272`; and
+    Zhang, Wang, Qu (2021), TRE, DOI `10.1016/j.tre.2021.102445`.
+    Degradation-aware labeling baselines for B25.
+18. Hardt, Jagadeesan, Mendler-Duenner (2022), *Performative Power*, NeurIPS.
+    Gates B11.
+19. Sioshansi (2010), Energy Journal, DOI
+    `10.5547/issn0195-6574-ej-vol31-no2-7`; Kazempour, Conejo, Ruiz (2015),
+    IEEE TPWRS, DOI `10.1109/tpwrs.2014.2332540`. Storage-welfare and
+    monopsony baselines for B8/B9.
+20. He, Michalek, Kar, Chen, Zhang, Whitacre (2021), *Utility-Scale Portable
+    Energy Storage Systems*, Joule, DOI `10.1016/j.joule.2020.12.005`; and
+    Crozier et al., arXiv:2311.11464. Mobile-energy economics for B24.
+
 ## Abstract-only — context, lower priority
 
 - *When Agents Meet Electric Bus Fleet Operations* (2026), arXiv:2606.26400.
