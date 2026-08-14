@@ -34,6 +34,16 @@ are all *the same computational pattern* — separation over the fleet's
 schedule set by a best-response oracle. One oracle, four economic products.
 That unification is a credible thesis-level methodological identity.
 
+**Claim discipline (added 2026-08-14, see
+`review_notes/EVSP_PRICE_FEEDBACK_NOVELTY_20260814.md`):** within EVSP,
+own-load-dependent *costs* already exist (demand charges, peak-load
+objectives, e.g., Wu et al. 2021 TRB branch-and-price MDEVSP). What is
+unoccupied is *market-mediated* price formation — a shared price moved by the
+fleet's load. Never phrase the novelty as "first EVSP where cost depends on
+own load"; phrase it as "first EVSP embedded in shared price formation," with
+the strategic/equilibrium/welfare structure that entails. A demand charge is
+a private nonlinearity; a market price is a shared externality.
+
 ## 2. Directions, updated
 
 ### Direction A — Certified atomic price-maker fleet market

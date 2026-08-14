@@ -77,6 +77,17 @@ Ordered by how directly they gate a live decision (see
 20. Oberdieck, Wittmann-Hohlbein, Pistikopoulos (2014), mp-MILP
     branch-and-bound, J. Global Optimization 59(2).
 
+## Abstract-only — EVSP-side price-aware baselines (added 2026-08-14, see review_notes/EVSP_PRICE_FEEDBACK_NOVELTY_20260814.md)
+
+- Wu, Lin, Liu, Jin (2021), *The multi-depot electric vehicle scheduling
+  problem with power grid characteristics*, Transp. Res. Part B 155, DOI
+  `10.1016/j.trb.2021.11.007`. Branch-and-price MDEVSP, TOU + peak-load
+  objective. Open-access preprint exists (White Rose eprints).
+- Zhang et al. (2024), *On the role of time-of-use electricity price in
+  charge scheduling for electric bus fleets*, Computer-Aided Civil and
+  Infrastructure Engineering, DOI `10.1111/mice.13134`. Branch-and-price,
+  TOU + partial charging + limited chargers.
+
 ## Abstract-only — context, lower priority
 
 - *When Agents Meet Electric Bus Fleet Operations* (2026), arXiv:2606.26400.
