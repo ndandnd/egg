@@ -21,11 +21,19 @@
 #SBATCH --time=24:00:00
 
 set -euo pipefail
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-cd "${SLURM_SUBMIT_DIR:-$(pwd)}"
+SUBMIT_DIR="${SLURM_SUBMIT_DIR:-$(pwd)}"
+if [[ -f "${SUBMIT_DIR}/experiments/run_phase1.py" ]]; then
+    WORK_DIR="${SUBMIT_DIR}"
+elif [[ -f "${SUBMIT_DIR}/src/experiments/run_phase1.py" ]]; then
+    WORK_DIR="${SUBMIT_DIR}/src"
+else
+    echo "ERROR: could not locate the egg src directory from ${SUBMIT_DIR}" >&2
+    exit 1
+fi
+cd "${WORK_DIR}"
 
 # --- environment ------------------------------------------------------------
-source "${SCRIPT_DIR}/unicorn_env.sh"
+source "${WORK_DIR}/cluster/unicorn_env.sh"
 # ---------------------------------------------------------------------------
 
 python experiments/run_phase1.py --cell "${SLURM_ARRAY_TASK_ID}" --out runs/phase1
