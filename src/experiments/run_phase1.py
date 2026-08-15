@@ -59,12 +59,26 @@ def run_cell(cell, args):
     posted = market.price(np.zeros(market.n_slots))
     rec_path = os.path.join(out, "static.jsonl")
     kw = dict(max_mip_gap=args.mip_gap, time_limit_s=args.time_limit)
+    params = {
+        "tag": tag,
+        "cell": list(cell),
+        "seed": seed,
+        "shape": shape,
+        "b_scale": b_scale,
+        "alpha": alpha,
+        "n_seg": args.n_seg,
+        "pwl_tol": args.pwl_tol,
+    }
 
     regimes = {
         "uncontrolled": lambda: solve_uncontrolled(inst, market, **kw),
         "taker": lambda: solve_taker(inst, posted, **kw),
-        "strategic": lambda: solve_strategic(inst, market, n_seg=args.n_seg, **kw),
-        "dictator": lambda: solve_dictator(inst, market, n_seg=args.n_seg, **kw),
+        "strategic": lambda: solve_strategic(
+            inst, market, n_seg=args.n_seg, tol_abs=args.pwl_tol, **kw
+        ),
+        "dictator": lambda: solve_dictator(
+            inst, market, n_seg=args.n_seg, tol_abs=args.pwl_tol, **kw
+        ),
     }
     ladder = {}
     for name, fn in regimes.items():
@@ -73,8 +87,13 @@ def run_cell(cell, args):
         sol = fn()
         rec = make_record(
             "phase1-static", inst, sol, market=market, prices=posted, regime=name,
-            extra={"tag": tag, "cell": list(cell), "n_seg": args.n_seg},
+            extra=params,
         )
+        if rec["replay_ok"] is False:
+            raise RuntimeError(
+                f"replay validation failed for {name} in {tag}: "
+                f"{rec['replay_violations']}"
+            )
         append_jsonl(rec_path, rec)
         ladder[name] = evaluate(inst, sol, market)["total_system"]
         state["static_done"].append(name)
@@ -86,10 +105,12 @@ def run_cell(cell, args):
             market,
             alpha=alpha,
             max_iters=args.max_iters,
+            tol_price=args.tol_price,
             out_dir=out,
             tag="loop",
             experiment="phase1-loop",
             solver_kw=kw,
+            extra_params={k: v for k, v in params.items() if k != "tag"},
         )
         state["loop_done"] = True
         checkpoint.save(ck_path, state)
@@ -105,9 +126,14 @@ def main():
         "--b-scales", dest="b_scales", type=float, nargs="+",
         default=[0.0, 0.002, 0.01, 0.05],
     )
-    ap.add_argument("--alphas", type=float, nargs="+", default=[1.0, 0.5])
+    ap.add_argument("--alphas", type=float, nargs="+", default=[1.0, 0.5, 0.25, 0.1])
     ap.add_argument("--n-seg", dest="n_seg", type=int, default=16)
-    ap.add_argument("--max-iters", dest="max_iters", type=int, default=40)
+    ap.add_argument("--pwl-tol", dest="pwl_tol", type=float, default=1e-2,
+                    help="certified upper/lower gap for strategic/dictator")
+    ap.add_argument("--tol-price", dest="tol_price", type=float, default=1e-4,
+                    help="price-state tolerance for fixed-point/cycle detection")
+    ap.add_argument("--max-iters", dest="max_iters", type=int, default=120,
+                    help="damped runs converge ~1/alpha slower; budget generously")
     ap.add_argument("--mip-gap", dest="mip_gap", type=float, default=1e-6)
     ap.add_argument("--time-limit", dest="time_limit", type=float, default=None)
     ap.add_argument("--out", default="runs/phase1")

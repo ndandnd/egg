@@ -61,17 +61,17 @@ def test_regime_ladder(inst, market):
         errs = validate_solution(inst, sol)
         assert errs == [], (name, errs)
     ev = {k: evaluate(inst, s, market) for k, s in sols.items()}
-    # dictator minimizes total system cost: no other regime may beat it
-    # (small tolerance for PWL tangent granularity)
+    # with adaptive certification the dominance tolerances are the certified
+    # gaps (default 1e-2), not PWL guesswork
+    tol = 2e-2
     for name in ("uncontrolled", "taker", "strategic"):
-        assert ev["dictator"]["total_system"] <= ev[name]["total_system"] + 1.0, (
+        assert ev["dictator"]["total_system"] <= ev[name]["total_system"] + tol, (
             name,
             ev[name]["total_system"],
             ev["dictator"]["total_system"],
         )
-    # strategic minimizes its own bill: cannot be beaten on total_private
     for name in ("uncontrolled", "taker", "dictator"):
-        assert ev["strategic"]["total_private"] <= ev[name]["total_private"] + 1.0, (
+        assert ev["strategic"]["total_private"] <= ev[name]["total_private"] + tol, (
             name,
             ev[name]["total_private"],
             ev["strategic"]["total_private"],

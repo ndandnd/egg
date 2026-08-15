@@ -77,6 +77,31 @@ class AffineMarket:
     def system_delta_segments(self, l_max: float, n_seg: int = 16):
         return self._tangents(self.a + self.b * self.U, 0.5 * self.b, l_max, n_seg)
 
+    def _tangents_at(self, coef_lin: np.ndarray, coef_quad: np.ndarray, L):
+        """Per-slot tangent (slope, intercept) of f_t at the point L_t —
+        used by the adaptive outer approximation (the added tangent makes the
+        PWL model exact at L)."""
+        L = np.asarray(L, dtype=float)
+        out = []
+        for t in range(self.n_slots):
+            slope = coef_lin[t] + 2.0 * coef_quad[t] * L[t]
+            intercept = -coef_quad[t] * L[t] * L[t]
+            out.append((float(slope), float(intercept)))
+        return out
+
+    def bill_tangents_at(self, L):
+        return self._tangents_at(self.a + self.b * self.U, self.b, L)
+
+    def system_delta_tangents_at(self, L):
+        return self._tangents_at(self.a + self.b * self.U, 0.5 * self.b, L)
+
+    # exact per-objective evaluators (for certified upper bounds)
+    def bill_true(self, L) -> float:
+        return self.bill(L)
+
+    def system_delta_true(self, L) -> float:
+        return self.system_cost_delta(L)
+
 
 PRICE_SHAPES = ("flat", "duck", "two_valley")
 

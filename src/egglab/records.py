@@ -55,9 +55,12 @@ def make_record(
     prices=None,
     regime: str = "",
     extra: dict | None = None,
+    validate: bool = True,
 ) -> dict:
+    from .evsp import validate_solution
     from .regimes import evaluate  # local import to avoid cycles
 
+    replay_violations = validate_solution(inst, sol) if validate else None
     rec = {
         "experiment": experiment,
         "regime": regime,
@@ -75,8 +78,11 @@ def make_record(
         "energy_charged_kwh": sol.energy_charged_kwh,
         "ops_cost": sol.ops_cost,
         "obj_model": sol.obj_model,
+        "obj_true": sol.obj_true,
         "energy_cost_model": sol.energy_cost_model,
         "oracle_tier": sol.oracle_tier,
+        "replay_ok": None if replay_violations is None else not replay_violations,
+        "replay_violations": replay_violations,
         "solver": sol.stats.to_dict() if sol.stats else None,
         "sequences": sol.sequences,
         "charges": sol.charges,

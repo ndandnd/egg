@@ -66,6 +66,12 @@ def slot_overlaps(inst: Instance, w0: int, w1: int):
 # --------------------------------------------------------------------------
 # solution container
 # --------------------------------------------------------------------------
+def _norm(x: float, ndigits: int = 6) -> float:
+    """Round and normalize -0.0 to 0.0 (hash-stability)."""
+    v = round(float(x), ndigits)
+    return v + 0.0 if v != 0 else 0.0
+
+
 @dataclass
 class Solution:
     sequences: list  # list of list of trip ids (one per used vehicle)
@@ -78,6 +84,7 @@ class Solution:
     ops_cost: float = 0.0
     energy_cost_model: float = 0.0
     obj_model: float | None = None
+    obj_true: float | None = None  # exact objective recomputed from loads
     stats: SolveStats | None = None
     oracle_tier: str = "exact-milp"
 
@@ -86,7 +93,7 @@ class Solution:
         return hashlib.sha256(json.dumps(canon).encode()).hexdigest()[:12]
 
     def load_hash(self) -> str:
-        canon = [round(x, 2) for x in self.load]
+        canon = [_norm(x, 2) for x in self.load]
         return hashlib.sha256(json.dumps(canon).encode()).hexdigest()[:12]
 
 
@@ -304,7 +311,7 @@ def _extract(inst, stats, u, o, z, xd, xg, e, L, dirp, depp) -> Solution:
         sequences.append(seq)
         arc_kinds.append(kinds)
 
-    load = [round(val(L[t]), 6) for t in range(inst.n_slots)]
+    load = [_norm(val(L[t])) for t in range(inst.n_slots)]
     sol = Solution(
         sequences=sequences,
         arc_kinds=arc_kinds,
@@ -317,6 +324,182 @@ def _extract(inst, stats, u, o, z, xd, xg, e, L, dirp, depp) -> Solution:
         + inst.dh_cost_per_min * dh_min_total,
         obj_model=stats.obj,
         stats=stats,
+    )
+    sol.energy_cost_model = (stats.obj or 0.0) - sol.ops_cost
+    return sol
+
+
+# --------------------------------------------------------------------------
+# fixed-sequence re-realization oracle (margin tests, re-pricing)
+# --------------------------------------------------------------------------
+def solve_fixed_sequences(
+    inst: Instance,
+    sequences: list,
+    energy_cost: tuple,
+    max_mip_gap: float = 1e-6,
+    time_limit_s: float | None = None,
+) -> Solution | None:
+    """Re-optimize arc kinds (direct vs via-depot) and charging for a FIXED
+    trip partition (the re-realization oracle: EVSP-DR's rerealize_routes
+    analogue). Returns None if the partition is time-infeasible. Used by the
+    Phase-2 margin test: 'is schedule B economically tied with A at A's
+    prices?'."""
+    D = inst.depot
+    B = inst.battery_kwh
+    M = 2.0 * B
+    tripmap = {t.id: t for t in inst.trips}
+    m = new_model("evsp-fixed")
+    load_terms = [[] for _ in range(inst.n_slots)]
+    total_dh_fixed = 0.0
+    dh_var_terms = []
+    all_e = []  # (chain_idx, pair_idx, i_id, j_id, {t: var})
+    chain_soc_ok = True
+
+    chains = []
+    for ci, seq in enumerate(sequences):
+        trips = [tripmap[tid] for tid in seq]
+        total_dh_fixed += inst.dhm(D, trips[0].start_loc) + inst.dhm(
+            trips[-1].end_loc, D
+        )
+        pairs = []
+        for k in range(len(trips) - 1):
+            ti, tj = trips[k], trips[k + 1]
+            dir_ok = ti.end_min + inst.dhm(ti.end_loc, tj.start_loc) <= tj.start_min
+            arrive = ti.end_min + inst.dhm(ti.end_loc, D)
+            depart = tj.start_min - inst.dhm(D, tj.start_loc)
+            dep_ok = depart >= arrive
+            if not dir_ok and not dep_ok:
+                return None  # partition time-infeasible
+            y = None
+            if dir_ok and dep_ok:
+                y = m.add_var(var_type=mip.BINARY)  # 1 = via depot
+            evars = {}
+            if dep_ok:
+                for (t, ov) in slot_overlaps(inst, arrive, depart):
+                    evars[t] = m.add_var(lb=0.0, ub=inst.charge_power_kw * ov / 60.0)
+                    load_terms[t].append(evars[t])
+            pairs.append(
+                {"i": ti, "j": tj, "dir_ok": dir_ok, "dep_ok": dep_ok, "y": y, "e": evars}
+            )
+            all_e.append((ci, k, ti.id, tj.id, evars))
+        chains.append((trips, pairs))
+
+    # SOC propagation per chain (exact; kind choice enters linearly)
+    for trips, pairs in chains:
+        soc = [None] * len(trips)  # soc before each trip (model vars)
+        s0 = inst.soc0_kwh - inst.dhk(D, trips[0].start_loc)
+        prev_after = None
+        for k, tr in enumerate(trips):
+            sb = m.add_var(lb=inst.soc_min_kwh, ub=B)
+            if k == 0:
+                m += sb == s0
+            else:
+                p = pairs[k - 1]
+                ti = p["i"]
+                dirk = inst.dhk(ti.end_loc, tr.start_loc)
+                d1 = inst.dhk(ti.end_loc, D)
+                d2 = inst.dhk(D, tr.start_loc)
+                ch = mip.xsum(p["e"].values()) if p["e"] else 0.0
+                if p["y"] is not None:  # both kinds possible
+                    y = p["y"]
+                    m += sb == prev_after - dirk * (1 - y) - (d1 + d2) * y + ch
+                    if p["e"]:
+                        m += mip.xsum(p["e"].values()) <= B * y
+                    m += prev_after - d1 + ch <= B + M * (1 - y)
+                    m += prev_after - d1 >= inst.soc_min_kwh - M * (1 - y)
+                elif p["dep_ok"]:  # depot only
+                    m += sb == prev_after - d1 - d2 + ch
+                    m += prev_after - d1 + ch <= B
+                    m += prev_after - d1 >= inst.soc_min_kwh
+                else:  # direct only
+                    m += sb == prev_after - dirk
+            sa = m.add_var(lb=inst.soc_min_kwh, ub=B)
+            m += sa == sb - tr.energy_kwh
+            prev_after = sa
+            soc[k] = sb
+        m += prev_after - inst.dhk(trips[-1].end_loc, D) >= inst.soc_end_kwh
+
+    # deadhead minutes (kind-dependent parts)
+    for trips, pairs in chains:
+        for p in pairs:
+            ti, tj = p["i"], p["j"]
+            dmin_dir = inst.dhm(ti.end_loc, tj.start_loc)
+            dmin_dep = inst.dhm(ti.end_loc, D) + inst.dhm(D, tj.start_loc)
+            if p["y"] is not None:
+                dh_var_terms.append(dmin_dir * (1 - p["y"]) + dmin_dep * p["y"])
+            else:
+                total_dh_fixed += dmin_dep if p["dep_ok"] else dmin_dir
+
+    L = [m.add_var(lb=0.0) for _ in range(inst.n_slots)]
+    for t in range(inst.n_slots):
+        m += L[t] == mip.xsum(load_terms[t]) if load_terms[t] else L[t] == 0
+
+    ops = inst.vehicle_fixed_cost * len(sequences) + inst.dh_cost_per_min * (
+        total_dh_fixed + mip.xsum(dh_var_terms) if dh_var_terms else total_dh_fixed
+    )
+    kind, payload = energy_cost
+    if kind == "linear":
+        m.objective = ops + mip.xsum(float(payload[t]) * L[t] for t in range(inst.n_slots))
+    elif kind == "pwl":
+        cost = [m.add_var(lb=0.0) for _ in range(inst.n_slots)]
+        for t in range(inst.n_slots):
+            for (slope, intercept) in payload[t]:
+                m += cost[t] >= slope * L[t] + intercept
+        m.objective = ops + mip.xsum(cost)
+    else:
+        raise ValueError(kind)
+
+    stats = optimize(m, max_mip_gap=max_mip_gap, time_limit_s=time_limit_s)
+    if stats.obj is None:
+        return None  # SOC-infeasible partition
+
+    def val(v):
+        return v.x if v.x is not None else 0.0
+
+    charges = []
+    arc_kinds = []
+    dh_total = total_dh_fixed if not dh_var_terms else None
+    dh_running = total_dh_fixed
+    for ci, (trips, pairs) in enumerate(chains):
+        kinds = []
+        for p in pairs:
+            via = p["dep_ok"] and (p["y"] is None or val(p["y"]) > 0.5)
+            kinds.append("dep" if via else "dir")
+            ti, tj = p["i"], p["j"]
+            if p["y"] is not None:
+                dh_running += (
+                    inst.dhm(ti.end_loc, D) + inst.dhm(D, tj.start_loc)
+                    if via
+                    else inst.dhm(ti.end_loc, tj.start_loc)
+                )
+            if via:
+                for t, var in p["e"].items():
+                    if val(var) > 1e-6:
+                        charges.append(
+                            {
+                                "vehicle": ci,
+                                "after_trip": ti.id,
+                                "before_trip": tj.id,
+                                "slot": t,
+                                "kwh": _norm(val(var)),
+                            }
+                        )
+        arc_kinds.append(kinds)
+
+    load = [_norm(val(L[t])) for t in range(inst.n_slots)]
+    sol = Solution(
+        sequences=[list(s) for s in sequences],
+        arc_kinds=arc_kinds,
+        charges=charges,
+        load=load,
+        fleet=len(sequences),
+        dh_min_total=dh_running,
+        energy_charged_kwh=_norm(sum(load)),
+        ops_cost=inst.vehicle_fixed_cost * len(sequences)
+        + inst.dh_cost_per_min * dh_running,
+        obj_model=stats.obj,
+        stats=stats,
+        oracle_tier="exact-milp/fixed-sequences",
     )
     sol.energy_cost_model = (stats.obj or 0.0) - sol.ops_cost
     return sol

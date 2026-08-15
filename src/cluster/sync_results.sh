@@ -25,6 +25,9 @@ mkdir -p "${OUT}"
 cd "${SRC_DIR}"
 python -m egglab.collect "${RUNS}" -o "${OUT}/records.csv"
 
+# completion audit + human-readable summary (fails the sync on replay errors)
+python experiments/audit_runs.py "${RUNS}" -o "${OUT}/SUMMARY.md"
+
 # summaries: every checkpoint json (small) for outcomes/switch lists
 find "${RUNS}" -name '*.ckpt.json' | while read -r f; do
   rel="${f#"${RUNS}"/}"
@@ -34,6 +37,6 @@ done
 
 cd "${REPO_DIR}"
 git add "result/${EXP}/${LABEL}"
-git commit -m "results: ${EXP} ${LABEL} ($(hostname))"
+git commit -m "results: ${EXP} ${LABEL} (synced from $(hostname); solves ran where records say)"
 git push
 echo "synced to result/${EXP}/${LABEL} and pushed"

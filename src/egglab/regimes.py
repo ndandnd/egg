@@ -24,21 +24,99 @@ def _l_max(inst: Instance) -> float:
 def solve_taker(inst: Instance, prices, **kw) -> Solution:
     sol = solve_evsp(inst, ("linear", np.asarray(prices, dtype=float)), **kw)
     sol.oracle_tier = "exact-milp/taker"
+    sol.obj_true = sol.obj_model  # linear objective is exact
     return sol
 
 
-def solve_strategic(inst: Instance, market: AffineMarket, n_seg: int = 16, **kw) -> Solution:
-    segs = market.bill_segments(_l_max(inst), n_seg)
-    sol = solve_evsp(inst, ("pwl", segs), **kw)
-    sol.oracle_tier = f"exact-milp/strategic-pwl{n_seg}"
+def _solve_convex_adaptive(
+    inst: Instance,
+    seg0: list,
+    tangents_at,
+    true_energy_cost,
+    label: str,
+    tol_abs: float = 1e-2,
+    max_rounds: int = 25,
+    **kw,
+) -> Solution:
+    """Certified adaptive outer approximation for a convex separable energy
+    objective (reviewer-specified): solve the tangent-relaxed MILP (its value
+    is a LOWER bound on the true optimum), evaluate the true objective at the
+    incumbent load (a feasible UPPER bound), add tangents at the incumbent,
+    repeat until ub - lb <= tol_abs. Records lb/ub/gap/rounds; obj_true is
+    the certified feasible value."""
+    segs = [list(rows) for rows in seg0]
+    best_sol, best_ub = None, float("inf")
+    lb = -float("inf")
+    rounds = 0
+    total_wall = 0.0
+    while rounds < max_rounds:
+        rounds += 1
+        sol = solve_evsp(inst, ("pwl", segs), **kw)
+        total_wall += sol.stats.wall_s + sol.stats.lp_wall_s
+        lb = sol.obj_model  # lower bound on true optimum
+        L = np.asarray(sol.load, dtype=float)
+        ub = sol.ops_cost + true_energy_cost(L)
+        if ub < best_ub - 1e-12:
+            best_ub, best_sol = ub, sol
+        if best_ub - lb <= tol_abs:
+            break
+        for t, seg in enumerate(tangents_at(L)):
+            segs[t].append(seg)
+    sol = best_sol
+    sol.obj_true = best_ub
+    sol.oracle_tier = f"exact-milp/{label}-adaptive"
+    sol.stats.extra.update(
+        {
+            "adaptive_rounds": rounds,
+            "adaptive_lb": lb,
+            "adaptive_ub": best_ub,
+            "adaptive_gap_abs": best_ub - lb,
+            "adaptive_tol_abs": tol_abs,
+            "adaptive_converged": bool(best_ub - lb <= tol_abs),
+            "adaptive_total_wall_s": total_wall,
+        }
+    )
     return sol
 
 
-def solve_dictator(inst: Instance, market: AffineMarket, n_seg: int = 16, **kw) -> Solution:
-    segs = market.system_delta_segments(_l_max(inst), n_seg)
-    sol = solve_evsp(inst, ("pwl", segs), **kw)
-    sol.oracle_tier = f"exact-milp/dictator-pwl{n_seg}"
-    return sol
+def solve_strategic(
+    inst: Instance,
+    market: AffineMarket,
+    n_seg: int = 16,
+    tol_abs: float = 1e-2,
+    max_rounds: int = 25,
+    **kw,
+) -> Solution:
+    return _solve_convex_adaptive(
+        inst,
+        market.bill_segments(_l_max(inst), n_seg),
+        market.bill_tangents_at,
+        market.bill_true,
+        "strategic",
+        tol_abs=tol_abs,
+        max_rounds=max_rounds,
+        **kw,
+    )
+
+
+def solve_dictator(
+    inst: Instance,
+    market: AffineMarket,
+    n_seg: int = 16,
+    tol_abs: float = 1e-2,
+    max_rounds: int = 25,
+    **kw,
+) -> Solution:
+    return _solve_convex_adaptive(
+        inst,
+        market.system_delta_segments(_l_max(inst), n_seg),
+        market.system_delta_tangents_at,
+        market.system_delta_true,
+        "dictator",
+        tol_abs=tol_abs,
+        max_rounds=max_rounds,
+        **kw,
+    )
 
 
 def solve_uncontrolled(inst: Instance, market: AffineMarket, **kw) -> Solution:

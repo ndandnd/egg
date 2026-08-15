@@ -31,27 +31,37 @@ SCALARS = [
     "energy_charged_kwh",
     "ops_cost",
     "obj_model",
+    "obj_true",
     "energy_cost_model",
     "oracle_tier",
+    "replay_ok",
 ]
 SOLVER = ["backend", "status", "obj", "bound", "mip_gap", "lp_obj",
           "lp_mip_gap_abs", "wall_s", "lp_wall_s", "n_vars", "n_int", "n_constrs"]
+ADAPTIVE = ["adaptive_rounds", "adaptive_lb", "adaptive_ub", "adaptive_gap_abs",
+            "adaptive_converged"]
 ECON = ["bill", "system_cost_delta", "total_private", "total_system", "energy_kwh"]
-EXTRA = ["tag", "iter", "alpha", "sweep_slot", "delta", "idx"]
+EXTRA = ["tag", "cell", "seed", "shape", "b_scale", "alpha", "tol_price",
+         "iter", "price_residual", "load_residual", "schedule_recurred",
+         "response_recurred", "sweep_slot", "delta", "idx"]
 
 
 def flatten(rec: dict) -> dict:
     row = {k: rec.get(k) for k in SCALARS}
     for k in SOLVER:
         row[f"solver_{k}"] = (rec.get("solver") or {}).get(k)
+    solver_extra = ((rec.get("solver") or {}).get("extra")) or {}
+    for k in ADAPTIVE:
+        row[k] = solver_extra.get(k)
     for k in ECON:
         row[f"econ_{k}"] = (rec.get("economics") or {}).get(k)
+    ext = rec.get("extra") or {}
     for k in EXTRA:
-        row[f"x_{k}"] = (rec.get("extra") or {}).get(k)
-    out = rec.get("extra") or {}
-    oc = out.get("outcome")
+        row[f"x_{k}"] = ext.get(k)
+    oc = ext.get("outcome")
     row["x_outcome_type"] = oc.get("type") if isinstance(oc, dict) else None
     row["x_cycle_length"] = oc.get("length") if isinstance(oc, dict) else None
+    row["n_replay_violations"] = len(rec.get("replay_violations") or [])
     return row
 
 

@@ -43,8 +43,13 @@ def run_cell(cell, args):
         out_dir=out,
         tag="sweep",
         solver_kw=dict(max_mip_gap=args.mip_gap, time_limit_s=args.time_limit),
+        extra_params={"seed": seed, "shape": args.shape, "cell": list(cell)},
+        run_margin_tests=not args.no_margin_tests,
     )
-    print(f"[done] cell {tag}: {state['n_switches']} switches")
+    print(
+        f"[done] cell {tag}: {state['n_switches']} switches "
+        f"({state['n_economic_switches']} economic; {state['counts_by_kind']})"
+    )
 
 
 def main():
@@ -58,6 +63,7 @@ def main():
     ap.add_argument("--d-step", dest="d_step", type=float, default=0.05)
     ap.add_argument("--mip-gap", dest="mip_gap", type=float, default=1e-6)
     ap.add_argument("--time-limit", dest="time_limit", type=float, default=None)
+    ap.add_argument("--no-margin-tests", dest="no_margin_tests", action="store_true")
     ap.add_argument("--out", default="runs/phase2")
     ap.add_argument("--list", action="store_true")
     ap.add_argument("--cell", type=int, default=None)

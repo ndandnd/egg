@@ -100,12 +100,48 @@ model objective, solver backend/status/objective/bound/MIP-gap/root-LP
 value/LP-vs-MIP gap/wall times/variable-constraint-integer counts, PWL
 segment count, git commit, host, Slurm job/array/restart IDs, timestamp.
 
-## First sanity results (2026-08-14, CBC, seed 0, 8 trips)
+## Correctness hardening (2026-08-15 patch, reviewer-specified)
 
-- Undamped taker iteration (alpha=1, b=0.05) found a **2-cycle** at
-  iteration 3 — the cobweb phenomenon that anchors flagship theorem B1.
-- Phase-2 sweep on one slot found 2 economic switches (load jumps of 14 and
-  57 kWh); tie-flip switches (alternative optima with identical loads) are
-  flagged separately so the switch statistic is honest.
-- Welfare ladder ordered as theory predicts (uncontrolled > taker >=
-  strategic >= dictator; the last three coincide at this tiny scale).
+After the first Unicorn screen (2,410 GRB solves, snapshot
+`result/*/20260814T233530Z`), the measurement layer was hardened:
+
+1. **State-correct detection** (`loops.py`): the dynamical state is the price
+   vector. Fixed point requires `p^{k+1} ~= p^k`; a cycle requires the price
+   state to recur (j <= k-2). Repeated loads/schedules at different prices
+   are recorded as recurrences, never as convergence. Full price history is
+   checkpointed; price/load residuals and schedule/response recurrences are
+   logged per iteration. (For alpha=1 the old response-recurrence test was
+   provably equivalent; the damped runs are the ones being reclassified.)
+2. **Certified adaptive convex approximation** (`regimes.py`): strategic and
+   dictator objectives are solved by iterated tangent refinement — MILP lower
+   bound, true-objective upper bound at the incumbent, add tangents at the
+   incumbent, repeat to tolerance (default 1e-2). Records carry
+   lb/ub/gap/rounds; `obj_true` is the certified feasible value.
+3. **Replay validation on every production solve**: `replay_ok` +
+   `replay_violations` in every record; drivers fail the cell on violation.
+4. **Hardened Phase-2 classification** (`boundary.py`): -0.0-safe hashing;
+   explicit 1 kWh material-load threshold; switch kinds `degenerate_tie` /
+   `charging_only` / `duty_change` / `fleet_change`; and a **margin test**
+   (re-realize schedule B's trip partition at A's prices via the
+   fixed-sequence oracle `evsp.solve_fixed_sequences`) that separates strict
+   preference changes from alternative optima (`tie_margin`).
+5. **Self-describing outputs**: records carry seed/shape/b/alpha/residuals;
+   `experiments/audit_runs.py` writes a completion audit + `SUMMARY.md`
+   (loop-outcome tables, switch classification, adaptive gaps, replay
+   status) and exits nonzero on replay failures; `sync_results.sh` runs it
+   automatically.
+
+First rerun with the hardened detector (CBC, seed 0, 8 trips, b=0.05):
+alpha=1 -> certified price-state **cycle**; alpha=0.5 -> still a certified
+cycle (damping at 0.5 genuinely fails here); alpha=0.25 -> reclassified to
+**max_iters** (slow transient) — hence the default iteration budget is now
+120. Adaptive strategic/dictator gaps closed to <= 0.005 in <= 7 rounds; all
+solves replay-valid.
+
+## Earlier sanity results (2026-08-14, pre-hardening)
+
+- Undamped taker iteration (alpha=1, b=0.05) found a 2-cycle at iteration 3.
+- Phase-2 sweep found 2 material switches; welfare ladder ordered as theory
+  predicts. (Superseded by the hardened measurement above; the Unicorn
+  screen snapshot under `result/` predates this patch — rerun before drawing
+  conclusions.)
