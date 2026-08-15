@@ -26,7 +26,29 @@ the recurring environment, Slurm, Git, and results-transfer failures.
    python -c 'from egglab.solver import backend; print(backend())'
    ```
 
-   The expected output is `GRB`.
+The expected output is `GRB`.
+
+Before using the hardened 128-cell Phase 1 array, verify the cell count
+directly from the checked-out code:
+
+```bash
+python experiments/run_phase1.py --list | tail -1
+# expected: total: 128 cells
+```
+
+If an array was accidentally launched from the old 64-cell `main`, preserve
+the mixed output and start clean after the hardened PR is merged:
+
+```bash
+ARCHIVE="runs/archive/pre-hardened-$(date -u +%Y%m%dT%H%M%SZ)"
+mkdir -p "${ARCHIVE}"
+[[ -d runs/phase1 ]] && mv runs/phase1 "${ARCHIVE}/phase1"
+[[ -d runs/phase2 ]] && mv runs/phase2 "${ARCHIVE}/phase2"
+mkdir -p runs/phase1 runs/phase2
+```
+
+Moving rather than deleting keeps failed and pre-hardened records available
+for diagnosis without allowing them to contaminate the corrected rerun.
 
 3. Submit explicit arrays and save both parent job IDs. Phase 1 is `0-127`
    after the hardened rerun; Phase 2 is `0-31`.
@@ -66,9 +88,11 @@ printf 'phase2: '
 find runs/phase2 -name sweep.ckpt.json | wc -l
 
 echo '=== matching logs with errors ==='
-rg -n -i 'error|traceback|exception|failed|killed|oom|requeue' \
-  slurm-egg-phase1-${P1_JOB}_*.out \
-  slurm-egg-phase2-${P2_JOB}_*.out || true
+for f in slurm-egg-phase1-${P1_JOB}_*.out \
+         slurm-egg-phase2-${P2_JOB}_*.out; do
+  [[ -e "${f}" ]] || continue
+  grep -Ein 'error|traceback|exception|failed|killed|oom|requeue' "${f}" || true
+done
 ```
 
 ## One-password results pull
@@ -100,6 +124,8 @@ ssh "${REMOTE}" \
 | `python: command not found` on the Mac | macOS exposes `python3`, not `python` | The collector must select `python` or `python3`; run local collection after pulling |
 | Cluster sync could not push to GitHub | HTTPS password authentication is disabled and no token/SSH key is configured | Never push from Unicorn; push the distilled results from the Mac |
 | `squeue` entries disappeared and status was unclear | `squeue` is not historical accounting | Use `sacct -X` and inspect exit codes/logs |
+| Phase 1 tasks `0-63` completed but `64-127` failed | A 128-task array was submitted while `main` still defined only 64 cells | Merge the hardened PR first; run `python experiments/run_phase1.py --list` and require `total: 128` before submitting |
+| `rg: command not found` on Unicorn | Ripgrep is not installed on the login/compute image | Use the portable `grep` loop above; do not add ad hoc packages to the cluster |
 
 ## Branch hygiene
 
