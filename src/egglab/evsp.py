@@ -67,9 +67,20 @@ def slot_overlaps(inst: Instance, w0: int, w1: int):
 # solution container
 # --------------------------------------------------------------------------
 def _norm(x: float, ndigits: int = 6) -> float:
-    """Round and normalize -0.0 to 0.0 (hash-stability)."""
+    """Round and normalize -0.0 to 0.0. HASH/PRESENTATION USE ONLY — never
+    apply to values that feed replay validation or economics (Unicorn
+    incident 2026-08-15: pre-replay rounding accumulated along vehicle
+    chains and produced spurious `6.00 < 6.0` terminal-SOC failures)."""
     v = round(float(x), ndigits)
     return v + 0.0 if v != 0 else 0.0
+
+
+# Absolute replay tolerance (kWh). Covers MILP solver feasibility residuals
+# (Gurobi/CBC default primal feasibility ~1e-6 per constraint) accumulated
+# over a vehicle chain, plus float arithmetic in the independent replay.
+# It does NOT weaken any MILP constraint — the model is solved exactly as
+# before; this tolerance only governs the ex-post replay audit.
+REPLAY_TOL_KWH = 1e-4
 
 
 @dataclass
@@ -298,7 +309,7 @@ def _extract(inst, stats, u, o, z, xd, xg, e, L, dirp, depp) -> Solution:
                                         "after_trip": inst.trips[a].id,
                                         "before_trip": inst.trips[b].id,
                                         "slot": t,
-                                        "kwh": round(val(var), 6),
+                                        "kwh": float(val(var)),  # full precision (replay)
                                     }
                                 )
                         break
@@ -311,7 +322,7 @@ def _extract(inst, stats, u, o, z, xd, xg, e, L, dirp, depp) -> Solution:
         sequences.append(seq)
         arc_kinds.append(kinds)
 
-    load = [_norm(val(L[t])) for t in range(inst.n_slots)]
+    load = [float(val(L[t])) for t in range(inst.n_slots)]  # full precision
     sol = Solution(
         sequences=sequences,
         arc_kinds=arc_kinds,
@@ -319,7 +330,7 @@ def _extract(inst, stats, u, o, z, xd, xg, e, L, dirp, depp) -> Solution:
         load=load,
         fleet=len(sequences),
         dh_min_total=dh_min_total,
-        energy_charged_kwh=round(sum(load), 6),
+        energy_charged_kwh=float(sum(load)),
         ops_cost=inst.vehicle_fixed_cost * len(sequences)
         + inst.dh_cost_per_min * dh_min_total,
         obj_model=stats.obj,
@@ -481,12 +492,12 @@ def solve_fixed_sequences(
                                 "after_trip": ti.id,
                                 "before_trip": tj.id,
                                 "slot": t,
-                                "kwh": _norm(val(var)),
+                                "kwh": float(val(var)),  # full precision (replay)
                             }
                         )
         arc_kinds.append(kinds)
 
-    load = [_norm(val(L[t])) for t in range(inst.n_slots)]
+    load = [float(val(L[t])) for t in range(inst.n_slots)]  # full precision
     sol = Solution(
         sequences=[list(s) for s in sequences],
         arc_kinds=arc_kinds,
@@ -494,7 +505,7 @@ def solve_fixed_sequences(
         load=load,
         fleet=len(sequences),
         dh_min_total=dh_running,
-        energy_charged_kwh=_norm(sum(load)),
+        energy_charged_kwh=float(sum(load)),
         ops_cost=inst.vehicle_fixed_cost * len(sequences)
         + inst.dh_cost_per_min * dh_running,
         obj_model=stats.obj,
@@ -508,9 +519,30 @@ def solve_fixed_sequences(
 # --------------------------------------------------------------------------
 # replay validation (independent of the MILP)
 # --------------------------------------------------------------------------
-def validate_solution(inst: Instance, sol: Solution) -> list:
+def _bound_err(
+    label: str, actual: float, bound: float, sense: str, tol: float
+) -> str:
+    """Uniform diagnostic: actual value, required bound, shortfall/excess,
+    and the active tolerance (reviewer/incident-specified format)."""
+    gap = (bound - actual) if sense == ">=" else (actual - bound)
+    word = "shortfall" if sense == ">=" else "excess"
+    return (
+        f"{label}: actual={actual:.9f} required{sense}{bound:.9f} "
+        f"{word}={gap:.3e} tol={tol:.1e}"
+    )
+
+
+def validate_solution(
+    inst: Instance, sol: Solution, tol_kwh: float = REPLAY_TOL_KWH
+) -> list:
     """Replay every vehicle sequence and charging plan against the instance
-    physics; returns a list of violation strings (empty = valid)."""
+    physics, independently of the MILP; returns a list of violation strings
+    (empty = valid).
+
+    tol_kwh (default REPLAY_TOL_KWH = 1e-4 kWh = 0.1 Wh) absorbs solver
+    primal-feasibility residuals and float accumulation along a chain. It is
+    an audit tolerance only; the MILP constraints are unchanged. Time checks
+    are integer-minute exact and take no tolerance."""
     errs = []
     tripmap = {t.id: t for t in inst.trips}
     covered = [tid for seq in sol.sequences for tid in seq]
@@ -532,36 +564,53 @@ def validate_solution(inst: Instance, sol: Solution) -> list:
                 if kind == "dir":
                     ready = prev.end_min + inst.dhm(prev.end_loc, tr.start_loc)
                     if ready > tr.start_min:
-                        errs.append(f"v{vi}: direct chain {prev.id}->{tid} late")
+                        errs.append(
+                            f"v{vi}: direct chain {prev.id}->{tid} late: "
+                            f"ready={ready}min required<={tr.start_min}min "
+                            f"excess={ready - tr.start_min}min tol=0 (exact)"
+                        )
                     soc -= inst.dhk(prev.end_loc, tr.start_loc)
                 else:
                     arrive = prev.end_min + inst.dhm(prev.end_loc, D)
                     depart = tr.start_min - inst.dhm(D, tr.start_loc)
                     if depart < arrive:
-                        errs.append(f"v{vi}: depot chain {prev.id}->{tid} infeasible")
+                        errs.append(
+                            f"v{vi}: depot chain {prev.id}->{tid} infeasible: "
+                            f"arrive={arrive}min required<=depart={depart}min "
+                            f"excess={arrive - depart}min tol=0 (exact)"
+                        )
                     soc -= inst.dhk(prev.end_loc, D)
-                    if soc < inst.soc_min_kwh - 1e-6:
-                        errs.append(f"v{vi}: SOC floor violated arriving depot")
+                    if soc < inst.soc_min_kwh - tol_kwh:
+                        errs.append(_bound_err(
+                            f"v{vi}: SOC floor arriving depot before {tid} (kWh)",
+                            soc, inst.soc_min_kwh, ">=", tol_kwh))
                     for c in charge_by_arc.get((prev.id, tid), []):
                         lo, hi = c["slot"] * inst.slot_min, (c["slot"] + 1) * inst.slot_min
                         ov = min(hi, depart) - max(lo, arrive)
                         cap = inst.charge_power_kw * max(ov, 0) / 60.0
-                        if c["kwh"] > cap + 1e-6:
-                            errs.append(
-                                f"v{vi}: charge {c['kwh']:.2f} kWh exceeds window cap "
-                                f"{cap:.2f} in slot {c['slot']}"
-                            )
+                        if c["kwh"] > cap + tol_kwh:
+                            errs.append(_bound_err(
+                                f"v{vi}: charge in slot {c['slot']} on "
+                                f"{prev.id}->{tid} exceeds window cap (kWh)",
+                                c["kwh"], cap, "<=", tol_kwh))
                         soc += c["kwh"]
-                    if soc > inst.battery_kwh + 1e-6:
-                        errs.append(f"v{vi}: battery overfilled at depot")
+                    if soc > inst.battery_kwh + tol_kwh:
+                        errs.append(_bound_err(
+                            f"v{vi}: battery overfilled at depot before {tid} (kWh)",
+                            soc, inst.battery_kwh, "<=", tol_kwh))
                     soc -= inst.dhk(D, tr.start_loc)
-            if soc < inst.soc_min_kwh - 1e-6:
-                errs.append(f"v{vi}: SOC floor violated before {tid}")
+            if soc < inst.soc_min_kwh - tol_kwh:
+                errs.append(_bound_err(
+                    f"v{vi}: SOC floor before {tid} (kWh)",
+                    soc, inst.soc_min_kwh, ">=", tol_kwh))
             soc -= tr.energy_kwh
-            if soc < inst.soc_min_kwh - 1e-6:
-                errs.append(f"v{vi}: SOC floor violated after {tid}")
+            if soc < inst.soc_min_kwh - tol_kwh:
+                errs.append(_bound_err(
+                    f"v{vi}: SOC floor after {tid} (kWh)",
+                    soc, inst.soc_min_kwh, ">=", tol_kwh))
             prev = tr
         soc -= inst.dhk(prev.end_loc, D)
-        if soc < inst.soc_end_kwh - 1e-6:
-            errs.append(f"v{vi}: terminal SOC {soc:.2f} < {inst.soc_end_kwh}")
+        if soc < inst.soc_end_kwh - tol_kwh:
+            errs.append(_bound_err(
+                f"v{vi}: terminal SOC (kWh)", soc, inst.soc_end_kwh, ">=", tol_kwh))
     return errs

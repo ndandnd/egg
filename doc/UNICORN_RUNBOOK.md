@@ -136,6 +136,21 @@ ssh "${REMOTE}" \
 | Phase 1 tasks `0-63` completed but `64-127` failed | A 128-task array was submitted while `main` still defined only 64 cells | Merge the hardened PR first; run `python experiments/run_phase1.py --list` and require `total: 128` before submitting |
 | `rg: command not found` on Unicorn | Ripgrep is not installed on the login/compute image | Use the portable `grep` loop above; do not add ad hoc packages to the cluster |
 | `sbatch: command not found` after the Gurobi preflight passed | Submission was run through a nested non-interactive SSH session from Unicorn back into itself; that shell lacked the Slurm client path | Submit directly from the current Unicorn login prompt with `bash cluster/launch_phase12.sh`; the launcher checks `sbatch` before doing any work |
+| Replay validation failed cells with `terminal SOC 6.00 < 6.0` (phase-1 job 51417: 24 failures; boundary job 51831: 23 failures); occasional SOC-floor/battery-overfill variants | Extracted charges/loads were rounded to 6 decimals before the independent replay while replay used a 1e-6 kWh tolerance; rounding plus solver primal-feasibility residuals accumulated along vehicle chains until tight constraints appeared violated | Full-precision extraction in the EVSP extractor, `solve_fixed_sequences`, and `solve_uncontrolled` (rounding only in hashes/presentation); one documented audit tolerance `REPLAY_TOL_KWH = 1e-4` kWh in `egglab/evsp.py` (audit-only — MILP constraints unchanged); diagnostic messages now print actual value, required bound, shortfall/excess, and active tolerance; regression tests in `tests/test_replay_tolerance.py` |
+
+## Replay tolerance policy (2026-08-15)
+
+The independent replay audit (`egglab/evsp.py:validate_solution`) accepts
+absolute energy deviations up to `REPLAY_TOL_KWH = 1e-4` kWh (0.1 Wh). This
+exists solely to absorb MILP solver primal-feasibility residuals (~1e-6 per
+constraint, accumulated along a vehicle chain) and floating-point replay
+arithmetic. It must never be raised to hide model bugs, and it does not relax
+any MILP constraint. Time-feasibility checks remain integer-minute exact with
+zero tolerance. Solution values (charges, loads, energy totals) are stored at
+full float precision; rounding is reserved for hashes and presentation only.
+Cells that failed replay under the old rounding (jobs 51417/51831) can simply
+be rerun with the same commands — checkpoints of completed units remain
+valid; the failed units were never marked done.
 
 ## Branch hygiene
 

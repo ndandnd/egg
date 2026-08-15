@@ -152,13 +152,13 @@ def solve_uncontrolled(inst: Instance, market: AffineMarket, **kw) -> Solution:
                         "after_trip": after,
                         "before_trip": before,
                         "slot": t,
-                        "kwh": round(amt, 6),
+                        "kwh": float(amt),  # full precision (replay)
                     }
                 )
                 new_load[t] += amt
                 remaining -= amt
     sol.charges = new_charges
-    sol.load = [round(x, 6) for x in new_load]
+    sol.load = [float(x) for x in new_load]  # full precision
     sol.oracle_tier = "policy/uncontrolled-charge-on-arrival"
     return sol
 
