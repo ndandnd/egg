@@ -1,0 +1,37 @@
+#!/bin/bash
+# Dense damping-frontier replication: 16 seeds x 2 slopes x 9 alphas.
+# Loop-only mode avoids recomputing alpha-invariant strategic/dictator solves.
+#SBATCH --job-name=egg-damping
+#SBATCH --output=slurm-%x-%A_%a.out
+#SBATCH --mail-type=END,FAIL,REQUEUE
+#SBATCH --mail-user=nc437@cornell.edu
+#SBATCH --requeue
+#SBATCH --array=0-287%24
+#SBATCH --cpus-per-task=4
+#SBATCH --mem=8G
+#SBATCH --time=24:00:00
+
+set -euo pipefail
+SUBMIT_DIR="${SLURM_SUBMIT_DIR:-$(pwd)}"
+if [[ -f "${SUBMIT_DIR}/experiments/run_phase1.py" ]]; then
+    WORK_DIR="${SUBMIT_DIR}"
+elif [[ -f "${SUBMIT_DIR}/src/experiments/run_phase1.py" ]]; then
+    WORK_DIR="${SUBMIT_DIR}/src"
+else
+    echo "ERROR: could not locate the egg src directory from ${SUBMIT_DIR}" >&2
+    exit 1
+fi
+cd "${WORK_DIR}"
+source "${WORK_DIR}/cluster/unicorn_env.sh"
+
+STAMP="${EGG_OVERNIGHT_STAMP:?EGG_OVERNIGHT_STAMP is required}"
+python experiments/run_phase1.py \
+    --cell "${SLURM_ARRAY_TASK_ID}" \
+    --seeds 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 \
+    --n-trips 12 \
+    --shapes duck \
+    --b-scales 0.01 0.05 \
+    --alphas 1.0 0.75 0.5 0.35 0.25 0.2 0.15 0.1 0.05 \
+    --loop-only \
+    --max-iters 240 \
+    --out "runs/overnight/${STAMP}/damping_frontier"

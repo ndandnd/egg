@@ -67,6 +67,11 @@ for diagnosis without allowing them to contaminate the corrected rerun.
    run `sync_results.sh` locally so the distilled CSV and `SUMMARY.md` can be
    committed and pushed.
 
+For targeted overnight work, use `cluster/launch_overnight.sh`. Set
+`EGG_AFTER_JOB=<jobid>` to queue the suite behind a running array. The launcher
+writes a stamped manifest and caps concurrent tasks; the scientific design is
+recorded in `doc/OVERNIGHT_EXPERIMENTS.md`.
+
 ## Definitive post-array check
 
 Replace the two IDs before running:

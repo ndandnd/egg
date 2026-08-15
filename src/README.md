@@ -96,6 +96,21 @@ bash cluster/sync_results.sh phase1   # aggregates runs/phase1 -> result/phase1/
 Raw `runs/` stays on the cluster (gitignored); only distilled results enter
 git, so analysis here always has the CSVs + outcome summaries.
 
+### Targeted overnight suite
+
+`cluster/launch_overnight.sh` submits two checkpointed campaigns: a 288-cell
+loop-only damping frontier and a 64-cell fine Phase-2 boundary map. To queue
+them behind an active job:
+
+```bash
+EGG_AFTER_JOB=51417 bash cluster/launch_overnight.sh
+```
+
+The launcher caps concurrency at 24 and 16 respectively and writes a stamped
+manifest under `runs/overnight/`. See
+`doc/OVERNIGHT_EXPERIMENTS.md` for hypotheses, grids, resource bounds, and
+decision rules.
+
 ## Statistics collected per solve (Phase-0 contract)
 
 instance hash/name/size, price vector, regime, oracle tier, schedule hash,

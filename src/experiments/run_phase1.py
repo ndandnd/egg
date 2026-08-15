@@ -68,6 +68,9 @@ def run_cell(cell, args):
         "alpha": alpha,
         "n_seg": args.n_seg,
         "pwl_tol": args.pwl_tol,
+        "run_mode": "loop_only" if args.loop_only else (
+            "static_only" if args.static_only else "full"
+        ),
     }
 
     regimes = {
@@ -80,26 +83,27 @@ def run_cell(cell, args):
             inst, market, n_seg=args.n_seg, tol_abs=args.pwl_tol, **kw
         ),
     }
-    ladder = {}
-    for name, fn in regimes.items():
-        if name in state["static_done"]:
-            continue
-        sol = fn()
-        rec = make_record(
-            "phase1-static", inst, sol, market=market, prices=posted, regime=name,
-            extra=params,
-        )
-        if rec["replay_ok"] is False:
-            raise RuntimeError(
-                f"replay validation failed for {name} in {tag}: "
-                f"{rec['replay_violations']}"
+    if not args.loop_only:
+        ladder = {}
+        for name, fn in regimes.items():
+            if name in state["static_done"]:
+                continue
+            sol = fn()
+            rec = make_record(
+                "phase1-static", inst, sol, market=market, prices=posted, regime=name,
+                extra=params,
             )
-        append_jsonl(rec_path, rec)
-        ladder[name] = evaluate(inst, sol, market)["total_system"]
-        state["static_done"].append(name)
-        checkpoint.save(ck_path, state)
+            if rec["replay_ok"] is False:
+                raise RuntimeError(
+                    f"replay validation failed for {name} in {tag}: "
+                    f"{rec['replay_violations']}"
+                )
+            append_jsonl(rec_path, rec)
+            ladder[name] = evaluate(inst, sol, market)["total_system"]
+            state["static_done"].append(name)
+            checkpoint.save(ck_path, state)
 
-    if not state["loop_done"]:
+    if not args.static_only and not state["loop_done"]:
         taker_fixed_point(
             inst,
             market,
@@ -137,6 +141,15 @@ def main():
     ap.add_argument("--mip-gap", dest="mip_gap", type=float, default=1e-6)
     ap.add_argument("--time-limit", dest="time_limit", type=float, default=None)
     ap.add_argument("--out", default="runs/phase1")
+    mode = ap.add_mutually_exclusive_group()
+    mode.add_argument(
+        "--loop-only", action="store_true",
+        help="skip alpha-invariant static regimes and run only the price loop",
+    )
+    mode.add_argument(
+        "--static-only", action="store_true",
+        help="run the four static regimes and skip the price loop",
+    )
     ap.add_argument("--list", action="store_true")
     ap.add_argument("--cell", type=int, default=None)
     ap.add_argument("--all", action="store_true")
