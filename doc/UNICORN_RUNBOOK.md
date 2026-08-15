@@ -50,8 +50,12 @@ mkdir -p runs/phase1 runs/phase2
 Moving rather than deleting keeps failed and pre-hardened records available
 for diagnosis without allowing them to contaminate the corrected rerun.
 
-3. Submit explicit arrays and save both parent job IDs. Phase 1 is `0-127`
-   after the hardened rerun; Phase 2 is `0-31`.
+3. From the current interactive Unicorn login prompt, submit both arrays with
+   `bash cluster/launch_phase12.sh`. Do not SSH from Unicorn back into itself:
+   a nested non-interactive SSH shell may omit the Slurm client path, producing
+   `sbatch: command not found` even though Gurobi initialization succeeds. The
+   launcher refuses to proceed unless `sbatch`, `squeue`, Gurobi, and the
+   hardened 128-cell grid are all available.
 
 4. `squeue` is only a live view. Once jobs disappear, use `sacct` as the
    authoritative result, then count `cell.ckpt.json` and `sweep.ckpt.json`.
@@ -126,10 +130,9 @@ ssh "${REMOTE}" \
 | `squeue` entries disappeared and status was unclear | `squeue` is not historical accounting | Use `sacct -X` and inspect exit codes/logs |
 | Phase 1 tasks `0-63` completed but `64-127` failed | A 128-task array was submitted while `main` still defined only 64 cells | Merge the hardened PR first; run `python experiments/run_phase1.py --list` and require `total: 128` before submitting |
 | `rg: command not found` on Unicorn | Ripgrep is not installed on the login/compute image | Use the portable `grep` loop above; do not add ad hoc packages to the cluster |
+| `sbatch: command not found` after the Gurobi preflight passed | Submission was run through a nested non-interactive SSH session from Unicorn back into itself; that shell lacked the Slurm client path | Submit directly from the current Unicorn login prompt with `bash cluster/launch_phase12.sh`; the launcher checks `sbatch` before doing any work |
 
 ## Branch hygiene
 
-Do not use the stale `codex/results-workflow` branch for new launches. The
-hardened implementation belongs in the PR #7 branch until it is merged into
-`main`; close stale workflow branches after their useful changes are either
-merged or superseded.
+The hardened implementation and this runbook are merged into `main`. Submit
+only from `main`; delete source branches after their PR is fast-forwarded.

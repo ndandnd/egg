@@ -73,8 +73,12 @@ python3 -m egglab.collect runs -o runs/all.csv
    `/share/apps/software/gurobi/gurobi.lic`, and requires Gurobi rather than
    silently falling back to CBC. `egglab.solver.backend()` prints the active
    backend.
-2. Size `--array` to `--list`'s cell count if defaults change.
-3. `sbatch cluster/submit_phase1.sub` (and phase2). **Preemption safety:**
+2. Submit from the current interactive Unicorn login shell with
+   `bash cluster/launch_phase12.sh`. The launcher verifies that `sbatch` is
+   available and that Phase 1 contains exactly 128 hardened cells before it
+   submits both arrays. Do not SSH from a Unicorn login node back into itself:
+   that nested non-interactive shell does not expose the Slurm client path.
+3. **Preemption safety:**
    jobs are `--requeue`; every driver checkpoints after each work unit
    (regime solve, loop iteration, grid point) with atomic writes, and rerunning
    the same command resumes — a preempted task loses at most one in-flight
