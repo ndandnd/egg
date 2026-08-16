@@ -1,0 +1,35 @@
+#!/bin/bash
+# Guarded launcher for the audit job.
+#
+# Usage (from an interactive Unicorn login prompt, in src/):
+#   bash cluster/launch_audit.sh runs/phase1 runs/overnight/<stamp>/damping_frontier runs/overnight/<stamp>/boundary_fine
+#
+# Verifies each root exists, submits ONE bash batch job (never
+# `sbatch --wrap`, whose /bin/sh has no `source`), and writes a manifest.
+set -euo pipefail
+
+SRC_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+REPO_DIR="$(cd "${SRC_DIR}/.." && pwd)"
+cd "${SRC_DIR}"
+
+if ! command -v sbatch >/dev/null 2>&1; then
+    echo "ERROR: sbatch is unavailable; run directly from an interactive Unicorn login prompt." >&2
+    exit 127
+fi
+source "${SRC_DIR}/cluster/unicorn_env.sh"
+
+[[ $# -ge 1 ]] || { echo "usage: bash cluster/launch_audit.sh RUNS_ROOT [RUNS_ROOT...]" >&2; exit 2; }
+for ROOT in "$@"; do
+    [[ -d "${ROOT}" ]] || { echo "ERROR: no such runs root: ${ROOT}" >&2; exit 1; }
+done
+
+JOB="$(sbatch --parsable --export="ALL,EGG_AUDIT_ROOTS=$*" cluster/submit_audit.sub)"
+mkdir -p runs/audit-manifests
+MANIFEST="runs/audit-manifests/MANIFEST-$(date -u +%Y%m%dT%H%M%SZ).txt"
+{
+    printf 'roots=%s\n' "$*"
+    printf 'job_id=%s\n' "${JOB}"
+    printf 'git_commit=%s\n' "$(git -C "${REPO_DIR}" rev-parse HEAD)"
+    printf 'submitted_utc=%s\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+} > "${MANIFEST}"
+echo "[submitted] audit job ${JOB} over: $* (manifest: ${MANIFEST})"

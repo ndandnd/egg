@@ -130,6 +130,18 @@ def taker_fixed_point(
                 **(extra_params or {}),
             },
         )
+        # FAIL FAST (measurement-closeout rule): a replay-invalid iteration
+        # must never be appended to the record stream and must never advance
+        # the scientific checkpoint. Raising here leaves state["iter"] == k
+        # and the checkpoint file untouched, so a rerun retries this exact
+        # iteration. (The pre-2026-08-16 code appended and advanced anyway,
+        # which is how the 18+163 legacy replay_ok=false records were born.)
+        if rec["replay_ok"] is False:
+            raise RuntimeError(
+                f"replay validation failed at iter {k} of '{tag}' "
+                f"(record NOT appended, checkpoint NOT advanced; "
+                f"state remains at iter {k}): {rec['replay_violations']}"
+            )
         append_jsonl(rec_path, rec)
 
         state["price_history"].append([float(x) for x in p])

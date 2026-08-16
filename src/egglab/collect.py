@@ -8,7 +8,6 @@ from __future__ import annotations
 
 import argparse
 import csv
-import glob
 import json
 import os
 
@@ -46,7 +45,15 @@ EXTRA = ["tag", "cell", "seed", "shape", "b_scale", "alpha", "tol_price",
          "response_recurred", "sweep_slot", "delta", "idx"]
 
 
-def flatten(rec: dict) -> dict:
+def flatten(rec: dict, sidecar: dict | None = None) -> dict:
+    """Flatten one record. Replay semantics (measurement closeout):
+    - replay_original_ok: the stored flag, never altered;
+    - replay_revalidation_status: sidecar disposition (exact-hash match);
+    - replay_effective_ok: original True, or original False covered by a
+      successful revalidation. CANONICAL ANALYSIS USES THE EFFECTIVE FIELD;
+      the original is always preserved alongside."""
+    from .revalidate import ACCEPTED_DISPOSITIONS
+
     row = {k: rec.get(k) for k in SCALARS}
     for k in SOLVER:
         row[f"solver_{k}"] = (rec.get("solver") or {}).get(k)
@@ -62,7 +69,46 @@ def flatten(rec: dict) -> dict:
     row["x_outcome_type"] = oc.get("type") if isinstance(oc, dict) else None
     row["x_cycle_length"] = oc.get("length") if isinstance(oc, dict) else None
     row["n_replay_violations"] = len(rec.get("replay_violations") or [])
+
+    original_ok = rec.get("replay_ok")
+    status = sidecar.get("disposition") if sidecar else None
+    if original_ok is False:
+        effective = status in ACCEPTED_DISPOSITIONS
+    else:
+        effective = original_ok  # True, or None for pre-replay-era records
+    row["replay_original_ok"] = original_ok
+    row["replay_effective_ok"] = effective
+    row["replay_revalidation_status"] = status
+    row["replay_policy_version"] = rec.get("replay_policy_version")
+    row["replay_tolerance_kwh"] = rec.get("replay_tol_kwh")
     return row
+
+
+def collect(runs_dir: str, out: str) -> int:
+    """Aggregate all records under runs_dir into one CSV. Sidecar files under
+    revalidation/ directories are consulted for effective replay status but
+    are never ingested as oracle records."""
+    from .revalidate import iter_record_lines, load_sidecars, record_sha256
+
+    sidecars = load_sidecars(runs_dir)
+    rows = []
+    files = set()
+    for rel, _i, raw in iter_record_lines(runs_dir):
+        files.add(rel)
+        rec = json.loads(raw)
+        sc = None
+        if rec.get("replay_ok") is False:
+            sc = sidecars.get(record_sha256(raw))
+        rows.append(flatten(rec, sidecar=sc))
+    if not rows:
+        raise SystemExit(f"no records found under {runs_dir}")
+    os.makedirs(os.path.dirname(os.path.abspath(out)), exist_ok=True)
+    with open(out, "w", newline="") as f:
+        w = csv.DictWriter(f, fieldnames=list(rows[0].keys()))
+        w.writeheader()
+        w.writerows(rows)
+    print(f"wrote {out}: {len(rows)} records from {len(files)} files")
+    return len(rows)
 
 
 def main() -> None:
@@ -70,23 +116,7 @@ def main() -> None:
     ap.add_argument("runs_dir")
     ap.add_argument("-o", "--out", required=True)
     args = ap.parse_args()
-
-    files = sorted(glob.glob(os.path.join(args.runs_dir, "**", "*.jsonl"), recursive=True))
-    rows = []
-    for fp in files:
-        with open(fp) as f:
-            for line in f:
-                line = line.strip()
-                if line:
-                    rows.append(flatten(json.loads(line)))
-    if not rows:
-        raise SystemExit(f"no records found under {args.runs_dir}")
-    os.makedirs(os.path.dirname(os.path.abspath(args.out)), exist_ok=True)
-    with open(args.out, "w", newline="") as f:
-        w = csv.DictWriter(f, fieldnames=list(rows[0].keys()))
-        w.writeheader()
-        w.writerows(rows)
-    print(f"wrote {args.out}: {len(rows)} records from {len(files)} files")
+    collect(args.runs_dir, args.out)
 
 
 if __name__ == "__main__":

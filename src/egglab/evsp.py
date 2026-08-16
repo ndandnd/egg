@@ -82,6 +82,13 @@ def _norm(x: float, ndigits: int = 6) -> float:
 # before; this tolerance only governs the ex-post replay audit.
 REPLAY_TOL_KWH = 1e-4
 
+# Replay policy version, stamped into every record:
+#   1 (implicit, pre-PR#11): extraction rounded to 6 decimals, 1e-6 kWh audit
+#     tolerance — produced the Unicorn spurious-failure incident.
+#   2 (PR#11 onward): full-precision extraction, REPLAY_TOL_KWH audit
+#     tolerance, diagnostic messages.
+REPLAY_POLICY_VERSION = 2
+
 
 @dataclass
 class Solution:

@@ -1,0 +1,31 @@
+#!/bin/bash
+# Legacy replay revalidation array. Launch via cluster/launch_revalidation.sh,
+# which sizes --array from the tool's --count and writes the manifest.
+# Each task revalidates ONE failing record (a couple of fixed-sequence Gurobi
+# solves) and writes one atomic sidecar; tasks are idempotent and requeue-safe.
+#
+#SBATCH --job-name=egg-reval
+#SBATCH --output=slurm-%x-%A_%a.out
+#SBATCH --mail-type=END,FAIL,REQUEUE
+#SBATCH --mail-user=nc437@cornell.edu
+#SBATCH --requeue
+#SBATCH --array=0-0
+#SBATCH --cpus-per-task=2
+#SBATCH --mem=4G
+#SBATCH --time=02:00:00
+
+set -euo pipefail
+SUBMIT_DIR="${SLURM_SUBMIT_DIR:-$(pwd)}"
+if [[ -f "${SUBMIT_DIR}/experiments/revalidate_legacy_replay.py" ]]; then
+    WORK_DIR="${SUBMIT_DIR}"
+elif [[ -f "${SUBMIT_DIR}/src/experiments/revalidate_legacy_replay.py" ]]; then
+    WORK_DIR="${SUBMIT_DIR}/src"
+else
+    echo "ERROR: could not locate the egg src directory from ${SUBMIT_DIR}" >&2
+    exit 1
+fi
+cd "${WORK_DIR}"
+source "${WORK_DIR}/cluster/unicorn_env.sh"
+
+RUNS="${EGG_REVAL_RUNS:?EGG_REVAL_RUNS is required (runs directory to revalidate)}"
+python experiments/revalidate_legacy_replay.py "${RUNS}" --cell "${SLURM_ARRAY_TASK_ID}"

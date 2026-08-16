@@ -137,6 +137,8 @@ ssh "${REMOTE}" \
 | `rg: command not found` on Unicorn | Ripgrep is not installed on the login/compute image | Use the portable `grep` loop above; do not add ad hoc packages to the cluster |
 | `sbatch: command not found` after the Gurobi preflight passed | Submission was run through a nested non-interactive SSH session from Unicorn back into itself; that shell lacked the Slurm client path | Submit directly from the current Unicorn login prompt with `bash cluster/launch_phase12.sh`; the launcher checks `sbatch` before doing any work |
 | Replay validation failed cells with `terminal SOC 6.00 < 6.0` (phase-1 job 51417: 24 failures; boundary job 51831: 23 failures); occasional SOC-floor/battery-overfill variants | Extracted charges/loads were rounded to 6 decimals before the independent replay while replay used a 1e-6 kWh tolerance; rounding plus solver primal-feasibility residuals accumulated along vehicle chains until tight constraints appeared violated | Full-precision extraction in the EVSP extractor, `solve_fixed_sequences`, and `solve_uncontrolled` (rounding only in hashes/presentation); one documented audit tolerance `REPLAY_TOL_KWH = 1e-4` kWh in `egglab/evsp.py` (audit-only — MILP constraints unchanged); diagnostic messages now print actual value, required bound, shortfall/excess, and active tolerance; regression tests in `tests/test_replay_tolerance.py` |
+| 18 (phase 1) + 163 (damping frontier) loop records with `replay_ok=false` survived in otherwise complete runs | `egglab/loops.py` appended every loop record and advanced the checkpoint WITHOUT checking `rec["replay_ok"]`, so replay-invalid iterations were never failed work units and were never replaced by retries | Fail-fast ordering in `loops.py`: replay is checked BEFORE `append_jsonl` and BEFORE any checkpoint mutation; a failed iteration raises and leaves `state["iter"]` untouched (regression-tested). Legacy records are handled by the sidecar revalidation campaign below — raw JSONL is append-only evidence and is never edited, deleted, or waived by commit age |
+| `source: not found` in the audit Slurm log | The audit was submitted with `sbatch --wrap`, which runs under `/bin/sh`; `source` is a bash builtin. The job continued only because the environment happened to be inherited | Never use `sbatch --wrap`. Use the committed `#!/bin/bash` scripts: `cluster/submit_audit.sub` via `cluster/launch_audit.sh`, and `cluster/submit_revalidate.sub` via `cluster/launch_revalidation.sh` |
 
 ## Replay tolerance policy (2026-08-15)
 
@@ -151,6 +153,49 @@ full float precision; rounding is reserved for hashes and presentation only.
 Cells that failed replay under the old rounding (jobs 51417/51831) can simply
 be rerun with the same commands — checkpoints of completed units remain
 valid; the failed units were never marked done.
+
+## Legacy replay revalidation (2026-08-16)
+
+Policy (full rationale: `MEASUREMENT_CLOSEOUT.md`): raw run records are
+append-only evidence. Records stored with `replay_ok=false` are never edited,
+deleted, or auto-waived because their commit predates the replay fix. Each is
+individually revalidated — the exact stored trip partition is re-realized at
+the recorded prices under the current full-precision oracle, replayed with
+the current validator, and compared against the legacy economics — and the
+verdict is written to an atomic sidecar (`<runs>/revalidation/<sha256>.json`)
+keyed by the SHA-256 of the complete original record line. Audits and the
+collector report both the raw counts (never hidden) and the effective status
+after exact-hash sidecar matching.
+
+Exact commands for the current campaign (interactive Unicorn login, `src/`):
+
+```bash
+cd "$HOME/egg/src"
+source cluster/unicorn_env.sh
+
+# 1. Revalidate both roots that contain legacy failures:
+bash cluster/launch_revalidation.sh \
+    runs/phase1 \
+    runs/overnight/20260815T033012Z/damping_frontier
+
+# 2. After the arrays complete (sacct, then checkpoints), run the
+#    three-root audit as a proper bash batch job:
+bash cluster/launch_audit.sh \
+    runs/phase1 \
+    runs/overnight/20260815T033012Z/damping_frontier \
+    runs/overnight/20260815T033012Z/boundary_fine
+```
+
+The audit exits zero only when every checkpoint is complete, every stored
+replay failure is covered by a successful exact-hash revalidation, no
+revalidation failed, and all solves are OPTIMAL with converged
+certifications. `SUMMARY.md` in each root always shows the raw counts, e.g.:
+
+```
+- raw legacy replay failures: 163
+- successfully revalidated: 163
+- unresolved replay failures: 0
+```
 
 ## Branch hygiene
 

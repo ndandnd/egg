@@ -57,7 +57,7 @@ def make_record(
     extra: dict | None = None,
     validate: bool = True,
 ) -> dict:
-    from .evsp import validate_solution
+    from .evsp import REPLAY_POLICY_VERSION, REPLAY_TOL_KWH, validate_solution
     from .regimes import evaluate  # local import to avoid cycles
 
     replay_violations = validate_solution(inst, sol) if validate else None
@@ -83,8 +83,15 @@ def make_record(
         "oracle_tier": sol.oracle_tier,
         "replay_ok": None if replay_violations is None else not replay_violations,
         "replay_violations": replay_violations,
+        # replay-audit provenance: with sequences+arc_kinds+charges+instance
+        # metadata, the independent validator can be rerun later without
+        # solving another MILP (measurement-closeout requirement)
+        "replay_policy_version": REPLAY_POLICY_VERSION,
+        "replay_tol_kwh": REPLAY_TOL_KWH,
+        "instance_meta": dict(inst.meta),
         "solver": sol.stats.to_dict() if sol.stats else None,
         "sequences": sol.sequences,
+        "arc_kinds": sol.arc_kinds,
         "charges": sol.charges,
     }
     if market is not None:
