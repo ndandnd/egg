@@ -286,6 +286,7 @@ def solve_rmp(inst: Instance, market: AffineMarket, columns: list,
             "bound": st.bound,
             "mip_gap": st.mip_gap,
             "n_vars": st.n_vars,
+            "n_int": st.n_int,  # zero is meaningful: the clean RMP is an LP
             "n_constrs": st.n_constrs,
             "wall_s": st.wall_s,
             "threads": st.extra.get("threads"),
@@ -429,6 +430,27 @@ def certified_cg(
             gap = ub - state["lb_best"]
             state["ub_history"].append(ub)
             state["lb_history"].append(state["lb_best"])
+            # the terminal clean RMP is a real solve: commit its evidence as
+            # a master-only iteration event (no pricing solve to reference)
+            state["iteration_events"].append({
+                "record_kind": "cg-iteration",
+                "terminal": True,
+                "iteration_id": f"{tag}-it{oc}-terminal",
+                "experiment": experiment, "tag": tag, **provenance(),
+                "instance_hash": inst.hash(),
+                "oracle_calls": oc,
+                "n_columns": len(state["columns"]),
+                "z_rmp_model": rmp["z_model"],
+                "ub_ch": ub,
+                "lb_best": state["lb_best"],
+                "certificate_gap": gap,
+                "epsilon": epsilon,
+                "pwl_tol": pwl_tol,
+                "n_tangent_refinements": rmp["n_refinements"],
+                "master_wall_s": rmp["master_wall_s"],
+                "master_solves": rmp["master_solves"],
+                "pricing_solve_id": None,
+            })
             outcome = {"type": "budget_exhausted", "ub_ch": ub,
                        "lb_best": state["lb_best"], "gap": gap,
                        "certified": bool(gap <= epsilon),

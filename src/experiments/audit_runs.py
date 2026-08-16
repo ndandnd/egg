@@ -117,13 +117,26 @@ def _cg_sane(ck: dict, tol_mono: float = 2e-3) -> list:
             break
     if any(e.get("replay_ok") is not True for e in events):
         errs.append("oracle event without replay_ok=true")
-    # iteration events reference committed pricing solves
+    # iteration events reference committed pricing solves (terminal
+    # master-only events carry the budget RMP's evidence and no pricing);
+    # master solve ids must be unique within the checkpoint
     id_set = set(ids)
+    seen_master = set()
     for it in ck.get("iteration_events") or []:
-        if it.get("pricing_solve_id") not in id_set:
+        if not it.get("terminal") and it.get("pricing_solve_id") not in id_set:
             errs.append(f"iteration {it.get('iteration_id')} references "
                         f"unknown pricing solve {it.get('pricing_solve_id')}")
             break
+        for ms in it.get("master_solves") or []:
+            if ms.get("solve_id") in seen_master:
+                errs.append(f"duplicate master solve_id {ms.get('solve_id')}")
+                break
+            seen_master.add(ms.get("solve_id"))
+    if (ck.get("outcome") or {}).get("type") == "budget_exhausted":
+        its = ck.get("iteration_events") or []
+        if not (its and its[-1].get("terminal") and its[-1].get("master_solves")):
+            errs.append("budget-exhausted cell missing the terminal "
+                        "master-only iteration event")
     return errs
 
 
@@ -152,6 +165,7 @@ def audit(
     recs = []
     cg_iter_recs = []
     raw_fail_shas = []
+    master_solve_ids = set()  # global uniqueness across every record file
     for rel, i, raw in iter_record_lines(runs_dir):
         try:
             rec = json.loads(raw)
@@ -165,14 +179,34 @@ def audit(
             # blocks at the top level would double-count the pricing solve.
             cg_iter_recs.append(rec)
             for ms in rec.get("master_solves") or []:
+                sid = ms.get("solve_id")
                 if ms.get("status") != "OPTIMAL":
                     problems.append(
-                        f"cg master solve {ms.get('solve_id')} in {rel}:{i} "
+                        f"cg master solve {sid} in {rel}:{i} "
                         f"has status {ms.get('status')} != OPTIMAL")
+                if sid in master_solve_ids:
+                    problems.append(f"duplicate master solve_id {sid} "
+                                    f"({rel}:{i})")
+                master_solve_ids.add(sid)
+                if "n_int" not in ms:
+                    problems.append(f"master solve {sid} missing n_int")
+                for fld in ("obj", "bound", "wall_s"):
+                    v = ms.get(fld)
+                    if not isinstance(v, (int, float)) or not math.isfinite(v):
+                        problems.append(
+                            f"master solve {sid} has nonfinite {fld}: {v!r}")
+                        break
             if not rec.get("master_solves"):
                 problems.append(f"cg iteration {rel}:{i} has no master solves")
             continue
         recs.append(rec)
+        # nested adaptive subsolves must each be OPTIMAL
+        for ad in (((rec.get("solver") or {}).get("extra") or {})
+                   .get("adaptive_solve_stats") or []):
+            if ad.get("status") != "OPTIMAL":
+                problems.append(
+                    f"adaptive subsolve round {ad.get('round')} in {rel}:{i} "
+                    f"has status {ad.get('status')} != OPTIMAL")
         if rec.get("replay_ok") is False:
             raw_fail_shas.append(record_sha256(raw))
 
@@ -418,7 +452,9 @@ def audit(
     if ok:
         lines.append("**PASS** — expected checkpoints all present and "
                      "complete; no unresolved replay failures; no nonaccepted "
-                     "revalidations; every solve OPTIMAL and certified.")
+                     "revalidations; every recorded solve OPTIMAL; replay and "
+                     "completeness gates passed; CG certification outcomes "
+                     "reported separately above.")
     else:
         lines.append("**FAIL**:")
         for p in problems:

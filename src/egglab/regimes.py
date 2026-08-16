@@ -56,15 +56,33 @@ def _solve_convex_adaptive(
     model_obj = None
     rounds = 0
     total_wall = 0.0
+    solve_stats = []
     while rounds < max_rounds:
         rounds += 1
         sol = solve_evsp(inst, ("pwl", segs), **kw)
         total_wall += sol.stats.wall_s + sol.stats.lp_wall_s
+        if sol.stats.status != "OPTIMAL":
+            raise RuntimeError(
+                f"adaptive {label}: round {rounds} solve status "
+                f"{sol.stats.status} != OPTIMAL; failing immediately")
         b = sol.stats.bound
         if b is None or not math.isfinite(float(b)):
             raise RuntimeError(
                 f"adaptive {label}: solver returned no finite certified "
                 f"bound ({b!r}); cannot certify")
+        solve_stats.append({
+            "round": rounds,
+            "status": sol.stats.status,
+            "incumbent": sol.obj_model,
+            "bound": float(b),
+            "gap": float(sol.obj_model) - float(b),
+            "n_vars": sol.stats.n_vars,
+            "n_int": sol.stats.n_int,
+            "n_constrs": sol.stats.n_constrs,
+            "wall_s": sol.stats.wall_s,
+            "backend": sol.stats.backend,
+            "threads": sol.stats.extra.get("threads"),
+        })
         lb_cert = max(lb_cert, float(b))
         model_obj = sol.obj_model  # incumbent of the tangent model (kept apart)
         L = np.asarray(sol.load, dtype=float)
@@ -88,6 +106,8 @@ def _solve_convex_adaptive(
             "adaptive_tol_abs": tol_abs,
             "adaptive_converged": bool(best_ub - lb_cert <= tol_abs),
             "adaptive_total_wall_s": total_wall,
+            # every nested subsolve, individually evidenced and audit-checked
+            "adaptive_solve_stats": solve_stats,
         }
     )
     return sol

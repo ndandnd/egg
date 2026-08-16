@@ -256,7 +256,12 @@ certified-bound reduced costs, the pricing gap, and every actual clean-RMP
 tangent-refinement solve individually), and
 `dictator.jsonl`/`dictator.ckpt.json` (the independent dictator solve —
 gated on OPTIMAL status, a finite certified bound, and adaptive
-convergence — feeding the uplift interval). LB_CH is always built from the
+convergence — feeding the uplift interval; the complete record and every
+per-round adaptive subsolve's stats are committed inside the checkpoint and
+`dictator.jsonl` is materialized atomically from it, so restarts never
+duplicate it). Budget-exhausted cells additionally commit the terminal
+clean-RMP's solve evidence as a master-only iteration event. LB_CH is
+always built from the
 pricing solver's certified dual bound, never the incumbent. A preempted task
 repeats at most the one in-flight oracle solve; completed columns and bounds
 survive requeue; a corrupted checkpoint (LB above best UB) or any identity

@@ -34,6 +34,7 @@ from egglab.instance import synthetic_instance
 from egglab.market import make_affine_market
 from egglab.regimes import solve_dictator, solve_taker
 from egglab.solver import SolveStats
+import experiments.run_b2a2_pilot as pilot_mod
 from experiments.audit_runs import audit
 from experiments.run_b2a2_pilot import BUDGET, EPSILON, build_cells, run_cell
 
@@ -610,6 +611,7 @@ def test_every_master_solve_is_evidenced(cg_run):
             assert ms["solve_id"] not in seen_solve_ids  # stable and unique
             seen_solve_ids.add(ms["solve_id"])
             assert math.isfinite(ms["obj"]) and ms["n_vars"] > 0
+            assert ms["n_int"] == 0  # the clean RMP is an LP; zero matters
         # pricing referenced by id, not duplicated as another solve entry
         assert it["pricing_solve_id"] in oracle_ids
     # oracle-call count agrees with unique committed records
@@ -699,3 +701,152 @@ def test_solver_records_thread_setting(tiny, monkeypatch):
     monkeypatch.setenv("SLURM_CPUS_PER_TASK", "4")
     sol = solve_taker(inst, market.price(np.zeros(market.n_slots)))
     assert sol.stats.extra.get("threads") == 4
+
+
+# --------------------------------------------------------------------------
+# transactional dictator stage (final amendment, item 1)
+# --------------------------------------------------------------------------
+def _tiny_pilot_args(tmp_path, monkeypatch, tiny):
+    inst, _ = tiny
+    monkeypatch.setattr(pilot_mod, "synthetic_instance",
+                        lambda **_kw: inst)
+    return types.SimpleNamespace(out=str(tmp_path), mip_gap=1e-6)
+
+
+def test_dictator_interrupt_after_checkpoint_before_materialization(
+        tiny, tmp_path, monkeypatch):
+    args = _tiny_pilot_args(tmp_path, monkeypatch, tiny)
+    cell = build_cells()[0]
+    tag = f"s{cell[0]}_n{cell[1]}_b{cell[2]:g}"
+    jsonl = os.path.join(str(tmp_path), tag, "dictator.jsonl")
+
+    def dying_mat(d_state, path):
+        raise KeyboardInterrupt("killed before dictator materialization")
+
+    real_mat = pilot_mod._materialize_dictator
+    pilot_mod._materialize_dictator = dying_mat
+    try:
+        with pytest.raises(KeyboardInterrupt):
+            run_cell(cell, args)
+    finally:
+        pilot_mod._materialize_dictator = real_mat
+    # checkpoint committed, log missing — resume repairs and completes
+    assert checkpoint.load(jsonl.replace(".jsonl", ".ckpt.json"))["record"]
+    assert not os.path.exists(jsonl)
+    run_cell(cell, args)
+    assert len(_read_jsonl(jsonl)) == 1
+    run_cell(cell, args)  # idempotent: rerun never duplicates
+    assert len(_read_jsonl(jsonl)) == 1
+
+
+def test_dictator_interrupt_during_materialization(tiny, tmp_path,
+                                                   monkeypatch):
+    args = _tiny_pilot_args(tmp_path, monkeypatch, tiny)
+    cell = build_cells()[0]
+    tag = f"s{cell[0]}_n{cell[1]}_b{cell[2]:g}"
+    jsonl = os.path.join(str(tmp_path), tag, "dictator.jsonl")
+
+    def dying_write(path, records):
+        raise KeyboardInterrupt("killed mid-materialization")
+
+    real_write = pilot_mod._atomic_write_lines
+    pilot_mod._atomic_write_lines = dying_write
+    try:
+        with pytest.raises(KeyboardInterrupt):
+            run_cell(cell, args)
+    finally:
+        pilot_mod._atomic_write_lines = real_write
+    run_cell(cell, args)
+    assert len(_read_jsonl(jsonl)) == 1
+    # the materialized record equals the committed one
+    ck = checkpoint.load(jsonl.replace(".jsonl", ".ckpt.json"))
+    assert _read_jsonl(jsonl)[0] == ck["record"]
+
+
+def test_dictator_rejects_stale_solver_settings(tiny, tmp_path, monkeypatch):
+    args = _tiny_pilot_args(tmp_path, monkeypatch, tiny)
+    cell = build_cells()[0]
+    run_cell(cell, args)  # complete run with mip_gap=1e-6
+    args_changed = types.SimpleNamespace(out=str(tmp_path), mip_gap=1e-8)
+    with pytest.raises(RuntimeError, match="stale dictator checkpoint"):
+        run_cell(cell, args_changed)
+
+
+# --------------------------------------------------------------------------
+# adaptive subsolve evidence (final amendment, item 2)
+# --------------------------------------------------------------------------
+def test_adaptive_non_optimal_round_fails_immediately(monkeypatch):
+    fake_sol = types.SimpleNamespace(
+        ops_cost=0.0, load=[0.0], obj_model=10.0, obj_true=None,
+        oracle_tier="",
+        stats=SolveStats(backend="FAKE", status="TIME_LIMIT", obj=10.0,
+                         bound=9.5))
+    monkeypatch.setattr(regimes_mod, "solve_evsp",
+                        lambda *_a, **_k: copy.deepcopy(fake_sol))
+    with pytest.raises(RuntimeError, match="!= OPTIMAL; failing immediately"):
+        regimes_mod._solve_convex_adaptive(
+            None, seg0=[[(0.0, 0.0)]], tangents_at=lambda L: [(0.0, 0.0)],
+            true_energy_cost=lambda L: 10.0, label="test")
+
+
+def test_adaptive_solve_stats_are_structured(dictator):
+    stats = dictator.stats.extra["adaptive_solve_stats"]
+    assert len(stats) == dictator.stats.extra["adaptive_rounds"]
+    for s in stats:
+        assert s["status"] == "OPTIMAL"
+        assert math.isfinite(s["bound"]) and math.isfinite(s["incumbent"])
+        assert s["gap"] == pytest.approx(s["incumbent"] - s["bound"], abs=1e-12)
+        assert s["n_vars"] > 0 and s["n_int"] > 0 and s["n_constrs"] > 0
+        assert "wall_s" in s and "backend" in s and "threads" in s
+
+
+def test_audit_checks_nested_adaptive_subsolves(tmp_path):
+    root = str(tmp_path)
+    rec = {"experiment": "t", "replay_ok": True,
+           "solver": {"backend": "GRB", "status": "OPTIMAL", "wall_s": 1.0,
+                      "extra": {"adaptive_solve_stats": [
+                          {"round": 1, "status": "OPTIMAL"},
+                          {"round": 2, "status": "TIME_LIMIT"}]}}}
+    with open(os.path.join(root, "r.jsonl"), "w") as f:
+        f.write(json.dumps(rec) + "\n")
+    _, ok, problems = audit(root)
+    assert not ok and any("adaptive subsolve round 2" in p for p in problems)
+
+
+# --------------------------------------------------------------------------
+# terminal budget RMP evidence (final amendment, item 3)
+# --------------------------------------------------------------------------
+def test_budget_exhaustion_records_terminal_master(tiny, tmp_path):
+    inst, market = tiny
+    out = str(tmp_path / "cell")
+    state = certified_cg(inst, market, epsilon=1e-2, budget=3,
+                         out_dir=out, tag="b")
+    oc = state["outcome"]
+    assert oc["type"] == "budget_exhausted" and oc["certified"] is False
+
+    iters = _read_jsonl(os.path.join(out, "b.iterations.jsonl"))
+    # the terminal clean RMP is evidenced by a master-only event
+    term = iters[-1]
+    assert term["terminal"] is True and term["pricing_solve_id"] is None
+    assert term["master_solves"]
+    # every actual master solve has one globally unique id, with n_int
+    seen = set()
+    for it in iters:
+        for ms in it["master_solves"]:
+            assert ms["solve_id"] not in seen
+            seen.add(ms["solve_id"])
+            assert ms["status"] == "OPTIMAL" and ms["n_int"] == 0
+            assert math.isfinite(ms["obj"])
+    # histories and outcome coherent
+    assert len(state["ub_history"]) == len(state["lb_history"])
+    assert oc["gap"] == pytest.approx(oc["ub_ch"] - oc["lb_best"], abs=1e-12)
+    assert state["ub_history"][-1] == oc["ub_ch"]
+
+    # strengthened audit: complete/sane but NOT certified
+    lines, ok, problems = audit(out, expect_cg=1)
+    assert ok, problems
+    text = "\n".join(lines)
+    assert "complete and sane: 1" in text
+    assert "CERTIFIED (gap <= epsilon): 0" in text
+    assert "budget-exhausted" in text
+    assert "CG certification outcomes reported separately above" in text
