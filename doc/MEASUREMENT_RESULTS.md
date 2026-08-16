@@ -213,7 +213,11 @@ cost of U+L; duals of the load-balance rows are the posted prices; the
 column oracle is the existing taker EVSP at those prices (unchanged, so all
 existing certification applies).
 
-- **A0 (baseline)**: undamped tatonnement — the certified 2-cycle machine.
+- **A0 (baseline label)**: undamped tatonnement — the certified 2-cycle
+  machine. A0 is DEFINED as the alpha = 1 member of the A1 family below; it
+  remains a conceptual baseline label for exposition and comparisons but is
+  NOT submitted as an additional experiment cell (no duplicate A0 jobs —
+  all A0 comparisons use the alpha = 1 rows of the family).
 - **A1 (baseline)**: the full prespecified constant-damping family,
   alpha in {1.0, 0.75, 0.5, 0.35, 0.25, 0.2, 0.15, 0.1, 0.05} — no
   "empirically best alpha" is defined (at b = 0.05 no alpha converged, and
@@ -331,19 +335,48 @@ A2–A5; A0/A1 are compared at matched oracle budgets on outcome metrics.
 ### Proposed Unicorn grid
 
 Instances: seeds 0–15 x n_trips {8, 12} x b {0.002, 0.01, 0.05} = 96
-distinct instances (32 at b = 0.05). Methods: A0, A2, A3, A4, A5 run on all
-96 instances = 480 method-cells; of these, A3–A5 contribute 3 x 32 = 96
-b = 0.05 method-cells — the acceptance criterion's population, evaluated
-per method over its 32 instances. The A1 family contributes 9 alphas x 96 instances = 864
-method-cells, of which 288 (n = 12, b in {0.01, 0.05}) are REUSED from the
-certified damping frontier at zero compute and 576 are fresh. Fresh compute:
-480 + 576 = **1,056 cells**, Slurm array `0-1055%24`, requeue-safe per-cell
-checkpoints, mail END/FAIL/REQUEUE, audit gates `cells=1056` (plus the 288
-reused cells verified by hash against the damping-frontier snapshot).
+distinct instances (32 at b = 0.05).
 
-**A 12-cell A2 pilot precedes any full grid**: 2 seeds x 2 trip sizes x 3 b
-on plain CG, to validate the master, the `LB_CH`/`UB_CH` accounting, and the
-record schema before the 1,056-cell submission.
+- Baseline family (A1, with A0 = its alpha = 1 member): 9 alphas x 96
+  instances = 864 method-cells; 288 of them (n = 12, b in {0.01, 0.05}) are
+  REUSED from the certified damping-frontier trajectories at zero compute
+  (verified by hash against that snapshot); **576 fresh baseline cells**.
+- CG methods A2–A5: 4 x 96 = **384 fresh cells** (of which A3–A5 contribute
+  3 x 32 = 96 b = 0.05 method-cells — the acceptance criterion's population,
+  evaluated per method over its 32 instances).
+- **Total fresh compute: 576 + 384 = 960 cells.** Full fresh array `0-959`,
+  subject to the implementation launcher's `--list` result and the audit
+  manifest — do not hard-code an array size without verifying it against
+  `--list` at submission time (runbook rule). Requeue-safe per-cell
+  checkpoints, mail END/FAIL/REQUEUE, audit gates `cells=960` (expected;
+  confirm from `--list`) plus hash-verification of the 288 reused cells.
+
+### Pilot (precedes any full grid)
+
+- Method: **A2 only** (plain CG — validates the master and the
+  `LB_CH`/`UB_CH` accounting without stabilization confounds).
+- Seeds: **0, 11, 15**. Seed 0 represents a typical cycling case; seed 11
+  the exceptional moderate-feedback fixed-point instance; seed 15 additional
+  heterogeneity.
+- n_trips: **8, 12**. b: **0.01, 0.05** — weak b = 0.002 is deferred because
+  the pilot's purpose is validating the certificate on the difficult
+  moderate/strong regimes.
+- Total: 3 x 2 x 2 = **12 cells**; budget **240 exact pricing calls** per
+  cell.
+
+### Launch gates
+
+**No full-grid launch occurs until all three hold:**
+
+1. tiny complete-enumeration identities pass locally (on instances small
+   enough to enumerate every feasible schedule column, verify
+   `z_RMP = z_CH` at completion, `LB_CH = UB_CH` at pricing exhaustion, and
+   the uplift interval brackets the enumerated `z_D - z_CH`);
+2. all 12 pilot cells satisfy bound sanity (`LB_CH <= UB_CH` throughout;
+   `UB_CH` nonincreasing after every valid column expansion and RMP
+   reoptimization, up to numerical tolerance);
+3. pilot records and checkpoints pass the replay and completeness audits
+   (existing gated audit tooling, `cells=12`).
 
 ## 9. Reproduction
 
