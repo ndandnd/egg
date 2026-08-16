@@ -246,15 +246,23 @@ python experiments/audit_runs.py runs/b2a2_pilot --expect-cg 12
 ```
 
 Per-cell evidence written under `runs/b2a2_pilot/<cell>/`:
-`a2.cg.ckpt.json` (atomic per-oracle-call checkpoint: columns with replay
-evidence, LB/UB trajectories, outcome, uplift interval),
-`a2.iterations.jsonl` (per-iteration UB_CH/z_model, min exact reduced cost,
-LB_CH, certificate gap, master + pricing wall times, column novelty, solver
-block), `a2.oracle.jsonl` (full oracle records, replay-enforced), and
-`dictator.jsonl`/`dictator.ckpt.json` (the independent dictator solve
-feeding the uplift interval). A preempted task repeats at most the one
-in-flight oracle solve; completed columns and bounds survive requeue, and a
-corrupted checkpoint (LB above best UB) fails loudly at resume.
+`a2.cg.ckpt.json` (the atomic per-oracle-call checkpoint and SINGLE source
+of truth: identity block, columns with replay evidence, LB/UB trajectories,
+committed oracle and iteration events with stable call/solve ids, outcome,
+uplift interval), `a2.oracle.jsonl` and `a2.iterations.jsonl` (materialized
+atomically FROM the checkpoint, so one completed oracle call appears exactly
+once after arbitrary restart; iterations carry both the incumbent and the
+certified-bound reduced costs, the pricing gap, and every actual clean-RMP
+tangent-refinement solve individually), and
+`dictator.jsonl`/`dictator.ckpt.json` (the independent dictator solve —
+gated on OPTIMAL status, a finite certified bound, and adaptive
+convergence — feeding the uplift interval). LB_CH is always built from the
+pricing solver's certified dual bound, never the incumbent. A preempted task
+repeats at most the one in-flight oracle solve; completed columns and bounds
+survive requeue; a corrupted checkpoint (LB above best UB) or any identity
+mismatch (instance, market a/b/U, epsilon, budget, tolerances, solver
+settings, dictator provenance) fails loudly at resume. Solves honor
+`SLURM_CPUS_PER_TASK` for solver threads and record the applied count.
 
 ## Branch hygiene
 

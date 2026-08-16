@@ -96,6 +96,16 @@ def optimize(
     st.n_constrs = m.num_rows
     st.n_int = m.num_int
 
+    # cluster resource hygiene: honor the Slurm CPU allocation so a solve
+    # never silently uses the whole node; record what was applied
+    cpus = os.environ.get("SLURM_CPUS_PER_TASK")
+    if cpus:
+        try:
+            m.threads = int(cpus)
+        except (TypeError, ValueError):
+            pass
+    st.extra["threads"] = getattr(m, "threads", None)
+
     if solve_lp_first:
         t0 = time.time()
         with _silence_native_output():

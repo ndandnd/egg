@@ -36,33 +36,46 @@ UB_CH is always the objective of the ORDINARY, UNSTABILIZED restricted
 master over all generated columns, with exact cost evaluation — never a
 penalized, proximal, smoothed, or box surrogate.
 
-LOWER BOUND AND REDUCED-COST SIGN CONVENTION
-============================================
+PRICING: RIGOROUS MILP-BOUND ACCOUNTING
+=======================================
 Duals are taken from the clean RMP LP written EXACTLY as above
 (link_t:  sum_j lambda_j e_{jt} - L_t = 0, dual pi_t; conv: dual sigma).
 The reduced cost of a candidate column S is
 
-    rc(S) = ops(S) - sum_t pi_t e_t(S) - sigma.
+    rc(S) = ops(S) - sum_t pi_t e_t(S) - sigma,
 
-Hence exact pricing is the certified taker EVSP oracle at ORACLE PRICES
+so exact pricing is the certified taker EVSP oracle at ORACLE PRICES
 
-    p_t := -pi_t        (sign convention: oracle price = MINUS link dual)
+    p_t := -pi_t        (sign convention: oracle price = MINUS link dual).
 
-because  min_S [ops(S) + sum_t p_t e_t(S)] = min_S [ops(S) - sum_t pi_t e_t(S)],
-so  min_rc = oracle_optimal_objective - sigma. At the RMP optimum the LP's
-own L_t variables price out to  pi_t = dDeltaC_model/dL_t >= 0 (marginal
-model cost)... NOTE the orientation: with the constraint written
-(sum lambda e) - L = 0, increasing L relaxes nothing by itself; python-mip
-returns pi such that p = -pi equals the model marginal cost of load, which
-is nonnegative at optimality (numerically verified in the tiny-enumeration
-tests; transient CG duals may wander).
+A MILP pricing solve returns TWO values, and they play different roles:
 
-With ONE convexity block, the Lasdon bound gives, for the solved LP,
+    pricing_ub = sol.obj_model     (feasible incumbent value; its schedule
+                                    is the candidate column)
+    pricing_lb = sol.stats.bound   (certified dual bound on the exact
+                                    pricing optimum; <= pricing_ub)
 
-    LB_CH = z_model + min(0, min_rc)
+    min_rc_ub = pricing_ub - sigma   -> improvement/novelty decisions ONLY
+    min_rc_lb = pricing_lb - sigma   -> the ONLY value allowed inside LB_CH
 
-valid for the PWL master and hence (tangent model <= true) for z_CH itself:
-LB_CH <= z_CH^pwl <= z_CH <= UB_CH.
+With ONE convexity block, the Lasdon bound requires a lower bound on the
+TRUE pricing optimum, hence
+
+    LB_CH = z_model + min(0, min_rc_lb),
+
+never min_rc_ub (the incumbent may sit above the true optimum by up to the
+solver's MIP gap, which would overstate LB_CH and could FALSELY certify).
+The absolute/relative pricing gap (pricing_ub - pricing_lb) is logged on
+every call, and a missing or nonfinite bound fails loudly. Validity chain:
+LB_CH <= z_CH^pwl <= z_CH <= UB_CH (tangent model <= true).
+
+If min_rc_lb < -rc_tol but pricing produced no improving novel incumbent
+(duplicate, or min_rc_ub >= -rc_tol), exhaustion is NOT declared: the
+pricing MIP gap is tightened (state["pricing_max_mip_gap"] /= 100, floor
+1e-12) and pricing continues; after MAX_PRICING_ESCALATIONS unproductive
+tightenings the run fails loudly. Pricing exhaustion — the precondition for
+LB_CH ~= z_model — requires min_rc_lb >= -rc_tol, i.e. a CERTIFIED
+statement that no improving column exists.
 
 CERTIFICATION AND INVARIANTS
 ============================
@@ -70,12 +83,26 @@ CERTIFICATION AND INVARIANTS
 - LB_best is the running maximum of valid lower bounds (monotone up);
 - UB_CH is nonincreasing after every valid column addition + clean-RMP
   reoptimization within tol_mono = pwl_tol + 1e-6 (enforced, loud failure);
-- every oracle solve must be OPTIMAL and replay-valid (loud failure);
-- duplicate columns are never added; a duplicate with materially negative
-  reduced cost after refinement raises after MAX_DUPLICATE retries;
-- atomic per-oracle-call checkpoints; resume re-solves at most the one
-  in-flight oracle call, never loses columns, and re-validates stored
-  bounds (LB_best <= UB + tol) before continuing.
+- every oracle solve must be OPTIMAL, replay-valid, and carry a finite
+  certified bound (loud failure otherwise);
+- duplicate columns are never added; a duplicate incumbent claiming an
+  improving min_rc_ub raises after MAX_DUPLICATE_RETRIES (dual/model
+  inconsistency);
+- checkpoint identity (schema version, instance hash, market hash over
+  a/b/U, epsilon, budget, pwl_tol, rc_tol, solver settings, dictator
+  provenance) is validated at resume; any mismatch rejects the checkpoint.
+
+TRANSACTIONAL LOGGING (EXACTLY-ONCE)
+====================================
+The atomic checkpoint is the single source of truth. Every oracle record and
+iteration record is committed INSIDE the checkpoint (state["oracle_events"],
+state["iteration_events"], each with a stable unique id), and the JSONL logs
+are materialized atomically (tmp + rename) FROM committed state — after each
+checkpoint save and again at startup before a done checkpoint is returned.
+A kill at any point (after the solve, after the checkpoint, during or after
+materialization) therefore yields, on resume, logs that are byte-derived
+from committed state: one completed oracle call appears exactly once, and at
+most the single in-flight solve is repeated.
 
 B3 UPLIFT INTERVAL
 ==================
@@ -86,7 +113,9 @@ from __future__ import annotations
 
 import hashlib
 import json
+import math
 import os
+import tempfile
 import time
 
 import mip
@@ -96,14 +125,16 @@ from . import checkpoint
 from .evsp import validate_solution
 from .instance import Instance
 from .market import AffineMarket
-from .records import append_jsonl, make_record, provenance
+from .records import make_record, provenance
 from .regimes import _l_max, solve_taker
-from .solver import SolveStats, new_model, optimize
+from .solver import backend, new_model, optimize
 
+SCHEMA_VERSION = "b2a2-v2"
 EPSILON_DEFAULT = 1e-2
 PWL_TOL = 1e-3
 RC_TOL = 1e-6
 MAX_DUPLICATE_RETRIES = 3
+MAX_PRICING_ESCALATIONS = 4
 TOL_MONO = PWL_TOL + 1e-6
 
 
@@ -111,12 +142,42 @@ class B2A2Error(RuntimeError):
     pass
 
 
+def _finite(x) -> bool:
+    return x is not None and math.isfinite(float(x))
+
+
+def market_hash(market: AffineMarket) -> str:
+    """Identity of the price model: full-precision a, b, U."""
+    payload = json.dumps({
+        "a": [f"{float(x):.17g}" for x in market.a],
+        "b": [f"{float(x):.17g}" for x in market.b],
+        "U": [f"{float(x):.17g}" for x in market.U],
+    })
+    return hashlib.sha256(payload.encode()).hexdigest()
+
+
 # ---------------------------------------------------------------------------
 # schedule columns
 # ---------------------------------------------------------------------------
+def column_key(col: dict) -> str:
+    """Master-column identity: the FULL projected master vector — the
+    full-precision normalized load AND the operating cost — hashed with full
+    SHA-256. Identical loads with different operating costs never collide
+    (the cheaper one is a distinct, novel column). Structural evidence
+    (sequences, arc kinds, hashes) stays in the column dict as diagnostics
+    but does not define master identity."""
+    payload = json.dumps({
+        "v": "b2a2-col-v2",
+        "load": [f"{float(x) + 0.0:.17g}" for x in col["load"]],
+        "ops_cost": f"{float(col['ops_cost']) + 0.0:.17g}",
+    })
+    return hashlib.sha256(payload.encode()).hexdigest()
+
+
 def column_from_solution(inst: Instance, sol) -> dict:
     """Schedule column: complete feasible schedule + load + cost + hashes +
-    replay evidence (requirement 1)."""
+    replay evidence. Fails loudly on replay violations, non-OPTIMAL status,
+    or a missing/nonfinite certified bound."""
     violations = validate_solution(inst, sol)
     if violations:
         raise B2A2Error(f"oracle produced replay-invalid column: {violations}")
@@ -124,6 +185,9 @@ def column_from_solution(inst: Instance, sol) -> dict:
         raise B2A2Error(
             f"oracle status {'missing' if sol.stats is None else sol.stats.status}"
             " != OPTIMAL")
+    if not _finite(sol.stats.bound):
+        raise B2A2Error(
+            f"oracle returned no finite certified bound: {sol.stats.bound!r}")
     col = {
         "sequences": [list(s) for s in sol.sequences],
         "arc_kinds": [list(k) for k in sol.arc_kinds],
@@ -142,27 +206,51 @@ def column_from_solution(inst: Instance, sol) -> dict:
     return col
 
 
-def column_key(col: dict) -> str:
-    canon = json.dumps(
-        [sorted(tuple(s) for s in col["sequences"]),
-         [round(x, 6) for x in col["load"]]])
-    return hashlib.sha256(canon.encode()).hexdigest()[:16]
+# ---------------------------------------------------------------------------
+# transactional log materialization (checkpoint is the source of truth)
+# ---------------------------------------------------------------------------
+def _atomic_write_lines(path: str, records: list) -> None:
+    d = os.path.dirname(os.path.abspath(path))
+    os.makedirs(d, exist_ok=True)
+    fd, tmp = tempfile.mkstemp(dir=d, suffix=".tmp")
+    try:
+        with os.fdopen(fd, "w") as f:
+            for rec in records:
+                f.write(json.dumps(rec) + "\n")
+            f.flush()
+            os.fsync(f.fileno())
+        os.replace(tmp, path)
+    finally:
+        if os.path.exists(tmp):
+            os.unlink(tmp)
+
+
+def _materialize_logs(state: dict, oc_path: str, it_path: str) -> None:
+    """Rebuild both JSONL logs atomically from COMMITTED state. Idempotent:
+    running it any number of times, from any interruption point, yields the
+    same files — one committed oracle call appears exactly once."""
+    _atomic_write_lines(oc_path, state["oracle_events"])
+    _atomic_write_lines(it_path, state["iteration_events"])
 
 
 # ---------------------------------------------------------------------------
 # clean restricted master (pure LP; UB via exact evaluation)
 # ---------------------------------------------------------------------------
 def solve_rmp(inst: Instance, market: AffineMarket, columns: list,
-              tangent_points: list, pwl_tol: float = PWL_TOL):
+              tangent_points: list, pwl_tol: float = PWL_TOL,
+              solve_id_prefix: str = "rmp"):
     """Solve the clean unstabilized RMP with inner tangent refinement.
-    Returns dict with z_model, ub (exact evaluation), lambdas, L, duals pi,
-    sigma, wall time, and possibly-extended tangent_points."""
+    Returns z_model, ub (exact evaluation), lambdas, L, duals pi/sigma, the
+    possibly-extended tangent_points, and Phase-0 evidence for EVERY actual
+    master solve (stable solve ids, backend, status, objective, bound,
+    sizes, wall time)."""
     if not columns:
         raise B2A2Error("RMP requires at least one column")
     T = market.n_slots
     l_max = _l_max(inst)
-    wall = 0.0
     tangent_points = [list(map(float, tp)) for tp in tangent_points]
+    solves = []
+    wall = 0.0
     for _refine in range(200):
         m = new_model("b2a2-rmp")
         lam = [m.add_var(lb=0.0) for _ in columns]
@@ -188,9 +276,20 @@ def solve_rmp(inst: Instance, market: AffineMarket, columns: list,
             mip.xsum(lam[j] * float(columns[j]["ops_cost"])
                      for j in range(len(columns)))
             + mip.xsum(cost))
-        t0 = time.time()
         st = optimize(m, solve_lp_first=False)
-        wall += time.time() - t0
+        wall += st.wall_s
+        solves.append({
+            "solve_id": f"{solve_id_prefix}-r{_refine}",
+            "backend": st.backend,
+            "status": st.status,
+            "obj": st.obj,
+            "bound": st.bound,
+            "mip_gap": st.mip_gap,
+            "n_vars": st.n_vars,
+            "n_constrs": st.n_constrs,
+            "wall_s": st.wall_s,
+            "threads": st.extra.get("threads"),
+        })
         if st.status != "OPTIMAL":
             raise B2A2Error(f"clean RMP not OPTIMAL: {st.status}")
         z_model = float(st.obj)
@@ -206,7 +305,7 @@ def solve_rmp(inst: Instance, market: AffineMarket, columns: list,
                 "z_model": z_model, "ub": ub, "lambdas": lam_v,
                 "L": [float(x) for x in L_v], "pi": pi, "sigma": sigma,
                 "master_wall_s": wall, "tangent_points": tangent_points,
-                "n_refinements": _refine,
+                "n_refinements": _refine, "master_solves": solves,
             }
         tangent_points.append([float(x) for x in L_v])
     raise B2A2Error("tangent refinement failed to close the PWL slack")
@@ -229,128 +328,180 @@ def certified_cg(
     tol_d: float = 1e-2,
 ) -> dict:
     """Run A2 to certification (UB_CH - LB_best <= epsilon) or budget
-    exhaustion. Checkpointed per oracle call; resumable; invariant-enforced."""
-    solver_kw = solver_kw or {}
+    exhaustion. Transactionally checkpointed per oracle call; resumable
+    with full identity validation; invariant-enforced."""
+    solver_kw = dict(solver_kw or {})
     os.makedirs(out_dir, exist_ok=True)
     ck_path = os.path.join(out_dir, f"{tag}.cg.ckpt.json")
     it_path = os.path.join(out_dir, f"{tag}.iterations.jsonl")
     oc_path = os.path.join(out_dir, f"{tag}.oracle.jsonl")
 
-    state = checkpoint.load(ck_path, default={
-        "columns": [], "keys": [], "tangent_points": [],
-        "oracle_calls": 0, "lb_best": -float("inf"),
-        "ub_history": [], "lb_history": [],
-        "duplicate_retries": 0, "done": False, "outcome": None,
-        "epsilon": epsilon, "budget": budget, "pwl_tol": pwl_tol,
+    identity = {
+        "schema_version": SCHEMA_VERSION,
         "instance_hash": inst.hash(),
-    })
-    if state["done"]:
-        return state
-    if state["instance_hash"] != inst.hash():
-        raise B2A2Error("checkpoint/instance hash mismatch")
-    # resume sanity: stored bounds must be consistent
-    if state["ub_history"] and state["lb_best"] > min(
-            u for u in state["ub_history"]) + TOL_MONO + epsilon:
-        raise B2A2Error(
-            f"corrupt checkpoint: LB_best {state['lb_best']} exceeds "
-            f"best UB {min(state['ub_history'])}")
+        "market_hash": market_hash(market),
+        "epsilon": epsilon,
+        "budget": budget,
+        "pwl_tol": pwl_tol,
+        "rc_tol": RC_TOL,
+        "solver": {"backend": backend(),
+                   **{k: solver_kw[k] for k in sorted(solver_kw)}},
+        "tol_d": tol_d,
+        "z_d_ub": z_d_ub,
+    }
+    base_pricing_gap = float(solver_kw.pop("max_mip_gap", 1e-6))
 
-    def record_iteration(rmp, min_rc, lb, gap, novel, key, pricing_wall, oc_stats):
-        rec = {
+    state = checkpoint.load(ck_path)
+    if state is None:
+        state = {
+            "identity": identity,
+            "columns": [], "keys": [], "tangent_points": [],
+            "oracle_calls": 0, "lb_best": -float("inf"),
+            "ub_history": [], "lb_history": [],
+            "oracle_events": [], "iteration_events": [],
+            "duplicate_retries": 0, "refine_retries": 0,
+            "pricing_escalations": 0,
+            "pricing_max_mip_gap": base_pricing_gap,
+            "done": False, "outcome": None,
+        }
+    else:
+        stored = state.get("identity")
+        if stored != identity:
+            diffs = sorted(
+                k for k in set(identity) | set(stored or {})
+                if (stored or {}).get(k) != identity.get(k))
+            raise B2A2Error(
+                f"checkpoint identity mismatch (fields: {diffs}); refusing "
+                "to resume — delete the cell directory to restart")
+        # repair/materialize logs from committed state BEFORE anything else
+        _materialize_logs(state, oc_path, it_path)
+        if state["done"]:
+            return state
+        # resume sanity: stored bounds must be consistent
+        if state["ub_history"] and state["lb_best"] > min(
+                state["ub_history"]) + TOL_MONO + epsilon:
+            raise B2A2Error(
+                f"corrupt checkpoint: LB_best {state['lb_best']} exceeds "
+                f"best UB {min(state['ub_history'])}")
+
+    def commit():
+        checkpoint.save(ck_path, state)
+        _materialize_logs(state, oc_path, it_path)
+
+    def pricing_solve(prices):
+        t0 = time.time()
+        sol = solve_taker(inst, prices,
+                          max_mip_gap=state["pricing_max_mip_gap"],
+                          **solver_kw)
+        return sol, time.time() - t0
+
+    # seed column: taker at posted prices (oracle call 0, budget-counted)
+    if not state["columns"]:
+        posted = market.price(np.zeros(market.n_slots))
+        sol, _pw = pricing_solve(posted)
+        col = column_from_solution(inst, sol)
+        call_id = f"{tag}-oc0"
+        rec = make_record(experiment, inst, sol, market=market, prices=posted,
+                          regime="cg-seed",
+                          extra={"tag": tag, "call_id": call_id})
+        if rec["replay_ok"] is False:
+            raise B2A2Error(f"seed replay invalid: {rec['replay_violations']}")
+        state["oracle_events"].append(rec)
+        state["columns"].append(col)
+        state["keys"].append(col["column_key"])
+        state["oracle_calls"] = 1
+        commit()
+
+    while True:
+        oc = state["oracle_calls"]
+        rmp = solve_rmp(inst, market, state["columns"],
+                        state["tangent_points"], pwl_tol=pwl_tol,
+                        solve_id_prefix=f"{tag}-it{oc}-rmp")
+        state["tangent_points"] = rmp["tangent_points"]
+        ub = rmp["ub"]
+        # invariant: UB nonincreasing within tolerance
+        prev_ub = state["ub_history"][-1] if state["ub_history"] else float("inf")
+        if ub > prev_ub + TOL_MONO:
+            raise B2A2Error(
+                f"UB_CH increased: {prev_ub} -> {ub} (tol {TOL_MONO})")
+
+        if oc >= state["identity"]["budget"]:
+            gap = ub - state["lb_best"]
+            state["ub_history"].append(ub)
+            state["lb_history"].append(state["lb_best"])
+            outcome = {"type": "budget_exhausted", "ub_ch": ub,
+                       "lb_best": state["lb_best"], "gap": gap,
+                       "certified": bool(gap <= epsilon),
+                       "oracle_calls": oc}
+            if z_d_ub is not None:
+                outcome["uplift_interval"] = [
+                    (z_d_ub - tol_d) - ub, z_d_ub - state["lb_best"]]
+            state.update(done=True, outcome=outcome)
+            commit()
+            return state
+
+        # exact pricing at oracle prices p = -pi
+        prices = -np.asarray(rmp["pi"])
+        sol, pricing_wall = pricing_solve(prices)
+        col = column_from_solution(inst, sol)
+        pricing_ub = float(sol.obj_model)          # feasible incumbent
+        pricing_lb = float(sol.stats.bound)        # certified dual bound
+        if not _finite(pricing_lb):
+            raise B2A2Error(f"pricing bound nonfinite: {pricing_lb!r}")
+        min_rc_ub = pricing_ub - rmp["sigma"]      # improvement/novelty only
+        min_rc_lb = pricing_lb - rmp["sigma"]      # the ONLY value in LB_CH
+        lb = rmp["z_model"] + min(0.0, min_rc_lb)
+        state["lb_best"] = max(state["lb_best"], lb)
+        gap = ub - state["lb_best"]
+        novel = col["column_key"] not in state["keys"]
+        call_id = f"{tag}-oc{oc}"
+
+        rec = make_record(experiment, inst, sol, market=market, prices=prices,
+                          regime="cg-pricing",
+                          extra={"tag": tag, "call_id": call_id,
+                                 "min_reduced_cost_ub": min_rc_ub,
+                                 "min_reduced_cost_lb": min_rc_lb,
+                                 "column_key": col["column_key"],
+                                 "column_novel": novel})
+        if rec["replay_ok"] is False:
+            raise B2A2Error(f"pricing replay invalid: {rec['replay_violations']}")
+        state["oracle_events"].append(rec)
+        state["iteration_events"].append({
+            "record_kind": "cg-iteration",
+            "iteration_id": f"{tag}-it{oc}",
             "experiment": experiment, "tag": tag, **provenance(),
             "instance_hash": inst.hash(),
-            "oracle_calls": state["oracle_calls"],
+            "oracle_calls": oc,
             "n_columns": len(state["columns"]),
             "z_rmp_model": rmp["z_model"],
-            "ub_ch": rmp["ub"],
-            "min_reduced_cost": min_rc,
+            "ub_ch": ub,
+            "min_reduced_cost_ub": min_rc_ub,
+            "min_reduced_cost_lb": min_rc_lb,
+            "pricing_gap_abs": pricing_ub - pricing_lb,
+            "pricing_gap_rel": (pricing_ub - pricing_lb) / max(1e-12, abs(pricing_ub)),
+            "pricing_max_mip_gap": state["pricing_max_mip_gap"],
             "lb_ch": lb,
             "lb_best": state["lb_best"],
             "certificate_gap": gap,
             "epsilon": epsilon,
             "pwl_tol": pwl_tol,
+            "rc_tol": RC_TOL,
             "n_tangent_refinements": rmp["n_refinements"],
             "master_wall_s": rmp["master_wall_s"],
             "pricing_wall_s": pricing_wall,
             "column_novel": novel,
-            "column_key": key,
-            # the pricing solve backing this iteration (audit contract:
-            # every record line carries an OPTIMAL solver block); its replay
-            # was enforced in column_from_solution + make_record before this
-            # line is written
-            "solver": oc_stats,
+            "column_key": col["column_key"],
+            # every ACTUAL master solve, individually evidenced; the pricing
+            # solve is referenced by id (full record in the oracle log) so
+            # solve counts are never inflated by double-counting
+            "master_solves": rmp["master_solves"],
+            "pricing_solve_id": call_id,
             "replay_ok": True,
             "duals_sigma": rmp["sigma"],
-            "oracle_prices_min": float(np.min(-np.asarray(rmp["pi"]))) + 0.0,
-            "oracle_prices_max": float(np.max(-np.asarray(rmp["pi"]))) + 0.0,
-        }
-        append_jsonl(it_path, rec)
-
-    # seed column: taker at posted prices (oracle call, budget-counted)
-    if not state["columns"]:
-        posted = market.price(np.zeros(market.n_slots))
-        t0 = time.time()
-        sol = solve_taker(inst, posted, **solver_kw)
-        pricing_wall = time.time() - t0
-        col = column_from_solution(inst, sol)
-        rec = make_record(experiment, inst, sol, market=market, prices=posted,
-                          regime="cg-seed", extra={"tag": tag, "oracle_call": 0})
-        if rec["replay_ok"] is False:
-            raise B2A2Error(f"seed replay invalid: {rec['replay_violations']}")
-        append_jsonl(oc_path, rec)
-        state["columns"].append(col)
-        state["keys"].append(col["column_key"])
-        state["oracle_calls"] = 1
-        checkpoint.save(ck_path, state)
-
-    prev_ub = float("inf") if not state["ub_history"] else state["ub_history"][-1]
-
-    while True:
-        rmp = solve_rmp(inst, market, state["columns"],
-                        state["tangent_points"], pwl_tol=pwl_tol)
-        state["tangent_points"] = rmp["tangent_points"]
-        ub = rmp["ub"]
-        # invariant: UB nonincreasing within tolerance
-        if ub > prev_ub + TOL_MONO:
-            raise B2A2Error(
-                f"UB_CH increased: {prev_ub} -> {ub} (tol {TOL_MONO})")
-        prev_ub = ub
-
-        if state["oracle_calls"] >= state["budget"]:
-            gap = ub - state["lb_best"]
-            outcome = {"type": "budget_exhausted", "ub_ch": ub,
-                       "lb_best": state["lb_best"], "gap": gap,
-                       "certified": bool(gap <= epsilon)}
-            state.update(done=True, outcome=outcome)
-            state["ub_history"].append(ub)
-            checkpoint.save(ck_path, state)
-            return state
-
-        # exact pricing at oracle prices p = -pi
-        prices = -np.asarray(rmp["pi"])
-        t0 = time.time()
-        sol = solve_taker(inst, prices, **solver_kw)
-        pricing_wall = time.time() - t0
-        col = column_from_solution(inst, sol)
-        min_rc = float(sol.obj_model - rmp["sigma"])
-        lb = rmp["z_model"] + min(0.0, min_rc)
-        state["lb_best"] = max(state["lb_best"], lb)
-        gap = ub - state["lb_best"]
-        novel = col["column_key"] not in state["keys"]
-
-        rec = make_record(experiment, inst, sol, market=market, prices=prices,
-                          regime="cg-pricing",
-                          extra={"tag": tag,
-                                 "oracle_call": state["oracle_calls"],
-                                 "min_reduced_cost": min_rc,
-                                 "column_key": col["column_key"],
-                                 "column_novel": novel})
-        if rec["replay_ok"] is False:
-            raise B2A2Error(f"pricing replay invalid: {rec['replay_violations']}")
-        append_jsonl(oc_path, rec)
-        state["oracle_calls"] += 1
-        record_iteration(rmp, min_rc, lb, gap, novel, col["column_key"],
-                         pricing_wall, col["oracle_stats"])
+            "oracle_prices_min": float(np.min(prices)) + 0.0,
+            "oracle_prices_max": float(np.max(prices)) + 0.0,
+        })
+        state["oracle_calls"] = oc + 1
         state["ub_history"].append(ub)
         state["lb_history"].append(state["lb_best"])
 
@@ -363,33 +514,50 @@ def certified_cg(
                 outcome["uplift_interval"] = [
                     (z_d_ub - tol_d) - ub, z_d_ub - state["lb_best"]]
             state.update(done=True, outcome=outcome)
-            checkpoint.save(ck_path, state)
+            commit()
             return state
 
+        improving = min_rc_ub < -RC_TOL
         if novel:
+            # retain every generated unique column (improving or not)
             state["columns"].append(col)
             state["keys"].append(col["column_key"])
+        if novel and improving:
             state["duplicate_retries"] = 0
+            state["refine_retries"] = 0
+            state["pricing_escalations"] = 0
+        elif (not novel) and improving:
+            # a duplicate of a retained column cannot have rc < 0 at the RMP
+            # optimum: dual/model inconsistency — refine, retry, then fail
+            state["duplicate_retries"] += 1
+            if state["duplicate_retries"] >= MAX_DUPLICATE_RETRIES:
+                raise B2A2Error(
+                    "pricing returned a duplicate column with materially "
+                    f"negative incumbent reduced cost {min_rc_ub} "
+                    f"{MAX_DUPLICATE_RETRIES} times — dual/model "
+                    "inconsistency; failing loudly")
+            state["tangent_points"].append(list(map(float, rmp["L"])))
+        elif min_rc_lb < -RC_TOL:
+            # no improving novel incumbent, but the CERTIFIED bound says an
+            # improving column may still exist: NOT exhaustion — tighten the
+            # pricing MIP gap and continue
+            state["pricing_escalations"] += 1
+            if state["pricing_escalations"] > MAX_PRICING_ESCALATIONS:
+                raise B2A2Error(
+                    f"pricing bound stays negative (min_rc_lb={min_rc_lb}) "
+                    "with no improving novel incumbent after "
+                    f"{MAX_PRICING_ESCALATIONS} MIP-gap escalations — "
+                    "cannot certify exhaustion; failing loudly")
+            state["pricing_max_mip_gap"] = max(
+                state["pricing_max_mip_gap"] / 100.0, 1e-12)
         else:
-            if min_rc < -RC_TOL:
-                state["duplicate_retries"] += 1
-                if state["duplicate_retries"] >= MAX_DUPLICATE_RETRIES:
-                    raise B2A2Error(
-                        "pricing returned a duplicate column with materially "
-                        f"negative reduced cost {min_rc} "
-                        f"{MAX_DUPLICATE_RETRIES} times — dual/model "
-                        "inconsistency; failing loudly")
-                # tighten the PWL model and retry pricing
-                state["tangent_points"].append(list(map(float, rmp["L"])))
-            else:
-                # pricing exhausted: LB ~= z_model; force refinement until
-                # the certificate closes or no progress is possible
-                if gap > epsilon:
-                    state["duplicate_retries"] += 1
-                    if state["duplicate_retries"] >= MAX_DUPLICATE_RETRIES:
-                        raise B2A2Error(
-                            f"pricing exhausted (min_rc={min_rc}) but gap "
-                            f"{gap} > epsilon {epsilon}; refinement made no "
-                            "progress — failing loudly")
-                    state["tangent_points"].append(list(map(float, rmp["L"])))
-        checkpoint.save(ck_path, state)
+            # certified exhaustion (min_rc_lb >= -rc_tol) but gap > epsilon:
+            # only PWL slack remains — force refinement until it closes
+            state["refine_retries"] += 1
+            if state["refine_retries"] >= MAX_DUPLICATE_RETRIES:
+                raise B2A2Error(
+                    f"pricing certifiably exhausted (min_rc_lb={min_rc_lb}) "
+                    f"but gap {gap} > epsilon {epsilon}; refinement made no "
+                    "progress — failing loudly")
+            state["tangent_points"].append(list(map(float, rmp["L"])))
+        commit()

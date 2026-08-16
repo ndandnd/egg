@@ -39,26 +39,39 @@ def _solve_convex_adaptive(
     **kw,
 ) -> Solution:
     """Certified adaptive outer approximation for a convex separable energy
-    objective (reviewer-specified): solve the tangent-relaxed MILP (its value
-    is a LOWER bound on the true optimum), evaluate the true objective at the
-    incumbent load (a feasible UPPER bound), add tangents at the incumbent,
-    repeat until ub - lb <= tol_abs. Records lb/ub/gap/rounds; obj_true is
-    the certified feasible value."""
+    objective. Each round's tangent-relaxed MILP under-approximates the true
+    objective for every feasible point, so its CERTIFIED DUAL BOUND
+    (sol.stats.bound) — never the model incumbent sol.obj_model, which can
+    exceed the model optimum by the solver's MIP gap and would overstate the
+    lower bound — is a valid lower bound on the true optimum. The certified
+    lower bound is the running maximum over rounds (tangent sets only grow).
+    The true objective at the incumbent load is a feasible UPPER bound.
+    Convergence is best_ub - certified_bound <= tol_abs. The model incumbent
+    is retained separately as adaptive_model_obj."""
+    import math
+
     segs = [list(rows) for rows in seg0]
     best_sol, best_ub = None, float("inf")
-    lb = -float("inf")
+    lb_cert = -float("inf")
+    model_obj = None
     rounds = 0
     total_wall = 0.0
     while rounds < max_rounds:
         rounds += 1
         sol = solve_evsp(inst, ("pwl", segs), **kw)
         total_wall += sol.stats.wall_s + sol.stats.lp_wall_s
-        lb = sol.obj_model  # lower bound on true optimum
+        b = sol.stats.bound
+        if b is None or not math.isfinite(float(b)):
+            raise RuntimeError(
+                f"adaptive {label}: solver returned no finite certified "
+                f"bound ({b!r}); cannot certify")
+        lb_cert = max(lb_cert, float(b))
+        model_obj = sol.obj_model  # incumbent of the tangent model (kept apart)
         L = np.asarray(sol.load, dtype=float)
         ub = sol.ops_cost + true_energy_cost(L)
         if ub < best_ub - 1e-12:
             best_ub, best_sol = ub, sol
-        if best_ub - lb <= tol_abs:
+        if best_ub - lb_cert <= tol_abs:
             break
         for t, seg in enumerate(tangents_at(L)):
             segs[t].append(seg)
@@ -68,11 +81,12 @@ def _solve_convex_adaptive(
     sol.stats.extra.update(
         {
             "adaptive_rounds": rounds,
-            "adaptive_lb": lb,
+            "adaptive_lb": lb_cert,  # certified dual bound, NOT the incumbent
+            "adaptive_model_obj": model_obj,
             "adaptive_ub": best_ub,
-            "adaptive_gap_abs": best_ub - lb,
+            "adaptive_gap_abs": best_ub - lb_cert,
             "adaptive_tol_abs": tol_abs,
-            "adaptive_converged": bool(best_ub - lb <= tol_abs),
+            "adaptive_converged": bool(best_ub - lb_cert <= tol_abs),
             "adaptive_total_wall_s": total_wall,
         }
     )

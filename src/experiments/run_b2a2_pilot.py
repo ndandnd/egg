@@ -24,8 +24,10 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
+import math
+
 from egglab import checkpoint
-from egglab.b2a2 import certified_cg
+from egglab.b2a2 import certified_cg, market_hash
 from egglab.instance import synthetic_instance
 from egglab.market import make_affine_market
 from egglab.records import append_jsonl, make_record
@@ -54,18 +56,38 @@ def run_cell(cell, args):
     market = make_affine_market(inst, shape="duck", b_scale=b)
 
     # independent dictator solve (checkpointed; feeds the uplift interval)
+    d_identity = {"instance_hash": inst.hash(),
+                  "market_hash": market_hash(market), "tol_d": TOL_D}
     d_path = os.path.join(out, "dictator.ckpt.json")
     d_state = checkpoint.load(d_path)
+    if d_state is not None and d_state.get("identity") != d_identity:
+        raise RuntimeError(
+            f"stale dictator checkpoint for {tag}: identity mismatch "
+            "(instance/market/tolerance changed); delete the cell directory "
+            "to restart")
     if d_state is None:
         sol = solve_dictator(inst, market, tol_abs=TOL_D, **kw)
+        ex = sol.stats.extra
+        # gate before the checkpoint is stored: OPTIMAL status, a finite
+        # certified bound, and adaptive convergence are all required
+        if sol.stats.status != "OPTIMAL":
+            raise RuntimeError(f"dictator status {sol.stats.status} != OPTIMAL")
+        if sol.stats.bound is None or not math.isfinite(float(sol.stats.bound)):
+            raise RuntimeError(f"dictator bound nonfinite: {sol.stats.bound!r}")
+        if not ex.get("adaptive_converged"):
+            raise RuntimeError(
+                f"dictator adaptive certification did not converge: "
+                f"gap {ex.get('adaptive_gap_abs')} > tol {ex.get('adaptive_tol_abs')}")
         rec = make_record("b2a2-pilot", inst, sol, market=market,
                           regime="dictator",
                           extra={"tag": tag, "cell": list(cell)})
         if rec["replay_ok"] is False:
             raise RuntimeError(f"dictator replay invalid: {rec['replay_violations']}")
         append_jsonl(os.path.join(out, "dictator.jsonl"), rec)
-        d_state = {"z_d_ub": sol.obj_true, "tol_d": TOL_D,
-                   "adaptive": sol.stats.extra}
+        d_state = {"identity": d_identity,
+                   "z_d_ub": sol.obj_true, "tol_d": TOL_D,
+                   "adaptive": ex, "status": sol.stats.status,
+                   "bound": sol.stats.bound}
         checkpoint.save(d_path, d_state)
 
     state = certified_cg(

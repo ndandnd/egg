@@ -21,6 +21,7 @@ from __future__ import annotations
 import argparse
 import glob
 import json
+import math
 import os
 import statistics
 import sys
@@ -38,7 +39,13 @@ from egglab.revalidate import (  # noqa: E402
 
 
 def _cg_sane(ck: dict, tol_mono: float = 2e-3) -> list:
-    """Sanity checks for a B2-A2 CG checkpoint; returns problem strings."""
+    """Full sanity battery for a B2-A2 CG checkpoint; returns problem
+    strings. 'Complete and sane' (this passing) is distinct from
+    'certified' (outcome.certified) — budget exhaustion is a valid completed
+    scientific outcome, but every bound and record must still be coherent."""
+    def fin(x):
+        return isinstance(x, (int, float)) and math.isfinite(x)
+
     errs = []
     if not ck.get("done"):
         errs.append("not done")
@@ -46,8 +53,25 @@ def _cg_sane(ck: dict, tol_mono: float = 2e-3) -> list:
     oc = ck.get("outcome") or {}
     if oc.get("type") not in ("certified", "budget_exhausted"):
         errs.append(f"bad outcome {oc.get('type')}")
+        return errs
     ub = ck.get("ub_history") or []
     lb = ck.get("lb_history") or []
+    # finite histories with matching lengths
+    if len(ub) != len(lb):
+        errs.append(f"history length mismatch: {len(ub)} UB vs {len(lb)} LB")
+    if not ub:
+        errs.append("empty bound histories")
+        return errs
+    if not all(fin(x) for x in ub) or not all(fin(x) for x in lb):
+        errs.append("nonfinite bound history entries")
+        return errs
+    # LB <= UB throughout: every LB is valid for z_CH and every UB is an
+    # exact feasible evaluation, so the inequality holds pairwise
+    for i, (l, u) in enumerate(zip(lb, ub)):
+        if l > u + 1e-6:
+            errs.append(f"LB {l} > UB {u} at iteration {i}")
+            break
+    # monotonicity within documented tolerances
     for a, b in zip(ub, ub[1:]):
         if b > a + tol_mono:
             errs.append(f"UB increased {a} -> {b}")
@@ -56,8 +80,50 @@ def _cg_sane(ck: dict, tol_mono: float = 2e-3) -> list:
         if b < a - 1e-9:
             errs.append(f"LB decreased {a} -> {b}")
             break
-    if ub and ck.get("lb_best", -1e18) > min(ub) + tol_mono + ck.get("epsilon", 0):
+    if ck.get("lb_best", -1e18) > min(ub) + tol_mono + ck.get(
+            "identity", {}).get("epsilon", ck.get("epsilon", 0)):
         errs.append("LB_best exceeds best UB")
+    # outcome coherence: gap equals final UB minus LB_best; certified
+    # implies gap <= epsilon; final history entry matches the outcome
+    eps = ck.get("identity", {}).get("epsilon", ck.get("epsilon"))
+    if not (fin(oc.get("gap")) and fin(oc.get("ub_ch")) and fin(oc.get("lb_best"))):
+        errs.append("nonfinite outcome fields")
+        return errs
+    if abs(oc["gap"] - (oc["ub_ch"] - oc["lb_best"])) > 1e-9:
+        errs.append(f"outcome gap {oc['gap']} != ub_ch - lb_best "
+                    f"{oc['ub_ch'] - oc['lb_best']}")
+    if abs(ub[-1] - oc["ub_ch"]) > 1e-12:
+        errs.append(f"final UB history {ub[-1]} != outcome ub_ch {oc['ub_ch']}")
+    if abs(ck.get("lb_best", float("nan")) - oc["lb_best"]) > 1e-12:
+        errs.append("state lb_best != outcome lb_best")
+    if oc.get("certified") and eps is not None and oc["gap"] > eps + 1e-12:
+        errs.append(f"certified but gap {oc['gap']} > epsilon {eps}")
+    # committed oracle events: count agreement, unique ids, OPTIMAL + replay
+    events = ck.get("oracle_events")
+    if events is None:
+        errs.append("checkpoint has no committed oracle events")
+        return errs
+    ids = [((e.get("extra") or {}).get("call_id")) for e in events]
+    if len(events) != ck.get("oracle_calls"):
+        errs.append(f"oracle_calls {ck.get('oracle_calls')} != "
+                    f"{len(events)} committed oracle events")
+    if len(set(ids)) != len(ids) or None in ids:
+        errs.append("duplicate or missing oracle call_ids")
+    for e in events:
+        st = (e.get("solver") or {}).get("status")
+        if st != "OPTIMAL":
+            errs.append(f"oracle event {((e.get('extra') or {}).get('call_id'))} "
+                        f"status {st} != OPTIMAL")
+            break
+    if any(e.get("replay_ok") is not True for e in events):
+        errs.append("oracle event without replay_ok=true")
+    # iteration events reference committed pricing solves
+    id_set = set(ids)
+    for it in ck.get("iteration_events") or []:
+        if it.get("pricing_solve_id") not in id_set:
+            errs.append(f"iteration {it.get('iteration_id')} references "
+                        f"unknown pricing solve {it.get('pricing_solve_id')}")
+            break
     return errs
 
 
@@ -84,6 +150,7 @@ def audit(
 
     sidecars = load_sidecars(runs_dir)
     recs = []
+    cg_iter_recs = []
     raw_fail_shas = []
     for rel, i, raw in iter_record_lines(runs_dir):
         try:
@@ -91,11 +158,28 @@ def audit(
         except json.JSONDecodeError:
             problems.append(f"unparsable record {rel}:{i}")
             continue
+        if rec.get("record_kind") == "cg-iteration":
+            # CG iteration summaries reference their pricing solve by id
+            # (the full record lives in the oracle log) and carry every
+            # actual master solve in master_solves; counting their solver
+            # blocks at the top level would double-count the pricing solve.
+            cg_iter_recs.append(rec)
+            for ms in rec.get("master_solves") or []:
+                if ms.get("status") != "OPTIMAL":
+                    problems.append(
+                        f"cg master solve {ms.get('solve_id')} in {rel}:{i} "
+                        f"has status {ms.get('status')} != OPTIMAL")
+            if not rec.get("master_solves"):
+                problems.append(f"cg iteration {rel}:{i} has no master solves")
+            continue
         recs.append(rec)
         if rec.get("replay_ok") is False:
             raw_fail_shas.append(record_sha256(raw))
 
-    lines.append(f"Total records: **{len(recs)}**")
+    lines.append(f"Total records: **{len(recs)}**"
+                 + (f" (+{len(cg_iter_recs)} cg-iteration summaries, "
+                    "master solves audit-checked, pricing referenced by id)"
+                    if cg_iter_recs else ""))
     lines.append(f"- backends: {dict(Counter((r.get('solver') or {}).get('backend') for r in recs))}")
     statuses = Counter((r.get("solver") or {}).get("status") for r in recs)
     lines.append(f"- statuses: {dict(statuses)}")
@@ -214,13 +298,13 @@ def audit(
 
     # --- B2-A2 CG certification details -------------------------------------
     if cg_cks_all:
-        certified, exhausted, gaps, calls = 0, 0, [], []
+        certified, exhausted, sane_n, gaps, calls = 0, 0, 0, [], []
         for f in cg_cks_all:
             ck = json.load(open(f))
             oc = ck.get("outcome") or {}
-            if oc.get("type") == "certified":
+            if oc.get("certified"):
                 certified += 1
-            elif oc.get("type") == "budget_exhausted":
+            if oc.get("type") == "budget_exhausted":
                 exhausted += 1
             if oc.get("gap") is not None:
                 gaps.append(oc["gap"])
@@ -228,9 +312,14 @@ def audit(
             sane = _cg_sane(ck)
             if sane:
                 problems.append(f"cg {os.path.dirname(f)}: {sane}")
+            else:
+                sane_n += 1
         lines.append("## B2-A2 certification")
-        lines.append(f"- cells: {len(cg_cks_all)}; certified: {certified}; "
-                     f"budget-exhausted: {exhausted}")
+        lines.append(
+            f"- cells: {len(cg_cks_all)}; complete and sane: {sane_n}; "
+            f"CERTIFIED (gap <= epsilon): {certified}; "
+            f"budget-exhausted (valid completed outcome, distinct from "
+            f"certified): {exhausted}")
         if gaps:
             lines.append(f"- final gaps: max {max(gaps):.4g}, "
                          f"median {statistics.median(gaps):.4g}")
