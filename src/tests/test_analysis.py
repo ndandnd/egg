@@ -11,7 +11,13 @@ import pandas as pd
 import pytest
 
 from egglab import checkpoint
-from experiments.analyze_closeout import AnalysisError, analyze
+from experiments.analyze_closeout import (
+    AnalysisError,
+    analyze,
+    checkpoints_digest,
+    output_hashes,
+    sha256_file,
+)
 
 COLS = dict(
     experiment="phase1-static", regime="taker", timestamp="t", host="h",
@@ -159,6 +165,68 @@ def test_cross_validation_catches_tampered_checkpoint(roots, tmp_path):
     _loop_root(p1t, outcome="cycle", tamper_outcome="fixed_point")
     with pytest.raises(AnalysisError, match="terminal outcome"):
         analyze(p1t, dp, bd, str(tmp_path / "o"))
+
+
+def test_manifest_hashes_inputs_and_outputs(roots, tmp_path):
+    """Provenance: MANIFEST.json must carry verifiable SHA-256 hashes of the
+    canonical inputs and of every generated output."""
+    p1, dp, bd = roots
+    out = str(tmp_path / "o")
+    analyze(p1, dp, bd, out)
+    man = json.load(open(os.path.join(out, "MANIFEST.json")))
+    assert man["analysis_code_commit"]
+    # inputs
+    for name, root in (("phase1", p1), ("damping", dp), ("boundary", bd)):
+        ih = man["input_hashes"][name]
+        assert ih["records.csv"] == sha256_file(os.path.join(root, "records.csv"))
+        assert ih["SUMMARY.md"] == sha256_file(os.path.join(root, "SUMMARY.md"))
+        digest, n = checkpoints_digest(root)
+        assert ih["checkpoints_sha256"] == digest
+        assert ih["n_checkpoint_files"] == n
+    # outputs: every generated file hashed, every hash correct
+    oh = man["output_hashes"]
+    recomputed = output_hashes(out)
+    assert oh == recomputed
+    assert any(k.endswith(".csv") for k in oh)
+    assert any(k.startswith("figures/") for k in oh)
+
+
+REPO_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+
+def _repo_analysis_dirs():
+    base = os.path.join(REPO_ROOT, "result", "analysis")
+    if not os.path.isdir(base):
+        return []
+    return sorted(
+        os.path.join(base, s) for s in os.listdir(base)
+        if os.path.exists(os.path.join(base, s, "MANIFEST.json"))
+    )
+
+
+def test_committed_artifacts_match_their_manifest():
+    """Integrity of committed analysis artifacts: every generated file and
+    every canonical input must match the SHA-256 recorded in the artifact
+    set's own MANIFEST.json. Environment-independent: verifies the committed
+    files, not cross-environment regeneration."""
+    dirs = [d for d in _repo_analysis_dirs()
+            if "output_hashes" in json.load(open(os.path.join(d, "MANIFEST.json")))]
+    if not dirs:
+        pytest.skip("no committed analysis artifacts with provenance manifests")
+    for d in dirs:
+        man = json.load(open(os.path.join(d, "MANIFEST.json")))
+        assert man["output_hashes"] == output_hashes(d), f"artifact drift in {d}"
+        for name, ih in man["input_hashes"].items():
+            root = ih["path"] if os.path.isabs(ih["path"]) \
+                else os.path.join(REPO_ROOT, ih["path"])
+            assert os.path.isdir(root), f"{d}: input root missing: {root}"
+            assert ih["records.csv"] == sha256_file(os.path.join(root, "records.csv")), \
+                f"input drift: {root}/records.csv"
+            assert ih["SUMMARY.md"] == sha256_file(os.path.join(root, "SUMMARY.md")), \
+                f"input drift: {root}/SUMMARY.md"
+            digest, n = checkpoints_digest(root)
+            assert ih["checkpoints_sha256"] == digest, f"input drift: {root}/checkpoints"
+            assert ih["n_checkpoint_files"] == n
 
 
 def test_dominance_violation_detected(roots, tmp_path):

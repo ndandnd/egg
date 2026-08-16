@@ -2,8 +2,10 @@
 
 Date: 2026-08-16. Status: definitive analysis of the certified measurement
 campaigns. Analysis code: `src/experiments/analyze_closeout.py` (tested in
-`src/tests/test_analysis.py`); generated tables and figures:
-`result/analysis/20260816T190500Z/`. Canonical immutable inputs:
+`src/tests/test_analysis.py`); generated tables and figures: the stamped
+directory under `result/analysis/` whose `MANIFEST.json` names the analysis
+code commit and carries SHA-256 hashes of all inputs and outputs (exact stamp
+recorded in the artifact commit). Canonical immutable inputs:
 `result/{phase1,damping_frontier,boundary_fine}/20260816T180507Z/` and
 `result/RESULTS_OVERVIEW_20260816T180507Z.md`.
 
@@ -35,7 +37,10 @@ Headline rates:
 - **b = 0 (no feedback):** 32/32 cells reach the trivial fixed point in one
   iteration — the price-taker limit behaves exactly as EVSP-DR assumes.
 - **b = 0.002 (weak feedback):** 62.5–75% fixed points; the rest are
-  certified cycles. Weak feedback is *mostly* stable.
+  certified cycles. Weak feedback is *mostly* stable, and damping can rescue
+  it: seed 0 / n=12 flips from a certified 2-cycle (alpha >= 0.25) to a
+  fixed point at alpha = 0.1 — the single damping-induced rescue in the
+  campaign.
 - **b = 0.01 (moderate):** fixed-point rate collapses to 1/8 (Phase 1) and
   1/16 (damping) at *every* damping level; cycles dominate (87.5–93.75% at
   alpha >= 0.2).
@@ -43,20 +48,24 @@ Headline rates:
   damping levels.** At alpha = 1: 24/24 cycles. At alpha = 0.05: 16/16
   unresolved transients.
 
-**Damping does not create convergence here; it trades short certified cycles
-for long orbits and unresolved transients.** Median iterations-to-outcome
-scale like 1/alpha (4 at alpha=1 to 240 at alpha=0.05). This is the central
-negative result motivating B2: naive damped tatonnement is not a reliable
-coordination algorithm for an indivisible fleet, at any tested damping.
+**For b in {0.01, 0.05}, damping does not create convergence; it trades
+short certified cycles for long orbits and unresolved transients.** (At
+b = 0.002 the single seed-0/n=12 rescue above shows weak feedback can be
+stabilized by constant damping.) Median iterations-to-outcome scale like
+1/alpha (4 at alpha=1 to 240 at alpha=0.05). This is the central negative
+result motivating B2: at moderate-to-strong feedback, naive constant-damping
+tatonnement is not a reliable coordination algorithm for an indivisible
+fleet, at any tested damping level.
 
 ## 2. Cycle structure
 
 Table `T2_cycle_lengths.csv`; figure `F2_cycle_lengths.png`. 284 certified
 cycles.
 
-- **Every undamped (alpha = 1) cycle has length exactly 2** — 49/49. The
-  pure cobweb: the fleet flip-flops between two schedules straddling a kink
-  of its value function.
+- **Every undamped (alpha = 1) cycle observed has length exactly 2** —
+  49/49, a certified empirical pattern of this laboratory (not a proven
+  universal). The pure cobweb: the fleet flip-flops between two schedules
+  straddling a kink of its value function.
 - **Damped cycles are long-period**: median length 11 (b=0.01) and 14
   (b=0.05) in the damping frontier, maximum 140. Damping smears the 2-cycle
   into long closed orbits in price space rather than collapsing it.
@@ -66,28 +75,32 @@ cycles.
 
 ## 3. Seed and instance heterogeneity
 
-Table `T4_outcomes_by_seed.csv`. Stability is **instance-structural, not
-algorithmic**: in the damping frontier, seed 11 accounts for *all nine*
+Table `T4_outcomes_by_seed.csv`. Stability is **strongly
+instance-dependent within this generator and the tested constant-damping
+family**: in the damping frontier, seed 11 accounts for *all nine*
 fixed-point cells at b = 0.01 (one per damping level), while the other 15
 seeds produce zero fixed points at any alpha. Phase 1 shows the same pattern
 at smaller scale (its b>0 fixed points concentrate in specific seed/size
-pairs). Whether an instance admits a stable point at all appears decided by
-the geometry of its schedule set relative to the price curve, not by the
-damping parameter — directly relevant to theorem target B10 (fixed-point
-existence tied to integrality structure).
+pairs, with the one seed-0/n=12 damping rescue at b = 0.002). Within the
+tested family, whether an instance admits a stable point appears decided
+largely by the geometry of its schedule set relative to the price curve
+rather than by the damping parameter — relevant to theorem target B10
+(fixed-point existence tied to integrality structure), pending tests beyond
+this generator and beyond constant damping.
 
 ## 4. Runtime and LP/MIP gaps
 
-Table `T5_solver_stats.csv`; figure `F5_solver_stats.png`. All 50k+ solves
-GRB/OPTIMAL. Median MIP wall times are small (1.1–2.1 s for statics/sweeps;
-19.8 s for damping-frontier iterations) with heavy tails (p90 up to 171 s,
-max 543 s) — consistent with kink-adjacent instances being much harder.
-LP-relaxation-to-MIP absolute gaps are **first-order large**: medians 127.4
-(Phase 1 overall), 301.3 (damping iterations), 84.8 (boundary), with maxima
-up to 700. The LP relaxation is far from the integer optimum on exactly the
-objects whose convexification the thesis prices (B3 internal uplift, B37
-aggregation error): the "price of indivisibility" in this laboratory is a
-triple-digit cost figure, not a rounding artifact.
+Table `T5_solver_stats.csv`; figure `F5_solver_stats.png`. All **49,993
+recorded solves** GRB/OPTIMAL. Median MIP wall times are small (1.1–2.1 s
+for statics/sweeps; 19.8 s for damping-frontier iterations) with heavy tails
+(p90 up to 171 s, max 543 s) — consistent with kink-adjacent instances being
+much harder. Root-LP-to-MIP absolute gaps are large: medians 127.4 (Phase 1
+overall), 301.3 (damping iterations), 84.8 (boundary), maxima up to 700.
+**These are formulation-specific integrality-gap measurements** — root-LP
+gaps of the compact vehicle-indexed MILP — and they motivate, but do not
+measure, the convex-hull uplift that B3 defines on the schedule-column
+master (z_D − z_CH, Section 8). They must not be read as the intrinsic
+"price of indivisibility" of the instances.
 
 ## 5. Static-regime welfare ladder
 
@@ -114,10 +127,12 @@ Two certified findings:
    B8 conjecture (W_T can approach or exceed W_U) is within reach of this
    laboratory at the worst-case level, though not yet in the mean.
 2. **The strategist nearly implements the planner**: strategic − dictator
-   stays ≤ 3.74 across the whole grid. At these scales, monopsony distortion
-   (B9) is an order of magnitude smaller than the price-taking distortion —
-   anticipating one's own price impact recovers almost all coordination value
-   even without a market designer.
+   stays ≤ 3.74 across the whole grid. At strong feedback (b = 0.05) in this
+   laboratory, the monopsony distortion (B9) is an order of magnitude smaller
+   than the price-taking distortion — anticipating one's own price impact
+   recovers almost all coordination value even without a market designer. At
+   weaker slopes both distortions are small and the comparison is not yet
+   informative.
 
 ### Degeneracy diagnostic (selection variance)
 
@@ -159,7 +174,9 @@ outnumber charging-only changes 57:35** — the discontinuity is substantially
 a routing/partition phenomenon, not merely charge-timing. This keeps the
 atomic/switch-boundary program (and eventually B31) alive, while the 2,559:92
 degenerate-to-economic ratio warns that any learning on raw schedule hashes
-without economic filtering would be fitting solver noise.
+without economic filtering would be fitting alternative-optimum selection —
+which schedule the solver reports among economically equivalent optima —
+rather than economic structure.
 
 ## 7. Limitations
 
@@ -203,31 +220,69 @@ existing certification applies).
 - **A5**: quadratic proximal stabilization (bundle-style; parameter halved on
   null steps).
 
+### Bounds and certification (definitions)
+
+For each instance, minimization throughout:
+
+- `z_D`   = integer dictator optimum. Available per instance from the
+  existing adaptive dictator solve as a certified interval
+  `[z_D_ub - tol_D, z_D_ub]` with `tol_D = 1e-2` (`obj_true` is the feasible
+  upper bound).
+- `z_CH`  = optimum of the FULL schedule-column convex-hull master (all
+  feasible schedule columns) — never computed directly.
+- `z_RMP` = optimum of the restricted master over the columns generated so
+  far. Fewer columns can only hurt a minimization, so
+  **`z_RMP >= z_CH`: the restricted master is the upper bound `UB_CH`.**
+- `LB_CH` = lower bound on `z_CH` from exact pricing reduced-cost accounting
+  (Lasdon bound: `z_RMP` plus the convexity-row-weighted minimum reduced
+  cost returned by the exact oracle).
+
+**Certification** for CG-based methods (A2–A5): `UB_CH - LB_CH <= epsilon`
+with `epsilon = 1e-2`. This certifies `z_CH`, not `z_D`.
+
+**B3 uplift** is `z_D - z_CH`, reported as a certified interval that carries
+both tolerances: `[(z_D_ub - tol_D) - UB_CH, z_D_ub - LB_CH]`.
+
+The quantity "integer restricted-master value minus `z_RMP`" is the
+**restricted-menu integrality gap**; it may be reported as a diagnostic but
+must NOT be called uplift unless pricing completeness (or an equivalent
+argument) establishes both `z_RMP = z_CH` and that the integer restricted
+master attains `z_D`.
+
+A0/A1 (tatonnement) carry **no CG certificate** — they produce no valid
+bound on `z_CH` — so calls-to-certificate comparisons are restricted to
+A2–A5; A0/A1 are compared at matched oracle budgets on outcome metrics.
+
 ### Metrics (per cell, all logged under the Phase-0 record contract)
 
-1. Oracle calls and wall time to an epsilon-certificate: master LP value
-   within epsilon = 1e-2 of the dictator optimum `obj_true` (already
-   computed per instance by the existing adaptive dictator solve — the
-   ground truth is free).
-2. Certified final gap (master bound vs dictator optimum), and the integer
-   restricted-master value minus master LP value = **internal uplift** (the
-   B3 measurement, obtained as a by-product).
-3. Price-path quality: L-infinity step sizes and total variation of the dual
-   trajectory (the "price path a coordinator would broadcast").
-4. Fraction of cells certified within budget (240 oracle calls), vs cycling/
-   unresolved under A0/A1.
+1. A2–A5 only: oracle calls and wall time to `UB_CH - LB_CH <= epsilon`;
+   final certified gap; `UB_CH`, `LB_CH` trajectories.
+2. B3 uplift interval per instance (by-product of 1 plus the existing
+   dictator solve), with tolerance accounting as defined above.
+3. All methods: price-path quality — L-infinity step sizes and total
+   variation of the dual/posted-price trajectory.
+4. A0/A1 at matched oracle budgets (the budget at which each certified
+   method terminated, and the full 240-call budget): fixed-point success,
+   final price residual, realized welfare (total system cost of the final
+   and of the time-averaged response), price-path total variation, wall
+   time.
 5. Replay validity and OPTIMAL status for every oracle call (unchanged
-   gates).
+   gates); restricted-menu integrality gap as a labeled diagnostic.
 
 ### Acceptance tests
 
 - On the 176 cells where b = 0.05 (zero fixed points today), A3/A4/A5 reach
   the epsilon-certificate within 240 oracle calls in >= 95% of cells.
-- Certified gap <= epsilon on every certified cell; master bound never
-  exceeds the dictator optimum (lower-bound property preserved).
-- Median oracle calls to certificate for the best stabilized method beats A1
-  (best damping) by >= 2x on b in {0.01, 0.05}.
-- Price-path total variation strictly below A0 and A1 on >= 90% of cells.
+- Bound sanity on every cell: `LB_CH <= UB_CH` at every iteration; `UB_CH`
+  is nonincreasing at serious steps; the certified `z_CH` interval is
+  consistent with the dictator interval (`z_CH <= z_D_ub + numerical
+  tolerance`).
+- Among CG methods: the best stabilized method (A3–A5) beats plain CG (A2)
+  by >= 2x on median oracle calls to certificate at b in {0.01, 0.05}.
+- Budget-matched superiority over tatonnement: at each certified method's
+  termination budget, A0/A1 fail to reach a price residual below tol_price
+  on the cells where they cycle today, and the stabilized methods' price-path
+  total variation is below A0/A1 on >= 90% of cells.
 - Determinism: rerunning any cell reproduces its record stream.
 
 ### Kill tests
@@ -236,11 +291,14 @@ existing certification applies).
   stabilization is not the contribution — the story collapses to "memory
   beats memorylessness" and Chapter I's algorithmic half must be re-scoped
   to the equivalence theorem plus uplift accounting.
-- If A1 (best fixed damping) is within 10% of the best stabilized method on
-  oracle calls across the full b grid, stabilized negotiation adds nothing
-  practical here; retain only the theory link.
-- If master-LP fixed points disagree with the convexified dictator optimum
-  by more than epsilon anywhere, the decomposition identity implementation
+- If A1 (best fixed damping), compared at matched oracle budgets, matches
+  the certified methods on realized welfare and reaches residuals below
+  tol_price on a comparable fraction of cells across the full b grid, then
+  stabilized negotiation adds nothing practical here; retain only the theory
+  link. (A1 cannot match on certificates, which it does not produce; the
+  comparison is on outcomes.)
+- If the certified `z_CH` interval ever contradicts the dictator interval
+  (`LB_CH > z_D_ub + tolerance`), the decomposition identity implementation
   is wrong — halt and debug before any scientific claim.
 
 ### Proposed Unicorn grid

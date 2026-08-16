@@ -23,6 +23,7 @@ from __future__ import annotations
 import argparse
 import datetime
 import glob
+import hashlib
 import json
 import os
 import re
@@ -40,6 +41,61 @@ WELFARE_TOL = 2e-2  # dictator-dominance check tolerance (certified gap scale)
 
 class AnalysisError(RuntimeError):
     pass
+
+
+# ---------------------------------------------------------------------------
+# provenance hashing
+# ---------------------------------------------------------------------------
+def sha256_file(path: str) -> str:
+    h = hashlib.sha256()
+    with open(path, "rb") as f:
+        for chunk in iter(lambda: f.read(1 << 20), b""):
+            h.update(chunk)
+    return h.hexdigest()
+
+
+def checkpoints_digest(root: str) -> tuple:
+    """Combined SHA-256 over all checkpoint files (sorted relpath + content
+    hash), plus the file count."""
+    h = hashlib.sha256()
+    files = sorted(glob.glob(os.path.join(root, "checkpoints", "*", "*.ckpt.json")))
+    for fp in files:
+        rel = os.path.relpath(fp, root)
+        h.update(rel.encode())
+        h.update(sha256_file(fp).encode())
+    return h.hexdigest(), len(files)
+
+
+REPO_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+
+def input_hashes(roots: dict) -> dict:
+    out = {}
+    for name, r in roots.items():
+        digest, n = checkpoints_digest(r["root"])
+        ap = os.path.abspath(r["root"])
+        try:
+            path = os.path.relpath(ap, REPO_ROOT)
+        except ValueError:
+            path = ap
+        out[name] = {
+            "path": path if not path.startswith("..") else ap,
+            "records.csv": sha256_file(os.path.join(r["root"], "records.csv")),
+            "SUMMARY.md": sha256_file(os.path.join(r["root"], "SUMMARY.md")),
+            "checkpoints_sha256": digest,
+            "n_checkpoint_files": n,
+        }
+    return out
+
+
+def output_hashes(out_dir: str) -> dict:
+    """SHA-256 of every generated file (excluding the manifest itself)."""
+    hashes = {}
+    for fp in sorted(glob.glob(os.path.join(out_dir, "**", "*"), recursive=True)):
+        if os.path.isdir(fp) or os.path.basename(fp) == "MANIFEST.json":
+            continue
+        hashes[os.path.relpath(fp, out_dir)] = sha256_file(fp)
+    return hashes
 
 
 # ---------------------------------------------------------------------------
@@ -509,10 +565,12 @@ def analyze(phase1: str, damping: str, boundary: str, out: str) -> dict:
         commit = "unknown"
     manifest = {
         "generated_utc": datetime.datetime.now(datetime.timezone.utc).isoformat(),
-        "analysis_commit": commit,
+        "analysis_code_commit": commit,
         "inputs": {"phase1": phase1, "damping": damping, "boundary": boundary},
+        "input_hashes": input_hashes(roots),
         "certified_filter": "replay_effective_ok == True AND solver_status == OPTIMAL",
         "figures": [os.path.basename(f) for f in figs],
+        "output_hashes": output_hashes(out),
     }
     with open(os.path.join(out, "MANIFEST.json"), "w") as f:
         json.dump(manifest, f, indent=1, sort_keys=True)
