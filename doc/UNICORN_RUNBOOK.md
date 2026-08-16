@@ -203,6 +203,59 @@ counts and the expected/found/complete/missing table, e.g.:
 - unresolved replay failures: 0
 ```
 
+## B2-A2 12-cell pilot (2026-08-16)
+
+Certified plain column generation (method A2 of `MEASUREMENT_RESULTS.md`
+Section 8): `egglab/b2a2.py` + `experiments/run_b2a2_pilot.py`. Grid: seeds
+{0, 11, 15} x n_trips {8, 12} x b {0.01, 0.05}; epsilon 1e-2; budget 240
+exact pricing calls per cell. Launch gates (all three required BEFORE any
+full-grid work): (i) tiny complete-enumeration tests pass locally
+(`python3 -m pytest tests/test_b2a2.py -q`), (ii) all 12 pilot cells satisfy
+bound sanity, (iii) pilot records/checkpoints pass replay and completeness
+audits.
+
+Exact commands (interactive Unicorn login prompt):
+
+```bash
+cd "$HOME/egg"
+git switch main && git pull --ff-only origin main && git log -1 --oneline
+cd src
+source cluster/unicorn_env.sh
+
+# 0. Verify the grid before submitting (the launcher refuses anything != 12):
+python experiments/run_b2a2_pilot.py --list | tail -1
+# expected: total: 12 cells
+
+# 1. Submit (derives the array from --list; %12 concurrency; --requeue;
+#    email nc437@cornell.edu on END/FAIL/REQUEUE; manifest under
+#    runs/b2a2_pilot/):
+bash cluster/launch_b2a2_pilot.sh
+
+# 2. Monitor:
+squeue --me
+sacct -j <JOBID> --format=JobID,State,Elapsed,ExitCode
+tail -f slurm-egg-b2a2-pilot-<JOBID>_<TASK>.out
+
+# 3. Inspect one cell's certificate:
+python -c "import json; s=json.load(open('runs/b2a2_pilot/s0_n8_b0.01/a2.cg.ckpt.json')); print(json.dumps(s['outcome'], indent=2))"
+
+# 4. Audit gate (cells=12), as a proper bash batch job:
+bash cluster/launch_audit.sh runs/b2a2_pilot:cg=12
+# or directly at the prompt:
+python experiments/audit_runs.py runs/b2a2_pilot --expect-cg 12
+```
+
+Per-cell evidence written under `runs/b2a2_pilot/<cell>/`:
+`a2.cg.ckpt.json` (atomic per-oracle-call checkpoint: columns with replay
+evidence, LB/UB trajectories, outcome, uplift interval),
+`a2.iterations.jsonl` (per-iteration UB_CH/z_model, min exact reduced cost,
+LB_CH, certificate gap, master + pricing wall times, column novelty, solver
+block), `a2.oracle.jsonl` (full oracle records, replay-enforced), and
+`dictator.jsonl`/`dictator.ckpt.json` (the independent dictator solve
+feeding the uplift interval). A preempted task repeats at most the one
+in-flight oracle solve; completed columns and bounds survive requeue, and a
+corrupted checkpoint (LB above best UB) fails loudly at resume.
+
 ## Branch hygiene
 
 The hardened implementation and this runbook are merged into `main`. Submit

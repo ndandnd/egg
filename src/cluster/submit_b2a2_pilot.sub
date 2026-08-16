@@ -1,0 +1,34 @@
+#!/bin/bash
+# B2-A2 pilot array (12 cells, A2 only). Launch via
+# cluster/launch_b2a2_pilot.sh, which derives the array size from --list and
+# refuses to submit unless it is exactly 12.
+#
+# Preemption safety: --requeue + atomic per-oracle-call checkpoints in
+# egglab/b2a2.py; a requeued task repeats at most one in-flight solve and
+# never loses completed columns or corrupts bounds.
+#
+#SBATCH --job-name=egg-b2a2-pilot
+#SBATCH --output=slurm-%x-%A_%a.out
+#SBATCH --mail-type=END,FAIL,REQUEUE
+#SBATCH --mail-user=nc437@cornell.edu
+#SBATCH --requeue
+#SBATCH --array=0-11%12
+#SBATCH --cpus-per-task=4
+#SBATCH --mem=8G
+#SBATCH --time=24:00:00
+
+set -euo pipefail
+SUBMIT_DIR="${SLURM_SUBMIT_DIR:-$(pwd)}"
+if [[ -f "${SUBMIT_DIR}/experiments/run_b2a2_pilot.py" ]]; then
+    WORK_DIR="${SUBMIT_DIR}"
+elif [[ -f "${SUBMIT_DIR}/src/experiments/run_b2a2_pilot.py" ]]; then
+    WORK_DIR="${SUBMIT_DIR}/src"
+else
+    echo "ERROR: could not locate the egg src directory from ${SUBMIT_DIR}" >&2
+    exit 1
+fi
+cd "${WORK_DIR}"
+source "${WORK_DIR}/cluster/unicorn_env.sh"
+
+python experiments/run_b2a2_pilot.py --cell "${SLURM_ARRAY_TASK_ID}" \
+    --out runs/b2a2_pilot

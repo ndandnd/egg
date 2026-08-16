@@ -37,6 +37,30 @@ from egglab.revalidate import (  # noqa: E402
 )
 
 
+def _cg_sane(ck: dict, tol_mono: float = 2e-3) -> list:
+    """Sanity checks for a B2-A2 CG checkpoint; returns problem strings."""
+    errs = []
+    if not ck.get("done"):
+        errs.append("not done")
+        return errs
+    oc = ck.get("outcome") or {}
+    if oc.get("type") not in ("certified", "budget_exhausted"):
+        errs.append(f"bad outcome {oc.get('type')}")
+    ub = ck.get("ub_history") or []
+    lb = ck.get("lb_history") or []
+    for a, b in zip(ub, ub[1:]):
+        if b > a + tol_mono:
+            errs.append(f"UB increased {a} -> {b}")
+            break
+    for a, b in zip(lb, lb[1:]):
+        if b < a - 1e-9:
+            errs.append(f"LB decreased {a} -> {b}")
+            break
+    if ub and ck.get("lb_best", -1e18) > min(ub) + tol_mono + ck.get("epsilon", 0):
+        errs.append("LB_best exceeds best UB")
+    return errs
+
+
 def audit(
     runs_dir: str,
     out_path: str | None = None,
@@ -44,6 +68,7 @@ def audit(
     expect_loops: int | None = None,
     expect_sweeps: int | None = None,
     expect_static: int | None = None,
+    expect_cg: int | None = None,
 ):
     """Build the summary; returns (lines, ok, problems).
 
@@ -129,6 +154,7 @@ def audit(
     cell_cks = sorted(glob.glob(os.path.join(runs_dir, "**", "cell.ckpt.json"), recursive=True))
     loop_cks_all = sorted(glob.glob(os.path.join(runs_dir, "**", "loop.ckpt.json"), recursive=True))
     sweep_cks_all = sorted(glob.glob(os.path.join(runs_dir, "**", "sweep.ckpt.json"), recursive=True))
+    cg_cks_all = sorted(glob.glob(os.path.join(runs_dir, "**", "*.cg.ckpt.json"), recursive=True))
 
     def _cell_complete(ck):
         if not ck.get("loop_done"):
@@ -143,6 +169,7 @@ def audit(
         ("loop", loop_cks_all, expect_loops, lambda ck: bool(ck.get("done"))),
         ("sweep", sweep_cks_all, expect_sweeps,
          lambda ck: bool(ck.get("done")) and bool(ck.get("margins_done"))),
+        ("cg", cg_cks_all, expect_cg, lambda ck: not _cg_sane(ck)),
     ):
         found = len(paths)
         complete = 0
@@ -184,6 +211,31 @@ def audit(
     if expect_static is not None:
         lines.append(f"- static-regime requirement per cell: >= {expect_static}")
     lines.append("")
+
+    # --- B2-A2 CG certification details -------------------------------------
+    if cg_cks_all:
+        certified, exhausted, gaps, calls = 0, 0, [], []
+        for f in cg_cks_all:
+            ck = json.load(open(f))
+            oc = ck.get("outcome") or {}
+            if oc.get("type") == "certified":
+                certified += 1
+            elif oc.get("type") == "budget_exhausted":
+                exhausted += 1
+            if oc.get("gap") is not None:
+                gaps.append(oc["gap"])
+            calls.append(ck.get("oracle_calls"))
+            sane = _cg_sane(ck)
+            if sane:
+                problems.append(f"cg {os.path.dirname(f)}: {sane}")
+        lines.append("## B2-A2 certification")
+        lines.append(f"- cells: {len(cg_cks_all)}; certified: {certified}; "
+                     f"budget-exhausted: {exhausted}")
+        if gaps:
+            lines.append(f"- final gaps: max {max(gaps):.4g}, "
+                         f"median {statistics.median(gaps):.4g}")
+        lines.append(f"- oracle calls: {calls}")
+        lines.append("")
 
     # --- adaptive approximation quality -------------------------------------
     ad = [
@@ -299,6 +351,8 @@ def main():
                     help="required number of complete (done+margins_done) sweep.ckpt.json files")
     ap.add_argument("--expect-static", dest="expect_static", type=int, default=None,
                     help="required completed static regimes per cell checkpoint (phase-1 full mode: 4)")
+    ap.add_argument("--expect-cg", dest="expect_cg", type=int, default=None,
+                    help="required number of complete, bound-sane *.cg.ckpt.json files (B2-A2)")
     args = ap.parse_args()
     out_path = args.out or os.path.join(args.runs_dir, "SUMMARY.md")
     _, ok, problems = audit(
@@ -308,6 +362,7 @@ def main():
         expect_loops=args.expect_loops,
         expect_sweeps=args.expect_sweeps,
         expect_static=args.expect_static,
+        expect_cg=args.expect_cg,
     )
     print(f"wrote {out_path}")
     if not ok:

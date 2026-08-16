@@ -30,7 +30,7 @@ cd "${WORK_DIR}"
 source "${WORK_DIR}/cluster/unicorn_env.sh"
 
 # EGG_AUDIT_ROOTS holds space-separated root SPECS with expected-count gates:
-#   path[:cells=N][:loops=N][:sweeps=N][:static=N]
+#   path[:cells=N][:loops=N][:sweeps=N][:static=N][:cg=N]
 # e.g. runs/phase1:cells=128:loops=128:static=4
 # A root without gates is audited without expected counts (found checkpoints
 # must still be complete) — prefer explicit gates for closeout audits.
@@ -46,6 +46,7 @@ for SPEC in ${ROOTS}; do
             loops=*)  ARGS+=(--expect-loops "${KV#loops=}") ;;
             sweeps=*) ARGS+=(--expect-sweeps "${KV#sweeps=}") ;;
             static=*) ARGS+=(--expect-static "${KV#static=}") ;;
+            cg=*)     ARGS+=(--expect-cg "${KV#cg=}") ;;
             *) echo "ERROR: unknown expectation '${KV}' in spec '${SPEC}'" >&2; exit 2 ;;
         esac
     done
