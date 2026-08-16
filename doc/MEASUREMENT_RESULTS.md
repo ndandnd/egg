@@ -44,9 +44,13 @@ Headline rates:
 - **b = 0.01 (moderate):** fixed-point rate collapses to 1/8 (Phase 1) and
   1/16 (damping) at *every* damping level; cycles dominate (87.5–93.75% at
   alpha >= 0.2).
-- **b = 0.05 (strong):** **zero fixed points in all 176 cells across nine
-  damping levels.** At alpha = 1: 24/24 cycles. At alpha = 0.05: 16/16
-  unresolved transients.
+- **b = 0.05 (strong):** **zero fixed points across all 176 tested baseline
+  algorithm-parameter cells** (repeated (instance, alpha) observations: the
+  32 distinct b=0.05 instances of the two campaigns, each run under several
+  constant-damping values). At alpha = 1: 24/24 cycles. At alpha = 0.05:
+  16/16 unresolved transients. This is the historical empirical result; the
+  B2 acceptance criterion below is stated over distinct instances, not over
+  these repeated cells.
 
 **For b in {0.01, 0.05}, damping does not create convergence; it trades
 short certified cycles for long orbits and unresolved transients.** (At
@@ -210,8 +214,16 @@ column oracle is the existing taker EVSP at those prices (unchanged, so all
 existing certification applies).
 
 - **A0 (baseline)**: undamped tatonnement — the certified 2-cycle machine.
-- **A1 (baseline)**: damped tatonnement at the empirically best fixed alpha
-  per b from `T1b_outcome_rates.csv`.
+- **A1 (baseline)**: the full prespecified constant-damping family,
+  alpha in {1.0, 0.75, 0.5, 0.35, 0.25, 0.2, 0.15, 0.1, 0.05} — no
+  "empirically best alpha" is defined (at b = 0.05 no alpha converged, and
+  selecting alpha post hoc on evaluation cells would be cherry-picking).
+  Where the B2 instance grid matches the already certified damping-frontier
+  trajectories (n = 12, b in {0.01, 0.05}, seeds 0–15, all nine alphas),
+  those existing certified runs are REUSED at zero compute; the remaining
+  family cells (n = 8 at all b; n = 12 at b = 0.002) are run fresh. No
+  alpha selection uses B2 evaluation cells; comparisons report the whole
+  family (and any kill decision must hold against every member).
 - **A2**: pure (unstabilized) column generation on the master — Kelley; adds
   memory of all past responses but no stabilization.
 - **A3**: du Merle box + linear-penalty stabilization (5-piece), stability
@@ -233,9 +245,19 @@ For each instance, minimization throughout:
 - `z_RMP` = optimum of the restricted master over the columns generated so
   far. Fewer columns can only hurt a minimization, so
   **`z_RMP >= z_CH`: the restricted master is the upper bound `UB_CH`.**
-- `LB_CH` = lower bound on `z_CH` from exact pricing reduced-cost accounting
-  (Lasdon bound: `z_RMP` plus the convexity-row-weighted minimum reduced
-  cost returned by the exact oracle).
+- `LB_CH` = lower bound on `z_CH` from exact pricing reduced-cost
+  accounting. For the current master, which has ONE convexity block (one
+  fleet), this is operationally
+  **`LB_CH = z_RMP + min(0, minimum_exact_reduced_cost)`**, where the
+  minimum exact reduced cost is returned by the exact pricing oracle at the
+  RMP duals. If the master is ever generalized to multiple independent
+  convexity blocks, the correction is the SUM over blocks of each block's
+  `min(0, minimum reduced cost)`.
+- `UB_CH` is the objective of the ORDINARY, UNSTABILIZED restricted master
+  evaluated over all columns generated so far — never the objective of a
+  penalized, proximal, smoothed, or box-master surrogate (stabilized methods
+  must re-solve the clean RMP, or equivalently price out their stabilization
+  terms, before reporting `UB_CH`).
 
 **Certification** for CG-based methods (A2–A5): `UB_CH - LB_CH <= epsilon`
 with `epsilon = 1e-2`. This certifies `z_CH`, not `z_D`.
@@ -271,12 +293,16 @@ A2–A5; A0/A1 are compared at matched oracle budgets on outcome metrics.
 
 ### Acceptance tests
 
-- On the 176 cells where b = 0.05 (zero fixed points today), A3/A4/A5 reach
-  the epsilon-certificate within 240 oracle calls in >= 95% of cells.
+- On the proposed 32-instance b = 0.05 grid (16 seeds x 2 trip sizes; 96
+  A3–A5 method-cells total), each of A3/A4/A5 certifies at least 95% of
+  instances within 240 oracle calls. (The historical "zero fixed points
+  across 176 tested baseline algorithm-parameter cells" is the motivating
+  empirical result, not this criterion's denominator.)
 - Bound sanity on every cell: `LB_CH <= UB_CH` at every iteration; `UB_CH`
-  is nonincreasing at serious steps; the certified `z_CH` interval is
-  consistent with the dictator interval (`z_CH <= z_D_ub + numerical
-  tolerance`).
+  is nonincreasing after EVERY valid column expansion and RMP
+  reoptimization, up to numerical tolerance — not merely on serious steps;
+  the certified `z_CH` interval is consistent with the dictator interval
+  (`z_CH <= z_D_ub + numerical tolerance`).
 - Among CG methods: the best stabilized method (A3–A5) beats plain CG (A2)
   by >= 2x on median oracle calls to certificate at b in {0.01, 0.05}.
 - Budget-matched superiority over tatonnement: at each certified method's
@@ -291,24 +317,33 @@ A2–A5; A0/A1 are compared at matched oracle budgets on outcome metrics.
   stabilization is not the contribution — the story collapses to "memory
   beats memorylessness" and Chapter I's algorithmic half must be re-scoped
   to the equivalence theorem plus uplift accounting.
-- If A1 (best fixed damping), compared at matched oracle budgets, matches
-  the certified methods on realized welfare and reaches residuals below
-  tol_price on a comparable fraction of cells across the full b grid, then
-  stabilized negotiation adds nothing practical here; retain only the theory
-  link. (A1 cannot match on certificates, which it does not produce; the
-  comparison is on outcomes.)
+- If ANY member of the prespecified A1 damping family, compared at matched
+  oracle budgets, matches the certified methods on realized welfare and
+  reaches residuals below tol_price on a comparable fraction of instances
+  across the full b grid, then stabilized negotiation adds nothing practical
+  here; retain only the theory link. (A1 members cannot match on
+  certificates, which they do not produce; the comparison is on outcomes,
+  and holds family-wide — never via a post-hoc selected alpha.)
 - If the certified `z_CH` interval ever contradicts the dictator interval
   (`LB_CH > z_D_ub + tolerance`), the decomposition identity implementation
   is wrong — halt and debug before any scientific claim.
 
 ### Proposed Unicorn grid
 
-Seeds 0–15; n_trips {8, 12}; b {0.002, 0.01, 0.05}; methods {A0, A1, A2,
-A3, A4, A5}; epsilon = 1e-2; budget 240 oracle calls; = 16 x 2 x 3 x 6 =
-**576 cells**, Slurm array `0-575%24`, requeue-safe per-cell checkpoints,
-mail END/FAIL/REQUEUE, audit gates `cells=576`. Estimated cost: comparable
-to one damping-frontier run (the oracle dominates; stabilized methods should
-*reduce* total oracle calls).
+Instances: seeds 0–15 x n_trips {8, 12} x b {0.002, 0.01, 0.05} = 96
+distinct instances (32 at b = 0.05). Methods: A0, A2, A3, A4, A5 run on all
+96 instances = 480 method-cells; of these, A3–A5 contribute 3 x 32 = 96
+b = 0.05 method-cells — the acceptance criterion's population, evaluated
+per method over its 32 instances. The A1 family contributes 9 alphas x 96 instances = 864
+method-cells, of which 288 (n = 12, b in {0.01, 0.05}) are REUSED from the
+certified damping frontier at zero compute and 576 are fresh. Fresh compute:
+480 + 576 = **1,056 cells**, Slurm array `0-1055%24`, requeue-safe per-cell
+checkpoints, mail END/FAIL/REQUEUE, audit gates `cells=1056` (plus the 288
+reused cells verified by hash against the damping-frontier snapshot).
+
+**A 12-cell A2 pilot precedes any full grid**: 2 seeds x 2 trip sizes x 3 b
+on plain CG, to validate the master, the `LB_CH`/`UB_CH` accounting, and the
+record schema before the 1,056-cell submission.
 
 ## 9. Reproduction
 
