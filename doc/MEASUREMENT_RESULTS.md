@@ -2,10 +2,10 @@
 
 Date: 2026-08-16. Status: definitive analysis of the certified measurement
 campaigns. Analysis code: `src/experiments/analyze_closeout.py` (tested in
-`src/tests/test_analysis.py`); generated tables and figures: the stamped
-directory under `result/analysis/` whose `MANIFEST.json` names the analysis
-code commit and carries SHA-256 hashes of all inputs and outputs (exact stamp
-recorded in the artifact commit). Canonical immutable inputs:
+`src/tests/test_analysis.py`); generated tables and figures:
+`result/analysis/20260816T190835Z/` (its `MANIFEST.json` names the analysis code
+commit ce2fa5c and carries SHA-256 hashes of every canonical input and every
+generated output; integrity is test-enforced). Canonical immutable inputs:
 `result/{phase1,damping_frontier,boundary_fine}/20260816T180507Z/` and
 `result/RESULTS_OVERVIEW_20260816T180507Z.md`.
 
