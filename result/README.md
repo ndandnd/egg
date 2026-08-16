@@ -1,12 +1,14 @@
 # result
 
-Figures, tables, and experiment outputs referenced by `doc/`.
+Distilled experiment evidence referenced by `doc/`. Raw JSONL remains on the
+cluster; canonical CSVs, audit verdicts, checkpoints, revalidation evidence,
+and provenance are committed here.
 
-Conventions (to adopt when the first experiments land, per the experiment
-ladder in `ref/context/HANDOFF_PRICE_MAKER_20260814.md` Section 8):
-- One subdirectory per experiment family, containing the outputs plus a
-  `PROVENANCE.md` recording: instance/input hashes, price/model parameters,
-  random seeds, solver status and bounds/gaps, oracle exactness tier, code
-  commit, and wall time.
-- Raw bulky artifacts stay on the cluster; commit only distilled
-  figures/tables/CSVs plus provenance.
+The latest certified measurement closeout is
+[`RESULTS_OVERVIEW_20260816T180507Z.md`](RESULTS_OVERVIEW_20260816T180507Z.md).
+It supersedes the pre-hardening August 14 snapshot for scientific claims; the
+older snapshot remains available as an archival hypothesis screen.
+
+Each experiment family uses `result/<experiment>/<UTC stamp>/`. Read the
+snapshot's `PROVENANCE.md` before analysis and use `replay_effective_ok` as the
+canonical replay field. The raw `replay_ok` value is intentionally preserved.
