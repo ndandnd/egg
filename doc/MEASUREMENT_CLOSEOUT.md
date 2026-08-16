@@ -39,16 +39,20 @@ JSON line:
    the partition is fixed; only charging/arc-kind realization is recomputed);
 3. the re-realization must pass the current replay validator
    (`REPLAY_TOL_KWH = 1e-4` kWh); and
-4. its economics must match the legacy record within documented tolerances:
-   objective within 1e-2 (the adaptive-certification scale, which also
-   absorbs the 6-decimal price rounding stored in records), total energy
-   within 1e-3 kWh, identical schedule hash; per-slot loads within 1e-3 kWh
-   for `certified_equivalent`, otherwise `certified_alternative_realization`
-   (a degenerate, economically equivalent charging allocation).
+4. its economics AND its trajectory content must match the legacy record
+   within documented tolerances: objective within 1e-2 (the
+   adaptive-certification scale, which also absorbs the 6-decimal price
+   rounding stored in records), total energy within 1e-3 kWh, identical
+   schedule hash, and **per-slot loads within 1e-3 kWh**.
 
-Outcomes that do NOT satisfy this — `materially_different` or
-`reconstruction_failed` — are never accepted and fail the audit; they would
-indicate a real modeling or data problem, not a precision artifact.
+**Only `certified_equivalent` resolves a failure.** These are loop records:
+the per-slot load vector determines the next endogenous price state, so
+objective/total-energy equivalence does not certify trajectory equivalence.
+`certified_alternative_realization` (same economics, different charging
+allocation) is retained as a diagnostic disposition but is NOT accepted — it
+leaves the record unresolved and fails the audit, exactly like
+`materially_different` and `reconstruction_failed`, which indicate a real
+modeling or data problem rather than a precision artifact.
 
 ## Evidence rules
 
@@ -66,8 +70,17 @@ indicate a real modeling or data problem, not a precision artifact.
 
 ## Success criterion
 
-The campaign is closed when the three-root audit (`runs/phase1`, the damping
-frontier, the fine boundary) exits zero: complete checkpoints, zero
-unresolved replay failures, zero failed revalidations, all solves OPTIMAL
-with converged certifications. Operational commands: `UNICORN_RUNBOOK.md`,
-section "Legacy replay revalidation".
+The campaign is closed when the three-root audit exits zero under explicit
+expected-count gates (an entirely absent checkpoint fails, not only an
+incomplete one):
+
+- `runs/phase1`: 128 complete cell checkpoints (loop_done, 4 static regimes)
+  and 128 complete loop checkpoints;
+- `damping_frontier`: 288 complete cell checkpoints (loop_done; loop-only,
+  no static requirement) and 288 complete loop checkpoints;
+- `boundary_fine`: 64 sweep checkpoints with done AND margins_done;
+
+plus zero unresolved replay failures, zero nonaccepted revalidations, and
+every record status exactly `OPTIMAL` (a missing status is a violation, not
+a pass) with converged certifications. Operational commands:
+`UNICORN_RUNBOOK.md`, section "Legacy replay revalidation".

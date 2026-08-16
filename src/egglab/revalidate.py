@@ -23,17 +23,21 @@ Revalidation of one record:
 6. write one sidecar JSON with the full evidence chain and a disposition.
 
 Dispositions:
-- certified_equivalent: replay-valid; objective, energy, schedule and
-  per-slot loads all match the legacy record within tolerance.
+- certified_equivalent: replay-valid; objective, energy, schedule AND
+  per-slot loads all match the legacy record within tolerance. The ONLY
+  acceptable disposition.
 - certified_alternative_realization: replay-valid; objective/energy/schedule
-  match, but the charging allocation differs beyond the load tolerance
-  (degenerate alternative optimum — economically equivalent).
+  match, but the charging allocation differs beyond the load tolerance.
+  DIAGNOSTIC ONLY — NOT acceptable: these are loop records, and the per-slot
+  load vector determines the next endogenous price state, so economic
+  equivalence does not certify trajectory equivalence. Such records remain
+  unresolved and fail the audit.
 - materially_different: replay-valid but economics do not match the legacy
   record. NOT acceptable; escalate.
 - reconstruction_failed: metadata incomplete, instance hash mismatch,
   re-realization infeasible, or current replay failed. NOT acceptable.
 
-Acceptance = {certified_equivalent, certified_alternative_realization}.
+Acceptance = {certified_equivalent} only.
 A record is never accepted merely because its commit predates PR #11.
 """
 from __future__ import annotations
@@ -60,10 +64,12 @@ TOL_ENERGY_KWH = 1e-3  # total charged energy must match to 1 Wh
 TOL_LOAD_KWH = 1e-3    # per-slot load agreement threshold for "equivalent"
 
 DISP_EQUIVALENT = "certified_equivalent"
-DISP_ALTERNATIVE = "certified_alternative_realization"
+DISP_ALTERNATIVE = "certified_alternative_realization"  # diagnostic, NOT accepted
 DISP_DIFFERENT = "materially_different"
 DISP_FAILED = "reconstruction_failed"
-ACCEPTED_DISPOSITIONS = {DISP_EQUIVALENT, DISP_ALTERNATIVE}
+# Only exact per-slot load equivalence resolves a legacy loop failure: the
+# load vector feeds the next endogenous price state (Codex review, PR #12).
+ACCEPTED_DISPOSITIONS = {DISP_EQUIVALENT}
 
 
 def record_sha256(raw_line: str) -> str:

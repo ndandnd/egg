@@ -150,7 +150,31 @@ def test_failed_revalidation_fails_audit(tmp_path):
     _sidecar(runs, record_sha256(line), DISP_DIFFERENT)
     _, ok, problems = audit(runs)
     assert not ok
-    assert any("materially-different" in p for p in problems)
+    assert any("nonaccepted revalidations" in p for p in problems)
+
+
+def test_alternative_realization_is_not_accepted(tmp_path):
+    """Codex review fix 1: same economics but different per-slot loads must
+    NOT resolve a loop replay failure — the load vector is the next price
+    state. Audit fails and the collector marks it effectively invalid."""
+    import csv as _csv
+
+    from egglab.revalidate import DISP_ALTERNATIVE
+
+    assert DISP_ALTERNATIVE not in ACCEPTED_DISPOSITIONS
+    runs = str(tmp_path / "runs")
+    (line,) = _write_jsonl(runs, "static.jsonl", [_fake_record(False)])
+    _sidecar(runs, record_sha256(line), DISP_ALTERNATIVE)
+    _, ok, problems = audit(runs)
+    assert not ok
+    assert any("unresolved replay failures" in p for p in problems)
+    assert any("nonaccepted revalidations" in p for p in problems)
+    out = str(tmp_path / "o.csv")
+    collect(runs, out)
+    (row,) = list(_csv.DictReader(open(out)))
+    assert row["replay_original_ok"] == "False"
+    assert row["replay_effective_ok"] == "False"
+    assert row["replay_revalidation_status"] == DISP_ALTERNATIVE
 
 
 def test_raw_count_always_visible_in_summary(tmp_path):
@@ -238,7 +262,8 @@ def test_end_to_end_legacy_revalidation(inst, market, taker_sol, tmp_path):
     failures = scan_failures(runs)
     assert len(failures) == 1
     sc = revalidate_record(runs, failures[0])
-    assert sc["disposition"] in ACCEPTED_DISPOSITIONS, sc
+    # only exact load equivalence is acceptable (Codex review fix 1)
+    assert sc["disposition"] == DISP_EQUIVALENT, sc
     assert sc["original_sha256"] == failures[0]["sha256"]
     assert sc["original_violations"] == rec["replay_violations"]
     assert sc["solver_stats"]["status"] == "OPTIMAL"
@@ -254,6 +279,173 @@ def test_end_to_end_legacy_revalidation(inst, market, taker_sol, tmp_path):
     text = "\n".join(lines)
     assert "raw legacy replay failures: 1" in text
     assert "unresolved replay failures: 0" in text
+
+
+def _legacy_alt_scenario(inst, market, taker_sol, runs):
+    """Legacy record whose objective/energy/schedule match but whose stored
+    per-slot load is shifted beyond tolerance (0.5 kWh between two slots)."""
+    posted = market.price(np.zeros(market.n_slots))
+    rec = make_record(
+        "phase1-loop", inst, taker_sol, market=market, prices=posted,
+        regime="taker-iteration", extra={"seed": 0},
+    )
+    rec["replay_ok"] = False
+    rec["replay_violations"] = ["legacy violation"]
+    load = list(rec["load"])
+    hot = max(range(len(load)), key=lambda t: load[t])
+    cold = min(range(len(load)), key=lambda t: load[t])
+    assert load[hot] >= 0.5 and hot != cold
+    load[hot] -= 0.5
+    load[cold] += 0.5
+    rec["load"] = load
+    _write_jsonl(runs, "loop.jsonl", [rec])
+    return rec
+
+
+def test_shifted_per_slot_load_yields_alternative_and_fails(inst, market, taker_sol, tmp_path):
+    """Regression (Codex review fix 1): objective, total energy, and schedule
+    all match the legacy record, but the stored per-slot load differs beyond
+    tolerance -> disposition certified_alternative_realization; audit rejects
+    and the collector marks the record effectively invalid."""
+    import csv as _csv
+
+    from egglab.revalidate import DISP_ALTERNATIVE
+
+    runs = str(tmp_path / "runs")
+    _legacy_alt_scenario(inst, market, taker_sol, runs)
+
+    failures = scan_failures(runs)
+    sc = revalidate_record(runs, failures[0])
+    assert sc["disposition"] == DISP_ALTERNATIVE, sc
+    assert abs(sc["residuals"]["obj_diff"]) <= 1e-2
+    assert abs(sc["residuals"]["energy_diff_kwh"]) <= 1e-3
+    assert sc["residuals"]["load_max_diff_kwh"] > 1e-3
+
+    _, ok, problems = audit(runs)
+    assert not ok
+    assert any("unresolved" in p for p in problems)
+    out = str(tmp_path / "o.csv")
+    collect(runs, out)
+    (row,) = list(_csv.DictReader(open(out)))
+    assert row["replay_effective_ok"] == "False"
+
+
+def test_cli_cell_exits_nonzero_on_nonaccepted(inst, market, taker_sol, tmp_path, monkeypatch, capsys):
+    """Codex review tightening: --cell must exit nonzero after safely writing
+    a nonaccepted sidecar, and a rerun must not re-solve (idempotent)."""
+    from experiments import revalidate_legacy_replay as cli
+
+    runs = str(tmp_path / "runs")
+    _legacy_alt_scenario(inst, market, taker_sol, runs)
+    monkeypatch.setattr(sys, "argv", ["prog", runs, "--cell", "0"])
+    with pytest.raises(SystemExit) as ei:
+        cli.main()
+    assert ei.value.code not in (0, None)
+    # sidecar exists despite the nonzero exit
+    (entry,) = scan_failures(runs)
+    assert os.path.exists(sidecar_path(runs, entry["sha256"]))
+    # rerun: same exit, but short-circuits on the existing sidecar
+    with pytest.raises(SystemExit):
+        cli.main()
+    out = capsys.readouterr().out
+    assert "NONACCEPTED" in out
+
+
+# ---------------------------------------------------------------------------
+# Codex review fix 2: expected-count gates
+# ---------------------------------------------------------------------------
+def _loop_ckpt(runs, cell, done=True):
+    checkpoint.save(
+        os.path.join(runs, cell, "loop.ckpt.json"),
+        {"done": done, "iter": 3, "outcome": {"type": "fixed_point", "iter": 2}},
+    )
+
+
+def _cell_ckpt(runs, cell, loop_done=True, static=4):
+    checkpoint.save(
+        os.path.join(runs, cell, "cell.ckpt.json"),
+        {"loop_done": loop_done,
+         "static_done": ["uncontrolled", "taker", "strategic", "dictator"][:static]},
+    )
+
+
+def _sweep_ckpt(runs, cell, done=True, margins_done=True):
+    checkpoint.save(
+        os.path.join(runs, cell, "sweep.ckpt.json"),
+        {"done": done, "margins_done": margins_done, "points": [], "switches": []},
+    )
+
+
+def test_absent_checkpoint_fails_expected_count_gate(tmp_path):
+    runs = str(tmp_path / "runs")
+    _write_jsonl(runs, "static.jsonl", [_fake_record(True)])
+    _loop_ckpt(runs, "cell_a")
+    # 1 complete loop checkpoint found, but the grid expects 2:
+    _, ok, problems = audit(runs, expect_loops=2)
+    assert not ok
+    assert any("loop: 1/2 complete" in p for p in problems)
+    # with the correct expectation the same root passes:
+    _, ok2, problems2 = audit(runs, expect_loops=1)
+    assert ok2, problems2
+
+
+def test_cell_checkpoint_gates(tmp_path):
+    runs = str(tmp_path / "runs")
+    _write_jsonl(runs, "static.jsonl", [_fake_record(True)])
+    _cell_ckpt(runs, "cell_a", loop_done=True, static=4)
+    _cell_ckpt(runs, "cell_b", loop_done=False, static=4)  # loop not done
+    _, ok, problems = audit(runs, expect_cells=2, expect_static=4)
+    assert not ok
+    assert any("cell: 1/2 complete" in p for p in problems)
+    # static-regime requirement: a cell with only 3 static regimes fails
+    runs2 = str(tmp_path / "runs2")
+    _write_jsonl(runs2, "static.jsonl", [_fake_record(True)])
+    _cell_ckpt(runs2, "cell_a", loop_done=True, static=3)
+    _, ok2, problems2 = audit(runs2, expect_cells=1, expect_static=4)
+    assert not ok2
+    assert any("cell: 0/1 complete" in p for p in problems2)
+
+
+def test_sweep_requires_margins_done(tmp_path):
+    runs = str(tmp_path / "runs")
+    _write_jsonl(runs, "static.jsonl", [_fake_record(True)])
+    _sweep_ckpt(runs, "cell_a", done=True, margins_done=False)
+    _, ok, problems = audit(runs, expect_sweeps=1)
+    assert not ok
+    assert any("sweep: 0/1 complete" in p for p in problems)
+
+
+def test_summary_shows_expected_found_complete_missing(tmp_path):
+    runs = str(tmp_path / "runs")
+    _write_jsonl(runs, "static.jsonl", [_fake_record(True)])
+    _loop_ckpt(runs, "cell_a")
+    lines, _ok, _p = audit(runs, expect_loops=2)
+    text = "\n".join(lines)
+    assert "| type | expected | found | complete | missing |" in text
+    assert "| loop | 2 | 1 | 1 | 1 |" in text
+
+
+# ---------------------------------------------------------------------------
+# Codex review fix 3: missing/non-OPTIMAL solver status fails
+# ---------------------------------------------------------------------------
+def test_missing_solver_status_fails(tmp_path):
+    runs = str(tmp_path / "runs")
+    rec = _fake_record(True)
+    rec["solver"] = {"backend": "GRB"}  # status missing entirely
+    _write_jsonl(runs, "static.jsonl", [rec])
+    _, ok, problems = audit(runs)
+    assert not ok
+    assert any("without OPTIMAL solver status" in p and "missing" in p for p in problems)
+
+
+def test_non_optimal_status_fails(tmp_path):
+    runs = str(tmp_path / "runs")
+    rec = _fake_record(True)
+    rec["solver"]["status"] = "TIME_LIMIT"
+    _write_jsonl(runs, "static.jsonl", [rec])
+    _, ok, problems = audit(runs)
+    assert not ok
+    assert any("without OPTIMAL solver status" in p for p in problems)
 
 
 def test_new_records_carry_replay_provenance(inst, market, taker_sol):

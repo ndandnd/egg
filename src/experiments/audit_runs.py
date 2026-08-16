@@ -37,8 +37,22 @@ from egglab.revalidate import (  # noqa: E402
 )
 
 
-def audit(runs_dir: str, out_path: str | None = None):
-    """Build the summary; returns (lines, ok, problems)."""
+def audit(
+    runs_dir: str,
+    out_path: str | None = None,
+    expect_cells: int | None = None,
+    expect_loops: int | None = None,
+    expect_sweeps: int | None = None,
+    expect_static: int | None = None,
+):
+    """Build the summary; returns (lines, ok, problems).
+
+    Expected-count gates (Codex review, PR #12): completeness of the
+    checkpoints that exist is not enough — an entirely absent cell must fail
+    the audit. Callers state how many cell/loop/sweep checkpoints the grid
+    should contain (from the launcher manifest or the driver's --list count);
+    `expect_static` additionally requires that many completed static regimes
+    per cell checkpoint (phase-1 full mode: 4; loop-only roots: omit)."""
     out_path = out_path or os.path.join(runs_dir, "SUMMARY.md")
     problems = []
     lines = [f"# Run summary: `{runs_dir}`", ""]
@@ -62,9 +76,17 @@ def audit(runs_dir: str, out_path: str | None = None):
     lines.append(f"- statuses: {dict(statuses)}")
     lines.append(f"- git commits: {dict(Counter(r.get('git_commit') for r in recs))}")
     lines.append(f"- replay_ok (raw stored): {dict(Counter(r.get('replay_ok') for r in recs))}")
-    non_optimal = sum(v for k, v in statuses.items() if k not in ("OPTIMAL", None))
+    # Contract: every oracle record has status exactly "OPTIMAL". A missing
+    # solver/status field is a violation, not a pass (Codex review, PR #12).
+    missing_status = statuses.get(None, 0)
+    non_optimal = sum(v for k, v in statuses.items() if k != "OPTIMAL")
+    if missing_status:
+        lines.append(f"- **records with MISSING solver status: {missing_status}**")
     if non_optimal:
-        problems.append(f"{non_optimal} records with non-OPTIMAL solver status")
+        problems.append(
+            f"{non_optimal} records without OPTIMAL solver status "
+            f"(of which {missing_status} missing entirely)"
+        )
     lines.append("")
 
     # --- replay: raw vs effective (sidecar-matched) -------------------------
@@ -79,19 +101,88 @@ def audit(runs_dir: str, out_path: str | None = None):
         sha for sha, sc in sidecars.items()
         if sc.get("disposition") not in ACCEPTED_DISPOSITIONS
     ]
+    nonaccepted_kinds = Counter(
+        sc.get("disposition") for sc in sidecars.values()
+        if sc.get("disposition") not in ACCEPTED_DISPOSITIONS
+    )
     lines.append("## Replay status (raw is never hidden)")
     lines.append(f"- raw legacy replay failures: {len(raw_fail_shas)}")
     lines.append(f"- successfully revalidated: {resolved}")
     lines.append(f"- unresolved replay failures: {unresolved}")
-    lines.append(f"- revalidation sidecars present: {len(sidecars)} "
-                 f"(failed/materially-different: {len(failed_sidecars)})")
+    lines.append(
+        f"- revalidation sidecars present: {len(sidecars)} "
+        f"(nonaccepted: {len(failed_sidecars)} — only certified_equivalent "
+        f"resolves; alternative realizations are diagnostic and NOT accepted)"
+    )
+    if nonaccepted_kinds:
+        lines.append(f"- nonaccepted dispositions: {dict(nonaccepted_kinds)}")
     if unresolved:
         problems.append(f"{unresolved} unresolved replay failures")
     if failed_sidecars:
         problems.append(
-            f"{len(failed_sidecars)} failed/materially-different revalidations: "
-            f"{[s[:12] for s in failed_sidecars]}"
+            f"{len(failed_sidecars)} nonaccepted revalidations "
+            f"({dict(nonaccepted_kinds)}): {[s[:12] for s in failed_sidecars]}"
         )
+    lines.append("")
+
+    # --- checkpoint completeness with expected-count gates -------------------
+    cell_cks = sorted(glob.glob(os.path.join(runs_dir, "**", "cell.ckpt.json"), recursive=True))
+    loop_cks_all = sorted(glob.glob(os.path.join(runs_dir, "**", "loop.ckpt.json"), recursive=True))
+    sweep_cks_all = sorted(glob.glob(os.path.join(runs_dir, "**", "sweep.ckpt.json"), recursive=True))
+
+    def _cell_complete(ck):
+        if not ck.get("loop_done"):
+            return False
+        if expect_static is not None and len(ck.get("static_done") or []) < expect_static:
+            return False
+        return True
+
+    completeness = []
+    for label, paths, expected, is_complete in (
+        ("cell", cell_cks, expect_cells, _cell_complete),
+        ("loop", loop_cks_all, expect_loops, lambda ck: bool(ck.get("done"))),
+        ("sweep", sweep_cks_all, expect_sweeps,
+         lambda ck: bool(ck.get("done")) and bool(ck.get("margins_done"))),
+    ):
+        found = len(paths)
+        complete = 0
+        incomplete_names = []
+        for f in paths:
+            try:
+                ck = json.load(open(f))
+            except (json.JSONDecodeError, OSError):
+                incomplete_names.append(os.path.basename(os.path.dirname(f)))
+                continue
+            if is_complete(ck):
+                complete += 1
+            else:
+                incomplete_names.append(os.path.basename(os.path.dirname(f)))
+        missing = (expected - complete) if expected is not None else None
+        completeness.append((label, expected, found, complete, missing, incomplete_names))
+        if expected is not None:
+            if found > expected:
+                problems.append(f"{label}: found {found} checkpoints but expected {expected} (grid mismatch)")
+            if complete != expected:
+                problems.append(
+                    f"{label}: {complete}/{expected} complete checkpoints "
+                    f"(missing or incomplete: {expected - complete})"
+                )
+        elif incomplete_names:
+            problems.append(f"{label}: {len(incomplete_names)} incomplete checkpoints")
+
+    lines.append("## Checkpoint completeness (expected-count gates)")
+    lines.append("")
+    lines.append("| type | expected | found | complete | missing |")
+    lines.append("|---|---|---|---|---|")
+    for label, expected, found, complete, missing, _names in completeness:
+        exp_s = expected if expected is not None else "(not gated)"
+        mis_s = missing if missing is not None else "-"
+        lines.append(f"| {label} | {exp_s} | {found} | {complete} | {mis_s} |")
+    for label, _e, _f, _c, _m, names in completeness:
+        if names:
+            lines.append(f"- incomplete {label} checkpoints: {names}")
+    if expect_static is not None:
+        lines.append(f"- static-regime requirement per cell: >= {expect_static}")
     lines.append("")
 
     # --- adaptive approximation quality -------------------------------------
@@ -113,7 +204,7 @@ def audit(runs_dir: str, out_path: str | None = None):
         lines.append("")
 
     # --- loop outcomes -------------------------------------------------------
-    loop_cks = sorted(glob.glob(os.path.join(runs_dir, "**", "loop.ckpt.json"), recursive=True))
+    loop_cks = loop_cks_all
     if loop_cks:
         table = defaultdict(Counter)
         incomplete = []
@@ -135,12 +226,12 @@ def audit(runs_dir: str, out_path: str | None = None):
             c = table[(b, a)]
             lines.append(f"| {b} | {a} | {c.get('fixed_point',0)} | {c.get('cycle',0)} | {c.get('max_iters',0)} |")
         if incomplete:
+            # already gated in the completeness section; informational here
             lines.append(f"\n**INCOMPLETE loop cells: {incomplete}**")
-            problems.append(f"{len(incomplete)} incomplete loop cells")
         lines.append("")
 
     # --- sweeps ---------------------------------------------------------------
-    sweep_cks = sorted(glob.glob(os.path.join(runs_dir, "**", "sweep.ckpt.json"), recursive=True))
+    sweep_cks = sweep_cks_all
     if sweep_cks:
         kinds = Counter()
         econ, ties, cells_with_econ, incomplete = 0, 0, 0, []
@@ -167,8 +258,8 @@ def audit(runs_dir: str, out_path: str | None = None):
         if jumps:
             lines.append(f"- load jumps (L1 kWh): median {statistics.median(jumps):.1f}, max {max(jumps):.1f}")
         if incomplete:
+            # already gated in the completeness section; informational here
             lines.append(f"- **INCOMPLETE sweep cells: {incomplete}**")
-            problems.append(f"{len(incomplete)} incomplete sweep cells")
         lines.append("")
 
     # --- solver stats -----------------------------------------------------------
@@ -184,9 +275,9 @@ def audit(runs_dir: str, out_path: str | None = None):
     ok = not problems
     lines.append("## Audit verdict")
     if ok:
-        lines.append("**PASS** — checkpoints complete; no unresolved replay "
-                     "failures; no failed revalidations; all solves OPTIMAL "
-                     "and certified.")
+        lines.append("**PASS** — expected checkpoints all present and "
+                     "complete; no unresolved replay failures; no nonaccepted "
+                     "revalidations; every solve OPTIMAL and certified.")
     else:
         lines.append("**FAIL**:")
         for p in problems:
@@ -200,9 +291,24 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("runs_dir")
     ap.add_argument("-o", "--out", default=None)
+    ap.add_argument("--expect-cells", dest="expect_cells", type=int, default=None,
+                    help="required number of complete cell.ckpt.json files")
+    ap.add_argument("--expect-loops", dest="expect_loops", type=int, default=None,
+                    help="required number of complete loop.ckpt.json files")
+    ap.add_argument("--expect-sweeps", dest="expect_sweeps", type=int, default=None,
+                    help="required number of complete (done+margins_done) sweep.ckpt.json files")
+    ap.add_argument("--expect-static", dest="expect_static", type=int, default=None,
+                    help="required completed static regimes per cell checkpoint (phase-1 full mode: 4)")
     args = ap.parse_args()
     out_path = args.out or os.path.join(args.runs_dir, "SUMMARY.md")
-    _, ok, problems = audit(args.runs_dir, out_path)
+    _, ok, problems = audit(
+        args.runs_dir,
+        out_path,
+        expect_cells=args.expect_cells,
+        expect_loops=args.expect_loops,
+        expect_sweeps=args.expect_sweeps,
+        expect_static=args.expect_static,
+    )
     print(f"wrote {out_path}")
     if not ok:
         sys.exit("AUDIT FAILED: " + "; ".join(problems))

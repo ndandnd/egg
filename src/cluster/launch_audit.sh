@@ -1,8 +1,18 @@
 #!/bin/bash
 # Guarded launcher for the audit job.
 #
-# Usage (from an interactive Unicorn login prompt, in src/):
-#   bash cluster/launch_audit.sh runs/phase1 runs/overnight/<stamp>/damping_frontier runs/overnight/<stamp>/boundary_fine
+# Usage (from an interactive Unicorn login prompt, in src/). Each argument is
+# a root SPEC carrying its expected-count gates:
+#
+#   bash cluster/launch_audit.sh \
+#       runs/phase1:cells=128:loops=128:static=4 \
+#       runs/overnight/<stamp>/damping_frontier:cells=288:loops=288 \
+#       runs/overnight/<stamp>/boundary_fine:sweeps=64
+#
+# Gates: cells=N (complete cell.ckpt.json with loop_done), loops=N (done
+# loop.ckpt.json), sweeps=N (done+margins_done sweep.ckpt.json), static=N
+# (completed static regimes per cell). An entirely missing checkpoint then
+# fails the audit — completeness of found files alone is not enough.
 #
 # Verifies each root exists, submits ONE bash batch job (never
 # `sbatch --wrap`, whose /bin/sh has no `source`), and writes a manifest.
@@ -18,9 +28,10 @@ if ! command -v sbatch >/dev/null 2>&1; then
 fi
 source "${SRC_DIR}/cluster/unicorn_env.sh"
 
-[[ $# -ge 1 ]] || { echo "usage: bash cluster/launch_audit.sh RUNS_ROOT [RUNS_ROOT...]" >&2; exit 2; }
-for ROOT in "$@"; do
-    [[ -d "${ROOT}" ]] || { echo "ERROR: no such runs root: ${ROOT}" >&2; exit 1; }
+[[ $# -ge 1 ]] || { echo "usage: bash cluster/launch_audit.sh 'ROOT[:cells=N][:loops=N][:sweeps=N][:static=N]' ..." >&2; exit 2; }
+for SPEC in "$@"; do
+    ROOT="${SPEC%%:*}"
+    [[ -d "${ROOT}" ]] || { echo "ERROR: no such runs root: ${ROOT} (from spec '${SPEC}')" >&2; exit 1; }
 done
 
 JOB="$(sbatch --parsable --export="ALL,EGG_AUDIT_ROOTS=$*" cluster/submit_audit.sub)"

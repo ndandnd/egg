@@ -179,17 +179,23 @@ bash cluster/launch_revalidation.sh \
     runs/overnight/20260815T033012Z/damping_frontier
 
 # 2. After the arrays complete (sacct, then checkpoints), run the
-#    three-root audit as a proper bash batch job:
+#    three-root audit as a proper bash batch job, WITH expected-count
+#    gates so an entirely absent checkpoint fails the audit:
 bash cluster/launch_audit.sh \
-    runs/phase1 \
-    runs/overnight/20260815T033012Z/damping_frontier \
-    runs/overnight/20260815T033012Z/boundary_fine
+    runs/phase1:cells=128:loops=128:static=4 \
+    runs/overnight/20260815T033012Z/damping_frontier:cells=288:loops=288 \
+    runs/overnight/20260815T033012Z/boundary_fine:sweeps=64
 ```
 
-The audit exits zero only when every checkpoint is complete, every stored
-replay failure is covered by a successful exact-hash revalidation, no
-revalidation failed, and all solves are OPTIMAL with converged
-certifications. `SUMMARY.md` in each root always shows the raw counts, e.g.:
+The audit exits zero only when every EXPECTED checkpoint exists and is
+complete (cells: loop_done + required static regimes; loops: done; sweeps:
+done + margins_done), every stored replay failure is covered by a
+`certified_equivalent` exact-hash revalidation (alternative realizations are
+diagnostic only — the per-slot load vector determines the next endogenous
+price state, so economic equivalence is not trajectory equivalence), no
+revalidation is nonaccepted, and every record status is exactly OPTIMAL
+(missing statuses fail). `SUMMARY.md` in each root always shows the raw
+counts and the expected/found/complete/missing table, e.g.:
 
 ```
 - raw legacy replay failures: 163

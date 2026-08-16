@@ -32,9 +32,9 @@ from egglab.revalidate import (
 def run_cell(runs_dir: str, entry: dict, solver_kw: dict) -> str:
     sc = revalidate_record(runs_dir, entry, solver_kw=solver_kw)
     disp = sc.get("disposition")
-    marker = "OK " if disp in ACCEPTED_DISPOSITIONS else "!! "
+    marker = "OK" if disp in ACCEPTED_DISPOSITIONS else "NONACCEPTED"
     print(
-        f"[{marker}{disp}] {entry['file']}:{entry['line_idx']} "
+        f"[{marker} {disp}] {entry['file']}:{entry['line_idx']} "
         f"sha={entry['sha256'][:12]} detail={sc.get('detail','')!r} "
         f"residuals={sc.get('residuals')}"
     )
@@ -64,11 +64,22 @@ def main():
 
     solver_kw = dict(max_mip_gap=args.mip_gap, time_limit_s=args.time_limit)
     if args.cell is not None:
-        run_cell(args.runs_dir, failures[args.cell], solver_kw)
+        disp = run_cell(args.runs_dir, failures[args.cell], solver_kw)
+        if disp not in ACCEPTED_DISPOSITIONS:
+            # Exit nonzero AFTER the sidecar is safely written so Slurm/email
+            # flags the problem immediately. Reruns/requeues are harmless:
+            # the existing sidecar short-circuits (no re-solve), so a
+            # permanent materially-different verdict is not retried.
+            sys.exit(
+                f"NONACCEPTED disposition '{disp}' for cell {args.cell} "
+                f"(sidecar written; see it for diagnostics)"
+            )
     elif args.all:
         dispositions = [run_cell(args.runs_dir, e, solver_kw) for e in failures]
         n_ok = sum(1 for d in dispositions if d in ACCEPTED_DISPOSITIONS)
         print(f"revalidated {n_ok}/{len(dispositions)} accepted")
+        if n_ok != len(dispositions):
+            sys.exit(f"{len(dispositions) - n_ok} nonaccepted dispositions")
     else:
         ap.error("choose --list, --count, --cell K, or --all")
 
