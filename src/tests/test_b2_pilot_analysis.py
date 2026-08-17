@@ -24,7 +24,7 @@ from experiments.analyze_b2_pilot import (
 )
 from experiments.run_b2a2_pilot import _dictator_stage
 
-FIX_INSTANCES = ((1, 4, 0.01), (3, 4, 0.01))
+FIX_INSTANCES = ((1, 4, 0.01), (3, 4, 0.05))
 METHODS = ("a2", "a3", "a4", "a5")
 
 
@@ -155,10 +155,12 @@ def test_acceptance_status_statuses(artifacts):
     best = min(float(ov.loc[m, "calls_median"]) for m in ("a3", "a4", "a5"))
     speedup = a2_med / best
     cells = pd.read_csv(os.path.join(artifacts, "cells.csv"))
-    a2_rate = cells[cells.method == "a2"]["certified"].mean()
+    a2_rate = cells[(cells.method == "a2") &
+                    (cells.b == 0.05)]["certified"].mean()
     assert a3c["status"] == (
         "pilot-supports" if speedup >= 2 else "pilot-rejects")
     k1 = acc[acc["criterion_id"] == "kill-1-a2-meets-bar"].iloc[0]
+    assert "32 b=0.05 A2 instances" in k1["denominator"]
     assert k1["status"] == ("pilot-supports"
                             if a2_rate >= 0.95 and speedup < 2
                             else "pilot-rejects")
@@ -195,7 +197,7 @@ def test_dictator_identity_validated(pilot_roots, tmp_path):
 
 def test_stale_dictator_pairing_rejected(pilot_roots, tmp_path):
     c2, c345 = _clone_roots(pilot_roots, tmp_path)
-    p = os.path.join(c345, "a5_s3_n4_b0.01", "dictator.ckpt.json")
+    p = os.path.join(c345, "a5_s3_n4_b0.05", "dictator.ckpt.json")
     ck = checkpoint.load(p)
     ck["z_d_ub"] = ck["z_d_ub"] + 5.0  # dictator value no longer the one CG used
     checkpoint.save(p, ck)
@@ -257,7 +259,7 @@ def _clone_roots(pilot_roots, tmp_path):
 
 def test_missing_cell_rejected(pilot_roots, tmp_path):
     c2, c345 = _clone_roots(pilot_roots, tmp_path)
-    shutil.rmtree(os.path.join(c345, "a4_s3_n4_b0.01"))
+    shutil.rmtree(os.path.join(c345, "a4_s3_n4_b0.05"))
     with pytest.raises(AnalysisError):
         analyze(c2, c345, str(tmp_path / "out"), "T", "c",
                 instances=FIX_INSTANCES, instance_builder=fix_builder,
@@ -291,7 +293,7 @@ def test_identity_mismatch_rejected(pilot_roots, tmp_path):
 
 def test_incomplete_root_fails_audit(pilot_roots, tmp_path):
     c2, c345 = _clone_roots(pilot_roots, tmp_path)
-    p = os.path.join(c345, "a3_s3_n4_b0.01", "a3.cg.ckpt.json")
+    p = os.path.join(c345, "a3_s3_n4_b0.05", "a3.cg.ckpt.json")
     ck = checkpoint.load(p)
     ck["done"] = False
     checkpoint.save(p, ck)

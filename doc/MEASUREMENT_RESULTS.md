@@ -388,7 +388,8 @@ distinct instances (32 at b = 0.05).
 acceptance/kill criteria are defined on their full populations: the 2x
 speed criterion on the 64 moderate/strong instances per method (16 seeds
 x 2 sizes x b in {0.01, 0.05}); the 95%-certification criterion on the 96
-b = 0.05 method-cells (32 instances x 3 stabilized methods). The pilot
+b = 0.05 method-cells (32 instances x 3 stabilized methods), with kill-1
+applying the same 32-instance b = 0.05 bar to A2. The pilot
 (12 instances: seeds 0/11/15 x n {8,12} x b {0.01, 0.05}) can support or
 reject continuing, but cannot pass a full-population criterion (see
 `result/b2_pilot/<stamp>/acceptance_status.csv`).
@@ -401,9 +402,11 @@ reject continuing, but cannot pass a full-population criterion (see
 - **Scientific signal** (operator-reported medians; canonical values
   regenerate via `src/experiments/analyze_b2_pilot.py` into
   `result/b2_pilot/<stamp>/`): median oracle calls to certificate —
-  **A2 21.5, A4 29, A3 33, A5 33**. Plain CG was fastest on every summary
-  view; the acceptance bar "best stabilized >= 2x fewer median calls than
-  A2" is REJECTED on pilot evidence, and the preregistered kill test
+  **A2 21.5, A4 29, A3 33, A5 33**. Plain CG had the fewest overall median
+  oracle calls; A3 and A5 had lower median solver wall time, so runtime and
+  call-count conclusions remain distinct. The acceptance bar "best
+  stabilized >= 2x fewer median calls than A2" is REJECTED on pilot
+  evidence, and the preregistered kill test
   ("if A2 already meets the bar, stabilization is not the contribution")
   is ACTIVE.
 - Consequence recorded in `DECISION_LOG.md` (2026-08-17): the 960-cell

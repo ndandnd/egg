@@ -426,12 +426,20 @@ def acceptance_status(cells: pd.DataFrame, summary: pd.DataFrame,
     best_med = stab_meds[best_stab]
     speedup = a2_med / best_med  # criterion: >= 2
     a2_cells = cells[cells.method == "a2"]
-    a2_cert_rate = float(a2_cells["certified"].mean())
+    # Kill-1 applies A2 to the same b=0.05 certification population as
+    # acc-1.  The 2x speed comparison remains over b in {0.01, 0.05}.
+    a2_acceptance_cells = a2_cells[a2_cells.b == 0.05]
+    a2_cert_rate = (float(a2_acceptance_cells["certified"].mean())
+                    if len(a2_acceptance_cells) else float("nan"))
     acc3_status = "pilot-supports" if speedup >= 2.0 else "pilot-rejects"
     # kill-1: A2 meets the negotiation bar (>= 95% certified within budget)
     # AND stabilization does not deliver its promised >= 2x speedup
-    kill1_active = (a2_cert_rate >= 0.95) and (speedup < 2.0)
-    kill1_status = "pilot-supports" if kill1_active else "pilot-rejects"
+    kill1_testable = bool(len(a2_acceptance_cells))
+    kill1_active = (kill1_testable and a2_cert_rate >= 0.95
+                    and speedup < 2.0)
+    kill1_status = ("pilot-supports" if kill1_active else
+                    "pilot-rejects" if kill1_testable else
+                    "not-testable-from-pilot")
     # kill-3: computed margin (a contradiction would have aborted extraction)
     zd_margin_min = float(cells["zd_minus_lb"].min())
     n_contra = int((cells["zd_minus_lb"] < -1e-6).sum())
@@ -491,10 +499,13 @@ def acceptance_status(cells: pd.DataFrame, summary: pd.DataFrame,
             "description": ("KILL: if plain CG already meets the acceptance "
                             "bar, stabilization is not the contribution "
                             "('memory beats memorylessness')"),
-            "denominator": f"pilot: {n_instances} matched instances",
+            "denominator": (
+                f"pilot: {len(a2_acceptance_cells)} b=0.05 A2 instances; "
+                "full acceptance population: 32 b=0.05 A2 instances"),
             "observed_pilot": (
-                f"A2 certified {int(a2_cells['certified'].sum())}"
-                f"/{len(a2_cells)} (rate {a2_cert_rate:.3f}, bar 0.95) with "
+                f"A2 certified {int(a2_acceptance_cells['certified'].sum())}"
+                f"/{len(a2_acceptance_cells)} on b=0.05 "
+                f"(rate {a2_cert_rate:.3f}, bar 0.95) with "
                 f"median {a2_med:g} calls; best stabilized speedup "
                 f"{speedup:.3f} (bar 2.0) => kill "
                 f"{'ACTIVE' if kill1_active else 'inactive'}"),
@@ -599,9 +610,12 @@ def write_summary_md(path: str, cells, matched, summary, acceptance,
     stab_meds = {m: float(ov.loc[m, "calls_median"]) for m in STAB_METHODS}
     best = min(stab_meds, key=stab_meds.get)
     speedup = a2_med / stab_meds[best]
-    a2_cert_rate = float(
-        cells[cells.method == "a2"]["certified"].mean())
-    kill1_active = (a2_cert_rate >= 0.95) and (speedup < 2.0)
+    a2_cells = cells[cells.method == "a2"]
+    a2_acceptance_cells = a2_cells[a2_cells.b == 0.05]
+    a2_cert_rate = (float(a2_acceptance_cells["certified"].mean())
+                    if len(a2_acceptance_cells) else float("nan"))
+    kill1_active = (len(a2_acceptance_cells) > 0
+                    and a2_cert_rate >= 0.95 and speedup < 2.0)
     if kill1_active:
         verdict = (
             "On this pilot the STABILIZATION KILL SIGNAL (kill-1) is "
@@ -618,7 +632,8 @@ def write_summary_md(path: str, cells, matched, summary, acceptance,
         "",
         "## Interpretation (computed from the tables above)",
         "",
-        f"A2 certified {a2_cert_rate:.0%} of pilot instances with median "
+        f"A2 certified {a2_cert_rate:.0%} of the pilot's b=0.05 instances "
+        f"with overall median "
         f"oracle-call count {a2_med:g}; the best stabilized method "
         f"({best.upper()}, median {stab_meds[best]:g}) gives a speedup "
         f"ratio a2/best = {speedup:.2f}, versus the preregistered "

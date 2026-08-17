@@ -40,7 +40,9 @@ values live in `result/b2_pilot/<stamp>/`, produced by
 `src/experiments/analyze_b2_pilot.py`):
 
 - median oracle calls to certificate: **A2 21.5, A4 29, A3 33, A5 33**;
-- plain CG (A2) was the FASTEST method on the pilot grid;
+- plain CG (A2) used the fewest overall median oracle calls on the pilot
+  grid; A3 and A5 had lower median solver wall time, so this is not a
+  blanket wall-clock claim;
 - the preregistered acceptance bar (best stabilized method >= 2x fewer
   median calls than A2) is REJECTED on pilot evidence;
 - the **stabilization kill signal (kill-1) is ACTIVE**: memory (retaining
