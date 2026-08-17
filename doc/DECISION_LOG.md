@@ -95,3 +95,27 @@ it adds seeds at fixed n in {8, 12} and T = 28; testing whether
 stabilization becomes useful at scale would require larger trip counts,
 more slots, multiple fleets, or additional coupling rows — a separate
 prespecification if ever pursued.
+
+## 2026-08-17 — Option B chosen: 208-cell matched expansion implemented
+
+**Decision**: run the 208-cell expansion (Option B) before any kill/reframe
+writing. Implemented as `experiments/run_b2_expansion.py` + guarded
+launcher: the remaining 52 moderate/strong instances (seeds 0-15 minus
+pilot {0, 11, 15}) x A2-A5, settings identical to the pilots; launch
+pending operator review of the launcher, then overnight Unicorn
+submission.
+
+**Prespecified audit gates**: completeness only (cg=208, 52 per method).
+Certification is the MEASUREMENT (acc-1: >= 95% per stabilized method on
+the full b=0.05 population; the 2x total-call criterion on all 64
+moderate/strong instances per method) — gating on it would assume the
+result. The clean/stabilized call decomposition from the corrected
+pipeline (PR #19) is the secondary readout: whether A4's clean-call
+advantage (11/12 on the pilot) persists population-wide.
+
+**Decision rule after the data** (restated from 2026-08-17): if A3-A5
+lose on total calls, clean calls, and wall across the matched population,
+stop stabilization and reframe; if the clean-call advantage or a
+b=0.05/degeneracy subgroup effect persists, prespecify a focused
+continuation; the 576 A1 cells and any scale experiment remain separate
+decisions.

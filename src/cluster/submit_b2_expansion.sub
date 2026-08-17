@@ -1,0 +1,35 @@
+#!/bin/bash
+# B2 208-cell matched expansion array (52 remaining moderate/strong
+# instances x methods A2-A5). Launch via cluster/launch_b2_expansion.sh,
+# which derives the array size from --list and refuses to submit unless it
+# is exactly 208.
+#
+# Preemption safety: --requeue + atomic per-oracle-call checkpoints with
+# clean/stab phase tracking; a requeued task repeats at most one in-flight
+# solve and reproduces the same nonvolatile record stream.
+#
+#SBATCH --job-name=egg-b2-expansion
+#SBATCH --output=slurm-%x-%A_%a.out
+#SBATCH --mail-type=END,FAIL,REQUEUE
+#SBATCH --mail-user=nc437@cornell.edu
+#SBATCH --requeue
+#SBATCH --array=0-207%12
+#SBATCH --cpus-per-task=4
+#SBATCH --mem=8G
+#SBATCH --time=24:00:00
+
+set -euo pipefail
+SUBMIT_DIR="${SLURM_SUBMIT_DIR:-$(pwd)}"
+if [[ -f "${SUBMIT_DIR}/experiments/run_b2_expansion.py" ]]; then
+    WORK_DIR="${SUBMIT_DIR}"
+elif [[ -f "${SUBMIT_DIR}/src/experiments/run_b2_expansion.py" ]]; then
+    WORK_DIR="${SUBMIT_DIR}/src"
+else
+    echo "ERROR: could not locate the egg src directory from ${SUBMIT_DIR}" >&2
+    exit 1
+fi
+cd "${WORK_DIR}"
+source "${WORK_DIR}/cluster/unicorn_env.sh"
+
+python experiments/run_b2_expansion.py --cell "${SLURM_ARRAY_TASK_ID}" \
+    --out runs/b2_expansion

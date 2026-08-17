@@ -361,6 +361,60 @@ git add ../result/b2_pilot/<stamp>
 git commit  # commit 2 of the two-commit provenance protocol
 ```
 
+## B2 208-cell matched expansion (2026-08-17, Option B)
+
+Population robustness for the stabilization kill decision
+(`DECISION_LOG.md`): the remaining 52 moderate/strong instances (seeds
+0-15 minus the pilot's {0, 11, 15}; n {8, 12}; b {0.01, 0.05}) x methods
+A2-A5 = exactly 208 method-cells, settings identical to the pilots
+(epsilon 1e-2, budget 240, duck market, per-cell dictator stage).
+Explicitly NOT a scale test. Certification is an OUTCOME here, not an
+audit gate: acc-1 tests >= 95% certification on the full population, so a
+budget-exhausted cell is valid completed science — the audit gates
+completeness only.
+
+Exact commands (interactive Unicorn login prompt):
+
+```bash
+cd "$HOME/egg"
+git switch main && git pull --ff-only origin main && git log -1 --oneline
+cd src
+source cluster/unicorn_env.sh
+
+# 0. Verify the grid (the launcher refuses anything != 208 and refuses
+#    any pilot seed leaking in):
+python experiments/run_b2_expansion.py --list | tail -1
+# expected: total: 208 cells
+
+# 1. Submit (array 0-207%12 derived from --list; --requeue; mail
+#    nc437@cornell.edu on END/FAIL/REQUEUE; manifest under runs/b2_expansion/):
+bash cluster/launch_b2_expansion.sh
+
+# 2. Monitor:
+squeue --me
+sacct -j <JOBID> --format=JobID,State,Elapsed,ExitCode | tail -20
+
+# 3. Audit (completeness + per-method counts; NO certification gates —
+#    certification rates are the measurement):
+bash cluster/launch_audit.sh \
+    runs/b2_expansion:cg=208:cg_a2=52:cg_a3=52:cg_a4=52:cg_a5=52
+# or directly:
+python experiments/audit_runs.py runs/b2_expansion --expect-cg 208 \
+    --expect-cg-method a2=52 --expect-cg-method a3=52 \
+    --expect-cg-method a4=52 --expect-cg-method a5=52
+
+# 4. Transfer (one password, same pattern as the pilots):
+#    ssh nc437@unicorn-login-01.coecis.cornell.edu \
+#      'cd "$HOME/egg/src" && tar -czf - runs/b2_expansion' |
+#    tar -xzf - -C "$LOCAL_REPO/src"
+```
+
+The full-population analysis (64 instances x 4 methods = 256 method-cells,
+joining `runs/b2_expansion` with the pilot roots) is a separate
+prespecified analysis PR after the data lands; the acceptance/kill
+criteria then get their true denominators (64 instances/method for the 2x
+criterion; 96 b=0.05 method-cells for acc-1).
+
 ## Branch hygiene
 
 The hardened implementation and this runbook are merged into `main`. Submit

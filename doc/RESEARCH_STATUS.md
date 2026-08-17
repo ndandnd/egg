@@ -79,15 +79,14 @@ cycles), the B3 uplift intervals, and the equivalence-theorem framing.
 
 ## Next gate
 
-**Pilot closeout must land before any further compute**: the committed
-artifact set under `result/b2_pilot/` (two-commit protocol; commit 2 is
-generated from the raw pilot runs, which live only on Unicorn and the
-operator's machine — `src/runs/` is gitignored by design). Then decide:
+Pilot closeout is COMPLETE: corrected artifacts live under
+`result/b2_pilot/` (deterministic, provenance-verified, wall identity
+enforced). **Option B is chosen** (DECISION_LOG 2026-08-17): the 208-cell
+matched expansion (`experiments/run_b2_expansion.py`, guarded launcher,
+audit gates cg=208 with 52 per method, certification as outcome not gate)
+is implemented and awaits operator review + overnight Unicorn submission.
+After the data: full-population analysis (256 matched method-cells) gives
+the acceptance/kill criteria their true denominators, then the
+kill/continue decision per the rule in DECISION_LOG.
 
-- Option A: stop stabilization; reframe around memory-vs-memorylessness.
-- Option B: run ONLY the prespecified moderate/strong-feedback matched
-  expansion (208 remaining A2-A5 method-cells) to give the kill decision
-  its full preregistered denominator.
-
-The 960-cell campaign (576 fresh A1 cells + full CG grid) stays PAUSED
-either way.
+The 960-cell campaign (576 fresh A1 cells + full CG grid) stays PAUSED.
