@@ -20,10 +20,16 @@ from egglab.b2a2 import B2A2Error, PWL_TOL, certified_cg
 from egglab.b2a345 import (
     A3_D2_OVER_D1,
     A3_ZETA1,
+    A4_ALPHA_DECR,
+    A4_ALPHA_INCR_FRAC,
     A4_ALPHA_MAX,
+    A5_K,
     A5_T_MIN,
     a3_update,
     a4_alpha_update,
+    a4_direction_signal,
+    a5_hinges,
+    a5_penalty_value,
     a5_update,
     initial_stab_state,
     serious_step,
@@ -220,16 +226,70 @@ def test_a3_update_equations(tiny):
 
 
 def test_a4_alpha_update_equations():
-    # <g, d> > 0: dual function still rises toward out -> less smoothing
-    assert a4_alpha_update(0.5, [1.0], [1.0]) == pytest.approx(0.4)
-    assert a4_alpha_update(0.05, [1.0], [1.0]) == 0.0  # floor
-    # <g, d> <= 0: overshoot -> more smoothing, alpha += (1-alpha)/10
-    assert a4_alpha_update(0.5, [1.0], [-1.0]) == pytest.approx(0.55)
-    assert a4_alpha_update(0.0, [0.0], [0.0]) == pytest.approx(0.1)
+    # signal > 0: dual function rises toward out -> less smoothing
+    assert a4_alpha_update(0.5, 1.0) == pytest.approx(0.5 - A4_ALPHA_DECR)
+    assert a4_alpha_update(0.05, 1.0) == 0.0  # floor
+    # signal <= 0: overshoot -> alpha += (1-alpha)*A4_ALPHA_INCR_FRAC
+    assert a4_alpha_update(0.5, -1.0) == pytest.approx(
+        0.5 + 0.5 * A4_ALPHA_INCR_FRAC)
+    assert a4_alpha_update(0.0, 0.0) == pytest.approx(A4_ALPHA_INCR_FRAC)
     a = 0.98
     for _ in range(200):
-        a = a4_alpha_update(a, [1.0], [-1.0])
+        a = a4_alpha_update(a, -1.0)
     assert a <= A4_ALPHA_MAX + 1e-12  # cap
+
+
+def test_a4_direction_signal_finite_difference(tiny):
+    """Directional finite-difference regression (review finding 1): the
+    signal computed in consistent posted-price coordinates must agree in
+    sign with the true directional derivative of Theta_cert toward the out
+    point, and 'dual function rises toward out' must DECREASE alpha. This
+    pins the coordinates end-to-end — it would fail with the g_p vs
+    (pi_out - pi_cand) mix-up, not merely invert a unit expectation."""
+    from egglab.regimes import solve_taker
+    inst, market = tiny
+
+    def theta_at(p):
+        return theta_cert(market, p, solve_taker(inst, p).stats.bound)
+
+    p_hat = market.price(np.zeros(market.n_slots))
+    decisive = 0
+    for factor in (2.0, 0.5):
+        p_out = factor * p_hat
+        p_cand = 0.5 * p_hat + 0.5 * p_out  # alpha = 0.5 smoothing
+        d_p = p_out - p_cand
+        sol = solve_taker(inst, p_cand)
+        signal = a4_direction_signal(market, p_cand, p_out, sol.load)
+        s = 1e-3
+        fd = (theta_at(p_cand + s * d_p) - theta_at(p_cand - s * d_p)) / (2 * s)
+        if abs(fd) < 1e-6:
+            continue
+        decisive += 1
+        assert (signal > 0) == (fd > 0), (signal, fd, factor)
+        alpha_new = a4_alpha_update(0.5, signal)
+        if fd > 0:  # dual function rises toward out -> less smoothing
+            assert alpha_new < 0.5
+        else:
+            assert alpha_new > 0.5
+    assert decisive >= 1  # at least one decisive direction was tested
+
+
+def test_a4_events_consistent_with_signal(stab_runs):
+    """Committed A4 events: alpha updates must match the recorded signal
+    per the documented map."""
+    _, out = stab_runs["a4"]
+    checked = 0
+    for it in _read_jsonl(os.path.join(out, "a4.iterations.jsonl")):
+        if it.get("phase") != "stabilized":
+            continue
+        a0, a1 = it["params_before"]["alpha"], it["params_after"]["alpha"]
+        if it["a4_signal"] > 0:
+            assert a1 == pytest.approx(max(0.0, a0 - A4_ALPHA_DECR))
+        else:
+            assert a1 == pytest.approx(
+                min(A4_ALPHA_MAX, a0 + (1 - a0) * A4_ALPHA_INCR_FRAC))
+        checked += 1
+    assert checked >= 1
 
 
 def test_a5_update_equations(tiny):
@@ -272,6 +332,73 @@ def test_updates_recorded_in_iteration_events(stab_runs):
             assert d_after == d_before
 
 
+def test_a5_chord_model_analytic():
+    """Review finding 2: the hinge decomposition must be the EXACT chord
+    interpolation of q(x) = x^2/(2t) — equality at every grid breakpoint,
+    midpoint overestimation exactly h^2/(8t), symmetry, and tangent
+    continuation slope W/t beyond W (via the final half-increment)."""
+    t, w = 0.7, 3.2
+    h = w / A5_K
+    q = lambda x: x * x / (2 * t)
+    # equality with the quadratic at every grid breakpoint
+    for m in range(A5_K + 1):
+        assert a5_penalty_value(m * h, t, w) == pytest.approx(q(m * h),
+                                                              abs=1e-12)
+        assert a5_penalty_value(-m * h, t, w) == pytest.approx(q(m * h),
+                                                               abs=1e-12)
+    # midpoint overestimation exactly h^2/(8t), on every piece
+    for m in range(A5_K):
+        x = (m + 0.5) * h
+        assert a5_penalty_value(x, t, w) - q(x) == pytest.approx(
+            h * h / (8 * t), abs=1e-12)
+    # symmetry
+    for x in (0.3, 1.234, 2.9, 5.0):
+        assert a5_penalty_value(x, t, w) == pytest.approx(
+            a5_penalty_value(-x, t, w), abs=1e-12)
+    # continuation slope beyond W is exactly W/t (tangent continuation,
+    # requires the final half-increment at the W breakpoint)
+    d = 0.25
+    slope = (a5_penalty_value(w + 2 * d, t, w)
+             - a5_penalty_value(w + d, t, w)) / d
+    assert slope == pytest.approx(w / t, abs=1e-12)
+    # first chord slope is h/(2t), NOT h/t (the reviewed bug)
+    assert a5_penalty_value(h, t, w) / h == pytest.approx(h / (2 * t),
+                                                          abs=1e-12)
+    # hinge structure: first and last carry the half-increment
+    hs = a5_hinges(t, w)
+    assert hs[0] == (0.0, h / (2 * t))
+    assert hs[-1] == (w, h / (2 * t))
+    assert all(s == pytest.approx(h / t) for _, s in hs[1:-1])
+
+
+def test_a5_lp_dual_penalty_matches_helper():
+    """The stabilized LP's induced dual penalty must equal a5_penalty_value.
+    LP duality: with hinge pairs built by _add_penalty_pair from a5_hinges,
+    min { sum(costs*y) : net deviation = delta } = pi_hat*delta + psi*(delta)
+    where psi* is the convex conjugate of the helper's psi. We verify the
+    LP value against a numerically computed conjugate of the helper."""
+    import mip as mip_mod
+    from egglab.b2a345 import _add_penalty_pair
+    from egglab.solver import new_model, optimize
+
+    t, w, pi_hat = 0.7, 3.2, -1.3
+    xs = np.linspace(-2 * w, 2 * w, 8001)
+    psi = np.array([a5_penalty_value(float(x), t, w) for x in xs])
+    for delta in (0.1, -0.6, 1.9, 3.9):  # |delta| < continuation slope W/t
+        m = new_model("conj")
+        link_terms = [[]]
+        obj_terms = []
+        for u, s in a5_hinges(t, w):
+            obj_terms.append(_add_penalty_pair(
+                m, link_terms, 0, pi_hat + u, pi_hat - u, s))
+        m.add_constr(mip_mod.xsum(link_terms[0]) == delta)
+        m.objective = mip_mod.xsum(obj_terms)
+        st = optimize(m, solve_lp_first=False)
+        assert st.status == "OPTIMAL"
+        conj = float(np.max(delta * xs - psi))  # psi*(delta), numeric
+        assert st.obj == pytest.approx(pi_hat * delta + conj, abs=1e-6)
+
+
 def test_theta_cert_is_weak_duality_valid(tiny, enum_truth):
     """Theta_cert at arbitrary price vectors never exceeds enumerated z_CH."""
     inst, market = tiny
@@ -305,6 +432,27 @@ def test_identity_rejects_changed_stab_settings(stab_runs, tiny, dictator,
     with pytest.raises(B2A2Error, match="identity mismatch.*stab"):
         certified_cg(inst, market, epsilon=1e-2, budget=120, out_dir=out,
                      tag="a3", method="a3",
+                     z_d_ub=dictator.obj_true, tol_d=TOL_D)
+
+
+@pytest.mark.parametrize("method,constant", [
+    ("a3", "A3_SERIOUS_SHRINK"),
+    ("a4", "A4_ALPHA_DECR"),
+    ("a4", "A4_ALPHA_INCR_FRAC"),
+    ("a5", "A5_NULL_SHRINK"),
+])
+def test_identity_rejects_changed_update_constants(stab_runs, tiny, dictator,
+                                                   monkeypatch, method,
+                                                   constant):
+    """Every numerical update constant is part of the resume identity
+    (review finding 4): changing any of them rejects the checkpoint."""
+    inst, market = tiny
+    _, out = stab_runs[method]
+    monkeypatch.setattr(b2a345_mod, constant,
+                        getattr(b2a345_mod, constant) * 0.5 + 0.01)
+    with pytest.raises(B2A2Error, match="identity mismatch.*stab"):
+        certified_cg(inst, market, epsilon=1e-2, budget=120, out_dir=out,
+                     tag=method, method=method,
                      z_d_ub=dictator.obj_true, tol_d=TOL_D)
 
 
@@ -507,3 +655,36 @@ def test_budget_exhausted_stabilized_is_sane_not_certified(tiny, tmp_path):
     text = "\n".join(lines)
     assert "complete and sane: 1" in text
     assert "CERTIFIED (gap <= epsilon): 0" in text
+
+
+def test_certification_gate_rejects_sane_budget_exhausted_pilot(tiny,
+                                                                tmp_path):
+    """Review finding 3: 36 sane budget-exhausted cells must PASS the
+    generic completeness audit (cg=36, 12 per method) yet FAIL the pilot's
+    per-method certification gate (cgcert 12 per method)."""
+    inst, market = tiny
+    src = str(tmp_path / "src")
+    certified_cg(inst, market, epsilon=1e-2, budget=4,
+                 out_dir=src, tag="a5", method="a5")
+    ck = checkpoint.load(os.path.join(src, "a5.cg.ckpt.json"))
+    root = str(tmp_path / "root")
+    for m in METHODS:
+        for i in range(12):
+            d = os.path.join(root, f"{m}_cell{i}")
+            os.makedirs(d, exist_ok=True)
+            fab = json.loads(json.dumps(ck))
+            fab["identity"]["method"] = m
+            checkpoint.save(os.path.join(d, "a5.cg.ckpt.json"), fab)
+            for fn in ("a5.iterations.jsonl", "a5.oracle.jsonl"):
+                with open(os.path.join(src, fn)) as sf, \
+                        open(os.path.join(d, fn), "w") as df:
+                    df.write(sf.read())
+    gates = {"a3": 12, "a4": 12, "a5": 12}
+    _, ok, problems = audit(root, expect_cg=36, expect_cg_method=gates)
+    assert ok, problems  # generic audit: complete and sane
+    _, ok2, problems2 = audit(root, expect_cg=36, expect_cg_method=gates,
+                              expect_cg_certified_method=gates)
+    assert not ok2
+    cert_fails = [p for p in problems2 if "certification gate" in p]
+    assert len(cert_fails) == 3
+    assert any("cg method a3: 0/12 CERTIFIED" in p for p in cert_fails)

@@ -26,16 +26,21 @@ from .solver import optimize, new_model
 SERIOUS_TOL = 1e-9
 
 # prespecified parameters (doc/B2_STABILIZATION_SPEC.md; not tuned on any
-# evaluation cell)
+# evaluation cell). EVERY numerical update constant below enters the resume
+# identity via stab_identity_params.
 A3_D1_FRAC = 0.05
 A3_D2_OVER_D1 = 10.0
 A3_ZETA1 = 0.1
 A3_ZETA2 = 100.0
 A3_D1_MIN_FRAC = 1e-4
+A3_SERIOUS_SHRINK = 0.5     # D1 multiplier on serious steps
 A4_ALPHA0 = 0.5
 A4_ALPHA_MAX = 0.99
+A4_ALPHA_DECR = 0.1         # alpha decrement when the signal says "rise"
+A4_ALPHA_INCR_FRAC = 0.1    # alpha += (1 - alpha) * this on overshoot
 A5_T0 = 1.0
 A5_T_MIN = 1e-4
+A5_NULL_SHRINK = 0.5        # t multiplier on null steps
 A5_K = 16
 A5_W_FRAC = 2.0
 
@@ -66,13 +71,18 @@ def stab_identity_params(method: str) -> dict:
     base = {"spec": "doc/B2_STABILIZATION_SPEC.md", "serious_tol": SERIOUS_TOL}
     if method == "a3":
         base.update(d1_frac=A3_D1_FRAC, d2_over_d1=A3_D2_OVER_D1,
-                    zeta1=A3_ZETA1, zeta2=A3_ZETA2, d1_min_frac=A3_D1_MIN_FRAC)
+                    zeta1=A3_ZETA1, zeta2=A3_ZETA2, d1_min_frac=A3_D1_MIN_FRAC,
+                    serious_shrink=A3_SERIOUS_SHRINK)
     elif method == "a4":
         base.update(alpha0=A4_ALPHA0, alpha_max=A4_ALPHA_MAX,
-                    rule="pessoa-subgradient-in-out (spec Section 2)")
+                    alpha_decr=A4_ALPHA_DECR,
+                    alpha_incr_frac=A4_ALPHA_INCR_FRAC,
+                    rule="wentges-auto-smoothing, project-prespecified "
+                         "(spec Section 2)")
     elif method == "a5":
-        base.update(t0=A5_T0, t_min=A5_T_MIN, pieces=A5_K, w_frac=A5_W_FRAC,
-                    penalty_model="chord-pwl (spec Section 3)")
+        base.update(t0=A5_T0, t_min=A5_T_MIN, null_shrink=A5_NULL_SHRINK,
+                    pieces=A5_K, w_frac=A5_W_FRAC,
+                    penalty_model="exact-chord-pwl (spec Section 3)")
     return base
 
 
@@ -111,7 +121,37 @@ def theta_cert(market: AffineMarket, prices, pricing_bound: float) -> float:
 
 
 # ---------------------------------------------------------------------------
-# stabilized masters (A3 du Merle 5-piece; A5 chord-PWL proximal)
+# A5 chord model of the quadratic penalty (single source of truth)
+# ---------------------------------------------------------------------------
+def a5_hinges(t: float, w: float, k: int = A5_K):
+    """Hinge decomposition of the EXACT symmetric chord interpolation of
+    q(x) = x^2/(2t) on the grid {0, h, ..., Kh = w} (spec Section 3):
+
+        psi(x) = sum_j s_j * max(0, |x| - u_j)
+
+    with u_0 = 0 carrying the FIRST chord slope h/(2t), interior
+    breakpoints u_j = j*h (j = 1..K-1) carrying the derivative increment
+    h/t, and the final breakpoint u_K = w carrying the half-increment
+    h/(2t) so that the continuation slope beyond w is exactly
+    K*h/t = w/t = q'(w) (tangent continuation). Chord properties:
+    psi(m*h) = (m*h)^2/(2t) exactly, midpoint overestimation exactly
+    h^2/(8t), symmetric."""
+    h = w / k
+    hinges = [(0.0, h / (2.0 * t))]
+    for j in range(1, k):
+        hinges.append((j * h, h / t))
+    hinges.append((w, h / (2.0 * t)))
+    return hinges
+
+
+def a5_penalty_value(x: float, t: float, w: float, k: int = A5_K) -> float:
+    """The chord-model penalty psi(x) induced in the dual by the A5 primal
+    construction (tests verify the LP matches this helper)."""
+    return sum(s * max(0.0, abs(x) - u) for u, s in a5_hinges(t, w, k))
+
+
+# ---------------------------------------------------------------------------
+# stabilized masters (A3 du Merle 5-piece; A5 exact-chord-PWL proximal)
 # ---------------------------------------------------------------------------
 def _add_penalty_pair(m, link_terms, t, breakpoint_hi, breakpoint_lo, slope):
     """One +/- primal penalty pair on link row t: y+ (coeff +1, cost
@@ -149,11 +189,8 @@ def solve_stabilized_rmp(inst, market: AffineMarket, columns, tangent_points,
                 m, link_terms, t, center[t] + d1, center[t] - d1, A3_ZETA1))
             penalty_obj.append(_add_penalty_pair(
                 m, link_terms, t, center[t] + d2, center[t] - d2, A3_ZETA2))
-        else:  # a5: chord PWL of |pi - center|^2 / (2 t), K pieces per side
-            h = stab["w"][t] / A5_K
-            slope = h / stab["t"]  # incremental dual slope per piece
-            for k in range(A5_K):
-                u = k * h
+        else:  # a5: exact chord PWL of |pi - center|^2 / (2 t) via a5_hinges
+            for u, slope in a5_hinges(stab["t"], stab["w"][t]):
                 penalty_obj.append(_add_penalty_pair(
                     m, link_terms, t, center[t] + u, center[t] - u, slope))
     link = []
@@ -228,7 +265,7 @@ def serious_step(theta_best, theta_cand) -> bool:
 def a3_update(stab: dict, serious: bool, pi_cand) -> dict:
     if serious:
         stab["center"] = [float(x) for x in pi_cand]
-        stab["d1"] = [max(dmin, d / 2.0)
+        stab["d1"] = [max(dmin, d * A3_SERIOUS_SHRINK)
                       for d, dmin in zip(stab["d1"], stab["d1_min"])]
         stab["serious_steps"] += 1
     else:
@@ -236,19 +273,34 @@ def a3_update(stab: dict, serious: bool, pi_cand) -> dict:
     return stab
 
 
-def a4_alpha_update(alpha: float, g, direction) -> float:
-    """Pessoa-style automatic alpha (spec Section 2): <g, d> > 0 means the
-    dual function still rises toward the out point -> less smoothing;
-    otherwise the out point overshoots -> more smoothing."""
-    inner = float(np.dot(np.asarray(g, dtype=float),
-                         np.asarray(direction, dtype=float)))
-    if inner > 0.0:
-        return max(0.0, alpha - 0.1)
-    return min(A4_ALPHA_MAX, alpha + (1.0 - alpha) / 10.0)
+def a4_direction_signal(market: AffineMarket, prices_cand, prices_out,
+                        e_load) -> float:
+    """Directional signal in CONSISTENT posted-price coordinates (spec
+    Section 2). theta_cert is a function of p = -pi; its subgradient at the
+    smoothed point is g_p = e(S_tilde) - Lstar(p_cand), and the direction
+    toward the out point is d_p = p_out - p_cand (equivalently, in dual
+    coordinates, g_pi = Lstar - e paired with pi_out - pi_cand — the SAME
+    inner product). Positive signal = the dual function rises toward the
+    out point."""
+    g = np.asarray(e_load, dtype=float) - lagrangian_L_star(market, prices_cand)
+    d = np.asarray(prices_out, dtype=float) - np.asarray(prices_cand,
+                                                         dtype=float)
+    return float(np.dot(g, d))
 
 
-def a4_update(stab: dict, serious: bool, pi_cand, g, direction) -> dict:
-    stab["alpha"] = a4_alpha_update(stab["alpha"], g, direction)
+def a4_alpha_update(alpha: float, signal: float) -> float:
+    """Project-prespecified Wentges auto-smoothing rule (spec Section 2):
+    signal > 0 (dual function rises toward the out point) -> less
+    smoothing, alpha -= A4_ALPHA_DECR (floor 0); otherwise the out point
+    overshoots -> more smoothing, alpha += (1-alpha)*A4_ALPHA_INCR_FRAC
+    (cap A4_ALPHA_MAX)."""
+    if signal > 0.0:
+        return max(0.0, alpha - A4_ALPHA_DECR)
+    return min(A4_ALPHA_MAX, alpha + (1.0 - alpha) * A4_ALPHA_INCR_FRAC)
+
+
+def a4_update(stab: dict, serious: bool, pi_cand, signal: float) -> dict:
+    stab["alpha"] = a4_alpha_update(stab["alpha"], signal)
     if serious:
         stab["center"] = [float(x) for x in pi_cand]
         stab["serious_steps"] += 1
@@ -262,17 +314,17 @@ def a5_update(stab: dict, serious: bool, pi_cand) -> dict:
         stab["center"] = [float(x) for x in pi_cand]
         stab["serious_steps"] += 1
     else:
-        stab["t"] = max(A5_T_MIN, stab["t"] / 2.0)
+        stab["t"] = max(A5_T_MIN, stab["t"] * A5_NULL_SHRINK)
         stab["null_steps"] += 1
     return stab
 
 
 def apply_update(method: str, stab: dict, serious: bool, pi_cand,
-                 g=None, direction=None) -> dict:
+                 signal: float | None = None) -> dict:
     if method == "a3":
         return a3_update(stab, serious, pi_cand)
     if method == "a4":
-        return a4_update(stab, serious, pi_cand, g, direction)
+        return a4_update(stab, serious, pi_cand, signal)
     if method == "a5":
         return a5_update(stab, serious, pi_cand)
     raise ValueError(method)

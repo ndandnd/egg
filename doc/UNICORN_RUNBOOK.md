@@ -305,11 +305,16 @@ tail -f slurm-egg-b2a345-pilot-<JOBID>_<TASK>.out
 # 3. Inspect one cell's certificate and stabilization dynamics:
 python -c "import json; s=json.load(open('runs/b2a345_pilot/a3_s0_n8_b0.01/a3.cg.ckpt.json')); print(json.dumps(s['outcome'], indent=2)); print('serious:', s['stab']['serious_steps'], 'null:', s['stab']['null_steps'])"
 
-# 4. Audit gate cg=36 with per-method breakdown (12 per method):
-bash cluster/launch_audit.sh runs/b2a345_pilot:cg=36:cg_a3=12:cg_a4=12:cg_a5=12
+# 4. Audit gates: 36 complete-and-sane cells, 12 per method, AND 12
+#    CERTIFIED per method (budget-exhausted cells are valid and sane but
+#    do NOT satisfy the pilot's certification gate):
+bash cluster/launch_audit.sh \
+    runs/b2a345_pilot:cg=36:cg_a3=12:cg_a4=12:cg_a5=12:cgcert_a3=12:cgcert_a4=12:cgcert_a5=12
 # or directly at the prompt:
 python experiments/audit_runs.py runs/b2a345_pilot --expect-cg 36 \
-    --expect-cg-method a3=12 --expect-cg-method a4=12 --expect-cg-method a5=12
+    --expect-cg-method a3=12 --expect-cg-method a4=12 --expect-cg-method a5=12 \
+    --expect-cg-certified-method a3=12 --expect-cg-certified-method a4=12 \
+    --expect-cg-certified-method a5=12
 ```
 
 Per-cell evidence under `runs/b2a345_pilot/<cell>/` follows the A2 pilot

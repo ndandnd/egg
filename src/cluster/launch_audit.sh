@@ -12,7 +12,9 @@
 # Gates: cells=N (complete cell.ckpt.json with loop_done), loops=N (done
 # loop.ckpt.json), sweeps=N (done+margins_done sweep.ckpt.json), static=N
 # (completed static regimes per cell), cg=N (done, bound-sane *.cg.ckpt.json
-# for B2-A2, e.g. runs/b2a2_pilot:cg=12). An entirely missing checkpoint then
+# for B2, e.g. runs/b2a2_pilot:cg=12), cg_<method>=N (per-method complete-
+# and-sane), cgcert_<method>=N (per-method CERTIFIED cells — budget-exhausted
+# cells are sane but do not count). An entirely missing checkpoint then
 # fails the audit — completeness of found files alone is not enough.
 #
 # Verifies each root exists, submits ONE bash batch job (never
@@ -29,7 +31,7 @@ if ! command -v sbatch >/dev/null 2>&1; then
 fi
 source "${SRC_DIR}/cluster/unicorn_env.sh"
 
-[[ $# -ge 1 ]] || { echo "usage: bash cluster/launch_audit.sh 'ROOT[:cells=N][:loops=N][:sweeps=N][:static=N][:cg=N]' ..." >&2; exit 2; }
+[[ $# -ge 1 ]] || { echo "usage: bash cluster/launch_audit.sh 'ROOT[:cells=N][:loops=N][:sweeps=N][:static=N][:cg=N][:cg_a3=N][:cgcert_a3=N]' ..." >&2; exit 2; }
 for SPEC in "$@"; do
     ROOT="${SPEC%%:*}"
     [[ -d "${ROOT}" ]] || { echo "ERROR: no such runs root: ${ROOT} (from spec '${SPEC}')" >&2; exit 1; }

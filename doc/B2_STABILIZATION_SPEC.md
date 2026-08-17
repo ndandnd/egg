@@ -117,35 +117,57 @@ shrinks, `D1_t <- max(D1_min_t, D1_t / 2)` with
 On a NULL step: no parameter change. `zeta1, zeta2` are constant.
 
 ## 2. A4 — Wentges dual smoothing + automatic alpha
+     (project-prespecified auto-smoothing rule)
 
 **No stabilized master.** Candidate duals are the Wentges (1997) convex
 combination of the stability center and the current clean RMP dual (the
 "out" point):
 
     pi_tilde = alpha * pi_hat + (1 - alpha) * pi_out,
-    p_cand   = -pi_tilde.
+    p_cand   = -pi_tilde        (smoothing commutes with the sign flip).
 
-**Automatic alpha (Pessoa-style; see under-specification note).** After
-each candidate call, compute the dual-function subgradient at the smoothed
-point,
+**Automatic alpha — COORDINATES MADE EXPLICIT.** `Theta_cert` is written as
+a function of the posted price `p = -pi`. Its subgradient at the smoothed
+point, IN p-COORDINATES, is
 
-    g_t = e_t(S_tilde) - Lstar_t(p_cand),
+    g_p,t = e_t(S_tilde) - Lstar_t(p_cand),
     Lstar_t(p) = max(0, (p_t - c1_t) / b_t),
 
 (`S_tilde` = the candidate call's incumbent schedule; `Lstar` = the
-Lagrangian load minimizer). With direction `d = pi_out - pi_tilde`:
+Lagrangian load minimizer). The direction toward the out point, in the SAME
+coordinates, is
 
-    if <g, d> > 0 :  alpha <- max(0,    alpha - 0.1)          (less smoothing:
-                                                the dual function still rises
-                                                toward the out point)
-    else          :  alpha <- min(0.99, alpha + (1-alpha)/10)  (more smoothing:
-                                                the out point overshoots)
+    d_p = p_out - p_cand        (= pi_cand - pi_out in dual coordinates).
 
-Initial `alpha = 0.5`, bounds `[0, 0.99]`. Serious step: common rule
+Equivalently one may work entirely in dual coordinates with
+`g_pi = Lstar - e` and `d_pi = pi_out - pi_tilde`; the inner product is
+identical. Mixing `g_p` with `d_pi` flips the sign and INVERTS the rule
+(this exact bug was caught in review; the directional finite-difference
+regression in tests/test_b2a345.py now pins the sign). The signal is
+
+    signal = <g_p, d_p>,
+
+and the update (constants prespecified, all in the resume identity):
+
+    if signal > 0 :  alpha <- max(0,    alpha - A4_ALPHA_DECR)
+                     (less smoothing: the dual function rises toward out)
+    else          :  alpha <- min(A4_ALPHA_MAX,
+                                  alpha + (1-alpha) * A4_ALPHA_INCR_FRAC)
+                     (more smoothing: the out point overshoots)
+
+with `A4_ALPHA_DECR = 0.1`, `A4_ALPHA_INCR_FRAC = 0.1`,
+`A4_ALPHA_MAX = 0.99`, initial `alpha = 0.5`. Serious step: common rule
 (center <- pi_tilde on Theta_cert improvement). Mispricing needs no special
 sequence here: the clean certification call at `pi_out` happens every
 iteration by construction, so a smoothed misprice can never stall
 certification.
+
+**Attribution.** Pessoa, Sadykov, Uchoa and Vanderbeck document a
+self-adjusting alpha scheme for smoothing, but the exact constants above
+have NOT been verified against the full paper text. This rule is therefore
+named and cited everywhere as the PROJECT-PRESPECIFIED WENTGES
+AUTO-SMOOTHING RULE (inspired by that line of work), not as the Pessoa
+et al. rule.
 
 ## 3. A5 — quadratic proximal (bundle-style)
 
@@ -157,22 +179,35 @@ deviation variable `d_t` in each link row with convex cost
 
 **Backend constraint (documented deviation).** python-mip cannot express
 quadratic objectives on either backend, so the quadratic penalty is
-represented by its chord piecewise-linear model: K = 16 pieces per side,
-half-width `W_t = 2 * (1 + |pi_hat_t^0|)`, piece width `h_t = W_t / K`;
-piece k in {0..K-1} contributes primal variables (same duality pattern as
-A3) with breakpoint offsets `u_k = k * h_t` and incremental slopes
-`h_t / t` each, i.e. penalty derivative `~ (pi - pi_hat)/t` sampled at the
-breakpoints; beyond `W_t` the final slope `K h_t / t = W_t / t` continues.
-The chord model over-penalizes by at most `h_t^2 / (8 t)` per row — a
-candidate-quality effect only; certificates never touch the stabilized
-master. The QUADRATIC parameter dynamics below are exact.
+represented by the EXACT SYMMETRIC CHORD INTERPOLATION of
+`q(x) = x^2/(2t)` on the grid `{0, h, ..., Kh = W_t}` with K = 16 pieces
+per side, half-width `W_t = 2 * (1 + |pi_hat_t^0|)`, `h = W_t / K`. Chord
+slopes on the m-th positive piece are `(2m+1) h / (2t)`: the hinge
+decomposition (`egglab.b2a345.a5_hinges`, the single source used by BOTH
+the LP construction and the tests) therefore places
 
-**Prespecified parameters:** `t^0 = 1.0`, `t_min = 1e-4`, K = 16, `W_t` as
-above (recorded in the resume identity).
+    offset 0     : slope  h / (2t)      (the FIRST chord slope),
+    offset j*h   : slope  h / t         (derivative increments, j = 1..K-1),
+    offset W_t   : slope  h / (2t)      (final HALF-increment),
+
+so that `psi(m h) = (m h)^2/(2t)` EXACTLY at every grid breakpoint, the
+midpoint overestimation is EXACTLY `h^2/(8t)`, psi is symmetric, and the
+continuation beyond `W_t` has slope exactly `K h / t = W_t / t = q'(W_t)`
+— the tangent continuation (it under-estimates the true quadratic out
+there; W_t is wide enough that such candidates are already heavily
+penalized). All five properties are pinned by analytic scalar tests, and
+an LP-conjugate test verifies the stabilized LP's induced dual penalty
+matches `a5_penalty_value`. Candidate-quality effect only; certificates
+never touch the stabilized master. The QUADRATIC parameter dynamics below
+are exact.
+
+**Prespecified parameters:** `t^0 = 1.0`, `t_min = 1e-4`,
+`A5_NULL_SHRINK = 0.5`, K = 16, `W_t` as above (all in the resume
+identity).
 
 **Updates.** SERIOUS step: center moves (common rule), `t` unchanged. NULL
-step: `t <- max(t_min, t / 2)` — the doc's "parameter halved on null
-steps", read as the proximal stepsize/trust parameter (see
+step: `t <- max(t_min, t * A5_NULL_SHRINK)` — the doc's "parameter halved
+on null steps", read as the proximal stepsize/trust parameter (see
 under-specification note).
 
 ## 4. Genuine under-specifications (reported, not silently resolved)
@@ -182,14 +217,14 @@ under-specification note).
    widths or slopes. The values in Section 1 are project-prespecified here,
    before any stabilization run, and enter the resume identity; they were
    NOT tuned on any evaluation cell.
-2. **A4 automatic rule.** The cited Pessoa et al. automation is implemented
-   as the subgradient in-out test above with increments
-   `alpha - 0.1` / `alpha + (1-alpha)/10`. This is the standard form of
-   their alpha-schedule, but the exact published constants have not been
-   verified against the paper's full text (it is on the reading queue). The
-   implemented rule is therefore normative for this project and is stated
-   exactly; any post-audit correction would be a new prespecification, not
-   a silent change.
+2. **A4 automatic rule — renamed.** Pessoa et al.'s public materials
+   confirm a self-adjusting smoothing scheme exists, but the exact
+   constants implemented here could not be verified against the full paper
+   text. Per review, the rule is NOT attributed to Pessoa et al.: it is the
+   PROJECT-PRESPECIFIED WENTGES AUTO-SMOOTHING RULE (Section 2), stated
+   exactly with all constants in the resume identity. If the paper's exact
+   rule is later verified, adopting it would be a new prespecification,
+   not a silent change.
 3. **A5 "parameter halved on null steps".** The doc line does not say
    whether the halved parameter is the penalty WEIGHT (u, halving = weaker
    stabilization) or the proximal STEPSIZE/trust (t = 1/u, halving =

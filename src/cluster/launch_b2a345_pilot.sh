@@ -34,7 +34,7 @@ MANIFEST="runs/b2a345_pilot/MANIFEST-$(date -u +%Y%m%dT%H%M%SZ).txt"
     printf 'campaign=b2a345-stabilization-pilot\n'
     printf 'cells=%s (verified from --list)\n' "${N}"
     printf 'array=0-%s%%%s\n' "$((N - 1))" "${CONC}"
-    printf 'methods=A3(duMerle 5-piece), A4(Wentges+auto-alpha), A5(proximal, t halved on null)\n'
+    printf 'methods=A3(duMerle 5-piece), A4(Wentges, project auto-smoothing rule), A5(proximal chord-PWL, t halved on null)\n'
     printf 'grid=methods{a3,a4,a5} x seeds{0,11,15} x n{8,12} x b{0.01,0.05}\n'
     printf 'epsilon=1e-2; budget=240 exact oracle calls (clean + stabilized)\n'
     printf 'spec=doc/B2_STABILIZATION_SPEC.md\n'

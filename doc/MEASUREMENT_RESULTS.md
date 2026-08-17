@@ -232,7 +232,11 @@ existing certification applies).
   memory of all past responses but no stabilization.
 - **A3**: du Merle box + linear-penalty stabilization (5-piece), stability
   center updated on serious steps.
-- **A4**: Wentges dual smoothing with the Pessoa et al. auto-parameter rule.
+- **A4**: Wentges dual smoothing with a project-prespecified automatic
+  parameter rule (inspired by the Pessoa et al. self-adjusting scheme; the
+  exact published constants were not verified against the full text, so
+  the rule is stated and named as project-prespecified — see
+  `B2_STABILIZATION_SPEC.md` Section 2).
 - **A5**: quadratic proximal stabilization (bundle-style; parameter halved on
   null steps).
 

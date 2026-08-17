@@ -149,6 +149,7 @@ def audit(
     expect_static: int | None = None,
     expect_cg: int | None = None,
     expect_cg_method: dict | None = None,
+    expect_cg_certified_method: dict | None = None,
 ):
     """Build the summary; returns (lines, ok, problems).
 
@@ -398,6 +399,16 @@ def audit(
                 problems.append(
                     f"cg method {method}: {got}/{expected} complete and "
                     "sane cells (per-method expected-count gate)")
+        # certification gates are SEPARATE from sanity: budget-exhausted
+        # cells remain valid completed outcomes, but a campaign that
+        # requires certificates must gate on them explicitly
+        for method, expected in sorted(
+                (expect_cg_certified_method or {}).items()):
+            got = by_method.get(method, {"certified": 0})["certified"]
+            if got != expected:
+                problems.append(
+                    f"cg method {method}: {got}/{expected} CERTIFIED cells "
+                    "(per-method certification gate)")
 
     # --- adaptive approximation quality -------------------------------------
     ad = [
@@ -520,6 +531,10 @@ def main():
     ap.add_argument("--expect-cg-method", dest="expect_cg_method",
                     action="append", default=None, metavar="METHOD=N",
                     help="per-method complete-and-sane gate, e.g. a3=12 (repeatable)")
+    ap.add_argument("--expect-cg-certified-method",
+                    dest="expect_cg_certified_method",
+                    action="append", default=None, metavar="METHOD=N",
+                    help="per-method CERTIFIED-cell gate, e.g. a3=12 (repeatable)")
     args = ap.parse_args()
     out_path = args.out or os.path.join(args.runs_dir, "SUMMARY.md")
     _, ok, problems = audit(
@@ -534,6 +549,10 @@ def main():
             {kv.split("=")[0]: int(kv.split("=")[1])
              for kv in args.expect_cg_method}
             if args.expect_cg_method else None),
+        expect_cg_certified_method=(
+            {kv.split("=")[0]: int(kv.split("=")[1])
+             for kv in args.expect_cg_certified_method}
+            if args.expect_cg_certified_method else None),
     )
     print(f"wrote {out_path}")
     if not ok:

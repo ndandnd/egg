@@ -692,12 +692,14 @@ def _stab_candidate_step(inst, market, state, method, tag, experiment,
 
     params_before = {k: (list(stab[k]) if isinstance(stab[k], list) else stab[k])
                      for k in ("alpha", "t", "d1") if k in stab}
-    g = direction = None
+    signal = None
     if method == "a4":
-        l_star = b2a345.lagrangian_L_star(market, prices)
-        g = [float(e) - float(l) for e, l in zip(col["load"], l_star)]
-        direction = [float(o) - float(c) for o, c in zip(pi_clean, pi_cand)]
-    b2a345.apply_update(method, stab, serious, pi_cand, g, direction)
+        # consistent posted-price coordinates: g_p = e - Lstar(p_cand)
+        # paired with d_p = p_out - p_cand (spec Section 2)
+        prices_out = -np.asarray(pi_clean)
+        signal = b2a345.a4_direction_signal(market, prices, prices_out,
+                                            col["load"])
+    b2a345.apply_update(method, stab, serious, pi_cand, signal)
     tb = stab.get("theta_best")
     if math.isfinite(theta) and (tb is None or theta > tb):
         stab["theta_best"] = theta
@@ -732,6 +734,7 @@ def _stab_candidate_step(inst, market, state, method, tag, experiment,
         "theta_cert": theta,
         "theta_best": stab.get("theta_best"),
         "serious_step": serious,
+        "a4_signal": signal,
         "params_before": params_before,
         "params_after": params_after,
         "pricing_wall_s": pricing_wall,
