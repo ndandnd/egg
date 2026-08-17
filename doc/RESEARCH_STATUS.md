@@ -52,13 +52,14 @@ Verified medians from the certified pilot (canonical values in
 - the preregistered acceptance bar (best stabilized method >= 2x fewer
   median TOTAL calls than A2) is REJECTED on pilot evidence; the kill-1
   signal is ACTIVE on that metric;
-- wall-time caution: the first artifact set mixed wrapper elapsed time
-  into solver-wall fields (wall_clean_s + wall_stab_s did not equal
-  total_solver_wall_s), so its per-method wall comparisons are not
-  citable; the corrected pipeline partitions solver-reported wall exactly
-  once by regime/phase and enforces the identity. Call-count conclusions
-  are unaffected. Artifacts must be regenerated under the corrected code
-  before any wall-clock claim is made.
+- wall-time correction: the first artifact set mixed wrapper elapsed time
+  into its `wall_clean_s`/`wall_stab_s` split, so those two fields are not
+  citable. Its independently computed `total_solver_wall_s`, F2, and total
+  per-method wall medians were already correct and are unchanged (A2
+  73.46 s, A3 61.66 s, A4 78.09 s, A5 60.76 s). The corrected pipeline
+  partitions solver-reported wall exactly once by regime/phase and
+  enforces clean + stabilized = total. Call-count conclusions are
+  unaffected.
 
 What survives regardless of the kill decision: the certified negotiation
 machinery itself (any CG variant certifies z_CH where tatonnement provably

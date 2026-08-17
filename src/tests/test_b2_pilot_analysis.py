@@ -308,6 +308,7 @@ def test_wall_identity_and_decomposition_columns(artifacts):
         assert col in matched.columns, col
     summary = pd.read_csv(os.path.join(artifacts, "method_summary.csv"))
     for col in ("clean_calls_median", "stab_calls_median",
+                "clean_wall_median_s", "stab_wall_median_s",
                 "clean_wins_vs_a2", "clean_losses_vs_a2"):
         assert col in summary.columns, col
     # clean W/T/L recomputed from matched rows

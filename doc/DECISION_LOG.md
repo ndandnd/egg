@@ -71,11 +71,12 @@ the two-commit protocol) and the matched tables are reviewed.
 
 ## 2026-08-17 — Wall accounting corrected; decomposition finding recorded
 
-**Decision**: fix the pilot-closeout wall accounting (the first artifact
-set mixed wrapper elapsed time into solver-wall fields, so
-wall_clean_s + wall_stab_s != total_solver_wall_s) and expose the
-clean/stabilized call decomposition in the artifacts; regenerate
-artifacts under the corrected code before any further campaign.
+**Decision**: fix the pilot-closeout wall split (the first artifact mixed
+wrapper elapsed time into `wall_clean_s`/`wall_stab_s`, so their sum did
+not equal the independently correct `total_solver_wall_s`) and expose the
+clean/stabilized call decomposition in the artifacts; regenerate artifacts
+under the corrected code before any further campaign. Total-wall F2 and
+per-method medians from the first artifact remain valid and unchanged.
 
 **Refined finding** (verified on the certified pilot): on CLEAN
 certification calls, A4 beats A2 on 11/12 matched instances (A3 on 9/12)

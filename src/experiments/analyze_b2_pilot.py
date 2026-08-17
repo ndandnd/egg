@@ -513,6 +513,10 @@ def method_summary(cells: pd.DataFrame, matched: pd.DataFrame) -> pd.DataFrame:
                     s["oracle_calls_clean"].tolist()),
                 "stab_calls_median": statistics.median(
                     s["oracle_calls_stab"].tolist()),
+                "clean_wall_median_s": statistics.median(
+                    s["wall_clean_s"].tolist()),
+                "stab_wall_median_s": statistics.median(
+                    s["wall_stab_s"].tolist()),
                 "wall_median_s": statistics.median(walls),
                 "wall_q1_s": w_q1, "wall_q3_s": w_q3, "wall_max_s": max(walls),
                 "gap_median": s["final_gap"].median(),
@@ -789,7 +793,9 @@ def write_summary_md(path: str, cells, matched, summary, acceptance,
                       int(r["clean_losses_vs_a2"]))
         decomp_rows.append(
             f"| {m.upper()} | {r['clean_calls_median']:g} | "
-            f"{r['stab_calls_median']:g} | {cw}/{ct}/{cl} |")
+            f"{r['stab_calls_median']:g} | {cw}/{ct}/{cl} | "
+            f"{r['clean_wall_median_s']:.2f} | "
+            f"{r['stab_wall_median_s']:.2f} |")
         if float(r["clean_calls_median"]) < best_clean_med:
             best_clean, best_clean_med = m, float(r["clean_calls_median"])
     clean_helps = best_clean_med < a2_clean_med
@@ -828,8 +834,9 @@ def write_summary_md(path: str, cells, matched, summary, acceptance,
         "(wall_clean_s + wall_stab_s = total_solver_wall_s, enforced).",
         "",
         "| method | clean-call median | stab-call median | "
-        "clean W/T/L vs A2 |",
-        "|---|---|---|---|",
+        "clean W/T/L vs A2 | clean-wall median (s) | "
+        "stab-wall median (s) |",
+        "|---|---|---|---|---|---|",
         *decomp_rows,
         "",
         decomp_verdict,
