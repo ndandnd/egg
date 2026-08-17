@@ -328,6 +328,39 @@ oracle-call split in the outcome. The 576 fresh A1 cells and the 960-cell
 full grid are NOT part of this stage; they follow only after this pilot
 passes its audit.
 
+**Outcome (2026-08-17)**: jobs **91001** and **91002** completed the
+36-cell stabilization pilot with **36/36 certified**, all solves OPTIMAL
+and replay-valid, and no budget exhaustion; the audit (cg=36 with
+per-method sanity and certification gates) passed. Per-cell runtimes and
+oracle-call counts are extracted from the checkpoints — never from Slurm
+console text — by `experiments/analyze_b2_pilot.py` into
+`result/b2_pilot/<stamp>/cells.csv` (solver wall time separated from the
+per-cell dictator stage, which every method-cell repeats by design).
+Scientific medians (A2 21.5 / A4 29 / A3 33 / A5 33 oracle calls) put the
+stabilization kill signal ACTIVE — see `doc/DECISION_LOG.md` 2026-08-17:
+the 960-cell campaign is PAUSED; do not submit it.
+
+## B2 pilot closeout transfer and analysis (2026-08-17)
+
+One-password transfer of both pilot run roots to the analysis machine:
+
+```bash
+ssh nc437@unicorn-login-01.coecis.cornell.edu \
+  'cd "$HOME/egg/src" && tar -czf - runs/b2a2_pilot runs/b2a345_pilot' |
+tar -xzf - -C "$LOCAL_REPO/src"
+```
+
+Then, where the raw runs live (they are gitignored and never committed):
+
+```bash
+cd "$LOCAL_REPO/src"
+python3 experiments/analyze_b2_pilot.py \
+    --a2-root runs/b2a2_pilot --a345-root runs/b2a345_pilot \
+    --analysis-code-commit <commit-1-hash>
+git add ../result/b2_pilot/<stamp>
+git commit  # commit 2 of the two-commit provenance protocol
+```
+
 ## Branch hygiene
 
 The hardened implementation and this runbook are merged into `main`. Submit

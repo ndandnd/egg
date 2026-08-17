@@ -36,14 +36,17 @@ preemption-safe checkpointing).
   below). Sources for the audited papers: `ref/papers/`. Tooling:
   `ref/tools/bibliography.py` (validates `papers.csv`, regenerates the
   index).
-- `doc/` — LaTeX write-ups, presentations (future).
-- `result/` — figures, tables, experiment outputs (future).
-- `src/` — code, runnable locally and on the Unicorn cluster (future; the
-  EVSP-DR and evspv2g_dp solvers remain separate repositories used as
-  oracles).
+- `doc/` — research status, findings, decisions, runbook, and future LaTeX
+  write-ups. Start with `doc/RESEARCH_STATUS.md` (rolling handoff) and
+  `doc/DECISION_LOG.md` (dated decisions with rationale).
+- `result/` — curated CSVs, figures, summaries, and manifests (committed;
+  raw runs stay under the gitignored `src/runs/`).
+- `src/` — code, runnable locally and on the Unicorn cluster (the EVSP-DR
+  and evspv2g_dp solvers remain separate repositories used as oracles).
 
 ## Canonical reading order
 
+0. `doc/RESEARCH_STATUS.md` — where the project stands right now.
 1. `HANDOFF.md` — zero-context orientation (start here).
 2. `ref/RESEARCH_DIRECTIONS.md` — live hypotheses, directions, decisions.
 3. `ref/BRAINSTORM_20260814.md` — the idea catalog (B1-B34) and recommended

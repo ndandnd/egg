@@ -382,6 +382,32 @@ distinct instances (32 at b = 0.05).
 3. pilot records and checkpoints pass the replay and completeness audits
    (existing gated audit tooling, `cells=12`).
 
+### Certified pilot results (A2, 2026-08-17; A3-A5, 2026-08-17)
+
+**Pilot evidence — NOT full-grid conclusions.** All preregistered
+acceptance/kill criteria are defined on the 96-instance full grid; the
+pilot (12 instances: seeds 0/11/15 x n {8,12} x b {0.01, 0.05}) can
+support or reject continuing, but cannot pass a full-grid criterion (see
+`result/b2_pilot/<stamp>/acceptance_status.csv`).
+
+- **A2 pilot** (job 80309; audit 81432 PASS): 12/12 certified within
+  budget, 16-30 exact oracle calls per cell against 240.
+- **A3-A5 pilot** (jobs 91001/91002): 36/36 certified, all solves OPTIMAL
+  and replay-valid, no budget exhaustion — operationally the stabilized
+  stage is fully validated.
+- **Scientific signal** (operator-reported medians; canonical values
+  regenerate via `src/experiments/analyze_b2_pilot.py` into
+  `result/b2_pilot/<stamp>/`): median oracle calls to certificate —
+  **A2 21.5, A4 29, A3 33, A5 33**. Plain CG was fastest on every summary
+  view; the acceptance bar "best stabilized >= 2x fewer median calls than
+  A2" is REJECTED on pilot evidence, and the preregistered kill test
+  ("if A2 already meets the bar, stabilization is not the contribution")
+  is ACTIVE.
+- Consequence recorded in `DECISION_LOG.md` (2026-08-17): the 960-cell
+  campaign is paused; the open choice is killing stabilization now versus
+  running only the prespecified 208-cell matched moderate/strong-feedback
+  expansion to give the kill decision its full preregistered denominator.
+
 ## 9. Reproduction
 
 ```bash
@@ -396,3 +422,19 @@ python3 -m pytest tests/test_analysis.py -q
 
 The script is deterministic (byte-identical CSVs on identical inputs) and
 aborts on any records/checkpoint/SUMMARY disagreement.
+
+B2 pilot closeout (raw pilot runs required under `src/runs/`, which is
+gitignored — run where the data lives):
+
+```bash
+cd src
+python3 experiments/analyze_b2_pilot.py \
+    --a2-root runs/b2a2_pilot --a345-root runs/b2a345_pilot \
+    --analysis-code-commit <commit-1-hash>
+python3 -m pytest tests/test_b2_pilot_analysis.py -q
+```
+
+Same determinism contract; additionally rejects missing/duplicate/
+mismatched cells against the exact pilot grid identity (instance and
+market hashes recomputed from the generators) and re-runs the effective
+audit programmatically before writing anything.
