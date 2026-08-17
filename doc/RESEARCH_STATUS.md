@@ -35,19 +35,30 @@ contracts live in `MEASUREMENT_RESULTS.md` and `B2_STABILIZATION_SPEC.md`.
 
 ## Current evidence (as of the A2-A5 pilots)
 
-Operator-reported medians from the certified pilot (canonical, regenerable
-values live in `result/b2_pilot/<stamp>/`, produced by
+Verified medians from the certified pilot (canonical values in
+`result/b2_pilot/<stamp>/`, produced by
 `src/experiments/analyze_b2_pilot.py`):
 
-- median oracle calls to certificate: **A2 21.5, A4 29, A3 33, A5 33**;
-- plain CG (A2) used the fewest overall median oracle calls on the pilot
-  grid; A3 and A5 had lower median solver wall time, so this is not a
-  blanket wall-clock claim;
+- median TOTAL oracle calls to certificate: **A2 21.5, A4 29, A3 33,
+  A5 33** — plain CG used the fewest, and total calls is the
+  preregistered acceptance metric;
+- **call decomposition (the refined finding)**: A2 clean calls 21.5;
+  A3 17.5 clean + 15.5 stabilized; A4 15.5 clean + 13.5 stabilized;
+  A5 17.5 clean + 15.5 stabilized. On CLEAN calls, A4 beats A2 on 11/12
+  matched instances and A3 on 9/12;
+- honest interpretation: **stabilization — especially A4 — does
+  accelerate clean-master convergence, but its extra candidate calls are
+  not amortized at this problem size** (T = 28, n in {8, 12});
 - the preregistered acceptance bar (best stabilized method >= 2x fewer
-  median calls than A2) is REJECTED on pilot evidence;
-- the **stabilization kill signal (kill-1) is ACTIVE**: memory (retaining
-  all columns in a clean RMP) appears to solve the price-coordination
-  problem that broke tatonnement; stabilization adds calls at this scale.
+  median TOTAL calls than A2) is REJECTED on pilot evidence; the kill-1
+  signal is ACTIVE on that metric;
+- wall-time caution: the first artifact set mixed wrapper elapsed time
+  into solver-wall fields (wall_clean_s + wall_stab_s did not equal
+  total_solver_wall_s), so its per-method wall comparisons are not
+  citable; the corrected pipeline partitions solver-reported wall exactly
+  once by regime/phase and enforces the identity. Call-count conclusions
+  are unaffected. Artifacts must be regenerated under the corrected code
+  before any wall-clock claim is made.
 
 What survives regardless of the kill decision: the certified negotiation
 machinery itself (any CG variant certifies z_CH where tatonnement provably

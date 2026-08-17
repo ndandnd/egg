@@ -68,3 +68,29 @@ the evidence citable and byte-reproducible.
 
 **Revisit condition**: after `result/b2_pilot/<stamp>/` lands (commit 2 of
 the two-commit protocol) and the matched tables are reviewed.
+
+## 2026-08-17 — Wall accounting corrected; decomposition finding recorded
+
+**Decision**: fix the pilot-closeout wall accounting (the first artifact
+set mixed wrapper elapsed time into solver-wall fields, so
+wall_clean_s + wall_stab_s != total_solver_wall_s) and expose the
+clean/stabilized call decomposition in the artifacts; regenerate
+artifacts under the corrected code before any further campaign.
+
+**Refined finding** (verified on the certified pilot): on CLEAN
+certification calls, A4 beats A2 on 11/12 matched instances (A3 on 9/12)
+— clean-call medians A4 15.5, A3/A5 17.5 vs A2 21.5 — so stabilization
+DOES accelerate clean-master convergence; it loses only after its
+candidate-call overhead (total medians A4 29, A3/A5 33 vs A2 21.5). The
+preregistered acceptance metric remains TOTAL oracle calls; the kill-1
+signal stays active on that metric, but "stabilization adds nothing" is
+NOT the correct summary — "stabilization is not amortized at this
+problem size" is.
+
+**Next campaign designated (not launched)**: the prespecified 208-cell
+matched moderate/strong-feedback A2-A5 expansion, to give the kill
+decision its full preregistered denominator. Explicitly NOT a scale test:
+it adds seeds at fixed n in {8, 12} and T = 28; testing whether
+stabilization becomes useful at scale would require larger trip counts,
+more slots, multiple fleets, or additional coupling rows — a separate
+prespecification if ever pursued.

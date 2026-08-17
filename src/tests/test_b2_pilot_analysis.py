@@ -291,6 +291,102 @@ def test_identity_mismatch_rejected(pilot_roots, tmp_path):
                 verify_code_commit=False)
 
 
+def test_wall_identity_and_decomposition_columns(artifacts):
+    """Review fix: solver wall is partitioned exactly once; the identity
+    wall_clean + wall_stab == total holds per cell, A2 has zero stabilized
+    wall/calls, and the summaries expose the clean/stab decomposition."""
+    cells = pd.read_csv(os.path.join(artifacts, "cells.csv"))
+    resid = (cells["wall_clean_s"] + cells["wall_stab_s"]
+             - cells["total_solver_wall_s"]).abs()
+    assert (resid <= 1e-6).all(), resid.max()
+    a2 = cells[cells["method"] == "a2"]
+    assert (a2["wall_stab_s"] == 0).all()
+    assert (a2["oracle_calls_stab"] == 0).all()
+    matched = pd.read_csv(os.path.join(artifacts, "matched_comparison.csv"))
+    for col in ("a2_clean_calls", "method_clean_calls", "method_stab_calls",
+                "clean_calls_diff", "clean_result_vs_a2"):
+        assert col in matched.columns, col
+    summary = pd.read_csv(os.path.join(artifacts, "method_summary.csv"))
+    for col in ("clean_calls_median", "stab_calls_median",
+                "clean_wins_vs_a2", "clean_losses_vs_a2"):
+        assert col in summary.columns, col
+    # clean W/T/L recomputed from matched rows
+    ov = summary[summary["scope"] == "overall"].set_index("method")
+    for m in ("a3", "a4", "a5"):
+        mm = matched[matched["method"] == m]
+        assert int(ov.loc[m, "clean_wins_vs_a2"]) == int(
+            (mm["clean_result_vs_a2"] == "win").sum())
+    assert os.path.exists(os.path.join(artifacts,
+                                       "F4_clean_vs_total_calls.png"))
+
+
+def test_wall_double_counted_master_solve_rejected(pilot_roots, tmp_path):
+    c2, c345 = _clone_roots(pilot_roots, tmp_path)
+    p = os.path.join(c345, "a3_s1_n4_b0.01", "a3.cg.ckpt.json")
+    ck = checkpoint.load(p)
+    ev = next(e for e in ck["iteration_events"] if e.get("master_solves"))
+    ev["master_solves"] = ev["master_solves"] + [dict(ev["master_solves"][0])]
+    checkpoint.save(p, ck)
+    # the audit's per-checkpoint uniqueness gate or the wall partition's
+    # dedup must reject it — either way, no silent double counting
+    with pytest.raises(AnalysisError, match="audit FAILED|double counted"):
+        analyze(c2, c345, str(tmp_path / "out"), "T", "c",
+                instances=FIX_INSTANCES, instance_builder=fix_builder,
+                verify_code_commit=False)
+
+
+def test_omitted_oracle_event_rejected(pilot_roots, tmp_path):
+    c2, c345 = _clone_roots(pilot_roots, tmp_path)
+    p = os.path.join(c345, "a4_s1_n4_b0.01", "a4.cg.ckpt.json")
+    ck = checkpoint.load(p)
+    ck["oracle_events"] = ck["oracle_events"][1:]  # drop the seed call
+    checkpoint.save(p, ck)
+    with pytest.raises(AnalysisError,
+                       match="audit FAILED|omitted or duplicated"):
+        analyze(c2, c345, str(tmp_path / "out"), "T", "c",
+                instances=FIX_INSTANCES, instance_builder=fix_builder,
+                verify_code_commit=False)
+
+
+def test_unknown_oracle_regime_rejected(pilot_roots, tmp_path):
+    c2, c345 = _clone_roots(pilot_roots, tmp_path)
+    p = os.path.join(c345, "a5_s1_n4_b0.01", "a5.cg.ckpt.json")
+    ck = checkpoint.load(p)
+    ck["oracle_events"][-1]["regime"] = "cg-mystery"
+    checkpoint.save(p, ck)
+    with pytest.raises(AnalysisError, match="unknown oracle regime"):
+        analyze(c2, c345, str(tmp_path / "out"), "T", "c",
+                instances=FIX_INSTANCES, instance_builder=fix_builder,
+                verify_code_commit=False)
+
+
+def test_phase_misclassification_rejected(pilot_roots, tmp_path):
+    c2, c345 = _clone_roots(pilot_roots, tmp_path)
+    p = os.path.join(c345, "a3_s1_n4_b0.01", "a3.cg.ckpt.json")
+    ck = checkpoint.load(p)
+    ev = next(e for e in ck["iteration_events"]
+              if e.get("phase") == "stabilized")
+    ev["phase"] = "clean"  # its wall would be misattributed to clean
+    checkpoint.save(p, ck)
+    with pytest.raises(AnalysisError, match="phase misclassification"):
+        analyze(c2, c345, str(tmp_path / "out"), "T", "c",
+                instances=FIX_INSTANCES, instance_builder=fix_builder,
+                verify_code_commit=False)
+
+
+def test_a2_with_stabilized_call_rejected(pilot_roots, tmp_path):
+    c2, c345 = _clone_roots(pilot_roots, tmp_path)
+    p = os.path.join(c2, "s1_n4_b0.01", "a2.cg.ckpt.json")
+    ck = checkpoint.load(p)
+    ck["oracle_events"][-1]["regime"] = "cg-stab-pricing"
+    checkpoint.save(p, ck)
+    with pytest.raises(AnalysisError,
+                       match="A2 cell contains stabilized"):
+        analyze(c2, c345, str(tmp_path / "out"), "T", "c",
+                instances=FIX_INSTANCES, instance_builder=fix_builder,
+                verify_code_commit=False)
+
+
 def test_incomplete_root_fails_audit(pilot_roots, tmp_path):
     c2, c345 = _clone_roots(pilot_roots, tmp_path)
     p = os.path.join(c345, "a3_s3_n4_b0.05", "a3.cg.ckpt.json")

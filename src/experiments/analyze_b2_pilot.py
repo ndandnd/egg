@@ -249,6 +249,116 @@ def _price_path_metrics(events, regimes) -> tuple:
     return tv, linf, n
 
 
+CLEAN_ORACLE_REGIMES = ("cg-seed", "cg-pricing")
+STAB_ORACLE_REGIME = "cg-stab-pricing"
+WALL_IDENTITY_TOL = 1e-6  # seconds; sums of identical float terms
+
+
+def wall_partition(ck: dict, method: str, label: str) -> tuple:
+    """Partition SOLVER-REPORTED wall time exactly once (review fix).
+
+    - Every oracle event's `solver.wall_s + solver.lp_wall_s` is assigned by
+      REGIME: cg-seed and cg-pricing are clean; cg-stab-pricing is
+      stabilized; anything else rejects the cell.
+    - Every master solve's `wall_s` is assigned by its iteration event's
+      PHASE (clean/terminal vs stabilized), each stable solve_id counted
+      exactly once (a duplicate is double counting and rejects the cell).
+    - Wrapper elapsed times (`pricing_wall_s`, `master_wall_s`) are NEVER
+      mixed into solver-wall fields.
+    - Cross-checks: oracle-event count equals oracle_calls (an omitted
+      seed/pricing event cannot pass); stabilized/clean iteration events
+      must reference exactly the stabilized/clean pricing call ids (a
+      phase misclassification cannot pass); A2 must have zero stabilized
+      calls; clean/terminal events (and A3/A5 stabilized events) must
+      carry their master-solve evidence.
+
+    Returns (wall_clean_s, wall_stab_s, total_solver_wall_s) satisfying
+    wall_clean + wall_stab == total within WALL_IDENTITY_TOL (enforced).
+    """
+    events = ck["oracle_events"]
+    iters = ck["iteration_events"]
+    if len(events) != ck["oracle_calls"]:
+        raise AnalysisError(
+            f"{label}: {len(events)} oracle events but oracle_calls="
+            f"{ck['oracle_calls']} — omitted or duplicated oracle evidence")
+
+    clean_oracle = stab_oracle = 0.0
+    stab_call_ids, clean_pricing_ids = set(), set()
+    for e in events:
+        sv = e.get("solver") or {}
+        w = float(sv.get("wall_s") or 0.0) + float(sv.get("lp_wall_s") or 0.0)
+        reg = e.get("regime")
+        cid = (e.get("extra") or {}).get("call_id")
+        if reg in CLEAN_ORACLE_REGIMES:
+            clean_oracle += w
+            if reg == "cg-pricing":
+                clean_pricing_ids.add(cid)
+        elif reg == STAB_ORACLE_REGIME:
+            stab_oracle += w
+            stab_call_ids.add(cid)
+        else:
+            raise AnalysisError(f"{label}: unknown oracle regime {reg!r}")
+    if method == "a2" and stab_call_ids:
+        raise AnalysisError(
+            f"{label}: A2 cell contains stabilized oracle calls "
+            f"{sorted(stab_call_ids)}")
+
+    clean_master = stab_master = 0.0
+    seen_solve_ids = set()
+    stab_event_pids, clean_event_pids = set(), set()
+    for ev in iters:
+        phase = ev.get("phase") or ("terminal" if ev.get("terminal")
+                                    else "clean")
+        if phase not in ("clean", "stabilized", "terminal"):
+            raise AnalysisError(f"{label}: unknown iteration phase {phase!r}")
+        if phase == "stabilized":
+            stab_event_pids.add(ev.get("pricing_solve_id"))
+        elif phase == "clean":
+            clean_event_pids.add(ev.get("pricing_solve_id"))
+        solves = ev.get("master_solves") or []
+        if not solves and not (phase == "stabilized" and method == "a4"):
+            raise AnalysisError(
+                f"{label}: iteration {ev.get('iteration_id')} (phase "
+                f"{phase}) has no master-solve evidence")
+        for ms in solves:
+            sid = ms.get("solve_id")
+            if sid in seen_solve_ids:
+                raise AnalysisError(
+                    f"{label}: master solve {sid} appears twice — wall "
+                    "time would be double counted")
+            seen_solve_ids.add(sid)
+            w = float(ms.get("wall_s") or 0.0)
+            if phase == "stabilized":
+                stab_master += w
+            else:
+                clean_master += w
+    if stab_event_pids != stab_call_ids:
+        raise AnalysisError(
+            f"{label}: stabilized iteration events reference "
+            f"{sorted(stab_event_pids)} but stabilized oracle calls are "
+            f"{sorted(stab_call_ids)} — phase misclassification")
+    if clean_event_pids != clean_pricing_ids:
+        raise AnalysisError(
+            f"{label}: clean iteration events reference "
+            f"{sorted(clean_event_pids)} but clean pricing calls are "
+            f"{sorted(clean_pricing_ids)} — phase misclassification")
+
+    wall_clean = clean_oracle + clean_master
+    wall_stab = stab_oracle + stab_master
+    # independent total: every oracle event + every master solve, unpartitioned
+    total = (sum(float((e.get("solver") or {}).get("wall_s") or 0.0)
+                 + float((e.get("solver") or {}).get("lp_wall_s") or 0.0)
+                 for e in events)
+             + sum(float(ms.get("wall_s") or 0.0)
+                   for ev in iters for ms in ev.get("master_solves") or []))
+    if abs(wall_clean + wall_stab - total) > WALL_IDENTITY_TOL:
+        raise AnalysisError(
+            f"{label}: wall identity violated — clean {wall_clean} + stab "
+            f"{wall_stab} != total {total} "
+            f"(tol {WALL_IDENTITY_TOL}); aborting analysis")
+    return wall_clean, wall_stab, total
+
+
 def extract_cell(root: str, method: str, seed: int, n: int, b: float) -> dict:
     d = cell_dir(root, method, seed, n, b)
     ck = checkpoint.load(os.path.join(d, f"{method}.cg.ckpt.json"))
@@ -257,28 +367,9 @@ def extract_cell(root: str, method: str, seed: int, n: int, b: float) -> dict:
         raise AnalysisError(f"missing dictator checkpoint in {d}")
     oc = ck["outcome"]
     events = ck["oracle_events"]
-    iters = ck["iteration_events"]
 
-    def is_stab(ev):
-        return ev.get("phase") == "stabilized"
-
-    clean_master_wall = sum(
-        ev.get("master_wall_s") or 0.0 for ev in iters if not is_stab(ev))
-    stab_master_wall = sum(
-        ms.get("wall_s") or 0.0
-        for ev in iters if is_stab(ev)
-        for ms in ev.get("master_solves") or [])
-    clean_pricing_wall = sum(
-        ev.get("pricing_wall_s") or 0.0
-        for ev in iters if not is_stab(ev) and not ev.get("terminal"))
-    stab_pricing_wall = sum(
-        ev.get("pricing_wall_s") or 0.0 for ev in iters if is_stab(ev))
-    oracle_wall = sum(
-        (e.get("solver") or {}).get("wall_s", 0.0)
-        + (e.get("solver") or {}).get("lp_wall_s", 0.0) for e in events)
-    seed_wall = ((events[0].get("solver") or {}).get("wall_s", 0.0)
-                 + (events[0].get("solver") or {}).get("lp_wall_s", 0.0))
-    total_solver_wall = oracle_wall + clean_master_wall + stab_master_wall
+    wall_clean, wall_stab, total_solver_wall = wall_partition(
+        ck, method, f"cell {method} seed={seed} n={n} b={b}")
 
     # broadcast metrics recomputed from oracle evidence; cross-validated
     tv, linf, n_pts = _price_path_metrics(events, BROADCAST_REGIMES[method])
@@ -324,8 +415,8 @@ def extract_cell(root: str, method: str, seed: int, n: int, b: float) -> dict:
         "n_columns": len(ck["columns"]),
         "serious_steps": stab.get("serious_steps", 0),
         "null_steps": stab.get("null_steps", 0),
-        "wall_clean_s": clean_pricing_wall + clean_master_wall + seed_wall,
-        "wall_stab_s": stab_pricing_wall + stab_master_wall,
+        "wall_clean_s": wall_clean,
+        "wall_stab_s": wall_stab,
         "total_solver_wall_s": total_solver_wall,
         "dictator_wall_s": (dck.get("adaptive") or {}).get(
             "adaptive_total_wall_s", float("nan")),
@@ -357,12 +448,23 @@ def matched_comparison(cells: pd.DataFrame) -> pd.DataFrame:
             calls_diff = int(r["oracle_calls"] - a2["oracle_calls"])
             label = ("win" if calls_diff < 0
                      else "tie" if calls_diff == 0 else "loss")
+            clean_diff = int(r["oracle_calls_clean"]
+                             - a2["oracle_calls_clean"])
+            clean_label = ("win" if clean_diff < 0
+                           else "tie" if clean_diff == 0 else "loss")
             rows.append({
                 "seed": key[0], "n_trips": key[1], "b": key[2], "method": m,
                 "a2_calls": int(a2["oracle_calls"]),
                 "method_calls": int(r["oracle_calls"]),
                 "calls_diff": calls_diff,
                 "calls_ratio": r["oracle_calls"] / a2["oracle_calls"],
+                # decomposition: does stabilization reduce CLEAN-master
+                # iterations even when total calls lose? (pilot finding)
+                "a2_clean_calls": int(a2["oracle_calls_clean"]),
+                "method_clean_calls": int(r["oracle_calls_clean"]),
+                "method_stab_calls": int(r["oracle_calls_stab"]),
+                "clean_calls_diff": clean_diff,
+                "clean_result_vs_a2": clean_label,
                 "a2_solver_wall_s": a2["total_solver_wall_s"],
                 "method_solver_wall_s": r["total_solver_wall_s"],
                 "wall_diff_s": r["total_solver_wall_s"] - a2["total_solver_wall_s"],
@@ -393,6 +495,10 @@ def method_summary(cells: pd.DataFrame, matched: pd.DataFrame) -> pd.DataFrame:
                 "cert_rate": s["certified"].mean(),
                 "calls_median": statistics.median(calls),
                 "calls_q1": c_q1, "calls_q3": c_q3, "calls_max": max(calls),
+                "clean_calls_median": statistics.median(
+                    s["oracle_calls_clean"].tolist()),
+                "stab_calls_median": statistics.median(
+                    s["oracle_calls_stab"].tolist()),
                 "wall_median_s": statistics.median(walls),
                 "wall_q1_s": w_q1, "wall_q3_s": w_q3, "wall_max_s": max(walls),
                 "gap_median": s["final_gap"].median(),
@@ -407,8 +513,16 @@ def method_summary(cells: pd.DataFrame, matched: pd.DataFrame) -> pd.DataFrame:
                 row["wins_vs_a2"] = int((mm["calls_result_vs_a2"] == "win").sum())
                 row["ties_vs_a2"] = int((mm["calls_result_vs_a2"] == "tie").sum())
                 row["losses_vs_a2"] = int((mm["calls_result_vs_a2"] == "loss").sum())
+                row["clean_wins_vs_a2"] = int(
+                    (mm["clean_result_vs_a2"] == "win").sum())
+                row["clean_ties_vs_a2"] = int(
+                    (mm["clean_result_vs_a2"] == "tie").sum())
+                row["clean_losses_vs_a2"] = int(
+                    (mm["clean_result_vs_a2"] == "loss").sum())
             else:
                 row["wins_vs_a2"] = row["ties_vs_a2"] = row["losses_vs_a2"] = 0
+                row["clean_wins_vs_a2"] = row["clean_ties_vs_a2"] = 0
+                row["clean_losses_vs_a2"] = 0
             rows.append(row)
     return pd.DataFrame(rows)
 
@@ -572,6 +686,28 @@ def make_figures(cells: pd.DataFrame, out_dir: str) -> list:
         fig.savefig(p, dpi=150)
         plt.close(fig)
         made.append(fname)
+
+    # F4: clean vs total call decomposition (stacked: clean + stabilized)
+    clean_v = per_method("oracle_calls_clean")
+    stab_v = per_method("oracle_calls_stab")
+    fig, ax = plt.subplots(figsize=(11, 4.5))
+    w = 0.2
+    for i, m in enumerate(METHODS):
+        xs = [xi + (i - 1.5) * w for xi in x]
+        ax.bar(xs, clean_v[m], width=w, label=f"{m.upper()} clean",
+               color=COLORS[m])
+        ax.bar(xs, stab_v[m], width=w, bottom=clean_v[m],
+               color=COLORS[m], alpha=0.45,
+               label=f"{m.upper()} stabilized" if m != "a2" else None)
+    ax.set_xticks(list(x))
+    ax.set_xticklabels(labels, rotation=45, ha="right", fontsize=8)
+    ax.set_ylabel("oracle calls (clean solid, stabilized shaded)")
+    ax.legend(ncol=4, fontsize=7)
+    ax.set_title("B2 pilot: clean vs total oracle-call decomposition")
+    fig.tight_layout()
+    fig.savefig(os.path.join(out_dir, "F4_clean_vs_total_calls.png"), dpi=150)
+    plt.close(fig)
+    made.append("F4_clean_vs_total_calls.png")
     return made
 
 
@@ -628,6 +764,38 @@ def write_summary_md(path: str, cells, matched, summary, acceptance,
         verdict = (
             "On this pilot the stabilization kill signal (kill-1) is NOT "
             "active (see acceptance_status.csv for the computed criteria).")
+    # clean/stabilized call decomposition (computed): does stabilization
+    # accelerate the clean master even when total calls lose?
+    a2_clean_med = float(ov.loc["a2", "clean_calls_median"])
+    decomp_rows = []
+    best_clean, best_clean_med = None, float("inf")
+    for m in STAB_METHODS:
+        r = ov.loc[m]
+        cw, ct, cl = (int(r["clean_wins_vs_a2"]), int(r["clean_ties_vs_a2"]),
+                      int(r["clean_losses_vs_a2"]))
+        decomp_rows.append(
+            f"| {m.upper()} | {r['clean_calls_median']:g} | "
+            f"{r['stab_calls_median']:g} | {cw}/{ct}/{cl} |")
+        if float(r["clean_calls_median"]) < best_clean_med:
+            best_clean, best_clean_med = m, float(r["clean_calls_median"])
+    clean_helps = best_clean_med < a2_clean_med
+    total_loses = float(ov.loc[best_clean, "calls_median"]) > a2_med
+    if clean_helps and total_loses:
+        decomp_verdict = (
+            f"Stabilization — especially {best_clean.upper()} — DOES "
+            "accelerate clean-master convergence (see clean-call W/T/L), "
+            "but its extra candidate calls are not amortized at this "
+            "problem size: the total-call comparison still favors A2. The "
+            "preregistered acceptance metric remains TOTAL oracle calls.")
+    elif clean_helps:
+        decomp_verdict = (
+            f"Stabilization ({best_clean.upper()}) reduces clean-master "
+            "iterations AND wins on total calls.")
+    else:
+        decomp_verdict = (
+            "Stabilization does not reduce clean-master iterations on "
+            "this pilot — it fails at the iteration level, not merely on "
+            "candidate-call overhead.")
     lines += [
         "",
         "## Interpretation (computed from the tables above)",
@@ -638,6 +806,19 @@ def write_summary_md(path: str, cells, matched, summary, acceptance,
         f"({best.upper()}, median {stab_meds[best]:g}) gives a speedup "
         f"ratio a2/best = {speedup:.2f}, versus the preregistered "
         f"acceptance bar of >= 2. {verdict}",
+        "",
+        "### Clean/stabilized call decomposition",
+        "",
+        f"A2 clean-call median: {a2_clean_med:g}. Solver wall time is "
+        "partitioned exactly once from solver-reported times "
+        "(wall_clean_s + wall_stab_s = total_solver_wall_s, enforced).",
+        "",
+        "| method | clean-call median | stab-call median | "
+        "clean W/T/L vs A2 |",
+        "|---|---|---|---|",
+        *decomp_rows,
+        "",
+        decomp_verdict,
         "",
         "Denominators and caveats:",
         "",
