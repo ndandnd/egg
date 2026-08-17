@@ -33,6 +33,18 @@ def git_commit() -> str:
 _GIT = None
 
 
+def _mip_version() -> str:
+    try:
+        import importlib.metadata as md
+
+        return md.version("mip")
+    except Exception:
+        return "unknown"
+
+
+_MIP_VERSION = _mip_version()
+
+
 def provenance() -> dict:
     global _GIT
     if _GIT is None:
@@ -41,6 +53,9 @@ def provenance() -> dict:
         "timestamp": datetime.datetime.now(datetime.timezone.utc).isoformat(),
         "host": socket.gethostname(),
         "git_commit": _GIT,
+        # solver-library version: pricing-bound slack proved to be
+        # CBC-build-dependent (PR #17 review), so records carry it
+        "mip_version": _MIP_VERSION,
         "slurm_job_id": os.environ.get("SLURM_JOB_ID"),
         "slurm_array_task_id": os.environ.get("SLURM_ARRAY_TASK_ID"),
         "slurm_restart_count": os.environ.get("SLURM_RESTART_COUNT"),

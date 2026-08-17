@@ -601,6 +601,7 @@ def certified_cg(
             return finish("certified", ub, gap)
 
         improving = min_rc_ub < -RC_TOL
+        clean_ambiguous = False
         if novel:
             # retain every generated unique column (improving or not)
             state["columns"].append(col)
@@ -622,9 +623,13 @@ def certified_cg(
             state["tangent_points"].append(list(map(float, rmp["L"])))
         elif min_rc_lb < -RC_TOL:
             if stabilized:
-                # candidates may still make progress; the clean bound alone
-                # does not trigger escalation until candidates also stall
-                pass
+                # AMBIGUOUS clean pricing: no improving novel incumbent while
+                # the certified bound says an improving column may exist. The
+                # escalation decision is DEFERRED to the candidate step via a
+                # committed flag: a novel candidate resolves the ambiguity, a
+                # duplicate candidate triggers exactly the A2 escalation
+                # (see _stab_candidate_step; regression-tested).
+                clean_ambiguous = True
             else:
                 # no improving novel incumbent, but the CERTIFIED bound says
                 # an improving column may still exist: NOT exhaustion —
@@ -650,11 +655,20 @@ def certified_cg(
             state["tangent_points"].append(list(map(float, rmp["L"])))
 
         if stabilized and state["oracle_calls"] < state["identity"]["budget"]:
-            # hand the clean duals to the candidate phase; committed so a
-            # kill between the two calls resumes into the SAME stream
+            # hand the clean duals (and the ambiguity flag) to the candidate
+            # phase; committed so a kill between the two calls resumes into
+            # the SAME stream with the SAME deferred-escalation decision
             state["pending"] = {"pi_clean": [float(x) for x in rmp["pi"]],
-                                "ub": ub, "gap": gap}
+                                "ub": ub, "gap": gap,
+                                "clean_ambiguous": clean_ambiguous}
             state["phase"] = "stab"
+        elif stabilized and clean_ambiguous:
+            # no candidate step remains (budget); escalate directly so the
+            # ambiguity is never silently dropped
+            state["pricing_escalations"] += 1
+            if state["pricing_escalations"] <= MAX_PRICING_ESCALATIONS:
+                state["pricing_max_mip_gap"] = max(
+                    state["pricing_max_mip_gap"] / 100.0, 1e-12)
         commit()
 
 
@@ -752,12 +766,34 @@ def _stab_candidate_step(inst, market, state, method, tag, experiment,
     state["oracle_calls"] = oc + 1
     state["calls_stab"] = state.get("calls_stab", 0) + 1
     _update_price_path(state, prices)
+    deferred_escalation = False
     if novel:
+        # a novel candidate resolves any deferred clean-pricing ambiguity
         state["columns"].append(col)
         state["keys"].append(col["column_key"])
         state["duplicate_retries"] = 0
         state["refine_retries"] = 0
         state["pricing_escalations"] = 0
+    elif pending.get("clean_ambiguous"):
+        # DEFERRED A2 ESCALATION: clean pricing was ambiguous (no improving
+        # novel incumbent, certified bound < -rc_tol) AND the stabilized
+        # candidate also stalled — tighten the pricing MIP gap exactly as
+        # A2 does before the next clean call; bounded, loud on exhaustion
+        state["pricing_escalations"] += 1
+        if state["pricing_escalations"] > MAX_PRICING_ESCALATIONS:
+            raise B2A2Error(
+                "clean pricing stayed ambiguous (certified bound < -rc_tol "
+                "with no improving novel incumbent) and stabilized "
+                "candidates stalled through "
+                f"{MAX_PRICING_ESCALATIONS} deferred MIP-gap escalations — "
+                "cannot certify exhaustion; failing loudly")
+        state["pricing_max_mip_gap"] = max(
+            state["pricing_max_mip_gap"] / 100.0, 1e-12)
+        deferred_escalation = True
+    ev = state["iteration_events"][-1]
+    ev["clean_ambiguous"] = bool(pending.get("clean_ambiguous"))
+    ev["deferred_escalation"] = deferred_escalation
+    ev["pricing_max_mip_gap_next"] = state["pricing_max_mip_gap"]
     state["phase"] = "clean"
     state["pending"] = None
     commit()

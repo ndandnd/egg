@@ -657,6 +657,131 @@ def test_budget_exhausted_stabilized_is_sane_not_certified(tiny, tmp_path):
     assert "CERTIFIED (gap <= epsilon): 0" in text
 
 
+# --------------------------------------------------------------------------
+# deferred pricing-gap escalation (review: A4 exhaustion control-flow bug)
+# --------------------------------------------------------------------------
+def _ambiguous_fake_factory(real_solve, mode, gaps_seen):
+    """Fake oracle: seed call real; later calls per `mode`:
+    - 'all_dup': every call returns a duplicate of the seed schedule with
+      an optimistic incumbent (1e9) and a very weak certified bound (-1e9)
+      => clean pricing is AMBIGUOUS (rc_ub >= 0, rc_lb < -RC_TOL, duplicate)
+      and every candidate stalls;
+    - 'clean_dup_cand_real': clean calls (even positions after the seed)
+      fake-ambiguous, candidate calls (odd positions) real => novel
+      candidates must clear the deferred escalation."""
+    counter = {"n": 0}
+    first = {}
+
+    def fake(_inst, prices, **kw):
+        counter["n"] += 1
+        gaps_seen.append(kw.get("max_mip_gap"))
+        if "sol" not in first:
+            first["sol"] = real_solve(_inst, prices, **kw)
+            return first["sol"]
+        if mode == "clean_dup_cand_real" and counter["n"] % 2 == 1:
+            return real_solve(_inst, prices, **kw)  # candidate calls real
+        sol = copy.deepcopy(first["sol"])
+        sol.obj_model = 1e9
+        sol.stats.bound = -1e9
+        return sol
+
+    return fake
+
+
+def test_deferred_escalation_tightens_gap_then_fails_loudly(tiny, tmp_path,
+                                                            monkeypatch):
+    """rc_ub = 0-ish (not improving), rc_lb < 0, duplicate clean incumbent
+    AND duplicate stabilized candidate: the next clean solve must use a
+    tighter MIP gap (not consume the full budget), and repeated unresolved
+    ambiguity must fail loudly after the bounded escalations."""
+    inst, market = tiny
+    gaps_seen = []
+    monkeypatch.setattr(
+        b2a2_mod, "solve_taker",
+        _ambiguous_fake_factory(b2a2_mod.solve_taker, "all_dup", gaps_seen))
+    with pytest.raises(B2A2Error, match="deferred MIP-gap escalations"):
+        certified_cg(inst, market, epsilon=1e-2, budget=60,
+                     out_dir=str(tmp_path), tag="a4", method="a4")
+    # escalation happened INSTEAD of budget consumption:
+    # seed + 5 x (clean + candidate) = 11 calls, far below 60
+    assert len(gaps_seen) < 20
+    # the clean call AFTER the first deferred escalation used a tighter gap
+    assert gaps_seen[:3] == [1e-6, 1e-6, 1e-6]
+    assert gaps_seen[3] == pytest.approx(1e-8)   # tightened before next clean
+    assert gaps_seen[5] == pytest.approx(1e-10)  # and tightened again
+    ck = checkpoint.load(os.path.join(str(tmp_path), "a4.cg.ckpt.json"))
+    assert ck["pricing_escalations"] == 4  # committed escalations at raise
+    assert ck["pricing_max_mip_gap"] <= 1e-12 + 1e-18  # floor respected
+    # committed evidence records the deferred escalation and the next gap
+    stab_events = [e for e in ck["iteration_events"]
+                   if e.get("phase") == "stabilized"]
+    assert stab_events and all(e["clean_ambiguous"] for e in stab_events)
+    assert all(e["deferred_escalation"] for e in stab_events)
+    assert stab_events[0]["pricing_max_mip_gap_next"] == pytest.approx(1e-8)
+
+
+def test_novel_candidate_clears_deferred_escalation(tiny, tmp_path,
+                                                    monkeypatch):
+    """Ambiguous clean pricing every iteration, but REAL (novel) stabilized
+    candidates: escalations must reset on novelty, so more than
+    MAX_PRICING_ESCALATIONS ambiguous cleans pass without a loud failure."""
+    inst, market = tiny
+    gaps_seen = []
+    monkeypatch.setattr(
+        b2a2_mod, "solve_taker",
+        _ambiguous_fake_factory(b2a2_mod.solve_taker, "clean_dup_cand_real",
+                                gaps_seen))
+    state = certified_cg(inst, market, epsilon=1e-2, budget=14,
+                         out_dir=str(tmp_path), tag="a4", method="a4")
+    oc = state["outcome"]
+    assert oc["type"] == "budget_exhausted"  # LB poisoned by the fake bound
+    stab_events = [e for e in state["iteration_events"]
+                   if e.get("phase") == "stabilized"]
+    ambiguous = [e for e in stab_events if e["clean_ambiguous"]]
+    novel = [e for e in stab_events if e["column_novel"]]
+    assert len(ambiguous) > 4  # more than the escalation budget — no raise
+    assert len(novel) >= 2
+    for e in stab_events:
+        if e["column_novel"]:
+            assert e["deferred_escalation"] is False
+
+
+def test_preemption_around_deferred_escalation(tiny, tmp_path, monkeypatch):
+    """Kill between the ambiguous clean commit and the candidate commit:
+    resume must repeat only the in-flight candidate solve, keep call ids
+    unique and sequential, and reach the same loud failure."""
+    inst, market = tiny
+    out = str(tmp_path)
+    gaps_seen = []
+    fake = _ambiguous_fake_factory(b2a2_mod.solve_taker, "all_dup", gaps_seen)
+    monkeypatch.setattr(b2a2_mod, "solve_taker", fake)
+    real_save = b2a2_mod.checkpoint.save
+    n = {"v": 0}
+
+    def dying_save(path, obj):
+        n["v"] += 1
+        if n["v"] == 3:  # the commit carrying the FIRST deferred escalation
+            raise KeyboardInterrupt("killed at deferred-escalation commit")
+        return real_save(path, obj)
+
+    monkeypatch.setattr(b2a2_mod.checkpoint, "save", dying_save)
+    with pytest.raises(KeyboardInterrupt):
+        certified_cg(inst, market, epsilon=1e-2, budget=60,
+                     out_dir=out, tag="a4", method="a4")
+    monkeypatch.setattr(b2a2_mod.checkpoint, "save", real_save)
+    ck = checkpoint.load(os.path.join(out, "a4.cg.ckpt.json"))
+    assert ck["phase"] == "stab" and ck["pending"]["clean_ambiguous"]
+    assert ck["pricing_escalations"] == 0  # the escalation was NOT committed
+    with pytest.raises(B2A2Error, match="deferred MIP-gap escalations"):
+        certified_cg(inst, market, epsilon=1e-2, budget=60,
+                     out_dir=out, tag="a4", method="a4")
+    ck = checkpoint.load(os.path.join(out, "a4.cg.ckpt.json"))
+    ids = [(e.get("extra") or {}).get("call_id") for e in ck["oracle_events"]]
+    assert len(ids) == len(set(ids))  # no duplicate calls after preemption
+    assert ids == [f"a4-oc{i}" for i in range(len(ids))]  # none missing
+    assert ck["pricing_escalations"] == 4  # deterministic final state
+
+
 def test_certification_gate_rejects_sane_budget_exhausted_pilot(tiny,
                                                                 tmp_path):
     """Review finding 3: 36 sane budget-exhausted cells must PASS the
