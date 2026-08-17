@@ -269,6 +269,60 @@ mismatch (instance, market a/b/U, epsilon, budget, tolerances, solver
 settings, dictator provenance) fails loudly at resume. Solves honor
 `SLURM_CPUS_PER_TASK` for solver threads and record the applied count.
 
+## B2 A3-A5 36-cell stabilization pilot (2026-08-17)
+
+Stabilized column generation per `B2_STABILIZATION_SPEC.md` (normative math:
+du Merle 5-piece box/penalty, Wentges smoothing with automatic alpha,
+proximal bundle with t halved on null steps). Certification is UNCHANGED
+from A2: `UB_CH` from the clean RMP over all columns, `LB_CH` only from
+clean-dual certification pricing; stabilization only chooses candidate
+columns. Both call kinds draw the same 240-call budget and are logged
+separately. Launch gates: the A2 pilot is closed (job 80309, 12/12
+certified; audit job 81432 PASS) and the A3-A5 battery passes locally
+(`python3 -m pytest tests/test_b2a345.py -q`).
+
+Exact commands (interactive Unicorn login prompt):
+
+```bash
+cd "$HOME/egg"
+git switch main && git pull --ff-only origin main && git log -1 --oneline
+cd src
+source cluster/unicorn_env.sh
+
+# 0. Verify the grid before submitting (the launcher refuses anything != 36):
+python experiments/run_b2a345_pilot.py --list | tail -1
+# expected: total: 36 cells
+
+# 1. Submit (array derived from --list; %12 concurrency; --requeue; email
+#    nc437@cornell.edu on END/FAIL/REQUEUE; manifest under runs/b2a345_pilot/):
+bash cluster/launch_b2a345_pilot.sh
+
+# 2. Monitor:
+squeue --me
+sacct -j <JOBID> --format=JobID,State,Elapsed,ExitCode
+tail -f slurm-egg-b2a345-pilot-<JOBID>_<TASK>.out
+
+# 3. Inspect one cell's certificate and stabilization dynamics:
+python -c "import json; s=json.load(open('runs/b2a345_pilot/a3_s0_n8_b0.01/a3.cg.ckpt.json')); print(json.dumps(s['outcome'], indent=2)); print('serious:', s['stab']['serious_steps'], 'null:', s['stab']['null_steps'])"
+
+# 4. Audit gate cg=36 with per-method breakdown (12 per method):
+bash cluster/launch_audit.sh runs/b2a345_pilot:cg=36:cg_a3=12:cg_a4=12:cg_a5=12
+# or directly at the prompt:
+python experiments/audit_runs.py runs/b2a345_pilot --expect-cg 36 \
+    --expect-cg-method a3=12 --expect-cg-method a4=12 --expect-cg-method a5=12
+```
+
+Per-cell evidence under `runs/b2a345_pilot/<cell>/` follows the A2 pilot
+layout (`<method>.cg.ckpt.json` as source of truth; oracle/iteration JSONL
+materialized from it) plus: candidate-call events (`phase=stabilized`) with
+Theta_cert, serious/null decisions, exact parameter values before/after,
+stabilized master solve evidence (A3/A5; marked `stabilized: true`, never
+counted as clean solves; A4 solves no master), broadcast-price trajectory
+metrics (L-infinity max step, total variation), and the clean/stabilized
+oracle-call split in the outcome. The 576 fresh A1 cells and the 960-cell
+full grid are NOT part of this stage; they follow only after this pilot
+passes its audit.
+
 ## Branch hygiene
 
 The hardened implementation and this runbook are merged into `main`. Submit

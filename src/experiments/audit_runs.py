@@ -148,6 +148,7 @@ def audit(
     expect_sweeps: int | None = None,
     expect_static: int | None = None,
     expect_cg: int | None = None,
+    expect_cg_method: dict | None = None,
 ):
     """Build the summary; returns (lines, ok, problems).
 
@@ -204,7 +205,12 @@ def audit(
                         problems.append(
                             f"master solve {sid} has nonfinite {fld}: {v!r}")
                         break
-            if not rec.get("master_solves"):
+            if not rec.get("master_solves") and not (
+                    rec.get("phase") == "stabilized"
+                    and rec.get("method") == "a4"):
+                # A4 (Wentges smoothing) is the only phase that legitimately
+                # solves no master: its candidate duals are a convex
+                # combination, not an LP solution
                 problems.append(f"cg iteration {rel}:{i} has no master solves")
             continue
         recs.append(rec)
@@ -344,14 +350,21 @@ def audit(
         lines.append(f"- static-regime requirement per cell: >= {expect_static}")
     lines.append("")
 
-    # --- B2-A2 CG certification details -------------------------------------
+    # --- B2 CG certification details (A2-A5) ---------------------------------
     if cg_cks_all:
         certified, exhausted, sane_n, gaps, calls = 0, 0, 0, [], []
+        by_method = defaultdict(lambda: {"cells": 0, "sane": 0, "certified": 0,
+                                         "calls": []})
         for f in cg_cks_all:
             ck = json.load(open(f))
             oc = ck.get("outcome") or {}
+            method = (ck.get("identity") or {}).get("method", "a2")
+            bm = by_method[method]
+            bm["cells"] += 1
+            bm["calls"].append(ck.get("oracle_calls"))
             if oc.get("certified"):
                 certified += 1
+                bm["certified"] += 1
             if oc.get("type") == "budget_exhausted":
                 exhausted += 1
             if oc.get("gap") is not None:
@@ -362,17 +375,29 @@ def audit(
                 problems.append(f"cg {os.path.dirname(f)}: {sane}")
             else:
                 sane_n += 1
-        lines.append("## B2-A2 certification")
+                bm["sane"] += 1
+        lines.append("## B2 CG certification")
         lines.append(
             f"- cells: {len(cg_cks_all)}; complete and sane: {sane_n}; "
             f"CERTIFIED (gap <= epsilon): {certified}; "
             f"budget-exhausted (valid completed outcome, distinct from "
             f"certified): {exhausted}")
+        for method in sorted(by_method):
+            bm = by_method[method]
+            lines.append(
+                f"- {method}: cells {bm['cells']}, complete and sane "
+                f"{bm['sane']}, certified {bm['certified']}, "
+                f"oracle calls {bm['calls']}")
         if gaps:
             lines.append(f"- final gaps: max {max(gaps):.4g}, "
                          f"median {statistics.median(gaps):.4g}")
-        lines.append(f"- oracle calls: {calls}")
         lines.append("")
+        for method, expected in sorted((expect_cg_method or {}).items()):
+            got = by_method.get(method, {"sane": 0})["sane"]
+            if got != expected:
+                problems.append(
+                    f"cg method {method}: {got}/{expected} complete and "
+                    "sane cells (per-method expected-count gate)")
 
     # --- adaptive approximation quality -------------------------------------
     ad = [
@@ -491,7 +516,10 @@ def main():
     ap.add_argument("--expect-static", dest="expect_static", type=int, default=None,
                     help="required completed static regimes per cell checkpoint (phase-1 full mode: 4)")
     ap.add_argument("--expect-cg", dest="expect_cg", type=int, default=None,
-                    help="required number of complete, bound-sane *.cg.ckpt.json files (B2-A2)")
+                    help="required number of complete, bound-sane *.cg.ckpt.json files (B2)")
+    ap.add_argument("--expect-cg-method", dest="expect_cg_method",
+                    action="append", default=None, metavar="METHOD=N",
+                    help="per-method complete-and-sane gate, e.g. a3=12 (repeatable)")
     args = ap.parse_args()
     out_path = args.out or os.path.join(args.runs_dir, "SUMMARY.md")
     _, ok, problems = audit(
@@ -502,6 +530,10 @@ def main():
         expect_sweeps=args.expect_sweeps,
         expect_static=args.expect_static,
         expect_cg=args.expect_cg,
+        expect_cg_method=(
+            {kv.split("=")[0]: int(kv.split("=")[1])
+             for kv in args.expect_cg_method}
+            if args.expect_cg_method else None),
     )
     print(f"wrote {out_path}")
     if not ok:

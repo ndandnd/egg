@@ -318,8 +318,23 @@ def solve_rmp(inst: Instance, market: AffineMarket, columns: list,
 
 
 # ---------------------------------------------------------------------------
-# certified plain CG (A2)
+# certified CG: A2 (plain) and A3-A5 (stabilized candidates)
 # ---------------------------------------------------------------------------
+def _update_price_path(state: dict, prices) -> None:
+    """Broadcast-price trajectory metrics (doc/B2_STABILIZATION_SPEC.md
+    Section 0): L-infinity max step and total variation of the prices the
+    negotiation posts to the fleet."""
+    pp = state.setdefault(
+        "price_path", {"last": None, "tv": 0.0, "linf_max": 0.0, "n": 0})
+    p = [float(x) for x in prices]
+    if pp["last"] is not None:
+        diffs = [abs(a - b) for a, b in zip(p, pp["last"])]
+        pp["tv"] += sum(diffs)
+        pp["linf_max"] = max(pp["linf_max"], max(diffs))
+    pp["last"] = p
+    pp["n"] += 1
+
+
 def certified_cg(
     inst: Instance,
     market: AffineMarket,
@@ -332,10 +347,20 @@ def certified_cg(
     solver_kw: dict | None = None,
     z_d_ub: float | None = None,
     tol_d: float = 1e-2,
+    method: str = "a2",
 ) -> dict:
-    """Run A2 to certification (UB_CH - LB_best <= epsilon) or budget
-    exhaustion. Transactionally checkpointed per oracle call; resumable
-    with full identity validation; invariant-enforced."""
+    """Run A2 (plain) or A3/A4/A5 (stabilized candidates, see
+    doc/B2_STABILIZATION_SPEC.md) to certification
+    (UB_CH - LB_best <= epsilon) or budget exhaustion. Transactionally
+    checkpointed per oracle call; resumable with full identity validation;
+    invariant-enforced. Stabilization only guides which columns are
+    generated: UB_CH always comes from the clean RMP, LB_CH only from
+    clean-dual certification pricing."""
+    from . import b2a345
+
+    if method not in ("a2",) + b2a345.METHODS:
+        raise B2A2Error(f"unknown method {method!r}")
+    stabilized = method != "a2"
     solver_kw = dict(solver_kw or {})
     os.makedirs(out_dir, exist_ok=True)
     ck_path = os.path.join(out_dir, f"{tag}.cg.ckpt.json")
@@ -355,6 +380,10 @@ def certified_cg(
         "tol_d": tol_d,
         "z_d_ub": z_d_ub,
     }
+    if stabilized:
+        # A2 identity stays byte-identical to the certified pilot's
+        identity["method"] = method
+        identity["stab"] = b2a345.stab_identity_params(method)
     base_pricing_gap = float(solver_kw.pop("max_mip_gap", 1e-6))
 
     state = checkpoint.load(ck_path)
@@ -368,8 +397,12 @@ def certified_cg(
             "duplicate_retries": 0, "refine_retries": 0,
             "pricing_escalations": 0,
             "pricing_max_mip_gap": base_pricing_gap,
+            "calls_clean": 0, "calls_stab": 0,
+            "phase": "clean", "pending": None,
             "done": False, "outcome": None,
         }
+        if stabilized:
+            state["stab"] = b2a345.initial_stab_state(method, market)
     else:
         stored = state.get("identity")
         if stored != identity:
@@ -401,6 +434,25 @@ def certified_cg(
                           **solver_kw)
         return sol, time.time() - t0
 
+    def finish(kind, ub, gap):
+        outcome = {"type": kind, "ub_ch": ub,
+                   "lb_best": state["lb_best"], "gap": gap,
+                   "certified": bool(gap <= epsilon),
+                   "oracle_calls": state["oracle_calls"],
+                   "method": method,
+                   "oracle_calls_clean": state.get("calls_clean"),
+                   "oracle_calls_stab": state.get("calls_stab")}
+        pp = state.get("price_path") or {}
+        outcome["broadcast_tv"] = pp.get("tv")
+        outcome["broadcast_linf_max"] = pp.get("linf_max")
+        outcome["broadcast_points"] = pp.get("n")
+        if z_d_ub is not None:
+            outcome["uplift_interval"] = [
+                (z_d_ub - tol_d) - ub, z_d_ub - state["lb_best"]]
+        state.update(done=True, outcome=outcome)
+        commit()
+        return state
+
     # seed column: taker at posted prices (oracle call 0, budget-counted)
     if not state["columns"]:
         posted = market.price(np.zeros(market.n_slots))
@@ -416,9 +468,17 @@ def certified_cg(
         state["columns"].append(col)
         state["keys"].append(col["column_key"])
         state["oracle_calls"] = 1
+        state["calls_clean"] = state.get("calls_clean", 0) + 1
+        _update_price_path(state, posted)
         commit()
 
     while True:
+        if state.get("phase", "clean") == "stab":
+            _stab_candidate_step(inst, market, state, method, tag,
+                                 experiment, epsilon, pwl_tol,
+                                 pricing_solve, commit)
+            continue
+
         oc = state["oracle_calls"]
         rmp = solve_rmp(inst, market, state["columns"],
                         state["tangent_points"], pwl_tol=pwl_tol,
@@ -440,6 +500,8 @@ def certified_cg(
             state["iteration_events"].append({
                 "record_kind": "cg-iteration",
                 "terminal": True,
+                "phase": "terminal",
+                "method": method,
                 "iteration_id": f"{tag}-it{oc}-terminal",
                 "experiment": experiment, "tag": tag, **provenance(),
                 "instance_hash": inst.hash(),
@@ -456,18 +518,9 @@ def certified_cg(
                 "master_solves": rmp["master_solves"],
                 "pricing_solve_id": None,
             })
-            outcome = {"type": "budget_exhausted", "ub_ch": ub,
-                       "lb_best": state["lb_best"], "gap": gap,
-                       "certified": bool(gap <= epsilon),
-                       "oracle_calls": oc}
-            if z_d_ub is not None:
-                outcome["uplift_interval"] = [
-                    (z_d_ub - tol_d) - ub, z_d_ub - state["lb_best"]]
-            state.update(done=True, outcome=outcome)
-            commit()
-            return state
+            return finish("budget_exhausted", ub, gap)
 
-        # exact pricing at oracle prices p = -pi
+        # exact CLEAN certification pricing at oracle prices p = -pi
         prices = -np.asarray(rmp["pi"])
         sol, pricing_wall = pricing_solve(prices)
         col = column_from_solution(inst, sol)
@@ -496,6 +549,8 @@ def certified_cg(
         state["iteration_events"].append({
             "record_kind": "cg-iteration",
             "iteration_id": f"{tag}-it{oc}",
+            "phase": "clean",
+            "method": method,
             "experiment": experiment, "tag": tag, **provenance(),
             "instance_hash": inst.hash(),
             "oracle_calls": oc,
@@ -529,20 +584,21 @@ def certified_cg(
             "oracle_prices_max": float(np.max(prices)) + 0.0,
         })
         state["oracle_calls"] = oc + 1
+        state["calls_clean"] = state.get("calls_clean", 0) + 1
         state["ub_history"].append(ub)
         state["lb_history"].append(state["lb_best"])
+        if not stabilized:
+            _update_price_path(state, prices)
+        else:
+            # theta_best tracks the best certified dual value at ANY priced
+            # point (spec Section 0); clean points participate
+            theta_clean = b2a345.theta_cert(market, prices, pricing_lb)
+            tb = state["stab"].get("theta_best")
+            if tb is None or theta_clean > tb:
+                state["stab"]["theta_best"] = theta_clean
 
         if gap <= epsilon:
-            outcome = {"type": "certified", "ub_ch": ub,
-                       "lb_best": state["lb_best"], "gap": gap,
-                       "certified": True,
-                       "oracle_calls": state["oracle_calls"]}
-            if z_d_ub is not None:
-                outcome["uplift_interval"] = [
-                    (z_d_ub - tol_d) - ub, z_d_ub - state["lb_best"]]
-            state.update(done=True, outcome=outcome)
-            commit()
-            return state
+            return finish("certified", ub, gap)
 
         improving = min_rc_ub < -RC_TOL
         if novel:
@@ -565,18 +621,23 @@ def certified_cg(
                     "inconsistency; failing loudly")
             state["tangent_points"].append(list(map(float, rmp["L"])))
         elif min_rc_lb < -RC_TOL:
-            # no improving novel incumbent, but the CERTIFIED bound says an
-            # improving column may still exist: NOT exhaustion — tighten the
-            # pricing MIP gap and continue
-            state["pricing_escalations"] += 1
-            if state["pricing_escalations"] > MAX_PRICING_ESCALATIONS:
-                raise B2A2Error(
-                    f"pricing bound stays negative (min_rc_lb={min_rc_lb}) "
-                    "with no improving novel incumbent after "
-                    f"{MAX_PRICING_ESCALATIONS} MIP-gap escalations — "
-                    "cannot certify exhaustion; failing loudly")
-            state["pricing_max_mip_gap"] = max(
-                state["pricing_max_mip_gap"] / 100.0, 1e-12)
+            if stabilized:
+                # candidates may still make progress; the clean bound alone
+                # does not trigger escalation until candidates also stall
+                pass
+            else:
+                # no improving novel incumbent, but the CERTIFIED bound says
+                # an improving column may still exist: NOT exhaustion —
+                # tighten the pricing MIP gap and continue
+                state["pricing_escalations"] += 1
+                if state["pricing_escalations"] > MAX_PRICING_ESCALATIONS:
+                    raise B2A2Error(
+                        f"pricing bound stays negative (min_rc_lb={min_rc_lb}) "
+                        "with no improving novel incumbent after "
+                        f"{MAX_PRICING_ESCALATIONS} MIP-gap escalations — "
+                        "cannot certify exhaustion; failing loudly")
+                state["pricing_max_mip_gap"] = max(
+                    state["pricing_max_mip_gap"] / 100.0, 1e-12)
         else:
             # certified exhaustion (min_rc_lb >= -rc_tol) but gap > epsilon:
             # only PWL slack remains — force refinement until it closes
@@ -587,4 +648,113 @@ def certified_cg(
                     f"but gap {gap} > epsilon {epsilon}; refinement made no "
                     "progress — failing loudly")
             state["tangent_points"].append(list(map(float, rmp["L"])))
+
+        if stabilized and state["oracle_calls"] < state["identity"]["budget"]:
+            # hand the clean duals to the candidate phase; committed so a
+            # kill between the two calls resumes into the SAME stream
+            state["pending"] = {"pi_clean": [float(x) for x in rmp["pi"]],
+                                "ub": ub, "gap": gap}
+            state["phase"] = "stab"
         commit()
+
+
+def _stab_candidate_step(inst, market, state, method, tag, experiment,
+                         epsilon, pwl_tol, pricing_solve, commit):
+    """One stabilized candidate step (A3/A4/A5): generate candidate prices,
+    one candidate oracle call, serious/null decision and exact parameter
+    update per doc/B2_STABILIZATION_SPEC.md. Never touches UB/LB."""
+    from . import b2a345
+
+    pending = state["pending"]
+    if pending is None:
+        raise B2A2Error("stab phase without pending clean duals")
+    if state["oracle_calls"] >= state["identity"]["budget"]:
+        state["phase"] = "clean"
+        state["pending"] = None
+        commit()
+        return
+    stab = state["stab"]
+    oc = state["oracle_calls"]
+    pi_clean = pending["pi_clean"]
+    pi_cand, stab_solves = b2a345.candidate_duals(
+        inst, market, state["columns"], state["tangent_points"], method,
+        stab, pi_clean, pwl_tol, solve_id_prefix=f"{tag}-it{oc}-stabrmp")
+    prices = -np.asarray(pi_cand)
+    sol, pricing_wall = pricing_solve(prices)
+    col = column_from_solution(inst, sol)
+    pricing_lb = float(sol.stats.bound)
+    if not _finite(pricing_lb):
+        raise B2A2Error(f"candidate pricing bound nonfinite: {pricing_lb!r}")
+    theta = b2a345.theta_cert(market, prices, pricing_lb)
+    serious = b2a345.serious_step(stab.get("theta_best"), theta)
+    novel = col["column_key"] not in state["keys"]
+    call_id = f"{tag}-oc{oc}"
+
+    params_before = {k: (list(stab[k]) if isinstance(stab[k], list) else stab[k])
+                     for k in ("alpha", "t", "d1") if k in stab}
+    g = direction = None
+    if method == "a4":
+        l_star = b2a345.lagrangian_L_star(market, prices)
+        g = [float(e) - float(l) for e, l in zip(col["load"], l_star)]
+        direction = [float(o) - float(c) for o, c in zip(pi_clean, pi_cand)]
+    b2a345.apply_update(method, stab, serious, pi_cand, g, direction)
+    tb = stab.get("theta_best")
+    if math.isfinite(theta) and (tb is None or theta > tb):
+        stab["theta_best"] = theta
+    params_after = {k: (list(stab[k]) if isinstance(stab[k], list) else stab[k])
+                    for k in ("alpha", "t", "d1") if k in stab}
+
+    rec = make_record(experiment, inst, sol, market=market, prices=prices,
+                      regime="cg-stab-pricing",
+                      extra={"tag": tag, "call_id": call_id,
+                             "method": method,
+                             "theta_cert": theta,
+                             "serious_step": serious,
+                             "column_key": col["column_key"],
+                             "column_novel": novel})
+    if rec["replay_ok"] is False:
+        raise B2A2Error(
+            f"candidate pricing replay invalid: {rec['replay_violations']}")
+    state["oracle_events"].append(rec)
+    state["iteration_events"].append({
+        "record_kind": "cg-iteration",
+        "iteration_id": f"{tag}-it{oc}-stab",
+        "phase": "stabilized",
+        "method": method,
+        "experiment": experiment, "tag": tag, **provenance(),
+        "instance_hash": inst.hash(),
+        "oracle_calls": oc,
+        "n_columns": len(state["columns"]),
+        "ub_ch": pending["ub"],           # unchanged by candidate steps
+        "certificate_gap": pending["gap"],
+        "epsilon": epsilon,
+        "pwl_tol": pwl_tol,
+        "theta_cert": theta,
+        "theta_best": stab.get("theta_best"),
+        "serious_step": serious,
+        "params_before": params_before,
+        "params_after": params_after,
+        "pricing_wall_s": pricing_wall,
+        "column_novel": novel,
+        "column_key": col["column_key"],
+        # A3/A5 carry their stabilized master solve; A4 has none (smoothing
+        # needs no master). Stabilized master solves are marked and are
+        # never counted as clean solves.
+        "master_solves": stab_solves,
+        "pricing_solve_id": call_id,
+        "replay_ok": True,
+        "oracle_prices_min": float(np.min(prices)) + 0.0,
+        "oracle_prices_max": float(np.max(prices)) + 0.0,
+    })
+    state["oracle_calls"] = oc + 1
+    state["calls_stab"] = state.get("calls_stab", 0) + 1
+    _update_price_path(state, prices)
+    if novel:
+        state["columns"].append(col)
+        state["keys"].append(col["column_key"])
+        state["duplicate_retries"] = 0
+        state["refine_retries"] = 0
+        state["pricing_escalations"] = 0
+    state["phase"] = "clean"
+    state["pending"] = None
+    commit()
