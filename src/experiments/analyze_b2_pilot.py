@@ -254,6 +254,16 @@ STAB_ORACLE_REGIME = "cg-stab-pricing"
 WALL_IDENTITY_TOL = 1e-6  # seconds; sums of identical float terms
 
 
+def _wall_value(value, label: str) -> float:
+    """Return a recorded wall time only when it is finite and nonnegative."""
+    if not isinstance(value, (int, float)) or not math.isfinite(value):
+        raise AnalysisError(f"{label}: missing or nonfinite wall evidence "
+                            f"{value!r}")
+    if value < 0:
+        raise AnalysisError(f"{label}: negative wall evidence {value!r}")
+    return float(value)
+
+
 def wall_partition(ck: dict, method: str, label: str) -> tuple:
     """Partition SOLVER-REPORTED wall time exactly once (review fix).
 
@@ -283,12 +293,19 @@ def wall_partition(ck: dict, method: str, label: str) -> tuple:
             f"{ck['oracle_calls']} — omitted or duplicated oracle evidence")
 
     clean_oracle = stab_oracle = 0.0
+    seen_call_ids = set()
     stab_call_ids, clean_pricing_ids = set(), set()
     for e in events:
         sv = e.get("solver") or {}
-        w = float(sv.get("wall_s") or 0.0) + float(sv.get("lp_wall_s") or 0.0)
-        reg = e.get("regime")
         cid = (e.get("extra") or {}).get("call_id")
+        if cid is None or cid in seen_call_ids:
+            raise AnalysisError(f"{label}: missing or duplicate oracle "
+                                f"call_id {cid!r}")
+        seen_call_ids.add(cid)
+        w = (_wall_value(sv.get("wall_s"), f"{label} oracle {cid} wall_s")
+             + _wall_value(sv.get("lp_wall_s"),
+                           f"{label} oracle {cid} lp_wall_s"))
+        reg = e.get("regime")
         if reg in CLEAN_ORACLE_REGIMES:
             clean_oracle += w
             if reg == "cg-pricing":
@@ -322,12 +339,13 @@ def wall_partition(ck: dict, method: str, label: str) -> tuple:
                 f"{phase}) has no master-solve evidence")
         for ms in solves:
             sid = ms.get("solve_id")
-            if sid in seen_solve_ids:
+            if sid is None or sid in seen_solve_ids:
                 raise AnalysisError(
-                    f"{label}: master solve {sid} appears twice — wall "
-                    "time would be double counted")
+                    f"{label}: master solve id {sid!r} is missing or appears "
+                    "twice — wall time would be double counted")
             seen_solve_ids.add(sid)
-            w = float(ms.get("wall_s") or 0.0)
+            w = _wall_value(ms.get("wall_s"),
+                            f"{label} master solve {sid} wall_s")
             if phase == "stabilized":
                 stab_master += w
             else:
@@ -346,11 +364,7 @@ def wall_partition(ck: dict, method: str, label: str) -> tuple:
     wall_clean = clean_oracle + clean_master
     wall_stab = stab_oracle + stab_master
     # independent total: every oracle event + every master solve, unpartitioned
-    total = (sum(float((e.get("solver") or {}).get("wall_s") or 0.0)
-                 + float((e.get("solver") or {}).get("lp_wall_s") or 0.0)
-                 for e in events)
-             + sum(float(ms.get("wall_s") or 0.0)
-                   for ev in iters for ms in ev.get("master_solves") or []))
+    total = clean_oracle + stab_oracle + clean_master + stab_master
     if abs(wall_clean + wall_stab - total) > WALL_IDENTITY_TOL:
         raise AnalysisError(
             f"{label}: wall identity violated — clean {wall_clean} + stab "

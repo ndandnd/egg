@@ -387,6 +387,38 @@ def test_a2_with_stabilized_call_rejected(pilot_roots, tmp_path):
                 verify_code_commit=False)
 
 
+@pytest.mark.parametrize("field,value", [
+    ("wall_s", None),
+    ("lp_wall_s", float("nan")),
+    ("wall_s", -0.1),
+])
+def test_invalid_oracle_wall_evidence_rejected(pilot_roots, tmp_path,
+                                               field, value):
+    c2, c345 = _clone_roots(pilot_roots, tmp_path)
+    p = os.path.join(c345, "a4_s1_n4_b0.01", "a4.cg.ckpt.json")
+    ck = checkpoint.load(p)
+    ck["oracle_events"][0]["solver"][field] = value
+    checkpoint.save(p, ck)
+    with pytest.raises(AnalysisError,
+                       match="missing or nonfinite wall|negative wall"):
+        analyze(c2, c345, str(tmp_path / "out"), "T", "c",
+                instances=FIX_INSTANCES, instance_builder=fix_builder,
+                verify_code_commit=False)
+
+
+def test_invalid_master_wall_evidence_rejected(pilot_roots, tmp_path):
+    c2, c345 = _clone_roots(pilot_roots, tmp_path)
+    p = os.path.join(c345, "a3_s1_n4_b0.01", "a3.cg.ckpt.json")
+    ck = checkpoint.load(p)
+    ev = next(e for e in ck["iteration_events"] if e.get("master_solves"))
+    ev["master_solves"][0]["wall_s"] = None
+    checkpoint.save(p, ck)
+    with pytest.raises(AnalysisError, match="missing or nonfinite wall"):
+        analyze(c2, c345, str(tmp_path / "out"), "T", "c",
+                instances=FIX_INSTANCES, instance_builder=fix_builder,
+                verify_code_commit=False)
+
+
 def test_incomplete_root_fails_audit(pilot_roots, tmp_path):
     c2, c345 = _clone_roots(pilot_roots, tmp_path)
     p = os.path.join(c345, "a3_s3_n4_b0.05", "a3.cg.ckpt.json")
