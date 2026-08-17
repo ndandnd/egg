@@ -243,7 +243,12 @@ def solve_rmp(inst: Instance, market: AffineMarket, columns: list,
     Returns z_model, ub (exact evaluation), lambdas, L, duals pi/sigma, the
     possibly-extended tangent_points, and Phase-0 evidence for EVERY actual
     master solve (stable solve ids, backend, status, objective, bound,
-    sizes, wall time)."""
+    sizes, wall time).
+
+    Solve ids are CELL-LOCAL: they are derived from the tag and iteration
+    counter, so different cell directories (which all run the same driver
+    with the same tag) legitimately contain identical ids. Uniqueness is
+    guaranteed, and audited, only within one cell directory / checkpoint."""
     if not columns:
         raise B2A2Error("RMP requires at least one column")
     T = market.n_slots

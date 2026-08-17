@@ -685,6 +685,50 @@ def test_audit_cg_detects_incoherent_outcome_and_events(cg_run, tmp_path):
     assert not ok5 and any("certified but gap" in p for p in problems5)
 
 
+def test_audit_solve_ids_are_cell_local(cg_run, tmp_path):
+    """Two different cell directories with IDENTICAL local solve ids must
+    pass: every pilot cell runs the same driver/tag, so cross-cell id
+    repetition is the normal case, not a violation."""
+    _, out = cg_run
+    root = str(tmp_path / "root")
+    for cell in ("cell_a", "cell_b"):
+        d = os.path.join(root, cell)
+        os.makedirs(d, exist_ok=True)
+        for fn in ("t.cg.ckpt.json", "t.iterations.jsonl", "t.oracle.jsonl"):
+            with open(os.path.join(out, fn)) as src, \
+                    open(os.path.join(d, fn), "w") as dst:
+                dst.write(src.read())
+    lines, ok, problems = audit(root, expect_cg=2)
+    assert ok, problems
+    assert not any("duplicate master solve_id" in p for p in problems)
+
+
+def test_audit_duplicate_solve_id_within_cell_fails(cg_run, tmp_path):
+    _, out = cg_run
+    root = str(tmp_path / "root")
+    d = os.path.join(root, "cell_a")
+    os.makedirs(d, exist_ok=True)
+    for fn in ("t.cg.ckpt.json", "t.iterations.jsonl", "t.oracle.jsonl"):
+        with open(os.path.join(out, fn)) as src, \
+                open(os.path.join(d, fn), "w") as dst:
+            dst.write(src.read())
+    # duplicate one master solve entry twice WITHIN the cell's iteration log
+    it_path = os.path.join(d, "t.iterations.jsonl")
+    recs = _read_jsonl(it_path)
+    recs[-1]["master_solves"] += [dict(recs[-1]["master_solves"][0])] * 2
+    with open(it_path, "w") as f:
+        for r in recs:
+            f.write(json.dumps(r) + "\n")
+    _, ok, problems = audit(root, expect_cg=1)
+    assert not ok
+    dup_problems = [p for p in problems if "duplicate master solve_id" in p]
+    # aggregated per cell: one line naming the cell scope, not a huge list
+    assert len(dup_problems) == 1
+    assert "cell_a" in dup_problems[0]
+    assert "2 duplicate" in dup_problems[0]
+    assert "cell-local" in dup_problems[0]
+
+
 def test_audit_checks_cg_iteration_master_solves(tmp_path):
     root = str(tmp_path)
     rec = {"record_kind": "cg-iteration", "iteration_id": "x-it1",

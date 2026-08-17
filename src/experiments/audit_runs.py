@@ -165,7 +165,14 @@ def audit(
     recs = []
     cg_iter_recs = []
     raw_fail_shas = []
-    master_solve_ids = set()  # global uniqueness across every record file
+    # B2-A2 solve ids are CELL-LOCAL: every pilot cell runs the same driver
+    # with the same tag, so e.g. `a2-it1-rmp-r0` legitimately appears once
+    # in EVERY cell directory. Uniqueness is therefore keyed by
+    # (run-relative cell directory, solve_id); a repeated id WITHIN one
+    # cell is still a violation. Duplicates are aggregated per cell so the
+    # problem list never explodes.
+    master_solve_ids = set()
+    dup_by_cell = {}  # cell dir -> [count, first example solve_id]
     for rel, i, raw in iter_record_lines(runs_dir):
         try:
             rec = json.loads(raw)
@@ -178,16 +185,17 @@ def audit(
             # actual master solve in master_solves; counting their solver
             # blocks at the top level would double-count the pricing solve.
             cg_iter_recs.append(rec)
+            cell_dir = os.path.dirname(rel)
             for ms in rec.get("master_solves") or []:
                 sid = ms.get("solve_id")
                 if ms.get("status") != "OPTIMAL":
                     problems.append(
                         f"cg master solve {sid} in {rel}:{i} "
                         f"has status {ms.get('status')} != OPTIMAL")
-                if sid in master_solve_ids:
-                    problems.append(f"duplicate master solve_id {sid} "
-                                    f"({rel}:{i})")
-                master_solve_ids.add(sid)
+                if (cell_dir, sid) in master_solve_ids:
+                    dup = dup_by_cell.setdefault(cell_dir, [0, sid])
+                    dup[0] += 1
+                master_solve_ids.add((cell_dir, sid))
                 if "n_int" not in ms:
                     problems.append(f"master solve {sid} missing n_int")
                 for fld in ("obj", "bound", "wall_s"):
@@ -209,6 +217,12 @@ def audit(
                     f"has status {ad.get('status')} != OPTIMAL")
         if rec.get("replay_ok") is False:
             raw_fail_shas.append(record_sha256(raw))
+
+    for cell_dir, (n_dup, example) in sorted(dup_by_cell.items()):
+        problems.append(
+            f"cell {cell_dir or '.'}: {n_dup} duplicate master solve_id(s) "
+            f"within the cell (e.g. {example}) — solve ids are cell-local "
+            "and must be unique inside one cell directory")
 
     lines.append(f"Total records: **{len(recs)}**"
                  + (f" (+{len(cg_iter_recs)} cg-iteration summaries, "
