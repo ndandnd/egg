@@ -384,10 +384,13 @@ distinct instances (32 at b = 0.05).
 
 ### Certified pilot results (A2, 2026-08-17; A3-A5, 2026-08-17)
 
-**Pilot evidence — NOT full-grid conclusions.** All preregistered
-acceptance/kill criteria are defined on the 96-instance full grid; the
-pilot (12 instances: seeds 0/11/15 x n {8,12} x b {0.01, 0.05}) can
-support or reject continuing, but cannot pass a full-grid criterion (see
+**Pilot evidence — NOT full-grid conclusions.** The preregistered
+acceptance/kill criteria are defined on their full populations: the 2x
+speed criterion on the 64 moderate/strong instances per method (16 seeds
+x 2 sizes x b in {0.01, 0.05}); the 95%-certification criterion on the 96
+b = 0.05 method-cells (32 instances x 3 stabilized methods). The pilot
+(12 instances: seeds 0/11/15 x n {8,12} x b {0.01, 0.05}) can support or
+reject continuing, but cannot pass a full-population criterion (see
 `result/b2_pilot/<stamp>/acceptance_status.csv`).
 
 - **A2 pilot** (job 80309; audit 81432 PASS): 12/12 certified within

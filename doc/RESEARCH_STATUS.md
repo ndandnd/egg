@@ -21,7 +21,10 @@ contracts live in `MEASUREMENT_RESULTS.md` and `B2_STABILIZATION_SPEC.md`.
    `doc/MEASUREMENT_RESULTS.md`): 596 certified cells; headline: naive
    tatonnement cycles essentially everywhere at moderate/strong feedback
    (0 fixed points across 176 damping cells at b in {0.01, 0.05});
-   dictator dominance and negligible-at-scale integrality gaps measured.
+   dictator dominance measured. Root-LP-to-MIP integrality gaps are LARGE
+   and formulation-specific (medians 127-301 on the compact
+   vehicle-indexed MILP) — they motivate, but do not measure, the B3
+   convex-hull uplift z_D - z_CH.
 4. **B2-A2 pilot** (job 80309, audit 81432): certified plain column
    generation, 12/12 cells certified in 16-30 oracle calls (budget 240),
    grounded by a tiny complete-enumeration gate.

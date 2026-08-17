@@ -74,6 +74,31 @@ def default_instance_builder(seed: int, n_trips: int):
     return synthetic_instance(seed=seed, n_trips=n_trips)
 
 
+def verify_analysis_code_commit(claimed: str) -> str:
+    """The two-commit protocol is only meaningful if the pipeline actually
+    runs from the commit it stamps into the manifest: verify HEAD matches
+    the claimed hash (prefix match either way) and the tracked tree is
+    clean. Returns the full resolved hash."""
+    import subprocess
+
+    repo_dir = os.path.dirname(os.path.abspath(__file__))
+    head = subprocess.check_output(
+        ["git", "rev-parse", "HEAD"], cwd=repo_dir).decode().strip()
+    if not (head.startswith(claimed) or claimed.startswith(head)):
+        raise AnalysisError(
+            f"analysis code commit mismatch: running from {head[:12]} but "
+            f"--analysis-code-commit claims {claimed}; check out the "
+            "claimed commit or fix the argument")
+    dirty = subprocess.check_output(
+        ["git", "status", "--porcelain", "--untracked-files=no"],
+        cwd=repo_dir).decode().strip()
+    if dirty:
+        raise AnalysisError(
+            "analysis tree has uncommitted tracked changes; the manifest "
+            f"would misattribute results to {claimed}:\n{dirty}")
+    return head
+
+
 # ---------------------------------------------------------------------------
 # hashing / deterministic writing
 # ---------------------------------------------------------------------------
@@ -163,6 +188,30 @@ def validate_roots(a2_root: str, a345_root: str, instances,
                 f"cell dir {d}: identity method {ident.get('method')} != {m}")
         if not ck.get("done"):
             raise AnalysisError(f"cell {m} seed={s} n={n} b={b} not done")
+        # the dictator checkpoint's identity is evidence too: same
+        # instance/market hashes, same tolerance, same solver settings,
+        # and its value must be the one the CG identity was keyed to
+        dck = checkpoint.load(os.path.join(d, "dictator.ckpt.json"))
+        if dck is None:
+            raise AnalysisError(f"missing dictator checkpoint in {d}")
+        d_ident = dck.get("identity") or {}
+        if d_ident.get("instance_hash") != inst.hash():
+            raise AnalysisError(
+                f"cell {m} seed={s} n={n} b={b}: dictator instance hash "
+                "mismatch")
+        if d_ident.get("market_hash") != market_hash(mkt):
+            raise AnalysisError(
+                f"cell {m} seed={s} n={n} b={b}: dictator market hash "
+                "mismatch")
+        if d_ident.get("tol_d") != ident.get("tol_d"):
+            raise AnalysisError(
+                f"cell {m} seed={s} n={n} b={b}: dictator tol_d "
+                f"{d_ident.get('tol_d')} != cg identity {ident.get('tol_d')}")
+        if ident.get("z_d_ub") != dck.get("z_d_ub"):
+            raise AnalysisError(
+                f"cell {m} seed={s} n={n} b={b}: cg identity z_d_ub "
+                f"{ident.get('z_d_ub')} != dictator checkpoint "
+                f"{dck.get('z_d_ub')} (stale pairing)")
     # unexpected extra cg checkpoints reject the run
     import glob as _glob
     found = set()
@@ -252,7 +301,20 @@ def extract_cell(root: str, method: str, seed: int, n: int, b: float) -> dict:
     if calls_clean is None:
         calls_clean = ck["oracle_calls"] - calls_stab
 
+    # EXPLICIT dictator/convex-hull consistency test (kill-3 precondition):
+    # LB_CH may never exceed the dictator's certified upper value. A
+    # violation is the doc's halt-and-debug condition — refuse to analyze.
+    zd_excess = ck["lb_best"] - (dck["z_d_ub"] + dck["tol_d"])
+    if zd_excess > 1e-6:
+        raise AnalysisError(
+            f"cell {method} seed={seed} n={n} b={b}: z_CH/dictator "
+            f"CONTRADICTION — LB_CH {ck['lb_best']} exceeds z_D_ub + tol_d "
+            f"{dck['z_d_ub'] + dck['tol_d']} by {zd_excess}; halt and debug "
+            "(MEASUREMENT_RESULTS.md kill test 3)")
+
     return {
+        "lb_best": ck["lb_best"], "ub_ch": oc["ub_ch"],
+        "zd_minus_lb": dck["z_d_ub"] + dck["tol_d"] - ck["lb_best"],
         "method": method, "seed": seed, "n_trips": n, "b": b,
         "outcome": oc["type"], "certified": bool(oc["certified"]),
         "final_gap": oc["gap"],
@@ -353,18 +415,35 @@ def method_summary(cells: pd.DataFrame, matched: pd.DataFrame) -> pd.DataFrame:
 
 def acceptance_status(cells: pd.DataFrame, summary: pd.DataFrame,
                       n_instances: int) -> pd.DataFrame:
+    """Every status below is COMPUTED from the tables — different data must
+    produce different verdicts (review requirement). 'not-testable' is used
+    only where the criterion's denominator structurally cannot exist in the
+    pilot (full-grid populations; missing A0/A1 arms)."""
     ov = summary[summary["scope"] == "overall"].set_index("method")
     a2_med = float(ov.loc["a2", "calls_median"])
     stab_meds = {m: float(ov.loc[m, "calls_median"]) for m in STAB_METHODS}
     best_stab = min(stab_meds, key=stab_meds.get)
     best_med = stab_meds[best_stab]
+    speedup = a2_med / best_med  # criterion: >= 2
+    a2_cells = cells[cells.method == "a2"]
+    a2_cert_rate = float(a2_cells["certified"].mean())
+    acc3_status = "pilot-supports" if speedup >= 2.0 else "pilot-rejects"
+    # kill-1: A2 meets the negotiation bar (>= 95% certified within budget)
+    # AND stabilization does not deliver its promised >= 2x speedup
+    kill1_active = (a2_cert_rate >= 0.95) and (speedup < 2.0)
+    kill1_status = "pilot-supports" if kill1_active else "pilot-rejects"
+    # kill-3: computed margin (a contradiction would have aborted extraction)
+    zd_margin_min = float(cells["zd_minus_lb"].min())
+    n_contra = int((cells["zd_minus_lb"] < -1e-6).sum())
+    kill3_status = "pilot-supports" if n_contra == 0 else "pilot-rejects"
+
     rows = [
         {
             "criterion_id": "acc-1-cert95-b005",
             "description": ("each of A3/A4/A5 certifies >= 95% within 240 "
-                            "calls on the 32-instance b=0.05 grid "
-                            "(96 method-cells)"),
-            "denominator": "full grid: 32 instances x 3 methods (96 cells)",
+                            "calls on the b=0.05 population"),
+            "denominator": ("full grid: 32 b=0.05 instances x 3 stabilized "
+                            "methods = 96 method-cells"),
             "observed_pilot": "; ".join(
                 f"{m}: {int(cells[(cells.method == m) & (cells.b == 0.05)]['certified'].sum())}"
                 f"/{len(cells[(cells.method == m) & (cells.b == 0.05)])} certified"
@@ -377,22 +456,27 @@ def acceptance_status(cells: pd.DataFrame, summary: pd.DataFrame,
                             "nonincreasing after every valid expansion; "
                             "z_CH interval consistent with dictator interval"),
             "denominator": f"all {len(cells)} pilot method-cells",
-            "observed_pilot": ("audit-enforced on every cell; "
-                               "0 violations"),
-            "status": "pilot-supports",
+            "observed_pilot": (
+                "computed: effective audit passed (pipeline aborts "
+                f"otherwise); min(z_D_ub + tol_d - LB_CH) = "
+                f"{zd_margin_min:.6g} >= 0 across all cells"),
+            "status": "pilot-supports" if zd_margin_min >= -1e-6
+                      else "pilot-rejects",
         },
         {
             "criterion_id": "acc-3-stab-beats-a2-2x",
             "description": ("best stabilized method beats plain CG (A2) by "
                             ">= 2x on median oracle calls at b in "
                             "{0.01, 0.05}"),
-            "denominator": (f"pilot: {n_instances} matched instances "
-                            "(full criterion population: 96 instances/method)"),
+            "denominator": (f"pilot: {n_instances} matched instances; full "
+                            "criterion population: 64 moderate/strong "
+                            "instances per method (16 seeds x 2 sizes x "
+                            "b in {0.01, 0.05})"),
             "observed_pilot": (
                 f"A2 median {a2_med:g}; best stabilized {best_stab} median "
-                f"{best_med:g}; ratio a2/best {a2_med / best_med:.3f} "
+                f"{best_med:g}; speedup a2/best = {speedup:.3f} "
                 "(criterion needs >= 2)"),
-            "status": "pilot-rejects",
+            "status": acc3_status,
         },
         {
             "criterion_id": "acc-4-vs-tatonnement",
@@ -409,11 +493,12 @@ def acceptance_status(cells: pd.DataFrame, summary: pd.DataFrame,
                             "('memory beats memorylessness')"),
             "denominator": f"pilot: {n_instances} matched instances",
             "observed_pilot": (
-                f"A2 certified {int(cells[cells.method == 'a2']['certified'].sum())}"
-                f"/{len(cells[cells.method == 'a2'])} with median {a2_med:g} "
-                f"calls; every stabilized median >= {min(stab_meds.values()):g}"
-                " (A2 fastest)"),
-            "status": "pilot-supports",
+                f"A2 certified {int(a2_cells['certified'].sum())}"
+                f"/{len(a2_cells)} (rate {a2_cert_rate:.3f}, bar 0.95) with "
+                f"median {a2_med:g} calls; best stabilized speedup "
+                f"{speedup:.3f} (bar 2.0) => kill "
+                f"{'ACTIVE' if kill1_active else 'inactive'}"),
+            "status": kill1_status,
         },
         {
             "criterion_id": "kill-3-zch-vs-dictator",
@@ -421,8 +506,10 @@ def acceptance_status(cells: pd.DataFrame, summary: pd.DataFrame,
                             "contradict the dictator interval "
                             "(LB_CH > z_D_ub + tol)"),
             "denominator": f"all {len(cells)} pilot method-cells",
-            "observed_pilot": "0 contradictions",
-            "status": "pilot-supports",
+            "observed_pilot": (
+                f"computed: {n_contra} contradictions; minimum margin "
+                f"z_D_ub + tol_d - LB_CH = {zd_margin_min:.6g}"),
+            "status": kill3_status,
         },
     ]
     return pd.DataFrame(rows)
@@ -511,27 +598,40 @@ def write_summary_md(path: str, cells, matched, summary, acceptance,
     a2_med = float(ov.loc["a2", "calls_median"])
     stab_meds = {m: float(ov.loc[m, "calls_median"]) for m in STAB_METHODS}
     best = min(stab_meds, key=stab_meds.get)
+    speedup = a2_med / stab_meds[best]
+    a2_cert_rate = float(
+        cells[cells.method == "a2"]["certified"].mean())
+    kill1_active = (a2_cert_rate >= 0.95) and (speedup < 2.0)
+    if kill1_active:
+        verdict = (
+            "On this pilot the STABILIZATION KILL SIGNAL (kill-1) is "
+            "ACTIVE: memory (retaining all columns in the clean RMP) "
+            "appears to solve the price-coordination problem that broke "
+            "tatonnement, while du Merle boxes, Wentges smoothing, and "
+            "proximal bundles do not deliver their preregistered speedup "
+            "at this scale.")
+    else:
+        verdict = (
+            "On this pilot the stabilization kill signal (kill-1) is NOT "
+            "active (see acceptance_status.csv for the computed criteria).")
     lines += [
         "",
-        "## Interpretation",
+        "## Interpretation (computed from the tables above)",
         "",
-        f"Plain column generation (A2) certified every pilot instance with "
-        f"the LOWEST median oracle-call count ({a2_med:g}); the best "
-        f"stabilized method ({best.upper()}, median {stab_meds[best]:g}) is "
-        f"{stab_meds[best] / a2_med:.2f}x A2, versus the preregistered "
-        "acceptance bar of best-stabilized <= 0.5x A2 (>= 2x fewer calls). "
-        "On this pilot the STABILIZATION KILL SIGNAL (kill-1) is ACTIVE: "
-        "memory (retaining all columns in the clean RMP) appears to solve "
-        "the price-coordination problem that broke tatonnement, while du "
-        "Merle boxes, Wentges smoothing, and proximal bundles add oracle "
-        "calls without reducing them at this scale.",
+        f"A2 certified {a2_cert_rate:.0%} of pilot instances with median "
+        f"oracle-call count {a2_med:g}; the best stabilized method "
+        f"({best.upper()}, median {stab_meds[best]:g}) gives a speedup "
+        f"ratio a2/best = {speedup:.2f}, versus the preregistered "
+        f"acceptance bar of >= 2. {verdict}",
         "",
         "Denominators and caveats:",
         "",
         f"- {len(cells) // 4} instances (seeds 0/11/15 x n 8/12 x "
-        "b 0.01/0.05); the preregistered acceptance criteria are defined on "
-        "the 96-instance full grid — pilot evidence cannot pass or fail "
-        "them, it can only support or reject continuing (see "
+        "b 0.01/0.05); the preregistered acceptance criteria are defined "
+        "on their full populations — 64 moderate/strong instances per "
+        "method for the 2x criterion, 96 b=0.05 method-cells for the "
+        "certification criterion — so pilot evidence cannot pass or fail "
+        "them, only support or reject continuing (see "
         "acceptance_status.csv).",
         "- Stabilized iterations spend 2 oracle calls (clean certification "
         "+ candidate) by design; the comparison metric is total calls to "
@@ -568,7 +668,13 @@ def write_summary_md(path: str, cells, matched, summary, acceptance,
 # ---------------------------------------------------------------------------
 def analyze(a2_root: str, a345_root: str, out_base: str, stamp: str,
             analysis_code_commit: str, instances=PILOT_INSTANCES,
-            instance_builder=default_instance_builder) -> str:
+            instance_builder=default_instance_builder,
+            verify_code_commit: bool = True) -> str:
+    code_verified = False
+    if verify_code_commit:
+        analysis_code_commit = verify_analysis_code_commit(
+            analysis_code_commit)
+        code_verified = True
     validate_roots(a2_root, a345_root, instances, instance_builder)
 
     rows = []
@@ -606,6 +712,7 @@ def analyze(a2_root: str, a345_root: str, out_base: str, stamp: str,
         "schema": "b2-pilot-closeout-v1",
         "stamp": stamp,
         "analysis_code_commit": analysis_code_commit,
+        "analysis_code_verified": code_verified,
         "grid": {"instances": [list(t) for t in instances],
                  "methods": list(METHODS)},
         "tolerances": {

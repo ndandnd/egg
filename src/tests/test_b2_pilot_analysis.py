@@ -62,7 +62,8 @@ def artifacts(pilot_roots, tmp_path_factory):
     a2_root, a345_root = pilot_roots
     out_base = str(tmp_path_factory.mktemp("result"))
     out_dir = analyze(a2_root, a345_root, out_base, "TESTSTAMP",
-                      "codecommit0", instances=FIX_INSTANCES, instance_builder=fix_builder)
+                      "codecommit0", instances=FIX_INSTANCES, instance_builder=fix_builder,
+                verify_code_commit=False)
     return out_dir
 
 
@@ -142,13 +143,102 @@ def test_acceptance_status_statuses(artifacts):
     assert a1["status"] == "not-testable-from-pilot"
     a4c = acc[acc["criterion_id"] == "acc-4-vs-tatonnement"].iloc[0]
     assert a4c["status"] == "not-testable-from-pilot"
+    # corrected denominators (review): 64 moderate/strong instances per
+    # method for the 2x criterion; 96 method-cells for the b=0.05 one
+    a3c = acc[acc["criterion_id"] == "acc-3-stab-beats-a2-2x"].iloc[0]
+    assert "64 moderate/strong" in a3c["denominator"]
+    assert "96 method-cells" in a1["denominator"]
+    # statuses must equal the recomputed rule (labels are data-derived)
+    summary = pd.read_csv(os.path.join(artifacts, "method_summary.csv"))
+    ov = summary[summary["scope"] == "overall"].set_index("method")
+    a2_med = float(ov.loc["a2", "calls_median"])
+    best = min(float(ov.loc[m, "calls_median"]) for m in ("a3", "a4", "a5"))
+    speedup = a2_med / best
+    cells = pd.read_csv(os.path.join(artifacts, "cells.csv"))
+    a2_rate = cells[cells.method == "a2"]["certified"].mean()
+    assert a3c["status"] == (
+        "pilot-supports" if speedup >= 2 else "pilot-rejects")
+    k1 = acc[acc["criterion_id"] == "kill-1-a2-meets-bar"].iloc[0]
+    assert k1["status"] == ("pilot-supports"
+                            if a2_rate >= 0.95 and speedup < 2
+                            else "pilot-rejects")
+
+
+def test_acceptance_labels_flip_with_different_data(artifacts):
+    """Feeding different results must produce different verdicts — the
+    labels are calculated, not hardcoded (review finding 1)."""
+    from experiments.analyze_b2_pilot import acceptance_status
+    cells = pd.read_csv(os.path.join(artifacts, "cells.csv"))
+    summary = pd.read_csv(os.path.join(artifacts, "method_summary.csv"))
+    # counterfactual: A2 suddenly needs 10x the calls
+    flipped = summary.copy()
+    mask = (flipped["scope"] == "overall") & (flipped["method"] == "a2")
+    flipped.loc[mask, "calls_median"] *= 10
+    acc = acceptance_status(cells, flipped, len(FIX_INSTANCES))
+    a3c = acc[acc["criterion_id"] == "acc-3-stab-beats-a2-2x"].iloc[0]
+    k1 = acc[acc["criterion_id"] == "kill-1-a2-meets-bar"].iloc[0]
+    assert a3c["status"] == "pilot-supports"   # stabilization now wins 2x
+    assert k1["status"] == "pilot-rejects"     # kill signal off
+
+
+def test_dictator_identity_validated(pilot_roots, tmp_path):
+    c2, c345 = _clone_roots(pilot_roots, tmp_path)
+    p = os.path.join(c345, "a4_s1_n4_b0.01", "dictator.ckpt.json")
+    ck = checkpoint.load(p)
+    ck["identity"]["market_hash"] = "tampered"
+    checkpoint.save(p, ck)
+    with pytest.raises(AnalysisError, match="dictator market hash mismatch"):
+        analyze(c2, c345, str(tmp_path / "out"), "T", "c",
+                instances=FIX_INSTANCES, instance_builder=fix_builder,
+                verify_code_commit=False)
+
+
+def test_stale_dictator_pairing_rejected(pilot_roots, tmp_path):
+    c2, c345 = _clone_roots(pilot_roots, tmp_path)
+    p = os.path.join(c345, "a5_s3_n4_b0.01", "dictator.ckpt.json")
+    ck = checkpoint.load(p)
+    ck["z_d_ub"] = ck["z_d_ub"] + 5.0  # dictator value no longer the one CG used
+    checkpoint.save(p, ck)
+    with pytest.raises(AnalysisError, match="stale pairing"):
+        analyze(c2, c345, str(tmp_path / "out"), "T", "c",
+                instances=FIX_INSTANCES, instance_builder=fix_builder,
+                verify_code_commit=False)
+
+
+def test_zch_dictator_contradiction_halts(pilot_roots, tmp_path):
+    c2, c345 = _clone_roots(pilot_roots, tmp_path)
+    d = os.path.join(c345, "a3_s1_n4_b0.01")
+    dp = os.path.join(d, "dictator.ckpt.json")
+    cp = os.path.join(d, "a3.cg.ckpt.json")
+    dck = checkpoint.load(dp)
+    cck = checkpoint.load(cp)
+    bogus = cck["lb_best"] - 100.0  # z_D below LB_CH: impossible physics
+    dck["z_d_ub"] = bogus
+    cck["identity"]["z_d_ub"] = bogus  # keep the pairing consistent
+    checkpoint.save(dp, dck)
+    checkpoint.save(cp, cck)
+    with pytest.raises(AnalysisError, match="CONTRADICTION"):
+        analyze(c2, c345, str(tmp_path / "out"), "T", "c",
+                instances=FIX_INSTANCES, instance_builder=fix_builder,
+                verify_code_commit=False)
+
+
+def test_code_commit_verification_rejects_wrong_commit(pilot_roots,
+                                                       tmp_path):
+    c2, c345 = _clone_roots(pilot_roots, tmp_path)
+    with pytest.raises(AnalysisError, match="code commit mismatch"):
+        analyze(c2, c345, str(tmp_path / "out"), "T",
+                "deadbeefdeadbeefdeadbeefdeadbeefdeadbeef",
+                instances=FIX_INSTANCES, instance_builder=fix_builder,
+                verify_code_commit=True)
 
 
 def test_deterministic_regeneration_byte_identical(pilot_roots, artifacts,
                                                    tmp_path):
     a2_root, a345_root = pilot_roots
     out2 = analyze(a2_root, a345_root, str(tmp_path), "TESTSTAMP",
-                   "codecommit0", instances=FIX_INSTANCES, instance_builder=fix_builder)
+                   "codecommit0", instances=FIX_INSTANCES, instance_builder=fix_builder,
+                verify_code_commit=False)
     for fn in ("cells.csv", "matched_comparison.csv", "method_summary.csv",
                "acceptance_status.csv", "SUMMARY.md"):
         b1 = open(os.path.join(artifacts, fn), "rb").read()
@@ -170,7 +260,8 @@ def test_missing_cell_rejected(pilot_roots, tmp_path):
     shutil.rmtree(os.path.join(c345, "a4_s3_n4_b0.01"))
     with pytest.raises(AnalysisError):
         analyze(c2, c345, str(tmp_path / "out"), "T", "c",
-                instances=FIX_INSTANCES, instance_builder=fix_builder)
+                instances=FIX_INSTANCES, instance_builder=fix_builder,
+                verify_code_commit=False)
 
 
 def test_unexpected_extra_cell_rejected(pilot_roots, tmp_path):
@@ -182,7 +273,8 @@ def test_unexpected_extra_cell_rejected(pilot_roots, tmp_path):
     with pytest.raises(AnalysisError,
                        match="audit FAILED|unexpected cg checkpoints"):
         analyze(c2, c345, str(tmp_path / "out"), "T", "c",
-                instances=FIX_INSTANCES, instance_builder=fix_builder)
+                instances=FIX_INSTANCES, instance_builder=fix_builder,
+                verify_code_commit=False)
 
 
 def test_identity_mismatch_rejected(pilot_roots, tmp_path):
@@ -193,7 +285,8 @@ def test_identity_mismatch_rejected(pilot_roots, tmp_path):
     checkpoint.save(p, ck)
     with pytest.raises(AnalysisError, match="instance hash mismatch"):
         analyze(c2, c345, str(tmp_path / "out"), "T", "c",
-                instances=FIX_INSTANCES, instance_builder=fix_builder)
+                instances=FIX_INSTANCES, instance_builder=fix_builder,
+                verify_code_commit=False)
 
 
 def test_incomplete_root_fails_audit(pilot_roots, tmp_path):
@@ -204,4 +297,5 @@ def test_incomplete_root_fails_audit(pilot_roots, tmp_path):
     checkpoint.save(p, ck)
     with pytest.raises(AnalysisError, match="audit FAILED"):
         analyze(c2, c345, str(tmp_path / "out"), "T", "c",
-                instances=FIX_INSTANCES, instance_builder=fix_builder)
+                instances=FIX_INSTANCES, instance_builder=fix_builder,
+                verify_code_commit=False)
