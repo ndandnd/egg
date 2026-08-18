@@ -426,7 +426,7 @@ It validates the exact 12 + 36 + 208 union (audits re-run
 programmatically, every identity hash recomputed, overlaps/gaps/extras
 rejected), evaluates acc-1 on 32 b=0.05 instances per stabilized method
 and acc-3 on 64 matched instances per method (2x threshold unchanged),
-verifies-and-reports two-call weak-coupling cells, and writes
+verifies-and-reports two-call immediate-certification cells, and writes
 deterministic artifacts to `result/b2_full/<stamp>/`.
 
 ## Branch hygiene

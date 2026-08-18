@@ -89,7 +89,7 @@ operator's machine (`src/runs/`, gitignored).
 validation, corrected wall partition, true denominators (acc-1 on 32
 b=0.05 instances per stabilized method; acc-3 on 64 matched instances per
 method at the unchanged 2x threshold; kill-1 from A2's 32 b=0.05 cells
-plus acc-3), two-call weak-coupling cells verified and reported rather
+plus acc-3), two-call immediate-certification cells verified and reported rather
 than filtered, and all labels computed from tables. **All full-population
 conclusions are PENDING**: they exist only once Codex regenerates
 `result/b2_full/<stamp>/` from the transferred raw data against the

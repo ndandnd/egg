@@ -133,7 +133,7 @@ Prespecified before looking at any expansion-derived table:
   with the unchanged 2x total-call threshold; kill-1 from A2's 32 b=0.05
   cells plus the acc-3 outcome; all labels computed from tables;
 - two-call cells (seed + one certifying clean call) are legitimate
-  weak-coupling outcomes: identity- and certification-verified, reported
+  immediate-certification outcomes: identity- and certification-verified, reported
   in two_call_cells.csv, never filtered;
 - corrected wall partition required per cell
   (wall_clean + wall_stab = total, 1e-6 s).

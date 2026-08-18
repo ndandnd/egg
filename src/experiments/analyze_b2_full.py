@@ -26,7 +26,7 @@ Preregistered criteria at their TRUE denominators (all labels computed):
 - acc-4 (vs tatonnement) remains not-testable: no A1 cells exist.
 
 Two-call cells (seed + one clean certification call) are LEGITIMATE
-outcomes on weak-coupling instances: they are verified (identity,
+immediate-certification outcomes: they are verified (identity,
 certification, coherence) and REPORTED, never filtered.
 
 Outputs (committed): result/b2_full/<stamp>/ with MANIFEST.json (hashing
@@ -190,8 +190,10 @@ def check_scientific_contract(cells: pd.DataFrame) -> None:
 
 def two_call_report(cells: pd.DataFrame) -> pd.DataFrame:
     """Cells that certified after only seed + one clean call are legitimate
-    weak-coupling outcomes: verify coherence explicitly (identity was
-    already validated) and REPORT them — never filter them."""
+    immediate-certification outcomes: verify coherence explicitly
+    (identity was already validated) and REPORT them — never filter them.
+    The label is deliberately causal-neutral: these cases can occur at
+    either tested feedback strength."""
     two = cells[cells["oracle_calls"] <= 2].copy()
     for _, r in two.iterrows():
         label = f"{r['method']} seed={r['seed']} n={r['n_trips']} b={r['b']}"
@@ -399,7 +401,7 @@ def write_summary_md(path, cells, matched, summary, acceptance, two_calls,
         "(pilot 12 + 36 cells joined with the 208-cell expansion; exact "
         "union verified — no overlaps, gaps, or extras);",
         f"- certified: {int(cells['certified'].sum())}/{len(cells)}; "
-        f"two-call weak-coupling cells: {len(two_calls)} (verified, "
+        f"two-call immediate-certification cells: {len(two_calls)} (verified, "
         "reported in two_call_cells.csv, never filtered).",
         "",
         "## Method summary (overall)",
