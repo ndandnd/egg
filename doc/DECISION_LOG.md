@@ -180,3 +180,34 @@ compute, must retain clean-dual certification, and must evaluate on a new
 holdout or separately prespecified population rather than tune and claim
 success on these 64 instances. The 576-cell A1 campaign and any scale
 experiment remain paused and are not implied by this decision.
+
+## 2026-08-18 — A6 continuation SPECIFIED (review pending; no code, no compute)
+
+**Decision**: adopt `doc/A6_SPARSE_STABILIZATION_SPEC.md` as the
+prespecification of the focused continuation mandated above, subject to
+review of its open questions. Summary of what is frozen there:
+
+- A6 = event-triggered sparse stabilization: one oracle call per master
+  iteration; candidate calls use the A4 Wentges mechanism (chosen for
+  the most consistent clean-call advantage, 57/64, and zero stabilized
+  master); clean certification calls fire on prespecified triggers
+  (theta_cert = 10*epsilon closable-gap, K_MAX = 4 staleness, candidate
+  stall, initialization). Certification contract unchanged; skipping
+  never affects validity; termination inherits A2's argument.
+- Seeds 0-15 are BURNED (motivating/dev only). Evaluation on a fresh
+  holdout: seeds 16-31 x n {8,12} x b {0.01,0.05} (feasibility screen
+  with prespecified seed substitution), A2 + one A6 arm = 128 cells.
+- Adoption bar: median(A6)/median(A2) <= 0.85 AND >= 38/64 matched wins
+  AND >= 95% certification with rate >= A2's. Kill: ratio >= 1.0 or
+  <= 32/64 wins terminates the stabilization line permanently; the gray
+  zone is prespecified as final-negative-with-nuance.
+- Sparse-A3 may run only in the 12-instance burned pilot, with a
+  one-shot selection rule (>= 9/12 pilot wins) deciding the single
+  holdout arm.
+- Pilot (12-24 cells, burned seeds) gates implementation correctness
+  only; constants may not be adjusted silently (any change is a new
+  prespecification; the holdout stays untouched until the config is
+  frozen).
+
+**Not decided here**: implementation and launches (follow spec review);
+A1 campaign; scale experiments; the 960-cell grid — all remain paused.
