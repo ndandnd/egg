@@ -79,14 +79,24 @@ cycles), the B3 uplift intervals, and the equivalence-theorem framing.
 
 ## Next gate
 
-Pilot closeout is COMPLETE: corrected artifacts live under
-`result/b2_pilot/` (deterministic, provenance-verified, wall identity
-enforced). **Option B is chosen** (DECISION_LOG 2026-08-17): the 208-cell
-matched expansion (`experiments/run_b2_expansion.py`, guarded launcher,
-audit gates cg=208 with 52 per method, certification as outcome not gate)
-is implemented and awaits operator review + overnight Unicorn submission.
-After the data: full-population analysis (256 matched method-cells) gives
-the acceptance/kill criteria their true denominators, then the
-kill/continue decision per the rule in DECISION_LOG.
+Pilot closeout is COMPLETE (`result/b2_pilot/`, corrected wall
+decomposition). The 208-cell matched expansion ran on Unicorn; the raw
+roots (12 + 36 + 208 = 256 method-cells) live on the cluster and the
+operator's machine (`src/runs/`, gitignored).
 
-The 960-cell campaign (576 fresh A1 cells + full CG grid) stays PAUSED.
+**Current step**: the full-population analysis pipeline
+(`experiments/analyze_b2_full.py`) is implemented — exact 3-root union
+validation, corrected wall partition, true denominators (acc-1 on 32
+b=0.05 instances per stabilized method; acc-3 on 64 matched instances per
+method at the unchanged 2x threshold; kill-1 from A2's 32 b=0.05 cells
+plus acc-3), two-call weak-coupling cells verified and reported rather
+than filtered, and all labels computed from tables. **All full-population
+conclusions are PENDING**: they exist only once Codex regenerates
+`result/b2_full/<stamp>/` from the transferred raw data against the
+verified analysis-code commit (two-commit protocol) and the artifact
+commit is reviewed and merged. Until then the pilot-level findings above
+remain the only citable evidence.
+
+After the artifact commit: record the kill/continue decision in
+DECISION_LOG per the prespecified rule. The 960-cell campaign (576 fresh
+A1 cells + full CG grid) stays PAUSED.

@@ -410,10 +410,24 @@ python experiments/audit_runs.py runs/b2_expansion --expect-cg 208 \
 ```
 
 The full-population analysis (64 instances x 4 methods = 256 method-cells,
-joining `runs/b2_expansion` with the pilot roots) is a separate
-prespecified analysis PR after the data lands; the acceptance/kill
-criteria then get their true denominators (64 instances/method for the 2x
-criterion; 96 b=0.05 method-cells for acc-1).
+joining `runs/b2_expansion` with the pilot roots) runs where the raw data
+lives, after all three roots are transferred:
+
+```bash
+cd "$LOCAL_REPO/src"
+python3 experiments/analyze_b2_full.py \
+    --a2-root runs/b2a2_pilot --a345-root runs/b2a345_pilot \
+    --expansion-root runs/b2_expansion \
+    --analysis-code-commit <verified-code-commit>
+git add ../result/b2_full/<stamp> && git commit  # artifact commit (2 of 2)
+```
+
+It validates the exact 12 + 36 + 208 union (audits re-run
+programmatically, every identity hash recomputed, overlaps/gaps/extras
+rejected), evaluates acc-1 on 32 b=0.05 instances per stabilized method
+and acc-3 on 64 matched instances per method (2x threshold unchanged),
+verifies-and-reports two-call weak-coupling cells, and writes
+deterministic artifacts to `result/b2_full/<stamp>/`.
 
 ## Branch hygiene
 

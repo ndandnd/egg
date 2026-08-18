@@ -119,3 +119,27 @@ stop stabilization and reframe; if the clean-call advantage or a
 b=0.05/degeneracy subgroup effect persists, prespecify a focused
 continuation; the 576 A1 cells and any scale experiment remain separate
 decisions.
+
+## 2026-08-18 — Full-population analysis pipeline landed; verdict PENDING
+
+**Decision**: analysis code for the 256-cell full population
+(`experiments/analyze_b2_full.py`) is committed ahead of the data review.
+Prespecified before looking at any expansion-derived table:
+
+- exact union validation (12 + 36 + 208, no overlaps/gaps/extras, all
+  identity hashes recomputed, per-root audits re-run programmatically);
+- acc-1 evaluated on exactly 32 b=0.05 instances per stabilized method
+  (96 method-cells); acc-3 on exactly 64 matched instances per method
+  with the unchanged 2x total-call threshold; kill-1 from A2's 32 b=0.05
+  cells plus the acc-3 outcome; all labels computed from tables;
+- two-call cells (seed + one certifying clean call) are legitimate
+  weak-coupling outcomes: identity- and certification-verified, reported
+  in two_call_cells.csv, never filtered;
+- corrected wall partition required per cell
+  (wall_clean + wall_stab = total, 1e-6 s).
+
+**No scientific conclusion is recorded here yet.** The verdict entry is
+written only after Codex regenerates `result/b2_full/<stamp>/` from the
+transferred raw runs against the verified analysis-code commit, reviews,
+and merges (two-commit protocol). A1 and any scale experiment remain out
+of scope regardless of the outcome.

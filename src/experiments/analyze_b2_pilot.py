@@ -145,6 +145,72 @@ def expected_cells(instances):
     return [(m, s, n, b) for m in METHODS for (s, n, b) in instances]
 
 
+def validate_cell(d: str, m: str, s: int, n: int, b: float,
+                  instance_builder=default_instance_builder) -> str:
+    """Exact identity validation of one cell directory (CG checkpoint AND
+    dictator checkpoint, including the z_d_ub pairing). Returns the cg
+    checkpoint path. Shared by the pilot and full-population pipelines."""
+    ck_path = os.path.join(d, f"{m}.cg.ckpt.json")
+    if not os.path.exists(ck_path):
+        raise AnalysisError(f"missing cell: {m} seed={s} n={n} b={b} "
+                            f"({ck_path})")
+    ck = checkpoint.load(ck_path)
+    ident = ck.get("identity") or {}
+    inst = instance_builder(s, n)
+    mkt = make_affine_market(inst, shape="duck", b_scale=b)
+    if ident.get("instance_hash") != inst.hash():
+        raise AnalysisError(
+            f"cell {m} seed={s} n={n} b={b}: instance hash mismatch")
+    if ident.get("market_hash") != market_hash(mkt):
+        raise AnalysisError(
+            f"cell {m} seed={s} n={n} b={b}: market hash mismatch")
+    if ident.get("method", "a2") != m:
+        raise AnalysisError(
+            f"cell dir {d}: identity method {ident.get('method')} != {m}")
+    if not ck.get("done"):
+        raise AnalysisError(f"cell {m} seed={s} n={n} b={b} not done")
+    # the dictator checkpoint's identity is evidence too: same
+    # instance/market hashes, same tolerance, same solver settings,
+    # and its value must be the one the CG identity was keyed to
+    dck = checkpoint.load(os.path.join(d, "dictator.ckpt.json"))
+    if dck is None:
+        raise AnalysisError(f"missing dictator checkpoint in {d}")
+    d_ident = dck.get("identity") or {}
+    if d_ident.get("instance_hash") != inst.hash():
+        raise AnalysisError(
+            f"cell {m} seed={s} n={n} b={b}: dictator instance hash "
+            "mismatch")
+    if d_ident.get("market_hash") != market_hash(mkt):
+        raise AnalysisError(
+            f"cell {m} seed={s} n={n} b={b}: dictator market hash "
+            "mismatch")
+    if d_ident.get("tol_d") != ident.get("tol_d"):
+        raise AnalysisError(
+            f"cell {m} seed={s} n={n} b={b}: dictator tol_d "
+            f"{d_ident.get('tol_d')} != cg identity {ident.get('tol_d')}")
+    if ident.get("z_d_ub") != dck.get("z_d_ub"):
+        raise AnalysisError(
+            f"cell {m} seed={s} n={n} b={b}: cg identity z_d_ub "
+            f"{ident.get('z_d_ub')} != dictator checkpoint "
+            f"{dck.get('z_d_ub')} (stale pairing)")
+    return ck_path
+
+
+def scan_extras(roots, expected_ckpt_paths) -> None:
+    """Reject any cg checkpoint in the given roots that is not expected —
+    catches overlaps (a cell served by two roots) and strays."""
+    import glob as _glob
+    found = set()
+    for root in roots:
+        for p in _glob.glob(os.path.join(root, "**", "*.cg.ckpt.json"),
+                            recursive=True):
+            found.add(os.path.abspath(p))
+    expected_set = {os.path.abspath(p) for p in expected_ckpt_paths}
+    extras = sorted(found - expected_set)
+    if extras:
+        raise AnalysisError(f"unexpected cg checkpoints present: {extras}")
+
+
 def validate_roots(a2_root: str, a345_root: str, instances,
                    instance_builder=default_instance_builder) -> list:
     """Audit + exact identity validation; returns audit problem summary."""
@@ -165,67 +231,15 @@ def validate_roots(a2_root: str, a345_root: str, instances,
     seen_dirs = set()
     for (m, s, n, b) in expected_cells(instances):
         root = a2_root if m == "a2" else a345_root
-        d = cell_dir(root, m, s, n, b)
-        ck_path = os.path.join(d, f"{m}.cg.ckpt.json")
-        if not os.path.exists(ck_path):
-            raise AnalysisError(f"missing cell: {m} seed={s} n={n} b={b} "
-                                f"({ck_path})")
+        ck_path = validate_cell(cell_dir(root, m, s, n, b), m, s, n, b,
+                                instance_builder)
         if ck_path in seen_dirs:
             raise AnalysisError(f"duplicate cell path {ck_path}")
         seen_dirs.add(ck_path)
-        ck = checkpoint.load(ck_path)
-        ident = ck.get("identity") or {}
-        inst = instance_builder(s, n)
-        mkt = make_affine_market(inst, shape="duck", b_scale=b)
-        if ident.get("instance_hash") != inst.hash():
-            raise AnalysisError(
-                f"cell {m} seed={s} n={n} b={b}: instance hash mismatch")
-        if ident.get("market_hash") != market_hash(mkt):
-            raise AnalysisError(
-                f"cell {m} seed={s} n={n} b={b}: market hash mismatch")
-        if ident.get("method", "a2") != m:
-            raise AnalysisError(
-                f"cell dir {d}: identity method {ident.get('method')} != {m}")
-        if not ck.get("done"):
-            raise AnalysisError(f"cell {m} seed={s} n={n} b={b} not done")
-        # the dictator checkpoint's identity is evidence too: same
-        # instance/market hashes, same tolerance, same solver settings,
-        # and its value must be the one the CG identity was keyed to
-        dck = checkpoint.load(os.path.join(d, "dictator.ckpt.json"))
-        if dck is None:
-            raise AnalysisError(f"missing dictator checkpoint in {d}")
-        d_ident = dck.get("identity") or {}
-        if d_ident.get("instance_hash") != inst.hash():
-            raise AnalysisError(
-                f"cell {m} seed={s} n={n} b={b}: dictator instance hash "
-                "mismatch")
-        if d_ident.get("market_hash") != market_hash(mkt):
-            raise AnalysisError(
-                f"cell {m} seed={s} n={n} b={b}: dictator market hash "
-                "mismatch")
-        if d_ident.get("tol_d") != ident.get("tol_d"):
-            raise AnalysisError(
-                f"cell {m} seed={s} n={n} b={b}: dictator tol_d "
-                f"{d_ident.get('tol_d')} != cg identity {ident.get('tol_d')}")
-        if ident.get("z_d_ub") != dck.get("z_d_ub"):
-            raise AnalysisError(
-                f"cell {m} seed={s} n={n} b={b}: cg identity z_d_ub "
-                f"{ident.get('z_d_ub')} != dictator checkpoint "
-                f"{dck.get('z_d_ub')} (stale pairing)")
-    # unexpected extra cg checkpoints reject the run
-    import glob as _glob
-    found = set()
-    for root in (a2_root, a345_root):
-        for p in _glob.glob(os.path.join(root, "**", "*.cg.ckpt.json"),
-                            recursive=True):
-            found.add(os.path.abspath(p))
-    expected_set = {os.path.abspath(p) for p in seen_dirs}
-    extras = sorted(found - expected_set)
-    if extras:
-        raise AnalysisError(f"unexpected cg checkpoints present: {extras}")
-    if len(expected_set) != 4 * n_inst:
+    scan_extras((a2_root, a345_root), seen_dirs)
+    if len(seen_dirs) != 4 * n_inst:
         raise AnalysisError(
-            f"{len(expected_set)} method-cells found; expected {4 * n_inst}")
+            f"{len(seen_dirs)} method-cells found; expected {4 * n_inst}")
     return []
 
 
@@ -374,7 +388,12 @@ def wall_partition(ck: dict, method: str, label: str) -> tuple:
 
 
 def extract_cell(root: str, method: str, seed: int, n: int, b: float) -> dict:
-    d = cell_dir(root, method, seed, n, b)
+    return extract_cell_from_dir(cell_dir(root, method, seed, n, b),
+                                 method, seed, n, b)
+
+
+def extract_cell_from_dir(d: str, method: str, seed: int, n: int,
+                          b: float) -> dict:
     ck = checkpoint.load(os.path.join(d, f"{method}.cg.ckpt.json"))
     dck = checkpoint.load(os.path.join(d, "dictator.ckpt.json"))
     if dck is None:
