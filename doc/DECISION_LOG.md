@@ -133,8 +133,8 @@ Prespecified before looking at any expansion-derived table:
   with the unchanged 2x total-call threshold; kill-1 from A2's 32 b=0.05
   cells plus the acc-3 outcome; all labels computed from tables;
 - two-call cells (seed + one certifying clean call) are legitimate
-  immediate-certification outcomes: identity- and certification-verified, reported
-  in two_call_cells.csv, never filtered;
+  immediate-certification outcomes: identity- and certification-verified,
+  reported in `two_call_cells.csv`, never filtered;
 - corrected wall partition required per cell
   (wall_clean + wall_stab = total, 1e-6 s).
 
@@ -143,3 +143,40 @@ written only after Codex regenerates `result/b2_full/<stamp>/` from the
 transferred raw runs against the verified analysis-code commit, reviews,
 and merges (two-commit protocol). A1 and any scale experiment remain out
 of scope regardless of the outcome.
+
+## 2026-08-18 — Full-population B2 verdict: current stabilization rejected; focused continuation triggered
+
+**Evidence accepted**: the canonical full-population artifact is
+`result/b2_full/20260818T140356Z/`. It joins the certified pilots and
+208-cell expansion into exactly 256 matched A2-A5 method-cells: 64
+instances per method, including 32 b=0.05 instances per method. All 256
+cells certified within the 240-call budget, and all provenance, replay,
+solver-status, checkpoint-completeness, wall-partition, and scientific-
+setting gates passed.
+
+**Prespecified criteria**:
+
+- acc-1 PASS: A3, A4, and A5 each certified 32/32 b=0.05 instances;
+- acc-3 FAIL: median total calls were A2 24, A3 30, A5 32, and A4 34;
+  the best stabilized-to-A2 speedup was therefore 24/30 = 0.80, below
+  the required 2.0;
+- kill-1 ACTIVE: A2 certified 32/32 b=0.05 instances and no stabilized
+  method met acc-3;
+- kill-3 PASS: every certified convex-hull lower bound remained
+  consistent with the paired dictator upper bound (minimum margin 0.01).
+
+**Interpretation**: reject the current A3-A5 implementations as
+end-to-end total-oracle-call improvements over plain A2 at n in {8, 12}
+and T = 28. Do not summarize this as “stabilization adds nothing.” The
+clean-call advantage persisted population-wide: A3, A4, and A5 beat A2
+on clean calls on 54/64, 57/64, and 45/64 matched instances,
+respectively. The stabilized candidate calls, rather than failure to
+accelerate the clean master, prevented amortization.
+
+**Decision**: follow the prespecified continuation branch from the
+2026-08-17 decision rule, but only as a new, focused overhead-reduction
+study. Its design must be written and reviewed before implementation or
+compute, must retain clean-dual certification, and must evaluate on a new
+holdout or separately prespecified population rather than tune and claim
+success on these 64 instances. The 576-cell A1 campaign and any scale
+experiment remain paused and are not implied by this decision.

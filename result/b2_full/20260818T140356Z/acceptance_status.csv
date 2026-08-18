@@ -1,0 +1,7 @@
+criterion_id,description,denominator,observed,status
+acc-1-cert95-b005,each of A3/A4/A5 certifies >= 95% within 240 calls on the b=0.05 population,32 b=0.05 instances per stabilized method (96 method-cells) — full population,a3: 32/32 (1.000); a4: 32/32 (1.000); a5: 32/32 (1.000),pass
+acc-2-bound-sanity,LB_CH <= UB_CH throughout; UB_CH nonincreasing; z_CH interval consistent with dictator interval,all 256 method-cells,audits passed; min(z_D_ub + tol_d - LB_CH) = 0.01,pass
+acc-3-stab-beats-a2-2x,"best stabilized method beats plain CG (A2) by >= 2x on median TOTAL oracle calls at b in {0.01, 0.05}",64 matched instances per method — full population,A2 median 24; best stabilized a3 median 30; speedup 0.800 (bar 2),fail
+acc-4-vs-tatonnement,budget-matched superiority over the A0/A1 tatonnement family,requires A1 family cells (none exist),no A0/A1 cells in the certified population,not-testable
+kill-1-a2-meets-bar,KILL: plain CG already meets the acceptance bar and stabilization does not deliver its preregistered speedup,A2: 32 b=0.05 instances (full acceptance population); speedup: acc-3,"A2 certified 32/32 on b=0.05 (rate 1.000, bar 0.95); acc-3 failed => kill ACTIVE",pass
+kill-3-zch-vs-dictator,KILL: certified z_CH interval must never contradict the dictator interval,all 256 method-cells,0 contradictions; min margin 0.01,pass

@@ -1,6 +1,6 @@
 # Research status (rolling handoff)
 
-Last updated: 2026-08-17. This is the single entry point for "where the
+Last updated: 2026-08-18. This is the single entry point for "where the
 project stands"; update it whenever a phase closes or a gate decision is
 taken. Decisions with rationale live in `DECISION_LOG.md`; operational
 memory lives in `UNICORN_RUNBOOK.md`; the measurement design and evidence
@@ -32,71 +32,64 @@ contracts live in `MEASUREMENT_RESULTS.md` and `B2_STABILIZATION_SPEC.md`.
    5-piece box, Wentges + project-prespecified auto-smoothing, proximal
    chord-PWL bundle), 36/36 cells certified, all solves OPTIMAL and
    replay-valid, no budget exhaustion.
+6. **B2 full-population closeout**
+   (`result/b2_full/20260818T140356Z/`): the 12 pilot instances plus 52
+   expansion instances form exactly 64 matched instances per method and
+   256 A2-A5 method-cells. All 256 certified within 240 calls; all
+   provenance, replay, completeness, solver-status, scientific-setting,
+   and corrected wall-partition gates passed.
 
-## Current evidence (as of the A2-A5 pilots)
+## Current evidence (full 64-instance matched population)
 
-Verified medians from the certified pilot (canonical values in
-`result/b2_pilot/<stamp>/`, produced by
-`src/experiments/analyze_b2_pilot.py`):
+Canonical values are in `result/b2_full/20260818T140356Z/`, produced by
+`src/experiments/analyze_b2_full.py`. The corrected pilot artifact remains
+at `result/b2_pilot/20260817T225235Z/` as the historical pilot closeout.
 
-- median TOTAL oracle calls to certificate: **A2 21.5, A4 29, A3 33,
-  A5 33** — plain CG used the fewest, and total calls is the
-  preregistered acceptance metric;
-- **call decomposition (the refined finding)**: A2 clean calls 21.5;
-  A3 17.5 clean + 15.5 stabilized; A4 15.5 clean + 13.5 stabilized;
-  A5 17.5 clean + 15.5 stabilized. On CLEAN calls, A4 beats A2 on 11/12
-  matched instances and A3 on 9/12;
-- honest interpretation: **stabilization — especially A4 — does
-  accelerate clean-master convergence, but its extra candidate calls are
-  not amortized at this problem size** (T = 28, n in {8, 12});
-- the preregistered acceptance bar (best stabilized method >= 2x fewer
-  median TOTAL calls than A2) is REJECTED on pilot evidence; the kill-1
-  signal is ACTIVE on that metric;
-- wall-time correction: the first artifact set mixed wrapper elapsed time
-  into its `wall_clean_s`/`wall_stab_s` split, so those two fields are not
-  citable. Its independently computed `total_solver_wall_s`, F2, and total
-  per-method wall medians were already correct and are unchanged (A2
-  73.46 s, A3 61.66 s, A4 78.09 s, A5 60.76 s). The corrected pipeline
-  partitions solver-reported wall exactly once by regime/phase and
-  enforces clean + stabilized = total. Call-count conclusions are
-  unaffected.
+- all methods certified 64/64; A3-A5 each certified 32/32 b=0.05
+  instances, so acc-1 passes;
+- median TOTAL calls: **A2 24, A3 30, A5 32, A4 34**. The best
+  stabilized-to-A2 speedup is 24/30 = 0.80, so the preregistered 2x
+  acc-3 threshold fails and kill-1 is active;
+- median CLEAN calls: **A2 24, A3 16, A5 17, A4 18**. A3, A4, and A5
+  beat A2 on clean calls on 54/64, 57/64, and 45/64 matched instances;
+- median corrected solver wall: **A2 38.48 s, A4 43.59 s, A5 49.21 s,
+  A3 57.08 s**;
+- honest interpretation: stabilization accelerates clean-master
+  convergence, but the extra candidate calls are not amortized at this
+  problem size (T = 28, n in {8, 12}). The current A3-A5 variants are
+  rejected as end-to-end total-call improvements, not as evidence that
+  stabilization has no mechanism;
+- all dictator/convex-hull consistency checks pass; the minimum
+  `z_D_ub + tol_D - LB_CH` margin is 0.01.
 
-What survives regardless of the kill decision: the certified negotiation
-machinery itself (any CG variant certifies z_CH where tatonnement provably
-cycles), the B3 uplift intervals, and the equivalence-theorem framing.
+What survives this decision: the certified negotiation machinery itself
+(any CG variant certifies z_CH where tatonnement provably cycles), the B3
+uplift intervals, and the equivalence-theorem framing.
 
 ## Open questions
 
-1. Does the pilot's A2 advantage persist on the full preregistered
-   b = 0.05 population (32 instances/method), or is it an artifact of 12
-   instances and small duals dimensionality (T = 28)?
-2. Does ANY damping-family member (A1), compared at matched budgets, come
+1. Can a prespecified sparse or triggered stabilization rule retain the
+   observed clean-call benefit while eliminating enough candidate calls
+   to beat A2 on total calls on new evaluation instances?
+2. Does any damping-family member (A1), compared at matched budgets, come
    close to A2 on outcome metrics? (Certificates are A2's alone; the
-   comparison is on outcomes.)
-3. If stabilization dies, does Chapter I's algorithmic half re-scope to
-   "memory beats memorylessness" plus the equivalence theorem plus uplift
-   atlas? (See DECISION_LOG 2026-08-17.)
+   comparison is on outcomes.) This campaign remains paused.
+3. Does stabilization become amortized at larger dual dimension or
+   physical scale? The completed expansion does not answer this because
+   n in {8, 12} and T = 28 were fixed; any scale study requires a separate
+   prespecification.
 
 ## Next gate
 
-Pilot closeout is COMPLETE (`result/b2_pilot/`, corrected wall
-decomposition). The 208-cell matched expansion ran on Unicorn; the raw
-roots (12 + 36 + 208 = 256 method-cells) live on the cluster and the
-operator's machine (`src/runs/`, gitignored).
+The full-population closeout is COMPLETE and canonical at
+`result/b2_full/20260818T140356Z/`. The prespecified decision is recorded
+in `DECISION_LOG.md`: current A3-A5 variants are rejected on total-call
+efficiency, while their population-wide clean-call advantage triggers a
+focused continuation.
 
-**Current step**: the full-population analysis pipeline
-(`experiments/analyze_b2_full.py`) is implemented — exact 3-root union
-validation, corrected wall partition, true denominators (acc-1 on 32
-b=0.05 instances per stabilized method; acc-3 on 64 matched instances per
-method at the unchanged 2x threshold; kill-1 from A2's 32 b=0.05 cells
-plus acc-3), two-call immediate-certification cells verified and reported rather
-than filtered, and all labels computed from tables. **All full-population
-conclusions are PENDING**: they exist only once Codex regenerates
-`result/b2_full/<stamp>/` from the transferred raw data against the
-verified analysis-code commit (two-commit protocol) and the artifact
-commit is reviewed and merged. Until then the pilot-level findings above
-remain the only citable evidence.
-
-After the artifact commit: record the kill/continue decision in
-DECISION_LOG per the prespecified rule. The 960-cell campaign (576 fresh
-A1 cells + full CG grid) stays PAUSED.
+**Current step**: design and review that focused continuation before any
+implementation or cluster submission. It must target candidate-call
+overhead, preserve clean-RMP/clean-dual certification, and use a new
+holdout or separately prespecified population for evaluation. No Unicorn
+job is currently required. The 576-cell A1 campaign, the old 960-cell
+campaign, and any scale experiment remain paused.
