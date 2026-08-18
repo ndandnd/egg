@@ -352,7 +352,7 @@ def test_audit_rejects_priority_violation(a6_runs, tmp_path):
         ev["triggers_fired"] = ["T2"]  # fired but not selected -> violation
 
     _, ok, problems = _audited_copy(a6_runs, tmp_path, mutate)
-    assert not ok and any("frozen priority" in p for p in problems)
+    assert not ok and any("recomputed" in p for p in problems)
 
 
 def test_audit_rejects_candidate_on_clean_trigger(a6_runs, tmp_path):
@@ -363,7 +363,7 @@ def test_audit_rejects_candidate_on_clean_trigger(a6_runs, tmp_path):
         ev["triggers_fired"] = ["T0"]
 
     _, ok, problems = _audited_copy(a6_runs, tmp_path, mutate)
-    assert not ok and any("clean trigger" in p for p in problems)
+    assert not ok and any("recomputed" in p for p in problems)
 
 
 def test_audit_rejects_candidate_during_recovery(a6_runs, tmp_path):
@@ -373,7 +373,7 @@ def test_audit_rejects_candidate_during_recovery(a6_runs, tmp_path):
         ev["recovery_active"] = True
 
     _, ok, problems = _audited_copy(a6_runs, tmp_path, mutate)
-    assert not ok and any("during active recovery" in p for p in problems)
+    assert not ok and any("recovery_active" in p for p in problems)
 
 
 def test_audit_rejects_excess_spacing(a6_runs, tmp_path):
@@ -390,8 +390,8 @@ def test_audit_rejects_excess_spacing(a6_runs, tmp_path):
                 e["recovery_active"] = False
 
     _, ok, problems = _audited_copy(a6_runs, tmp_path, mutate)
-    assert not ok and any("consecutive candidates" in p or
-                          "clean trigger" in p for p in problems)
+    assert not ok and any("recomputed" in p or "k_since_clean" in p
+                          for p in problems)
 
 
 # --------------------------------------------------------------------------
@@ -437,7 +437,7 @@ def mini_pilot(tmp_path_factory):
         for m in ("a6_a4", "a6_a3"):
             out = os.path.join(root, f"{m}_s{s}_n{n}_b{b:g}")
             os.makedirs(out, exist_ok=True)
-            d_state = _dictator_stage(inst, market, out, f"{m}_{s}", 
+            d_state = _dictator_stage(inst, market, out, f"{m}_{s}",
                                       [m, s, n, b], kw)
             certified_cg_a6(inst, market, method=m, epsilon=1e-2, budget=60,
                             out_dir=out, tag=m, solver_kw=kw,
