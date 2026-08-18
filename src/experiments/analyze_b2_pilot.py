@@ -347,7 +347,8 @@ def wall_partition(ck: dict, method: str, label: str) -> tuple:
         elif phase == "clean":
             clean_event_pids.add(ev.get("pricing_solve_id"))
         solves = ev.get("master_solves") or []
-        if not solves and not (phase == "stabilized" and method == "a4"):
+        if not solves and not (phase == "stabilized"
+                               and method in ("a4", "a6_a4")):
             raise AnalysisError(
                 f"{label}: iteration {ev.get('iteration_id')} (phase "
                 f"{phase}) has no master-solve evidence")

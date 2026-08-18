@@ -117,6 +117,54 @@ def _cg_sane(ck: dict, tol_mono: float = 2e-3) -> list:
             break
     if any(e.get("replay_ok") is not True for e in events):
         errs.append("oracle event without replay_ok=true")
+    # A6 scheduler-stream integrity (falsified trigger streams must fail):
+    # the selected trigger must be the frozen-priority first of the fired
+    # triggers; T0/clean-trigger selections must be clean calls; no
+    # candidate may run while recovery is active; clean spacing outside
+    # recovery is bounded by k_max
+    method = (ck.get("identity") or {}).get("method", "a2")
+    if method.startswith("a6"):
+        from egglab.a6 import CLEAN_TRIGGERS, select_trigger
+        k_max = ((ck.get("identity") or {}).get("scheduler") or {}).get(
+            "k_max", 4)
+        run = 0
+        for it in ck.get("iteration_events") or []:
+            if it.get("terminal"):
+                continue
+            fired = {t: True for t in it.get("triggers_fired") or []}
+            sel = it.get("trigger_selected")
+            kind = it.get("call_kind")
+            if sel != select_trigger(fired):
+                errs.append(
+                    f"a6 iteration {it.get('iteration_id')}: selected "
+                    f"{sel} violates the frozen priority over "
+                    f"{it.get('triggers_fired')}")
+                break
+            if sel in CLEAN_TRIGGERS and kind != "clean":
+                errs.append(
+                    f"a6 iteration {it.get('iteration_id')}: clean trigger "
+                    f"{sel} but call_kind {kind}")
+                break
+            if sel not in CLEAN_TRIGGERS and kind != "candidate":
+                errs.append(
+                    f"a6 iteration {it.get('iteration_id')}: default "
+                    f"candidate selected but call_kind {kind}")
+                break
+            if it.get("recovery_active") and kind == "candidate":
+                errs.append(
+                    f"a6 iteration {it.get('iteration_id')}: candidate call "
+                    "during active recovery (T0 violated)")
+                break
+            if kind == "candidate":
+                run += 1
+                if run > k_max:
+                    errs.append(
+                        f"a6 iteration {it.get('iteration_id')}: "
+                        f"{run} consecutive candidates exceeds k_max={k_max}")
+                    break
+            else:
+                run = 0
+
     # iteration events reference committed pricing solves (terminal
     # master-only events carry the budget RMP's evidence and no pricing);
     # master solve ids must be unique within the checkpoint
@@ -208,10 +256,10 @@ def audit(
                         break
             if not rec.get("master_solves") and not (
                     rec.get("phase") == "stabilized"
-                    and rec.get("method") == "a4"):
-                # A4 (Wentges smoothing) is the only phase that legitimately
-                # solves no master: its candidate duals are a convex
-                # combination, not an LP solution
+                    and rec.get("method") in ("a4", "a6_a4")):
+                # Wentges smoothing (dense A4 and sparse a6_a4) is the only
+                # candidate phase that legitimately solves no master: its
+                # candidate duals are a convex combination, not an LP solution
                 problems.append(f"cg iteration {rel}:{i} has no master solves")
             continue
         recs.append(rec)

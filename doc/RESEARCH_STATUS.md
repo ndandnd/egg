@@ -111,7 +111,11 @@ unscored. Exhaustive decision partition: ADOPT (all gates) /
 HALT-AND-DEBUG / FINAL NEGATIVE (certification shortfall, clear kill,
 gray, discordant) — any final negative ends the stabilization line
 absent new theory. All five review questions are resolved (spec Section
-10). Implementation, pilot, and holdout follow only after final spec
-sign-off. No Unicorn job is currently required. The 576-cell A1
-campaign, the old 960-cell campaign, and any scale experiment remain
-paused.
+10). **A6 is now IMPLEMENTED** (`egglab/a6.py`, both identities; 24-cell
+pilot driver + guarded launcher; audit trigger-stream gates; one-shot
+selection pipeline `experiments/select_a6_arm.py`) and awaits Codex
+review before the pilot is launched. The holdout has NO driver by design:
+it may not be generated, submitted, or inspected before
+`result/a6_pilot/<stamp>/SELECTION.json` is committed. No Unicorn job is
+currently running. The 576-cell A1 campaign, the old 960-cell campaign,
+and any scale experiment remain paused.

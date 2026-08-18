@@ -429,6 +429,56 @@ and acc-3 on 64 matched instances per method (2x threshold unchanged),
 verifies-and-reports two-call immediate-certification cells, and writes
 deterministic artifacts to `result/b2_full/<stamp>/`.
 
+## A6 burned-seed pilot (2026-08-18): EXACTLY 24 cells
+
+Implementation of `A6_SPARSE_STABILIZATION_SPEC.md`: event-triggered
+sparse stabilization (`egglab/a6.py`), identities `a6_a4` and `a6_a3`,
+frozen trigger priority T0 > T4 > T3 > T1 > T2 > default candidate,
+one oracle call per master iteration, T0 recovery via A2's direct clean
+escalation. The pilot is dev-only (burned seeds {0, 11, 15}); the holdout
+(seeds 16-31) has NO driver yet by design and may not be generated before
+the selection artifact is committed.
+
+```bash
+cd "$HOME/egg"
+git switch main && git pull --ff-only origin main && git log -1 --oneline
+cd src
+source cluster/unicorn_env.sh
+
+# 0. Verify the grid (launcher refuses != 24 or any seed >= 16):
+python experiments/run_a6_pilot.py --list | tail -1
+# expected: total: 24 cells
+
+# 1. Submit (array 0-23%12; --requeue; mail nc437@cornell.edu on
+#    END/FAIL/REQUEUE; manifest under runs/a6_pilot/):
+bash cluster/launch_a6_pilot.sh
+
+# 2. Monitor:
+squeue --me
+sacct -j <JOBID> --format=JobID,State,Elapsed,ExitCode | tail -30
+
+# 3. Audit gates — both arms 12/12 complete, sane, AND certified
+#    (implementation gates; also checks trigger-stream integrity:
+#    frozen priority, T0 clean-only, no candidate during recovery,
+#    spacing <= K_MAX):
+bash cluster/launch_audit.sh \
+    runs/a6_pilot:cg=24:cg_a6_a4=12:cg_a6_a3=12:cgcert_a6_a4=12:cgcert_a6_a3=12
+# or directly:
+python experiments/audit_runs.py runs/a6_pilot --expect-cg 24 \
+    --expect-cg-method a6_a4=12 --expect-cg-method a6_a3=12 \
+    --expect-cg-certified-method a6_a4=12 --expect-cg-certified-method a6_a3=12
+
+# 4. Transfer (one password), then the ONE-SHOT arm selection where the
+#    data lives; SELECTION.json must be committed BEFORE any holdout work:
+#    ssh nc437@unicorn-login-01.coecis.cornell.edu \
+#      'cd "$HOME/egg/src" && tar -czf - runs/a6_pilot' |
+#    tar -xzf - -C "$LOCAL_REPO/src"
+cd "$LOCAL_REPO/src"
+python3 experiments/select_a6_arm.py --pilot-root runs/a6_pilot \
+    --analysis-code-commit <verified-code-commit>
+git add ../result/a6_pilot/<stamp> && git commit  # + DECISION_LOG entry
+```
+
 ## Branch hygiene
 
 The hardened implementation and this runbook are merged into `main`. Submit

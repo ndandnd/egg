@@ -1,0 +1,34 @@
+#!/bin/bash
+# A6 burned-seed pilot array (EXACTLY 24 cells: 12 a6_a4 + 12 a6_a3).
+# Launch via cluster/launch_a6_pilot.sh, which derives the array size from
+# --list and refuses anything except 24.
+#
+# Preemption safety: --requeue + atomic per-oracle-call checkpoints with
+# scheduler/recovery state; a requeued task repeats at most one in-flight
+# solve and reproduces the identical decision sequence and record stream.
+#
+#SBATCH --job-name=egg-a6-pilot
+#SBATCH --output=slurm-%x-%A_%a.out
+#SBATCH --mail-type=END,FAIL,REQUEUE
+#SBATCH --mail-user=nc437@cornell.edu
+#SBATCH --requeue
+#SBATCH --array=0-23%12
+#SBATCH --cpus-per-task=4
+#SBATCH --mem=8G
+#SBATCH --time=24:00:00
+
+set -euo pipefail
+SUBMIT_DIR="${SLURM_SUBMIT_DIR:-$(pwd)}"
+if [[ -f "${SUBMIT_DIR}/experiments/run_a6_pilot.py" ]]; then
+    WORK_DIR="${SUBMIT_DIR}"
+elif [[ -f "${SUBMIT_DIR}/src/experiments/run_a6_pilot.py" ]]; then
+    WORK_DIR="${SUBMIT_DIR}/src"
+else
+    echo "ERROR: could not locate the egg src directory from ${SUBMIT_DIR}" >&2
+    exit 1
+fi
+cd "${WORK_DIR}"
+source "${WORK_DIR}/cluster/unicorn_env.sh"
+
+python experiments/run_a6_pilot.py --cell "${SLURM_ARRAY_TASK_ID}" \
+    --out runs/a6_pilot
