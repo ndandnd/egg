@@ -381,8 +381,8 @@ git switch main && git pull --ff-only origin main && git log -1 --oneline
 cd src
 source cluster/unicorn_env.sh
 
-# 0. Verify the grid (the launcher refuses anything != 208 and refuses
-#    any pilot seed leaking in):
+# 0. Verify the grid (the launcher refuses anything != 208, anything !=
+#    52 cells per method, any pilot seed, or any unexpected seed set):
 python experiments/run_b2_expansion.py --list | tail -1
 # expected: total: 208 cells
 

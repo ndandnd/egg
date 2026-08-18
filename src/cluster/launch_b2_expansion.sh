@@ -34,6 +34,22 @@ if printf '%s\n' "${LIST}" | grep -E "'seed': (0|11|15)," >/dev/null; then
     echo "ERROR: --list contains pilot seeds (0/11/15); the expansion must be disjoint from result/b2_pilot. Refusing to submit." >&2
     exit 1
 fi
+for METHOD in A2 A3 A4 A5; do
+    METHOD_N="$(printf '%s\n' "${LIST}" |
+        grep -c "'method': '${METHOD}'" || true)"
+    if [[ "${METHOD_N}" != "52" ]]; then
+        echo "ERROR: --list contains ${METHOD_N} ${METHOD} cells; expected 52. Refusing to submit." >&2
+        exit 1
+    fi
+done
+SEED_SET="$(printf '%s\n' "${LIST}" |
+    sed -n "s/.*'seed': \([0-9][0-9]*\),.*/\1/p" |
+    sort -nu | paste -sd, -)"
+EXPECTED_SEEDS="1,2,3,4,5,6,7,8,9,10,12,13,14"
+if [[ "${SEED_SET}" != "${EXPECTED_SEEDS}" ]]; then
+    echo "ERROR: --list seed set is ${SEED_SET}; expected ${EXPECTED_SEEDS}. Refusing to submit." >&2
+    exit 1
+fi
 CONC=12
 
 JOB="$(sbatch --parsable --array="0-$((N - 1))%${CONC}" cluster/submit_b2_expansion.sub)"
@@ -41,7 +57,8 @@ mkdir -p runs/b2_expansion
 MANIFEST="runs/b2_expansion/MANIFEST-$(date -u +%Y%m%dT%H%M%SZ).txt"
 {
     printf 'campaign=b2-208-cell-matched-expansion (Option B, DECISION_LOG 2026-08-17)\n'
-    printf 'cells=%s (verified from --list; 52 instances x methods a2,a3,a4,a5)\n' "${N}"
+    printf 'cells=%s (verified from --list; 52 cells per method a2,a3,a4,a5)\n' "${N}"
+    printf 'verified_seed_set=%s\n' "${SEED_SET}"
     printf 'grid=seeds 0-15 minus pilot {0,11,15} x n{8,12} x b{0.01,0.05}\n'
     printf 'array=0-%s%%%s\n' "$((N - 1))" "${CONC}"
     printf 'epsilon=1e-2; budget=240 exact oracle calls; settings identical to the pilots\n'
