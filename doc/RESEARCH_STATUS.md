@@ -87,22 +87,31 @@ in `DECISION_LOG.md`: current A3-A5 variants are rejected on total-call
 efficiency, while their population-wide clean-call advantage triggers a
 focused continuation.
 
-**Current step**: the focused continuation is SPECIFIED and awaits
-review: `doc/A6_SPARSE_STABILIZATION_SPEC.md` (2026-08-18). A6 =
+**Current step**: the focused continuation is SPECIFIED and
+review-amended: `doc/A6_SPARSE_STABILIZATION_SPEC.md` (2026-08-18). A6 =
 event-triggered sparse stabilization — A2's certified loop plus a
-scheduler that spends exactly one oracle call per master iteration,
-choosing Wentges-smoothed candidate calls by default and clean
-certification calls on prespecified triggers (closable gap
-theta_cert = 10*epsilon; staleness K_MAX = 4; candidate stall;
-initialization). Certification remains clean-RMP UB + clean-dual LB only;
-skipped calls can never affect validity. Primary mechanism sparse-A4
-(most consistent clean-call advantage, 57/64, no stabilized master);
-sparse-A3 sanctioned only as a pilot-gated alternative. Evaluation on a
-NEW holdout (seeds 16-31, 64 instances, A2 + one A6 arm = 128 cells);
-the burned seeds 0-15 are motivating/dev evidence only. Prespecified
-adoption bar: >= 15% median total-call reduction AND >= 38/64 matched
-wins with >= 95% certification; kill: ratio >= 1.0 or <= 32 wins
-terminates the stabilization line. Implementation, pilot (12-24 cells on
-burned seeds), and the holdout campaign follow only after spec review.
-No Unicorn job is currently required. The 576-cell A1 campaign, the old
-960-cell campaign, and any scale experiment remain paused.
+scheduler spending the seed call and then exactly one oracle call per
+master iteration, chosen under the frozen priority T0 recovery > T4
+initialization > T3 candidate stall > T1 closable gap
+(theta_cert = 10*epsilon) > T2 staleness (K_MAX = 4) > default
+Wentges-smoothed candidate. T0 forces clean calls through A2's direct
+escalation/retry logic during ambiguity/refinement/duplicate recovery;
+candidates never interrupt recovery. Certification remains clean-RMP UB
++ clean-dual LB only; skipped calls can never affect validity; terminal
+states are certified, budget-exhausted, or fail-loud recovery error.
+Method identities `a6_a4` (primary; clean-call wins 57/64, no stabilized
+master) and `a6_a3` (pilot-only alternative). Pilot: exactly 24 cells on
+the burned pilot instances, both arms 12/12 audited, one-shot >= 9/12
+score selection committed as a machine-readable artifact BEFORE any
+holdout work. Holdout FROZEN at seeds 16-31 (no substitution;
+infeasibility halts and amends the preregistration), A2 + the selected
+arm = 128 cells. Scoring: certified = calls-to-certificate, valid
+budget-exhausted = 241, both-exhausted = tie, validity failures halt
+unscored. Exhaustive decision partition: ADOPT (all gates) /
+HALT-AND-DEBUG / FINAL NEGATIVE (certification shortfall, clear kill,
+gray, discordant) — any final negative ends the stabilization line
+absent new theory. All five review questions are resolved (spec Section
+10). Implementation, pilot, and holdout follow only after final spec
+sign-off. No Unicorn job is currently required. The 576-cell A1
+campaign, the old 960-cell campaign, and any scale experiment remain
+paused.

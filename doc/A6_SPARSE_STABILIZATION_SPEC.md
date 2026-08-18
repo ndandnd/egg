@@ -33,61 +33,79 @@ may cite it.
 
 ## 2. Mechanism selection (from the committed tables)
 
-Primary mechanism: **Wentges smoothing (the A4 mechanism)**, because
-(i) it has the most CONSISTENT per-instance clean-call advantage
-(57/64 — a sparse scheduler fires few candidates, so per-instance
-reliability matters more than depth); (ii) it requires NO stabilized
-master LP — candidate duals are a convex combination of the stability
-center and the CURRENT clean RMP duals, which A6 has for free every
-iteration; (iii) it has the smallest constant set (already implemented,
-tested, and identity-frozen).
+Primary mechanism: **Wentges smoothing (the A4 mechanism)**, method
+identity **`a6_a4`**, because (i) it has the most CONSISTENT per-instance
+clean-call advantage (57/64 — a sparse scheduler fires few candidates, so
+per-instance reliability matters more than depth); (ii) it requires NO
+stabilized master LP — candidate duals are a convex combination of the
+stability center and the CURRENT clean RMP duals, which A6 already holds
+each iteration (the clean RMP solve costs LP time but NO additional
+oracle call); (iii) it has the smallest constant set (already
+implemented, tested, and identity-frozen).
 
-Tightly limited comparison (the only sanctioned one): **sparse-A3**
-(du Merle candidates under the same scheduler) may run IN THE PILOT ONLY
-(12 burned instances, +12 cells, negligible cost), motivated by A3's
-deeper clean reduction (16 vs 18). Prespecified selection rule, applied
-once, on burned data only: the holdout arm is sparse-A4 unless sparse-A3
-beats sparse-A4 on total calls on >= 9 of the 12 pilot instances, in
-which case the holdout arm is sparse-A3. The holdout NEVER runs both.
+Tightly limited comparison (the only sanctioned one): **`a6_a3`**
+(du Merle candidates under the same scheduler) runs IN THE PILOT ONLY,
+motivated by A3's deeper clean reduction (16 vs 18). The pilot is exactly
+24 cells (Section 7) and its one-shot selection rule decides the single
+holdout arm. The holdout NEVER runs both.
 
 ## 3. A6 mathematics
 
 A6 = A2's certified loop with a SCHEDULER that chooses, each master
 iteration, exactly ONE oracle call. Everything below reuses the existing
-certified machinery unchanged.
+certified machinery unchanged, EXCEPT the recovery semantics (T0), which
+replace the dense deferred-escalation state machine for sparse
+scheduling.
 
 Per master iteration k:
 
-1. Solve the clean RMP over all columns (LP + tangent refinement; NOT an
-   oracle call). This yields `UB_k` (exact evaluation — the only UB source,
-   unchanged), clean duals `(pi_k, sigma_k)`, and `gap_k = UB_k - LB_best`.
-2. Choose the call type `C(k)`:
+1. Solve the clean RMP over all columns (LP + tangent refinement; this
+   costs LP wall time but NO ADDITIONAL ORACLE CALL). This yields `UB_k`
+   (exact evaluation — the only UB source, unchanged), clean duals
+   `(pi_k, sigma_k)`, and `gap_k = UB_k - LB_best`.
+2. Evaluate ALL triggers, record every trigger that fires AND the one
+   selected under the FROZEN DETERMINISTIC PRIORITY
 
-   CLEAN (certification) iff any trigger fires:
-   - **T1 (closable gap)**: `gap_k <= theta_cert` with
-     `theta_cert = 10 * epsilon = 0.1` — a certificate plausibly closes,
-     so refresh LB now;
-   - **T2 (staleness)**: `k_since_clean >= K_MAX = 4` consecutive
-     candidate calls since the last clean call — bounds certificate
-     staleness and guarantees liveness;
-   - **T3 (candidate stall)**: the previous call was a candidate whose
-     column was NOT novel — the standard mispricing fallback: the clean
-     call both certifies and supplies the Kelley column;
+       T0 recovery > T4 initialization > T3 candidate stall >
+       T1 closable gap > T2 staleness > default candidate,
+
+   then make the selected call:
+
+   - **T0 (safety/recovery, highest priority)**: the previous clean call
+     entered a recovery path — ambiguous pricing (incumbent rc not
+     materially negative while the certified rc bound is `< -rc_tol`),
+     certified-exhaustion PWL refinement, or duplicate-negative-
+     reduced-cost retry. The next call is FORCED CLEAN and A2's DIRECT
+     escalation/retry logic applies on the clean subsequence (tighten
+     `pricing_max_mip_gap` /100 on ambiguity, tangent refinement on
+     exhaustion, bounded retries with loud failure — the ORIGINAL A2
+     branches, not the dense candidate-mediated deferral, which is
+     specific to the dense schedule and is NOT reused in A6). Candidate
+     calls must never interrupt a recovery sequence: T0 keeps firing
+     until the recovery resolves (novel improving column, certificate,
+     or loud failure).
    - **T4 (initialization)**: the first post-seed call is clean
      (initializes LB and the out-point).
-
-   Otherwise CANDIDATE: prices `p_cand = -(alpha * pi_hat +
-   (1 - alpha) * pi_k)` — Wentges smoothing toward the CURRENT clean RMP
-   dual, with the existing project-prespecified auto-alpha rule,
-   Theta_cert serious/null steps, and center updates, all unchanged from
-   `B2_STABILIZATION_SPEC.md` Section 2.
+   - **T3 (candidate stall)**: the previous call was a candidate whose
+     column was NOT novel — the standard mispricing fallback: the clean
+     call both certifies and supplies the Kelley column.
+   - **T1 (closable gap)**: `gap_k <= theta_cert` with
+     `theta_cert = 10 * epsilon = 0.1` — a certificate plausibly closes,
+     so refresh LB now.
+   - **T2 (staleness)**: `k_since_clean >= K_MAX = 4` consecutive
+     candidate calls since the last clean call — bounds certificate
+     staleness and guarantees repeated certification opportunities.
+   - **default CANDIDATE**: prices `p_cand = -(alpha * pi_hat +
+     (1 - alpha) * pi_k)` — Wentges smoothing toward the CURRENT clean
+     RMP dual (`a6_a4`; du Merle candidate duals for `a6_a3`), with the
+     existing project-prespecified auto-alpha rule, Theta_cert
+     serious/null steps, and center updates, all unchanged from
+     `B2_STABILIZATION_SPEC.md`.
 
 3. CLEAN calls update `LB_best` by the unchanged Lasdon formula
-   `z_model_k + min(0, pricing_bound - sigma_k)` and flow through A2's
-   existing duplicate/exhaustion/deferred-escalation state machine
-   verbatim. CANDIDATE calls only add columns and update the smoothing
-   state; their `Theta_cert` remains a logged diagnostic, NEVER folded
-   into `LB_best`.
+   `z_model_k + min(0, pricing_bound - sigma_k)`. CANDIDATE calls only
+   add columns and update the smoothing state; their `Theta_cert`
+   remains a logged diagnostic, NEVER folded into `LB_best`.
 
 **Certification contract (unchanged, and unaffected by skipping):**
 `UB_CH` from the clean RMP over all columns every iteration; `LB_CH` only
@@ -97,20 +115,30 @@ can never affect validity (candidates only ever ADD columns); skipping a
 clean call only DELAYS an LB update, never invalidates one — the
 certificate is exactly as valid as A2's, merely refreshed on a schedule.
 
-**Termination**: T2 forces a clean call at least every `K_MAX + 1` calls,
-so the clean subsequence is infinite until termination and inherits A2's
-finite-termination argument (finite column universe, monotone UB,
-bounded escalations, loud failure) unchanged. A6 terminates certified or
-budget-exhausted.
+**Termination and terminal states**: T2 guarantees REPEATED clean
+certification opportunities (a clean call at least every `K_MAX + 1`
+calls outside recovery; more often inside T0), and under the finite-
+column assumptions the clean subsequence retains A2's progress
+machinery. The actual terminal states are exactly: CERTIFIED,
+BUDGET-EXHAUSTED (valid completed outcome), or FAIL-LOUD RECOVERY ERROR
+(bounded retries exceeded). No unconditional finite-termination claim is
+made beyond these three states; the budget is the hard stop.
 
-**Expected budget arithmetic (motivation, not a prediction):** dense A4
-needed ~16-18 master iterations (its clean-call median) at 2 calls each.
-A6 spends ~1 call per iteration plus extra clean refreshes
-(~1 per K_MAX+T1/T3 events). If the candidate quality transfers, totals
-land near iterations + refreshes ≈ high teens vs A2's 24 — a 15-30%
-reduction is the plausible range, and the acceptance bar (Section 6) is
-set accordingly BELOW the old (rejected) 2x bar, because the continuation
-claim is "stabilization can pay for itself," not "stabilization is 2x."
+**Expected budget arithmetic (motivation, not a prediction):** A6 spends
+exactly `1 (seed) + 1 oracle call per subsequent master iteration`.
+Clean refreshes PARTITION those iterations between clean and candidate
+calls — they are not extra calls added on top of an iteration count.
+The relevant unknowns are (i) how many master iterations the sparse
+candidate stream needs to assemble the certifying column set (dense-A4
+evidence: its master ran ~16-18 iterations, but each dense iteration
+injected BOTH a candidate and a Kelley column, so the sparse iteration
+count may be somewhat higher), and (ii) how many additional iterations
+delayed certification detection costs (LB refreshes only at clean
+calls). If those two effects stay moderate, totals land in the high
+teens to low twenties vs A2's 24 — which is why the acceptance bar
+(Section 6) is set at a 15% median reduction, deliberately BELOW the old
+(rejected) 2x bar: the continuation claim is "stabilization can pay for
+itself," not "stabilization is 2x."
 
 ## 4. Prespecified constants (frozen; all enter the resume identity)
 
@@ -118,7 +146,10 @@ claim is "stabilization can pay for itself," not "stabilization is 2x."
 |---|---|---|
 | `theta_cert` | `10 * epsilon = 0.1` | T1 gap trigger |
 | `K_MAX` | 4 | T2 max consecutive candidates |
-| alpha machinery | unchanged A4 constants (`alpha0 0.5`, decr 0.1, incr frac 0.1, cap 0.99) | candidate smoothing |
+| trigger priority | `T0 > T4 > T3 > T1 > T2 > default` | frozen deterministic selection |
+| T0 recovery constants | A2's existing escalation constants unchanged (gap /100 floor 1e-12; MAX_PRICING_ESCALATIONS 4; MAX_DUPLICATE_RETRIES 3) | recovery |
+| alpha machinery | unchanged A4 constants (`alpha0 0.5`, decr 0.1, incr frac 0.1, cap 0.99) | candidate smoothing (`a6_a4`) |
+| du Merle machinery | unchanged A3 constants | candidate master (`a6_a3` only) |
 | `epsilon`, budget, `pwl_tol`, `rc_tol`, `tol_d` | unchanged (1e-2, 240, 1e-3, 1e-6, 1e-2) | contract |
 
 These are round-number conventions chosen WITHOUT optimization on seeds
@@ -128,76 +159,119 @@ configuration is frozen.
 
 ## 5. Logging and checkpoint identity (prespecified)
 
-- identity adds: `method: "a6"` (or `"a6b"` for sparse-A3),
-  `scheduler: {theta_cert: 0.1, k_max: 4, triggers: [T1, T2, T3, T4]}`,
-  plus the unchanged mechanism constants;
-- every oracle event records `call_kind` in {seed, clean, candidate} and
-  `trigger_reason` in {T1, T2, T3, T4, default-candidate};
-- iteration events record `gap_at_decision`, `k_since_clean`, and the
-  scheduler decision, alongside the existing evidence contract (solve
-  ids, bounds, replay, walls);
-- checkpoint state adds the scheduler counters so resume reproduces the
-  identical decision sequence (same preemption tests as A2-A5: identical
-  nonvolatile record stream after interruption at any boundary);
-- audit: existing cg gates apply; additionally every clean gap between
-  consecutive clean calls must be <= K_MAX candidates (audit-checkable
-  from trigger_reason sequences).
+- identity adds: `method: "a6_a4"` (or `"a6_a3"`),
+  `scheduler: {theta_cert: 0.1, k_max: 4,
+  priority: [T0, T4, T3, T1, T2, default]}`, plus the unchanged
+  mechanism constants;
+- every oracle event records `call_kind` in {seed, clean, candidate},
+  `triggers_fired` (the full list of triggers that evaluated true), and
+  `trigger_selected` in {T0, T1, T2, T3, T4, default-candidate} (the one
+  chosen under the frozen priority);
+- iteration events record `gap_at_decision`, `k_since_clean`, the
+  recovery-state flag driving T0, and the scheduler decision, alongside
+  the existing evidence contract (solve ids, bounds, replay, walls);
+- checkpoint state adds the scheduler counters and recovery state so
+  resume reproduces the identical decision sequence (same preemption
+  tests as A2-A5: identical nonvolatile record stream after interruption
+  at any boundary);
+- audit: existing cg gates apply; additionally (i) every gap between
+  consecutive clean calls must be <= K_MAX candidates outside recovery,
+  (ii) every T0-flagged iteration must be a clean call, and (iii) no
+  candidate call may appear while the recovery flag is set — all
+  checkable from the committed trigger fields.
 
 ## 6. Holdout population, endpoints, decision thresholds (prespecified)
 
-**Holdout**: seeds 16-31 x n {8, 12} x b {0.01, 0.05} = 64 NEW instances,
-disjoint from the burned 0-15 population by construction. Feasibility
-screen (before freezing the holdout): one taker solve per instance at
-posted prices; if any instance is infeasible, substitute the next unused
-seed (32, 33, ...) in increasing order and record the substitution in the
-campaign manifest. Methods on the holdout: **A2 and the single A6 arm
-only** (64 matched pairs, 128 method-cells) — A3-A5 dense results on new
-seeds would add 192 cells with no decision value, and A2 must be run
-fresh because its seeds 0-15 statistics do not transfer.
+**Holdout — FROZEN**: exactly seeds 16-31 x n {8, 12} x b {0.01, 0.05}
+= 64 instances, disjoint from the burned 0-15 population by construction.
+NO adaptive seed substitution. If any generated instance turns out
+infeasible, HALT before running either method on the holdout and amend
+this preregistration explicitly; observations are never replaced.
+Methods on the holdout: **A2 and the single selected A6 arm only**
+(64 matched pairs, 128 method-cells) — A3-A5 dense results on new seeds
+would add 192 cells with no decision value, and A2 must be run fresh
+because its seeds 0-15 statistics do not transfer.
 
-**Primary endpoint**: median total oracle calls to certificate, matched
-A6 vs A2 on the 64 holdout instances. Also reported: clean calls,
-candidate (stabilized) calls, solver wall time (corrected partition),
-certification rate, final gaps, serious/null steps, trigger-reason
-counts, matched W/T/L on totals and on clean calls, uplift intervals.
+**Scoring (prespecified; used for every W/T/L and median-ratio
+computation):**
+- raw oracle-call counts are always recorded as the actual counts;
+- a CERTIFIED cell scores its calls-to-certificate;
+- a VALID budget-exhausted cell scores **241** (budget + 1);
+- if both methods of a matched pair are budget-exhausted, the pair is a
+  TIE;
+- audit or certification-validity failures are NEVER scored: they HALT
+  the campaign (halt-and-debug), and no conclusion is drawn.
 
-**Acceptance (adopt A6)** — ALL must hold on the holdout:
-- `acc-A6-1`: A6 certifies >= 61/64 (95%) within 240 calls;
-- `acc-A6-2` (primary): `median(A6 total) / median(A2 total) <= 0.85`
-  AND A6 wins >= 38/64 matched instances on total calls (ties are
-  non-wins); supporting inference: two-sided sign test on non-tied pairs
-  at alpha = 0.05 (reported, not gating);
-- `acc-A6-3`: A6 certification rate >= A2's on the same holdout.
+**Primary endpoint**: median SCORE (as defined above), matched A6 vs A2
+on the 64 holdout instances. Also reported: raw calls, clean calls,
+candidate calls, solver wall time (corrected partition), certification
+rate, final gaps, serious/null steps, trigger-selected counts, matched
+W/T/L on scores and on clean calls, uplift intervals.
 
-**Kill (terminate the stabilization line permanently)**:
-- `kill-A6-1`: median ratio >= 1.0 OR wins <= 32/64;
-- gray zone (0.85 < ratio < 1.0 and wins > 32): NOT adopted; recorded as
-  a negative result with nuance; no further stabilization variants
-  without new theory (this outcome is prespecified as final);
-- `kill-A6-2` (guardrails): any certification-validity violation halts
-  (halt-and-debug); audit gates as in Section 5.
+**Decision partition (exhaustive; every valid campaign lands in exactly
+one cell).** Let `ratio = median(A6 score) / median(A2 score)`, `W` = A6
+matched wins on scores (ties non-wins), and let the certification gates
+be `acc-A6-1`: A6 certifies >= 61/64, and `acc-A6-3`: A6 certification
+rate >= A2's on the holdout.
+
+0. **HALT-AND-DEBUG** (no conclusion): any audit or certification-
+   validity violation in either method's cells. Never scored.
+1. **ADOPT**: acc-A6-1 AND acc-A6-3 AND `ratio <= 0.85` AND `W >= 38`.
+   (Supporting inference, reported not gating: two-sided sign test on
+   non-tied score pairs at alpha = 0.05.)
+2. **FINAL NEGATIVE — certification shortfall**: acc-A6-1 or acc-A6-3
+   fails, regardless of speed results.
+3. **FINAL NEGATIVE — clear kill**: certification gates pass and
+   (`ratio >= 1.0` OR `W <= 32`).
+4. **FINAL NEGATIVE — gray**: certification gates pass and
+   `0.85 < ratio < 1.0` and `W >= 33`.
+5. **FINAL NEGATIVE — discordant**: certification gates pass and either
+   (`ratio <= 0.85` with `33 <= W <= 37`: the median moves but the
+   effect is concentrated in a subset of instances) or
+   (`W >= 38` with `0.85 < ratio < 1.0`: many small wins without the
+   required median effect).
+
+Exhaustiveness check (given certification gates pass): ratio falls in
+{<= 0.85, (0.85, 1.0), >= 1.0} and W in {<= 32, 33-37, >= 38}; case 1
+covers (<= 0.85, >= 38); case 3 covers all of ratio >= 1.0 and all of
+W <= 32; cases 4-5 cover the remaining four combinations. EVERY
+final-negative sublabel carries the same consequence: no further
+stabilization variants without new theory. ADOPT is the only outcome
+that continues the stabilization line.
 
 ## 7. Bounded pilot (before the holdout campaign)
 
-- Cells: A6 on the 12 BURNED pilot instances (seeds {0, 11, 15} x
-  n {8, 12} x b {0.01, 0.05}); optionally +12 sparse-A3 cells under the
-  Section 2 selection rule. A2 baselines on these instances already
-  exist and are not re-run.
-- Gates (implementation, not evaluation): 12/12 complete and sane;
-  bound sanity and audit (cg=12 per arm); determinism and preemption
-  batteries pass locally; trigger accounting consistent (clean-call
-  spacing <= K_MAX + 1); call counts within [2, 240].
+- Cells: EXACTLY 24 — `a6_a4` AND `a6_a3` on the 12 BURNED pilot
+  instances each (seeds {0, 11, 15} x n {8, 12} x b {0.01, 0.05}). A2
+  baselines on these instances already exist and are not re-run.
+- Gates (implementation, not evaluation): BOTH arms must pass 12/12
+  implementation audits — complete and sane, bound sanity, cg=12 per
+  arm, determinism and preemption batteries locally, trigger accounting
+  consistent (clean-call spacing <= K_MAX + 1 outside recovery; T0
+  iterations clean; no candidate inside recovery), call counts within
+  [2, 240].
+- **One-shot arm selection (on burned data, applied once)**: select
+  `a6_a3` for the holdout iff it beats `a6_a4` on the total-call SCORE
+  (Section 6 scoring) on AT LEAST 9 of the 12 pilot instances, ties
+  counted as non-wins; otherwise select `a6_a4`.
+- **Selection artifact (machine-readable, committed BEFORE any holdout
+  job is generated or submitted)**: `result/a6_pilot/<stamp>/SELECTION.json`
+  containing the per-instance scores of both arms, the win count, the
+  applied rule, the selected method identity, the analysis-code commit,
+  and hashes of the pilot inputs; plus the arm decision recorded in
+  DECISION_LOG.md. NO holdout data may be generated, submitted, or
+  inspected before this artifact is committed.
 - The pilot may NOT adjust constants silently (Section 4 rule) and its
   results may not be cited as evaluation evidence.
 
 ## 8. Estimated Unicorn cost
 
 From the 208-cell expansion (one overnight at %12, ~2-5 min median per
-cell all-in): pilot 12-24 cells ≈ well under 1 hour; holdout 128 cells ≈
-half an expansion night, ~3-6 hours wall at %12 with requeue-safe
-checkpoints. Total: one short evening (pilot + review) plus one overnight
-(holdout). No new cluster resources needed (4 CPU / 8 GB / 24 h per task
-unchanged).
+cell all-in): pilot exactly 24 cells ≈ well under 1 hour; holdout 128
+cells ≈ half an expansion night, ~3-6 hours wall at %12 with requeue-safe
+checkpoints. Total: one short evening (pilot + selection commit + review)
+plus one overnight (holdout). No new cluster resources needed
+(4 CPU / 8 GB / 24 h per task unchanged).
 
 ## 9. Out of scope (this continuation)
 
@@ -207,16 +281,23 @@ certification variants, and the 960-cell grid all remain out of scope and
 paused. Implementation itself follows only after this specification is
 reviewed and its open questions (below) are resolved.
 
-## 10. Open review questions
+## 10. Resolved review decisions (2026-08-18)
 
-1. Single holdout arm with the pilot-gated A3/A4 selection rule
-   (Section 2) — or drop sparse-A3 entirely and commit to sparse-A4 now?
-2. Are `theta_cert = 10 * epsilon` and `K_MAX = 4` acceptable as frozen
-   round-number conventions, or should a different convention be fixed
-   before implementation?
-3. Is the acceptance bar (>= 15% median reduction AND >= 38/64 wins) the
-   right ambition level for adopting A6 into the thesis narrative?
-4. Holdout = A2 + one A6 arm only (128 cells): agreed, or should any
-   dense method be re-run on the holdout for continuity?
-5. Pilot on burned seeds {0, 11, 15}: agreed that this is dev-only and
-   uncitable?
+All five open questions from the first draft were resolved in review;
+none remains optional:
+
+1. **Pilot arms**: the pilot is EXACTLY 24 cells (12 `a6_a4` + 12
+   `a6_a3`); both arms must pass 12/12 implementation audits; the
+   one-shot >= 9/12 score rule (ties non-wins) selects the single
+   holdout arm, default `a6_a4`; the selection is committed as a
+   machine-readable artifact before any holdout work (Section 7).
+2. **Constants**: `theta_cert = 10 * epsilon` and `K_MAX = 4` are
+   APPROVED as frozen round-number conventions, joined by the frozen
+   trigger priority `T0 > T4 > T3 > T1 > T2 > default` (Section 3).
+3. **Adoption bar**: APPROVED at ratio <= 0.85 AND >= 38/64 wins, with
+   the budget-exhaustion scoring rule (score 241) and the exhaustive
+   decision partition of Section 6.
+4. **Holdout arms**: APPROVED as A2 + one selected A6 arm only
+   (128 method-cells); dense methods are not re-run.
+5. **Burned pilot**: APPROVED — seeds 0-15 (including the pilot's
+   {0, 11, 15}) are dev-only and uncitable as evaluation evidence.

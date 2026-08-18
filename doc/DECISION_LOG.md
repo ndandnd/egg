@@ -187,27 +187,41 @@ experiment remain paused and are not implied by this decision.
 prespecification of the focused continuation mandated above, subject to
 review of its open questions. Summary of what is frozen there:
 
-- A6 = event-triggered sparse stabilization: one oracle call per master
-  iteration; candidate calls use the A4 Wentges mechanism (chosen for
-  the most consistent clean-call advantage, 57/64, and zero stabilized
-  master); clean certification calls fire on prespecified triggers
-  (theta_cert = 10*epsilon closable-gap, K_MAX = 4 staleness, candidate
-  stall, initialization). Certification contract unchanged; skipping
-  never affects validity; termination inherits A2's argument.
-- Seeds 0-15 are BURNED (motivating/dev only). Evaluation on a fresh
-  holdout: seeds 16-31 x n {8,12} x b {0.01,0.05} (feasibility screen
-  with prespecified seed substitution), A2 + one A6 arm = 128 cells.
-- Adoption bar: median(A6)/median(A2) <= 0.85 AND >= 38/64 matched wins
-  AND >= 95% certification with rate >= A2's. Kill: ratio >= 1.0 or
-  <= 32/64 wins terminates the stabilization line permanently; the gray
-  zone is prespecified as final-negative-with-nuance.
-- Sparse-A3 may run only in the 12-instance burned pilot, with a
-  one-shot selection rule (>= 9/12 pilot wins) deciding the single
-  holdout arm.
-- Pilot (12-24 cells, burned seeds) gates implementation correctness
-  only; constants may not be adjusted silently (any change is a new
-  prespecification; the holdout stays untouched until the config is
-  frozen).
+- A6 = event-triggered sparse stabilization: seed call + exactly one
+  oracle call per subsequent master iteration (clean and candidate calls
+  PARTITION the iterations); candidate calls use the A4 Wentges
+  mechanism (`a6_a4`, chosen for the most consistent clean-call
+  advantage, 57/64, and no stabilized master; the clean RMP solve costs
+  LP time but no additional oracle call); clean certification calls fire
+  under the FROZEN trigger priority T0 recovery > T4 initialization >
+  T3 candidate stall > T1 closable gap (theta_cert = 10*epsilon) >
+  T2 staleness (K_MAX = 4) > default candidate. T0 forces clean calls
+  through A2's DIRECT escalation/retry logic whenever the previous clean
+  call entered ambiguity/refinement/duplicate recovery — candidates
+  never interrupt recovery. Certification contract unchanged; skipping
+  never affects validity; terminal states are exactly certified,
+  budget-exhausted, or fail-loud recovery error.
+- Seeds 0-15 are BURNED (motivating/dev only). Holdout FROZEN at exactly
+  seeds 16-31 x n {8,12} x b {0.01,0.05} (no seed substitution; any
+  infeasible instance halts and amends the preregistration before
+  running either method); A2 + the one selected A6 arm = 128 cells.
+- Scoring: certified cells score calls-to-certificate; valid
+  budget-exhausted cells score 241; both-exhausted pairs tie;
+  audit/validity failures halt and are never scored. Adoption requires
+  ALL of: >= 61/64 certified, cert rate >= A2's, median score ratio
+  <= 0.85, >= 38/64 matched score wins. The decision partition is
+  EXHAUSTIVE: adopt / halt-and-debug / final negative (certification
+  shortfall, clear kill, gray, or discordant) — every final-negative
+  sublabel ends the stabilization line absent new theory.
+- Pilot: EXACTLY 24 cells (12 `a6_a4` + 12 `a6_a3` on the burned pilot
+  instances); both arms must pass 12/12 implementation audits; `a6_a3`
+  is selected only on >= 9/12 score wins (ties non-wins), else `a6_a4`;
+  the selection is committed as a machine-readable artifact
+  (result/a6_pilot/<stamp>/SELECTION.json) plus a DECISION_LOG entry
+  BEFORE any holdout job is generated or submitted.
+- All five review questions from the first draft are RESOLVED (spec
+  Section 10); nothing about the design remains optional.
 
-**Not decided here**: implementation and launches (follow spec review);
-A1 campaign; scale experiments; the 960-cell grid — all remain paused.
+**Not decided here**: implementation and launches (follow final spec
+review); A1 campaign; scale experiments; the 960-cell grid — all remain
+paused.
