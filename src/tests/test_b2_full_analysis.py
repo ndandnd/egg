@@ -23,6 +23,7 @@ from experiments.analyze_b2_full import (
     acceptance_full,
     analyze,
     check_denominators,
+    check_scientific_contract,
     two_call_report,
 )
 from experiments.analyze_b2_pilot import (
@@ -69,8 +70,13 @@ def full_roots(tmp_path_factory):
             os.makedirs(out, exist_ok=True)
             d_state = _dictator_stage(inst, market, out, base_name,
                                       [m, s, n, b], kw)
-            certified_cg(inst, market, epsilon=1e-2, budget=60,
+            experiment = ("b2a2-pilot" if (s, n, b) in MINI_PILOT
+                          and m == "a2" else
+                          "b2a345-pilot" if (s, n, b) in MINI_PILOT else
+                          "b2-expansion")
+            certified_cg(inst, market, epsilon=1e-2, budget=240,
                          out_dir=out, tag=m, method=m, solver_kw=kw,
+                         experiment=experiment,
                          z_d_ub=d_state["z_d_ub"], tol_d=d_state["tol_d"])
     return roots
 
@@ -210,7 +216,8 @@ def _fake_row(**over):
            "outcome": "certified", "certified": True, "final_gap": 1e-3,
            "oracle_calls": 2, "oracle_calls_clean": 2,
            "oracle_calls_stab": 0, "n_columns": 2, "uplift_lo": 0.0,
-           "uplift_hi": 0.02, "zd_minus_lb": 0.01}
+           "uplift_hi": 0.02, "zd_minus_lb": 0.01, "epsilon": 0.01,
+           "budget": 240, "tol_d": 0.01}
     row.update(over)
     return row
 
@@ -237,6 +244,21 @@ def test_two_call_with_stab_calls_is_impossible():
                                     oracle_calls_clean=1)])
     with pytest.raises(AnalysisError, match="stabilized calls"):
         two_call_report(cells)
+
+
+def test_one_call_cell_cannot_masquerade_as_two_call():
+    cells = pd.DataFrame([_fake_row(oracle_calls=1,
+                                    oracle_calls_clean=1)])
+    with pytest.raises(AnalysisError, match="exactly seed"):
+        two_call_report(cells)
+
+
+def test_scientific_contract_rejects_mixed_settings():
+    cells = pd.DataFrame([_fake_row(), _fake_row(seed=8)])
+    check_scientific_contract(cells)
+    cells.loc[1, "budget"] = 120
+    with pytest.raises(AnalysisError, match="scientific-contract error"):
+        check_scientific_contract(cells)
 
 
 # --------------------------------------------------------------------------
@@ -268,6 +290,18 @@ def test_hash_mismatch_rejected(full_roots, tmp_path):
     ck["identity"]["instance_hash"] = "tampered"
     checkpoint.save(p, ck)
     with pytest.raises(AnalysisError, match="instance hash mismatch"):
+        _run(roots, str(tmp_path / "out"))
+
+
+def test_experiment_lineage_mismatch_rejected(full_roots, tmp_path):
+    roots = _clone(full_roots, tmp_path)
+    p = os.path.join(roots["expansion"], "a5_s3_n4_b0.01",
+                     "a5.cg.ckpt.json")
+    ck = checkpoint.load(p)
+    for event in ck["oracle_events"]:
+        event["experiment"] = "wrong-campaign"
+    checkpoint.save(p, ck)
+    with pytest.raises(AnalysisError, match="experiment lineage"):
         _run(roots, str(tmp_path / "out"))
 
 

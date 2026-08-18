@@ -79,6 +79,13 @@ EXPANSION_INSTANCES_FULL = tuple(
 CERT_RATE_BAR = 0.95
 SPEEDUP_BAR = 2.0
 EPS = 1e-2
+BUDGET = 240
+TOL_D = 1e-2
+EXPECTED_EXPERIMENT = {
+    "a2_pilot": "b2a2-pilot",
+    "a345_pilot": "b2a345-pilot",
+    "expansion": "b2-expansion",
+}
 
 
 # ---------------------------------------------------------------------------
@@ -125,6 +132,19 @@ def validate_full(roots: dict, instances, pilot_instances,
         for m in METHODS:
             d = locate_cell_dir(roots, pilot_set, m, s, n, b)
             ck_path = validate_cell(d, m, s, n, b, instance_builder)
+            ck = json.load(open(ck_path))
+            experiments = {e.get("experiment")
+                           for e in ck.get("oracle_events") or []}
+            expected_experiment = (EXPECTED_EXPERIMENT["a2_pilot"]
+                                   if (s, n, b) in pilot_set and m == "a2"
+                                   else EXPECTED_EXPERIMENT["a345_pilot"]
+                                   if (s, n, b) in pilot_set
+                                   else EXPECTED_EXPERIMENT["expansion"])
+            if experiments != {expected_experiment}:
+                raise AnalysisError(
+                    f"cell {m} seed={s} n={n} b={b}: CG experiment "
+                    f"lineage {sorted(map(str, experiments))} != "
+                    f"{expected_experiment!r}")
             if ck_path in seen:
                 raise AnalysisError(f"duplicate/overlapping cell {ck_path}")
             seen.add(ck_path)
@@ -155,6 +175,19 @@ def check_denominators(cells: pd.DataFrame, expected_b005_per_method: int,
                 f"{expected_matched_per_method}")
 
 
+def check_scientific_contract(cells: pd.DataFrame) -> None:
+    """Reject a population assembled under settings other than the
+    preregistered B2 contract. Identity coherence alone is insufficient:
+    all sources must use the same epsilon, budget, and dictator tolerance."""
+    expected = {"epsilon": EPS, "budget": BUDGET, "tol_d": TOL_D}
+    for field, value in expected.items():
+        observed = set(cells[field].tolist())
+        if observed != {value}:
+            raise AnalysisError(
+                f"scientific-contract error: {field} values "
+                f"{sorted(map(str, observed))} != {value}")
+
+
 def two_call_report(cells: pd.DataFrame) -> pd.DataFrame:
     """Cells that certified after only seed + one clean call are legitimate
     weak-coupling outcomes: verify coherence explicitly (identity was
@@ -162,17 +195,22 @@ def two_call_report(cells: pd.DataFrame) -> pd.DataFrame:
     two = cells[cells["oracle_calls"] <= 2].copy()
     for _, r in two.iterrows():
         label = f"{r['method']} seed={r['seed']} n={r['n_trips']} b={r['b']}"
-        if not bool(r["certified"]):
+        if r["outcome"] != "certified" or not bool(r["certified"]):
             raise AnalysisError(
-                f"two-call cell {label} is NOT certified — a 2-call "
-                "termination without a certificate is incoherent")
-        if r["final_gap"] > EPS + 1e-12:
-            raise AnalysisError(
-                f"two-call cell {label}: gap {r['final_gap']} > epsilon")
+                f"two-call cell {label} is NOT certified — outcome "
+                f"{r['outcome']!r}")
         if int(r["oracle_calls_stab"]) != 0:
             raise AnalysisError(
                 f"two-call cell {label}: has stabilized calls, impossible "
                 "before the first candidate phase")
+        if int(r["oracle_calls"]) != 2 or int(r["oracle_calls_clean"]) != 2:
+            raise AnalysisError(
+                f"two-call cell {label}: expected exactly seed + one clean "
+                f"pricing call (total=clean=2), got total="
+                f"{r['oracle_calls']} clean={r['oracle_calls_clean']}")
+        if r["final_gap"] > r["epsilon"] + 1e-12:
+            raise AnalysisError(
+                f"two-call cell {label}: gap {r['final_gap']} > epsilon")
     cols = ["method", "seed", "n_trips", "b", "outcome", "certified",
             "final_gap", "oracle_calls", "oracle_calls_clean",
             "oracle_calls_stab", "n_columns", "uplift_lo", "uplift_hi"]
@@ -446,6 +484,7 @@ def analyze(roots: dict, out_base: str, stamp: str,
         cells,
         expected_b005_per_method=sum(1 for i in instances if i[2] == 0.05),
         expected_matched_per_method=n_inst)
+    check_scientific_contract(cells)
 
     two_calls = two_call_report(cells)
     matched = matched_comparison(cells)
