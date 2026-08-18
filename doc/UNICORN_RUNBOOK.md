@@ -453,6 +453,17 @@ python experiments/run_a6_pilot.py --list | tail -1
 #    END/FAIL/REQUEUE; manifest under runs/a6_pilot/):
 bash cluster/launch_a6_pilot.sh
 
+# 1b. LOCAL alternative (a machine with Gurobi; not the cluster):
+#     dry-run by default — lists the 24 cells, writes a manifest
+#     (commit, dirty status, backend, package versions; no license
+#     material), and refuses CBC, wrong grids, holdout seeds, or
+#     concurrency > 4. Execution runs at most 4 concurrent cells with
+#     4 solver threads each and resumes through the existing
+#     transactional checkpoints:
+python3 experiments/local_a6_preflight.py                # dry-run
+python3 experiments/local_a6_preflight.py --execute      # run 24 cells
+# per-cell logs: runs/a6_pilot/logs/; manifest: runs/a6_pilot/LOCAL_MANIFEST-*.json
+
 # 2. Monitor:
 squeue --me
 sacct -j <JOBID> --format=JobID,State,Elapsed,ExitCode | tail -30
