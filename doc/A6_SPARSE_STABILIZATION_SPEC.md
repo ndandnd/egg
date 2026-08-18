@@ -224,7 +224,7 @@ rate >= A2's on the holdout.
 3. **FINAL NEGATIVE — clear kill**: certification gates pass and
    (`ratio >= 1.0` OR `W <= 32`).
 4. **FINAL NEGATIVE — gray**: certification gates pass and
-   `0.85 < ratio < 1.0` and `W >= 33`.
+   `0.85 < ratio < 1.0` and `33 <= W <= 37`.
 5. **FINAL NEGATIVE — discordant**: certification gates pass and either
    (`ratio <= 0.85` with `33 <= W <= 37`: the median moves but the
    effect is concentrated in a subset of instances) or
