@@ -436,8 +436,9 @@ sparse stabilization (`egglab/a6.py`), identities `a6_a4` and `a6_a3`,
 frozen trigger priority T0 > T4 > T3 > T1 > T2 > default candidate,
 one oracle call per master iteration, T0 recovery via A2's direct clean
 escalation. The pilot is dev-only (burned seeds {0, 11, 15}); the holdout
-(seeds 16-31) has NO driver yet by design and may not be generated before
-the selection artifact is committed.
+(seeds 16-31) remained inaccessible until the selection artifact was
+committed. That gate closed at commit `8f59a905`; the frozen holdout flow is
+documented in the next section.
 
 ```bash
 cd "$HOME/egg"
@@ -489,6 +490,93 @@ python3 experiments/select_a6_arm.py --pilot-root runs/a6_pilot \
     --analysis-code-commit <verified-code-commit>
 git add ../result/a6_pilot/<stamp> && git commit  # + DECISION_LOG entry
 ```
+
+## A6 frozen holdout: EXACTLY 128 method-cells
+
+The holdout is fresh A2 plus the selected `a6_a4` arm on seeds 16-31 x
+n {8,12} x b {0.01,0.05}: 64 matched instances and 128 method-cells.
+`a6_a3`, seed substitution, and certification-count launch gates are
+forbidden. Valid budget exhaustion is completed science and scores 241.
+
+The launcher requires a clean published `main`, the exact committed pilot
+selection (SHA-256
+`026ddc38e90f9dd2e9342a50cfb5550bc52731c5f1ee67d87d53008bd6b4b507`),
+and the frozen grid. Before `sbatch`, it constructively proves all 32 unique
+physical instances feasible with exact zero-charge trip covers and writes
+`runs/a6_holdout/PREFLIGHT.json`; every array cell independently validates
+the entire proof and its implementation commit before creating output.
+It also creates a persistent `runs/a6_holdout/SUBMISSION_LOCK` before
+preflight so a second launcher cannot race the same checkpoint paths. Never
+delete that sentinel or resubmit after a failure without first auditing the
+existing root and explicitly reviewing the recovery plan.
+
+```bash
+set -euo pipefail
+
+cd "$HOME/egg"
+git switch main
+git pull --ff-only origin main
+test "$(git rev-parse HEAD)" = "$(git rev-parse origin/main)"
+test -z "$(git status --porcelain --untracked-files=no)"
+
+cd src
+source cluster/unicorn_env.sh
+
+# 0. Read-only grid check; expected final line: total: 128 cells
+python experiments/run_a6_holdout.py --list | tail -1
+
+# 1. Preflight then submit 0-127%12, 4 CPU / 8 GB / 24 h per task.
+#    The launcher refuses before sbatch if any provenance, grid, backend,
+#    selection, or physical-feasibility gate fails.
+bash cluster/launch_a6_holdout.sh
+
+# 2. Monitor using the job id printed by the launcher/manifest.
+squeue --me
+sacct -j <JOBID> --format=JobID,State,Elapsed,ExitCode,MaxRSS | tail -140
+
+# 3. Only after all tasks finish: completeness/validity audit. Do not add
+#    --expect-cg-certified-method; certification rate is an endpoint.
+python experiments/audit_runs.py runs/a6_holdout \
+    --expect-cg 128 \
+    --expect-cg-method a2=64 \
+    --expect-cg-method a6_a4=64
+```
+
+If preflight, any array task, or the audit fails, stop. Do not replace a
+seed, score a partial denominator, or launch the missing arm opportunistically.
+After a passing audit, transfer the raw root once (it remains gitignored):
+
+```bash
+LOCAL_REPO="$HOME/Documents/projects/egg"
+
+ssh nc437@unicorn-login-01.coecis.cornell.edu \
+  'cd "$HOME/egg/src" && tar -czf - runs/a6_holdout' |
+tar -xzf - -C "$LOCAL_REPO/src"
+```
+
+Analyze from the exact clean implementation commit that produced the run:
+
+```bash
+set -euo pipefail
+
+cd "$LOCAL_REPO"
+git switch main
+git pull --ff-only origin main
+test "$(git rev-parse HEAD)" = "$(git rev-parse origin/main)"
+test -z "$(git status --porcelain --untracked-files=no)"
+
+cd src
+CODE_COMMIT="$(git -C .. rev-parse HEAD)"
+python experiments/analyze_a6_holdout.py \
+    --root runs/a6_holdout \
+    --analysis-code-commit "$CODE_COMMIT"
+```
+
+The analyzer reruns the audit, independently reconstructs every identity,
+market, feasibility witness, lineage, materialized log, and corrected wall
+partition, then applies the exhaustive Section-6 decision rule. Commit the
+new `result/a6_holdout/<stamp>/` artifact and matching `DECISION_LOG.md`
+entry only after it succeeds. No second holdout look is permitted.
 
 ## Branch hygiene
 

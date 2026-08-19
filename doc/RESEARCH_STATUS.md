@@ -122,10 +122,15 @@ absent new theory. All five review questions are resolved (spec Section
 artifact is committed at `result/a6_pilot/20260819T005514Z/`:
 `a6_a3` won 2/12, so the frozen holdout arm is `a6_a4`.
 
-**Current step**: implement, review, and only then launch the frozen
-128-cell holdout (64 fresh A2 + 64 `a6_a4`; seeds 16-31 x n {8,12} x
-b {0.01,0.05}). No `a6_a3` holdout cells and no adaptive seed
-substitution are permitted. The holdout does not yet have a driver or
-launcher, and no holdout data has been generated or inspected. The
-576-cell A1 campaign, the old 960-cell campaign, and any scale experiment
-remain paused.
+**Current step**: merge and then launch the independently reviewed 128-cell
+holdout (64 fresh A2 + 64 `a6_a4`; seeds 16-31 x n {8,12} x
+b {0.01,0.05}). The guarded execution and closeout paths now live in
+`src/experiments/run_a6_holdout.py`,
+`src/cluster/launch_a6_holdout.sh`, and
+`src/experiments/analyze_a6_holdout.py`. Before any method cell, the
+launcher requires a whole-population constructive feasibility proof for
+all 32 unique physical instances. No `a6_a3` holdout cells, adaptive seed
+substitution, or certification-count completion gate are permitted. As of
+this implementation closeout, no holdout optimization data has been
+generated or inspected. The 576-cell A1 campaign, the old 960-cell
+campaign, and any scale experiment remain paused.
