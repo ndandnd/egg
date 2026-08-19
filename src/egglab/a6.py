@@ -45,17 +45,20 @@ from .b2a2 import (
     _finite,
     _materialize_logs,
     _update_price_path,
+    canonicalize_pricing_solution,
     column_from_solution,
     market_hash,
+    pricing_incumbent,
     solve_rmp,
 )
+from .evsp import LOAD_RECONSTRUCTION_POLICY_VERSION, REPLAY_TOL_KWH
 from .instance import Instance
 from .market import AffineMarket
 from .records import make_record, provenance
 from .regimes import solve_taker
 from .solver import backend
 
-A6_SCHEMA_VERSION = "a6-v1"
+A6_SCHEMA_VERSION = "a6-v2"
 A6_THETA_CERT_MULT = 10.0          # theta_cert = mult * epsilon
 A6_K_MAX = 4                       # max consecutive candidates outside T0
 A6_PRIORITY = ("T0", "T4", "T3", "T1", "T2")  # then default candidate
@@ -89,6 +92,10 @@ def a6_identity(inst, market, method, epsilon, budget, pwl_tol, solver_kw,
                    **{k: solver_kw[k] for k in sorted(solver_kw)}},
         "tol_d": tol_d,
         "z_d_ub": z_d_ub,
+        "load_reconstruction": {
+            "policy_version": LOAD_RECONSTRUCTION_POLICY_VERSION,
+            "tolerance_kwh": REPLAY_TOL_KWH,
+        },
         "method": method,
         "scheduler": {
             "theta_cert_mult": A6_THETA_CERT_MULT,
@@ -182,6 +189,7 @@ def certified_cg_a6(
         sol = solve_taker(inst, prices,
                           max_mip_gap=state["pricing_max_mip_gap"],
                           **solver_kw)
+        canonicalize_pricing_solution(inst, sol, prices)
         return sol, time.time() - t0
 
     def finish(kind, ub, gap):
@@ -293,7 +301,7 @@ def certified_cg_a6(
             prices = -np.asarray(rmp["pi"])
             sol, pricing_wall = pricing_solve(prices)
             col = column_from_solution(inst, sol)
-            pricing_ub = float(sol.obj_model)
+            pricing_ub = pricing_incumbent(col, sol, prices)
             pricing_lb = float(sol.stats.bound)
             if not _finite(pricing_lb):
                 raise B2A2Error(f"pricing bound nonfinite: {pricing_lb!r}")

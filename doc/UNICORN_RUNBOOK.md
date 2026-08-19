@@ -510,6 +510,67 @@ preflight so a second launcher cannot race the same checkpoint paths. Never
 delete that sentinel or resubmit after a failure without first auditing the
 existing root and explicitly reviewing the recovery plan.
 
+### One-time replacement protocol after failed job 218143
+
+Job 218143 is an unscored implementation incident, not a resumable scientific
+holdout. Before launching the repaired full replacement, preserve its entire
+root and available Slurm logs under a collision-refusing archive name. This is
+a recoverable rename, not deletion; the adjacent SHA-256 inventory freezes the
+archived bytes. Run once from `src/` only after job 218143 has left the queue:
+
+```bash
+set -euo pipefail
+
+cd "$HOME/egg/src"
+
+FAILED_JOB="218143"
+FAILED_ROOT="runs/a6_holdout"
+ARCHIVE_ROOT="runs/a6_holdout_failed_job218143_2dba047"
+HASH_MANIFEST="${ARCHIVE_ROOT}.sha256"
+
+test -d "$FAILED_ROOT"
+test ! -e "$ARCHIVE_ROOT"
+test ! -e "$HASH_MANIFEST"
+test -z "$(squeue -h -j "$FAILED_JOB" -o '%A')"
+
+python - <<'PY'
+import json
+from pathlib import Path
+
+root = Path("runs/a6_holdout")
+checkpoints = sorted(root.glob("**/*.cg.ckpt.json"))
+assert len(checkpoints) == 128, len(checkpoints)
+incomplete = []
+for path in checkpoints:
+    state = json.loads(path.read_text())
+    if not state.get("done"):
+        incomplete.append(path.relative_to(root).as_posix())
+assert incomplete == [
+    "a2_s26_n8_b0.05/a2.cg.ckpt.json",
+    "a6_a4_s26_n8_b0.05/a6_a4.cg.ckpt.json",
+], incomplete
+PY
+
+mv "$FAILED_ROOT" "$ARCHIVE_ROOT"
+find . -maxdepth 1 -type f \
+    -name 'slurm-egg-a6-holdout-218143_*.out' \
+    -exec cp -p {} "$ARCHIVE_ROOT"/ \;
+
+find "$ARCHIVE_ROOT" -type f -print0 |
+    LC_ALL=C sort -z |
+    xargs -0 sha256sum > "$HASH_MANIFEST"
+
+test -s "$HASH_MANIFEST"
+test ! -e runs/a6_holdout
+echo "Archived failed root: $ARCHIVE_ROOT"
+echo "Inventory:            $HASH_MANIFEST"
+sha256sum "$HASH_MANIFEST"
+```
+
+The standard launcher below then creates a new canonical
+`runs/a6_holdout` from scratch. Never merge the 126 completed old-code cells
+into that replacement root.
+
 ```bash
 set -euo pipefail
 
@@ -530,9 +591,31 @@ python experiments/run_a6_holdout.py --list | tail -1
 #    selection, or physical-feasibility gate fails.
 bash cluster/launch_a6_holdout.sh
 
-# 2. Monitor using the job id printed by the launcher/manifest.
-squeue --me
-sacct -j <JOBID> --format=JobID,State,Elapsed,ExitCode,MaxRSS | tail -140
+# 2. Monitor using the job id printed by the launcher/manifest. `--array`
+#    expands grouped task ranges. The cardinality gate prevents a zero-row
+#    filter from being misreported as "zero failures."
+JOB_ID="replace-with-job-id"
+squeue --jobs="$JOB_ID"
+sacct -n -X --array -P -j "$JOB_ID" \
+    --format=JobID,State,Elapsed,ExitCode,MaxRSS |
+awk -F'|' -v job="$JOB_ID" '
+  $1 ~ ("^" job "_[0-9]+$") {
+    total++
+    count[$2]++
+    if ($2 != "COMPLETED") { bad++; badrow[bad]=$0 }
+  }
+  END {
+    for (state in count) print state, count[state]
+    print "array records:", total+0
+    print "non-completed:", bad+0
+    for (i=1; i<=bad; i++) print "BAD", badrow[i]
+    if (total != 128) {
+      print "ERROR: expected exactly 128 expanded array records" > "/dev/stderr"
+      exit 2
+    }
+    exit(bad != 0)
+  }
+'
 
 # 3. Only after all tasks finish: completeness/validity audit. Do not add
 #    --expect-cg-certified-method; certification rate is an endpoint.

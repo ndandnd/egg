@@ -15,14 +15,18 @@ import numpy as np
 import pytest
 
 import egglab.b2a2 as b2a2_mod
+import egglab.evsp as evsp_mod
 import egglab.regimes as regimes_mod
 from egglab import checkpoint
 from egglab.b2a2 import (
     B2A2Error,
     PWL_TOL,
+    canonicalize_pricing_solution,
     certified_cg,
     column_from_solution,
     column_key,
+    pricing_incumbent,
+    solve_rmp,
 )
 from egglab.enumerate_tiny import (
     PWL_TOL as ENUM_TOL,
@@ -60,6 +64,16 @@ def _strip_volatile(obj):
 def _read_jsonl(path):
     with open(path) as f:
         return [json.loads(line) for line in f]
+
+
+def _reprice_physical_solution(sol, prices):
+    """Keep a mocked oracle column/objective coherent at new prices."""
+    value = float(sol.ops_cost + np.dot(np.asarray(prices, dtype=float),
+                                        np.asarray(sol.load, dtype=float)))
+    sol.obj_true = value
+    sol.obj_model = value
+    sol.stats.obj = value
+    return sol
 
 
 @pytest.fixture(scope="module")
@@ -242,7 +256,7 @@ def test_pricing_bound_regression_no_false_exhaustion(tiny, tmp_path,
             first["sol"] = real_solve(_inst, prices, **kw)
             return first["sol"]
         sol = copy.deepcopy(first["sol"])
-        sol.obj_model = 1e12          # incumbent: no improving column
+        _reprice_physical_solution(sol, prices)  # duplicate: no improvement
         sol.stats.bound = -1e12       # certified bound: cannot rule one out
         return sol
 
@@ -255,7 +269,7 @@ def test_pricing_bound_regression_no_false_exhaustion(tiny, tmp_path,
     assert ck["iteration_events"]
     for it in ck["iteration_events"]:
         # proof the OLD calculation would have false-certified here:
-        assert min(0.0, it["min_reduced_cost_ub"]) == 0.0
+        assert it["min_reduced_cost_ub"] >= -b2a2_mod.RC_TOL
         assert it["ub_ch"] - it["z_rmp_model"] <= 1e-2
         # while the CORRECTED lower bound keeps the gap enormous:
         assert it["certificate_gap"] > 1e-2
@@ -282,20 +296,15 @@ def test_pricing_requires_finite_bound(tiny, tmp_path, monkeypatch):
 # --------------------------------------------------------------------------
 # safety failures
 # --------------------------------------------------------------------------
-def test_duplicate_negative_rc_fails_safely(tiny, tmp_path, monkeypatch):
+def test_inconsistent_pricing_objective_fails_safely(tiny):
     inst, market = tiny
-    real = solve_taker(inst, market.price(np.zeros(market.n_slots)))
-
-    def fake_solve(_inst, _prices, **kw):
-        sol = copy.deepcopy(real)
-        sol.obj_model = -1e6        # incumbent claims a huge improvement
-        sol.stats.bound = -1e6
-        return sol
-
-    monkeypatch.setattr(b2a2_mod, "solve_taker", fake_solve)
-    with pytest.raises(B2A2Error, match="duplicate column"):
-        certified_cg(inst, market, epsilon=1e-9, budget=30,
-                     out_dir=str(tmp_path), tag="d")
+    prices = market.price(np.zeros(market.n_slots))
+    sol = solve_taker(inst, prices)
+    canonicalize_pricing_solution(inst, sol, prices)
+    col = column_from_solution(inst, sol)
+    sol.obj_true = -1e6
+    with pytest.raises(B2A2Error, match="pricing objective/column mismatch"):
+        pricing_incumbent(col, sol, prices)
 
 
 def test_replay_invalid_fails_loudly(tiny, tmp_path, monkeypatch):
@@ -348,13 +357,120 @@ def test_bound_corruption_detected(tiny, tmp_path, monkeypatch):
 
 def test_column_requires_valid_optimal_solution(tiny):
     inst, market = tiny
-    sol = solve_taker(inst, market.price(np.zeros(market.n_slots)))
+    prices = market.price(np.zeros(market.n_slots))
+    sol = solve_taker(inst, prices)
+    canonicalize_pricing_solution(inst, sol, prices)
     col = column_from_solution(inst, sol)
     assert col["replay_ok"] and col["column_key"]
     bad = copy.deepcopy(sol)
     bad.charges[0]["kwh"] = 0.0
     with pytest.raises(B2A2Error, match="replay-invalid"):
         column_from_solution(inst, bad)
+
+
+def test_physical_load_reconstruction_repairs_holdout_residual(tiny):
+    """Regression for Unicorn A6 holdout job 218143, seed 26/n8/b.05."""
+    inst, _market = tiny
+    raw = [0.0] * inst.n_slots
+    raw[7] = -7.356248409800537e-06
+    raw[8] = 45.40000735693806
+    charges = [{"slot": 8, "kwh": 45.4}]
+    stats = SolveStats(status="OPTIMAL")
+
+    load = evsp_mod._physical_load_from_charges(inst, charges, raw, stats)
+
+    assert load[7] == 0.0
+    assert load[8] == 45.4
+    assert min(load) >= 0.0
+    evidence = stats.extra["load_reconstruction"]
+    assert evidence["policy_version"] == 1
+    assert evidence["raw_min_kwh"] == raw[7]
+    assert evidence["max_abs_residual_kwh"] == pytest.approx(
+        7.356938063196372e-06)
+
+
+@pytest.mark.parametrize("bad", [-2e-4, float("nan"), float("inf")])
+def test_physical_load_reconstruction_rejects_material_or_nonfinite(
+        tiny, bad):
+    inst, _market = tiny
+    raw = [0.0] * inst.n_slots
+    raw[0] = bad
+    match = "nonfinite" if not math.isfinite(bad) else "disagrees"
+    with pytest.raises(RuntimeError, match=match):
+        evsp_mod._physical_load_from_charges(inst, [], raw, SolveStats())
+
+
+def test_generic_taker_representation_is_not_changed_by_cg_policy(tiny):
+    """The incident repair must not alter legacy Phase-1 resume semantics."""
+    inst, market = tiny
+    sol = solve_taker(inst, market.price(np.zeros(market.n_slots)))
+    assert "load_reconstruction" not in sol.stats.extra
+    assert sol.obj_true == sol.obj_model
+
+
+def test_cg_pricing_load_matches_charge_events_and_physical_objective(tiny):
+    inst, market = tiny
+    prices = market.price(np.zeros(market.n_slots))
+    sol = solve_taker(inst, prices)
+    canonicalize_pricing_solution(inst, sol, prices)
+    per_slot = [0.0] * inst.n_slots
+    for charge in sol.charges:
+        per_slot[charge["slot"]] += charge["kwh"]
+
+    assert sol.load == per_slot
+    assert min(sol.load) >= 0.0
+    assert sol.obj_true == pytest.approx(
+        sol.ops_cost + float(np.dot(prices, sol.load)))
+    assert sol.stats.extra["load_reconstruction"]["policy_version"] == 1
+    assert "pricing_objective_reconstruction" in sol.stats.extra
+
+
+def test_pricing_incumbent_uses_physical_column_not_model_incumbent(tiny):
+    inst, market = tiny
+    prices = market.price(np.zeros(market.n_slots))
+    sol = solve_taker(inst, prices)
+    canonicalize_pricing_solution(inst, sol, prices)
+    col = column_from_solution(inst, sol)
+    sol.obj_model = float(sol.obj_true) - 1.0
+
+    got = pricing_incumbent(col, sol, prices)
+
+    assert got == pytest.approx(sol.obj_true)
+    assert got != pytest.approx(sol.obj_model)
+
+
+@pytest.mark.parametrize("bad,match", [
+    (-7.356248409800537e-06, "negative"),
+    (float("nan"), "nonfinite"),
+])
+def test_rmp_rejects_nonphysical_checkpoint_column_before_backend(
+        tiny, bad, match, monkeypatch):
+    inst, market = tiny
+    prices = market.price(np.zeros(market.n_slots))
+    sol = solve_taker(inst, prices)
+    canonicalize_pricing_solution(inst, sol, prices)
+    col = column_from_solution(inst, sol)
+    col["load"][0] = bad
+    monkeypatch.setattr(
+        b2a2_mod, "new_model",
+        lambda *_a, **_k: pytest.fail("backend must not be constructed"),
+    )
+    with pytest.raises(B2A2Error, match=match):
+        solve_rmp(inst, market, [col], [])
+
+
+def test_seed26_one_column_rmp_is_feasible_after_reconstruction():
+    inst = synthetic_instance(seed=26, n_trips=8)
+    market = make_affine_market(inst, shape="duck", b_scale=0.05)
+    prices = market.price(np.zeros(market.n_slots))
+    sol = solve_taker(inst, prices)
+    canonicalize_pricing_solution(inst, sol, prices)
+    col = column_from_solution(inst, sol)
+
+    assert min(col["load"]) >= 0.0
+    rmp = solve_rmp(inst, market, [col], [])
+    assert rmp["lambdas"] == pytest.approx([1.0])
+    assert min(rmp["L"]) >= -1e-12
 
 
 # --------------------------------------------------------------------------

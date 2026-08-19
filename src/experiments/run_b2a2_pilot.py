@@ -25,6 +25,7 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import math
+import numpy as np
 
 from egglab import checkpoint
 from egglab.b2a2 import (
@@ -33,6 +34,8 @@ from egglab.b2a2 import (
     certified_cg,
     market_hash,
 )
+from egglab.evsp import (LOAD_RECONSTRUCTION_POLICY_VERSION, REPLAY_TOL_KWH,
+                         canonicalize_solution_load)
 from egglab.instance import synthetic_instance
 from egglab.market import make_affine_market
 from egglab.records import make_record
@@ -64,14 +67,22 @@ def _dictator_stage(
     """Transactional independent dictator solve (feeds the uplift interval).
     Identity-validated, atomically checkpointed with the complete record
     committed inside, and materialized/repaired on resume. ``experiment``
-    labels new evidence truthfully; it is intentionally not added to the
-    legacy checkpoint identity so existing campaign resumes stay compatible.
+    labels new evidence truthfully. Representation-policy changes are part of
+    the identity, so evidence produced before physical-load reconstruction is
+    deliberately not resumable under newer code.
     """
-    d_identity = {"schema_version": SCHEMA_VERSION,
-                  "instance_hash": inst.hash(),
-                  "market_hash": market_hash(market), "tol_d": TOL_D,
-                  "solver": {"backend": backend(),
-                             **{k: kw[k] for k in sorted(kw)}}}
+    d_identity = {
+        "schema_version": SCHEMA_VERSION,
+        "instance_hash": inst.hash(),
+        "market_hash": market_hash(market),
+        "tol_d": TOL_D,
+        "solver": {"backend": backend(),
+                   **{k: kw[k] for k in sorted(kw)}},
+        "load_reconstruction": {
+            "policy_version": LOAD_RECONSTRUCTION_POLICY_VERSION,
+            "tolerance_kwh": REPLAY_TOL_KWH,
+        },
+    }
     d_path = os.path.join(out, "dictator.ckpt.json")
     d_jsonl = os.path.join(out, "dictator.jsonl")
     d_state = checkpoint.load(d_path)
@@ -93,6 +104,24 @@ def _dictator_stage(
         return d_state
 
     sol = solve_dictator(inst, market, tol_abs=TOL_D, **kw)
+    raw_true_obj = sol.obj_true
+    canonicalize_solution_load(inst, sol)
+    physical_obj = float(
+        sol.ops_cost + market.system_cost_delta(np.asarray(sol.load)))
+    sol.obj_true = physical_obj
+    adaptive_lb = float(sol.stats.extra["adaptive_lb"])
+    adaptive_gap = physical_obj - adaptive_lb
+    sol.stats.extra.update({
+        "adaptive_ub": physical_obj,
+        "adaptive_gap_abs": adaptive_gap,
+        "adaptive_converged": bool(adaptive_gap <= TOL_D),
+        "dictator_objective_reconstruction": {
+            "policy_version": LOAD_RECONSTRUCTION_POLICY_VERSION,
+            "raw_true_obj": raw_true_obj,
+            "physical_obj": physical_obj,
+            "abs_adjustment": abs(float(raw_true_obj) - physical_obj),
+        },
+    })
     ex = sol.stats.extra
     # gate before the checkpoint is stored: OPTIMAL status, a finite
     # certified bound, and adaptive convergence are all required

@@ -18,6 +18,7 @@ from egglab.a6 import (A6_K_MAX, A6_PRIORITY, A6_THETA_CERT_MULT,
 from egglab.b2a2 import (MAX_DUPLICATE_RETRIES, MAX_PRICING_ESCALATIONS,
                          PWL_TOL, RC_TOL, SCHEMA_VERSION, market_hash)
 from egglab.b2a345 import stab_identity_params
+from egglab.evsp import LOAD_RECONSTRUCTION_POLICY_VERSION, REPLAY_TOL_KWH
 from egglab.instance import synthetic_instance
 from egglab.market import make_affine_market
 import experiments.analyze_a6_holdout as mod
@@ -74,7 +75,20 @@ def _dump_jsonl(path: Path, rows: list) -> None:
             f.write(json.dumps(row) + "\n")
 
 
-def _event(*, method, inst_hash, regime, call_id, trigger=False):
+def _load_evidence(n_slots):
+    return {
+        "policy_version": LOAD_RECONSTRUCTION_POLICY_VERSION,
+        "tolerance_kwh": REPLAY_TOL_KWH,
+        "max_abs_residual_kwh": 0.0,
+        "max_abs_residual_slot": 0,
+        "raw_min_kwh": 0.0,
+        "physical_min_kwh": 0.0,
+        "raw_load_kwh": [0.0] * n_slots,
+        "residual_kwh": [0.0] * n_slots,
+    }
+
+
+def _event(*, method, inst_hash, n_slots, regime, call_id, trigger=False):
     extra = {"tag": method, "call_id": call_id}
     if trigger:
         extra.update(call_kind="clean", trigger_selected="T4",
@@ -82,10 +96,24 @@ def _event(*, method, inst_hash, regime, call_id, trigger=False):
     return {
         "experiment": "a6-holdout", "regime": regime,
         "git_commit": RUN_COMMIT[:7], "mip_version": "1.17.6",
-        "instance_hash": inst_hash, "prices": [1.0, 2.0],
+        "instance_hash": inst_hash, "prices": [0.0] * n_slots,
+        "load": [0.0] * n_slots, "charges": [],
+        "energy_charged_kwh": 0.0, "ops_cost": 10.0,
+        "obj_model": 10.0, "obj_true": 10.0,
         "replay_ok": True, "extra": extra,
         "solver": {"backend": "GRB", "status": "OPTIMAL",
-                   "wall_s": 0.1, "lp_wall_s": 0.0},
+                   "wall_s": 0.1, "lp_wall_s": 0.0,
+                   "extra": {
+                       "load_reconstruction": _load_evidence(n_slots),
+                       "pricing_objective_reconstruction": {
+                           "policy_version":
+                               LOAD_RECONSTRUCTION_POLICY_VERSION,
+                           "prices": [0.0] * n_slots,
+                           "model_obj": 10.0,
+                           "physical_obj": 10.0,
+                           "abs_adjustment": 0.0,
+                       },
+                   }},
     }
 
 
@@ -103,6 +131,10 @@ def _write_cell(root: Path, method: str, seed: int, n: int, b: float,
         "epsilon": 0.01, "budget": 240, "pwl_tol": PWL_TOL,
         "rc_tol": RC_TOL, "solver": SOLVER_IDENTITY,
         "tol_d": 0.01, "z_d_ub": zd,
+        "load_reconstruction": {
+            "policy_version": LOAD_RECONSTRUCTION_POLICY_VERSION,
+            "tolerance_kwh": REPLAY_TOL_KWH,
+        },
     }
     if method == A6_METHOD:
         identity.update(
@@ -121,9 +153,11 @@ def _write_cell(root: Path, method: str, seed: int, n: int, b: float,
             stab=stab_identity_params("a4"),
         )
     seed_event = _event(method=method, inst_hash=inst.hash(),
+                        n_slots=inst.n_slots,
                         regime="cg-seed", call_id=f"{method}-oc0")
     clean_event = _event(
-        method=method, inst_hash=inst.hash(), regime="cg-pricing",
+        method=method, inst_hash=inst.hash(), n_slots=inst.n_slots,
+        regime="cg-pricing",
         call_id=f"{method}-oc1", trigger=method == A6_METHOD)
     iteration = {
         "record_kind": "cg-iteration", "phase": "clean",
@@ -157,7 +191,11 @@ def _write_cell(root: Path, method: str, seed: int, n: int, b: float,
         "identity": identity, "done": True, "outcome": outcome,
         "oracle_calls": calls, "calls_clean": calls, "calls_stab": 0,
         "lb_best": 9.995, "ub_history": [10.0], "lb_history": [9.995],
-        "columns": [{"column_key": "x"}],
+        "columns": [{
+            "column_key": "x", "load": [0.0] * inst.n_slots,
+            "charges": [], "energy_charged_kwh": 0.0,
+            "ops_cost": 10.0, "oracle_stats": seed_event["solver"],
+        }],
         "oracle_events": [seed_event, clean_event],
         "iteration_events": [iteration],
     }
@@ -171,14 +209,35 @@ def _write_cell(root: Path, method: str, seed: int, n: int, b: float,
         "experiment": "a6-holdout", "regime": "dictator",
         "git_commit": RUN_COMMIT[:7], "mip_version": "1.17.6",
         "instance_hash": inst.hash(), "replay_ok": True,
+        "load": [0.0] * inst.n_slots, "charges": [],
+        "energy_charged_kwh": 0.0, "ops_cost": zd,
+        "obj_model": zd, "obj_true": zd,
         "solver": {"backend": "GRB", "status": "OPTIMAL",
-                   "wall_s": 0.3, "lp_wall_s": 0.0},
+                   "wall_s": 0.3, "lp_wall_s": 0.0,
+                   "extra": {
+                       "load_reconstruction": _load_evidence(inst.n_slots),
+                       "dictator_objective_reconstruction": {
+                           "policy_version":
+                               LOAD_RECONSTRUCTION_POLICY_VERSION,
+                           "raw_true_obj": zd,
+                           "physical_obj": zd,
+                           "abs_adjustment": 0.0,
+                       },
+                   }},
         "extra": {"tag": dirname, "cell": [method, seed, n, b]},
     }
     dck = {
-        "identity": {"instance_hash": inst.hash(),
-                     "market_hash": market_hash(market), "tol_d": 0.01,
-                     "solver": SOLVER_IDENTITY},
+        "identity": {
+            "schema_version": SCHEMA_VERSION,
+            "instance_hash": inst.hash(),
+            "market_hash": market_hash(market),
+            "tol_d": 0.01,
+            "solver": SOLVER_IDENTITY,
+            "load_reconstruction": {
+                "policy_version": LOAD_RECONSTRUCTION_POLICY_VERSION,
+                "tolerance_kwh": REPLAY_TOL_KWH,
+            },
+        },
         "z_d_ub": zd, "tol_d": 0.01, "status": "OPTIMAL",
         "bound": 10.99,
         "adaptive": {"adaptive_total_wall_s": 0.5,
@@ -380,6 +439,28 @@ def test_identity_and_cell_provenance_tampering_halt(mini_root, tmp_path):
     with pytest.raises(AnalysisError, match="market hash mismatch"):
         _mini_analyze(str(bad_hash), preflight, tmp_path / "o1")
 
+    bad_policy = tmp_path / "bad-load-policy"
+    shutil.copytree(source, bad_policy)
+    ck_path = bad_policy / "a6_a4_s1_n4_b0.01" / "a6_a4.cg.ckpt.json"
+    ck = checkpoint.load(str(ck_path))
+    ck["identity"]["load_reconstruction"]["policy_version"] = 0
+    checkpoint.save(str(ck_path), ck)
+    with pytest.raises(AnalysisError, match="load reconstruction identity"):
+        _mini_analyze(str(bad_policy), preflight, tmp_path / "o-policy")
+
+    bad_dictator_policy = tmp_path / "bad-dictator-load-policy"
+    shutil.copytree(source, bad_dictator_policy)
+    dck_path = (bad_dictator_policy / "a2_s1_n4_b0.01" /
+                "dictator.ckpt.json")
+    dck = checkpoint.load(str(dck_path))
+    dck["identity"]["load_reconstruction"]["policy_version"] = 0
+    checkpoint.save(str(dck_path), dck)
+    with pytest.raises(
+            AnalysisError, match="dictator load reconstruction identity"):
+        _mini_analyze(
+            str(bad_dictator_policy), preflight,
+            tmp_path / "o-dictator-policy")
+
     bad_prov = tmp_path / "bad-prov"
     shutil.copytree(source, bad_prov)
     p = bad_prov / "a6_a4_s1_n4_b0.01" / "CELL_PROVENANCE.json"
@@ -388,6 +469,48 @@ def test_identity_and_cell_provenance_tampering_halt(mini_root, tmp_path):
     p.write_text(json.dumps(data, indent=2, sort_keys=True) + "\n")
     with pytest.raises(AnalysisError, match="cell provenance mismatch"):
         _mini_analyze(str(bad_prov), preflight, tmp_path / "o2")
+
+
+@pytest.mark.parametrize("case,expected", [
+    ("column_load", "canonical load does not equal summed charge events"),
+    ("oracle_load", "canonical load does not equal summed charge events"),
+    ("oracle_raw", "recorded load residual was tampered"),
+    ("oracle_objective", "record obj_true mismatch"),
+    ("dictator_objective", "dictator record obj_true mismatch"),
+])
+def test_numeric_reconstruction_tampering_halts_unscored(
+        mini_root, tmp_path, case, expected):
+    source, preflight = mini_root
+    bad = tmp_path / f"bad-numeric-{case}"
+    shutil.copytree(source, bad)
+    cell = bad / "a2_s1_n4_b0.01"
+    ck_path = cell / "a2.cg.ckpt.json"
+    ck = checkpoint.load(str(ck_path))
+
+    if case == "column_load":
+        ck["columns"][0]["load"][0] = 1e-6
+    elif case == "oracle_load":
+        ck["oracle_events"][0]["load"][0] = 1e-6
+    elif case == "oracle_raw":
+        lr = ck["oracle_events"][0]["solver"]["extra"][
+            "load_reconstruction"]
+        lr["raw_load_kwh"][0] = 1e-6
+    elif case == "oracle_objective":
+        ck["oracle_events"][0]["obj_true"] += 1.0
+    checkpoint.save(str(ck_path), ck)
+    _dump_jsonl(cell / "a2.oracle.jsonl", ck["oracle_events"])
+
+    if case == "dictator_objective":
+        dck_path = cell / "dictator.ckpt.json"
+        dck = checkpoint.load(str(dck_path))
+        dck["record"]["obj_true"] += 1.0
+        checkpoint.save(str(dck_path), dck)
+        _dump_jsonl(cell / "dictator.jsonl", [dck["record"]])
+
+    out = tmp_path / f"out-{case}"
+    with pytest.raises(AnalysisError, match=expected):
+        _mini_analyze(str(bad), preflight, out)
+    assert not (out / "TESTSTAMP").exists()
 
 
 def test_dictator_campaign_provenance_tampering_halts_unscored(

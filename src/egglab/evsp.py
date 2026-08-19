@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import math
 from dataclasses import dataclass, field
 
 import mip
@@ -87,7 +88,80 @@ REPLAY_TOL_KWH = 1e-4
 #     tolerance — produced the Unicorn spurious-failure incident.
 #   2 (PR#11 onward): full-precision extraction, REPLAY_TOL_KWH audit
 #     tolerance, diagnostic messages.
+# The B2/A6 column-generation pipeline applies its own versioned physical-load
+# reconstruction before storing columns. Keep this global replay policy stable
+# so unrelated resumable Phase-1/boundary workflows cannot mix representations.
 REPLAY_POLICY_VERSION = 2
+LOAD_RECONSTRUCTION_POLICY_VERSION = 1
+
+
+def _physical_load_from_charges(
+    inst: Instance,
+    charges: list,
+    raw_load: list,
+    stats: SolveStats | None,
+) -> list[float]:
+    """Reconstruct the physical slot load and audit the solver aggregate.
+
+    ``L`` is a redundant aggregate variable in the MILP.  Solver feasibility
+    residuals can make its extracted value slightly negative even though every
+    underlying charging variable is nonnegative.  The schedule's physical
+    load is therefore the per-slot sum of its recorded charge events.  The raw
+    aggregate remains diagnostic evidence and must agree within the frozen
+    replay tolerance; larger discrepancies fail loudly.
+    """
+    if len(raw_load) != inst.n_slots:
+        raise RuntimeError(
+            f"solver aggregate load has {len(raw_load)} slots; "
+            f"expected {inst.n_slots}"
+        )
+    raw = []
+    for t, value in enumerate(raw_load):
+        value = float(value)
+        if not math.isfinite(value):
+            raise RuntimeError(
+                f"solver aggregate load is nonfinite at slot {t}: {value!r}"
+            )
+        raw.append(value)
+
+    physical = [0.0] * inst.n_slots
+    for i, charge in enumerate(charges):
+        try:
+            slot = int(charge["slot"])
+            amount = float(charge["kwh"])
+        except (KeyError, TypeError, ValueError) as exc:
+            raise RuntimeError(f"malformed charge event {i}: {charge!r}") from exc
+        if slot != charge["slot"] or not 0 <= slot < inst.n_slots:
+            raise RuntimeError(f"charge event {i} has invalid slot {charge['slot']!r}")
+        if not math.isfinite(amount) or amount < 0.0:
+            raise RuntimeError(
+                f"charge event {i} has invalid nonnegative kWh value {amount!r}"
+            )
+        physical[slot] += amount
+
+    residuals = [raw[t] - physical[t] for t in range(inst.n_slots)]
+    max_abs = max((abs(value) for value in residuals), default=0.0)
+    if max_abs > REPLAY_TOL_KWH:
+        t = max(range(inst.n_slots), key=lambda k: abs(residuals[k]))
+        raise RuntimeError(
+            "solver aggregate load disagrees with physical charge events: "
+            f"slot={t} raw={raw[t]:.12g} physical={physical[t]:.12g} "
+            f"residual={residuals[t]:.3e} tol={REPLAY_TOL_KWH:.1e}"
+        )
+    if stats is not None:
+        max_slot = (max(range(inst.n_slots), key=lambda k: abs(residuals[k]))
+                    if inst.n_slots else None)
+        stats.extra["load_reconstruction"] = {
+            "policy_version": LOAD_RECONSTRUCTION_POLICY_VERSION,
+            "tolerance_kwh": REPLAY_TOL_KWH,
+            "max_abs_residual_kwh": max_abs,
+            "max_abs_residual_slot": max_slot,
+            "raw_min_kwh": min(raw, default=0.0),
+            "physical_min_kwh": min(physical, default=0.0),
+            "raw_load_kwh": raw,
+            "residual_kwh": residuals,
+        }
+    return [float(value) + 0.0 for value in physical]
 
 
 @dataclass
@@ -113,6 +187,18 @@ class Solution:
     def load_hash(self) -> str:
         canon = [_norm(x, 2) for x in self.load]
         return hashlib.sha256(json.dumps(canon).encode()).hexdigest()[:12]
+
+
+def canonicalize_solution_load(inst: Instance, sol: Solution) -> Solution:
+    """Apply the B2/A6 physical-load policy to one solved schedule in place.
+
+    This is deliberately opt-in. Generic EVSP, Phase-1, and boundary callers
+    retain their established raw-solver representation and resume semantics.
+    """
+    sol.load = _physical_load_from_charges(
+        inst, sol.charges, list(sol.load), sol.stats)
+    sol.energy_charged_kwh = float(sum(sol.load))
+    return sol
 
 
 # --------------------------------------------------------------------------
