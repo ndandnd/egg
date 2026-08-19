@@ -62,6 +62,14 @@ from experiments.analyze_b2_pilot import (
     write_csv,
 )
 from experiments.audit_runs import audit
+from experiments.package_a6_holdout import (
+    IncompletePublicationError,
+    PackagingError,
+    _capture_exact_tree_ownership,
+    _regular_signature,
+    _rollback_owned_tree,
+    publish_flat_directory_no_replace,
+)
 
 
 METHODS = ("a2", "a6_a4")
@@ -1823,6 +1831,18 @@ def _replay_cg_certificate_evidence(ck: dict, label: str) -> dict:
             outcome.get(field), expected, f"{label} outcome {field}")
     if expected_certified and first_certificate_call is None:
         raise AnalysisError(f"{label}: certified outcome has no first call")
+    if method.startswith("a6"):
+        # ONE shared recovery replay (experiments/a6_replay.py, also run by
+        # the audit): the complete scheduler/counter/pricing-gap state
+        # stream — duplicate/refine/escalation counters, /100 gap updates
+        # with the floor, recovery kind, and the final checkpoint state —
+        # must replay exactly from the committed events in the producer's
+        # branch order.
+        from experiments.a6_replay import replay_a6_recovery
+
+        _final_state, replay_errors = replay_a6_recovery(ck)
+        if replay_errors:
+            raise AnalysisError(f"{label}: {replay_errors[0]}")
     score = (first_certificate_call if expected_certified
              else BUDGET_EXHAUSTED_SCORE)
     return {
@@ -3240,210 +3260,20 @@ def _fsync_tree(path: str) -> None:
         os.close(fd)
 
 
-def _assert_analysis_publication_owned(
-    target: Path,
-    *,
-    target_signature: tuple[int, int],
-    expected_names: set[str],
-    signatures: dict[str, tuple[int, int]],
-    marker: Path,
-    marker_signature: tuple[int, int],
-) -> None:
-    """Prove the reserved directory still contains only our exact inodes."""
-    try:
-        target_info = target.lstat()
-    except OSError as exc:
-        raise AnalysisError(
-            "analysis publication reservation disappeared") from exc
-    if (not stat.S_ISDIR(target_info.st_mode)
-            or (target_info.st_dev, target_info.st_ino) != target_signature):
-        raise AnalysisError(
-            "analysis publication reservation ownership changed")
-    try:
-        observed = {entry.name for entry in target.iterdir()}
-    except OSError as exc:
-        raise AnalysisError(
-            "cannot revalidate analysis publication reservation") from exc
-    expected = {*expected_names, marker.name}
-    if observed != expected:
-        raise AnalysisError(
-            "analysis publication reservation population changed")
-    for name in sorted(expected_names):
-        path = target / name
-        try:
-            info = path.lstat()
-        except OSError as exc:
-            raise AnalysisError(
-                f"analysis publication artifact disappeared: {path}") from exc
-        if (not stat.S_ISREG(info.st_mode) or info.st_nlink != 1
-                or (info.st_dev, info.st_ino) != signatures[name]):
-            raise AnalysisError(
-                f"analysis publication artifact ownership changed: {path}")
-    try:
-        marker_info = marker.lstat()
-    except OSError as exc:
-        raise AnalysisError(
-            "analysis publication sentinel disappeared") from exc
-    if (not stat.S_ISREG(marker_info.st_mode)
-            or marker_info.st_nlink != 1
-            or (marker_info.st_dev, marker_info.st_ino) != marker_signature):
-        raise AnalysisError(
-            "analysis publication sentinel ownership changed")
 
 
-def _publish_analysis_directory_no_replace(
-    staging: str | os.PathLike,
-    destination: str | os.PathLike,
-    *,
-    expected_names: set[str],
-) -> None:
-    """Publish flat analysis artifacts under an exclusive reservation."""
-    source = Path(staging)
-    target = Path(destination)
-    entries = {entry.name: entry for entry in source.iterdir()}
-    if (set(entries) != expected_names
-            or "MANIFEST.json" not in expected_names):
-        raise AnalysisError("analysis publication staging is incomplete")
-    signatures = {}
-    for name, path in entries.items():
-        if path.is_symlink() or not path.is_file():
-            raise AnalysisError(f"unsafe analysis publication source: {path}")
-        info = path.lstat()
-        if not stat.S_ISREG(info.st_mode) or info.st_nlink != 1:
-            raise AnalysisError(f"unsafe analysis publication source: {path}")
-        signatures[name] = (info.st_dev, info.st_ino)
-    try:
-        target.mkdir(mode=0o700)
-    except FileExistsError as exc:
-        raise AnalysisError(
-            f"refusing existing analysis publication path: {target}") from exc
-    target_info = target.lstat()
-    target_signature = (target_info.st_dev, target_info.st_ino)
-
-    marker = target / ".publication-incomplete"
-    marker_signature = None
-    linked = []
-    try:
-        descriptor = os.open(
-            marker, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
-        with os.fdopen(descriptor, "wb") as handle:
-            handle.write(b"incomplete\n")
-            handle.flush()
-            os.fsync(handle.fileno())
-        marker_info = marker.lstat()
-        marker_signature = (marker_info.st_dev, marker_info.st_ino)
-        for name in [
-                *sorted(set(entries) - {"MANIFEST.json"}),
-                "MANIFEST.json"]:
-            try:
-                os.link(entries[name], target / name, follow_symlinks=False)
-            except FileExistsError as exc:
-                raise AnalysisError(
-                    f"analysis publication target appeared: {target / name}"
-                ) from exc
-            linked.append(name)
-        directory_fd = os.open(target, os.O_RDONLY)
-        try:
-            os.fsync(directory_fd)
-        finally:
-            os.close(directory_fd)
-        for name in sorted(entries):
-            entries[name].unlink()
-        source.rmdir()
-        # The exclusive mkdir protects the reservation itself, but a path can
-        # still appear or be replaced inside it while links are installed.
-        # Revalidate the exact population and every inode immediately before
-        # removing the only visible incomplete-state marker.
-        _assert_analysis_publication_owned(
-            target,
-            target_signature=target_signature,
-            expected_names=expected_names,
-            signatures=signatures,
-            marker=marker,
-            marker_signature=marker_signature,
-        )
-        marker.unlink()
-        os.chmod(target, 0o755)
-        directory_fd = os.open(target, os.O_RDONLY)
-        try:
-            os.fsync(directory_fd)
-        finally:
-            os.close(directory_fd)
-        parent_fd = os.open(target.parent, os.O_RDONLY)
-        try:
-            os.fsync(parent_fd)
-        finally:
-            os.close(parent_fd)
-    except BaseException as exc:
-        cleanup_errors = []
-        try:
-            current_target = target.lstat()
-        except FileNotFoundError:
-            current_target = None
-        except OSError as cleanup_exc:
-            current_target = None
-            cleanup_errors.append(str(cleanup_exc))
-        target_owned = (
-            current_target is not None
-            and stat.S_ISDIR(current_target.st_mode)
-            and (current_target.st_dev, current_target.st_ino)
-            == target_signature
-        )
-        if not target_owned:
-            cleanup_errors.append(
-                "analysis publication reservation is no longer owned")
-        else:
-            for name in reversed(linked):
-                path = target / name
-                try:
-                    info = path.lstat()
-                except FileNotFoundError:
-                    continue
-                if (info.st_dev, info.st_ino) == signatures[name]:
-                    try:
-                        path.unlink()
-                    except OSError as cleanup_exc:
-                        cleanup_errors.append(str(cleanup_exc))
-
-        marker_owned = False
-        if target_owned and marker_signature is not None:
-            try:
-                marker_info = marker.lstat()
-            except FileNotFoundError:
-                marker_info = None
-            marker_owned = (
-                marker_info is not None
-                and stat.S_ISREG(marker_info.st_mode)
-                and (marker_info.st_dev, marker_info.st_ino)
-                == marker_signature
-            )
-        if target_owned:
-            try:
-                remaining = {entry.name for entry in target.iterdir()}
-            except OSError as cleanup_exc:
-                remaining = None
-                cleanup_errors.append(str(cleanup_exc))
-            # Remove our marker only when that makes the owned reservation
-            # empty.  If competitor-owned paths remain, retain the marker and
-            # reservation as an explicit fail-closed incident boundary.
-            if remaining == ({marker.name} if marker_owned else set()):
-                if marker_owned:
-                    try:
-                        marker.unlink()
-                    except OSError as cleanup_exc:
-                        cleanup_errors.append(str(cleanup_exc))
-                try:
-                    target.rmdir()
-                except OSError as cleanup_exc:
-                    cleanup_errors.append(str(cleanup_exc))
-            elif remaining is not None:
-                cleanup_errors.append(
-                    "competitor-owned analysis publication paths remain")
-        if cleanup_errors:
-            raise AnalysisError(
-                "analysis publication failed and reservation cleanup was "
-                "incomplete: " + "; ".join(cleanup_errors)) from exc
-        raise
+def _record_staging_artifact(staging: str, ownership: dict,
+                             name: str) -> None:
+    """Record one just-written flat staging artifact as proven-owned so a
+    later failure can clean exactly the inodes this analysis wrote —
+    anything unrecorded freezes the staging tree for incident review."""
+    info = os.lstat(os.path.join(staging, name))
+    if not stat.S_ISREG(info.st_mode) or info.st_nlink != 1:
+        raise AnalysisError(f"unsafe analysis staging artifact: {name}")
+    ownership["files"][name] = {
+        "signature": _regular_signature(info),
+        "nlink": 1,
+    }
 
 
 def analyze(
@@ -3558,6 +3388,12 @@ def analyze(
     out_base = str(out_base_path)
     os.makedirs(out_base, exist_ok=True)
     staging = tempfile.mkdtemp(prefix=f".{stamp}.staging-", dir=out_base)
+    staging_info = os.lstat(staging)
+    staging_ownership = {
+        "root": (staging_info.st_dev, staging_info.st_ino),
+        "directories": {},
+        "files": {},
+    }
     try:
         write_csv(cells, os.path.join(staging, "cells.csv"),
                   ["method", "b", "n_trips", "seed"])
@@ -3569,9 +3405,16 @@ def analyze(
                   ["decision_cell"])
         write_csv(triggers, os.path.join(staging, "trigger_summary.csv"),
                   ["trigger_selected"])
+        for name in ("cells.csv", "matched_comparison.csv",
+                     "method_summary.csv", "decision_status.csv",
+                     "trigger_summary.csv"):
+            _record_staging_artifact(staging, staging_ownership, name)
         figures = make_figures(cells, matched, triggers, staging)
+        for name in figures:
+            _record_staging_artifact(staging, staging_ownership, name)
         write_summary(os.path.join(staging, "SUMMARY.md"), cells, summary,
                       decision, stamp, analysis_code_commit)
+        _record_staging_artifact(staging, staging_ownership, "SUMMARY.md")
 
         outputs = sorted([
             "cells.csv", "matched_comparison.csv", "method_summary.csv",
@@ -3647,16 +3490,54 @@ def analyze(
         with open(os.path.join(staging, "MANIFEST.json"), "w") as f:
             json.dump(manifest, f, indent=2, sort_keys=True)
             f.write("\n")
+        _record_staging_artifact(staging, staging_ownership, "MANIFEST.json")
         _fsync_tree(staging)
-        _publish_analysis_directory_no_replace(
-            staging,
-            out_dir,
-            expected_names={*outputs, "MANIFEST.json"},
-        )
+        expected_names = {*outputs, "MANIFEST.json"}
+        try:
+            staging_ownership = _capture_exact_tree_ownership(
+                Path(staging), expected_directories=set(),
+                expected_files=expected_names)
+        except PackagingError as exc:
+            # cleanup below uses the incremental proven-owned record; the
+            # unmanifested/foreign entry itself is preserved as evidence
+            raise AnalysisError(
+                "analysis publication staging is incomplete: "
+                f"{exc}") from exc
+
+        def _revalidate_before_commit():
+            # final raw-tree/receipt/analysis-claim revalidation, run by
+            # the shared publisher IMMEDIATELY before the incomplete
+            # marker is removed (the last pre-commit veto)
+            if transfer is not None:
+                _assert_analysis_inputs_unchanged(
+                    root_path, transfer, analysis_claim)
+
+        try:
+            publish_flat_directory_no_replace(
+                staging,
+                out_dir,
+                expected_names=expected_names,
+                revalidate=_revalidate_before_commit,
+            )
+        except IncompletePublicationError as exc:
+            staging = ""  # the tree moved; evidence lives at out_dir now
+            raise AnalysisError(
+                f"analysis publication failed: {exc}") from exc
+        except PackagingError as exc:
+            raise AnalysisError(
+                f"analysis publication failed: {exc}") from exc
         staging = ""
     finally:
         if staging and os.path.isdir(staging):
-            shutil.rmtree(staging)
+            # NEVER a blind rmtree: remove only the exact inodes this
+            # analysis wrote; anything foreign or replaced freezes the
+            # staging tree for incident review.
+            cleanup_errors = _rollback_owned_tree(
+                Path(staging), staging_ownership)
+            if cleanup_errors:
+                sys.stderr.write(
+                    "analysis staging preserved for incident review: "
+                    f"{staging}: " + "; ".join(cleanup_errors) + "\n")
     return out_dir
 
 

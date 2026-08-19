@@ -118,152 +118,18 @@ def _cg_sane(ck: dict, tol_mono: float = 2e-3) -> list:
     if any(e.get("replay_ok") is not True for e in events):
         errs.append("oracle event without replay_ok=true")
     # A6 scheduler-stream integrity (falsified trigger streams must fail).
-    # Recompute every trigger from the preceding committed state; never
-    # trust the record's own triggers_fired list as the source of truth.
+    # The COMPLETE recovery/counter replay — trigger stream, k_since_clean,
+    # recovery kind/state, duplicate/refine/escalation counters, and
+    # pricing_max_mip_gap with its /100 updates and floor — lives in ONE
+    # shared pure helper used by both this audit and the production
+    # analyzer (experiments/a6_replay.py).
     method = (ck.get("identity") or {}).get("method", "a2")
     if method.startswith("a6"):
-        from egglab.a6 import (A6_PRIORITY, CLEAN_TRIGGERS,
-                               DEFAULT_CANDIDATE, select_trigger)
-        ident = ck.get("identity") or {}
-        scheduler_ident = ident.get("scheduler") or {}
-        k_max = scheduler_ident.get("k_max", 4)
-        theta_cert = scheduler_ident.get("theta_cert")
-        rc_tol = ident.get("rc_tol")
-        if not fin(theta_cert) or not fin(rc_tol):
-            errs.append("a6 identity missing finite scheduler thresholds")
-            return errs
-        run = 0
-        n_clean = 0
-        n_columns = 1
-        last_candidate_novel = None
-        recovery_kind = None
-        event_by_id = {
-            (e.get("extra") or {}).get("call_id"): e for e in events
-        }
-        for it in ck.get("iteration_events") or []:
-            if it.get("terminal"):
-                continue
-            gap = it.get("gap_at_decision")
-            if not (isinstance(gap, (int, float)) and not math.isnan(gap)):
-                errs.append(
-                    f"a6 iteration {it.get('iteration_id')}: invalid "
-                    "gap_at_decision")
-                break
-            if it.get("k_since_clean") != run:
-                errs.append(
-                    f"a6 iteration {it.get('iteration_id')}: recorded "
-                    f"k_since_clean={it.get('k_since_clean')} but recomputed "
-                    f"value is {run}")
-                break
-            if it.get("n_columns") != n_columns:
-                errs.append(
-                    f"a6 iteration {it.get('iteration_id')}: recorded "
-                    f"n_columns={it.get('n_columns')} but recomputed value "
-                    f"is {n_columns}")
-                break
-            recovery = recovery_kind is not None
-            if bool(it.get("recovery_active")) != recovery:
-                errs.append(
-                    f"a6 iteration {it.get('iteration_id')}: recorded "
-                    f"recovery_active={it.get('recovery_active')} but "
-                    f"recomputed value is {recovery}")
-                break
-            if it.get("recovery_kind") != recovery_kind:
-                errs.append(
-                    f"a6 iteration {it.get('iteration_id')}: recorded "
-                    f"recovery_kind={it.get('recovery_kind')!r} but "
-                    f"recomputed value is {recovery_kind!r}")
-                break
-            expected_fired = {
-                "T0": recovery,
-                "T4": n_clean == 0,
-                "T3": last_candidate_novel is False,
-                "T1": gap <= theta_cert,
-                "T2": run >= k_max,
-            }
-            fired_list = [t for t in A6_PRIORITY if expected_fired[t]]
-            if it.get("triggers_fired") != fired_list:
-                errs.append(
-                    f"a6 iteration {it.get('iteration_id')}: recorded "
-                    f"triggers_fired={it.get('triggers_fired')} but "
-                    f"recomputed value is {fired_list}")
-                break
-            sel = it.get("trigger_selected")
-            kind = it.get("call_kind")
-            expected_selected = select_trigger(expected_fired)
-            if sel != expected_selected:
-                errs.append(
-                    f"a6 iteration {it.get('iteration_id')}: selected "
-                    f"{sel} violates recomputed frozen-priority selection "
-                    f"{expected_selected}")
-                break
-            if sel in CLEAN_TRIGGERS and kind != "clean":
-                errs.append(
-                    f"a6 iteration {it.get('iteration_id')}: clean trigger "
-                    f"{sel} but call_kind {kind}")
-                break
-            if sel not in CLEAN_TRIGGERS and kind != "candidate":
-                errs.append(
-                    f"a6 iteration {it.get('iteration_id')}: default "
-                    f"candidate selected but call_kind {kind}")
-                break
-            if recovery and kind == "candidate":
-                errs.append(
-                    f"a6 iteration {it.get('iteration_id')}: candidate call "
-                    "during active recovery (T0 violated)")
-                break
-            pricing_id = it.get("pricing_solve_id")
-            oracle_event = event_by_id.get(pricing_id)
-            extra = (oracle_event or {}).get("extra") or {}
-            if oracle_event is None or any((
-                    extra.get("call_kind") != kind,
-                    extra.get("trigger_selected") != sel,
-                    extra.get("triggers_fired") != fired_list)):
-                errs.append(
-                    f"a6 iteration {it.get('iteration_id')}: oracle-event "
-                    "scheduler fields disagree with the iteration event")
-                break
-            if kind == "candidate":
-                novel = it.get("column_novel")
-                if not isinstance(novel, bool):
-                    errs.append(
-                        f"a6 iteration {it.get('iteration_id')}: candidate "
-                        "column_novel is not boolean")
-                    break
-                run += 1
-                if run > k_max:
-                    errs.append(
-                        f"a6 iteration {it.get('iteration_id')}: "
-                        f"{run} consecutive candidates exceeds k_max={k_max}")
-                    break
-                last_candidate_novel = novel
-                recovery_kind = None
-                if novel:
-                    n_columns += 1
-            else:
-                run = 0
-                n_clean += 1
-                last_candidate_novel = None
-                novel = it.get("column_novel")
-                if not isinstance(novel, bool):
-                    errs.append(
-                        f"a6 iteration {it.get('iteration_id')}: clean "
-                        "column_novel is not boolean")
-                    break
-                improving = it.get("min_reduced_cost_ub") < -rc_tol
-                certified = it.get("certificate_gap") <= ident.get(
-                    "epsilon", 0)
-                if not certified:
-                    if novel:
-                        n_columns += 1
-                    if novel and improving:
-                        recovery_kind = None
-                    elif improving:
-                        recovery_kind = "duplicate"
-                    elif it.get("min_reduced_cost_lb") < -rc_tol:
-                        recovery_kind = "ambiguous"
-                    else:
-                        recovery_kind = "refinement"
+        from experiments.a6_replay import replay_a6_recovery
+
+        _final_state, replay_errors = replay_a6_recovery(ck)
+        if replay_errors:
+            errs.extend(replay_errors)
 
     # iteration events reference committed pricing solves (terminal
     # master-only events carry the budget RMP's evidence and no pricing);

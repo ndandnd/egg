@@ -14,6 +14,7 @@ import pytest
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import experiments.package_a6_holdout as mod
+from experiments.analyze_a6_holdout import EVIDENCE_LIMITATIONS
 import experiments.analyze_a6_holdout as analysis_mod
 import experiments.audit_runs as audit_mod
 from experiments.analyze_a6_holdout import HOLDOUT_INSTANCES
@@ -112,6 +113,7 @@ def _callbacks(root: Path, calls: list | None = None) -> dict:
             "experiment_code_commit": EXPERIMENT_COMMIT,
             "checks": list(mod.SCIENTIFIC_CHECKS),
             "decision_computed": False,
+            "evidence_limitations": list(EVIDENCE_LIMITATIONS),
         }
 
     def audit_fn(run_root, **kwargs):
@@ -389,6 +391,7 @@ def test_source_closeout_claim_tamper_blocks_publication(tmp_path):
             "experiment_code_commit": EXPERIMENT_COMMIT,
             "checks": list(mod.SCIENTIFIC_CHECKS),
             "decision_computed": False,
+            "evidence_limitations": list(EVIDENCE_LIMITATIONS),
         }
 
     with pytest.raises(mod.PackagingError, match="closeout claim"):
@@ -606,12 +609,14 @@ def test_flat_publication_final_ownership_gate_preserves_race_evidence(
         (staging / name).write_text(f"owned {name}\n")
     target = tmp_path / "published"
     real_gate = mod._flat_publication_errors
-    injected = False
+    calls = {"n": 0}
 
     def inject(path, **kwargs):
-        nonlocal injected
-        if not injected:
-            injected = True
+        # the first invocation is the pre-rename staging gate; the mutation
+        # must strike the POST-RENAME destination gate (the completion
+        # boundary), where evidence freezes under the retained marker
+        calls["n"] += 1
+        if calls["n"] == 2:
             if mutation == "extra":
                 (path / "operator-extra").write_text("preserve extra\n")
             elif mutation == "replacement":
@@ -624,9 +629,11 @@ def test_flat_publication_final_ownership_gate_preserves_race_evidence(
 
     monkeypatch.setattr(mod, "_flat_publication_errors", inject)
     with pytest.raises(
-            mod.IncompletePublicationError, match="cleanup was incomplete"):
+            mod.IncompletePublicationError,
+            match="incomplete destination preserved"):
         mod.publish_flat_directory_no_replace(
             staging, target, expected_names=expected)
+    assert calls["n"] >= 2
     assert (target / ".publication-incomplete").is_file()
     if mutation == "extra":
         assert (target / "operator-extra").read_text() == "preserve extra\n"
@@ -637,8 +644,12 @@ def test_flat_publication_final_ownership_gate_preserves_race_evidence(
         assert not (target / "BUNDLE_MANIFEST.json").exists()
 
 
-def test_flat_publication_reservation_fsync_failure_rolls_back_empty_target(
+def test_flat_publication_parent_fsync_failure_retains_incomplete_marker(
         tmp_path, monkeypatch):
+    """Publication is rename-first: the parent fsync happens AFTER the
+    exclusive rename, so an fsync failure must preserve the renamed
+    destination WITH its incomplete marker (never a markerless
+    apparently-complete directory, never a silent rollback)."""
     staging = tmp_path / "staging"
     staging.mkdir()
     expected = {"A.txt", "BUNDLE_MANIFEST.json"}
@@ -652,20 +663,29 @@ def test_flat_publication_reservation_fsync_failure_rolls_back_empty_target(
         nonlocal injected
         if Path(path) == target.parent and not injected:
             injected = True
-            raise OSError("injected reservation fsync failure")
+            raise OSError("injected parent fsync failure")
         return real_fsync(path)
 
     monkeypatch.setattr(mod, "_fsync_directory", fail_first_parent_fsync)
-    with pytest.raises(OSError, match="reservation fsync"):
+    with pytest.raises(
+            mod.IncompletePublicationError,
+            match="incomplete destination preserved"):
         mod.publish_flat_directory_no_replace(
             staging, target, expected_names=expected)
     assert injected
-    assert not target.exists()
-    assert {path.name for path in staging.iterdir()} == expected
+    assert not staging.exists()  # the tree moved atomically
+    assert (target / ".publication-incomplete").read_text() == "incomplete\n"
+    assert {p.name for p in target.iterdir()} == (
+        expected | {".publication-incomplete"})
+    for name in expected:
+        assert (target / name).read_text() == f"owned {name}\n"
 
 
-def test_flat_publication_reservation_race_keeps_incomplete_marker(
+def test_flat_publication_post_rename_race_keeps_incomplete_marker(
         tmp_path, monkeypatch):
+    """A foreign entry appearing in the renamed destination during the
+    post-rename window must freeze the publication: marker retained,
+    competitor evidence preserved, loud incomplete failure."""
     staging = tmp_path / "staging"
     staging.mkdir()
     expected = {"A.txt", "BUNDLE_MANIFEST.json"}
@@ -680,18 +700,21 @@ def test_flat_publication_reservation_race_keeps_incomplete_marker(
         if Path(path) == target.parent and not injected:
             injected = True
             (target / "operator-extra").write_text("preserve extra\n")
-            raise OSError("injected reservation fsync race")
+            raise OSError("injected post-rename fsync race")
         return real_fsync(path)
 
     monkeypatch.setattr(mod, "_fsync_directory", race_at_first_parent_fsync)
     with pytest.raises(
-            mod.IncompletePublicationError, match="cleanup was incomplete"):
+            mod.IncompletePublicationError,
+            match="incomplete destination preserved"):
         mod.publish_flat_directory_no_replace(
             staging, target, expected_names=expected)
     assert injected
+    assert not staging.exists()
     assert (target / ".publication-incomplete").read_text() == "incomplete\n"
     assert (target / "operator-extra").read_text() == "preserve extra\n"
-    assert {path.name for path in staging.iterdir()} == expected
+    for name in expected:
+        assert (target / name).read_text() == f"owned {name}\n"
 
 
 def test_source_mutation_or_writer_failure_publishes_nothing(
@@ -953,6 +976,18 @@ def test_existing_receipt_refuses_without_modification(tmp_path):
     assert not (runs / "a6_holdout").exists()
 
 
+
+
+def _assert_import_lock_blocking(runs):
+    """The converted import lock is a REGULAR FILE (inode-bound, O_EXCL),
+    never a directory; on any preserved-failure path it must remain and
+    carry one of the two producer payloads."""
+    lock = runs / ".a6_holdout.import-lock"
+    assert lock.is_file() and not lock.is_symlink()
+    assert lock.lstat().st_nlink == 1
+    assert lock.read_text() in ("A6 import in progress\n",
+                                "interrupted import\n")
+
 @pytest.mark.parametrize("competitor", ("file", "directory", "symlink"))
 def test_import_publication_race_never_replaces_appearing_target(
         tmp_path, monkeypatch, competitor):
@@ -988,36 +1023,46 @@ def test_import_publication_race_never_replaces_appearing_target(
         assert (target / "operator-owned").read_text() == "preserve\n"
         assert target.is_symlink() is (competitor == "symlink")
     assert not (runs / mod.RECEIPT_FILENAME).exists()
-    assert (runs / ".a6_holdout.import-lock").is_dir()
+    _assert_import_lock_blocking(runs)
 
 
-def test_install_internal_file_collision_preserves_source_and_competitor(
+def test_install_staging_replacement_before_rename_gate_rejected(
         tmp_path, monkeypatch):
+    """Nested staging replacement BEFORE the pre-rename validation gate:
+    the whole-tree rename install has no internal per-file collision
+    window (that legacy scenario is structurally gone), so the guarded
+    surface is the staging tree itself. An unlink+rewrite of a nested
+    file — even if the filesystem recycles the inode — must be caught by
+    the (dev, ino, size, mtime_ns) ownership gate, publish NOTHING, and
+    preserve the tampered staging tree as incident evidence."""
     staging = tmp_path / "staging"
     (staging / "nested").mkdir(parents=True)
     (staging / "A.txt").write_text("owned source\n")
     (staging / "nested/B.txt").write_text("owned nested source\n")
     snapshot = mod.snapshot_source(staging)
     target = tmp_path / "installed"
-    collision = target / "A.txt"
-    real_link = mod.os.link
+    real_fsync = mod.os.fsync
     injected = False
 
-    def collide_after_reservation(source, destination, **kwargs):
+    def replace_nested_before_gate(descriptor):
         nonlocal injected
-        if Path(destination) == collision and not injected:
+        if not injected:
             injected = True
-            collision.write_text("operator competitor\n")
-        return real_link(source, destination, **kwargs)
+            victim = staging / "nested/B.txt"
+            victim.unlink()
+            victim.write_text("operator replacement\n")
+        return real_fsync(descriptor)
 
-    monkeypatch.setattr(mod.os, "link", collide_after_reservation)
+    monkeypatch.setattr(mod.os, "fsync", replace_nested_before_gate)
     with pytest.raises(
-            mod.IncompletePublicationError, match="rollback was incomplete"):
+            mod.PackagingError,
+            match="staging changed before exclusive rename"):
         mod.install_tree_no_replace(staging, target, snapshot)
     assert injected
-    assert collision.read_text() == "operator competitor\n"
-    assert mod.snapshot_source(staging) == snapshot
-    assert (target / "nested").is_dir()
+    assert not target.exists()  # nothing was published
+    # the tampered staging tree is preserved for incident review
+    assert (staging / "nested/B.txt").read_text() == "operator replacement\n"
+    assert (staging / "A.txt").read_text() == "owned source\n"
 
 
 def test_receipt_publication_failure_rolls_back_target(tmp_path, monkeypatch):
@@ -1079,7 +1124,7 @@ def test_receipt_publication_race_preserves_competitor_and_freezes_tree(
     else:
         assert (receipt / "operator-owned").read_text() == "preserve\n"
         assert receipt.is_symlink() is (competitor == "symlink")
-    assert (runs / ".a6_holdout.import-lock").is_dir()
+    _assert_import_lock_blocking(runs)
 
 
 def test_post_publish_validation_failure_rolls_back_both(
@@ -1123,7 +1168,7 @@ def test_target_competitor_during_rollback_is_preserved_with_lock(
     assert (runs / "a6_holdout/PREFLIGHT.json").read_text() == (
         "operator replacement\n")
     assert (runs / mod.RECEIPT_FILENAME).is_file()
-    assert (runs / ".a6_holdout.import-lock").is_dir()
+    _assert_import_lock_blocking(runs)
 
 
 def test_receipt_competitor_during_rollback_is_preserved_with_lock(
@@ -1147,7 +1192,7 @@ def test_receipt_competitor_during_rollback_is_preserved_with_lock(
     assert (runs / "a6_holdout").is_dir()
     assert (runs / mod.RECEIPT_FILENAME).read_text() == (
         "operator receipt replacement\n")
-    assert (runs / ".a6_holdout.import-lock").is_dir()
+    _assert_import_lock_blocking(runs)
 
 
 def test_import_lock_and_manifest_provenance_tamper_refuse(tmp_path):

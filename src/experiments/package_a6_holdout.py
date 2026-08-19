@@ -536,9 +536,30 @@ def _write_bytes(path: Path, payload: bytes) -> None:
         os.fsync(handle.fileno())
 
 
+def _regular_signature(info: os.stat_result) -> tuple[int, int, int, int]:
+    """Ownership signature for regular files: (dev, ino, size, mtime_ns).
+
+    (dev, ino) alone is defeated by inode recycling: an unlink immediately
+    followed by a re-create can legitimately receive the SAME inode number
+    (observed on tmpfs), making a foreign replacement indistinguishable and
+    letting rollback destroy competitor content (EI-022). Size and mtime_ns
+    change on any rewrite, closing that hole for cooperative processes.
+    Hard-linking/unlinking OTHER names of the inode changes neither, so the
+    receipt link dance stays valid. A malicious same-UID process could
+    restore mtime via utimensat — that adversary is outside the documented
+    trust boundary (see the module publication notes)."""
+    return (info.st_dev, info.st_ino, info.st_size, info.st_mtime_ns)
+
+
+def _regular_signature_error(info: os.stat_result,
+                             signature: tuple) -> bool:
+    return (not stat.S_ISREG(info.st_mode)
+            or _regular_signature(info) != tuple(signature))
+
+
 def _owned_regular_error(
     path: Path,
-    signature: tuple[int, int],
+    signature: tuple,
     *,
     allowed_nlinks: set[int],
 ) -> str | None:
@@ -546,12 +567,11 @@ def _owned_regular_error(
         info = path.lstat()
     except FileNotFoundError:
         return f"owned path is missing: {path}"
-    if (not stat.S_ISREG(info.st_mode)
-            or (info.st_dev, info.st_ino) != signature
+    if (_regular_signature_error(info, signature)
             or info.st_nlink not in allowed_nlinks):
         return (
-            f"owned regular path was replaced or relinked: {path} "
-            f"(nlink={info.st_nlink})")
+            f"owned regular path was replaced, rewritten, or relinked: "
+            f"{path} (nlink={info.st_nlink})")
     return None
 
 
@@ -585,7 +605,7 @@ def _open_directory_nofollow(
 def _owned_regular_error_at(
     directory_fd: int,
     name: str,
-    signature: tuple[int, int],
+    signature: tuple,
     *,
     allowed_nlinks: set[int],
     display: Path,
@@ -594,12 +614,11 @@ def _owned_regular_error_at(
         info = os.stat(name, dir_fd=directory_fd, follow_symlinks=False)
     except FileNotFoundError:
         return f"owned path is missing: {display}"
-    if (not stat.S_ISREG(info.st_mode)
-            or (info.st_dev, info.st_ino) != signature
+    if (_regular_signature_error(info, signature)
             or info.st_nlink not in allowed_nlinks):
         return (
-            f"owned regular path was replaced or relinked: {display} "
-            f"(nlink={info.st_nlink})")
+            f"owned regular path was replaced, rewritten, or relinked: "
+            f"{display} (nlink={info.st_nlink})")
     return None
 
 
@@ -816,12 +835,33 @@ def publish_flat_directory_no_replace(
     destination: str | os.PathLike,
     *,
     expected_names: set[str],
+    revalidate=None,
 ) -> None:
     """Publish a flat artifact directory without ever replacing a path.
 
     The fully prepared staging directory is atomically renamed with the native
     no-replace primitive.  An anchored sentinel remains until a post-rename
     ownership gate proves the exact directory reached the requested path.
+
+    ``revalidate`` (optional, no arguments) runs AFTER the final ownership
+    gate and IMMEDIATELY BEFORE the marker unlink — the last chance to
+    reject the publication while the incomplete marker still anchors it.
+    Any exception it raises preserves the renamed destination WITH the
+    marker (IncompletePublicationError), never a markerless
+    apparently-complete directory.
+
+    Trust boundary (honest OS limits): the native rename protects the
+    DESTINATION atomically (renamex_np/RENAME_EXCL on macOS,
+    renameat2/RENAME_NOREPLACE on Linux), but portable POSIX offers no
+    rename-by-open-directory-fd for the SOURCE.  The randomized,
+    caller-owned staging namespace is therefore treated as
+    trusted/cooperative: a malicious same-UID process swapping the staging
+    directory in the instant between the pre-rename ownership gate and the
+    rename syscall is outside this function's guarantees (and mtime-based
+    rewrite detection can likewise be defeated by a same-UID utimensat).
+    Everything a cooperative-but-buggy environment can produce — stray
+    files, crashed competitors, inode recycling, fsync failures — is
+    detected or preserved fail-closed.
     """
     source = Path(staging)
     target = Path(destination)
@@ -850,11 +890,14 @@ def publish_flat_directory_no_replace(
             os.close(marker_fd)
             raise PackagingError(
                 "publication incomplete-marker ownership is invalid")
-        marker_signature = (marker_info.st_dev, marker_info.st_ino)
         with os.fdopen(marker_fd, "wb") as handle:
             handle.write(b"incomplete\n")
             handle.flush()
             os.fsync(handle.fileno())
+        # signature is captured AFTER the final write: (dev, ino, size,
+        # mtime_ns) must describe the finished marker
+        marker_signature = _regular_signature(os.stat(
+            marker_name, dir_fd=source_fd, follow_symlinks=False))
         os.fchmod(source_fd, 0o755)
         os.fsync(source_fd)
         pre_errors = _flat_publication_errors(
@@ -888,6 +931,11 @@ def publish_flat_directory_no_replace(
             raise PackagingError(
                 "publication ownership changed before commit: "
                 + "; ".join(final_errors))
+        # Caller-supplied final revalidation (e.g. the analyzer's raw-tree/
+        # receipt/analysis-claim recheck) runs while the marker still
+        # anchors the publication; its failure preserves marker + evidence.
+        if revalidate is not None:
+            revalidate()
         # The unlink syscall is the final commit boundary.  All directory and
         # rename durability barriers have completed while the marker existed;
         # a crash may conservatively retain the marker, but no fallible step
@@ -1093,7 +1141,7 @@ def _capture_exact_tree_ownership(
                     raise PackagingError(
                         f"unsafe owned tree file: {root / relative}")
                 ownership["files"][relative] = {
-                    "signature": (info.st_dev, info.st_ino),
+                    "signature": _regular_signature(info),
                     "nlink": 1,
                 }
             finally:
@@ -1134,7 +1182,7 @@ def _record_owned_regular_entry(
                 raise PackagingError(
                     f"unsafe newly owned regular file: {root / relative}")
             ownership["files"][relative] = {
-                "signature": (info.st_dev, info.st_ino),
+                "signature": _regular_signature(info),
                 "nlink": 1,
             }
         finally:
@@ -1457,12 +1505,15 @@ def validate_scientific_population(
     if resolved != preflight["code_commit"]:
         raise PackagingError(
             "resolved experiment commit differs from PREFLIGHT code commit")
+    from experiments.analyze_a6_holdout import EVIDENCE_LIMITATIONS
+
     return {
         "status": "PASS",
         "method_cells": len(cells),
         "experiment_code_commit": resolved,
         "checks": list(SCIENTIFIC_CHECKS),
         "decision_computed": False,
+        "evidence_limitations": list(EVIDENCE_LIMITATIONS),
     }
 
 
@@ -1636,15 +1687,19 @@ def _validated_manifest_snapshot(manifest: dict, audit_bytes: bytes) -> dict:
             or preflight.get("method_cells") != 128):
         raise PackagingError("bundle manifest preflight identity is invalid")
 
+    from experiments.analyze_a6_holdout import EVIDENCE_LIMITATIONS
+
     scientific = manifest.get("scientific_validation") or {}
     if (set(scientific) != {
             "status", "method_cells", "experiment_code_commit", "checks",
-            "decision_computed"}
+            "decision_computed", "evidence_limitations"}
             or scientific.get("status") != "PASS"
             or scientific.get("method_cells") != 128
             or scientific.get("experiment_code_commit") != experiment_commit
             or scientific.get("decision_computed") is not False
-            or scientific.get("checks") != list(SCIENTIFIC_CHECKS)):
+            or scientific.get("checks") != list(SCIENTIFIC_CHECKS)
+            or scientific.get("evidence_limitations")
+            != list(EVIDENCE_LIMITATIONS)):
         raise PackagingError(
             "bundle manifest scientific validation is invalid")
 
@@ -2099,10 +2154,12 @@ def import_bundle(
         lock_info = os.fstat(lock_fd)
         if not stat.S_ISREG(lock_info.st_mode) or lock_info.st_nlink != 1:
             raise PackagingError("import lock ownership is invalid at creation")
-        lock_signature = (lock_info.st_dev, lock_info.st_ino)
         os.write(lock_fd, b"A6 import in progress\n")
         os.fsync(lock_fd)
         os.fsync(runs_parent_fd)
+        # signature after the final write: rewrite detection must not be
+        # defeated by inode recycling (EI-022)
+        lock_signature = _regular_signature(os.fstat(lock_fd))
     except BaseException as exc:
         if lock_fd is not None:
             os.close(lock_fd)
@@ -2160,7 +2217,7 @@ def import_bundle(
                         f"imported source member differs: {member_name}")
                 info = destination.lstat()
                 staging_ownership["files"][record["path"]] = {
-                    "signature": (info.st_dev, info.st_ino),
+                    "signature": _regular_signature(info),
                     "nlink": 1,
                 }
         staging_errors = _owned_tree_errors(staging, staging_ownership)
@@ -2203,8 +2260,7 @@ def import_bundle(
         if (not stat.S_ISREG(receipt_temp_info.st_mode)
                 or receipt_temp_info.st_nlink != 1):
             raise PackagingError("temporary transfer receipt ownership is invalid")
-        receipt_temp_signature = (
-            receipt_temp_info.st_dev, receipt_temp_info.st_ino)
+        receipt_temp_signature = _regular_signature(receipt_temp_info)
 
         if (target.exists() or target.is_symlink()
                 or receipt_path.exists() or receipt_path.is_symlink()):
@@ -2220,12 +2276,10 @@ def import_bundle(
                 f"refusing existing transfer receipt: {receipt_path}") from exc
         receipt_link_info = receipt_path.lstat()
         temp_link_info = receipt_temp.lstat()
-        if (not stat.S_ISREG(receipt_link_info.st_mode)
-                or not stat.S_ISREG(temp_link_info.st_mode)
-                or (receipt_link_info.st_dev, receipt_link_info.st_ino)
-                != receipt_temp_signature
-                or (temp_link_info.st_dev, temp_link_info.st_ino)
-                != receipt_temp_signature
+        if (_regular_signature_error(receipt_link_info,
+                                     receipt_temp_signature)
+                or _regular_signature_error(temp_link_info,
+                                            receipt_temp_signature)
                 or receipt_link_info.st_nlink != 2
                 or temp_link_info.st_nlink != 2):
             raise PackagingError("transfer receipt hard-link ownership is invalid")
@@ -2343,9 +2397,7 @@ def import_bundle(
                         "import lock ownership record is missing")
                 else:
                     open_info = os.fstat(lock_fd)
-                    if ((open_info.st_dev, open_info.st_ino)
-                            != lock_signature
-                            or not stat.S_ISREG(open_info.st_mode)
+                    if (_regular_signature_error(open_info, lock_signature)
                             or open_info.st_nlink != 1):
                         lock_release_errors.append(
                             "open import lock ownership changed")

@@ -330,7 +330,9 @@ def _write_cell(root: Path, method: str, seed: int, n: int, b: float,
             recovery_active=False, recovery_kind=None,
             triggers_fired=["T4"], trigger_selected="T4",
             call_kind="clean", column_novel=False,
-            min_reduced_cost_ub=0.0)
+            min_reduced_cost_ub=0.0,
+            pricing_max_mip_gap=SOLVER_IDENTITY.get(
+                "max_mip_gap", 1e-6))
     broadcast_tv, broadcast_linf, broadcast_points = mod._price_path_metrics(
         [seed_event, clean_event],
         ("cg-seed", "cg-pricing", "cg-stab-pricing"),
@@ -347,6 +349,7 @@ def _write_cell(root: Path, method: str, seed: int, n: int, b: float,
     if method == A6_METHOD:
         outcome["method"] = method
         outcome["trigger_selected_counts"] = {"T4": 1}
+        outcome["recovery_active_at_end"] = False
     ck = {
         "identity": identity, "done": True, "outcome": outcome,
         "oracle_calls": calls, "calls_clean": calls, "calls_stab": 0,
@@ -354,6 +357,15 @@ def _write_cell(root: Path, method: str, seed: int, n: int, b: float,
         "oracle_events": [seed_event, clean_event],
         "iteration_events": [iteration],
     }
+    if method == A6_METHOD:
+        # complete producer state so the shared recovery replay
+        # (experiments/a6_replay.py) verifies these synthetic cells
+        ck.update(
+            duplicate_retries=0, refine_retries=0, pricing_escalations=0,
+            pricing_max_mip_gap=SOLVER_IDENTITY.get("max_mip_gap", 1e-6),
+            scheduler={"k_since_clean": 0, "n_clean_pricing": 1,
+                       "last_candidate_novel": None, "recovery": None},
+        )
     column = {
         key: copy.deepcopy(schedule[key])
         for key in ("sequences", "arc_kinds", "charges", "load", "fleet",
@@ -849,33 +861,121 @@ def test_scoring_including_terminal_budget_certificate():
         score_outcome(_score_ck("budget_exhausted", False, 239, 0.02), "x")
 
 
-def test_scoring_replays_a6_candidate_without_treating_it_as_a_bound():
+def _coherent_a6_score_state():
+    """A fully scheduler-coherent synthetic a6 trace accepted end-to-end by
+    the analyzer (shared by the candidate-bound test and the coordinated
+    recovery-tamper rejections below)."""
     state = _score_ck("certified", True, 4, 0.001)
     state["identity"]["method"] = A6_METHOD
+    state["identity"]["rc_tol"] = RC_TOL
+    state["identity"]["solver"] = SOLVER_IDENTITY
+    state["identity"]["scheduler"] = {
+        "theta_cert_mult": A6_THETA_CERT_MULT,
+        "theta_cert": A6_THETA_CERT_MULT * 0.01,
+        "k_max": A6_K_MAX,
+        "priority": list(A6_PRIORITY) + [DEFAULT_CANDIDATE],
+    }
+    state["identity"]["recovery"] = {
+        "max_pricing_escalations": MAX_PRICING_ESCALATIONS,
+        "max_duplicate_retries": MAX_DUPLICATE_RETRIES,
+        "gap_divisor": 100.0, "gap_floor": 1e-12,
+    }
+    base_gap = SOLVER_IDENTITY.get("max_mip_gap", 1e-6)
+    ub = state["outcome"]["ub_ch"]
     for call, event in enumerate(state["oracle_events"]):
         event["extra"]["tag"] = A6_METHOD
         event["extra"]["call_id"] = f"{A6_METHOD}-oc{call}"
-    prior_lb = -float("inf")
-    for call, event in enumerate(state["iteration_events"], start=1):
-        event["pricing_solve_id"] = f"{A6_METHOD}-oc{call}"
-        event["call_kind"] = "clean"
-        event["trigger_selected"] = "T4"
-        event["triggers_fired"] = ["T4"]
-        event["gap_at_decision"] = event["ub_ch"] - prior_lb
-        state["oracle_events"][call]["extra"].update(
-            call_kind="clean", trigger_selected="T4",
-            triggers_fired=["T4"])
-        event["master_solves"][0]["solve_id"] = (
-            f"{A6_METHOD}-it{call}-rmp-r0")
-        prior_lb = event["lb_best"]
-    candidate = state["iteration_events"][1]
-    candidate["phase"] = "stabilized"
-    candidate["call_kind"] = "candidate"
-    candidate["master_solves"] = []
-    candidate_event = state["oracle_events"][2]
-    candidate_event["regime"] = "cg-stab-pricing"
-    candidate_event["extra"]["call_kind"] = "candidate"
-    assert score_outcome(state, "a6") == 4
+
+    it1, it2, it3 = state["iteration_events"]
+    oc1, oc2, oc3 = state["oracle_events"][1:]
+    # it1: T4 clean, novel improving column -> no recovery, LB = ub - 0.2
+    it1.update(
+        pricing_solve_id=f"{A6_METHOD}-oc1", call_kind="clean",
+        trigger_selected="T4", triggers_fired=["T4"],
+        gap_at_decision=float("inf"), k_since_clean=0, n_columns=1,
+        recovery_active=False, recovery_kind=None,
+        pricing_max_mip_gap=base_gap,
+        duals_sigma=ub + 0.2, min_reduced_cost_ub=-0.2,
+        min_reduced_cost_lb=-0.2, lb_ch=ub - 0.2, lb_best=ub - 0.2,
+        certificate_gap=0.2, column_key="k-novel", column_novel=True)
+    it1["master_solves"][0]["solve_id"] = f"{A6_METHOD}-it1-rmp-r0"
+    oc1["extra"].update(
+        call_kind="clean", trigger_selected="T4", triggers_fired=["T4"],
+        min_reduced_cost_ub=-0.2, min_reduced_cost_lb=-0.2,
+        column_key="k-novel", column_novel=True)
+    oc1["solver"]["bound"] = ub + 0.0  # sigma - 0.2
+    # it2: default candidate (gap 0.2 > theta_cert), NON-novel column; its
+    # oracle event carries a bound that WOULD certify if misused
+    it2.update(
+        pricing_solve_id=f"{A6_METHOD}-oc2", phase="stabilized",
+        call_kind="candidate", trigger_selected=DEFAULT_CANDIDATE,
+        triggers_fired=[], gap_at_decision=0.2, k_since_clean=0,
+        n_columns=2, recovery_active=False, recovery_kind=None,
+        lb_best=ub - 0.2, certificate_gap=0.2, column_novel=False,
+        master_solves=[])
+    oc2["regime"] = "cg-stab-pricing"
+    oc2["extra"].update(
+        call_kind="candidate", trigger_selected=DEFAULT_CANDIDATE,
+        triggers_fired=[], column_novel=False)
+    oc2["solver"]["bound"] = ub  # tempting: gap would be 0 if misused
+    # it3: T3 clean (candidate stalled), certifies at 0.001
+    it3.update(
+        pricing_solve_id=f"{A6_METHOD}-oc3", call_kind="clean",
+        trigger_selected="T3", triggers_fired=["T3"],
+        gap_at_decision=0.2, k_since_clean=1, n_columns=2,
+        recovery_active=False, recovery_kind=None,
+        pricing_max_mip_gap=base_gap,
+        duals_sigma=ub + 0.001, min_reduced_cost_ub=-0.001,
+        min_reduced_cost_lb=-0.001, lb_ch=ub - 0.001, lb_best=ub - 0.001,
+        certificate_gap=0.001, column_novel=False)
+    it3["master_solves"][0]["solve_id"] = f"{A6_METHOD}-it3-rmp-r0"
+    oc3["extra"].update(
+        call_kind="clean", trigger_selected="T3", triggers_fired=["T3"],
+        min_reduced_cost_ub=-0.001, min_reduced_cost_lb=-0.001,
+        column_novel=False)
+    oc3["solver"]["bound"] = ub - 0.001 + (ub + 0.001) - ub  # sigma-0.001
+
+    state["ub_history"] = [ub, ub, ub]
+    state["lb_history"] = [ub - 0.2, ub - 0.2, ub - 0.001]
+    state["lb_best"] = ub - 0.001
+    state["outcome"].update(lb_best=ub - 0.001, gap=0.001,
+                            recovery_active_at_end=False)
+    state.update(
+        duplicate_retries=0, refine_retries=0, pricing_escalations=0,
+        pricing_max_mip_gap=base_gap,
+        scheduler={"k_since_clean": 0, "n_clean_pricing": 2,
+                   "last_candidate_novel": None, "recovery": None})
+    return state
+
+
+def test_scoring_replays_a6_candidate_without_treating_it_as_a_bound():
+    """A candidate call carrying a certificate-tempting solver bound must
+    not certify; the trace is fully scheduler-coherent so the shared
+    recovery replay (experiments/a6_replay.py) accepts it."""
+    assert score_outcome(_coherent_a6_score_state(), "a6") == 4
+
+
+def test_analyzer_rejects_coordinated_recovery_counter_tamper():
+    """Coordinated final-state tamper: the checkpoint counter is adjusted
+    without any supporting event — the production analyzer must reject it
+    through the shared recovery replay."""
+    state = copy.deepcopy(_coherent_a6_score_state())
+    state["pricing_escalations"] = 1
+    with pytest.raises(AnalysisError, match="event stream replays"):
+        score_outcome(state, "a6")
+
+
+def test_analyzer_rejects_falsified_gap_path():
+    """Coordinated /100 falsification: recorded per-event pricing gaps and
+    the final state agree with EACH OTHER but not with the producer's
+    /100 rule — the analyzer must reject via the shared replay."""
+    state = copy.deepcopy(_coherent_a6_score_state())
+    for event in state["iteration_events"]:
+        if event.get("call_kind") == "clean":
+            event["pricing_max_mip_gap"] = 1e-7
+    state["pricing_max_mip_gap"] = 1e-7
+    with pytest.raises(AnalysisError, match="pricing_max_mip_gap"):
+        score_outcome(state, "a6")
 
 
 def test_trace_refuses_to_continue_after_first_certificate():
@@ -2144,7 +2244,12 @@ def test_unmanifested_analysis_artifact_blocks_publication(
     with pytest.raises(AnalysisError, match="staging is incomplete"):
         _mini_analyze(root, preflight, out)
     assert not (out / "TESTSTAMP").exists()
-    assert not list(out.glob(".TESTSTAMP.staging-*"))
+    # the unmanifested entry cannot be proven analysis-owned: the staging
+    # tree is PRESERVED for incident review (never blindly removed), with
+    # the foreign artifact intact as evidence
+    preserved = list(out.glob(".TESTSTAMP.staging-*"))
+    assert len(preserved) == 1
+    assert (preserved[0] / "unexpected.bin").read_bytes() == b"unexpected"
 
 
 @pytest.mark.parametrize("competitor", ("file", "directory", "symlink"))
@@ -2152,9 +2257,9 @@ def test_output_publication_race_never_replaces_appearing_path(
         mini_root, tmp_path, monkeypatch, competitor):
     root, preflight = mini_root
     out = tmp_path / "publication-race"
-    real_publish = mod._publish_analysis_directory_no_replace
+    real_publish = mod.publish_flat_directory_no_replace
 
-    def inject(staging, destination, *, expected_names):
+    def inject(staging, destination, *, expected_names, revalidate=None):
         target = Path(destination)
         if competitor == "file":
             target.write_text("preserve\n")
@@ -2167,11 +2272,13 @@ def test_output_publication_race_never_replaces_appearing_path(
             (owner / "operator-owned").write_text("preserve\n")
             target.symlink_to(owner, target_is_directory=True)
         return real_publish(
-            staging, destination, expected_names=expected_names)
+            staging, destination, expected_names=expected_names,
+            revalidate=revalidate)
 
     monkeypatch.setattr(
-        mod, "_publish_analysis_directory_no_replace", inject)
-    with pytest.raises(AnalysisError, match="existing analysis publication"):
+        mod, "publish_flat_directory_no_replace", inject)
+    with pytest.raises(AnalysisError,
+                       match="refusing existing publication path"):
         _mini_analyze(root, preflight, out)
     target = out / "TESTSTAMP"
     if competitor == "file":
@@ -2183,32 +2290,95 @@ def test_output_publication_race_never_replaces_appearing_path(
 
 
 @pytest.mark.parametrize("mutation", ("extra", "replace"))
-def test_output_publication_post_reservation_mutation_fails_closed(
+def test_output_publication_post_rename_mutation_fails_closed(
         mini_root, tmp_path, monkeypatch, mutation):
+    """A mutation striking the published destination between the exclusive
+    rename and the final gate must freeze the publication: incomplete
+    marker retained, competitor evidence preserved, owned artifacts left
+    in place under the marker (rename-first: there is no reservation
+    phase and no owned-link teardown)."""
+    import experiments.package_a6_holdout as pkg
     root, preflight = mini_root
-    out = tmp_path / f"post-reservation-{mutation}"
-    real_assert = mod._assert_analysis_publication_owned
+    out = tmp_path / f"post-rename-{mutation}"
+    real_gate = pkg._flat_publication_errors
+    calls = {"n": 0}
 
-    def inject(target, **kwargs):
-        target = Path(target)
-        if mutation == "extra":
-            (target / "operator-owned").write_text("preserve\n")
-        else:
-            victim = target / "MANIFEST.json"
-            victim.unlink()
-            victim.write_text("preserve\n")
-        return real_assert(target, **kwargs)
+    def inject(path, **kwargs):
+        calls["n"] += 1
+        if calls["n"] == 2:  # the post-rename destination gate
+            if mutation == "extra":
+                (path / "operator-owned").write_text("preserve\n")
+            else:
+                victim = path / "MANIFEST.json"
+                victim.unlink()
+                victim.write_text("preserve\n")
+        return real_gate(path, **kwargs)
 
-    monkeypatch.setattr(
-        mod, "_assert_analysis_publication_owned", inject)
-    with pytest.raises(AnalysisError, match="cleanup was incomplete"):
+    monkeypatch.setattr(pkg, "_flat_publication_errors", inject)
+    with pytest.raises(AnalysisError,
+                       match="incomplete destination preserved"):
         _mini_analyze(root, preflight, out)
+    assert calls["n"] >= 2
 
     target = out / "TESTSTAMP"
     competitor = (target / "operator-owned" if mutation == "extra"
                   else target / "MANIFEST.json")
     assert competitor.read_text() == "preserve\n"
     assert (target / ".publication-incomplete").read_text() == "incomplete\n"
-    assert {entry.name for entry in target.iterdir()} == {
-        competitor.name, ".publication-incomplete"}
-    assert not list(out.glob(".TESTSTAMP.staging-*"))
+    assert (target / "cells.csv").is_file()  # owned artifacts preserved
+    assert (target / "SUMMARY.md").is_file()
+    assert not list(out.glob(".TESTSTAMP.staging-*"))  # tree moved
+
+
+def test_analyzer_publication_parity_with_package(mini_root, tmp_path,
+                                                  monkeypatch):
+    """The analyzer publishes through the ONE shared package
+    implementation (no analyzer-local fork), passing a final revalidation
+    callback that the publisher runs immediately before marker removal."""
+    import experiments.package_a6_holdout as pkg
+    assert mod.publish_flat_directory_no_replace \
+        is pkg.publish_flat_directory_no_replace
+    root, preflight = mini_root
+    out = tmp_path / "parity"
+    seen = {}
+    real_publish = pkg.publish_flat_directory_no_replace
+
+    def spy(staging, destination, *, expected_names, revalidate=None):
+        seen["revalidate"] = revalidate
+        return real_publish(staging, destination,
+                            expected_names=expected_names,
+                            revalidate=revalidate)
+
+    monkeypatch.setattr(mod, "publish_flat_directory_no_replace", spy)
+    _mini_analyze(root, preflight, out)
+    assert callable(seen["revalidate"])  # the pre-commit veto is wired
+    assert (out / "TESTSTAMP" / "MANIFEST.json").is_file()
+    assert not (out / "TESTSTAMP" / ".publication-incomplete").exists()
+
+
+def test_analyzer_revalidation_failure_preserves_marker(mini_root, tmp_path,
+                                                        monkeypatch):
+    """If the final revalidation callback rejects, the destination stays
+    anchored by the incomplete marker — never markerless."""
+    root, preflight = mini_root
+    out = tmp_path / "revalidate-veto"
+    real_publish = mod.publish_flat_directory_no_replace
+
+    def veto_wrapper(staging, destination, *, expected_names,
+                     revalidate=None):
+        def veto():
+            if revalidate is not None:
+                revalidate()
+            raise AnalysisError("injected final revalidation veto")
+
+        return real_publish(staging, destination,
+                            expected_names=expected_names, revalidate=veto)
+
+    monkeypatch.setattr(mod, "publish_flat_directory_no_replace",
+                        veto_wrapper)
+    with pytest.raises(AnalysisError,
+                       match="incomplete destination preserved"):
+        _mini_analyze(root, preflight, out)
+    target = out / "TESTSTAMP"
+    assert (target / ".publication-incomplete").read_text() == "incomplete\n"
+    assert (target / "MANIFEST.json").is_file()
