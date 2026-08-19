@@ -544,21 +544,72 @@ python experiments/audit_runs.py runs/a6_holdout \
 
 If preflight, any array task, or the audit fails, stop. Do not replace a
 seed, score a partial denominator, or launch the missing arm opportunistically.
-After a passing audit, transfer the raw root once (it remains gitignored).
-The transferred root must preserve `PREFLIGHT.json`, exactly one launcher
-`MANIFEST-*.txt`, and the persistent
-`SUBMISSION_LOCK/{CLAIM,INTENT,SUBMITTED}.txt` chain alongside all cell
-directories; do not reconstruct or omit those launch records:
+Do not update the Unicorn checkout while the array is active. Once `squeue`
+reports no entries for the launched job and the audit passes, update to the
+reviewed closeout tooling and build the guarded transfer bundle. The packager
+checks Slurm inactivity both before reading checkpoints and immediately before
+publication, freezes a byte-for-byte snapshot, validates and audits that exact
+snapshot, runs the analyzer's full scoreability/population/Git-provenance
+checks without computing the decision, inventories every raw-root file, reads
+the completed archive back, and atomically publishes the archive plus its
+manifest, audit summary, and SHA-256 sidecar. It never writes inside
+`runs/a6_holdout`:
 
 ```bash
-LOCAL_REPO="$HOME/Documents/projects/egg"
+set -euo pipefail
 
-ssh nc437@unicorn-login-01.coecis.cornell.edu \
-  'cd "$HOME/egg/src" && tar -czf - runs/a6_holdout' |
-tar -xzf - -C "$LOCAL_REPO/src"
+cd "$HOME/egg"
+git switch main
+git pull --ff-only origin main
+test "$(git rev-parse HEAD)" = "$(git rev-parse origin/main)"
+test -z "$(git status --porcelain --untracked-files=no)"
+
+cd src
+source cluster/unicorn_env.sh
+PACKAGING_COMMIT="$(git -C .. rev-parse HEAD)"
+python experiments/package_a6_holdout.py pack \
+    --root runs/a6_holdout \
+    --packaging-code-commit "$PACKAGING_COMMIT"
 ```
 
-Analyze from the exact clean implementation commit that produced the run:
+The bundle explicitly excludes the per-task
+`src/slurm-egg-a6-holdout-<job>_<task>.out` operational logs because Slurm
+writes them outside the canonical campaign root; checkpoints and committed
+oracle/iteration records remain the scientific evidence. Copy the complete
+printed bundle directory to the Mac, then use the guarded importer rather than
+an unchecked `tar` extraction. Replace `<bundle>` with the printed directory
+name:
+
+```bash
+set -euo pipefail
+
+LOCAL_REPO="$HOME/Documents/projects/egg"
+LOCAL_BUNDLES="$HOME/Downloads"
+BUNDLE_NAME="<printed bundle directory name>"
+
+scp -r \
+  nc437@unicorn-login-01.coecis.cornell.edu:"egg/src/runs/a6_holdout_packages/$BUNDLE_NAME" \
+  "$LOCAL_BUNDLES/"
+
+cd "$LOCAL_REPO"
+git switch main
+git pull --ff-only origin main
+test "$(git rev-parse HEAD)" = "$(git rev-parse origin/main)"
+test -z "$(git status --porcelain --untracked-files=no)"
+
+cd src
+python3 experiments/package_a6_holdout.py import \
+    --bundle-dir "$LOCAL_BUNDLES/$BUNDLE_NAME" \
+    --repo-root "$LOCAL_REPO"
+```
+
+Import refuses an existing `src/runs/a6_holdout`; it never merges or
+overwrites a partial transfer. It verifies the external SHA-256, exact bundle
+file set, internal/external manifest equality, normalized archive member set,
+and every source hash/size before atomically installing the raw root.
+
+Analyze from the exact clean **analysis** commit. The launch commit remains
+separately bound by `PREFLIGHT.json`, the submission chain, and every cell:
 
 ```bash
 set -euo pipefail
