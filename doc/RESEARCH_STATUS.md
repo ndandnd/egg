@@ -38,6 +38,12 @@ contracts live in `MEASUREMENT_RESULTS.md` and `B2_STABILIZATION_SPEC.md`.
    256 A2-A5 method-cells. All 256 certified within 240 calls; all
    provenance, replay, completeness, solver-status, scientific-setting,
    and corrected wall-partition gates passed.
+7. **A6 burned pilot and arm selection**
+   (`result/a6_pilot/20260819T005514Z/`): 24/24 implementation cells
+   certified and passed the trigger-stream, replay, completeness, and
+   solver-status audits. Under the frozen one-shot rule, `a6_a3` won only
+   2/12 matched pilot instances, so **`a6_a4` is the committed holdout
+   arm**. The pilot is burned development evidence, not an evaluation.
 
 ## Current evidence (full 64-instance matched population)
 
@@ -68,9 +74,10 @@ uplift intervals, and the equivalence-theorem framing.
 
 ## Open questions
 
-1. Can a prespecified sparse or triggered stabilization rule retain the
-   observed clean-call benefit while eliminating enough candidate calls
-   to beat A2 on total calls on new evaluation instances?
+1. On the frozen seeds 16-31 holdout, does selected sparse stabilization
+   (`a6_a4`) satisfy the preregistered adoption rule against a fresh A2
+   baseline: score ratio <= 0.85, at least 38/64 wins, and the two
+   certification-rate gates?
 2. Does any damping-family member (A1), compared at matched budgets, come
    close to A2 on outcome metrics? (Certificates are A2's alone; the
    comparison is on outcomes.) This campaign remains paused.
@@ -87,8 +94,8 @@ in `DECISION_LOG.md`: current A3-A5 variants are rejected on total-call
 efficiency, while their population-wide clean-call advantage triggers a
 focused continuation.
 
-**Current step**: the focused continuation is SPECIFIED and
-review-amended: `doc/A6_SPARSE_STABILIZATION_SPEC.md` (2026-08-18). A6 =
+The focused continuation is specified in
+`doc/A6_SPARSE_STABILIZATION_SPEC.md` (2026-08-18). A6 =
 event-triggered sparse stabilization — A2's certified loop plus a
 scheduler spending the seed call and then exactly one oracle call per
 master iteration, chosen under the frozen priority T0 recovery > T4
@@ -111,11 +118,14 @@ unscored. Exhaustive decision partition: ADOPT (all gates) /
 HALT-AND-DEBUG / FINAL NEGATIVE (certification shortfall, clear kill,
 gray, discordant) — any final negative ends the stabilization line
 absent new theory. All five review questions are resolved (spec Section
-10). **A6 is now IMPLEMENTED** (`egglab/a6.py`, both identities; 24-cell
-pilot driver + guarded launcher; audit trigger-stream gates; one-shot
-selection pipeline `experiments/select_a6_arm.py`) and awaits Codex
-review before the pilot is launched. The holdout has NO driver by design:
-it may not be generated, submitted, or inspected before
-`result/a6_pilot/<stamp>/SELECTION.json` is committed. No Unicorn job is
-currently running. The 576-cell A1 campaign, the old 960-cell campaign,
-and any scale experiment remain paused.
+10). The 24-cell burned pilot is complete and its canonical selection
+artifact is committed at `result/a6_pilot/20260819T005514Z/`:
+`a6_a3` won 2/12, so the frozen holdout arm is `a6_a4`.
+
+**Current step**: implement, review, and only then launch the frozen
+128-cell holdout (64 fresh A2 + 64 `a6_a4`; seeds 16-31 x n {8,12} x
+b {0.01,0.05}). No `a6_a3` holdout cells and no adaptive seed
+substitution are permitted. The holdout does not yet have a driver or
+launcher, and no holdout data has been generated or inspected. The
+576-cell A1 campaign, the old 960-cell campaign, and any scale experiment
+remain paused.
