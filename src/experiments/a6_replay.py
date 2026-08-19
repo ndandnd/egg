@@ -542,14 +542,14 @@ def replay_a6_recovery(ck: dict) -> tuple[dict, list[str]]:
                     f"match the {history_index} replayed events")
                 return final_state, errors
 
-        # the recorded outcome must follow the replayed trace exactly
+        # the recorded outcome must follow the replayed trace exactly.
+        # (outcome.oracle_calls is intentionally NOT bound here: it is the
+        # arm-selection score consumed by select_a6_arm/cell_score through
+        # this same audit path; the production analyzer independently binds
+        # it to the committed event count in _replay_cg_certificate_evidence.)
         rec_outcome = ck.get("outcome") or {}
-        replay_calls = 1 + sum(
-            1 for e in (ck.get("iteration_events") or [])
-            if isinstance(e, dict) and not e.get("terminal"))
         outcome_checks = (
             ("type", rec_outcome.get("type"), expected_type),
-            ("oracle_calls", rec_outcome.get("oracle_calls"), replay_calls),
             ("method", rec_outcome.get("method"),
              (ck.get("identity") or {}).get("method")),
             ("ub_ch", rec_outcome.get("ub_ch"), prev_ub),

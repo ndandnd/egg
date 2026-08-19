@@ -1182,9 +1182,13 @@ require zero terminal events for certified completion and exactly one final
 terminal event for budget-exhausted completion; replay and validate the
 terminal master's `n_columns`, `lb_best`, and its UB/LB history entry; and
 compare the top-level checkpoint `lb_best`, column count, and history lengths
-plus the full outcome (`type`, `certified` as an exact boolean, `ub_ch`,
-`lb_best`, `gap`, `oracle_calls`, `method`, and recovery-at-end) against the
-replay. Additionally, cross-link each clean call's oracle-event
+plus the outcome (`type`, `certified` as an exact boolean, `ub_ch`,
+`lb_best`, `gap`, `method`, and recovery-at-end) against the replay.
+`outcome.oracle_calls` is deliberately not bound in the shared helper: it is
+the arm-selection score consumed through this same audit path
+(`select_a6_arm.cell_score`), and the production analyzer independently binds
+it to the committed event count in `_replay_cg_certificate_evidence`.
+Additionally, cross-link each clean call's oracle-event
 `min_reduced_cost_ub`/`min_reduced_cost_lb` and every call's `column_novel`
 with the corresponding iteration fields; oracle and iteration evidence may
 not disagree. No second replay implementation was added; the audit and the
