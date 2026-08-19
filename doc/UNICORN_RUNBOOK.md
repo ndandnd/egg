@@ -544,7 +544,11 @@ python experiments/audit_runs.py runs/a6_holdout \
 
 If preflight, any array task, or the audit fails, stop. Do not replace a
 seed, score a partial denominator, or launch the missing arm opportunistically.
-After a passing audit, transfer the raw root once (it remains gitignored):
+After a passing audit, transfer the raw root once (it remains gitignored).
+The transferred root must preserve `PREFLIGHT.json`, exactly one launcher
+`MANIFEST-*.txt`, and the persistent
+`SUBMISSION_LOCK/{CLAIM,INTENT,SUBMITTED}.txt` chain alongside all cell
+directories; do not reconstruct or omit those launch records:
 
 ```bash
 LOCAL_REPO="$HOME/Documents/projects/egg"
@@ -572,11 +576,15 @@ python experiments/analyze_a6_holdout.py \
     --analysis-code-commit "$CODE_COMMIT"
 ```
 
-The analyzer reruns the audit, independently reconstructs every identity,
-market, feasibility witness, lineage, materialized log, and corrected wall
-partition, then applies the exhaustive Section-6 decision rule. Commit the
-new `result/a6_holdout/<stamp>/` artifact and matching `DECISION_LOG.md`
-entry only after it succeeds. No second holdout look is permitted.
+The analyzer first validates the one-shot launch chain semantically: exactly
+one manifest and one complete submission sentinel must agree on the launch
+commit, selection/preflight/grid hashes, exact array/audit contract, Slurm
+job id, and timestamp ordering. It then reruns the audit, independently
+reconstructs every identity, market, feasibility witness, lineage,
+materialized log, and corrected wall partition before applying the
+exhaustive Section-6 decision rule. Commit the new
+`result/a6_holdout/<stamp>/` artifact and matching `DECISION_LOG.md` entry
+only after it succeeds. No second holdout look is permitted.
 
 ## Branch hygiene
 

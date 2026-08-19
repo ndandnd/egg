@@ -16,6 +16,7 @@ import datetime
 import json
 import math
 import os
+import re
 import shutil
 import statistics
 import subprocess
@@ -459,6 +460,243 @@ def validate_preflight(path: str | os.PathLike, instances=HOLDOUT_INSTANCES) -> 
         "market_instances": len(markets),
         "method_cells": expected_grid["method_cells"],
         "selection": selection,
+    }
+
+
+def _parse_launch_record(path: Path, expected_keys: set[str], label: str) -> dict:
+    """Parse one launcher key-value record without accepting ambiguity."""
+    if path.is_symlink() or not path.is_file():
+        raise AnalysisError(f"missing or non-regular {label}: {path}")
+    try:
+        text = path.read_text()
+    except OSError as exc:
+        raise AnalysisError(f"cannot read {label}: {path}") from exc
+    if not text or not text.endswith("\n"):
+        raise AnalysisError(f"{label} must be nonempty and newline-terminated")
+    values = {}
+    for line_no, line in enumerate(text.splitlines(), start=1):
+        if not line or "=" not in line:
+            raise AnalysisError(
+                f"{label} has malformed line {line_no}: {line!r}")
+        key, value = line.split("=", 1)
+        if not re.fullmatch(r"[a-z][a-z0-9_]*", key) or not value:
+            raise AnalysisError(
+                f"{label} has malformed key/value on line {line_no}")
+        if key in values:
+            raise AnalysisError(f"{label} has duplicate key {key!r}")
+        values[key] = value
+    if set(values) != expected_keys:
+        raise AnalysisError(
+            f"{label} keys differ: got {sorted(values)}, "
+            f"expected {sorted(expected_keys)}")
+    return values
+
+
+def _parse_launch_utc(value: str, label: str) -> datetime.datetime:
+    if not re.fullmatch(r"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z", value):
+        raise AnalysisError(f"{label} is not a launcher UTC timestamp: {value!r}")
+    try:
+        return datetime.datetime.strptime(
+            value, "%Y-%m-%dT%H:%M:%SZ").replace(
+                tzinfo=datetime.timezone.utc)
+    except ValueError as exc:
+        raise AnalysisError(f"{label} is not a valid UTC timestamp") from exc
+
+
+def _launch_grid_text(instances) -> str:
+    seeds = sorted({int(s) for s, _n, _b in instances})
+    n_trips = sorted({int(n) for _s, n, _b in instances})
+    b_scales = sorted({float(b) for _s, _n, b in instances})
+    if seeds == list(range(seeds[0], seeds[-1] + 1)):
+        seed_text = f"{seeds[0]}-{seeds[-1]}"
+    else:
+        seed_text = "{" + ",".join(str(v) for v in seeds) + "}"
+    n_text = ",".join(str(v) for v in n_trips)
+    b_text = ",".join(f"{v:g}" for v in b_scales)
+    return (
+        f"seeds {seed_text} x n{{{n_text}}} x b{{{b_text}}}; "
+        f"{len(instances)} matched instances")
+
+
+def validate_launch_provenance(
+    root: str | os.PathLike,
+    preflight: dict,
+    selection: dict,
+    instances=HOLDOUT_INSTANCES,
+) -> dict:
+    """Bind scoring to the one-shot launcher claim, intent, and submission.
+
+    The scientific checkpoints are validated separately.  This gate proves
+    that the transferred campaign root also carries one unambiguous launch
+    history whose commit, hashes, grid, and job identity agree with the
+    independently validated preflight and canonical arm selection.
+    """
+    root_path = Path(root).resolve()
+    manifests = sorted(root_path.glob("MANIFEST-*.txt"))
+    if len(manifests) != 1:
+        raise AnalysisError(
+            f"launch provenance requires exactly one MANIFEST-*.txt; "
+            f"found {len(manifests)}")
+    manifest_path = manifests[0]
+    match = re.fullmatch(
+        r"MANIFEST-(\d{8}T\d{6}Z)\.txt", manifest_path.name)
+    if manifest_path.is_symlink() or match is None:
+        raise AnalysisError("launch manifest path/name is invalid")
+
+    lock = root_path / "SUBMISSION_LOCK"
+    if lock.is_symlink() or not lock.is_dir():
+        raise AnalysisError(f"missing regular submission lock directory: {lock}")
+    expected_lock_files = {"CLAIM.txt", "INTENT.txt", "SUBMITTED.txt"}
+    observed_lock_files = {p.name for p in lock.iterdir()}
+    if observed_lock_files != expected_lock_files:
+        raise AnalysisError(
+            "submission lock must contain exactly CLAIM.txt, INTENT.txt, "
+            f"and SUBMITTED.txt; found {sorted(observed_lock_files)}")
+
+    claim = _parse_launch_record(
+        lock / "CLAIM.txt",
+        {"status", "git_commit", "selection_sha256", "claimed_utc"},
+        "launch CLAIM")
+    intent = _parse_launch_record(
+        lock / "INTENT.txt",
+        {"status", "git_commit", "grid_list_sha256", "selection_sha256",
+         "preflight_sha256", "prepared_utc"},
+        "launch INTENT")
+    submitted = _parse_launch_record(
+        lock / "SUBMITTED.txt",
+        {"status", "job_id", "submitted_utc"},
+        "launch SUBMITTED")
+    manifest = _parse_launch_record(
+        manifest_path,
+        {"campaign", "cells", "grid", "grid_list_sha256", "array",
+         "epsilon", "audit", "selection_path", "selection_sha256",
+         "selection_gate_commit", "preflight_path", "preflight_sha256",
+         "submission_sentinel", "feasibility", "job_id", "git_commit",
+         "submitted_utc"},
+        "launch manifest")
+
+    if claim["status"] != "claimed-before-preflight":
+        raise AnalysisError("launch CLAIM status is not claimed-before-preflight")
+    if intent["status"] != "prepared":
+        raise AnalysisError("launch INTENT status is not prepared")
+    if submitted["status"] != "submitted":
+        raise AnalysisError("launch SUBMITTED status is not submitted")
+
+    code_commit = preflight.get("code_commit")
+    selection_sha = selection.get("sha256")
+    preflight_sha = preflight.get("sha256")
+    if (not isinstance(code_commit, str) or len(code_commit) != 40
+            or any(c not in "0123456789abcdef" for c in code_commit)):
+        raise AnalysisError("validated preflight lacks a full code commit")
+    for label, value in {
+            "canonical selection": selection_sha,
+            "validated preflight": preflight_sha,
+            "grid list": intent["grid_list_sha256"],
+    }.items():
+        if not _is_sha256(value):
+            raise AnalysisError(f"{label} SHA-256 is missing or malformed")
+
+    actual_preflight = root_path / "PREFLIGHT.json"
+    if (Path(preflight.get("path", "")).resolve() != actual_preflight
+            or sha256_file(str(actual_preflight)) != preflight_sha):
+        raise AnalysisError("launch preflight path/hash does not match root")
+    if (selection_sha != EXPECTED_SELECTION_SHA256
+            or (preflight.get("selection") or {}).get("sha256") != selection_sha):
+        raise AnalysisError("launch selection does not match canonical preflight")
+    if {claim["git_commit"], intent["git_commit"],
+            manifest["git_commit"]} != {code_commit}:
+        raise AnalysisError("launch commit chain disagrees with preflight")
+    if {claim["selection_sha256"], intent["selection_sha256"],
+            manifest["selection_sha256"]} != {selection_sha}:
+        raise AnalysisError("launch selection SHA chain is inconsistent")
+    if {intent["preflight_sha256"], manifest["preflight_sha256"]} != {
+            preflight_sha}:
+        raise AnalysisError("launch preflight SHA chain is inconsistent")
+    if (intent["grid_list_sha256"] != manifest["grid_list_sha256"]
+            or not _is_sha256(manifest["grid_list_sha256"])):
+        raise AnalysisError("launch grid-list SHA chain is inconsistent")
+    if not re.fullmatch(r"[1-9]\d*", submitted["job_id"]):
+        raise AnalysisError("submitted Slurm job id is not numeric")
+    if submitted["job_id"] != manifest["job_id"]:
+        raise AnalysisError("launch job id differs between lock and manifest")
+
+    n_instances = len(instances)
+    method_cells = 2 * n_instances
+    physical_instances = len({(s, n) for s, n, _b in instances})
+    expected_manifest = {
+        "campaign": (
+            "a6-holdout (spec doc/A6_SPARSE_STABILIZATION_SPEC.md "
+            "Section 6)"),
+        "cells": (
+            f"{method_cells} (verified: {n_instances} a2 + "
+            f"{n_instances} a6_a4; a6_a3 forbidden)"),
+        "grid": _launch_grid_text(instances),
+        "array": f"0-{method_cells - 1}%12",
+        "epsilon": (
+            "1e-2; budget=240 exact oracle calls; budget exhaustion is "
+            "valid and scores 241"),
+        "audit": (
+            f"--expect-cg {method_cells} --expect-cg-method a2={n_instances} "
+            f"--expect-cg-method a6_a4={n_instances} "
+            "(NO certification-count gate)"),
+        "selection_path": (
+            "result/a6_pilot/20260819T005514Z/SELECTION.json"),
+        "selection_gate_commit": EXPECTED_SELECTION_COMMIT
+            + " (verified ancestor)",
+        "preflight_path": "runs/a6_holdout/PREFLIGHT.json",
+        "submission_sentinel": (
+            "runs/a6_holdout/SUBMISSION_LOCK "
+            "(persistent; deletion requires audit/review)"),
+        "feasibility": (
+            f"{physical_instances}/{physical_instances} physical instances "
+            "have exact zero-charge covers; "
+            f"{n_instances} market hashes recorded before sbatch"),
+    }
+    bad = {
+        key: (manifest.get(key), expected)
+        for key, expected in expected_manifest.items()
+        if manifest.get(key) != expected
+    }
+    if bad:
+        raise AnalysisError(f"launch manifest contract mismatch: {bad}")
+    if "certified" in manifest["audit"].lower():
+        raise AnalysisError("launch audit incorrectly includes certification gate")
+
+    claimed_at = _parse_launch_utc(claim["claimed_utc"], "claimed_utc")
+    prepared_at = _parse_launch_utc(intent["prepared_utc"], "prepared_utc")
+    submitted_at = _parse_launch_utc(
+        submitted["submitted_utc"], "submitted_utc")
+    manifest_submitted_at = _parse_launch_utc(
+        manifest["submitted_utc"], "manifest submitted_utc")
+    manifest_at = datetime.datetime.strptime(
+        match.group(1), "%Y%m%dT%H%M%SZ").replace(
+            tzinfo=datetime.timezone.utc)
+    if not (claimed_at <= prepared_at <= submitted_at
+            <= manifest_at <= manifest_submitted_at):
+        raise AnalysisError("launch timestamps violate claim/submit chronology")
+
+    return {
+        "schema": "a6-holdout-launch-provenance-v1",
+        "job_id": submitted["job_id"],
+        "code_commit": code_commit,
+        "selection_sha256": selection_sha,
+        "preflight_sha256": preflight_sha,
+        "grid_list_sha256": intent["grid_list_sha256"],
+        "claimed_utc": claim["claimed_utc"],
+        "prepared_utc": intent["prepared_utc"],
+        "submitted_utc": submitted["submitted_utc"],
+        "manifest_submitted_utc": manifest["submitted_utc"],
+        "manifest": {
+            "path": str(manifest_path),
+            "sha256": sha256_file(str(manifest_path)),
+        },
+        "lock": {
+            name: {
+                "path": str(lock / name),
+                "sha256": sha256_file(str(lock / name)),
+            }
+            for name in sorted(expected_lock_files)
+        },
     }
 
 
@@ -1202,6 +1440,7 @@ def analyze(
     verify_experiment_commit: bool = True,
     require_frozen_grid: bool = True,
     preflight_validator=validate_preflight,
+    launch_validator=validate_launch_provenance,
 ) -> str:
     if require_frozen_grid:
         assert_frozen_grid(instances)
@@ -1219,6 +1458,8 @@ def analyze(
             f"preflight must be the campaign-root artifact "
             f"{canonical_preflight}")
     preflight = preflight_validator(preflight_path, instances=instances)
+    launch = launch_validator(
+        root, preflight, selection, instances=instances)
     paths = validate_holdout_root(
         root, instances, instance_builder, preflight=preflight)
 
@@ -1276,6 +1517,7 @@ def analyze(
             "analysis_code_verified": code_verified,
             "selection": selection,
             "preflight": preflight,
+            "launch": launch,
             "population": {
                 "instances": [list(t) for t in instances],
                 "methods": list(METHODS),

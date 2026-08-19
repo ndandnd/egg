@@ -36,6 +36,7 @@ from experiments.analyze_a6_holdout import (
     classify_decision,
     exact_sign_test_p,
     score_outcome,
+    validate_launch_provenance,
     validate_selection,
     validate_preflight,
 )
@@ -72,6 +73,68 @@ def _dump_jsonl(path: Path, rows: list) -> None:
     with path.open("w") as f:
         for row in rows:
             f.write(json.dumps(row) + "\n")
+
+
+def _write_launch_records(root: Path, preflight: dict,
+                          instances=MINI_INSTANCES) -> None:
+    lock = root / "SUBMISSION_LOCK"
+    lock.mkdir()
+    grid_sha = "1" * 64
+    n_instances = len(instances)
+    n_cells = 2 * n_instances
+    physical = len({(s, n) for s, n, _b in instances})
+    (lock / "CLAIM.txt").write_text(
+        "status=claimed-before-preflight\n"
+        f"git_commit={RUN_COMMIT}\n"
+        f"selection_sha256={EXPECTED_SELECTION_SHA256}\n"
+        "claimed_utc=2026-08-19T01:00:00Z\n")
+    (lock / "INTENT.txt").write_text(
+        "status=prepared\n"
+        f"git_commit={RUN_COMMIT}\n"
+        f"grid_list_sha256={grid_sha}\n"
+        f"selection_sha256={EXPECTED_SELECTION_SHA256}\n"
+        f"preflight_sha256={preflight['sha256']}\n"
+        "prepared_utc=2026-08-19T01:01:00Z\n")
+    (lock / "SUBMITTED.txt").write_text(
+        "status=submitted\n"
+        "job_id=424242\n"
+        "submitted_utc=2026-08-19T01:02:00Z\n")
+    seeds = sorted({s for s, _n, _b in instances})
+    seed_text = (f"{seeds[0]}-{seeds[-1]}"
+                 if seeds == list(range(seeds[0], seeds[-1] + 1))
+                 else "{" + ",".join(str(v) for v in seeds) + "}")
+    ns = ",".join(str(v) for v in sorted({n for _s, n, _b in instances}))
+    bs = ",".join(f"{v:g}" for v in sorted(
+        {b for _s, _n, b in instances}))
+    manifest = root / "MANIFEST-20260819T010300Z.txt"
+    manifest.write_text(
+        "campaign=a6-holdout (spec doc/A6_SPARSE_STABILIZATION_SPEC.md "
+        "Section 6)\n"
+        f"cells={n_cells} (verified: {n_instances} a2 + {n_instances} "
+        "a6_a4; a6_a3 forbidden)\n"
+        f"grid=seeds {seed_text} x n{{{ns}}} x b{{{bs}}}; "
+        f"{n_instances} matched instances\n"
+        f"grid_list_sha256={grid_sha}\n"
+        f"array=0-{n_cells - 1}%12\n"
+        "epsilon=1e-2; budget=240 exact oracle calls; budget exhaustion "
+        "is valid and scores 241\n"
+        f"audit=--expect-cg {n_cells} --expect-cg-method a2={n_instances} "
+        f"--expect-cg-method a6_a4={n_instances} "
+        "(NO certification-count gate)\n"
+        "selection_path=result/a6_pilot/20260819T005514Z/SELECTION.json\n"
+        f"selection_sha256={EXPECTED_SELECTION_SHA256}\n"
+        f"selection_gate_commit={EXPECTED_SELECTION_COMMIT} "
+        "(verified ancestor)\n"
+        "preflight_path=runs/a6_holdout/PREFLIGHT.json\n"
+        f"preflight_sha256={preflight['sha256']}\n"
+        "submission_sentinel=runs/a6_holdout/SUBMISSION_LOCK "
+        "(persistent; deletion requires audit/review)\n"
+        f"feasibility={physical}/{physical} physical instances have exact "
+        f"zero-charge covers; {n_instances} market hashes recorded before "
+        "sbatch\n"
+        "job_id=424242\n"
+        f"git_commit={RUN_COMMIT}\n"
+        "submitted_utc=2026-08-19T01:04:00Z\n")
 
 
 def _event(*, method, inst_hash, regime, call_id, trigger=False):
@@ -213,6 +276,7 @@ def mini_root(tmp_path_factory):
         "physical_instances": 2, "market_instances": 2, "method_cells": 4,
         "selection": selection_block(),
     }
+    _write_launch_records(root, preflight)
     cells = [(m, *i) for m in METHODS for i in MINI_INSTANCES]
     for index, (method, seed, n, b) in enumerate(cells):
         _write_cell(root, method, seed, n, b, index, preflight,
@@ -221,13 +285,15 @@ def mini_root(tmp_path_factory):
 
 
 def _mini_analyze(root, preflight, out_base, stamp="TESTSTAMP"):
+    rooted_preflight = dict(preflight)
+    rooted_preflight["path"] = str(Path(root, "PREFLIGHT.json").resolve())
     return analyze(
         root, str(out_base), stamp, "analysis0",
         selection_path=mod.DEFAULT_SELECTION,
         instances=MINI_INSTANCES, instance_builder=fix_builder,
         verify_code_commit=False, verify_selection_git=False,
         verify_experiment_commit=False, require_frozen_grid=False,
-        preflight_validator=lambda _p, instances: preflight)
+        preflight_validator=lambda _p, instances: rooted_preflight)
 
 
 # -------------------------------------------------------------------------
@@ -340,6 +406,23 @@ def test_real_driver_preflight_round_trip_and_tampering(tmp_path):
         validate_preflight(path)
 
 
+def test_real_launcher_contract_round_trip(tmp_path):
+    selection = holdout_driver.load_committed_selection()
+    payload = holdout_driver.build_feasibility_manifest(
+        selection, RUN_COMMIT)
+    path = tmp_path / "PREFLIGHT.json"
+    checkpoint.save(str(path), payload)
+    preflight = validate_preflight(path)
+    _write_launch_records(tmp_path, preflight, HOLDOUT_INSTANCES)
+    selection_summary = validate_selection(
+        mod.DEFAULT_SELECTION, verify_git=False)
+    launch = validate_launch_provenance(
+        tmp_path, preflight, selection_summary,
+        instances=HOLDOUT_INSTANCES)
+    assert launch["job_id"] == "424242"
+    assert launch["code_commit"] == RUN_COMMIT
+
+
 # -------------------------------------------------------------------------
 # Strict miniature end-to-end artifact pipeline
 # -------------------------------------------------------------------------
@@ -353,6 +436,129 @@ def test_mini_pipeline_artifacts_and_determinism(mini_root, tmp_path):
     for filename in files:
         assert (Path(first, filename).read_bytes()
                 == Path(second, filename).read_bytes()), filename
+    manifest = json.loads(Path(first, "MANIFEST.json").read_text())
+    assert manifest["launch"]["job_id"] == "424242"
+    assert manifest["launch"]["code_commit"] == RUN_COMMIT
+    assert manifest["launch"]["manifest"]["sha256"] == sha256_file(
+        str(Path(root, "MANIFEST-20260819T010300Z.txt")))
+
+
+def test_launch_provenance_validates_complete_chain(mini_root):
+    root, preflight = mini_root
+    rooted = dict(preflight)
+    rooted["path"] = str(Path(root, "PREFLIGHT.json").resolve())
+    selection = validate_selection(mod.DEFAULT_SELECTION, verify_git=False)
+    launch = validate_launch_provenance(
+        root, rooted, selection, instances=MINI_INSTANCES)
+    assert launch["job_id"] == "424242"
+    assert launch["selection_sha256"] == EXPECTED_SELECTION_SHA256
+    assert set(launch["lock"]) == {
+        "CLAIM.txt", "INTENT.txt", "SUBMITTED.txt"}
+
+
+def test_missing_launch_lock_file_halts_unscored(mini_root, tmp_path):
+    source, preflight = mini_root
+    bad = tmp_path / "missing-lock-file"
+    shutil.copytree(source, bad)
+    (bad / "SUBMISSION_LOCK" / "INTENT.txt").unlink()
+    out = tmp_path / "missing-lock-out"
+    with pytest.raises(AnalysisError, match="must contain exactly"):
+        _mini_analyze(str(bad), preflight, out)
+    assert not (out / "TESTSTAMP").exists()
+    assert not list(out.glob(".TESTSTAMP.staging-*"))
+
+
+def test_launch_job_id_mismatch_halts_unscored(mini_root, tmp_path):
+    source, preflight = mini_root
+    bad = tmp_path / "job-mismatch"
+    shutil.copytree(source, bad)
+    path = bad / "SUBMISSION_LOCK" / "SUBMITTED.txt"
+    path.write_text(path.read_text().replace("job_id=424242", "job_id=999999"))
+    out = tmp_path / "job-mismatch-out"
+    with pytest.raises(AnalysisError, match="job id differs"):
+        _mini_analyze(str(bad), preflight, out)
+    assert not (out / "TESTSTAMP").exists()
+    assert not list(out.glob(".TESTSTAMP.staging-*"))
+
+
+@pytest.mark.parametrize("record,old,new,match", [
+    ("CLAIM.txt", EXPECTED_SELECTION_SHA256, "2" * 64,
+     "selection SHA chain"),
+    ("INTENT.txt", "1" * 64, "3" * 64, "grid-list SHA chain"),
+])
+def test_launch_hash_tampering_halts_unscored(
+        mini_root, tmp_path, record, old, new, match):
+    source, preflight = mini_root
+    bad = tmp_path / f"hash-{record}"
+    shutil.copytree(source, bad)
+    path = bad / "SUBMISSION_LOCK" / record
+    path.write_text(path.read_text().replace(old, new, 1))
+    out = tmp_path / f"hash-{record}-out"
+    with pytest.raises(AnalysisError, match=match):
+        _mini_analyze(str(bad), preflight, out)
+    assert not (out / "TESTSTAMP").exists()
+    assert not list(out.glob(".TESTSTAMP.staging-*"))
+
+
+def test_launch_preflight_hash_tampering_halts_unscored(mini_root, tmp_path):
+    source, preflight = mini_root
+    bad = tmp_path / "preflight-hash"
+    shutil.copytree(source, bad)
+    path = bad / "SUBMISSION_LOCK" / "INTENT.txt"
+    path.write_text(path.read_text().replace(
+        preflight["sha256"], "4" * 64, 1))
+    out = tmp_path / "preflight-hash-out"
+    with pytest.raises(AnalysisError, match="preflight SHA chain"):
+        _mini_analyze(str(bad), preflight, out)
+    assert not (out / "TESTSTAMP").exists()
+    assert not list(out.glob(".TESTSTAMP.staging-*"))
+
+
+def test_duplicate_launch_manifest_halts_unscored(mini_root, tmp_path):
+    source, preflight = mini_root
+    bad = tmp_path / "duplicate-manifest"
+    shutil.copytree(source, bad)
+    shutil.copy2(
+        bad / "MANIFEST-20260819T010300Z.txt",
+        bad / "MANIFEST-20260819T010301Z.txt")
+    out = tmp_path / "duplicate-manifest-out"
+    with pytest.raises(AnalysisError, match="exactly one"):
+        _mini_analyze(str(bad), preflight, out)
+    assert not (out / "TESTSTAMP").exists()
+    assert not list(out.glob(".TESTSTAMP.staging-*"))
+
+
+def test_launch_timestamp_inversion_halts_unscored(mini_root, tmp_path):
+    source, preflight = mini_root
+    bad = tmp_path / "timestamp-inversion"
+    shutil.copytree(source, bad)
+    path = bad / "SUBMISSION_LOCK" / "CLAIM.txt"
+    path.write_text(path.read_text().replace(
+        "claimed_utc=2026-08-19T01:00:00Z",
+        "claimed_utc=2026-08-19T02:00:00Z"))
+    out = tmp_path / "timestamp-inversion-out"
+    with pytest.raises(AnalysisError, match="timestamp"):
+        _mini_analyze(str(bad), preflight, out)
+    assert not (out / "TESTSTAMP").exists()
+    assert not list(out.glob(".TESTSTAMP.staging-*"))
+
+
+@pytest.mark.parametrize("suffix,match", [
+    ("job_id=424242\n", "duplicate key"),
+    ("malformed-line\n", "malformed line"),
+])
+def test_malformed_launch_record_halts_unscored(
+        mini_root, tmp_path, suffix, match):
+    source, preflight = mini_root
+    bad = tmp_path / f"malformed-{match.replace(' ', '-')}"
+    shutil.copytree(source, bad)
+    path = bad / "SUBMISSION_LOCK" / "SUBMITTED.txt"
+    path.write_text(path.read_text() + suffix)
+    out = tmp_path / f"malformed-{match.replace(' ', '-')}-out"
+    with pytest.raises(AnalysisError, match=match):
+        _mini_analyze(str(bad), preflight, out)
+    assert not (out / "TESTSTAMP").exists()
+    assert not list(out.glob(".TESTSTAMP.staging-*"))
 
 
 def test_audit_failure_halts_unscored(mini_root, tmp_path):
