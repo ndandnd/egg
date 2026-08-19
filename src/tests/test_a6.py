@@ -37,7 +37,8 @@ from experiments.audit_runs import audit
 from experiments.run_a6_pilot import BUDGET, EPSILON, TOL_D, build_cells
 from experiments.run_b2a2_pilot import _dictator_stage
 from experiments.select_a6_arm import cell_score, select
-from tests.test_b2a2 import _read_jsonl, _strip_volatile
+from tests.test_b2a2 import (_read_jsonl, _reprice_physical_solution,
+                             _strip_volatile)
 
 MINI_INSTANCES = ((1, 4, 0.01), (3, 4, 0.05))
 
@@ -106,7 +107,7 @@ def test_t0_recovery_uninterruptible(tiny, tmp_path, monkeypatch):
             first["sol"] = real_solve(_inst, prices, **kw)
             return first["sol"]
         sol = copy.deepcopy(first["sol"])
-        sol.obj_model = 1e9
+        _reprice_physical_solution(sol, prices)
         sol.stats.bound = -1e9
         return sol
 

@@ -45,7 +45,8 @@ from egglab.market import make_affine_market
 from egglab.regimes import solve_dictator
 from experiments.audit_runs import audit
 from experiments.run_b2a345_pilot import BUDGET, EPSILON, build_cells
-from tests.test_b2a2 import _read_jsonl, _strip_volatile
+from tests.test_b2a2 import (_read_jsonl, _reprice_physical_solution,
+                             _strip_volatile)
 
 TOL_D = 1e-3
 SLACK = PWL_TOL + ENUM_TOL + 1e-6
@@ -165,7 +166,7 @@ def test_optimistic_incumbent_weak_bound_never_certifies(tiny, tmp_path,
             first["sol"] = real_solve(_inst, prices, **kw)
             return first["sol"]
         sol = copy.deepcopy(first["sol"])
-        sol.obj_model = 1e12
+        _reprice_physical_solution(sol, prices)
         sol.stats.bound = -1e12
         return sol
 
@@ -180,7 +181,7 @@ def test_optimistic_incumbent_weak_bound_never_certifies(tiny, tmp_path,
         if it.get("phase") != "clean":
             continue
         # old formula would have false-certified
-        assert min(0.0, it["min_reduced_cost_ub"]) == 0.0
+        assert it["min_reduced_cost_ub"] >= -b2a2_mod.RC_TOL
         assert it["ub_ch"] - it["z_rmp_model"] <= 1e-2
         assert it["certificate_gap"] > 1e-2
 
@@ -662,8 +663,8 @@ def test_budget_exhausted_stabilized_is_sane_not_certified(tiny, tmp_path):
 # --------------------------------------------------------------------------
 def _ambiguous_fake_factory(real_solve, mode, gaps_seen):
     """Fake oracle: seed call real; later calls per `mode`:
-    - 'all_dup': every call returns a duplicate of the seed schedule with
-      an optimistic incumbent (1e9) and a very weak certified bound (-1e9)
+    - 'all_dup': every call returns a physically repriced duplicate of the
+      seed schedule and a very weak certified bound (-1e9)
       => clean pricing is AMBIGUOUS (rc_ub >= 0, rc_lb < -RC_TOL, duplicate)
       and every candidate stalls;
     - 'clean_dup_cand_real': clean calls (even positions after the seed)
@@ -681,7 +682,7 @@ def _ambiguous_fake_factory(real_solve, mode, gaps_seen):
         if mode == "clean_dup_cand_real" and counter["n"] % 2 == 1:
             return real_solve(_inst, prices, **kw)  # candidate calls real
         sol = copy.deepcopy(first["sol"])
-        sol.obj_model = 1e9
+        _reprice_physical_solution(sol, prices)
         sol.stats.bound = -1e9
         return sol
 

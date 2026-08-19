@@ -50,8 +50,8 @@ so exact pricing is the certified taker EVSP oracle at ORACLE PRICES
 
 A MILP pricing solve returns TWO values, and they play different roles:
 
-    pricing_ub = sol.obj_model     (feasible incumbent value; its schedule
-                                    is the candidate column)
+    pricing_ub = sol.obj_true      (feasible incumbent recomputed from the
+                                    candidate column's physical charge load)
     pricing_lb = sol.stats.bound   (certified dual bound on the exact
                                     pricing optimum; <= pricing_ub)
 
@@ -122,14 +122,15 @@ import mip
 import numpy as np
 
 from . import checkpoint
-from .evsp import validate_solution
+from .evsp import (LOAD_RECONSTRUCTION_POLICY_VERSION, REPLAY_TOL_KWH,
+                   canonicalize_solution_load, validate_solution)
 from .instance import Instance
 from .market import AffineMarket
 from .records import make_record, provenance
 from .regimes import _l_max, solve_taker
 from .solver import backend, new_model, optimize
 
-SCHEMA_VERSION = "b2a2-v2"
+SCHEMA_VERSION = "b2a2-v3"
 EPSILON_DEFAULT = 1e-2
 PWL_TOL = 1e-3
 RC_TOL = 1e-6
@@ -188,11 +189,39 @@ def column_from_solution(inst: Instance, sol) -> dict:
     if not _finite(sol.stats.bound):
         raise B2A2Error(
             f"oracle returned no finite certified bound: {sol.stats.bound!r}")
+    load_evidence = sol.stats.extra.get("load_reconstruction")
+    expected_policy = {
+        "policy_version": LOAD_RECONSTRUCTION_POLICY_VERSION,
+        "tolerance_kwh": REPLAY_TOL_KWH,
+    }
+    if (not isinstance(load_evidence, dict)
+            or any(load_evidence.get(k) != v
+                   for k, v in expected_policy.items())):
+        raise B2A2Error(
+            "oracle is missing the required physical-load reconstruction "
+            f"evidence {expected_policy!r}")
+    if len(sol.load) != inst.n_slots:
+        raise B2A2Error(
+            f"oracle load has {len(sol.load)} slots; expected {inst.n_slots}"
+        )
+    physical_load = []
+    for t, value in enumerate(sol.load):
+        if not _finite(value):
+            raise B2A2Error(f"oracle load is nonfinite at slot {t}: {value!r}")
+        value = float(value) + 0.0
+        if value < 0.0:
+            raise B2A2Error(
+                f"oracle load is negative at slot {t}: {value:.3e}; "
+                "physical load reconstruction failed"
+            )
+        physical_load.append(value)
+    if not _finite(sol.ops_cost):
+        raise B2A2Error(f"oracle operating cost is nonfinite: {sol.ops_cost!r}")
     col = {
         "sequences": [list(s) for s in sol.sequences],
         "arc_kinds": [list(k) for k in sol.arc_kinds],
         "charges": sol.charges,
-        "load": [float(x) for x in sol.load],
+        "load": physical_load,
         "ops_cost": float(sol.ops_cost),
         "fleet": int(sol.fleet),
         "schedule_hash": sol.schedule_hash(),
@@ -204,6 +233,76 @@ def column_from_solution(inst: Instance, sol) -> dict:
     }
     col["column_key"] = column_key(col)
     return col
+
+
+def canonicalize_pricing_solution(inst: Instance, sol, prices):
+    """Apply the B2/A6 load policy and recompute the feasible linear cost."""
+    prices = np.asarray(prices, dtype=float)
+    if len(prices) != inst.n_slots or not np.all(np.isfinite(prices)):
+        raise B2A2Error("pricing vector is wrong-length or nonfinite")
+    canonicalize_solution_load(inst, sol)
+    value = float(sol.ops_cost + np.dot(prices, np.asarray(sol.load)))
+    if not _finite(value):
+        raise B2A2Error(f"physical pricing objective is nonfinite: {value!r}")
+    model_obj = sol.obj_model
+    sol.obj_true = value
+    sol.stats.extra["pricing_objective_reconstruction"] = {
+        "policy_version": LOAD_RECONSTRUCTION_POLICY_VERSION,
+        "prices": [float(x) + 0.0 for x in prices],
+        "model_obj": model_obj,
+        "physical_obj": value,
+        "abs_adjustment": abs(float(model_obj) - value),
+    }
+    return sol
+
+
+def pricing_incumbent(col: dict, sol, prices) -> float:
+    """Feasible pricing upper bound for the exact column actually retained."""
+    value = float(
+        float(col["ops_cost"])
+        + np.dot(np.asarray(prices, dtype=float),
+                 np.asarray(col["load"], dtype=float))
+    )
+    if not _finite(value):
+        raise B2A2Error(f"physical pricing incumbent is nonfinite: {value!r}")
+    if not _finite(sol.obj_true):
+        raise B2A2Error(
+            f"oracle physical objective is missing/nonfinite: {sol.obj_true!r}"
+        )
+    scale = max(1.0, abs(value), abs(float(sol.obj_true)))
+    if abs(value - float(sol.obj_true)) > 1e-10 * scale:
+        raise B2A2Error(
+            "pricing objective/column mismatch: "
+            f"column={value:.12g} oracle_physical={float(sol.obj_true):.12g}"
+        )
+    return value
+
+
+def _validate_master_columns(inst: Instance, market: AffineMarket,
+                             columns: list) -> None:
+    """Reject malformed/nonphysical checkpoint columns before model build."""
+    for j, col in enumerate(columns):
+        load = col.get("load") if isinstance(col, dict) else None
+        if not isinstance(load, list) or len(load) != market.n_slots:
+            raise B2A2Error(
+                f"RMP column {j} load length is invalid: "
+                f"{None if load is None else len(load)} != {market.n_slots}"
+            )
+        for t, value in enumerate(load):
+            if not _finite(value):
+                raise B2A2Error(
+                    f"RMP column {j} load is nonfinite at slot {t}: {value!r}"
+                )
+            if float(value) < 0.0:
+                raise B2A2Error(
+                    f"RMP column {j} load is negative at slot {t}: "
+                    f"{float(value):.3e}"
+                )
+        if not _finite(col.get("ops_cost")):
+            raise B2A2Error(
+                f"RMP column {j} operating cost is nonfinite: "
+                f"{col.get('ops_cost')!r}"
+            )
 
 
 # ---------------------------------------------------------------------------
@@ -251,6 +350,7 @@ def solve_rmp(inst: Instance, market: AffineMarket, columns: list,
     guaranteed, and audited, only within one cell directory / checkpoint."""
     if not columns:
         raise B2A2Error("RMP requires at least one column")
+    _validate_master_columns(inst, market, columns)
     T = market.n_slots
     l_max = _l_max(inst)
     tangent_points = [list(map(float, tp)) for tp in tangent_points]
@@ -379,9 +479,13 @@ def certified_cg(
                    **{k: solver_kw[k] for k in sorted(solver_kw)}},
         "tol_d": tol_d,
         "z_d_ub": z_d_ub,
+        "load_reconstruction": {
+            "policy_version": LOAD_RECONSTRUCTION_POLICY_VERSION,
+            "tolerance_kwh": REPLAY_TOL_KWH,
+        },
     }
     if stabilized:
-        # A2 identity stays byte-identical to the certified pilot's
+        # A2 intentionally has no method/stabilization identity fields.
         identity["method"] = method
         identity["stab"] = b2a345.stab_identity_params(method)
     base_pricing_gap = float(solver_kw.pop("max_mip_gap", 1e-6))
@@ -432,6 +536,7 @@ def certified_cg(
         sol = solve_taker(inst, prices,
                           max_mip_gap=state["pricing_max_mip_gap"],
                           **solver_kw)
+        canonicalize_pricing_solution(inst, sol, prices)
         return sol, time.time() - t0
 
     def finish(kind, ub, gap):
@@ -524,7 +629,7 @@ def certified_cg(
         prices = -np.asarray(rmp["pi"])
         sol, pricing_wall = pricing_solve(prices)
         col = column_from_solution(inst, sol)
-        pricing_ub = float(sol.obj_model)          # feasible incumbent
+        pricing_ub = pricing_incumbent(col, sol, prices)
         pricing_lb = float(sol.stats.bound)        # certified dual bound
         if not _finite(pricing_lb):
             raise B2A2Error(f"pricing bound nonfinite: {pricing_lb!r}")

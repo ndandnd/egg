@@ -38,7 +38,8 @@ from egglab.a6 import (A6_K_MAX, A6_PRIORITY, A6_SCHEMA_VERSION,
 from egglab.b2a2 import (MAX_DUPLICATE_RETRIES, MAX_PRICING_ESCALATIONS,
                          PWL_TOL, RC_TOL, SCHEMA_VERSION, market_hash)
 from egglab.b2a345 import stab_identity_params
-from egglab.evsp import Solution, validate_solution
+from egglab.evsp import (LOAD_RECONSTRUCTION_POLICY_VERSION, REPLAY_TOL_KWH,
+                         Solution, validate_solution)
 from egglab.market import make_affine_market
 from experiments.analyze_b2_pilot import (
     AnalysisError,
@@ -519,6 +520,15 @@ def _validate_identity(ck: dict, method: str, label: str) -> None:
         raise AnalysisError(
             f"{label}: solver identity {solver_ident!r} != "
             f"{expected_solver!r}; comparable evidence required")
+    expected_load_policy = {
+        "policy_version": LOAD_RECONSTRUCTION_POLICY_VERSION,
+        "tolerance_kwh": REPLAY_TOL_KWH,
+    }
+    if ident.get("load_reconstruction") != expected_load_policy:
+        raise AnalysisError(
+            f"{label}: load reconstruction identity "
+            f"{ident.get('load_reconstruction')!r} != "
+            f"{expected_load_policy!r}")
     if method == "a2":
         if "method" in ident:
             raise AnalysisError(f"{label}: A2 identity method mismatch")
@@ -543,6 +553,172 @@ def _validate_identity(ck: dict, method: str, label: str) -> None:
             raise AnalysisError(f"{label}: recovery identity was tampered")
         if ident.get("stab") != stab_identity_params("a4"):
             raise AnalysisError(f"{label}: A4 mechanism identity was tampered")
+
+
+def _evidence_close(actual: float, expected: float) -> bool:
+    return abs(actual - expected) <= 1e-10 * max(
+        1.0, abs(actual), abs(expected))
+
+
+def _finite_vector(value, n_slots: int, label: str) -> list[float]:
+    if not isinstance(value, list) or len(value) != n_slots:
+        raise AnalysisError(
+            f"{label}: expected {n_slots} numeric slots, got "
+            f"{None if not isinstance(value, list) else len(value)}")
+    out = []
+    for t, item in enumerate(value):
+        if (not isinstance(item, (int, float)) or isinstance(item, bool)
+                or not math.isfinite(item)):
+            raise AnalysisError(f"{label}: nonfinite/non-numeric slot {t}")
+        out.append(float(item) + 0.0)
+    return out
+
+
+def _validate_physical_load_evidence(
+    obj: dict,
+    *,
+    n_slots: int,
+    stats_field: str,
+    label: str,
+) -> list[float]:
+    """Recompute canonical load and the raw-residual audit from bytes."""
+    load = _finite_vector(obj.get("load"), n_slots, f"{label} load")
+    if any(value < 0.0 for value in load):
+        raise AnalysisError(f"{label}: canonical load contains a negative slot")
+    charges = obj.get("charges")
+    if not isinstance(charges, list):
+        raise AnalysisError(f"{label}: charges are missing or malformed")
+    physical = [0.0] * n_slots
+    for i, charge in enumerate(charges):
+        if not isinstance(charge, dict):
+            raise AnalysisError(f"{label}: charge event {i} is malformed")
+        slot, amount = charge.get("slot"), charge.get("kwh")
+        if (not isinstance(slot, int) or isinstance(slot, bool)
+                or not 0 <= slot < n_slots
+                or not isinstance(amount, (int, float))
+                or isinstance(amount, bool) or not math.isfinite(amount)
+                or amount < 0.0):
+            raise AnalysisError(f"{label}: charge event {i} is nonphysical")
+        physical[slot] += float(amount)
+    if any(not _evidence_close(a, b) for a, b in zip(load, physical)):
+        raise AnalysisError(
+            f"{label}: canonical load does not equal summed charge events")
+    energy = obj.get("energy_charged_kwh")
+    if energy is not None and (
+            not isinstance(energy, (int, float)) or isinstance(energy, bool)
+            or not math.isfinite(energy)
+            or not _evidence_close(float(energy), sum(load))):
+        raise AnalysisError(f"{label}: energy/load accounting mismatch")
+
+    stats = obj.get(stats_field) or {}
+    lr = ((stats.get("extra") or {}).get("load_reconstruction")
+          if isinstance(stats, dict) else None)
+    expected_policy = {
+        "policy_version": LOAD_RECONSTRUCTION_POLICY_VERSION,
+        "tolerance_kwh": REPLAY_TOL_KWH,
+    }
+    if (not isinstance(lr, dict)
+            or any(lr.get(k) != v for k, v in expected_policy.items())):
+        raise AnalysisError(f"{label}: missing load reconstruction evidence")
+    raw = _finite_vector(
+        lr.get("raw_load_kwh"), n_slots, f"{label} raw load")
+    residual = _finite_vector(
+        lr.get("residual_kwh"), n_slots, f"{label} load residual")
+    expected_residual = [raw[t] - load[t] for t in range(n_slots)]
+    if any(not _evidence_close(a, b)
+           for a, b in zip(residual, expected_residual)):
+        raise AnalysisError(f"{label}: recorded load residual was tampered")
+    max_abs = max((abs(x) for x in expected_residual), default=0.0)
+    max_slot = (max(range(n_slots), key=lambda t: abs(expected_residual[t]))
+                if n_slots else None)
+    expected_scalars = {
+        "max_abs_residual_kwh": max_abs,
+        "max_abs_residual_slot": max_slot,
+        "raw_min_kwh": min(raw, default=0.0),
+        "physical_min_kwh": min(load, default=0.0),
+    }
+    for field, expected in expected_scalars.items():
+        actual = lr.get(field)
+        if field == "max_abs_residual_slot":
+            ok = actual == expected
+        else:
+            ok = (isinstance(actual, (int, float))
+                  and not isinstance(actual, bool)
+                  and math.isfinite(actual)
+                  and _evidence_close(float(actual), float(expected)))
+        if not ok:
+            raise AnalysisError(
+                f"{label}: load reconstruction scalar {field} was tampered")
+    if max_abs > REPLAY_TOL_KWH:
+        raise AnalysisError(
+            f"{label}: raw/canonical residual {max_abs} exceeds "
+            f"{REPLAY_TOL_KWH}")
+    return load
+
+
+def _validate_cell_numeric_evidence(
+    ck: dict,
+    dck: dict,
+    market,
+    label: str,
+) -> None:
+    n_slots = market.n_slots
+    for j, col in enumerate(ck.get("columns") or []):
+        _validate_physical_load_evidence(
+            col, n_slots=n_slots, stats_field="oracle_stats",
+            label=f"{label} column {j}")
+    for i, rec in enumerate(ck.get("oracle_events") or []):
+        rlabel = f"{label} oracle event {i}"
+        load = _validate_physical_load_evidence(
+            rec, n_slots=n_slots, stats_field="solver", label=rlabel)
+        stats_extra = ((rec.get("solver") or {}).get("extra") or {})
+        pricing = stats_extra.get("pricing_objective_reconstruction")
+        if (not isinstance(pricing, dict)
+                or pricing.get("policy_version")
+                != LOAD_RECONSTRUCTION_POLICY_VERSION):
+            raise AnalysisError(f"{rlabel}: missing pricing objective evidence")
+        prices = _finite_vector(
+            pricing.get("prices"), n_slots, f"{rlabel} full prices")
+        if rec.get("prices") != [round(x, 6) for x in prices]:
+            raise AnalysisError(f"{rlabel}: rounded/full price mismatch")
+        ops_cost = rec.get("ops_cost")
+        if (not isinstance(ops_cost, (int, float))
+                or isinstance(ops_cost, bool) or not math.isfinite(ops_cost)):
+            raise AnalysisError(f"{rlabel}: invalid operating cost")
+        expected_obj = float(ops_cost + sum(
+            prices[t] * load[t] for t in range(n_slots)))
+        for field, actual in (
+                ("record obj_true", rec.get("obj_true")),
+                ("pricing physical_obj", pricing.get("physical_obj"))):
+            if (not isinstance(actual, (int, float))
+                    or isinstance(actual, bool) or not math.isfinite(actual)
+                    or not _evidence_close(float(actual), expected_obj)):
+                raise AnalysisError(f"{rlabel}: {field} mismatch")
+
+    drec = dck.get("record") or {}
+    load = _validate_physical_load_evidence(
+        drec, n_slots=n_slots, stats_field="solver",
+        label=f"{label} dictator record")
+    extra = ((drec.get("solver") or {}).get("extra") or {})
+    objective = extra.get("dictator_objective_reconstruction")
+    if (not isinstance(objective, dict)
+            or objective.get("policy_version")
+            != LOAD_RECONSTRUCTION_POLICY_VERSION):
+        raise AnalysisError(
+            f"{label}: missing dictator objective reconstruction evidence")
+    ops_cost = drec.get("ops_cost")
+    if (not isinstance(ops_cost, (int, float))
+            or isinstance(ops_cost, bool) or not math.isfinite(ops_cost)):
+        raise AnalysisError(f"{label}: dictator operating cost is invalid")
+    expected_obj = float(
+        ops_cost + market.system_cost_delta(load))
+    for field, actual in (
+            ("record obj_true", drec.get("obj_true")),
+            ("dictator physical_obj", objective.get("physical_obj"))):
+        if (not isinstance(actual, (int, float))
+                or isinstance(actual, bool) or not math.isfinite(actual)
+                or not _evidence_close(float(actual), expected_obj)):
+            raise AnalysisError(f"{label}: dictator {field} mismatch")
 
 
 def _validate_cell_provenance(
@@ -618,6 +794,24 @@ def validate_holdout_root(
         ck = checkpoint.load(ck_path)
         label = f"{method} seed={seed} n={n_trips} b={b}"
         _validate_identity(ck, method, label)
+        dck = checkpoint.load(os.path.join(d, "dictator.ckpt.json"))
+        d_ident = (dck or {}).get("identity") or {}
+        expected_load_policy = {
+            "policy_version": LOAD_RECONSTRUCTION_POLICY_VERSION,
+            "tolerance_kwh": REPLAY_TOL_KWH,
+        }
+        if d_ident.get("schema_version") != SCHEMA_VERSION:
+            raise AnalysisError(
+                f"{label}: dictator schema "
+                f"{d_ident.get('schema_version')!r} != {SCHEMA_VERSION!r}")
+        if d_ident.get("load_reconstruction") != expected_load_policy:
+            raise AnalysisError(
+                f"{label}: dictator load reconstruction identity "
+                f"{d_ident.get('load_reconstruction')!r} != "
+                f"{expected_load_policy!r}")
+        inst = instance_builder(seed, n_trips)
+        market = make_affine_market(inst, shape="duck", b_scale=b)
+        _validate_cell_numeric_evidence(ck, dck, market, label)
         _validate_cell_provenance(
             d, cell_index=cell_index, method=method, seed=seed,
             n_trips=n_trips, b=b,

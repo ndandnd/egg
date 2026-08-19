@@ -250,3 +250,36 @@ frozen seeds 16-31 population specified in
 No holdout data existed or was inspected before this selection was
 committed. A1, the old 960-cell campaign, and scale experiments remain
 paused.
+
+## 2026-08-19 — A6 holdout job 218143 halted unscored; full replacement required
+
+**Incident evidence**: the guarded 128-cell holdout launched from commit
+`2dba047683e2af48a1ec4d3629dd6e15b20847f5` as Slurm job 218143. Expanded
+accounting showed 126 COMPLETED and two FAILED tasks. The failed matched cells
+were array index 41 (`a2_s26_n8_b0.05`) and index 105
+(`a6_a4_s26_n8_b0.05`); both stopped at their first clean restricted master
+with `clean RMP not OPTIMAL: INFEASIBLE`.
+
+**Root cause**: both seed checkpoints contained the identical raw aggregate
+load residual `L[7] = -7.356248409800537e-06` kWh, despite the EVSP model's
+nonnegative load domain. Extraction had stored the solver's redundant
+aggregate `L` values directly rather than reconstructing physical slot load
+from nonnegative charge events. With one seed column, the master then required
+both `L[7] < 0` and `L[7] >= 0`. The physical instance itself had already
+passed the independent constructive feasibility preflight.
+
+**Decision before outcome analysis**: job 218143 is a failed implementation
+incident and is never scored. Its 126 completed cells are retained as incident
+evidence but will not be mixed with repaired cells. No completed-cell outcome
+table or A2/A6 comparison was inspected before this amendment. The repair must
+reconstruct physical load from charge events, audit the raw aggregate residual,
+use the reconstructed feasible objective for pricing-incumbent upper bounds,
+reject malformed master columns before solving, and version the changed
+checkpoint identity. After tests and review, the entire same preregistered
+128-cell population will be rerun under one new pinned commit. Methods, seeds,
+budgets, scoring, and adoption/kill thresholds remain unchanged; there is no
+seed substitution and no two-cell-only recovery.
+
+**Scope boundary**: physical-load canonicalization is enabled only inside the
+B2/A6 pricing and shared-dictator pipeline. Generic taker extraction and the
+legacy Phase 1/boundary replay semantics remain unchanged.

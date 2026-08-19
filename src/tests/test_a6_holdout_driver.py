@@ -210,19 +210,20 @@ def test_dispatches_fresh_a2_and_a6_a4_with_truthful_lineage(
         assert x["selection"]["selected_arm"] == "a6_a4"
 
 
-def test_dictator_helper_labels_new_holdout_record_without_identity_drift(
+def test_dictator_helper_labels_record_and_versions_representation_identity(
     tmp_path, monkeypatch
 ):
-    """The backward-compatible helper extension must label the new record,
-    while leaving the legacy resume identity byte-compatible."""
+    """Campaign lineage and representation policy are both checkpointed."""
     inst = synthetic_instance(seed=16, n_trips=8)
     market = make_affine_market(inst, shape="duck", b_scale=0.01)
     stats = SimpleNamespace(
         extra={"adaptive_converged": True, "adaptive_gap_abs": 0.0,
-               "adaptive_tol_abs": 1e-2},
+               "adaptive_tol_abs": 1e-2, "adaptive_lb": 1.0},
         status="OPTIMAL", bound=0.0,
     )
-    sol = SimpleNamespace(stats=stats, obj_true=1.0)
+    sol = SimpleNamespace(
+        stats=stats, obj_true=1.0, obj_model=1.0, ops_cost=1.0,
+        load=[0.0] * inst.n_slots, charges=[], energy_charged_kwh=0.0)
     seen = {}
     monkeypatch.setattr(dictator_driver, "backend", lambda: "GRB")
     monkeypatch.setattr(
@@ -242,6 +243,10 @@ def test_dictator_helper_labels_new_holdout_record_without_identity_drift(
     assert seen["experiment"] == "a6-holdout"
     assert state["record"]["experiment"] == "a6-holdout"
     assert "experiment" not in state["identity"]
+    assert state["identity"]["load_reconstruction"] == {
+        "policy_version": 1,
+        "tolerance_kwh": pytest.approx(1e-4),
+    }
     with pytest.raises(RuntimeError, match="record experiment"):
         dictator_driver._dictator_stage(
             inst, market, str(tmp_path), "tag",
