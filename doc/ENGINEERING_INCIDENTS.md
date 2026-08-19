@@ -910,8 +910,9 @@ certified lower bound.
 
 ## EI-021 — A6 recovery bounds and requested pricing-gap state were not replayed
 
-**Status: FOUND — IN PROGRESS.** Complete recovery-state replay is required
-before the integration branch is scoreable.
+**Status: FIXED — regression-covered.** The complete recovery-state replay
+is implemented as the shared pure helper `experiments/a6_replay.py`, used
+by both the audit and the production analyzer.
 
 **Observed symptom and evidence.** The scheduler audit reconstructed whether
 recovery was active and whether its kind was `duplicate`, `ambiguous`, or
@@ -950,3 +951,92 @@ the final scheduler state.
 the frozen A6 algorithm until every bounded counter and requested solver-gap
 transition replays. Until the complete state machine and adversarial tests are
 reviewed, do not score its oracle-call count.
+
+## EI-022 — Inode recycling defeated (dev, ino) ownership signatures
+
+**Status: FIXED — regression-covered.**
+
+**Observed symptom and evidence.** During integration testing of the
+rollback-competitor regressions, an `unlink` immediately followed by a
+re-create of the same path received the SAME inode number from the
+filesystem (observed live on tmpfs). Ownership checks keyed on
+`(st_dev, st_ino)` therefore classified a foreign replacement file as the
+owned original, and import rollback destroyed operator-owned replacement
+content instead of freezing it for review.
+
+**Root cause and impact.** POSIX permits immediate inode reuse after the
+last link drops. A 2-tuple identity is an ABA-vulnerable signature: any
+"remove then recreate" replacement can silently reacquire the identity of
+the file it replaced. Every rollback and publication gate keyed on the
+2-tuple — installed-tree files, staging records, publication markers, the
+import lock, and the transfer receipt — could remove or trust a
+same-inode competitor.
+
+**Disposition and required regression.** Regular-file ownership signatures
+are now `(st_dev, st_ino, st_size, st_mtime_ns)`
+(`package_a6_holdout._regular_signature`); size and mtime_ns change on any
+rewrite, and hard-linking/unlinking OTHER names changes neither, so the
+receipt link dance stays valid. Marker and import-lock signatures are
+captured AFTER their final payload writes. Directory signatures remain
+2-tuples (rollback safety for directories is enforced by population and
+rmdir-on-nonempty semantics). Honest boundary: a malicious same-UID
+process can restore mtime with utimensat; that adversary is outside the
+documented cooperative-namespace trust boundary. Regressions:
+`test_target_competitor_during_rollback_is_preserved_with_lock`,
+`test_receipt_competitor_during_rollback_is_preserved_with_lock`, and
+`test_install_staging_replacement_before_rename_gate_rejected` (an
+unlink+rewrite of a nested staging file — inode reuse included — must be
+caught by the pre-rename gate and preserved as evidence).
+
+**Scientific handling.** No published artifact relied on the vulnerable
+check; the gap was found and fixed before this integration branch became
+scoreable.
+
+## EI-023 — Analyzer publication forked from the package contract
+
+**Status: FIXED — regression-covered.**
+
+**Observed symptom and evidence.** `analyze_a6_holdout` carried its own
+publication implementation: an exclusive-`mkdir` reservation populated by
+per-file hard links, with staging removed via a blind `shutil.rmtree` in a
+`finally` block. The package module had already converted to the native
+atomic no-replace directory rename (`renamex_np`/`RENAME_EXCL` on macOS,
+`renameat2`/`RENAME_NOREPLACE` on Linux) with an anchored
+`.publication-incomplete` marker; the analyzer had not, and its blind
+rmtree could destroy foreign or replaced staging entries on failure.
+
+**Root cause and impact.** Two publication implementations drifted. The
+analyzer's reservation window (mkdir, then link-in files) is not atomic;
+its cleanup did not distinguish proven-owned inodes from foreign entries;
+and no final revalidation ran between population and marker removal.
+
+**Disposition and required regression.** The analyzer now publishes
+through the ONE shared `publish_flat_directory_no_replace`, passing a
+final raw-tree/receipt/analysis-claim revalidation callback that the
+publisher runs immediately before the marker unlink (the marker unlink is
+the final logical commit operation; no fallible step follows it). Staging
+artifacts are ownership-recorded as they are written; failure cleanup
+removes only proven-owned inodes and otherwise PRESERVES the staging tree
+for incident review. Regressions:
+`test_analyzer_publication_parity_with_package`,
+`test_analyzer_revalidation_failure_preserves_marker`,
+`test_output_publication_post_rename_mutation_fails_closed`,
+`test_output_publication_race_never_replaces_appearing_path`,
+`test_unmanifested_analysis_artifact_blocks_publication` (preserved
+staging), and `test_atomic_output_failure_leaves_no_final_or_staging`
+(owned cleanup).
+
+**Scientific handling.** Publication mechanics only; no scientific tables
+were derived from a mispublished directory.
+
+## Regression-coverage map: EI-017 through EI-023
+
+| incident | repair | regression coverage |
+|---|---|---|
+| EI-017 (trusted decision gap) | bounds rebuilt chronologically in `_replay_cg_certificate_evidence` | `test_a6_holdout_analysis.py` trigger/bound replay battery |
+| EI-018 (seed prices unanchored) | seed vector rebuilt from the frozen market | seed-anchor tamper tests in `test_a6_holdout_analysis.py` |
+| EI-019 (coordinated price/master edits) | independent exact restricted-master bracket | independent-master and coordinated-edit tests in `test_a6_holdout_analysis.py` |
+| EI-020 (A4 out-dual omitted) | conditional replay + evidence limitation #2 | conditional A4 replay tests; limitation asserted in SUMMARY/MANIFEST/package metadata |
+| EI-021 (recovery counters not replayed) | shared `experiments/a6_replay.py` used by audit AND analyzer | `test_a6_recovery_replay.py` (real recovery trace; coordinated /100 and cap tampers; final-state tampers) + analyzer rejections in `test_a6_holdout_analysis.py` |
+| EI-022 (inode recycling) | `(dev, ino, size, mtime_ns)` signatures | rollback-competitor and staging-replacement regressions in `test_a6_holdout_package.py` |
+| EI-023 (analyzer publication fork) | one shared no-replace publisher + owned staging cleanup | publication parity/revalidation/mutation regressions in `test_a6_holdout_analysis.py` |
