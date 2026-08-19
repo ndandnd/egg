@@ -58,10 +58,15 @@ def _materialize_dictator(d_state, jsonl_path):
     _atomic_write_lines(jsonl_path, [d_state["record"]])
 
 
-def _dictator_stage(inst, market, out, tag, cell, kw):
+def _dictator_stage(
+    inst, market, out, tag, cell, kw, *, experiment="b2a2-pilot"
+):
     """Transactional independent dictator solve (feeds the uplift interval).
     Identity-validated, atomically checkpointed with the complete record
-    committed inside, and materialized/repaired on resume."""
+    committed inside, and materialized/repaired on resume. ``experiment``
+    labels new evidence truthfully; it is intentionally not added to the
+    legacy checkpoint identity so existing campaign resumes stay compatible.
+    """
     d_identity = {"schema_version": SCHEMA_VERSION,
                   "instance_hash": inst.hash(),
                   "market_hash": market_hash(market), "tol_d": TOL_D,
@@ -76,6 +81,13 @@ def _dictator_stage(inst, market, out, tag, cell, kw):
                 f"stale dictator checkpoint for {tag}: identity mismatch "
                 "(instance/market/tolerance/solver settings changed); delete "
                 "the cell directory to restart")
+        stored_experiment = (d_state.get("record") or {}).get("experiment")
+        if stored_experiment != experiment:
+            raise RuntimeError(
+                f"stale dictator checkpoint for {tag}: record experiment "
+                f"mismatch ({stored_experiment!r} != requested "
+                f"{experiment!r}); "
+                "refusing cross-campaign resume")
         # repair/materialize the log from committed state before use
         _materialize_dictator(d_state, d_jsonl)
         return d_state
@@ -92,7 +104,7 @@ def _dictator_stage(inst, market, out, tag, cell, kw):
         raise RuntimeError(
             f"dictator adaptive certification did not converge: "
             f"gap {ex.get('adaptive_gap_abs')} > tol {ex.get('adaptive_tol_abs')}")
-    rec = make_record("b2a2-pilot", inst, sol, market=market,
+    rec = make_record(experiment, inst, sol, market=market,
                       regime="dictator",
                       extra={"tag": tag, "cell": list(cell)})
     if rec["replay_ok"] is False:
