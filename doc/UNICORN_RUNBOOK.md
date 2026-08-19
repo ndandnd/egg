@@ -627,17 +627,103 @@ python experiments/audit_runs.py runs/a6_holdout \
 
 If preflight, any array task, or the audit fails, stop. Do not replace a
 seed, score a partial denominator, or launch the missing arm opportunistically.
-After a passing audit, transfer the raw root once (it remains gitignored):
+Do not update the Unicorn checkout while the array is active. Once `squeue`
+reports no entries for the launched job and the audit passes, update to the
+reviewed closeout tooling and build the guarded transfer bundle. Do not use
+this closeout path until its hardening is merged into `main`. The reviewed
+packager must check Slurm inactivity both before reading checkpoints and
+immediately before publication, freeze a byte-for-byte snapshot, validate and
+audit that exact snapshot, run the analyzer's full
+scoreability/population/Git-provenance checks without computing the final
+decision, inventory every raw-root file, read the completed archive back, and
+publish the archive plus its manifest, audit summary, and SHA-256 sidecar with
+an atomic no-clobber operation. A prior existence check followed by a
+replacing rename is not a no-overwrite guarantee. Neither is a path-based
+leaf check if the final or source directory root can be exchanged before a
+later link, rename, or cleanup. Publication and rollback must stay anchored to
+the exact reserved/source root inode and must never recursively clean a
+replacement namespace. The packager never writes inside `runs/a6_holdout`.
+The frozen bundle preserves `PREFLIGHT.json`, exactly
+one launcher `MANIFEST-*.txt`, and the persistent
+`SUBMISSION_LOCK/{CLAIM,INTENT,SUBMITTED}.txt` chain alongside every cell
+directory; never reconstruct or omit those launch records:
 
 ```bash
-LOCAL_REPO="$HOME/Documents/projects/egg"
+set -euo pipefail
 
-ssh nc437@unicorn-login-01.coecis.cornell.edu \
-  'cd "$HOME/egg/src" && tar -czf - runs/a6_holdout' |
-tar -xzf - -C "$LOCAL_REPO/src"
+cd "$HOME/egg"
+git switch main
+git pull --ff-only origin main
+test "$(git rev-parse HEAD)" = "$(git rev-parse origin/main)"
+test -z "$(git status --porcelain --untracked-files=no)"
+
+cd src
+source cluster/unicorn_env.sh
+PACKAGING_COMMIT="$(git -C .. rev-parse HEAD)"
+test ! -e runs/a6_holdout.CLOSEOUT_CLAIM.json
+python experiments/package_a6_holdout.py pack \
+    --root runs/a6_holdout \
+    --packaging-code-commit "$PACKAGING_COMMIT"
 ```
 
-Analyze from the exact clean implementation commit that produced the run:
+Packaging is itself outcome-aware: root/population validation reconstructs
+cell evidence and scores even though it does not compute the final Section-6
+decision. Therefore, before the first outcome-aware callback, the packager
+must exclusively create the persistent adjacent source claim
+`runs/a6_holdout.CLOSEOUT_CLAIM.json`. That claim binds the canonical source
+tree, exact packaging code, and frozen launch and selection identities from
+which the package name is deterministically derived. A failed or partial
+claimed package is an incident and blocks another package attempt. Preserve
+the claim and raw tree; never delete or rewrite the claim to retry.
+
+The bundle explicitly excludes the per-task
+`src/slurm-egg-a6-holdout-<job>_<task>.out` operational logs because Slurm
+writes them outside the canonical campaign root; checkpoints and committed
+oracle/iteration records remain the scientific evidence. Copy the complete
+printed bundle directory to the Mac, then use the guarded importer rather than
+an unchecked `tar` extraction. Replace `<bundle>` with the printed directory
+name:
+
+```bash
+set -euo pipefail
+
+LOCAL_REPO="$HOME/Documents/projects/egg"
+LOCAL_BUNDLES="$HOME/Downloads"
+BUNDLE_NAME="<printed bundle directory name>"
+
+scp -r \
+  nc437@unicorn-login-01.coecis.cornell.edu:"egg/src/runs/a6_holdout_packages/$BUNDLE_NAME" \
+  "$LOCAL_BUNDLES/"
+
+cd "$LOCAL_REPO"
+git switch main
+git pull --ff-only origin main
+test "$(git rev-parse HEAD)" = "$(git rev-parse origin/main)"
+test -z "$(git status --porcelain --untracked-files=no)"
+
+cd src
+python3 experiments/package_a6_holdout.py import \
+    --bundle-dir "$LOCAL_BUNDLES/$BUNDLE_NAME" \
+    --repo-root "$LOCAL_REPO"
+```
+
+Import refuses an existing `src/runs/a6_holdout`; it never merges or
+overwrites a partial transfer. It verifies the external SHA-256, exact bundle
+file set, internal/external manifest equality, normalized archive member set,
+and every source hash/size before transactionally installing the raw root and
+the adjacent `src/runs/a6_holdout.TRANSFER_RECEIPT.json`, using publication
+operations that refuse a target created at the last moment. The import lock is
+an in-progress/failure sentinel, not the successful commit marker. A successful
+import removes the lock and leaves the receipt as the durable commit record;
+caught failures roll back the target and receipt, while an interrupted or
+incomplete rollback preserves the lock and blocks analysis. Do not delete a
+lock, receipt, or raw root to retry without recording the incident. The
+importer must prove the recorded inode before removing its lock or any partial
+tree; a pathname that now names a replacement directory is operator-owned and
+must be preserved, not treated as rollback state.
+
+Analyze from the exact clean **analysis** commit. The launch commit remains
+separately bound by `PREFLIGHT.json`, the submission chain, and every cell:
 
 ```bash
 set -euo pipefail
@@ -648,20 +734,92 @@ git pull --ff-only origin main
 test "$(git rev-parse HEAD)" = "$(git rev-parse origin/main)"
 test -z "$(git status --porcelain --untracked-files=no)"
 
+# Activate a Python 3 environment containing pandas, matplotlib, and
+# python-mip (import name `mip`), then verify it before claiming the one look.
+python3 -c 'import pandas, matplotlib, mip; print("closeout dependencies: OK")'
+
+RECEIPT="src/runs/a6_holdout.TRANSFER_RECEIPT.json"
+test -f "$RECEIPT"
+PACKAGING_COMMIT="$(python3 -c \
+  'import json,sys; print(json.load(open(sys.argv[1]))["provenance"]["packaging_code_commit"])' \
+  "$RECEIPT")"
+test "$(git rev-parse HEAD)" = "$PACKAGING_COMMIT"
+test ! -e "src/runs/a6_holdout.ANALYSIS_CLAIM.json"
+test ! -d "result/a6_holdout" || test -z "$(find result/a6_holdout -mindepth 1 -print -quit)"
+
 cd src
 CODE_COMMIT="$(git -C .. rev-parse HEAD)"
-python experiments/analyze_a6_holdout.py \
+python3 experiments/analyze_a6_holdout.py \
     --root runs/a6_holdout \
     --analysis-code-commit "$CODE_COMMIT"
 ```
 
-The analyzer reruns the audit, independently reconstructs every identity,
-market, feasibility witness, lineage, materialized log, and corrected wall
-partition, then applies the exhaustive Section-6 decision rule. Commit the
-new `result/a6_holdout/<stamp>/` artifact and matching `DECISION_LOG.md`
-entry only after it succeeds. No second holdout look is permitted.
+The source `CLOSEOUT_CLAIM` and destination `ANALYSIS_CLAIM` guard different
+looks and both are required. The source claim prevents repackaging or changing
+validation code after checkpoint outcomes have been inspected. The destination
+claim prevents reanalyzing the imported snapshot after seeing a decision; it
+does not retroactively cover the source-side packaging look.
+
+The analyzer first validates the one-shot launch chain semantically: exactly
+one manifest and one complete submission sentinel must agree on the launch
+commit, selection/preflight/grid hashes, exact array/audit contract, Slurm job
+id, and timestamp ordering. It independently regenerates the exact 128-cell
+launcher bytes, validates the source closeout claim carried by the bundle, the
+transfer receipt, and the unchanged raw-tree digest, and requires analysis HEAD
+to equal the packaging commit. Before it interprets any checkpoint outcome it
+exclusively creates the persistent
+`src/runs/a6_holdout.ANALYSIS_CLAIM.json`; a failure leaves that claim in place
+for incident review, and a second timestamp does not authorize a second look.
+It then reruns the audit and independently reconstructs schedules, loads,
+identities, markets, feasibility witnesses, retained-column lineage, dictator
+bound arithmetic, task indices, materialized logs, economic quantities, and
+the corrected wall partition before applying the exhaustive Section-6
+decision rule. For CG, this statement has a precise evidence boundary:
+
+- scheduler decisions are replayed from the independently derived prior
+  `LB_best` and current master UB, and the seed price is regenerated as the
+  frozen market price at zero fleet load. The complete bounded recovery state
+  also replays: duplicate/refinement/escalation counters, requested pricing
+  MIP-gap progression and floor, spacing state, resets, and the final
+  scheduler/counter snapshot;
+- every clean convexity dual must be tight on the then-retained columns within
+  `RC_TOL`, and every clean lower bound is capped by the global Lagrangian
+  certificate obtained from the pricing solver's certified bound and the
+  affine-market conjugate;
+- the analyzer independently brackets each exact convex restricted-master
+  optimum from the chronological retained-column prefix. A feasible
+  Frank--Wolfe iterate supplies a safe UB and its Frank--Wolfe gap supplies a
+  rigorous lower bound; a stopping claim must also close against that
+  independently feasible UB; and
+- candidate calls carry the last certified lower bound but never improve it.
+
+These checks independently establish certificate safety and replay the
+stopping arithmetic. They do **not** reproduce the exact historical producer
+path. The launch-era checkpoints omit the clean RMP lambdas, aggregate load,
+link-dual vector, and per-iteration tangent set, so the closeout cannot claim
+the exact producer primal mixture, exact stored UB construction, or exact
+clean-dual path. A6-A4 additionally omits the contemporaneous clean out-dual
+used to form each candidate. Its `theta`, serious/null decision, direction
+signal, alpha transition, center, and counters can be recomputed only
+conditional on the serialized candidate price. Future campaigns must record
+those omitted primal/dual objects if exact algorithm-path replay is required.
+
+The launch-era records at experiment commit `92c38a6` contain each Slurm task
+ID and task job ID but not `SLURM_ARRAY_JOB_ID`. For this historical holdout the
+analyzer can prove the frozen method-major task index and within-cell job
+consistency; it cannot claim that record bytes exactly join to the parent array
+job ID in the launch manifest. That parent remains separately preserved launch
+evidence. Future campaigns must record and require `slurm_array_job_id`.
+
+Commit the new
+`result/a6_holdout/<stamp>/` artifact and matching `DECISION_LOG.md` entry
+only after it succeeds. Never delete or rewrite the analysis claim merely to
+obtain another result.
 
 ## Branch hygiene
 
-The hardened implementation and this runbook are merged into `main`. Submit
-only from `main`; delete source branches after their PR is fast-forwarded.
+Submit experiments only from a clean, published `main`. The closeout
+hardening described above remains **FOUND — IN PROGRESS** until its integrated
+PR and regression battery are reviewed and merged; this runbook does not make
+an unmerged branch production policy. Delete source branches only after their
+PR is merged.

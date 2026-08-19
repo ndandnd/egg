@@ -134,8 +134,9 @@ def _cg_sane(ck: dict, tol_mono: float = 2e-3) -> list:
             return errs
         run = 0
         n_clean = 0
+        n_columns = 1
         last_candidate_novel = None
-        recovery = False
+        recovery_kind = None
         event_by_id = {
             (e.get("extra") or {}).get("call_id"): e for e in events
         }
@@ -154,11 +155,24 @@ def _cg_sane(ck: dict, tol_mono: float = 2e-3) -> list:
                     f"k_since_clean={it.get('k_since_clean')} but recomputed "
                     f"value is {run}")
                 break
+            if it.get("n_columns") != n_columns:
+                errs.append(
+                    f"a6 iteration {it.get('iteration_id')}: recorded "
+                    f"n_columns={it.get('n_columns')} but recomputed value "
+                    f"is {n_columns}")
+                break
+            recovery = recovery_kind is not None
             if bool(it.get("recovery_active")) != recovery:
                 errs.append(
                     f"a6 iteration {it.get('iteration_id')}: recorded "
                     f"recovery_active={it.get('recovery_active')} but "
                     f"recomputed value is {recovery}")
+                break
+            if it.get("recovery_kind") != recovery_kind:
+                errs.append(
+                    f"a6 iteration {it.get('iteration_id')}: recorded "
+                    f"recovery_kind={it.get('recovery_kind')!r} but "
+                    f"recomputed value is {recovery_kind!r}")
                 break
             expected_fired = {
                 "T0": recovery,
@@ -223,17 +237,33 @@ def _cg_sane(ck: dict, tol_mono: float = 2e-3) -> list:
                         f"{run} consecutive candidates exceeds k_max={k_max}")
                     break
                 last_candidate_novel = novel
-                recovery = False
+                recovery_kind = None
+                if novel:
+                    n_columns += 1
             else:
                 run = 0
                 n_clean += 1
                 last_candidate_novel = None
                 novel = it.get("column_novel")
+                if not isinstance(novel, bool):
+                    errs.append(
+                        f"a6 iteration {it.get('iteration_id')}: clean "
+                        "column_novel is not boolean")
+                    break
                 improving = it.get("min_reduced_cost_ub") < -rc_tol
                 certified = it.get("certificate_gap") <= ident.get(
                     "epsilon", 0)
-                recovery = bool(not certified and not (
-                    novel is True and improving))
+                if not certified:
+                    if novel:
+                        n_columns += 1
+                    if novel and improving:
+                        recovery_kind = None
+                    elif improving:
+                        recovery_kind = "duplicate"
+                    elif it.get("min_reduced_cost_lb") < -rc_tol:
+                        recovery_kind = "ambiguous"
+                    else:
+                        recovery_kind = "refinement"
 
     # iteration events reference committed pricing solves (terminal
     # master-only events carry the budget RMP's evidence and no pricing);

@@ -36,6 +36,7 @@ import hashlib
 import json
 import math
 import os
+import re
 import statistics
 import sys
 
@@ -76,27 +77,47 @@ def default_instance_builder(seed: int, n_trips: int):
 
 def verify_analysis_code_commit(claimed: str) -> str:
     """The two-commit protocol is only meaningful if the pipeline actually
-    runs from the commit it stamps into the manifest: verify HEAD matches
-    the claimed hash (prefix match either way) and the tracked tree is
-    clean. Returns the full resolved hash."""
+    runs from the commit it stamps into the manifest: resolve a syntactically
+    valid claimed commit, require that exact commit to be HEAD, and only then
+    require a clean tracked tree. Returns the full resolved hash."""
     import subprocess
 
     repo_dir = os.path.dirname(os.path.abspath(__file__))
-    head = subprocess.check_output(
-        ["git", "rev-parse", "HEAD"], cwd=repo_dir).decode().strip()
-    if not (head.startswith(claimed) or claimed.startswith(head)):
+    if (not isinstance(claimed, str)
+            or re.fullmatch(r"[0-9a-f]{7,40}", claimed) is None):
+        raise AnalysisError(
+            "--analysis-code-commit must be 7-40 lowercase hexadecimal "
+            "characters")
+    try:
+        resolved = subprocess.check_output(
+            ["git", "rev-parse", "--verify", f"{claimed}^{{commit}}"],
+            cwd=repo_dir, text=True,
+            stderr=subprocess.STDOUT).strip()
+        head = subprocess.check_output(
+            ["git", "rev-parse", "--verify", "HEAD^{commit}"],
+            cwd=repo_dir, text=True,
+            stderr=subprocess.STDOUT).strip()
+    except (subprocess.CalledProcessError, OSError) as exc:
+        raise AnalysisError(
+            "cannot resolve analysis code commit provenance") from exc
+    if resolved != head:
         raise AnalysisError(
             f"analysis code commit mismatch: running from {head[:12]} but "
             f"--analysis-code-commit claims {claimed}; check out the "
             "claimed commit or fix the argument")
-    dirty = subprocess.check_output(
-        ["git", "status", "--porcelain", "--untracked-files=no"],
-        cwd=repo_dir).decode().strip()
+    try:
+        dirty = subprocess.check_output(
+            ["git", "status", "--porcelain", "--untracked-files=no"],
+            cwd=repo_dir, text=True,
+            stderr=subprocess.STDOUT).strip()
+    except (subprocess.CalledProcessError, OSError) as exc:
+        raise AnalysisError(
+            "cannot verify analysis tree cleanliness") from exc
     if dirty:
         raise AnalysisError(
             "analysis tree has uncommitted tracked changes; the manifest "
             f"would misattribute results to {claimed}:\n{dirty}")
-    return head
+    return resolved
 
 
 # ---------------------------------------------------------------------------

@@ -306,7 +306,7 @@ def test_experiment_lineage_mismatch_rejected(full_roots, tmp_path):
 
 
 def test_code_commit_verification_active(full_roots, tmp_path):
-    with pytest.raises(AnalysisError, match="code commit mismatch"):
+    with pytest.raises(AnalysisError, match="cannot resolve|code commit mismatch"):
         analyze(full_roots, str(tmp_path), "T",
                 "deadbeefdeadbeefdeadbeefdeadbeefdeadbeef",
                 instances=MINI_ALL, pilot_instances=MINI_PILOT,

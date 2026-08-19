@@ -6,6 +6,7 @@ stages on tiny instances)."""
 import json
 import os
 import shutil
+import subprocess
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -21,6 +22,7 @@ from experiments.analyze_b2_pilot import (
     AnalysisError,
     analyze,
     sha256_file,
+    verify_analysis_code_commit,
 )
 from experiments.run_b2a2_pilot import _dictator_stage
 
@@ -228,11 +230,84 @@ def test_zch_dictator_contradiction_halts(pilot_roots, tmp_path):
 def test_code_commit_verification_rejects_wrong_commit(pilot_roots,
                                                        tmp_path):
     c2, c345 = _clone_roots(pilot_roots, tmp_path)
-    with pytest.raises(AnalysisError, match="code commit mismatch"):
+    with pytest.raises(AnalysisError, match="cannot resolve|code commit mismatch"):
         analyze(c2, c345, str(tmp_path / "out"), "T",
                 "deadbeefdeadbeefdeadbeefdeadbeefdeadbeef",
                 instances=FIX_INSTANCES, instance_builder=fix_builder,
                 verify_code_commit=True)
+
+
+@pytest.mark.parametrize(
+    "claimed", ("", "abcdef", "ABCDEF0", "abcdeg0", "a" * 41))
+def test_analysis_commit_verifier_rejects_invalid_claim_without_git(
+        claimed, monkeypatch):
+    def unexpected(*_args, **_kwargs):
+        raise AssertionError("invalid commit syntax must fail before Git")
+
+    monkeypatch.setattr(subprocess, "check_output", unexpected)
+    with pytest.raises(AnalysisError, match="7-40 lowercase hexadecimal"):
+        verify_analysis_code_commit(claimed)
+
+
+def test_analysis_commit_verifier_rejects_unresolved_claim(monkeypatch):
+    def unresolved(command, **_kwargs):
+        assert command[-1] == "deadbee^{commit}"
+        raise subprocess.CalledProcessError(128, command)
+
+    monkeypatch.setattr(subprocess, "check_output", unresolved)
+    with pytest.raises(AnalysisError, match="cannot resolve"):
+        verify_analysis_code_commit("deadbee")
+
+
+def test_analysis_commit_verifier_rejects_resolved_non_head(monkeypatch):
+    head = "a" * 40
+
+    def output(command, **_kwargs):
+        if command[-1] == "deadbee^{commit}":
+            return "b" * 40 + "\n"
+        if command[-1] == "HEAD^{commit}":
+            return head + "\n"
+        raise AssertionError(command)
+
+    monkeypatch.setattr(subprocess, "check_output", output)
+    with pytest.raises(AnalysisError, match="code commit mismatch"):
+        verify_analysis_code_commit("deadbee")
+
+
+@pytest.mark.parametrize("use_full", (False, True))
+def test_analysis_commit_verifier_accepts_resolved_head_and_clean_tree(
+        use_full, monkeypatch):
+    head = "a" * 40
+    claimed = head if use_full else head[:7]
+    calls = []
+
+    def output(command, **_kwargs):
+        calls.append(command)
+        if command[-1] in (f"{claimed}^{{commit}}", "HEAD^{commit}"):
+            return head + "\n"
+        if command[1] == "status":
+            return ""
+        raise AssertionError(command)
+
+    monkeypatch.setattr(subprocess, "check_output", output)
+    assert verify_analysis_code_commit(claimed) == head
+    assert calls[-1] == [
+        "git", "status", "--porcelain", "--untracked-files=no"]
+
+
+def test_analysis_commit_verifier_rejects_dirty_tracked_tree(monkeypatch):
+    head = "a" * 40
+
+    def output(command, **_kwargs):
+        if command[1] == "rev-parse":
+            return head + "\n"
+        if command[1] == "status":
+            return " M src/experiments/analyze_b2_pilot.py\n"
+        raise AssertionError(command)
+
+    monkeypatch.setattr(subprocess, "check_output", output)
+    with pytest.raises(AnalysisError, match="uncommitted tracked changes"):
+        verify_analysis_code_commit(head[:7])
 
 
 def test_deterministic_regeneration_byte_identical(pilot_roots, artifacts,

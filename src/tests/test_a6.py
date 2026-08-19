@@ -377,6 +377,26 @@ def test_audit_rejects_candidate_during_recovery(a6_runs, tmp_path):
     assert not ok and any("recovery_active" in p for p in problems)
 
 
+def test_audit_rejects_falsified_column_count(a6_runs, tmp_path):
+    def mutate(ck):
+        ev = next(e for e in ck["iteration_events"]
+                  if not e.get("terminal"))
+        ev["n_columns"] += 1
+
+    _, ok, problems = _audited_copy(a6_runs, tmp_path, mutate)
+    assert not ok and any("n_columns" in p for p in problems)
+
+
+def test_audit_rejects_falsified_recovery_kind(a6_runs, tmp_path):
+    def mutate(ck):
+        ev = next(e for e in ck["iteration_events"]
+                  if not e.get("terminal"))
+        ev["recovery_kind"] = "ambiguous"
+
+    _, ok, problems = _audited_copy(a6_runs, tmp_path, mutate)
+    assert not ok and any("recovery_kind" in p for p in problems)
+
+
 def test_audit_rejects_excess_spacing(a6_runs, tmp_path):
     def mutate(ck):
         # relabel a clean iteration as a candidate to break the spacing
@@ -519,7 +539,7 @@ def test_selection_aborts_on_failed_audit(mini_pilot, tmp_path):
 
 
 def test_selection_code_commit_verification(mini_pilot, tmp_path):
-    with pytest.raises(AnalysisError, match="code commit mismatch"):
+    with pytest.raises(AnalysisError, match="cannot resolve|code commit mismatch"):
         select(mini_pilot, str(tmp_path), "T",
                "deadbeefdeadbeefdeadbeefdeadbeefdeadbeef",
                instances=MINI_INSTANCES, win_threshold=2,
