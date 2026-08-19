@@ -42,7 +42,9 @@ not sufficient.
 | EI-018 | 2026-08-19 | **FOUND — IN PROGRESS** | The seed pricing vector was not anchored to the frozen market |
 | EI-019 | 2026-08-19 | **FOUND — IN PROGRESS** | Coordinated clean-price and master edits could fabricate a CG certificate |
 | EI-020 | 2026-08-19 | **FOUND — IN PROGRESS** | Historical A4 replay cannot recover the omitted clean out-dual |
-| EI-021 | 2026-08-19 | **FOUND — IN PROGRESS** | A6 recovery bounds and requested pricing-gap state were not replayed |
+| EI-021 | 2026-08-19 | **FIXED** | A6 recovery bounds and requested pricing-gap state were not replayed |
+| EI-022 | 2026-08-19 | **FIXED** | Inode recycling defeated (dev, ino) ownership signatures |
+| EI-023 | 2026-08-19 | **FIXED** | Analyzer publication forked from the package contract |
 
 ## EI-001 — Replay rounding and audit tolerance
 
@@ -733,6 +735,15 @@ determinism inputs, including the exact closeout claim, are identical.
 
 ## EI-017 — A6 trigger replay trusted its recorded decision gap
 
+**2026-08-19 addendum.** The analyzer-side repair below was joined by the
+audit side: the shared recovery replay (`experiments/a6_replay.py`) now
+derives every `gap_at_decision` chronologically from the recomputed UB and
+the prior certified LB chain and never uses the recorded gap to regenerate
+T1 or the certificate decision; both the audit and the analyzer consume
+that one path. Coordinated regression:
+`test_coordinated_decision_gap_trigger_tamper_rejected` (helper + audit)
+and `test_coordinated_scheduler_gap_and_trigger_story_halts` (analyzer).
+
 **Status: FOUND — IN PROGRESS.** Scheduler-gap anchoring is implemented on the
 integration branch and awaits review and merge.
 
@@ -974,9 +985,14 @@ same-inode competitor.
 
 **Disposition and required regression.** Regular-file ownership signatures
 are now `(st_dev, st_ino, st_size, st_mtime_ns)`
-(`package_a6_holdout._regular_signature`); size and mtime_ns change on any
-rewrite, and hard-linking/unlinking OTHER names changes neither, so the
-receipt link dance stays valid. Marker and import-lock signatures are
+(`package_a6_holdout._regular_signature`). Exact guarantee: a replacement
+or rewrite is detected whenever it differs in byte length OR in
+nanosecond mtime; kernels set `st_mtime_ns` on every write and creation,
+so unlink+recreate and content rewrites are detected unless a same-UID
+adversary deliberately restores both the exact length and the exact
+nanosecond timestamp (`utimensat`) — outside the cooperative trust
+boundary. Hard-linking/unlinking OTHER names changes neither field, so
+the receipt link dance stays valid. Marker and import-lock signatures are
 captured AFTER their final payload writes. Directory signatures remain
 2-tuples (rollback safety for directories is enforced by population and
 rmdir-on-nonempty semantics). Honest boundary: a malicious same-UID
@@ -1012,9 +1028,14 @@ and no final revalidation ran between population and marker removal.
 
 **Disposition and required regression.** The analyzer now publishes
 through the ONE shared `publish_flat_directory_no_replace`, passing a
-final raw-tree/receipt/analysis-claim revalidation callback that the
-publisher runs immediately before the marker unlink (the marker unlink is
-the final logical commit operation; no fallible step follows it). Staging
+final raw-tree/receipt/analysis-claim revalidation callback; a second
+ownership gate runs after the callback, immediately before the marker
+unlink. The marker unlink is the final LOGICAL commit: fallible steps do
+follow it (descriptor close, and the unlink syscall itself can fail after
+removing the marker), but none of them may reclassify a verifiably
+markerless committed destination as incomplete — commit state is tracked
+explicitly (pre-rename / renamed-with-marker / committed) and marker
+presence is inspected through the anchored descriptor. Staging
 artifacts are ownership-recorded as they are written; failure cleanup
 removes only proven-owned inodes and otherwise PRESERVES the staging tree
 for incident review. Regressions:
