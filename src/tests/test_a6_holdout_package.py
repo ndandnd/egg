@@ -1413,6 +1413,193 @@ def test_source_fd_close_failure_after_commit_is_not_a_failure(
         assert (target / name).read_text() == f"owned {name}\n"
 
 
+@pytest.mark.parametrize("corrupt", (False, True))
+@pytest.mark.parametrize("callback_raises", (False, True))
+def test_precommit_marker_deletion_is_corruption_not_commit(
+        tmp_path, corrupt, callback_raises):
+    """E1 (EI-024). Original exploit (reproduced ACCEPTED before the fix): a
+    revalidate callback that removes the guard marker BEFORE the publisher's
+    own commit unlink used to be misread as a successful commit (marker
+    absent) — leaving a markerless, apparently-complete (possibly corrupt)
+    directory behind an ORDINARY error.  Marker absence in the
+    renamed-guarded state is corruption: a blocking marker must be restored
+    and the failure reported truthfully as incomplete."""
+    staging, target, expected = _flat_staging(tmp_path)
+
+    def revalidate():
+        if corrupt:
+            (target / "A.txt").write_text("CORRUPT\n")
+        (target / ".publication-incomplete").unlink()
+        if callback_raises:
+            raise RuntimeError("callback failure after marker deletion")
+
+    with pytest.raises(mod.IncompletePublicationError) as info:
+        mod.publish_flat_directory_no_replace(
+            staging, target, expected_names=expected, revalidate=revalidate)
+    err = info.value
+    assert err.renamed is True
+    assert err.committed is False
+    assert err.destination == str(target)
+    assert "removed before commit" in str(err)
+    # the real renamed destination and every artifact are preserved
+    assert target.is_dir()
+    for name in expected:
+        assert (target / name).exists()
+    # corruption is preserved as evidence, never silently healed
+    assert (target / "A.txt").read_text() == (
+        "CORRUPT\n" if corrupt else "owned A.txt\n")
+    # a blocking incomplete marker exists again: no markerless "complete" dir
+    marker = target / ".publication-incomplete"
+    assert marker.exists() and marker.read_text() == "incomplete\n"
+    if callback_raises:
+        assert isinstance(err.__cause__, RuntimeError)
+
+
+def test_precommit_marker_restore_race_preserves_competitor(
+        tmp_path, monkeypatch):
+    """If a competitor squats the marker name in the instant the guard is
+    restored, its path is preserved (never overwritten) and the failure is
+    louder."""
+    staging, target, expected = _flat_staging(tmp_path)
+    real_open = mod.os.open
+    fired = {"done": False}
+
+    def revalidate():
+        (target / ".publication-incomplete").unlink()
+
+    def racing_open(path, flags, *args, **kwargs):
+        # the restore open is the ONLY marker open that uses O_NOFOLLOW
+        if (path == ".publication-incomplete" and flags & os.O_NOFOLLOW
+                and not fired["done"]):
+            fired["done"] = True
+            cfd = real_open(path, os.O_WRONLY | os.O_CREAT | os.O_EXCL,
+                            0o600, dir_fd=kwargs.get("dir_fd"))
+            with os.fdopen(cfd, "wb") as handle:
+                handle.write(b"competitor\n")
+            # the real restore now loses the O_EXCL race and preserves it
+        return real_open(path, flags, *args, **kwargs)
+
+    monkeypatch.setattr(mod.os, "open", racing_open)
+    with pytest.raises(mod.IncompletePublicationError) as info:
+        mod.publish_flat_directory_no_replace(
+            staging, target, expected_names=expected, revalidate=revalidate)
+    assert info.value.renamed is True and info.value.committed is False
+    assert "could not be safely restored" in str(info.value)
+    assert (target / ".publication-incomplete").read_text() == "competitor\n"
+
+
+def test_install_tree_post_rename_error_carries_truthful_metadata(
+        tmp_path, monkeypatch):
+    """E3. install_tree_no_replace post-rename failures must populate the
+    exception contract (renamed/destination/committed)."""
+    staging = tmp_path / "src"
+    staging.mkdir()
+    (staging / "f.txt").write_text("x\n")
+    snapshot = mod.snapshot_source(staging)
+    target = tmp_path / "dst"
+    real_snapshot = mod.snapshot_source
+
+    def diff_after_rename(path):
+        result = real_snapshot(path)
+        if Path(path) == target:
+            result = dict(result)
+            result["files"] = []
+        return result
+
+    monkeypatch.setattr(mod, "snapshot_source", diff_after_rename)
+    with pytest.raises(mod.IncompletePublicationError) as info:
+        mod.install_tree_no_replace(staging, target, snapshot)
+    assert info.value.renamed is True
+    assert info.value.committed is False
+    assert info.value.destination == str(target)
+    assert target.is_dir()  # the renamed tree is preserved for review
+
+
+def test_install_tree_pre_rename_error_leaves_no_target(tmp_path):
+    """E3. A pre-rename refusal (existing target) is an ordinary
+    PackagingError and never renames onto the rival."""
+    staging = tmp_path / "src"
+    staging.mkdir()
+    (staging / "f.txt").write_text("x\n")
+    snapshot = mod.snapshot_source(staging)
+    target = tmp_path / "dst"
+    target.mkdir()
+    (target / "rival").write_text("rival\n")
+    with pytest.raises(mod.PackagingError,
+                       match="refusing existing import target") as info:
+        mod.install_tree_no_replace(staging, target, snapshot)
+    # pre-rename refusal is an ordinary PackagingError, not the post-rename
+    # incomplete-publication contract
+    assert not isinstance(info.value, mod.IncompletePublicationError)
+    assert (target / "rival").read_text() == "rival\n"
+    assert staging.is_dir()  # the staging tree was never renamed away
+
+
+def _import_repo(tmp_path):
+    repository = tmp_path / "repo"
+    (repository / ".git").mkdir(parents=True)
+    (repository / "src/runs").mkdir(parents=True)
+    return repository
+
+
+def test_import_descriptor_close_after_commit_is_not_a_failure(
+        tmp_path, monkeypatch):
+    """E3. Analogous to the publisher post-commit close test: once the
+    target and receipt are durable and the lock is released, a descriptor
+    close failure has no data consequence and must not report the import as
+    unsuccessful."""
+    root = _source_root(tmp_path)
+    package = _package(root, tmp_path / "packages")
+    repository = _import_repo(tmp_path)
+    runs = repository / "src/runs"
+    lock = runs / ".a6_holdout.import-lock"
+    receipt = runs / mod.RECEIPT_FILENAME
+    real_close = mod.os.close
+    fired = {"done": False}
+
+    def failing_close(fd):
+        committed = receipt.exists() and not lock.exists()
+        real_close(fd)
+        if committed and not fired["done"]:
+            fired["done"] = True
+            raise OSError("injected close failure after import commit")
+
+    monkeypatch.setattr(mod.os, "close", failing_close)
+    result = _import(package["bundle_dir"], repository)
+    assert fired["done"]
+    assert Path(result["target"]).is_dir()
+    assert Path(result["receipt"]).exists()
+    assert result["receipt_sha256"] == sha256_file(receipt)
+
+
+def test_import_descriptor_close_before_commit_is_reported(
+        tmp_path, monkeypatch):
+    """E3. A descriptor-close failure while the import has NOT committed is
+    surfaced honestly (the import fails, no receipt is committed), never
+    silently swallowed into a success."""
+    root = _source_root(tmp_path)
+    package = _package(root, tmp_path / "packages")
+    repository = _import_repo(tmp_path)
+    runs = repository / "src/runs"
+    receipt = runs / mod.RECEIPT_FILENAME
+    real_close = mod.os.close
+    fired = {"done": False}
+
+    def failing_close(fd):
+        # fire once BEFORE the receipt is committed (pre-commit)
+        precommit = not receipt.exists() and not fired["done"]
+        real_close(fd)
+        if precommit:
+            fired["done"] = True
+            raise OSError("injected pre-commit close failure")
+
+    monkeypatch.setattr(mod.os, "close", failing_close)
+    with pytest.raises((OSError, mod.PackagingError)):
+        _import(package["bundle_dir"], repository)
+    assert fired["done"]
+    assert not receipt.exists()  # the import never committed
+
+
 def test_package_wrapper_pre_rename_cleanup_failure_never_masks(
         tmp_path, monkeypatch, capsys):
     """Wrapper-level: a pre-rename publication refusal whose staging

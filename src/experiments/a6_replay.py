@@ -34,6 +34,16 @@ theta_cert, retry caps, gap divisor 100, floor 1e-12).  Consumed by BOTH
 the audit (experiments/audit_runs) and the production analyzer
 (experiments/analyze_a6_holdout); there is deliberately no second
 implementation anywhere.
+
+EI-025 closure: a COMPLETED trace is also closed at its terminal/final
+state.  No event may follow a derived certificate or the budget terminal;
+certified completion has zero terminal events and budget exhaustion has
+exactly one final terminal event whose n_columns/lb_best/history entry
+replay; the top-level checkpoint lb_best, column count, and history lengths
+and the full outcome (type, certified, ub_ch, lb_best, gap, oracle_calls,
+method, recovery-at-end) must equal the replay; and each call's
+oracle-event reduced-cost/novelty evidence must agree with its iteration
+event.
 """
 from __future__ import annotations
 
@@ -152,9 +162,22 @@ def replay_a6_recovery(ck: dict) -> tuple[dict, list[str]]:
     lb_best = -math.inf
     prev_ub = math.inf
     history_index = 0
+    terminals = 0
 
     for it in ck.get("iteration_events") or []:
         iteration = it.get("iteration_id")
+        # nothing may follow a certificate or the budget terminal: the
+        # producer STOPS at either (the certificate returns; the terminal
+        # master is the final committed event).  A trailing event of ANY
+        # kind — including a second terminal — is impossible.
+        if certified:
+            return fail(
+                f"a6 iteration {iteration}: events continue after the "
+                "certificate returned")
+        if terminals:
+            return fail(
+                f"a6 iteration {iteration}: events continue after the "
+                "terminal event")
         # ---- chronological UB / derived decision gap (EI-017 closure) ----
         ub = it.get("ub_ch")
         if not _fin(ub):
@@ -165,6 +188,7 @@ def replay_a6_recovery(ck: dict) -> tuple[dict, list[str]]:
                 f"{prev_ub} -> {ub}")
         derived_gap = ub - lb_best  # +inf until the first clean LB refresh
         if it.get("terminal"):
+            terminals += 1
             recorded_terminal_gap = it.get("certificate_gap")
             if not _pos_inf_ok(recorded_terminal_gap) or (
                     recorded_terminal_gap != derived_gap):
@@ -172,13 +196,33 @@ def replay_a6_recovery(ck: dict) -> tuple[dict, list[str]]:
                     f"a6 iteration {iteration}: terminal certificate_gap="
                     f"{recorded_terminal_gap!r} but the derived value is "
                     f"{derived_gap!r}")
+            # the terminal master commits n_columns, lb_best, and one more
+            # UB/LB history entry: each must replay exactly
+            if it.get("n_columns") != n_columns:
+                return fail(
+                    f"a6 iteration {iteration}: terminal n_columns="
+                    f"{it.get('n_columns')!r} but the recomputed value is "
+                    f"{n_columns}")
+            if it.get("lb_best") != lb_best:
+                return fail(
+                    f"a6 iteration {iteration}: terminal lb_best="
+                    f"{it.get('lb_best')!r} but the derived value is "
+                    f"{lb_best!r}")
+            if (isinstance(ub_history, list)
+                    and history_index < len(ub_history)
+                    and ub_history[history_index] != ub):
+                return fail(
+                    f"a6 iteration {iteration}: terminal ub_history "
+                    "disagrees with the iteration ub_ch")
+            if (isinstance(lb_history, list)
+                    and history_index < len(lb_history)
+                    and lb_history[history_index] != lb_best):
+                return fail(
+                    f"a6 iteration {iteration}: terminal lb_history "
+                    "disagrees with the derived LB chain")
             prev_ub = ub
             history_index += 1
             continue
-        if certified:
-            return fail(
-                f"a6 iteration {iteration}: events continue after the "
-                "certificate returned")
         gap = it.get("gap_at_decision")
         if not _pos_inf_ok(gap):
             return fail(
@@ -267,6 +311,19 @@ def replay_a6_recovery(ck: dict) -> tuple[dict, list[str]]:
         if not isinstance(novel, bool):
             return fail(
                 f"a6 iteration {iteration}: column_novel is not boolean")
+        # oracle and iteration evidence for the SAME call may never disagree
+        if extra.get("column_novel") != novel:
+            return fail(
+                f"a6 iteration {iteration}: oracle-event column_novel "
+                "disagrees with the iteration event")
+        if kind == "clean" and (
+                extra.get("min_reduced_cost_ub")
+                != it.get("min_reduced_cost_ub")
+                or extra.get("min_reduced_cost_lb")
+                != it.get("min_reduced_cost_lb")):
+            return fail(
+                f"a6 iteration {iteration}: oracle-event reduced-cost "
+                "evidence disagrees with the iteration event")
 
         if kind == "candidate":
             # candidates never touch certified bounds, counters, or gap
@@ -428,6 +485,90 @@ def replay_a6_recovery(ck: dict) -> tuple[dict, list[str]]:
                 f"a6 final state: recorded {name}={recorded!r} but the "
                 f"event stream replays {replayed!r}")
             return final_state, errors
+
+    # ---- terminal / final-state / outcome closure (EI-025 closure) --------
+    # A COMPLETED trace closes in exactly one way: a certificate returns
+    # (zero terminal events) or the budget terminal fires as the final event
+    # (exactly one).  A resumable in-flight checkpoint legitimately has
+    # neither, so this closure only binds a done checkpoint.
+    if ck.get("done"):
+        final_gap = prev_ub - lb_best
+        expected_certified = bool(_fin(final_gap) and final_gap <= epsilon)
+        if terminals == 0:
+            if not certified:
+                errors.append(
+                    "a6 final state: completed trace has neither a "
+                    "certificate nor a terminal event")
+                return final_state, errors
+            expected_type = "certified"
+        elif terminals == 1:
+            if certified:
+                errors.append(
+                    "a6 final state: a certificate and a terminal event "
+                    "cannot both close a trace")
+                return final_state, errors
+            iters = ck.get("iteration_events") or []
+            if not (iters and isinstance(iters[-1], dict)
+                    and iters[-1].get("terminal") is True):
+                errors.append(
+                    "a6 final state: the terminal event is not the final "
+                    "iteration event")
+                return final_state, errors
+            expected_type = "budget_exhausted"
+        else:
+            errors.append(
+                f"a6 final state: {terminals} terminal events (a completed "
+                "trace has zero when certified, exactly one at budget)")
+            return final_state, errors
+
+        # top-level checkpoint fields must equal the replay
+        if ck.get("lb_best") != lb_best:
+            errors.append(
+                f"a6 final state: recorded lb_best={ck.get('lb_best')!r} "
+                f"but the event stream replays {lb_best!r}")
+            return final_state, errors
+        columns = ck.get("columns")
+        if isinstance(columns, list) and len(columns) != n_columns:
+            errors.append(
+                f"a6 final state: recorded column count {len(columns)} but "
+                f"the event stream replays {n_columns}")
+            return final_state, errors
+        for name, hist in (("ub_history", ub_history),
+                           ("lb_history", lb_history)):
+            hist_len = len(hist) if isinstance(hist, list) else None
+            if hist_len != history_index:
+                errors.append(
+                    f"a6 final state: {name} length {hist_len} does not "
+                    f"match the {history_index} replayed events")
+                return final_state, errors
+
+        # the recorded outcome must follow the replayed trace exactly
+        rec_outcome = ck.get("outcome") or {}
+        replay_calls = 1 + sum(
+            1 for e in (ck.get("iteration_events") or [])
+            if isinstance(e, dict) and not e.get("terminal"))
+        outcome_checks = (
+            ("type", rec_outcome.get("type"), expected_type),
+            ("oracle_calls", rec_outcome.get("oracle_calls"), replay_calls),
+            ("method", rec_outcome.get("method"),
+             (ck.get("identity") or {}).get("method")),
+            ("ub_ch", rec_outcome.get("ub_ch"), prev_ub),
+            ("lb_best", rec_outcome.get("lb_best"), lb_best),
+            ("gap", rec_outcome.get("gap"), final_gap),
+        )
+        for name, recorded, expected in outcome_checks:
+            if recorded != expected:
+                errors.append(
+                    f"a6 final state: outcome {name}={recorded!r} but the "
+                    f"event stream replays {expected!r}")
+                return final_state, errors
+        if rec_outcome.get("certified") is not expected_certified:
+            errors.append(
+                "a6 final state: outcome certified="
+                f"{rec_outcome.get('certified')!r} but the event stream "
+                f"replays {expected_certified!r}")
+            return final_state, errors
+
     outcome = ck.get("outcome") or {}
     if "recovery_active_at_end" not in outcome:
         errors.append(

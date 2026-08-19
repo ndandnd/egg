@@ -160,6 +160,7 @@ def test_candidate_lb_mutation_rejected(recovery_trace):
 # --------------------------------------------------------------------------
 def _synthetic_recovery_ck(kind: str, repeats: int, *,
                            epsilon: float = 1e-2,
+                           append_terminal: bool = True,
                            identity_overrides: dict | None = None) -> dict:
     """A minimal internally consistent a6 stream of `repeats` consecutive
     recovery clean calls of one kind (ambiguous, duplicate, or
@@ -216,7 +217,10 @@ def _synthetic_recovery_ck(kind: str, repeats: int, *,
             "solver": {"bound": bound},
             "extra": {"tag": "a6_a4", "call_id": call_id,
                       "call_kind": "clean", "trigger_selected": fired[0],
-                      "triggers_fired": fired}})
+                      "triggers_fired": fired,
+                      "column_novel": False,
+                      "min_reduced_cost_ub": rc_ub,
+                      "min_reduced_cost_lb": rc_lb}})
         lb_best = max(lb_best, lb)
         iterations.append({
             "iteration_id": f"a6_a4-it{i + 1}",
@@ -244,14 +248,31 @@ def _synthetic_recovery_ck(kind: str, repeats: int, *,
             duplicates += 1
         else:
             refines += 1
+    terminal_gap = ub - lb_best
+    if append_terminal:
+        # the budget terminal master: commits one more UB/LB history entry
+        # and the final n_columns/lb_best, with no pricing solve
+        iterations.append({
+            "record_kind": "cg-iteration", "terminal": True,
+            "phase": "terminal", "method": "a6_a4",
+            "iteration_id": f"a6_a4-it{repeats + 1}-terminal",
+            "oracle_calls": repeats + 1,
+            "n_columns": 1, "z_rmp_model": z_model, "ub_ch": ub,
+            "lb_best": lb_best, "certificate_gap": terminal_gap,
+            "pricing_solve_id": None,
+        })
+        ub_history.append(ub)
+        lb_history.append(lb_best)
     return {
         "done": True,
         "identity": identity,
         "oracle_calls": repeats + 1,
         "oracle_events": events,
         "iteration_events": iterations,
+        "columns": [{"column_key": "seed"}],
         "ub_history": ub_history,
         "lb_history": lb_history,
+        "lb_best": lb_best,
         "duplicate_retries": duplicates,
         "refine_retries": refines,
         "pricing_escalations": escalations,
@@ -261,6 +282,8 @@ def _synthetic_recovery_ck(kind: str, repeats: int, *,
                       "last_candidate_novel": None,
                       "recovery": {"kind": kind}},
         "outcome": {"type": "budget_exhausted", "certified": False,
+                    "ub_ch": ub, "lb_best": lb_best, "gap": terminal_gap,
+                    "oracle_calls": repeats + 1, "method": "a6_a4",
                     "recovery_active_at_end": True},
     }
 
@@ -415,7 +438,8 @@ def test_floor_saturation_replays_and_falsification_rejected():
     final, errors = replay_a6_recovery(ck)
     assert errors == []
     assert final["pricing_max_mip_gap"] == 1e-12  # floor engaged
-    recorded = [it["pricing_max_mip_gap"] for it in ck["iteration_events"]]
+    recorded = [it["pricing_max_mip_gap"] for it in ck["iteration_events"]
+                if not it.get("terminal")]
     assert recorded == [1e-6, 1e-8, 1e-10, 1e-12]
 
     bad = json.loads(json.dumps(ck))
@@ -432,13 +456,17 @@ def test_certification_while_recovery_active_replays():
     theta = A6_THETA_CERT_MULT * epsilon
     ub = z = 10.0
     sigma = 12.0
-    ck = _synthetic_recovery_ck("ambiguous", 1, epsilon=epsilon)
+    # a certified trace ends WITHOUT a terminal event; build the recovery
+    # prefix without one and append the certifying clean call below
+    ck = _synthetic_recovery_ck("ambiguous", 1, epsilon=epsilon,
+                                append_terminal=False)
     # event0 must NOT certify at epsilon=2: widen its certified bound
     it0 = ck["iteration_events"][0]
     bound0 = 7.0
     rc0 = bound0 - sigma
     lb0 = z + min(0.0, rc0)
     ck["oracle_events"][1]["solver"]["bound"] = bound0
+    ck["oracle_events"][1]["extra"]["min_reduced_cost_lb"] = rc0
     it0.update(min_reduced_cost_lb=rc0, lb_ch=lb0, lb_best=lb0,
                certificate_gap=ub - lb0)
     ck["lb_history"][0] = lb0
@@ -455,7 +483,8 @@ def test_certification_while_recovery_active_replays():
         "solver": {"bound": bound1},
         "extra": {"tag": "a6_a4", "call_id": "a6_a4-oc2",
                   "call_kind": "clean", "trigger_selected": "T0",
-                  "triggers_fired": fired}})
+                  "triggers_fired": fired, "column_novel": False,
+                  "min_reduced_cost_ub": 1.0, "min_reduced_cost_lb": rc1}})
     ck["iteration_events"].append({
         "iteration_id": "a6_a4-it2",
         "call_kind": "clean", "trigger_selected": "T0",
@@ -473,10 +502,13 @@ def test_certification_while_recovery_active_replays():
     })
     ck["ub_history"].append(ub)
     ck["lb_history"].append(max(lb0, lb1))
+    ck["lb_best"] = max(lb0, lb1)
     ck["oracle_calls"] = 3
     ck["scheduler"]["n_clean_pricing"] = 2
     ck["outcome"] = {"type": "certified", "certified": True,
-                     "recovery_active_at_end": True}
+                     "ub_ch": ub, "lb_best": max(lb0, lb1),
+                     "gap": ub - max(lb0, lb1), "oracle_calls": 3,
+                     "method": "a6_a4", "recovery_active_at_end": True}
     final, errors = replay_a6_recovery(ck)
     assert errors == []
     assert final["certified"] is True
@@ -487,3 +519,128 @@ def test_certification_while_recovery_active_replays():
     bad["outcome"]["recovery_active_at_end"] = False
     _final, errors = replay_a6_recovery(bad)
     assert any("recovery_active_at_end" in e for e in errors)
+
+
+# --------------------------------------------------------------------------
+# E2 (EI-025): terminal / final-state / outcome closure.  Each edit below
+# was reproduced ACCEPTED by the shared helper before the closure and must
+# now be rejected.  A real CERTIFIED trace is the base for the certificate
+# edits; a synthetic BUDGET-exhausted trace is the base for the terminal
+# edits.
+# --------------------------------------------------------------------------
+def _certified_ck(recovery_trace):
+    ck, _ = recovery_trace
+    assert ck["outcome"]["type"] == "certified"
+    return json.loads(json.dumps(ck))
+
+
+def test_e2_flip_outcome_certified_after_derived_certificate(recovery_trace):
+    """Exploit 1: a derived-certified trace whose outcome.certified is
+    flipped to False (accepted before closure)."""
+    bad = _certified_ck(recovery_trace)
+    bad["outcome"]["certified"] = False
+    _final, errors = replay_a6_recovery(bad)
+    assert any("outcome certified=" in e and "event stream replays" in e
+               for e in errors)
+    assert any("outcome certified=" in e for e in _cg_sane(bad))
+
+
+def test_e2_coordinated_lb_gap_inflation_rejected(recovery_trace):
+    """Exploit 2: top-level checkpoint lb_best and outcome LB/gap coherently
+    inflated by 5e-4 (mutually consistent, accepted before closure)."""
+    bad = _certified_ck(recovery_trace)
+    bad["lb_best"] += 5e-4
+    bad["outcome"]["lb_best"] += 5e-4
+    bad["outcome"]["gap"] -= 5e-4
+    _final, errors = replay_a6_recovery(bad)
+    assert any("recorded lb_best=" in e and "event stream replays" in e
+               for e in errors)
+    assert any("lb_best" in e for e in _cg_sane(bad))
+
+
+def _append_fake_terminal(ck):
+    last = [e for e in ck["iteration_events"] if not e.get("terminal")][-1]
+    ub = last["ub_ch"]
+    lb_best = ck["lb_best"]
+    ck["iteration_events"].append({
+        "record_kind": "cg-iteration", "terminal": True, "phase": "terminal",
+        "iteration_id": "a6_a4-itX-terminal", "oracle_calls": ck["oracle_calls"],
+        "n_columns": last.get("n_columns"), "ub_ch": ub, "lb_best": lb_best,
+        "certificate_gap": ub - lb_best, "pricing_solve_id": None,
+    })
+    ck["ub_history"].append(ub)
+    ck["lb_history"].append(lb_best)
+    return ck
+
+
+def test_e2_terminal_after_certificate_rejected(recovery_trace):
+    """Exploit 3: a terminal event (plus matching history) appended after a
+    certificate was already derived (accepted before closure)."""
+    bad = _append_fake_terminal(_certified_ck(recovery_trace))
+    _final, errors = replay_a6_recovery(bad)
+    assert any("events continue after the certificate returned" in e
+               for e in errors)
+    assert any("events continue after the certificate returned" in e
+               for e in _cg_sane(bad))
+
+
+def test_e2_budget_terminal_deleted_rejected():
+    """A completed budget-exhausted trace with its required terminal removed
+    no longer closes."""
+    ck = _synthetic_recovery_ck("ambiguous", 2)
+    assert ck["iteration_events"][-1].get("terminal") is True
+    del ck["iteration_events"][-1]
+    del ck["ub_history"][-1]
+    del ck["lb_history"][-1]
+    _final, errors = replay_a6_recovery(ck)
+    assert any("neither a certificate nor a terminal event" in e
+               for e in errors)
+
+
+def test_e2_second_budget_terminal_rejected():
+    """Two terminal events cannot close one trace."""
+    ck = _synthetic_recovery_ck("ambiguous", 2)
+    ck["iteration_events"].append(copy.deepcopy(ck["iteration_events"][-1]))
+    ck["ub_history"].append(ck["ub_history"][-1])
+    ck["lb_history"].append(ck["lb_history"][-1])
+    _final, errors = replay_a6_recovery(ck)
+    assert any("events continue after the terminal event" in e
+               for e in errors)
+
+
+def test_e2_falsified_terminal_lb_best_rejected():
+    """The terminal master's committed lb_best must replay exactly."""
+    ck = _synthetic_recovery_ck("ambiguous", 2)
+    ck["iteration_events"][-1]["lb_best"] += 5e-4
+    _final, errors = replay_a6_recovery(ck)
+    assert any("terminal lb_best=" in e for e in errors)
+
+
+def test_e2_falsified_terminal_n_columns_rejected():
+    """The terminal master's committed n_columns must replay exactly."""
+    ck = _synthetic_recovery_ck("ambiguous", 2)
+    ck["iteration_events"][-1]["n_columns"] = 99
+    _final, errors = replay_a6_recovery(ck)
+    assert any("terminal n_columns=" in e for e in errors)
+
+
+def test_e2_oracle_iteration_reduced_cost_disagreement_rejected():
+    """Oracle and iteration reduced-cost evidence for the same clean call
+    may not disagree."""
+    ck = _synthetic_recovery_ck("ambiguous", 2)
+    it = next(e for e in ck["iteration_events"]
+              if e.get("call_kind") == "clean")
+    it["min_reduced_cost_lb"] = it["min_reduced_cost_lb"] + 1.0
+    _final, errors = replay_a6_recovery(ck)
+    assert any("reduced-cost evidence disagrees" in e for e in errors)
+
+
+def test_e2_oracle_iteration_novelty_disagreement_rejected():
+    """Oracle and iteration column-novelty for the same call may not
+    disagree."""
+    ck = _synthetic_recovery_ck("ambiguous", 2)
+    oc = next(e for e in ck["oracle_events"]
+              if (e.get("extra") or {}).get("call_kind") == "clean")
+    oc["extra"]["column_novel"] = True  # iteration says False
+    _final, errors = replay_a6_recovery(ck)
+    assert any("column_novel" in e and "disagrees" in e for e in errors)

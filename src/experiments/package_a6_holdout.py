@@ -869,13 +869,20 @@ def publish_flat_directory_no_replace(
     destination WITH the marker (IncompletePublicationError), never a
     markerless apparently-complete directory.
 
-    Commit states are explicit: ``pre-rename`` (failure cleans the owned
-    staging marker), ``renamed-with-marker`` (failure preserves the
-    destination anchored by the marker), and ``committed`` (the marker is
-    gone; the destination is valid).  If the marker unlink raises but the
-    marker is verifiably absent through the anchored descriptor, the
-    publication is classified committed — never incomplete — and
-    descriptor-close errors after commit never reclassify it.
+    Commit states are explicit and DISTINGUISH the two ways the guard can
+    vanish: ``pre-rename`` (failure cleans the owned staging marker),
+    ``renamed-guarded`` (renamed and still anchored by the marker; failure
+    preserves the destination), ``commit-unlink-in-flight`` (set immediately
+    before the publisher's own marker unlink), and ``committed`` (the marker
+    is gone; the destination is valid).  Marker absence proves commit ONLY
+    from ``commit-unlink-in-flight``: if the marker disappears while
+    ``renamed-guarded`` (a callback removed the guard before commit) that is
+    corruption, so a blocking marker is safely restored through the anchored
+    fd and the incomplete/corrupt destination is preserved — never a
+    markerless apparently-complete directory.  If the publisher's own unlink
+    raises but the marker is verifiably absent, the publication is
+    classified committed, and descriptor-close errors after commit never
+    reclassify it.
 
     Trust boundary (honest OS limits): the native rename protects the
     DESTINATION atomically (renamex_np/RENAME_EXCL on macOS,
@@ -918,6 +925,43 @@ def publish_flat_directory_no_replace(
             return False
         return False
 
+    def _restore_incomplete_marker() -> str | None:
+        """Re-establish a blocking incomplete marker through the anchored
+        directory fd after a callback removed it before commit.  Returns None
+        on success or an error string if a competitor won the name or the
+        restored marker cannot be proved owned.  Never overwrites or unlinks
+        a competitor-created path."""
+        try:
+            fd = os.open(
+                marker_name,
+                os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW,
+                0o600, dir_fd=source_fd)
+        except FileExistsError:
+            return (f"incomplete-marker restoration lost a race; a foreign "
+                    f"{marker_name!r} was preserved")
+        except OSError as exc:
+            return f"incomplete-marker restoration failed: {exc}"
+        try:
+            info = os.fstat(fd)
+            if not stat.S_ISREG(info.st_mode) or info.st_nlink != 1:
+                os.close(fd)
+                return "restored incomplete-marker is not an owned regular file"
+            with os.fdopen(fd, "wb") as handle:
+                handle.write(b"incomplete\n")
+                handle.flush()
+                os.fsync(handle.fileno())
+        except OSError as exc:
+            try:
+                os.close(fd)
+            except OSError:
+                pass
+            return f"incomplete-marker restoration write failed: {exc}"
+        try:
+            os.fsync(source_fd)
+        except OSError as exc:
+            return f"incomplete-marker restoration dir fsync failed: {exc}"
+        return None
+
     try:
         marker_fd = os.open(
             marker_name, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600,
@@ -951,7 +995,7 @@ def publish_flat_directory_no_replace(
                 "publication staging ownership changed before rename: "
                 + "; ".join(pre_errors))
         _rename_directory_no_replace(source, target)
-        state = "renamed-with-marker"
+        state = "renamed-guarded"
         _fsync_directory(target.parent)
 
         # This is the completion boundary.  Every operation remains anchored
@@ -992,7 +1036,10 @@ def publish_flat_directory_no_replace(
         # rename durability barriers have completed while the marker
         # existed; a crash may conservatively retain the marker, but no
         # fallible step after this point may reclassify a markerless
-        # committed publication as incomplete.
+        # committed publication as incomplete.  Marker absence may prove
+        # commit ONLY from this state — the publisher's own unlink is the
+        # sole legitimate way the guard disappears.
+        state = "commit-unlink-in-flight"
         try:
             os.unlink(marker_name, dir_fd=source_fd)
         except OSError:
@@ -1007,11 +1054,37 @@ def publish_flat_directory_no_replace(
     except BaseException as exc:
         if state == "committed":
             raise
-        if state == "renamed-with-marker":
+        if state == "commit-unlink-in-flight":
+            # the publisher's OWN unlink was in flight: marker absence proves
+            # the publication committed and the original error propagates
+            # as-is; a still-present marker means it did not commit
             if _marker_absent_through_fd():
-                # committed despite the in-flight error (e.g. an exception
-                # immediately after the unlink): never incomplete
                 raise
+            raise IncompletePublicationError(
+                "publication failed after exclusive rename; incomplete "
+                "destination preserved",
+                renamed=True, destination=str(target),
+                committed=False) from exc
+        if state == "renamed-guarded":
+            # BEFORE the publisher's own commit unlink, marker absence is
+            # never commit — it is corruption (a callback removed the guard).
+            # Restore a blocking marker through the anchored fd and preserve
+            # every artifact and foreign entry; never treat this as committed.
+            if _marker_absent_through_fd():
+                restore_error = _restore_incomplete_marker()
+                if restore_error is not None:
+                    raise IncompletePublicationError(
+                        "publication guard marker was removed before commit "
+                        "and could not be safely restored (" + restore_error
+                        + "); incomplete/corrupt destination preserved",
+                        renamed=True, destination=str(target),
+                        committed=False) from exc
+                raise IncompletePublicationError(
+                    "publication guard marker was removed before commit; a "
+                    "blocking incomplete marker was restored and the "
+                    "incomplete destination preserved",
+                    renamed=True, destination=str(target),
+                    committed=False) from exc
             raise IncompletePublicationError(
                 "publication failed after exclusive rename; incomplete "
                 "destination preserved",
@@ -1398,17 +1471,21 @@ def install_tree_no_replace(
         if ownership_errors:
             raise IncompletePublicationError(
                 "installed tree ownership changed after exclusive rename: "
-                + "; ".join(ownership_errors))
+                + "; ".join(ownership_errors),
+                renamed=True, destination=str(target), committed=False)
         if snapshot_source(target) != snapshot:
             raise IncompletePublicationError(
-                "installed source tree differs after exclusive rename")
+                "installed source tree differs after exclusive rename",
+                renamed=True, destination=str(target), committed=False)
         _fsync_directory(target.parent)
         return ownership
     except BaseException as exc:
         if renamed and not isinstance(exc, IncompletePublicationError):
             raise IncompletePublicationError(
                 "import failed after exclusive rename; installed tree and "
-                "import lock preserved") from exc
+                "import lock preserved",
+                renamed=True, destination=str(target),
+                committed=False) from exc
         raise
     finally:
         os.close(source_fd)
@@ -2255,6 +2332,10 @@ def import_bundle(
     target_ownership: dict | None = None
     receipt_ownership: dict | None = None
     release_lock = False
+    # the import is durably committed only when the target tree and receipt
+    # are installed AND fsynced (set on the success path, never on rollback);
+    # a descriptor-close failure after this point must not report failure
+    import_committed = False
     receipt_document: dict | None = None
     try:
         staging = Path(tempfile.mkdtemp(
@@ -2385,6 +2466,9 @@ def import_bundle(
         receipt_sha256 = sha256_file(receipt_path)
         _fsync_directory(runs_parent)
         release_lock = True
+        # target + receipt are durably installed and fsynced: the import has
+        # committed and only the lock release remains
+        import_committed = True
     except BaseException as exc:
         rollback_errors = []
         if isinstance(exc, IncompletePublicationError):
@@ -2509,9 +2593,21 @@ def import_bundle(
                     _ensure_blocking_regular_path(
                         lock, runs_parent_fd))
         finally:
-            if lock_fd is not None:
-                os.close(lock_fd)
-            os.close(runs_parent_fd)
+            close_errors = []
+            for descriptor in (lock_fd, runs_parent_fd):
+                if descriptor is not None:
+                    try:
+                        os.close(descriptor)
+                    except OSError as close_exc:
+                        close_errors.append(str(close_exc))
+            # once the import has committed (target + receipt durable, lock
+            # released and its parent fsynced), a descriptor-close failure
+            # has no data consequence and must NOT report the import as
+            # unsuccessful; pre-commit close failures are still surfaced.
+            if close_errors and not import_committed:
+                raise PackagingError(
+                    "A6 import descriptor close failed before commit; import "
+                    "lock preserved: " + "; ".join(close_errors))
         if lock_release_errors:
             raise PackagingError(
                 "cannot safely release A6 import lock; analysis remains "

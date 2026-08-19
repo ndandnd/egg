@@ -951,7 +951,7 @@ def _coherent_a6_score_state():
     state["ub_history"] = [ub, ub, ub]
     state["lb_history"] = [lb1, lb1, lb3]
     state["lb_best"] = lb3
-    state["outcome"].update(lb_best=lb3, gap=ub - lb3,
+    state["outcome"].update(lb_best=lb3, gap=ub - lb3, method=A6_METHOD,
                             recovery_active_at_end=False)
     state.update(
         duplicate_retries=0, refine_retries=0, pricing_escalations=0,

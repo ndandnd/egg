@@ -45,6 +45,8 @@ not sufficient.
 | EI-021 | 2026-08-19 | **FIXED** | A6 recovery bounds and requested pricing-gap state were not replayed |
 | EI-022 | 2026-08-19 | **FIXED** | Inode recycling defeated (dev, ino) ownership signatures |
 | EI-023 | 2026-08-19 | **FIXED** | Analyzer publication forked from the package contract |
+| EI-024 | 2026-08-19 | **FOUND — IN PROGRESS** | Precommit incomplete-marker deletion was misclassified as a completed publication |
+| EI-025 | 2026-08-19 | **FOUND — IN PROGRESS** | A6 shared replay omitted terminal/final outcome closure |
 
 ## EI-001 — Replay rounding and audit tolerance
 
@@ -319,6 +321,18 @@ self-proving. After merge, preserve the adjacent receipt and both closeout
 claims with the raw tree. A remaining import lock means interrupted or
 incompletely rolled-back work and must block analysis; never synthesize or
 delete any provenance marker after extraction.
+
+**2026-08-19 addendum (post-commit descriptor-close case).** A later
+adversarial pass found that `import_bundle` removed and fsynced its lock,
+then closed its descriptors, so a descriptor-close failure could still
+report import failure after the target and receipt had durably committed and
+the lock was gone. The import now tracks an explicit `import_committed` state
+(set once the target and receipt are installed and fsynced): once committed,
+a descriptor-close failure has no data consequence and must not report the
+import as unsuccessful, while pre-commit close failures are still surfaced
+honestly. Regression coverage:
+`test_import_descriptor_close_after_commit_is_not_a_failure` and
+`test_import_descriptor_close_before_commit_is_reported`.
 
 ## EI-008 — Closeout code and number of outcome looks were not frozen
 
@@ -1050,6 +1064,19 @@ staging), and `test_atomic_output_failure_leaves_no_final_or_staging`
 **Scientific handling.** Publication mechanics only; no scientific tables
 were derived from a mispublished directory.
 
+**2026-08-19 addendum (truthful exception metadata and four commit states).**
+A later adversarial pass found that the three-state description above was
+insufficient (see EI-024): the publisher now distinguishes four states —
+`pre-rename`, `renamed-guarded`, `commit-unlink-in-flight`, and `committed`
+— and marker absence proves commit only from `commit-unlink-in-flight`. In
+addition, `install_tree_no_replace`'s post-rename failures now populate the
+full `IncompletePublicationError` contract (`renamed=True`,
+`destination=<target>`, `committed=False`) instead of a bare message, so a
+caught import failure after the exclusive rename is truthfully attributable.
+Regression coverage:
+`test_install_tree_post_rename_error_carries_truthful_metadata` and
+`test_install_tree_pre_rename_error_leaves_no_target`.
+
 ## Regression-coverage map: EI-017 through EI-023
 
 | incident | repair | regression coverage |
@@ -1061,3 +1088,129 @@ were derived from a mispublished directory.
 | EI-021 (recovery counters not replayed) | shared `experiments/a6_replay.py` used by audit AND analyzer | `test_a6_recovery_replay.py` (real recovery trace; coordinated /100 and cap tampers; final-state tampers) + analyzer rejections in `test_a6_holdout_analysis.py` |
 | EI-022 (inode recycling) | `(dev, ino, size, mtime_ns)` signatures | rollback-competitor and staging-replacement regressions in `test_a6_holdout_package.py` |
 | EI-023 (analyzer publication fork) | one shared no-replace publisher + owned staging cleanup | publication parity/revalidation/mutation regressions in `test_a6_holdout_analysis.py` |
+
+## EI-024 — Precommit incomplete-marker deletion was misclassified as a completed publication
+
+**Status: FOUND — IN PROGRESS.** The four-state publisher machine and safe
+marker restoration are implemented on this branch with regression coverage,
+pending independent review; until reviewed and merged, do not treat a
+markerless destination as self-proving evidence of a committed publication.
+
+**Observed symptom and evidence.** A new adversarial pass against `a6bb350`
+reproduced the following against `publish_flat_directory_no_replace`: a
+`revalidate` callback that corrupts an expected artifact and deletes the
+`.publication-incomplete` marker, then returns, was misread as a successful
+commit. The post-revalidation ownership gate detected the changed artifact
+and missing marker and raised, but the outer handler — in state
+`renamed-with-marker` — saw the marker absent and treated absence as proof
+that the publisher's own commit unlink had already succeeded, re-raising an
+ordinary `PackagingError`. The destination was left markerless with
+`A.txt` = `CORRUPT`, so the corrupt directory appeared complete. Captured
+before/after evidence: the same edit produced a markerless corrupt directory
+plus an ordinary error before the repair, and a restored blocking marker plus
+a truthful `IncompletePublicationError` after it.
+
+**Root cause and impact.** The commit state machine conflated two distinct
+ways the guard marker can vanish. Marker absence is proof of commit only when
+the publisher's OWN unlink was in flight; a callback that removes the marker
+before that point is corruption, not commit. A three-state machine
+(`pre-rename`, `renamed-with-marker`, `committed`) cannot tell them apart, so
+a precommit guard deletion produced an apparently complete, markerless,
+possibly corrupt publication behind an ordinary error — exactly the state the
+anchored marker exists to prevent.
+
+**Required invariant and regression.** Use four distinguishable states:
+`pre-rename`, `renamed-guarded`, `commit-unlink-in-flight`, and `committed`.
+Set `commit-unlink-in-flight` immediately before the publisher's own marker
+unlink; marker absence may prove commit only from that state. Marker absence
+in `renamed-guarded` is corruption: restore a blocking marker through the
+anchored directory fd (`O_CREAT | O_EXCL | O_NOFOLLOW`, a regular file with
+one link, contents exactly `incomplete\n`, marker and directory fsynced,
+never overwriting or unlinking a competitor-created path), preserve every
+artifact and foreign entry, and raise a louder incomplete/corrupt-publication
+error with truthful `renamed`/`destination`/`committed` metadata; if
+restoration loses a race, preserve the competitor path and fail louder. The
+destination must never be left markerless because a callback removed the
+guard before the commit attempt. Regression coverage in
+`test_a6_holdout_package.py`:
+`test_precommit_marker_deletion_is_corruption_not_commit` (four cases:
+marker-only vs. corrupt-artifact, each with and without a trailing callback
+exception) and `test_precommit_marker_restore_race_preserves_competitor`. The
+retained pre-existing cases (mutation without marker deletion,
+unlink-removes-then-raises, exception after the publisher's own unlink,
+target replacement, and post-commit descriptor-close) still pass.
+
+**Scientific handling.** A markerless destination produced by the old
+three-state path is not proof of a committed publication; it may be a
+precommit-corrupted directory. Preserve any restored marker and the corrupt
+or foreign evidence for incident review; never delete a marker or artifact to
+make a directory look complete.
+
+## EI-025 — A6 shared replay omitted terminal/final outcome closure
+
+**Status: FOUND — IN PROGRESS.** The terminal/final/outcome closure is
+implemented in the shared helper `experiments/a6_replay.py` (used by both the
+audit and the production analyzer) with regression coverage, pending
+independent review; until reviewed and merged, the operational audit's
+acceptance of a completed A6 trace is not sufficient certificate evidence on
+its own.
+
+**Observed symptom and evidence.** A new adversarial pass against `a6bb350`
+reproduced three coordinated edits that the shared recovery replay
+(`replay_a6_recovery`) and the audit (`_cg_sane`) accepted, even though the
+strict production analyzer rejected them downstream: (1) a derived-certified
+trace whose `outcome.certified` was flipped to `False`; (2) a trace whose
+top-level checkpoint `lb_best` and outcome LB/gap were coherently inflated by
+`5e-4`; and (3) a fake terminal event plus matching history entries appended
+after a certificate had already been derived. Captured before/after evidence:
+helper and audit both accepted all three before the closure and reject all
+three after it.
+
+**Root cause and impact.** The shared helper replayed the recovery/counter
+state machine but stopped short of closing the terminal and final/outcome
+state. It handled a terminal event before rejecting post-certificate events,
+never bound the number of terminal events to the completion type, and never
+compared the top-level `lb_best`, column count, history lengths, or the
+outcome (`type`, `certified`, `ub_ch`, `lb_best`, `gap`, `oracle_calls`,
+`method`) against the replay. The operational audit therefore called
+impossible producer traces sane and the helper claimed a complete replay it
+had not performed.
+
+**Required invariant and regression.** In the one shared chronological path,
+reject every event after a derived certificate (including a terminal event);
+require zero terminal events for certified completion and exactly one final
+terminal event for budget-exhausted completion; replay and validate the
+terminal master's `n_columns`, `lb_best`, and its UB/LB history entry; and
+compare the top-level checkpoint `lb_best`, column count, and history lengths
+plus the full outcome (`type`, `certified` as an exact boolean, `ub_ch`,
+`lb_best`, `gap`, `oracle_calls`, `method`, and recovery-at-end) against the
+replay. Additionally, cross-link each clean call's oracle-event
+`min_reduced_cost_ub`/`min_reduced_cost_lb` and every call's `column_novel`
+with the corresponding iteration fields; oracle and iteration evidence may
+not disagree. No second replay implementation was added; the audit and the
+analyzer stay on the same authoritative path. Regression coverage in
+`test_a6_recovery_replay.py`: `test_e2_flip_outcome_certified_after_derived_certificate`,
+`test_e2_coordinated_lb_gap_inflation_rejected`,
+`test_e2_terminal_after_certificate_rejected`,
+`test_e2_budget_terminal_deleted_rejected`,
+`test_e2_second_budget_terminal_rejected`,
+`test_e2_falsified_terminal_lb_best_rejected`,
+`test_e2_falsified_terminal_n_columns_rejected`,
+`test_e2_oracle_iteration_reduced_cost_disagreement_rejected`, and
+`test_e2_oracle_iteration_novelty_disagreement_rejected`, with the analyzer
+consuming the same rejections in `test_a6_holdout_analysis.py`.
+
+**Scientific handling.** A completed A6 trace is attributable to the frozen
+algorithm only when its terminal/final/outcome closure replays, not merely
+when its recovery counters do. The strict production analyzer already
+rejected these edits, so no packaged science depended on the gap; but until
+the shared-helper closure is reviewed and merged, the operational audit's
+"complete and sane" verdict must not be cited as an independent certificate.
+
+## Regression-coverage map: EI-024 through EI-025
+
+| incident | repair | regression coverage |
+|---|---|---|
+| EI-024 (precommit marker deletion misclassified) | four-state publisher machine (`renamed-guarded` / `commit-unlink-in-flight`) + safe marker restoration through the anchored fd + truthful `install_tree_no_replace` metadata | `test_precommit_marker_deletion_is_corruption_not_commit`, `test_precommit_marker_restore_race_preserves_competitor`, `test_install_tree_post_rename_error_carries_truthful_metadata`, `test_install_tree_pre_rename_error_leaves_no_target` in `test_a6_holdout_package.py`; retained publisher edge-case tests still pass |
+| EI-025 (replay terminal/final closure omitted) | terminal/final/outcome closure + oracle/iteration cross-link in the shared `experiments/a6_replay.py` (audit AND analyzer) | `test_e2_*` battery in `test_a6_recovery_replay.py` + analyzer rejections in `test_a6_holdout_analysis.py` |
+| import post-commit close (EI-007 addendum) | explicit `import_committed` state guards descriptor-close reporting | `test_import_descriptor_close_after_commit_is_not_a_failure`, `test_import_descriptor_close_before_commit_is_reported` in `test_a6_holdout_package.py` |
