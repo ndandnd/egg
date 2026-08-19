@@ -253,8 +253,13 @@ def _write_cell(root: Path, method: str, seed: int, n: int, b: float,
     d.mkdir(parents=True)
     schedule = _schedule_payload(inst)
     ub = schedule["ops_cost"]
-    pricing_gap = 0.0005
-    lb = ub - pricing_gap
+    # producer arithmetic: recorded fields DERIVE from (bound, sigma, z)
+    # so the strict recovery replay's exact-equality checks hold
+    sigma = ub
+    bound = ub - 0.0005
+    rc_lb = bound - sigma
+    lb = ub + min(0.0, rc_lb)
+    pricing_gap = ub - lb
     zd = ub
     identity = {
         "schema_version": SCHEMA_VERSION if method == "a2" else A6_SCHEMA_VERSION,
@@ -290,9 +295,9 @@ def _write_cell(root: Path, method: str, seed: int, n: int, b: float,
         method=method, inst=inst,
         regime="cg-pricing",
         call_id=f"{method}-oc1", trigger=method == A6_METHOD)
-    clean_event["solver"]["bound"] = lb
+    clean_event["solver"]["bound"] = bound
     clean_event["extra"]["min_reduced_cost_ub"] = 0.0
-    clean_event["extra"]["min_reduced_cost_lb"] = -pricing_gap
+    clean_event["extra"]["min_reduced_cost_lb"] = rc_lb
     for event in (seed_event, clean_event):
         event.update(
             slurm_job_id="424242",
@@ -306,11 +311,11 @@ def _write_cell(root: Path, method: str, seed: int, n: int, b: float,
         "mip_version": "1.17.6", "terminal": False,
         "oracle_calls": 1, "pricing_solve_id": f"{method}-oc1",
         "n_columns": 1, "z_rmp_model": ub, "ub_ch": ub,
-        "duals_sigma": ub,
+        "duals_sigma": sigma,
         "min_reduced_cost_ub": 0.0,
-        "min_reduced_cost_lb": -pricing_gap,
+        "min_reduced_cost_lb": rc_lb,
         "pricing_gap_abs": pricing_gap,
-        "lb_ch": lb, "lb_best": lb, "certificate_gap": pricing_gap,
+        "lb_ch": lb, "lb_best": lb, "certificate_gap": ub - lb,
         "epsilon": 0.01, "pwl_tol": PWL_TOL, "rc_tol": RC_TOL,
         "n_tangent_refinements": 0,
         "column_key": clean_event["extra"]["column_key"],
@@ -339,12 +344,12 @@ def _write_cell(root: Path, method: str, seed: int, n: int, b: float,
     )
     outcome = {
         "type": "certified", "ub_ch": ub, "lb_best": lb,
-        "gap": pricing_gap, "certified": True, "oracle_calls": calls,
+        "gap": ub - lb, "certified": True, "oracle_calls": calls,
         "oracle_calls_clean": calls, "oracle_calls_stab": 0,
         "broadcast_tv": broadcast_tv,
         "broadcast_linf_max": broadcast_linf,
         "broadcast_points": broadcast_points,
-        "uplift_interval": [-0.01, pricing_gap],
+        "uplift_interval": [(zd - 0.01) - ub, zd - lb],
     }
     if method == A6_METHOD:
         outcome["method"] = method
@@ -888,57 +893,65 @@ def _coherent_a6_score_state():
 
     it1, it2, it3 = state["iteration_events"]
     oc1, oc2, oc3 = state["oracle_events"][1:]
-    # it1: T4 clean, novel improving column -> no recovery, LB = ub - 0.2
+    # all recorded bound/gap fields DERIVE from (bound, sigma, z) with the
+    # producer's exact float arithmetic (the strict replay checks equality)
+    sigma1, bound1 = ub + 0.2, ub
+    rc1 = bound1 - sigma1
+    lb1 = ub + min(0.0, rc1)
+    # it1: T4 clean, novel improving column -> no recovery
     it1.update(
         pricing_solve_id=f"{A6_METHOD}-oc1", call_kind="clean",
         trigger_selected="T4", triggers_fired=["T4"],
         gap_at_decision=float("inf"), k_since_clean=0, n_columns=1,
         recovery_active=False, recovery_kind=None,
         pricing_max_mip_gap=base_gap,
-        duals_sigma=ub + 0.2, min_reduced_cost_ub=-0.2,
-        min_reduced_cost_lb=-0.2, lb_ch=ub - 0.2, lb_best=ub - 0.2,
-        certificate_gap=0.2, column_key="k-novel", column_novel=True)
+        duals_sigma=sigma1, min_reduced_cost_ub=rc1,
+        min_reduced_cost_lb=rc1, lb_ch=lb1, lb_best=lb1,
+        certificate_gap=ub - lb1, column_key="k-novel", column_novel=True)
     it1["master_solves"][0]["solve_id"] = f"{A6_METHOD}-it1-rmp-r0"
     oc1["extra"].update(
         call_kind="clean", trigger_selected="T4", triggers_fired=["T4"],
-        min_reduced_cost_ub=-0.2, min_reduced_cost_lb=-0.2,
+        min_reduced_cost_ub=rc1, min_reduced_cost_lb=rc1,
         column_key="k-novel", column_novel=True)
-    oc1["solver"]["bound"] = ub + 0.0  # sigma - 0.2
-    # it2: default candidate (gap 0.2 > theta_cert), NON-novel column; its
-    # oracle event carries a bound that WOULD certify if misused
+    oc1["solver"]["bound"] = bound1
+    # it2: default candidate (gap ~0.2 > theta_cert), NON-novel column;
+    # its oracle event carries a bound that WOULD certify if misused
     it2.update(
         pricing_solve_id=f"{A6_METHOD}-oc2", phase="stabilized",
         call_kind="candidate", trigger_selected=DEFAULT_CANDIDATE,
-        triggers_fired=[], gap_at_decision=0.2, k_since_clean=0,
+        triggers_fired=[], gap_at_decision=ub - lb1, k_since_clean=0,
         n_columns=2, recovery_active=False, recovery_kind=None,
-        lb_best=ub - 0.2, certificate_gap=0.2, column_novel=False,
-        master_solves=[])
+        ub_ch=ub, lb_best=lb1, certificate_gap=ub - lb1,
+        column_novel=False, master_solves=[])
     oc2["regime"] = "cg-stab-pricing"
     oc2["extra"].update(
         call_kind="candidate", trigger_selected=DEFAULT_CANDIDATE,
         triggers_fired=[], column_novel=False)
     oc2["solver"]["bound"] = ub  # tempting: gap would be 0 if misused
-    # it3: T3 clean (candidate stalled), certifies at 0.001
+    # it3: T3 clean (candidate stalled), certifies
+    sigma3, bound3 = ub + 0.001, ub
+    rc3 = bound3 - sigma3
+    lb3 = ub + min(0.0, rc3)
     it3.update(
         pricing_solve_id=f"{A6_METHOD}-oc3", call_kind="clean",
         trigger_selected="T3", triggers_fired=["T3"],
-        gap_at_decision=0.2, k_since_clean=1, n_columns=2,
+        gap_at_decision=ub - lb1, k_since_clean=1, n_columns=2,
         recovery_active=False, recovery_kind=None,
         pricing_max_mip_gap=base_gap,
-        duals_sigma=ub + 0.001, min_reduced_cost_ub=-0.001,
-        min_reduced_cost_lb=-0.001, lb_ch=ub - 0.001, lb_best=ub - 0.001,
-        certificate_gap=0.001, column_novel=False)
+        duals_sigma=sigma3, min_reduced_cost_ub=rc3,
+        min_reduced_cost_lb=rc3, lb_ch=lb3, lb_best=lb3,
+        certificate_gap=ub - lb3, column_novel=False)
     it3["master_solves"][0]["solve_id"] = f"{A6_METHOD}-it3-rmp-r0"
     oc3["extra"].update(
         call_kind="clean", trigger_selected="T3", triggers_fired=["T3"],
-        min_reduced_cost_ub=-0.001, min_reduced_cost_lb=-0.001,
+        min_reduced_cost_ub=rc3, min_reduced_cost_lb=rc3,
         column_novel=False)
-    oc3["solver"]["bound"] = ub - 0.001 + (ub + 0.001) - ub  # sigma-0.001
+    oc3["solver"]["bound"] = bound3
 
     state["ub_history"] = [ub, ub, ub]
-    state["lb_history"] = [ub - 0.2, ub - 0.2, ub - 0.001]
-    state["lb_best"] = ub - 0.001
-    state["outcome"].update(lb_best=ub - 0.001, gap=0.001,
+    state["lb_history"] = [lb1, lb1, lb3]
+    state["lb_best"] = lb3
+    state["outcome"].update(lb_best=lb3, gap=ub - lb3,
                             recovery_active_at_end=False)
     state.update(
         duplicate_retries=0, refine_retries=0, pricing_escalations=0,
@@ -1505,7 +1518,10 @@ def test_coordinated_scheduler_gap_and_trigger_story_halts(
     _dump_jsonl(cell / "a6_a4.oracle.jsonl", state["oracle_events"])
     _dump_jsonl(cell / "a6_a4.iterations.jsonl", state["iteration_events"])
 
-    with pytest.raises(AnalysisError, match="gap_at_decision.*does not replay"):
+    with pytest.raises(
+            AnalysisError,
+            match="gap_at_decision.*(does not replay|chronologically "
+                  "derived)"):
         _mini_analyze(
             str(bad), preflight, tmp_path / "out-scheduler-gap-story")
 
@@ -2382,3 +2398,67 @@ def test_analyzer_revalidation_failure_preserves_marker(mini_root, tmp_path,
     target = out / "TESTSTAMP"
     assert (target / ".publication-incomplete").read_text() == "incomplete\n"
     assert (target / "MANIFEST.json").is_file()
+
+
+def test_analyzer_pre_rename_cleanup_failure_never_masks(
+        mini_root, tmp_path, monkeypatch, capsys):
+    """Wrapper-level: a pre-rename publication refusal whose staging
+    cleanup ALSO fails must surface the ORIGINAL refusal; the staging tree
+    is preserved with a stderr note, never a masking exception."""
+    import experiments.package_a6_holdout as pkg
+    root, preflight = mini_root
+    out = tmp_path / "wrapper-pre-rename"
+
+    def refuse_publication(*_args, **_kwargs):
+        raise pkg.PackagingError("refusing existing publication path: X")
+
+    def failing_rollback(_root, _ownership):
+        return ["injected analyzer rollback failure"]
+
+    monkeypatch.setattr(
+        mod, "publish_flat_directory_no_replace", refuse_publication)
+    monkeypatch.setattr(mod, "_rollback_owned_tree", failing_rollback)
+    with pytest.raises(AnalysisError,
+                       match="refusing existing publication path"):
+        _mini_analyze(root, preflight, out)
+    err = capsys.readouterr().err
+    assert "analysis staging preserved for incident review" in err
+    assert "injected analyzer rollback failure" in err
+    preserved = list(out.glob(".TESTSTAMP.staging-*"))
+    assert len(preserved) == 1  # frozen for review, not blindly removed
+
+
+def test_analyzer_post_rename_fsync_failure_skips_staging_cleanup(
+        mini_root, tmp_path, monkeypatch):
+    """Wrapper-level: after the exclusive rename the staging tree MOVED;
+    a parent-fsync failure must preserve the marker-anchored destination,
+    and the analyzer must not attempt cleanup at the stale staging path."""
+    import experiments.package_a6_holdout as pkg
+    root, preflight = mini_root
+    out = tmp_path / "wrapper-post-rename"
+    real_fsync = pkg._fsync_directory
+    injected = {"done": False}
+    rollbacks = []
+    real_rollback = mod._rollback_owned_tree
+
+    def fail_parent_fsync(path):
+        if Path(path) == out and not injected["done"]:
+            injected["done"] = True
+            raise OSError("injected wrapper parent fsync failure")
+        return real_fsync(path)
+
+    def spying_rollback(root_path, ownership):
+        rollbacks.append(str(root_path))
+        return real_rollback(root_path, ownership)
+
+    monkeypatch.setattr(pkg, "_fsync_directory", fail_parent_fsync)
+    monkeypatch.setattr(mod, "_rollback_owned_tree", spying_rollback)
+    with pytest.raises(AnalysisError,
+                       match="incomplete destination preserved"):
+        _mini_analyze(root, preflight, out)
+    assert injected["done"]
+    target = out / "TESTSTAMP"
+    assert (target / ".publication-incomplete").read_text() == "incomplete\n"
+    assert (target / "MANIFEST.json").is_file()
+    assert rollbacks == []  # nothing to clean: the tree moved
+    assert not list(out.glob(".TESTSTAMP.staging-*"))

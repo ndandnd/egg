@@ -84,7 +84,26 @@ class PackagingError(RuntimeError):
 
 
 class IncompletePublicationError(PackagingError):
-    """A no-replace reservation could not be fully rolled back."""
+    """A no-replace publication could not be completed or rolled back.
+
+    Carries explicit commit-state metadata so wrappers clean up the
+    correct path and never mask the original failure:
+
+    - ``renamed``: the staging tree was atomically renamed to the
+      destination; evidence lives there (under the incomplete marker),
+      not at the staging path.
+    - ``destination``: the destination path the publication targeted.
+    - ``committed``: the publication reached the committed (markerless)
+      state; the destination contents are valid.
+    """
+
+    def __init__(self, message: str, *, renamed: bool = False,
+                 destination: str | None = None,
+                 committed: bool = False) -> None:
+        super().__init__(message)
+        self.renamed = renamed
+        self.destination = destination
+        self.committed = committed
 
 
 def sha256_file(path: str | os.PathLike) -> str:
@@ -844,11 +863,19 @@ def publish_flat_directory_no_replace(
     ownership gate proves the exact directory reached the requested path.
 
     ``revalidate`` (optional, no arguments) runs AFTER the final ownership
-    gate and IMMEDIATELY BEFORE the marker unlink — the last chance to
-    reject the publication while the incomplete marker still anchors it.
-    Any exception it raises preserves the renamed destination WITH the
-    marker (IncompletePublicationError), never a markerless
-    apparently-complete directory.
+    gate, and a SECOND ownership gate runs after it, immediately before
+    the marker unlink — so nothing the callback observes or triggers can
+    mutate the publication unnoticed.  Any exception preserves the renamed
+    destination WITH the marker (IncompletePublicationError), never a
+    markerless apparently-complete directory.
+
+    Commit states are explicit: ``pre-rename`` (failure cleans the owned
+    staging marker), ``renamed-with-marker`` (failure preserves the
+    destination anchored by the marker), and ``committed`` (the marker is
+    gone; the destination is valid).  If the marker unlink raises but the
+    marker is verifiably absent through the anchored descriptor, the
+    publication is classified committed — never incomplete — and
+    descriptor-close errors after commit never reclassify it.
 
     Trust boundary (honest OS limits): the native rename protects the
     DESTINATION atomically (renamex_np/RENAME_EXCL on macOS,
@@ -879,7 +906,18 @@ def publish_flat_directory_no_replace(
     }
     marker_name = ".publication-incomplete"
     marker_signature: tuple[int, int] | None = None
-    renamed = False
+    state = "pre-rename"
+
+    def _marker_absent_through_fd() -> bool:
+        """Inspect marker presence through the anchored directory fd."""
+        try:
+            os.stat(marker_name, dir_fd=source_fd, follow_symlinks=False)
+        except FileNotFoundError:
+            return True
+        except OSError:
+            return False
+        return False
+
     try:
         marker_fd = os.open(
             marker_name, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600,
@@ -913,7 +951,7 @@ def publish_flat_directory_no_replace(
                 "publication staging ownership changed before rename: "
                 + "; ".join(pre_errors))
         _rename_directory_no_replace(source, target)
-        renamed = True
+        state = "renamed-with-marker"
         _fsync_directory(target.parent)
 
         # This is the completion boundary.  Every operation remains anchored
@@ -936,16 +974,49 @@ def publish_flat_directory_no_replace(
         # anchors the publication; its failure preserves marker + evidence.
         if revalidate is not None:
             revalidate()
-        # The unlink syscall is the final commit boundary.  All directory and
-        # rename durability barriers have completed while the marker existed;
-        # a crash may conservatively retain the marker, but no fallible step
-        # after this point may report a markerless incomplete publication.
-        os.unlink(marker_name, dir_fd=source_fd)
+            # anything mutated during (or by) the callback must be caught
+            # while the marker still anchors the publication
+            post_revalidate_errors = _flat_publication_errors(
+                target,
+                target_fd=source_fd,
+                target_signature=ownership["root"],
+                file_signatures=signatures,
+                marker_signature=marker_signature,
+                allowed_file_nlinks={1},
+            )
+            if post_revalidate_errors:
+                raise PackagingError(
+                    "publication ownership changed during final "
+                    "revalidation: " + "; ".join(post_revalidate_errors))
+        # The unlink syscall is the final logical commit.  All directory and
+        # rename durability barriers have completed while the marker
+        # existed; a crash may conservatively retain the marker, but no
+        # fallible step after this point may reclassify a markerless
+        # committed publication as incomplete.
+        try:
+            os.unlink(marker_name, dir_fd=source_fd)
+        except OSError:
+            # the unlink may have removed the marker before failing;
+            # a verifiably absent marker means the publication committed
+            if _marker_absent_through_fd():
+                state = "committed"
+            else:
+                raise
+        else:
+            state = "committed"
     except BaseException as exc:
-        if renamed:
+        if state == "committed":
+            raise
+        if state == "renamed-with-marker":
+            if _marker_absent_through_fd():
+                # committed despite the in-flight error (e.g. an exception
+                # immediately after the unlink): never incomplete
+                raise
             raise IncompletePublicationError(
                 "publication failed after exclusive rename; incomplete "
-                "destination preserved") from exc
+                "destination preserved",
+                renamed=True, destination=str(target),
+                committed=False) from exc
         cleanup_errors = []
         if marker_signature is not None:
             path_error = _owned_directory_error(source, ownership["root"])
@@ -966,10 +1037,18 @@ def publish_flat_directory_no_replace(
         if cleanup_errors:
             raise IncompletePublicationError(
                 "publication failed and staging cleanup was incomplete: "
-                + "; ".join(cleanup_errors)) from exc
+                + "; ".join(cleanup_errors),
+                renamed=False, destination=str(target),
+                committed=False) from exc
         raise
     finally:
-        os.close(source_fd)
+        try:
+            os.close(source_fd)
+        except OSError:
+            # a descriptor-close failure has no data consequence (all
+            # durability barriers completed while the marker existed) and
+            # must never reclassify a committed publication as incomplete
+            pass
 
 
 def _owned_tree_population(root: Path) -> tuple[set[str], set[str], list[str]]:
@@ -2301,6 +2380,9 @@ def import_bundle(
         if snapshot_source(target) != snapshot:
             raise PackagingError(
                 "installed source tree differs before import commit")
+        # canonical digest is computed and RETAINED while the import lock
+        # still excludes competitors; no receipt I/O happens after commit
+        receipt_sha256 = sha256_file(receipt_path)
         _fsync_directory(runs_parent)
         release_lock = True
     except BaseException as exc:
@@ -2444,7 +2526,8 @@ def import_bundle(
     return {
         "target": str(target),
         "receipt": str(receipt_path),
-        "receipt_sha256": sha256_file(receipt_path),
+        # retained digest from under the lock: never reread after commit
+        "receipt_sha256": receipt_sha256,
         "archive_sha256": archive_record["sha256"],
         "file_count": snapshot["file_count"],
         "total_bytes": snapshot["total_bytes"],
@@ -2666,19 +2749,29 @@ def package_holdout(
             raise PackagingError(
                 "source tree changed immediately before publication")
         closeout_claim_validator(closeout_claim)
-        publish_flat_directory_no_replace(
-            staging,
-            final_dir,
-            expected_names={
-                archive_name,
-                "ARCHIVE.sha256",
-                "BUNDLE_MANIFEST.json",
-                "AUDIT_SUMMARY.md",
-            },
-        )
+        try:
+            publish_flat_directory_no_replace(
+                staging,
+                final_dir,
+                expected_names={
+                    archive_name,
+                    "ARCHIVE.sha256",
+                    "BUNDLE_MANIFEST.json",
+                    "AUDIT_SUMMARY.md",
+                },
+            )
+        except IncompletePublicationError as pub_exc:
+            if pub_exc.renamed:
+                # the staging tree moved: evidence is preserved at the
+                # destination (anchored by the marker unless committed);
+                # there is nothing to clean at the staging path
+                staging = None
+            raise
         staging = None
     finally:
         if staging is not None:
+            # an exception is always in flight here (staging is None on
+            # success); cleanup problems must never mask it
             if staging_ownership is None:
                 cleanup_errors = [
                     "package staging ownership record is missing"]
@@ -2686,9 +2779,9 @@ def package_holdout(
                 cleanup_errors = _rollback_owned_tree(
                     staging, staging_ownership)
             if cleanup_errors:
-                raise IncompletePublicationError(
-                    "package staging cleanup was incomplete; reservation "
-                    "preserved: " + "; ".join(cleanup_errors))
+                sys.stderr.write(
+                    "package staging preserved for incident review: "
+                    f"{staging}: " + "; ".join(cleanup_errors) + "\n")
 
     return {
         "bundle_dir": str(final_dir),

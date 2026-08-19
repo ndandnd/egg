@@ -158,70 +158,102 @@ def test_candidate_lb_mutation_rejected(recovery_trace):
 # --------------------------------------------------------------------------
 # synthetic coordinated cap-exceed traces (internally consistent streams)
 # --------------------------------------------------------------------------
-def _synthetic_recovery_ck(kind: str, repeats: int) -> dict:
+def _synthetic_recovery_ck(kind: str, repeats: int, *,
+                           epsilon: float = 1e-2,
+                           identity_overrides: dict | None = None) -> dict:
     """A minimal internally consistent a6 stream of `repeats` consecutive
-    recovery clean calls of one kind (ambiguous or duplicate), with every
-    per-event label, counter, and gap value coordinated with the tamper."""
+    recovery clean calls of one kind (ambiguous, duplicate, or
+    refinement), with every per-event label, counter, bound, and gap value
+    derived through the exact producer arithmetic so only the deliberate
+    violation under test differs."""
     base_gap = 1e-6
+    theta_cert = A6_THETA_CERT_MULT * epsilon
     identity = {
-        "method": "a6_a4", "epsilon": 1e-2, "rc_tol": 1e-6,
+        "method": "a6_a4", "epsilon": epsilon, "rc_tol": 1e-6,
+        "pwl_tol": 1e-6,
         "solver": {"backend": "CBC", "max_mip_gap": base_gap},
-        "scheduler": {"theta_cert": A6_THETA_CERT_MULT * 1e-2,
+        "scheduler": {"theta_cert_mult": A6_THETA_CERT_MULT,
+                      "theta_cert": theta_cert,
                       "k_max": A6_K_MAX,
                       "priority": list(A6_PRIORITY) + [DEFAULT_CANDIDATE]},
         "recovery": {"max_pricing_escalations": MAX_PRICING_ESCALATIONS,
                      "max_duplicate_retries": MAX_DUPLICATE_RETRIES,
                      "gap_divisor": 100.0, "gap_floor": 1e-12},
     }
+    for key, value in (identity_overrides or {}).items():
+        parent, _, child = key.partition(".")
+        if child:
+            identity[parent][child] = value
+        else:
+            identity[parent] = value
+    ub = 10.0
+    z_model = 10.0
+    sigma = 12.0
+    if kind == "ambiguous":
+        bound, rc_ub = 11.0, 1.0
+    elif kind == "duplicate":
+        bound, rc_ub = 11.0, -1.0
+    else:  # refinement: |rc_lb| below RC_TOL, incumbent non-improving
+        bound, rc_ub = sigma - 1e-7, 1.0
+    rc_lb = bound - sigma                       # producer arithmetic
+    lb = z_model + min(0.0, rc_lb)
     events = [{"regime": "cg-seed",
                "extra": {"tag": "a6_a4", "call_id": "a6_a4-oc0"}}]
     iterations = []
     gap = base_gap
     escalations = 0
     duplicates = 0
+    refines = 0
+    lb_best = -float("inf")
+    ub_history = []
     lb_history = []
     for i in range(repeats):
         call_id = f"a6_a4-oc{i + 1}"
         fired = ["T4"] if i == 0 else ["T0"]
-        if kind == "ambiguous":
-            rc_ub, rc_lb = 1.0, -1.0
-        else:  # duplicate improving
-            rc_ub, rc_lb = -1.0, -1.0
+        derived_gap = ub - lb_best              # inf on the first call
         events.append({
             "regime": "cg-pricing",
+            "solver": {"bound": bound},
             "extra": {"tag": "a6_a4", "call_id": call_id,
                       "call_kind": "clean", "trigger_selected": fired[0],
                       "triggers_fired": fired}})
+        lb_best = max(lb_best, lb)
         iterations.append({
             "iteration_id": f"a6_a4-it{i + 1}",
             "call_kind": "clean", "trigger_selected": fired[0],
             "triggers_fired": fired,
-            "gap_at_decision": float("inf") if i == 0 else 5.0,
+            "gap_at_decision": derived_gap,
             "k_since_clean": 0, "n_columns": 1,
             "recovery_active": i > 0,
             "recovery_kind": None if i == 0 else kind,
             "pricing_solve_id": call_id,
             "pricing_max_mip_gap": gap,
+            "ub_ch": ub, "z_rmp_model": z_model, "duals_sigma": sigma,
             "min_reduced_cost_ub": rc_ub,
             "min_reduced_cost_lb": rc_lb,
-            "certificate_gap": 5.0,
+            "lb_ch": lb, "lb_best": lb_best,
+            "certificate_gap": ub - lb_best,
             "column_novel": False,
         })
-        lb_history.append(5.0)
+        ub_history.append(ub)
+        lb_history.append(lb_best)
         if kind == "ambiguous":
             escalations += 1
             gap = max(gap / 100.0, 1e-12)
-        else:
+        elif kind == "duplicate":
             duplicates += 1
+        else:
+            refines += 1
     return {
         "done": True,
         "identity": identity,
         "oracle_calls": repeats + 1,
         "oracle_events": events,
         "iteration_events": iterations,
+        "ub_history": ub_history,
         "lb_history": lb_history,
         "duplicate_retries": duplicates,
-        "refine_retries": 0,
+        "refine_retries": refines,
         "pricing_escalations": escalations,
         "pricing_max_mip_gap": gap,
         "scheduler": {"k_since_clean": 0,
@@ -259,3 +291,199 @@ def test_duplicate_below_cap_replays():
     ck = _synthetic_recovery_ck("duplicate", MAX_DUPLICATE_RETRIES - 1)
     _final, errors = replay_a6_recovery(ck)
     assert errors == []
+
+
+def test_coordinated_decision_gap_trigger_tamper_rejected(recovery_trace):
+    """EI-017 closure. Original exploit (reproduced accepted before the
+    fix): on a clean iteration selected by a trigger above T1 where T1 did
+    not fire, lower the recorded decision gap below theta_cert and add T1
+    to triggers_fired on BOTH the iteration event and the oracle metadata
+    (order-consistent).  Selection is unchanged, so no other stream field
+    moves.  The chronological UB/LB derivation must reject it in the
+    shared helper and the audit."""
+    ck, _ = recovery_trace
+    bad = json.loads(json.dumps(ck))
+    theta = bad["identity"]["scheduler"]["theta_cert"]
+    by_id = {e["extra"]["call_id"]: e
+             for e in bad["oracle_events"] if e.get("extra")}
+    target = None
+    for it in bad["iteration_events"]:
+        if it.get("terminal") or it.get("call_kind") != "clean":
+            continue
+        if (it["trigger_selected"] in ("T0", "T4", "T3")
+                and "T1" not in it["triggers_fired"]):
+            target = it
+            break
+    assert target is not None
+    target["gap_at_decision"] = theta / 2
+    fired = [t for t in A6_PRIORITY
+             if t in target["triggers_fired"] or t == "T1"]
+    target["triggers_fired"] = fired
+    by_id[target["pricing_solve_id"]]["extra"]["triggers_fired"] = fired
+
+    _final, errors = replay_a6_recovery(bad)
+    assert any("chronologically derived" in e for e in errors)
+    errs = _cg_sane(bad)
+    assert any("chronologically derived" in e for e in errs)
+
+
+def test_negative_infinity_gap_rejected(recovery_trace):
+    ck, _ = recovery_trace
+    bad = json.loads(json.dumps(ck))
+    first = next(e for e in bad["iteration_events"] if not e.get("terminal"))
+    first["gap_at_decision"] = -float("inf")
+    _final, errors = replay_a6_recovery(bad)
+    assert any("-inf are never producible" in e or "invalid gap" in e
+               for e in errors)
+
+
+def test_outcome_recovery_flag_deleted_or_mistyped_rejected(recovery_trace):
+    ck, _ = recovery_trace
+    bad = json.loads(json.dumps(ck))
+    del bad["outcome"]["recovery_active_at_end"]
+    _final, errors = replay_a6_recovery(bad)
+    assert any("recovery_active_at_end is missing" in e for e in errors)
+
+    bad = json.loads(json.dumps(ck))
+    truthy = bad["outcome"]["recovery_active_at_end"]
+    bad["outcome"]["recovery_active_at_end"] = 1 if truthy in (
+        False, True) else True
+    # an int (even a truthy one matching the replayed value) is mistyped
+    bad["outcome"]["recovery_active_at_end"] = int(truthy)
+    _final, errors = replay_a6_recovery(bad)
+    assert any("not exactly a bool" in e for e in errors)
+
+
+def test_iteration_recovery_flag_mistyped_rejected():
+    ck = _synthetic_recovery_ck("ambiguous", 2)
+    ck["iteration_events"][1]["recovery_active"] = 1  # int, not bool
+    _final, errors = replay_a6_recovery(ck)
+    assert any("not exactly a bool" in e for e in errors)
+
+
+def test_raised_identity_caps_rejected():
+    """A stream at 5 escalations whose identity ALSO claims a raised cap
+    of 5 is internally consistent — but the identity must equal the frozen
+    producer constant, so the coordinated raise is rejected."""
+    ck = _synthetic_recovery_ck(
+        "ambiguous", MAX_PRICING_ESCALATIONS + 1,
+        identity_overrides={
+            "recovery.max_pricing_escalations": MAX_PRICING_ESCALATIONS + 1,
+        })
+    _final, errors = replay_a6_recovery(ck)
+    assert any("frozen producer constant" in e for e in errors)
+
+
+def test_divisor_identity_mutation_rejected():
+    """/10 divisor with a fully coordinated stream AND identity mutation:
+    per-event gaps, the final state, and identity.gap_divisor all agree on
+    /10 — the frozen-constant pin still rejects it."""
+    ck = _synthetic_recovery_ck(
+        "ambiguous", 2,
+        identity_overrides={"recovery.gap_divisor": 10.0})
+    gap = 1e-6
+    for it in ck["iteration_events"]:
+        it["pricing_max_mip_gap"] = gap
+        gap = max(gap / 10.0, 1e-12)
+    ck["pricing_max_mip_gap"] = gap
+    _final, errors = replay_a6_recovery(ck)
+    assert any("frozen producer constant" in e for e in errors)
+
+
+def test_refinement_cap_behavior():
+    """Refinement retries replay below the cap and reject at it (epsilon
+    small enough that a near-zero certified reduced-cost bound does not
+    certify)."""
+    ck = _synthetic_recovery_ck(
+        "refinement", MAX_DUPLICATE_RETRIES - 1, epsilon=1e-9)
+    final, errors = replay_a6_recovery(ck)
+    assert errors == []
+    assert final["refine_retries"] == MAX_DUPLICATE_RETRIES - 1
+    assert final["recovery"] == {"kind": "refinement"}
+
+    ck = _synthetic_recovery_ck(
+        "refinement", MAX_DUPLICATE_RETRIES, epsilon=1e-9)
+    _final, errors = replay_a6_recovery(ck)
+    assert any("refine_retries" in e and "impossible" in e for e in errors)
+
+
+def test_floor_saturation_replays_and_falsification_rejected():
+    """Four ambiguous escalations drive the requested gap 1e-6 -> 1e-8 ->
+    1e-10 -> 1e-12 -> floor(1e-12); the floor must saturate exactly, and
+    claiming the un-floored 1e-14 must be rejected."""
+    ck = _synthetic_recovery_ck("ambiguous", MAX_PRICING_ESCALATIONS)
+    final, errors = replay_a6_recovery(ck)
+    assert errors == []
+    assert final["pricing_max_mip_gap"] == 1e-12  # floor engaged
+    recorded = [it["pricing_max_mip_gap"] for it in ck["iteration_events"]]
+    assert recorded == [1e-6, 1e-8, 1e-10, 1e-12]
+
+    bad = json.loads(json.dumps(ck))
+    bad["pricing_max_mip_gap"] = 1e-14  # claims no floor
+    _final, errors = replay_a6_recovery(bad)
+    assert any("pricing_max_mip_gap" in e for e in errors)
+
+
+def test_certification_while_recovery_active_replays():
+    """The certificate returns BEFORE any recovery mutation: a T0 recovery
+    clean call that certifies leaves recovery acknowledged as active at
+    the end, with counters frozen at their pre-certificate values."""
+    epsilon = 2.0
+    theta = A6_THETA_CERT_MULT * epsilon
+    ub = z = 10.0
+    sigma = 12.0
+    ck = _synthetic_recovery_ck("ambiguous", 1, epsilon=epsilon)
+    # event0 must NOT certify at epsilon=2: widen its certified bound
+    it0 = ck["iteration_events"][0]
+    bound0 = 7.0
+    rc0 = bound0 - sigma
+    lb0 = z + min(0.0, rc0)
+    ck["oracle_events"][1]["solver"]["bound"] = bound0
+    it0.update(min_reduced_cost_lb=rc0, lb_ch=lb0, lb_best=lb0,
+               certificate_gap=ub - lb0)
+    ck["lb_history"][0] = lb0
+    # event1: T0 clean at tightened gap 1e-8; derived gap 5.0 <= theta so
+    # T1 also fires; certifies (cert 1.0 <= 2.0) while recovery is active
+    bound1 = 11.0
+    rc1 = bound1 - sigma
+    lb1 = z + min(0.0, rc1)
+    assert ub - lb0 > epsilon and ub - lb1 <= epsilon
+    assert ub - lb0 <= theta  # T1 fires alongside T0
+    fired = ["T0", "T1"]
+    ck["oracle_events"].append({
+        "regime": "cg-pricing",
+        "solver": {"bound": bound1},
+        "extra": {"tag": "a6_a4", "call_id": "a6_a4-oc2",
+                  "call_kind": "clean", "trigger_selected": "T0",
+                  "triggers_fired": fired}})
+    ck["iteration_events"].append({
+        "iteration_id": "a6_a4-it2",
+        "call_kind": "clean", "trigger_selected": "T0",
+        "triggers_fired": fired,
+        "gap_at_decision": ub - lb0,
+        "k_since_clean": 0, "n_columns": 1,
+        "recovery_active": True, "recovery_kind": "ambiguous",
+        "pricing_solve_id": "a6_a6-oc2".replace("a6_a6", "a6_a4"),
+        "pricing_max_mip_gap": 1e-8,
+        "ub_ch": ub, "z_rmp_model": z, "duals_sigma": sigma,
+        "min_reduced_cost_ub": 1.0, "min_reduced_cost_lb": rc1,
+        "lb_ch": lb1, "lb_best": max(lb0, lb1),
+        "certificate_gap": ub - max(lb0, lb1),
+        "column_novel": False,
+    })
+    ck["ub_history"].append(ub)
+    ck["lb_history"].append(max(lb0, lb1))
+    ck["oracle_calls"] = 3
+    ck["scheduler"]["n_clean_pricing"] = 2
+    ck["outcome"] = {"type": "certified", "certified": True,
+                     "recovery_active_at_end": True}
+    final, errors = replay_a6_recovery(ck)
+    assert errors == []
+    assert final["certified"] is True
+    assert final["recovery"] == {"kind": "ambiguous"}
+    assert final["pricing_escalations"] == 1  # frozen, not reset
+
+    bad = json.loads(json.dumps(ck))
+    bad["outcome"]["recovery_active_at_end"] = False
+    _final, errors = replay_a6_recovery(bad)
+    assert any("recovery_active_at_end" in e for e in errors)

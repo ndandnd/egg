@@ -1262,3 +1262,303 @@ def test_gzip_header_has_zero_mtime_and_no_filename(tmp_path):
     assert header[3] & 0x08 == 0
     assert header[4:8] == b"\x00\x00\x00\x00"
     assert header[8:] == b"\x02\xff"
+
+
+# ---------------------------------------------------------------------------
+# Task B: explicit publication commit states
+# ---------------------------------------------------------------------------
+def _flat_staging(tmp_path):
+    staging = tmp_path / "staging"
+    staging.mkdir()
+    expected = {"A.txt", "BUNDLE_MANIFEST.json"}
+    for name in expected:
+        (staging / name).write_text(f"owned {name}\n")
+    return staging, tmp_path / "published", expected
+
+
+@pytest.mark.parametrize("mutation", ("foreign", "replace"))
+def test_revalidate_mutation_caught_by_post_revalidate_gate(
+        tmp_path, mutation):
+    """Original exploit (reproduced before the fix): a revalidate callback
+    that mutates the destination used to commit SILENTLY — the marker was
+    removed and the corrupted markerless publication looked complete.  The
+    post-revalidate ownership gate must now freeze it under the marker."""
+    staging, target, expected = _flat_staging(tmp_path)
+
+    def mutating_revalidate():
+        if mutation == "foreign":
+            (target / "operator-extra").write_text("foreign\n")
+        else:
+            victim = target / "BUNDLE_MANIFEST.json"
+            victim.unlink()
+            victim.write_text("foreign\n")
+
+    with pytest.raises(mod.IncompletePublicationError,
+                       match="incomplete destination preserved") as info:
+        mod.publish_flat_directory_no_replace(
+            staging, target, expected_names=expected,
+            revalidate=mutating_revalidate)
+    assert info.value.renamed is True
+    assert info.value.committed is False
+    assert info.value.destination == str(target)
+    assert "during final revalidation" in str(info.value.__cause__)
+    assert (target / ".publication-incomplete").read_text() == "incomplete\n"
+    if mutation == "foreign":
+        assert (target / "operator-extra").read_text() == "foreign\n"
+    else:
+        assert (target / "BUNDLE_MANIFEST.json").read_text() == "foreign\n"
+
+
+def test_revalidate_target_replacement_freezes_anchored_tree(tmp_path):
+    """revalidate moves the renamed tree away and squats a foreign
+    directory at the destination name: the anchored-fd gate must reject,
+    and the REAL tree keeps its marker wherever it was moved."""
+    staging, target, expected = _flat_staging(tmp_path)
+    moved = tmp_path / "moved-away"
+
+    def replace_target():
+        os.rename(target, moved)
+        target.mkdir()
+        (target / "operator-owned").write_text("squatter\n")
+
+    with pytest.raises(mod.IncompletePublicationError,
+                       match="incomplete destination preserved") as info:
+        mod.publish_flat_directory_no_replace(
+            staging, target, expected_names=expected,
+            revalidate=replace_target)
+    assert info.value.renamed is True and info.value.committed is False
+    # the squatter is never replaced or populated
+    assert (target / "operator-owned").read_text() == "squatter\n"
+    # the real anchored tree is preserved with its marker at the new name
+    assert (moved / ".publication-incomplete").read_text() == "incomplete\n"
+    for name in expected:
+        assert (moved / name).read_text() == f"owned {name}\n"
+
+
+def test_unlink_removes_marker_then_raises_classifies_committed(
+        tmp_path, monkeypatch):
+    """Original exploit (reproduced before the fix): an unlink that removed
+    the marker before failing was classified INCOMPLETE although the
+    destination was committed and markerless.  Marker absence through the
+    anchored fd must classify committed — publication succeeds."""
+    staging, target, expected = _flat_staging(tmp_path)
+    real_unlink = mod.os.unlink
+
+    def unlink_then_raise(*args, **kwargs):
+        real_unlink(*args, **kwargs)
+        if args and args[0] == ".publication-incomplete":
+            raise OSError("injected post-removal unlink failure")
+
+    monkeypatch.setattr(mod.os, "unlink", unlink_then_raise)
+    mod.publish_flat_directory_no_replace(
+        staging, target, expected_names=expected)
+    assert not (target / ".publication-incomplete").exists()
+    for name in expected:
+        assert (target / name).read_text() == f"owned {name}\n"
+
+
+def test_exception_immediately_after_unlink_propagates_not_incomplete(
+        tmp_path, monkeypatch):
+    """A non-OS exception striking immediately after the successful marker
+    unlink must propagate AS-IS: the destination is committed and
+    markerless, so IncompletePublicationError would be a false claim."""
+    staging, target, expected = _flat_staging(tmp_path)
+    real_unlink = mod.os.unlink
+
+    def unlink_then_interrupt(*args, **kwargs):
+        real_unlink(*args, **kwargs)
+        if args and args[0] == ".publication-incomplete":
+            raise RuntimeError("injected exception immediately after unlink")
+
+    monkeypatch.setattr(mod.os, "unlink", unlink_then_interrupt)
+    with pytest.raises(RuntimeError,
+                       match="immediately after unlink") as info:
+        mod.publish_flat_directory_no_replace(
+            staging, target, expected_names=expected)
+    assert not isinstance(info.value, mod.IncompletePublicationError)
+    assert not (target / ".publication-incomplete").exists()
+    for name in expected:
+        assert (target / name).read_text() == f"owned {name}\n"
+
+
+def test_source_fd_close_failure_after_commit_is_not_a_failure(
+        tmp_path, monkeypatch):
+    """A descriptor-close error after commit has no data consequence and
+    must never reclassify the committed markerless publication."""
+    staging, target, expected = _flat_staging(tmp_path)
+    real_close = mod.os.close
+    opened = set()
+    real_open = mod._open_directory_nofollow
+
+    def capture_fd(path):
+        fd = real_open(path)
+        opened.add(fd)
+        return fd
+
+    def failing_close(fd):
+        committed = (target.is_dir()
+                     and not (target / ".publication-incomplete").exists())
+        if fd in opened and committed:
+            opened.discard(fd)
+            real_close(fd)
+            raise OSError("injected close failure after commit")
+        return real_close(fd)
+
+    monkeypatch.setattr(mod, "_open_directory_nofollow", capture_fd)
+    monkeypatch.setattr(mod.os, "close", failing_close)
+    mod.publish_flat_directory_no_replace(
+        staging, target, expected_names=expected)
+    assert not (target / ".publication-incomplete").exists()
+    for name in expected:
+        assert (target / name).read_text() == f"owned {name}\n"
+
+
+def test_package_wrapper_pre_rename_cleanup_failure_never_masks(
+        tmp_path, monkeypatch, capsys):
+    """Wrapper-level: a pre-rename publication refusal whose staging
+    rollback ALSO fails must propagate the ORIGINAL error; the staging
+    tree is preserved with a stderr note, never a masking exception."""
+    root = _source_root(tmp_path)
+    out = tmp_path / "packages"
+    real_rollback = mod._rollback_owned_tree
+
+    def refuse_publication(*_args, **_kwargs):
+        raise mod.PackagingError("refusing existing publication path: X")
+
+    def failing_rollback(root_path, ownership):
+        # fail only the wrapper's staging-ROOT cleanup; the frozen-tree
+        # cleanup inside the packaging body must run normally
+        if Path(root_path).parent == out:
+            return ["injected rollback failure"]
+        return real_rollback(root_path, ownership)
+
+    monkeypatch.setattr(
+        mod, "publish_flat_directory_no_replace", refuse_publication)
+    monkeypatch.setattr(mod, "_rollback_owned_tree", failing_rollback)
+    with pytest.raises(mod.PackagingError,
+                       match="refusing existing publication path"):
+        _package(root, out)
+    err = capsys.readouterr().err
+    assert "package staging preserved for incident review" in err
+    assert "injected rollback failure" in err
+
+
+def test_package_wrapper_post_rename_fsync_failure_skips_staging(
+        tmp_path, monkeypatch):
+    """Wrapper-level: a post-rename parent-fsync failure means the staging
+    tree MOVED; the wrapper must not roll back the stale staging path and
+    must surface the incomplete error with its metadata intact."""
+    root = _source_root(tmp_path)
+    out = tmp_path / "packages"
+    real_fsync = mod._fsync_directory
+    rollbacks = []
+    real_rollback = mod._rollback_owned_tree
+    injected = {"done": False}
+
+    def fail_final_parent_fsync(path):
+        if Path(path) == out and not injected["done"]:
+            injected["done"] = True
+            raise OSError("injected wrapper parent fsync failure")
+        return real_fsync(path)
+
+    def spying_rollback(root_path, ownership):
+        rollbacks.append(str(root_path))
+        return real_rollback(root_path, ownership)
+
+    monkeypatch.setattr(mod, "_fsync_directory", fail_final_parent_fsync)
+    monkeypatch.setattr(mod, "_rollback_owned_tree", spying_rollback)
+    with pytest.raises(mod.IncompletePublicationError,
+                       match="incomplete destination preserved") as info:
+        _package(root, out)
+    assert injected["done"]
+    assert info.value.renamed is True and info.value.committed is False
+    destination = Path(info.value.destination)
+    assert (destination / ".publication-incomplete").exists()
+    # the wrapper's finally never rolled back the staging ROOT (the tree
+    # moved); the frozen-subtree cleanup inside the body is legitimate
+    assert not any(Path(path).parent == out for path in rollbacks)
+
+
+# ---------------------------------------------------------------------------
+# Task C: no post-commit import I/O
+# ---------------------------------------------------------------------------
+def test_receipt_digest_retained_from_under_the_lock(tmp_path, monkeypatch):
+    """Original exploit (reproduced before the fix): the import re-read the
+    receipt AFTER releasing the lock, so a competitor swapping the receipt
+    at that instant poisoned the returned digest.  The digest must now be
+    computed and retained under the lock, and no receipt read may occur
+    after lock removal."""
+    import hashlib
+    root = _source_root(tmp_path)
+    bundle = _package(root, tmp_path / "packages")["bundle_dir"]
+    repo = tmp_path / "repo"
+    (repo / "src").mkdir(parents=True)
+
+    real_unlink = mod.os.unlink
+    real_sha = mod.sha256_file
+    state = {"swapped": False, "lock_released": False,
+             "post_release_receipt_reads": 0, "original_sha": None}
+
+    def swap_after_lock_release(*args, **kwargs):
+        real_unlink(*args, **kwargs)
+        name = str(args[0] if args else kwargs.get("path"))
+        if name.endswith(".a6_holdout.import-lock") and not state["swapped"]:
+            state["swapped"] = True
+            state["lock_released"] = True
+            receipt = next(repo.rglob(mod.RECEIPT_FILENAME))
+            state["original_sha"] = hashlib.sha256(
+                receipt.read_bytes()).hexdigest()
+            receipt.write_bytes(b'{"swapped": "competitor content"}\n')
+
+    def spying_sha(path):
+        if (state["lock_released"]
+                and str(path).endswith(mod.RECEIPT_FILENAME)):
+            state["post_release_receipt_reads"] += 1
+        return real_sha(path)
+
+    monkeypatch.setattr(mod.os, "unlink", swap_after_lock_release)
+    monkeypatch.setattr(mod, "sha256_file", spying_sha)
+    result = _import(bundle, repo)
+    assert state["swapped"]
+    # the returned digest is the ORIGINAL receipt's, proving it was
+    # captured before the lock was released
+    assert result["receipt_sha256"] == state["original_sha"]
+    # and no receipt hash was recomputed after lock removal
+    assert state["post_release_receipt_reads"] == 0
+
+
+def test_regular_signature_distinguishes_size_and_mtime(tmp_path):
+    """Deterministic signature contract: with the SAME (dev, inode), a
+    changed byte length or a changed nanosecond mtime changes the
+    signature; restoring both exactly (the utimensat adversary) is the
+    documented boundary where the signature is equal again."""
+    victim = tmp_path / "victim.bin"
+    victim.write_bytes(b"aa")
+    info = victim.lstat()
+    original = mod._regular_signature(info)
+    os.utime(victim, ns=(info.st_atime_ns, info.st_mtime_ns))
+    baseline = mod._regular_signature(victim.lstat())
+    assert baseline == original
+
+    # in-place extension: same inode, different size
+    with open(victim, "r+b") as handle:
+        handle.seek(0, os.SEEK_END)
+        handle.write(b"aa")
+    grown = victim.lstat()
+    assert (grown.st_dev, grown.st_ino) == (info.st_dev, info.st_ino)
+    assert mod._regular_signature(grown) != original
+
+    # size restored, mtime differs by one nanosecond: still detected
+    with open(victim, "r+b") as handle:
+        handle.truncate(2)
+    os.utime(victim, ns=(info.st_atime_ns, info.st_mtime_ns + 1))
+    shifted = victim.lstat()
+    assert (shifted.st_dev, shifted.st_ino) == (info.st_dev, info.st_ino)
+    assert shifted.st_size == info.st_size
+    assert mod._regular_signature(shifted) != original
+
+    # exact guarantee boundary: same dev/ino AND identical size AND
+    # identical nanosecond mtime (deliberate utimensat restoration) is
+    # indistinguishable — the documented cooperative trust boundary
+    os.utime(victim, ns=(info.st_atime_ns, info.st_mtime_ns))
+    assert mod._regular_signature(victim.lstat()) == original

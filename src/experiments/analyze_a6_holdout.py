@@ -3520,7 +3520,10 @@ def analyze(
                 revalidate=_revalidate_before_commit,
             )
         except IncompletePublicationError as exc:
-            staging = ""  # the tree moved; evidence lives at out_dir now
+            if exc.renamed:
+                # the tree moved; evidence lives at the destination now
+                # (anchored by the marker unless committed)
+                staging = ""
             raise AnalysisError(
                 f"analysis publication failed: {exc}") from exc
         except PackagingError as exc:
