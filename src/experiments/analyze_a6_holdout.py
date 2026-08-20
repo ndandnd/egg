@@ -1232,6 +1232,31 @@ def _evidence_close(actual: float, expected: float) -> bool:
         1.0, abs(actual), abs(expected))
 
 
+def _ordering_tolerance(*operands: float) -> float:
+    """The single operand-scaled absolute tolerance for ordering two solver
+    quantities of the same magnitude.
+
+    It is IDENTICAL to the scale at which their equality is accepted
+    (``1e-10 * max(1, |operands|)``).  EI-026 root cause: a gap DERIVED from
+    two operands (e.g. ``incumbent - bound``) must be judged against zero at
+    the SAME operand scale, never at a fixed scale of ~1.  Using this one
+    helper for both the bound/incumbent ordering gate and the derived-gap sign
+    test makes those two decisions consistent by construction, so the same
+    numerical relationship cannot pass one gate and fail the other.
+    """
+    scale = 1.0
+    for value in operands:
+        scale = max(scale, abs(float(value)))
+    return 1e-10 * scale
+
+
+# A tiny, operand-independent serialization slack for the conservative
+# safety-certificate comparison (well below any operand-scaled ordering
+# tolerance); it absorbs float round-off without masking a real dependence on
+# the operand-scale slack.
+CONSERVATIVE_CERT_TOL = 1e-9
+
+
 def _finite_vector(value, n_slots: int, label: str) -> list[float]:
     if not isinstance(value, list) or len(value) != n_slots:
         raise AnalysisError(
@@ -1655,6 +1680,14 @@ def _replay_cg_certificate_evidence(ck: dict, label: str) -> dict:
     lb_best = -float("inf")
     first_certificate_call = None
     previous_ub = float("inf")
+    # ---- parallel CONSERVATIVE safety chain (kept SEPARATE from the
+    # producer-trace replay above): a second LB chain built from an explicitly
+    # reduced pricing bound (bound - operand_tau) so a certificate can never
+    # depend on the operand-scale ordering slack (EI-026, Task A point 5/6).
+    safe_lb_best = -float("inf")
+    safe_slack = 0.0
+    min_raw_pricing_gap = float("inf")
+    min_pricing_gap_diag = float("inf")
     for oracle_call, event in enumerate(priced, start=1):
         elabel = f"{label} iteration {oracle_call}"
         prior_lb_best = lb_best
@@ -1721,13 +1754,18 @@ def _replay_cg_certificate_evidence(ck: dict, label: str) -> dict:
                 solver.get("obj"), f"{elabel} pricing model incumbent")
             pricing_incumbent = _finite_evidence_number(
                 oracle.get("obj_true"), f"{elabel} pricing incumbent")
-            if (pricing_bound > pricing_model_incumbent
-                    and not _evidence_close(
-                        pricing_bound, pricing_model_incumbent)):
+            # ONE operand-scaled ordering tolerance covers the certified bound
+            # and BOTH incumbents; the derived pricing gap is judged against
+            # zero at this SAME scale (EI-026), so bound/incumbent equality and
+            # the sign of their derived gap can never disagree.
+            order_tau = _ordering_tolerance(
+                pricing_bound, pricing_model_incumbent, pricing_incumbent)
+            # inflated-bound tamper gate: a certified minimization bound may not
+            # exceed either incumbent beyond the operand-scaled tolerance.
+            if pricing_bound - pricing_model_incumbent > order_tau:
                 raise AnalysisError(
                     f"{elabel}: pricing bound exceeds model incumbent")
-            if (pricing_bound > pricing_incumbent
-                    and not _evidence_close(pricing_bound, pricing_incumbent)):
+            if pricing_bound - pricing_incumbent > order_tau:
                 raise AnalysisError(
                     f"{elabel}: pricing bound exceeds physical incumbent")
             min_rc_lb = pricing_bound - sigma
@@ -1739,23 +1777,40 @@ def _replay_cg_certificate_evidence(ck: dict, label: str) -> dict:
                 _require_evidence_close(
                     record.get("min_reduced_cost_ub"), min_rc_ub,
                     f"{elabel} {owner} min_reduced_cost_ub")
-            pricing_gap = pricing_incumbent - pricing_bound
-            if pricing_gap < 0.0 and not _evidence_close(pricing_gap, 0.0):
-                raise AnalysisError(f"{elabel}: pricing gap is negative")
+            # RAW pricing gap: preserved and validated EXACTLY against the
+            # recorded value.  A negative raw gap is admitted ONLY within the
+            # SAME operand-scaled tolerance derived from the original operands,
+            # and rejected beyond it.
+            raw_pricing_gap = pricing_incumbent - pricing_bound
+            if raw_pricing_gap < -order_tau:
+                raise AnalysisError(
+                    f"{elabel}: pricing gap is negative beyond the operand "
+                    f"tolerance ({raw_pricing_gap!r} < {-order_tau!r})")
             _require_evidence_close(
-                event.get("pricing_gap_abs"), pricing_gap,
+                event.get("pricing_gap_abs"), raw_pricing_gap,
                 f"{elabel} pricing_gap_abs")
             if "pricing_gap_rel" in event:
                 _require_evidence_close(
                     event.get("pricing_gap_rel"),
-                    pricing_gap / max(1e-12, abs(pricing_incumbent)),
+                    raw_pricing_gap / max(1e-12, abs(pricing_incumbent)),
                     f"{elabel} pricing_gap_rel")
+            # diagnostic gap semantics ONLY: a within-tolerance negative raw
+            # gap normalizes to zero (the raw value above is what is checked).
+            diag_pricing_gap = raw_pricing_gap if raw_pricing_gap > 0.0 else 0.0
+            min_raw_pricing_gap = min(min_raw_pricing_gap, raw_pricing_gap)
+            min_pricing_gap_diag = min(min_pricing_gap_diag, diag_pricing_gap)
             lb_ch = z_model + min(0.0, min_rc_lb)
             _require_evidence_close(
                 event.get("lb_ch"), lb_ch, f"{elabel} lb_ch")
             lb_best = max(lb_best, lb_ch)
             _require_evidence_close(
                 event.get("lb_best"), lb_best, f"{elabel} lb_best")
+            # ---- conservative safety chain (separate; reduced bound) --------
+            safe_bound = pricing_bound - order_tau
+            safe_min_rc_lb = safe_bound - sigma
+            safe_lb_ch = z_model + min(0.0, safe_min_rc_lb)
+            safe_lb_best = max(safe_lb_best, safe_lb_ch)
+            safe_slack = max(safe_slack, order_tau)
         if ub > previous_ub + TOL_MONO:
             raise AnalysisError(f"{elabel}: UB history is not monotone")
         gap = ub - lb_best
@@ -1770,6 +1825,13 @@ def _replay_cg_certificate_evidence(ck: dict, label: str) -> dict:
             if oracle_call != calls - 1 or terminal:
                 raise AnalysisError(
                     f"{elabel}: trace continues after first certificate")
+            # the certificate must survive the conservative (reduced-bound)
+            # safety chain: it may not depend on the operand-scale slack.
+            if ub - safe_lb_best > epsilon + CONSERVATIVE_CERT_TOL:
+                raise AnalysisError(
+                    f"{elabel}: conservative safety certificate "
+                    f"{ub - safe_lb_best!r} exceeds epsilon {epsilon!r} "
+                    "(certificate depends on operand-scale slack)")
 
     if terminal:
         event = terminal[0]
@@ -1793,6 +1855,11 @@ def _replay_cg_certificate_evidence(ck: dict, label: str) -> dict:
         lb_history.append(lb_best)
         if gap <= epsilon:
             first_certificate_call = calls
+            if ub - safe_lb_best > epsilon + CONSERVATIVE_CERT_TOL:
+                raise AnalysisError(
+                    f"{elabel}: conservative safety certificate "
+                    f"{ub - safe_lb_best!r} exceeds epsilon {epsilon!r} "
+                    "(certificate depends on operand-scale slack)")
         expected_type = "budget_exhausted"
     else:
         ub = ub_history[-1]
@@ -1855,6 +1922,17 @@ def _replay_cg_certificate_evidence(ck: dict, label: str) -> dict:
         "outcome_type": expected_type,
         "first_certificate_call": first_certificate_call,
         "score": score,
+        # conservative safety chain (reduced-bound) — separate evidence
+        "safe_lb_best": safe_lb_best,
+        "safe_certificate_gap": (ub - safe_lb_best),
+        "safe_slack": safe_slack,
+        # raw preserved, plus the zero-normalized diagnostic
+        "min_raw_pricing_gap": (
+            None if min_raw_pricing_gap == float("inf")
+            else min_raw_pricing_gap),
+        "min_pricing_gap_diag": (
+            None if min_pricing_gap_diag == float("inf")
+            else min_pricing_gap_diag),
     }
 
 

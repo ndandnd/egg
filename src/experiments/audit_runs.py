@@ -117,6 +117,37 @@ def _cg_sane(ck: dict, tol_mono: float = 2e-3) -> list:
             break
     if any(e.get("replay_ok") is not True for e in events):
         errs.append("oracle event without replay_ok=true")
+    # Operand-scaled pricing-order parity (EI-026): wherever a clean pricing
+    # event serializes a certified bound with both incumbents, the audit
+    # applies the SAME operand-scaled ordering the production analyzer uses
+    # (one shared helper).  Incomplete fixtures without solver.obj/obj_true are
+    # skipped; complete real cells are judged identically at both entry points.
+    from experiments.analyze_a6_holdout import _ordering_tolerance
+    ev_by_id = {(e.get("extra") or {}).get("call_id"): e for e in events}
+    for it in ck.get("iteration_events") or []:
+        if it.get("terminal"):
+            continue
+        oe = ev_by_id.get(it.get("pricing_solve_id"))
+        if not isinstance(oe, dict):
+            continue
+        solver = oe.get("solver") or {}
+        bound, model, phys = (solver.get("bound"), solver.get("obj"),
+                              oe.get("obj_true"))
+        if not (fin(bound) and fin(model) and fin(phys)):
+            continue
+        tau = _ordering_tolerance(bound, model, phys)
+        if bound - model > tau:
+            errs.append(f"iteration {it.get('iteration_id')}: pricing bound "
+                        "exceeds model incumbent")
+            break
+        if bound - phys > tau:
+            errs.append(f"iteration {it.get('iteration_id')}: pricing bound "
+                        "exceeds physical incumbent")
+            break
+        if (phys - bound) < -tau:
+            errs.append(f"iteration {it.get('iteration_id')}: pricing gap "
+                        "negative beyond operand tolerance")
+            break
     # A6 scheduler-stream integrity (falsified trigger streams must fail).
     # The COMPLETE recovery/counter replay — trigger stream, k_since_clean,
     # recovery kind/state, duplicate/refine/escalation counters, and
