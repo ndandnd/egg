@@ -32,6 +32,7 @@ import hashlib
 import json
 import math
 import time
+from dataclasses import replace
 
 import mip
 import numpy as np
@@ -49,7 +50,7 @@ from .solver import new_model, optimize
 
 MAX_STRUCTURES = 2000
 PWL_TOL = 1e-4
-CANONICAL_DIGITS = 12
+CANONICAL_DIGITS = 9
 
 
 def canonical_number(value: float, digits: int = CANONICAL_DIGITS) -> float:
