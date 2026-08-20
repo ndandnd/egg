@@ -84,6 +84,21 @@ def test_strict_reduced_cost_gate_and_honest_outcomes():
     assert proposer.disposition(4, 2) == "POSITIVE-SPIKE"
 
 
+@pytest.mark.parametrize("seed", proposer.SEEDS)
+def test_singleton_witness_proves_replacement_population_feasible(seed):
+    inst = synthetic_instance(
+        seed=seed,
+        n_trips=proposer.N_TRIPS,
+        max_vehicles=proposer.MAX_VEHICLES,
+    )
+    witness = proposer.singleton_feasibility_witness(inst)
+
+    assert witness["vehicle_count"] == proposer.N_TRIPS
+    assert witness["max_vehicles"] == proposer.MAX_VEHICLES
+    assert witness["minimum_terminal_margin_kwh"] >= 0.0
+    assert len(witness["trips"]) == proposer.N_TRIPS
+
+
 @pytest.fixture(scope="module")
 def one_cell_report(tmp_path_factory):
     """Real solver-backed evidence, narrowed only inside this test process."""

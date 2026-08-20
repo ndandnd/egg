@@ -53,6 +53,7 @@ BASE_COMMIT = "5b63e725d0fd85cfb0b83f462a612016e7f4321a"
 
 SEEDS = (0, 11, 15)
 N_TRIPS = 4
+MAX_VEHICLES = 4
 B_SCALES = (0.01, 0.05)
 CELLS = tuple((seed, N_TRIPS, b) for seed in SEEDS for b in B_SCALES)
 
@@ -495,12 +496,48 @@ def _cell_tag(cell) -> str:
     return f"s{seed}_n{n_trips}_b{b:g}"
 
 
+def singleton_feasibility_witness(inst) -> dict:
+    """Outcome-blind proof that one initially full vehicle per trip works."""
+    if int(inst.max_vehicles) < len(inst.trips):
+        raise ColumnProposerError(
+            "singleton witness requires at least one vehicle per trip")
+    rows = []
+    for trip in sorted(inst.trips, key=lambda item: item.id):
+        energy = (
+            inst.dhk(inst.depot, trip.start_loc)
+            + float(trip.energy_kwh)
+            + inst.dhk(trip.end_loc, inst.depot)
+        )
+        terminal_soc = float(inst.soc0_kwh) - energy
+        margin = terminal_soc - float(inst.soc_end_kwh)
+        if margin < 0.0:
+            raise ColumnProposerError(
+                f"singleton witness fails for {trip.id}: terminal margin "
+                f"{margin}")
+        rows.append({
+            "trip": trip.id,
+            "round_trip_energy_kwh": energy,
+            "terminal_soc_kwh": terminal_soc,
+            "terminal_margin_kwh": margin,
+        })
+    return {
+        "policy": "one-trip-per-vehicle",
+        "vehicle_count": len(inst.trips),
+        "max_vehicles": int(inst.max_vehicles),
+        "minimum_terminal_margin_kwh": min(
+            row["terminal_margin_kwh"] for row in rows),
+        "trips": rows,
+    }
+
+
 def run_cell(cell, run_dir: str | os.PathLike) -> dict:
     seed, n_trips, b = cell
     if tuple(cell) not in CELLS:
         raise ColumnProposerError(f"cell {cell!r} is outside the frozen grid")
-    inst = synthetic_instance(seed=seed, n_trips=n_trips)
+    inst = synthetic_instance(
+        seed=seed, n_trips=n_trips, max_vehicles=MAX_VEHICLES)
     market = make_affine_market(inst, shape="duck", b_scale=b)
+    feasibility = singleton_feasibility_witness(inst)
     tag = _cell_tag(cell)
     raw = Path(run_dir) / tag
     state = certified_cg(
@@ -533,6 +570,7 @@ def run_cell(cell, run_dir: str | os.PathLike) -> dict:
             "hash": inst.hash(),
             "max_vehicles": inst.max_vehicles,
         },
+        "feasibility_witness": feasibility,
         "market": {
             "hash": market_hash(market),
             "name": market.name,
@@ -561,6 +599,7 @@ def _design() -> dict:
         "population": {
             "seeds": list(SEEDS),
             "n_trips": N_TRIPS,
+            "max_vehicles": MAX_VEHICLES,
             "b_scales": list(B_SCALES),
             "shape": "duck",
             "cell_count": len(CELLS),
@@ -811,10 +850,13 @@ def audit_report(report: dict) -> list[str]:
             "tag": _cell_tag(expected),
         }:
             fail(f"{label}: cell identity mismatch")
-        inst = synthetic_instance(seed=seed, n_trips=n_trips)
+        inst = synthetic_instance(
+            seed=seed, n_trips=n_trips, max_vehicles=MAX_VEHICLES)
         market = make_affine_market(inst, shape="duck", b_scale=b)
         if (stored.get("instance") or {}).get("hash") != inst.hash():
             fail(f"{label}: instance hash mismatch")
+        if stored.get("feasibility_witness") != singleton_feasibility_witness(inst):
+            fail(f"{label}: singleton feasibility witness mismatch")
         market_doc = stored.get("market") or {}
         if market_doc.get("hash") != market_hash(market):
             fail(f"{label}: market hash mismatch")

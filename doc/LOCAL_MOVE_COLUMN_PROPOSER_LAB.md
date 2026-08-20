@@ -11,6 +11,21 @@ This laboratory is standalone. It does not depend on the unmerged tiny
 branch-and-price work, does not modify A2 or A6, and does not launch a cluster
 campaign.
 
+**Design amendment after invalid attempt (2026-08-20).** The first committed
+implementation (`e1b83820c721fec87b9bc928f47d2e4c6cffe874`) inherited the
+generator's default `max_vehicles = 2`. Its one authorized run halted while
+seeding the third cell because the seed-11 four-trip instance was infeasible
+under that cap. The two earlier raw cell directories were not inspected or
+scored, no report was published, and the entire partial attempt is invalid.
+The replacement retains the exact seeds and all scoring rules but freezes
+`max_vehicles = n_trips = 4`. This repair is outcome-blind and has a direct
+constructive feasibility proof: assign each trip to its own initially full
+vehicle; every generated trip's depot round trip consumes at most
+`2.4 + 22.0 + 2.4 = 26.8 kWh`, leaving at least `33.2 kWh`, above the
+`6.0 kWh` terminal requirement. The replacement is one complete fresh run
+under a new commit; the invalid partial run is never resumed or combined with
+it.
+
 ## 1. Question and non-claims
 
 At a clean restricted-master dual, can a deterministic one-move neighborhood
@@ -38,12 +53,14 @@ seed in {0, 11, 15}
 n_trips = 4
 b in {0.01, 0.05}
 market shape = duck
+max_vehicles = 4
 all other synthetic_instance arguments = committed defaults
 ```
 
-The generator default gives `max_vehicles = 2`. No seed in 16--37 is
-generated or inspected. The six cells are a tiny mechanism laboratory, not an
-external-validity sample.
+No seed in 16--37 is generated or inspected. The six cells are a tiny
+mechanism laboratory, not an external-validity sample. The four-vehicle cap is
+a feasibility envelope, not controlled fleet size; the optimizer still pays
+the unchanged fixed cost for every vehicle it actually uses.
 
 Each cell first runs unchanged production A2 with:
 
