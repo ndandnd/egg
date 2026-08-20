@@ -443,6 +443,27 @@ def test_selection_refuses_factor_swap_with_csv_flag_edits(tmp_path, screen):
     assert not (tmp_path / "sel").exists()
 
 
+@pytest.mark.parametrize("table,needle", [
+    ("matched_contrasts.csv", "duplicate contrast|missing contrast"),
+    ("cell_intervals.csv", "duplicate cell|frozen 60-cell"),
+])
+def test_selection_refuses_duplicate_row_replacement(tmp_path, screen,
+                                                     table, needle):
+    """Coordinated SAME-CARDINALITY forgery: one data row is replaced by a
+    duplicate of another (row counts and manifest hashes all consistent).
+    The recomputation over the frozen grid must refuse."""
+    analysis = _go_analysis(tmp_path, screen)
+    path = analysis / table
+    lines = path.read_text().splitlines()
+    assert len(lines) > 3
+    lines[1] = lines[2]
+    path.write_text("\n".join(lines) + "\n")
+    _rehash(analysis, table)
+    with pytest.raises(sel.B3SelectionError, match=needle):
+        _select(analysis, tmp_path / "sel")
+    assert not (tmp_path / "sel").exists()
+
+
 def test_selection_requires_verified_analysis_and_real_commit(
         tmp_path, screen):
     runs = _go_tree(tmp_path, screen)

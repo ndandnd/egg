@@ -643,11 +643,13 @@ def test_decision_no_go_wrong_direction():
     res = az.analyze_population(_pop(deltas))
     dec = res["decision"]
     # S3 has count 0 like the others; selection ties on count then median.
-    # Its signed median is -0.1 (against direction); others are 0, so f* is a
-    # zero-median setting and the state is UNDER-RESOLVED. Assert the wrong
-    # direction is at least reflected in S3's signed median.
+    # Its signed median is -0.1 (against direction); others are 0, so f*
+    # is the first zero-median setting in factor order (S1) and the ONE
+    # preregistered answer is UNDER-RESOLVED (|med_{f*}| = 0 <= tau).
     assert res["settings"]["S3_pow_low"]["signed_median_midpoint"] < -az.TAU_DELTA
-    assert dec["state"] in ("UNDER-RESOLVED", "NO-GO")
+    assert dec["selected_contrast"] == "S1_batt_low"
+    assert dec["signed_median_midpoint"] == 0.0
+    assert dec["state"] == "UNDER-RESOLVED"
 
 
 def test_decision_wrong_direction_no_go_selected():
@@ -846,6 +848,155 @@ def test_screen_override_marks_artifact_non_scoreable(tmp_path):
     with pytest.raises(sel.B3SelectionError, match="frozen screen"):
         sel.select(out, tmp_path / "sel", head, verify_code_commit=False)
     assert not (tmp_path / "sel").exists()
+
+
+# --------------------------------------------------------------------------
+# preregistered decision-rule boundaries, pinned EXACTLY (one right
+# answer per fixture; engineering gates are strict inequalities)
+# --------------------------------------------------------------------------
+def _pop_points(u_baseline, u_by_setting):
+    """A valid population of point intervals with an arbitrary baseline
+    level, so boundary contrasts can be constructed float-exactly."""
+    market_keys = [(s, n, b) for s in bp.SEEDS for n in bp.N_TRIPS
+                   for b in bp.B_SCALES]
+    assert len(market_keys) == 12
+    cells = {}
+    for setting in bp.SETTING_ORDER:
+        for i, key in enumerate(market_keys):
+            if setting == "S0_baseline":
+                u = u_baseline
+            else:
+                u = u_by_setting[setting][i]
+            iv = {"U_lo_raw": u, "U_lo": max(0.0, u), "U_hi": u,
+                  "width": 0.0}
+            cells[(setting, *key)] = {"cell": {}, "interval": iv}
+    return {"cells": cells, "problems": []}
+
+
+def _boundary_pop(s1_values):
+    zeros = [0.0] * 12
+    return _pop_points(0.0, {
+        "S1_batt_low": s1_values, "S2_batt_high": zeros,
+        "S3_pow_low": zeros, "S4_pow_high": zeros})
+
+
+def test_boundary_median_exactly_plus_tau_is_under_resolved():
+    """med == +0.04 EXACTLY: GO requires med > tau strictly, so the state
+    is UNDER-RESOLVED (never GO), even at a 12/12 count."""
+    res = az.analyze_population(_boundary_pop([az.TAU_DELTA] * 12))
+    dec = res["decision"]
+    assert dec["signed_median_midpoint"] == az.TAU_DELTA
+    assert dec["count"] == 12
+    assert dec["state"] == "UNDER-RESOLVED"
+
+
+def test_boundary_median_just_above_tau_is_go():
+    value = math.nextafter(az.TAU_DELTA, 1.0)
+    res = az.analyze_population(_boundary_pop([value] * 12))
+    dec = res["decision"]
+    assert dec["signed_median_midpoint"] == value
+    assert dec["state"] == "GO"
+
+
+def _minus_boundary_pop(s1_values):
+    """S1 carries the boundary values; every other factor is pushed WELL
+    below so the ranking must select S1 (all counts tie at zero)."""
+    low = [-0.5] * 12
+    return _pop_points(0.0, {
+        "S1_batt_low": s1_values, "S2_batt_high": [0.5] * 12,
+        "S3_pow_low": low, "S4_pow_high": [0.5] * 12})
+
+
+def test_boundary_median_exactly_minus_tau_is_under_resolved():
+    res = az.analyze_population(_minus_boundary_pop([-az.TAU_DELTA] * 12))
+    dec = res["decision"]
+    assert dec["selected_contrast"] == "S1_batt_low"
+    assert dec["signed_median_midpoint"] == -az.TAU_DELTA
+    assert dec["state"] == "UNDER-RESOLVED"
+
+
+def test_boundary_median_just_below_minus_tau_is_no_go():
+    value = math.nextafter(-az.TAU_DELTA, -1.0)
+    res = az.analyze_population(_minus_boundary_pop([value] * 12))
+    dec = res["decision"]
+    assert dec["selected_contrast"] == "S1_batt_low"
+    assert dec["signed_median_midpoint"] == value
+    assert dec["state"] == "NO-GO"
+
+
+def test_boundary_negative_direction_median_exactly_tau():
+    """S2 (non-positive direction): every contrast exactly -tau gives a
+    SIGNED median of exactly +tau with a 12/12 zero-excluding count; the
+    strict median gate still refuses GO."""
+    zeros = [0.0] * 12
+    res = az.analyze_population(_pop_points(0.0, {
+        "S1_batt_low": zeros, "S2_batt_high": [-az.TAU_DELTA] * 12,
+        "S3_pow_low": zeros, "S4_pow_high": zeros}))
+    dec = res["decision"]
+    assert dec["selected_contrast"] == "S2_batt_high"
+    assert dec["count"] == 12
+    assert dec["signed_median_midpoint"] == az.TAU_DELTA
+    assert dec["state"] == "UNDER-RESOLVED"
+
+
+def test_boundary_count_exactly_nine_is_go_eight_is_no_go():
+    go = az.analyze_population(_boundary_pop([0.1] * 9 + [0.0] * 3))
+    assert go["decision"]["count"] == 9
+    assert go["decision"]["signed_median_midpoint"] == 0.1
+    assert go["decision"]["state"] == "GO"
+    no_go = az.analyze_population(_boundary_pop([0.1] * 8 + [0.0] * 4))
+    assert no_go["decision"]["count"] == 8
+    assert no_go["decision"]["signed_median_midpoint"] == 0.1
+    assert no_go["decision"]["state"] == "NO-GO"
+
+
+def test_boundary_contrast_endpoint_exactly_zero_not_zero_excluding():
+    """A contrast endpoint of EXACTLY zero is not zero-excluding (strict
+    inequality), so nine 0.1-cells plus three exact-zero cells count 9."""
+    res = az.analyze_population(_boundary_pop([0.1] * 9 + [0.0] * 3))
+    s1_rows = [row for row in res["contrasts"]
+               if row["setting"] == "S1_batt_low"]
+    zero_rows = [row for row in s1_rows if row["delta_lo"] == 0.0]
+    assert len(zero_rows) == 3
+    assert all(row["direction_consistent_zero_excluding"] is False
+               for row in zero_rows)
+    assert res["settings"]["S1_batt_low"]["count"] == 9
+
+
+def test_boundary_count_beats_median_in_ranking():
+    """f* selection is count-first: S1 (count 10, med 0.05) outranks S3
+    (count 9, med 0.9)."""
+    zeros = [0.0] * 12
+    res = az.analyze_population(_pop_points(0.0, {
+        "S1_batt_low": [0.05] * 10 + [0.0] * 2,
+        "S2_batt_high": zeros,
+        "S3_pow_low": [0.9] * 9 + [0.0] * 3,
+        "S4_pow_high": zeros}))
+    dec = res["decision"]
+    assert res["settings"]["S1_batt_low"]["count"] == 10
+    assert res["settings"]["S3_pow_low"]["count"] == 9
+    assert res["settings"]["S3_pow_low"]["signed_median_midpoint"] == 0.9
+    assert dec["selected_contrast"] == "S1_batt_low"
+    assert dec["count"] == 10
+    assert dec["signed_median_midpoint"] == 0.05
+    assert dec["state"] == "GO"
+
+
+def test_boundary_exact_factor_order_tie():
+    """An EXACT tie on (count, signed median) resolves by the frozen
+    factor order: S1 before S3."""
+    zeros = [0.0] * 12
+    res = az.analyze_population(_pop_points(0.0, {
+        "S1_batt_low": [0.1] * 12, "S2_batt_high": zeros,
+        "S3_pow_low": [0.1] * 12, "S4_pow_high": zeros}))
+    dec = res["decision"]
+    s1 = res["settings"]["S1_batt_low"]
+    s3 = res["settings"]["S3_pow_low"]
+    assert (s1["count"], s1["signed_median_midpoint"]) == (
+        s3["count"], s3["signed_median_midpoint"])
+    assert dec["selected_contrast"] == "S1_batt_low"
+    assert s1["rank"] == 1 and s3["rank"] == 2
+    assert dec["state"] == "GO"
 
 
 # --------------------------------------------------------------------------
