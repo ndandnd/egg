@@ -30,8 +30,10 @@ unknown keys fail closed.
 All arithmetic uses decimal endpoint strings and directed outward rounding.
 Binary floating-point is not claim-bearing.
 
-For slot `t`, `p_t in [p_t.lo, p_t.hi]` is a certified convex-hull-price
-enclosure. For participant `i`:
+For slot `t`, `p_t in [p_t.lo, p_t.hi]` is an outer coordinate projection of
+one joint convex-hull-price certificate. The coordinate box is NOT asserted to
+be Cartesian: an arbitrary endpoint combination or midpoint need not be a
+supporting price. For participant `i`:
 
 - `q_it` is signed net withdrawal (demand/charging is positive; supply is
   negative);
@@ -53,9 +55,34 @@ z_CH in [z_CH.lo, z_CH.hi]  # integrated convex-hull optimum
 
 The certificate declares participant coverage as:
 
-- `complete`: every separable decision block in the Lagrangian is represented,
-  so total lost-opportunity cost and `z_D - z_CH` denote the same quantity; or
+- `complete`: every separable objective/decision block in the Lagrangian is
+  represented; or
 - `partial`: the listed LOCs are only a subtotal and no equality claim is made.
+
+Coverage alone does not authorize an equality claim. A separate
+`uplift_loc_identity_certificate` may assert `sum_i LOC_i = z_D - z_CH` only
+when it certifies ALL of the following:
+
+1. complete separable-block coverage;
+2. a jointly feasible and exactly balanced assigned profile;
+3. that assigned profile attains the integrated integer optimum `z_D`;
+4. one common price represented by the price certificate is dual-optimal;
+5. convex-hull strong duality at that price; and
+6. every participant best-response enclosure is evaluated at that same price.
+
+To see why each premise is load-bearing, let `d(p) = sum_i v_i(p)` and let
+`C(x_hat)` be the intrinsic cost of a balanced assignment. Then
+
+```
+sum_i LOC_i(p)
+  = (z_D - z_CH)
+    + (C(x_hat) - z_D)
+    + (z_CH - d(p)).
+```
+
+Complete coverage does not remove assignment or dual suboptimality. If the
+identity certificate is absent, the calculator reports uplift and total LOC
+separately even when coverage is `complete`.
 
 ## 3. Interval arithmetic
 
@@ -89,8 +116,12 @@ endpoint contradicts the certificate and must fail.
 The two-part tariff uses a charge-positive-to-participant convention:
 
 1. volumetric charge: `E_i`;
-2. minimum fixed commitment payment **to** the participant: `LOC_i`;
+2. minimum fixed commitment payment **to** the participant, conditional on
+   performing the assigned action: `LOC_i`;
 3. equivalently, fixed tariff charge to the participant: `-LOC_i`.
+
+An unconditional payment does not alter action incentives and is not a
+supporting tariff.
 
 At the exact minimum payment, the assigned all-in private cost equals `v_i`.
 For interval reporting, compute the net charge through the dependency-safe
@@ -110,19 +141,25 @@ The theorem `z_D >= z_CH` gives
 `U = [max(0, U_raw.lo), U_raw.hi]`. A negative raw upper endpoint is a
 contradiction.
 
-For `complete` coverage, `sum_i LOC_i = U` under the stated convex-hull
-Lagrangian premises. Their certified intervals must intersect; an empty
-intersection fails closed. For `partial` coverage, report both intervals but
-do not infer equality, residual allocation, or incentive compatibility.
+When (and only when) the separate identity certificate proves every premise
+above, `sum_i LOC_i = U`; the certified intervals must intersect and an empty
+intersection fails closed. Otherwise report both intervals without an equality
+claim. In particular, `partial` coverage does not support residual allocation
+or even a subtotal inequality unless an additional subset/decomposition
+certificate is supplied (not part of this schema).
 
 ## 4. Non-claims
 
 Endpoint arithmetic alone does not prove:
 
 - that the supplied price enclosure is a convex-hull-price certificate;
+- that arbitrary coordinate combinations or the midpoint of the price
+  projections are supporting prices;
 - that a best-response enclosure was computed at the supplied price set;
+- assignment optimality, exact balance, or strong duality;
 - incentive compatibility under private information;
-- budget balance for a partial participant list;
+- budget balance (even under complete coverage, zero-balance volumetric
+  charges sum to zero while positive commitment credits need funding);
 - a unique price or payment when an interval has positive width; or
 - equality of one fleet's LOC and total uplift when other decision blocks are
   omitted.
@@ -138,7 +175,8 @@ mechanism-design result.
 
 Acceptance tests cover signed interval products, outward rounding, raw versus
 theorem-tightened bounds, negative-upper contradictions, complete/partial
-coverage, dependency-safe tariff identities, exact schema rejection,
-dimension/ID mismatches, non-finite/binary-float refusal, deterministic
-serialization, no-replace output, and refusal of repository `result/` paths
-before I/O.
+coverage separated from the explicit joint identity premises,
+assignment-contingent/dependency-safe tariff identities, price-projection and
+budget-balance nonclaims, exact schema rejection, dimension/ID mismatches,
+non-finite/binary-float refusal, deterministic serialization, no-replace
+output, and refusal of repository `result/` paths before I/O.

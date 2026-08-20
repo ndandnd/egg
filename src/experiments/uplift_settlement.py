@@ -44,6 +44,16 @@ from typing import Callable
 INPUT_SCHEMA = "uplift-settlement-endpoints-v1"
 OUTPUT_SCHEMA = "uplift-settlement-arithmetic-v1"
 DECIMAL_PRECISION = 80
+PRICE_REPRESENTATION = "outer-coordinate-projections"
+IDENTITY_PREMISES = (
+    "complete_separable_block_coverage",
+    "assignment_jointly_feasible",
+    "assignment_balanced",
+    "assignment_integer_optimal",
+    "common_price_dual_optimal",
+    "convex_hull_strong_duality",
+    "best_responses_at_common_price",
+)
 REPO_ROOT = Path(__file__).resolve().parents[2]
 
 
@@ -251,7 +261,7 @@ def _nonempty_text(value: object, label: str) -> str:
 def _parse_price_certificate(value: object) -> dict:
     _strict_keys(
         value,
-        {"certificate_id", "status", "components"},
+        {"certificate_id", "status", "representation", "components"},
         "price_certificate",
     )
     assert isinstance(value, dict)
@@ -260,6 +270,11 @@ def _parse_price_certificate(value: object) -> dict:
     if value["status"] != "certified":
         raise SettlementError(
             "price_certificate.status must be exactly 'certified'")
+    if value["representation"] != PRICE_REPRESENTATION:
+        raise SettlementError(
+            "price_certificate.representation must be exactly "
+            f"{PRICE_REPRESENTATION!r}; coordinate intervals are outer "
+            "projections, not a Cartesian set of supporting prices")
     components_value = value["components"]
     if not isinstance(components_value, list) or not components_value:
         raise SettlementError(
@@ -314,6 +329,41 @@ def _parse_objective_certificate(value: object) -> dict:
             value["convex_hull_objective"],
             "objective_certificate.convex_hull_objective",
         ),
+    }
+
+
+def _parse_identity_certificate(value: object, coverage: str) -> dict | None:
+    """Validate the additional premises needed for sum(LOC) == z_D - z_CH.
+
+    Complete block coverage alone is deliberately insufficient: the assigned
+    profile must also be a balanced integer optimum and every best response
+    must be evaluated at one common dual-optimal price under strong duality.
+    """
+    if value is None:
+        return None
+    expected = {"certificate_id", "status", *IDENTITY_PREMISES}
+    _strict_keys(value, expected, "uplift_loc_identity_certificate")
+    assert isinstance(value, dict)
+    if coverage != "complete":
+        raise SettlementError(
+            "an uplift/LOC identity certificate requires complete participant "
+            "coverage")
+    if value["status"] != "certified":
+        raise SettlementError(
+            "uplift_loc_identity_certificate.status must be exactly "
+            "'certified'")
+    certificate_id = _nonempty_text(
+        value["certificate_id"],
+        "uplift_loc_identity_certificate.certificate_id",
+    )
+    for premise in IDENTITY_PREMISES:
+        if value[premise] is not True:
+            raise SettlementError(
+                "uplift_loc_identity_certificate requires certified premise "
+                f"{premise}=true")
+    return {
+        "certificate_id": certificate_id,
+        "premises": {premise: True for premise in IDENTITY_PREMISES},
     }
 
 
@@ -408,6 +458,7 @@ def _parse_document(document: object) -> dict:
             "units",
             "price_certificate",
             "objective_certificate",
+            "uplift_loc_identity_certificate",
             "participants",
         },
         "endpoint certificate",
@@ -432,6 +483,8 @@ def _parse_document(document: object) -> dict:
     component_ids = [item["component_id"] for item in price["components"]]
     objective = _parse_objective_certificate(
         document["objective_certificate"])
+    identity = _parse_identity_certificate(
+        document["uplift_loc_identity_certificate"], coverage)
     participant_values = document["participants"]
     if not isinstance(participant_values, list) or not participant_values:
         raise SettlementError("participants must be a nonempty list")
@@ -453,6 +506,7 @@ def _parse_document(document: object) -> dict:
         "units": parsed_units,
         "price": price,
         "objective": objective,
+        "identity": identity,
         "participants": participants,
     }
 
@@ -524,6 +578,8 @@ def _participant_settlement(
         "two_part_tariff": {
             "charge_sign_convention":
                 "positive-is-charge-to-participant",
+            "commitment_condition":
+                "payment-contingent-on-assigned-action-performance",
             "volumetric_charge_to_participant": energy_charge.to_json(),
             "minimum_commitment_payment_to_participant": loc.to_json(),
             "fixed_charge_to_participant": loc.negate().to_json(),
@@ -568,15 +624,15 @@ def settle(document: object) -> dict:
     total_raw_loc = interval_sum(raw_locs)
     total_loc = interval_sum(tightened_locs)
 
-    identity_required = parsed["coverage"] == "complete"
+    identity_asserted = parsed["identity"] is not None
     identity_intersection = None
     identity_consistent = None
-    if identity_required:
+    if identity_asserted:
         identity_intersection = uplift.intersection(total_loc)
         if identity_intersection is None:
             raise SettlementError(
-                "complete participant coverage requires total "
-                "lost-opportunity cost to equal integrated uplift, but the "
+                "the certified uplift/LOC identity premises require total "
+                "lost-opportunity cost to equal integrated uplift, but their "
                 "certified intervals do not intersect")
         identity_consistent = True
 
@@ -594,6 +650,7 @@ def settle(document: object) -> dict:
         "convex_hull_price_certificate": {
             "certificate_id": parsed["price"]["certificate_id"],
             "status": "certified",
+            "representation": PRICE_REPRESENTATION,
             "components": [
                 {
                     "component_id": item["component_id"],
@@ -614,7 +671,15 @@ def settle(document: object) -> dict:
             "reported_participants": len(participant_results),
             "total_lost_opportunity_cost_raw": total_raw_loc.to_json(),
             "total_lost_opportunity_cost": total_loc.to_json(),
-            "uplift_loc_identity_required": identity_required,
+            "uplift_loc_identity_asserted": identity_asserted,
+            "uplift_loc_identity_certificate_id": (
+                None if parsed["identity"] is None
+                else parsed["identity"]["certificate_id"]
+            ),
+            "uplift_loc_identity_premises": (
+                None if parsed["identity"] is None
+                else parsed["identity"]["premises"]
+            ),
             "uplift_loc_identity_consistent": identity_consistent,
             "uplift_loc_identity_intersection": (
                 None if identity_intersection is None
@@ -625,7 +690,9 @@ def settle(document: object) -> dict:
             "endpoint_arithmetic_only": True,
             "population_adapter_included": False,
             "incentive_compatibility_claimed": False,
-            "partial_coverage_budget_balance_claimed": False,
+            "budget_balance_claimed": False,
+            "coordinate_price_intervals_are_outer_projections": True,
+            "arbitrary_price_box_points_claimed_supporting": False,
         },
     }
 

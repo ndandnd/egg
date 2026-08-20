@@ -31,6 +31,14 @@ def _withdrawal(t0, t1):
     ]
 
 
+def _identity_certificate():
+    return {
+        "certificate_id": "invented-uplift-loc-identity-cert",
+        "status": "certified",
+        **{premise: True for premise in us.IDENTITY_PREMISES},
+    }
+
+
 def _certificate(*, coverage="complete"):
     """Exact invented case: participant LOCs 2 + 1 = system uplift 3."""
     return {
@@ -41,6 +49,7 @@ def _certificate(*, coverage="complete"):
         "price_certificate": {
             "certificate_id": "invented-price-cert",
             "status": "certified",
+            "representation": us.PRICE_REPRESENTATION,
             "components": [
                 {"component_id": "t0", "price": _interval(2)},
                 {"component_id": "t1", "price": _interval(3)},
@@ -52,6 +61,9 @@ def _certificate(*, coverage="complete"):
             "integrated_integer_objective": _interval(100),
             "convex_hull_objective": _interval(97),
         },
+        "uplift_loc_identity_certificate": (
+            _identity_certificate() if coverage == "complete" else None
+        ),
         "participants": [
             {
                 "participant_id": "demand",
@@ -99,6 +111,8 @@ def test_exact_complete_settlement_and_two_part_tariff():
     tariff = demand["two_part_tariff"]
     assert tariff["minimum_commitment_payment_to_participant"] == _interval(2)
     assert tariff["fixed_charge_to_participant"] == _interval(-2)
+    assert tariff["commitment_condition"] == \
+        "payment-contingent-on-assigned-action-performance"
     assert tariff["net_charge_to_participant_at_minimum_payment"] == _interval(9)
     assert tariff["assigned_all_in_cost_at_minimum_payment"] == _interval(19)
     assert tariff["guaranteed_commitment_payment_to_participant"] == _interval(2)
@@ -111,9 +125,15 @@ def test_exact_complete_settlement_and_two_part_tariff():
 
     aggregate = result["loc_aggregation"]
     assert aggregate["total_lost_opportunity_cost"] == _interval(3)
-    assert aggregate["uplift_loc_identity_required"] is True
+    assert aggregate["uplift_loc_identity_asserted"] is True
+    assert aggregate["uplift_loc_identity_certificate_id"] == \
+        "invented-uplift-loc-identity-cert"
+    assert aggregate["uplift_loc_identity_premises"] == {
+        premise: True for premise in us.IDENTITY_PREMISES
+    }
     assert aggregate["uplift_loc_identity_consistent"] is True
     assert aggregate["uplift_loc_identity_intersection"] == _interval(3)
+    assert result["boundary"]["budget_balance_claimed"] is False
 
 
 def test_price_components_are_preserved_as_certified_intervals():
@@ -125,6 +145,12 @@ def test_price_components_are_preserved_as_certified_intervals():
         "component_id": "t0",
         "price": _interval("1.9", "2.1"),
     }
+    assert result["convex_hull_price_certificate"][
+        "representation"] == us.PRICE_REPRESENTATION
+    assert result["boundary"][
+        "coordinate_price_intervals_are_outer_projections"] is True
+    assert result["boundary"][
+        "arbitrary_price_box_points_claimed_supporting"] is False
     demand = _participants(result)["demand"]
     assert demand["volumetric_charge_to_participant"] == _interval(
         "10.6", "11.4")
@@ -180,6 +206,27 @@ def test_loc_raw_interval_is_preserved_and_nonnegative_theorem_tightens():
         "assigned_all_in_cost_at_minimum_payment"] == _interval(19, 22)
 
 
+def test_minimum_net_tariff_uses_dependency_cancellation_identity():
+    document = _certificate(coverage="partial")
+    document["price_certificate"]["components"] = [
+        {"component_id": "t0", "price": _interval(9, 11)}
+    ]
+    participant = document["participants"][0]
+    document["participants"] = [participant]
+    participant["assigned_intrinsic_cost"] = _interval(4, 6)
+    participant["assigned_net_withdrawal"] = [
+        {"component_id": "t0", "quantity": _interval(1)}
+    ]
+    participant["best_response_objective"] = _interval(7, 8)
+    result = us.settle(document)["participants"][0]
+    assert result["volumetric_charge_to_participant"] == _interval(9, 11)
+    assert result["lost_opportunity_cost"] == _interval(5, 10)
+    # E - LOC as independent intervals would be [-1, 6].  The exact
+    # dependency cancels E and gives v-c = [1, 4].
+    assert result["two_part_tariff"][
+        "net_charge_to_participant_at_minimum_payment"] == _interval(1, 4)
+
+
 def test_uplift_raw_interval_is_preserved_and_nonnegative_theorem_tightens():
     document = _certificate(coverage="partial")
     document["objective_certificate"][
@@ -207,12 +254,29 @@ def test_negative_uplift_upper_endpoint_is_a_certificate_contradiction():
         us.settle(document)
 
 
-def test_complete_coverage_requires_uplift_loc_identity_intersection():
+def test_certified_joint_premises_require_uplift_loc_identity_intersection():
     document = _certificate()
     document["objective_certificate"][
         "integrated_integer_objective"] = _interval(101)
     with pytest.raises(us.SettlementError, match="do not intersect"):
         us.settle(document)
+
+
+def test_complete_coverage_alone_makes_no_uplift_loc_identity_claim():
+    document = _certificate()
+    document["uplift_loc_identity_certificate"] = None
+    document["objective_certificate"][
+        "integrated_integer_objective"] = _interval(101)
+    result = us.settle(document)
+    aggregate = result["loc_aggregation"]
+    assert result["coverage"] == "complete"
+    assert aggregate["total_lost_opportunity_cost"] == _interval(3)
+    assert result["system"]["uplift"] == _interval(4)
+    assert aggregate["uplift_loc_identity_asserted"] is False
+    assert aggregate["uplift_loc_identity_certificate_id"] is None
+    assert aggregate["uplift_loc_identity_premises"] is None
+    assert aggregate["uplift_loc_identity_consistent"] is None
+    assert aggregate["uplift_loc_identity_intersection"] is None
 
 
 def test_partial_coverage_makes_no_uplift_loc_identity_claim():
@@ -222,11 +286,19 @@ def test_partial_coverage_makes_no_uplift_loc_identity_claim():
     result = us.settle(document)
     aggregate = result["loc_aggregation"]
     assert aggregate["total_lost_opportunity_cost"] == _interval(3)
-    assert aggregate["uplift_loc_identity_required"] is False
+    assert aggregate["uplift_loc_identity_asserted"] is False
+    assert aggregate["uplift_loc_identity_certificate_id"] is None
     assert aggregate["uplift_loc_identity_consistent"] is None
     assert aggregate["uplift_loc_identity_intersection"] is None
-    assert result["boundary"][
-        "partial_coverage_budget_balance_claimed"] is False
+    assert result["boundary"]["budget_balance_claimed"] is False
+
+
+@pytest.mark.parametrize("premise", us.IDENTITY_PREMISES)
+def test_identity_certificate_requires_every_joint_premise(premise):
+    document = _certificate()
+    document["uplift_loc_identity_certificate"][premise] = False
+    with pytest.raises(us.SettlementError, match=rf"{premise}=true"):
+        us.settle(document)
 
 
 @pytest.mark.parametrize(
@@ -242,6 +314,11 @@ def test_partial_coverage_makes_no_uplift_loc_identity_claim():
             "price_certificate.status",
         ),
         (
+            lambda document: document["price_certificate"].update(
+                {"representation": "cartesian-box"}),
+            "outer-coordinate-projections",
+        ),
+        (
             lambda document: document["objective_certificate"].update(
                 {"status": "uncertified"}),
             "objective_certificate.status",
@@ -255,6 +332,22 @@ def test_partial_coverage_makes_no_uplift_loc_identity_claim():
             lambda document: document["participants"][0].update(
                 {"assigned_action_certified_feasible": False}),
             "assigned_action_certified_feasible",
+        ),
+        (
+            lambda document: document[
+                "uplift_loc_identity_certificate"].update(
+                    {"status": "uncertified"}),
+            "identity_certificate.status",
+        ),
+        (
+            lambda document: document[
+                "uplift_loc_identity_certificate"].update(
+                    {"assignment_integer_optimal": False}),
+            "assignment_integer_optimal=true",
+        ),
+        (
+            lambda document: document.update({"coverage": "partial"}),
+            "requires complete participant coverage",
         ),
         (
             lambda document: document["participants"][0].update(
