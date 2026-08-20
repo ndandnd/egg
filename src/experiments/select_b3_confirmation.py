@@ -31,12 +31,16 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import experiments.b3_factor_pilot as bp
 from experiments.analyze_b3_factor_pilot import (
+    BASELINE_SETTING,
     CELL_INTERVAL_COLUMNS,
+    COUNT_GATE,
     DECISION_SCHEMA,
     DIRECTION_SIGN,
+    FACTOR_ORDER,
     MATCHED_CONTRAST_COLUMNS,
     SETTING_SUMMARY_COLUMNS,
     SCHEMA as ANALYSIS_SCHEMA,
+    TAU_DELTA,
 )
 
 SELECTION_SCHEMA = "b3-confirmation-selection-v1"
@@ -117,32 +121,182 @@ def verify_selection_code_commit(claimed: str) -> str:
     return resolved
 
 
-def _csv_rows(path: Path, expected_columns: list[str],
-              label: str) -> list[dict]:
-    import csv
+def _read_bytes_once(path: Path, label: str) -> bytes:
+    """Read each input file's bytes exactly once; hashing and parsing use
+    THESE bytes (no hash-close-reopen-parse window)."""
     try:
-        with open(path, newline="") as handle:
-            reader = csv.DictReader(handle)
-            if list(reader.fieldnames or ()) != expected_columns:
-                raise B3SelectionError(f"{label}: column layout differs")
-            return list(reader)
+        return path.read_bytes()
     except OSError as exc:
         raise B3SelectionError(f"{label}: unreadable") from exc
 
 
+def _csv_rows_from_bytes(raw: bytes, expected_columns: list[str],
+                         label: str) -> list[dict]:
+    import csv
+    import io
+    reader = csv.DictReader(io.StringIO(raw.decode()))
+    if list(reader.fieldnames or ()) != expected_columns:
+        raise B3SelectionError(f"{label}: column layout differs")
+    return list(reader)
+
+
+def _require_commit_in_history(commit: str, label: str) -> None:
+    """The commit must be a real object in THIS repository's history (an
+    ancestor of the current branch); all-zero or unresolvable commits
+    refuse."""
+    if (not isinstance(commit, str) or len(commit) != 40
+            or not all(c in "0123456789abcdef" for c in commit)
+            or commit == "0" * 40):
+        raise B3SelectionError(
+            f"{label}: commit {commit!r} is not a real 40-hex commit")
+    try:
+        resolved = subprocess.check_output(
+            ["git", "rev-parse", "--verify", f"{commit}^{{commit}}"],
+            cwd=REPO_ROOT, stderr=subprocess.DEVNULL).decode().strip()
+    except subprocess.CalledProcessError as exc:
+        raise B3SelectionError(
+            f"{label}: commit {commit} does not resolve") from exc
+    if resolved != commit:
+        raise B3SelectionError(f"{label}: commit resolves to {resolved}")
+    if subprocess.run(
+            ["git", "merge-base", "--is-ancestor", commit, "HEAD"],
+            cwd=REPO_ROOT).returncode != 0:
+        raise B3SelectionError(
+            f"{label}: commit {commit} is not an ancestor of the current "
+            "branch")
+
+
+def recompute_decision(cells: list[dict],
+                       contrasts: list[dict]) -> dict:
+    """Independently recompute the FULL preregistered decision from the
+    primitive tables: 60 cell intervals -> 48 matched contrasts ->
+    direction signs -> zero-excluding counts -> signed medians ->
+    count/median/factor-order ranking -> state.  The recorded
+    matched_contrasts rows are cross-checked field by field."""
+    import statistics
+    interval = {}
+    for row in cells:
+        key = (row["setting"], int(row["seed"]), int(row["n_trips"]),
+               row["b"])
+        if key in interval:
+            raise B3SelectionError(
+                f"cell_intervals.csv: duplicate cell {key}")
+        interval[key] = {"lo_raw": float(row["u_lo_raw"]),
+                         "lo": float(row["u_lo_tightened"]),
+                         "hi": float(row["u_hi"])}
+    expected_keys = {
+        (cell["setting"], cell["seed"], cell["n_trips"], f"{cell['b']:g}")
+        for cell in bp.build_cells()}
+    if set(interval) != expected_keys:
+        raise B3SelectionError(
+            "cell_intervals.csv does not cover the frozen 60-cell grid "
+            "exactly")
+    recorded = {}
+    for row in contrasts:
+        key = (row["setting"], int(row["seed"]), int(row["n_trips"]),
+               row["b"])
+        if key in recorded:
+            raise B3SelectionError(
+                f"matched_contrasts.csv: duplicate contrast {key}")
+        recorded[key] = row
+    per_setting = {}
+    for factor in FACTOR_ORDER:
+        sign = DIRECTION_SIGN[factor]
+        signed_mids = []
+        count = 0
+        for cell in bp.build_cells():
+            if cell["setting"] != factor:
+                continue
+            key = (factor, cell["seed"], cell["n_trips"],
+                   f"{cell['b']:g}")
+            base_key = (BASELINE_SETTING, cell["seed"], cell["n_trips"],
+                        f"{cell['b']:g}")
+            u_f = interval[key]
+            u_0 = interval[base_key]
+            lo = u_f["lo_raw"] - u_0["hi"]
+            hi = u_f["hi"] - u_0["lo_raw"]
+            midpoint = 0.5 * (lo + hi)
+            zero_excluding = (lo > 0) if sign > 0 else (hi < 0)
+            row = recorded.get(key)
+            if row is None:
+                raise B3SelectionError(
+                    f"matched_contrasts.csv: missing contrast {key}")
+            for field, value in (
+                    ("delta_lo", lo), ("delta_hi", hi),
+                    ("delta_midpoint", midpoint)):
+                if float(row[field]) != value:
+                    raise B3SelectionError(
+                        f"matched_contrasts.csv {key}: recorded {field} "
+                        f"{row[field]} != recomputed {value!r}")
+            if int(row["direction_sign"]) != sign:
+                raise B3SelectionError(
+                    f"matched_contrasts.csv {key}: direction_sign differs "
+                    "from the preregistered sign")
+            if (row["direction_consistent_zero_excluding"] == "True") \
+                    != zero_excluding:
+                raise B3SelectionError(
+                    f"matched_contrasts.csv {key}: zero-excluding flag "
+                    "does not recompute")
+            if zero_excluding:
+                count += 1
+            signed_mids.append(sign * midpoint)
+        per_setting[factor] = {
+            "count": count,
+            "signed_median_midpoint": statistics.median(signed_mids),
+        }
+    ranked = sorted(
+        FACTOR_ORDER,
+        key=lambda f: (per_setting[f]["count"],
+                       per_setting[f]["signed_median_midpoint"],
+                       -FACTOR_ORDER.index(f)),
+        reverse=True)
+    f_star = ranked[0]
+    med_star = per_setting[f_star]["signed_median_midpoint"]
+    count_star = per_setting[f_star]["count"]
+    if abs(med_star) <= TAU_DELTA:
+        state = "UNDER-RESOLVED"
+    elif med_star > TAU_DELTA and count_star >= COUNT_GATE:
+        state = "GO"
+    else:
+        state = "NO-GO"
+    return {"state": state, "selected_factor": f_star,
+            "count": count_star, "signed_median_midpoint": med_star,
+            "per_setting": per_setting, "ranked": ranked}
+
+
 def load_analysis_artifact(analysis_dir: str | os.PathLike) -> dict:
-    """Load and fully validate the completed analysis artifact: manifest
-    schema, output hashes and row counts, table layouts and cardinality,
-    and DECISION.json cross-binding."""
+    """Load and fully validate the completed analysis artifact with
+    transactional single reads, frozen-constant provenance, and a FULL
+    independent recomputation of the decision from primitives."""
     base = Path(analysis_dir)
     manifest_path = base / "MANIFEST.json"
     if not manifest_path.is_file():
         raise B3SelectionError(f"missing analysis manifest: {manifest_path}")
-    manifest = json.loads(manifest_path.read_text())
+    manifest_bytes = _read_bytes_once(manifest_path, "MANIFEST.json")
+    manifest = json.loads(manifest_bytes)
     if manifest.get("schema") != ANALYSIS_SCHEMA:
         raise B3SelectionError(
             f"analysis manifest schema {manifest.get('schema')!r} is not "
             f"{ANALYSIS_SCHEMA!r}")
+    # provenance must be REAL: verified flag, frozen screen/spec hashes,
+    # and an analyzer commit that resolves inside this repository history
+    if manifest.get("analysis_code_verified") is not True:
+        raise B3SelectionError(
+            "analysis was produced without code verification "
+            "(analysis_code_verified != true); not selectable")
+    frozen_screen = manifest.get("frozen_screen") or {}
+    if frozen_screen.get("record_sha256") != (
+            bp.FROZEN_SCREEN_RECORD_SHA256):
+        raise B3SelectionError(
+            "analysis screen record SHA differs from the frozen screen "
+            "constant; non-scoreable analysis is not selectable")
+    expected_spec_sha = sha256_file(REPO_ROOT / bp.SPEC_RELPATH)
+    if (manifest.get("spec") or {}).get("sha256") != expected_spec_sha:
+        raise B3SelectionError(
+            "analysis spec SHA differs from the committed specification")
+    _require_commit_in_history(
+        manifest.get("analysis_code_commit"), "analysis_code_commit")
+
     outputs = manifest.get("outputs") or {}
     required = {"DECISION.json", "SUMMARY.md", "cell_intervals.csv",
                 "matched_contrasts.csv", "setting_summary.csv"}
@@ -150,23 +304,28 @@ def load_analysis_artifact(analysis_dir: str | os.PathLike) -> dict:
         raise B3SelectionError(
             "analysis manifest outputs are incomplete for a scoreable "
             f"population: {sorted(outputs)}")
+    raw_by_name = {}
     for name, recorded in outputs.items():
         path = base / name
         if not path.is_file():
             raise B3SelectionError(f"missing analysis table: {name}")
-        actual = sha256_file(path)
+        raw = _read_bytes_once(path, name)
+        actual = hashlib.sha256(raw).hexdigest()
         if actual != recorded:
             raise B3SelectionError(
                 f"analysis table {name} hash mismatch (tampered): "
                 f"{actual} != {recorded}")
+        raw_by_name[name] = raw
     table_rows = manifest.get("table_rows") or {}
-    cells = _csv_rows(base / "cell_intervals.csv", CELL_INTERVAL_COLUMNS,
-                      "cell_intervals.csv")
-    contrasts = _csv_rows(base / "matched_contrasts.csv",
-                          MATCHED_CONTRAST_COLUMNS,
-                          "matched_contrasts.csv")
-    summary = _csv_rows(base / "setting_summary.csv",
-                        SETTING_SUMMARY_COLUMNS, "setting_summary.csv")
+    cells = _csv_rows_from_bytes(
+        raw_by_name["cell_intervals.csv"], CELL_INTERVAL_COLUMNS,
+        "cell_intervals.csv")
+    contrasts = _csv_rows_from_bytes(
+        raw_by_name["matched_contrasts.csv"], MATCHED_CONTRAST_COLUMNS,
+        "matched_contrasts.csv")
+    summary = _csv_rows_from_bytes(
+        raw_by_name["setting_summary.csv"], SETTING_SUMMARY_COLUMNS,
+        "setting_summary.csv")
     for name, rows, expected in (
             ("cell_intervals.csv", cells, bp.N_CELLS),
             ("matched_contrasts.csv", contrasts, bp.N_MATCHED_CONTRASTS),
@@ -175,13 +334,18 @@ def load_analysis_artifact(analysis_dir: str | os.PathLike) -> dict:
             raise B3SelectionError(
                 f"{name}: row count {len(rows)} / manifest "
                 f"{table_rows.get(name)} != expected {expected}")
-    decision = json.loads((base / "DECISION.json").read_text())
+    decision = json.loads(raw_by_name["DECISION.json"])
     if decision.get("schema") != DECISION_SCHEMA:
         raise B3SelectionError("DECISION.json schema differs")
     for field in ("run_manifest_sha256", "screen_record_sha256",
                   "spec_sha256"):
         if decision.get("inputs", {}).get(field) is None:
             raise B3SelectionError(f"DECISION.json missing input {field}")
+    if decision.get("inputs", {}).get("screen_record_sha256") != (
+            bp.FROZEN_SCREEN_RECORD_SHA256):
+        raise B3SelectionError(
+            "DECISION.json screen record SHA differs from the frozen "
+            "constant")
     if decision.get("analysis_code_commit") != manifest.get(
             "analysis_code_commit"):
         raise B3SelectionError(
@@ -190,12 +354,83 @@ def load_analysis_artifact(analysis_dir: str | os.PathLike) -> dict:
             manifest.get("run_manifest_sha256")):
         raise B3SelectionError(
             "DECISION.json / manifest run_manifest_sha256 mismatch")
+
+    # BLOCKER repair: never trust the recorded decision — recompute the
+    # full preregistered decision from primitives and require EXACT
+    # agreement with BOTH DECISION.json and MANIFEST.json["decision"].
+    recomputed = recompute_decision(cells, contrasts)
+    manifest_decision = manifest.get("decision") or {}
+    for source, doc, fields in (
+            ("DECISION.json", decision, (
+                ("state", "state"),
+                ("selected_factor", "selected_factor"),
+                ("count", ("counts", "zero_excluding_count")),
+                ("signed_median_midpoint", "signed_median_midpoint"))),
+            ("MANIFEST.json[decision]", manifest_decision, (
+                ("state", "state"),
+                ("selected_factor", "selected_contrast"),
+                ("count", "count"),
+                ("signed_median_midpoint", "signed_median_midpoint")))):
+        for recomputed_field, recorded_field in fields:
+            if isinstance(recorded_field, tuple):
+                value = (doc.get(recorded_field[0]) or {}).get(
+                    recorded_field[1])
+                name = ".".join(recorded_field)
+            else:
+                value = doc.get(recorded_field)
+                name = recorded_field
+            if value != recomputed[recomputed_field]:
+                raise B3SelectionError(
+                    f"{source}.{name} = {value!r} disagrees with the "
+                    f"recomputed decision "
+                    f"{recomputed[recomputed_field]!r}")
+    # setting_summary must agree with the recomputation too
+    for row in summary:
+        factor = row["setting"]
+        stats = recomputed["per_setting"].get(factor)
+        if stats is None:
+            raise B3SelectionError(
+                f"setting_summary.csv: unexpected factor {factor!r}")
+        if int(row["zero_excluding_count"]) != stats["count"]:
+            raise B3SelectionError(
+                f"setting_summary.csv {factor}: zero_excluding_count "
+                "disagrees with the recomputed decision")
+        if float(row["signed_median_midpoint"]) != (
+                stats["signed_median_midpoint"]):
+            raise B3SelectionError(
+                f"setting_summary.csv {factor}: signed_median_midpoint "
+                "disagrees with the recomputed decision")
+        if (row["selected"] == "True") != (
+                factor == recomputed["selected_factor"]):
+            raise B3SelectionError(
+                f"setting_summary.csv {factor}: selected flag disagrees "
+                "with the recomputed ranking")
     return {
         "manifest": manifest,
-        "manifest_sha256": sha256_file(manifest_path),
+        "manifest_sha256": hashlib.sha256(manifest_bytes).hexdigest(),
         "decision": decision,
         "summary_rows": summary,
+        "recomputed": recomputed,
     }
+
+
+def _refuse_a6_path(path: Path, label: str) -> None:
+    """The A6 holdout boundary is absolute: no selector path may point at
+    an A6 tree.  Checked on the RESOLVED real path before any read."""
+    for part in path.parts:
+        if "a6" in part.lower():
+            raise B3SelectionError(
+                f"{label} {path} crosses the A6 holdout boundary; refusing")
+
+
+def _refuse_symlinked_parents(path: Path, label: str) -> None:
+    """Every existing component of the ABSOLUTE (unresolved) path must be a
+    real directory, so a symlinked parent cannot alias the publication."""
+    probe = path.absolute()
+    for candidate in (probe, *probe.parents):
+        if candidate.is_symlink():
+            raise B3SelectionError(
+                f"{label} has a symlinked component: {candidate}")
 
 
 def select(analysis_dir: str | os.PathLike, out_dir: str | os.PathLike,
@@ -203,16 +438,31 @@ def select(analysis_dir: str | os.PathLike, out_dir: str | os.PathLike,
            verify_code_commit: bool = True) -> str:
     """Freeze the confirmation selection from a GO decision; refuse
     everything else without partial output."""
+    # publication isolation is settled BEFORE any input read
+    analysis_real = Path(analysis_dir).resolve()
+    out_real = Path(out_dir).resolve()
+    _refuse_a6_path(analysis_real, "analysis dir")
+    _refuse_a6_path(out_real, "output dir")
+    _refuse_symlinked_parents(Path(analysis_dir), "analysis dir")
+    _refuse_symlinked_parents(Path(out_dir), "output dir")
+    if out_real == analysis_real or out_real in analysis_real.parents \
+            or analysis_real in out_real.parents:
+        raise B3SelectionError(
+            "output dir and analysis dir must be disjoint on resolved "
+            f"real paths: {out_real} vs {analysis_real}")
     if verify_code_commit:
         verify_selection_code_commit(selection_code_commit)
     artifact = load_analysis_artifact(analysis_dir)
     decision = artifact["decision"]
-    state = decision.get("state")
+    # the artifact loader has already proven DECISION.json equals the
+    # recomputed decision; authorization gates on the RECOMPUTED values
+    recomputed = artifact["recomputed"]
+    state = recomputed["state"]
     if state != "GO":
         raise B3SelectionError(
-            f"confirmation may be authorized only from GO; decision state "
-            f"is {state!r}")
-    factor = decision.get("selected_factor")
+            f"confirmation may be authorized only from GO; recomputed "
+            f"decision state is {state!r}")
+    factor = recomputed["selected_factor"]
     if factor not in bp.FROZEN_SELECTED_LEVELS:
         raise B3SelectionError(
             f"selected factor {factor!r} has no frozen level")
@@ -221,19 +471,18 @@ def select(analysis_dir: str | os.PathLike, out_dir: str | os.PathLike,
         raise B3SelectionError(
             "DECISION.json direction sign differs from the preregistered "
             "direction")
-    counts = decision.get("counts") or {}
     thresholds = decision.get("thresholds") or {}
-    if (thresholds.get("count_gate") != 9
+    if (thresholds.get("count_gate") != COUNT_GATE
             or thresholds.get("tau_delta") != bp.TAU_DELTA):
         raise B3SelectionError(
             "DECISION.json thresholds differ from the preregistered gates")
-    count = counts.get("zero_excluding_count")
-    med = decision.get("signed_median_midpoint")
-    if not isinstance(count, int) or count < 9:
+    count = recomputed["count"]
+    med = recomputed["signed_median_midpoint"]
+    if count < COUNT_GATE:
         raise B3SelectionError(
             f"GO decision with count {count!r} below the 9/12 gate is "
             "inconsistent")
-    if not isinstance(med, (int, float)) or med <= bp.TAU_DELTA:
+    if med <= bp.TAU_DELTA:
         raise B3SelectionError(
             f"GO decision with signed median {med!r} <= tau_Delta is "
             "inconsistent")
@@ -260,7 +509,7 @@ def select(analysis_dir: str | os.PathLike, out_dir: str | os.PathLike,
         "frozen_factor_level": bp.FROZEN_SELECTED_LEVELS[factor],
         "baseline_level": baseline_level,
         "zero_excluding_count": count,
-        "count_gate": 9,
+        "count_gate": COUNT_GATE,
         "signed_median_midpoint": med,
         "tau_delta": bp.TAU_DELTA,
         "pilot": {
@@ -287,12 +536,30 @@ def select(analysis_dir: str | os.PathLike, out_dir: str | os.PathLike,
         raise B3SelectionError(
             f"refusing existing selection destination: {destination}")
     out_path.mkdir(parents=True, exist_ok=True)
-    descriptor = os.open(
-        destination, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o644)
-    with os.fdopen(descriptor, "wb") as handle:
-        handle.write(payload)
-        handle.flush()
-        os.fsync(handle.fileno())
+    # atomic publication: the full payload is written and fsynced to a
+    # temp file first, then linked into place with no-replace semantics.
+    # An O_EXCL-create-then-write would expose a partially written
+    # SELECTION.json under the final name; this never does.
+    temp = out_path / f".{SELECTION_FILENAME}.tmp-{os.getpid()}"
+    descriptor = os.open(temp, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o644)
+    try:
+        with os.fdopen(descriptor, "wb") as handle:
+            handle.write(payload)
+            handle.flush()
+            os.fsync(handle.fileno())
+        try:
+            os.link(temp, destination)
+        except FileExistsError as exc:
+            raise B3SelectionError(
+                f"refusing existing selection destination: "
+                f"{destination}") from exc
+    finally:
+        temp.unlink(missing_ok=True)
+    dir_fd = os.open(out_path, os.O_RDONLY)
+    try:
+        os.fsync(dir_fd)
+    finally:
+        os.close(dir_fd)
     return str(destination)
 
 

@@ -7,8 +7,10 @@ import csv
 import json
 import os
 import shutil
+import subprocess
 import sys
 from pathlib import Path
+from unittest import mock
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -23,7 +25,10 @@ from experiments.package_a6_holdout import PackagingError
 from test_b3_factor_pilot import _write_tree
 
 STAMP = "20260820T000000Z"
-CODE = "0" * 40
+# the selector resolves the analyzer commit against REAL repository
+# history, so the fixtures record the actual checkout HEAD
+CODE = subprocess.check_output(
+    ["git", "rev-parse", "HEAD"], cwd=bp.REPO_ROOT).decode().strip()
 
 
 @pytest.fixture(scope="module")
@@ -37,9 +42,19 @@ def _go_tree(tmp_path, screen, name="runs"):
     return _write_tree(tmp_path / name, screen, u_by_setting=u)
 
 
-def _analyze(runs, out, stamp=STAMP):
-    return az.analyze(runs, out, stamp, CODE,
-                      screen_dir=None, verify_code_commit=False)
+def _analyze(runs, out, stamp=STAMP, *, verified=True):
+    """Analyze a synthetic tree.  ``verified=True`` produces an honestly
+    verified artifact (the byte-level provenance check itself is exercised
+    in test_b3_factor_pilot; it cannot pass against fixtures on a dirty
+    development tree, so it is stubbed here and the manifest records
+    ``analysis_code_verified: true`` through the normal code path)."""
+    if not verified:
+        return az.analyze(runs, out, stamp, CODE,
+                          screen_dir=None, verify_code_commit=False)
+    with mock.patch.object(az, "verify_analysis_code_commit",
+                           return_value=True):
+        return az.analyze(runs, out, stamp, CODE,
+                          screen_dir=None, verify_code_commit=True)
 
 
 # --------------------------------------------------------------------------
@@ -183,7 +198,9 @@ def test_selection_refuses_non_go(tmp_path, screen):
     runs = _write_tree(tmp_path / "runs", screen)
     analysis = Path(_analyze(runs, tmp_path / "out"))
     state = json.loads((analysis / "DECISION.json").read_text())["state"]
-    assert state != "GO"
+    # uniform uplift -> every matched contrast is exactly zero -> the
+    # preregistered rule has ONE answer: |median| <= tau is UNDER-RESOLVED
+    assert state == "UNDER-RESOLVED"
     with pytest.raises(sel.B3SelectionError, match="only from GO"):
         _select(analysis, tmp_path / "sel")
     assert not (tmp_path / "sel" / "SELECTION.json").exists()
@@ -238,7 +255,7 @@ def test_selection_refuses_tampering(tmp_path, screen, tamper):
             analysis / "DECISION.json")
         (analysis / "MANIFEST.json").write_text(
             json.dumps(manifest, indent=2, sort_keys=True) + "\n")
-        message = "below the 9/12 gate"
+        message = "disagrees with the recomputed decision"
     elif tamper == "selected_factor":
         decision = json.loads((analysis / "DECISION.json").read_text())
         decision["selected_factor"] = "S3_pow_low"
@@ -250,7 +267,7 @@ def test_selection_refuses_tampering(tmp_path, screen, tamper):
             analysis / "DECISION.json")
         (analysis / "MANIFEST.json").write_text(
             json.dumps(manifest, indent=2, sort_keys=True) + "\n")
-        message = "selected row differs"
+        message = "disagrees with the recomputed decision"
     elif tamper == "threshold":
         decision = json.loads((analysis / "DECISION.json").read_text())
         decision["thresholds"]["tau_delta"] = 0.01
@@ -331,6 +348,137 @@ def test_selection_provenance_gates(monkeypatch):
     monkeypatch.setattr(sel.subprocess, "check_output", dirty)
     with pytest.raises(sel.B3SelectionError, match="tracked modifications"):
         sel.verify_selection_code_commit(head)
+
+
+def _edit_json(path, fn):
+    doc = json.loads(Path(path).read_text())
+    fn(doc)
+    Path(path).write_text(json.dumps(doc, indent=2, sort_keys=True) + "\n")
+
+
+def _rehash(analysis, *names):
+    """A coordinated attacker with full write access also rewrites the
+    manifest hashes of every edited output."""
+    manifest_path = Path(analysis) / "MANIFEST.json"
+    manifest = json.loads(manifest_path.read_text())
+    for name in names:
+        manifest["outputs"][name] = sel.sha256_file(Path(analysis) / name)
+    manifest_path.write_text(
+        json.dumps(manifest, indent=2, sort_keys=True) + "\n")
+
+
+def test_selection_refuses_forged_go_from_under_resolved(tmp_path, screen):
+    """Review reproduction: a non-GO analysis whose DECISION.json AND
+    MANIFEST.json decision were edited to GO (count 12, median 0.1) with
+    all hashes recomputed.  The selector recomputes the decision from the
+    primitive tables and must refuse."""
+    runs = _write_tree(tmp_path / "runs", screen)  # uniform: UNDER-RESOLVED
+    analysis = Path(_analyze(runs, tmp_path / "out"))
+
+    def forge(doc):
+        doc["state"] = "GO"
+        doc["counts"]["zero_excluding_count"] = 12
+        doc["signed_median_midpoint"] = 0.1
+        doc["selected_factor"] = "S1_batt_low"
+        doc["direction_sign"] = 1
+    _edit_json(analysis / "DECISION.json", forge)
+
+    def forge_manifest(doc):
+        doc["decision"].update(state="GO", count=12,
+                               signed_median_midpoint=0.1,
+                               selected_contrast="S1_batt_low")
+    _edit_json(analysis / "MANIFEST.json", forge_manifest)
+    _rehash(analysis, "DECISION.json")
+    with pytest.raises(sel.B3SelectionError,
+                       match="disagrees with the recomputed decision"):
+        _select(analysis, tmp_path / "sel")
+    assert not (tmp_path / "sel").exists()
+
+
+def test_selection_refuses_factor_swap_with_csv_flag_edits(tmp_path, screen):
+    """Review reproduction: swap the winning factor S1 -> S3 by editing the
+    matched-contrast zero-excluding flags plus DECISION/manifest, with all
+    hashes recomputed.  The flags must recompute from the cell intervals,
+    so the selector refuses."""
+    analysis = _go_analysis(tmp_path, screen)
+    path = analysis / "matched_contrasts.csv"
+    rows = list(csv.DictReader(open(path)))
+    for row in rows:
+        if row["setting"] == "S3_pow_low":
+            row["direction_consistent_zero_excluding"] = "True"
+        if row["setting"] == "S1_batt_low":
+            row["direction_consistent_zero_excluding"] = "False"
+    with open(path, "w", newline="") as handle:
+        writer = csv.DictWriter(handle, fieldnames=list(rows[0]),
+                                lineterminator="\n")
+        writer.writeheader()
+        writer.writerows(rows)
+    _edit_json(analysis / "DECISION.json",
+               lambda d: d.update(selected_factor="S3_pow_low"))
+    _edit_json(analysis / "MANIFEST.json",
+               lambda m: m["decision"].update(selected_contrast="S3_pow_low"))
+    _rehash(analysis, "matched_contrasts.csv", "DECISION.json")
+    with pytest.raises(sel.B3SelectionError,
+                       match="does not recompute|disagrees"):
+        _select(analysis, tmp_path / "sel")
+    assert not (tmp_path / "sel").exists()
+
+
+def test_selection_requires_verified_analysis_and_real_commit(
+        tmp_path, screen):
+    runs = _go_tree(tmp_path, screen)
+    unverified = Path(_analyze(runs, tmp_path / "out-unverified",
+                               stamp="20260820T000001Z", verified=False))
+    with pytest.raises(sel.B3SelectionError,
+                       match="without code verification"):
+        _select(unverified, tmp_path / "sel-u")
+    analysis = Path(_analyze(runs, tmp_path / "out"))
+    for label, fake, message in (
+            ("zeros", "0" * 40, "not a real 40-hex commit"),
+            ("unresolvable", "f" * 40, "does not resolve")):
+        work = tmp_path / f"work-{label}"
+        shutil.copytree(analysis, work)
+        _edit_json(work / "MANIFEST.json",
+                   lambda m, fake=fake: m.update(analysis_code_commit=fake))
+        _edit_json(work / "DECISION.json",
+                   lambda d, fake=fake: d.update(analysis_code_commit=fake))
+        _rehash(work, "DECISION.json")
+        with pytest.raises(sel.B3SelectionError, match=message):
+            _select(work, tmp_path / f"sel-{label}")
+
+
+def test_selection_refuses_screen_and_spec_drift(tmp_path, screen):
+    analysis = _go_analysis(tmp_path, screen)
+    drift_screen = tmp_path / "screen-drift"
+    shutil.copytree(analysis, drift_screen)
+    _edit_json(drift_screen / "MANIFEST.json",
+               lambda m: m["frozen_screen"].update(record_sha256="e" * 64))
+    with pytest.raises(sel.B3SelectionError, match="frozen screen"):
+        _select(drift_screen, tmp_path / "s1")
+    drift_spec = tmp_path / "spec-drift"
+    shutil.copytree(analysis, drift_spec)
+    _edit_json(drift_spec / "MANIFEST.json",
+               lambda m: m["spec"].update(sha256="d" * 64))
+    with pytest.raises(sel.B3SelectionError, match="spec SHA"):
+        _select(drift_spec, tmp_path / "s2")
+
+
+def test_selection_publication_isolation(tmp_path, screen):
+    analysis = _go_analysis(tmp_path, screen)
+    with pytest.raises(sel.B3SelectionError, match="disjoint"):
+        _select(analysis, analysis / "sel")
+    with pytest.raises(sel.B3SelectionError, match="disjoint"):
+        _select(analysis, analysis.parent)
+    real = tmp_path / "sel-real"
+    real.mkdir()
+    link = tmp_path / "sel-alias"
+    link.symlink_to(real, target_is_directory=True)
+    with pytest.raises(sel.B3SelectionError, match="symlinked"):
+        _select(analysis, link / "sub")
+    with pytest.raises(sel.B3SelectionError, match="A6"):
+        _select(analysis, tmp_path / "a6_holdout" / "sel")
+    assert not (tmp_path / "a6_holdout").exists()
+    assert not (analysis / "sel").exists()
 
 
 # --------------------------------------------------------------------------
