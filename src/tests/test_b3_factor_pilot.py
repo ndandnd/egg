@@ -647,7 +647,10 @@ def test_analyzer_go_end_to_end(tmp_path, screen):
     assert manifest["decision"]["state"] == "GO"
     assert manifest["decision"]["selected_contrast"] == "S1_batt_low"
     assert (Path(out) / "SUMMARY.md").exists()
-    assert (Path(out) / "contrasts.csv").exists()
+    assert (Path(out) / "matched_contrasts.csv").exists()
+    assert (Path(out) / "cell_intervals.csv").exists()
+    assert (Path(out) / "setting_summary.csv").exists()
+    assert (Path(out) / "DECISION.json").exists()
     summary = (Path(out) / "SUMMARY.md").read_text()
     assert "synthetic" in summary and "not the full B3 atlas" in summary
 

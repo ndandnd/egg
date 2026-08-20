@@ -278,6 +278,20 @@ def load_population(runs_dir: str | os.PathLike, screen: dict,
             problems.append(f"{tag}: lb_CH {lb_ch} > ub_CH {ub_ch}")
             continue
 
+        # certification call count is cross-checked against the committed
+        # oracle events, never trusted from a summary field alone
+        oracle_calls = ck.get("oracle_calls")
+        events = ck.get("oracle_events") or []
+        if (not isinstance(oracle_calls, int)
+                or isinstance(oracle_calls, bool)
+                or oracle_calls != len(events)):
+            problems.append(
+                f"{tag}: oracle_calls {oracle_calls!r} != committed events "
+                f"({len(events)})")
+            continue
+        solver_ident = ident.get("solver") or {}
+        solver_mip_gap = solver_ident.get(
+            "mip_gap", solver_ident.get("max_mip_gap"))
         interval = cell_interval(ub_ch, lb_ch, z_d_ub, z_d_lb, cell["n_trips"])
         if interval["U_hi"] < -1e-6:
             problems.append(
@@ -292,7 +306,14 @@ def load_population(runs_dir: str | os.PathLike, screen: dict,
                 f"{tag}: width(U) {interval['width']:.6g} > tol_d+epsilon "
                 f"{WIDTH_BOUND}")
             continue
-        cells[key] = {"cell": cell, "interval": interval}
+        cells[key] = {
+            "cell": cell, "interval": interval,
+            "instance_hash": ident.get("instance_hash"),
+            "market_hash": ident.get("market_hash"),
+            "oracle_calls": oracle_calls,
+            "solver_backend": solver_ident.get("backend"),
+            "solver_mip_gap": solver_mip_gap,
+        }
     if len(cells) != bp.N_CELLS:
         problems.append(
             f"expected {bp.N_CELLS} valid certified cells, got {len(cells)}")
@@ -314,7 +335,7 @@ def analyze_population(pop: dict) -> dict:
     if pop["problems"]:
         return {"decision": {"state": "INVALID/HALT",
                              "problems": pop["problems"]},
-                "contrasts": [], "settings": {}}
+                "contrasts": [], "settings": {}, "cells": {}}
     cells = pop["cells"]
     market_keys = sorted({(s, n, b) for (_setting, s, n, b) in cells})
     contrasts = []
@@ -340,15 +361,22 @@ def analyze_population(pop: dict) -> dict:
             })
         med = statistics.median(signed_mids)
         per_setting[f] = {"count": count, "signed_median_midpoint": med,
-                          "n_cells": len(market_keys)}
+                          "n_cells": len(market_keys),
+                          "direction_sign": s_f,
+                          "factor_order_index": FACTOR_ORDER.index(f)}
 
     # deterministic selection of f* (spec 6): max count; tie larger med;
     # final tie the fixed factor order.
-    f_star = max(
+    ranked = sorted(
         FACTOR_ORDER,
         key=lambda f: (per_setting[f]["count"],
                        per_setting[f]["signed_median_midpoint"],
-                       -FACTOR_ORDER.index(f)))
+                       -FACTOR_ORDER.index(f)),
+        reverse=True)
+    for rank, f in enumerate(ranked, start=1):
+        per_setting[f]["rank"] = rank
+        per_setting[f]["selected"] = rank == 1
+    f_star = ranked[0]
     med_star = per_setting[f_star]["signed_median_midpoint"]
     count_star = per_setting[f_star]["count"]
 
@@ -368,12 +396,16 @@ def analyze_population(pop: dict) -> dict:
         },
         "contrasts": contrasts,
         "settings": per_setting,
+        "cells": cells,
     }
 
 
 # --------------------------------------------------------------------------
 # artifact emission (spec 7)
 # --------------------------------------------------------------------------
+DECISION_SCHEMA = "b3-factor-pilot-decision-v1"
+
+
 def _git_commit() -> str | None:
     try:
         return subprocess.check_output(
@@ -431,13 +463,86 @@ def _write_summary(path: Path, manifest: dict, result: dict) -> None:
     path.write_text("\n".join(lines) + "\n")
 
 
+def _format_csv_value(value):
+    if isinstance(value, bool):
+        return "True" if value else "False"
+    if isinstance(value, float):
+        return repr(value)
+    if value is None:
+        return ""
+    return str(value)
+
+
 def _write_csv(path: Path, rows: list[dict], columns: list[str]) -> None:
     import csv
     with open(path, "w", newline="") as handle:
-        writer = csv.DictWriter(handle, fieldnames=columns)
-        writer.writeheader()
+        writer = csv.writer(handle, lineterminator="\n")
+        writer.writerow(columns)
         for row in rows:
-            writer.writerow({c: row.get(c) for c in columns})
+            writer.writerow([_format_csv_value(row.get(c))
+                             for c in columns])
+
+
+CELL_INTERVAL_COLUMNS = [
+    "setting", "seed", "n_trips", "b", "instance_hash", "market_hash",
+    "z_d_lb", "z_d_ub", "lb_ch", "ub_ch",
+    "u_lo_raw", "u_lo_tightened", "u_hi", "width",
+    "u_lo_raw_per_trip", "u_hi_per_trip", "lo_endpoint_source",
+    "oracle_calls", "solver_backend", "solver_mip_gap",
+]
+MATCHED_CONTRAST_COLUMNS = [
+    "setting", "seed", "n_trips", "b", "direction_sign",
+    "delta_lo", "delta_hi", "delta_midpoint", "delta_width",
+    "direction_consistent_zero_excluding",
+]
+SETTING_SUMMARY_COLUMNS = [
+    "setting", "direction_sign", "zero_excluding_count", "n_cells",
+    "signed_median_midpoint", "factor_order_index", "rank", "selected",
+]
+
+
+def _cell_interval_rows(cells: dict) -> list[dict]:
+    rows = []
+    for setting in bp.SETTING_ORDER:
+        for seed in bp.SEEDS:
+            for n in bp.N_TRIPS:
+                for b in bp.B_SCALES:
+                    record = cells[(setting, seed, n, b)]
+                    interval = record["interval"]
+                    rows.append({
+                        "setting": setting, "seed": seed, "n_trips": n,
+                        "b": b,
+                        "instance_hash": record["instance_hash"],
+                        "market_hash": record["market_hash"],
+                        "z_d_lb": interval["z_d_lb"],
+                        "z_d_ub": interval["z_d_ub"],
+                        "lb_ch": interval["lb_ch"],
+                        "ub_ch": interval["ub_ch"],
+                        "u_lo_raw": interval["U_lo_raw"],
+                        "u_lo_tightened": interval["U_lo"],
+                        "u_hi": interval["U_hi"],
+                        "width": interval["width"],
+                        "u_lo_raw_per_trip": interval["U_lo_raw_per_trip"],
+                        "u_hi_per_trip": interval["U_hi_per_trip"],
+                        "lo_endpoint_source": interval["lo_endpoint"],
+                        "oracle_calls": record["oracle_calls"],
+                        "solver_backend": record["solver_backend"],
+                        "solver_mip_gap": record["solver_mip_gap"],
+                    })
+    return rows
+
+
+def _setting_summary_rows(settings: dict) -> list[dict]:
+    return [{
+        "setting": f,
+        "direction_sign": settings[f]["direction_sign"],
+        "zero_excluding_count": settings[f]["count"],
+        "n_cells": settings[f]["n_cells"],
+        "signed_median_midpoint": settings[f]["signed_median_midpoint"],
+        "factor_order_index": settings[f]["factor_order_index"],
+        "rank": settings[f]["rank"],
+        "selected": settings[f]["selected"],
+    } for f in FACTOR_ORDER]
 
 
 def analyze(runs_dir, out_base, stamp, analysis_code_commit, *,
@@ -453,7 +558,7 @@ def analyze(runs_dir, out_base, stamp, analysis_code_commit, *,
     except bp.B3PilotError as exc:
         result = {"decision": {"state": "DESIGN-NOT-FROZEN",
                                "reason": str(exc)},
-                  "contrasts": [], "settings": {}}
+                  "contrasts": [], "settings": {}, "cells": {}}
         screen = {"dir": "<unresolved>", "record_sha256": None,
                   "spec_sha256": None}
     else:
@@ -464,7 +569,7 @@ def analyze(runs_dir, out_base, stamp, analysis_code_commit, *,
         if not audit_result["ok"]:
             result = {"decision": {"state": "INVALID/HALT",
                                    "problems": audit_result["problems"]},
-                      "contrasts": [], "settings": {}}
+                      "contrasts": [], "settings": {}, "cells": {}}
         else:
             run = bp.load_run_manifest(runs_dir)
             market_by_cell = bp.market_hash_by_cell(run["manifest"])
@@ -477,6 +582,14 @@ def analyze(runs_dir, out_base, stamp, analysis_code_commit, *,
     if out_dir.exists():
         raise B3AnalysisError(f"refusing existing output directory: {out_dir}")
 
+    # repository-relative provenance paths only (portable regeneration
+    # across absolute checkout/output roots)
+    screen_dir_recorded = screen["dir"]
+    try:
+        screen_dir_recorded = str(
+            Path(screen_dir_recorded).resolve().relative_to(REPO_ROOT))
+    except (ValueError, OSError):
+        pass
     manifest = {
         "schema": SCHEMA,
         "stamp": stamp,
@@ -485,7 +598,7 @@ def analyze(runs_dir, out_base, stamp, analysis_code_commit, *,
         "git_commit": _git_commit(),
         "spec": {"path": SPEC_RELPATH,
                  "sha256": sha256_file(REPO_ROOT / SPEC_RELPATH)},
-        "frozen_screen": {"dir": screen["dir"],
+        "frozen_screen": {"dir": screen_dir_recorded,
                           "record_sha256": screen.get("record_sha256")},
         "run_manifest_sha256": audit_sha,
         "audit_required": True,
@@ -494,20 +607,80 @@ def analyze(runs_dir, out_base, stamp, analysis_code_commit, *,
         "counts": bp.counts(),
         "decision": result["decision"],
     }
+    decision_document = {
+        "schema": DECISION_SCHEMA,
+        "stamp": stamp,
+        "state": result["decision"]["state"],
+        "selected_factor": result["decision"].get("selected_contrast"),
+        "direction_sign": (
+            DIRECTION_SIGN.get(result["decision"].get("selected_contrast"))
+            if result["decision"].get("selected_contrast") else None),
+        "thresholds": {
+            "count_gate": COUNT_GATE,
+            "tau_delta": TAU_DELTA,
+            "width_bound": WIDTH_BOUND,
+        },
+        "counts": {
+            "zero_excluding_count": result["decision"].get("count"),
+            "n_matched_cells": result["decision"].get("n_cells"),
+            "expected_cells": bp.N_CELLS,
+            "expected_contrasts": bp.N_MATCHED_CONTRASTS,
+        },
+        "signed_median_midpoint": result["decision"].get(
+            "signed_median_midpoint"),
+        "inputs": {
+            "run_manifest_sha256": audit_sha,
+            "screen_record_sha256": screen.get("record_sha256"),
+            "spec_sha256": manifest["spec"]["sha256"],
+        },
+        "analysis_code_commit": analysis_code_commit,
+        "problems": result["decision"].get("problems"),
+        "reason": result["decision"].get("reason"),
+    }
 
+    valid_population = bool(result["cells"])
     staging = out_dir.with_name(f".{stamp}.staging")
     if staging.exists():
         raise B3AnalysisError(f"refusing existing staging dir: {staging}")
     staging.mkdir(parents=True)
     try:
+        table_rows: dict[str, int] = {}
+        if valid_population:
+            cell_rows = _cell_interval_rows(result["cells"])
+            if len(cell_rows) != bp.N_CELLS:
+                raise B3AnalysisError(
+                    f"cell_intervals must carry exactly {bp.N_CELLS} rows")
+            if len(result["contrasts"]) != bp.N_MATCHED_CONTRASTS:
+                raise B3AnalysisError(
+                    "matched_contrasts must carry exactly "
+                    f"{bp.N_MATCHED_CONTRASTS} rows")
+            _write_csv(staging / "cell_intervals.csv", cell_rows,
+                       CELL_INTERVAL_COLUMNS)
+            _write_csv(staging / "matched_contrasts.csv",
+                       result["contrasts"], MATCHED_CONTRAST_COLUMNS)
+            summary_rows = _setting_summary_rows(result["settings"])
+            if len(summary_rows) != len(FACTOR_ORDER):
+                raise B3AnalysisError(
+                    "setting_summary must carry exactly four factor rows")
+            _write_csv(staging / "setting_summary.csv", summary_rows,
+                       SETTING_SUMMARY_COLUMNS)
+            table_rows = {
+                "cell_intervals.csv": len(cell_rows),
+                "matched_contrasts.csv": len(result["contrasts"]),
+                "setting_summary.csv": len(summary_rows),
+            }
+        (staging / "DECISION.json").write_text(
+            json.dumps(decision_document, indent=2, sort_keys=True) + "\n")
+        _write_summary(staging / "SUMMARY.md", manifest, result)
+        # the manifest is written LAST, cross-bound to every emitted
+        # table's hash and row count
+        outputs = sorted(
+            path.name for path in staging.iterdir())
+        manifest["outputs"] = {
+            name: sha256_file(staging / name) for name in outputs}
+        manifest["table_rows"] = table_rows
         (staging / "MANIFEST.json").write_text(
             json.dumps(manifest, indent=2, sort_keys=True) + "\n")
-        _write_summary(staging / "SUMMARY.md", manifest, result)
-        if result["contrasts"]:
-            _write_csv(staging / "contrasts.csv", result["contrasts"], [
-                "setting", "seed", "n_trips", "b", "direction_sign",
-                "delta_lo", "delta_hi", "delta_midpoint", "delta_width",
-                "direction_consistent_zero_excluding"])
         os.rename(staging, out_dir)
     except BaseException:
         for entry in staging.glob("*"):
