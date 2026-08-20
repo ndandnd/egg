@@ -1244,11 +1244,11 @@ the shared-helper closure is reviewed and merged, the operational audit's
 ## EI-026 — Split tolerance scales aborted a claimed A6 holdout pack mid-validation
 
 **Status: FOUND — IN PROGRESS.** The tolerance/certificate repair (Task A) and
-the one-shot claimed-incident recovery command (Task B) are implemented on this
-branch with regression coverage, pending independent review. The recovery
-disposition remains IN PROGRESS until this branch is merged AND the recovery
-command has been successfully used to repackage the claimed incident. The
-original claim and raw tree must never be deleted or rewritten.
+the one-shot claimed-incident recovery command (Task B) passed independent
+review and merged through PR #33 with regression coverage. The recovery
+disposition remains IN PROGRESS until the reviewed recovery command has been
+successfully used to repackage the claimed incident. The original claim and raw
+tree must never be deleted or rewritten.
 
 **Operational history.** An earlier `squeue` quiescence check failed from a
 non-login shell (its Slurm client path was unavailable) **before** any claim
@@ -1288,7 +1288,7 @@ passed the first gate (`|bound - incumbent| ≤ 3.26e-7`) and failed the second
 (`|gap| = 5.95e-8 > 1e-10`), aborting the claimed pack even though bound and
 incumbent are equal to solver precision at this ≈ 3255 magnitude.
 
-**Invariant and repair under review (Task A).** One shared operand-scaled
+**Invariant and reviewed repair (Task A).** One shared operand-scaled
 ordering helper (`analyze_a6_holdout._ordering_tolerance`) is the sole authority
 for ordering two solver quantities of the same magnitude; the derived gap is
 judged against zero at that SAME operand scale. A negative raw pricing gap is
@@ -1343,7 +1343,7 @@ synthetic recover-pack/import/analyzer round trip.
 
 **Scientific handling.** The original claim and raw tree are immutable incident
 evidence and must never be deleted or rewritten. No score, decision, or artifact
-was produced by the aborted attempt. Until this branch is reviewed and merged
-and the recovery command has successfully repackaged the claimed incident under
-the versioned contract, EI-026 remains IN PROGRESS and no packaged scientific
-result may be cited from this campaign.
+was produced by the aborted attempt. Although the repair is reviewed and
+merged, EI-026 remains IN PROGRESS and no packaged scientific result may be
+cited from this campaign until the recovery command has successfully
+repackaged the claimed incident under the versioned contract.

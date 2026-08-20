@@ -903,8 +903,7 @@ The protocol enforced by that command is:
 
 ## Branch hygiene
 
-Submit experiments only from a clean, published `main`. The closeout
-hardening described above remains **FOUND — IN PROGRESS** until its integrated
-PR and regression battery are reviewed and merged; this runbook does not make
-an unmerged branch production policy. Delete source branches only after their
-PR is merged.
+Submit experiments only from a clean, published `main`. EI-026 remains
+**FOUND — IN PROGRESS** until the reviewed one-shot recovery succeeds and the
+resulting package passes import and analysis; merging the repair alone is not a
+scientific closeout. Delete source branches only after their PR is merged.
