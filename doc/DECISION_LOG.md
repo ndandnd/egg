@@ -300,7 +300,7 @@ within a 5e-8 serialization tolerance (measured maximum deviation
 9.6e-9). The result is labeled retrospective/exploratory: intervals are
 up to tol_d + epsilon = 0.02 wide, so only `uplift_lo > 0` certifies
 strictly positive uplift, and intervals containing 0 do not establish
-absence of uplift. Specification: `doc/B3_BASELINE_SPEC.md`; analyzer:
+absence of uplift. Specification: `doc/B3_UPLIFT_BASELINE_SPEC.md`; analyzer:
 `src/experiments/analyze_b3_baseline.py` (stdlib-only, byte-identical
 regeneration, two-commit protocol). No factor pilot or new cluster
 experiment starts until this baseline and its follow-up specification

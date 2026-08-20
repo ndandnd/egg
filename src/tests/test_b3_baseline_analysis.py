@@ -456,13 +456,64 @@ def test_known_paired_interval_arithmetic():
     assert mod.classify_contrast(0.0, 0.5) == "crosses-or-touches-zero"
 
 
-def test_interval_classification_golden():
+def test_interval_classification_exhaustive_over_valid_intervals():
+    """Exhaustive over lo <= hi: every zero-touching interval is a
+    boundary case, never invalid."""
     assert mod.classify_interval(0.5, 0.6, "x") == "strictly-positive"
+    assert mod.classify_interval(-0.6, -0.5, "x") == "strictly-negative"
     assert mod.classify_interval(-0.01, 0.0, "x") == "exact-zero-boundary"
+    assert mod.classify_interval(0.0, 0.5, "x") == "exact-zero-boundary"
+    assert mod.classify_interval(0.0, 0.0, "x") == "exact-zero-boundary"
     assert mod.classify_interval(-0.005, 0.005, "x") == \
         "strict-zero-crossing"
-    with pytest.raises(mod.B3Error, match="exhaustive"):
-        mod.classify_interval(0.0, 0.5, "x")
+    # only invalid intervals raise
+    with pytest.raises(mod.B3Error, match="not a valid"):
+        mod.classify_interval(0.5, 0.4, "x")
+    with pytest.raises(mod.B3Error, match="not a valid"):
+        mod.classify_interval(float("nan"), 0.4, "x")
+
+
+def test_output_separation_gate(tmp_path):
+    """--out must be strictly separated from the canonical input root in
+    both directions; symlink/relative aliases cannot bypass; refusal
+    happens BEFORE any input/output mutation."""
+    before = {p.name: mod.sha256_file(p)
+              for p in CANONICAL.iterdir() if p.is_file()}
+
+    # out == input
+    with pytest.raises(mod.B3Error, match="strictly separated"):
+        mod.analyze(CANONICAL, CANONICAL, "S", "x" * 40,
+                    verify_code_commit=False)
+    # out inside input
+    inside = CANONICAL / "nested-out"
+    with pytest.raises(mod.B3Error, match="strictly separated"):
+        mod.analyze(CANONICAL, inside, "S", "x" * 40,
+                    verify_code_commit=False)
+    assert not inside.exists()  # refused before creation
+    # input inside out (out contains the input root)
+    isolated = _tampered_copy(tmp_path / "container" / "deep", "input")
+    with pytest.raises(mod.B3Error, match="strictly separated"):
+        mod.analyze(isolated, tmp_path / "container", "S", "x" * 40,
+                    verify_code_commit=False)
+    assert not list((tmp_path / "container").glob(".S.b3-staging-*"))
+    # symlink alias resolving into the input root
+    link = tmp_path / "alias"
+    link.symlink_to(CANONICAL, target_is_directory=True)
+    with pytest.raises(mod.B3Error, match="strictly separated"):
+        mod.analyze(CANONICAL, link / "sub", "S", "x" * 40,
+                    verify_code_commit=False)
+    assert not (CANONICAL / "sub").exists()
+    # relative alias resolving into the input root
+    dotted = CANONICAL / ".." / CANONICAL.name / "sub"
+    with pytest.raises(mod.B3Error, match="strictly separated"):
+        mod.analyze(CANONICAL, dotted, "S", "x" * 40,
+                    verify_code_commit=False)
+    assert not (CANONICAL / "sub").exists()
+
+    # the canonical input was never mutated by any refusal
+    after = {p.name: mod.sha256_file(p)
+             for p in CANONICAL.iterdir() if p.is_file()}
+    assert before == after
 
 
 def test_code_commit_verification(monkeypatch):

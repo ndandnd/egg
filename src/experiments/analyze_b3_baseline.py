@@ -102,6 +102,22 @@ def _num(row: dict, field: str, label: str) -> float:
     return value
 
 
+def assert_output_separation(input_dir: str | os.PathLike,
+                             out_base: str | os.PathLike) -> None:
+    """The output root must be strictly separated from the canonical
+    input root in BOTH directions: not equal, not inside it, and not
+    containing it.  Paths are fully resolved first, so symlink or
+    relative aliases cannot bypass the gate.  Runs BEFORE any output
+    creation or input read."""
+    inp = Path(input_dir).resolve()
+    out = Path(out_base).resolve()
+    if out == inp or inp in out.parents or out in inp.parents:
+        raise B3Error(
+            f"output root {out} must be strictly separated from the "
+            f"canonical input root {inp} (equal/nested paths are "
+            "refused)")
+
+
 def refuse_a6_paths(*paths: str | os.PathLike) -> None:
     """This analysis must never read or write any A6 input/output path."""
     for path in paths:
@@ -312,17 +328,29 @@ def recompute_uplift(row: dict, label: str) -> dict:
 
 
 def classify_interval(lo: float, hi: float, label: str) -> str:
+    """Exhaustive over every valid interval lo <= hi.
+
+    - strictly-positive: 0 < lo;
+    - strictly-negative: hi < 0 (admitted by the classifier for
+      completeness; upstream population gates reject it on canonical
+      data because it would contradict z_D >= z_CH);
+    - exact-zero-boundary: the interval TOUCHES zero at an endpoint —
+      [lo, 0] with lo <= 0 (canonical: z_d_ub == lb_best), [0, hi] with
+      hi >= 0, and the degenerate [0, 0];
+    - strict-zero-crossing: lo < 0 < hi.
+
+    Only an invalid (reversed or non-finite) interval raises."""
+    if not (math.isfinite(lo) and math.isfinite(hi)) or lo > hi:
+        raise B3Error(
+            f"{label}: interval [{lo}, {hi}] is not a valid lo <= hi "
+            "interval")
     if lo > 0.0:
         return "strictly-positive"
-    if hi == 0.0:
-        # z_d_ub == lb_best in the serialized evidence: the certified
-        # interval is [-tol_d, 0] — an exact-zero upper boundary
+    if hi < 0.0:
+        return "strictly-negative"
+    if lo == 0.0 or hi == 0.0:
         return "exact-zero-boundary"
-    if lo < 0.0 < hi:
-        return "strict-zero-crossing"
-    raise B3Error(
-        f"{label}: interval [{lo}, {hi}] does not fit the exhaustive "
-        "classification")
+    return "strict-zero-crossing"
 
 
 def classify_contrast(lo: float, hi: float) -> str:
@@ -627,6 +655,7 @@ def analyze(input_dir: str | os.PathLike, out_base: str | os.PathLike,
             stamp: str, analysis_code_commit: str, *,
             verify_code_commit: bool = True) -> str:
     refuse_a6_paths(input_dir, out_base)
+    assert_output_separation(input_dir, out_base)
     if verify_code_commit:
         verify_analysis_code_commit(analysis_code_commit)
     population = load_canonical_population(input_dir)
