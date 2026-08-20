@@ -330,33 +330,3 @@ are pinned, manifests use repository-relative paths for portable
 byte-identical regeneration, CSVs are LF-terminated, and historical
 mip_version=="unknown" rows (12/256, declared in the B2 manifest) are
 preserved and disclosed.
-
-## 2026-08-20 — Tiny local-move column proposer: honest negative
-
-**Invalid first attempt**: implementation commit `e1b8382` inherited the
-four-trip generator's default two-vehicle cap. The frozen run halted while
-seeding the third cell because seed 11 was infeasible. No report was
-published and no completed proposer outcome was inspected. The whole partial
-attempt was discarded unscored. Commit `9a760de` retained the same seeds and
-scoring but froze a four-vehicle feasibility envelope, proved outcome-blind by
-the one-trip-per-vehicle constructive witness; no raw cell was reused.
-
-**Frozen replacement evidence**:
-`result/column_proposer/20260820T174254Z/`, analysis commit
-`9a760ded5642abe7d93c9bea37e138fb98eca80d`. All six A2 baselines certified,
-and the independent no-solver audit regenerated every move catalog, physical
-load, operating cost, master-column identity, reduced cost, classification,
-count, and disposition. Across 38 clean-prefix dual snapshots, exact
-full-fleet pricing exposed 32 strict-improvement opportunities. The frozen
-relocate/swap proposer captured **0/32**: 160 unique candidate partitions were
-priced, 150 produced feasible replay-valid columns, and **0** passed the
-strict novel reduced-cost gate.
-
-**Decision**: accept the preregistered **HONEST-NEGATIVE** and do not integrate
-this exact active-support, one-trip relocate/swap proposer into A2/A6. Do not
-rescue it by counting schedule-hash changes, structural novelty, ties,
-fixed-partition bounds, or post hoc move variants. The negative is conditional
-on the recorded solver-selected dual representatives and four-trip synthetic
-instances; dual degeneracy prevents a claim that every optimal dual face or a
-larger neighborhood must fail. Any future proposer requires a new theory and
-separate prespecification, not a rerun of this grid.

@@ -99,19 +99,6 @@ are descriptive rather than causal. Retrospective/exploratory: see
 `doc/B3_UPLIFT_BASELINE_SPEC.md` and `result/b3_baseline/`. No new
 compute was spent.
 
-## Local-move column proposer spike (closed negative)
-
-The bounded four-trip shadow study at
-`result/column_proposer/20260820T174254Z/` is complete and independently
-audited. Exact full-fleet pricing identified 32 strict-improvement
-opportunities across 38 clean-prefix dual snapshots; the frozen active-support
-relocate/swap proposer captured 0/32, with zero accepted columns among 150
-feasible replay-valid candidates. The preregistered disposition is
-**HONEST-NEGATIVE**: do not integrate this exact proposer into A2/A6 or rescue
-it with structural/schedule-hash counts. The result is conditional on the
-recorded dual representatives and tiny synthetic instances; it is not a
-theorem over every degenerate dual face.
-
 ## Next gate
 
 The full-population closeout is COMPLETE and canonical at
