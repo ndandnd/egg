@@ -519,13 +519,29 @@ def test_assert_fresh_run_dir(tmp_path, screen):
     bp.assert_fresh_run_dir(out)                      # empty dir is fine
     (out / bp.RUN_MANIFEST_FILENAME).write_text("{}")
     bp.assert_fresh_run_dir(out)                      # lone manifest reusable
+    # JOB.json refuses
     (out / bp.JOB_FILENAME).write_text("{}")
     with pytest.raises(bp.B3PilotError, match="JOB.json already exists"):
         bp.assert_fresh_run_dir(out)
     (out / bp.JOB_FILENAME).unlink()
+    # any extra file alongside MANIFEST.json refuses
+    stray = out / "notes.txt"
+    stray.write_text("x")
+    with pytest.raises(bp.B3PilotError, match="unexpected entry"):
+        bp.assert_fresh_run_dir(out)
+    stray.unlink()
+    # a cell directory refuses
     cell = out / "S0_baseline_s0_n8_b0.01"
     cell.mkdir()
     with pytest.raises(bp.B3PilotError, match="existing cell directory"):
+        bp.assert_fresh_run_dir(out)
+    cell.rmdir()
+    # a symlink named MANIFEST.json refuses (must be a regular file)
+    (out / bp.RUN_MANIFEST_FILENAME).unlink()
+    target = tmp_path / "real_manifest.json"
+    target.write_text("{}")
+    os.symlink(target, out / bp.RUN_MANIFEST_FILENAME)
+    with pytest.raises(bp.B3PilotError, match="symlink or not a regular file"):
         bp.assert_fresh_run_dir(out)
 
 

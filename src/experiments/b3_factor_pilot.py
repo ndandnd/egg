@@ -178,20 +178,47 @@ def refuse_existing_dir(path: str | os.PathLike) -> None:
 
 
 def assert_fresh_run_dir(out_dir: str | os.PathLike) -> None:
-    """Refuse to (re)submit into a run dir that already holds a job binding or
-    any partial/result-bearing state (a cell directory, a ``*.ckpt.json``
-    checkpoint, or a cell-identity sidecar).  A lone byte-identical
-    ``MANIFEST.json`` left by a pre-sbatch interruption is allowed (reuse);
-    ``write_run_manifest`` still refuses a *different* manifest."""
+    """Refuse to (re)submit unless the run dir does not exist, is empty, or
+    contains EXACTLY ONE regular ``MANIFEST.json`` (a byte-identical manifest
+    left by a pre-sbatch interruption; ``write_run_manifest`` still refuses a
+    *different* one).
+
+    Every other case is refused before submission: a ``JOB.json`` binding, any
+    cell directory, any ``*.ckpt.json`` checkpoint or ``identity.json``
+    sidecar, any symlink (even one named ``MANIFEST.json``), any temp file, and
+    any other unexpected file — nothing partial or result-bearing may survive
+    into a submission.
+    """
     out = Path(out_dir)
     if not out.exists():
         return
-    if (out / JOB_FILENAME).exists():
-        raise B3PilotError(
-            f"refusing to submit: {out / JOB_FILENAME} already exists (a job "
-            "was already submitted for this run dir)")
-    for entry in sorted(out.iterdir()):
-        if entry.is_dir():
+    entries = sorted(os.scandir(out), key=lambda e: e.name)
+    # explicit, high-signal refusal for an existing job binding first
+    for entry in entries:
+        if entry.name == JOB_FILENAME:
+            raise B3PilotError(
+                f"refusing to submit: {out / JOB_FILENAME} already exists (a "
+                "job was already submitted for this run dir)")
+    if not entries:
+        return
+    if (len(entries) == 1 and entries[0].name == RUN_MANIFEST_FILENAME
+            and not entries[0].is_symlink()
+            and entries[0].is_file(follow_symlinks=False)):
+        return
+    # otherwise identify the first offending entry with a specific reason
+    for entry in entries:
+        if (entry.name == RUN_MANIFEST_FILENAME and not entry.is_symlink()
+                and entry.is_file(follow_symlinks=False)):
+            continue  # the one allowed entry; there must be others -> refuse
+        if entry.name == RUN_MANIFEST_FILENAME:
+            raise B3PilotError(
+                "refusing to submit: MANIFEST.json is a symlink or not a "
+                "regular file")
+        if entry.is_symlink():
+            raise B3PilotError(
+                f"refusing to submit: unexpected symlink {entry.name!r} in the "
+                "run dir")
+        if entry.is_dir(follow_symlinks=False):
             raise B3PilotError(
                 f"refusing to submit: existing cell directory {entry.name!r} "
                 "in the run dir (partial/result-bearing state)")
@@ -200,6 +227,9 @@ def assert_fresh_run_dir(out_dir: str | os.PathLike) -> None:
             raise B3PilotError(
                 f"refusing to submit: existing result-bearing file "
                 f"{entry.name!r} in the run dir")
+        raise B3PilotError(
+            f"refusing to submit: unexpected entry {entry.name!r} in the run "
+            "dir (only an empty dir or a lone MANIFEST.json may be reused)")
 
 
 # --------------------------------------------------------------------------
