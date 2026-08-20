@@ -816,7 +816,7 @@ Commit the new
 only after it succeeds. Never delete or rewrite the analysis claim merely to
 obtain another result.
 
-## EI-026 one-shot claimed-incident recovery (protocol only; not yet runnable)
+## EI-026 one-shot claimed-incident recovery
 
 A claimed packaging attempt aborted mid-validation and left the source-side
 `runs/a6_holdout.CLOSEOUT_CLAIM.json` on disk with **no** audit, archive,
@@ -826,10 +826,51 @@ correctly refuses to run while that claim exists. Recovery uses a **separate,
 explicit EI-026-only** command (`package_a6_holdout.py recover-pack`), never a
 generic bypass.
 
-**Do not run any recovery command yet.** No operator launch command is
-published here until the EI-026 tolerance/certificate repair and the recovery
-command have passed independent review and merged into `main`. The intended
-protocol, for review, is:
+The EI-026 tolerance/certificate repair and recovery command passed independent
+review and merged into `main` through PR #33. The following is the sole
+operator command for this claimed incident; it deliberately refuses a dirty or
+stale checkout, a changed original claim, an existing recovery claim, an active
+Slurm job, source-tree drift, or an existing matching final package:
+
+```bash
+set -euo pipefail
+
+ORIGINAL_CLAIM_SHA="1b0acf0b8232d4b08e764564e2732fcfa9c28dd53456a1415085b77cb38f6675"
+REVIEWED_RECOVERY_HEAD="0642ae38dffe01ff45d5c47eadc46b9301714ae8"
+
+cd "$HOME/egg"
+git switch main
+git pull --ff-only origin main
+test -z "$(git status --porcelain --untracked-files=no)"
+
+RECOVERY_COMMIT="$(git rev-parse HEAD)"
+test "$RECOVERY_COMMIT" = "$(git rev-parse origin/main)"
+git merge-base --is-ancestor "$REVIEWED_RECOVERY_HEAD" "$RECOVERY_COMMIT"
+
+cd src
+source cluster/unicorn_env.sh
+export PATH="/usr/local/slurm/current/bin:$PATH"
+command -v squeue
+
+test -f runs/a6_holdout.CLOSEOUT_CLAIM.json
+test ! -L runs/a6_holdout.CLOSEOUT_CLAIM.json
+test "$(sha256sum runs/a6_holdout.CLOSEOUT_CLAIM.json | awk '{print $1}')" = \
+  "$ORIGINAL_CLAIM_SHA"
+test ! -e runs/a6_holdout.RECOVERY_CLAIM.json
+test ! -L runs/a6_holdout.RECOVERY_CLAIM.json
+
+echo "Recovery commit: $RECOVERY_COMMIT"
+python experiments/package_a6_holdout.py recover-pack \
+  --root runs/a6_holdout \
+  --out runs/a6_holdout_packages \
+  --recovery-code-commit "$RECOVERY_COMMIT" \
+  --incident-id EI-026 \
+  --original-claim-sha256 "$ORIGINAL_CLAIM_SHA" \
+  --failure-fingerprint \
+    "a2-s16-n12-b0.01-a2-it31-negative-gap--5.951687853666954e-08"
+```
+
+The protocol enforced by that command is:
 
 1. **Preserve the evidence.** Never delete or rewrite
    `runs/a6_holdout.CLOSEOUT_CLAIM.json` or anything under `runs/a6_holdout`.
