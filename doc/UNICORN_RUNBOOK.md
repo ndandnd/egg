@@ -816,10 +816,94 @@ Commit the new
 only after it succeeds. Never delete or rewrite the analysis claim merely to
 obtain another result.
 
+## EI-026 one-shot claimed-incident recovery
+
+A claimed packaging attempt aborted mid-validation and left the source-side
+`runs/a6_holdout.CLOSEOUT_CLAIM.json` on disk with **no** audit, archive,
+manifest, sidecar, bundle, decision, or score emitted (see `EI-026` in
+`ENGINEERING_INCIDENTS.md` for the exact evidence and root cause). Normal `pack`
+correctly refuses to run while that claim exists. Recovery uses a **separate,
+explicit EI-026-only** command (`package_a6_holdout.py recover-pack`), never a
+generic bypass.
+
+The EI-026 tolerance/certificate repair and recovery command passed independent
+review and merged into `main` through PR #33. The following is the sole
+operator command for this claimed incident; it deliberately refuses a dirty or
+stale checkout, a changed original claim, an existing recovery claim, an active
+Slurm job, source-tree drift, or an existing matching final package:
+
+```bash
+set -euo pipefail
+
+ORIGINAL_CLAIM_SHA="1b0acf0b8232d4b08e764564e2732fcfa9c28dd53456a1415085b77cb38f6675"
+REVIEWED_RECOVERY_HEAD="0642ae38dffe01ff45d5c47eadc46b9301714ae8"
+
+cd "$HOME/egg"
+git switch main
+git pull --ff-only origin main
+test -z "$(git status --porcelain --untracked-files=no)"
+
+RECOVERY_COMMIT="$(git rev-parse HEAD)"
+test "$RECOVERY_COMMIT" = "$(git rev-parse origin/main)"
+git merge-base --is-ancestor "$REVIEWED_RECOVERY_HEAD" "$RECOVERY_COMMIT"
+
+cd src
+source cluster/unicorn_env.sh
+export PATH="/usr/local/slurm/current/bin:$PATH"
+command -v squeue
+
+test -f runs/a6_holdout.CLOSEOUT_CLAIM.json
+test ! -L runs/a6_holdout.CLOSEOUT_CLAIM.json
+test "$(sha256sum runs/a6_holdout.CLOSEOUT_CLAIM.json | awk '{print $1}')" = \
+  "$ORIGINAL_CLAIM_SHA"
+test ! -e runs/a6_holdout.RECOVERY_CLAIM.json
+test ! -L runs/a6_holdout.RECOVERY_CLAIM.json
+
+echo "Recovery commit: $RECOVERY_COMMIT"
+python experiments/package_a6_holdout.py recover-pack \
+  --root runs/a6_holdout \
+  --out runs/a6_holdout_packages \
+  --recovery-code-commit "$RECOVERY_COMMIT" \
+  --incident-id EI-026 \
+  --original-claim-sha256 "$ORIGINAL_CLAIM_SHA" \
+  --failure-fingerprint \
+    "a2-s16-n12-b0.01-a2-it31-negative-gap--5.951687853666954e-08"
+```
+
+The protocol enforced by that command is:
+
+1. **Preserve the evidence.** Never delete or rewrite
+   `runs/a6_holdout.CLOSEOUT_CLAIM.json` or anything under `runs/a6_holdout`.
+   Record the full original claim SHA-256.
+2. **Recover from a clean, reviewed HEAD** that has the original packaging
+   commit `740ab0c` as an ancestor and equals the recovery commit; the tracked
+   tree must be clean. From a non-login Unicorn shell the Slurm client is not on
+   `PATH` (this is what caused the pre-claim `squeue` failure), so export it
+   before the quiescence checks run:
+
+   ```bash
+   export PATH="/usr/local/slurm/current/bin:$PATH"
+   ```
+3. The recovery command **re-verifies** the immutable original claim (regular,
+   single-link, exact schema/SHA/commit/launch identities/source digest),
+   **re-checks** that the live raw tree still exactly matches that claim before
+   any outcome is read, checks **Slurm quiescence** from a login shell both
+   before reading and immediately before publication, and exclusively creates a
+   second adjacent `runs/a6_holdout.RECOVERY_CLAIM.json` **before** validation.
+   Exactly one recovery attempt is permitted; a pre-existing recovery claim
+   blocks all further attempts.
+4. The recovery bundle, import receipt, and analyzer contract are **versioned**
+   (`…-v3-recovery` / `…-v2-recovery`) and record the original claim commit+SHA,
+   the recovery claim commit+SHA, the experiment commit, and the actual
+   corrected packaging/analysis commit. Import and analysis require HEAD to
+   equal the recovery commit while separately verifying both immutable claims.
+5. Any recovery failure is fail-closed: preserve both claims and the raw tree,
+   diagnose without reading a new decision, and record the disposition here and
+   in `ENGINEERING_INCIDENTS.md` before any further attempt.
+
 ## Branch hygiene
 
-Submit experiments only from a clean, published `main`. The closeout
-hardening described above remains **FOUND — IN PROGRESS** until its integrated
-PR and regression battery are reviewed and merged; this runbook does not make
-an unmerged branch production policy. Delete source branches only after their
-PR is merged.
+Submit experiments only from a clean, published `main`. EI-026 remains
+**FOUND — IN PROGRESS** until the reviewed one-shot recovery succeeds and the
+resulting package passes import and analysis; merging the repair alone is not a
+scientific closeout. Delete source branches only after their PR is merged.

@@ -1,0 +1,41 @@
+#!/bin/bash
+# B3 internal-uplift factor pilot array (60 cells, A2 only). Launch via
+# cluster/launch_b3_factor_pilot.sh, which derives the array size from --list
+# and refuses to submit unless it is exactly 60 (and the --dry-run binding
+# preflight passes).
+#
+# Gurobi-only: EGGLAB_REQUIRE_GRB=1 forces the GRB backend; a non-GRB
+# fallback aborts the task instead of silently solving with CBC.
+#
+# Preemption safety: --requeue + atomic per-oracle-call checkpoints in
+# egglab/b2a2.py and the dictator checkpoint; a requeued task repeats at
+# most one in-flight solve and never loses completed columns or corrupts
+# bounds.
+#
+#SBATCH --job-name=egg-b3-factor-pilot
+#SBATCH --output=slurm-%x-%A_%a.out
+#SBATCH --mail-type=END,FAIL,REQUEUE
+#SBATCH --mail-user=nc437@cornell.edu
+#SBATCH --requeue
+#SBATCH --array=0-59%12
+#SBATCH --cpus-per-task=4
+#SBATCH --mem=8G
+#SBATCH --time=24:00:00
+
+set -euo pipefail
+SUBMIT_DIR="${SLURM_SUBMIT_DIR:-$(pwd)}"
+if [[ -f "${SUBMIT_DIR}/experiments/run_b3_factor_pilot.py" ]]; then
+    WORK_DIR="${SUBMIT_DIR}"
+elif [[ -f "${SUBMIT_DIR}/src/experiments/run_b3_factor_pilot.py" ]]; then
+    WORK_DIR="${SUBMIT_DIR}/src"
+else
+    echo "ERROR: could not locate the egg src directory from ${SUBMIT_DIR}" >&2
+    exit 1
+fi
+cd "${WORK_DIR}"
+
+export EGGLAB_REQUIRE_GRB=1
+source "${WORK_DIR}/cluster/unicorn_env.sh"
+
+python experiments/run_b3_factor_pilot.py --cell "${SLURM_ARRAY_TASK_ID}" \
+    --out runs/b3_factor_pilot
