@@ -14,6 +14,7 @@ from egglab.b2a2 import certified_cg
 from egglab.branch_price_lab import (
     BASE_ORIGIN_MAIN_SHA,
     ExactnessLabError,
+    _fractional_arc,
     arc_key,
     audit_tree,
     canonical_branch_constraints,
@@ -27,6 +28,7 @@ from egglab.branch_price_lab import (
 from egglab.enumerate_tiny import enumerated_ch, enumerated_dictator
 from egglab.instance import synthetic_instance
 from egglab.market import make_affine_market
+from egglab.regimes import solve_dictator
 
 
 TREE_EPSILON = 1e-2
@@ -97,6 +99,21 @@ def _call_signature(node_state):
     ]
 
 
+def _assert_nested_equal(actual, expected):
+    if isinstance(expected, dict):
+        assert set(actual) == set(expected)
+        for key in expected:
+            _assert_nested_equal(actual[key], expected[key])
+    elif isinstance(expected, list):
+        assert len(actual) == len(expected)
+        for got, want in zip(actual, expected):
+            _assert_nested_equal(got, want)
+    elif isinstance(expected, float):
+        assert float(actual) == pytest.approx(expected, abs=1e-9)
+    else:
+        assert actual == expected
+
+
 def test_gurobi_is_optional_for_cbc_only_collection():
     requirements = (
         Path(__file__).resolve().parents[1] / "requirements.txt"
@@ -151,6 +168,73 @@ def test_root_bounds_agree_with_certified_a2(tree_run, a2_root, truth):
     assert z_ch <= a2["ub_ch"] + TRUTH_TOL
 
 
+@pytest.mark.parametrize(
+    "seed,n_trips,max_vehicles",
+    [
+        (0, 4, 2),
+        # Seed 11 has no time-feasible path cover at n=4/max_vehicles=2.
+        (11, 3, 2),
+        (15, 4, 2),
+    ],
+)
+def test_burned_seed_cross_validation(
+    seed, n_trips, max_vehicles, tmp_path
+):
+    inst = synthetic_instance(
+        seed=seed,
+        n_trips=n_trips,
+        max_vehicles=max_vehicles,
+    )
+    market = make_affine_market(inst, shape="duck", b_scale=0.01)
+    enum_ch = enumerated_ch(inst, market)
+    enum_d = enumerated_dictator(inst, market)
+    compact = solve_dictator(
+        inst, market, tol_abs=TREE_EPSILON, max_mip_gap=1e-9
+    )
+    a2 = certified_cg(
+        inst,
+        market,
+        epsilon=TREE_EPSILON,
+        pwl_tol=TREE_PWL_TOL,
+        budget=200,
+        out_dir=str(tmp_path / "a2"),
+        tag="a2",
+        solver_kw={"max_mip_gap": 1e-9},
+    )
+    tree_out = str(tmp_path / "tree")
+    tree = solve_tree(
+        inst,
+        market,
+        tree_out,
+        epsilon=TREE_EPSILON,
+        pwl_tol=TREE_PWL_TOL,
+    )
+    root = _root_outcome(tree)
+    a2_outcome = a2["outcome"]
+
+    assert max(root["lower_bound"], a2_outcome["lb_best"]) <= min(
+        root["upper_bound"], a2_outcome["ub_ch"]
+    ) + TRUTH_TOL
+    assert root["lower_bound"] - TRUTH_TOL <= enum_ch["z_ch"]
+    assert enum_ch["z_ch"] <= root["upper_bound"] + TREE_EPSILON
+    compact_lower = compact.stats.extra["adaptive_lb"]
+    assert compact_lower - TRUTH_TOL <= enum_d["z_d"]
+    assert enum_d["z_d"] <= compact.obj_true + TRUTH_TOL
+    assert tree["outcome"]["global_bound"] - TRUTH_TOL <= enum_d["z_d"]
+    assert enum_d["z_d"] <= (
+        tree["outcome"]["incumbent_upper_bound"] + TRUTH_TOL
+    )
+    assert audit_tree(inst, tree, tree_out) == []
+
+
+def test_seed11_n4_is_documented_infeasible(tmp_path):
+    inst = synthetic_instance(seed=11, n_trips=4, max_vehicles=2)
+    market = make_affine_market(inst, shape="duck", b_scale=0.01)
+    tree = solve_tree(inst, market, str(tmp_path))
+    assert tree["outcome"]["status"] == "infeasible"
+    assert tree["nodes"]["n0000"]["lp_outcome"]["status"] == "infeasible"
+
+
 def test_final_incumbent_and_global_bound_match_complete_truth(tree_run, truth):
     state, _out = tree_run
     result = state["outcome"]
@@ -182,6 +266,26 @@ def test_genuinely_fractional_root_closes_in_one_split(tree_run):
     assert {child["branch"]["value"] for child in children} == {0, 1}
     assert all(child["branch"]["arc"] == branch["arc"] for child in children)
     assert all(child["status"] in {"integral", "bound_pruned"} for child in children)
+
+
+def test_deeper_external_tree_closes_tiny_truth(tmp_path):
+    inst = synthetic_instance(seed=9, n_trips=4, max_vehicles=2)
+    market = make_affine_market(inst, shape="duck", b_scale=0.2)
+    enum_d = enumerated_dictator(inst, market)
+    state = solve_tree(
+        inst,
+        market,
+        str(tmp_path),
+        epsilon=TREE_EPSILON,
+        pwl_tol=TREE_PWL_TOL,
+    )
+    assert state["outcome"]["status"] == "optimal"
+    assert state["outcome"]["branches"] >= 2
+    assert state["outcome"]["max_depth"] >= 2
+    assert state["outcome"]["global_bound"] <= enum_d["z_d"] + TRUTH_TOL
+    assert enum_d["z_d"] <= (
+        state["outcome"]["incumbent_upper_bound"] + TRUTH_TOL
+    )
 
 
 def test_all_nodes_columns_and_leaf_replay_physically(tree_run, tiny):
@@ -322,6 +426,95 @@ def test_full_fleet_oracle_certifies_infeasible_node(tiny, tmp_path):
     )
 
 
+def test_genuinely_infeasible_child_extends_feasible_parent(tmp_path):
+    inst = synthetic_instance(seed=1, n_trips=4, max_vehicles=1)
+    market = make_affine_market(inst, shape="duck", b_scale=0.01)
+    parent_branch = [
+        {
+            "arc": structural_arc("out", None, inst.trips[0].id),
+            "value": 1,
+        }
+    ]
+    child_branch = parent_branch + [
+        {
+            "arc": structural_arc("out", None, inst.trips[1].id),
+            "value": 1,
+        }
+    ]
+    parent = solve_node_lp(
+        inst,
+        market,
+        parent_branch,
+        str(tmp_path / "parent"),
+        node_id="parent",
+    )
+    child = solve_node_lp(
+        inst,
+        market,
+        child_branch,
+        str(tmp_path / "child"),
+        node_id="child",
+    )
+    assert parent["outcome"]["status"] == "certified"
+    assert child["outcome"]["status"] == "infeasible"
+    assert child["pricing_calls"][0]["solver"]["status"] == "INFEASIBLE"
+    assert child["pricing_calls"][0]["infeasibility_certified"]
+    assert len(child["identity"]["branch_constraints"]) == (
+        len(parent["identity"]["branch_constraints"]) + 1
+    )
+
+
+def test_degenerate_tied_pricing_certifies_without_false_ambiguity(tmp_path):
+    inst = synthetic_instance(seed=1, n_trips=4, max_vehicles=2)
+    market = make_affine_market(
+        inst,
+        shape="flat",
+        a_level=0.0,
+        a_amp=0.0,
+        b_scale=0.0,
+        base_load_level=0.0,
+    )
+    state = solve_node_lp(
+        inst,
+        market,
+        [],
+        str(tmp_path),
+        node_id="tie",
+    )
+    final_call = state["pricing_calls"][-1]
+    assert state["outcome"]["status"] == "certified"
+    assert final_call["min_reduced_cost_upper"] == pytest.approx(0.0)
+    assert final_call["min_reduced_cost_lower_solver"] == pytest.approx(0.0)
+    assert final_call["column_novel"] is False
+    assert final_call["column"]["charges"]  # charging timing is genuinely tied
+
+
+def test_near_integral_branching_band_is_explicit(tiny):
+    inst, _market = tiny
+    catalog = structural_arc_catalog(inst)
+    keys = [arc_key(arc) for arc in catalog]
+    selected = catalog[0]
+    key = arc_key(selected)
+    tol = 1e-8
+
+    inside_zero = {arc_key_: 0.0 for arc_key_ in keys}
+    inside_zero[key] = 0.5 * tol
+    assert _fractional_arc(inst, inside_zero, [], tol) is None
+
+    outside_zero = dict(inside_zero)
+    outside_zero[key] = 2.0 * tol
+    branch = _fractional_arc(inst, outside_zero, [], tol)
+    assert branch is not None
+    assert branch[0] == selected
+    assert branch[1] == pytest.approx(2.0 * tol)
+
+    outside_one = {arc_key_: 0.0 for arc_key_ in keys}
+    outside_one[key] = 1.0 - 2.0 * tol
+    branch = _fractional_arc(inst, outside_one, [], tol)
+    assert branch is not None
+    assert branch[1] == pytest.approx(1.0 - 2.0 * tol)
+
+
 def test_tree_resume_preserves_calls_frontier_and_result(
     tiny, tree_run, tmp_path
 ):
@@ -364,9 +557,7 @@ def test_tree_resume_preserves_calls_frontier_and_result(
         resumed_root["lower_history"],
         resumed_root["upper_history"],
     ) == before_bounds
-    assert resumed["outcome"] == pytest.approx(
-        uninterrupted["outcome"], abs=1e-9
-    )
+    _assert_nested_equal(resumed["outcome"], uninterrupted["outcome"])
     assert [
         (record["node_id"], record["arc"], record["fractional_value"])
         for record in resumed["branch_history"]
@@ -391,6 +582,54 @@ def test_tree_resume_preserves_calls_frontier_and_result(
     }
     assert audit_tree(inst, resumed, str(tmp_path)) == []
     assert audit_tree(inst, uninterrupted, uninterrupted_out) == []
+
+
+@pytest.mark.parametrize(
+    "phase,checkpoint_phase,persisted_calls",
+    [
+        ("seed", "seed", 0),
+        ("master", "master", 1),
+        ("pricing", "pricing", 1),
+    ],
+)
+def test_node_resume_from_uncommitted_phase_solve(
+    tiny, tmp_path, phase, checkpoint_phase, persisted_calls
+):
+    inst, market = tiny
+    reference = solve_node_lp(
+        inst,
+        market,
+        [],
+        str(tmp_path / "reference"),
+        node_id="phase",
+    )
+    interrupted_dir = tmp_path / phase
+    with pytest.raises(KeyboardInterrupt, match=phase):
+        solve_node_lp(
+            inst,
+            market,
+            [],
+            str(interrupted_dir),
+            node_id="phase",
+            _interrupt_after_solve=phase,
+        )
+    interrupted = checkpoint.load(interrupted_dir / "node.ckpt.json")
+    assert interrupted["phase"] == checkpoint_phase
+    assert len(interrupted["pricing_calls"]) == persisted_calls
+
+    resumed = solve_node_lp(
+        inst,
+        market,
+        [],
+        str(interrupted_dir),
+        node_id="phase",
+    )
+    _assert_nested_equal(resumed["outcome"], reference["outcome"])
+    call_ids = [call["call_id"] for call in resumed["pricing_calls"]]
+    assert len(call_ids) == len(set(call_ids))
+    assert call_ids == [
+        call["call_id"] for call in reference["pricing_calls"]
+    ]
 
 
 def test_rejects_non_tiny_instance_before_solving(tmp_path):

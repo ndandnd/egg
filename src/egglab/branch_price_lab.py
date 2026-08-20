@@ -1012,6 +1012,7 @@ def solve_node_lp(
     pricing_mip_gap: float = DEFAULT_PRICING_MIP_GAP,
     budget: int = DEFAULT_NODE_BUDGET,
     max_new_pricing_calls: int | None = None,
+    _interrupt_after_solve: str | None = None,
 ) -> dict:
     """Certified CG relaxation of one externally managed branch node.
 
@@ -1019,6 +1020,10 @@ def solve_node_lp(
     tests.  It is not part of mathematical identity.
     """
     _validate_fixture(inst)
+    if _interrupt_after_solve not in {None, "seed", "master", "pricing"}:
+        raise ExactnessLabError(
+            f"unknown interruption phase {_interrupt_after_solve!r}"
+        )
     branch = canonical_branch_constraints(inst, branch_constraints)
     os.makedirs(out_dir, exist_ok=True)
     path = os.path.join(out_dir, "node.ckpt.json")
@@ -1057,6 +1062,9 @@ def solve_node_lp(
             "done": False,
             "outcome": None,
         }
+        # Persist the pre-solve phase so an interruption in the first seed
+        # solve resumes from an explicit state rather than an absent file.
+        checkpoint.save(path, state)
     elif state.get("identity") != identity or state.get("node_id") != node_id:
         raise ExactnessLabError(
             f"node {node_id} checkpoint identity mismatch; refusing resume"
@@ -1075,6 +1083,10 @@ def solve_node_lp(
             and new_calls >= max_new_pricing_calls
         )
 
+    def interrupt_after(phase: str) -> None:
+        if _interrupt_after_solve == phase:
+            raise KeyboardInterrupt(f"injected interruption after {phase} solve")
+
     while not state["done"]:
         if state["phase"] == "seed":
             if pause_due():
@@ -1087,6 +1099,7 @@ def solve_node_lp(
                 call_id=f"{node_id}-seed",
                 mip_gap=pricing_mip_gap,
             )
+            interrupt_after("seed")
             new_calls += 1
             state["pricing_calls"].append(event)
             if event["solver"]["status"] == "INFEASIBLE":
@@ -1133,6 +1146,7 @@ def solve_node_lp(
                 pwl_tol=pwl_tol,
                 solve_id_prefix=f"{node_id}-it{iteration}",
             )
+            interrupt_after("master")
             state["tangent_points"] = rmp["tangent_points"]
             if (
                 state["upper_history"]
@@ -1172,6 +1186,7 @@ def solve_node_lp(
             call_id=f"{node_id}-price-{call_index}",
             mip_gap=pricing_mip_gap,
         )
+        interrupt_after("pricing")
         new_calls += 1
         if event["solver"]["status"] == "INFEASIBLE":
             raise ExactnessLabError(
@@ -2021,10 +2036,15 @@ def solve_tree(
 
 
 # ---------------------------------------------------------------------------
-# Independent persisted-state audit
+# Solver-attested persisted-state audit with independent physical replay
 # ---------------------------------------------------------------------------
 def audit_tree(inst: Instance, state: dict, out_dir: str) -> list[str]:
-    """Replay every persisted column and integral realization without solving."""
+    """Independently replay physical records without re-solving.
+
+    Master objectives, dual bounds, and infeasibility statuses remain
+    solver-attested; this function is deliberately not described as a fully
+    reconstructed independent global certificate.
+    """
     errors = []
     for node_id, node in sorted(state["nodes"].items()):
         node_path = os.path.join(out_dir, "nodes", node_id, "node.ckpt.json")

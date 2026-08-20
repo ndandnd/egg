@@ -274,6 +274,20 @@ must establish all of the following:
 6. interruption/resume preserves bounds, calls, restrictions, incumbents,
    queue order, and the final result exactly apart from volatile timing.
 
+The burned B2 seeds used here are all below 16:
+
+* seeds 0 and 15 use \(n=4\);
+* seed 11 at \(n=4\), `max_vehicles=2` has no time-feasible path cover and is
+  retained as an explicit root-infeasibility fixture; its feasible
+  cross-validation fixture uses \(n=3\), `max_vehicles=2`;
+* seed 1 supplies the one-split fractional tree and tied-price fixture; and
+* seed 9 with \(n=4\), duck prices, and \(b=0.2\) supplies a tree of depth at
+  least two.
+
+Additional adversarial checks cover a feasible parent with an infeasible
+restricted child, both sides of the near-integral branching band, and
+interruptions after uncommitted seed, master, and pricing solves.
+
 The spike stops and remains a documented draft if a one-split tree cannot
 reproduce tiny truth, a node claimed infeasible lacks a solver certificate, or
 a structurally integral leaf cannot be independently converted and replayed.
