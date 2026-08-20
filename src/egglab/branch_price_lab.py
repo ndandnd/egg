@@ -14,9 +14,14 @@ import os
 import time
 from typing import Iterable
 
-import gurobipy as gp
 import numpy as np
-from gurobipy import GRB
+
+try:  # Optional by repository policy; CBC-only installs must still import.
+    import gurobipy as gp
+    from gurobipy import GRB
+except ImportError:  # pragma: no cover - exercised in an isolated subprocess
+    gp = None
+    GRB = None
 
 from . import checkpoint
 from .b2a2 import (
@@ -67,7 +72,21 @@ def _finite(value) -> bool:
     return value is not None and math.isfinite(float(value))
 
 
+def gurobi_available() -> bool:
+    """Whether the optional direct-Gurobi dependency can be imported."""
+    return gp is not None and GRB is not None
+
+
+def _require_gurobi() -> None:
+    if not gurobi_available():
+        raise ExactnessLabError(
+            "the tiny branch-and-price laboratory requires the optional "
+            "'gurobipy' package; the rest of egglab remains CBC-compatible"
+        )
+
+
 def _status_name(code: int) -> str:
+    _require_gurobi()
     names = {
         GRB.OPTIMAL: "OPTIMAL",
         GRB.INFEASIBLE: "INFEASIBLE",
@@ -82,11 +101,13 @@ def _status_name(code: int) -> str:
 
 
 def _gurobi_version() -> str:
+    _require_gurobi()
     return ".".join(str(x) for x in gp.gurobi.version())
 
 
 def _new_model(name: str) -> gp.Model:
     """Create the only solver used by this laboratory."""
+    _require_gurobi()
     try:
         model = gp.Model(name)
     except gp.GurobiError as exc:
