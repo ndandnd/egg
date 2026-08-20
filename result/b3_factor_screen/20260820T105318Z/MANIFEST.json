@@ -1,0 +1,57 @@
+{
+  "analysis_code_commit": "5dba64e28ddee3d8c6086326eff117b3e24bc187",
+  "analysis_code_verified": true,
+  "base_commit": "b81b15ace8ffd7301ce93f349fdb643cdefd5da6",
+  "counts": {
+    "baseline_instances": 6,
+    "candidate_grid_sizes": {
+      "S1_batt_low": 16,
+      "S2_batt_high": 46,
+      "S3_pow_low": 15,
+      "S4_pow_high": 41
+    },
+    "setting_instances": 30,
+    "settings": 5
+  },
+  "disposition": {
+    "levels": {
+      "S1_batt_low": 45.0,
+      "S2_batt_high": 90.0,
+      "S3_pow_low": 75.0,
+      "S4_pow_high": 300.0
+    },
+    "state": "FROZEN"
+  },
+  "generator": {
+    "function": "egglab.instance.synthetic_instance",
+    "held_fixed_arguments": {
+      "day_end_min": 1320,
+      "day_start_min": 300,
+      "max_vehicles": null,
+      "name": null,
+      "soc_end_frac": 0.1,
+      "soc_min_frac": 0.1,
+      "trip_energy_range": [
+        14.0,
+        22.0
+      ]
+    },
+    "path": "src/egglab/instance.py",
+    "sha256": "3fa505926863c3f79a4b0fb446001156ded7fa73d802cfc351337e9da7437f0b",
+    "varied_arguments": [
+      "seed",
+      "n_trips",
+      "battery_kwh",
+      "charge_power_kw"
+    ]
+  },
+  "outputs": {
+    "SCREEN_RECORD.json": "27c04d82bc88b62eed84394569b3ab8a35238a3a57c9cf4ba6463fb85f7bf603"
+  },
+  "schema": "b3-factor-screen-v1",
+  "spec": {
+    "path": "doc/B3_FACTOR_PILOT_SPEC_DRAFT.md",
+    "sha256": "150f4b32220b13866d2872e4bb8a29bfcc5137cca18ebb55c8ddf3d163d4275f"
+  },
+  "stamp": "20260820T105318Z"
+}
