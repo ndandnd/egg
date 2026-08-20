@@ -283,3 +283,25 @@ seed substitution and no two-cell-only recovery.
 **Scope boundary**: physical-load canonicalization is enabled only inside the
 B2/A6 pricing and shared-dictator pipeline. Generic taker extraction and the
 legacy Phase 1/boundary replay semantics remain unchanged.
+
+## 2026-08-20 — B3 no-solver certified-uplift baseline (retrospective)
+
+**Decision**: produce the B3 uplift baseline purely by restating certified
+evidence from the committed B2 full population
+(`result/b2_full/20260818T140356Z/cells.csv`), with no solver run, no
+cluster launch, and no new experiment. The baseline uses exactly one A2
+row per each of the 64 unique instances; A3-A5 rows serve only as
+consistency witnesses (shared dictator evidence must be identical and
+witness intervals must intersect the A2 interval). Uplift bounds are
+recomputed from the serialized fields as
+`uplift_lo = (z_d_ub - tol_d) - ub_ch` and
+`uplift_hi = z_d_ub - lb_best`, validated against the recorded columns
+within a 5e-8 serialization tolerance (measured maximum deviation
+9.6e-9). The result is labeled retrospective/exploratory: intervals are
+up to tol_d + epsilon = 0.02 wide, so only `uplift_lo > 0` certifies
+strictly positive uplift, and intervals containing 0 do not establish
+absence of uplift. Specification: `doc/B3_BASELINE_SPEC.md`; analyzer:
+`src/experiments/analyze_b3_baseline.py` (stdlib-only, byte-identical
+regeneration, two-commit protocol). No factor pilot or new cluster
+experiment starts until this baseline and its follow-up specification
+are reviewed.

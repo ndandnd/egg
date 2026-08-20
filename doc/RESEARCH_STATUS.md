@@ -86,6 +86,14 @@ uplift intervals, and the equivalence-theorem framing.
    n in {8, 12} and T = 28 were fixed; any scale study requires a separate
    prespecification.
 
+## B3 baseline (in review)
+
+The no-solver B3 certified-uplift baseline restates the committed B2
+population as one A2 interval per unique instance (64 rows), with A3-A5
+as consistency witnesses only. It is retrospective/exploratory: see
+`doc/B3_BASELINE_SPEC.md` and `result/b3_baseline/`. No new compute was
+spent.
+
 ## Next gate
 
 The full-population closeout is COMPLETE and canonical at
