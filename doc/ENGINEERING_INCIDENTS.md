@@ -1183,11 +1183,22 @@ terminal event for budget-exhausted completion; replay and validate the
 terminal master's `n_columns`, `lb_best`, and its UB/LB history entry; and
 compare the top-level checkpoint `lb_best`, column count, and history lengths
 plus the outcome (`type`, `certified` as an exact boolean, `ub_ch`,
-`lb_best`, `gap`, `method`, and recovery-at-end) against the replay.
-`outcome.oracle_calls` is deliberately not bound in the shared helper: it is
-the arm-selection score consumed through this same audit path
-(`select_a6_arm.cell_score`), and the production analyzer independently binds
-it to the committed event count in `_replay_cg_certificate_evidence`.
+`lb_best`, `gap`, `oracle_calls`, `method`, and recovery-at-end) against the
+replay.
+
+Oracle-call provenance is closed completely (F1): every oracle event carries
+a present, unique call ID; `replay_calls` — one seed call plus one call per
+priced iteration — must equal, as exact integers, `len(oracle_events)`,
+`checkpoint.oracle_calls`, and `outcome.oracle_calls`; each priced iteration
+binds its chronological `oracle_calls` index and the terminal event binds the
+total count; and the non-seed oracle events are in one-to-one correspondence
+with the priced iterations (orphan events, reused event IDs, and missing
+events are all rejected). Because `outcome.oracle_calls` is now bound in the
+shared audit path, arm selection no longer fabricates it: the selection
+regression keeps every checkpoint coherent and injects synthetic scores by
+monkeypatching `select_a6_arm.cell_score`, not by corrupting scientific
+evidence.
+
 Additionally, cross-link each clean call's oracle-event
 `min_reduced_cost_ub`/`min_reduced_cost_lb` and every call's `column_novel`
 with the corresponding iteration fields; oracle and iteration evidence may
@@ -1202,7 +1213,17 @@ analyzer stay on the same authoritative path. Regression coverage in
 `test_e2_falsified_terminal_n_columns_rejected`,
 `test_e2_oracle_iteration_reduced_cost_disagreement_rejected`, and
 `test_e2_oracle_iteration_novelty_disagreement_rejected`, with the analyzer
-consuming the same rejections in `test_a6_holdout_analysis.py`.
+consuming the same rejections in `test_a6_holdout_analysis.py`. Oracle-call
+provenance (F1) is covered by `test_f1_outcome_oracle_calls_edit_rejected`,
+`test_f1_checkpoint_oracle_calls_edit_rejected`,
+`test_f1_iteration_oracle_calls_index_edit_rejected`,
+`test_f1_terminal_oracle_calls_edit_rejected`,
+`test_f1_orphan_oracle_event_rejected`,
+`test_f1_reused_oracle_call_id_rejected`, and the `_cg_sane` regression
+`test_f1_cg_sane_rejects_outcome_oracle_calls_edit`, all in
+`test_a6_recovery_replay.py`; and end-to-end by
+`test_selection_aborts_on_outcome_oracle_calls_edit` in `test_a6.py`
+(a one-field `outcome.oracle_calls` edit aborts arm selection).
 
 **Scientific handling.** A completed A6 trace is attributable to the frozen
 algorithm only when its terminal/final/outcome closure replays, not merely
@@ -1216,5 +1237,5 @@ the shared-helper closure is reviewed and merged, the operational audit's
 | incident | repair | regression coverage |
 |---|---|---|
 | EI-024 (precommit marker deletion misclassified) | four-state publisher machine (`renamed-guarded` / `commit-unlink-in-flight`) + safe marker restoration through the anchored fd + truthful `install_tree_no_replace` metadata | `test_precommit_marker_deletion_is_corruption_not_commit`, `test_precommit_marker_restore_race_preserves_competitor`, `test_install_tree_post_rename_error_carries_truthful_metadata`, `test_install_tree_pre_rename_error_leaves_no_target` in `test_a6_holdout_package.py`; retained publisher edge-case tests still pass |
-| EI-025 (replay terminal/final closure omitted) | terminal/final/outcome closure + oracle/iteration cross-link in the shared `experiments/a6_replay.py` (audit AND analyzer) | `test_e2_*` battery in `test_a6_recovery_replay.py` + analyzer rejections in `test_a6_holdout_analysis.py` |
+| EI-025 (replay terminal/final closure omitted) | terminal/final/outcome closure + full oracle-call provenance (F1: exact-integer `replay_calls == len(oracle_events) == checkpoint.oracle_calls == outcome.oracle_calls`, per-iteration/terminal index binding, one-to-one event↔iteration) + oracle/iteration cross-link in the shared `experiments/a6_replay.py` (audit AND analyzer) | `test_e2_*` and `test_f1_*` batteries (including `test_f1_cg_sane_rejects_outcome_oracle_calls_edit`) in `test_a6_recovery_replay.py`, `test_selection_aborts_on_outcome_oracle_calls_edit` in `test_a6.py`, + analyzer rejections in `test_a6_holdout_analysis.py` |
 | import post-commit close (EI-007 addendum) | explicit `import_committed` state guards descriptor-close reporting | `test_import_descriptor_close_after_commit_is_not_a_failure`, `test_import_descriptor_close_before_commit_is_reported` in `test_a6_holdout_package.py` |

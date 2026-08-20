@@ -1488,7 +1488,16 @@ def install_tree_no_replace(
                 committed=False) from exc
         raise
     finally:
-        os.close(source_fd)
+        # closing the read-only staging descriptor has no data consequence:
+        # on success the rename, snapshot validation, and parent fsync
+        # durability barriers already completed, and on failure the outcome
+        # (and its ownership attribution) is already decided.  A close-only
+        # OSError must never mask an active exception or reclassify the
+        # result — consistent with the publisher's source_fd contract.
+        try:
+            os.close(source_fd)
+        except OSError:
+            pass
 
 
 def _fsync_directory(path: Path) -> None:

@@ -44,6 +44,14 @@ and the full outcome (type, certified, ub_ch, lb_best, gap, oracle_calls,
 method, recovery-at-end) must equal the replay; and each call's
 oracle-event reduced-cost/novelty evidence must agree with its iteration
 event.
+
+Oracle-call provenance (F1): oracle-event call IDs are present and unique;
+replay_calls (one seed plus one per priced iteration) equals, as exact
+integers, len(oracle_events), checkpoint.oracle_calls, and
+outcome.oracle_calls; every priced iteration binds its chronological
+oracle_calls index and the terminal event binds the total count; and the
+non-seed oracle events are in one-to-one correspondence with the priced
+iterations (no orphan, reused, or missing events).
 """
 from __future__ import annotations
 
@@ -76,6 +84,10 @@ RECOVERY_GAP_FLOOR = 1e-12
 def _fin(value) -> bool:
     return isinstance(value, (int, float)) and not isinstance(
         value, bool) and math.isfinite(value)
+
+
+def _is_int(value) -> bool:
+    return isinstance(value, int) and not isinstance(value, bool)
 
 
 def _pos_inf_ok(value) -> bool:
@@ -145,6 +157,12 @@ def replay_a6_recovery(ck: dict) -> tuple[dict, list[str]]:
     event_by_id = {
         (e.get("extra") or {}).get("call_id"): e for e in events
     }
+    # oracle-call provenance: every committed oracle event carries a present,
+    # unique call ID (reused or missing IDs break the one-to-one mapping)
+    call_ids = [(e.get("extra") or {}).get("call_id") for e in events]
+    if None in call_ids or len(set(call_ids)) != len(call_ids):
+        return fail("a6 oracle events have missing or reused call IDs")
+    seed_call_id = call_ids[0] if call_ids else None
     ub_history = ck.get("ub_history")
     lb_history = ck.get("lb_history")
 
@@ -163,6 +181,8 @@ def replay_a6_recovery(ck: dict) -> tuple[dict, list[str]]:
     prev_ub = math.inf
     history_index = 0
     terminals = 0
+    oracle_call = 0             # chronological index of the last priced call
+    referenced_ids: set = set()  # non-seed oracle events cited by iterations
 
     for it in ck.get("iteration_events") or []:
         iteration = it.get("iteration_id")
@@ -220,6 +240,13 @@ def replay_a6_recovery(ck: dict) -> tuple[dict, list[str]]:
                 return fail(
                     f"a6 iteration {iteration}: terminal lb_history "
                     "disagrees with the derived LB chain")
+            # the terminal master fires at the budget: its recorded
+            # oracle_calls is the total call count (seed + every priced call)
+            if it.get("oracle_calls") != oracle_call + 1:
+                return fail(
+                    f"a6 iteration {iteration}: terminal oracle_calls="
+                    f"{it.get('oracle_calls')!r} but the replayed count is "
+                    f"{oracle_call + 1}")
             prev_ub = ub
             history_index += 1
             continue
@@ -233,6 +260,14 @@ def replay_a6_recovery(ck: dict) -> tuple[dict, list[str]]:
                 f"a6 iteration {iteration}: recorded gap_at_decision="
                 f"{gap!r} but the chronologically derived value is "
                 f"{derived_gap!r}")
+        # each priced iteration is oracle call k (seed is call 0); bind its
+        # recorded chronological index exactly
+        oracle_call += 1
+        if it.get("oracle_calls") != oracle_call:
+            return fail(
+                f"a6 iteration {iteration}: recorded "
+                f"oracle_calls={it.get('oracle_calls')!r} but the "
+                f"chronological index is {oracle_call}")
         if (isinstance(ub_history, list)
                 and history_index < len(ub_history)
                 and ub_history[history_index] != ub):
@@ -307,6 +342,17 @@ def replay_a6_recovery(ck: dict) -> tuple[dict, list[str]]:
             return fail(
                 f"a6 iteration {iteration}: oracle-event scheduler fields "
                 "disagree with the iteration event")
+        # one-to-one: a priced iteration cites the seed or an already-cited
+        # event only if the stream is forged
+        if pricing_id == seed_call_id:
+            return fail(
+                f"a6 iteration {iteration}: priced call references the seed "
+                f"oracle event {pricing_id!r}")
+        if pricing_id in referenced_ids:
+            return fail(
+                f"a6 iteration {iteration}: oracle event {pricing_id!r} is "
+                "referenced by more than one priced iteration")
+        referenced_ids.add(pricing_id)
         novel = it.get("column_novel")
         if not isinstance(novel, bool):
             return fail(
@@ -542,12 +588,37 @@ def replay_a6_recovery(ck: dict) -> tuple[dict, list[str]]:
                     f"match the {history_index} replayed events")
                 return final_state, errors
 
-        # the recorded outcome must follow the replayed trace exactly.
-        # (outcome.oracle_calls is intentionally NOT bound here: it is the
-        # arm-selection score consumed by select_a6_arm/cell_score through
-        # this same audit path; the production analyzer independently binds
-        # it to the committed event count in _replay_cg_certificate_evidence.)
         rec_outcome = ck.get("outcome") or {}
+
+        # ---- oracle-call provenance closure (F1) --------------------------
+        # replay_calls = one seed call plus one call per priced iteration.
+        # It must equal, as exact integers, the committed oracle-event count,
+        # the checkpoint's oracle_calls, and the outcome's oracle_calls.
+        replay_calls = 1 + oracle_call
+        for name, value in (
+                ("checkpoint.oracle_calls", ck.get("oracle_calls")),
+                ("outcome.oracle_calls", rec_outcome.get("oracle_calls"))):
+            if not _is_int(value):
+                errors.append(
+                    f"a6 final state: {name}={value!r} is not an integer")
+                return final_state, errors
+        if not (replay_calls == len(events) == ck.get("oracle_calls")
+                == rec_outcome.get("oracle_calls")):
+            errors.append(
+                "a6 final state: oracle-call count mismatch — replay "
+                f"{replay_calls}, oracle_events {len(events)}, "
+                f"checkpoint.oracle_calls {ck.get('oracle_calls')!r}, "
+                f"outcome.oracle_calls {rec_outcome.get('oracle_calls')!r}")
+            return final_state, errors
+        # every non-seed oracle event is cited by exactly one priced iteration
+        # (no orphan events, no missing events)
+        if referenced_ids != set(call_ids) - {seed_call_id}:
+            errors.append(
+                "a6 final state: priced iterations and non-seed oracle "
+                "events are not in one-to-one correspondence")
+            return final_state, errors
+
+        # the recorded outcome must follow the replayed trace exactly
         outcome_checks = (
             ("type", rec_outcome.get("type"), expected_type),
             ("method", rec_outcome.get("method"),

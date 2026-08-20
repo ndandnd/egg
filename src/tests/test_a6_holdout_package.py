@@ -1572,32 +1572,142 @@ def test_import_descriptor_close_after_commit_is_not_a_failure(
     assert result["receipt_sha256"] == sha256_file(receipt)
 
 
-def test_import_descriptor_close_before_commit_is_reported(
+def test_import_final_descriptor_close_before_commit_is_reported(
         tmp_path, monkeypatch):
-    """E3. A descriptor-close failure while the import has NOT committed is
-    surfaced honestly (the import fails, no receipt is committed), never
-    silently swallowed into a success."""
+    """E3/F2. A descriptor-close failure in the FINAL import descriptor-close
+    block while the import has NOT committed is surfaced honestly, never
+    silently swallowed. Targets the exact runs_parent_fd closed in that block
+    (an install failure after the lock is acquired reaches it pre-commit)."""
     root = _source_root(tmp_path)
     package = _package(root, tmp_path / "packages")
     repository = _import_repo(tmp_path)
-    runs = repository / "src/runs"
-    receipt = runs / mod.RECEIPT_FILENAME
+    real_open_dir = mod._open_directory_nofollow
     real_close = mod.os.close
-    fired = {"done": False}
+    captured = {}
+
+    def capture(path, *args, **kwargs):
+        fd = real_open_dir(path, *args, **kwargs)
+        # the first top-level (no dir_fd) open is runs_parent
+        if kwargs.get("dir_fd") is None and "runs_parent" not in captured:
+            captured["runs_parent"] = fd
+        return fd
+
+    def boom(*_args, **_kwargs):
+        raise mod.PackagingError("injected install failure before commit")
 
     def failing_close(fd):
-        # fire once BEFORE the receipt is committed (pre-commit)
-        precommit = not receipt.exists() and not fired["done"]
-        real_close(fd)
-        if precommit:
-            fired["done"] = True
-            raise OSError("injected pre-commit close failure")
+        if fd == captured.get("runs_parent"):
+            real_close(fd)
+            captured["runs_parent"] = None
+            raise OSError("injected final descriptor close failure")
+        return real_close(fd)
 
+    monkeypatch.setattr(mod, "_open_directory_nofollow", capture)
+    monkeypatch.setattr(mod, "install_tree_no_replace", boom)
     monkeypatch.setattr(mod.os, "close", failing_close)
-    with pytest.raises((OSError, mod.PackagingError)):
+    with pytest.raises(mod.PackagingError,
+                       match="descriptor close failed before commit"):
         _import(package["bundle_dir"], repository)
-    assert fired["done"]
-    assert not receipt.exists()  # the import never committed
+
+
+def _install_staging(tmp_path):
+    staging = tmp_path / "src"
+    staging.mkdir()
+    (staging / "f.txt").write_text("x\n")
+    return staging, tmp_path / "dst", mod.snapshot_source(staging)
+
+
+def _fail_close_of_install_source_fd(monkeypatch, staging):
+    """Fail os.close only for the exact persistent source_fd install_tree
+    opens for `staging` (the one opened AFTER ownership capture, held across
+    the rename); return the captured-state dict."""
+    real_open = mod._open_directory_nofollow
+    real_close = mod.os.close
+    real_capture = mod._capture_exact_tree_ownership
+    captured = {}
+    state = {"ownership_done": False}
+
+    def wrapped_capture(*a, **k):
+        result = real_capture(*a, **k)
+        state["ownership_done"] = True
+        return result
+
+    def capture(path, *args, **kwargs):
+        fd = real_open(path, *args, **kwargs)
+        # the source_fd is the first top-level staging open AFTER ownership
+        # capture (subdir traversal passes dir_fd and is skipped)
+        if (kwargs.get("dir_fd") is None and Path(path) == staging
+                and state["ownership_done"] and "fd" not in captured):
+            captured["fd"] = fd
+        return fd
+
+    def failing_close(fd):
+        if fd == captured.get("fd"):
+            captured["fd"] = None
+            real_close(fd)
+            captured["fired"] = True
+            raise OSError("injected source_fd close failure")
+        return real_close(fd)
+
+    monkeypatch.setattr(mod, "_capture_exact_tree_ownership", wrapped_capture)
+    monkeypatch.setattr(mod, "_open_directory_nofollow", capture)
+    monkeypatch.setattr(mod.os, "close", failing_close)
+    return captured
+
+
+def test_install_tree_success_source_fd_close_failure_is_benign(
+        tmp_path, monkeypatch):
+    """F2. On success the read-only source_fd close has no data consequence:
+    a close-only OSError must not become a failure."""
+    staging, target, snapshot = _install_staging(tmp_path)
+    captured = _fail_close_of_install_source_fd(monkeypatch, staging)
+    ownership = mod.install_tree_no_replace(staging, target, snapshot)
+    assert captured.get("fired") is True
+    assert ownership["root"]
+    assert mod.snapshot_source(target) == snapshot
+
+
+def test_install_tree_post_rename_error_plus_close_failure_not_masked(
+        tmp_path, monkeypatch):
+    """F2. A post-rename error together with a source_fd close failure must
+    stay an IncompletePublicationError with intact metadata — the close-only
+    OSError must not mask it or strip ownership attribution."""
+    staging, target, snapshot = _install_staging(tmp_path)
+    real_snapshot = mod.snapshot_source
+
+    def diff_after_rename(path):
+        result = real_snapshot(path)
+        if Path(path) == target:
+            result = dict(result)
+            result["files"] = []
+        return result
+
+    monkeypatch.setattr(mod, "snapshot_source", diff_after_rename)
+    captured = _fail_close_of_install_source_fd(monkeypatch, staging)
+    with pytest.raises(mod.IncompletePublicationError) as info:
+        mod.install_tree_no_replace(staging, target, snapshot)
+    assert captured.get("fired") is True
+    assert info.value.renamed is True
+    assert info.value.committed is False
+    assert info.value.destination == str(target)
+    assert target.is_dir()
+
+
+def test_install_tree_pre_rename_refusal_close_failure_not_masked(
+        tmp_path, monkeypatch):
+    """F2. A pre-rename refusal (existing target) with a source_fd close
+    failure stays the ordinary PackagingError; the close does not mask it."""
+    staging, target, snapshot = _install_staging(tmp_path)
+    target.mkdir()
+    (target / "rival").write_text("rival\n")
+    captured = _fail_close_of_install_source_fd(monkeypatch, staging)
+    with pytest.raises(mod.PackagingError,
+                       match="refusing existing import target") as info:
+        mod.install_tree_no_replace(staging, target, snapshot)
+    assert captured.get("fired") is True
+    assert not isinstance(info.value, mod.IncompletePublicationError)
+    assert (target / "rival").read_text() == "rival\n"
+    assert staging.is_dir()
 
 
 def test_package_wrapper_pre_rename_cleanup_failure_never_masks(

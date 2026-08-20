@@ -227,6 +227,7 @@ def _synthetic_recovery_ck(kind: str, repeats: int, *,
             "call_kind": "clean", "trigger_selected": fired[0],
             "triggers_fired": fired,
             "gap_at_decision": derived_gap,
+            "oracle_calls": i + 1,
             "k_since_clean": 0, "n_columns": 1,
             "recovery_active": i > 0,
             "recovery_kind": None if i == 0 else kind,
@@ -490,6 +491,7 @@ def test_certification_while_recovery_active_replays():
         "call_kind": "clean", "trigger_selected": "T0",
         "triggers_fired": fired,
         "gap_at_decision": ub - lb0,
+        "oracle_calls": 2,
         "k_since_clean": 0, "n_columns": 1,
         "recovery_active": True, "recovery_kind": "ambiguous",
         "pricing_solve_id": "a6_a6-oc2".replace("a6_a6", "a6_a4"),
@@ -644,3 +646,87 @@ def test_e2_oracle_iteration_novelty_disagreement_rejected():
     oc["extra"]["column_novel"] = True  # iteration says False
     _final, errors = replay_a6_recovery(ck)
     assert any("column_novel" in e and "disagrees" in e for e in errors)
+
+
+# --------------------------------------------------------------------------
+# F1: complete oracle-call provenance.  A budget-exhausted synthetic trace is
+# fully coherent; each one-field edit below must abort the shared helper (and
+# _cg_sane).
+# --------------------------------------------------------------------------
+def test_f1_coherent_trace_replays():
+    ck = _synthetic_recovery_ck("ambiguous", 2)
+    _final, errors = replay_a6_recovery(ck)
+    assert errors == []
+
+
+def test_f1_outcome_oracle_calls_edit_rejected():
+    ck = _synthetic_recovery_ck("ambiguous", 2)
+    ck["outcome"]["oracle_calls"] = ck["outcome"]["oracle_calls"] + 1
+    _final, errors = replay_a6_recovery(ck)
+    assert any("oracle-call count mismatch" in e for e in errors)
+
+
+def test_f1_checkpoint_oracle_calls_edit_rejected():
+    ck = _synthetic_recovery_ck("ambiguous", 2)
+    ck["oracle_calls"] = ck["oracle_calls"] + 1
+    _final, errors = replay_a6_recovery(ck)
+    assert any("oracle-call count mismatch" in e for e in errors)
+
+
+def test_f1_non_integer_oracle_calls_rejected():
+    ck = _synthetic_recovery_ck("ambiguous", 2)
+    ck["outcome"]["oracle_calls"] = float(ck["outcome"]["oracle_calls"])
+    _final, errors = replay_a6_recovery(ck)
+    assert any("is not an integer" in e for e in errors)
+
+
+def test_f1_iteration_oracle_calls_index_edit_rejected():
+    ck = _synthetic_recovery_ck("ambiguous", 2)
+    it = next(e for e in ck["iteration_events"]
+              if not e.get("terminal"))
+    it["oracle_calls"] = it["oracle_calls"] + 5
+    _final, errors = replay_a6_recovery(ck)
+    assert any("chronological index" in e for e in errors)
+
+
+def test_f1_terminal_oracle_calls_edit_rejected():
+    ck = _synthetic_recovery_ck("ambiguous", 2)
+    term = ck["iteration_events"][-1]
+    assert term.get("terminal") is True
+    term["oracle_calls"] = term["oracle_calls"] + 1
+    _final, errors = replay_a6_recovery(ck)
+    assert any("terminal oracle_calls=" in e for e in errors)
+
+
+def test_f1_orphan_oracle_event_rejected():
+    """An extra, unreferenced oracle event breaks the one-to-one map and the
+    count equality."""
+    ck = _synthetic_recovery_ck("ambiguous", 2)
+    orphan = copy.deepcopy(ck["oracle_events"][-1])
+    orphan["extra"] = dict(orphan["extra"])
+    orphan["extra"]["call_id"] = "a6_a4-oc99"  # cited by no iteration
+    ck["oracle_events"].append(orphan)
+    _final, errors = replay_a6_recovery(ck)
+    assert errors  # rejected (count mismatch or orphan correspondence)
+    assert any("oracle-call count mismatch" in e
+               or "one-to-one correspondence" in e for e in errors)
+
+
+def test_f1_reused_oracle_call_id_rejected():
+    ck = _synthetic_recovery_ck("ambiguous", 2)
+    # duplicate the first priced event's id onto the second
+    ck["oracle_events"][2]["extra"]["call_id"] = (
+        ck["oracle_events"][1]["extra"]["call_id"])
+    _final, errors = replay_a6_recovery(ck)
+    assert any("missing or reused call IDs" in e for e in errors)
+
+
+def test_f1_cg_sane_rejects_outcome_oracle_calls_edit(recovery_trace):
+    """The audit (_cg_sane) — the exact gate arm selection runs — rejects a
+    lone outcome.oracle_calls edit via the shared replay.  Uses a real
+    producer trace so the untampered checkpoint is fully audit-sane."""
+    ck, _ = recovery_trace
+    assert _cg_sane(json.loads(json.dumps(ck))) == []
+    bad = json.loads(json.dumps(ck))
+    bad["outcome"]["oracle_calls"] = int(bad["outcome"]["oracle_calls"]) + 1
+    assert any("oracle-call count mismatch" in e for e in _cg_sane(bad))
