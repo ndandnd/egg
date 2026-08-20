@@ -1,8 +1,5 @@
 """Acceptance battery for the tiny external branch-and-price laboratory."""
-import math
 import os
-from pathlib import Path
-import subprocess
 import sys
 
 import pytest
@@ -18,7 +15,7 @@ from egglab.branch_price_lab import (
     arc_key,
     audit_tree,
     canonical_branch_constraints,
-    gurobi_available,
+    gurobi_runtime_available,
     solve_node_lp,
     solve_tree,
     structural_arc,
@@ -29,6 +26,12 @@ from egglab.enumerate_tiny import enumerated_ch, enumerated_dictator
 from egglab.instance import synthetic_instance
 from egglab.market import make_affine_market
 from egglab.regimes import solve_dictator
+
+
+pytestmark = pytest.mark.skipif(
+    not gurobi_runtime_available(),
+    reason="optional licensed Gurobi runtime is unavailable",
+)
 
 
 TREE_EPSILON = 1e-2
@@ -112,34 +115,6 @@ def _assert_nested_equal(actual, expected):
         assert float(actual) == pytest.approx(expected, abs=1e-9)
     else:
         assert actual == expected
-
-
-def test_gurobi_is_optional_for_cbc_only_collection():
-    requirements = (
-        Path(__file__).resolve().parents[1] / "requirements.txt"
-    ).read_text().splitlines()
-    assert not any(line.strip().startswith("gurobipy") for line in requirements)
-    code = """
-import sys
-sys.modules["gurobipy"] = None
-import egglab.branch_price_lab as lab
-assert not lab.gurobi_available()
-try:
-    lab._new_model("must-not-start")
-except lab.ExactnessLabError as exc:
-    assert "optional 'gurobipy'" in str(exc)
-else:
-    raise AssertionError("missing optional dependency did not fail locally")
-"""
-    completed = subprocess.run(
-        [sys.executable, "-c", code],
-        cwd=Path(__file__).resolve().parents[1],
-        text=True,
-        capture_output=True,
-        check=False,
-    )
-    assert completed.returncode == 0, completed.stderr
-    assert gurobi_available()  # this test environment exercises the lab too
 
 
 def test_exact_base_sha_is_recorded(tree_run):

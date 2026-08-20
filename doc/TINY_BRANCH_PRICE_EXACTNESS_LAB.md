@@ -157,6 +157,24 @@ The tree, branching, queue, bounds, pruning, checkpointing, and replay are
 external Python logic; no Gurobi branch-and-price callback or solver-managed
 tree is used.
 
+### Direct-Gurobi duplication and mandatory drift guard
+
+The canonical fleet model in `egglab.evsp.solve_evsp` is built through
+`python-mip`, while this laboratory needs direct Gurobi models for its
+solver-attested node evidence. Safely factoring one backend-neutral model
+builder would change production solver construction and resume semantics, so
+that refactor is deliberately outside this spike.
+
+The laboratory does reuse canonical instance data, compatible-arc and
+slot-overlap primitives, `Solution`, physical-load reconstruction, replay, and
+market cost functions. The algebraic full-fleet constraints remain duplicated.
+Consequently, `tests/test_branch_price_lab_parity.py` is a **mandatory drift
+guard**: for every burned seed 0--15 and every positive `n<=4`, it compares
+the duplicate oracle with canonical `solve_taker` under three price vectors,
+and compares the tree with canonical `solve_dictator` plus complete tiny
+enumeration. Seed 11 at `n=4` must be infeasible in every formulation. Any
+future canonical fleet-model change must keep this parity battery green.
+
 ## 5. Binding tolerance ledger
 
 One operand-scaled policy governs every numerical comparison:
@@ -287,6 +305,11 @@ The burned B2 seeds used here are all below 16:
 Additional adversarial checks cover a feasible parent with an infeasible
 restricted child, both sides of the near-integral branching band, and
 interruptions after uncommitted seed, master, and pricing solves.
+
+The always-run CBC-compatible checks live in
+`tests/test_branch_price_lab_import.py`. Exact-tree and parity modules have an
+explicit module-level skip when the optional Gurobi package or license is
+unavailable; a CBC-only full test collection must pass rather than fail.
 
 The spike stops and remains a documented draft if a one-split tree cannot
 reproduce tiny truth, a node claimed infeasible lacks a solver certificate, or

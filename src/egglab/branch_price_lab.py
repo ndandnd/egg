@@ -139,6 +139,40 @@ def gurobi_available() -> bool:
     return gp is not None and GRB is not None
 
 
+_GUROBI_RUNTIME_CACHE: list[bool] = []
+
+
+def gurobi_runtime_available() -> bool:
+    """Whether optional Gurobi can create a licensed model.
+
+    Test modules use this predicate for an explicit module-level skip, so an
+    installed package without a usable license behaves like an unavailable
+    optional backend rather than failing CBC CI.
+    """
+    if _GUROBI_RUNTIME_CACHE:
+        return _GUROBI_RUNTIME_CACHE[0]
+    if not gurobi_available():
+        _GUROBI_RUNTIME_CACHE.append(False)
+        return False
+    environment = None
+    model = None
+    try:
+        environment = gp.Env(empty=True)
+        environment.setParam("OutputFlag", 0)
+        environment.start()
+        model = gp.Model(env=environment)
+        available = True
+    except Exception:
+        available = False
+    finally:
+        if model is not None:
+            model.dispose()
+        if environment is not None:
+            environment.dispose()
+    _GUROBI_RUNTIME_CACHE.append(available)
+    return available
+
+
 def _require_gurobi() -> None:
     if not gurobi_available():
         raise ExactnessLabError(
