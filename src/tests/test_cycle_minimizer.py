@@ -199,9 +199,14 @@ def test_degenerate_losing_response_uses_invariant_certificate(
         if np.max(np.abs(
                 np.asarray(posted_prices, dtype=float) - prices)) <= 1e-12:
             backend_row = next(
-                response for response in result["responses"]
-                if response["structure_id"] == sid)
-            backend_row["solution"] = copy.deepcopy(alternate)
+                (
+                    response for response in result["responses"]
+                    if response["structure_id"] == sid
+                ),
+                None,
+            )
+            if backend_row is not None:
+                backend_row["solution"] = copy.deepcopy(alternate)
         return result
 
     monkeypatch.setattr(
