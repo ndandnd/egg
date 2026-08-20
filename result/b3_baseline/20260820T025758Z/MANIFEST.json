@@ -1,0 +1,92 @@
+{
+  "analysis_code_commit": "5f44e9fb1dbfdd79be5736f56705e92e7ad85c1c",
+  "analysis_code_verified": true,
+  "inputs": {
+    "b2_analysis_code_commit": "71d4c378768a7c3a882a2236e9c2ce92d98e8b23",
+    "b2_manifest": {
+      "path": "result/b2_full/20260818T140356Z/MANIFEST.json",
+      "schema": "b2-full-population-v1",
+      "sha256": "d9546f4e3e040a7dec5a1b0a397753602a9e505147435994b09f384cd4c37742"
+    },
+    "cells_csv": {
+      "csv_header": [
+        "lb_best",
+        "ub_ch",
+        "zd_minus_lb",
+        "method",
+        "seed",
+        "n_trips",
+        "b",
+        "outcome",
+        "certified",
+        "final_gap",
+        "oracle_calls",
+        "oracle_calls_clean",
+        "oracle_calls_stab",
+        "n_columns",
+        "serious_steps",
+        "null_steps",
+        "wall_clean_s",
+        "wall_stab_s",
+        "total_solver_wall_s",
+        "dictator_wall_s",
+        "broadcast_tv",
+        "broadcast_linf_max",
+        "broadcast_points",
+        "uplift_lo",
+        "uplift_hi",
+        "z_d_ub",
+        "tol_d",
+        "epsilon",
+        "budget",
+        "backend",
+        "mip_version",
+        "source_commit"
+      ],
+      "path": "result/b2_full/20260818T140356Z/cells.csv",
+      "row_count": 256,
+      "sha256": "45f946e4fabb42f01157666bd00df27c1c582b3e1d767c59ae53c25a4b6e80c6",
+      "unknown_mip_rows": 12
+    }
+  },
+  "label": "retrospective-exploratory",
+  "outputs": {
+    "SUMMARY.md": "eff0b0a90bfac2e395010064e9277ae5df2aefcf21e31934f2d99c5928f7caba",
+    "cross_method_audit.csv": "e853275184ddf65ce96d71b13bc3fe0c53ba5fc789f0019c36a6800c27a3ef35",
+    "instance_uplift.csv": "16ae5e19364aa42c046b3cdedb1dcc2445d1c83adee75563f40b7ff979418758",
+    "paired_effects.csv": "7eb8e00f64ee509b088ae4506b34c9679420b55aabe1f4987c34b1dac1ebf4fa",
+    "strata_summary.csv": "9213eb4a7b35078e5391eb6c98140b8d76c555a300ad604924583599373cb904"
+  },
+  "population": {
+    "audit_rows": 64,
+    "baseline_instances": 64,
+    "baseline_method": "a2",
+    "method_cells": 256,
+    "methods": [
+      "a2",
+      "a3",
+      "a4",
+      "a5"
+    ],
+    "paired_contrasts": 64
+  },
+  "schema": "b3-uplift-baseline-v2",
+  "scientific_boundary": [
+    "All 64 instances are synthetic (seeded generators); none is observed operator data.",
+    "Battery capacity and per-vehicle charging power are fixed constants of the instance generator.",
+    "There is no shared charger-count or depot-capacity constraint; vehicles charge independently.",
+    "There is no V2G: energy flows only from grid to vehicle.",
+    "The affine duck-shaped price environment is a stylized demand curve, not a solar-generation model.",
+    "n_trips is workload/problem size, not a controlled fleet-size variable.",
+    "There is no distribution network and no locational charging; prices are system-wide per slot.",
+    "This is the minimal default-physics uplift slice, not the full B3 atlas.",
+    "The result establishes certified synthetic signal and heterogeneity, not external validity or manuscript-grade novelty."
+  ],
+  "stamp": "20260820T025758Z",
+  "tolerances": {
+    "budget": 240,
+    "epsilon": 0.01,
+    "serialization_tol": 5e-08,
+    "tol_d": 0.01
+  }
+}
