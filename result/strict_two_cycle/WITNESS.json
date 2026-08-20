@@ -6,7 +6,7 @@
         "the recorded undamped deterministic oracle trajectory has strict prime period two",
         "all feasible discrete structures were independently enumerated at both cycle prices",
         "the unique enumerated dictator candidate is not a best response at its induced price",
-        "the four-trip witness is 1-minimal on the declared trip/capacity/feedback axes"
+        "the four-trip witness is 1-minimal-only on the tested trip/capacity/feedback deletion axes, not globally minimal"
       ],
       "status": "pass"
     },
@@ -19,7 +19,7 @@
       {
         "id": "T1-fixed-point-necessary-dictator",
         "role": "Only this implication turns the enumerated unique-dictator/deviation evidence into absence of any fixed point in the serialized continuous-charging model.",
-        "statement": "For diagonal b >= 0, every self-confirming posted-price best response minimizes ops + a*L + 0.5*b*L^2.  The identity adds 0.5*(L'-L)^T b (L'-L) to each best-response inequality.",
+        "statement": "For diagonal b >= 0, every self-confirming posted-price best response minimizes ops + (a+b*U)*L + 0.5*b*L^2.  The identity adds 0.5*(L'-L)^T b (L'-L) to each best-response inequality.",
         "status": "separate-algebraic-lemma"
       }
     ]
@@ -31,36 +31,6 @@
       "uplift_interval": [
         0.00304926,
         0.003138558
-      ],
-      "z_ch_load": [
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.298828125,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0
       ],
       "z_ch_lower_model": 241.996861442,
       "z_ch_upper_exact_incumbent": 241.99695074,
@@ -707,6 +677,7 @@
           "n_feasible": 29,
           "n_infeasible": 7,
           "n_structures": 36,
+          "other_structures_certified_lower_bound": 242.0,
           "prices": [
             3.500268355,
             3.501749815,
@@ -750,68 +721,6 @@
               "objective": 314.616405473,
               "objective_gap_from_best": 73.157253197,
               "optimality_gap_abs": 0.0,
-              "solution": {
-                "arc_kinds": [
-                  [],
-                  [
-                    "dir",
-                    "dep"
-                  ]
-                ],
-                "charges": [
-                  {
-                    "after_trip": "t002",
-                    "before_trip": "t003",
-                    "kwh": 10.7,
-                    "slot": 20,
-                    "vehicle": 1
-                  }
-                ],
-                "energy_charged_kwh": 10.7,
-                "fleet": 2,
-                "load": [
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  10.7,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0
-                ],
-                "ops_cost": 272.0,
-                "sequences": [
-                  [
-                    "t000"
-                  ],
-                  [
-                    "t001",
-                    "t002",
-                    "t003"
-                  ]
-                ],
-                "structure_id": "034039bb2a8016db57e4a6c4fac56a9296b86429678321beb64493f778af9fd7"
-              },
               "structure": {
                 "kinds": [
                   [],
@@ -852,68 +761,6 @@
               "objective": 309.454366772,
               "objective_gap_from_best": 67.995214496,
               "optimality_gap_abs": 0.0,
-              "solution": {
-                "arc_kinds": [
-                  [
-                    "dir",
-                    "dep"
-                  ],
-                  []
-                ],
-                "charges": [
-                  {
-                    "after_trip": "t001",
-                    "before_trip": "t003",
-                    "kwh": 14.6,
-                    "slot": 13,
-                    "vehicle": 0
-                  }
-                ],
-                "energy_charged_kwh": 14.6,
-                "fleet": 2,
-                "load": [
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  14.6,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0
-                ],
-                "ops_cost": 262.0,
-                "sequences": [
-                  [
-                    "t000",
-                    "t001",
-                    "t003"
-                  ],
-                  [
-                    "t002"
-                  ]
-                ],
-                "structure_id": "043d0dffe25a04d44568f412b0534a427d9c5f31d50aa8611f313f7f5831dd01"
-              },
               "structure": {
                 "kinds": [
                   [
@@ -973,61 +820,6 @@
               "objective": 266.0,
               "objective_gap_from_best": 24.540847724,
               "optimality_gap_abs": 0.0,
-              "solution": {
-                "arc_kinds": [
-                  [
-                    "dep"
-                  ],
-                  [
-                    "dir"
-                  ]
-                ],
-                "charges": [],
-                "energy_charged_kwh": 0.0,
-                "fleet": 2,
-                "load": [
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0
-                ],
-                "ops_cost": 266.0,
-                "sequences": [
-                  [
-                    "t000",
-                    "t001"
-                  ],
-                  [
-                    "t002",
-                    "t003"
-                  ]
-                ],
-                "structure_id": "2bea32b1b01b08f960e05fa86266869cf32972624ca9d7f88d9714e5b99b8fca"
-              },
               "structure": {
                 "kinds": [
                   [
@@ -1067,61 +859,6 @@
               "objective": 272.0,
               "objective_gap_from_best": 30.540847724,
               "optimality_gap_abs": 0.0,
-              "solution": {
-                "arc_kinds": [
-                  [
-                    "dir"
-                  ],
-                  [
-                    "dep"
-                  ]
-                ],
-                "charges": [],
-                "energy_charged_kwh": 0.0,
-                "fleet": 2,
-                "load": [
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0
-                ],
-                "ops_cost": 272.0,
-                "sequences": [
-                  [
-                    "t000",
-                    "t003"
-                  ],
-                  [
-                    "t001",
-                    "t002"
-                  ]
-                ],
-                "structure_id": "2c99fe256b47111c84e30e6e980c64c55f3c92f6296670fd4545245853995483"
-              },
               "structure": {
                 "kinds": [
                   [
@@ -1161,68 +898,6 @@
               "objective": 293.527901212,
               "objective_gap_from_best": 52.068748936,
               "optimality_gap_abs": 0.0,
-              "solution": {
-                "arc_kinds": [
-                  [
-                    "dir",
-                    "dep"
-                  ],
-                  []
-                ],
-                "charges": [
-                  {
-                    "after_trip": "t001",
-                    "before_trip": "t002",
-                    "kwh": 9.7,
-                    "slot": 13,
-                    "vehicle": 0
-                  }
-                ],
-                "energy_charged_kwh": 9.7,
-                "fleet": 2,
-                "load": [
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  9.7,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0
-                ],
-                "ops_cost": 262.0,
-                "sequences": [
-                  [
-                    "t000",
-                    "t001",
-                    "t002"
-                  ],
-                  [
-                    "t003"
-                  ]
-                ],
-                "structure_id": "2f11ff352ed537cccd093a6a041e07cc428a8db79eb3a3446386a2b75ff3ab3f"
-              },
               "structure": {
                 "kinds": [
                   [
@@ -1261,66 +936,6 @@
               "objective": 241.459152276,
               "objective_gap_from_best": 0.0,
               "optimality_gap_abs": 0.0,
-              "solution": {
-                "arc_kinds": [
-                  [
-                    "dir",
-                    "dep",
-                    "dir"
-                  ]
-                ],
-                "charges": [
-                  {
-                    "after_trip": "t001",
-                    "before_trip": "t002",
-                    "kwh": 30.6,
-                    "slot": 13,
-                    "vehicle": 0
-                  }
-                ],
-                "energy_charged_kwh": 30.6,
-                "fleet": 1,
-                "load": [
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  30.6,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0
-                ],
-                "ops_cost": 142.0,
-                "sequences": [
-                  [
-                    "t000",
-                    "t001",
-                    "t002",
-                    "t003"
-                  ]
-                ],
-                "structure_id": "35ee45f99249a70db82924b1b0a119d0fee9359baad01886639379fca86a3daf"
-              },
               "structure": {
                 "kinds": [
                   [
@@ -1361,66 +976,6 @@
               "objective": 314.061784304,
               "objective_gap_from_best": 72.602632028,
               "optimality_gap_abs": 0.0,
-              "solution": {
-                "arc_kinds": [
-                  [
-                    "dep",
-                    "dep",
-                    "dep"
-                  ]
-                ],
-                "charges": [
-                  {
-                    "after_trip": "t001",
-                    "before_trip": "t002",
-                    "kwh": 39.4,
-                    "slot": 13,
-                    "vehicle": 0
-                  }
-                ],
-                "energy_charged_kwh": 39.4,
-                "fleet": 1,
-                "load": [
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  39.4,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0
-                ],
-                "ops_cost": 186.0,
-                "sequences": [
-                  [
-                    "t000",
-                    "t001",
-                    "t002",
-                    "t003"
-                  ]
-                ],
-                "structure_id": "3716b955d6801bf174928b8c1cc09b7f13a03423964fb148c80b3338906e0f0b"
-              },
               "structure": {
                 "kinds": [
                   [
@@ -1459,68 +1014,6 @@
               "objective": 329.879037769,
               "objective_gap_from_best": 88.419885493,
               "optimality_gap_abs": 0.0,
-              "solution": {
-                "arc_kinds": [
-                  [],
-                  [
-                    "dep",
-                    "dep"
-                  ]
-                ],
-                "charges": [
-                  {
-                    "after_trip": "t001",
-                    "before_trip": "t002",
-                    "kwh": 13.5,
-                    "slot": 13,
-                    "vehicle": 1
-                  }
-                ],
-                "energy_charged_kwh": 13.5,
-                "fleet": 2,
-                "load": [
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  13.5,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0
-                ],
-                "ops_cost": 286.0,
-                "sequences": [
-                  [
-                    "t000"
-                  ],
-                  [
-                    "t001",
-                    "t002",
-                    "t003"
-                  ]
-                ],
-                "structure_id": "40def8562013fe231d46f866785bb583d4f2c04a24374e9083f56c81fd0dfacf"
-              },
               "structure": {
                 "kinds": [
                   [],
@@ -1559,68 +1052,6 @@
               "objective": 296.877841393,
               "objective_gap_from_best": 55.418689117,
               "optimality_gap_abs": 0.0,
-              "solution": {
-                "arc_kinds": [
-                  [],
-                  [
-                    "dep",
-                    "dir"
-                  ]
-                ],
-                "charges": [
-                  {
-                    "after_trip": "t001",
-                    "before_trip": "t002",
-                    "kwh": 9.5,
-                    "slot": 13,
-                    "vehicle": 1
-                  }
-                ],
-                "energy_charged_kwh": 9.5,
-                "fleet": 2,
-                "load": [
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  9.5,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0
-                ],
-                "ops_cost": 266.0,
-                "sequences": [
-                  [
-                    "t000"
-                  ],
-                  [
-                    "t001",
-                    "t002",
-                    "t003"
-                  ]
-                ],
-                "structure_id": "4155de56049e15e102f2aaf79820c04a0400f16b01f90df7700607cc454e6a36"
-              },
               "structure": {
                 "kinds": [
                   [],
@@ -1682,61 +1113,6 @@
               "objective": 286.0,
               "objective_gap_from_best": 44.540847724,
               "optimality_gap_abs": 0.0,
-              "solution": {
-                "arc_kinds": [
-                  [
-                    "dep"
-                  ],
-                  [
-                    "dep"
-                  ]
-                ],
-                "charges": [],
-                "energy_charged_kwh": 0.0,
-                "fleet": 2,
-                "load": [
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0
-                ],
-                "ops_cost": 286.0,
-                "sequences": [
-                  [
-                    "t000",
-                    "t001"
-                  ],
-                  [
-                    "t002",
-                    "t003"
-                  ]
-                ],
-                "structure_id": "46514e71b0f6171c2fec7da130d69d32bd872cf1a16ec09fb55c5b0a9a029424"
-              },
               "structure": {
                 "kinds": [
                   [
@@ -1772,61 +1148,6 @@
               "objective": 262.0,
               "objective_gap_from_best": 20.540847724,
               "optimality_gap_abs": 0.0,
-              "solution": {
-                "arc_kinds": [
-                  [
-                    "dir"
-                  ],
-                  [
-                    "dep"
-                  ]
-                ],
-                "charges": [],
-                "energy_charged_kwh": 0.0,
-                "fleet": 2,
-                "load": [
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0
-                ],
-                "ops_cost": 262.0,
-                "sequences": [
-                  [
-                    "t000",
-                    "t001"
-                  ],
-                  [
-                    "t002",
-                    "t003"
-                  ]
-                ],
-                "structure_id": "52a9f3d838d74aadf4c03eb9910b7a45ae86d4a473d46e87381bd38e51267d3d"
-              },
               "structure": {
                 "kinds": [
                   [
@@ -1862,68 +1183,6 @@
               "objective": 310.933007165,
               "objective_gap_from_best": 69.473854889,
               "optimality_gap_abs": 0.0,
-              "solution": {
-                "arc_kinds": [
-                  [
-                    "dep",
-                    "dir"
-                  ],
-                  []
-                ],
-                "charges": [
-                  {
-                    "after_trip": "t000",
-                    "before_trip": "t001",
-                    "kwh": 11.7,
-                    "slot": 12,
-                    "vehicle": 0
-                  }
-                ],
-                "energy_charged_kwh": 11.7,
-                "fleet": 2,
-                "load": [
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  11.7,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0
-                ],
-                "ops_cost": 272.0,
-                "sequences": [
-                  [
-                    "t000",
-                    "t001",
-                    "t002"
-                  ],
-                  [
-                    "t003"
-                  ]
-                ],
-                "structure_id": "5cda22d833eecc2371cc2fcad717cbb34177162a5c93f39cc9d52824779a1751"
-              },
               "structure": {
                 "kinds": [
                   [
@@ -1964,68 +1223,6 @@
               "objective": 333.129336863,
               "objective_gap_from_best": 91.670184587,
               "optimality_gap_abs": 0.0,
-              "solution": {
-                "arc_kinds": [
-                  [
-                    "dep",
-                    "dep"
-                  ],
-                  []
-                ],
-                "charges": [
-                  {
-                    "after_trip": "t001",
-                    "before_trip": "t002",
-                    "kwh": 14.5,
-                    "slot": 13,
-                    "vehicle": 0
-                  }
-                ],
-                "energy_charged_kwh": 14.5,
-                "fleet": 2,
-                "load": [
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  14.5,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0
-                ],
-                "ops_cost": 286.0,
-                "sequences": [
-                  [
-                    "t000",
-                    "t001",
-                    "t002"
-                  ],
-                  [
-                    "t003"
-                  ]
-                ],
-                "structure_id": "663382c80031edd1b94cb3271b2ede50882466bc33893c6e51ec956d3ea43e33"
-              },
               "structure": {
                 "kinds": [
                   [
@@ -2091,66 +1288,6 @@
               "objective": 274.460348652,
               "objective_gap_from_best": 33.001196376,
               "optimality_gap_abs": 0.0,
-              "solution": {
-                "arc_kinds": [
-                  [
-                    "dir",
-                    "dep",
-                    "dep"
-                  ]
-                ],
-                "charges": [
-                  {
-                    "after_trip": "t001",
-                    "before_trip": "t002",
-                    "kwh": 34.6,
-                    "slot": 13,
-                    "vehicle": 0
-                  }
-                ],
-                "energy_charged_kwh": 34.6,
-                "fleet": 1,
-                "load": [
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  34.6,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0
-                ],
-                "ops_cost": 162.0,
-                "sequences": [
-                  [
-                    "t000",
-                    "t001",
-                    "t002",
-                    "t003"
-                  ]
-                ],
-                "structure_id": "7bec0cca3ac2acbeb62ad694b170b75800460e0c8eea3014fc3d1da3f9fb1043"
-              },
               "structure": {
                 "kinds": [
                   [
@@ -2189,68 +1326,6 @@
               "objective": 307.603828403,
               "objective_gap_from_best": 66.144676127,
               "optimality_gap_abs": 0.0,
-              "solution": {
-                "arc_kinds": [
-                  [
-                    "dep",
-                    "dir"
-                  ],
-                  []
-                ],
-                "charges": [
-                  {
-                    "after_trip": "t000",
-                    "before_trip": "t002",
-                    "kwh": 12.8,
-                    "slot": 13,
-                    "vehicle": 0
-                  }
-                ],
-                "energy_charged_kwh": 12.8,
-                "fleet": 2,
-                "load": [
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  12.8,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0
-                ],
-                "ops_cost": 266.0,
-                "sequences": [
-                  [
-                    "t000",
-                    "t002",
-                    "t003"
-                  ],
-                  [
-                    "t001"
-                  ]
-                ],
-                "structure_id": "7ffb388ae1c2edbbf55c63d1ccb26b60492f5c79cbeb3b777c85926aaa163534"
-              },
               "structure": {
                 "kinds": [
                   [
@@ -2333,73 +1408,6 @@
               "objective": 300.801438428,
               "objective_gap_from_best": 59.342286152,
               "optimality_gap_abs": 0.0,
-              "solution": {
-                "arc_kinds": [
-                  [
-                    "dep",
-                    "dir",
-                    "dep"
-                  ]
-                ],
-                "charges": [
-                  {
-                    "after_trip": "t000",
-                    "before_trip": "t001",
-                    "kwh": 25.9,
-                    "slot": 12,
-                    "vehicle": 0
-                  },
-                  {
-                    "after_trip": "t002",
-                    "before_trip": "t003",
-                    "kwh": 10.7,
-                    "slot": 20,
-                    "vehicle": 0
-                  }
-                ],
-                "energy_charged_kwh": 36.6,
-                "fleet": 1,
-                "load": [
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  25.9,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  10.7,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0
-                ],
-                "ops_cost": 172.0,
-                "sequences": [
-                  [
-                    "t000",
-                    "t001",
-                    "t002",
-                    "t003"
-                  ]
-                ],
-                "structure_id": "9288024892aacc48c501bbdfcd7b7729777885c30e28362c92a63935456ee473"
-              },
               "structure": {
                 "kinds": [
                   [
@@ -2440,68 +1448,6 @@
               "objective": 349.055802424,
               "objective_gap_from_best": 107.596650148,
               "optimality_gap_abs": 0.0,
-              "solution": {
-                "arc_kinds": [
-                  [
-                    "dep",
-                    "dep"
-                  ],
-                  []
-                ],
-                "charges": [
-                  {
-                    "after_trip": "t001",
-                    "before_trip": "t003",
-                    "kwh": 19.4,
-                    "slot": 13,
-                    "vehicle": 0
-                  }
-                ],
-                "energy_charged_kwh": 19.4,
-                "fleet": 2,
-                "load": [
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  19.4,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0
-                ],
-                "ops_cost": 286.0,
-                "sequences": [
-                  [
-                    "t000",
-                    "t001",
-                    "t003"
-                  ],
-                  [
-                    "t002"
-                  ]
-                ],
-                "structure_id": "92dfb0b0879acf2a5852f1ffd65b4f4bcac3a12655b11b39cecee6ae70dfcb85"
-              },
               "structure": {
                 "kinds": [
                   [
@@ -2569,68 +1515,6 @@
               "objective": 340.605024779,
               "objective_gap_from_best": 99.145872503,
               "optimality_gap_abs": 0.0,
-              "solution": {
-                "arc_kinds": [
-                  [
-                    "dep",
-                    "dep"
-                  ],
-                  []
-                ],
-                "charges": [
-                  {
-                    "after_trip": "t000",
-                    "before_trip": "t002",
-                    "kwh": 16.8,
-                    "slot": 13,
-                    "vehicle": 0
-                  }
-                ],
-                "energy_charged_kwh": 16.8,
-                "fleet": 2,
-                "load": [
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  16.8,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0
-                ],
-                "ops_cost": 286.0,
-                "sequences": [
-                  [
-                    "t000",
-                    "t002",
-                    "t003"
-                  ],
-                  [
-                    "t001"
-                  ]
-                ],
-                "structure_id": "a65e4d78371abe698591d7ab54429645a6834f25d93772454741ab8ba76a05d5"
-              },
               "structure": {
                 "kinds": [
                   [
@@ -2662,61 +1546,6 @@
               "objective": 258.0,
               "objective_gap_from_best": 16.540847724,
               "optimality_gap_abs": 0.0,
-              "solution": {
-                "arc_kinds": [
-                  [
-                    "dir"
-                  ],
-                  [
-                    "dir"
-                  ]
-                ],
-                "charges": [],
-                "energy_charged_kwh": 0.0,
-                "fleet": 2,
-                "load": [
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0
-                ],
-                "ops_cost": 258.0,
-                "sequences": [
-                  [
-                    "t000",
-                    "t003"
-                  ],
-                  [
-                    "t001",
-                    "t002"
-                  ]
-                ],
-                "structure_id": "a84493be34d57f2d07a62b1c5718f6786ec1c33234b716e178d1669bdb3fc052"
-              },
               "structure": {
                 "kinds": [
                   [
@@ -2758,61 +1587,6 @@
               "objective": 272.0,
               "objective_gap_from_best": 30.540847724,
               "optimality_gap_abs": 0.0,
-              "solution": {
-                "arc_kinds": [
-                  [
-                    "dir"
-                  ],
-                  [
-                    "dep"
-                  ]
-                ],
-                "charges": [],
-                "energy_charged_kwh": 0.0,
-                "fleet": 2,
-                "load": [
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0
-                ],
-                "ops_cost": 272.0,
-                "sequences": [
-                  [
-                    "t000",
-                    "t002"
-                  ],
-                  [
-                    "t001",
-                    "t003"
-                  ]
-                ],
-                "structure_id": "aa26c6fba9de3a23f7a1ba6fb4551512e25eb9ea8a915e93a8d50934880b797f"
-              },
               "structure": {
                 "kinds": [
                   [
@@ -2856,61 +1630,6 @@
               "objective": 272.0,
               "objective_gap_from_best": 30.540847724,
               "optimality_gap_abs": 0.0,
-              "solution": {
-                "arc_kinds": [
-                  [
-                    "dep"
-                  ],
-                  [
-                    "dir"
-                  ]
-                ],
-                "charges": [],
-                "energy_charged_kwh": 0.0,
-                "fleet": 2,
-                "load": [
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0
-                ],
-                "ops_cost": 272.0,
-                "sequences": [
-                  [
-                    "t000",
-                    "t003"
-                  ],
-                  [
-                    "t001",
-                    "t002"
-                  ]
-                ],
-                "structure_id": "ac7b3f648c1d343530d5f118e685b43c7ca77f26eb82064590c28d3b365ec10c"
-              },
               "structure": {
                 "kinds": [
                   [
@@ -2946,68 +1665,6 @@
               "objective": 327.759782862,
               "objective_gap_from_best": 86.300630586,
               "optimality_gap_abs": 0.0,
-              "solution": {
-                "arc_kinds": [
-                  [
-                    "dir",
-                    "dep"
-                  ],
-                  []
-                ],
-                "charges": [
-                  {
-                    "after_trip": "t002",
-                    "before_trip": "t003",
-                    "kwh": 14.0,
-                    "slot": 20,
-                    "vehicle": 0
-                  }
-                ],
-                "energy_charged_kwh": 14.0,
-                "fleet": 2,
-                "load": [
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  14.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0
-                ],
-                "ops_cost": 272.0,
-                "sequences": [
-                  [
-                    "t000",
-                    "t002",
-                    "t003"
-                  ],
-                  [
-                    "t001"
-                  ]
-                ],
-                "structure_id": "b11a56d50b5292b4184346be3b0c19cd840d7e02b97fd4370d4ebed7cb18168e"
-              },
               "structure": {
                 "kinds": [
                   [
@@ -3048,66 +1705,6 @@
               "objective": 281.060587928,
               "objective_gap_from_best": 39.601435652,
               "optimality_gap_abs": 0.0,
-              "solution": {
-                "arc_kinds": [
-                  [
-                    "dep",
-                    "dep",
-                    "dir"
-                  ]
-                ],
-                "charges": [
-                  {
-                    "after_trip": "t001",
-                    "before_trip": "t002",
-                    "kwh": 35.4,
-                    "slot": 13,
-                    "vehicle": 0
-                  }
-                ],
-                "energy_charged_kwh": 35.4,
-                "fleet": 1,
-                "load": [
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  35.4,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0
-                ],
-                "ops_cost": 166.0,
-                "sequences": [
-                  [
-                    "t000",
-                    "t001",
-                    "t002",
-                    "t003"
-                  ]
-                ],
-                "structure_id": "b2df03f89e0eff8e7d5b8361c20bb3e9df14e2b5321aebeff7d94237f28cd4c9"
-              },
               "structure": {
                 "kinds": [
                   [
@@ -3148,61 +1745,6 @@
               "objective": 286.0,
               "objective_gap_from_best": 44.540847724,
               "optimality_gap_abs": 0.0,
-              "solution": {
-                "arc_kinds": [
-                  [
-                    "dep"
-                  ],
-                  [
-                    "dep"
-                  ]
-                ],
-                "charges": [],
-                "energy_charged_kwh": 0.0,
-                "fleet": 2,
-                "load": [
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0
-                ],
-                "ops_cost": 286.0,
-                "sequences": [
-                  [
-                    "t000",
-                    "t003"
-                  ],
-                  [
-                    "t001",
-                    "t002"
-                  ]
-                ],
-                "structure_id": "bc9fde19426dc293136418f2da9890ab3dccee801b25154177607a3e7e9890c8"
-              },
               "structure": {
                 "kinds": [
                   [
@@ -3244,61 +1786,6 @@
               "objective": 272.0,
               "objective_gap_from_best": 30.540847724,
               "optimality_gap_abs": 0.0,
-              "solution": {
-                "arc_kinds": [
-                  [
-                    "dep"
-                  ],
-                  [
-                    "dir"
-                  ]
-                ],
-                "charges": [],
-                "energy_charged_kwh": 0.0,
-                "fleet": 2,
-                "load": [
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0
-                ],
-                "ops_cost": 272.0,
-                "sequences": [
-                  [
-                    "t000",
-                    "t002"
-                  ],
-                  [
-                    "t001",
-                    "t003"
-                  ]
-                ],
-                "structure_id": "bf8095a6fcccb1caed751055557a28f9f6394f316a4497be990b531e50d942b3"
-              },
               "structure": {
                 "kinds": [
                   [
@@ -3354,61 +1841,6 @@
               "objective": 242.0,
               "objective_gap_from_best": 0.540847724,
               "optimality_gap_abs": 0.0,
-              "solution": {
-                "arc_kinds": [
-                  [
-                    "dir"
-                  ],
-                  [
-                    "dir"
-                  ]
-                ],
-                "charges": [],
-                "energy_charged_kwh": 0.0,
-                "fleet": 2,
-                "load": [
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0
-                ],
-                "ops_cost": 242.0,
-                "sequences": [
-                  [
-                    "t000",
-                    "t001"
-                  ],
-                  [
-                    "t002",
-                    "t003"
-                  ]
-                ],
-                "structure_id": "d78b5f4aba23eeb7523ea7091ec8fffaa92d4c2c020391f9834cb13dc7ab7b83"
-              },
               "structure": {
                 "kinds": [
                   [
@@ -3441,61 +1873,6 @@
               "objective": 258.0,
               "objective_gap_from_best": 16.540847724,
               "optimality_gap_abs": 0.0,
-              "solution": {
-                "arc_kinds": [
-                  [
-                    "dir"
-                  ],
-                  [
-                    "dir"
-                  ]
-                ],
-                "charges": [],
-                "energy_charged_kwh": 0.0,
-                "fleet": 2,
-                "load": [
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0
-                ],
-                "ops_cost": 258.0,
-                "sequences": [
-                  [
-                    "t000",
-                    "t002"
-                  ],
-                  [
-                    "t001",
-                    "t003"
-                  ]
-                ],
-                "structure_id": "da43f627c5f1fb26dd4610a9521cf85bcd3b4d5b78eff76253868c56a3f1975d"
-              },
               "structure": {
                 "kinds": [
                   [
@@ -3539,61 +1916,6 @@
               "objective": 286.0,
               "objective_gap_from_best": 44.540847724,
               "optimality_gap_abs": 0.0,
-              "solution": {
-                "arc_kinds": [
-                  [
-                    "dep"
-                  ],
-                  [
-                    "dep"
-                  ]
-                ],
-                "charges": [],
-                "energy_charged_kwh": 0.0,
-                "fleet": 2,
-                "load": [
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0
-                ],
-                "ops_cost": 286.0,
-                "sequences": [
-                  [
-                    "t000",
-                    "t002"
-                  ],
-                  [
-                    "t001",
-                    "t003"
-                  ]
-                ],
-                "structure_id": "dd4b011dc7e8eacfe3934c6e0ef34822a6c9315690892eeefbfad22d6169d691"
-              },
               "structure": {
                 "kinds": [
                   [
@@ -3629,68 +1951,6 @@
               "objective": 327.23828367,
               "objective_gap_from_best": 85.779131394,
               "optimality_gap_abs": 0.0,
-              "solution": {
-                "arc_kinds": [
-                  [
-                    "dep",
-                    "dir"
-                  ],
-                  []
-                ],
-                "charges": [
-                  {
-                    "after_trip": "t000",
-                    "before_trip": "t001",
-                    "kwh": 16.6,
-                    "slot": 12,
-                    "vehicle": 0
-                  }
-                ],
-                "energy_charged_kwh": 16.6,
-                "fleet": 2,
-                "load": [
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  16.6,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0
-                ],
-                "ops_cost": 272.0,
-                "sequences": [
-                  [
-                    "t000",
-                    "t001",
-                    "t003"
-                  ],
-                  [
-                    "t002"
-                  ]
-                ],
-                "structure_id": "f7fc0d4ddbc033b06989855c08fb1ddd809d50b6ed7fd20f49789fb3521ba9d0"
-              },
               "structure": {
                 "kinds": [
                   [
@@ -3725,6 +1985,7 @@
           "n_feasible": 29,
           "n_infeasible": 7,
           "n_structures": 36,
+          "other_structures_certified_lower_bound": 243.82478797,
           "prices": [
             3.500268355,
             3.501749815,
@@ -3768,68 +2029,6 @@
               "objective": 314.616405473,
               "objective_gap_from_best": 72.616405473,
               "optimality_gap_abs": 0.0,
-              "solution": {
-                "arc_kinds": [
-                  [],
-                  [
-                    "dir",
-                    "dep"
-                  ]
-                ],
-                "charges": [
-                  {
-                    "after_trip": "t002",
-                    "before_trip": "t003",
-                    "kwh": 10.7,
-                    "slot": 20,
-                    "vehicle": 1
-                  }
-                ],
-                "energy_charged_kwh": 10.7,
-                "fleet": 2,
-                "load": [
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  10.7,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0
-                ],
-                "ops_cost": 272.0,
-                "sequences": [
-                  [
-                    "t000"
-                  ],
-                  [
-                    "t001",
-                    "t002",
-                    "t003"
-                  ]
-                ],
-                "structure_id": "034039bb2a8016db57e4a6c4fac56a9296b86429678321beb64493f778af9fd7"
-              },
               "structure": {
                 "kinds": [
                   [],
@@ -3870,68 +2069,6 @@
               "objective": 310.58306877,
               "objective_gap_from_best": 68.58306877,
               "optimality_gap_abs": 0.0,
-              "solution": {
-                "arc_kinds": [
-                  [
-                    "dir",
-                    "dep"
-                  ],
-                  []
-                ],
-                "charges": [
-                  {
-                    "after_trip": "t001",
-                    "before_trip": "t003",
-                    "kwh": 14.6,
-                    "slot": 14,
-                    "vehicle": 0
-                  }
-                ],
-                "energy_charged_kwh": 14.6,
-                "fleet": 2,
-                "load": [
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  14.6,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0
-                ],
-                "ops_cost": 262.0,
-                "sequences": [
-                  [
-                    "t000",
-                    "t001",
-                    "t003"
-                  ],
-                  [
-                    "t002"
-                  ]
-                ],
-                "structure_id": "043d0dffe25a04d44568f412b0534a427d9c5f31d50aa8611f313f7f5831dd01"
-              },
               "structure": {
                 "kinds": [
                   [
@@ -3991,61 +2128,6 @@
               "objective": 266.0,
               "objective_gap_from_best": 24.0,
               "optimality_gap_abs": 0.0,
-              "solution": {
-                "arc_kinds": [
-                  [
-                    "dep"
-                  ],
-                  [
-                    "dir"
-                  ]
-                ],
-                "charges": [],
-                "energy_charged_kwh": 0.0,
-                "fleet": 2,
-                "load": [
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0
-                ],
-                "ops_cost": 266.0,
-                "sequences": [
-                  [
-                    "t000",
-                    "t001"
-                  ],
-                  [
-                    "t002",
-                    "t003"
-                  ]
-                ],
-                "structure_id": "2bea32b1b01b08f960e05fa86266869cf32972624ca9d7f88d9714e5b99b8fca"
-              },
               "structure": {
                 "kinds": [
                   [
@@ -4085,61 +2167,6 @@
               "objective": 272.0,
               "objective_gap_from_best": 30.0,
               "optimality_gap_abs": 0.0,
-              "solution": {
-                "arc_kinds": [
-                  [
-                    "dir"
-                  ],
-                  [
-                    "dep"
-                  ]
-                ],
-                "charges": [],
-                "energy_charged_kwh": 0.0,
-                "fleet": 2,
-                "load": [
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0
-                ],
-                "ops_cost": 272.0,
-                "sequences": [
-                  [
-                    "t000",
-                    "t003"
-                  ],
-                  [
-                    "t001",
-                    "t002"
-                  ]
-                ],
-                "structure_id": "2c99fe256b47111c84e30e6e980c64c55f3c92f6296670fd4545245853995483"
-              },
               "structure": {
                 "kinds": [
                   [
@@ -4179,68 +2206,6 @@
               "objective": 294.277792265,
               "objective_gap_from_best": 52.277792265,
               "optimality_gap_abs": 0.0,
-              "solution": {
-                "arc_kinds": [
-                  [
-                    "dir",
-                    "dep"
-                  ],
-                  []
-                ],
-                "charges": [
-                  {
-                    "after_trip": "t001",
-                    "before_trip": "t002",
-                    "kwh": 9.7,
-                    "slot": 14,
-                    "vehicle": 0
-                  }
-                ],
-                "energy_charged_kwh": 9.7,
-                "fleet": 2,
-                "load": [
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  9.7,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0
-                ],
-                "ops_cost": 262.0,
-                "sequences": [
-                  [
-                    "t000",
-                    "t001",
-                    "t002"
-                  ],
-                  [
-                    "t003"
-                  ]
-                ],
-                "structure_id": "2f11ff352ed537cccd093a6a041e07cc428a8db79eb3a3446386a2b75ff3ab3f"
-              },
               "structure": {
                 "kinds": [
                   [
@@ -4279,66 +2244,6 @@
               "objective": 243.82478797,
               "objective_gap_from_best": 1.82478797,
               "optimality_gap_abs": 0.0,
-              "solution": {
-                "arc_kinds": [
-                  [
-                    "dir",
-                    "dep",
-                    "dir"
-                  ]
-                ],
-                "charges": [
-                  {
-                    "after_trip": "t001",
-                    "before_trip": "t002",
-                    "kwh": 30.6,
-                    "slot": 14,
-                    "vehicle": 0
-                  }
-                ],
-                "energy_charged_kwh": 30.6,
-                "fleet": 1,
-                "load": [
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  30.6,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0
-                ],
-                "ops_cost": 142.0,
-                "sequences": [
-                  [
-                    "t000",
-                    "t001",
-                    "t002",
-                    "t003"
-                  ]
-                ],
-                "structure_id": "35ee45f99249a70db82924b1b0a119d0fee9359baad01886639379fca86a3daf"
-              },
               "structure": {
                 "kinds": [
                   [
@@ -4379,66 +2284,6 @@
               "objective": 317.10773353,
               "objective_gap_from_best": 75.10773353,
               "optimality_gap_abs": 0.0,
-              "solution": {
-                "arc_kinds": [
-                  [
-                    "dep",
-                    "dep",
-                    "dep"
-                  ]
-                ],
-                "charges": [
-                  {
-                    "after_trip": "t001",
-                    "before_trip": "t002",
-                    "kwh": 39.4,
-                    "slot": 14,
-                    "vehicle": 0
-                  }
-                ],
-                "energy_charged_kwh": 39.4,
-                "fleet": 1,
-                "load": [
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  39.4,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0
-                ],
-                "ops_cost": 186.0,
-                "sequences": [
-                  [
-                    "t000",
-                    "t001",
-                    "t002",
-                    "t003"
-                  ]
-                ],
-                "structure_id": "3716b955d6801bf174928b8c1cc09b7f13a03423964fb148c80b3338906e0f0b"
-              },
               "structure": {
                 "kinds": [
                   [
@@ -4477,68 +2322,6 @@
               "objective": 330.922700575,
               "objective_gap_from_best": 88.922700575,
               "optimality_gap_abs": 0.0,
-              "solution": {
-                "arc_kinds": [
-                  [],
-                  [
-                    "dep",
-                    "dep"
-                  ]
-                ],
-                "charges": [
-                  {
-                    "after_trip": "t001",
-                    "before_trip": "t002",
-                    "kwh": 13.5,
-                    "slot": 14,
-                    "vehicle": 1
-                  }
-                ],
-                "energy_charged_kwh": 13.5,
-                "fleet": 2,
-                "load": [
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  13.5,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0
-                ],
-                "ops_cost": 286.0,
-                "sequences": [
-                  [
-                    "t000"
-                  ],
-                  [
-                    "t001",
-                    "t002",
-                    "t003"
-                  ]
-                ],
-                "structure_id": "40def8562013fe231d46f866785bb583d4f2c04a24374e9083f56c81fd0dfacf"
-              },
               "structure": {
                 "kinds": [
                   [],
@@ -4577,68 +2360,6 @@
               "objective": 297.612270775,
               "objective_gap_from_best": 55.612270775,
               "optimality_gap_abs": 0.0,
-              "solution": {
-                "arc_kinds": [
-                  [],
-                  [
-                    "dep",
-                    "dir"
-                  ]
-                ],
-                "charges": [
-                  {
-                    "after_trip": "t001",
-                    "before_trip": "t002",
-                    "kwh": 9.5,
-                    "slot": 14,
-                    "vehicle": 1
-                  }
-                ],
-                "energy_charged_kwh": 9.5,
-                "fleet": 2,
-                "load": [
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  9.5,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0
-                ],
-                "ops_cost": 266.0,
-                "sequences": [
-                  [
-                    "t000"
-                  ],
-                  [
-                    "t001",
-                    "t002",
-                    "t003"
-                  ]
-                ],
-                "structure_id": "4155de56049e15e102f2aaf79820c04a0400f16b01f90df7700607cc454e6a36"
-              },
               "structure": {
                 "kinds": [
                   [],
@@ -4700,61 +2421,6 @@
               "objective": 286.0,
               "objective_gap_from_best": 44.0,
               "optimality_gap_abs": 0.0,
-              "solution": {
-                "arc_kinds": [
-                  [
-                    "dep"
-                  ],
-                  [
-                    "dep"
-                  ]
-                ],
-                "charges": [],
-                "energy_charged_kwh": 0.0,
-                "fleet": 2,
-                "load": [
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0
-                ],
-                "ops_cost": 286.0,
-                "sequences": [
-                  [
-                    "t000",
-                    "t001"
-                  ],
-                  [
-                    "t002",
-                    "t003"
-                  ]
-                ],
-                "structure_id": "46514e71b0f6171c2fec7da130d69d32bd872cf1a16ec09fb55c5b0a9a029424"
-              },
               "structure": {
                 "kinds": [
                   [
@@ -4790,61 +2456,6 @@
               "objective": 262.0,
               "objective_gap_from_best": 20.0,
               "optimality_gap_abs": 0.0,
-              "solution": {
-                "arc_kinds": [
-                  [
-                    "dir"
-                  ],
-                  [
-                    "dep"
-                  ]
-                ],
-                "charges": [],
-                "energy_charged_kwh": 0.0,
-                "fleet": 2,
-                "load": [
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0
-                ],
-                "ops_cost": 262.0,
-                "sequences": [
-                  [
-                    "t000",
-                    "t001"
-                  ],
-                  [
-                    "t002",
-                    "t003"
-                  ]
-                ],
-                "structure_id": "52a9f3d838d74aadf4c03eb9910b7a45ae86d4a473d46e87381bd38e51267d3d"
-              },
               "structure": {
                 "kinds": [
                   [
@@ -4880,68 +2491,6 @@
               "objective": 310.933007165,
               "objective_gap_from_best": 68.933007165,
               "optimality_gap_abs": 0.0,
-              "solution": {
-                "arc_kinds": [
-                  [
-                    "dep",
-                    "dir"
-                  ],
-                  []
-                ],
-                "charges": [
-                  {
-                    "after_trip": "t000",
-                    "before_trip": "t001",
-                    "kwh": 11.7,
-                    "slot": 12,
-                    "vehicle": 0
-                  }
-                ],
-                "energy_charged_kwh": 11.7,
-                "fleet": 2,
-                "load": [
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  11.7,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0
-                ],
-                "ops_cost": 272.0,
-                "sequences": [
-                  [
-                    "t000",
-                    "t001",
-                    "t002"
-                  ],
-                  [
-                    "t003"
-                  ]
-                ],
-                "structure_id": "5cda22d833eecc2371cc2fcad717cbb34177162a5c93f39cc9d52824779a1751"
-              },
               "structure": {
                 "kinds": [
                   [
@@ -4982,68 +2531,6 @@
               "objective": 334.250308025,
               "objective_gap_from_best": 92.250308025,
               "optimality_gap_abs": 0.0,
-              "solution": {
-                "arc_kinds": [
-                  [
-                    "dep",
-                    "dep"
-                  ],
-                  []
-                ],
-                "charges": [
-                  {
-                    "after_trip": "t000",
-                    "before_trip": "t001",
-                    "kwh": 14.5,
-                    "slot": 12,
-                    "vehicle": 0
-                  }
-                ],
-                "energy_charged_kwh": 14.5,
-                "fleet": 2,
-                "load": [
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  14.5,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0
-                ],
-                "ops_cost": 286.0,
-                "sequences": [
-                  [
-                    "t000",
-                    "t001",
-                    "t002"
-                  ],
-                  [
-                    "t003"
-                  ]
-                ],
-                "structure_id": "663382c80031edd1b94cb3271b2ede50882466bc33893c6e51ec956d3ea43e33"
-              },
               "structure": {
                 "kinds": [
                   [
@@ -5109,66 +2596,6 @@
               "objective": 277.13521777,
               "objective_gap_from_best": 35.13521777,
               "optimality_gap_abs": 0.0,
-              "solution": {
-                "arc_kinds": [
-                  [
-                    "dir",
-                    "dep",
-                    "dep"
-                  ]
-                ],
-                "charges": [
-                  {
-                    "after_trip": "t001",
-                    "before_trip": "t002",
-                    "kwh": 34.6,
-                    "slot": 14,
-                    "vehicle": 0
-                  }
-                ],
-                "energy_charged_kwh": 34.6,
-                "fleet": 1,
-                "load": [
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  34.6,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0
-                ],
-                "ops_cost": 162.0,
-                "sequences": [
-                  [
-                    "t000",
-                    "t001",
-                    "t002",
-                    "t003"
-                  ]
-                ],
-                "structure_id": "7bec0cca3ac2acbeb62ad694b170b75800460e0c8eea3014fc3d1da3f9fb1043"
-              },
               "structure": {
                 "kinds": [
                   [
@@ -5207,68 +2634,6 @@
               "objective": 308.59337536,
               "objective_gap_from_best": 66.59337536,
               "optimality_gap_abs": 0.0,
-              "solution": {
-                "arc_kinds": [
-                  [
-                    "dep",
-                    "dir"
-                  ],
-                  []
-                ],
-                "charges": [
-                  {
-                    "after_trip": "t000",
-                    "before_trip": "t002",
-                    "kwh": 12.8,
-                    "slot": 12,
-                    "vehicle": 0
-                  }
-                ],
-                "energy_charged_kwh": 12.8,
-                "fleet": 2,
-                "load": [
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  12.8,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0
-                ],
-                "ops_cost": 266.0,
-                "sequences": [
-                  [
-                    "t000",
-                    "t002",
-                    "t003"
-                  ],
-                  [
-                    "t001"
-                  ]
-                ],
-                "structure_id": "7ffb388ae1c2edbbf55c63d1ccb26b60492f5c79cbeb3b777c85926aaa163534"
-              },
               "structure": {
                 "kinds": [
                   [
@@ -5351,73 +2716,6 @@
               "objective": 300.801438428,
               "objective_gap_from_best": 58.801438428,
               "optimality_gap_abs": 0.0,
-              "solution": {
-                "arc_kinds": [
-                  [
-                    "dep",
-                    "dir",
-                    "dep"
-                  ]
-                ],
-                "charges": [
-                  {
-                    "after_trip": "t000",
-                    "before_trip": "t001",
-                    "kwh": 25.9,
-                    "slot": 12,
-                    "vehicle": 0
-                  },
-                  {
-                    "after_trip": "t002",
-                    "before_trip": "t003",
-                    "kwh": 10.7,
-                    "slot": 20,
-                    "vehicle": 0
-                  }
-                ],
-                "energy_charged_kwh": 36.6,
-                "fleet": 1,
-                "load": [
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  25.9,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  10.7,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0
-                ],
-                "ops_cost": 172.0,
-                "sequences": [
-                  [
-                    "t000",
-                    "t001",
-                    "t002",
-                    "t003"
-                  ]
-                ],
-                "structure_id": "9288024892aacc48c501bbdfcd7b7729777885c30e28362c92a63935456ee473"
-              },
               "structure": {
                 "kinds": [
                   [
@@ -5458,68 +2756,6 @@
               "objective": 350.55558453,
               "objective_gap_from_best": 108.55558453,
               "optimality_gap_abs": 0.0,
-              "solution": {
-                "arc_kinds": [
-                  [
-                    "dep",
-                    "dep"
-                  ],
-                  []
-                ],
-                "charges": [
-                  {
-                    "after_trip": "t000",
-                    "before_trip": "t001",
-                    "kwh": 19.4,
-                    "slot": 12,
-                    "vehicle": 0
-                  }
-                ],
-                "energy_charged_kwh": 19.4,
-                "fleet": 2,
-                "load": [
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  19.4,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0
-                ],
-                "ops_cost": 286.0,
-                "sequences": [
-                  [
-                    "t000",
-                    "t001",
-                    "t003"
-                  ],
-                  [
-                    "t002"
-                  ]
-                ],
-                "structure_id": "92dfb0b0879acf2a5852f1ffd65b4f4bcac3a12655b11b39cecee6ae70dfcb85"
-              },
               "structure": {
                 "kinds": [
                   [
@@ -5587,68 +2823,6 @@
               "objective": 341.90380516,
               "objective_gap_from_best": 99.90380516,
               "optimality_gap_abs": 0.0,
-              "solution": {
-                "arc_kinds": [
-                  [
-                    "dep",
-                    "dep"
-                  ],
-                  []
-                ],
-                "charges": [
-                  {
-                    "after_trip": "t000",
-                    "before_trip": "t002",
-                    "kwh": 16.8,
-                    "slot": 12,
-                    "vehicle": 0
-                  }
-                ],
-                "energy_charged_kwh": 16.8,
-                "fleet": 2,
-                "load": [
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  16.8,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0
-                ],
-                "ops_cost": 286.0,
-                "sequences": [
-                  [
-                    "t000",
-                    "t002",
-                    "t003"
-                  ],
-                  [
-                    "t001"
-                  ]
-                ],
-                "structure_id": "a65e4d78371abe698591d7ab54429645a6834f25d93772454741ab8ba76a05d5"
-              },
               "structure": {
                 "kinds": [
                   [
@@ -5680,61 +2854,6 @@
               "objective": 258.0,
               "objective_gap_from_best": 16.0,
               "optimality_gap_abs": 0.0,
-              "solution": {
-                "arc_kinds": [
-                  [
-                    "dir"
-                  ],
-                  [
-                    "dir"
-                  ]
-                ],
-                "charges": [],
-                "energy_charged_kwh": 0.0,
-                "fleet": 2,
-                "load": [
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0
-                ],
-                "ops_cost": 258.0,
-                "sequences": [
-                  [
-                    "t000",
-                    "t003"
-                  ],
-                  [
-                    "t001",
-                    "t002"
-                  ]
-                ],
-                "structure_id": "a84493be34d57f2d07a62b1c5718f6786ec1c33234b716e178d1669bdb3fc052"
-              },
               "structure": {
                 "kinds": [
                   [
@@ -5776,61 +2895,6 @@
               "objective": 272.0,
               "objective_gap_from_best": 30.0,
               "optimality_gap_abs": 0.0,
-              "solution": {
-                "arc_kinds": [
-                  [
-                    "dir"
-                  ],
-                  [
-                    "dep"
-                  ]
-                ],
-                "charges": [],
-                "energy_charged_kwh": 0.0,
-                "fleet": 2,
-                "load": [
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0
-                ],
-                "ops_cost": 272.0,
-                "sequences": [
-                  [
-                    "t000",
-                    "t002"
-                  ],
-                  [
-                    "t001",
-                    "t003"
-                  ]
-                ],
-                "structure_id": "aa26c6fba9de3a23f7a1ba6fb4551512e25eb9ea8a915e93a8d50934880b797f"
-              },
               "structure": {
                 "kinds": [
                   [
@@ -5874,61 +2938,6 @@
               "objective": 272.0,
               "objective_gap_from_best": 30.0,
               "optimality_gap_abs": 0.0,
-              "solution": {
-                "arc_kinds": [
-                  [
-                    "dep"
-                  ],
-                  [
-                    "dir"
-                  ]
-                ],
-                "charges": [],
-                "energy_charged_kwh": 0.0,
-                "fleet": 2,
-                "load": [
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0
-                ],
-                "ops_cost": 272.0,
-                "sequences": [
-                  [
-                    "t000",
-                    "t003"
-                  ],
-                  [
-                    "t001",
-                    "t002"
-                  ]
-                ],
-                "structure_id": "ac7b3f648c1d343530d5f118e685b43c7ca77f26eb82064590c28d3b365ec10c"
-              },
               "structure": {
                 "kinds": [
                   [
@@ -5964,68 +2973,6 @@
               "objective": 327.759782862,
               "objective_gap_from_best": 85.759782862,
               "optimality_gap_abs": 0.0,
-              "solution": {
-                "arc_kinds": [
-                  [
-                    "dir",
-                    "dep"
-                  ],
-                  []
-                ],
-                "charges": [
-                  {
-                    "after_trip": "t002",
-                    "before_trip": "t003",
-                    "kwh": 14.0,
-                    "slot": 20,
-                    "vehicle": 0
-                  }
-                ],
-                "energy_charged_kwh": 14.0,
-                "fleet": 2,
-                "load": [
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  14.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0
-                ],
-                "ops_cost": 272.0,
-                "sequences": [
-                  [
-                    "t000",
-                    "t002",
-                    "t003"
-                  ],
-                  [
-                    "t001"
-                  ]
-                ],
-                "structure_id": "b11a56d50b5292b4184346be3b0c19cd840d7e02b97fd4370d4ebed7cb18168e"
-              },
               "structure": {
                 "kinds": [
                   [
@@ -6066,66 +3013,6 @@
               "objective": 283.79730373,
               "objective_gap_from_best": 41.79730373,
               "optimality_gap_abs": 0.0,
-              "solution": {
-                "arc_kinds": [
-                  [
-                    "dep",
-                    "dep",
-                    "dir"
-                  ]
-                ],
-                "charges": [
-                  {
-                    "after_trip": "t001",
-                    "before_trip": "t002",
-                    "kwh": 35.4,
-                    "slot": 14,
-                    "vehicle": 0
-                  }
-                ],
-                "energy_charged_kwh": 35.4,
-                "fleet": 1,
-                "load": [
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  35.4,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0
-                ],
-                "ops_cost": 166.0,
-                "sequences": [
-                  [
-                    "t000",
-                    "t001",
-                    "t002",
-                    "t003"
-                  ]
-                ],
-                "structure_id": "b2df03f89e0eff8e7d5b8361c20bb3e9df14e2b5321aebeff7d94237f28cd4c9"
-              },
               "structure": {
                 "kinds": [
                   [
@@ -6166,61 +3053,6 @@
               "objective": 286.0,
               "objective_gap_from_best": 44.0,
               "optimality_gap_abs": 0.0,
-              "solution": {
-                "arc_kinds": [
-                  [
-                    "dep"
-                  ],
-                  [
-                    "dep"
-                  ]
-                ],
-                "charges": [],
-                "energy_charged_kwh": 0.0,
-                "fleet": 2,
-                "load": [
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0
-                ],
-                "ops_cost": 286.0,
-                "sequences": [
-                  [
-                    "t000",
-                    "t003"
-                  ],
-                  [
-                    "t001",
-                    "t002"
-                  ]
-                ],
-                "structure_id": "bc9fde19426dc293136418f2da9890ab3dccee801b25154177607a3e7e9890c8"
-              },
               "structure": {
                 "kinds": [
                   [
@@ -6262,61 +3094,6 @@
               "objective": 272.0,
               "objective_gap_from_best": 30.0,
               "optimality_gap_abs": 0.0,
-              "solution": {
-                "arc_kinds": [
-                  [
-                    "dep"
-                  ],
-                  [
-                    "dir"
-                  ]
-                ],
-                "charges": [],
-                "energy_charged_kwh": 0.0,
-                "fleet": 2,
-                "load": [
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0
-                ],
-                "ops_cost": 272.0,
-                "sequences": [
-                  [
-                    "t000",
-                    "t002"
-                  ],
-                  [
-                    "t001",
-                    "t003"
-                  ]
-                ],
-                "structure_id": "bf8095a6fcccb1caed751055557a28f9f6394f316a4497be990b531e50d942b3"
-              },
               "structure": {
                 "kinds": [
                   [
@@ -6372,61 +3149,6 @@
               "objective": 242.0,
               "objective_gap_from_best": 0.0,
               "optimality_gap_abs": 0.0,
-              "solution": {
-                "arc_kinds": [
-                  [
-                    "dir"
-                  ],
-                  [
-                    "dir"
-                  ]
-                ],
-                "charges": [],
-                "energy_charged_kwh": 0.0,
-                "fleet": 2,
-                "load": [
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0
-                ],
-                "ops_cost": 242.0,
-                "sequences": [
-                  [
-                    "t000",
-                    "t001"
-                  ],
-                  [
-                    "t002",
-                    "t003"
-                  ]
-                ],
-                "structure_id": "d78b5f4aba23eeb7523ea7091ec8fffaa92d4c2c020391f9834cb13dc7ab7b83"
-              },
               "structure": {
                 "kinds": [
                   [
@@ -6459,61 +3181,6 @@
               "objective": 258.0,
               "objective_gap_from_best": 16.0,
               "optimality_gap_abs": 0.0,
-              "solution": {
-                "arc_kinds": [
-                  [
-                    "dir"
-                  ],
-                  [
-                    "dir"
-                  ]
-                ],
-                "charges": [],
-                "energy_charged_kwh": 0.0,
-                "fleet": 2,
-                "load": [
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0
-                ],
-                "ops_cost": 258.0,
-                "sequences": [
-                  [
-                    "t000",
-                    "t002"
-                  ],
-                  [
-                    "t001",
-                    "t003"
-                  ]
-                ],
-                "structure_id": "da43f627c5f1fb26dd4610a9521cf85bcd3b4d5b78eff76253868c56a3f1975d"
-              },
               "structure": {
                 "kinds": [
                   [
@@ -6557,61 +3224,6 @@
               "objective": 286.0,
               "objective_gap_from_best": 44.0,
               "optimality_gap_abs": 0.0,
-              "solution": {
-                "arc_kinds": [
-                  [
-                    "dep"
-                  ],
-                  [
-                    "dep"
-                  ]
-                ],
-                "charges": [],
-                "energy_charged_kwh": 0.0,
-                "fleet": 2,
-                "load": [
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0
-                ],
-                "ops_cost": 286.0,
-                "sequences": [
-                  [
-                    "t000",
-                    "t002"
-                  ],
-                  [
-                    "t001",
-                    "t003"
-                  ]
-                ],
-                "structure_id": "dd4b011dc7e8eacfe3934c6e0ef34822a6c9315690892eeefbfad22d6169d691"
-              },
               "structure": {
                 "kinds": [
                   [
@@ -6647,68 +3259,6 @@
               "objective": 327.23828367,
               "objective_gap_from_best": 85.23828367,
               "optimality_gap_abs": 0.0,
-              "solution": {
-                "arc_kinds": [
-                  [
-                    "dep",
-                    "dir"
-                  ],
-                  []
-                ],
-                "charges": [
-                  {
-                    "after_trip": "t000",
-                    "before_trip": "t001",
-                    "kwh": 16.6,
-                    "slot": 12,
-                    "vehicle": 0
-                  }
-                ],
-                "energy_charged_kwh": 16.6,
-                "fleet": 2,
-                "load": [
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  16.6,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0
-                ],
-                "ops_cost": 272.0,
-                "sequences": [
-                  [
-                    "t000",
-                    "t001",
-                    "t003"
-                  ],
-                  [
-                    "t002"
-                  ]
-                ],
-                "structure_id": "f7fc0d4ddbc033b06989855c08fb1ddd809d50b6ed7fd20f49789fb3521ba9d0"
-              },
               "structure": {
                 "kinds": [
                   [
@@ -6912,68 +3462,6 @@
             "objective_lower": 314.616405477,
             "objective_upper": 314.616405477,
             "pwl_gap_abs": 0.0,
-            "solution": {
-              "arc_kinds": [
-                [],
-                [
-                  "dir",
-                  "dep"
-                ]
-              ],
-              "charges": [
-                {
-                  "after_trip": "t002",
-                  "before_trip": "t003",
-                  "kwh": 10.7,
-                  "slot": 20,
-                  "vehicle": 1
-                }
-              ],
-              "energy_charged_kwh": 10.7,
-              "fleet": 2,
-              "load": [
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                10.7,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0
-              ],
-              "ops_cost": 272.0,
-              "sequences": [
-                [
-                  "t000"
-                ],
-                [
-                  "t001",
-                  "t002",
-                  "t003"
-                ]
-              ],
-              "structure_id": "034039bb2a8016db57e4a6c4fac56a9296b86429678321beb64493f778af9fd7"
-            },
             "structure": {
               "kinds": [
                 [],
@@ -7013,75 +3501,6 @@
             "objective_lower": 310.523222637,
             "objective_upper": 310.523303951,
             "pwl_gap_abs": 8.1314e-05,
-            "solution": {
-              "arc_kinds": [
-                [
-                  "dir",
-                  "dep"
-                ],
-                []
-              ],
-              "charges": [
-                {
-                  "after_trip": "t001",
-                  "before_trip": "t003",
-                  "kwh": 1.53984375,
-                  "slot": 13,
-                  "vehicle": 0
-                },
-                {
-                  "after_trip": "t001",
-                  "before_trip": "t003",
-                  "kwh": 13.06015625,
-                  "slot": 14,
-                  "vehicle": 0
-                }
-              ],
-              "energy_charged_kwh": 14.6,
-              "fleet": 2,
-              "load": [
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                1.53984375,
-                13.06015625,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0
-              ],
-              "ops_cost": 262.0,
-              "sequences": [
-                [
-                  "t000",
-                  "t001",
-                  "t003"
-                ],
-                [
-                  "t002"
-                ]
-              ],
-              "structure_id": "043d0dffe25a04d44568f412b0534a427d9c5f31d50aa8611f313f7f5831dd01"
-            },
             "structure": {
               "kinds": [
                 [
@@ -7140,61 +3559,6 @@
             "objective_lower": 266.0,
             "objective_upper": 266.0,
             "pwl_gap_abs": 0.0,
-            "solution": {
-              "arc_kinds": [
-                [
-                  "dep"
-                ],
-                [
-                  "dir"
-                ]
-              ],
-              "charges": [],
-              "energy_charged_kwh": 0.0,
-              "fleet": 2,
-              "load": [
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0
-              ],
-              "ops_cost": 266.0,
-              "sequences": [
-                [
-                  "t000",
-                  "t001"
-                ],
-                [
-                  "t002",
-                  "t003"
-                ]
-              ],
-              "structure_id": "2bea32b1b01b08f960e05fa86266869cf32972624ca9d7f88d9714e5b99b8fca"
-            },
             "structure": {
               "kinds": [
                 [
@@ -7233,61 +3597,6 @@
             "objective_lower": 272.0,
             "objective_upper": 272.0,
             "pwl_gap_abs": 0.0,
-            "solution": {
-              "arc_kinds": [
-                [
-                  "dir"
-                ],
-                [
-                  "dep"
-                ]
-              ],
-              "charges": [],
-              "energy_charged_kwh": 0.0,
-              "fleet": 2,
-              "load": [
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0
-              ],
-              "ops_cost": 272.0,
-              "sequences": [
-                [
-                  "t000",
-                  "t003"
-                ],
-                [
-                  "t001",
-                  "t002"
-                ]
-              ],
-              "structure_id": "2c99fe256b47111c84e30e6e980c64c55f3c92f6296670fd4545245853995483"
-            },
             "structure": {
               "kinds": [
                 [
@@ -7326,75 +3635,6 @@
             "objective_lower": 294.217991904,
             "objective_upper": 294.218027796,
             "pwl_gap_abs": 3.5892e-05,
-            "solution": {
-              "arc_kinds": [
-                [
-                  "dir",
-                  "dep"
-                ],
-                []
-              ],
-              "charges": [
-                {
-                  "after_trip": "t001",
-                  "before_trip": "t002",
-                  "kwh": 1.553515625,
-                  "slot": 13,
-                  "vehicle": 0
-                },
-                {
-                  "after_trip": "t001",
-                  "before_trip": "t002",
-                  "kwh": 8.146484375,
-                  "slot": 14,
-                  "vehicle": 0
-                }
-              ],
-              "energy_charged_kwh": 9.7,
-              "fleet": 2,
-              "load": [
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                1.553515625,
-                8.146484375,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0
-              ],
-              "ops_cost": 262.0,
-              "sequences": [
-                [
-                  "t000",
-                  "t001",
-                  "t002"
-                ],
-                [
-                  "t003"
-                ]
-              ],
-              "structure_id": "2f11ff352ed537cccd093a6a041e07cc428a8db79eb3a3446386a2b75ff3ab3f"
-            },
             "structure": {
               "kinds": [
                 [
@@ -7432,73 +3672,6 @@
             "objective_lower": 243.765000523,
             "objective_upper": 243.765089821,
             "pwl_gap_abs": 8.9298e-05,
-            "solution": {
-              "arc_kinds": [
-                [
-                  "dir",
-                  "dep",
-                  "dir"
-                ]
-              ],
-              "charges": [
-                {
-                  "after_trip": "t001",
-                  "before_trip": "t002",
-                  "kwh": 1.494140625,
-                  "slot": 13,
-                  "vehicle": 0
-                },
-                {
-                  "after_trip": "t001",
-                  "before_trip": "t002",
-                  "kwh": 29.105859375,
-                  "slot": 14,
-                  "vehicle": 0
-                }
-              ],
-              "energy_charged_kwh": 30.6,
-              "fleet": 1,
-              "load": [
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                1.494140625,
-                29.105859375,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0
-              ],
-              "ops_cost": 142.0,
-              "sequences": [
-                [
-                  "t000",
-                  "t001",
-                  "t002",
-                  "t003"
-                ]
-              ],
-              "structure_id": "35ee45f99249a70db82924b1b0a119d0fee9359baad01886639379fca86a3daf"
-            },
             "structure": {
               "kinds": [
                 [
@@ -7538,73 +3711,6 @@
             "objective_lower": 317.047955306,
             "objective_upper": 317.047992317,
             "pwl_gap_abs": 3.7011e-05,
-            "solution": {
-              "arc_kinds": [
-                [
-                  "dep",
-                  "dep",
-                  "dep"
-                ]
-              ],
-              "charges": [
-                {
-                  "after_trip": "t001",
-                  "before_trip": "t002",
-                  "kwh": 1.577539063,
-                  "slot": 13,
-                  "vehicle": 0
-                },
-                {
-                  "after_trip": "t001",
-                  "before_trip": "t002",
-                  "kwh": 37.822460937,
-                  "slot": 14,
-                  "vehicle": 0
-                }
-              ],
-              "energy_charged_kwh": 39.4,
-              "fleet": 1,
-              "load": [
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                1.577539063,
-                37.822460937,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0
-              ],
-              "ops_cost": 186.0,
-              "sequences": [
-                [
-                  "t000",
-                  "t001",
-                  "t002",
-                  "t003"
-                ]
-              ],
-              "structure_id": "3716b955d6801bf174928b8c1cc09b7f13a03423964fb148c80b3338906e0f0b"
-            },
             "structure": {
               "kinds": [
                 [
@@ -7642,75 +3748,6 @@
             "objective_lower": 330.862872348,
             "objective_upper": 330.862941871,
             "pwl_gap_abs": 6.9523e-05,
-            "solution": {
-              "arc_kinds": [
-                [],
-                [
-                  "dep",
-                  "dep"
-                ]
-              ],
-              "charges": [
-                {
-                  "after_trip": "t001",
-                  "before_trip": "t002",
-                  "kwh": 1.529296875,
-                  "slot": 13,
-                  "vehicle": 1
-                },
-                {
-                  "after_trip": "t001",
-                  "before_trip": "t002",
-                  "kwh": 11.970703125,
-                  "slot": 14,
-                  "vehicle": 1
-                }
-              ],
-              "energy_charged_kwh": 13.5,
-              "fleet": 2,
-              "load": [
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                1.529296875,
-                11.970703125,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0
-              ],
-              "ops_cost": 286.0,
-              "sequences": [
-                [
-                  "t000"
-                ],
-                [
-                  "t001",
-                  "t002",
-                  "t003"
-                ]
-              ],
-              "structure_id": "40def8562013fe231d46f866785bb583d4f2c04a24374e9083f56c81fd0dfacf"
-            },
             "structure": {
               "kinds": [
                 [],
@@ -7748,75 +3785,6 @@
             "objective_lower": 297.552485759,
             "objective_upper": 297.552520187,
             "pwl_gap_abs": 3.4428e-05,
-            "solution": {
-              "arc_kinds": [
-                [],
-                [
-                  "dep",
-                  "dir"
-                ]
-              ],
-              "charges": [
-                {
-                  "after_trip": "t001",
-                  "before_trip": "t002",
-                  "kwh": 1.521484375,
-                  "slot": 13,
-                  "vehicle": 1
-                },
-                {
-                  "after_trip": "t001",
-                  "before_trip": "t002",
-                  "kwh": 7.978515625,
-                  "slot": 14,
-                  "vehicle": 1
-                }
-              ],
-              "energy_charged_kwh": 9.5,
-              "fleet": 2,
-              "load": [
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                1.521484375,
-                7.978515625,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0
-              ],
-              "ops_cost": 266.0,
-              "sequences": [
-                [
-                  "t000"
-                ],
-                [
-                  "t001",
-                  "t002",
-                  "t003"
-                ]
-              ],
-              "structure_id": "4155de56049e15e102f2aaf79820c04a0400f16b01f90df7700607cc454e6a36"
-            },
             "structure": {
               "kinds": [
                 [],
@@ -7877,61 +3845,6 @@
             "objective_lower": 286.0,
             "objective_upper": 286.0,
             "pwl_gap_abs": 0.0,
-            "solution": {
-              "arc_kinds": [
-                [
-                  "dep"
-                ],
-                [
-                  "dep"
-                ]
-              ],
-              "charges": [],
-              "energy_charged_kwh": 0.0,
-              "fleet": 2,
-              "load": [
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0
-              ],
-              "ops_cost": 286.0,
-              "sequences": [
-                [
-                  "t000",
-                  "t001"
-                ],
-                [
-                  "t002",
-                  "t003"
-                ]
-              ],
-              "structure_id": "46514e71b0f6171c2fec7da130d69d32bd872cf1a16ec09fb55c5b0a9a029424"
-            },
             "structure": {
               "kinds": [
                 [
@@ -7966,61 +3879,6 @@
             "objective_lower": 262.0,
             "objective_upper": 262.0,
             "pwl_gap_abs": 0.0,
-            "solution": {
-              "arc_kinds": [
-                [
-                  "dir"
-                ],
-                [
-                  "dep"
-                ]
-              ],
-              "charges": [],
-              "energy_charged_kwh": 0.0,
-              "fleet": 2,
-              "load": [
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0
-              ],
-              "ops_cost": 262.0,
-              "sequences": [
-                [
-                  "t000",
-                  "t001"
-                ],
-                [
-                  "t002",
-                  "t003"
-                ]
-              ],
-              "structure_id": "52a9f3d838d74aadf4c03eb9910b7a45ae86d4a473d46e87381bd38e51267d3d"
-            },
             "structure": {
               "kinds": [
                 [
@@ -8055,68 +3913,6 @@
             "objective_lower": 310.933007166,
             "objective_upper": 310.933007166,
             "pwl_gap_abs": 0.0,
-            "solution": {
-              "arc_kinds": [
-                [
-                  "dep",
-                  "dir"
-                ],
-                []
-              ],
-              "charges": [
-                {
-                  "after_trip": "t000",
-                  "before_trip": "t001",
-                  "kwh": 11.7,
-                  "slot": 12,
-                  "vehicle": 0
-                }
-              ],
-              "energy_charged_kwh": 11.7,
-              "fleet": 2,
-              "load": [
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                11.7,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0
-              ],
-              "ops_cost": 272.0,
-              "sequences": [
-                [
-                  "t000",
-                  "t001",
-                  "t002"
-                ],
-                [
-                  "t003"
-                ]
-              ],
-              "structure_id": "5cda22d833eecc2371cc2fcad717cbb34177162a5c93f39cc9d52824779a1751"
-            },
             "structure": {
               "kinds": [
                 [
@@ -8156,75 +3952,6 @@
             "objective_lower": 334.190469117,
             "objective_upper": 334.190549321,
             "pwl_gap_abs": 8.0204e-05,
-            "solution": {
-              "arc_kinds": [
-                [
-                  "dep",
-                  "dep"
-                ],
-                []
-              ],
-              "charges": [
-                {
-                  "after_trip": "t001",
-                  "before_trip": "t002",
-                  "kwh": 1.529296875,
-                  "slot": 13,
-                  "vehicle": 0
-                },
-                {
-                  "after_trip": "t001",
-                  "before_trip": "t002",
-                  "kwh": 12.970703125,
-                  "slot": 14,
-                  "vehicle": 0
-                }
-              ],
-              "energy_charged_kwh": 14.5,
-              "fleet": 2,
-              "load": [
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                1.529296875,
-                12.970703125,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0
-              ],
-              "ops_cost": 286.0,
-              "sequences": [
-                [
-                  "t000",
-                  "t001",
-                  "t002"
-                ],
-                [
-                  "t003"
-                ]
-              ],
-              "structure_id": "663382c80031edd1b94cb3271b2ede50882466bc33893c6e51ec956d3ea43e33"
-            },
             "structure": {
               "kinds": [
                 [
@@ -8289,73 +4016,6 @@
             "objective_lower": 277.07543987,
             "objective_upper": 277.075468412,
             "pwl_gap_abs": 2.8543e-05,
-            "solution": {
-              "arc_kinds": [
-                [
-                  "dir",
-                  "dep",
-                  "dep"
-                ]
-              ],
-              "charges": [
-                {
-                  "after_trip": "t001",
-                  "before_trip": "t002",
-                  "kwh": 1.520507812,
-                  "slot": 13,
-                  "vehicle": 0
-                },
-                {
-                  "after_trip": "t001",
-                  "before_trip": "t002",
-                  "kwh": 33.079492188,
-                  "slot": 14,
-                  "vehicle": 0
-                }
-              ],
-              "energy_charged_kwh": 34.6,
-              "fleet": 1,
-              "load": [
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                1.520507812,
-                33.079492188,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0
-              ],
-              "ops_cost": 162.0,
-              "sequences": [
-                [
-                  "t000",
-                  "t001",
-                  "t002",
-                  "t003"
-                ]
-              ],
-              "structure_id": "7bec0cca3ac2acbeb62ad694b170b75800460e0c8eea3014fc3d1da3f9fb1043"
-            },
             "structure": {
               "kinds": [
                 [
@@ -8393,75 +4053,6 @@
             "objective_lower": 308.533547408,
             "objective_upper": 308.533609908,
             "pwl_gap_abs": 6.25e-05,
-            "solution": {
-              "arc_kinds": [
-                [
-                  "dep",
-                  "dir"
-                ],
-                []
-              ],
-              "charges": [
-                {
-                  "after_trip": "t000",
-                  "before_trip": "t002",
-                  "kwh": 11.25,
-                  "slot": 12,
-                  "vehicle": 0
-                },
-                {
-                  "after_trip": "t000",
-                  "before_trip": "t002",
-                  "kwh": 1.55,
-                  "slot": 13,
-                  "vehicle": 0
-                }
-              ],
-              "energy_charged_kwh": 12.8,
-              "fleet": 2,
-              "load": [
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                11.25,
-                1.55,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0
-              ],
-              "ops_cost": 266.0,
-              "sequences": [
-                [
-                  "t000",
-                  "t002",
-                  "t003"
-                ],
-                [
-                  "t001"
-                ]
-              ],
-              "structure_id": "7ffb388ae1c2edbbf55c63d1ccb26b60492f5c79cbeb3b777c85926aaa163534"
-            },
             "structure": {
               "kinds": [
                 [
@@ -8543,73 +4134,6 @@
             "objective_lower": 300.801438433,
             "objective_upper": 300.801438433,
             "pwl_gap_abs": 0.0,
-            "solution": {
-              "arc_kinds": [
-                [
-                  "dep",
-                  "dir",
-                  "dep"
-                ]
-              ],
-              "charges": [
-                {
-                  "after_trip": "t000",
-                  "before_trip": "t001",
-                  "kwh": 25.9,
-                  "slot": 12,
-                  "vehicle": 0
-                },
-                {
-                  "after_trip": "t002",
-                  "before_trip": "t003",
-                  "kwh": 10.7,
-                  "slot": 20,
-                  "vehicle": 0
-                }
-              ],
-              "energy_charged_kwh": 36.6,
-              "fleet": 1,
-              "load": [
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                25.9,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                10.7,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0
-              ],
-              "ops_cost": 172.0,
-              "sequences": [
-                [
-                  "t000",
-                  "t001",
-                  "t002",
-                  "t003"
-                ]
-              ],
-              "structure_id": "9288024892aacc48c501bbdfcd7b7729777885c30e28362c92a63935456ee473"
-            },
             "structure": {
               "kinds": [
                 [
@@ -8649,75 +4173,6 @@
             "objective_lower": 350.495784169,
             "objective_upper": 350.495820061,
             "pwl_gap_abs": 3.5892e-05,
-            "solution": {
-              "arc_kinds": [
-                [
-                  "dep",
-                  "dep"
-                ],
-                []
-              ],
-              "charges": [
-                {
-                  "after_trip": "t001",
-                  "before_trip": "t003",
-                  "kwh": 1.553515625,
-                  "slot": 13,
-                  "vehicle": 0
-                },
-                {
-                  "after_trip": "t001",
-                  "before_trip": "t003",
-                  "kwh": 17.846484375,
-                  "slot": 14,
-                  "vehicle": 0
-                }
-              ],
-              "energy_charged_kwh": 19.4,
-              "fleet": 2,
-              "load": [
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                1.553515625,
-                17.846484375,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0
-              ],
-              "ops_cost": 286.0,
-              "sequences": [
-                [
-                  "t000",
-                  "t001",
-                  "t003"
-                ],
-                [
-                  "t002"
-                ]
-              ],
-              "structure_id": "92dfb0b0879acf2a5852f1ffd65b4f4bcac3a12655b11b39cecee6ae70dfcb85"
-            },
             "structure": {
               "kinds": [
                 [
@@ -8784,75 +4239,6 @@
             "objective_lower": 341.844012821,
             "objective_upper": 341.844039737,
             "pwl_gap_abs": 2.6917e-05,
-            "solution": {
-              "arc_kinds": [
-                [
-                  "dep",
-                  "dep"
-                ],
-                []
-              ],
-              "charges": [
-                {
-                  "after_trip": "t000",
-                  "before_trip": "t002",
-                  "kwh": 15.2578125,
-                  "slot": 12,
-                  "vehicle": 0
-                },
-                {
-                  "after_trip": "t000",
-                  "before_trip": "t002",
-                  "kwh": 1.5421875,
-                  "slot": 13,
-                  "vehicle": 0
-                }
-              ],
-              "energy_charged_kwh": 16.8,
-              "fleet": 2,
-              "load": [
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                15.2578125,
-                1.5421875,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0
-              ],
-              "ops_cost": 286.0,
-              "sequences": [
-                [
-                  "t000",
-                  "t002",
-                  "t003"
-                ],
-                [
-                  "t001"
-                ]
-              ],
-              "structure_id": "a65e4d78371abe698591d7ab54429645a6834f25d93772454741ab8ba76a05d5"
-            },
             "structure": {
               "kinds": [
                 [
@@ -8883,61 +4269,6 @@
             "objective_lower": 258.0,
             "objective_upper": 258.0,
             "pwl_gap_abs": 0.0,
-            "solution": {
-              "arc_kinds": [
-                [
-                  "dir"
-                ],
-                [
-                  "dir"
-                ]
-              ],
-              "charges": [],
-              "energy_charged_kwh": 0.0,
-              "fleet": 2,
-              "load": [
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0
-              ],
-              "ops_cost": 258.0,
-              "sequences": [
-                [
-                  "t000",
-                  "t003"
-                ],
-                [
-                  "t001",
-                  "t002"
-                ]
-              ],
-              "structure_id": "a84493be34d57f2d07a62b1c5718f6786ec1c33234b716e178d1669bdb3fc052"
-            },
             "structure": {
               "kinds": [
                 [
@@ -8978,61 +4309,6 @@
             "objective_lower": 272.0,
             "objective_upper": 272.0,
             "pwl_gap_abs": 0.0,
-            "solution": {
-              "arc_kinds": [
-                [
-                  "dir"
-                ],
-                [
-                  "dep"
-                ]
-              ],
-              "charges": [],
-              "energy_charged_kwh": 0.0,
-              "fleet": 2,
-              "load": [
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0
-              ],
-              "ops_cost": 272.0,
-              "sequences": [
-                [
-                  "t000",
-                  "t002"
-                ],
-                [
-                  "t001",
-                  "t003"
-                ]
-              ],
-              "structure_id": "aa26c6fba9de3a23f7a1ba6fb4551512e25eb9ea8a915e93a8d50934880b797f"
-            },
             "structure": {
               "kinds": [
                 [
@@ -9075,61 +4351,6 @@
             "objective_lower": 272.0,
             "objective_upper": 272.0,
             "pwl_gap_abs": 0.0,
-            "solution": {
-              "arc_kinds": [
-                [
-                  "dep"
-                ],
-                [
-                  "dir"
-                ]
-              ],
-              "charges": [],
-              "energy_charged_kwh": 0.0,
-              "fleet": 2,
-              "load": [
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0
-              ],
-              "ops_cost": 272.0,
-              "sequences": [
-                [
-                  "t000",
-                  "t003"
-                ],
-                [
-                  "t001",
-                  "t002"
-                ]
-              ],
-              "structure_id": "ac7b3f648c1d343530d5f118e685b43c7ca77f26eb82064590c28d3b365ec10c"
-            },
             "structure": {
               "kinds": [
                 [
@@ -9164,68 +4385,6 @@
             "objective_lower": 327.759782867,
             "objective_upper": 327.759782867,
             "pwl_gap_abs": 0.0,
-            "solution": {
-              "arc_kinds": [
-                [
-                  "dir",
-                  "dep"
-                ],
-                []
-              ],
-              "charges": [
-                {
-                  "after_trip": "t002",
-                  "before_trip": "t003",
-                  "kwh": 14.0,
-                  "slot": 20,
-                  "vehicle": 0
-                }
-              ],
-              "energy_charged_kwh": 14.0,
-              "fleet": 2,
-              "load": [
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                14.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0
-              ],
-              "ops_cost": 272.0,
-              "sequences": [
-                [
-                  "t000",
-                  "t002",
-                  "t003"
-                ],
-                [
-                  "t001"
-                ]
-              ],
-              "structure_id": "b11a56d50b5292b4184346be3b0c19cd840d7e02b97fd4370d4ebed7cb18168e"
-            },
             "structure": {
               "kinds": [
                 [
@@ -9265,73 +4424,6 @@
             "objective_lower": 283.737510289,
             "objective_upper": 283.737540167,
             "pwl_gap_abs": 2.9878e-05,
-            "solution": {
-              "arc_kinds": [
-                [
-                  "dep",
-                  "dep",
-                  "dir"
-                ]
-              ],
-              "charges": [
-                {
-                  "after_trip": "t001",
-                  "before_trip": "t002",
-                  "kwh": 1.555664062,
-                  "slot": 13,
-                  "vehicle": 0
-                },
-                {
-                  "after_trip": "t001",
-                  "before_trip": "t002",
-                  "kwh": 33.844335938,
-                  "slot": 14,
-                  "vehicle": 0
-                }
-              ],
-              "energy_charged_kwh": 35.4,
-              "fleet": 1,
-              "load": [
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                1.555664062,
-                33.844335938,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0
-              ],
-              "ops_cost": 166.0,
-              "sequences": [
-                [
-                  "t000",
-                  "t001",
-                  "t002",
-                  "t003"
-                ]
-              ],
-              "structure_id": "b2df03f89e0eff8e7d5b8361c20bb3e9df14e2b5321aebeff7d94237f28cd4c9"
-            },
             "structure": {
               "kinds": [
                 [
@@ -9371,61 +4463,6 @@
             "objective_lower": 286.0,
             "objective_upper": 286.0,
             "pwl_gap_abs": 0.0,
-            "solution": {
-              "arc_kinds": [
-                [
-                  "dep"
-                ],
-                [
-                  "dep"
-                ]
-              ],
-              "charges": [],
-              "energy_charged_kwh": 0.0,
-              "fleet": 2,
-              "load": [
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0
-              ],
-              "ops_cost": 286.0,
-              "sequences": [
-                [
-                  "t000",
-                  "t003"
-                ],
-                [
-                  "t001",
-                  "t002"
-                ]
-              ],
-              "structure_id": "bc9fde19426dc293136418f2da9890ab3dccee801b25154177607a3e7e9890c8"
-            },
             "structure": {
               "kinds": [
                 [
@@ -9466,61 +4503,6 @@
             "objective_lower": 272.0,
             "objective_upper": 272.0,
             "pwl_gap_abs": 0.0,
-            "solution": {
-              "arc_kinds": [
-                [
-                  "dep"
-                ],
-                [
-                  "dir"
-                ]
-              ],
-              "charges": [],
-              "energy_charged_kwh": 0.0,
-              "fleet": 2,
-              "load": [
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0
-              ],
-              "ops_cost": 272.0,
-              "sequences": [
-                [
-                  "t000",
-                  "t002"
-                ],
-                [
-                  "t001",
-                  "t003"
-                ]
-              ],
-              "structure_id": "bf8095a6fcccb1caed751055557a28f9f6394f316a4497be990b531e50d942b3"
-            },
             "structure": {
               "kinds": [
                 [
@@ -9575,61 +4557,6 @@
             "objective_lower": 242.0,
             "objective_upper": 242.0,
             "pwl_gap_abs": 0.0,
-            "solution": {
-              "arc_kinds": [
-                [
-                  "dir"
-                ],
-                [
-                  "dir"
-                ]
-              ],
-              "charges": [],
-              "energy_charged_kwh": 0.0,
-              "fleet": 2,
-              "load": [
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0
-              ],
-              "ops_cost": 242.0,
-              "sequences": [
-                [
-                  "t000",
-                  "t001"
-                ],
-                [
-                  "t002",
-                  "t003"
-                ]
-              ],
-              "structure_id": "d78b5f4aba23eeb7523ea7091ec8fffaa92d4c2c020391f9834cb13dc7ab7b83"
-            },
             "structure": {
               "kinds": [
                 [
@@ -9661,61 +4588,6 @@
             "objective_lower": 258.0,
             "objective_upper": 258.0,
             "pwl_gap_abs": 0.0,
-            "solution": {
-              "arc_kinds": [
-                [
-                  "dir"
-                ],
-                [
-                  "dir"
-                ]
-              ],
-              "charges": [],
-              "energy_charged_kwh": 0.0,
-              "fleet": 2,
-              "load": [
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0
-              ],
-              "ops_cost": 258.0,
-              "sequences": [
-                [
-                  "t000",
-                  "t002"
-                ],
-                [
-                  "t001",
-                  "t003"
-                ]
-              ],
-              "structure_id": "da43f627c5f1fb26dd4610a9521cf85bcd3b4d5b78eff76253868c56a3f1975d"
-            },
             "structure": {
               "kinds": [
                 [
@@ -9758,61 +4630,6 @@
             "objective_lower": 286.0,
             "objective_upper": 286.0,
             "pwl_gap_abs": 0.0,
-            "solution": {
-              "arc_kinds": [
-                [
-                  "dep"
-                ],
-                [
-                  "dep"
-                ]
-              ],
-              "charges": [],
-              "energy_charged_kwh": 0.0,
-              "fleet": 2,
-              "load": [
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0
-              ],
-              "ops_cost": 286.0,
-              "sequences": [
-                [
-                  "t000",
-                  "t002"
-                ],
-                [
-                  "t001",
-                  "t003"
-                ]
-              ],
-              "structure_id": "dd4b011dc7e8eacfe3934c6e0ef34822a6c9315690892eeefbfad22d6169d691"
-            },
             "structure": {
               "kinds": [
                 [
@@ -9847,68 +4664,6 @@
             "objective_lower": 327.238283671,
             "objective_upper": 327.238283671,
             "pwl_gap_abs": 0.0,
-            "solution": {
-              "arc_kinds": [
-                [
-                  "dep",
-                  "dir"
-                ],
-                []
-              ],
-              "charges": [
-                {
-                  "after_trip": "t000",
-                  "before_trip": "t001",
-                  "kwh": 16.6,
-                  "slot": 12,
-                  "vehicle": 0
-                }
-              ],
-              "energy_charged_kwh": 16.6,
-              "fleet": 2,
-              "load": [
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                16.6,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0
-              ],
-              "ops_cost": 272.0,
-              "sequences": [
-                [
-                  "t000",
-                  "t001",
-                  "t003"
-                ],
-                [
-                  "t002"
-                ]
-              ],
-              "structure_id": "f7fc0d4ddbc033b06989855c08fb1ddd809d50b6ed7fd20f49789fb3521ba9d0"
-            },
             "structure": {
               "kinds": [
                 [
@@ -9941,7 +4696,7 @@
       "unique_dictator_structure_margin": 1.765000523
     },
     "irreducibility": {
-      "definition": "1-minimal under deletion of any remaining trip, the second vehicle-capacity unit, or any remaining nonzero affine-feedback slot",
+      "definition": "1-minimal-only on the tested deletion axes: removing any remaining trip, the second vehicle-capacity unit, or any remaining nonzero affine-feedback slot; no global or seed-grid minimality claim",
       "irreducible": true,
       "n_trips": 4,
       "target_max_trips": 4,
@@ -10020,10 +4775,11 @@
     },
     "strict_best_response": {
       "all_margins_clear_tolerances": true,
+      "maximum_certified_load_range_upper_kwh": 1.3243e-05,
       "minimum_global_discrete_structure_margin": 0.540847724,
       "minimum_opposite_cycle_endpoint_margin": 0.54084773,
       "objective_tolerance_ceiling": 0.01,
-      "scope": "positive margins compare the globally best optimized discrete structure with every other optimized structure; optimal-face ranges separately check continuous-load uniqueness",
+      "scope": "positive margins compare the globally best optimized discrete structure with every other optimized structure; certified optimal-face extrema separately check continuous-load uniqueness",
       "states": [
         {
           "chosen_objective": 241.45915227,
@@ -10039,43 +4795,65 @@
               17,
               18
             ],
-            "max_load_range_kwh": 1.32e-07,
-            "objective_tolerance": 1e-08,
+            "max_certified_load_range_upper_kwh": 1.3243e-05,
+            "max_primal_load_range_kwh": 1.3243e-05,
+            "objective_tolerance": 1e-06,
+            "primary_certified_lower": 241.459152276,
+            "primary_feasible_upper": 241.459152276,
+            "primary_optimality_gap_abs": 0.0,
             "slot_ranges": [
               {
-                "max_kwh": 30.600000003,
-                "min_kwh": 30.599999871,
-                "range_kwh": 1.32e-07,
+                "certified_range_upper_kwh": 1.3243e-05,
+                "max_certified_upper_kwh": 30.600000308,
+                "max_primal_kwh": 30.600000308,
+                "min_certified_lower_kwh": 30.599987065,
+                "min_primal_kwh": 30.599987065,
+                "primal_range_kwh": 1.3243e-05,
                 "slot": 13
               },
               {
-                "max_kwh": 1.29e-07,
-                "min_kwh": 0.0,
-                "range_kwh": 1.29e-07,
+                "certified_range_upper_kwh": 1.2935e-05,
+                "max_certified_upper_kwh": 1.2935e-05,
+                "max_primal_kwh": 1.2935e-05,
+                "min_certified_lower_kwh": 0.0,
+                "min_primal_kwh": 0.0,
+                "primal_range_kwh": 1.2935e-05,
                 "slot": 14
               },
               {
-                "max_kwh": 3.4e-08,
-                "min_kwh": 0.0,
-                "range_kwh": 3.4e-08,
+                "certified_range_upper_kwh": 3.371e-06,
+                "max_certified_upper_kwh": 3.371e-06,
+                "max_primal_kwh": 3.371e-06,
+                "min_certified_lower_kwh": 0.0,
+                "min_primal_kwh": 0.0,
+                "primal_range_kwh": 3.371e-06,
                 "slot": 15
               },
               {
-                "max_kwh": 1.7e-08,
-                "min_kwh": 0.0,
-                "range_kwh": 1.7e-08,
+                "certified_range_upper_kwh": 1.653e-06,
+                "max_certified_upper_kwh": 1.653e-06,
+                "max_primal_kwh": 1.653e-06,
+                "min_certified_lower_kwh": 0.0,
+                "min_primal_kwh": 0.0,
+                "primal_range_kwh": 1.653e-06,
                 "slot": 16
               },
               {
-                "max_kwh": 1.1e-08,
-                "min_kwh": 0.0,
-                "range_kwh": 1.1e-08,
+                "certified_range_upper_kwh": 1.122e-06,
+                "max_certified_upper_kwh": 1.122e-06,
+                "max_primal_kwh": 1.122e-06,
+                "min_certified_lower_kwh": 0.0,
+                "min_primal_kwh": 0.0,
+                "primal_range_kwh": 1.122e-06,
                 "slot": 17
               },
               {
-                "max_kwh": 1e-08,
-                "min_kwh": 0.0,
-                "range_kwh": 1e-08,
+                "certified_range_upper_kwh": 9.77e-07,
+                "max_certified_upper_kwh": 9.77e-07,
+                "max_primal_kwh": 9.77e-07,
+                "min_certified_lower_kwh": 0.0,
+                "min_primal_kwh": 0.0,
+                "primal_range_kwh": 9.77e-07,
                 "slot": 18
               }
             ]
@@ -10091,8 +4869,12 @@
           "opposite_cycle_endpoint_margin": 46.277152276,
           "optimal_face_load_uniqueness": {
             "active_load_slots": [],
-            "max_load_range_kwh": 0.0,
-            "objective_tolerance": 1e-08,
+            "max_certified_load_range_upper_kwh": 0.0,
+            "max_primal_load_range_kwh": 0.0,
+            "objective_tolerance": 1e-06,
+            "primary_certified_lower": 242.0,
+            "primary_feasible_upper": 242.0,
+            "primary_optimality_gap_abs": 0.0,
             "slot_ranges": []
           },
           "runner_up_objective": 243.82478797,
@@ -10110,7 +4892,10 @@
       "exhaustive_response_enumeration": true,
       "fixed_point_absence_preconditions": true,
       "irreducibility": true,
+      "nonwinning_inventory_invariants": true,
       "physical_schedule_replay": true,
+      "selected_load_uniqueness_certified": true,
+      "selected_primitives_recomputed": true,
       "strict_structure_margins": true
     },
     "engine": "egglab.enumerate_tiny",
@@ -10244,7 +5029,7 @@
   },
   "integrity": {
     "canonical_json": "UTF-8, sorted keys, indent=2, trailing newline",
-    "canonical_payload_sha256": "acc9a293091ce0f2ef0bb506cefe3a51fb432a4a92678ef466418ada00f0a833"
+    "canonical_payload_sha256": "c5ac6e87b349a427fb8653da0116b561d8360f699b20d5658c49d65a255c72a4"
   },
   "market": {
     "a": [
@@ -10783,7 +5568,7 @@
       }
     ]
   },
-  "schema": "egglab.strict-undamped-two-cycle.v1",
+  "schema": "egglab.strict-undamped-two-cycle.v2",
   "tolerances": {
     "load_match_and_replay_kwh": 0.0001,
     "objective": {
@@ -10794,7 +5579,7 @@
     },
     "objective_tolerance_ceiling": 0.01,
     "optimal_face_load_kwh": 0.0001,
-    "optimal_face_objective": 1e-08,
+    "optimal_face_objective": 1e-06,
     "price_state_inf": 1e-07,
     "strict_margin_required": 0.02
   }
