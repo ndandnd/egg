@@ -10,6 +10,7 @@ import pytest
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import egglab.column_proposer as proposer
+import experiments.run_column_proposer as runner
 from egglab.b2a2 import RC_TOL
 from egglab.instance import synthetic_instance
 
@@ -179,3 +180,38 @@ def test_publish_refuses_existing_raw_or_output_without_solving(tmp_path):
             proposer.ColumnProposerError, match="existing output directory"):
         proposer.publish(
             raw, out, analysis_commit="a" * 40, verify_git=False)
+
+
+def test_runner_requires_and_forwards_caller_supplied_output_paths(
+        tmp_path, monkeypatch):
+    calls = []
+
+    def fake_publish(run_root, out_dir, analysis_commit=None):
+        calls.append((run_root, out_dir, analysis_commit))
+        return out_dir
+
+    monkeypatch.chdir(tmp_path)
+    monkeypatch.setattr(runner, "publish", fake_publish)
+    monkeypatch.setattr(sys, "argv", ["run_column_proposer.py"])
+    with pytest.raises(SystemExit) as exc:
+        runner.main()
+    assert exc.value.code == 2
+    assert calls == []
+    assert list(tmp_path.iterdir()) == []
+
+    raw = tmp_path / "caller-raw"
+    out = tmp_path / "caller-out"
+    commit = "a" * 40
+    monkeypatch.setattr(sys, "argv", [
+        "run_column_proposer.py",
+        "--run-root", str(raw),
+        "--out", str(out),
+        "--analysis-commit", commit,
+    ])
+    runner.main()
+
+    assert calls == [(raw, out, commit)]
+    # The fake publisher makes any accidental runner-side default write
+    # visible: the runner itself must create neither path.
+    assert not raw.exists()
+    assert not out.exists()

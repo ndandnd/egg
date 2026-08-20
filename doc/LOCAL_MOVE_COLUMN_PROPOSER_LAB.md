@@ -11,6 +11,11 @@ This laboratory is standalone. It does not depend on the unmerged tiny
 branch-and-price work, does not modify A2 or A6, and does not launch a cluster
 campaign.
 
+**Evidence tier:** this is a finite-pool diagnostic on the already-burned
+synthetic seeds `{0, 11, 15}`. It supports no speedup claim and no
+generalization claim. Integration into any production or experiment driver is
+a separate reviewed task.
+
 **Design amendment after invalid attempt (2026-08-20).** The first committed
 implementation (`e1b83820c721fec87b9bc928f47d2e4c6cffe874`) inherited the
 generator's default `max_vehicles = 2`. Its one authorized run halted while
