@@ -1,6 +1,6 @@
 # Strict two-cycle witness
 
-- analysis_code_commit: `7908702132a14674942f2cbf4b2f2eaf037354d7`
+- analysis_code_commit: `38085076b9ab7fd871bbcca9914c0a62f6cfdc37`
 - witness_sha256: `e8d00d907e6b9071af238da1c41620afb538e403088e7cb4b1ec1ba75067f363`
 - trips: 4
 - structures: 36
