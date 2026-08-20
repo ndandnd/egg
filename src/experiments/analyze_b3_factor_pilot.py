@@ -171,10 +171,23 @@ def _load(path: Path):
         return json.load(handle)
 
 
-def load_population(runs_dir: str | os.PathLike, screen: dict) -> dict:
-    """Read all 60 cells, validate frozen binding + certification + interval
-    sanity, and return per-cell intervals.  Any failure is collected as an
-    INVALID/HALT problem (no cell is ever silently dropped)."""
+NUM_TOL = 1e-9
+
+
+def load_population(runs_dir: str | os.PathLike, screen: dict,
+                    market_by_cell: dict) -> dict:
+    """Read all 60 cells and, rather than trusting the recorded outcome fields,
+    RECOMPUTE the certified bounds from the committed bound histories and
+    cross-bind them to the matched dictator's endpoints and the run manifest's
+    market hashes.  Any failure is collected as an INVALID/HALT problem (no
+    cell is ever silently dropped).
+
+    Rejections: single-field ``outcome.lb_best``/``ub_ch`` edits (they must
+    equal the recomputed history endpoints); CG/dictator ``z_D`` mismatch;
+    missing or altered market hashes; missing/nonfinite recorded ``z_D_lb``;
+    non-OPTIMAL or unconverged dictator evidence; ``U_hi < 0`` beyond tolerance
+    and any interval inversion.
+    """
     runs = Path(runs_dir)
     problems: list[str] = []
     cells: dict[tuple, dict] = {}
@@ -192,39 +205,94 @@ def load_population(runs_dir: str | os.PathLike, screen: dict) -> dict:
         ident = ck.get("identity") or {}
         expected_hash = screen["instance_hashes"][
             (cell["setting"], cell["seed"], cell["n_trips"])]
+        expected_market = market_by_cell.get(key)
         if ident.get("method", "a2") != bp.METHOD:
             problems.append(f"{tag}: method {ident.get('method')!r} != a2")
         if ident.get("instance_hash") != expected_hash:
             problems.append(f"{tag}: instance-hash drift vs frozen screen")
+        # market hash must be present and match the manifest, on BOTH sides
+        if expected_market is None:
+            problems.append(f"{tag}: market hash missing from run manifest")
+        if ident.get("market_hash") != expected_market:
+            problems.append(f"{tag}: CG market hash != manifest (missing/altered)")
+        if (dd.get("identity") or {}).get("market_hash") != expected_market:
+            problems.append(f"{tag}: dictator market hash != manifest")
+
         oc = ck.get("outcome") or {}
         if not (oc.get("type") == "certified" and oc.get("certified")):
             problems.append(
                 f"{tag}: A2 not certified within budget (INVALID/HALT)")
             continue
+
+        # recompute UB/LB from the committed histories; reject single-field
+        # edits of the recorded outcome bounds
+        ub_hist = ck.get("ub_history") or []
+        lb_hist = ck.get("lb_history") or []
+        if not ub_hist or not lb_hist:
+            problems.append(f"{tag}: empty bound histories")
+            continue
+        if not all(_finite(x) for x in ub_hist + lb_hist):
+            problems.append(f"{tag}: nonfinite bound history")
+            continue
+        ub_ch = ub_hist[-1]
+        lb_ch = max(lb_hist)
+        if abs(lb_ch - lb_hist[-1]) > NUM_TOL:
+            problems.append(f"{tag}: lb_best != final LB history entry")
+        for label, recomputed, recorded in (
+                ("ub_ch", ub_ch, oc.get("ub_ch")),
+                ("lb_best", lb_ch, oc.get("lb_best"))):
+            if not _finite(recorded) or abs(recomputed - recorded) > NUM_TOL:
+                problems.append(
+                    f"{tag}: outcome {label} {recorded} != recomputed "
+                    f"{recomputed} (single-field edit)")
+        if _finite(oc.get("gap")) and abs(
+                oc["gap"] - (ub_ch - lb_ch)) > NUM_TOL:
+            problems.append(f"{tag}: outcome gap != ub_ch - lb_best")
+
+        # dictator endpoints + cross-binding
+        z_d_ub = dd.get("z_d_ub")
+        z_d_lb = dd.get("z_d_lb")
+        if dd.get("status") != "OPTIMAL":
+            problems.append(f"{tag}: dictator status != OPTIMAL")
+            continue
         if not (dd.get("adaptive") or {}).get("adaptive_converged"):
             problems.append(f"{tag}: dictator not converged (INVALID/HALT)")
             continue
-        ub_ch = oc.get("ub_ch"); lb_ch = oc.get("lb_best")
-        z_d_ub = dd.get("z_d_ub"); z_d_lb = dd.get("z_d_lb")
-        if not all(_finite(v) for v in (ub_ch, lb_ch, z_d_ub)):
-            problems.append(f"{tag}: nonfinite bound(s)")
+        if not _finite(z_d_ub):
+            problems.append(f"{tag}: nonfinite dictator z_d_ub")
             continue
-        if lb_ch > ub_ch + 1e-9:
+        if not _finite(ident.get("z_d_ub")) or abs(
+                ident["z_d_ub"] - z_d_ub) > 1e-12:
+            problems.append(
+                f"{tag}: CG identity z_d_ub != dictator z_d_ub (z_D mismatch)")
+            continue
+        if not _finite(z_d_lb):
+            problems.append(
+                f"{tag}: dictator z_d_lb missing/nonfinite (required)")
+            continue
+        adaptive_lb = (dd.get("adaptive") or {}).get("adaptive_lb")
+        if not _finite(adaptive_lb) or abs(adaptive_lb - z_d_lb) > NUM_TOL:
+            problems.append(f"{tag}: dictator z_d_lb != recorded adaptive_lb")
+            continue
+        if lb_ch > ub_ch + NUM_TOL:
             problems.append(f"{tag}: lb_CH {lb_ch} > ub_CH {ub_ch}")
             continue
+
         interval = cell_interval(ub_ch, lb_ch, z_d_ub, z_d_lb, cell["n_trips"])
-        if interval["U_hi"] < interval["U_lo_raw"] - 1e-9:
+        if interval["U_hi"] < -1e-6:
+            problems.append(
+                f"{tag}: U_hi {interval['U_hi']:.6g} < 0 beyond tolerance "
+                "(violates z_D >= z_CH)")
+            continue
+        if interval["U_hi"] < interval["U_lo_raw"] - NUM_TOL:
             problems.append(f"{tag}: U_hi < U_lo_raw (interval inversion)")
             continue
-        if interval["width"] > WIDTH_BOUND + 1e-9:
+        if interval["width"] > WIDTH_BOUND + NUM_TOL:
             problems.append(
                 f"{tag}: width(U) {interval['width']:.6g} > tol_d+epsilon "
                 f"{WIDTH_BOUND}")
             continue
         cells[key] = {"cell": cell, "interval": interval}
-    if len(cells) + len(problems) != bp.N_CELLS and not problems:
-        problems.append(
-            f"population has {len(cells)} valid cells, expected {bp.N_CELLS}")
     if len(cells) != bp.N_CELLS:
         problems.append(
             f"expected {bp.N_CELLS} valid certified cells, got {len(cells)}")
@@ -379,6 +447,7 @@ def analyze(runs_dir, out_base, stamp, analysis_code_commit, *,
     if verify_code_commit:
         verify_analysis_code_commit(analysis_code_commit)
 
+    audit_sha = None
     try:
         screen = bp.load_frozen_screen(screen_dir)
     except bp.B3PilotError as exc:
@@ -388,8 +457,19 @@ def analyze(runs_dir, out_base, stamp, analysis_code_commit, *,
         screen = {"dir": "<unresolved>", "record_sha256": None,
                   "spec_sha256": None}
     else:
-        pop = load_population(runs_dir, screen)
-        result = analyze_population(pop)
+        # the exact audit MUST pass before any scoring
+        from experiments import audit_b3_factor_pilot as ad
+        audit_result = ad.audit(runs_dir, screen_dir)
+        audit_sha = audit_result.get("run_manifest_sha256")
+        if not audit_result["ok"]:
+            result = {"decision": {"state": "INVALID/HALT",
+                                   "problems": audit_result["problems"]},
+                      "contrasts": [], "settings": {}}
+        else:
+            run = bp.load_run_manifest(runs_dir)
+            market_by_cell = bp.market_hash_by_cell(run["manifest"])
+            pop = load_population(runs_dir, screen, market_by_cell)
+            result = analyze_population(pop)
 
     out_base = Path(out_base)
     out_base.mkdir(parents=True, exist_ok=True)
@@ -407,6 +487,8 @@ def analyze(runs_dir, out_base, stamp, analysis_code_commit, *,
                  "sha256": sha256_file(REPO_ROOT / SPEC_RELPATH)},
         "frozen_screen": {"dir": screen["dir"],
                           "record_sha256": screen.get("record_sha256")},
+        "run_manifest_sha256": audit_sha,
+        "audit_required": True,
         "tolerances": {"epsilon": bp.EPSILON, "tol_d": bp.TOL_D,
                        "budget": bp.BUDGET, "tau_delta": TAU_DELTA},
         "counts": bp.counts(),

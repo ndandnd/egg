@@ -59,11 +59,13 @@ def _materialize_dictator(d_state, jsonl_path):
     _atomic_write_lines(jsonl_path, [d_state["record"]])
 
 
-def _dictator_stage(inst, market, out, tag, cell, kw, screen):
+def _dictator_stage(inst, market, out, tag, cell, kw, screen,
+                    run_manifest_sha256, run_commit):
     """Transactional independent dictator solve feeding the uplift interval.
-    Identity-validated (including the frozen screen record SHA and the bound
-    instance hash), atomically checkpointed with the complete record committed
-    inside, and materialized/repaired on resume."""
+    Identity-validated (including the frozen screen record SHA, the run
+    manifest SHA + code commit, and the bound instance/market hashes),
+    atomically checkpointed with the complete record committed inside, and
+    materialized/repaired on resume."""
     d_identity = {
         "schema_version": SCHEMA_VERSION,
         "experiment": EXPERIMENT,
@@ -73,6 +75,8 @@ def _dictator_stage(inst, market, out, tag, cell, kw, screen):
         "solver": {"backend": backend(),
                    **{k: kw[k] for k in sorted(kw)}},
         "screen_record_sha256": screen["record_sha256"],
+        "run_manifest_sha256": run_manifest_sha256,
+        "run_commit": run_commit,
         "setting": cell["setting"],
         "load_reconstruction": {
             "policy_version": LOAD_RECONSTRUCTION_POLICY_VERSION,
@@ -137,7 +141,7 @@ def _cell_label(cell):
     return [cell["setting"], cell["seed"], cell["n_trips"], cell["b"]]
 
 
-def run_cell(cell, args, screen):
+def run_cell(cell, args, screen, run):
     tag = cell["tag"]
     out = os.path.join(args.out, tag)
     os.makedirs(out, exist_ok=True)
@@ -146,8 +150,18 @@ def run_cell(cell, args, screen):
     # bind to the frozen screen (rebuilds and hash-checks the instance)
     inst = bp.bind_cell_to_screen(cell, screen)
     market = make_affine_market(inst, shape="duck", b_scale=cell["b"])
+    mhash = market_hash(market)
 
-    d_state = _dictator_stage(inst, market, out, tag, cell, kw, screen)
+    # cross-bind the cell to the run manifest, code commit, and solver identity;
+    # a resume under any different identity is refused (fail-closed).
+    identity = bp.cell_identity(
+        cell, screen, market_hash=mhash,
+        run_manifest_sha256=run["sha256"], run_commit=run["manifest"]["run_commit"],
+        mip_gap=args.mip_gap, backend_name=backend())
+    bp.verify_or_write_cell_identity(out, identity)
+
+    d_state = _dictator_stage(inst, market, out, tag, cell, kw, screen,
+                              run["sha256"], run["manifest"]["run_commit"])
 
     state = certified_cg(
         inst, market,
@@ -192,6 +206,10 @@ def main():
     ap.add_argument("--list", action="store_true")
     ap.add_argument("--dry-run", action="store_true",
                     help="full binding/count/refusal preflight; no solve")
+    ap.add_argument("--emit-run-manifest", action="store_true",
+                    help="write the canonical Section-7 run manifest (GRB only)")
+    ap.add_argument("--bind-job", default=None,
+                    help="record the submitted Slurm job id against the manifest")
     ap.add_argument("--cell", type=int, default=None)
     ap.add_argument("--all", action="store_true")
     args = ap.parse_args()
@@ -209,7 +227,27 @@ def main():
         print(f"total: {len(cells)} cells")
         return
 
+    if args.bind_job is not None:
+        path = bp.bind_job_id(args.out, args.bind_job)
+        print(f"JOB_BOUND={path}")
+        return
+
     screen = bp.load_frozen_screen(args.screen_dir)
+
+    if args.emit_run_manifest:
+        # emitted BEFORE sbatch: clean tree + Gurobi are mandatory so the
+        # recorded backend and code commit are truthful.
+        bp.assert_clean_tracked_tree()
+        bp.assert_grb_backend()
+        _preflight(screen)
+        manifest = bp.build_run_manifest(
+            screen, git_commit=bp.git_head_commit(),
+            backend_name=backend(), mip_gap=args.mip_gap)
+        path = bp.write_run_manifest(args.out, manifest)
+        print(f"RUN_MANIFEST={path}")
+        print(f"RUN_MANIFEST_SHA256={bp.run_manifest_sha256(manifest)}")
+        print(f"RUN_COMMIT={manifest['run_commit']}")
+        return
 
     if args.dry_run:
         checked = _preflight(screen)
@@ -234,14 +272,23 @@ def main():
     bp.assert_clean_tracked_tree()
     bp.assert_grb_backend()
     _preflight(screen)
+    # the run manifest must already exist (emitted before submission); the
+    # cell binds to its SHA and run commit.
+    run = bp.load_run_manifest(args.out)
+    if run["manifest"]["run_commit"] != bp.git_head_commit():
+        raise bp.B3PilotError(
+            "run manifest commit != current HEAD; refusing to execute a cell "
+            "under a different code commit than the manifest was emitted for")
+    if run["manifest"]["screen"]["record_sha256"] != screen["record_sha256"]:
+        raise bp.B3PilotError("run manifest screen SHA != frozen screen")
 
     if args.cell is not None:
         if not (0 <= args.cell < len(cells)):
             ap.error(f"--cell must be in [0, {len(cells)})")
-        run_cell(cells[args.cell], args, screen)
+        run_cell(cells[args.cell], args, screen, run)
     else:
         for c in cells:
-            run_cell(c, args, screen)
+            run_cell(c, args, screen, run)
 
 
 if __name__ == "__main__":

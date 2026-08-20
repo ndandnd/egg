@@ -24,8 +24,8 @@ import experiments.b3_factor_pilot as bp
 REPO_ROOT = bp.REPO_ROOT
 DRIVER = REPO_ROOT / "src" / "experiments" / "run_b3_factor_pilot.py"
 
-# Clean base this branch forked from (origin/main tip with PR #34 merged).
-B3_PILOT_BASE_COMMIT = "74a9c5d56ae328b5c394537007cc7cefdb6e3441"
+# Clean base this branch integrates (origin/main tip with PR #35 merged).
+B3_PILOT_BASE_COMMIT = "ac417a6"
 PROTECTED_A6_FILES = (
     "src/egglab/a6.py",
     "src/egglab/b2a2.py",
@@ -44,9 +44,14 @@ def screen():
 # --------------------------------------------------------------------------
 # fixtures: synthetic sane checkpoints (no solver)
 # --------------------------------------------------------------------------
-def _cg_ckpt(ihash, ub_ch=100.0, lb_best=100.0, certified=True,
+RUN_COMMIT = "a" * 40
+MIP_GAP = bp.MIP_GAP_DEFAULT
+
+
+def _cg_ckpt(ihash, mhash, z_d_ub, ub_ch=100.0, lb_best=100.0, certified=True,
              method="a2", eps=bp.EPSILON):
-    """A complete, ``_cg_sane``-passing A2 checkpoint bound to ``ihash``."""
+    """A complete, ``_cg_sane``-passing A2 checkpoint bound to ``ihash`` /
+    ``mhash`` with the CG->dictator ``z_d_ub`` recorded in identity."""
     calls = 3
     oe = [{"extra": {"call_id": f"a2-oc{i}"},
            "solver": {"status": "OPTIMAL"}, "replay_ok": True}
@@ -59,7 +64,9 @@ def _cg_ckpt(ihash, ub_ch=100.0, lb_best=100.0, certified=True,
     return {
         "done": True,
         "identity": {"method": method, "epsilon": eps, "budget": bp.BUDGET,
-                     "tol_d": bp.TOL_D, "instance_hash": ihash},
+                     "tol_d": bp.TOL_D, "instance_hash": ihash,
+                     "market_hash": mhash, "z_d_ub": z_d_ub,
+                     "solver": {"backend": "GRB", "max_mip_gap": MIP_GAP}},
         "oracle_calls": calls, "oracle_events": oe, "iteration_events": it,
         "ub_history": ub, "lb_history": lb, "lb_best": lb_best,
         "outcome": {"type": otype, "ub_ch": ub_ch, "lb_best": lb_best,
@@ -68,36 +75,69 @@ def _cg_ckpt(ihash, ub_ch=100.0, lb_best=100.0, certified=True,
     }
 
 
-def _dict_ckpt(ihash, screen_sha, z_d_ub, z_d_lb, converged=True):
+def _dict_ckpt(ihash, mhash, screen_sha, setting, manifest_sha, z_d_ub, z_d_lb,
+               converged=True, status="OPTIMAL"):
     return {
-        "identity": {"instance_hash": ihash, "screen_record_sha256": screen_sha,
-                     "experiment": "b3-factor-pilot"},
+        "identity": {"instance_hash": ihash, "market_hash": mhash,
+                     "screen_record_sha256": screen_sha,
+                     "run_manifest_sha256": manifest_sha,
+                     "run_commit": RUN_COMMIT, "setting": setting,
+                     "tol_d": bp.TOL_D, "experiment": "b3-factor-pilot"},
         "z_d_ub": z_d_ub, "z_d_lb": z_d_lb, "tol_d": bp.TOL_D,
-        "status": "OPTIMAL",
+        "status": status,
         "adaptive": {"adaptive_converged": converged, "adaptive_lb": z_d_lb},
     }
 
 
 def _write_tree(runs, screen, *, u_by_setting=None, certified_all=True):
-    """Write a full 60-cell synthetic run tree bound to the frozen screen.
+    """Write a full 60-cell synthetic run tree bound to the frozen screen, the
+    canonical run manifest, and per-cell identity sidecars.
 
     ``u_by_setting`` maps a setting to its (constant) certified uplift U;
     defaults to 0.5 SEK everywhere (all matched contrasts zero)."""
     runs = Path(runs)
+    manifest = bp.build_run_manifest(
+        screen, git_commit=RUN_COMMIT, backend_name="GRB", mip_gap=MIP_GAP)
+    manifest_sha = bp.run_manifest_sha256(manifest)
+    bp.write_run_manifest(runs, manifest)
+    mbc = bp.market_hash_by_cell(manifest)
     for cell in bp.build_cells():
         setting = cell["setting"]
         u = 0.5 if u_by_setting is None else u_by_setting[setting]
-        ihash = screen["instance_hashes"][
-            (setting, cell["seed"], cell["n_trips"])]
+        key3 = (setting, cell["seed"], cell["n_trips"])
+        key4 = (setting, cell["seed"], cell["n_trips"], cell["b"])
+        ihash = screen["instance_hashes"][key3]
+        mhash = mbc[key4]
         cdir = runs / cell["tag"]
         cdir.mkdir(parents=True)
         ub_ch = lb_best = 100.0
         z_d = ub_ch + u
         (cdir / "a2.cg.ckpt.json").write_text(json.dumps(
-            _cg_ckpt(ihash, ub_ch, lb_best, certified=certified_all)))
+            _cg_ckpt(ihash, mhash, z_d, ub_ch, lb_best,
+                     certified=certified_all)))
         (cdir / "dictator.ckpt.json").write_text(json.dumps(
-            _dict_ckpt(ihash, screen["record_sha256"], z_d, z_d)))
+            _dict_ckpt(ihash, mhash, screen["record_sha256"], setting,
+                       manifest_sha, z_d, z_d)))
+        identity = bp.cell_identity(
+            cell, screen, market_hash=mhash, run_manifest_sha256=manifest_sha,
+            run_commit=RUN_COMMIT, mip_gap=MIP_GAP, backend_name="GRB")
+        (cdir / bp.CELL_IDENTITY_FILENAME).write_bytes(
+            bp.canonical_cell_identity_bytes(identity))
     return runs
+
+
+def _mutate_cg(runs, tag, fn):
+    p = runs / tag / "a2.cg.ckpt.json"
+    ck = json.loads(p.read_text())
+    fn(ck)
+    p.write_text(json.dumps(ck))
+
+
+def _mutate_dict(runs, tag, fn):
+    p = runs / tag / "dictator.ckpt.json"
+    dd = json.loads(p.read_text())
+    fn(dd)
+    p.write_text(json.dumps(dd))
 
 
 # --------------------------------------------------------------------------
@@ -309,7 +349,8 @@ def test_audit_instance_hash_drift_refused(tmp_path, screen):
     (runs / tag / "a2.cg.ckpt.json").write_text(json.dumps(ck))
     result = ad.audit(runs, screen_dir=None)
     assert not result["ok"]
-    assert any("factor drift" in p for p in result["problems"])
+    assert any("instance hash" in p and "drift" in p
+               for p in result["problems"])
 
 
 def test_audit_a6_method_hard_refused(tmp_path, screen):
@@ -327,6 +368,159 @@ def test_audit_uncertified_refused(tmp_path, screen):
     result = ad.audit(runs, screen_dir=None)
     assert not result["ok"]
     assert any("not certified" in p for p in result["problems"])
+
+
+# --------------------------------------------------------------------------
+# exploit regressions (each was accepted before the provenance/integrity fix;
+# each must now be rejected, and a clean rebuild must pass)
+# --------------------------------------------------------------------------
+def test_exploit_missing_market_hash(tmp_path, screen):
+    runs = _write_tree(tmp_path / "runs", screen)
+    tag = bp.build_cells()[0]["tag"]
+    _mutate_cg(runs, tag, lambda ck: ck["identity"].pop("market_hash"))
+    a = ad.audit(runs, screen_dir=None)
+    assert not a["ok"] and any("market hash" in p for p in a["problems"])
+    # repaired
+    runs2 = _write_tree(tmp_path / "runs2", screen)
+    assert ad.audit(runs2, screen_dir=None)["ok"]
+
+
+def test_exploit_altered_outcome_lb_best(tmp_path, screen):
+    runs = _write_tree(tmp_path / "runs", screen)
+    tag = bp.build_cells()[0]["tag"]
+    _mutate_cg(runs, tag,
+               lambda ck: ck["outcome"].__setitem__("lb_best", 42.0))
+    a = ad.audit(runs, screen_dir=None)
+    assert not a["ok"]
+    # analyzer independently rejects the single-field edit too
+    out = az.analyze(runs, tmp_path / "out", "s1", "0" * 40,
+                     screen_dir=None, verify_code_commit=False)
+    man = json.loads((Path(out) / "MANIFEST.json").read_text())
+    assert man["decision"]["state"] == "INVALID/HALT"
+
+
+def test_exploit_altered_dictator_z_d_ub(tmp_path, screen):
+    runs = _write_tree(tmp_path / "runs", screen)
+    tag = bp.build_cells()[0]["tag"]
+    _mutate_dict(runs, tag, lambda dd: dd.__setitem__("z_d_ub", 123.0))
+    a = ad.audit(runs, screen_dir=None)
+    assert not a["ok"]
+    assert any("z_d_ub" in p for p in a["problems"])
+
+
+def test_exploit_altered_dictator_z_d_lb(tmp_path, screen):
+    runs = _write_tree(tmp_path / "runs", screen)
+    tag = bp.build_cells()[0]["tag"]
+    _mutate_dict(runs, tag, lambda dd: dd.__setitem__("z_d_lb", 77.0))
+    a = ad.audit(runs, screen_dir=None)
+    assert not a["ok"]
+    assert any("z_d_lb" in p for p in a["problems"])
+
+
+def test_exploit_mismatched_cg_identity_z_d_ub(tmp_path, screen):
+    runs = _write_tree(tmp_path / "runs", screen)
+    tag = bp.build_cells()[0]["tag"]
+    _mutate_cg(runs, tag,
+               lambda ck: ck["identity"].__setitem__("z_d_ub", 999.0))
+    a = ad.audit(runs, screen_dir=None)
+    assert not a["ok"]
+    assert any("z_d_ub" in p for p in a["problems"])
+
+
+def test_exploit_tampered_manifest(tmp_path, screen):
+    runs = _write_tree(tmp_path / "runs", screen)
+    mpath = runs / bp.RUN_MANIFEST_FILENAME
+    man = json.loads(mpath.read_text())
+    man["market_hashes"][0]["market_hash"] = "0" * 64
+    mpath.write_text(json.dumps(man, indent=2, sort_keys=True) + "\n")
+    a = ad.audit(runs, screen_dir=None)
+    assert not a["ok"]
+    assert any("byte-for-byte" in p or "tampered" in p for p in a["problems"])
+
+
+def test_exploit_wrong_run_commit_in_sidecar(tmp_path, screen):
+    runs = _write_tree(tmp_path / "runs", screen)
+    tag = bp.build_cells()[0]["tag"]
+    ipath = runs / tag / bp.CELL_IDENTITY_FILENAME
+    ident = json.loads(ipath.read_text())
+    ident["run_commit"] = "b" * 40
+    ipath.write_bytes(bp.canonical_cell_identity_bytes(ident))
+    a = ad.audit(runs, screen_dir=None)
+    assert not a["ok"]
+    assert any("cell-identity sidecar" in p for p in a["problems"])
+
+
+def test_exploit_wrong_manifest_sha_in_dictator(tmp_path, screen):
+    runs = _write_tree(tmp_path / "runs", screen)
+    tag = bp.build_cells()[0]["tag"]
+    _mutate_dict(runs, tag,
+                 lambda dd: dd["identity"].__setitem__(
+                     "run_manifest_sha256", "0" * 64))
+    a = ad.audit(runs, screen_dir=None)
+    assert not a["ok"]
+    assert any("run-manifest SHA" in p for p in a["problems"])
+
+
+def test_analyzer_requires_audit_pass(tmp_path, screen):
+    # an analyzer run on a tree that fails audit must be INVALID/HALT, never a
+    # scored decision.
+    runs = _write_tree(tmp_path / "runs", screen)
+    tag = bp.build_cells()[0]["tag"]
+    _mutate_dict(runs, tag, lambda dd: dd.__setitem__("z_d_lb", 77.0))
+    out = az.analyze(runs, tmp_path / "out", "s2", "0" * 40,
+                     screen_dir=None, verify_code_commit=False)
+    man = json.loads((Path(out) / "MANIFEST.json").read_text())
+    assert man["decision"]["state"] == "INVALID/HALT"
+
+
+# --------------------------------------------------------------------------
+# run-manifest + cell-identity sidecar unit behavior
+# --------------------------------------------------------------------------
+def test_run_manifest_deterministic_and_bound(screen):
+    m1 = bp.build_run_manifest(screen, git_commit="c" * 40,
+                               backend_name="GRB", mip_gap=1e-6)
+    m2 = bp.build_run_manifest(screen, git_commit="c" * 40,
+                               backend_name="GRB", mip_gap=1e-6)
+    assert bp.run_manifest_sha256(m1) == bp.run_manifest_sha256(m2)
+    assert len(m1["instance_hashes"]) == 30 and len(m1["market_hashes"]) == 60
+    assert m1["screen"]["record_sha256"] == screen["record_sha256"]
+    assert m1["tolerances"]["tau_delta"] == bp.TAU_DELTA
+
+
+def test_run_manifest_rejects_non_grb(screen):
+    with pytest.raises(bp.B3PilotError, match="Gurobi-only|not GRB"):
+        bp.build_run_manifest(screen, git_commit="c" * 40,
+                              backend_name="CBC", mip_gap=1e-6)
+
+
+def test_cell_identity_resume_refuses_drift(tmp_path, screen):
+    cell = bp.build_cells()[0]
+    m = bp.build_run_manifest(screen, git_commit=RUN_COMMIT,
+                              backend_name="GRB", mip_gap=MIP_GAP)
+    sha = bp.run_manifest_sha256(m)
+    mbc = bp.market_hash_by_cell(m)
+    key4 = (cell["setting"], cell["seed"], cell["n_trips"], cell["b"])
+    ident = bp.cell_identity(cell, screen, market_hash=mbc[key4],
+                             run_manifest_sha256=sha, run_commit=RUN_COMMIT,
+                             mip_gap=MIP_GAP, backend_name="GRB")
+    d = tmp_path / "cell"
+    d.mkdir()
+    bp.verify_or_write_cell_identity(d, ident)      # first write
+    bp.verify_or_write_cell_identity(d, ident)      # idempotent resume
+    drifted = dict(ident, run_commit="d" * 40)
+    with pytest.raises(bp.B3PilotError, match="cell identity mismatch"):
+        bp.verify_or_write_cell_identity(d, drifted)
+
+
+def test_job_binding_closes_provenance_gap(tmp_path, screen):
+    runs = _write_tree(tmp_path / "runs", screen)
+    path = bp.bind_job_id(runs, "123456")
+    job = json.loads(Path(path).read_text())
+    assert job["job_id"] == "123456"
+    assert job["run_commit"] == RUN_COMMIT
+    assert job["run_manifest_sha256"] == bp.load_run_manifest(runs)["sha256"]
+    with pytest.raises(bp.B3PilotError, match="already exists"):
+        bp.bind_job_id(runs, "999")
 
 
 # --------------------------------------------------------------------------

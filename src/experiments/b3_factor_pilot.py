@@ -28,6 +28,7 @@ import json
 import os
 import subprocess
 import sys
+import tempfile
 from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -38,17 +39,28 @@ from experiments.b3_factor_screen import (
     BASELINE_BATTERY_KWH,
     BASELINE_POWER_KW,
     FROZEN_BURNED_SEEDS,
+    GENERATOR_HELD_FIXED_ARGUMENTS,
+    GENERATOR_RELPATH,
     N_TRIPS,
     SETTING_ORDER,
+    SPEC_RELPATH,
     build_instance,
+    sha256_file,
 )
 
 SCHEMA = "b3-factor-pilot-v1"
+RUN_MANIFEST_SCHEMA = "b3-factor-pilot-run-v1"
+CELL_IDENTITY_SCHEMA = "b3-factor-pilot-cell-v1"
+RUN_MANIFEST_FILENAME = "MANIFEST.json"
+JOB_FILENAME = "JOB.json"
+CELL_IDENTITY_FILENAME = "identity.json"
+MIP_GAP_DEFAULT = 1e-6
 REPO_ROOT = Path(__file__).resolve().parents[2]
 
 # --- frozen design (spec Sections 2-3, 5) ---------------------------------
 SEEDS = FROZEN_BURNED_SEEDS            # (0, 11, 15) — development only
 B_SCALES = (0.01, 0.05)
+BASELINE_SETTING = "S0_baseline"
 EPSILON = 1e-2
 BUDGET = 240
 TOL_D = 1e-2
@@ -318,11 +330,15 @@ def assert_no_factor_drift(screen: dict) -> None:
             f"{N_PHYSICAL_INSTANCES}")
 
 
-def cell_identity(cell: dict, screen: dict) -> dict:
-    """The frozen provenance every run/audit/analysis record must carry."""
+def cell_identity(cell: dict, screen: dict, *, market_hash: str,
+                  run_manifest_sha256: str, run_commit: str,
+                  mip_gap: float, backend_name: str) -> dict:
+    """The frozen provenance every cell's sidecar carries, binding the cell to
+    the frozen screen AND to the specific run (manifest SHA + code commit +
+    solver identity + market hash)."""
     key = (cell["setting"], cell["seed"], cell["n_trips"])
     return {
-        "schema": SCHEMA,
+        "schema": CELL_IDENTITY_SCHEMA,
         "setting": cell["setting"],
         "seed": cell["seed"],
         "n_trips": cell["n_trips"],
@@ -336,7 +352,54 @@ def cell_identity(cell: dict, screen: dict) -> dict:
         "screen_record_sha256": screen["record_sha256"],
         "screen_selected_levels": dict(FROZEN_SELECTED_LEVELS),
         "instance_hash": screen["instance_hashes"][key],
+        "market_hash": market_hash,
+        "run_manifest_sha256": run_manifest_sha256,
+        "run_commit": run_commit,
+        "solver": {"backend": backend_name, "mip_gap": mip_gap},
     }
+
+
+def canonical_cell_identity_bytes(identity: dict) -> bytes:
+    return (json.dumps(identity, indent=2, sort_keys=True) + "\n").encode()
+
+
+def _atomic_write_bytes(path: Path, payload: bytes) -> None:
+    fd, tmp = tempfile.mkstemp(prefix=f".{path.name}.", dir=str(path.parent))
+    try:
+        with os.fdopen(fd, "wb") as handle:
+            handle.write(payload)
+            handle.flush()
+            os.fsync(handle.fileno())
+        os.replace(tmp, path)
+    except BaseException:
+        if os.path.exists(tmp):
+            os.unlink(tmp)
+        raise
+
+
+def verify_or_write_cell_identity(cell_dir: str | os.PathLike,
+                                  identity: dict) -> None:
+    """Write the cell-identity sidecar on first run; on resume, refuse if ANY
+    bound field (code commit, manifest SHA, screen SHA, setting, factor level,
+    instance hash, market hash, or solver identity) differs."""
+    path = Path(cell_dir) / CELL_IDENTITY_FILENAME
+    payload = canonical_cell_identity_bytes(identity)
+    if path.exists():
+        existing = path.read_bytes()
+        if existing != payload:
+            try:
+                prior = json.loads(existing)
+            except ValueError:
+                prior = {}
+            diffs = sorted(
+                k for k in set(identity) | set(prior)
+                if prior.get(k) != identity.get(k))
+            raise B3PilotError(
+                f"cell identity mismatch on resume (fields: {diffs}); refusing "
+                "to resume a cell under a different run/code/screen identity — "
+                "delete the cell directory to restart")
+        return
+    _atomic_write_bytes(path, payload)
 
 
 def counts() -> dict:
@@ -348,3 +411,206 @@ def counts() -> dict:
         "dictators": N_CELLS,
         "matched_contrasts": N_MATCHED_CONTRASTS,
     }
+
+
+# --------------------------------------------------------------------------
+# git provenance
+# --------------------------------------------------------------------------
+def git_head_commit() -> str:
+    """The full 40-char lowercase HEAD commit, pinned to the repo root."""
+    out = subprocess.check_output(
+        ["git", "rev-parse", "HEAD"], cwd=REPO_ROOT).decode().strip()
+    if len(out) != 40 or not all(c in "0123456789abcdef" for c in out):
+        raise B3PilotError(f"HEAD did not resolve to a 40-char SHA: {out!r}")
+    return out
+
+
+# --------------------------------------------------------------------------
+# Section-7 run manifest (canonical, deterministic, SHA-bound)
+# --------------------------------------------------------------------------
+def _recompute_hashes(screen: dict) -> tuple[dict, list]:
+    """Rebuild every physical instance and market, binding each instance hash
+    to the frozen screen; return (instance_hashes, market_rows)."""
+    from egglab.market import make_affine_market
+    from egglab.b2a2 import market_hash
+
+    instance_hashes: dict[str, str] = {}
+    market_rows: list[dict] = []
+    for cell in build_cells():
+        inst = bind_cell_to_screen(cell, screen)   # rebuild + hash-check
+        market = make_affine_market(inst, shape="duck", b_scale=cell["b"])
+        ihash = inst.hash()
+        mhash = market_hash(market)
+        ikey = f"{cell['setting']}|{cell['seed']}|{cell['n_trips']}"
+        instance_hashes.setdefault(ikey, ihash)
+        market_rows.append({
+            "setting": cell["setting"], "seed": cell["seed"],
+            "n_trips": cell["n_trips"], "b": cell["b"],
+            "instance_hash": ihash, "market_hash": mhash,
+        })
+    return instance_hashes, market_rows
+
+
+def _assert_hash_invariants(instance_hashes: dict, market_rows: list,
+                            screen: dict) -> None:
+    """Spec Section 7: each instance occurs exactly twice; the two b-markets of
+    a physical instance differ; matched cells (same seed,n,b) share a market;
+    baseline S0 identities match the frozen screen."""
+    from collections import Counter
+    inst_counts = Counter(r["instance_hash"] for r in market_rows)
+    if len(instance_hashes) != N_PHYSICAL_INSTANCES:
+        raise B3PilotError(
+            f"expected {N_PHYSICAL_INSTANCES} distinct instances, got "
+            f"{len(instance_hashes)}")
+    for ihash, n in inst_counts.items():
+        if n != 2:
+            raise B3PilotError(
+                f"instance {ihash} occurs {n} times, expected exactly twice")
+    # b-markets differ per physical instance
+    by_phys: dict[tuple, dict] = {}
+    for r in market_rows:
+        by_phys.setdefault((r["setting"], r["seed"], r["n_trips"]), {})[
+            r["b"]] = r["market_hash"]
+    for key, bmap in by_phys.items():
+        if len(set(bmap.values())) != len(bmap):
+            raise B3PilotError(
+                f"{key}: market hashes do not differ across b ({bmap})")
+    # matched cells (same seed,n,b) share the market across settings
+    by_market_cell: dict[tuple, set] = {}
+    for r in market_rows:
+        by_market_cell.setdefault(
+            (r["seed"], r["n_trips"], r["b"]), set()).add(r["market_hash"])
+    for key, mset in by_market_cell.items():
+        if len(mset) != 1:
+            raise B3PilotError(
+                f"market cell {key}: settings disagree on market hash ({mset})")
+    # baseline S0 identities match the frozen screen
+    for seed in SEEDS:
+        for n in N_TRIPS:
+            ikey = f"{BASELINE_SETTING}|{seed}|{n}"
+            if instance_hashes.get(ikey) != screen["instance_hashes"][
+                    (BASELINE_SETTING, seed, n)]:
+                raise B3PilotError(
+                    f"baseline instance {ikey} differs from the frozen screen")
+
+
+def build_run_manifest(screen: dict, *, git_commit: str, backend_name: str,
+                       mip_gap: float = MIP_GAP_DEFAULT) -> dict:
+    """The canonical Section-7 run manifest (pure function of the frozen
+    screen, code commit, and solver identity).  Raises on any hash invariant
+    failure so a malformed design can never be submitted."""
+    if len(git_commit) != 40 or not all(
+            c in "0123456789abcdef" for c in git_commit):
+        raise B3PilotError("run manifest requires the full 40-char commit SHA")
+    if backend_name != "GRB":
+        raise B3PilotError(
+            f"run manifest backend {backend_name!r} is not GRB (Gurobi-only)")
+    instance_hashes, market_rows = _recompute_hashes(screen)
+    _assert_hash_invariants(instance_hashes, market_rows, screen)
+    return {
+        "schema": RUN_MANIFEST_SCHEMA,
+        "run_commit": git_commit,
+        "spec": {"path": SPEC_RELPATH,
+                 "sha256": sha256_file(REPO_ROOT / SPEC_RELPATH)},
+        "screen": {
+            "dir": FROZEN_SCREEN_RELDIR,
+            "record_sha256": screen["record_sha256"],
+            "selected_levels": dict(FROZEN_SELECTED_LEVELS),
+        },
+        "generator": {
+            "path": GENERATOR_RELPATH,
+            "sha256": screen.get("generator_sha256"),
+            "held_fixed_arguments": dict(GENERATOR_HELD_FIXED_ARGUMENTS),
+            "baseline": {"battery_kwh": BASELINE_BATTERY_KWH,
+                         "charge_power_kw": BASELINE_POWER_KW},
+        },
+        "grid": {
+            "settings": list(SETTING_ORDER),
+            "seeds": list(SEEDS),
+            "n_trips": list(N_TRIPS),
+            "b_scales": list(B_SCALES),
+        },
+        "tolerances": {
+            "epsilon": EPSILON, "budget": BUDGET, "tol_d": TOL_D,
+            "tau_delta": TAU_DELTA,
+        },
+        "solver": {
+            "backend": backend_name, "method": METHOD, "mip_gap": mip_gap,
+        },
+        "load_reconstruction": _load_reconstruction_policy(),
+        "counts": counts(),
+        "instance_hashes": instance_hashes,
+        "market_hashes": market_rows,
+    }
+
+
+def _load_reconstruction_policy() -> dict:
+    from egglab.evsp import (LOAD_RECONSTRUCTION_POLICY_VERSION,
+                             REPLAY_TOL_KWH)
+    return {"policy_version": LOAD_RECONSTRUCTION_POLICY_VERSION,
+            "tolerance_kwh": REPLAY_TOL_KWH}
+
+
+def canonical_manifest_bytes(manifest: dict) -> bytes:
+    return (json.dumps(manifest, indent=2, sort_keys=True) + "\n").encode()
+
+
+def run_manifest_sha256(manifest: dict) -> str:
+    return hashlib.sha256(canonical_manifest_bytes(manifest)).hexdigest()
+
+
+def market_hash_by_cell(manifest: dict) -> dict:
+    return {(r["setting"], r["seed"], r["n_trips"], r["b"]): r["market_hash"]
+            for r in manifest.get("market_hashes", [])}
+
+
+def write_run_manifest(out_dir: str | os.PathLike, manifest: dict) -> str:
+    """Atomically write the canonical run manifest before submission.  If a
+    manifest already exists it must be byte-identical (idempotent re-emit);
+    otherwise refuse (a different manifest means a different design)."""
+    out = Path(out_dir)
+    out.mkdir(parents=True, exist_ok=True)
+    path = out / RUN_MANIFEST_FILENAME
+    payload = canonical_manifest_bytes(manifest)
+    if path.exists():
+        if path.read_bytes() != payload:
+            raise B3PilotError(
+                f"refusing to overwrite a different run manifest at {path}")
+        return str(path)
+    _atomic_write_bytes(path, payload)
+    return str(path)
+
+
+def load_run_manifest(out_dir: str | os.PathLike) -> dict:
+    """Load and SHA-validate the run manifest; return {manifest, sha256}."""
+    path = Path(out_dir) / RUN_MANIFEST_FILENAME
+    if not path.is_file():
+        raise B3PilotError(f"run manifest missing: {path}")
+    manifest = json.loads(path.read_bytes())
+    sha = run_manifest_sha256(manifest)
+    if manifest.get("schema") != RUN_MANIFEST_SCHEMA:
+        raise B3PilotError("run manifest schema mismatch")
+    return {"manifest": manifest, "sha256": sha}
+
+
+def bind_job_id(out_dir: str | os.PathLike, job_id: str) -> str:
+    """Atomically record the submitted Slurm job id, referencing the manifest
+    SHA and run commit, immediately after sbatch — closing the post-sbatch
+    provenance gap.  Refuses to overwrite an existing binding."""
+    loaded = load_run_manifest(out_dir)
+    manifest = loaded["manifest"]
+    path = Path(out_dir) / JOB_FILENAME
+    if path.exists():
+        raise B3PilotError(f"job binding already exists: {path}")
+    import datetime
+    doc = {
+        "schema": "b3-factor-pilot-job-v1",
+        "job_id": str(job_id),
+        "run_manifest_sha256": loaded["sha256"],
+        "run_commit": manifest["run_commit"],
+        "submitted_utc": datetime.datetime.now(
+            datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+    }
+    _atomic_write_bytes(
+        path, (json.dumps(doc, indent=2, sort_keys=True) + "\n").encode())
+    return str(path)
