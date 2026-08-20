@@ -47,6 +47,7 @@ not sufficient.
 | EI-023 | 2026-08-19 | **FIXED** | Analyzer publication forked from the package contract |
 | EI-024 | 2026-08-19 | **FOUND — IN PROGRESS** | Precommit incomplete-marker deletion was misclassified as a completed publication |
 | EI-025 | 2026-08-19 | **FOUND — IN PROGRESS** | A6 shared replay omitted terminal/final outcome closure |
+| EI-026 | 2026-08-20 | **FOUND — IN PROGRESS** | Operand-scaled bound/incumbent equality passed one gate but its derived gap failed a scale-1 zero gate; claimed pack aborted mid-validation |
 
 ## EI-001 — Replay rounding and audit tolerance
 
@@ -1239,3 +1240,103 @@ the shared-helper closure is reviewed and merged, the operational audit's
 | EI-024 (precommit marker deletion misclassified) | four-state publisher machine (`renamed-guarded` / `commit-unlink-in-flight`) + safe marker restoration through the anchored fd + truthful `install_tree_no_replace` metadata | `test_precommit_marker_deletion_is_corruption_not_commit`, `test_precommit_marker_restore_race_preserves_competitor`, `test_install_tree_post_rename_error_carries_truthful_metadata`, `test_install_tree_pre_rename_error_leaves_no_target` in `test_a6_holdout_package.py`; retained publisher edge-case tests still pass |
 | EI-025 (replay terminal/final closure omitted) | terminal/final/outcome closure + full oracle-call provenance (F1: exact-integer `replay_calls == len(oracle_events) == checkpoint.oracle_calls == outcome.oracle_calls`, per-iteration/terminal index binding, one-to-one event↔iteration) + oracle/iteration cross-link in the shared `experiments/a6_replay.py` (audit AND analyzer) | `test_e2_*` and `test_f1_*` batteries (including `test_f1_cg_sane_rejects_outcome_oracle_calls_edit`) in `test_a6_recovery_replay.py`, `test_selection_aborts_on_outcome_oracle_calls_edit` in `test_a6.py`, + analyzer rejections in `test_a6_holdout_analysis.py` |
 | import post-commit close (EI-007 addendum) | explicit `import_committed` state guards descriptor-close reporting | `test_import_descriptor_close_after_commit_is_not_a_failure`, `test_import_descriptor_close_before_commit_is_reported` in `test_a6_holdout_package.py` |
+
+## EI-026 — Split tolerance scales aborted a claimed A6 holdout pack mid-validation
+
+**Status: FOUND — IN PROGRESS.** The tolerance/certificate repair (Task A) and
+the one-shot claimed-incident recovery command (Task B) are implemented on this
+branch with regression coverage, pending independent review. The recovery
+disposition remains IN PROGRESS until this branch is merged AND the recovery
+command has been successfully used to repackage the claimed incident. The
+original claim and raw tree must never be deleted or rewritten.
+
+**Operational history.** An earlier `squeue` quiescence check failed from a
+non-login shell (its Slurm client path was unavailable) **before** any claim
+existed. The subsequent interactive packaging attempt created the source-side
+`a6_holdout.CLOSEOUT_CLAIM.json` and then **failed during frozen scientific
+validation** — specifically the certificate replay of one clean pricing event.
+**No audit, archive, manifest, sidecar, bundle, decision, or score was
+emitted, and no final package directory was created.** The exclusive claim
+therefore remains on disk as a deliberate fail-closed recovery marker.
+
+**Observed symptom and exact evidence.** Cell/event `a2 seed=16 n=12 b=0.01`,
+iteration `a2-it31`, GRB / python-mip 1.17.6, OPTIMAL:
+
+- original packaging/claim commit `740ab0c1578b454268102c0bb15b1104d9ac8d9d`;
+- original claim SHA-256
+  `1b0acf0b8232d4b08e764564e2732fcfa9c28dd53456a1415085b77cb38f6675`;
+- claimed source-tree SHA-256
+  `2c60b3d2feb1f313cb08541556d5e8f95bf40dc76b2c539d78149dd93ad88749`;
+- implicated checkpoint SHA-256
+  `dc7a948a6966f20e6f25b9a8744a937741a7973e9c2ad64622b71512658f7669`;
+- solver bound `3255.503129856506`;
+- solver model incumbent `3255.503129876505` (model minus bound
+  `+1.9999333744635805e-08`);
+- reconstructed physical incumbent `3255.503129796989` (physical minus model
+  `-7.951621228130534e-08`);
+- raw physical gap `-5.951687853666954e-08` (recorded gap exactly equals the
+  recomputed raw gap);
+- operand-scaled tolerance `3.255503129856506e-07`;
+- erroneous derived-gap/zero tolerance `1e-10`.
+
+**Root cause.** `_replay_cg_certificate_evidence` first accepted the
+bound/incumbent equality with an operand-scaled tolerance
+`1e-10 * max(1, |bound|, |incumbent|) ≈ 3.26e-7`, then compared the small
+derived gap `incumbent - bound` against zero with a scale of ≈ 1
+(`1e-10 * max(1, |gap|, 0) = 1e-10`). The same numerical relationship therefore
+passed the first gate (`|bound - incumbent| ≤ 3.26e-7`) and failed the second
+(`|gap| = 5.95e-8 > 1e-10`), aborting the claimed pack even though bound and
+incumbent are equal to solver precision at this ≈ 3255 magnitude.
+
+**Invariant and repair under review (Task A).** One shared operand-scaled
+ordering helper (`analyze_a6_holdout._ordering_tolerance`) is the sole authority
+for ordering two solver quantities of the same magnitude; the derived gap is
+judged against zero at that SAME operand scale. A negative raw pricing gap is
+admitted only within that tolerance (derived from the original incumbent/bound
+operands) and rejected beyond it; the recorded RAW absolute/relative gaps are
+preserved and validated exactly, and a within-tolerance negative gap normalizes
+to zero for diagnostic gap semantics only. Certification is not silently
+strengthened: a SEPARATE conservative safety chain reduces the bound by the
+operand tolerance (`bound - tau`), re-derives safe min-reduced-cost/LB-best, and
+requires the terminal certificate to remain `<= epsilon`, kept independent of
+the producer-trace replay. All existing coordinated bound-inflation/tamper
+rejections are preserved, and the audit (`_cg_sane`) applies the SAME
+operand-scaled ordering for parity. Regressions in `test_a6_holdout_analysis.py`
+cover the exact EI-026 scalar case (numerical equality), just-inside/just-outside
+tolerance at small and large scales, the full raw/model/physical
+reconstruction, the exact raw-recorded-gap check, the conservative safe chain
+(certifies or fails honestly), the retained inflated-bound rejection, and
+audit/analyzer parity.
+
+**One-shot recovery (Task B).** Normal `pack` still refuses the existing claim.
+A separate, explicit **EI-026-only** recovery command
+(`package_a6_holdout.recover_package_holdout` / `recover-pack`), never a generic
+bypass, requires the full original claim SHA and incident ID `EI-026`; opens the
+original claim as canonical, regular, single-link immutable evidence and
+verifies its schema, SHA, original commit, launch identities, and claimed source
+digest/count/bytes; requires a clean recovery HEAD equal to the recovery commit
+with `740ab0c` as an ancestor; verifies the live raw tree still exactly matches
+the original claim before any outcome validation; exclusively creates a second
+adjacent `a6_holdout.RECOVERY_CLAIM.json` (binding EI-026, the original claim
+SHA/commit, the raw-tree digest, the recovery commit, and the failure
+fingerprint) before validation, with exactly one recovery attempt permitted;
+never modifies or replaces the original claim or raw root; uses fresh staging
+only; checks Slurm quiescence before reading and again immediately before
+publication; and records a versioned bundle-manifest/import-receipt/analyzer
+contract (`…-v3-recovery` / `…-v2-recovery`) carrying the original claim
+commit+SHA, the recovery claim commit+SHA, the experiment commit, and the actual
+corrected packaging/analysis commit. Import requires HEAD to equal the recovery
+commit while separately verifying both immutable claims. Any recovery failure is
+fail-closed, and a second recovery claim blocks all further attempts. Adversarial
+regressions in `test_a6_holdout_package.py` cover wrong/missing/mutated/linked
+claim, source drift, dirty/non-descendant recovery HEAD, wrong incident ID, an
+existing recovery claim, an active Slurm job, destination HEAD mismatch, recovery
+failure preservation, that normal `pack` still refuses, and a complete synthetic
+recover-pack/import round trip.
+
+**Scientific handling.** The original claim and raw tree are immutable incident
+evidence and must never be deleted or rewritten. No score, decision, or artifact
+was produced by the aborted attempt. Until this branch is reviewed and merged
+and the recovery command has successfully repackaged the claimed incident under
+the versioned contract, EI-026 remains IN PROGRESS and no packaged scientific
+result may be cited from this campaign.
