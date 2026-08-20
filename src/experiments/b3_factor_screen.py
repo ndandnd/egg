@@ -41,13 +41,24 @@ from egglab.instance import synthetic_instance
 SCHEMA = "b3-factor-screen-v1"
 REPO_ROOT = Path(__file__).resolve().parents[2]
 SPEC_RELPATH = "doc/B3_FACTOR_PILOT_SPEC_DRAFT.md"
+GENERATOR_RELPATH = "src/egglab/instance.py"
 BASE_COMMIT = "b81b15ace8ffd7301ce93f349fdb643cdefd5da6"
 
 # frozen design (spec Sections 2-4)
-BURNED_SEEDS = (0, 11, 15)
+FROZEN_BURNED_SEEDS = (0, 11, 15)
+BURNED_SEEDS = FROZEN_BURNED_SEEDS
 N_TRIPS = (8, 12)
 BASELINE_BATTERY_KWH = 60.0
 BASELINE_POWER_KW = 150.0
+GENERATOR_HELD_FIXED_ARGUMENTS = {
+    "soc_min_frac": 0.10,
+    "soc_end_frac": 0.10,
+    "trip_energy_range": [14.0, 22.0],
+    "day_start_min": 300,
+    "day_end_min": 1320,
+    "max_vehicles": None,
+    "name": None,
+}
 
 # level -> (parameter, band lo, band hi, step, starting candidate,
 #           expected candidate count)
@@ -63,6 +74,7 @@ SETTING_ORDER = ("S0_baseline", "S1_batt_low", "S2_batt_high",
 PROVENANCE_FILES = (
     "src/experiments/b3_factor_screen.py",
     "src/tests/test_b3_factor_screen.py",
+    GENERATOR_RELPATH,
     SPEC_RELPATH,
 )
 
@@ -82,9 +94,11 @@ def sha256_file(path: str | os.PathLike) -> str:
 # --------------------------------------------------------------------------
 # guards
 # --------------------------------------------------------------------------
-def assert_burned_seeds(seeds=BURNED_SEEDS) -> None:
+def assert_burned_seeds(seeds=None) -> None:
     """Only the burned development seeds may ever be generated."""
-    if tuple(seeds) != (0, 11, 15):
+    if seeds is None:
+        seeds = BURNED_SEEDS
+    if tuple(seeds) != FROZEN_BURNED_SEEDS:
         raise B3ScreenError(
             f"unexpected seeds {tuple(seeds)!r}: the screen is frozen to "
             "burned seeds (0, 11, 15)")
@@ -189,13 +203,21 @@ def preference_order(candidates: list[float], start: float,
 # --------------------------------------------------------------------------
 def build_instance(seed: int, n_trips: int, battery_kwh: float,
                    charge_power_kw: float):
-    if seed not in BURNED_SEEDS:
+    if seed not in FROZEN_BURNED_SEEDS:
         raise B3ScreenError(
             f"refusing to generate seed {seed}: not a burned development "
             "seed")
     return synthetic_instance(
         seed=seed, n_trips=n_trips, battery_kwh=battery_kwh,
-        charge_power_kw=charge_power_kw)
+        charge_power_kw=charge_power_kw,
+        soc_min_frac=GENERATOR_HELD_FIXED_ARGUMENTS["soc_min_frac"],
+        soc_end_frac=GENERATOR_HELD_FIXED_ARGUMENTS["soc_end_frac"],
+        trip_energy_range=tuple(
+            GENERATOR_HELD_FIXED_ARGUMENTS["trip_energy_range"]),
+        day_start_min=GENERATOR_HELD_FIXED_ARGUMENTS["day_start_min"],
+        day_end_min=GENERATOR_HELD_FIXED_ARGUMENTS["day_end_min"],
+        max_vehicles=GENERATOR_HELD_FIXED_ARGUMENTS["max_vehicles"],
+        name=GENERATOR_HELD_FIXED_ARGUMENTS["name"])
 
 
 # --------------------------------------------------------------------------
@@ -362,6 +384,15 @@ def run_screen() -> dict:
         "design": {
             "seeds": list(BURNED_SEEDS),
             "n_trips": list(N_TRIPS),
+            "generator": {
+                "function": "egglab.instance.synthetic_instance",
+                "path": GENERATOR_RELPATH,
+                "sha256": sha256_file(REPO_ROOT / GENERATOR_RELPATH),
+                "held_fixed_arguments": dict(
+                    GENERATOR_HELD_FIXED_ARGUMENTS),
+                "varied_arguments": [
+                    "seed", "n_trips", "battery_kwh", "charge_power_kw"],
+            },
             "baseline": {"battery_kwh": BASELINE_BATTERY_KWH,
                          "charge_power_kw": BASELINE_POWER_KW},
             "levels": [{
@@ -490,6 +521,7 @@ def publish(out_base: str | os.PathLike, stamp: str,
             "analysis_code_verified": verify_code_commit,
             "base_commit": BASE_COMMIT,
             "spec": record["spec"],
+            "generator": record["design"]["generator"],
             "disposition": record["disposition"],
             "counts": {
                 "settings": len(SETTING_ORDER),

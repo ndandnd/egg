@@ -147,6 +147,14 @@ def test_screen_is_deterministic_and_freezes_at_starting_candidates():
     assert len(record["baseline_gate"]) == 6
     assert all(c["ok"] for c in record["baseline_gate"])
     assert len(record["setting_instances"]) == 30
+    assert record["design"]["generator"] == {
+        "function": "egglab.instance.synthetic_instance",
+        "path": "src/egglab/instance.py",
+        "sha256": mod.sha256_file(mod.REPO_ROOT / "src/egglab/instance.py"),
+        "held_fixed_arguments": mod.GENERATOR_HELD_FIXED_ARGUMENTS,
+        "varied_arguments": [
+            "seed", "n_trips", "battery_kwh", "charge_power_kw"],
+    }
     # every level selected on its FIRST (starting) candidate
     for name, level in record["levels"].items():
         assert level["transitions"][0]["state"] == "SELECTED", name
@@ -218,6 +226,12 @@ def test_burned_seed_guards():
         mod.build_instance(32, 8, 60.0, 150.0)
 
 
+def test_run_screen_refuses_runtime_seed_constant_tamper(monkeypatch):
+    monkeypatch.setattr(mod, "BURNED_SEEDS", (0, 11, 16))
+    with pytest.raises(mod.B3ScreenError, match="frozen to"):
+        mod.run_screen()
+
+
 # --------------------------------------------------------------------------
 # publication and refusals
 # --------------------------------------------------------------------------
@@ -237,6 +251,9 @@ def test_publish_end_to_end_and_byte_identical(tmp_path):
     assert manifest["counts"]["candidate_grid_sizes"] == {
         "S1_batt_low": 16, "S2_batt_high": 46,
         "S3_pow_low": 15, "S4_pow_high": 41}
+    assert manifest["generator"]["path"] == "src/egglab/instance.py"
+    assert manifest["generator"]["sha256"] == mod.sha256_file(
+        mod.REPO_ROOT / "src/egglab/instance.py")
     record = json.loads((first / "SCREEN_RECORD.json").read_text())
     payload = mod.canonical_bytes(record)
     import hashlib
@@ -324,6 +341,26 @@ def test_screen_provenance_verification(monkeypatch):
 
     monkeypatch.setattr(mod.subprocess, "check_output", stale_show)
     with pytest.raises(mod.B3ScreenError, match="differs from the claimed"):
+        mod.verify_screen_provenance(head)
+
+
+def test_generator_source_is_part_of_claimed_commit_provenance(monkeypatch):
+    head = subprocess.check_output(
+        ["git", "rev-parse", "HEAD"], cwd=mod.REPO_ROOT).decode().strip()
+    real_co = mod.subprocess.check_output
+
+    def stale_generator(args, cwd=None, stderr=None):
+        if args[1] == "status":
+            return b""
+        if args[1] == "show":
+            relpath = args[2].split(":", 1)[1]
+            if relpath == mod.GENERATOR_RELPATH:
+                return b"different generator bytes"
+            return (mod.REPO_ROOT / relpath).read_bytes()
+        return real_co(args, cwd=cwd, stderr=stderr)
+
+    monkeypatch.setattr(mod.subprocess, "check_output", stale_generator)
+    with pytest.raises(mod.B3ScreenError, match="instance.py differs"):
         mod.verify_screen_provenance(head)
 
 
