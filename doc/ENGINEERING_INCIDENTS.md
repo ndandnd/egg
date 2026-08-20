@@ -48,6 +48,7 @@ not sufficient.
 | EI-024 | 2026-08-19 | **FOUND — IN PROGRESS** | Precommit incomplete-marker deletion was misclassified as a completed publication |
 | EI-025 | 2026-08-19 | **FOUND — IN PROGRESS** | A6 shared replay omitted terminal/final outcome closure |
 | EI-026 | 2026-08-20 | **FOUND — IN PROGRESS** | Operand-scaled bound/incumbent equality passed one gate but its derived gap failed a scale-1 zero gate; claimed pack aborted mid-validation |
+| EI-027 | 2026-08-20 | **FOUND — IN PROGRESS** | Physical-incumbent reconstruction adjustment exceeded the operand tolerance and aborted the EI-026 recovery pack |
 
 ## EI-001 — Replay rounding and audit tolerance
 
@@ -1347,3 +1348,94 @@ was produced by the aborted attempt. Although the repair is reviewed and
 merged, EI-026 remains IN PROGRESS and no packaged scientific result may be
 cited from this campaign until the recovery command has successfully
 repackaged the claimed incident under the versioned contract.
+
+## EI-027 — Physical-incumbent reconstruction adjustment exceeded the operand tolerance and aborted the EI-026 recovery pack
+
+**Status: FOUND — IN PROGRESS.** The numerical repair (Task A), the
+second-stage recovery machinery (Task B), and this entry are implemented
+on an unmerged branch with regression coverage; the status flips to FIXED
+only after independent review, merge, and a successful second-stage
+recovery repackaging. No operator command is published until then.
+
+**Frozen evidence.**
+
+- cell: `a2 seed=22 n=12 b=0.01`, iteration 24
+- checkpoint SHA-256:
+  `b9b58dfbc0042f49fb37637284e9ac98beae1bf5c7c612487555d9480fd25fda`
+- solver bound = solver model incumbent = `2417.583855389641`
+- physical incumbent = `2417.583844628412`
+- model-to-physical reconstruction adjustment = `1.0761229077616008e-05`
+- operand tau = `2.4175838553896413e-07`
+- original claim SHA-256:
+  `1b0acf0b8232d4b08e764564e2732fcfa9c28dd53456a1415085b77cb38f6675`
+- first recovery claim SHA-256:
+  `88c22f06ce6bc8dcff56c0d6737c91bbd39fe8da79c2b6ba6d2a987b6b6abe88`
+- first recovery commit: `b81b15ace8ffd7301ce93f349fdb643cdefd5da6`
+- raw source-tree SHA-256:
+  `2c60b3d2feb1f313cb08541556d5e8f95bf40dc76b2c539d78149dd93ad88749`
+
+**Observed symptom and evidence.** The one-shot EI-026 recovery pack
+(`recover-pack`, first recovery claim above) aborted during certificate
+replay on the cell above: the certified solver bound EXACTLY equals the
+solver model incumbent (ordering trivially satisfied at operand tau), but
+the PHYSICAL incumbent — the exact reconstructed objective of the
+retained column — sits `1.0761229077616008e-05` BELOW the bound, which
+exceeds the operand-scaled tolerance `2.4175838553896413e-07` by two
+orders of magnitude. The EI-026 gate `bound <= physical_incumbent +
+operand_tau` therefore rejected a legitimate record, and the recovery
+attempt was consumed.
+
+**Root cause and impact.** The model-to-physical objective
+reconstruction (`pricing_objective_reconstruction.abs_adjustment`,
+recorded by the producer) legitimately moves the physical incumbent away
+from the model incumbent by more than the operand tolerance; treating
+the physical incumbent as if it had to sit within operand tau of the
+bound conflates solver arithmetic (bound vs model incumbent) with
+reconstruction arithmetic (model vs physical objective). No incorrect
+science was published — the pack failed closed — but the one-shot
+EI-026 recovery claim is burned, so a second-stage mechanism is required
+to repackage.
+
+**Disposition (Task A — numerical root cause).** ONE shared pure gate
+(`pricing_order_gate`, used by both the audit and the analyzer):
+bound-versus-model-incumbent ordering stays governed by `operand_tau`;
+`reconstruction_adjustment` is recomputed EXACTLY as
+`abs(model_incumbent - physical_incumbent)`; the
+`physical_bridge_allowance = operand_tau + reconstruction_adjustment`;
+required orderings are `bound <= model_incumbent + operand_tau` AND
+`bound <= physical_incumbent + physical_bridge_allowance`; claim-bearing
+safe bounds use `safe_bound = bound - physical_bridge_allowance`. Raw
+pricing gaps and recorded reconstruction fields are preserved exactly
+(negative raw gaps admitted only within the bridge allowance). Every
+claim-bearing output schema is version-bumped
+(`a6-holdout-closeout-v4-physical-bridge`) and the formula is documented
+in the emitted SUMMARY and manifest policy blocks. The exact frozen
+scalars above are a regression with audit/analyzer parity; all raw-only
+certificate rejections and inflated-bound tamper protections are
+preserved (a coordinated model-incumbent tamper is now caught by the
+exact reconstruction binding instead of the ordering gate).
+
+**Disposition (Task B — recovery-after-recovery).** The EI-026
+`recover-pack` one-shot refusal remains intact and is never weakened or
+reused. A separate EI-027-only second-stage command
+(`recover2-pack` / `recover2_package_holdout`) exclusively creates a
+distinct `a6_holdout.RECOVERY2_CLAIM.json`; it freezes and validates the
+exact original claim and first-recovery-claim hashes, documents,
+commits, source digest, and incident identities; binds the COMPLETE
+original, recovery-1, and recovery-2 claims into the versioned
+`a6-holdout-transfer-bundle-v4-recovery2` /
+`a6-holdout-transfer-receipt-v3-recovery2` / import / analyzer contract;
+validates and prepares output paths BEFORE consuming the RECOVERY2
+claim; requires a clean HEAD, the reviewed ancestry chain
+(`740ab0c -> b81b15a -> 74a9c5d -> HEAD`), Slurm quiescence twice, an
+unchanged raw tree, and the absence of any existing matching final
+package; and revalidates all three claims immediately before
+publication. NO third attempt or generic bypass exists. Adversarial
+regressions cover coordinated rehash, mutation, chronology, ancestry,
+output paths, preexisting packages, and a full synthetic round trip
+through packaging, import, and the analyzer receipt contract.
+
+**Scientific handling.** No outcome was scored; the failed pack and the
+burned first recovery claim are preserved as immutable evidence. The
+operator command is NOT published in the runbook until this branch is
+independently reviewed and merged.

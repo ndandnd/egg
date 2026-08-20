@@ -39,12 +39,25 @@ SCHEMA = "a6-holdout-transfer-bundle-v2"
 # The recovery contract is a SEPARATE, versioned manifest/receipt schema so a
 # recovery bundle can never be confused with a normal one (EI-026 Task B).
 SCHEMA_RECOVERY = "a6-holdout-transfer-bundle-v3-recovery"
+SCHEMA_RECOVERY2 = "a6-holdout-transfer-bundle-v4-recovery2"
 RECEIPT_SCHEMA = "a6-holdout-transfer-receipt-v1"
 RECEIPT_SCHEMA_RECOVERY = "a6-holdout-transfer-receipt-v2-recovery"
+RECEIPT_SCHEMA_RECOVERY2 = "a6-holdout-transfer-receipt-v3-recovery2"
 RECEIPT_FILENAME = "a6_holdout.TRANSFER_RECEIPT.json"
 CLOSEOUT_CLAIM_SCHEMA = "a6-holdout-closeout-claim-v1"
 CLOSEOUT_CLAIM_FILENAME = "a6_holdout.CLOSEOUT_CLAIM.json"
 RECOVERY_CLAIM_SCHEMA = "a6-holdout-recovery-claim-v1"
+RECOVERY2_CLAIM_SCHEMA = "a6-holdout-recovery2-claim-v1"
+RECOVERY2_CLAIM_FILENAME = "a6_holdout.RECOVERY2_CLAIM.json"
+# EI-027 second-stage recovery: frozen identities of the ORIGINAL claim,
+# the FIRST (EI-026) recovery claim, the reviewed ancestry bases, and the
+# unchanged raw source tree. There is NO third stage and no generic bypass.
+RECOVERY2_INCIDENT_ID = "EI-027"
+RECOVERY2_BASE_COMMIT = "74a9c5d56ae328b5c394537007cc7cefdb6e3441"
+RECOVERY2_FIRST_RECOVERY_COMMIT = (
+    "b81b15ace8ffd7301ce93f349fdb643cdefd5da6")
+RECOVERY2_FIRST_RECOVERY_CLAIM_SHA256 = (
+    "88c22f06ce6bc8dcff56c0d6737c91bbd39fe8da79c2b6ba6d2a987b6b6abe88")
 RECOVERY_CLAIM_FILENAME = "a6_holdout.RECOVERY_CLAIM.json"
 RECOVERY_INCIDENT_ID = "EI-026"
 # The one packaging/claim commit the original (failed) claim was made at; the
@@ -1808,6 +1821,133 @@ def claim_recovery(root, *, original_claim: dict, recovery_commit: str,
             "document": document}
 
 
+def verify_first_recovery_claim(
+    root,
+    *,
+    first_recovery_claim_sha256: str,
+    original_claim_sha256: str,
+    expected_sha256: str = RECOVERY2_FIRST_RECOVERY_CLAIM_SHA256,
+    expected_recovery_commit: str = RECOVERY2_FIRST_RECOVERY_COMMIT,
+    expected_raw_tree_sha256: str = RECOVERY_ORIGINAL_SOURCE_TREE_SHA256,
+) -> dict:
+    """Open the FIRST (EI-026) recovery claim adjacent to the raw root as
+    canonical, regular, single-link IMMUTABLE evidence and verify it against
+    the FROZEN EI-027 identities: the operator-supplied SHA must equal the
+    frozen first-recovery-claim SHA, the file must hash to it, and the
+    document must carry the frozen incident, commits, original-claim SHA,
+    and raw-tree digest."""
+    if not _full_hex(first_recovery_claim_sha256, 64):
+        raise PackagingError(
+            "first recovery claim SHA-256 must be 64 lowercase hex")
+    if first_recovery_claim_sha256 != expected_sha256:
+        raise PackagingError(
+            "first recovery claim SHA-256 does not equal the frozen EI-027 "
+            "first-recovery-claim SHA-256")
+    root_path = Path(root).expanduser().resolve()
+    claim_path = root_path.parent / RECOVERY_CLAIM_FILENAME
+    raw = _regular_bundle_file(claim_path, "first recovery claim")
+    info = claim_path.lstat()
+    if not stat.S_ISREG(info.st_mode) or info.st_nlink != 1:
+        raise PackagingError(
+            "first recovery claim is not a regular single-link file")
+    if hashlib.sha256(raw).hexdigest() != first_recovery_claim_sha256:
+        raise PackagingError(
+            "first recovery claim SHA-256 does not match the supplied claim")
+    try:
+        document = json.loads(raw)
+    except json.JSONDecodeError as exc:
+        raise PackagingError(
+            "first recovery claim is not valid JSON") from exc
+    if raw != _canonical_json_bytes(document):
+        raise PackagingError("first recovery claim is not canonical JSON")
+    if set(document) != {
+            "schema", "campaign", "incident_id", "status", "claimed_utc",
+            "recovery_code_commit", "recovery_base_commit", "original_claim",
+            "raw_tree_sha256", "failure_fingerprint"}:
+        raise PackagingError("first recovery claim key set is invalid")
+    if (document.get("schema") != RECOVERY_CLAIM_SCHEMA
+            or document.get("campaign") != "a6-holdout"
+            or document.get("incident_id") != RECOVERY_INCIDENT_ID
+            or document.get("status")
+            != "recovery-claimed-before-outcome-validation"):
+        raise PackagingError(
+            "first recovery claim schema/incident/status is invalid")
+    if document.get("recovery_code_commit") != expected_recovery_commit:
+        raise PackagingError(
+            "first recovery claim recovery commit does not equal the frozen "
+            "EI-026 recovery commit")
+    if document.get("recovery_base_commit") != RECOVERY_BASE_COMMIT:
+        raise PackagingError(
+            "first recovery claim base commit does not equal the frozen "
+            "EI-026 base commit")
+    original = document.get("original_claim") or {}
+    if original.get("sha256") != original_claim_sha256:
+        raise PackagingError(
+            "first recovery claim does not bind the frozen original claim")
+    if document.get("raw_tree_sha256") != expected_raw_tree_sha256:
+        raise PackagingError(
+            "first recovery claim raw-tree SHA-256 does not equal the frozen "
+            "source digest")
+    if (not isinstance(document.get("failure_fingerprint"), str)
+            or not document["failure_fingerprint"]):
+        raise PackagingError("first recovery claim fingerprint is invalid")
+    return {"path": str(claim_path), "sha256": first_recovery_claim_sha256,
+            "document": document}
+
+
+def claim_recovery2(root, *, original_claim: dict,
+                    first_recovery_claim: dict, recovery2_commit: str,
+                    failure_fingerprint: str, raw_tree_sha256: str) -> dict:
+    """Exclusively create the THIRD adjacent claim (EI-027 second-stage
+    recovery) before any outcome validation.  Exactly one second-stage
+    attempt is allowed; a pre-existing RECOVERY2 claim blocks all further
+    attempts, and NO third recovery stage exists."""
+    root_path = Path(root).expanduser().resolve()
+    recovery2_path = root_path.parent / RECOVERY2_CLAIM_FILENAME
+    doc = original_claim["document"]
+    document = {
+        "schema": RECOVERY2_CLAIM_SCHEMA,
+        "campaign": "a6-holdout",
+        "incident_id": RECOVERY2_INCIDENT_ID,
+        "status": "recovery2-claimed-before-outcome-validation",
+        "claimed_utc": datetime.datetime.now(
+            datetime.timezone.utc).replace(microsecond=0).strftime(
+                "%Y-%m-%dT%H:%M:%SZ"),
+        "recovery2_code_commit": recovery2_commit,
+        "recovery2_base_commit": RECOVERY2_BASE_COMMIT,
+        "first_recovery_commit": RECOVERY2_FIRST_RECOVERY_COMMIT,
+        "original_claim": {
+            "sha256": original_claim["sha256"],
+            "packaging_code_commit": doc["packaging_code_commit"],
+            "experiment_code_commit": doc["experiment_code_commit"],
+            "launch_job_id": doc["launch_job_id"],
+        },
+        "first_recovery_claim": {
+            "sha256": first_recovery_claim["sha256"],
+            "recovery_code_commit":
+                first_recovery_claim["document"]["recovery_code_commit"],
+        },
+        "raw_tree_sha256": raw_tree_sha256,
+        "failure_fingerprint": failure_fingerprint,
+    }
+    payload = _canonical_json_bytes(document)
+    try:
+        descriptor = os.open(
+            recovery2_path, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
+    except FileExistsError as exc:
+        raise PackagingError(
+            "A6 second-stage recovery was already claimed; no third "
+            f"recovery stage exists: {recovery2_path}") from exc
+    with os.fdopen(descriptor, "wb") as handle:
+        handle.write(payload)
+        handle.flush()
+        os.fsync(handle.fileno())
+    _fsync_directory(root_path.parent)
+    return {"path": str(recovery2_path),
+            "sha256": hashlib.sha256(payload).hexdigest(),
+            "document": document}
+
+
 def validate_scientific_population(
     paths: dict,
     preflight: dict,
@@ -1881,11 +2021,16 @@ def _manifest_document(
     snapshot: dict,
     audit_bytes: bytes,
     recovery: dict | None = None,
+    recovery2: dict | None = None,
 ) -> dict:
     launch_manifest = launch["manifest"]
     launch_lock = launch["lock"]
+    if recovery is not None and recovery2 is not None:
+        raise PackagingError(
+            "a bundle cannot carry both recovery stages' envelopes")
     document = {
-        "schema": SCHEMA_RECOVERY if recovery is not None else SCHEMA,
+        "schema": (SCHEMA_RECOVERY2 if recovery2 is not None
+                   else SCHEMA_RECOVERY if recovery is not None else SCHEMA),
         "campaign": "a6-holdout",
         "packaging_code_commit": packaging_commit,
         "experiment_code_commit": preflight["code_commit"],
@@ -1978,6 +2123,11 @@ def _manifest_document(
         # commit+SHA, the recovery claim commit+SHA, the experiment commit, and
         # the actual corrected packaging/analysis commit (EI-026 Task B.9).
         document["recovery"] = recovery
+    if recovery2 is not None:
+        # the EI-027 second-stage contract binds the COMPLETE original,
+        # recovery-1, and recovery-2 claims (documents + SHAs), the frozen
+        # commits, and the corrected packaging/analysis commit.
+        document["recovery2"] = recovery2
     return document
 
 
@@ -2017,13 +2167,85 @@ def _validated_manifest_snapshot(manifest: dict, audit_bytes: bytes) -> dict:
         "scientific_validation", "selection", "source", "closeout_claim",
     }
     is_recovery = manifest.get("schema") == SCHEMA_RECOVERY
+    is_recovery2 = manifest.get("schema") == SCHEMA_RECOVERY2
     if is_recovery:
         expected_top = expected_top | {"recovery"}
+    if is_recovery2:
+        expected_top = expected_top | {"recovery2"}
     if set(manifest) != expected_top:
         raise PackagingError("bundle manifest top-level keys differ")
-    if (manifest.get("schema") not in (SCHEMA, SCHEMA_RECOVERY)
+    if (manifest.get("schema") not in (SCHEMA, SCHEMA_RECOVERY,
+                                       SCHEMA_RECOVERY2)
             or manifest.get("campaign") != "a6-holdout"):
         raise PackagingError("bundle manifest has wrong schema/campaign")
+    if is_recovery2:
+        recovery2 = manifest.get("recovery2")
+        original2 = (recovery2 or {}).get("original_claim") or {}
+        first_rc = (recovery2 or {}).get("first_recovery_claim") or {}
+        first_rc_doc = first_rc.get("document")
+        rc2 = (recovery2 or {}).get("recovery2_claim") or {}
+        rc2_doc = rc2.get("document")
+        if (not isinstance(recovery2, dict)
+                or set(recovery2) != {
+                    "incident_id", "recovery2_code_commit",
+                    "recovery2_base_commit", "first_recovery_commit",
+                    "experiment_code_commit", "original_claim",
+                    "first_recovery_claim", "recovery2_claim"}
+                or recovery2.get("incident_id") != RECOVERY2_INCIDENT_ID
+                or not _full_hex(recovery2.get("recovery2_code_commit"), 40)
+                or recovery2.get("recovery2_base_commit")
+                != RECOVERY2_BASE_COMMIT
+                or recovery2.get("first_recovery_commit")
+                != RECOVERY2_FIRST_RECOVERY_COMMIT
+                or set(original2) != {"sha256", "packaging_code_commit",
+                                      "document"}
+                or not _full_hex(original2.get("sha256"), 64)
+                or hashlib.sha256(_canonical_json_bytes(
+                    original2.get("document") or {})).hexdigest()
+                != original2.get("sha256")
+                or set(first_rc) != {"sha256", "document"}
+                or first_rc.get("sha256")
+                != RECOVERY2_FIRST_RECOVERY_CLAIM_SHA256
+                or not isinstance(first_rc_doc, dict)
+                or hashlib.sha256(_canonical_json_bytes(
+                    first_rc_doc)).hexdigest() != first_rc.get("sha256")
+                or first_rc_doc.get("schema") != RECOVERY_CLAIM_SCHEMA
+                or first_rc_doc.get("incident_id") != RECOVERY_INCIDENT_ID
+                or first_rc_doc.get("recovery_code_commit")
+                != RECOVERY2_FIRST_RECOVERY_COMMIT
+                or (first_rc_doc.get("original_claim") or {}).get("sha256")
+                != original2.get("sha256")
+                or set(rc2) != {"sha256", "document"}
+                or not _full_hex(rc2.get("sha256"), 64)
+                or not isinstance(rc2_doc, dict)
+                or hashlib.sha256(_canonical_json_bytes(
+                    rc2_doc)).hexdigest() != rc2.get("sha256")
+                or rc2_doc.get("schema") != RECOVERY2_CLAIM_SCHEMA
+                or rc2_doc.get("incident_id") != RECOVERY2_INCIDENT_ID
+                or rc2_doc.get("status")
+                != "recovery2-claimed-before-outcome-validation"
+                or rc2_doc.get("recovery2_code_commit")
+                != recovery2.get("recovery2_code_commit")
+                or rc2_doc.get("recovery2_base_commit")
+                != RECOVERY2_BASE_COMMIT
+                or (rc2_doc.get("original_claim") or {}).get("sha256")
+                != original2.get("sha256")
+                or (rc2_doc.get("first_recovery_claim") or {}).get("sha256")
+                != first_rc.get("sha256")):
+            raise PackagingError(
+                "bundle manifest recovery2 contract is invalid")
+        # chronology: original closeout <= first recovery <= recovery2
+        t0 = _manifest_timestamp(
+            (original2.get("document") or {}).get("claimed_utc"),
+            "recovery2 original claim claimed_utc")
+        t1 = _manifest_timestamp(
+            first_rc_doc.get("claimed_utc"),
+            "recovery2 first recovery claimed_utc")
+        t2 = _manifest_timestamp(
+            rc2_doc.get("claimed_utc"), "recovery2 claim claimed_utc")
+        if not t0 <= t1 <= t2:
+            raise PackagingError(
+                "recovery2 claim chronology is invalid")
     if is_recovery:
         recovery = manifest.get("recovery")
         original = (recovery or {}).get("original_claim") or {}
@@ -2162,7 +2384,10 @@ def _validated_manifest_snapshot(manifest: dict, audit_bytes: bytes) -> dict:
             != "claimed-before-outcome-validation"
             or claim_doc.get("packaging_code_commit") != (
                 manifest["recovery"]["original_claim"]["packaging_code_commit"]
-                if is_recovery else packaging_commit)
+                if is_recovery else
+                manifest["recovery2"]["original_claim"][
+                    "packaging_code_commit"]
+                if is_recovery2 else packaging_commit)
             or claim_doc.get("experiment_code_commit") != experiment_commit
             or claim_doc.get("selection_sha256") != EXPECTED_SELECTION_SHA256
             or claim_doc.get("preflight_sha256") != preflight["sha256"]
@@ -2416,8 +2641,10 @@ def _receipt_document(
     imported_utc: str,
 ) -> dict:
     recovery = manifest.get("recovery")
+    recovery2 = manifest.get("recovery2")
     document = {
-        "schema": (RECEIPT_SCHEMA_RECOVERY if recovery is not None
+        "schema": (RECEIPT_SCHEMA_RECOVERY2 if recovery2 is not None
+                   else RECEIPT_SCHEMA_RECOVERY if recovery is not None
                    else RECEIPT_SCHEMA),
         "campaign": "a6-holdout",
         "imported_utc": imported_utc,
@@ -2458,6 +2685,9 @@ def _receipt_document(
         # claim commit+SHA, recovery claim commit+SHA, experiment commit, and
         # the corrected packaging/analysis (recovery) commit.
         document["recovery"] = recovery
+    if recovery2 is not None:
+        # EI-027: the receipt records the complete three-claim contract.
+        document["recovery2"] = recovery2
     return document
 
 
@@ -2479,10 +2709,17 @@ def validate_transfer_receipt(
         "schema", "campaign", "imported_utc", "destination", "bundle",
         "archive", "source", "provenance", "closeout_claim"}
     is_recovery = document.get("schema") == RECEIPT_SCHEMA_RECOVERY
-    expected_keys = base_keys | {"recovery"} if is_recovery else base_keys
+    is_recovery2 = document.get("schema") == RECEIPT_SCHEMA_RECOVERY2
+    expected_keys = base_keys
+    if is_recovery:
+        expected_keys = base_keys | {"recovery"}
+    if is_recovery2:
+        expected_keys = base_keys | {"recovery2"}
     if set(document) != expected_keys:
         raise PackagingError("transfer receipt top-level keys differ")
-    if (document.get("schema") not in (RECEIPT_SCHEMA, RECEIPT_SCHEMA_RECOVERY)
+    if (document.get("schema") not in (RECEIPT_SCHEMA,
+                                       RECEIPT_SCHEMA_RECOVERY,
+                                       RECEIPT_SCHEMA_RECOVERY2)
             or document.get("campaign") != "a6-holdout"):
         raise PackagingError("transfer receipt schema/campaign is invalid")
     if is_recovery:
@@ -2490,6 +2727,15 @@ def validate_transfer_receipt(
         if (recovery.get("incident_id") != RECOVERY_INCIDENT_ID
                 or not _full_hex(recovery.get("recovery_code_commit"), 40)):
             raise PackagingError("transfer receipt recovery block is invalid")
+    if is_recovery2:
+        recovery2 = document.get("recovery2") or {}
+        if (recovery2.get("incident_id") != RECOVERY2_INCIDENT_ID
+                or not _full_hex(
+                    recovery2.get("recovery2_code_commit"), 40)
+                or (recovery2.get("first_recovery_claim") or {}).get("sha256")
+                != RECOVERY2_FIRST_RECOVERY_CLAIM_SHA256):
+            raise PackagingError(
+                "transfer receipt recovery2 block is invalid")
     _manifest_timestamp(document.get("imported_utc"), "imported_utc")
     if expected is not None:
         comparable = dict(document)
@@ -2591,6 +2837,48 @@ def import_bundle(
                 != recovery.get("experiment_code_commit")):
             raise PackagingError(
                 "recovery manifest commit identities are inconsistent")
+    # EI-027 second-stage bundles bind the destination-side HEAD to the
+    # recovery2 commit and verify ALL THREE immutable claims.
+    if manifest.get("schema") == SCHEMA_RECOVERY2:
+        recovery2 = manifest.get("recovery2") or {}
+        head = recovery_head_resolver()
+        recovery2_commit = recovery2.get("recovery2_code_commit")
+        if head != recovery2_commit:
+            raise PackagingError(
+                "recovery2 import requires HEAD to equal the recovery2 "
+                f"commit {recovery2_commit!r}; HEAD is {head!r}")
+        # reviewed ancestry: original base -> first recovery -> stage-2 base
+        recovery_ancestor_checker(RECOVERY_BASE_COMMIT, recovery2_commit)
+        recovery_ancestor_checker(
+            RECOVERY2_FIRST_RECOVERY_COMMIT, recovery2_commit)
+        recovery_ancestor_checker(RECOVERY2_BASE_COMMIT, recovery2_commit)
+        original2 = recovery2.get("original_claim") or {}
+        embedded_claim = manifest.get("closeout_claim") or {}
+        rc2_doc = (recovery2.get("recovery2_claim") or {}).get(
+            "document") or {}
+        if embedded_claim.get("sha256") != original2.get("sha256"):
+            raise PackagingError(
+                "recovery2 manifest original-claim SHA does not match the "
+                "embedded closeout claim")
+        claim_doc = embedded_claim.get("document") or {}
+        if (claim_doc.get("packaging_code_commit")
+                != original2.get("packaging_code_commit")):
+            raise PackagingError(
+                "recovery2 manifest original packaging commit is "
+                "inconsistent")
+        if (rc2_doc.get("recovery2_code_commit") != recovery2_commit
+                or (rc2_doc.get("original_claim") or {}).get("sha256")
+                != original2.get("sha256")
+                or (rc2_doc.get("first_recovery_claim") or {}).get("sha256")
+                != (recovery2.get("first_recovery_claim") or {}).get(
+                    "sha256")):
+            raise PackagingError(
+                "recovery2 manifest claim identities are inconsistent")
+        if (manifest.get("packaging_code_commit") != recovery2_commit
+                or manifest.get("experiment_code_commit")
+                != recovery2.get("experiment_code_commit")):
+            raise PackagingError(
+                "recovery2 manifest commit identities are inconsistent")
 
     expected_sidecar = (
         f"{archive_record['sha256']}  {archive.name}\n"
@@ -2984,6 +3272,7 @@ def package_holdout(
     closeout_claimer=claim_closeout,
     closeout_claim_validator=assert_closeout_claim_unchanged,
     recovery=None,
+    recovery2=None,
 ) -> dict:
     """Validate, package, and publish one no-overwrite transfer bundle."""
     if (selection_validator is None or preflight_validator is None
@@ -3123,6 +3412,7 @@ def package_holdout(
             snapshot=snapshot,
             audit_bytes=audit_bytes,
             recovery=recovery,
+            recovery2=recovery2,
         )
         manifest_bytes = (
             json.dumps(manifest, indent=2, sort_keys=True) + "\n"
@@ -3384,6 +3674,197 @@ def recover_package_holdout(
     )
 
 
+def recover2_package_holdout(
+    root: str | os.PathLike,
+    out_base: str | os.PathLike,
+    recovery2_code_commit: str,
+    *,
+    incident_id: str,
+    original_claim_sha256: str,
+    first_recovery_claim_sha256: str,
+    failure_fingerprint: str,
+    selection_path: str | os.PathLike = DEFAULT_SELECTION,
+    instances=HOLDOUT_INSTANCES,
+    require_frozen_grid: bool = True,
+    verify_selection_git: bool = True,
+    code_verifier=verify_packaging_code_commit,
+    job_quiescence_validator=assert_job_quiescent,
+    head_resolver=_resolve_head_commit,
+    clean_tree_checker=_require_clean_tracked_tree,
+    ancestor_checker=_require_commit_ancestor,
+    original_claim_verifier=verify_original_claim,
+    first_recovery_claim_verifier=verify_first_recovery_claim,
+    recovery2_claimer=claim_recovery2,
+    expected_original_sha256: str = RECOVERY_ORIGINAL_CLAIM_SHA256,
+    expected_original_packaging_commit: str = (
+        RECOVERY_ORIGINAL_PACKAGING_COMMIT),
+    expected_original_source_tree_sha256: str = (
+        RECOVERY_ORIGINAL_SOURCE_TREE_SHA256),
+    expected_first_recovery_sha256: str = (
+        RECOVERY2_FIRST_RECOVERY_CLAIM_SHA256),
+    expected_first_recovery_commit: str = RECOVERY2_FIRST_RECOVERY_COMMIT,
+    **package_kwargs,
+) -> dict:
+    """One-shot EI-027-only SECOND-STAGE claimed-incident recovery.
+
+    A separate, explicit entry point layered above the burned EI-026
+    recovery: the ``recover-pack`` one-shot refusal remains intact and is
+    never weakened or reused; this command additionally validates the
+    frozen FIRST recovery claim, exclusively creates a distinct RECOVERY2
+    claim, and binds all three claims into the v4 bundle contract.  A
+    pre-existing RECOVERY2 claim blocks all further attempts; NO third
+    recovery stage or generic bypass exists.
+    """
+    # 1. incident + full claim SHA gates.
+    if incident_id != RECOVERY2_INCIDENT_ID:
+        raise PackagingError(
+            f"second-stage recovery is restricted to "
+            f"{RECOVERY2_INCIDENT_ID}; got {incident_id!r}")
+    if not _full_hex(original_claim_sha256, 64):
+        raise PackagingError("original claim SHA-256 must be 64 lowercase hex")
+    if not _full_hex(first_recovery_claim_sha256, 64):
+        raise PackagingError(
+            "first recovery claim SHA-256 must be 64 lowercase hex")
+    if not isinstance(failure_fingerprint, str) or not failure_fingerprint:
+        raise PackagingError(
+            "second-stage recovery requires a non-empty failure fingerprint")
+    # 2. clean recovery2 HEAD equal to the recovery2 commit, with the
+    #    reviewed ancestry chain: original base -> first recovery commit ->
+    #    stage-2 base -> HEAD.
+    recovery2_commit = code_verifier(recovery2_code_commit)
+    clean_tree_checker()
+    head = head_resolver()
+    if head != recovery2_commit:
+        raise PackagingError(
+            "recovery2 HEAD does not equal the recovery2 commit "
+            f"({head!r} != {recovery2_commit!r})")
+    ancestor_checker(RECOVERY_BASE_COMMIT, head)
+    ancestor_checker(expected_first_recovery_commit, head)
+    ancestor_checker(RECOVERY2_BASE_COMMIT, head)
+    # 3. verify the immutable ORIGINAL claim against the frozen identities.
+    original_claim = original_claim_verifier(
+        root, original_claim_sha256=original_claim_sha256,
+        expected_sha256=expected_original_sha256,
+        expected_packaging_commit=expected_original_packaging_commit,
+        expected_source_tree_sha256=expected_original_source_tree_sha256)
+    doc = original_claim["document"]
+    # 4. verify the immutable FIRST recovery claim against the frozen
+    #    identities (and its binding to the original claim).
+    first_recovery_claim = first_recovery_claim_verifier(
+        root,
+        first_recovery_claim_sha256=first_recovery_claim_sha256,
+        original_claim_sha256=original_claim_sha256,
+        expected_sha256=expected_first_recovery_sha256,
+        expected_recovery_commit=expected_first_recovery_commit,
+        expected_raw_tree_sha256=expected_original_source_tree_sha256)
+    # 5. Slurm quiescence BEFORE reading any outcome (again inside
+    #    package_holdout immediately before publication).
+    job_quiescence_validator(doc["launch_job_id"])
+    # 6. the live raw tree must still exactly match the original claim.
+    root_path = Path(root).expanduser().resolve()
+    live_snapshot = snapshot_source(root_path)
+    src = doc["source"]
+    live_tree_sha = canonical_tree_sha256(live_snapshot)
+    if (live_tree_sha != src["canonical_tree_sha256"]
+            or live_snapshot["file_count"] != src["file_count"]
+            or live_snapshot["directory_count"] != src["directory_count"]
+            or live_snapshot["total_bytes"] != src["total_bytes"]):
+        raise PackagingError(
+            "live raw tree no longer matches the original claim; refusing "
+            "second-stage recovery before any outcome validation")
+    # 7. validate/prepare the output container BEFORE consuming the one-shot
+    #    RECOVERY2 claim; also refuse ANY existing matching final package.
+    raw_out_path = Path(out_base).expanduser()
+    if raw_out_path.is_symlink():
+        raise PackagingError(
+            f"unsafe recovery2 package output directory: {raw_out_path}")
+    out_path = raw_out_path.resolve()
+    if _path_is_within(out_path, root_path):
+        raise PackagingError(
+            "recovery2 package output must be outside the canonical source "
+            "root")
+    try:
+        out_path.mkdir(parents=True, exist_ok=True)
+    except OSError as exc:
+        raise PackagingError(
+            f"cannot prepare recovery2 package output directory: {out_path}"
+        ) from exc
+    if out_path.is_symlink() or not out_path.is_dir():
+        raise PackagingError(
+            f"unsafe recovery2 package output directory: {out_path}")
+    prefix = (f"a6_holdout-job{doc['launch_job_id']}-"
+              f"{doc['preflight_sha256'][:12]}-")
+    for entry in out_path.iterdir():
+        if entry.name.startswith(prefix):
+            raise PackagingError(
+                "refusing second-stage recovery: an existing package with "
+                f"the same campaign/job/preflight prefix is present: {entry}")
+    # 8. exclusively create the DISTINCT RECOVERY2 claim (one-shot; no third
+    #    stage exists).  The original and first recovery claims are never
+    #    modified or replaced.
+    recovery2_claim = recovery2_claimer(
+        root_path, original_claim=original_claim,
+        first_recovery_claim=first_recovery_claim,
+        recovery2_commit=recovery2_commit,
+        failure_fingerprint=failure_fingerprint,
+        raw_tree_sha256=live_tree_sha)
+    recovery2_meta = {
+        "incident_id": RECOVERY2_INCIDENT_ID,
+        "recovery2_code_commit": recovery2_commit,
+        "recovery2_base_commit": RECOVERY2_BASE_COMMIT,
+        "first_recovery_commit": expected_first_recovery_commit,
+        "experiment_code_commit": doc["experiment_code_commit"],
+        "original_claim": {
+            "sha256": original_claim["sha256"],
+            "packaging_code_commit": doc["packaging_code_commit"],
+            "document": doc,
+        },
+        "first_recovery_claim": {
+            "sha256": first_recovery_claim["sha256"],
+            "document": first_recovery_claim["document"],
+        },
+        "recovery2_claim": {
+            "sha256": recovery2_claim["sha256"],
+            "document": recovery2_claim["document"],
+        },
+    }
+
+    def _recovery2_closeout_claimer(*_args, **_kwargs):
+        return original_claim
+
+    # 9. revalidate ALL THREE immutable claims immediately before
+    #    scientific validation/publication; any mutation fails closed.
+    def _recovery2_claim_validator(record):
+        assert_closeout_claim_unchanged(record)          # original claim
+        raw1 = _regular_bundle_file(
+            Path(first_recovery_claim["path"]), "first recovery claim")
+        if (raw1 != _canonical_json_bytes(first_recovery_claim["document"])
+                or hashlib.sha256(raw1).hexdigest()
+                != first_recovery_claim["sha256"]):
+            raise PackagingError(
+                "first recovery claim changed during second-stage recovery")
+        raw2 = _regular_bundle_file(
+            Path(recovery2_claim["path"]), "recovery2 claim")
+        if (raw2 != _canonical_json_bytes(recovery2_claim["document"])
+                or hashlib.sha256(raw2).hexdigest()
+                != recovery2_claim["sha256"]):
+            raise PackagingError(
+                "recovery2 claim changed during second-stage recovery")
+
+    return package_holdout(
+        root, out_base, recovery2_code_commit,
+        selection_path=selection_path, instances=instances,
+        require_frozen_grid=require_frozen_grid,
+        verify_selection_git=verify_selection_git,
+        code_verifier=code_verifier,
+        job_quiescence_validator=job_quiescence_validator,
+        closeout_claimer=_recovery2_closeout_claimer,
+        closeout_claim_validator=_recovery2_claim_validator,
+        recovery2=recovery2_meta,
+        **package_kwargs,
+    )
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     commands = parser.add_subparsers(dest="command", required=True)
@@ -3405,6 +3886,18 @@ def main() -> None:
     recover_parser.add_argument("--incident-id", required=True)
     recover_parser.add_argument("--original-claim-sha256", required=True)
     recover_parser.add_argument("--failure-fingerprint", required=True)
+    # EI-027-only SECOND-STAGE recovery: separate explicit command; the
+    # EI-026 recover-pack one-shot refusal remains intact; no third stage.
+    recover2_parser = commands.add_parser("recover2-pack")
+    recover2_parser.add_argument("--root", default="runs/a6_holdout")
+    recover2_parser.add_argument("--out", default=DEFAULT_OUT)
+    recover2_parser.add_argument("--selection", default=str(DEFAULT_SELECTION))
+    recover2_parser.add_argument("--recovery2-code-commit", required=True)
+    recover2_parser.add_argument("--incident-id", required=True)
+    recover2_parser.add_argument("--original-claim-sha256", required=True)
+    recover2_parser.add_argument(
+        "--first-recovery-claim-sha256", required=True)
+    recover2_parser.add_argument("--failure-fingerprint", required=True)
     args = parser.parse_args()
 
     if args.command == "pack":
@@ -3417,6 +3910,20 @@ def main() -> None:
         print(f"[done] wrote {result['bundle_dir']}")
         print(f"archive: {result['archive']}")
         print(f"sidecar: {result['sidecar']}")
+        print(f"sha256:  {result['archive_sha256']}")
+    elif args.command == "recover2-pack":
+        result = recover2_package_holdout(
+            args.root,
+            args.out,
+            args.recovery2_code_commit,
+            incident_id=args.incident_id,
+            original_claim_sha256=args.original_claim_sha256,
+            first_recovery_claim_sha256=args.first_recovery_claim_sha256,
+            failure_fingerprint=args.failure_fingerprint,
+            selection_path=args.selection,
+        )
+        print(f"[done] second-stage recovery wrote {result['bundle_dir']}")
+        print(f"archive: {result['archive']}")
         print(f"sha256:  {result['archive_sha256']}")
     elif args.command == "recover-pack":
         result = recover_package_holdout(
