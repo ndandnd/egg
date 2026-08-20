@@ -110,6 +110,7 @@ TRANSFER_RECEIPT_SCHEMA = "a6-holdout-transfer-receipt-v1"
 TRANSFER_RECEIPT_SCHEMA_RECOVERY = "a6-holdout-transfer-receipt-v2-recovery"
 RECOVERY_INCIDENT_ID = "EI-026"
 RECOVERY_BASE_COMMIT = "740ab0c1578b454268102c0bb15b1104d9ac8d9d"
+RECOVERY_CLAIM_SCHEMA = "a6-holdout-recovery-claim-v1"
 TRANSFER_RECEIPT_FILENAME = "a6_holdout.TRANSFER_RECEIPT.json"
 CLOSEOUT_CLAIM_SCHEMA = "a6-holdout-closeout-claim-v1"
 IMPORT_LOCK_FILENAME = ".a6_holdout.import-lock"
@@ -845,25 +846,53 @@ def validate_transfer_receipt(
         original = recovery_block.get("original_claim") or {}
         rc = recovery_block.get("recovery_claim") or {}
         rc_doc = rc.get("document") or {}
-        if (recovery_block.get("incident_id") != RECOVERY_INCIDENT_ID
+        rc_original = rc_doc.get("original_claim") or {}
+        if (set(recovery_block) != {
+                    "incident_id", "recovery_code_commit",
+                    "recovery_base_commit", "experiment_code_commit",
+                    "original_claim", "recovery_claim"}
+                or recovery_block.get("incident_id") != RECOVERY_INCIDENT_ID
                 or recovery_block.get("recovery_code_commit")
                 != analysis_code_commit
                 or recovery_block.get("recovery_base_commit")
                 != RECOVERY_BASE_COMMIT
+                or recovery_block.get("experiment_code_commit")
+                != preflight.get("code_commit")
+                or set(original) != {"sha256", "packaging_code_commit"}
                 or not _full_hex(original.get("sha256"), 64)
                 or original.get("sha256") != closeout.get("sha256")
                 or original.get("packaging_code_commit")
                 != closeout_packaging_commit
+                or set(rc) != {"sha256", "document"}
                 or not _full_hex(rc.get("sha256"), 64)
                 or not isinstance(rc_doc, dict)
+                or set(rc_doc) != {
+                    "schema", "campaign", "incident_id", "status",
+                    "claimed_utc", "recovery_code_commit",
+                    "recovery_base_commit", "original_claim",
+                    "raw_tree_sha256", "failure_fingerprint"}
                 or hashlib.sha256(_canonical_json_bytes(rc_doc)).hexdigest()
                 != rc.get("sha256")
+                or rc_doc.get("schema") != RECOVERY_CLAIM_SCHEMA
+                or rc_doc.get("campaign") != EXPECTED_EXPERIMENT
                 or rc_doc.get("incident_id") != RECOVERY_INCIDENT_ID
+                or rc_doc.get("status")
+                != "recovery-claimed-before-outcome-validation"
                 or rc_doc.get("recovery_code_commit") != analysis_code_commit
-                or (rc_doc.get("original_claim") or {}).get("sha256")
-                != original.get("sha256")
+                or rc_doc.get("recovery_base_commit") != RECOVERY_BASE_COMMIT
+                or set(rc_original) != {
+                    "sha256", "packaging_code_commit",
+                    "experiment_code_commit", "launch_job_id"}
+                or rc_original.get("sha256") != original.get("sha256")
+                or rc_original.get("packaging_code_commit")
+                != original.get("packaging_code_commit")
+                or rc_original.get("experiment_code_commit")
+                != preflight.get("code_commit")
+                or rc_original.get("launch_job_id") != launch.get("job_id")
                 or rc_doc.get("raw_tree_sha256")
-                != expected_source["canonical_tree_sha256"]):
+                != expected_source["canonical_tree_sha256"]
+                or not isinstance(rc_doc.get("failure_fingerprint"), str)
+                or not rc_doc["failure_fingerprint"]):
             raise AnalysisError(
                 "transfer receipt recovery block is invalid or inconsistent")
         # chronology: original closeout <= recovery claim <= import

@@ -2030,20 +2030,44 @@ def _validated_manifest_snapshot(manifest: dict, audit_bytes: bytes) -> dict:
         recovery_claim = (recovery or {}).get("recovery_claim") or {}
         rc_doc = recovery_claim.get("document")
         if (not isinstance(recovery, dict)
+                or set(recovery) != {
+                    "incident_id", "recovery_code_commit",
+                    "recovery_base_commit", "experiment_code_commit",
+                    "original_claim", "recovery_claim"}
                 or recovery.get("incident_id") != RECOVERY_INCIDENT_ID
                 or not _full_hex(recovery.get("recovery_code_commit"), 40)
                 or recovery.get("recovery_base_commit") != RECOVERY_BASE_COMMIT
+                or set(original) != {"sha256", "packaging_code_commit"}
                 or not _full_hex(original.get("sha256"), 64)
                 or not _full_hex(original.get("packaging_code_commit"), 40)
+                or set(recovery_claim) != {"sha256", "document"}
                 or not _full_hex(recovery_claim.get("sha256"), 64)
                 or not isinstance(rc_doc, dict)
+                or set(rc_doc) != {
+                    "schema", "campaign", "incident_id", "status",
+                    "claimed_utc", "recovery_code_commit",
+                    "recovery_base_commit", "original_claim",
+                    "raw_tree_sha256", "failure_fingerprint"}
                 or hashlib.sha256(_canonical_json_bytes(rc_doc)).hexdigest()
                 != recovery_claim.get("sha256")
+                or rc_doc.get("schema") != RECOVERY_CLAIM_SCHEMA
+                or rc_doc.get("campaign") != "a6-holdout"
                 or rc_doc.get("incident_id") != RECOVERY_INCIDENT_ID
+                or rc_doc.get("status")
+                != "recovery-claimed-before-outcome-validation"
                 or rc_doc.get("recovery_code_commit")
                 != recovery.get("recovery_code_commit")
-                or (rc_doc.get("original_claim") or {}).get("sha256")
-                != original.get("sha256")
+                or rc_doc.get("recovery_base_commit") != RECOVERY_BASE_COMMIT
+                or set(rc_doc.get("original_claim") or {}) != {
+                    "sha256", "packaging_code_commit",
+                    "experiment_code_commit", "launch_job_id"}
+                or (rc_doc["original_claim"].get("sha256")
+                    != original.get("sha256"))
+                or (rc_doc["original_claim"].get("packaging_code_commit")
+                    != original.get("packaging_code_commit"))
+                or not _full_hex(rc_doc.get("raw_tree_sha256"), 64)
+                or not isinstance(rc_doc.get("failure_fingerprint"), str)
+                or not rc_doc["failure_fingerprint"]
                 or not _full_hex(recovery.get("experiment_code_commit"), 40)):
             raise PackagingError("bundle manifest recovery block is invalid")
     packaging_commit = manifest.get("packaging_code_commit")
@@ -2051,6 +2075,12 @@ def _validated_manifest_snapshot(manifest: dict, audit_bytes: bytes) -> dict:
     if not _full_hex(packaging_commit, 40) or not _full_hex(
             experiment_commit, 40):
         raise PackagingError("bundle manifest commit identity is invalid")
+    if is_recovery and (
+            packaging_commit != recovery["recovery_code_commit"]
+            or experiment_commit != recovery["experiment_code_commit"]
+            or rc_doc["original_claim"]["experiment_code_commit"]
+            != experiment_commit):
+        raise PackagingError("bundle manifest recovery commits differ")
 
     selection = manifest.get("selection") or {}
     expected_selection = {
@@ -2144,6 +2174,16 @@ def _validated_manifest_snapshot(manifest: dict, audit_bytes: bytes) -> dict:
         claim_doc.get("claimed_utc"), "closeout claim claimed_utc")
     if claim_time < launch_times[-1]:
         raise PackagingError("bundle closeout claim predates launch records")
+    if is_recovery:
+        recovery_time = _manifest_timestamp(
+            rc_doc.get("claimed_utc"), "recovery claim claimed_utc")
+        if (recovery_time < claim_time
+                or rc_doc["original_claim"]["launch_job_id"]
+                != launch["job_id"]
+                or recovery["original_claim"]["sha256"]
+                != closeout_claim["sha256"]):
+            raise PackagingError(
+                "bundle manifest recovery chronology/identity is invalid")
     launch_manifest = launch.get("manifest") or {}
     lock = launch.get("lock") or {}
     if (set(launch_manifest) != {"path", "sha256"}
@@ -2234,6 +2274,9 @@ def _validated_manifest_snapshot(manifest: dict, audit_bytes: bytes) -> dict:
     }
     if claim_doc.get("source") != expected_claim_source:
         raise PackagingError("bundle closeout claim source tree is invalid")
+    if is_recovery and rc_doc.get("raw_tree_sha256") != (
+            expected_claim_source["canonical_tree_sha256"]):
+        raise PackagingError("bundle recovery claim source tree is invalid")
 
     file_map = {record["path"]: record for record in safe_files}
     evidence_hashes = {
@@ -3259,15 +3302,33 @@ def recover_package_holdout(
             "recovery before any outcome validation")
     # B2. refuse ANY existing final package with the same campaign/job/preflight
     #     prefix, regardless of packaging commit, before consuming recovery.
-    out_path = Path(out_base).expanduser().resolve()
+    raw_out_path = Path(out_base).expanduser()
+    if raw_out_path.is_symlink():
+        raise PackagingError(
+            f"unsafe recovery package output directory: {raw_out_path}")
+    out_path = raw_out_path.resolve()
+    if _path_is_within(out_path, root_path):
+        raise PackagingError(
+            "recovery package output must be outside the canonical source root")
+    # Prepare and validate the output container before consuming the one-shot
+    # recovery claim.  A pre-existing non-directory, symlink, or unwritable
+    # parent is an operator/preflight error, not a scientific recovery attempt.
+    try:
+        out_path.mkdir(parents=True, exist_ok=True)
+    except OSError as exc:
+        raise PackagingError(
+            f"cannot prepare recovery package output directory: {out_path}"
+        ) from exc
+    if out_path.is_symlink() or not out_path.is_dir():
+        raise PackagingError(
+            f"unsafe recovery package output directory: {out_path}")
     prefix = (f"a6_holdout-job{doc['launch_job_id']}-"
               f"{doc['preflight_sha256'][:12]}-")
-    if out_path.is_dir():
-        for entry in out_path.iterdir():
-            if entry.name.startswith(prefix):
-                raise PackagingError(
-                    "refusing recovery: an existing package with the same "
-                    f"campaign/job/preflight prefix is present: {entry}")
+    for entry in out_path.iterdir():
+        if entry.name.startswith(prefix):
+            raise PackagingError(
+                "refusing recovery: an existing package with the same "
+                f"campaign/job/preflight prefix is present: {entry}")
     # 5. exclusively create the SECOND adjacent recovery claim before outcome
     #    validation; exactly one attempt (a pre-existing recovery claim blocks
     #    all further attempts).  6. the original claim/raw root are never

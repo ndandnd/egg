@@ -1997,6 +1997,35 @@ def test_ei026_analyzer_rejects_tampered_recovery_receipt(tmp_path):
             repository=repo, verify_git=False)
 
 
+def test_ei026_analyzer_rejects_rehashed_semantic_recovery_tamper(tmp_path):
+    """The analyzer validates recovery semantics, not only its digest."""
+    import experiments.analyze_a6_holdout as an
+    root = _source_root(tmp_path)
+    claim = _write_original_claim(root)
+    result = _recover(root, tmp_path / "packages", claim=claim)
+    manifest = json.loads(Path(result["manifest"]).read_text())
+    repo = _import_repo(tmp_path)
+    imported = _import_recovery(result["bundle_dir"], repo)
+    target = Path(imported["target"])
+    receipt_path = Path(imported["receipt"])
+    document = json.loads(receipt_path.read_text())
+    recovery_claim = document["recovery"]["recovery_claim"]
+    recovery_claim["document"]["status"] = "recovery-complete"
+    recovery_claim["sha256"] = hashlib.sha256(
+        mod._canonical_json_bytes(recovery_claim["document"])).hexdigest()
+    receipt_path.write_bytes(mod._canonical_json_bytes(document))
+    with pytest.raises(an.AnalysisError, match="recovery block"):
+        an.validate_transfer_receipt(
+            target,
+            preflight={"code_commit": EXPERIMENT_COMMIT,
+                       "sha256": manifest["preflight"]["sha256"]},
+            selection={"sha256": SELECTION_SHA},
+            launch={"job_id": "424242", "grid_list_sha256": "e" * 64,
+                    "manifest_submitted_utc": "2026-08-19T01:04:00Z"},
+            analysis_code_commit=RECOVERY_COMMIT,
+            repository=repo, verify_git=False)
+
+
 def test_ei026_import_requires_recovery_head(tmp_path):
     root = _source_root(tmp_path)
     claim = _write_original_claim(root)
@@ -2140,6 +2169,63 @@ def test_ei026_existing_package_prefix_blocks_recovery(tmp_path):
                        match="same campaign/job/preflight prefix"):
         _recover(root, out, claim=claim)
     assert not _recovery_claim_path(root).exists()
+
+
+def test_ei026_output_file_refused_before_recovery_claim(tmp_path):
+    """A pre-detectable output-path error must not consume the one shot."""
+    root = _source_root(tmp_path)
+    claim = _write_original_claim(root)
+    out = tmp_path / "packages"
+    out.write_text("not a directory\n")
+    with pytest.raises(mod.PackagingError,
+                       match="output directory|cannot prepare"):
+        _recover(root, out, claim=claim)
+    assert not _recovery_claim_path(root).exists()
+
+
+def test_ei026_output_symlink_refused_before_recovery_claim(tmp_path):
+    """A symlinked output container is rejected without burning recovery."""
+    root = _source_root(tmp_path)
+    claim = _write_original_claim(root)
+    actual = tmp_path / "actual-packages"
+    actual.mkdir()
+    out = tmp_path / "packages-link"
+    out.symlink_to(actual, target_is_directory=True)
+    with pytest.raises(mod.PackagingError, match="unsafe recovery package"):
+        _recover(root, out, claim=claim)
+    assert not _recovery_claim_path(root).exists()
+
+
+@pytest.mark.parametrize(
+    "mutation",
+    ["extra-key", "status", "base", "raw-tree", "empty-fingerprint"],
+)
+def test_ei026_manifest_rejects_coordinated_recovery_claim_tamper(
+        tmp_path, mutation):
+    """Rehashing a semantically altered recovery document is not enough."""
+    root = _source_root(tmp_path)
+    claim = _write_original_claim(root)
+    result = _recover(root, tmp_path / "packages", claim=claim)
+    manifest = json.loads(Path(result["manifest"]).read_text())
+    recovery = manifest["recovery"]
+    rc = recovery["recovery_claim"]
+    document = rc["document"]
+    if mutation == "extra-key":
+        document["unexpected"] = "accepted-before-fix"
+    elif mutation == "status":
+        document["status"] = "recovery-complete"
+    elif mutation == "base":
+        document["recovery_base_commit"] = "f" * 40
+        recovery["recovery_base_commit"] = "f" * 40
+    elif mutation == "raw-tree":
+        document["raw_tree_sha256"] = "f" * 64
+    else:
+        document["failure_fingerprint"] = ""
+    rc["sha256"] = hashlib.sha256(
+        mod._canonical_json_bytes(document)).hexdigest()
+    audit_bytes = Path(result["audit_summary"]).read_bytes()
+    with pytest.raises(mod.PackagingError, match="recovery"):
+        mod._validated_manifest_snapshot(manifest, audit_bytes)
 
 
 def test_ei026_recovery_claim_mutation_before_publication_fails_closed(tmp_path):

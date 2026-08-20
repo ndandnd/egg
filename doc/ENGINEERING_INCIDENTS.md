@@ -1316,7 +1316,9 @@ original claim as canonical, regular, single-link immutable evidence and
 verifies its schema, SHA, original commit, launch identities, and claimed source
 digest/count/bytes; requires a clean recovery HEAD equal to the recovery commit
 with `740ab0c` as an ancestor; verifies the live raw tree still exactly matches
-the original claim before any outcome validation; exclusively creates a second
+the original claim before any outcome validation; prepares and validates the
+package output container (rejecting a file, symlink, unsafe nesting, or
+uncreatable path) before consuming the one-shot recovery; exclusively creates a second
 adjacent `a6_holdout.RECOVERY_CLAIM.json` (binding EI-026, the original claim
 SHA/commit, the raw-tree digest, the recovery commit, and the failure
 fingerprint) before validation, with exactly one recovery attempt permitted;
@@ -1325,14 +1327,19 @@ only; checks Slurm quiescence before reading and again immediately before
 publication; and records a versioned bundle-manifest/import-receipt/analyzer
 contract (`…-v3-recovery` / `…-v2-recovery`) carrying the original claim
 commit+SHA, the recovery claim commit+SHA, the experiment commit, and the actual
-corrected packaging/analysis commit. Import requires HEAD to equal the recovery
-commit while separately verifying both immutable claims. Any recovery failure is
+corrected packaging/analysis commit. The manifest/import/analyzer validators
+require exact recovery-envelope and recovery-document key sets and bind schema,
+status, base/experiment/packaging commits, launch identity, raw-tree digest,
+failure fingerprint, and closeout-to-recovery chronology; merely rehashing a
+semantically altered recovery document is insufficient. Import requires HEAD to
+equal the recovery commit while separately verifying both immutable claims. Any recovery failure is
 fail-closed, and a second recovery claim blocks all further attempts. Adversarial
 regressions in `test_a6_holdout_package.py` cover wrong/missing/mutated/linked
 claim, source drift, dirty/non-descendant recovery HEAD, wrong incident ID, an
 existing recovery claim, an active Slurm job, destination HEAD mismatch, recovery
-failure preservation, that normal `pack` still refuses, and a complete synthetic
-recover-pack/import round trip.
+failure preservation, pre-claim output-file/symlink refusal, coordinated
+recovery-document rehashing, that normal `pack` still refuses, and a complete
+synthetic recover-pack/import/analyzer round trip.
 
 **Scientific handling.** The original claim and raw tree are immutable incident
 evidence and must never be deleted or rewritten. No score, decision, or artifact
