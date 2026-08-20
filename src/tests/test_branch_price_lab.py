@@ -29,9 +29,9 @@ from egglab.instance import synthetic_instance
 from egglab.market import make_affine_market
 
 
-TREE_EPSILON = 1e-5
-TREE_PWL_TOL = 1e-6
-A2_EPSILON = 1e-3
+TREE_EPSILON = 1e-2
+TREE_PWL_TOL = 1e-4
+A2_EPSILON = 1e-2
 A2_PWL_TOL = 1e-4
 # The independent enumerator has a 1e-4 tangent tolerance.  This allowance
 # combines that certificate with the tighter tree and A2 tolerances.
@@ -142,8 +142,9 @@ def test_root_bounds_agree_with_certified_a2(tree_run, a2_root, truth):
     assert root["certified"] and a2["certified"]
     assert root["upper_bound"] - root["lower_bound"] <= TREE_EPSILON
     assert a2["ub_ch"] - a2["lb_best"] <= A2_EPSILON
-    assert abs(root["lower_bound"] - a2["lb_best"]) <= TRUTH_TOL
-    assert abs(root["upper_bound"] - a2["ub_ch"]) <= TRUTH_TOL
+    assert max(root["lower_bound"], a2["lb_best"]) <= (
+        min(root["upper_bound"], a2["ub_ch"]) + TRUTH_TOL
+    )
     assert root["lower_bound"] - TRUTH_TOL <= z_ch
     assert z_ch <= root["upper_bound"] + TRUTH_TOL
     assert a2["lb_best"] - TRUTH_TOL <= z_ch
@@ -157,10 +158,14 @@ def test_final_incumbent_and_global_bound_match_complete_truth(tree_run, truth):
 
     assert result["status"] == "optimal"
     assert result["certified"]
-    assert result["global_bound"] <= result["incumbent_objective"] + 1e-9
+    assert result["global_bound"] <= result["incumbent_upper_bound"] + 1e-9
     assert result["gap"] <= TREE_EPSILON
     assert abs(result["incumbent_objective"] - z_dictator) <= TRUTH_TOL
-    assert abs(result["global_bound"] - z_dictator) <= TRUTH_TOL
+    assert result["global_bound"] <= z_dictator + TRUTH_TOL
+    assert z_dictator <= result["incumbent_upper_bound"] + TRUTH_TOL
+    assert TREE_EPSILON > (
+        result["tolerance_evidence"]["accumulated_objective_allowance"]
+    )
 
 
 def test_genuinely_fractional_root_closes_in_one_split(tree_run):
@@ -198,6 +203,18 @@ def test_all_nodes_columns_and_leaf_replay_physically(tree_run, tiny):
             assert event["branch_constraints"] == node["branch_constraints"]
             if event["column"] is not None:
                 assert event["replay_ok"]
+                allowance = event["tolerance_evidence"][
+                    "pricing_bound_allowance"
+                ]
+                assert event["pricing_bound"] <= (
+                    event["physical_objective"] + allowance
+                )
+                assert event["tolerance_evidence"][
+                    "pricing_bound_le_physical_plus_allowance"
+                ]
+                assert event["tolerance_evidence"][
+                    "charge_dropped_positive_kwh"
+                ] == 0.0
         for master_event in node_state["master_events"]:
             assert all(
                 solve["backend"] == "GRB"
@@ -205,7 +222,25 @@ def test_all_nodes_columns_and_leaf_replay_physically(tree_run, tiny):
                 and solve["status"] == "OPTIMAL"
                 for solve in master_event["rmp"]["master_solves"]
             )
+            tolerance = master_event["rmp"]["tolerance_evidence"]
+            assert tolerance["pwl_model_slack"] <= (
+                tolerance["pwl_model_limit"]
+            )
     assert recorded_calls == state["outcome"]["pricing_calls"]
+
+
+def test_tolerance_budget_rejects_narrow_final_gap(tiny, tmp_path):
+    inst, market = tiny
+    with pytest.raises(
+        ExactnessLabError, match="not wider than the declared numerical"
+    ):
+        solve_tree(
+            inst,
+            market,
+            str(tmp_path),
+            epsilon=1e-5,
+            pwl_tol=1e-6,
+        )
 
 
 def test_integral_leaf_is_independent_continuous_charge_average(tree_run):
@@ -272,12 +307,11 @@ def test_full_fleet_oracle_certifies_infeasible_node(tiny, tmp_path):
         epsilon=TREE_EPSILON,
         pwl_tol=TREE_PWL_TOL,
     )
-    assert state["outcome"] == {
-        "status": "infeasible",
-        "certified": True,
-        "pricing_calls": 1,
-        "certificate_call_id": "infeasible-seed",
-    }
+    assert state["outcome"]["status"] == "infeasible"
+    assert state["outcome"]["certified"] is True
+    assert state["outcome"]["evidence_tier"] == "solver-attested"
+    assert state["outcome"]["pricing_calls"] == 1
+    assert state["outcome"]["certificate_call_id"] == "infeasible-seed"
     event = state["pricing_calls"][0]
     assert event["solver"]["status"] == "INFEASIBLE"
     assert event["solver"]["backend"] == "GRB"

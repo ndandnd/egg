@@ -31,6 +31,7 @@ from .b2a2 import (
     market_hash,
 )
 from .evsp import (
+    REPLAY_TOL_KWH,
     Solution,
     depot_pairs,
     direct_pairs,
@@ -44,16 +45,19 @@ from .regimes import _l_max
 from .solver import SolveStats
 
 
-SCHEMA_VERSION = "tiny-branch-price-v1"
+SCHEMA_VERSION = "tiny-branch-price-v2"
 BASE_ORIGIN_MAIN_SHA = "5b63e725d0fd85cfb0b83f462a612016e7f4321a"
 MAX_TRIPS = 4
-DEFAULT_EPSILON = 1e-5
-DEFAULT_PWL_TOL = 1e-6
+DEFAULT_EPSILON = 1e-2
+DEFAULT_PWL_TOL = 1e-4
 DEFAULT_RC_TOL = 1e-8
 DEFAULT_INTEGRAL_TOL = 1e-8
 DEFAULT_SUPPORT_TOL = 1e-9
 DEFAULT_PRICING_MIP_GAP = 1e-9
 DEFAULT_NODE_BUDGET = 200
+SOLVER_OBJECTIVE_ABS_TOL = 1e-8
+SOLVER_OBJECTIVE_REL_TOL = 1e-9
+CHARGE_EXTRACTION_TOL_KWH = 0.0  # every positive solved charge is serialized
 MAX_REFINEMENTS = 200
 MAX_DUPLICATE_RETRIES = 3
 
@@ -70,6 +74,64 @@ class ExactnessLabError(RuntimeError):
 
 def _finite(value) -> bool:
     return value is not None and math.isfinite(float(value))
+
+
+def _scaled_objective_tolerance(*operands: float) -> float:
+    """One operand-scaled objective policy used throughout the laboratory."""
+    scale = max((abs(float(value)) for value in operands if _finite(value)),
+                default=1.0)
+    return SOLVER_OBJECTIVE_ABS_TOL + (
+        SOLVER_OBJECTIVE_REL_TOL * max(1.0, scale)
+    )
+
+
+def tolerance_ledger(
+    *,
+    epsilon: float,
+    pwl_tol: float,
+    rc_tol: float,
+    integral_tol: float,
+    support_tol: float,
+    pricing_mip_gap: float,
+) -> dict:
+    """The single serialized numerical policy for every certificate layer."""
+    return {
+        "policy_version": 1,
+        "operand_scaled_objective": {
+            "absolute": SOLVER_OBJECTIVE_ABS_TOL,
+            "relative": SOLVER_OBJECTIVE_REL_TOL,
+            "formula": "absolute + relative * max(1, abs(operands))",
+        },
+        "master_pwl_abs": float(pwl_tol),
+        "pricing_mip_gap": float(pricing_mip_gap),
+        "reduced_cost_abs": float(rc_tol),
+        "integrality_abs": float(integral_tol),
+        "support_abs": float(support_tol),
+        "physical_load_reconstruction_kwh": REPLAY_TOL_KWH,
+        "charge_extraction_kwh": CHARGE_EXTRACTION_TOL_KWH,
+        "soc_physics_replay_kwh": REPLAY_TOL_KWH,
+        "final_global_gap_abs": float(epsilon),
+        "certificate_rule": (
+            "final_global_gap_abs must strictly exceed every recorded "
+            "accumulated objective allowance"
+        ),
+    }
+
+
+def _validate_tolerance_budget(ledger: dict) -> None:
+    # Even when observed reconstruction residuals are zero, the declared
+    # certificate must dominate the PWL and physical replay policy floors.
+    floor = (
+        float(ledger["master_pwl_abs"])
+        + float(ledger["soc_physics_replay_kwh"])
+        + _scaled_objective_tolerance(1.0)
+    )
+    epsilon = float(ledger["final_global_gap_abs"])
+    if epsilon <= floor:
+        raise ExactnessLabError(
+            "final gap tolerance is not wider than the declared numerical "
+            f"policy floor: epsilon={epsilon:.3e}, floor={floor:.3e}"
+        )
 
 
 def gurobi_available() -> bool:
@@ -262,6 +324,67 @@ def restrictions_satisfied(
         incidence.get(arc_key(item["arc"]), 0) == item["value"]
         for item in canonical
     )
+
+
+def _pricing_tolerance_evidence(
+    prices: np.ndarray,
+    solution: Solution,
+    pricing_bound: float,
+) -> dict:
+    """Convert physical reconstruction and replay tolerances into objective
+    units and enforce the bound/incumbent ordering with that allowance."""
+    reconstruction = solution.stats.extra.get("load_reconstruction") or {}
+    residuals = reconstruction.get("residual_kwh")
+    if not isinstance(residuals, list) or len(residuals) != len(prices):
+        raise ExactnessLabError("pricing call lacks load-reconstruction residuals")
+    reconstruction_objective = float(
+        np.dot(np.abs(prices), np.abs(np.asarray(residuals, dtype=float)))
+    )
+    objective_reconstruction = (
+        solution.stats.extra.get("pricing_objective_reconstruction") or {}
+    )
+    reconstruction_objective = max(
+        reconstruction_objective,
+        float(objective_reconstruction.get("abs_adjustment", 0.0)),
+    )
+    charge_evidence = solution.stats.extra.get("charge_extraction") or {}
+    dropped_positive = float(charge_evidence.get("dropped_positive_kwh", 0.0))
+    if dropped_positive > 0.0:
+        raise ExactnessLabError(
+            "positive solved charge was dropped during extraction"
+        )
+    max_abs_price = max(1.0, float(np.max(np.abs(prices), initial=0.0)))
+    charge_objective = max_abs_price * dropped_positive
+    replay_objective = max_abs_price * REPLAY_TOL_KWH
+    solver_objective = _scaled_objective_tolerance(
+        pricing_bound, solution.obj_model, solution.obj_true
+    )
+    total = (
+        solver_objective
+        + reconstruction_objective
+        + charge_objective
+        + replay_objective
+    )
+    if float(pricing_bound) > float(solution.obj_true) + total:
+        raise ExactnessLabError(
+            "pricing bound exceeds the physically reconstructed incumbent "
+            f"plus declared allowance: bound={pricing_bound:.12g}, "
+            f"physical={float(solution.obj_true):.12g}, allowance={total:.3e}"
+        )
+    return {
+        "solver_objective": solver_objective,
+        "load_reconstruction_objective": reconstruction_objective,
+        "charge_extraction_objective": charge_objective,
+        "soc_physics_replay_objective": replay_objective,
+        "pricing_bound_allowance": total,
+        "pricing_bound_le_physical_plus_allowance": True,
+        "physical_load_reconstruction_kwh": float(
+            reconstruction.get("max_abs_residual_kwh", 0.0)
+        ),
+        "charge_dropped_positive_kwh": dropped_positive,
+        "soc_physics_replay_kwh": REPLAY_TOL_KWH,
+        "total_objective_allowance": total,
+    }
 
 
 # ---------------------------------------------------------------------------
@@ -554,6 +677,7 @@ def _solve_full_fleet_oracle(
         return float(variable.X)
 
     sequences, arc_kinds, charges = [], [], []
+    clamped_negative_charge = 0.0
     total_deadhead = 0.0
     for v in range(V):
         starts = [i for i in range(n) if value(o[v, i]) > 0.5]
@@ -585,7 +709,13 @@ def _solve_full_fleet_oracle(
                         ) + inst.dhm(D, inst.trips[b].start_loc)
                         for t, _overlap in arc_slots[a, b]:
                             amount = value(e[v, a, b, t])
-                            if amount > 1e-8:
+                            if amount < -REPLAY_TOL_KWH:
+                                model.dispose()
+                                raise ExactnessLabError(
+                                    f"oracle {call_id} extracted negative charge "
+                                    f"{amount:.3e} kWh"
+                                )
+                            if amount > CHARGE_EXTRACTION_TOL_KWH:
                                 charges.append(
                                     {
                                         "vehicle": len(sequences),
@@ -595,6 +725,8 @@ def _solve_full_fleet_oracle(
                                         "kwh": amount,
                                     }
                                 )
+                            elif amount < 0.0:
+                                clamped_negative_charge += abs(amount)
                         break
             if next_trip is None:
                 total_deadhead += inst.dhm(inst.trips[i].end_loc, D)
@@ -605,6 +737,12 @@ def _solve_full_fleet_oracle(
         sequences.append(sequence)
         arc_kinds.append(kinds)
 
+    stats.extra["charge_extraction"] = {
+        "policy": "serialize-every-positive-charge",
+        "tolerance_kwh": CHARGE_EXTRACTION_TOL_KWH,
+        "dropped_positive_kwh": 0.0,
+        "clamped_negative_kwh": clamped_negative_charge,
+    }
     raw_load = [value(load[t]) for t in range(inst.n_slots)]
     solution = Solution(
         sequences=sequences,
@@ -631,6 +769,9 @@ def _solve_full_fleet_oracle(
             f"oracle {call_id} failed physical replay: {violations}"
         )
     column = column_from_solution(inst, solution)
+    tolerance_evidence = _pricing_tolerance_evidence(
+        prices, solution, float(bound)
+    )
     incidence = structural_incidence(inst, sequences, arc_kinds)
     if not restrictions_satisfied(inst, incidence, branch):
         model.dispose()
@@ -638,10 +779,12 @@ def _solve_full_fleet_oracle(
     column["structural_incidence"] = incidence
     event.update(
         column=column,
+        solver=stats.to_dict(),
         replay_ok=True,
         infeasibility_certified=False,
         physical_objective=float(solution.obj_true),
         pricing_bound=float(bound),
+        tolerance_evidence=tolerance_evidence,
     )
     model.dispose()
     return event
@@ -740,9 +883,13 @@ def _solve_clean_rmp(
             for j in range(len(columns))
         )
         upper = operations + market.system_delta_true(load_values)
-        if upper - model_value <= pwl_tol:
+        pwl_slack = max(0.0, float(upper - model_value))
+        if pwl_slack <= pwl_tol:
             pi = [float(row.Pi) for row in link]
             sigma = float(convexity.Pi)
+            numeric_allowance = _scaled_objective_tolerance(
+                model_value, upper, sigma, *pi
+            )
             model.dispose()
             return {
                 "z_model": model_value,
@@ -755,6 +902,14 @@ def _solve_clean_rmp(
                 "n_refinements": refinement,
                 "master_wall_s": total_wall,
                 "master_solves": solves,
+                "tolerance_evidence": {
+                    "pwl_model_slack": pwl_slack,
+                    "pwl_model_limit": float(pwl_tol),
+                    "solver_objective": numeric_allowance,
+                    "total_objective_allowance": (
+                        pwl_slack + numeric_allowance
+                    ),
+                },
             }
         tangent_points.append([float(value) for value in load_values])
         model.dispose()
@@ -769,9 +924,20 @@ def _node_identity(
     epsilon: float,
     pwl_tol: float,
     rc_tol: float,
+    integral_tol: float,
+    support_tol: float,
     pricing_mip_gap: float,
     budget: int,
 ) -> dict:
+    ledger = tolerance_ledger(
+        epsilon=epsilon,
+        pwl_tol=pwl_tol,
+        rc_tol=rc_tol,
+        integral_tol=integral_tol,
+        support_tol=support_tol,
+        pricing_mip_gap=pricing_mip_gap,
+    )
+    _validate_tolerance_budget(ledger)
     return {
         "schema_version": SCHEMA_VERSION,
         "base_origin_main_sha": BASE_ORIGIN_MAIN_SHA,
@@ -783,11 +949,23 @@ def _node_identity(
         "rc_tol": float(rc_tol),
         "pricing_mip_gap": float(pricing_mip_gap),
         "budget": int(budget),
+        "tolerance_ledger": ledger,
         "solver": {"backend": "GRB", "gurobi_version": _gurobi_version()},
     }
 
 
 def _finish_node_optimal(state: dict, rmp: dict, gap: float) -> dict:
+    accumulated_allowance = max(
+        float(state.get("lb_best_allowance") or 0.0),
+        float(rmp["tolerance_evidence"]["total_objective_allowance"]),
+    )
+    epsilon = float(state["identity"]["epsilon"])
+    if epsilon <= accumulated_allowance:
+        raise ExactnessLabError(
+            "node certificate gap tolerance does not exceed its accumulated "
+            f"allowance: epsilon={epsilon:.3e}, "
+            f"allowance={accumulated_allowance:.3e}"
+        )
     aggregate = aggregate_structural_values(
         state["columns"], rmp["lambdas"], state["arc_keys"]
     )
@@ -797,6 +975,9 @@ def _finish_node_optimal(state: dict, rmp: dict, gap: float) -> dict:
     state["outcome"] = {
         "status": "certified",
         "certified": True,
+        "evidence_tier": (
+            "solver-attested-with-independent-physical-replay"
+        ),
         "lower_bound": state["lb_best"],
         "upper_bound": rmp["upper"],
         "gap": gap,
@@ -806,6 +987,12 @@ def _finish_node_optimal(state: dict, rmp: dict, gap: float) -> dict:
         "aggregate_structural": aggregate,
         "pricing_calls": len(state["pricing_calls"]),
         "n_columns": len(state["columns"]),
+        "lower_bound_source_call_id": state["lb_best_call_id"],
+        "tolerance_evidence": {
+            "accumulated_objective_allowance": accumulated_allowance,
+            "final_gap_tolerance": epsilon,
+            "allowance_margin": epsilon - accumulated_allowance,
+        },
     }
     return state
 
@@ -820,6 +1007,8 @@ def solve_node_lp(
     epsilon: float = DEFAULT_EPSILON,
     pwl_tol: float = DEFAULT_PWL_TOL,
     rc_tol: float = DEFAULT_RC_TOL,
+    integral_tol: float = DEFAULT_INTEGRAL_TOL,
+    support_tol: float = DEFAULT_SUPPORT_TOL,
     pricing_mip_gap: float = DEFAULT_PRICING_MIP_GAP,
     budget: int = DEFAULT_NODE_BUDGET,
     max_new_pricing_calls: int | None = None,
@@ -830,8 +1019,6 @@ def solve_node_lp(
     tests.  It is not part of mathematical identity.
     """
     _validate_fixture(inst)
-    if epsilon < pwl_tol:
-        raise ExactnessLabError("node epsilon must cover the PWL tolerance")
     branch = canonical_branch_constraints(inst, branch_constraints)
     os.makedirs(out_dir, exist_ok=True)
     path = os.path.join(out_dir, "node.ckpt.json")
@@ -843,6 +1030,8 @@ def solve_node_lp(
         epsilon=epsilon,
         pwl_tol=pwl_tol,
         rc_tol=rc_tol,
+        integral_tol=integral_tol,
+        support_tol=support_tol,
         pricing_mip_gap=pricing_mip_gap,
         budget=budget,
     )
@@ -858,6 +1047,8 @@ def solve_node_lp(
             "pricing_calls": [],
             "master_events": [],
             "lb_best": None,
+            "lb_best_allowance": None,
+            "lb_best_call_id": None,
             "lower_history": [],
             "upper_history": [],
             "duplicate_retries": 0,
@@ -908,8 +1099,10 @@ def solve_node_lp(
                 state["outcome"] = {
                     "status": "infeasible",
                     "certified": True,
+                    "evidence_tier": "solver-attested",
                     "pricing_calls": len(state["pricing_calls"]),
                     "certificate_call_id": event["call_id"],
+                    "tolerance_ledger": identity["tolerance_ledger"],
                 }
                 commit()
                 return state
@@ -986,24 +1179,42 @@ def solve_node_lp(
             )
         column = event["column"]
         pricing_upper = float(event["physical_objective"])
-        pricing_lower = float(event["pricing_bound"])
-        min_rc_upper = pricing_upper - rmp["sigma"]
-        min_rc_lower = pricing_lower - rmp["sigma"]
-        lower = rmp["z_model"] + min(0.0, min_rc_lower)
-        state["lb_best"] = (
-            lower
-            if state["lb_best"] is None
-            else max(float(state["lb_best"]), lower)
+        pricing_lower_solver = float(event["pricing_bound"])
+        pricing_allowance = float(
+            event["tolerance_evidence"]["pricing_bound_allowance"]
         )
+        pricing_lower_safe = pricing_lower_solver - pricing_allowance
+        min_rc_upper = pricing_upper - rmp["sigma"]
+        min_rc_lower_solver = pricing_lower_solver - rmp["sigma"]
+        min_rc_lower_safe = pricing_lower_safe - rmp["sigma"]
+        master_allowance = float(
+            rmp["tolerance_evidence"]["total_objective_allowance"]
+        )
+        lower_solver = (
+            rmp["z_model"] + min(0.0, min_rc_lower_solver)
+        )
+        lower = (
+            rmp["z_model"]
+            - master_allowance
+            + min(0.0, min_rc_lower_safe)
+        )
+        accumulated_allowance = master_allowance + pricing_allowance
+        if state["lb_best"] is None or lower > float(state["lb_best"]):
+            state["lb_best"] = lower
+            state["lb_best_allowance"] = accumulated_allowance
+            state["lb_best_call_id"] = event["call_id"]
         gap = rmp["upper"] - state["lb_best"]
         novel = column["column_key"] not in state["column_keys"]
         event.update(
             min_reduced_cost_upper=min_rc_upper,
-            min_reduced_cost_lower=min_rc_lower,
+            min_reduced_cost_lower_solver=min_rc_lower_solver,
+            min_reduced_cost_lower=min_rc_lower_safe,
+            lower_bound_solver=lower_solver,
             lower_bound=lower,
             lower_bound_best=state["lb_best"],
             upper_bound=rmp["upper"],
             certificate_gap=gap,
+            accumulated_objective_allowance=accumulated_allowance,
             column_novel=novel,
         )
         state["pricing_calls"].append(event)
@@ -1033,12 +1244,12 @@ def solve_node_lp(
                     f"negative reduced cost {min_rc_upper}"
                 )
             state["tangent_points"].append(list(map(float, rmp["load"])))
-        elif min_rc_lower < -rc_tol:
+        elif min_rc_lower_solver < -rc_tol:
             # An optimal Gurobi solve should supply an improving incumbent
             # whenever its bound is improving.  Refuse to infer exhaustion.
             raise ExactnessLabError(
                 f"node {node_id} has ambiguous pricing interval "
-                f"[{min_rc_lower}, {min_rc_upper}]"
+                f"[{min_rc_lower_solver}, {min_rc_upper}]"
             )
         else:
             # Pricing is exhausted; only tangent-model slack can remain.
@@ -1238,8 +1449,11 @@ def realize_structurally_integral_leaf(
             )
     charges = []
     load = [0.0] * inst.n_slots
+    dropped_positive_charge = 0.0
     for (tail, head, slot), amount in sorted(charge_amounts.items()):
-        if amount <= support_tol:
+        if amount <= CHARGE_EXTRACTION_TOL_KWH:
+            if amount > 0.0:
+                dropped_positive_charge += amount
             continue
         if (tail, head) not in arc_vehicle:
             raise ExactnessLabError("averaged charge is not on a depot arc")
@@ -1269,6 +1483,7 @@ def realize_structurally_integral_leaf(
         "structural_incidence": incidence,
         "source_weights": normalized_weights,
         "dropped_lambda_weight": dropped_weight,
+        "dropped_positive_charge_kwh": dropped_positive_charge,
         "replay_ok": False,
         "replay_violations": None,
     }
@@ -1309,6 +1524,38 @@ def realize_structurally_integral_leaf(
             "independent leaf realization does not reproduce the master point: "
             f"load residual={load_residual}, objective residual={objective_residual}"
         )
+    marginal_scale = max(
+        1.0, float(np.max(np.abs(market.price(np.asarray(load))), initial=0.0))
+    )
+    load_objective_allowance = marginal_scale * float(
+        np.sum(np.abs(np.asarray(load) - rmp_load))
+    )
+    replay_objective_allowance = marginal_scale * REPLAY_TOL_KWH
+    numeric_allowance = _scaled_objective_tolerance(
+        objective, outcome["upper_bound"]
+    )
+    total_allowance = (
+        objective_residual
+        + load_objective_allowance
+        + replay_objective_allowance
+        + numeric_allowance
+    )
+    if dropped_positive_charge > 0.0:
+        raise ExactnessLabError(
+            "leaf conversion dropped positive averaged charge"
+        )
+    record["tolerance_evidence"] = {
+        "dropped_lambda_weight": dropped_weight,
+        "dropped_positive_charge_kwh": dropped_positive_charge,
+        "load_conversion_objective": load_objective_allowance,
+        "objective_conversion": objective_residual,
+        "soc_physics_replay_objective": replay_objective_allowance,
+        "solver_objective": numeric_allowance,
+        "total_objective_allowance": total_allowance,
+    }
+    record["evidence_tier"] = (
+        "solver-attested-with-independent-physical-replay"
+    )
     return record
 
 
@@ -1369,6 +1616,15 @@ def _tree_identity(
     pricing_mip_gap: float,
     node_budget: int,
 ) -> dict:
+    ledger = tolerance_ledger(
+        epsilon=epsilon,
+        pwl_tol=pwl_tol,
+        rc_tol=rc_tol,
+        integral_tol=integral_tol,
+        support_tol=support_tol,
+        pricing_mip_gap=pricing_mip_gap,
+    )
+    _validate_tolerance_budget(ledger)
     return {
         "schema_version": SCHEMA_VERSION,
         "base_origin_main_sha": BASE_ORIGIN_MAIN_SHA,
@@ -1383,6 +1639,7 @@ def _tree_identity(
         "support_tol": float(support_tol),
         "pricing_mip_gap": float(pricing_mip_gap),
         "node_budget": int(node_budget),
+        "tolerance_ledger": ledger,
         "solver": {"backend": "GRB", "gurobi_version": _gurobi_version()},
     }
 
@@ -1436,8 +1693,6 @@ def solve_tree(
 ) -> dict:
     """Run or resume the deterministic external branch-and-price tree."""
     _validate_fixture(inst)
-    if epsilon < pwl_tol:
-        raise ExactnessLabError("tree epsilon must cover the PWL tolerance")
     os.makedirs(out_dir, exist_ok=True)
     nodes_dir = os.path.join(out_dir, "nodes")
     os.makedirs(nodes_dir, exist_ok=True)
@@ -1520,6 +1775,8 @@ def solve_tree(
                 epsilon=epsilon,
                 pwl_tol=pwl_tol,
                 rc_tol=rc_tol,
+                integral_tol=integral_tol,
+                support_tol=support_tol,
                 pricing_mip_gap=pricing_mip_gap,
                 budget=node_budget,
             )
@@ -1559,7 +1816,7 @@ def solve_tree(
             if (
                 incumbent is not None
                 and float(outcome["lower_bound"])
-                >= float(incumbent["objective"]) - epsilon
+                >= float(incumbent["upper_bound"])
             ):
                 node["status"] = "bound_pruned"
                 state["terminal_nodes"].append(node_id)
@@ -1568,7 +1825,7 @@ def solve_tree(
                         "kind": "bound_prune",
                         "node_id": node_id,
                         "lower_bound": outcome["lower_bound"],
-                        "incumbent": incumbent["objective"],
+                        "incumbent_upper_bound": incumbent["upper_bound"],
                         **provenance(),
                     }
                 )
@@ -1596,20 +1853,32 @@ def solve_tree(
                 node["realization"] = realization
                 node["status"] = "integral"
                 state["terminal_nodes"].append(node_id)
+                realization_allowance = float(
+                    realization["tolerance_evidence"][
+                        "total_objective_allowance"
+                    ]
+                )
+                realization_upper = (
+                    float(realization["objective"]) + realization_allowance
+                )
                 if (
                     incumbent is None
-                    or realization["objective"]
-                    < float(incumbent["objective"]) - 1e-9
+                    or realization_upper
+                    < float(incumbent["upper_bound"])
                 ):
                     state["incumbent"] = {
                         "node_id": node_id,
                         "objective": realization["objective"],
+                        "upper_bound": realization_upper,
+                        "objective_allowance": realization_allowance,
                         "realization": realization,
                     }
                     state["incumbent_history"].append(
                         {
                             "node_id": node_id,
                             "objective": realization["objective"],
+                            "upper_bound": realization_upper,
+                            "objective_allowance": realization_allowance,
                             **provenance(),
                         }
                     )
@@ -1678,6 +1947,7 @@ def solve_tree(
             state["outcome"] = {
                 "status": "infeasible",
                 "certified": True,
+                "evidence_tier": "solver-attested",
                 "global_bound": None,
                 "incumbent_objective": None,
                 "gap": None,
@@ -1687,7 +1957,30 @@ def solve_tree(
         else:
             if global_bound is None:
                 raise ExactnessLabError("feasible tree has no terminal lower bound")
-            gap = float(incumbent["objective"]) - global_bound
+            bound_node = min(
+                (
+                    float(state["nodes"][node_id]["lp_outcome"]["lower_bound"]),
+                    node_id,
+                )
+                for node_id in state["terminal_nodes"]
+                if state["nodes"][node_id]["status"]
+                in {"integral", "bound_pruned"}
+            )[1]
+            lower_allowance = float(
+                state["nodes"][bound_node]["lp_outcome"][
+                    "tolerance_evidence"
+                ]["accumulated_objective_allowance"]
+            )
+            accumulated_allowance = (
+                lower_allowance + float(incumbent["objective_allowance"])
+            )
+            if epsilon <= accumulated_allowance:
+                raise ExactnessLabError(
+                    "final global gap tolerance does not exceed accumulated "
+                    f"allowance: epsilon={epsilon:.3e}, "
+                    f"allowance={accumulated_allowance:.3e}"
+                )
+            gap = float(incumbent["upper_bound"]) - global_bound
             if gap < -epsilon:
                 raise ExactnessLabError(
                     f"global lower bound exceeds incumbent by {-gap}"
@@ -1695,9 +1988,23 @@ def solve_tree(
             state["outcome"] = {
                 "status": "optimal",
                 "certified": bool(gap <= epsilon),
+                "evidence_tier": (
+                    "solver-attested-with-independent-physical-replay"
+                ),
                 "global_bound": global_bound,
                 "incumbent_objective": float(incumbent["objective"]),
+                "incumbent_upper_bound": float(incumbent["upper_bound"]),
                 "gap": gap,
+                "tolerance_evidence": {
+                    "global_lower_bound_node": bound_node,
+                    "lower_bound_objective_allowance": lower_allowance,
+                    "incumbent_objective_allowance": float(
+                        incumbent["objective_allowance"]
+                    ),
+                    "accumulated_objective_allowance": accumulated_allowance,
+                    "final_gap_tolerance": float(epsilon),
+                    "allowance_margin": float(epsilon) - accumulated_allowance,
+                },
                 "nodes": len(state["nodes"]),
                 "branches": len(state["branch_history"]),
                 "max_depth": max(

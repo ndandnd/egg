@@ -149,11 +149,50 @@ seed schedule is fathomed only when that restricted MILP returns certified
 `INFEASIBLE`; absence of an incumbent, timeout, or an empty filtered pool is
 not an infeasibility certificate.
 
-Gurobi solves node masters and full-fleet MILP oracles. The tree, branching,
-queue, bounds, pruning, checkpointing, and replay are external Python logic;
-no Gurobi branch-and-price callback or solver-managed tree is used.
+Gurobi solves node masters and full-fleet MILP oracles. `gurobipy` is an
+optional dependency for this laboratory and is deliberately absent from the
+repository-wide requirements: install it separately to run these tests.
+CBC-only installs must still import and collect the rest of the repository.
+The tree, branching, queue, bounds, pruning, checkpointing, and replay are
+external Python logic; no Gurobi branch-and-price callback or solver-managed
+tree is used.
 
-## 5. Why structural integrality yields one physical schedule
+## 5. Binding tolerance ledger
+
+One operand-scaled policy governs every numerical comparison:
+
+\[
+\tau_{\mathrm{obj}}(v)=10^{-8}+10^{-9}\max(1,\max_i|v_i|).
+\]
+
+The serialized ledger is binding; a run rejects identity changes on resume.
+
+| Component | Declared limit | Propagation rule |
+|---|---:|---|
+| Master tangent/PWL | \(10^{-4}\) objective units | record actual true-minus-model slack and add it to the node lower-bound allowance |
+| Solver objective numerics | operand-scaled formula above | subtract from solver-attested lower bounds |
+| Pricing MIP gap | \(10^{-9}\) relative | retain the Gurobi bound and its scaled objective allowance |
+| Integrality | \(10^{-8}\) | branch outside the integral band; account for any omitted support in leaf conversion |
+| Master support | \(10^{-9}\) | record dropped lambda weight plus resulting load/objective residual |
+| Physical-load reconstruction | \(10^{-4}\) kWh policy cap | propagate \(\sum_t |p_t|\,|L_t^{raw}-L_t^{physical}|\) |
+| Charge extraction | \(0\) kWh | serialize every positive solved charge; dropping positive charge is fatal |
+| SOC/physics replay | \(10^{-4}\) kWh | describe feasibility as within replay policy and convert one policy unit using the active maximum absolute price |
+| Final global gap | \(10^{-2}\) objective units by default | must strictly exceed the accumulated lower-bound and incumbent allowances |
+
+Every pricing call enforces
+
+\[
+\underline z_{\mathrm{price}}
+\le z_{\mathrm{physical\ incumbent}}+\delta_{\mathrm{pricing}},
+\]
+
+where \(\delta_{\mathrm{pricing}}\) is serialized by component. The safe node
+lower bound subtracts both master and pricing allowances. The global gap uses
+the physical incumbent plus its leaf-conversion allowance. A result is
+reported certified only if the robust gap is within epsilon **and**
+epsilon is strictly wider than the accumulated allowance.
+
+## 6. Why structural integrality yields one physical schedule
 
 Suppose every \(\bar x_a\) at a node solution is integral. Since
 \(\lambda_s\geq0\), \(\sum_s\lambda_s=1\), and each \(x_a(s)\) is binary:
@@ -190,10 +229,12 @@ Failure to do so is fatal; selecting an arbitrary positive lambda is not an
 acceptable substitute because convex charging cost can make the averaged load
 strictly better.
 
-## 6. Node and global certificates
+## 7. Solver-attested bounds and independent physical replay
 
-Each node runs clean restricted column generation to a declared absolute
-tolerance. It retains:
+Each node runs clean restricted column generation to the ledger tolerance. Its
+bounds and infeasibility statuses are **solver-attested**. Physical columns and
+integral leaves are replayed independently. This is not an independently
+reconstructed global certificate. The checkpoint retains:
 
 * every clean master solve and exact-evaluation upper bound;
 * every pricing vector, incumbent, certified bound, reduced-cost interval,
@@ -217,7 +258,7 @@ bounds, incumbent history, terminal partition, and pending work. Writes are
 atomic. Resume rejects any identity change and may repeat at most one
 uncommitted solver call.
 
-## 7. Tiny acceptance and stop rules
+## 8. Tiny acceptance and stop rules
 
 Only independently enumerable fixtures with \(n\leq4\) are in scope. Tests
 must establish all of the following:
