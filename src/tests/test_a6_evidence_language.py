@@ -115,16 +115,17 @@ def _body_statuses(ledger: str) -> dict:
 def test_incident_index_retains_and_matches_bodies():
     ledger = (DOC / "ENGINEERING_INCIDENTS.md").read_text()
     index = _index_statuses(ledger)
-    for number in range(17, 24):
+    for number in range(17, 26):
         key = f"EI-0{number}"
         assert key in index, f"{key} missing from the incident index"
         assert f"## {key}" in ledger, f"{key} body missing"
     assert "## Regression-coverage map: EI-017 through EI-023" in ledger
-    for number in range(17, 24):
+    assert "## Regression-coverage map: EI-024 through EI-025" in ledger
+    for number in range(17, 26):
         assert f"EI-0{number} (" in ledger, (
             f"EI-0{number} missing from the coverage map")
     # index/body status agreement for the closeout incidents
-    for key in ("EI-021", "EI-022", "EI-023"):
+    for key in ("EI-021", "EI-022", "EI-023", "EI-024", "EI-025"):
         body = re.search(
             rf"^## {key} — .*?\*\*Status: ([A-Za-z— -]+?)[.,*]",
             ledger, re.MULTILINE | re.DOTALL)
