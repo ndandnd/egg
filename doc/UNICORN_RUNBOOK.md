@@ -836,7 +836,13 @@ protocol, for review, is:
    Record the full original claim SHA-256.
 2. **Recover from a clean, reviewed HEAD** that has the original packaging
    commit `740ab0c` as an ancestor and equals the recovery commit; the tracked
-   tree must be clean.
+   tree must be clean. From a non-login Unicorn shell the Slurm client is not on
+   `PATH` (this is what caused the pre-claim `squeue` failure), so export it
+   before the quiescence checks run:
+
+   ```bash
+   export PATH="/usr/local/slurm/current/bin:$PATH"
+   ```
 3. The recovery command **re-verifies** the immutable original claim (regular,
    single-link, exact schema/SHA/commit/launch identities/source digest),
    **re-checks** that the live raw tree still exactly matches that claim before
