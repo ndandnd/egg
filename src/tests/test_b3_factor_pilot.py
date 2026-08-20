@@ -7,7 +7,9 @@ analyzer (``experiments.analyze_b3_factor_pilot``) with adversarial tamper
 cases, plus the protected-A6-file zero-drift gate. No optimizer is invoked
 and no outcome artifact is generated: cells are synthetic fixtures.
 """
+import copy
 import json
+import math
 import os
 import subprocess
 import sys
@@ -50,16 +52,37 @@ MIP_GAP = bp.MIP_GAP_DEFAULT
 
 def _cg_ckpt(ihash, mhash, z_d_ub, ub_ch=100.0, lb_best=100.0, certified=True,
              method="a2", eps=bp.EPSILON):
-    """A complete, ``_cg_sane``-passing A2 checkpoint bound to ``ihash`` /
-    ``mhash`` with the CG->dictator ``z_d_ub`` recorded in identity."""
-    calls = 3
-    oe = [{"extra": {"call_id": f"a2-oc{i}"},
-           "solver": {"status": "OPTIMAL"}, "replay_ok": True}
-          for i in range(calls)]
-    it = [{"iteration_id": i, "pricing_solve_id": f"a2-oc{i + 1}"}
-          for i in range(calls - 1)]
-    ub = [ub_ch + 2.0, ub_ch + 1.0, ub_ch]
-    lb = [lb_best - 1.0, lb_best - 0.5, lb_best]
+    """A complete, ``_cg_sane``-passing, REPLAY-CONSISTENT A2 checkpoint:
+    every recorded bound-history entry, ``lb_ch``, ``lb_best``, and outcome
+    field is reproducible from the chronological oracle/iteration event
+    evidence (``lb_ch = z_rmp + min(0, bound - sigma)``), exactly as the
+    production driver commits them."""
+    sigma = 10.0
+    # (ub of the iteration's RMP, its z_rmp_model, the lb it certifies)
+    plan = [(ub_ch + 1.0, ub_ch + 1.0, lb_best - 1.0),
+            (ub_ch, ub_ch, lb_best)]
+    # seed call (chronologically first, referenced by no iteration event)
+    oe = [{"extra": {"call_id": "a2-oc0"},
+           "solver": {"status": "OPTIMAL"}, "replay_ok": True}]
+    it, ub_hist, lb_hist = [], [], []
+    lbb = -math.inf
+    for i, (ub, z_rmp, lb_target) in enumerate(plan):
+        call_id = f"a2-oc{i + 1}"
+        rc = lb_target - z_rmp        # <= 0, so lb_ch == lb_target exactly
+        oe.append({"extra": {"call_id": call_id,
+                             "min_reduced_cost_lb": rc},
+                   "solver": {"status": "OPTIMAL", "bound": sigma + rc},
+                   "replay_ok": True})
+        lb_ch = z_rmp + min(0.0, rc)
+        lbb = max(lbb, lb_ch)
+        it.append({"iteration_id": f"it{i}", "phase": "clean",
+                   "pricing_solve_id": call_id, "z_rmp_model": z_rmp,
+                   "duals_sigma": sigma, "min_reduced_cost_lb": rc,
+                   "lb_ch": lb_ch, "lb_best": lbb, "ub_ch": ub,
+                   "certificate_gap": ub - lbb})
+        ub_hist.append(ub)
+        lb_hist.append(lbb)
+    calls = len(oe)
     otype = "certified" if certified else "budget_exhausted"
     return {
         "done": True,
@@ -68,24 +91,32 @@ def _cg_ckpt(ihash, mhash, z_d_ub, ub_ch=100.0, lb_best=100.0, certified=True,
                      "market_hash": mhash, "z_d_ub": z_d_ub,
                      "solver": {"backend": "GRB", "max_mip_gap": MIP_GAP}},
         "oracle_calls": calls, "oracle_events": oe, "iteration_events": it,
-        "ub_history": ub, "lb_history": lb, "lb_best": lb_best,
-        "outcome": {"type": otype, "ub_ch": ub_ch, "lb_best": lb_best,
-                    "gap": ub_ch - lb_best, "certified": certified,
+        "ub_history": ub_hist, "lb_history": lb_hist, "lb_best": lbb,
+        "outcome": {"type": otype, "ub_ch": ub_ch, "lb_best": lbb,
+                    "gap": ub_ch - lbb, "certified": certified,
                     "oracle_calls": calls, "method": method},
     }
 
 
 def _dict_ckpt(ihash, mhash, screen_sha, setting, manifest_sha, z_d_ub, z_d_lb,
                converged=True, status="OPTIMAL"):
+    """A complete dictator checkpoint mirroring the production driver:
+    adaptive endpoints and gap, the committed replay-valid record, and the
+    manifest-bound solver identity."""
     return {
         "identity": {"instance_hash": ihash, "market_hash": mhash,
                      "screen_record_sha256": screen_sha,
                      "run_manifest_sha256": manifest_sha,
                      "run_commit": RUN_COMMIT, "setting": setting,
-                     "tol_d": bp.TOL_D, "experiment": "b3-factor-pilot"},
+                     "tol_d": bp.TOL_D, "experiment": "b3-factor-pilot",
+                     "solver": {"backend": "GRB", "max_mip_gap": MIP_GAP,
+                                "time_limit_s": None}},
         "z_d_ub": z_d_ub, "z_d_lb": z_d_lb, "tol_d": bp.TOL_D,
         "status": status,
-        "adaptive": {"adaptive_converged": converged, "adaptive_lb": z_d_lb},
+        "adaptive": {"adaptive_converged": converged,
+                     "adaptive_lb": z_d_lb, "adaptive_ub": z_d_ub,
+                     "adaptive_gap_abs": z_d_ub - z_d_lb},
+        "record": {"replay_ok": True, "replay_violations": []},
     }
 
 
@@ -632,6 +663,189 @@ def test_decision_wrong_direction_no_go_selected():
     assert dec["selected_contrast"] == "S2_batt_high"
     assert dec["state"] == "NO-GO" and dec["count"] == 0
     assert dec["signed_median_midpoint"] < -az.TAU_DELTA
+
+
+# --------------------------------------------------------------------------
+# evidence replay: bounds are replayed from chronological events, never
+# read from stored summary fields (review-reproduction regressions)
+# --------------------------------------------------------------------------
+def _analyze_decision(runs, out, stamp="sX", screen_dir=None):
+    outdir = az.analyze(runs, out, stamp, "0" * 40, screen_dir=screen_dir,
+                        verify_code_commit=False)
+    return json.loads((Path(outdir) / "MANIFEST.json").read_text())[
+        "decision"]
+
+
+def test_exploit_ch_history_edit_with_unchanged_solver_evidence(
+        tmp_path, screen):
+    """Review reproduction: fabricate a 12/12 median-0.12 GO for S1 by
+    shifting the CH histories, iteration bound fields, and outcome down
+    while the ORACLE SOLVER EVIDENCE is unchanged.  The audit's coherence
+    battery passes; the analyzer's event replay must refuse."""
+    runs = _write_tree(tmp_path / "runs", screen)  # uniform 0.5 everywhere
+
+    def shift(ck, d=0.12):
+        ck["ub_history"] = [u - d for u in ck["ub_history"]]
+        ck["lb_history"] = [x - d for x in ck["lb_history"]]
+        ck["lb_best"] -= d
+        ck["outcome"]["ub_ch"] -= d
+        ck["outcome"]["lb_best"] -= d
+        for it in ck["iteration_events"]:
+            it["ub_ch"] -= d
+            it["lb_ch"] -= d
+            it["lb_best"] -= d
+    for cell in bp.build_cells():
+        if cell["setting"] == "S1_batt_low":
+            _mutate_cg(runs, cell["tag"], shift)
+    # the coherence audit alone does NOT catch this forgery
+    assert ad.audit(runs, screen_dir=None)["ok"]
+    decision = _analyze_decision(runs, tmp_path / "out")
+    assert decision["state"] == "INVALID/HALT"
+    assert any("!= replayed" in p or "history edited" in p
+               for p in decision["problems"])
+
+
+def test_exploit_single_history_entry_edit(tmp_path, screen):
+    runs = _write_tree(tmp_path / "runs", screen)
+    tag = bp.build_cells()[0]["tag"]
+    _mutate_cg(runs, tag,
+               lambda ck: ck["lb_history"].__setitem__(0, 42.0))
+    decision = _analyze_decision(runs, tmp_path / "out")
+    assert decision["state"] == "INVALID/HALT"
+    assert any("CH history edited" in p for p in decision["problems"])
+
+
+def test_exploit_oracle_event_dropped_or_reordered(tmp_path, screen):
+    runs = _write_tree(tmp_path / "runs", screen)
+    tags = [c["tag"] for c in bp.build_cells()[:2]]
+    _mutate_cg(runs, tags[0],
+               lambda ck: ck.update(
+                   oracle_events=ck["oracle_events"][:-1],
+                   oracle_calls=len(ck["oracle_events"]) - 1))
+    _mutate_cg(runs, tags[1],
+               lambda ck: ck.update(
+                   oracle_events=list(reversed(ck["oracle_events"]))))
+    decision = _analyze_decision(runs, tmp_path / "out")
+    assert decision["state"] == "INVALID/HALT"
+
+
+@pytest.mark.parametrize("forgery,needle", [
+    ("gap", "recomputed dictator gap"),
+    ("gap_abs", "inconsistent with endpoints"),
+    ("record_invalid", "record replay invalid"),
+    ("record_missing", "record replay invalid"),
+    ("violations", "replay violations"),
+    ("solver", "dictator solver identity"),
+])
+def test_exploit_dictator_certificate_forgeries(tmp_path, screen, forgery,
+                                                needle):
+    """adaptive_converged alone is never trusted: the dictator certificate
+    is recomputed from endpoints, the committed record must be
+    replay-valid, and the solver identity must match the run manifest."""
+    runs = _write_tree(tmp_path / "runs", screen)
+    tag = bp.build_cells()[0]["tag"]
+
+    def forge(dd):
+        if forgery == "gap":
+            # widen the certified gap beyond tol_d while keeping every
+            # stored consistency field agreeing and the flag True
+            dd["z_d_lb"] -= 0.02
+            dd["adaptive"]["adaptive_lb"] = dd["z_d_lb"]
+            dd["adaptive"]["adaptive_gap_abs"] = (
+                dd["z_d_ub"] - dd["z_d_lb"])
+            assert dd["adaptive"]["adaptive_converged"] is True
+        elif forgery == "gap_abs":
+            dd["adaptive"]["adaptive_gap_abs"] = 0.005
+        elif forgery == "record_invalid":
+            dd["record"]["replay_ok"] = False
+        elif forgery == "record_missing":
+            dd.pop("record")
+        elif forgery == "violations":
+            dd["record"]["replay_violations"] = ["load drift"]
+        elif forgery == "solver":
+            dd["identity"]["solver"]["backend"] = "CBC"
+    _mutate_dict(runs, tag, forge)
+    decision = _analyze_decision(runs, tmp_path / "out")
+    assert decision["state"] == "INVALID/HALT"
+    assert any(needle in p for p in decision["problems"]), decision[
+        "problems"]
+
+
+def test_exploit_budget_exceeded_refused(tmp_path, screen):
+    """A replay-consistent event stream that exceeds the frozen oracle
+    budget (240) is INVALID/HALT — never a scored cell."""
+    runs = _write_tree(tmp_path / "runs", screen)
+    tag = bp.build_cells()[0]["tag"]
+
+    def extend(ck):
+        last_it = ck["iteration_events"][-1]
+        for j in range(bp.BUDGET):
+            call_id = f"a2-ocx{j}"
+            event = copy.deepcopy(ck["oracle_events"][-1])
+            event["extra"]["call_id"] = call_id
+            ck["oracle_events"].append(event)
+            it = dict(last_it)
+            it["pricing_solve_id"] = call_id
+            it["iteration_id"] = f"itx{j}"
+            ck["iteration_events"].append(it)
+            ck["ub_history"].append(it["ub_ch"])
+            ck["lb_history"].append(it["lb_best"])
+        ck["oracle_calls"] = len(ck["oracle_events"])
+        ck["outcome"]["oracle_calls"] = ck["oracle_calls"]
+    _mutate_cg(runs, tag, extend)
+    decision = _analyze_decision(runs, tmp_path / "out")
+    assert decision["state"] == "INVALID/HALT"
+    assert any("exceeds the frozen budget" in p
+               for p in decision["problems"]), decision["problems"]
+
+
+def test_impossible_tightened_interval_is_invalid_halt(tmp_path, screen):
+    """U_hi in [-1e-6, 0): the theorem-tightened interval [0, U_hi] is
+    impossible (lo > hi) and must be INVALID/HALT, never emitted."""
+    u = {s: 0.5 for s in bp.SETTING_ORDER}
+    u["S4_pow_high"] = -5e-7
+    runs = _write_tree(tmp_path / "runs", screen, u_by_setting=u)
+    decision = _analyze_decision(runs, tmp_path / "out")
+    assert decision["state"] == "INVALID/HALT"
+    assert any("impossible tightened interval" in p
+               for p in decision["problems"]), decision["problems"]
+
+
+def test_malformed_checkpoint_is_structured_invalid_halt(tmp_path, screen):
+    runs = _write_tree(tmp_path / "runs", screen)
+    tag = bp.build_cells()[0]["tag"]
+    (Path(runs) / tag / "a2.cg.ckpt.json").write_text("{not json")
+    decision = _analyze_decision(runs, tmp_path / "out")  # must not raise
+    assert decision["state"] == "INVALID/HALT"
+    assert decision["problems"]
+
+
+def test_screen_override_marks_artifact_non_scoreable(tmp_path):
+    """--screen-dir cannot bypass the frozen screen SHA: a drifted screen
+    yields frozen_screen_verified=false and the selector refuses it."""
+    dst = _screen_copy(tmp_path, mutate=lambda r, m: (
+        {**r, "synthetic_note": "test-only screen"}, m))
+    screen2 = bp.load_frozen_screen(dst)
+    assert screen2["record_sha256"] != bp.FROZEN_SCREEN_RECORD_SHA256
+    u = {s: 0.5 for s in bp.SETTING_ORDER}
+    u["S1_batt_low"] = 0.6
+    runs = _write_tree(tmp_path / "runs", screen2, u_by_setting=u)
+    from unittest import mock
+    head = subprocess.check_output(
+        ["git", "rev-parse", "HEAD"], cwd=bp.REPO_ROOT).decode().strip()
+    with mock.patch.object(az, "verify_analysis_code_commit",
+                           return_value=True):
+        out = az.analyze(runs, tmp_path / "out", "sN", head,
+                         screen_dir=dst, verify_code_commit=True)
+    manifest = json.loads((Path(out) / "MANIFEST.json").read_text())
+    assert manifest["decision"]["state"] == "GO"
+    assert manifest["frozen_screen_verified"] is False
+    decision = json.loads((Path(out) / "DECISION.json").read_text())
+    assert decision["frozen_screen_verified"] is False
+    import experiments.select_b3_confirmation as sel
+    with pytest.raises(sel.B3SelectionError, match="frozen screen"):
+        sel.select(out, tmp_path / "sel", head, verify_code_commit=False)
+    assert not (tmp_path / "sel").exists()
 
 
 # --------------------------------------------------------------------------

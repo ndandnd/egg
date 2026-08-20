@@ -69,12 +69,29 @@ def test_artifact_contents_counts_and_cross_binding(tmp_path, screen):
         for field in ("instance_hash", "market_hash", "z_d_lb", "z_d_ub",
                       "lb_ch", "ub_ch", "u_lo_raw", "u_lo_tightened",
                       "u_hi", "width", "u_lo_raw_per_trip",
-                      "u_hi_per_trip", "lo_endpoint_source",
-                      "oracle_calls", "solver_backend", "solver_mip_gap"):
+                      "u_hi_per_trip", "cost_fraction_lo",
+                      "cost_fraction_hi", "dictator_gap", "ch_gap",
+                      "lo_endpoint_source", "oracle_calls",
+                      "solver_backend", "solver_mip_gap"):
             assert row[field] != "", field
         assert row["lo_endpoint_source"] == "z_D_lb"
         assert float(row["u_lo_tightened"]) == max(
             0.0, float(row["u_lo_raw"]))
+        # spec 1.1/7 evidence: cost-fraction endpoints and BOTH
+        # certificate gaps are emitted per cell
+        assert float(row["dictator_gap"]) == (
+            float(row["z_d_ub"]) - float(row["z_d_lb"]))
+        assert float(row["ch_gap"]) == (
+            float(row["ub_ch"]) - float(row["lb_ch"]))
+        assert float(row["cost_fraction_lo"]) == (
+            float(row["u_lo_tightened"]) / float(row["ub_ch"]))
+        assert float(row["cost_fraction_hi"]) == (
+            float(row["u_hi"]) / float(row["lb_ch"]))
+        # the solver gap field is the run manifest's BOUND value, not an
+        # unbound checkpoint field
+        assert row["solver_backend"] == "GRB"
+        assert float(row["solver_mip_gap"]) == bp.MIP_GAP_DEFAULT
+        assert int(row["oracle_calls"]) <= bp.BUDGET
     contrasts = list(csv.DictReader(open(out / "matched_contrasts.csv")))
     assert len(contrasts) == 48
     summary = list(csv.DictReader(open(out / "setting_summary.csv")))
@@ -93,6 +110,8 @@ def test_artifact_contents_counts_and_cross_binding(tmp_path, screen):
     assert decision["analysis_code_commit"] == CODE
     assert decision["inputs"]["run_manifest_sha256"]
     manifest = json.loads((out / "MANIFEST.json").read_text())
+    assert manifest["analysis_code_verified"] is True
+    assert manifest["frozen_screen_verified"] is True
     assert manifest["table_rows"] == {
         "cell_intervals.csv": 60, "matched_contrasts.csv": 48,
         "setting_summary.csv": 4}
