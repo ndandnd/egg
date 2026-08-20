@@ -2131,10 +2131,12 @@ def test_coordinated_pricing_bound_above_incumbents_halts(
     # campaign still HALTs with nothing scored. The analyzer's own dedicated
     # rejections ("solver obj mismatch" / "solver bound exceeds model
     # incumbent") remain and are covered by the direct-call EI-026 regressions.
-    expected = ("pricing bound exceeds physical incumbent"
-                if coordinate_solver_obj else
-                "pricing bound exceeds model incumbent")
-    with pytest.raises(AnalysisError, match=expected):
+    # The inflated bound is caught at the AUDIT stage via the ONE shared
+    # conservative-certificate helper (EI-026 parity); the campaign HALTs with
+    # nothing scored. The analyzer's own dedicated rejections remain and are
+    # covered by the direct-call EI-026 regressions.
+    with pytest.raises(AnalysisError,
+                       match="bound exceeds an incumbent beyond the operand"):
         _mini_analyze(str(bad), preflight, tmp_path / "out-pricing-bound-order")
 
 
@@ -2605,15 +2607,14 @@ def test_ei026_conservative_safe_chain_certifies_or_fails_honestly():
     cert = mod._replay_cg_certificate_evidence(ck, "safe-ok")
     assert cert["certified"] is True
     assert cert["safe_certificate_gap"] <= 0.01 + 1e-9
-    # boundary: gap == epsilon exactly, so the reduced bound pushes the safe
-    # certificate just over epsilon -> honest conservative failure
+    # boundary: raw gap == epsilon exactly, so the reduced bound pushes the
+    # conservative gap over epsilon -> raw and conservative chains disagree on
+    # certification, a hard rejection (no CONSERVATIVE_CERT_TOL slack).
     scale = 1.0e7
-    tau = 1e-10 * scale                       # ~1e-3
     bound = scale
-    # choose sigma so min_rc_lb = -epsilon exactly: gap == epsilon at the edge
     ck2 = _pricing_order_ck(bound, bound, bound, sigma=bound + 0.01,
                             z_model=bound, epsilon=0.01)
-    with pytest.raises(AnalysisError, match="conservative safety certificate"):
+    with pytest.raises(AnalysisError, match="disagree on certification"):
         mod._replay_cg_certificate_evidence(ck2, "safe-boundary")
 
 
@@ -2634,8 +2635,10 @@ def test_ei026_audit_analyzer_parity_generic_pricing_order():
     tau = 1e-10 * 100.0
     bad = _pricing_order_ck(bound + 100.0 * tau, bound, bound)
     audit_errs = audit_mod._cg_sane(json.loads(json.dumps(bad)))
-    assert any("pricing bound exceeds" in e for e in audit_errs)
-    with pytest.raises(AnalysisError, match="exceeds (model|physical) incumbent"):
+    assert any("bound exceeds an incumbent beyond the operand" in e
+               for e in audit_errs)
+    with pytest.raises(AnalysisError,
+                       match="exceeds (model|physical) incumbent|bound exceeds an incumbent"):
         mod._replay_cg_certificate_evidence(bad, "parity-bad")
 
 
@@ -2648,3 +2651,54 @@ def test_ei026_inflated_bound_beyond_tolerance_still_rejected():
     ck = _pricing_order_ck(bound + 100.0 * tau, bound, bound)
     with pytest.raises(AnalysisError, match="exceeds (model|physical) incumbent"):
         mod._replay_cg_certificate_evidence(ck, "inflated")
+
+
+def _raw_only_ck(scale, epsilon=0.01):
+    """A certificate that holds on the RAW bound but not on the reduced bound:
+    raw gap just under epsilon by less than tau, so the conservative gap crosses
+    epsilon (an EI-026 raw-only certificate)."""
+    tau = 1e-10 * scale
+    bound = scale
+    sigma = bound + epsilon - 0.4 * tau      # raw gap = epsilon - 0.4*tau
+    return _pricing_order_ck(bound, bound, bound, sigma=sigma, z_model=bound,
+                             epsilon=epsilon)
+
+
+def test_ei026_raw_only_certificate_rejected_scale5():
+    """scale=5: raw gap <= epsilon but conservative gap > epsilon must reject."""
+    ck = _raw_only_ck(5.0)
+    with pytest.raises(AnalysisError, match="disagree on certification"):
+        mod._replay_cg_certificate_evidence(ck, "raw-only-5")
+
+
+def test_ei026_raw_only_certificate_rejected_audit_and_analyzer_scale1e7():
+    """scale=1e7: the audit and analyzer must BOTH reject the same raw-only
+    certificate via the one shared conservative replay."""
+    import experiments.audit_runs as audit_mod
+    ck = _raw_only_ck(1.0e7)
+    errs = audit_mod._cg_sane(json.loads(json.dumps(ck)))
+    assert any("disagree on certification" in e for e in errs)
+    with pytest.raises(AnalysisError, match="disagree on certification"):
+        mod._replay_cg_certificate_evidence(ck, "raw-only-1e7")
+
+
+def test_ei026_csv_uses_conservative_claim_bearing_values(mini_root, tmp_path):
+    """Claim-bearing CSV fields use the conservative values while raw_* fields
+    preserve the producer history."""
+    import csv as _csv
+    source, preflight = mini_root
+    out = tmp_path / "claim-out"
+    _mini_analyze(str(source), preflight, out)
+    rows = list(_csv.DictReader(open(out / "TESTSTAMP" / "cells.csv")))
+    assert rows
+    for r in rows:
+        for col in ("raw_lb_best", "raw_final_gap", "raw_uplift_lo",
+                    "raw_uplift_hi", "raw_uplift_width", "raw_zd_minus_lb"):
+            assert col in r, col
+        # claim-bearing lb_best is the conservative (<= raw) lower bound
+        assert float(r["lb_best"]) <= float(r["raw_lb_best"]) + 1e-12
+        # conservative uplift_hi / final_gap are >= their raw counterparts
+        assert float(r["uplift_hi"]) >= float(r["raw_uplift_hi"]) - 1e-12
+        assert float(r["final_gap"]) >= float(r["raw_final_gap"]) - 1e-12
+        # zd_minus_lb uses the smaller conservative LB, so it is >= raw
+        assert float(r["zd_minus_lb"]) >= float(r["raw_zd_minus_lb"]) - 1e-12

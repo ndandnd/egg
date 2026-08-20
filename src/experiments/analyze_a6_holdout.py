@@ -111,7 +111,10 @@ CLOSEOUT_CLAIM_SCHEMA = "a6-holdout-closeout-claim-v1"
 IMPORT_LOCK_FILENAME = ".a6_holdout.import-lock"
 ANALYSIS_CLAIM_SCHEMA = "a6-holdout-analysis-claim-v1"
 ANALYSIS_CLAIM_FILENAME = "a6_holdout.ANALYSIS_CLAIM.json"
-CLOSEOUT_SCHEMA = "a6-holdout-closeout-v2"
+# v3 makes the CONSERVATIVE (reduced-bound) certificate values claim-bearing
+# in every output; producer/raw values are preserved under raw_* columns
+# (EI-026 Task A.7).
+CLOSEOUT_SCHEMA = "a6-holdout-closeout-v3-conservative"
 MASTER_FW_TOL = 1e-6
 EVIDENCE_LIMITATIONS = (
     "Launch-era clean-master lambdas, aggregate load, and link duals were "
@@ -1250,11 +1253,163 @@ def _ordering_tolerance(*operands: float) -> float:
     return 1e-10 * scale
 
 
-# A tiny, operand-independent serialization slack for the conservative
-# safety-certificate comparison (well below any operand-scaled ordering
-# tolerance); it absorbs float round-off without masking a real dependence on
-# the operand-scale slack.
-CONSERVATIVE_CERT_TOL = 1e-9
+def conservative_certificate(ck: dict) -> dict:
+    """ONE pure raw+conservative certificate replay, used by BOTH the audit
+    (``_cg_sane``) and the production analyzer.
+
+    For every clean pricing call it replays two lower-bound chains from the
+    committed events:
+
+    - the RAW chain from the recorded certified bound
+      (``lb_ch = z_rmp + min(0, bound - sigma)``); and
+    - a CONSERVATIVE chain from an explicitly reduced bound
+      (``safe_bound = bound - tau``; ``safe_lb_ch = z_rmp +
+      min(0, safe_bound - sigma)``), where ``tau`` is the single operand-scale
+      tolerance ``1e-10 * max(1, |bound|, |model_incumbent|,
+      |physical_incumbent|)``.
+
+    It returns both certification decisions plus the conservative
+    (claim-bearing) bounds and histories.  Certification MUST agree between the
+    two chains: a raw-only certificate (``raw_gap <= epsilon`` while
+    ``safe_gap > epsilon``), or a first-certificate-call that differs between
+    the chains, is a hard rejection (recorded in ``errors``).  A safe gap above
+    epsilon is never called certified.  This function does not raise; callers
+    surface ``errors``.
+    """
+    errors: list[str] = []
+
+    def fail(msg: str) -> dict:
+        errors.append(msg)
+        return {"errors": errors, "evaluable": True, "raw": None,
+                "safe": None}
+
+    def fin(x) -> bool:
+        return (isinstance(x, (int, float)) and not isinstance(x, bool)
+                and math.isfinite(x))
+
+    identity = ck.get("identity") or {}
+    epsilon = identity.get("epsilon")
+    budget = identity.get("budget")
+    if not fin(epsilon) or epsilon < 0:
+        return fail("conservative certificate: invalid epsilon")
+    method = identity.get("method", "a2")
+    calls = ck.get("oracle_calls")
+    events = ck.get("oracle_events")
+    iterations = ck.get("iteration_events")
+    if (not isinstance(calls, int) or isinstance(calls, bool)
+            or not isinstance(events, list) or len(events) != calls
+            or not isinstance(iterations, list)):
+        return fail("conservative certificate: malformed event cardinality")
+
+    terminal = [e for e in iterations if isinstance(e, dict)
+                and e.get("terminal") is True]
+    priced = [e for e in iterations if not (isinstance(e, dict)
+              and e.get("terminal") is True)]
+    if len(terminal) > 1 or len(priced) != calls - 1:
+        return fail("conservative certificate: iteration cardinality mismatch")
+
+    # Evaluability: the conservative chain needs the certified bound and BOTH
+    # incumbents for every clean call.  Incomplete fixtures (e.g. a6 synthetic
+    # recovery-replay cells without solver.obj/obj_true) are not evaluated by
+    # this pricing-order chain; production cells always carry full evidence.
+    def _clean_complete(event, oracle):
+        solver = (oracle or {}).get("solver") or {}
+        return all(fin(v) for v in (
+            event.get("z_rmp_model"), event.get("duals_sigma"),
+            solver.get("bound"), solver.get("obj"),
+            (oracle or {}).get("obj_true")))
+
+    method0 = method
+    for oracle_call, event in enumerate(priced, start=1):
+        if not isinstance(event, dict):
+            return fail("conservative certificate: malformed priced event")
+        clean = (method0 == "a2") or event.get("call_kind") == "clean"
+        oracle = events[oracle_call] if oracle_call < len(events) else None
+        if clean and not _clean_complete(event, oracle):
+            return {"errors": [], "evaluable": False,
+                    "raw": None, "safe": None}
+
+    raw_lb_best = -math.inf
+    safe_lb_best = -math.inf
+    raw_first = None
+    safe_first = None
+    raw_ub_history: list[float] = []
+    safe_lb_history: list[float] = []
+
+    for oracle_call, event in enumerate(priced, start=1):
+        if not isinstance(event, dict):
+            return fail("conservative certificate: malformed priced event")
+        oracle = events[oracle_call] if oracle_call < len(events) else None
+        clean = (method == "a2") or event.get("call_kind") == "clean"
+        ub = event.get("ub_ch")
+        if not fin(ub):
+            return fail(
+                f"conservative certificate: iteration {oracle_call} ub_ch "
+                "is not finite")
+        if clean:
+            z_model = event.get("z_rmp_model")
+            sigma = event.get("duals_sigma")
+            solver = (oracle or {}).get("solver") or {}
+            bound = solver.get("bound")
+            model = solver.get("obj")
+            phys = (oracle or {}).get("obj_true")
+            if not all(fin(v) for v in (z_model, sigma, bound, model, phys)):
+                return fail(
+                    f"conservative certificate: iteration {oracle_call} clean "
+                    "bound evidence is not finite")
+            tau = _ordering_tolerance(bound, model, phys)
+            if bound - model > tau or bound - phys > tau:
+                return fail(
+                    f"conservative certificate: iteration {oracle_call} bound "
+                    "exceeds an incumbent beyond the operand tolerance")
+            raw_lb_best = max(raw_lb_best, z_model + min(0.0, bound - sigma))
+            safe_lb_best = max(
+                safe_lb_best, z_model + min(0.0, (bound - tau) - sigma))
+        raw_ub_history.append(ub)
+        safe_lb_history.append(safe_lb_best)
+        if clean and raw_first is None and (ub - raw_lb_best) <= epsilon:
+            raw_first = oracle_call + 1
+        if clean and safe_first is None and (ub - safe_lb_best) <= epsilon:
+            safe_first = oracle_call + 1
+
+    if terminal:
+        ub = terminal[0].get("ub_ch")
+        if not fin(ub):
+            return fail("conservative certificate: terminal ub_ch not finite")
+        raw_ub_history.append(ub)
+        safe_lb_history.append(safe_lb_best)
+        if raw_first is None and (ub - raw_lb_best) <= epsilon:
+            raw_first = calls
+        if safe_first is None and (ub - safe_lb_best) <= epsilon:
+            safe_first = calls
+        final_ub = ub
+    else:
+        final_ub = raw_ub_history[-1] if raw_ub_history else math.inf
+
+    raw_gap = final_ub - raw_lb_best
+    safe_gap = final_ub - safe_lb_best
+    raw_certified = bool(raw_gap <= epsilon)
+    safe_certified = bool(safe_gap <= epsilon)
+    # The conservative and raw chains MUST agree on certification and on the
+    # first certificate call; disagreement is the EI-026 raw-only certificate.
+    if safe_certified != raw_certified:
+        return fail(
+            "conservative certificate: raw and conservative chains disagree "
+            f"on certification (raw_gap={raw_gap!r}, safe_gap={safe_gap!r}, "
+            f"epsilon={epsilon!r})")
+    if safe_first != raw_first:
+        return fail(
+            "conservative certificate: raw and conservative chains disagree "
+            f"on the first certificate call ({raw_first!r} vs {safe_first!r})")
+    return {
+        "errors": errors,
+        "evaluable": True,
+        "raw": {"certified": raw_certified, "first_call": raw_first,
+                "lb_best": raw_lb_best, "gap": raw_gap, "ub": final_ub},
+        "safe": {"certified": safe_certified, "first_call": safe_first,
+                 "lb_best": safe_lb_best, "gap": safe_gap, "ub": final_ub,
+                 "lb_history": safe_lb_history, "ub_history": raw_ub_history},
+    }
 
 
 def _finite_vector(value, n_slots: int, label: str) -> list[float]:
@@ -1680,12 +1835,6 @@ def _replay_cg_certificate_evidence(ck: dict, label: str) -> dict:
     lb_best = -float("inf")
     first_certificate_call = None
     previous_ub = float("inf")
-    # ---- parallel CONSERVATIVE safety chain (kept SEPARATE from the
-    # producer-trace replay above): a second LB chain built from an explicitly
-    # reduced pricing bound (bound - operand_tau) so a certificate can never
-    # depend on the operand-scale ordering slack (EI-026, Task A point 5/6).
-    safe_lb_best = -float("inf")
-    safe_slack = 0.0
     min_raw_pricing_gap = float("inf")
     min_pricing_gap_diag = float("inf")
     for oracle_call, event in enumerate(priced, start=1):
@@ -1805,12 +1954,6 @@ def _replay_cg_certificate_evidence(ck: dict, label: str) -> dict:
             lb_best = max(lb_best, lb_ch)
             _require_evidence_close(
                 event.get("lb_best"), lb_best, f"{elabel} lb_best")
-            # ---- conservative safety chain (separate; reduced bound) --------
-            safe_bound = pricing_bound - order_tau
-            safe_min_rc_lb = safe_bound - sigma
-            safe_lb_ch = z_model + min(0.0, safe_min_rc_lb)
-            safe_lb_best = max(safe_lb_best, safe_lb_ch)
-            safe_slack = max(safe_slack, order_tau)
         if ub > previous_ub + TOL_MONO:
             raise AnalysisError(f"{elabel}: UB history is not monotone")
         gap = ub - lb_best
@@ -1825,13 +1968,6 @@ def _replay_cg_certificate_evidence(ck: dict, label: str) -> dict:
             if oracle_call != calls - 1 or terminal:
                 raise AnalysisError(
                     f"{elabel}: trace continues after first certificate")
-            # the certificate must survive the conservative (reduced-bound)
-            # safety chain: it may not depend on the operand-scale slack.
-            if ub - safe_lb_best > epsilon + CONSERVATIVE_CERT_TOL:
-                raise AnalysisError(
-                    f"{elabel}: conservative safety certificate "
-                    f"{ub - safe_lb_best!r} exceeds epsilon {epsilon!r} "
-                    "(certificate depends on operand-scale slack)")
 
     if terminal:
         event = terminal[0]
@@ -1855,11 +1991,6 @@ def _replay_cg_certificate_evidence(ck: dict, label: str) -> dict:
         lb_history.append(lb_best)
         if gap <= epsilon:
             first_certificate_call = calls
-            if ub - safe_lb_best > epsilon + CONSERVATIVE_CERT_TOL:
-                raise AnalysisError(
-                    f"{elabel}: conservative safety certificate "
-                    f"{ub - safe_lb_best!r} exceeds epsilon {epsilon!r} "
-                    "(certificate depends on operand-scale slack)")
         expected_type = "budget_exhausted"
     else:
         ub = ub_history[-1]
@@ -1910,23 +2041,45 @@ def _replay_cg_certificate_evidence(ck: dict, label: str) -> dict:
         _final_state, replay_errors = replay_a6_recovery(ck)
         if replay_errors:
             raise AnalysisError(f"{label}: {replay_errors[0]}")
+
+    # ONE shared conservative-and-raw certificate replay (also run by the
+    # audit): certification must AGREE between the raw and reduced-bound
+    # chains, and the reduced-bound (conservative) values are claim-bearing.
+    cc = conservative_certificate(ck)
+    if cc["errors"]:
+        raise AnalysisError(f"{label}: {cc['errors'][0]}")
+    if not cc.get("evaluable"):
+        raise AnalysisError(
+            f"{label}: conservative certificate is not evaluable "
+            "(incomplete pricing evidence for a production cell)")
+    if (cc["raw"]["certified"] != expected_certified
+            or cc["raw"]["first_call"] != first_certificate_call):
+        raise AnalysisError(
+            f"{label}: raw certificate decision diverges from the shared "
+            "conservative replay")
+    safe = cc["safe"]
+    # the conservative certificate is the claim-bearing certificate; because
+    # certification must agree, `certified` is unambiguous.
     score = (first_certificate_call if expected_certified
              else BUDGET_EXHAUSTED_SCORE)
     return {
         "ub_history": ub_history,
         "lb_history": lb_history,
         "ub_ch": ub,
-        "lb_best": lb_best,
-        "gap": gap,
+        # claim-bearing (conservative) lower bound and gap
+        "lb_best": safe["lb_best"],
+        "gap": safe["gap"],
         "certified": expected_certified,
         "outcome_type": expected_type,
         "first_certificate_call": first_certificate_call,
         "score": score,
-        # conservative safety chain (reduced-bound) — separate evidence
-        "safe_lb_best": safe_lb_best,
-        "safe_certificate_gap": (ub - safe_lb_best),
-        "safe_slack": safe_slack,
-        # raw preserved, plus the zero-normalized diagnostic
+        # conservative claim-bearing chain
+        "safe_lb_best": safe["lb_best"],
+        "safe_certificate_gap": safe["gap"],
+        "safe_lb_history": safe["lb_history"],
+        # producer/raw values preserved for disclosure
+        "raw_lb_best": lb_best,
+        "raw_gap": gap,
         "min_raw_pricing_gap": (
             None if min_raw_pricing_gap == float("inf")
             else min_raw_pricing_gap),
@@ -2090,9 +2243,9 @@ def _validate_clean_bound_safety(
                 event.get("certificate_gap"),
                 f"{label} terminal certificate_gap")
             if terminal_gap <= EPSILON:
-                lb_best = _finite_evidence_number(
-                    event.get("lb_best"), f"{label} terminal lb_best")
-                safe_gap = bounds["upper_bound"] - lb_best
+                # A6: the backstop certificate uses the CONSERVATIVE lower
+                # bound, so it cannot rely on the operand-scale slack.
+                safe_gap = bounds["upper_bound"] - certificate["safe_lb_best"]
                 if safe_gap > EPSILON + _evidence_abs_tolerance(
                         safe_gap, EPSILON, MASTER_FW_TOL):
                     raise AnalysisError(
@@ -2148,9 +2301,8 @@ def _validate_clean_bound_safety(
                 event.get("certificate_gap"),
                 f"{elabel} certificate_gap")
             if certificate_gap <= EPSILON:
-                lb_best = _finite_evidence_number(
-                    event.get("lb_best"), f"{elabel} lb_best")
-                safe_gap = bounds["upper_bound"] - lb_best
+                # A6: independent-master certificate uses the CONSERVATIVE LB.
+                safe_gap = bounds["upper_bound"] - certificate["safe_lb_best"]
                 if safe_gap > EPSILON + _evidence_abs_tolerance(
                         safe_gap, EPSILON, MASTER_FW_TOL):
                     raise AnalysisError(
@@ -2828,7 +2980,8 @@ def extract_cell(d: str, method: str, seed: int, n: int, b: float) -> dict:
     ck = checkpoint.load(os.path.join(d, f"{method}.cg.ckpt.json"))
     dck = checkpoint.load(os.path.join(d, "dictator.ckpt.json"))
     label = f"{method} seed={seed} n={n} b={b}"
-    score = score_outcome(ck, label)
+    replay = _replay_cg_certificate_evidence(ck, label)
+    score = int(replay["score"])
     oc = ck["outcome"]
     events = ck["oracle_events"]
 
@@ -2917,6 +3070,19 @@ def extract_cell(d: str, method: str, seed: int, n: int, b: float) -> dict:
     if zd_margin < -1e-6:
         raise AnalysisError(
             f"{label}: LB_CH contradicts dictator interval; HALT-AND-DEBUG")
+    # ---- EI-026 claim-bearing (conservative) values ----------------------
+    # The conservative lower bound (reduced by the operand tolerance) is the
+    # claim-bearing lb_best; producer/raw values are preserved under raw_*.
+    safe_lb_best = replay["safe_lb_best"]
+    safe_final_gap = replay["safe_certificate_gap"]
+    safe_uplift_lo = uplift[0]                       # unchanged (uses ub_ch)
+    safe_uplift_hi = dck["z_d_ub"] - safe_lb_best    # wider than raw
+    safe_uplift_width = safe_uplift_hi - safe_uplift_lo
+    safe_zd_minus_lb = dck["z_d_ub"] + dck["tol_d"] - safe_lb_best
+    if safe_zd_minus_lb < -1e-6:
+        raise AnalysisError(
+            f"{label}: conservative LB contradicts dictator interval; "
+            "HALT-AND-DEBUG")
     dictator_wall = _finite_nonnegative(
         (dck.get("adaptive") or {}).get("adaptive_total_wall_s"),
         f"{label} dictator wall")
@@ -2946,15 +3112,21 @@ def extract_cell(d: str, method: str, seed: int, n: int, b: float) -> dict:
         "score": score, "oracle_calls": ck["oracle_calls"],
         "oracle_calls_clean": clean_calls,
         "oracle_calls_candidate": candidate_calls,
-        "final_gap": float(oc["gap"]), "lb_best": ck["lb_best"],
+        # claim-bearing (conservative) values
+        "final_gap": safe_final_gap, "lb_best": safe_lb_best,
         "ub_ch": oc["ub_ch"], "n_columns": len(ck["columns"]),
         "serious_steps": serious, "null_steps": null,
         "wall_clean_s": wall_clean, "wall_candidate_s": wall_candidate,
         "total_solver_wall_s": wall_total,
         "dictator_wall_s": dictator_wall,
-        "uplift_lo": uplift[0], "uplift_hi": uplift[1],
-        "uplift_width": uplift[1] - uplift[0],
-        "zd_minus_lb": zd_margin,
+        "uplift_lo": safe_uplift_lo, "uplift_hi": safe_uplift_hi,
+        "uplift_width": safe_uplift_width,
+        "zd_minus_lb": safe_zd_minus_lb,
+        # producer/raw values preserved for disclosure
+        "raw_lb_best": ck["lb_best"], "raw_final_gap": float(oc["gap"]),
+        "raw_uplift_lo": uplift[0], "raw_uplift_hi": uplift[1],
+        "raw_uplift_width": uplift[1] - uplift[0],
+        "raw_zd_minus_lb": zd_margin,
         "broadcast_tv": tv, "broadcast_linf_max": linf,
         "broadcast_points": points,
         "epsilon": ck["identity"]["epsilon"],
@@ -3318,6 +3490,14 @@ def write_summary(path: str, cells: pd.DataFrame, summary: pd.DataFrame,
         "serious/null steps, trigger selections, corrected wall partitions, "
         "final gaps, and uplift intervals are in the CSV tables. "
         "MANIFEST.json hashes every input and generated artifact.", "",
+        "## Conservative-certificate policy (EI-026)", "",
+        "The claim-bearing `lb_best`, `final_gap`, `uplift_hi`, "
+        "`uplift_width`, and `zd_minus_lb` (and every summary/decision derived "
+        "from them) use the CONSERVATIVE reduced-bound certificate "
+        "(`bound - operand_tau`); the producer/raw values are preserved under "
+        "the `raw_*` CSV columns. Certification must agree between the raw and "
+        "conservative chains, which are the one shared replay used by both the "
+        "audit and this analyzer.", "",
         "## Evidence limits", "",
         *[f"- {limitation}" for limitation in EVIDENCE_LIMITATIONS],
     ]
@@ -3534,6 +3714,24 @@ def analyze(
             "scientific_validation": {
                 "independent_master_fw_tolerance": MASTER_FW_TOL,
                 "evidence_limitations": list(EVIDENCE_LIMITATIONS),
+            },
+            "conservative_certificate_policy": {
+                "incident": "EI-026",
+                "claim_bearing": (
+                    "lb_best, final_gap, uplift_hi, uplift_width, zd_minus_lb "
+                    "and every summary/decision derived from them use the "
+                    "CONSERVATIVE reduced-bound (bound - operand_tau) chain"),
+                "raw_columns_preserved": [
+                    "raw_lb_best", "raw_final_gap", "raw_uplift_lo",
+                    "raw_uplift_hi", "raw_uplift_width", "raw_zd_minus_lb"],
+                "operand_tolerance": (
+                    "1e-10 * max(1, |bound|, |model_incumbent|, "
+                    "|physical_incumbent|)"),
+                "shared_replay": (
+                    "conservative_certificate() is the single pure replay used "
+                    "by both the audit (_cg_sane) and this analyzer; "
+                    "certification must agree between the raw and conservative "
+                    "chains"),
             },
             "decision_rule": {
                 "a6_min_certified": MIN_A6_CERTIFIED,
