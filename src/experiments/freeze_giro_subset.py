@@ -12,12 +12,23 @@ with this exact top-level shape:
       "service_day": null,
       "variant_choice": {
         "policy": "...",
-        "selected": ["..."]
+        "groups": [{
+          "base_task": "13316",
+          "alternatives": ["13316m", "13316uwt"],
+          "selected": "13316m"
+        }]
       },
       "trip_selection": {
         "rule": "Identifier == Regular",
-        "source_rows": [123, 456],
-        "trip_ids": ["..."]
+        "lineage": [{
+          "trip_id": "...",
+          "source_role": "vehicle_details",
+          "source_row": 123,
+          "signature": {
+            "route": "...", "direction": 1, "from": "...",
+            "start": "04:45", "end": "04:57", "to": "..."
+          }
+        }]
       },
       "deadhead_fidelity": {
         "level": "exact-directed-base",
@@ -28,6 +39,8 @@ with this exact top-level shape:
       },
       "physics": {
         "service_energy_policy": "...",
+        "charge_power_model": "constant",
+        "charger_capacity_policy": "...",
         "instance_parameters": {...}
       }
     }

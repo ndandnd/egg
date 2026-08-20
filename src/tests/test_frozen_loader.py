@@ -53,14 +53,43 @@ def _write_inputs(root: Path, *, instance=None):
                 "service_day": None,
                 "variant_choice": {
                     "policy": "fixture: one selected variant per base task",
-                    "selected": ["fixture-m"],
+                    "groups": [
+                        {
+                            "base_task": "13316",
+                            "alternatives": ["13316m", "13316uwt"],
+                            "selected": "13316m",
+                        },
+                        {
+                            "base_task": "13324",
+                            "alternatives": ["13324muw", "13324t"],
+                            "selected": "13324t",
+                        },
+                    ],
                 },
                 "trip_selection": {
                     "rule": "Identifier == Regular",
-                    "source_rows": list(
-                        range(101, 101 + len(inst.trips))
-                    ),
-                    "trip_ids": [trip.id for trip in inst.trips],
+                    "lineage": [
+                        {
+                            "trip_id": trip.id,
+                            "source_role": "vehicle_details",
+                            "source_row": 101 + index,
+                            "signature": {
+                                "route": None,
+                                "direction": None,
+                                "from": trip.start_loc,
+                                "start": (
+                                    f"{trip.start_min // 60:02d}:"
+                                    f"{trip.start_min % 60:02d}"
+                                ),
+                                "end": (
+                                    f"{trip.end_min // 60:02d}:"
+                                    f"{trip.end_min % 60:02d}"
+                                ),
+                                "to": trip.end_loc,
+                            },
+                        }
+                        for index, trip in enumerate(inst.trips)
+                    ],
                 },
                 "deadhead_fidelity": {
                     "level": "exact-directed-base",
@@ -71,6 +100,10 @@ def _write_inputs(root: Path, *, instance=None):
                 },
                 "physics": {
                     "service_energy_policy": "accept source Usage kWh",
+                    "charge_power_model": "constant",
+                    "charger_capacity_policy": (
+                        "not represented; no shared capacity constraint"
+                    ),
                     "instance_parameters": _instance_parameters(inst),
                 },
             }
@@ -375,31 +408,88 @@ def test_freeze_refuses_mismatched_deadhead_matrices(tmp_path):
     candidate = instance.canonical()
     candidate["dh_min"] = candidate["dh_min"][:-1]
     root = tmp_path / "inputs"
-    _inst, candidate_path, provenance, _source = _write_inputs(root)
+    _inst, candidate_path, provenance, source = _write_inputs(root)
     candidate_path.write_bytes(canonical_json_bytes(candidate))
     with pytest.raises(FrozenSubsetError, match="identical arcs"):
-        freeze_subset(candidate_path, provenance, tmp_path / "frozen")
+        freeze_subset(
+            candidate_path,
+            provenance,
+            tmp_path / "frozen",
+            source_files={"vehicle_details": source},
+        )
 
 
 def test_freeze_refuses_incomplete_provenance_disclosure(tmp_path):
-    _inst, candidate, provenance, _source = _write_inputs(tmp_path / "inputs")
+    _inst, candidate, provenance, source = _write_inputs(tmp_path / "inputs")
     value = json.loads(provenance.read_text())
     del value["variant_choice"]
     provenance.write_bytes(canonical_json_bytes(value))
     with pytest.raises(FrozenSubsetError, match="provenance keys"):
-        freeze_subset(candidate, provenance, tmp_path / "frozen")
+        freeze_subset(
+            candidate,
+            provenance,
+            tmp_path / "frozen",
+            source_files={"vehicle_details": source},
+        )
 
 
-@pytest.mark.parametrize("field", ["source_rows", "trip_ids"])
-def test_freeze_binds_declared_trip_lineage_to_instance(tmp_path, field):
+@pytest.mark.parametrize(
+    ("tamper", "message"),
+    [
+        ("missing", "lineage trip_ids do not match"),
+        ("trip_id", "lineage trip_ids do not match"),
+        ("source_role", "not a hashed manifest source"),
+        ("time", "lineage times do not match"),
+    ],
+)
+def test_freeze_binds_declared_trip_lineage_to_instance(
+    tmp_path, tamper, message
+):
     _inst, candidate, provenance, source = _write_inputs(tmp_path / "inputs")
     value = json.loads(provenance.read_text())
-    value["trip_selection"][field] = value["trip_selection"][field][:-1]
+    lineage = value["trip_selection"]["lineage"]
+    if tamper == "missing":
+        lineage.pop()
+    elif tamper == "trip_id":
+        lineage[-1]["trip_id"] = "not-the-instance-trip"
+    elif tamper == "source_role":
+        lineage[-1]["source_role"] = "unhashed_source"
+    else:
+        lineage[-1]["signature"]["start"] = "00:00"
     provenance.write_bytes(canonical_json_bytes(value))
-    with pytest.raises(
-        FrozenSubsetError,
-        match="source_rows count|trip_ids do not match",
-    ):
+    with pytest.raises(FrozenSubsetError, match=message):
+        freeze_subset(
+            candidate,
+            provenance,
+            tmp_path / "frozen",
+            source_files={"vehicle_details": source},
+        )
+
+
+@pytest.mark.parametrize(
+    ("tamper", "message"),
+    [
+        ("variant", "Partille variant_choice"),
+        ("time_dependent", "time-dependent deadheads"),
+        ("undirected", "must remain directed"),
+        ("charge_model", "must be 'constant'"),
+    ],
+)
+def test_freeze_refuses_contradictory_giro_disclosures(
+    tmp_path, tamper, message
+):
+    _inst, candidate, provenance, source = _write_inputs(tmp_path / "inputs")
+    value = json.loads(provenance.read_text())
+    if tamper == "variant":
+        value["variant_choice"]["groups"].pop()
+    elif tamper == "time_dependent":
+        value["deadhead_fidelity"]["time_dependent"] = True
+    elif tamper == "undirected":
+        value["deadhead_fidelity"]["directed"] = False
+    else:
+        value["physics"]["charge_power_model"] = "tapered"
+    provenance.write_bytes(canonical_json_bytes(value))
+    with pytest.raises(FrozenSubsetError, match=message):
         freeze_subset(
             candidate,
             provenance,

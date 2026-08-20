@@ -73,8 +73,11 @@ _PROVENANCE_KEYS = {
     "deadhead_fidelity",
     "physics",
 }
-_VARIANT_CHOICE_KEYS = {"policy", "selected"}
-_TRIP_SELECTION_KEYS = {"rule", "source_rows", "trip_ids"}
+_VARIANT_CHOICE_KEYS = {"policy", "groups"}
+_VARIANT_GROUP_KEYS = {"base_task", "alternatives", "selected"}
+_TRIP_SELECTION_KEYS = {"rule", "lineage"}
+_LINEAGE_KEYS = {"trip_id", "source_role", "source_row", "signature"}
+_SIGNATURE_KEYS = {"route", "direction", "from", "start", "end", "to"}
 _DEADHEAD_FIDELITY_KEYS = {
     "level",
     "directed",
@@ -82,9 +85,13 @@ _DEADHEAD_FIDELITY_KEYS = {
     "same_reference_policy",
     "missing_link_policy",
 }
-_PHYSICS_KEYS = {"service_energy_policy", "instance_parameters"}
+_PHYSICS_KEYS = {
+    "service_energy_policy",
+    "charge_power_model",
+    "charger_capacity_policy",
+    "instance_parameters",
+}
 _DEADHEAD_LEVELS = {
-    "exact-directed-time-dependent",
     "exact-directed-base",
     "reference-fallback",
     "zone-abstraction",
@@ -467,8 +474,27 @@ def instance_from_canonical(value: Any):
     return instance
 
 
-def validate_provenance(value: Any, *, instance=None) -> dict:
-    """Validate GIRO disclosures and, when available, bind them to an instance."""
+def _service_minutes(value: Any, *, label: str) -> int:
+    text = _require_string(value, label=label)
+    parts = text.split(":")
+    if (
+        len(parts) != 2
+        or not all(part.isdigit() for part in parts)
+        or not 0 <= int(parts[1]) <= 59
+    ):
+        raise FrozenSubsetError(
+            f"{label} must be an HH:MM service-day time"
+        )
+    return int(parts[0]) * 60 + int(parts[1])
+
+
+def validate_provenance(
+    value: Any,
+    *,
+    instance=None,
+    source_roles: set[str] | None = None,
+) -> dict:
+    """Validate GIRO disclosures and bind lineage to hashed source roles."""
     provenance = _require_exact_keys(
         value, _PROVENANCE_KEYS, label="provenance"
     )
@@ -476,7 +502,9 @@ def validate_provenance(value: Any, *, instance=None) -> dict:
         raise FrozenSubsetError(
             f"unsupported provenance schema: {provenance['schema']!r}"
         )
-    _require_string(provenance["contract"], label="provenance.contract")
+    contract = _require_string(
+        provenance["contract"], label="provenance.contract"
+    )
     service_day = provenance["service_day"]
     if service_day is not None:
         _require_string(service_day, label="provenance.service_day")
@@ -489,20 +517,54 @@ def validate_provenance(value: Any, *, instance=None) -> dict:
     _require_string(
         variant["policy"], label="provenance.variant_choice.policy"
     )
-    if not isinstance(variant["selected"], list) or not variant["selected"]:
+    if not isinstance(variant["groups"], list):
         raise FrozenSubsetError(
-            "provenance.variant_choice.selected must be a non-empty list"
+            "provenance.variant_choice.groups must be a list"
         )
-    selected = [
-        _require_string(
-            item, label=f"provenance.variant_choice.selected[{index}]"
+    groups = {}
+    for index, raw_group in enumerate(variant["groups"]):
+        label = f"provenance.variant_choice.groups[{index}]"
+        group = _require_exact_keys(
+            raw_group, _VARIANT_GROUP_KEYS, label=label
         )
-        for index, item in enumerate(variant["selected"])
-    ]
-    if len(set(selected)) != len(selected):
-        raise FrozenSubsetError(
-            "provenance.variant_choice.selected contains duplicates"
+        base_task = _require_string(
+            group["base_task"], label=f"{label}.base_task"
         )
+        if base_task in groups:
+            raise FrozenSubsetError(
+                f"duplicate variant base task: {base_task!r}"
+            )
+        alternatives = group["alternatives"]
+        if not isinstance(alternatives, list) or len(alternatives) < 2:
+            raise FrozenSubsetError(
+                f"{label}.alternatives must list at least two tasks"
+            )
+        normalized = [
+            _require_string(item, label=f"{label}.alternatives[{item_index}]")
+            for item_index, item in enumerate(alternatives)
+        ]
+        if len(set(normalized)) != len(normalized):
+            raise FrozenSubsetError(
+                f"{label}.alternatives contains duplicates"
+            )
+        selected = _require_string(
+            group["selected"], label=f"{label}.selected"
+        )
+        if selected not in normalized:
+            raise FrozenSubsetError(
+                f"{label}.selected is not one of its alternatives"
+            )
+        groups[base_task] = set(normalized)
+    if contract.casefold() in {"partille", "par"}:
+        expected_groups = {
+            "13316": {"13316m", "13316uwt"},
+            "13324": {"13324muw", "13324t"},
+        }
+        if groups != expected_groups:
+            raise FrozenSubsetError(
+                "Partille variant_choice must disclose exactly the 13316 "
+                "and 13324 weekday-variant groups"
+            )
 
     trip_selection = _require_exact_keys(
         provenance["trip_selection"],
@@ -513,39 +575,66 @@ def validate_provenance(value: Any, *, instance=None) -> dict:
         raise FrozenSubsetError(
             "provenance.trip_selection.rule must be 'Identifier == Regular'"
         )
-    source_rows = trip_selection["source_rows"]
-    if not isinstance(source_rows, list) or not source_rows:
+    lineage = trip_selection["lineage"]
+    if not isinstance(lineage, list) or not lineage:
         raise FrozenSubsetError(
-            "provenance.trip_selection.source_rows must be a non-empty list"
+            "provenance.trip_selection.lineage must be a non-empty list"
         )
-    normalized_rows = [
-        _require_int(
-            row,
-            label=f"provenance.trip_selection.source_rows[{index}]",
-            minimum=1,
+    lineage_ids = []
+    source_row_keys = set()
+    lineage_times = []
+    for index, raw_entry in enumerate(lineage):
+        label = f"provenance.trip_selection.lineage[{index}]"
+        entry = _require_exact_keys(raw_entry, _LINEAGE_KEYS, label=label)
+        trip_id = _require_string(
+            entry["trip_id"], label=f"{label}.trip_id"
         )
-        for index, row in enumerate(source_rows)
-    ]
-    if len(set(normalized_rows)) != len(normalized_rows):
-        raise FrozenSubsetError(
-            "provenance.trip_selection.source_rows contains duplicates"
+        source_role = _require_string(
+            entry["source_role"], label=f"{label}.source_role"
         )
-    declared_trip_ids = trip_selection["trip_ids"]
-    if not isinstance(declared_trip_ids, list) or not declared_trip_ids:
-        raise FrozenSubsetError(
-            "provenance.trip_selection.trip_ids must be a non-empty list"
+        if "/" in source_role or "\\" in source_role:
+            raise FrozenSubsetError(
+                f"{label}.source_role must not contain a path separator"
+            )
+        if source_roles is not None and source_role not in source_roles:
+            raise FrozenSubsetError(
+                f"{label}.source_role is not a hashed manifest source"
+            )
+        source_row = _require_int(
+            entry["source_row"], label=f"{label}.source_row", minimum=1
         )
-    normalized_trip_ids = [
+        row_key = (source_role, source_row)
+        if row_key in source_row_keys:
+            raise FrozenSubsetError(
+                "provenance lineage contains a duplicate source role/row"
+            )
+        source_row_keys.add(row_key)
+        signature = _require_exact_keys(
+            entry["signature"], _SIGNATURE_KEYS, label=f"{label}.signature"
+        )
+        for optional in ("route", "direction"):
+            field = signature[optional]
+            if field is not None and (
+                isinstance(field, bool)
+                or not isinstance(field, (str, int))
+            ):
+                raise FrozenSubsetError(
+                    f"{label}.signature.{optional} must be string, integer, or null"
+                )
         _require_string(
-            trip_id,
-            label=f"provenance.trip_selection.trip_ids[{index}]",
+            signature["from"], label=f"{label}.signature.from"
         )
-        for index, trip_id in enumerate(declared_trip_ids)
-    ]
-    if len(set(normalized_trip_ids)) != len(normalized_trip_ids):
-        raise FrozenSubsetError(
-            "provenance.trip_selection.trip_ids contains duplicates"
+        _require_string(signature["to"], label=f"{label}.signature.to")
+        start_min = _service_minutes(
+            signature["start"], label=f"{label}.signature.start"
         )
+        end_min = _service_minutes(
+            signature["end"], label=f"{label}.signature.end"
+        )
+        lineage_ids.append(trip_id)
+        lineage_times.append((start_min, end_min))
+    if len(set(lineage_ids)) != len(lineage_ids):
+        raise FrozenSubsetError("provenance lineage contains duplicate trip_ids")
 
     deadhead = _require_exact_keys(
         provenance["deadhead_fidelity"],
@@ -554,13 +643,25 @@ def validate_provenance(value: Any, *, instance=None) -> dict:
     )
     if deadhead["level"] not in _DEADHEAD_LEVELS:
         raise FrozenSubsetError(
-            "provenance.deadhead_fidelity.level is unsupported"
+            "provenance.deadhead_fidelity.level is unsupported by "
+            "the static Instance deadhead representation"
         )
     for key in ("directed", "time_dependent"):
         if not isinstance(deadhead[key], bool):
             raise FrozenSubsetError(
                 f"provenance.deadhead_fidelity.{key} must be boolean"
             )
+    if deadhead["time_dependent"]:
+        raise FrozenSubsetError(
+            "time-dependent deadheads cannot be represented by Instance"
+        )
+    if (
+        deadhead["level"] in {"exact-directed-base", "reference-fallback"}
+        and not deadhead["directed"]
+    ):
+        raise FrozenSubsetError(
+            f"{deadhead['level']} deadhead fidelity must remain directed"
+        )
     _require_string(
         deadhead["same_reference_policy"],
         label="provenance.deadhead_fidelity.same_reference_policy",
@@ -579,6 +680,15 @@ def validate_provenance(value: Any, *, instance=None) -> dict:
         physics["service_energy_policy"],
         label="provenance.physics.service_energy_policy",
     )
+    if physics["charge_power_model"] != "constant":
+        raise FrozenSubsetError(
+            "provenance.physics.charge_power_model must be 'constant' "
+            "for Instance"
+        )
+    _require_string(
+        physics["charger_capacity_policy"],
+        label="provenance.physics.charger_capacity_policy",
+    )
     _require_exact_keys(
         physics["instance_parameters"],
         _MODEL_KEYS,
@@ -588,13 +698,16 @@ def validate_provenance(value: Any, *, instance=None) -> dict:
 
     if instance is not None:
         actual_ids = [trip.id for trip in instance.trips]
-        if normalized_trip_ids != actual_ids:
+        if lineage_ids != actual_ids:
             raise FrozenSubsetError(
-                "provenance trip_ids do not match the frozen instance"
+                "provenance lineage trip_ids do not match the frozen instance"
             )
-        if len(normalized_rows) != len(actual_ids):
+        actual_times = [
+            (trip.start_min, trip.end_min) for trip in instance.trips
+        ]
+        if lineage_times != actual_times:
             raise FrozenSubsetError(
-                "provenance source_rows count does not match the frozen instance"
+                "provenance lineage times do not match the frozen instance"
             )
         if physics["instance_parameters"] != _model_record(instance):
             raise FrozenSubsetError(
@@ -741,7 +854,7 @@ def validate_manifest(value: Any) -> dict:
         previous_role = role
         roles.add(role)
 
-    validate_provenance(manifest["provenance"])
+    validate_provenance(manifest["provenance"], source_roles=roles)
     _require_exact_keys(manifest["model"], _MODEL_KEYS, label="manifest.model")
     selection = _require_exact_keys(
         manifest["selection"], _SELECTION_KEYS, label="manifest.selection"
@@ -925,15 +1038,16 @@ def freeze_subset(
     provenance_bytes = read_stable_regular_file(
         provenance_file, label="provenance"
     )
-    provenance = validate_provenance(
-        strict_json_bytes(provenance_bytes, label="provenance"),
-        instance=instance,
-    )
-
     source_records = []
     for role, path in _normalize_sources(source_files):
         payload = read_stable_regular_file(path, label=f"source file {role!r}")
         source_records.append(_input_file_record(role, path, payload))
+    source_roles = {record["role"] for record in source_records}
+    provenance = validate_provenance(
+        strict_json_bytes(provenance_bytes, label="provenance"),
+        instance=instance,
+        source_roles=source_roles,
+    )
 
     manifest = {
         "schema": MANIFEST_SCHEMA,
@@ -1098,7 +1212,13 @@ def load_verified_frozen_subset(
             "frozen subset instance bytes are not canonical JSON"
         )
     instance = instance_from_canonical(value)
-    validate_provenance(manifest["provenance"], instance=instance)
+    validate_provenance(
+        manifest["provenance"],
+        instance=instance,
+        source_roles={
+            record["role"] for record in manifest["inputs"]["source_files"]
+        },
+    )
     if instance.hash() != artifact["instance_hash"]:
         raise FrozenSubsetError(
             "frozen subset Instance.hash() does not match the manifest"
