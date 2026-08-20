@@ -106,6 +106,10 @@ EXPECTED_GRID_LIST_SHA256 = (
     "4ca11f7fe113c849c7a65921ddc78badce0a7fdb7b01b35db6a7fb8d72716bcd"
 )
 TRANSFER_RECEIPT_SCHEMA = "a6-holdout-transfer-receipt-v1"
+# EI-026 recovery receipt (versioned) and the frozen recovery base commit.
+TRANSFER_RECEIPT_SCHEMA_RECOVERY = "a6-holdout-transfer-receipt-v2-recovery"
+RECOVERY_INCIDENT_ID = "EI-026"
+RECOVERY_BASE_COMMIT = "740ab0c1578b454268102c0bb15b1104d9ac8d9d"
 TRANSFER_RECEIPT_FILENAME = "a6_holdout.TRANSFER_RECEIPT.json"
 CLOSEOUT_CLAIM_SCHEMA = "a6-holdout-closeout-claim-v1"
 IMPORT_LOCK_FILENAME = ".a6_holdout.import-lock"
@@ -718,11 +722,15 @@ def validate_transfer_receipt(
         raise AnalysisError("cannot parse transfer receipt") from exc
     if raw != _canonical_json_bytes(document):
         raise AnalysisError("transfer receipt is not canonical JSON")
-    if set(document) != {
-            "schema", "campaign", "imported_utc", "destination", "bundle",
-            "archive", "source", "provenance", "closeout_claim"}:
+    is_recovery = document.get("schema") == TRANSFER_RECEIPT_SCHEMA_RECOVERY
+    base_keys = {
+        "schema", "campaign", "imported_utc", "destination", "bundle",
+        "archive", "source", "provenance", "closeout_claim"}
+    expected_top = base_keys | {"recovery"} if is_recovery else base_keys
+    if set(document) != expected_top:
         raise AnalysisError("transfer receipt top-level keys differ")
-    if (document.get("schema") != TRANSFER_RECEIPT_SCHEMA
+    if (document.get("schema") not in (
+            TRANSFER_RECEIPT_SCHEMA, TRANSFER_RECEIPT_SCHEMA_RECOVERY)
             or document.get("campaign") != EXPECTED_EXPERIMENT):
         raise AnalysisError("transfer receipt schema/campaign is invalid")
     try:
@@ -794,11 +802,17 @@ def validate_transfer_receipt(
             "selection_sha256", "preflight_sha256", "launch_job_id",
             "grid_list_sha256", "source"}:
         raise AnalysisError("transfer receipt closeout claim keys differ")
+    # For a recovery receipt the embedded closeout claim is the ORIGINAL claim,
+    # whose packaging commit is the original (740ab0c), not the recovery HEAD.
+    recovery_block = document.get("recovery") or {}
+    closeout_packaging_commit = (
+        (recovery_block.get("original_claim") or {}).get("packaging_code_commit")
+        if is_recovery else analysis_code_commit)
     expected_closeout = {
         "schema": CLOSEOUT_CLAIM_SCHEMA,
         "campaign": EXPECTED_EXPERIMENT,
         "status": "claimed-before-outcome-validation",
-        "packaging_code_commit": analysis_code_commit,
+        "packaging_code_commit": closeout_packaging_commit,
         "experiment_code_commit": preflight.get("code_commit"),
         "selection_sha256": selection.get("sha256"),
         "preflight_sha256": preflight.get("sha256"),
@@ -826,6 +840,45 @@ def validate_transfer_receipt(
         raise AnalysisError(
             "transfer receipt closeout claim chronology is invalid")
 
+    # ---- EI-026 recovery receipt binding (Task B.4/B.6) -------------------
+    if is_recovery:
+        original = recovery_block.get("original_claim") or {}
+        rc = recovery_block.get("recovery_claim") or {}
+        rc_doc = rc.get("document") or {}
+        if (recovery_block.get("incident_id") != RECOVERY_INCIDENT_ID
+                or recovery_block.get("recovery_code_commit")
+                != analysis_code_commit
+                or recovery_block.get("recovery_base_commit")
+                != RECOVERY_BASE_COMMIT
+                or not _full_hex(original.get("sha256"), 64)
+                or original.get("sha256") != closeout.get("sha256")
+                or original.get("packaging_code_commit")
+                != closeout_packaging_commit
+                or not _full_hex(rc.get("sha256"), 64)
+                or not isinstance(rc_doc, dict)
+                or hashlib.sha256(_canonical_json_bytes(rc_doc)).hexdigest()
+                != rc.get("sha256")
+                or rc_doc.get("incident_id") != RECOVERY_INCIDENT_ID
+                or rc_doc.get("recovery_code_commit") != analysis_code_commit
+                or (rc_doc.get("original_claim") or {}).get("sha256")
+                != original.get("sha256")
+                or rc_doc.get("raw_tree_sha256")
+                != expected_source["canonical_tree_sha256"]):
+            raise AnalysisError(
+                "transfer receipt recovery block is invalid or inconsistent")
+        # chronology: original closeout <= recovery claim <= import
+        try:
+            recovered_at = datetime.datetime.strptime(
+                rc_doc.get("claimed_utc", ""), "%Y-%m-%dT%H:%M:%SZ")
+        except (TypeError, ValueError) as exc:
+            raise AnalysisError(
+                "transfer receipt recovery claim chronology is invalid"
+            ) from exc
+        if not claimed_at <= recovered_at <= imported_at:
+            raise AnalysisError(
+                "transfer receipt recovery chronology is invalid "
+                "(require closeout <= recovery <= import)")
+
     if verify_git:
         experiment_commit = expected_provenance["experiment_code_commit"]
         packaging_commit = expected_provenance["packaging_code_commit"]
@@ -851,6 +904,18 @@ def validate_transfer_receipt(
                  experiment_commit, packaging_commit],
                 cwd=repository_path, stdout=subprocess.DEVNULL,
                 stderr=subprocess.DEVNULL)
+            if is_recovery:
+                # B6: prove 740ab0c -> recovery commit (== packaging_commit).
+                subprocess.check_call(
+                    ["git", "cat-file", "-e",
+                     f"{RECOVERY_BASE_COMMIT}^{{commit}}"],
+                    cwd=repository_path, stdout=subprocess.DEVNULL,
+                    stderr=subprocess.DEVNULL)
+                subprocess.check_call(
+                    ["git", "merge-base", "--is-ancestor",
+                     RECOVERY_BASE_COMMIT, packaging_commit],
+                    cwd=repository_path, stdout=subprocess.DEVNULL,
+                    stderr=subprocess.DEVNULL)
         except (subprocess.CalledProcessError, OSError, TypeError) as exc:
             raise AnalysisError(
                 "transfer receipt Git ancestry is invalid") from exc

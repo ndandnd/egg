@@ -50,7 +50,20 @@ RECOVERY_INCIDENT_ID = "EI-026"
 # The one packaging/claim commit the original (failed) claim was made at; the
 # recovery HEAD must have this as an ancestor.
 RECOVERY_BASE_COMMIT = "740ab0c1578b454268102c0bb15b1104d9ac8d9d"
+# Frozen EI-026 identities (operator evidence).  A merely well-formed
+# operator-supplied SHA is insufficient: the recovery gate requires these exact
+# values (tests inject their own synthetic expectations via parameters).
+RECOVERY_ORIGINAL_CLAIM_SHA256 = (
+    "1b0acf0b8232d4b08e764564e2732fcfa9c28dd53456a1415085b77cb38f6675")
+RECOVERY_ORIGINAL_PACKAGING_COMMIT = (
+    "740ab0c1578b454268102c0bb15b1104d9ac8d9d")
+RECOVERY_ORIGINAL_SOURCE_TREE_SHA256 = (
+    "2c60b3d2feb1f313cb08541556d5e8f95bf40dc76b2c539d78149dd93ad88749")
 SOURCE_ARC_ROOT = "src/runs/a6_holdout"
+# The repository root; every recovery Git command is pinned here, never the
+# caller's cwd (EI-026 Task B.5).
+REPO_ROOT = os.path.dirname(
+    os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 METADATA_ARC_ROOT = "A6_HOLDOUT_TRANSFER"
 DEFAULT_OUT = "runs/a6_holdout_packages"
 AUDIT_EXPECT_CG = 128
@@ -1634,8 +1647,9 @@ def assert_job_quiescent(job_id: str) -> None:
 # EI-026 one-shot claimed-incident recovery (Task B)
 # ===========================================================================
 def _git_output(args: list[str]) -> str:
+    # every recovery Git command is pinned to REPO_ROOT, never the caller's cwd
     result = subprocess.run(
-        ["git", *args], check=False, stdout=subprocess.PIPE,
+        ["git", "-C", REPO_ROOT, *args], check=False, stdout=subprocess.PIPE,
         stderr=subprocess.PIPE, text=True)
     if result.returncode != 0:
         detail = result.stderr.strip() or f"exit {result.returncode}"
@@ -1659,7 +1673,8 @@ def _require_clean_tracked_tree() -> None:
 
 def _require_commit_ancestor(ancestor: str, descendant: str) -> None:
     result = subprocess.run(
-        ["git", "merge-base", "--is-ancestor", ancestor, descendant],
+        ["git", "-C", REPO_ROOT, "merge-base", "--is-ancestor",
+         ancestor, descendant],
         check=False, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
     if result.returncode == 1:
         raise PackagingError(
@@ -1670,12 +1685,30 @@ def _require_commit_ancestor(ancestor: str, descendant: str) -> None:
         raise PackagingError(f"cannot verify commit ancestry: {detail}")
 
 
-def verify_original_claim(root, *, original_claim_sha256: str) -> dict:
+def verify_original_claim(
+    root,
+    *,
+    original_claim_sha256: str,
+    expected_sha256: str = RECOVERY_ORIGINAL_CLAIM_SHA256,
+    expected_packaging_commit: str = RECOVERY_ORIGINAL_PACKAGING_COMMIT,
+    expected_source_tree_sha256: str = RECOVERY_ORIGINAL_SOURCE_TREE_SHA256,
+) -> dict:
     """Open the original (failed) closeout claim adjacent to the raw root as
-    canonical, regular, single-link IMMUTABLE evidence and verify its schema,
-    SHA-256, original commit, launch identities, and claimed source digest."""
+    canonical, regular, single-link IMMUTABLE evidence and verify it against the
+    FROZEN EI-026 identities.
+
+    A merely well-formed operator-supplied SHA is insufficient: the supplied SHA
+    must equal the frozen expected SHA, the file must hash to it, the document
+    must have the exact canonical key set, and its packaging commit and source
+    digest must equal the frozen constants.  (Tests inject synthetic
+    expectations via the ``expected_*`` parameters.)
+    """
     if not _full_hex(original_claim_sha256, 64):
         raise PackagingError("original claim SHA-256 must be 64 lowercase hex")
+    if original_claim_sha256 != expected_sha256:
+        raise PackagingError(
+            "original claim SHA-256 does not equal the frozen EI-026 claim "
+            "SHA-256")
     root_path = Path(root).expanduser().resolve()
     claim_path = root_path.parent / CLOSEOUT_CLAIM_FILENAME
     raw = _regular_bundle_file(claim_path, "original closeout claim")
@@ -1693,20 +1726,39 @@ def verify_original_claim(root, *, original_claim_sha256: str) -> dict:
             "original closeout claim is not valid JSON") from exc
     if raw != _canonical_json_bytes(document):
         raise PackagingError("original closeout claim is not canonical JSON")
-    if document.get("schema") != CLOSEOUT_CLAIM_SCHEMA:
-        raise PackagingError("original closeout claim schema is invalid")
-    for key in ("packaging_code_commit", "experiment_code_commit",
-                "launch_job_id", "grid_list_sha256", "selection_sha256",
-                "preflight_sha256"):
+    # exact canonical key set
+    if set(document) != {
+            "schema", "campaign", "status", "claimed_utc",
+            "packaging_code_commit", "experiment_code_commit",
+            "selection_sha256", "preflight_sha256", "launch_job_id",
+            "grid_list_sha256", "source"}:
+        raise PackagingError("original closeout claim key set is invalid")
+    if (document.get("schema") != CLOSEOUT_CLAIM_SCHEMA
+            or document.get("campaign") != "a6-holdout"
+            or document.get("status") != "claimed-before-outcome-validation"):
+        raise PackagingError("original closeout claim schema/status is invalid")
+    if document.get("packaging_code_commit") != expected_packaging_commit:
+        raise PackagingError(
+            "original closeout claim packaging commit does not equal the "
+            "frozen EI-026 packaging commit")
+    for key in ("experiment_code_commit", "launch_job_id", "grid_list_sha256",
+                "selection_sha256", "preflight_sha256"):
         if not document.get(key):
             raise PackagingError(f"original closeout claim missing {key}")
     src = document.get("source") or {}
+    if set(src) != {"canonical_tree_sha256", "file_count",
+                    "directory_count", "total_bytes"}:
+        raise PackagingError("original closeout claim source key set is invalid")
     if not (_full_hex(src.get("canonical_tree_sha256"), 64)
             and isinstance(src.get("file_count"), int)
             and not isinstance(src.get("file_count"), bool)
             and isinstance(src.get("directory_count"), int)
             and isinstance(src.get("total_bytes"), int)):
         raise PackagingError("original closeout claim source digest is invalid")
+    if src.get("canonical_tree_sha256") != expected_source_tree_sha256:
+        raise PackagingError(
+            "original closeout claim source-tree SHA-256 does not equal the "
+            "frozen EI-026 source-tree SHA-256")
     return {"path": str(claim_path), "sha256": original_claim_sha256,
             "document": document}
 
@@ -1976,6 +2028,7 @@ def _validated_manifest_snapshot(manifest: dict, audit_bytes: bytes) -> dict:
         recovery = manifest.get("recovery")
         original = (recovery or {}).get("original_claim") or {}
         recovery_claim = (recovery or {}).get("recovery_claim") or {}
+        rc_doc = recovery_claim.get("document")
         if (not isinstance(recovery, dict)
                 or recovery.get("incident_id") != RECOVERY_INCIDENT_ID
                 or not _full_hex(recovery.get("recovery_code_commit"), 40)
@@ -1983,6 +2036,14 @@ def _validated_manifest_snapshot(manifest: dict, audit_bytes: bytes) -> dict:
                 or not _full_hex(original.get("sha256"), 64)
                 or not _full_hex(original.get("packaging_code_commit"), 40)
                 or not _full_hex(recovery_claim.get("sha256"), 64)
+                or not isinstance(rc_doc, dict)
+                or hashlib.sha256(_canonical_json_bytes(rc_doc)).hexdigest()
+                != recovery_claim.get("sha256")
+                or rc_doc.get("incident_id") != RECOVERY_INCIDENT_ID
+                or rc_doc.get("recovery_code_commit")
+                != recovery.get("recovery_code_commit")
+                or (rc_doc.get("original_claim") or {}).get("sha256")
+                != original.get("sha256")
                 or not _full_hex(recovery.get("experiment_code_commit"), 40)):
             raise PackagingError("bundle manifest recovery block is invalid")
     packaging_commit = manifest.get("packaging_code_commit")
@@ -2403,6 +2464,7 @@ def import_bundle(
     *,
     destination_validator=validate_destination_repository,
     recovery_head_resolver=_resolve_head_commit,
+    recovery_ancestor_checker=_require_commit_ancestor,
 ) -> dict:
     """Verify a bundle and transactionally install raw root plus receipt."""
     raw_bundle = Path(bundle_dir).expanduser()
@@ -2451,16 +2513,41 @@ def import_bundle(
     if manifest.get("schema") == SCHEMA_RECOVERY:
         recovery = manifest.get("recovery") or {}
         head = recovery_head_resolver()
-        if head != recovery.get("recovery_code_commit"):
+        recovery_commit = recovery.get("recovery_code_commit")
+        if head != recovery_commit:
             raise PackagingError(
                 "recovery import requires HEAD to equal the recovery commit "
-                f"{recovery.get('recovery_code_commit')!r}; HEAD is {head!r}")
+                f"{recovery_commit!r}; HEAD is {head!r}")
+        # B6. prove 740ab0c -> recovery commit.
+        recovery_ancestor_checker(RECOVERY_BASE_COMMIT, recovery_commit)
         original = recovery.get("original_claim") or {}
         embedded_claim = manifest.get("closeout_claim") or {}
+        rc_doc = (recovery.get("recovery_claim") or {}).get("document") or {}
+        # B6. cross-bind every manifest/claim/source/experiment/packaging
+        # identity: the embedded original claim, the recovery claim document,
+        # and the manifest commits must all agree.
         if embedded_claim.get("sha256") != original.get("sha256"):
             raise PackagingError(
                 "recovery manifest original-claim SHA does not match the "
                 "embedded closeout claim")
+        claim_doc = embedded_claim.get("document") or {}
+        if (claim_doc.get("packaging_code_commit")
+                != original.get("packaging_code_commit")):
+            raise PackagingError(
+                "recovery manifest original packaging commit is inconsistent")
+        if (rc_doc.get("recovery_code_commit") != recovery_commit
+                or (rc_doc.get("original_claim") or {}).get("sha256")
+                != original.get("sha256")
+                or (rc_doc.get("original_claim") or {}).get(
+                    "experiment_code_commit")
+                != recovery.get("experiment_code_commit")):
+            raise PackagingError(
+                "recovery manifest recovery-claim identities are inconsistent")
+        if (manifest.get("packaging_code_commit") != recovery_commit
+                or manifest.get("experiment_code_commit")
+                != recovery.get("experiment_code_commit")):
+            raise PackagingError(
+                "recovery manifest commit identities are inconsistent")
 
     expected_sidecar = (
         f"{archive_record['sha256']}  {archive.name}\n"
@@ -3114,6 +3201,11 @@ def recover_package_holdout(
     ancestor_checker=_require_commit_ancestor,
     original_claim_verifier=verify_original_claim,
     recovery_claimer=claim_recovery,
+    expected_original_sha256: str = RECOVERY_ORIGINAL_CLAIM_SHA256,
+    expected_original_packaging_commit: str = (
+        RECOVERY_ORIGINAL_PACKAGING_COMMIT),
+    expected_original_source_tree_sha256: str = (
+        RECOVERY_ORIGINAL_SOURCE_TREE_SHA256),
     **package_kwargs,
 ) -> dict:
     """One-shot EI-026-only claimed-incident recovery.
@@ -3142,9 +3234,13 @@ def recover_package_holdout(
             "recovery HEAD does not equal the recovery commit "
             f"({head!r} != {recovery_commit!r})")
     ancestor_checker(RECOVERY_BASE_COMMIT, head)
-    # 2. open + verify the immutable original claim.
+    # 2. open + verify the immutable original claim against the FROZEN
+    #    EI-026 identities.
     original_claim = original_claim_verifier(
-        root, original_claim_sha256=original_claim_sha256)
+        root, original_claim_sha256=original_claim_sha256,
+        expected_sha256=expected_original_sha256,
+        expected_packaging_commit=expected_original_packaging_commit,
+        expected_source_tree_sha256=expected_original_source_tree_sha256)
     doc = original_claim["document"]
     # 8. Slurm quiescence BEFORE reading any outcome.
     job_quiescence_validator(doc["launch_job_id"])
@@ -3161,6 +3257,17 @@ def recover_package_holdout(
         raise PackagingError(
             "live raw tree no longer matches the original claim; refusing "
             "recovery before any outcome validation")
+    # B2. refuse ANY existing final package with the same campaign/job/preflight
+    #     prefix, regardless of packaging commit, before consuming recovery.
+    out_path = Path(out_base).expanduser().resolve()
+    prefix = (f"a6_holdout-job{doc['launch_job_id']}-"
+              f"{doc['preflight_sha256'][:12]}-")
+    if out_path.is_dir():
+        for entry in out_path.iterdir():
+            if entry.name.startswith(prefix):
+                raise PackagingError(
+                    "refusing recovery: an existing package with the same "
+                    f"campaign/job/preflight prefix is present: {entry}")
     # 5. exclusively create the SECOND adjacent recovery claim before outcome
     #    validation; exactly one attempt (a pre-existing recovery claim blocks
     #    all further attempts).  6. the original claim/raw root are never
@@ -3179,7 +3286,11 @@ def recover_package_holdout(
             "sha256": original_claim["sha256"],
             "packaging_code_commit": doc["packaging_code_commit"],
         },
-        "recovery_claim": {"sha256": recovery_claim["sha256"]},
+        # B3. embed the COMPLETE recovery claim, not only its SHA.
+        "recovery_claim": {
+            "sha256": recovery_claim["sha256"],
+            "document": recovery_claim["document"],
+        },
     }
 
     # 7. fresh staging only (package_holdout always mkdtemp's fresh staging).
@@ -3187,6 +3298,16 @@ def recover_package_holdout(
     #    normal exclusive CLOSEOUT_CLAIM create is never invoked here.
     def _recovery_closeout_claimer(*_args, **_kwargs):
         return original_claim
+
+    # B3. revalidate BOTH immutable claims immediately before scientific
+    #     validation/publication; any mutation fails closed.
+    def _recovery_claim_validator(record):
+        assert_closeout_claim_unchanged(record)          # original claim
+        raw = _regular_bundle_file(
+            Path(recovery_claim["path"]), "recovery claim")
+        if (raw != _canonical_json_bytes(recovery_claim["document"])
+                or hashlib.sha256(raw).hexdigest() != recovery_claim["sha256"]):
+            raise PackagingError("recovery claim changed during recovery")
 
     return package_holdout(
         root, out_base, recovery_code_commit,
@@ -3196,7 +3317,7 @@ def recover_package_holdout(
         code_verifier=code_verifier,
         job_quiescence_validator=job_quiescence_validator,
         closeout_claimer=_recovery_closeout_claimer,
-        closeout_claim_validator=assert_closeout_claim_unchanged,
+        closeout_claim_validator=_recovery_claim_validator,
         recovery=recovery_meta,
         **package_kwargs,
     )

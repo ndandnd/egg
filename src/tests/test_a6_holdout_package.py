@@ -1861,15 +1861,17 @@ def test_regular_signature_distinguishes_size_and_mtime(tmp_path):
     assert mod._regular_signature(victim.lstat()) == original
 
 
+
 # ==========================================================================
-# EI-026 Task B: one-shot claimed-incident recovery
+# EI-026 Task B: one-shot claimed-incident recovery (frozen provenance)
 # ==========================================================================
 RECOVERY_COMMIT = "d" * 40
 
 
 def _write_original_claim(root: Path) -> dict:
     """Write a valid immutable original closeout claim adjacent to the raw
-    root (as the failed interactive attempt would have) and return its record."""
+    root (as the failed interactive attempt would have) and return its
+    record (which carries the source-tree digest for test injection)."""
     snapshot = mod.snapshot_source(root)
     return mod.claim_closeout(
         root,
@@ -1893,12 +1895,25 @@ def _recovery_pkg_kwargs(root: Path) -> dict:
     return kwargs
 
 
-def _recover(root, out, *, original_sha, incident_id="EI-026",
+def _recover(root, out, *, claim=None, original_sha=None, incident_id="EI-026",
              quiescence=None, clean=None, ancestor=None, head=None,
              audit_fn=None, **over):
+    """Drive recover_package_holdout with synthetic frozen-constant injection
+    (the real production constants are the frozen EI-026 identities)."""
     kwargs = _recovery_pkg_kwargs(root)
     if audit_fn is not None:
         kwargs["audit_fn"] = audit_fn
+    exp = {}
+    if claim is not None:
+        exp["expected_original_sha256"] = claim["sha256"]
+        exp["expected_original_packaging_commit"] = (
+            claim["document"]["packaging_code_commit"])
+        exp["expected_original_source_tree_sha256"] = (
+            claim["document"]["source"]["canonical_tree_sha256"])
+        if original_sha is None:
+            original_sha = claim["sha256"]
+    exp.update({k: over.pop(k) for k in list(over)
+                if k.startswith("expected_original_")})
     return mod.recover_package_holdout(
         root, out, RECOVERY_COMMIT,
         incident_id=incident_id,
@@ -1909,86 +1924,143 @@ def _recover(root, out, *, original_sha, incident_id="EI-026",
         head_resolver=head or (lambda: RECOVERY_COMMIT),
         clean_tree_checker=clean or (lambda: None),
         ancestor_checker=ancestor or (lambda a, d: None),
-        **kwargs, **over)
+        **exp, **kwargs, **over)
 
 
 def _recovery_claim_path(root: Path) -> Path:
     return root.parent / mod.RECOVERY_CLAIM_FILENAME
 
 
-def test_ei026_recovery_full_round_trip(tmp_path):
-    """A complete synthetic recover-pack + import: the recovery bundle carries
-    the versioned contract and imports under HEAD == recovery commit."""
+def _import_recovery(bundle_dir, repo):
+    return mod.import_bundle(
+        bundle_dir, repo,
+        destination_validator=lambda _r, _m: None,
+        recovery_head_resolver=lambda: RECOVERY_COMMIT,
+        recovery_ancestor_checker=lambda a, d: None)
+
+
+def test_ei026_recovery_full_round_trip_through_analyzer(tmp_path):
+    """recover-pack -> import -> analyzer validate_transfer_receipt."""
     root = _source_root(tmp_path)
     claim = _write_original_claim(root)
-    result = _recover(root, tmp_path / "packages", original_sha=claim["sha256"])
+    result = _recover(root, tmp_path / "packages", claim=claim)
     manifest = json.loads(Path(result["manifest"]).read_text())
     assert manifest["schema"] == mod.SCHEMA_RECOVERY
     rec = manifest["recovery"]
-    assert rec["incident_id"] == "EI-026"
-    assert rec["recovery_code_commit"] == RECOVERY_COMMIT
-    assert rec["recovery_base_commit"] == mod.RECOVERY_BASE_COMMIT
-    assert rec["original_claim"]["sha256"] == claim["sha256"]
-    assert len(rec["recovery_claim"]["sha256"]) == 64  # recovery claim bound
-    # the recovery claim was created and preserved; the original is untouched
+    assert rec["recovery_claim"]["document"]["incident_id"] == "EI-026"
     assert _recovery_claim_path(root).exists()
-    assert Path(claim["path"]).read_bytes() == mod._canonical_json_bytes(
-        claim["document"])
-    # import under HEAD == recovery commit
+    # import under HEAD == recovery commit, 740ab0c -> recovery ancestry
     repo = _import_repo(tmp_path)
-    imported = mod.import_bundle(
-        result["bundle_dir"], repo,
-        destination_validator=lambda _r, _m: None,
-        recovery_head_resolver=lambda: RECOVERY_COMMIT)
+    imported = _import_recovery(result["bundle_dir"], repo)
     receipt = json.loads(Path(imported["receipt"]).read_text())
     assert receipt["schema"] == mod.RECEIPT_SCHEMA_RECOVERY
-    assert receipt["recovery"]["recovery_code_commit"] == RECOVERY_COMMIT
+    # analyzer recovery-receipt binding (verify_git disabled in tests)
+    import experiments.analyze_a6_holdout as an
+    target = Path(imported["target"])
+    validated = an.validate_transfer_receipt(
+        target,
+        preflight={"code_commit": EXPERIMENT_COMMIT,
+                   "sha256": manifest["preflight"]["sha256"]},
+        selection={"sha256": SELECTION_SHA},
+        launch={"job_id": "424242", "grid_list_sha256": "e" * 64,
+                "manifest_submitted_utc": "2026-08-19T01:04:00Z"},
+        analysis_code_commit=RECOVERY_COMMIT,
+        repository=repo, verify_git=False)
+    assert validated["document"]["recovery"]["recovery_code_commit"] == (
+        RECOVERY_COMMIT)
 
 
-def test_ei026_recovery_import_requires_recovery_head(tmp_path):
+def test_ei026_analyzer_rejects_tampered_recovery_receipt(tmp_path):
+    """Tamper the recovery block of an imported receipt: the analyzer must
+    reject it."""
+    import experiments.analyze_a6_holdout as an
     root = _source_root(tmp_path)
     claim = _write_original_claim(root)
-    result = _recover(root, tmp_path / "packages", original_sha=claim["sha256"])
+    result = _recover(root, tmp_path / "packages", claim=claim)
+    repo = _import_repo(tmp_path)
+    imported = _import_recovery(result["bundle_dir"], repo)
+    target = Path(imported["target"])
+    receipt_path = Path(imported["receipt"])
+    doc = json.loads(receipt_path.read_text())
+    doc["recovery"]["recovery_claim"]["sha256"] = "f" * 64  # mutate
+    receipt_path.write_text(json.dumps(doc, indent=2, sort_keys=True) + "\n")
+    with pytest.raises(an.AnalysisError):
+        an.validate_transfer_receipt(
+            target,
+            preflight={"code_commit": EXPERIMENT_COMMIT,
+                       "sha256": json.loads(Path(result["manifest"]).read_text())
+                       ["preflight"]["sha256"]},
+            selection={"sha256": SELECTION_SHA},
+            launch={"job_id": "424242", "grid_list_sha256": "e" * 64,
+                    "manifest_submitted_utc": "2026-08-19T01:04:00Z"},
+            analysis_code_commit=RECOVERY_COMMIT,
+            repository=repo, verify_git=False)
+
+
+def test_ei026_import_requires_recovery_head(tmp_path):
+    root = _source_root(tmp_path)
+    claim = _write_original_claim(root)
+    result = _recover(root, tmp_path / "packages", claim=claim)
     repo = _import_repo(tmp_path)
     with pytest.raises(mod.PackagingError, match="HEAD to equal the recovery commit"):
         mod.import_bundle(
             result["bundle_dir"], repo,
             destination_validator=lambda _r, _m: None,
-            recovery_head_resolver=lambda: "f" * 40)
+            recovery_head_resolver=lambda: "f" * 40,
+            recovery_ancestor_checker=lambda a, d: None)
+
+
+def test_ei026_import_requires_base_to_recovery_ancestry(tmp_path):
+    root = _source_root(tmp_path)
+    claim = _write_original_claim(root)
+    result = _recover(root, tmp_path / "packages", claim=claim)
+    repo = _import_repo(tmp_path)
+
+    def not_ancestor(a, d):
+        raise mod.PackagingError(f"{d} does not have {a} as an ancestor")
+
+    with pytest.raises(mod.PackagingError, match="does not have .* as an ancestor"):
+        mod.import_bundle(
+            result["bundle_dir"], repo,
+            destination_validator=lambda _r, _m: None,
+            recovery_head_resolver=lambda: RECOVERY_COMMIT,
+            recovery_ancestor_checker=not_ancestor)
 
 
 def test_ei026_wrong_claim_sha_refused(tmp_path):
     root = _source_root(tmp_path)
-    _write_original_claim(root)
-    with pytest.raises(mod.PackagingError, match="does not match the supplied claim"):
-        _recover(root, tmp_path / "p", original_sha="b" * 64)
+    claim = _write_original_claim(root)
+    with pytest.raises(mod.PackagingError,
+                       match="does not equal the frozen EI-026 claim"):
+        _recover(root, tmp_path / "p", claim=claim, original_sha="b" * 64)
     assert not _recovery_claim_path(root).exists()
 
 
 def test_ei026_missing_claim_refused(tmp_path):
-    root = _source_root(tmp_path)  # no claim written
+    root = _source_root(tmp_path)
+    claim = _write_original_claim(root)
+    Path(claim["path"]).unlink()  # frozen gate passes, file is gone
     with pytest.raises(mod.PackagingError):
-        _recover(root, tmp_path / "p", original_sha="a" * 64)
+        _recover(root, tmp_path / "p", claim=claim)
     assert not _recovery_claim_path(root).exists()
 
 
 def test_ei026_mutated_claim_refused(tmp_path):
     root = _source_root(tmp_path)
     claim = _write_original_claim(root)
-    # mutate the on-disk claim after the fact: SHA no longer matches
     Path(claim["path"]).write_text(Path(claim["path"]).read_text() + " ")
     with pytest.raises(mod.PackagingError):
-        _recover(root, tmp_path / "p", original_sha=claim["sha256"])
+        _recover(root, tmp_path / "p", claim=claim)
     assert not _recovery_claim_path(root).exists()
 
 
 def test_ei026_linked_claim_refused(tmp_path):
     root = _source_root(tmp_path)
     claim = _write_original_claim(root)
-    os.link(claim["path"], str(root.parent / "claim.hardlink"))  # nlink -> 2
+    os.link(claim["path"], str(root.parent / "claim.hardlink"))
     with pytest.raises(mod.PackagingError,
                        match="single-link|unsafe original closeout claim"):
-        _recover(root, tmp_path / "p", original_sha=claim["sha256"])
+        _recover(root, tmp_path / "p", claim=claim)
     assert not _recovery_claim_path(root).exists()
 
 
@@ -1996,8 +2068,9 @@ def test_ei026_source_drift_refused(tmp_path):
     root = _source_root(tmp_path)
     claim = _write_original_claim(root)
     (root / "cell-a" / "checkpoint.json").write_text('{"done":true,"x":1}\n')
-    with pytest.raises(mod.PackagingError, match="no longer matches the original claim"):
-        _recover(root, tmp_path / "p", original_sha=claim["sha256"])
+    with pytest.raises(mod.PackagingError,
+                       match="frozen EI-026 source-tree|no longer matches"):
+        _recover(root, tmp_path / "p", claim=claim)
     assert not _recovery_claim_path(root).exists()
 
 
@@ -2009,7 +2082,7 @@ def test_ei026_dirty_recovery_tree_refused(tmp_path):
         raise mod.PackagingError("recovery requires a clean tracked tree")
 
     with pytest.raises(mod.PackagingError, match="clean tracked tree"):
-        _recover(root, tmp_path / "p", original_sha=claim["sha256"], clean=dirty)
+        _recover(root, tmp_path / "p", claim=claim, clean=dirty)
     assert not _recovery_claim_path(root).exists()
 
 
@@ -2018,12 +2091,10 @@ def test_ei026_non_descendant_recovery_commit_refused(tmp_path):
     claim = _write_original_claim(root)
 
     def not_ancestor(a, d):
-        raise mod.PackagingError(
-            f"recovery HEAD {d} does not have {a} as an ancestor")
+        raise mod.PackagingError(f"{d} does not have {a} as an ancestor")
 
     with pytest.raises(mod.PackagingError, match="does not have .* as an ancestor"):
-        _recover(root, tmp_path / "p", original_sha=claim["sha256"],
-                 ancestor=not_ancestor)
+        _recover(root, tmp_path / "p", claim=claim, ancestor=not_ancestor)
     assert not _recovery_claim_path(root).exists()
 
 
@@ -2031,8 +2102,7 @@ def test_ei026_wrong_incident_id_refused(tmp_path):
     root = _source_root(tmp_path)
     claim = _write_original_claim(root)
     with pytest.raises(mod.PackagingError, match="restricted to EI-026"):
-        _recover(root, tmp_path / "p", original_sha=claim["sha256"],
-                 incident_id="EI-999")
+        _recover(root, tmp_path / "p", claim=claim, incident_id="EI-999")
     assert not _recovery_claim_path(root).exists()
 
 
@@ -2044,26 +2114,52 @@ def test_ei026_active_slurm_refused(tmp_path):
         raise mod.PackagingError(f"Slurm job {job_id} is still active")
 
     with pytest.raises(mod.PackagingError, match="still active"):
-        _recover(root, tmp_path / "p", original_sha=claim["sha256"],
-                 quiescence=active)
+        _recover(root, tmp_path / "p", claim=claim, quiescence=active)
     assert not _recovery_claim_path(root).exists()
 
 
 def test_ei026_existing_recovery_claim_blocks_all_attempts(tmp_path):
     root = _source_root(tmp_path)
     claim = _write_original_claim(root)
-    # pre-existing recovery claim: one-shot blocks further attempts
     _recovery_claim_path(root).write_text("prior\n")
     with pytest.raises(mod.PackagingError, match="already claimed"):
-        _recover(root, tmp_path / "p", original_sha=claim["sha256"])
-    # the prior claim is preserved untouched
+        _recover(root, tmp_path / "p", claim=claim)
     assert _recovery_claim_path(root).read_text() == "prior\n"
 
 
+def test_ei026_existing_package_prefix_blocks_recovery(tmp_path):
+    """B2: an existing final package with the same campaign/job/preflight
+    prefix (any packaging commit) blocks recovery before the recovery claim."""
+    root = _source_root(tmp_path)
+    claim = _write_original_claim(root)
+    out = tmp_path / "packages"
+    out.mkdir()
+    pf12 = sha256_file(str(root / "PREFLIGHT.json"))[:12]
+    (out / f"a6_holdout-job424242-{pf12}-pkgOLDCOMMIT").mkdir()
+    with pytest.raises(mod.PackagingError,
+                       match="same campaign/job/preflight prefix"):
+        _recover(root, out, claim=claim)
+    assert not _recovery_claim_path(root).exists()
+
+
+def test_ei026_recovery_claim_mutation_before_publication_fails_closed(tmp_path):
+    """B3: mutating the recovery claim after it is created but before
+    publication fails closed."""
+    root = _source_root(tmp_path)
+    claim = _write_original_claim(root)
+    real_claimer = mod.claim_recovery
+
+    def claim_then_mutate(*a, **k):
+        rec = real_claimer(*a, **k)
+        Path(rec["path"]).write_text("MUTATED\n")  # corrupt after creation
+        return rec
+
+    with pytest.raises(mod.PackagingError, match="recovery claim changed"):
+        _recover(root, tmp_path / "p", claim=claim,
+                 recovery_claimer=claim_then_mutate)
+
+
 def test_ei026_recovery_failure_preserves_claims(tmp_path):
-    """A failure AFTER the recovery claim is created is fail-closed: the
-    recovery + original claims and raw root are preserved, no bundle created,
-    and a second attempt is blocked by the one-shot recovery claim."""
     root = _source_root(tmp_path)
     claim = _write_original_claim(root)
 
@@ -2071,19 +2167,15 @@ def test_ei026_recovery_failure_preserves_claims(tmp_path):
         return ["# summary", "", "**FAIL**"], False, ["injected audit failure"]
 
     with pytest.raises(mod.PackagingError, match="AUDIT FAILED"):
-        _recover(root, tmp_path / "p", original_sha=claim["sha256"],
-                 audit_fn=failing_audit)
-    assert _recovery_claim_path(root).exists()          # preserved
-    assert Path(claim["path"]).exists()                 # original preserved
-    assert not list((tmp_path / "p").glob("a6_holdout-*"))  # no bundle
-    # second attempt is blocked by the one-shot recovery claim
+        _recover(root, tmp_path / "p", claim=claim, audit_fn=failing_audit)
+    assert _recovery_claim_path(root).exists()
+    assert Path(claim["path"]).exists()
+    assert not list((tmp_path / "p").glob("a6_holdout-*"))
     with pytest.raises(mod.PackagingError, match="already claimed"):
-        _recover(root, tmp_path / "p", original_sha=claim["sha256"])
+        _recover(root, tmp_path / "p", claim=claim)
 
 
 def test_ei026_normal_pack_still_refuses_existing_claim(tmp_path):
-    """Normal pack is NOT a recovery bypass: it still refuses when the
-    closeout claim already exists."""
     root = _source_root(tmp_path)
     _write_original_claim(root)
     cb = _callbacks(root)
