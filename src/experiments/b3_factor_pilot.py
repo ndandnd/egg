@@ -177,6 +177,31 @@ def refuse_existing_dir(path: str | os.PathLike) -> None:
         raise B3PilotError(f"refusing existing output directory: {path}")
 
 
+def assert_fresh_run_dir(out_dir: str | os.PathLike) -> None:
+    """Refuse to (re)submit into a run dir that already holds a job binding or
+    any partial/result-bearing state (a cell directory, a ``*.ckpt.json``
+    checkpoint, or a cell-identity sidecar).  A lone byte-identical
+    ``MANIFEST.json`` left by a pre-sbatch interruption is allowed (reuse);
+    ``write_run_manifest`` still refuses a *different* manifest."""
+    out = Path(out_dir)
+    if not out.exists():
+        return
+    if (out / JOB_FILENAME).exists():
+        raise B3PilotError(
+            f"refusing to submit: {out / JOB_FILENAME} already exists (a job "
+            "was already submitted for this run dir)")
+    for entry in sorted(out.iterdir()):
+        if entry.is_dir():
+            raise B3PilotError(
+                f"refusing to submit: existing cell directory {entry.name!r} "
+                "in the run dir (partial/result-bearing state)")
+        if entry.name.endswith(".ckpt.json") or \
+                entry.name == CELL_IDENTITY_FILENAME:
+            raise B3PilotError(
+                f"refusing to submit: existing result-bearing file "
+                f"{entry.name!r} in the run dir")
+
+
 # --------------------------------------------------------------------------
 # frozen screen artifact loading and binding (spec Section 7)
 # --------------------------------------------------------------------------

@@ -236,9 +236,11 @@ def main():
 
     if args.emit_run_manifest:
         # emitted BEFORE sbatch: clean tree + Gurobi are mandatory so the
-        # recorded backend and code commit are truthful.
+        # recorded backend and code commit are truthful. Refuse any
+        # partial/result-bearing run dir (a lone MANIFEST.json may be reused).
         bp.assert_clean_tracked_tree()
         bp.assert_grb_backend()
+        bp.assert_fresh_run_dir(args.out)
         _preflight(screen)
         manifest = bp.build_run_manifest(
             screen, git_commit=bp.git_head_commit(),

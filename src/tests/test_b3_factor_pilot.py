@@ -512,6 +512,23 @@ def test_cell_identity_resume_refuses_drift(tmp_path, screen):
         bp.verify_or_write_cell_identity(d, drifted)
 
 
+def test_assert_fresh_run_dir(tmp_path, screen):
+    out = tmp_path / "runs"
+    bp.assert_fresh_run_dir(out)                      # missing dir is fine
+    out.mkdir()
+    bp.assert_fresh_run_dir(out)                      # empty dir is fine
+    (out / bp.RUN_MANIFEST_FILENAME).write_text("{}")
+    bp.assert_fresh_run_dir(out)                      # lone manifest reusable
+    (out / bp.JOB_FILENAME).write_text("{}")
+    with pytest.raises(bp.B3PilotError, match="JOB.json already exists"):
+        bp.assert_fresh_run_dir(out)
+    (out / bp.JOB_FILENAME).unlink()
+    cell = out / "S0_baseline_s0_n8_b0.01"
+    cell.mkdir()
+    with pytest.raises(bp.B3PilotError, match="existing cell directory"):
+        bp.assert_fresh_run_dir(out)
+
+
 def test_job_binding_closes_provenance_gap(tmp_path, screen):
     runs = _write_tree(tmp_path / "runs", screen)
     path = bp.bind_job_id(runs, "123456")
