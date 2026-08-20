@@ -2125,18 +2125,19 @@ def test_coordinated_pricing_bound_above_incumbents_halts(
     checkpoint.save(str(path), state)
     _dump_jsonl(cell / "a2.oracle.jsonl", state["oracle_events"])
     _dump_jsonl(cell / "a2.iterations.jsonl", state["iteration_events"])
-    # The inflated bound (ub + 1.0) exceeds the incumbents far beyond any
-    # operand-scaled tolerance and is now caught at the AUDIT stage via the
-    # shared operand-scaled ordering (EI-026 audit/analyzer parity); the
-    # campaign still HALTs with nothing scored. The analyzer's own dedicated
-    # rejections ("solver obj mismatch" / "solver bound exceeds model
-    # incumbent") remain and are covered by the direct-call EI-026 regressions.
-    # The inflated bound is caught at the AUDIT stage via the ONE shared
-    # conservative-certificate helper (EI-026 parity); the campaign HALTs with
-    # nothing scored. The analyzer's own dedicated rejections remain and are
-    # covered by the direct-call EI-026 regressions.
-    with pytest.raises(AnalysisError,
-                       match="bound exceeds an incumbent beyond the operand"):
+    # Both variants still HALT with nothing scored, via two different
+    # layers of the EI-027 contract:
+    # - obj untampered: the shared physical-bridge gate rejects the bound
+    #   above the MODEL incumbent beyond operand tau (audit stage);
+    # - obj coordinated with the bound: the ordering gate legitimately
+    #   passes (the physical allowance covers exactly the model-physical
+    #   distance), but the RAW reconstruction fields are preserved exactly
+    #   (EI-027 Task A), so the analyzer's pricing-objective
+    #   reconstruction binding catches the tampered solver obj.
+    with pytest.raises(
+            AnalysisError,
+            match="exceeds the model incumbent beyond the operand"
+                  "|solver obj mismatch"):
         _mini_analyze(str(bad), preflight, tmp_path / "out-pricing-bound-order")
 
 
@@ -2556,21 +2557,30 @@ def test_ei026_ordering_tolerance_scales_with_operands():
 
 @pytest.mark.parametrize("scale", [1.0, 3255.503129856506, 1.0e6])
 def test_ei026_just_inside_and_outside_tolerance_at_scales(scale):
-    """A negative raw gap just inside the operand tolerance is admitted; just
-    outside it is rejected — at small and large objective scales."""
+    """Operand-tolerance behavior at small and large objective scales,
+    under the EI-027 physical-bridge contract:
+
+    - a physical incumbent below a MODEL-consistent bound is admitted
+      (the exact reconstruction adjustment explains it — the EI-027
+      pattern), with the claim-bearing safe chain absorbing the full
+      allowance;
+    - a bound above the MODEL incumbent beyond operand tau is rejected."""
     bound = scale
     tau = 1e-10 * max(1.0, abs(bound))
-    # just inside: incumbent below bound by 0.5*tau (raw gap -0.5*tau)
+    # inside: physical below bound by 0.5*tau (raw gap -0.5*tau)
     inside = _pricing_order_ck(bound, bound, bound - 0.5 * tau)
     cert = mod._replay_cg_certificate_evidence(inside, "inside")
     assert cert["certified"] is True
-    # just outside: incumbent below bound by 2*tau (raw gap -2*tau). This is
-    # the SAME condition as "bound exceeds incumbent beyond tolerance", so
-    # either equivalent operand-scaled rejection is acceptable.
-    outside = _pricing_order_ck(bound, bound, bound - 2.0 * tau)
+    # EI-027 pattern: physical 2*tau below a model-consistent bound is now
+    # ADMITTED (allowance = tau + 2*tau covers it) — verify via the gate
+    gate = mod.pricing_order_gate(bound, bound, bound - 2.0 * tau)
+    assert gate["errors"] == []
+    assert gate["physical_bridge_allowance"] == pytest.approx(3.0 * tau)
+    # model-side violation is still rejected at every scale
     with pytest.raises(AnalysisError,
-                       match="exceeds physical incumbent|negative beyond the operand"):
-        mod._replay_cg_certificate_evidence(outside, "outside")
+                       match="exceeds the model incumbent"):
+        mod._replay_cg_certificate_evidence(
+            _pricing_order_ck(bound + 2.0 * tau, bound, bound), "outside")
 
 
 def test_ei026_raw_recorded_gap_is_checked_exactly():
@@ -2635,10 +2645,11 @@ def test_ei026_audit_analyzer_parity_generic_pricing_order():
     tau = 1e-10 * 100.0
     bad = _pricing_order_ck(bound + 100.0 * tau, bound, bound)
     audit_errs = audit_mod._cg_sane(json.loads(json.dumps(bad)))
-    assert any("bound exceeds an incumbent beyond the operand" in e
+    assert any("exceeds the model incumbent beyond the operand" in e
                for e in audit_errs)
-    with pytest.raises(AnalysisError,
-                       match="exceeds (model|physical) incumbent|bound exceeds an incumbent"):
+    with pytest.raises(
+            AnalysisError,
+            match="exceeds the (model|physical) incumbent"):
         mod._replay_cg_certificate_evidence(bad, "parity-bad")
 
 
@@ -2649,7 +2660,8 @@ def test_ei026_inflated_bound_beyond_tolerance_still_rejected():
     tau = 1e-10 * 100.0
     # bound exceeds both incumbents by 100*tau
     ck = _pricing_order_ck(bound + 100.0 * tau, bound, bound)
-    with pytest.raises(AnalysisError, match="exceeds (model|physical) incumbent"):
+    with pytest.raises(AnalysisError,
+                       match="exceeds the (model|physical) incumbent"):
         mod._replay_cg_certificate_evidence(ck, "inflated")
 
 
@@ -2702,3 +2714,260 @@ def test_ei026_csv_uses_conservative_claim_bearing_values(mini_root, tmp_path):
         assert float(r["final_gap"]) >= float(r["raw_final_gap"]) - 1e-12
         # zd_minus_lb uses the smaller conservative LB, so it is >= raw
         assert float(r["zd_minus_lb"]) >= float(r["raw_zd_minus_lb"]) - 1e-12
+
+
+# ---------------------------------------------------------------------------
+# EI-027: physical-bridge allowance (frozen incident scalars)
+# ---------------------------------------------------------------------------
+EI027_BOUND = 2417.583855389641
+EI027_MODEL_INCUMBENT = 2417.583855389641   # bound == model incumbent
+EI027_PHYS_INCUMBENT = 2417.583844628412
+EI027_OPERAND_TAU = 2.4175838553896413e-07
+EI027_ADJUSTMENT = 1.0761229077616008e-05
+
+
+def test_ei027_frozen_scalars_accepted_with_exact_gate_values():
+    """The exact EI-027 evidence (cell a2 seed=22 n=12 b=0.01 iteration
+    24) must pass the shared gate with the exact frozen intermediate
+    scalars, and both the analyzer and the audit must certify it."""
+    gate = mod.pricing_order_gate(
+        EI027_BOUND, EI027_MODEL_INCUMBENT, EI027_PHYS_INCUMBENT)
+    assert gate["operand_tau"] == EI027_OPERAND_TAU
+    assert gate["reconstruction_adjustment"] == EI027_ADJUSTMENT
+    assert gate["physical_bridge_allowance"] == (
+        EI027_OPERAND_TAU + EI027_ADJUSTMENT)
+    assert gate["safe_bound"] == EI027_BOUND - (
+        EI027_OPERAND_TAU + EI027_ADJUSTMENT)
+    assert gate["errors"] == []
+
+    ck = _pricing_order_ck(
+        EI027_BOUND, EI027_MODEL_INCUMBENT, EI027_PHYS_INCUMBENT)
+    cert = mod._replay_cg_certificate_evidence(ck, "ei027")
+    assert cert["certified"] is True
+    # raw pricing gap preserved exactly (negative by the adjustment)
+    assert cert["min_raw_pricing_gap"] == (
+        EI027_PHYS_INCUMBENT - EI027_BOUND)
+    # audit/analyzer parity through the one shared implementation
+    import experiments.audit_runs as audit_mod
+    assert audit_mod._cg_sane(json.loads(json.dumps(ck))) == []
+
+
+def test_ei027_safe_chain_subtracts_full_allowance():
+    """Claim-bearing safe bounds use bound - physical_bridge_allowance."""
+    ck = _pricing_order_ck(
+        EI027_BOUND, EI027_MODEL_INCUMBENT, EI027_PHYS_INCUMBENT)
+    conservative = mod.conservative_certificate(ck)
+    assert conservative["errors"] == [] and conservative["evaluable"]
+    allowance = EI027_OPERAND_TAU + EI027_ADJUSTMENT
+    z_model = ck["iteration_events"][0]["z_rmp_model"]
+    sigma = ck["iteration_events"][0]["duals_sigma"]
+    expected_safe_lb = z_model + min(
+        0.0, (EI027_BOUND - allowance) - sigma)
+    assert conservative["safe"]["lb_best"] == expected_safe_lb
+    # raw chain unchanged: raw lb uses the untouched bound
+    expected_raw_lb = z_model + min(0.0, EI027_BOUND - sigma)
+    assert conservative["raw"]["lb_best"] == expected_raw_lb
+
+
+def test_ei027_bridge_never_covers_model_side_inflation():
+    """The physical bridge is one-sided: a bound above the MODEL incumbent
+    beyond operand tau is rejected regardless of the physical distance."""
+    gate = mod.pricing_order_gate(
+        EI027_BOUND + 1e-4, EI027_BOUND, EI027_PHYS_INCUMBENT)
+    assert any("model incumbent" in e for e in gate["errors"])
+    # and a physical incumbent ABOVE the model gains no extra allowance
+    # beyond the reconstruction distance itself
+    gate = mod.pricing_order_gate(100.0 + 1e-6, 100.0, 100.0 + 2e-7)
+    assert any("model incumbent" in e for e in gate["errors"])
+
+
+def test_ei027_audit_analyzer_parity_on_rejection():
+    """Beyond-allowance evidence is rejected identically by the audit and
+    the analyzer through the one shared gate."""
+    import experiments.audit_runs as audit_mod
+    bad = _pricing_order_ck(
+        EI027_BOUND + 1e-3, EI027_MODEL_INCUMBENT, EI027_PHYS_INCUMBENT)
+    errs = audit_mod._cg_sane(json.loads(json.dumps(bad)))
+    assert any("exceeds the model incumbent" in e for e in errs)
+    with pytest.raises(AnalysisError,
+                       match="exceeds the model incumbent"):
+        mod._replay_cg_certificate_evidence(bad, "ei027-bad")
+
+
+# ---------------------------------------------------------------------------
+# EI-027 P1: the FULL-CELL numeric validation must apply the same
+# physical-bridge policy as the audit and the certificate replay
+# ---------------------------------------------------------------------------
+def _frozen_incident_cell():
+    """A cell whose cg-pricing event carries the EXACT frozen EI-027
+    scalars, with real load-evidence, reconstruction, certificate, and
+    dictator consistency at that scale.  The single-price-slot
+    construction makes the recomputed model/physical objectives land on
+    the frozen doubles exactly (asserted)."""
+    inst = fix_builder(1, 4)
+    market = make_affine_market(inst, shape="duck", b_scale=0.01)
+    n = market.n_slots
+    zeros = [0.0] * n
+
+    def load_evidence(raw, load):
+        residual = [raw[t] - load[t] for t in range(n)]
+        max_slot = max(range(n), key=lambda t: abs(residual[t]))
+        return {
+            "policy_version": LOAD_RECONSTRUCTION_POLICY_VERSION,
+            "tolerance_kwh": REPLAY_TOL_KWH,
+            "raw_load_kwh": list(raw),
+            "residual_kwh": residual,
+            "max_abs_residual_kwh": max(abs(x) for x in residual),
+            "max_abs_residual_slot": max_slot,
+            "raw_min_kwh": min(raw),
+            "physical_min_kwh": min(load),
+        }
+
+    ck = _pricing_order_ck(
+        EI027_BOUND, EI027_MODEL_INCUMBENT, EI027_PHYS_INCUMBENT)
+    seed_rec, price_rec = ck["oracle_events"]
+
+    # seed event: posted prices, no charging, trivially ordered
+    posted = [float(x) for x in market.price(zeros)]
+    seed_rec.update(
+        prices=[round(x, 6) for x in posted],
+        ops_cost=EI027_PHYS_INCUMBENT, obj_true=EI027_PHYS_INCUMBENT,
+        obj_model=EI027_PHYS_INCUMBENT, load=list(zeros), charges=[],
+        energy_charged_kwh=0.0)
+    seed_rec["solver"].update(
+        obj=EI027_PHYS_INCUMBENT, bound=EI027_PHYS_INCUMBENT)
+    seed_rec["solver"]["extra"] = {
+        "load_reconstruction": load_evidence(zeros, zeros),
+        "pricing_objective_reconstruction": {
+            "policy_version": LOAD_RECONSTRUCTION_POLICY_VERSION,
+            "prices": posted, "model_obj": EI027_PHYS_INCUMBENT,
+            "physical_obj": EI027_PHYS_INCUMBENT, "abs_adjustment": 0.0,
+        },
+    }
+
+    # frozen pricing event: exact doubles through exact float arithmetic
+    ops = 2400.0
+    phys_slot = EI027_PHYS_INCUMBENT - ops
+    model_slot = EI027_BOUND - ops
+    assert ops + phys_slot == EI027_PHYS_INCUMBENT      # exact
+    assert ops + model_slot == EI027_BOUND              # exact
+    prices = [1.0] + [0.0] * (n - 1)
+    load = [phys_slot] + [0.0] * (n - 1)
+    raw = [model_slot] + [0.0] * (n - 1)
+    price_rec.update(
+        prices=[round(x, 6) for x in prices],
+        ops_cost=ops, obj_true=EI027_PHYS_INCUMBENT,
+        obj_model=EI027_BOUND, load=load,
+        charges=[{"slot": 0, "kwh": phys_slot}],
+        energy_charged_kwh=phys_slot)
+    price_rec["solver"].update(obj=EI027_BOUND, bound=EI027_BOUND)
+    price_rec["solver"]["extra"] = dict(
+        price_rec["solver"].get("extra") or {},
+        load_reconstruction=load_evidence(raw, load),
+        pricing_objective_reconstruction={
+            "policy_version": LOAD_RECONSTRUCTION_POLICY_VERSION,
+            "prices": prices, "model_obj": EI027_BOUND,
+            "physical_obj": EI027_PHYS_INCUMBENT,
+            "abs_adjustment": EI027_ADJUSTMENT,
+        })
+    assert abs(EI027_BOUND - EI027_PHYS_INCUMBENT) == EI027_ADJUSTMENT
+
+    ck["columns"] = [{
+        "load": list(zeros), "charges": [],
+        "oracle_stats": {"extra": {
+            "load_reconstruction": load_evidence(zeros, zeros)}},
+    }]
+
+    # dictator at the same scale: zero load, exact reconstruction
+    zd = EI027_PHYS_INCUMBENT + 5.0
+    lb_d = zd - 0.005
+    dictator_extra = {
+        "load_reconstruction": load_evidence(zeros, zeros),
+        "adaptive_rounds": 1, "adaptive_lb": lb_d,
+        "adaptive_model_obj": zd, "adaptive_ub": zd,
+        "adaptive_gap_abs": zd - lb_d, "adaptive_tol_abs": 0.01,
+        "adaptive_converged": True, "adaptive_total_wall_s": 0.5,
+        "adaptive_solve_stats": [{
+            "round": 1, "status": "OPTIMAL", "incumbent": zd,
+            "bound": lb_d, "gap": zd - lb_d, "n_vars": 1, "n_int": 1,
+            "n_constrs": 1, "wall_s": 0.3, "backend": "GRB",
+            "threads": 4}],
+        "dictator_objective_reconstruction": {
+            "policy_version": LOAD_RECONSTRUCTION_POLICY_VERSION,
+            "raw_true_obj": zd, "physical_obj": zd,
+            "abs_adjustment": 0.0},
+    }
+    drec = {
+        "ops_cost": zd, "obj_true": zd, "obj_model": zd,
+        "load": list(zeros), "charges": [], "energy_charged_kwh": 0.0,
+        "solver": {"backend": "GRB", "status": "OPTIMAL",
+                   "extra": dictator_extra},
+    }
+    dck = {"record": drec, "z_d_ub": zd, "tol_d": 0.01,
+           "adaptive": copy.deepcopy(dictator_extra)}
+    return ck, dck, inst, market
+
+
+def _run_frozen_incident_cell(monkeypatch):
+    """Drive the REAL _validate_cell_numeric_evidence on the frozen
+    incident.  The independent schedule-physics replay and the
+    certificate-side safety helpers (covered by their own batteries) are
+    stubbed; every numeric gate — load evidence, reconstruction
+    bindings, the pricing-order policy, the certificate replay, and the
+    dictator block — runs for real."""
+    ck, dck, inst, market = _frozen_incident_cell()
+    monkeypatch.setattr(mod, "_validate_schedule_evidence",
+                        lambda *a, **k: None)
+    monkeypatch.setattr(mod, "_validate_retained_column_lineage",
+                        lambda *a, **k: None)
+    monkeypatch.setattr(mod, "_validate_clean_bound_safety",
+                        lambda *a, **k: None)
+    monkeypatch.setattr(mod, "_replay_a6_a4_mechanism",
+                        lambda *a, **k: None)
+    return ck, dck, inst, market
+
+
+def test_ei027_frozen_incident_passes_full_cell_numeric_evidence(
+        monkeypatch):
+    """P1 regression: the exact frozen incident must survive the FULL
+    cell numeric validation, not merely pricing_order_gate or the
+    certificate replay."""
+    ck, dck, inst, market = _run_frozen_incident_cell(monkeypatch)
+    mod._validate_cell_numeric_evidence(ck, dck, inst, market, "ei027")
+
+
+def test_ei027_full_cell_rejects_just_beyond_model_tolerance(monkeypatch):
+    """Just beyond the model tolerance the full-cell validation still
+    rejects (with the reconstruction fields coordinated so only the
+    ordering gate can fire)."""
+    ck, dck, inst, market = _run_frozen_incident_cell(monkeypatch)
+    rec = ck["oracle_events"][1]
+    tau = mod._ordering_tolerance(
+        EI027_BOUND, EI027_MODEL_INCUMBENT, EI027_PHYS_INCUMBENT)
+    inflated = EI027_BOUND + 3.0 * tau
+    rec["solver"]["bound"] = inflated
+    with pytest.raises(AnalysisError,
+                       match="exceeds the model incumbent"):
+        mod._validate_cell_numeric_evidence(ck, dck, inst, market, "ei027")
+
+
+def test_ei027_full_cell_rejects_just_beyond_bridge_allowance(monkeypatch):
+    """Just beyond the physical-bridge allowance: with the model incumbent
+    raised alongside the bound (so the model gate passes), a bound above
+    physical + allowance is impossible without also exceeding the model
+    gate; the coordinated variant is caught by the exact
+    reconstruction-field bindings instead. Both layers are asserted."""
+    # layer 1: bound raised beyond phys + allowance ALSO breaks the model
+    # gate (the mathematical implication documented in the incident)
+    gate = mod.pricing_order_gate(
+        EI027_BOUND + 2e-5, EI027_MODEL_INCUMBENT, EI027_PHYS_INCUMBENT)
+    assert any("model incumbent" in e for e in gate["errors"])
+    # layer 2: coordinating solver obj/bound together breaks the exact
+    # model-objective reconstruction binding in the full-cell path
+    ck, dck, inst, market = _run_frozen_incident_cell(monkeypatch)
+    rec = ck["oracle_events"][1]
+    lifted = EI027_BOUND + 2e-5
+    rec["solver"]["bound"] = lifted
+    rec["solver"]["obj"] = lifted
+    with pytest.raises(AnalysisError, match="solver obj mismatch"):
+        mod._validate_cell_numeric_evidence(ck, dck, inst, market, "ei027")

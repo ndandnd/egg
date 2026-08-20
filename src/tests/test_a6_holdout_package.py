@@ -2274,3 +2274,329 @@ def test_ei026_normal_pack_still_refuses_existing_claim(tmp_path):
             root, tmp_path / "p", PACKAGING_COMMIT,
             selection_path=cb["selection_path"], require_frozen_grid=False,
             verify_selection_git=False, **kwargs)
+
+
+# ==========================================================================
+# EI-027 Task B: second-stage recovery (frozen three-claim provenance)
+# ==========================================================================
+RECOVERY2_COMMIT = "c" * 40
+
+
+def _write_first_recovery_claim(root: Path, claim: dict) -> dict:
+    """Write the (synthetic) EI-026 first recovery claim exactly as the
+    burned recover-pack would have."""
+    return mod.claim_recovery(
+        root, original_claim=claim, recovery_commit=RECOVERY_COMMIT,
+        failure_fingerprint="nonlogin-squeue-then-frozen-validation",
+        raw_tree_sha256=claim["document"]["source"]["canonical_tree_sha256"])
+
+
+def _ei027_env(tmp_path, monkeypatch):
+    """Synthetic frozen environment: original claim + first recovery claim
+    adjacent to a fresh raw root, with the module frozen constants
+    repointed at the synthetic identities (test-only)."""
+    root = _source_root(tmp_path)
+    claim = _write_original_claim(root)
+    first = _write_first_recovery_claim(root, claim)
+    monkeypatch.setattr(
+        mod, "RECOVERY2_FIRST_RECOVERY_CLAIM_SHA256", first["sha256"])
+    monkeypatch.setattr(
+        mod, "RECOVERY2_FIRST_RECOVERY_COMMIT", RECOVERY_COMMIT)
+    monkeypatch.setattr(mod, "RECOVERY2_BASE_COMMIT", RECOVERY_COMMIT)
+    return root, claim, first
+
+
+def _recover2(root, out, *, claim, first, incident_id="EI-027",
+              original_sha=None, first_sha=None, quiescence=None,
+              clean=None, ancestor=None, head=None, audit_fn=None, **over):
+    kwargs = _recovery_pkg_kwargs(root)
+    if audit_fn is not None:
+        kwargs["audit_fn"] = audit_fn
+    if original_sha is None:
+        original_sha = claim["sha256"]
+    if first_sha is None:
+        first_sha = first["sha256"]
+    return mod.recover2_package_holdout(
+        root, out, RECOVERY2_COMMIT,
+        incident_id=incident_id,
+        original_claim_sha256=original_sha,
+        first_recovery_claim_sha256=first_sha,
+        failure_fingerprint="ei027-physical-bridge-validation-abort",
+        code_verifier=lambda c: RECOVERY2_COMMIT,
+        job_quiescence_validator=quiescence or (lambda j: None),
+        head_resolver=head or (lambda: RECOVERY2_COMMIT),
+        clean_tree_checker=clean or (lambda: None),
+        ancestor_checker=ancestor or (lambda a, d: None),
+        expected_original_sha256=claim["sha256"],
+        expected_original_packaging_commit=(
+            claim["document"]["packaging_code_commit"]),
+        expected_original_source_tree_sha256=(
+            claim["document"]["source"]["canonical_tree_sha256"]),
+        expected_first_recovery_sha256=first["sha256"],
+        expected_first_recovery_commit=RECOVERY_COMMIT,
+        **kwargs, **over)
+
+
+def _recovery2_claim_path(root: Path) -> Path:
+    return root.parent / mod.RECOVERY2_CLAIM_FILENAME
+
+
+def _import_recovery2(bundle_dir, repo):
+    return mod.import_bundle(
+        bundle_dir, repo,
+        destination_validator=lambda _r, _m: None,
+        recovery_head_resolver=lambda: RECOVERY2_COMMIT,
+        recovery_ancestor_checker=lambda a, d: None)
+
+
+def test_ei027_recover2_full_synthetic_round_trip(tmp_path, monkeypatch):
+    """recover2-pack -> import -> analyzer validate_transfer_receipt, with
+    the complete original, recovery-1, and recovery-2 claims bound."""
+    root, claim, first = _ei027_env(tmp_path, monkeypatch)
+    result = _recover2(root, tmp_path / "packages", claim=claim, first=first)
+    manifest = json.loads(Path(result["manifest"]).read_text())
+    assert manifest["schema"] == mod.SCHEMA_RECOVERY2
+    r2 = manifest["recovery2"]
+    assert r2["incident_id"] == "EI-027"
+    assert r2["original_claim"]["sha256"] == claim["sha256"]
+    assert r2["first_recovery_claim"]["sha256"] == first["sha256"]
+    assert r2["recovery2_claim"]["document"]["incident_id"] == "EI-027"
+    assert r2["recovery2_claim"]["document"]["first_recovery_claim"][
+        "sha256"] == first["sha256"]
+    assert _recovery2_claim_path(root).exists()
+    # the EI-026 claim file is untouched byte-for-byte
+    assert (mod.sha256_file(root.parent / mod.RECOVERY_CLAIM_FILENAME)
+            == first["sha256"])
+
+    repo = _import_repo(tmp_path)
+    imported = _import_recovery2(result["bundle_dir"], repo)
+    receipt = json.loads(Path(imported["receipt"]).read_text())
+    assert receipt["schema"] == mod.RECEIPT_SCHEMA_RECOVERY2
+    assert receipt["recovery2"]["recovery2_claim"]["sha256"] == (
+        r2["recovery2_claim"]["sha256"])
+
+    import experiments.analyze_a6_holdout as an
+    monkeypatch.setattr(
+        an, "RECOVERY2_FIRST_RECOVERY_CLAIM_SHA256", first["sha256"])
+    monkeypatch.setattr(
+        an, "RECOVERY2_FIRST_RECOVERY_COMMIT", RECOVERY_COMMIT)
+    monkeypatch.setattr(an, "RECOVERY2_BASE_COMMIT", RECOVERY_COMMIT)
+    validated = an.validate_transfer_receipt(
+        Path(imported["target"]),
+        preflight={"code_commit": EXPERIMENT_COMMIT,
+                   "sha256": manifest["preflight"]["sha256"]},
+        selection={"sha256": SELECTION_SHA},
+        launch={"job_id": "424242", "grid_list_sha256": "e" * 64,
+                "manifest_submitted_utc": "2026-08-19T01:04:00Z"},
+        analysis_code_commit=RECOVERY2_COMMIT,
+        repository=repo, verify_git=False)
+    assert validated["document"]["recovery2"]["recovery2_code_commit"] == (
+        RECOVERY2_COMMIT)
+
+
+def test_ei027_one_shot_refusal_and_no_third_stage(tmp_path, monkeypatch):
+    root, claim, first = _ei027_env(tmp_path, monkeypatch)
+    _recover2(root, tmp_path / "packages-a", claim=claim, first=first)
+    # a second second-stage attempt is blocked by the RECOVERY2 claim
+    with pytest.raises(mod.PackagingError,
+                       match="no third recovery stage exists"):
+        _recover2(root, tmp_path / "packages-b", claim=claim, first=first)
+    # the EI-026 recover-pack one-shot refusal is intact (never reused)
+    with pytest.raises(mod.PackagingError,
+                       match="already claimed"):
+        _recover(root, tmp_path / "packages-c", claim=claim)
+    # and the normal pack path still refuses the original claim (the
+    # real claimer, not the harness stub)
+    cb = _callbacks(root)
+    kwargs = {k: cb[k] for k in (
+        "selection_validator", "preflight_validator", "launch_validator",
+        "root_validator", "scientific_validator", "audit_fn",
+        "code_verifier", "job_quiescence_validator")}
+    with pytest.raises(mod.PackagingError, match="already claimed"):
+        mod.package_holdout(
+            root, tmp_path / "packages-d", PACKAGING_COMMIT,
+            selection_path=cb["selection_path"],
+            require_frozen_grid=False, verify_selection_git=False,
+            **kwargs)
+
+
+def test_ei027_incident_and_sha_gates(tmp_path, monkeypatch):
+    root, claim, first = _ei027_env(tmp_path, monkeypatch)
+    with pytest.raises(mod.PackagingError, match="restricted to EI-027"):
+        _recover2(root, tmp_path / "o1", claim=claim, first=first,
+                  incident_id="EI-026")
+    with pytest.raises(mod.PackagingError, match="64 lowercase hex"):
+        _recover2(root, tmp_path / "o2", claim=claim, first=first,
+                  first_sha="nothex")
+    # wrong (but well-formed) first-recovery SHA: refused against frozen
+    with pytest.raises(mod.PackagingError,
+                       match="does not equal the frozen"):
+        _recover2(root, tmp_path / "o3", claim=claim, first=first,
+                  first_sha="0" * 64)
+    assert not _recovery2_claim_path(root).exists()  # nothing burned
+
+
+def test_ei027_first_claim_mutation_and_coordinated_rehash(tmp_path,
+                                                           monkeypatch):
+    root, claim, first = _ei027_env(tmp_path, monkeypatch)
+    path = root.parent / mod.RECOVERY_CLAIM_FILENAME
+    # byte mutation: file hash no longer matches the supplied/frozen SHA
+    original_bytes = path.read_bytes()
+    path.write_bytes(original_bytes + b"\n")
+    with pytest.raises(mod.PackagingError, match="does not match"):
+        _recover2(root, tmp_path / "o1", claim=claim, first=first)
+    # coordinated rehash: rewrite the document canonically with a tampered
+    # fingerprint and supply ITS sha — refused against the frozen SHA
+    doc = dict(first["document"])
+    doc["failure_fingerprint"] = "tampered"
+    payload = mod._canonical_json_bytes(doc)
+    path.write_bytes(payload)
+    import hashlib as _hl
+    rehashed = _hl.sha256(payload).hexdigest()
+    with pytest.raises(mod.PackagingError,
+                       match="does not equal the frozen"):
+        _recover2(root, tmp_path / "o2", claim=claim, first=first,
+                  first_sha=rehashed)
+    assert not _recovery2_claim_path(root).exists()
+    path.write_bytes(original_bytes)
+
+
+def test_ei027_ancestry_gate(tmp_path, monkeypatch):
+    root, claim, first = _ei027_env(tmp_path, monkeypatch)
+
+    def refuse_first_recovery_ancestry(ancestor, descendant):
+        if ancestor == RECOVERY_COMMIT:
+            raise mod.PackagingError(
+                f"recovery HEAD {descendant} does not have {ancestor} as "
+                "an ancestor")
+
+    with pytest.raises(mod.PackagingError, match=r"as\s+an ancestor"):
+        _recover2(root, tmp_path / "o1", claim=claim, first=first,
+                  ancestor=refuse_first_recovery_ancestry)
+    assert not _recovery2_claim_path(root).exists()
+
+
+def test_ei027_output_path_gates_do_not_burn_the_claim(tmp_path,
+                                                       monkeypatch):
+    root, claim, first = _ei027_env(tmp_path, monkeypatch)
+    # symlinked out
+    real_out = tmp_path / "real-out"
+    real_out.mkdir()
+    link = tmp_path / "link-out"
+    link.symlink_to(real_out, target_is_directory=True)
+    with pytest.raises(mod.PackagingError, match="unsafe recovery2"):
+        _recover2(root, link, claim=claim, first=first)
+    # out inside the raw root
+    with pytest.raises(mod.PackagingError, match="outside the canonical"):
+        _recover2(root, root / "inner", claim=claim, first=first)
+    # pre-existing matching final package
+    out = tmp_path / "preexisting"
+    out.mkdir()
+    prefix = (f"a6_holdout-job424242-"
+              f"{claim['document']['preflight_sha256'][:12]}-existing")
+    (out / prefix).mkdir()
+    with pytest.raises(mod.PackagingError,
+                       match="existing package with the same"):
+        _recover2(root, out, claim=claim, first=first)
+    # none of the refusals consumed the one-shot RECOVERY2 claim
+    assert not _recovery2_claim_path(root).exists()
+
+
+def test_ei027_claim_mutation_before_publication_fails_closed(
+        tmp_path, monkeypatch):
+    """All three claims are revalidated immediately before publication."""
+    root, claim, first = _ei027_env(tmp_path, monkeypatch)
+    first_path = root.parent / mod.RECOVERY_CLAIM_FILENAME
+    kwargs = _recovery_pkg_kwargs(root)
+    real_audit = kwargs["audit_fn"]
+
+    def tamper_then_audit(run_root, **kw):
+        first_path.write_bytes(first_path.read_bytes() + b"\n")
+        return real_audit(run_root, **kw)
+
+    with pytest.raises(mod.PackagingError,
+                       match="first recovery claim changed"):
+        _recover2(root, tmp_path / "o1", claim=claim, first=first,
+                  audit_fn=tamper_then_audit)
+    # the recovery2 claim WAS consumed (mutation happened after claiming);
+    # a rerun is blocked one-shot — exactly the fail-closed contract
+    assert _recovery2_claim_path(root).exists()
+
+
+def test_ei027_import_rejects_coordinated_manifest_tamper(tmp_path,
+                                                          monkeypatch):
+    root, claim, first = _ei027_env(tmp_path, monkeypatch)
+    result = _recover2(root, tmp_path / "packages", claim=claim, first=first)
+    bundle = Path(result["bundle_dir"])
+    manifest_path = bundle / "BUNDLE_MANIFEST.json"
+    manifest = json.loads(manifest_path.read_text())
+    # coordinated rehash: tamper the first recovery claim document inside
+    # the manifest AND rehash its sha; every internal binding is updated,
+    # but the frozen first-recovery-claim SHA pin must still refuse it
+    r2 = manifest["recovery2"]
+    doc = dict(r2["first_recovery_claim"]["document"])
+    doc["failure_fingerprint"] = "tampered"
+    import hashlib as _hl
+    new_sha = _hl.sha256(mod._canonical_json_bytes(doc)).hexdigest()
+    r2["first_recovery_claim"] = {"sha256": new_sha, "document": doc}
+    r2["recovery2_claim"]["document"]["first_recovery_claim"]["sha256"] = (
+        new_sha)
+    rc2_doc = r2["recovery2_claim"]["document"]
+    r2["recovery2_claim"]["sha256"] = _hl.sha256(
+        mod._canonical_json_bytes(rc2_doc)).hexdigest()
+    manifest_path.write_text(
+        json.dumps(manifest, indent=2, sort_keys=True) + "\n")
+    repo = _import_repo(tmp_path)
+    with pytest.raises(mod.PackagingError):
+        _import_recovery2(result["bundle_dir"], repo)
+
+
+def test_ei027_import_rejects_bad_chronology(tmp_path, monkeypatch):
+    root, claim, first = _ei027_env(tmp_path, monkeypatch)
+
+    def early_claimer(*args, **kwargs):
+        record = mod.claim_recovery2(*args, **kwargs)
+        doc = dict(record["document"])
+        doc["claimed_utc"] = "2000-01-01T00:00:00Z"  # before recovery1
+        payload = mod._canonical_json_bytes(doc)
+        Path(record["path"]).write_bytes(payload)
+        import hashlib as _hl
+        return {"path": record["path"],
+                "sha256": _hl.sha256(payload).hexdigest(),
+                "document": doc}
+
+    result = _recover2(root, tmp_path / "packages", claim=claim,
+                       first=first, recovery2_claimer=early_claimer)
+    repo = _import_repo(tmp_path)
+    with pytest.raises(mod.PackagingError, match="chronology"):
+        _import_recovery2(result["bundle_dir"], repo)
+
+
+def test_ei027_verify_first_recovery_claim_unit_gates(tmp_path, monkeypatch):
+    root, claim, first = _ei027_env(tmp_path, monkeypatch)
+    ok = mod.verify_first_recovery_claim(
+        root, first_recovery_claim_sha256=first["sha256"],
+        original_claim_sha256=claim["sha256"],
+        expected_sha256=first["sha256"],
+        expected_recovery_commit=RECOVERY_COMMIT,
+        expected_raw_tree_sha256=(
+            claim["document"]["source"]["canonical_tree_sha256"]))
+    assert ok["sha256"] == first["sha256"]
+    # binding to a different original claim SHA refuses
+    with pytest.raises(mod.PackagingError, match="does not bind"):
+        mod.verify_first_recovery_claim(
+            root, first_recovery_claim_sha256=first["sha256"],
+            original_claim_sha256="1" * 64,
+            expected_sha256=first["sha256"],
+            expected_recovery_commit=RECOVERY_COMMIT,
+            expected_raw_tree_sha256=(
+                claim["document"]["source"]["canonical_tree_sha256"]))
+    # wrong frozen recovery commit refuses
+    with pytest.raises(mod.PackagingError, match=r"frozen\s+EI-026 recovery"):
+        mod.verify_first_recovery_claim(
+            root, first_recovery_claim_sha256=first["sha256"],
+            original_claim_sha256=claim["sha256"],
+            expected_sha256=first["sha256"],
+            expected_recovery_commit="9" * 40,
+            expected_raw_tree_sha256=(
+                claim["document"]["source"]["canonical_tree_sha256"]))
