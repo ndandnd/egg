@@ -66,8 +66,11 @@ python3 experiments/run_phase1.py --cell 0 --out runs/phase1
 python3 experiments/run_phase2.py --cell 0 --out runs/phase2
 python3 -m egglab.collect runs -o runs/all.csv
 # Canonical four-trip witness (closed synthetic fixture; local only):
-python3 experiments/minimize_strict_cycle.py --out ../result/strict_two_cycle/WITNESS.json
-python3 -m egglab.enumerate_tiny --replay ../result/strict_two_cycle/WITNESS.json
+python3 experiments/minimize_strict_cycle.py \
+  --out ../result/strict_two_cycle/WITNESS.json \
+  --analysis-code-commit "$(git rev-parse HEAD)"
+python3 -m egglab.enumerate_tiny \
+  --replay ../result/strict_two_cycle/WITNESS.json --require-backend CBC
 ```
 
 ## Run on the Unicorn cluster (Slurm + Gurobi)

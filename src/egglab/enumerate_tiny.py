@@ -46,7 +46,7 @@ from .evsp import (
 )
 from .instance import Instance, Trip
 from .market import AffineMarket
-from .solver import new_model, optimize
+from .solver import backend, new_model, optimize
 
 MAX_STRUCTURES = 2000
 PWL_TOL = 1e-4
@@ -367,10 +367,11 @@ def solve_structure_linear(
     sol.obj_true = objective
     sol.energy_cost_model = objective - sol.ops_cost
     bound = stats.bound
+    if bound is None or not math.isfinite(float(bound)):
+        raise B2A2Error(
+            "enumerated structure solve returned no finite certified bound")
     optimality_gap = (
         max(0.0, objective - float(bound))
-        if bound is not None and math.isfinite(float(bound))
-        else None
     )
     return {
         "structure": struct,
@@ -378,7 +379,7 @@ def solve_structure_linear(
         "solution_object": sol,
         "solution": canonical_solution_record(sol),
         "objective": objective,
-        "certified_bound": float(bound) if bound is not None else None,
+        "certified_bound": float(bound),
         "optimality_gap_abs": optimality_gap,
         "n_charge_variables": capture["n_charge_variables"],
         "active_load_slots": list(capture["active_load_slots"]),
@@ -442,6 +443,20 @@ def enumerate_price_responses(inst: Instance, prices) -> dict:
     best = ranked[0]
     runner_up = ranked[1] if len(ranked) > 1 else None
     best_value = best["objective"]
+    other_lower_bound = min(
+        (
+            float(row["certified_bound"])
+            for row in feasible_raw
+            if row["structure_id"] != best["structure_id"]
+            and row["certified_bound"] is not None
+            and math.isfinite(float(row["certified_bound"]))
+        ),
+        default=float("inf"),
+    )
+    certified_margin = (
+        other_lower_bound - best_value
+        if math.isfinite(other_lower_bound) else None
+    )
     for response in responses:
         if response["feasible"]:
             response["objective_gap_from_best"] = canonical_number(
@@ -458,10 +473,53 @@ def enumerate_price_responses(inst: Instance, prices) -> dict:
         "runner_up_objective": (
             canonical_number(runner_up["objective"])
             if runner_up is not None else None),
+        "other_structures_certified_lower_bound": (
+            canonical_number(other_lower_bound)
+            if math.isfinite(other_lower_bound) else None),
         "strict_structure_margin": (
-            canonical_number(runner_up["objective"] - best_value)
-            if runner_up is not None else None),
+            canonical_number(certified_margin)
+            if certified_margin is not None else None),
         "responses": responses,
+    }
+
+
+def response_inventory_invariants(enumeration: dict) -> dict:
+    """Backend-invariant certificate view of complete response enumeration.
+
+    Optimizer-selected charge vectors are intentionally excluded.  Selected
+    cycle responses are serialized and physically replayed through the
+    trajectory contract instead.
+    """
+    response_fields = (
+        "index",
+        "structure_id",
+        "structure",
+        "feasible",
+        "objective",
+        "certified_bound",
+        "optimality_gap_abs",
+        "n_charge_variables",
+        "active_load_slots",
+        "objective_gap_from_best",
+    )
+    top_fields = (
+        "prices",
+        "n_structures",
+        "n_feasible",
+        "n_infeasible",
+        "best_structure_id",
+        "best_objective",
+        "runner_up_structure_id",
+        "runner_up_objective",
+        "other_structures_certified_lower_bound",
+        "strict_structure_margin",
+    )
+    return {
+        **{key: enumeration[key] for key in top_fields},
+        "responses": [
+            {key: row[key] for key in response_fields if key in row}
+            for row in enumeration["responses"]
+        ],
     }
 
 
@@ -469,7 +527,7 @@ def structure_optimal_face(
     inst: Instance,
     struct: dict,
     prices,
-    objective_tolerance: float = 1e-8,
+    objective_tolerance: float = 1e-6,
 ) -> dict:
     """Bound load variation on a structure's near-optimal LP face.
 
@@ -491,26 +549,54 @@ def structure_optimal_face(
     for slot in capture["active_load_slots"]:
         m.objective = loads[slot]
         low_stats = optimize(m, solve_lp_first=False)
-        if low_stats.status != "OPTIMAL":
-            raise B2A2Error("optimal-face minimum solve failed")
-        low = float(loads[slot].x or 0.0)
+        if (
+            low_stats.status != "OPTIMAL"
+            or low_stats.bound is None
+            or not math.isfinite(float(low_stats.bound))
+        ):
+            raise B2A2Error(
+                "optimal-face minimum solve lacks a certified bound")
+        low_primal = float(loads[slot].x or 0.0)
+        min_lower_bound = float(low_stats.bound)
         m.objective = -loads[slot]
         high_stats = optimize(m, solve_lp_first=False)
-        if high_stats.status != "OPTIMAL":
-            raise B2A2Error("optimal-face maximum solve failed")
-        high = float(loads[slot].x or 0.0)
+        if (
+            high_stats.status != "OPTIMAL"
+            or high_stats.bound is None
+            or not math.isfinite(float(high_stats.bound))
+        ):
+            raise B2A2Error(
+                "optimal-face maximum solve lacks a certified bound")
+        high_primal = float(loads[slot].x or 0.0)
+        max_upper_bound = -float(high_stats.bound)
         ranges.append({
             "slot": slot,
-            "min_kwh": canonical_number(low),
-            "max_kwh": canonical_number(high),
-            "range_kwh": canonical_number(max(0.0, high - low)),
+            "min_primal_kwh": canonical_number(low_primal),
+            "min_certified_lower_kwh": canonical_number(min_lower_bound),
+            "max_primal_kwh": canonical_number(high_primal),
+            "max_certified_upper_kwh": canonical_number(max_upper_bound),
+            "primal_range_kwh": canonical_number(
+                max(0.0, high_primal - low_primal)),
+            "certified_range_upper_kwh": canonical_number(
+                max(0.0, max_upper_bound - min_lower_bound)),
         })
     return {
         "objective_tolerance": objective_tolerance,
+        "primary_feasible_upper": canonical_number(solved["objective"]),
+        "primary_certified_lower": (
+            canonical_number(solved["certified_bound"])
+            if solved["certified_bound"] is not None else None),
+        "primary_optimality_gap_abs": (
+            canonical_number(solved["optimality_gap_abs"])
+            if solved["optimality_gap_abs"] is not None else None),
         "active_load_slots": capture["active_load_slots"],
         "slot_ranges": ranges,
-        "max_load_range_kwh": canonical_number(
-            max((row["range_kwh"] for row in ranges), default=0.0)),
+        "max_primal_load_range_kwh": canonical_number(
+            max((row["primal_range_kwh"] for row in ranges), default=0.0)),
+        "max_certified_load_range_upper_kwh": canonical_number(max(
+            (row["certified_range_upper_kwh"] for row in ranges),
+            default=0.0,
+        )),
     }
 
 
@@ -661,7 +747,6 @@ def enumerated_dictator_details(
             "pwl_gap_abs": canonical_number(solved["pwl_gap_abs"]),
             "n_charge_variables": solved["n_charge_variables"],
             "active_load_slots": solved["active_load_slots"],
-            "solution": solved["solution"],
         })
     if not feasible:
         raise B2A2Error("no feasible structure")
@@ -747,6 +832,51 @@ def _solution_from_record(record: dict) -> Solution:
     )
 
 
+def _selected_response_from_primitives(
+    inst: Instance,
+    record: dict,
+    posted_prices,
+    claimed_objective: float,
+    load_tolerance: float,
+) -> tuple[Solution, float]:
+    """Replay one selected response without trusting aggregate/cost fields."""
+    sol = _solution_from_record(record)
+    violations = validate_solution(inst, sol)
+    if violations:
+        raise B2A2Error(
+            "selected response failed physical replay: "
+            + "; ".join(violations))
+    try:
+        canonicalize_solution_load(inst, sol)
+    except RuntimeError as exc:
+        raise B2A2Error(
+            "selected response load is inconsistent with charge events"
+        ) from exc
+    recorded_energy = float(record["energy_charged_kwh"])
+    physical_energy = float(sum(sol.load))
+    if abs(recorded_energy - physical_energy) > load_tolerance:
+        raise B2A2Error(
+            "selected response energy total is inconsistent with physical load")
+
+    canonical = canonical_structure(sol.sequences, sol.arc_kinds)
+    tripmap = {trip.id: trip for trip in inst.trips}
+    part = [[tripmap[trip_id] for trip_id in sequence]
+            for sequence in canonical["sequences"]]
+    expected_ops = _ops_cost(inst, part, canonical["kinds"])
+    if abs(float(record["ops_cost"]) - expected_ops) > 1e-8:
+        raise B2A2Error(
+            "selected response operations cost does not match its structure")
+    sol.ops_cost = expected_ops
+    objective = expected_ops + float(np.dot(
+        np.asarray(posted_prices, dtype=float),
+        np.asarray(sol.load, dtype=float),
+    ))
+    if abs(objective - float(claimed_objective)) > 1e-8:
+        raise B2A2Error(
+            "selected response objective does not match primitive replay")
+    return sol, objective
+
+
 def _assert_witness_close(actual, expected, path: str, tolerance: float):
     if isinstance(expected, dict):
         if not isinstance(actual, dict) or set(actual) != set(expected):
@@ -788,6 +918,8 @@ def _enumerated_strict_cycle_status(
     market: AffineMarket,
     price_tolerance: float,
     strict_margin: float,
+    face_objective_tolerance: float,
+    load_tolerance: float,
 ) -> dict:
     """Independent dynamics using only complete structure enumeration."""
     prices = market.price(np.zeros(market.n_slots))
@@ -804,6 +936,7 @@ def _enumerated_strict_cycle_status(
         rows.append({
             "iteration": iteration,
             "structure_id": best["structure_id"],
+            "structure": best["structure"],
             "load": best["solution"]["load"],
             "margin": enumeration["strict_structure_margin"],
             "prices": [canonical_number(value) for value in prices],
@@ -832,7 +965,7 @@ def _enumerated_strict_cycle_status(
     if outcome.get("type") == "cycle" and outcome.get("length") == 2:
         first = outcome["first_seen"]
         orbit = rows[first:first + 2]
-        strict = bool(
+        margins_strict = bool(
             len(orbit) == 2
             and orbit[0]["structure_id"] != orbit[1]["structure_id"]
             and all(
@@ -841,7 +974,32 @@ def _enumerated_strict_cycle_status(
                 for row in orbit
             )
         )
-    return {"strict": strict, "outcome": outcome, "rows": rows}
+        faces = []
+        if margins_strict:
+            for row in orbit:
+                face = structure_optimal_face(
+                    inst,
+                    row["structure"],
+                    row["prices"],
+                    objective_tolerance=face_objective_tolerance,
+                )
+                faces.append(face)
+            strict = all(
+                face["max_certified_load_range_upper_kwh"]
+                <= load_tolerance
+                for face in faces
+            )
+        else:
+            strict = False
+            faces = []
+    else:
+        faces = []
+    return {
+        "strict": strict,
+        "outcome": outcome,
+        "rows": rows,
+        "optimal_faces": faces,
+    }
 
 
 def replay_cycle_witness(
@@ -849,7 +1007,7 @@ def replay_cycle_witness(
     verify_integrity: bool = True,
 ) -> dict:
     """Replay a canonical witness without the compact EVSP cycle oracle."""
-    expected_schema = "egglab.strict-undamped-two-cycle.v1"
+    expected_schema = "egglab.strict-undamped-two-cycle.v2"
     if witness.get("schema") != expected_schema:
         raise B2A2Error(
             f"unsupported strict-cycle witness schema {witness.get('schema')!r}")
@@ -880,6 +1038,10 @@ def replay_cycle_witness(
     load_tolerance = float(tolerances["load_match_and_replay_kwh"])
     strict_required = float(tolerances["strict_margin_required"])
     objective_ceiling = float(tolerances["objective_tolerance_ceiling"])
+    linear_certificate_tolerance = float(
+        tolerances["objective"]["compact_mip_absolute"])
+    pwl_certificate_tolerance = float(
+        tolerances["objective"]["enumerated_pwl_absolute"])
 
     trajectory = cycle["complete_iteration_trajectory"]
     if len(trajectory) != 3:
@@ -888,17 +1050,32 @@ def replay_cycle_witness(
     replayed_enumerations = []
     margins = []
     for index, row in enumerate(trajectory):
-        sol = _solution_from_record(row["response"])
-        violations = validate_solution(inst, sol)
-        if violations:
-            raise B2A2Error(
-                f"witness response {index} failed physical replay: "
-                + "; ".join(violations))
+        posted = np.asarray(row["posted_prices"], dtype=float)
+        sol, objective = _selected_response_from_primitives(
+            inst,
+            row["response"],
+            posted,
+            row["objective"],
+            load_tolerance,
+        )
         if structure_id(sol.sequences, sol.arc_kinds) != (
                 row["response"]["structure_id"]):
             raise B2A2Error(
                 f"witness response {index} structure id mismatch")
-        posted = np.asarray(row["posted_prices"], dtype=float)
+        bound = row["certified_bound"]
+        if (
+            bound is None
+            or not math.isfinite(float(bound))
+            or float(bound) > objective + 1e-8
+        ):
+            raise B2A2Error(
+                f"witness response {index} has an invalid certified bound")
+        expected_gap = max(0.0, objective - float(bound))
+        if abs(
+            expected_gap - float(row["solver_optimality_gap_abs"])
+        ) > 1e-8:
+            raise B2A2Error(
+                f"witness response {index} optimality gap is inconsistent")
         induced = market.price(sol.load)
         if float(np.max(np.abs(
                 induced - np.asarray(row["induced_prices"], dtype=float)))) > (
@@ -918,6 +1095,11 @@ def replay_cycle_witness(
         ):
             raise B2A2Error(
                 f"response {index} is not the enumerated best structure")
+        if abs(
+            objective - float(enumeration["best_objective"])
+        ) > linear_certificate_tolerance:
+            raise B2A2Error(
+                f"response {index} objective differs from enumerated optimum")
         best = next(
             candidate for candidate in enumeration["responses"]
             if candidate["structure_id"] == enumeration["best_structure_id"])
@@ -929,6 +1111,26 @@ def replay_cycle_witness(
         if index < 2:
             replayed_enumerations.append(enumeration)
             margins.append(float(enumeration["strict_structure_margin"]))
+
+    for state in range(2):
+        _assert_witness_close(
+            cycle["both_schedules"][state],
+            trajectory[state]["response"],
+            f"cycle.both_schedules[{state}]",
+            0.0,
+        )
+        _assert_witness_close(
+            cycle["loads"][state],
+            trajectory[state]["response"]["load"],
+            f"cycle.loads[{state}]",
+            0.0,
+        )
+        _assert_witness_close(
+            cycle["induced_prices"][state],
+            trajectory[state]["induced_prices"],
+            f"cycle.induced_prices[{state}]",
+            0.0,
+        )
 
     if float(np.max(np.abs(
             np.asarray(trajectory[2]["posted_prices"], dtype=float)
@@ -945,11 +1147,59 @@ def replay_cycle_witness(
 
     expected_states = evidence[
         "exhaustive_feasible_response_enumeration"]["states"]
+    replayed_faces = []
     for index, enumeration in enumerate(replayed_enumerations):
         expected = dict(expected_states[index])
         expected.pop("state")
         _assert_witness_close(
-            enumeration, expected, f"enumeration.state[{index}]", 1e-9)
+            response_inventory_invariants(enumeration),
+            expected,
+            f"enumeration.state[{index}]",
+            linear_certificate_tolerance,
+        )
+        best = next(
+            row for row in enumeration["responses"]
+            if row["structure_id"] == enumeration["best_structure_id"])
+        replayed_face = structure_optimal_face(
+            inst,
+            best["structure"],
+            enumeration["prices"],
+            objective_tolerance=float(
+                tolerances["optimal_face_objective"]),
+        )
+        expected_face = evidence[
+            "strict_best_response"]["states"][index][
+                "optimal_face_load_uniqueness"]
+        _assert_witness_close(
+            replayed_face,
+            expected_face,
+            f"strict_best_response.state[{index}].optimal_face",
+            linear_certificate_tolerance,
+        )
+        replayed_faces.append(replayed_face)
+        if replayed_face[
+                "max_certified_load_range_upper_kwh"] > load_tolerance:
+            raise B2A2Error(
+                f"state {index} selected load is not unique within tolerance")
+    strict_evidence = evidence["strict_best_response"]
+    maximum_face_range = max(
+        face["max_certified_load_range_upper_kwh"]
+        for face in replayed_faces
+    )
+    if abs(
+        maximum_face_range
+        - float(strict_evidence[
+            "maximum_certified_load_range_upper_kwh"])
+    ) > linear_certificate_tolerance:
+        raise B2A2Error(
+            "strict-response aggregate uniqueness bound is inconsistent")
+    if abs(
+        min(margins)
+        - float(strict_evidence[
+            "minimum_global_discrete_structure_margin"])
+    ) > linear_certificate_tolerance:
+        raise B2A2Error(
+            "strict-response aggregate margin is inconsistent")
 
     dictator = enumerated_dictator_details(
         inst, market, pwl_tol=float(
@@ -958,18 +1208,32 @@ def replay_cycle_witness(
         dictator,
         evidence["fixed_point_absence"]["enumerated_dictator"],
         "fixed_point_absence.enumerated_dictator",
-        1e-8,
+        pwl_certificate_tolerance,
     )
     best_dictator = next(
         row for row in dictator["structures"]
         if row["structure_id"] == dictator["best_structure_id"])
     candidate = dictator["best_response"]
     candidate_prices = market.price(candidate["load"])
-    candidate_responses = enumerate_price_responses(inst, candidate_prices)
-    candidate_objective = (
-        float(candidate["ops_cost"])
-        + float(np.dot(candidate_prices, candidate["load"]))
+    candidate_sol, candidate_objective = _selected_response_from_primitives(
+        inst,
+        candidate,
+        candidate_prices,
+        evidence["fixed_point_absence"]["candidate_linear_objective"],
+        load_tolerance,
     )
+    candidate_system_objective = (
+        candidate_sol.ops_cost
+        + market.system_cost_delta(candidate_sol.load)
+    )
+    if abs(
+        candidate_system_objective - float(dictator["z_d_upper"])
+    ) > float(
+        evidence["convex_hull_dictator_comparison"]["pwl_tolerance"]
+    ):
+        raise B2A2Error(
+            "dictator best response does not reproduce its system objective")
+    candidate_responses = enumerate_price_responses(inst, candidate_prices)
     deviation = candidate_objective - float(
         candidate_responses["best_objective"])
     if not (
@@ -988,7 +1252,6 @@ def replay_cycle_witness(
     hull_replay = {
         "z_ch_lower_model": canonical_number(hull["z_ch_model"]),
         "z_ch_upper_exact_incumbent": canonical_number(hull["z_ch"]),
-        "z_ch_load": [canonical_number(value) for value in hull["load"]],
         "z_d_lower": dictator["z_d_lower"],
         "z_d_upper": dictator["z_d_upper"],
         "uplift_interval": [
@@ -999,10 +1262,20 @@ def replay_cycle_witness(
         "pwl_tolerance": comparison["pwl_tolerance"],
     }
     _assert_witness_close(
-        hull_replay, comparison, "convex_hull_dictator_comparison", 1e-8)
+        hull_replay,
+        comparison,
+        "convex_hull_dictator_comparison",
+        pwl_certificate_tolerance,
+    )
 
     independent_final = _enumerated_strict_cycle_status(
-        inst, market, price_tolerance, strict_required)
+        inst,
+        market,
+        price_tolerance,
+        strict_required,
+        float(tolerances["optimal_face_objective"]),
+        load_tolerance,
+    )
     if not independent_final["strict"]:
         raise B2A2Error(
             "final witness is not a strict cycle under enumerated replay")
@@ -1033,7 +1306,11 @@ def replay_cycle_witness(
                 f"unknown irreducibility axis {trial['axis']!r}")
         status = _enumerated_strict_cycle_status(
             candidate_inst, candidate_market,
-            price_tolerance, strict_required)
+            price_tolerance,
+            strict_required,
+            float(tolerances["optimal_face_objective"]),
+            load_tolerance,
+        )
         if status["strict"]:
             raise B2A2Error(
                 f"irreducibility trial unexpectedly preserves strict cycle: "
@@ -1046,9 +1323,12 @@ def replay_cycle_witness(
         "checks": {
             "canonical_instance_round_trip": True,
             "physical_schedule_replay": True,
+            "selected_primitives_recomputed": True,
             "complete_trajectory": True,
             "exhaustive_response_enumeration": True,
+            "nonwinning_inventory_invariants": True,
             "strict_structure_margins": True,
+            "selected_load_uniqueness_certified": True,
             "fixed_point_absence_preconditions": True,
             "convex_hull_dictator_comparison": True,
             "irreducibility": True,
@@ -1071,7 +1351,15 @@ def _main(argv=None):
     parser = argparse.ArgumentParser(
         description="Independent replay for a tiny strict-cycle witness")
     parser.add_argument("--replay", required=True, help="canonical witness JSON")
+    parser.add_argument(
+        "--require-backend",
+        choices=("CBC", "GRB"),
+        help="fail unless replay uses this solver backend",
+    )
     args = parser.parse_args(argv)
+    if args.require_backend and backend() != args.require_backend:
+        parser.error(
+            f"required backend {args.require_backend}, active backend {backend()}")
     with open(args.replay) as handle:
         witness = json.load(handle)
     report = replay_cycle_witness(witness)

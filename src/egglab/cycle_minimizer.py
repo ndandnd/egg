@@ -33,6 +33,7 @@ from .enumerate_tiny import (
     enumerate_price_responses,
     enumerated_ch,
     enumerated_dictator_details,
+    response_inventory_invariants,
     structure_id,
     structure_optimal_face,
 )
@@ -41,13 +42,13 @@ from .instance import Instance, Trip, synthetic_instance
 from .market import AffineMarket, make_affine_market
 from .regimes import solve_taker
 
-WITNESS_SCHEMA = "egglab.strict-undamped-two-cycle.v1"
+WITNESS_SCHEMA = "egglab.strict-undamped-two-cycle.v2"
 TARGET_MAX_TRIPS = 4
 DEFAULT_MAX_ORACLE_EVALUATIONS = 128
 DEFAULT_MAX_WALL_SECONDS = 24 * 60 * 60
 PRICE_STATE_TOL = 1e-7
 LOAD_MATCH_TOL_KWH = REPLAY_TOL_KWH
-OPTIMAL_FACE_OBJECTIVE_TOL = 1e-8
+OPTIMAL_FACE_OBJECTIVE_TOL = 1e-6
 OPTIMAL_FACE_LOAD_TOL_KWH = REPLAY_TOL_KWH
 STRICT_MARGIN_REQUIRED = 2e-2
 
@@ -338,7 +339,10 @@ def certify_strict_two_cycle(
             row["posted_prices"],
             objective_tolerance=OPTIMAL_FACE_OBJECTIVE_TOL,
         )
-        if face["max_load_range_kwh"] > OPTIMAL_FACE_LOAD_TOL_KWH:
+        if (
+            face["max_certified_load_range_upper_kwh"]
+            > OPTIMAL_FACE_LOAD_TOL_KWH
+        ):
             return {
                 "ok": False,
                 "reason": f"nonunique_optimal_load_state_{state_index}",
@@ -690,8 +694,9 @@ def build_witness(reduction: dict | None = None) -> dict:
                     "enumerated at both cycle prices",
                     "the unique enumerated dictator candidate is not a best "
                     "response at its induced price",
-                    "the four-trip witness is 1-minimal on the declared "
-                    "trip/capacity/feedback axes",
+                    "the four-trip witness is 1-minimal-only on the tested "
+                    "trip/capacity/feedback deletion axes, not globally "
+                    "minimal",
                 ],
             },
             "theorem_claims": [{
@@ -699,7 +704,8 @@ def build_witness(reduction: dict | None = None) -> dict:
                 "status": "separate-algebraic-lemma",
                 "statement": (
                     "For diagonal b >= 0, every self-confirming posted-price "
-                    "best response minimizes ops + a*L + 0.5*b*L^2.  The "
+                    "best response minimizes ops + (a+b*U)*L + "
+                    "0.5*b*L^2.  The "
                     "identity adds 0.5*(L'-L)^T b (L'-L) to each best-response "
                     "inequality."),
                 "role": (
@@ -764,13 +770,19 @@ def build_witness(reduction: dict | None = None) -> dict:
                 "scope": (
                     "positive margins compare the globally best optimized "
                     "discrete structure with every other optimized structure; "
-                    "optimal-face ranges separately check continuous-load "
-                    "uniqueness"),
+                    "certified optimal-face extrema separately check "
+                    "continuous-load uniqueness"),
                 "states": strict_states,
                 "minimum_global_discrete_structure_margin": (
                     certificate["minimum_structure_margin"]),
                 "minimum_opposite_cycle_endpoint_margin": canonical_number(
                     min(opposite_margins)),
+                "maximum_certified_load_range_upper_kwh": canonical_number(
+                    max(
+                        face["max_certified_load_range_upper_kwh"]
+                        for face in certificate["optimal_faces"]
+                    )
+                ),
                 "objective_tolerance_ceiling": (
                     objective_tolerance_ceiling),
                 "all_margins_clear_tolerances": bool(
@@ -785,7 +797,10 @@ def build_witness(reduction: dict | None = None) -> dict:
                     "each feasible structure's continuous charging LP is "
                     "optimized and independently physically replayed"),
                 "states": [
-                    {"state": index, **enumeration}
+                    {
+                        "state": index,
+                        **response_inventory_invariants(enumeration),
+                    }
                     for index, enumeration in enumerate(enumerations)
                 ],
             },
@@ -818,8 +833,6 @@ def build_witness(reduction: dict | None = None) -> dict:
             "convex_hull_dictator_comparison": {
                 "z_ch_lower_model": canonical_number(hull["z_ch_model"]),
                 "z_ch_upper_exact_incumbent": canonical_number(hull["z_ch"]),
-                "z_ch_load": [
-                    canonical_number(value) for value in hull["load"]],
                 "z_d_lower": dictator["z_d_lower"],
                 "z_d_upper": dictator["z_d_upper"],
                 "uplift_interval": [
@@ -831,9 +844,10 @@ def build_witness(reduction: dict | None = None) -> dict:
             },
             "irreducibility": {
                 "definition": (
-                    "1-minimal under deletion of any remaining trip, the "
-                    "second vehicle-capacity unit, or any remaining nonzero "
-                    "affine-feedback slot"),
+                    "1-minimal-only on the tested deletion axes: removing any "
+                    "remaining trip, the second vehicle-capacity unit, or any "
+                    "remaining nonzero affine-feedback slot; no global or "
+                    "seed-grid minimality claim"),
                 "target_max_trips": TARGET_MAX_TRIPS,
                 "n_trips": len(inst.trips),
                 "trials": reduction["irreducibility_trials"],
