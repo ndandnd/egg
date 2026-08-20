@@ -1527,8 +1527,11 @@ def conservative_certificate(ck: dict) -> dict:
     - the RAW chain from the recorded certified bound
       (``lb_ch = z_rmp + min(0, bound - sigma)``); and
     - a CONSERVATIVE chain from an explicitly reduced bound
-      (``safe_bound = bound - tau``; ``safe_lb_ch = z_rmp +
-      min(0, safe_bound - sigma)``), where ``tau`` is the single operand-scale
+      (``safe_bound = bound - physical_bridge_allowance`` with
+      ``physical_bridge_allowance = operand_tau + abs(model_incumbent -
+      physical_incumbent)``; ``safe_lb_ch = z_rmp +
+      min(0, safe_bound - sigma)``), where ``operand_tau`` is the single
+      operand-scale
       tolerance ``1e-10 * max(1, |bound|, |model_incumbent|,
       |physical_incumbent|)``.
 
@@ -2877,15 +2880,16 @@ def _validate_cell_numeric_evidence(
                 or isinstance(solver_bound, bool)
                 or not math.isfinite(solver_bound)):
             raise AnalysisError(f"{rlabel}: solver bound is nonfinite")
-        if (float(solver_bound) > expected_model_obj
-                and not _evidence_close(
-                    float(solver_bound), expected_model_obj)):
-            raise AnalysisError(
-                f"{rlabel}: solver bound exceeds model incumbent")
-        if (float(solver_bound) > expected_obj
-                and not _evidence_close(float(solver_bound), expected_obj)):
-            raise AnalysisError(
-                f"{rlabel}: solver bound exceeds physical incumbent")
+        # ONE shared physical-bridge ordering policy (EI-027): the strict
+        # model-incumbent gate stays at operand tau, and the physical side
+        # is judged against operand_tau + the exact recomputed
+        # reconstruction adjustment — identical to the audit and the
+        # certificate replay.  The exact reconstruction-field validation
+        # below is unchanged.
+        gate = pricing_order_gate(
+            float(solver_bound), expected_model_obj, expected_obj)
+        if gate["errors"]:
+            raise AnalysisError(f"{rlabel}: " + "; ".join(gate["errors"]))
         adjustment = pricing.get("abs_adjustment")
         expected_adjustment = abs(float(model_obj) - expected_obj)
         if (not isinstance(adjustment, (int, float))

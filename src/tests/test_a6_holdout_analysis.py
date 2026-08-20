@@ -2792,3 +2792,182 @@ def test_ei027_audit_analyzer_parity_on_rejection():
     with pytest.raises(AnalysisError,
                        match="exceeds the model incumbent"):
         mod._replay_cg_certificate_evidence(bad, "ei027-bad")
+
+
+# ---------------------------------------------------------------------------
+# EI-027 P1: the FULL-CELL numeric validation must apply the same
+# physical-bridge policy as the audit and the certificate replay
+# ---------------------------------------------------------------------------
+def _frozen_incident_cell():
+    """A cell whose cg-pricing event carries the EXACT frozen EI-027
+    scalars, with real load-evidence, reconstruction, certificate, and
+    dictator consistency at that scale.  The single-price-slot
+    construction makes the recomputed model/physical objectives land on
+    the frozen doubles exactly (asserted)."""
+    inst = fix_builder(1, 4)
+    market = make_affine_market(inst, shape="duck", b_scale=0.01)
+    n = market.n_slots
+    zeros = [0.0] * n
+
+    def load_evidence(raw, load):
+        residual = [raw[t] - load[t] for t in range(n)]
+        max_slot = max(range(n), key=lambda t: abs(residual[t]))
+        return {
+            "policy_version": LOAD_RECONSTRUCTION_POLICY_VERSION,
+            "tolerance_kwh": REPLAY_TOL_KWH,
+            "raw_load_kwh": list(raw),
+            "residual_kwh": residual,
+            "max_abs_residual_kwh": max(abs(x) for x in residual),
+            "max_abs_residual_slot": max_slot,
+            "raw_min_kwh": min(raw),
+            "physical_min_kwh": min(load),
+        }
+
+    ck = _pricing_order_ck(
+        EI027_BOUND, EI027_MODEL_INCUMBENT, EI027_PHYS_INCUMBENT)
+    seed_rec, price_rec = ck["oracle_events"]
+
+    # seed event: posted prices, no charging, trivially ordered
+    posted = [float(x) for x in market.price(zeros)]
+    seed_rec.update(
+        prices=[round(x, 6) for x in posted],
+        ops_cost=EI027_PHYS_INCUMBENT, obj_true=EI027_PHYS_INCUMBENT,
+        obj_model=EI027_PHYS_INCUMBENT, load=list(zeros), charges=[],
+        energy_charged_kwh=0.0)
+    seed_rec["solver"].update(
+        obj=EI027_PHYS_INCUMBENT, bound=EI027_PHYS_INCUMBENT)
+    seed_rec["solver"]["extra"] = {
+        "load_reconstruction": load_evidence(zeros, zeros),
+        "pricing_objective_reconstruction": {
+            "policy_version": LOAD_RECONSTRUCTION_POLICY_VERSION,
+            "prices": posted, "model_obj": EI027_PHYS_INCUMBENT,
+            "physical_obj": EI027_PHYS_INCUMBENT, "abs_adjustment": 0.0,
+        },
+    }
+
+    # frozen pricing event: exact doubles through exact float arithmetic
+    ops = 2400.0
+    phys_slot = EI027_PHYS_INCUMBENT - ops
+    model_slot = EI027_BOUND - ops
+    assert ops + phys_slot == EI027_PHYS_INCUMBENT      # exact
+    assert ops + model_slot == EI027_BOUND              # exact
+    prices = [1.0] + [0.0] * (n - 1)
+    load = [phys_slot] + [0.0] * (n - 1)
+    raw = [model_slot] + [0.0] * (n - 1)
+    price_rec.update(
+        prices=[round(x, 6) for x in prices],
+        ops_cost=ops, obj_true=EI027_PHYS_INCUMBENT,
+        obj_model=EI027_BOUND, load=load,
+        charges=[{"slot": 0, "kwh": phys_slot}],
+        energy_charged_kwh=phys_slot)
+    price_rec["solver"].update(obj=EI027_BOUND, bound=EI027_BOUND)
+    price_rec["solver"]["extra"] = dict(
+        price_rec["solver"].get("extra") or {},
+        load_reconstruction=load_evidence(raw, load),
+        pricing_objective_reconstruction={
+            "policy_version": LOAD_RECONSTRUCTION_POLICY_VERSION,
+            "prices": prices, "model_obj": EI027_BOUND,
+            "physical_obj": EI027_PHYS_INCUMBENT,
+            "abs_adjustment": EI027_ADJUSTMENT,
+        })
+    assert abs(EI027_BOUND - EI027_PHYS_INCUMBENT) == EI027_ADJUSTMENT
+
+    ck["columns"] = [{
+        "load": list(zeros), "charges": [],
+        "oracle_stats": {"extra": {
+            "load_reconstruction": load_evidence(zeros, zeros)}},
+    }]
+
+    # dictator at the same scale: zero load, exact reconstruction
+    zd = EI027_PHYS_INCUMBENT + 5.0
+    lb_d = zd - 0.005
+    dictator_extra = {
+        "load_reconstruction": load_evidence(zeros, zeros),
+        "adaptive_rounds": 1, "adaptive_lb": lb_d,
+        "adaptive_model_obj": zd, "adaptive_ub": zd,
+        "adaptive_gap_abs": zd - lb_d, "adaptive_tol_abs": 0.01,
+        "adaptive_converged": True, "adaptive_total_wall_s": 0.5,
+        "adaptive_solve_stats": [{
+            "round": 1, "status": "OPTIMAL", "incumbent": zd,
+            "bound": lb_d, "gap": zd - lb_d, "n_vars": 1, "n_int": 1,
+            "n_constrs": 1, "wall_s": 0.3, "backend": "GRB",
+            "threads": 4}],
+        "dictator_objective_reconstruction": {
+            "policy_version": LOAD_RECONSTRUCTION_POLICY_VERSION,
+            "raw_true_obj": zd, "physical_obj": zd,
+            "abs_adjustment": 0.0},
+    }
+    drec = {
+        "ops_cost": zd, "obj_true": zd, "obj_model": zd,
+        "load": list(zeros), "charges": [], "energy_charged_kwh": 0.0,
+        "solver": {"backend": "GRB", "status": "OPTIMAL",
+                   "extra": dictator_extra},
+    }
+    dck = {"record": drec, "z_d_ub": zd, "tol_d": 0.01,
+           "adaptive": copy.deepcopy(dictator_extra)}
+    return ck, dck, inst, market
+
+
+def _run_frozen_incident_cell(monkeypatch):
+    """Drive the REAL _validate_cell_numeric_evidence on the frozen
+    incident.  The independent schedule-physics replay and the
+    certificate-side safety helpers (covered by their own batteries) are
+    stubbed; every numeric gate — load evidence, reconstruction
+    bindings, the pricing-order policy, the certificate replay, and the
+    dictator block — runs for real."""
+    ck, dck, inst, market = _frozen_incident_cell()
+    monkeypatch.setattr(mod, "_validate_schedule_evidence",
+                        lambda *a, **k: None)
+    monkeypatch.setattr(mod, "_validate_retained_column_lineage",
+                        lambda *a, **k: None)
+    monkeypatch.setattr(mod, "_validate_clean_bound_safety",
+                        lambda *a, **k: None)
+    monkeypatch.setattr(mod, "_replay_a6_a4_mechanism",
+                        lambda *a, **k: None)
+    return ck, dck, inst, market
+
+
+def test_ei027_frozen_incident_passes_full_cell_numeric_evidence(
+        monkeypatch):
+    """P1 regression: the exact frozen incident must survive the FULL
+    cell numeric validation, not merely pricing_order_gate or the
+    certificate replay."""
+    ck, dck, inst, market = _run_frozen_incident_cell(monkeypatch)
+    mod._validate_cell_numeric_evidence(ck, dck, inst, market, "ei027")
+
+
+def test_ei027_full_cell_rejects_just_beyond_model_tolerance(monkeypatch):
+    """Just beyond the model tolerance the full-cell validation still
+    rejects (with the reconstruction fields coordinated so only the
+    ordering gate can fire)."""
+    ck, dck, inst, market = _run_frozen_incident_cell(monkeypatch)
+    rec = ck["oracle_events"][1]
+    tau = mod._ordering_tolerance(
+        EI027_BOUND, EI027_MODEL_INCUMBENT, EI027_PHYS_INCUMBENT)
+    inflated = EI027_BOUND + 3.0 * tau
+    rec["solver"]["bound"] = inflated
+    with pytest.raises(AnalysisError,
+                       match="exceeds the model incumbent"):
+        mod._validate_cell_numeric_evidence(ck, dck, inst, market, "ei027")
+
+
+def test_ei027_full_cell_rejects_just_beyond_bridge_allowance(monkeypatch):
+    """Just beyond the physical-bridge allowance: with the model incumbent
+    raised alongside the bound (so the model gate passes), a bound above
+    physical + allowance is impossible without also exceeding the model
+    gate; the coordinated variant is caught by the exact
+    reconstruction-field bindings instead. Both layers are asserted."""
+    # layer 1: bound raised beyond phys + allowance ALSO breaks the model
+    # gate (the mathematical implication documented in the incident)
+    gate = mod.pricing_order_gate(
+        EI027_BOUND + 2e-5, EI027_MODEL_INCUMBENT, EI027_PHYS_INCUMBENT)
+    assert any("model incumbent" in e for e in gate["errors"])
+    # layer 2: coordinating solver obj/bound together breaks the exact
+    # model-objective reconstruction binding in the full-cell path
+    ck, dck, inst, market = _run_frozen_incident_cell(monkeypatch)
+    rec = ck["oracle_events"][1]
+    lifted = EI027_BOUND + 2e-5
+    rec["solver"]["bound"] = lifted
+    rec["solver"]["obj"] = lifted
+    with pytest.raises(AnalysisError, match="solver obj mismatch"):
+        mod._validate_cell_numeric_evidence(ck, dck, inst, market, "ei027")
