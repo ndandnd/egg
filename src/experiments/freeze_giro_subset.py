@@ -10,10 +10,26 @@ with this exact top-level shape:
       "schema": "egglab-giro-freeze-provenance-v1",
       "contract": "...",
       "service_day": null,
-      "variant_choice": {...},
-      "trip_selection": {...},
-      "deadhead_fidelity": {...},
-      "physics": {...}
+      "variant_choice": {
+        "policy": "...",
+        "selected": ["..."]
+      },
+      "trip_selection": {
+        "rule": "Identifier == Regular",
+        "source_rows": [123, 456],
+        "trip_ids": ["..."]
+      },
+      "deadhead_fidelity": {
+        "level": "exact-directed-base",
+        "directed": true,
+        "time_dependent": false,
+        "same_reference_policy": "...",
+        "missing_link_policy": "..."
+      },
+      "physics": {
+        "service_energy_policy": "...",
+        "instance_parameters": {...}
+      }
     }
 
 Use repeatable ``--source ROLE=PATH`` arguments to bind the artifact to raw or
@@ -68,7 +84,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--source",
         action="append",
-        default=[],
+        required=True,
         type=_source_argument,
         metavar="ROLE=PATH",
         help="additional source to hash into the manifest; repeatable",

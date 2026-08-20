@@ -73,6 +73,23 @@ _PROVENANCE_KEYS = {
     "deadhead_fidelity",
     "physics",
 }
+_VARIANT_CHOICE_KEYS = {"policy", "selected"}
+_TRIP_SELECTION_KEYS = {"rule", "source_rows", "trip_ids"}
+_DEADHEAD_FIDELITY_KEYS = {
+    "level",
+    "directed",
+    "time_dependent",
+    "same_reference_policy",
+    "missing_link_policy",
+}
+_PHYSICS_KEYS = {"service_energy_policy", "instance_parameters"}
+_DEADHEAD_LEVELS = {
+    "exact-directed-time-dependent",
+    "exact-directed-base",
+    "reference-fallback",
+    "zone-abstraction",
+    "custom",
+}
 _MANIFEST_KEYS = {
     "schema",
     "artifact",
@@ -312,10 +329,10 @@ def _matrix(
 def instance_from_canonical(value: Any):
     """Validate canonical data and construct an ``Instance``.
 
-    Validation is deliberately stricter than dataclass construction.  In
-    particular, matrices must be complete and directed over every location
-    used by the subset; missing GIRO links must already have been resolved
-    under the policy disclosed in the provenance record.
+    The representation and primitive values are checked, but this function
+    does not strengthen the existing ``Instance`` policy knobs or complete a
+    sparse GIRO matrix.  In particular, terminal SOC remains independent of
+    the running reserve and unavailable directed deadhead arcs remain absent.
     """
     data = _require_exact_keys(value, _INSTANCE_KEYS, label="instance")
     name = _require_string(data["name"], label="instance.name")
@@ -366,10 +383,6 @@ def instance_from_canonical(value: Any):
             label=f"instance.trips[{index}].energy_kwh",
             minimum=0.0,
         )
-        if energy == 0:
-            raise FrozenSubsetError(
-                f"instance.trips[{index}].energy_kwh must be positive"
-            )
         trips.append(
             Trip(trip_id, start_min, end_min, start_loc, end_loc, energy)
         )
@@ -381,25 +394,6 @@ def instance_from_canonical(value: Any):
     if set(dh_min) != set(dh_kwh):
         raise FrozenSubsetError(
             "instance.dh_min and instance.dh_kwh must contain identical arcs"
-        )
-
-    locations = {depot}
-    for trip in trips:
-        locations.add(trip.start_loc)
-        locations.add(trip.end_loc)
-    missing = sorted(
-        (start, end)
-        for start in locations
-        for end in locations
-        if start != end and (start, end) not in dh_min
-    )
-    if missing:
-        preview = ", ".join(repr(pair) for pair in missing[:5])
-        suffix = "" if len(missing) <= 5 else f", ... ({len(missing)} total)"
-        raise FrozenSubsetError(
-            "deadhead matrices are incomplete over used locations: "
-            + preview
-            + suffix
         )
 
     battery = _require_number(
@@ -416,21 +410,15 @@ def instance_from_canonical(value: Any):
     soc_end = _require_number(
         data["soc_end_kwh"], label="instance.soc_end_kwh", minimum=0.0
     )
-    if not (soc_min <= soc0 <= battery):
+    if soc0 > battery or soc_min > battery or soc_end > battery:
         raise FrozenSubsetError(
-            "instance SOC must satisfy soc_min_kwh <= soc0_kwh <= battery_kwh"
-        )
-    if not (soc_min <= soc_end <= battery):
-        raise FrozenSubsetError(
-            "instance SOC must satisfy soc_min_kwh <= soc_end_kwh <= battery_kwh"
+            "instance SOC values must not exceed battery_kwh"
         )
     charge_power = _require_number(
         data["charge_power_kw"],
         label="instance.charge_power_kw",
         minimum=0.0,
     )
-    if charge_power == 0:
-        raise FrozenSubsetError("instance.charge_power_kw must be positive")
     n_slots = _require_int(
         data["n_slots"], label="instance.n_slots", minimum=1
     )
@@ -440,8 +428,6 @@ def instance_from_canonical(value: Any):
     max_vehicles = _require_int(
         data["max_vehicles"], label="instance.max_vehicles", minimum=1
     )
-    if max(trip.end_min for trip in trips) > n_slots * slot_min:
-        raise FrozenSubsetError("a trip ends after the instance horizon")
     vehicle_fixed_cost = _require_number(
         data["vehicle_fixed_cost"],
         label="instance.vehicle_fixed_cost",
@@ -481,8 +467,8 @@ def instance_from_canonical(value: Any):
     return instance
 
 
-def validate_provenance(value: Any) -> dict:
-    """Validate the required GIRO disclosure blocks without inventing them."""
+def validate_provenance(value: Any, *, instance=None) -> dict:
+    """Validate GIRO disclosures and, when available, bind them to an instance."""
     provenance = _require_exact_keys(
         value, _PROVENANCE_KEYS, label="provenance"
     )
@@ -494,18 +480,126 @@ def validate_provenance(value: Any) -> dict:
     service_day = provenance["service_day"]
     if service_day is not None:
         _require_string(service_day, label="provenance.service_day")
-    for key in (
-        "variant_choice",
-        "trip_selection",
-        "deadhead_fidelity",
-        "physics",
-    ):
-        block = provenance[key]
-        if not isinstance(block, dict) or not block:
+
+    variant = _require_exact_keys(
+        provenance["variant_choice"],
+        _VARIANT_CHOICE_KEYS,
+        label="provenance.variant_choice",
+    )
+    _require_string(
+        variant["policy"], label="provenance.variant_choice.policy"
+    )
+    if not isinstance(variant["selected"], list) or not variant["selected"]:
+        raise FrozenSubsetError(
+            "provenance.variant_choice.selected must be a non-empty list"
+        )
+    selected = [
+        _require_string(
+            item, label=f"provenance.variant_choice.selected[{index}]"
+        )
+        for index, item in enumerate(variant["selected"])
+    ]
+    if len(set(selected)) != len(selected):
+        raise FrozenSubsetError(
+            "provenance.variant_choice.selected contains duplicates"
+        )
+
+    trip_selection = _require_exact_keys(
+        provenance["trip_selection"],
+        _TRIP_SELECTION_KEYS,
+        label="provenance.trip_selection",
+    )
+    if trip_selection["rule"] != "Identifier == Regular":
+        raise FrozenSubsetError(
+            "provenance.trip_selection.rule must be 'Identifier == Regular'"
+        )
+    source_rows = trip_selection["source_rows"]
+    if not isinstance(source_rows, list) or not source_rows:
+        raise FrozenSubsetError(
+            "provenance.trip_selection.source_rows must be a non-empty list"
+        )
+    normalized_rows = [
+        _require_int(
+            row,
+            label=f"provenance.trip_selection.source_rows[{index}]",
+            minimum=1,
+        )
+        for index, row in enumerate(source_rows)
+    ]
+    if len(set(normalized_rows)) != len(normalized_rows):
+        raise FrozenSubsetError(
+            "provenance.trip_selection.source_rows contains duplicates"
+        )
+    declared_trip_ids = trip_selection["trip_ids"]
+    if not isinstance(declared_trip_ids, list) or not declared_trip_ids:
+        raise FrozenSubsetError(
+            "provenance.trip_selection.trip_ids must be a non-empty list"
+        )
+    normalized_trip_ids = [
+        _require_string(
+            trip_id,
+            label=f"provenance.trip_selection.trip_ids[{index}]",
+        )
+        for index, trip_id in enumerate(declared_trip_ids)
+    ]
+    if len(set(normalized_trip_ids)) != len(normalized_trip_ids):
+        raise FrozenSubsetError(
+            "provenance.trip_selection.trip_ids contains duplicates"
+        )
+
+    deadhead = _require_exact_keys(
+        provenance["deadhead_fidelity"],
+        _DEADHEAD_FIDELITY_KEYS,
+        label="provenance.deadhead_fidelity",
+    )
+    if deadhead["level"] not in _DEADHEAD_LEVELS:
+        raise FrozenSubsetError(
+            "provenance.deadhead_fidelity.level is unsupported"
+        )
+    for key in ("directed", "time_dependent"):
+        if not isinstance(deadhead[key], bool):
             raise FrozenSubsetError(
-                f"provenance.{key} must be a non-empty JSON object"
+                f"provenance.deadhead_fidelity.{key} must be boolean"
             )
-        canonical_json_bytes(block)
+    _require_string(
+        deadhead["same_reference_policy"],
+        label="provenance.deadhead_fidelity.same_reference_policy",
+    )
+    _require_string(
+        deadhead["missing_link_policy"],
+        label="provenance.deadhead_fidelity.missing_link_policy",
+    )
+
+    physics = _require_exact_keys(
+        provenance["physics"],
+        _PHYSICS_KEYS,
+        label="provenance.physics",
+    )
+    _require_string(
+        physics["service_energy_policy"],
+        label="provenance.physics.service_energy_policy",
+    )
+    _require_exact_keys(
+        physics["instance_parameters"],
+        _MODEL_KEYS,
+        label="provenance.physics.instance_parameters",
+    )
+    canonical_json_bytes(provenance)
+
+    if instance is not None:
+        actual_ids = [trip.id for trip in instance.trips]
+        if normalized_trip_ids != actual_ids:
+            raise FrozenSubsetError(
+                "provenance trip_ids do not match the frozen instance"
+            )
+        if len(normalized_rows) != len(actual_ids):
+            raise FrozenSubsetError(
+                "provenance source_rows count does not match the frozen instance"
+            )
+        if physics["instance_parameters"] != _model_record(instance):
+            raise FrozenSubsetError(
+                "provenance physics do not match the frozen instance"
+            )
     return provenance
 
 
@@ -566,7 +660,9 @@ def _selection_record(instance) -> dict:
 
 def _validate_input_record(value: Any, *, label: str) -> dict:
     record = _require_exact_keys(value, _INPUT_FILE_KEYS, label=label)
-    _require_string(record["role"], label=f"{label}.role")
+    role = _require_string(record["role"], label=f"{label}.role")
+    if "/" in role or "\\" in role:
+        raise FrozenSubsetError(f"{label}.role must not contain a path separator")
     filename = _require_string(record["file"], label=f"{label}.file")
     if Path(filename).name != filename or filename in (".", ".."):
         raise FrozenSubsetError(f"{label}.file must be a basename")
@@ -622,8 +718,13 @@ def validate_manifest(value: Any) -> dict:
         )
     if provenance_input["role"] != "provenance":
         raise FrozenSubsetError("manifest.inputs.provenance has the wrong role")
-    if not isinstance(inputs["source_files"], list):
-        raise FrozenSubsetError("manifest.inputs.source_files must be a list")
+    if (
+        not isinstance(inputs["source_files"], list)
+        or not inputs["source_files"]
+    ):
+        raise FrozenSubsetError(
+            "manifest.inputs.source_files must be a non-empty list"
+        )
     roles = set()
     previous_role = None
     for index, raw_record in enumerate(inputs["source_files"]):
@@ -753,7 +854,9 @@ def _normalize_sources(
     | None,
 ) -> list[tuple[str, Path]]:
     if source_files is None:
-        return []
+        raise FrozenSubsetError(
+            "at least one GIRO source file is required for the freeze manifest"
+        )
     items = (
         list(source_files.items())
         if isinstance(source_files, Mapping)
@@ -773,6 +876,10 @@ def _normalize_sources(
             )
         seen.add(role)
         normalized.append((role, Path(raw_path)))
+    if not normalized:
+        raise FrozenSubsetError(
+            "at least one GIRO source file is required for the freeze manifest"
+        )
     return sorted(normalized, key=lambda item: item[0])
 
 
@@ -819,7 +926,8 @@ def freeze_subset(
         provenance_file, label="provenance"
     )
     provenance = validate_provenance(
-        strict_json_bytes(provenance_bytes, label="provenance")
+        strict_json_bytes(provenance_bytes, label="provenance"),
+        instance=instance,
     )
 
     source_records = []
@@ -920,6 +1028,19 @@ def load_verified_frozen_subset(
         raise FrozenSubsetError(
             f"frozen subset directory must not be a symlink: {instance_path.parent}"
         )
+    artifact_directory = resolved_manifest_path.parent
+    try:
+        names = {entry.name for entry in artifact_directory.iterdir()}
+    except OSError as exc:
+        raise FrozenSubsetError(
+            f"cannot inventory frozen subset directory: {artifact_directory}"
+        ) from exc
+    expected_names = {INSTANCE_FILENAME, MANIFEST_FILENAME}
+    if names != expected_names:
+        raise FrozenSubsetError(
+            "frozen subset directory entries do not match the manifest "
+            f"contract (expected={sorted(expected_names)}, got={sorted(names)})"
+        )
     manifest_bytes = read_stable_regular_file(
         resolved_manifest_path, label="frozen subset manifest"
     )
@@ -933,9 +1054,14 @@ def load_verified_frozen_subset(
                 "frozen subset manifest SHA-256 mismatch: "
                 f"expected {expected}, got {actual}"
             )
-    manifest = validate_manifest(
-        strict_json_bytes(manifest_bytes, label="frozen subset manifest")
+    manifest_value = strict_json_bytes(
+        manifest_bytes, label="frozen subset manifest"
     )
+    if canonical_json_bytes(manifest_value) != manifest_bytes:
+        raise FrozenSubsetError(
+            "frozen subset manifest bytes are not canonical JSON"
+        )
+    manifest = validate_manifest(manifest_value)
 
     expected_instance_path = resolved_manifest_path.parent / INSTANCE_FILENAME
     try:
@@ -972,6 +1098,7 @@ def load_verified_frozen_subset(
             "frozen subset instance bytes are not canonical JSON"
         )
     instance = instance_from_canonical(value)
+    validate_provenance(manifest["provenance"], instance=instance)
     if instance.hash() != artifact["instance_hash"]:
         raise FrozenSubsetError(
             "frozen subset Instance.hash() does not match the manifest"
