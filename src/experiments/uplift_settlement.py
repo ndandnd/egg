@@ -26,10 +26,12 @@ import argparse
 import hashlib
 import json
 import os
+import sys
 import tempfile
 from dataclasses import dataclass
 from decimal import (
     Decimal,
+    DecimalException,
     InvalidOperation,
     ROUND_CEILING,
     ROUND_FLOOR,
@@ -84,10 +86,14 @@ def _directed(
     right: Decimal,
     rounding: str,
 ) -> Decimal:
-    with localcontext() as context:
-        context.prec = DECIMAL_PRECISION
-        context.rounding = rounding
-        value = operation(left, right)
+    try:
+        with localcontext() as context:
+            context.prec = DECIMAL_PRECISION
+            context.rounding = rounding
+            value = operation(left, right)
+    except DecimalException as exc:
+        raise SettlementError(
+            "decimal interval operation exceeded the supported context") from exc
     if not value.is_finite():
         raise SettlementError("decimal interval operation became non-finite")
     return _canonical_zero(value)
@@ -452,17 +458,19 @@ def _parse_document(document: object) -> dict:
 
 
 def canonical_certificate_sha256(document: object) -> str:
+    def encode_decimal(value: object) -> str:
+        if isinstance(value, Decimal):
+            return _decimal_text(value)
+        raise TypeError(
+            f"object of type {type(value).__name__} is not JSON serializable")
+
     try:
         payload = json.dumps(
             document,
             ensure_ascii=False,
             separators=(",", ":"),
             sort_keys=True,
-            default=(
-                lambda value: _decimal_text(value)
-                if isinstance(value, Decimal)
-                else (_ for _ in ()).throw(TypeError())
-            ),
+            default=encode_decimal,
         ).encode("utf-8")
     except (TypeError, ValueError) as exc:
         raise SettlementError(
@@ -654,8 +662,18 @@ def load_endpoint_certificate(path: str | os.PathLike) -> dict:
     if source.is_symlink() or not source.is_file():
         raise SettlementError(
             f"input endpoint certificate is not a regular file: {source}")
+    def unique_object(pairs: list[tuple[str, object]]) -> dict:
+        result = {}
+        for key, value in pairs:
+            if key in result:
+                raise SettlementError(
+                    f"endpoint certificate contains duplicate key {key!r}")
+            result[key] = value
+        return result
+
     try:
-        document = json.loads(source.read_bytes())
+        document = json.loads(
+            source.read_bytes(), object_pairs_hook=unique_object)
     except (OSError, UnicodeDecodeError, json.JSONDecodeError) as exc:
         raise SettlementError(
             f"cannot read endpoint certificate {source}: {exc}") from exc
@@ -720,7 +738,7 @@ def main() -> None:
         if args.output:
             print(write_result_no_replace(args.output, result))
         else:
-            os.write(1, canonical_result_bytes(result))
+            sys.stdout.buffer.write(canonical_result_bytes(result))
     except SettlementError as exc:
         parser.error(str(exc))
 

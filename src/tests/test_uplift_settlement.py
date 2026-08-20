@@ -358,6 +358,15 @@ def test_cli_round_trip_uses_endpoint_json_only_and_refuses_overwrite(tmp_path):
     assert "existing output destination" in repeated.stderr
 
 
+def test_loader_refuses_duplicate_json_keys(tmp_path):
+    source = tmp_path / "duplicate.json"
+    source.write_text(
+        '{"schema":"uplift-settlement-endpoints-v1",'
+        '"schema":"uplift-settlement-endpoints-v1"}\n')
+    with pytest.raises(us.SettlementError, match="duplicate key 'schema'"):
+        us.load_endpoint_certificate(source)
+
+
 def test_repository_result_paths_are_refused_before_content_io(monkeypatch):
     def forbidden_read(_self):
         raise AssertionError("result content must not be read")
