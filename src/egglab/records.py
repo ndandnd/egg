@@ -57,6 +57,7 @@ def provenance() -> dict:
         # CBC-build-dependent (PR #17 review), so records carry it
         "mip_version": _MIP_VERSION,
         "slurm_job_id": os.environ.get("SLURM_JOB_ID"),
+        "slurm_array_job_id": os.environ.get("SLURM_ARRAY_JOB_ID"),
         "slurm_array_task_id": os.environ.get("SLURM_ARRAY_TASK_ID"),
         "slurm_restart_count": os.environ.get("SLURM_RESTART_COUNT"),
     }

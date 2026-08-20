@@ -20,6 +20,10 @@ import experiments.run_b2a2_pilot as dictator_driver
 from egglab import checkpoint
 from egglab.instance import synthetic_instance
 from egglab.market import make_affine_market
+from experiments.analyze_a6_holdout import (
+    HOLDOUT_INSTANCES, validate_launch_provenance,
+)
+from experiments.analyze_b2_pilot import sha256_file
 
 
 def test_frozen_grid_is_exact_128_matched_cells():
@@ -416,18 +420,21 @@ def _fake_happy_launcher_repo(tmp_path):
     selection.write_bytes(
         (holdout.REPO_DIR / holdout.SELECTION_RELATIVE_PATH).read_bytes()
     )
+    driver_selection = holdout.load_committed_selection()
     fake_driver = experiments / "run_a6_holdout.py"
     fake_driver.write_text("""#!/usr/bin/env python3
 import json
 from pathlib import Path
 import sys
 
+SELECTION = __SELECTION__
+
 if "--preflight" in sys.argv:
     out = Path(sys.argv[sys.argv.index("--out") + 1])
     out.mkdir(parents=True, exist_ok=True)
     (out / "PREFLIGHT.json").write_text(json.dumps({"ok": True}) + "\\n")
 elif "--list" in sys.argv:
-    print("selection:", {"selected_arm": "a6_a4"})
+    print("selection:", SELECTION)
     k = 0
     for method in ("a2", "a6_a4"):
         for seed in range(16, 32):
@@ -440,7 +447,7 @@ elif "--list" in sys.argv:
     print(f"total: {k} cells")
 else:
     raise SystemExit(91)
-""")
+""".replace("__SELECTION__", repr(driver_selection)))
 
     fake_bin = tmp_path / "bin"
     fake_bin.mkdir()
@@ -495,6 +502,29 @@ def test_launcher_one_shot_lock_allows_first_and_refuses_second(tmp_path):
     assert second.returncode == 1
     assert "sentinel" in second.stderr
     assert counter.read_text().splitlines() == ["call"]
+
+
+def test_launcher_artifacts_round_trip_through_analyzer(tmp_path):
+    launcher, src, env, counter = _fake_happy_launcher_repo(tmp_path)
+    proc = subprocess.run(
+        ["bash", str(launcher)], cwd=src, text=True,
+        capture_output=True, env=env,
+    )
+    assert proc.returncode == 0, proc.stderr
+    assert counter.read_text().splitlines() == ["call"]
+    root = src / "runs/a6_holdout"
+    preflight_path = root / "PREFLIGHT.json"
+    preflight = {
+        "path": str(preflight_path.resolve()),
+        "sha256": sha256_file(str(preflight_path)),
+        "code_commit": "c" * 40,
+        "selection": holdout.load_committed_selection(),
+    }
+    selection = {"sha256": holdout.EXPECTED_SELECTION_SHA256}
+    launch = validate_launch_provenance(
+        root, preflight, selection, instances=HOLDOUT_INSTANCES)
+    assert launch["job_id"] == "424242"
+    assert launch["code_commit"] == "c" * 40
 
 
 @pytest.mark.parametrize("checkpoint_name", [

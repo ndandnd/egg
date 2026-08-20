@@ -16,6 +16,7 @@ import pytest
 
 import egglab.b2a2 as b2a2_mod
 import egglab.evsp as evsp_mod
+import egglab.records as records_mod
 import egglab.regimes as regimes_mod
 from egglab import checkpoint
 from egglab.b2a2 import (
@@ -46,10 +47,19 @@ TOL_D = 1e-3  # dictator tolerance used in this battery
 SLACK = PWL_TOL + ENUM_TOL + 1e-6  # combined upper-evaluation slack
 
 VOLATILE_KEYS = {
-    "timestamp", "host", "slurm_job_id", "slurm_array_task_id",
+    "timestamp", "host", "slurm_job_id", "slurm_array_job_id",
+    "slurm_array_task_id",
     "slurm_restart_count", "wall_s", "lp_wall_s", "master_wall_s",
     "pricing_wall_s",
 }
+
+
+def test_provenance_records_slurm_array_parent(monkeypatch):
+    monkeypatch.setenv("SLURM_ARRAY_JOB_ID", "424242")
+    monkeypatch.setenv("SLURM_ARRAY_TASK_ID", "17")
+    record = records_mod.provenance()
+    assert record["slurm_array_job_id"] == "424242"
+    assert record["slurm_array_task_id"] == "17"
 
 
 def _strip_volatile(obj):

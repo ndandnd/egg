@@ -377,6 +377,26 @@ def test_audit_rejects_candidate_during_recovery(a6_runs, tmp_path):
     assert not ok and any("recovery_active" in p for p in problems)
 
 
+def test_audit_rejects_falsified_column_count(a6_runs, tmp_path):
+    def mutate(ck):
+        ev = next(e for e in ck["iteration_events"]
+                  if not e.get("terminal"))
+        ev["n_columns"] += 1
+
+    _, ok, problems = _audited_copy(a6_runs, tmp_path, mutate)
+    assert not ok and any("n_columns" in p for p in problems)
+
+
+def test_audit_rejects_falsified_recovery_kind(a6_runs, tmp_path):
+    def mutate(ck):
+        ev = next(e for e in ck["iteration_events"]
+                  if not e.get("terminal"))
+        ev["recovery_kind"] = "ambiguous"
+
+    _, ok, problems = _audited_copy(a6_runs, tmp_path, mutate)
+    assert not ok and any("recovery_kind" in p for p in problems)
+
+
 def test_audit_rejects_excess_spacing(a6_runs, tmp_path):
     def mutate(ck):
         # relabel a clean iteration as a candidate to break the spacing
@@ -469,42 +489,67 @@ def test_selection_artifact_end_to_end(mini_pilot, tmp_path):
 
 
 def test_selection_decision_thresholds(mini_pilot, tmp_path, monkeypatch):
-    """Exhaustive decision tests on fabricated score patterns via the real
-    pipeline: force a6_a3 wins by tampering scores in cloned checkpoints."""
+    """Exhaustive decision tests on synthetic score patterns via the real
+    pipeline.  Checkpoints stay byte-coherent (the audit — which now binds
+    outcome.oracle_calls to the event stream — must pass); synthetic scores
+    are injected by monkeypatching cell_score, never by corrupting evidence."""
+    import re
     import experiments.select_a6_arm as sel_mod
+    real_cell_score = sel_mod.cell_score
 
-    def clone_with_scores(a4_scores, a3_scores, dst):
-        shutil.copytree(mini_pilot, dst)
-        for (key, score_map) in (("a6_a4", a4_scores), ("a6_a3", a3_scores)):
-            for (s, n, b), calls in score_map.items():
-                p = os.path.join(dst, f"{key}_s{s}_n{n}_b{b:g}",
-                                 f"{key}.cg.ckpt.json")
-                ck = checkpoint.load(p)
-                ck["outcome"]["oracle_calls"] = calls
-                checkpoint.save(p, ck)
-        return dst
+    def run_with_scores(a4_scores, a3_scores, out):
+        score_map = {}
+        for score_by_inst, m in ((a4_scores, "a6_a4"), (a3_scores, "a6_a3")):
+            for inst, sc in score_by_inst.items():
+                score_map[(m, inst)] = sc
+
+        def fake_cell_score(ck, label):
+            # label is "{method} seed={s} n={n} b={b}"; keep the audit's
+            # coherence guarantee by still exercising the real scorer
+            real_cell_score(ck, label)
+            method = label.split()[0]
+            s = int(re.search(r"seed=(\d+)", label).group(1))
+            n = int(re.search(r"n=(\d+)", label).group(1))
+            b = float(re.search(r"b=([0-9.]+)", label).group(1))
+            return score_map[(method, (s, n, b))]
+
+        monkeypatch.setattr(sel_mod, "cell_score", fake_cell_score)
+        result = select(mini_pilot, out, "T", "c",
+                        instances=MINI_INSTANCES, win_threshold=2,
+                        instance_builder=fix_builder, verify_code_commit=False)
+        monkeypatch.undo()
+        return json.load(open(os.path.join(result, "SELECTION.json")))
 
     # a6_a3 strictly better on both instances -> wins 2/2 >= threshold 2
-    d1 = clone_with_scores(
+    sel = run_with_scores(
         {MINI_INSTANCES[0]: 30, MINI_INSTANCES[1]: 30},
         {MINI_INSTANCES[0]: 10, MINI_INSTANCES[1]: 10},
-        str(tmp_path / "w2"))
-    out = select(d1, str(tmp_path / "o1"), "T", "c",
-                 instances=MINI_INSTANCES, win_threshold=2,
-                 instance_builder=fix_builder, verify_code_commit=False)
-    assert json.load(open(os.path.join(
-        out, "SELECTION.json")))["selected_arm"] == "a6_a3"
+        str(tmp_path / "o1"))
+    assert sel["selected_arm"] == "a6_a3"
 
     # tie on one instance (ties are non-wins) -> 1 win < 2 -> a6_a4
-    d2 = clone_with_scores(
+    sel = run_with_scores(
         {MINI_INSTANCES[0]: 10, MINI_INSTANCES[1]: 30},
         {MINI_INSTANCES[0]: 10, MINI_INSTANCES[1]: 10},
-        str(tmp_path / "w1"))
-    out = select(d2, str(tmp_path / "o2"), "T", "c",
-                 instances=MINI_INSTANCES, win_threshold=2,
-                 instance_builder=fix_builder, verify_code_commit=False)
-    assert json.load(open(os.path.join(
-        out, "SELECTION.json")))["selected_arm"] == "a6_a4"
+        str(tmp_path / "o2"))
+    assert sel["selected_arm"] == "a6_a4"
+
+
+def test_selection_aborts_on_outcome_oracle_calls_edit(mini_pilot, tmp_path):
+    """End-to-end F1: a single-field outcome.oracle_calls edit in one cell
+    now fails the audit (via the shared replay's oracle-call provenance) and
+    aborts selection — nothing is scored."""
+    dst = str(tmp_path / "edited")
+    shutil.copytree(mini_pilot, dst)
+    s, n, b = MINI_INSTANCES[0]
+    p = os.path.join(dst, f"a6_a4_s{s}_n{n}_b{b:g}", "a6_a4.cg.ckpt.json")
+    ck = checkpoint.load(p)
+    ck["outcome"]["oracle_calls"] = int(ck["outcome"]["oracle_calls"]) + 1
+    checkpoint.save(p, ck)
+    with pytest.raises(AnalysisError, match="selection aborted"):
+        select(dst, str(tmp_path / "o"), "T", "c",
+               instances=MINI_INSTANCES, win_threshold=2,
+               instance_builder=fix_builder, verify_code_commit=False)
 
 
 def test_selection_aborts_on_failed_audit(mini_pilot, tmp_path):
@@ -519,7 +564,7 @@ def test_selection_aborts_on_failed_audit(mini_pilot, tmp_path):
 
 
 def test_selection_code_commit_verification(mini_pilot, tmp_path):
-    with pytest.raises(AnalysisError, match="code commit mismatch"):
+    with pytest.raises(AnalysisError, match="cannot resolve|code commit mismatch"):
         select(mini_pilot, str(tmp_path), "T",
                "deadbeefdeadbeefdeadbeefdeadbeefdeadbeef",
                instances=MINI_INSTANCES, win_threshold=2,
