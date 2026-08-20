@@ -22,7 +22,18 @@ backed by an in-repository provenance proof; the decision rules use a
 direction-SIGNED median with an explicit wrong-direction NO-GO case; the
 gate thresholds are explicitly engineering gates, not significance
 levels; and Appendix A adds pseudo-code plus a state-transition table
-making the screen byte-for-byte reproducible.
+making the screen byte-for-byte reproducible. A second amendment (same
+day) aligned the witness with the actual Phase-1 EVSP model: the
+z-terminal constraint requires SOC upon pull-in (`soc_arr >=
+soc_end_kwh`) with NO charging after the final trip, so `W` creates no
+terminal charging event and R1/R2 operate only on inter-trip depot-arc
+events; the N2 necessity proof was corrected (maximum detour saving is
+4.8 kWh, not 2.4, with the induction margin 14.0 - 4.8 = 9.2 kWh per
+chained trip, recomputed and asserted per instance rather than assumed);
+and R2 is documented as a conservative sufficient witness (whole-slot
+contiguous placements only — the model also permits partial-slot overlap
+and noncontiguous allocation, so R2 can under-report flexibility but
+never falsely certify it).
 
 This pilot studies **B3: the internal-uplift atlas** — how the certified price
 of indivisibility responds to two physical fleet parameters — using only **A2
@@ -189,15 +200,31 @@ bound rejects the setting before the witness runs. Let usable band
 - **N2 (depot round-trip):** for every trip `i`,
   `dh_kwh(depot, start_i) + energy_i + dh_kwh(end_i, depot) <= B`
   (a fully charged vehicle can pull out, serve `i`, and pull in).
-  *Necessity justification (generator-specific):* charging exists only at
-  the depot, so the depot-departure-to-depot-arrival segment containing
-  trip `i` consumes at least `dh_kwh(depot, start_i) + energy_i +
-  dh_kwh(end_i, depot)` whenever it contains only trip `i`; if the
-  segment chains further trips, it consumes strictly more, because the
-  generator's minimum trip energy (14.0 kWh) exceeds the largest possible
-  deadhead-detour saving (all deadhead energies are <= 2.4 kWh). N2 is
-  therefore necessary for THIS generator's frozen `trip_energy_range` and
-  deadhead table; it is asserted, not assumed, in the screen record.
+  *Necessity justification (generator-specific, by induction).* Charging
+  exists only at the depot, so consider the full-to-floor energy segment
+  (depot departure to next depot arrival) containing trip `i`. Chaining a
+  further trip `j` after `i` replaces the two depot legs
+  `dh_kwh(end_i, depot) + dh_kwh(depot, start_j)` by the direct
+  connection `dh_kwh(end_i, start_j)`; the maximum possible saving is
+
+  ```
+  max over (e, s) of  dh_kwh(e, depot) + dh_kwh(depot, s) - dh_kwh(e, s)
+    = 2.4 + 2.4 - 0 = 4.8 kWh    (attained at e = s = B),
+  ```
+
+  while every added trip contributes at least `min trip energy = 14.0`
+  kWh. By induction on the number of chained trips, each additional trip
+  adds at least `14.0 - 4.8 = 9.2 kWh` net to the segment's consumption,
+  so a segment containing trip `i` and `m - 1` other trips consumes at
+  least `dh_kwh(depot, start_i) + energy_i + dh_kwh(end_i, depot) +
+  (m - 1) * 9.2` — chaining can never make a
+  depot-round-trip-infeasible trip feasible within one segment. The
+  screen does not rely on these prose constants: it RECOMPUTES, per
+  instance, `max_saving = max over location pairs of the expression
+  above` and `min_energy = min over trips of energy_kwh`, and ASSERTS
+  `min_energy > max_saving` in the screen record (N2-necessity
+  assertion); if the assertion ever fails, the screen is
+  `DESIGN-NOT-FROZEN` because N2 would no longer be a necessary bound.
 - **N3 (terminal SOC):** `soc_min_kwh <= soc_end_kwh <= battery_kwh`.
 - **N4 (charge-rate admissibility):** one slot of charging delivers
   `charge_power_kw × slot_min / 60 > 0` kWh (non-degenerate charging).
@@ -270,18 +297,21 @@ single inequality is the "soc_min throughout" check under P1).
    dh_min(end_loc_i, depot)`; record the dwell's charging event with
    `charge_kwh = soc_dep - soc_arr` if strictly positive.
 
-**Terminal-SOC check (frozen).** After all trips are assigned, every
-used vehicle is at the depot (P1). Its terminal dwell is
-`[free_at, horizon_min]` with `horizon_min = n_slots * slot_min`
-(= 1680); terminal charging uses the same integration rule; `W`
-requires `min(battery_kwh, soc_arr + charge_power_kw *
-(horizon_min - free_at) / 60) >= soc_end_kwh` for every vehicle, and
-records the terminal charging event (energy up to the cap) if strictly
-positive. A terminal-check failure is `W-INFEASIBLE`.
+**Terminal-SOC check (frozen; matches the Phase-1 EVSP model).** The
+model's z-terminal constraint requires the SOC **upon pull-in** after
+the final trip to satisfy `soc >= soc_end_kwh`; there is NO charging
+after the final trip (terminal/opportunity charging is a later model
+extension and is outside this experiment). Accordingly, `W` requires,
+for every used vehicle, `soc_arr >= soc_end_kwh` where `soc_arr` is the
+SOC on depot arrival after its last assigned trip's pull-in. No
+terminal charging event is created. A terminal-check failure is
+`W-INFEASIBLE`.
 
 `W` **witnesses feasibility** iff it assigns all trips within
 `max_vehicles` with every dwell/segment inequality and every terminal
-check satisfied.
+check satisfied. Charging events exist ONLY on inter-trip depot arcs
+(the dwell between a vehicle's return from one trip and its departure
+for the next); R1/R2 operate exclusively on those events.
 
 **Relevance from `W` (deterministic; slot alignment frozen).** For a
 charging event on dwell `[a, d]` with energy `c > 0`:
@@ -299,10 +329,19 @@ charging event on dwell `[a, d]` with energy `c > 0`:
 
 The setting is relevant iff
 
-- **R1 (charging occurs):** total charging energy across all of `W`'s
-  events (dwell and terminal) is strictly positive; and
+- **R1 (charging occurs):** total charging energy across `W`'s
+  inter-trip depot-arc events is strictly positive; and
 - **R2 (timing has freedom):** at least one charging event is
   timing-free.
+
+**R2 is a conservative sufficient witness.** It counts only whole-slot,
+contiguous placements fully inside the dwell. The EVSP model itself also
+permits partial-slot overlap at the dwell boundaries and noncontiguous
+slot allocations, so R2 may MISS flexibility that the model has (a
+false negative is possible and merely makes the screen stricter); it can
+never create a false positive, because any two distinct whole-slot
+contiguous placements counted by R2 are themselves distinct feasible
+model allocations delivering the same energy.
 
 ### 4.3 Frozen candidate enumeration and outcome-blind selection
 
@@ -565,7 +604,10 @@ Stated here and required in every emitted SUMMARY of any future run:
 - Only **battery capacity and per-vehicle charging power** are varied (across the
   five OFAT settings); all other physics are fixed.
 - There is **no shared charger-count / depot-capacity** constraint.
-- There is **no V2G**.
+- There is **no V2G**, and **no terminal/opportunity charging**: the
+  model's z-terminal constraint requires SOC upon pull-in
+  (`soc >= soc_end_kwh` after the final trip's return to depot); all
+  charging happens on inter-trip depot arcs.
 - The affine duck-shaped price environment is **not a solar-generation model**.
 - `n_trips` is **workload / problem size, not controlled fleet size**.
 - There is **no distribution network or locational charging**.
@@ -653,15 +695,12 @@ def witness(inst):                      # inst: one physical instance
         vehicles[v_index] = (
             soc_dep - need,
             trip.end_min + inst.dh_min[(trip.end_loc, inst.depot)])
-    horizon = inst.n_slots * inst.slot_min
-    for (soc_arr, free_at) in vehicles:              # terminal checks
-        soc_final = min(inst.battery_kwh,
-                        soc_arr + inst.charge_power_kw
-                                  * (horizon - free_at) / 60)
-        if soc_final < inst.soc_end_kwh: return W_INFEASIBLE
-        if soc_final - soc_arr > 0:
-            events.append((free_at, horizon, soc_final - soc_arr))
-    return W_FEASIBLE, events
+    # terminal checks: SOC upon pull-in, NO charging after the final
+    # trip (matches the Phase-1 EVSP z-terminal constraint; terminal/
+    # opportunity charging is outside this experiment)
+    for (soc_arr, free_at) in vehicles:
+        if soc_arr < inst.soc_end_kwh: return W_INFEASIBLE
+    return W_FEASIBLE, events           # inter-trip depot-arc events only
 ```
 
 ### A.2 Relevance pseudo-code
@@ -681,6 +720,13 @@ def relevant(inst, events):
 
 ```
 def screen():
+    # N2-necessity assertion (recomputed, never assumed)
+    for inst in all 30 physical instances:
+        max_saving = max over locations (e, s) of (
+            inst.dh_kwh[(e, inst.depot)] + inst.dh_kwh[(inst.depot, s)]
+            - (0 if e == s else inst.dh_kwh[(e, s)]))
+        min_energy = min over inst.trips of trip.energy_kwh
+        if not (min_energy > max_saving): return DESIGN_NOT_FROZEN("N2")
     # baseline gate (S0 fixed at 60.0 kWh / 150.0 kW)
     for (seed, n) in (0,8),(0,12),(11,8),(11,12),(15,8),(15,12):
         inst = synthetic_instance(seed, n)           # frozen defaults
@@ -703,8 +749,8 @@ def screen():
 | state | condition | next state |
 | --- | --- | --- |
 | `CANDIDATE(c)` | any of N1-N4 fails on any of the 6 instances | `REJECT(c, infeasible-bound)` -> next candidate |
-| `CANDIDATE(c)` | bounds pass; `witness` returns `W_INFEASIBLE` on any instance | `REJECT(c, witness-infeasible)` -> next candidate |
-| `CANDIDATE(c)` | witness feasible everywhere; `R1_FAIL` on any instance | `REJECT(c, no-charging)` -> next candidate |
+| `CANDIDATE(c)` | bounds pass; `witness` returns `W_INFEASIBLE` on any instance (assignment failure or pull-in SOC below `soc_end_kwh` — no terminal charging exists) | `REJECT(c, witness-infeasible)` -> next candidate |
+| `CANDIDATE(c)` | witness feasible everywhere; `R1_FAIL` (no inter-trip depot-arc charging) on any instance | `REJECT(c, no-charging)` -> next candidate |
 | `CANDIDATE(c)` | R1 passes everywhere; `R2_FAIL` on any instance | `REJECT(c, no-timing-freedom)` -> next candidate |
 | `CANDIDATE(c)` | all gates pass on all 6 instances | `SELECTED(c)` — level frozen |
 | (candidates exhausted) | no `SELECTED` | `NON-EXERCISABLE` -> `DESIGN-NOT-FROZEN` |
