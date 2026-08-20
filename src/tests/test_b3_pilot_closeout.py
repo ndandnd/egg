@@ -600,23 +600,22 @@ def test_pack_refuses_active_job_and_bad_job_binding(tmp_path, screen):
 def test_pack_detects_mutation_during_packaging(tmp_path, screen):
     runs, analysis = _packable(tmp_path, screen)
     victim = runs / "S0_baseline_s0_n8_b0.01" / "a2.oracle.jsonl"
-    real_copy = pk._copy_tree
+    real_copy = pk._copy_snapshot
     state = {"mutated": False}
 
-    def mutating_copy(source, destination):
-        real_copy(source, destination)
+    def mutating_copy(source, snapshot, destination):
+        real_copy(source, snapshot, destination)
         if not state["mutated"] and source.name != "analysis-out":
             state["mutated"] = True
             victim.write_bytes(victim.read_bytes() + b"\n")
 
-    import types
-    orig = pk._copy_tree
-    pk._copy_tree = mutating_copy
+    orig = pk._copy_snapshot
+    pk._copy_snapshot = mutating_copy
     try:
         with pytest.raises(PackagingError, match="mutated during packaging"):
             _pack(runs, analysis, tmp_path / "b1")
     finally:
-        pk._copy_tree = orig
+        pk._copy_snapshot = orig
     assert state["mutated"]
 
 
@@ -632,6 +631,199 @@ def test_pack_refuses_cross_run_analysis(tmp_path, screen):
         _pack(runs, analysis, tmp_path / "b1")
 
 
+def test_pack_refuses_cross_job_analysis(tmp_path, screen):
+    """Review reproduction (BLOCKER): the design manifest is SHARED across
+    jobs, so one job's raw results packaged with another job's GO analysis
+    used to pass.  The raw-tree digest and Slurm job binding recorded in
+    the analysis must now match the exact raw tree being packaged."""
+    runs_a = Path(_go_tree(tmp_path, screen, name="runsA"))
+    _materialize_jsonl(runs_a)
+    bp.bind_job_id(runs_a, "424242")
+    analysis_a = Path(_analyze(runs_a, tmp_path / "analysisA"))
+    runs_b = Path(_go_tree(tmp_path, screen, name="runsB"))
+    _materialize_jsonl(runs_b)
+    bp.bind_job_id(runs_b, "424243")
+    # same design manifest => identical run-manifest SHA on both sides,
+    # which is exactly why the SHA alone was insufficient
+    assert pk.sha256_file(runs_a / "MANIFEST.json") == pk.sha256_file(
+        runs_b / "MANIFEST.json")
+    with pytest.raises(PackagingError,
+                       match="DIFFERENT job|job binding"):
+        _pack(runs_b, analysis_a, tmp_path / "b1")
+    assert not (tmp_path / "b1").exists()
+
+
+def test_pack_requires_verified_scoreable_analysis(tmp_path, screen):
+    runs, analysis = _packable(tmp_path, screen)
+    unverified = tmp_path / "unverified"
+    shutil.copytree(analysis, unverified)
+    _edit_json(unverified / "MANIFEST.json",
+               lambda m: m.update(analysis_code_verified=False))
+    with pytest.raises(PackagingError, match="without code verification"):
+        _pack(runs, unverified, tmp_path / "b1")
+    drifted = tmp_path / "drifted-screen"
+    shutil.copytree(analysis, drifted)
+    _edit_json(drifted / "MANIFEST.json",
+               lambda m: m.update(frozen_screen_verified=False))
+    with pytest.raises(PackagingError, match="non-scoreable"):
+        _pack(runs, drifted, tmp_path / "b2")
+    unbound = tmp_path / "unbound"
+    shutil.copytree(analysis, unbound)
+    _edit_json(unbound / "MANIFEST.json",
+               lambda m: m.update(raw_binding=None))
+    with pytest.raises(PackagingError, match="raw-tree digest"):
+        _pack(runs, unbound, tmp_path / "b3")
+
+
+def test_pack_refuses_noncanonical_job_id(tmp_path, screen):
+    runs, analysis = _packable(tmp_path, screen)
+    for bad in ("0042", "42; scancel", "", 424242):
+        job = json.loads((runs / "JOB.json").read_text())
+        job["job_id"] = bad
+        (runs / "JOB.json").write_text(
+            json.dumps(job, indent=2, sort_keys=True) + "\n")
+        with pytest.raises(PackagingError,
+                           match="canonical Slurm job id|malformed"):
+            _pack(runs, analysis, tmp_path / "b1")
+    assert not (tmp_path / "b1").exists()
+
+
+def test_pack_reverifies_quiescence_before_rename(tmp_path, screen):
+    """A job that becomes active again mid-packaging refuses at the second
+    (immediately-pre-rename) quiescence gate; no bundle is published."""
+    runs, analysis = _packable(tmp_path, screen)
+    calls = {"n": 0}
+
+    def flaky(job_id):
+        calls["n"] += 1
+        if calls["n"] >= 2:
+            raise PackagingError(f"Slurm job {job_id} is still active")
+
+    with pytest.raises(PackagingError, match="still active"):
+        pk.pack(runs, analysis, tmp_path / "b1", CODE,
+                verify_commit=False, job_quiescence_validator=flaky)
+    assert calls["n"] == 2
+    assert not any((tmp_path / "b1").iterdir())
+
+
+def test_pack_and_import_path_isolation(tmp_path, screen):
+    runs, analysis = _packable(tmp_path, screen)
+    with pytest.raises(PackagingError, match="disjoint"):
+        _pack(runs, analysis, runs / "bundles")
+    with pytest.raises(PackagingError, match="disjoint"):
+        _pack(runs, analysis, analysis / "bundles")
+    # the A6 refusal fires BEFORE any recursive read: the path does not
+    # even exist, so any read attempt would raise a different error
+    with pytest.raises(PackagingError, match="A6"):
+        pk.pack(tmp_path / "a6_holdout" / "runs", analysis,
+                tmp_path / "b2", CODE, verify_commit=False,
+                job_quiescence_validator=lambda j: None)
+    with pytest.raises(PackagingError, match="A6"):
+        _pack(runs, analysis, tmp_path / "result_a6_mirror")
+    bundle = Path(_pack(runs, analysis, tmp_path / "bundles")["bundle_dir"])
+    with pytest.raises(PackagingError, match="disjoint"):
+        pk.import_bundle(bundle, bundle / "imported")
+    with pytest.raises(PackagingError, match="A6"):
+        pk.import_bundle(bundle, tmp_path / "a6_holdout" / "dest")
+    assert not (tmp_path / "a6_holdout").exists()
+
+
+def _rewrite_bundle_manifest(work, fn):
+    """Coordinated bundle tamper: edit the manifest, keep it canonical,
+    and rebind the completion record to the new manifest bytes."""
+    manifest = json.loads((work / "BUNDLE_MANIFEST.json").read_bytes())
+    fn(manifest)
+    from experiments.package_a6_holdout import _canonical_json_bytes
+    raw = _canonical_json_bytes(manifest)
+    (work / "BUNDLE_MANIFEST.json").write_bytes(raw)
+    import hashlib
+    (work / "BUNDLE_COMPLETE.json").write_bytes(_canonical_json_bytes({
+        "schema": "b3-factor-pilot-bundle-complete-v1",
+        "bundle_manifest_sha256": hashlib.sha256(raw).hexdigest(),
+    }))
+
+
+def test_import_refuses_incomplete_or_uncommitted_bundle(tmp_path, screen):
+    """Failure must not look like success: a bundle carrying the
+    incomplete marker, or lacking the completion record, or with a
+    completion record bound to different manifest bytes, refuses."""
+    runs, analysis = _packable(tmp_path, screen)
+    bundle = Path(_pack(runs, analysis, tmp_path / "bundles")["bundle_dir"])
+    marked = tmp_path / "marked"
+    shutil.copytree(bundle, marked)
+    (marked / pk.INCOMPLETE_MARKER).write_text("{}\n")
+    with pytest.raises(PackagingError, match="incomplete-publication"):
+        pk.import_bundle(marked, tmp_path / "d1")
+    uncommitted = tmp_path / "uncommitted"
+    shutil.copytree(bundle, uncommitted)
+    (uncommitted / "BUNDLE_COMPLETE.json").unlink()
+    with pytest.raises(PackagingError, match="lacks the completion marker"):
+        pk.import_bundle(uncommitted, tmp_path / "d2")
+    unbound = tmp_path / "unbound-complete"
+    shutil.copytree(bundle, unbound)
+    _rewrite_bundle_manifest(unbound, lambda m: None)
+    _edit_json(unbound / "BUNDLE_COMPLETE.json",
+               lambda d: d.update(bundle_manifest_sha256="0" * 64))
+    with pytest.raises(PackagingError, match="does not bind"):
+        pk.import_bundle(unbound, tmp_path / "d3")
+    for d in ("d1", "d2", "d3"):
+        assert not (tmp_path / d).exists()
+
+
+def test_import_reapplies_population_and_manifest_contract(
+        tmp_path, screen):
+    runs, analysis = _packable(tmp_path, screen)
+    bundle = Path(_pack(runs, analysis, tmp_path / "bundles")["bundle_dir"])
+
+    empty_runs = tmp_path / "empty-runs"
+    shutil.copytree(bundle, empty_runs)
+    shutil.rmtree(empty_runs / "runs")
+    (empty_runs / "runs").mkdir()
+    with pytest.raises(PackagingError, match="empty raw tree"):
+        pk.import_bundle(empty_runs, tmp_path / "d1")
+
+    empty_analysis = tmp_path / "empty-analysis"
+    shutil.copytree(bundle, empty_analysis)
+    shutil.rmtree(empty_analysis / "analysis")
+    (empty_analysis / "analysis").mkdir()
+    with pytest.raises(PackagingError, match="empty analysis artifact"):
+        pk.import_bundle(empty_analysis, tmp_path / "d2")
+
+    no_cells = tmp_path / "no-cells"
+    shutil.copytree(bundle, no_cells)
+    _rewrite_bundle_manifest(no_cells,
+                             lambda m: m["raw"].update(cells={}))
+    with pytest.raises(PackagingError, match="cells are empty"):
+        pk.import_bundle(no_cells, tmp_path / "d3")
+
+    traversal = tmp_path / "traversal"
+    shutil.copytree(bundle, traversal)
+
+    def add_traversal(m):
+        files = next(iter(m["raw"]["cells"].values()))
+        m["raw"]["cells"]["../evil"] = dict(files)
+    _rewrite_bundle_manifest(traversal, add_traversal)
+    with pytest.raises(PackagingError, match="unsafe bundle manifest path"):
+        pk.import_bundle(traversal, tmp_path / "d4")
+
+    swapped_job = tmp_path / "swapped-job"
+    shutil.copytree(bundle, swapped_job)
+    _rewrite_bundle_manifest(
+        swapped_job, lambda m: m["raw"].update(job_id="999999"))
+    with pytest.raises(PackagingError,
+                       match="job id differs from the raw tree"):
+        pk.import_bundle(swapped_job, tmp_path / "d5")
+
+    dropped_cell = tmp_path / "dropped-cell"
+    shutil.copytree(bundle, dropped_cell)
+    tag = bp.build_cells()[0]["tag"]
+    shutil.rmtree(dropped_cell / "runs" / tag)
+    with pytest.raises(PackagingError, match="population differs"):
+        pk.import_bundle(dropped_cell, tmp_path / "d6")
+    for d in ("d1", "d2", "d3", "d4", "d5", "d6"):
+        assert not (tmp_path / d).exists()
+
+
 def test_import_rejects_tampered_bundle(tmp_path, screen):
     runs, analysis = _packable(tmp_path, screen)
     bundle = Path(_pack(runs, analysis, tmp_path / "bundles")["bundle_dir"])
@@ -641,6 +833,6 @@ def test_import_rejects_tampered_bundle(tmp_path, screen):
     shutil.copytree(bundle, work)
     victim = work / "runs" / "S1_batt_low_s0_n8_b0.01" / "a2.cg.ckpt.json"
     victim.write_bytes(victim.read_bytes() + b"\n")
-    with pytest.raises(PackagingError, match="digest mismatch"):
+    with pytest.raises(PackagingError, match="digest"):
         pk.import_bundle(work, tmp_path / "dest")
     assert not (tmp_path / "dest").exists()

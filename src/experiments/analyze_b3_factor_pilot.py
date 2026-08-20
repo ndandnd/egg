@@ -796,6 +796,35 @@ def analyze(runs_dir, out_base, stamp, analysis_code_commit, *,
                                   run["manifest"])
             result = analyze_population(pop)
 
+    # bind the analysis to the EXACT raw job it scored: the raw tree's
+    # canonical digest plus the Slurm job binding (the design manifest is
+    # shared across jobs, so the manifest SHA alone cannot identify a job)
+    raw_binding = None
+    if audit_sha is not None:
+        from experiments.package_a6_holdout import (
+            PackagingError as _PkgError,
+            canonical_tree_sha256 as _tree_sha,
+            snapshot_source as _snapshot,
+        )
+        try:
+            raw_binding = {
+                "raw_tree_sha256": _tree_sha(_snapshot(runs_dir)),
+                "job_id": None,
+                "job_sha256": None,
+            }
+            job_path = Path(runs_dir) / "JOB.json"
+            if job_path.is_file():
+                job_doc = json.loads(job_path.read_text())
+                raw_binding["job_id"] = str(job_doc.get("job_id"))
+                raw_binding["job_sha256"] = sha256_file(job_path)
+        except (_PkgError, OSError, json.JSONDecodeError,
+                UnicodeDecodeError) as exc:
+            raw_binding = None
+            result = {"decision": {"state": "INVALID/HALT",
+                                   "problems": [
+                                       f"raw tree cannot be bound: {exc}"]},
+                      "contrasts": [], "settings": {}, "cells": {}}
+
     out_base = Path(out_base)
     out_base.mkdir(parents=True, exist_ok=True)
     out_dir = out_base / stamp
@@ -827,6 +856,7 @@ def analyze(runs_dir, out_base, stamp, analysis_code_commit, *,
         "frozen_screen": {"dir": screen_dir_recorded,
                           "record_sha256": screen.get("record_sha256")},
         "run_manifest_sha256": audit_sha,
+        "raw_binding": raw_binding,
         "audit_required": True,
         "tolerances": {"epsilon": bp.EPSILON, "tol_d": bp.TOL_D,
                        "budget": bp.BUDGET, "tau_delta": TAU_DELTA},
