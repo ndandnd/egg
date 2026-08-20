@@ -1375,6 +1375,29 @@ def _terminal_global_bound(state: dict) -> float | None:
     return min(bounds) if bounds else None
 
 
+def _refresh_frontier(state: dict) -> None:
+    """Persist the deterministic work queues rather than reconstructing them
+    only in memory.  This makes the exact resume point directly auditable."""
+    state["frontier"] = {
+        "queued": sorted(
+            node_id
+            for node_id, node in state["nodes"].items()
+            if node["status"] == "queued"
+        ),
+        "open_best_bound": [
+            node_id
+            for _bound, node_id in sorted(
+                (
+                    float(node["lp_outcome"]["lower_bound"]),
+                    node_id,
+                )
+                for node_id, node in state["nodes"].items()
+                if node["status"] == "open"
+            )
+        ],
+    }
+
+
 def solve_tree(
     inst: Instance,
     market: AffineMarket,
@@ -1434,6 +1457,7 @@ def solve_tree(
             "incumbent": None,
             "incumbent_history": [],
             "work_history": [],
+            "frontier": {"queued": [root_id], "open_best_bound": []},
             "done": False,
             "outcome": None,
             "created": provenance(),
@@ -1447,6 +1471,7 @@ def solve_tree(
     work = 0
 
     def commit():
+        _refresh_frontier(state)
         checkpoint.save(path, state)
 
     def pause_due() -> bool:
