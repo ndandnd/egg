@@ -305,3 +305,28 @@ absence of uplift. Specification: `doc/B3_BASELINE_SPEC.md`; analyzer:
 regeneration, two-commit protocol). No factor pilot or new cluster
 experiment starts until this baseline and its follow-up specification
 are reviewed.
+
+## 2026-08-20 — B3 baseline corrections after independent review
+
+**Decision**: amend the B3 baseline (PR #30) per the independent review
+of head `7503036`. The cross-method invariant is strengthened from
+pairwise-with-A2 overlap to the FOUR-WAY interval intersection
+(`max(lo) <= min(hi)` across a2/a3/a4/a5 per instance); pairwise overlap
+does not imply a common intersection. Paired effects are added by
+interval subtraction (feedback contrast b=0.05-0.01 within (seed, n);
+workload contrast n=12-8 within (seed, b)); on the canonical population
+they are heterogeneous (feedback: 23/32 certified positive, 1 negative,
+8 unresolved; workload: 19/32 positive, 6 negative, 7 unresolved), so
+the defensible statement is that stratum-level certification rates rise
+with n and b while matched effects are heterogeneous and descriptive
+rather than causal. Canonical artifact names are adopted
+(instance_uplift/cross_method_audit/paired_effects/strata_summary), the
+classification is exhaustive (38 strictly positive, 21 strict zero
+crossings, 5 exact-zero boundaries where z_d_ub == lb_best exactly), the
+complete scientific boundary is embedded in the spec and every emitted
+SUMMARY, provenance requires the full 40-character correction-commit SHA
+(ancestor-of-HEAD with byte-identical analyzer/spec/tests), input hashes
+are pinned, manifests use repository-relative paths for portable
+byte-identical regeneration, CSVs are LF-terminated, and historical
+mip_version=="unknown" rows (12/256, declared in the B2 manifest) are
+preserved and disclosed.

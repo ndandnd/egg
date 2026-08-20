@@ -90,9 +90,14 @@ uplift intervals, and the equivalence-theorem framing.
 
 The no-solver B3 certified-uplift baseline restates the committed B2
 population as one A2 interval per unique instance (64 rows), with A3-A5
-as consistency witnesses only. It is retrospective/exploratory: see
-`doc/B3_BASELINE_SPEC.md` and `result/b3_baseline/`. No new compute was
-spent.
+as consistency witnesses whose four-way interval intersection must be
+nonempty. Certified classification: 38 strictly positive, 21 strict zero
+crossings, 5 exact-zero boundaries. Paired interval-subtraction effects
+are heterogeneous (feedback 23/32 certified positive, workload 19/32):
+stratum-level certification rates rise with n and b, but matched effects
+are descriptive rather than causal. Retrospective/exploratory: see
+`doc/B3_UPLIFT_BASELINE_SPEC.md` and `result/b3_baseline/`. No new
+compute was spent.
 
 ## Next gate
 
