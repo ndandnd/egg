@@ -267,6 +267,292 @@ def test_selected_response_primitives_and_face_tampering_rejected(witness):
         replay_cycle_witness(candidate, verify_integrity=False)
 
 
+def _tamper_path(candidate, path):
+    target = candidate
+    for key in path[:-1]:
+        target = target[key]
+    key = path[-1]
+    value = target[key]
+    if isinstance(value, bool):
+        target[key] = not value
+    elif isinstance(value, (int, float)):
+        target[key] = value + 1
+    elif isinstance(value, str):
+        target[key] = value + "-tampered"
+    else:
+        raise AssertionError(f"unsupported tamper value at {path}: {value!r}")
+
+
+STRICT_STATE_TAMPER_PATHS = [
+    (
+        "computational_evidence",
+        "strict_best_response",
+        "states",
+        state,
+        field,
+    )
+    for state in (0, 1)
+    for field in (
+        "state",
+        "chosen_structure_id",
+        "chosen_objective",
+        "runner_up_structure_id",
+        "runner_up_objective",
+        "global_discrete_structure_margin",
+        "opposite_cycle_endpoint_margin",
+    )
+]
+STRICT_STATE_TAMPER_PATHS += [
+    (
+        "computational_evidence",
+        "strict_best_response",
+        "states",
+        state,
+        "optimal_face_load_uniqueness",
+        "max_certified_load_range_upper_kwh",
+    )
+    for state in (0, 1)
+]
+
+
+@pytest.mark.parametrize(
+    "path",
+    STRICT_STATE_TAMPER_PATHS,
+    ids=[
+        f"state-{path[3]}-{path[-1]}"
+        for path in STRICT_STATE_TAMPER_PATHS
+    ],
+)
+def test_complete_strict_state_summary_tampering_rejected(witness, path):
+    candidate = copy.deepcopy(witness)
+    _tamper_path(candidate, path)
+    with pytest.raises(B2A2Error):
+        replay_cycle_witness(candidate, verify_integrity=False)
+
+
+STRICT_AGGREGATE_TAMPER_PATHS = [
+    ("computational_evidence", "strict_best_response", "scope"),
+    (
+        "computational_evidence",
+        "strict_best_response",
+        "minimum_global_discrete_structure_margin",
+    ),
+    (
+        "computational_evidence",
+        "strict_best_response",
+        "minimum_opposite_cycle_endpoint_margin",
+    ),
+    (
+        "computational_evidence",
+        "strict_best_response",
+        "maximum_certified_load_range_upper_kwh",
+    ),
+    (
+        "computational_evidence",
+        "strict_best_response",
+        "objective_tolerance_ceiling",
+    ),
+    (
+        "computational_evidence",
+        "strict_best_response",
+        "all_margins_clear_tolerances",
+    ),
+]
+
+
+@pytest.mark.parametrize(
+    "path",
+    STRICT_AGGREGATE_TAMPER_PATHS,
+    ids=[path[-1] for path in STRICT_AGGREGATE_TAMPER_PATHS],
+)
+def test_strict_summary_aggregate_tampering_rejected(witness, path):
+    candidate = copy.deepcopy(witness)
+    _tamper_path(candidate, path)
+    with pytest.raises(B2A2Error):
+        replay_cycle_witness(candidate, verify_integrity=False)
+
+
+FIXED_POINT_TAMPER_PATHS = [
+    (
+        "computational_evidence",
+        "fixed_point_absence",
+        "candidate_induced_prices",
+        0,
+    ),
+    (
+        "computational_evidence",
+        "fixed_point_absence",
+        "candidate_linear_objective",
+    ),
+    (
+        "computational_evidence",
+        "fixed_point_absence",
+        "best_response_at_candidate_prices",
+        "structure_id",
+    ),
+    (
+        "computational_evidence",
+        "fixed_point_absence",
+        "best_response_at_candidate_prices",
+        "objective",
+    ),
+    (
+        "computational_evidence",
+        "fixed_point_absence",
+        "best_response_at_candidate_prices",
+        "solution",
+        "fleet",
+    ),
+    (
+        "computational_evidence",
+        "fixed_point_absence",
+        "profitable_deviation_margin",
+    ),
+    (
+        "computational_evidence",
+        "fixed_point_absence",
+        "passes_tolerance",
+    ),
+    (
+        "computational_evidence",
+        "fixed_point_absence",
+        "conclusion",
+    ),
+]
+
+
+@pytest.mark.parametrize(
+    "path",
+    FIXED_POINT_TAMPER_PATHS,
+    ids=[path[-1] for path in FIXED_POINT_TAMPER_PATHS],
+)
+def test_fixed_point_summary_tampering_rejected(witness, path):
+    candidate = copy.deepcopy(witness)
+    _tamper_path(candidate, path)
+    with pytest.raises(B2A2Error):
+        replay_cycle_witness(candidate, verify_integrity=False)
+
+
+CYCLE_SUMMARY_TAMPER_PATHS = [
+    ("computational_evidence", "cycle", "alpha"),
+    ("computational_evidence", "cycle", "period"),
+    ("computational_evidence", "cycle", "outcome", "type"),
+    ("computational_evidence", "cycle", "outcome", "length"),
+    (
+        "computational_evidence",
+        "cycle",
+        "both_schedules",
+        0,
+        "fleet",
+    ),
+    ("computational_evidence", "cycle", "loads", 0, 13),
+    ("computational_evidence", "cycle", "induced_prices", 0, 13),
+    (
+        "computational_evidence",
+        "cycle",
+        "price_state_separation_inf",
+    ),
+    (
+        "computational_evidence",
+        "cycle",
+        "load_state_separation_inf_kwh",
+    ),
+    (
+        "computational_evidence",
+        "cycle",
+        "complete_iteration_trajectory",
+        0,
+        "response",
+        "fleet",
+    ),
+]
+
+
+@pytest.mark.parametrize(
+    "path",
+    CYCLE_SUMMARY_TAMPER_PATHS,
+    ids=[
+        "-".join(str(part) for part in path[2:])
+        for path in CYCLE_SUMMARY_TAMPER_PATHS
+    ],
+)
+def test_cycle_summary_and_redundant_response_tampering_rejected(
+        witness, path):
+    candidate = copy.deepcopy(witness)
+    _tamper_path(candidate, path)
+    with pytest.raises(B2A2Error):
+        replay_cycle_witness(candidate, verify_integrity=False)
+
+
+SELECTED_RESPONSE_TAMPER_PATHS = [
+    (
+        "computational_evidence",
+        "cycle",
+        "complete_iteration_trajectory",
+        0,
+        "response",
+        "structure_id",
+    ),
+    (
+        "computational_evidence",
+        "cycle",
+        "complete_iteration_trajectory",
+        0,
+        "response",
+        "fleet",
+    ),
+    (
+        "computational_evidence",
+        "cycle",
+        "complete_iteration_trajectory",
+        0,
+        "response",
+        "energy_charged_kwh",
+    ),
+    (
+        "computational_evidence",
+        "cycle",
+        "complete_iteration_trajectory",
+        0,
+        "response",
+        "load",
+        13,
+    ),
+    (
+        "computational_evidence",
+        "cycle",
+        "complete_iteration_trajectory",
+        0,
+        "response",
+        "arc_kinds",
+        0,
+        0,
+    ),
+    (
+        "computational_evidence",
+        "cycle",
+        "complete_iteration_trajectory",
+        0,
+        "response",
+        "charges",
+        0,
+        "slot",
+    ),
+]
+
+
+@pytest.mark.parametrize(
+    "path",
+    SELECTED_RESPONSE_TAMPER_PATHS,
+    ids=[path[-1] for path in SELECTED_RESPONSE_TAMPER_PATHS],
+)
+def test_redundant_selected_response_field_tampering_rejected(witness, path):
+    candidate = copy.deepcopy(witness)
+    _tamper_path(candidate, path)
+    with pytest.raises(B2A2Error):
+        replay_cycle_witness(candidate, verify_integrity=False)
+
+
 def test_dictator_quadratic_includes_base_load_coupling():
     a = np.array([2.0])
     b = np.array([0.5])
@@ -307,6 +593,17 @@ def test_artifact_manifest_and_summary_pin_analysis_commit(witness):
     assert set(payloads) == {"WITNESS.json", "MANIFEST.json", "SUMMARY.md"}
     assert set(manifest["outputs"]) == {"WITNESS.json", "SUMMARY.md"}
     assert analysis_commit.encode() in payloads["SUMMARY.md"]
+
+
+def test_committed_witness_bundle_is_byte_identical(witness):
+    root = Path(__file__).resolve().parents[2] / "result" / "strict_two_cycle"
+    manifest = json.loads((root / "MANIFEST.json").read_bytes())
+    payloads = artifact_payloads(
+        canonical_witness_bytes(witness),
+        manifest["analysis_code_commit"],
+    )
+    for filename, payload in payloads.items():
+        assert (root / filename).read_bytes() == payload
 
 
 def test_standalone_cbc_replay_cli(witness, tmp_path):

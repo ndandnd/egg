@@ -523,6 +523,155 @@ def response_inventory_invariants(enumeration: dict) -> dict:
     }
 
 
+def response_linear_objective(response: dict, prices) -> float:
+    return float(response["ops_cost"]) + float(np.dot(
+        np.asarray(prices, dtype=float),
+        np.asarray(response["load"], dtype=float),
+    ))
+
+
+def cycle_summary_from_trajectory(trajectory: list) -> dict:
+    """Reconstruct every redundant cycle-summary field from trajectory rows."""
+    if len(trajectory) != 3:
+        raise B2A2Error(
+            "complete strict two-cycle trajectory must contain three solves")
+    first, second, closure = trajectory
+    return {
+        "alpha": 1.0,
+        "period": 2,
+        "outcome": {
+            "type": "cycle",
+            "first_seen": 0,
+            "length": 2,
+            "iteration": 2,
+        },
+        "both_schedules": [first["response"], second["response"]],
+        "loads": [
+            first["response"]["load"],
+            second["response"]["load"],
+        ],
+        "induced_prices": [
+            first["induced_prices"],
+            second["induced_prices"],
+        ],
+        "complete_iteration_trajectory": trajectory,
+        "price_state_separation_inf": canonical_number(float(np.max(np.abs(
+            np.asarray(first["posted_prices"], dtype=float)
+            - np.asarray(second["posted_prices"], dtype=float)
+        )))),
+        "load_state_separation_inf_kwh": canonical_number(float(np.max(np.abs(
+            np.asarray(first["response"]["load"], dtype=float)
+            - np.asarray(second["response"]["load"], dtype=float)
+        )))),
+    }
+
+
+def strict_best_response_summary(
+    orbit: list,
+    enumerations: list,
+    optimal_faces: list,
+    objective_tolerance_ceiling: float,
+) -> dict:
+    """Reconstruct both strict-state summaries and their aggregate fields."""
+    if not (
+        len(orbit) == len(enumerations) == len(optimal_faces) == 2
+    ):
+        raise B2A2Error("strict two-cycle summary requires exactly two states")
+    states = []
+    opposite_margins = []
+    structure_margins = []
+    for index, (row, enumeration, face) in enumerate(zip(
+            orbit, enumerations, optimal_faces)):
+        opposite = orbit[1 - index]["response"]
+        opposite_margin = (
+            response_linear_objective(opposite, row["posted_prices"])
+            - float(row["objective"])
+        )
+        opposite_margins.append(opposite_margin)
+        structure_margins.append(float(
+            enumeration["strict_structure_margin"]))
+        states.append({
+            "state": index,
+            "chosen_structure_id": row["response"]["structure_id"],
+            "chosen_objective": row["objective"],
+            "runner_up_structure_id": (
+                enumeration["runner_up_structure_id"]),
+            "runner_up_objective": enumeration["runner_up_objective"],
+            "global_discrete_structure_margin": (
+                enumeration["strict_structure_margin"]),
+            "opposite_cycle_endpoint_margin": canonical_number(
+                opposite_margin),
+            "optimal_face_load_uniqueness": face,
+        })
+    minimum_structure_margin = min(structure_margins)
+    minimum_opposite_margin = min(opposite_margins)
+    return {
+        "scope": (
+            "positive margins compare the globally best optimized discrete "
+            "structure with every other optimized structure; certified "
+            "optimal-face extrema separately check continuous-load uniqueness"
+        ),
+        "states": states,
+        "minimum_global_discrete_structure_margin": canonical_number(
+            minimum_structure_margin),
+        "minimum_opposite_cycle_endpoint_margin": canonical_number(
+            minimum_opposite_margin),
+        "maximum_certified_load_range_upper_kwh": canonical_number(max(
+            face["max_certified_load_range_upper_kwh"]
+            for face in optimal_faces
+        )),
+        "objective_tolerance_ceiling": objective_tolerance_ceiling,
+        "all_margins_clear_tolerances": bool(
+            minimum_structure_margin > objective_tolerance_ceiling
+            and minimum_opposite_margin > objective_tolerance_ceiling
+        ),
+    }
+
+
+def fixed_point_absence_summary(
+    dictator: dict,
+    candidate_prices,
+    candidate_linear_objective: float,
+    candidate_responses: dict,
+    profitable_deviation_margin: float,
+    objective_tolerance_ceiling: float,
+) -> dict:
+    """Reconstruct all fixed-point computational conclusion fields."""
+    best_dictator_row = next(
+        row for row in dictator["structures"]
+        if row["structure_id"] == dictator["best_structure_id"])
+    best_response = next(
+        row for row in candidate_responses["responses"]
+        if row["structure_id"] == candidate_responses["best_structure_id"])
+    passes = bool(
+        dictator["certified_unique_structure_margin"]
+        > objective_tolerance_ceiling
+        and best_dictator_row["n_charge_variables"] == 0
+        and profitable_deviation_margin > objective_tolerance_ceiling
+    )
+    return {
+        "conclusion": "no_fixed_point" if passes else "not_certified",
+        "depends_on_theorem_claim": "T1-fixed-point-necessary-dictator",
+        "enumerated_dictator": dictator,
+        "unique_dictator_structure_margin": (
+            dictator["certified_unique_structure_margin"]),
+        "unique_dictator_has_no_charging_variables": (
+            best_dictator_row["n_charge_variables"] == 0),
+        "candidate_induced_prices": [
+            canonical_number(value) for value in candidate_prices],
+        "candidate_linear_objective": canonical_number(
+            candidate_linear_objective),
+        "best_response_at_candidate_prices": {
+            "structure_id": candidate_responses["best_structure_id"],
+            "objective": candidate_responses["best_objective"],
+            "solution": best_response["solution"],
+        },
+        "profitable_deviation_margin": canonical_number(
+            profitable_deviation_margin),
+        "passes_tolerance": passes,
+    }
+
+
 def structure_optimal_face(
     inst: Instance,
     struct: dict,
@@ -867,6 +1016,13 @@ def _selected_response_from_primitives(
         raise B2A2Error(
             "selected response operations cost does not match its structure")
     sol.ops_cost = expected_ops
+    reconstructed_record = canonical_solution_record(sol)
+    _assert_witness_close(
+        reconstructed_record,
+        record,
+        "selected_response",
+        load_tolerance,
+    )
     objective = expected_ops + float(np.dot(
         np.asarray(posted_prices, dtype=float),
         np.asarray(sol.load, dtype=float),
@@ -1112,25 +1268,13 @@ def replay_cycle_witness(
             replayed_enumerations.append(enumeration)
             margins.append(float(enumeration["strict_structure_margin"]))
 
-    for state in range(2):
-        _assert_witness_close(
-            cycle["both_schedules"][state],
-            trajectory[state]["response"],
-            f"cycle.both_schedules[{state}]",
-            0.0,
-        )
-        _assert_witness_close(
-            cycle["loads"][state],
-            trajectory[state]["response"]["load"],
-            f"cycle.loads[{state}]",
-            0.0,
-        )
-        _assert_witness_close(
-            cycle["induced_prices"][state],
-            trajectory[state]["induced_prices"],
-            f"cycle.induced_prices[{state}]",
-            0.0,
-        )
+    reconstructed_cycle = cycle_summary_from_trajectory(trajectory)
+    _assert_witness_close(
+        reconstructed_cycle,
+        cycle,
+        "cycle",
+        1e-9,
+    )
 
     if float(np.max(np.abs(
             np.asarray(trajectory[2]["posted_prices"], dtype=float)
@@ -1181,25 +1325,18 @@ def replay_cycle_witness(
                 "max_certified_load_range_upper_kwh"] > load_tolerance:
             raise B2A2Error(
                 f"state {index} selected load is not unique within tolerance")
-    strict_evidence = evidence["strict_best_response"]
-    maximum_face_range = max(
-        face["max_certified_load_range_upper_kwh"]
-        for face in replayed_faces
+    reconstructed_strict = strict_best_response_summary(
+        trajectory[:2],
+        replayed_enumerations,
+        replayed_faces,
+        objective_ceiling,
     )
-    if abs(
-        maximum_face_range
-        - float(strict_evidence[
-            "maximum_certified_load_range_upper_kwh"])
-    ) > linear_certificate_tolerance:
-        raise B2A2Error(
-            "strict-response aggregate uniqueness bound is inconsistent")
-    if abs(
-        min(margins)
-        - float(strict_evidence[
-            "minimum_global_discrete_structure_margin"])
-    ) > linear_certificate_tolerance:
-        raise B2A2Error(
-            "strict-response aggregate margin is inconsistent")
+    _assert_witness_close(
+        reconstructed_strict,
+        evidence["strict_best_response"],
+        "strict_best_response",
+        linear_certificate_tolerance,
+    )
 
     dictator = enumerated_dictator_details(
         inst, market, pwl_tol=float(
@@ -1210,9 +1347,6 @@ def replay_cycle_witness(
         "fixed_point_absence.enumerated_dictator",
         pwl_certificate_tolerance,
     )
-    best_dictator = next(
-        row for row in dictator["structures"]
-        if row["structure_id"] == dictator["best_structure_id"])
     candidate = dictator["best_response"]
     candidate_prices = market.price(candidate["load"])
     candidate_sol, candidate_objective = _selected_response_from_primitives(
@@ -1222,6 +1356,7 @@ def replay_cycle_witness(
         evidence["fixed_point_absence"]["candidate_linear_objective"],
         load_tolerance,
     )
+    candidate_prices = market.price(candidate_sol.load)
     candidate_system_objective = (
         candidate_sol.ops_cost
         + market.system_cost_delta(candidate_sol.load)
@@ -1236,12 +1371,41 @@ def replay_cycle_witness(
     candidate_responses = enumerate_price_responses(inst, candidate_prices)
     deviation = candidate_objective - float(
         candidate_responses["best_objective"])
-    if not (
-        float(dictator["certified_unique_structure_margin"])
-        > objective_ceiling
-        and best_dictator["n_charge_variables"] == 0
-        and deviation > objective_ceiling
-    ):
+    reconstructed_fixed_point = fixed_point_absence_summary(
+        dictator,
+        candidate_prices,
+        candidate_objective,
+        candidate_responses,
+        deviation,
+        objective_ceiling,
+    )
+    expected_fixed_point = evidence["fixed_point_absence"]
+    reconstructed_without_dictator = dict(reconstructed_fixed_point)
+    reconstructed_without_dictator.pop("enumerated_dictator")
+    expected_without_dictator = dict(expected_fixed_point)
+    expected_without_dictator.pop("enumerated_dictator")
+    _assert_witness_close(
+        reconstructed_without_dictator,
+        expected_without_dictator,
+        "fixed_point_absence",
+        linear_certificate_tolerance,
+    )
+    selected_at_candidate = expected_fixed_point[
+        "best_response_at_candidate_prices"]
+    selected_candidate_sol, _ = _selected_response_from_primitives(
+        inst,
+        selected_at_candidate["solution"],
+        candidate_prices,
+        selected_at_candidate["objective"],
+        load_tolerance,
+    )
+    if structure_id(
+            selected_candidate_sol.sequences,
+            selected_candidate_sol.arc_kinds,
+    ) != selected_at_candidate["structure_id"]:
+        raise B2A2Error(
+            "selected candidate-price best response structure is inconsistent")
+    if not reconstructed_fixed_point["passes_tolerance"]:
         raise B2A2Error(
             "fixed-point-absence computational preconditions failed replay")
 

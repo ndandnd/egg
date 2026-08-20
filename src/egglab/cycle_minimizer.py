@@ -30,10 +30,13 @@ from .enumerate_tiny import (
     PWL_TOL,
     canonical_number,
     canonical_solution_record,
+    cycle_summary_from_trajectory,
     enumerate_price_responses,
     enumerated_ch,
     enumerated_dictator_details,
+    fixed_point_absence_summary,
     response_inventory_invariants,
+    strict_best_response_summary,
     structure_id,
     structure_optimal_face,
 )
@@ -610,12 +613,6 @@ def _canonical_instance(inst: Instance) -> dict:
     return json.loads(json.dumps(inst.canonical(), sort_keys=True))
 
 
-def _response_at(enumeration: dict, structure: str) -> dict:
-    return next(
-        row for row in enumeration["responses"]
-        if row["structure_id"] == structure)
-
-
 def build_witness(reduction: dict | None = None) -> dict:
     reduction = reduction or minimize_fixture()
     inst = reduction["instance"]
@@ -623,30 +620,6 @@ def build_witness(reduction: dict | None = None) -> dict:
     certificate = reduction["certificate"]
     orbit = certificate["orbit"]
     enumerations = certificate["enumerations"]
-
-    strict_states = []
-    opposite_margins = []
-    for state_index, (row, enumeration, face) in enumerate(zip(
-            orbit, enumerations, certificate["optimal_faces"])):
-        opposite = orbit[1 - state_index]["response"]
-        opposite_margin = (
-            _linear_objective(opposite, row["posted_prices"])
-            - float(row["objective"])
-        )
-        opposite_margins.append(opposite_margin)
-        strict_states.append({
-            "state": state_index,
-            "chosen_structure_id": row["response"]["structure_id"],
-            "chosen_objective": row["objective"],
-            "runner_up_structure_id": (
-                enumeration["runner_up_structure_id"]),
-            "runner_up_objective": enumeration["runner_up_objective"],
-            "global_discrete_structure_margin": (
-                enumeration["strict_structure_margin"]),
-            "opposite_cycle_endpoint_margin": canonical_number(
-                opposite_margin),
-            "optimal_face_load_uniqueness": face,
-        })
 
     dictator = enumerated_dictator_details(inst, market, pwl_tol=PWL_TOL)
     dictator_load = dictator["best_response"]["load"]
@@ -658,17 +631,24 @@ def build_witness(reduction: dict | None = None) -> dict:
         candidate_linear_objective
         - float(dictator_responses["best_objective"])
     )
-    best_dictator_row = next(
-        row for row in dictator["structures"]
-        if row["structure_id"] == dictator["best_structure_id"])
     objective_tolerance_ceiling = max(OBJECTIVE_TOLERANCES.values())
-    no_fixed_point_certificate = bool(
-        dictator["certified_unique_structure_margin"]
-        > objective_tolerance_ceiling
-        and best_dictator_row["n_charge_variables"] == 0
-        and fixed_point_deviation > objective_tolerance_ceiling
+    cycle_summary = cycle_summary_from_trajectory(
+        certificate["trace"]["iterations"])
+    strict_summary = strict_best_response_summary(
+        orbit,
+        enumerations,
+        certificate["optimal_faces"],
+        objective_tolerance_ceiling,
     )
-    if not no_fixed_point_certificate:
+    fixed_point_summary = fixed_point_absence_summary(
+        dictator,
+        dictator_prices,
+        candidate_linear_objective,
+        dictator_responses,
+        fixed_point_deviation,
+        objective_tolerance_ceiling,
+    )
+    if not fixed_point_summary["passes_tolerance"]:
         raise CycleMinimizerError(
             "enumerated fixed-point-absence certificate did not clear tolerances")
 
@@ -745,52 +725,8 @@ def build_witness(reduction: dict | None = None) -> dict:
         "instance": _canonical_instance(inst),
         "market": _canonical_market(market),
         "computational_evidence": {
-            "cycle": {
-                "alpha": 1.0,
-                "period": 2,
-                "outcome": certificate["trace"]["outcome"],
-                "both_schedules": [
-                    orbit[0]["response"], orbit[1]["response"]],
-                "loads": [
-                    orbit[0]["response"]["load"],
-                    orbit[1]["response"]["load"],
-                ],
-                "induced_prices": [
-                    orbit[0]["induced_prices"],
-                    orbit[1]["induced_prices"],
-                ],
-                "complete_iteration_trajectory": (
-                    certificate["trace"]["iterations"]),
-                "price_state_separation_inf": (
-                    certificate["price_state_separation_inf"]),
-                "load_state_separation_inf_kwh": (
-                    certificate["load_state_separation_inf_kwh"]),
-            },
-            "strict_best_response": {
-                "scope": (
-                    "positive margins compare the globally best optimized "
-                    "discrete structure with every other optimized structure; "
-                    "certified optimal-face extrema separately check "
-                    "continuous-load uniqueness"),
-                "states": strict_states,
-                "minimum_global_discrete_structure_margin": (
-                    certificate["minimum_structure_margin"]),
-                "minimum_opposite_cycle_endpoint_margin": canonical_number(
-                    min(opposite_margins)),
-                "maximum_certified_load_range_upper_kwh": canonical_number(
-                    max(
-                        face["max_certified_load_range_upper_kwh"]
-                        for face in certificate["optimal_faces"]
-                    )
-                ),
-                "objective_tolerance_ceiling": (
-                    objective_tolerance_ceiling),
-                "all_margins_clear_tolerances": bool(
-                    certificate["minimum_structure_margin"]
-                    > objective_tolerance_ceiling
-                    and min(opposite_margins)
-                    > objective_tolerance_ceiling),
-            },
+            "cycle": cycle_summary,
+            "strict_best_response": strict_summary,
             "exhaustive_feasible_response_enumeration": {
                 "scope": (
                     "all trip partitions and direct/depot arc-kind structures; "
@@ -804,32 +740,7 @@ def build_witness(reduction: dict | None = None) -> dict:
                     for index, enumeration in enumerate(enumerations)
                 ],
             },
-            "fixed_point_absence": {
-                "conclusion": "no_fixed_point",
-                "depends_on_theorem_claim": (
-                    "T1-fixed-point-necessary-dictator"),
-                "enumerated_dictator": dictator,
-                "unique_dictator_structure_margin": (
-                    dictator["certified_unique_structure_margin"]),
-                "unique_dictator_has_no_charging_variables": (
-                    best_dictator_row["n_charge_variables"] == 0),
-                "candidate_induced_prices": [
-                    canonical_number(value) for value in dictator_prices],
-                "candidate_linear_objective": canonical_number(
-                    candidate_linear_objective),
-                "best_response_at_candidate_prices": {
-                    "structure_id": (
-                        dictator_responses["best_structure_id"]),
-                    "objective": dictator_responses["best_objective"],
-                    "solution": _response_at(
-                        dictator_responses,
-                        dictator_responses["best_structure_id"],
-                    )["solution"],
-                },
-                "profitable_deviation_margin": canonical_number(
-                    fixed_point_deviation),
-                "passes_tolerance": no_fixed_point_certificate,
-            },
+            "fixed_point_absence": fixed_point_summary,
             "convex_hull_dictator_comparison": {
                 "z_ch_lower_model": canonical_number(hull["z_ch_model"]),
                 "z_ch_upper_exact_incumbent": canonical_number(hull["z_ch"]),
