@@ -2125,18 +2125,19 @@ def test_coordinated_pricing_bound_above_incumbents_halts(
     checkpoint.save(str(path), state)
     _dump_jsonl(cell / "a2.oracle.jsonl", state["oracle_events"])
     _dump_jsonl(cell / "a2.iterations.jsonl", state["iteration_events"])
-    # The inflated bound (ub + 1.0) exceeds the incumbents far beyond any
-    # operand-scaled tolerance and is now caught at the AUDIT stage via the
-    # shared operand-scaled ordering (EI-026 audit/analyzer parity); the
-    # campaign still HALTs with nothing scored. The analyzer's own dedicated
-    # rejections ("solver obj mismatch" / "solver bound exceeds model
-    # incumbent") remain and are covered by the direct-call EI-026 regressions.
-    # The inflated bound is caught at the AUDIT stage via the ONE shared
-    # conservative-certificate helper (EI-026 parity); the campaign HALTs with
-    # nothing scored. The analyzer's own dedicated rejections remain and are
-    # covered by the direct-call EI-026 regressions.
-    with pytest.raises(AnalysisError,
-                       match="bound exceeds an incumbent beyond the operand"):
+    # Both variants still HALT with nothing scored, via two different
+    # layers of the EI-027 contract:
+    # - obj untampered: the shared physical-bridge gate rejects the bound
+    #   above the MODEL incumbent beyond operand tau (audit stage);
+    # - obj coordinated with the bound: the ordering gate legitimately
+    #   passes (the physical allowance covers exactly the model-physical
+    #   distance), but the RAW reconstruction fields are preserved exactly
+    #   (EI-027 Task A), so the analyzer's pricing-objective
+    #   reconstruction binding catches the tampered solver obj.
+    with pytest.raises(
+            AnalysisError,
+            match="exceeds the model incumbent beyond the operand"
+                  "|solver obj mismatch"):
         _mini_analyze(str(bad), preflight, tmp_path / "out-pricing-bound-order")
 
 
@@ -2556,21 +2557,30 @@ def test_ei026_ordering_tolerance_scales_with_operands():
 
 @pytest.mark.parametrize("scale", [1.0, 3255.503129856506, 1.0e6])
 def test_ei026_just_inside_and_outside_tolerance_at_scales(scale):
-    """A negative raw gap just inside the operand tolerance is admitted; just
-    outside it is rejected — at small and large objective scales."""
+    """Operand-tolerance behavior at small and large objective scales,
+    under the EI-027 physical-bridge contract:
+
+    - a physical incumbent below a MODEL-consistent bound is admitted
+      (the exact reconstruction adjustment explains it — the EI-027
+      pattern), with the claim-bearing safe chain absorbing the full
+      allowance;
+    - a bound above the MODEL incumbent beyond operand tau is rejected."""
     bound = scale
     tau = 1e-10 * max(1.0, abs(bound))
-    # just inside: incumbent below bound by 0.5*tau (raw gap -0.5*tau)
+    # inside: physical below bound by 0.5*tau (raw gap -0.5*tau)
     inside = _pricing_order_ck(bound, bound, bound - 0.5 * tau)
     cert = mod._replay_cg_certificate_evidence(inside, "inside")
     assert cert["certified"] is True
-    # just outside: incumbent below bound by 2*tau (raw gap -2*tau). This is
-    # the SAME condition as "bound exceeds incumbent beyond tolerance", so
-    # either equivalent operand-scaled rejection is acceptable.
-    outside = _pricing_order_ck(bound, bound, bound - 2.0 * tau)
+    # EI-027 pattern: physical 2*tau below a model-consistent bound is now
+    # ADMITTED (allowance = tau + 2*tau covers it) — verify via the gate
+    gate = mod.pricing_order_gate(bound, bound, bound - 2.0 * tau)
+    assert gate["errors"] == []
+    assert gate["physical_bridge_allowance"] == pytest.approx(3.0 * tau)
+    # model-side violation is still rejected at every scale
     with pytest.raises(AnalysisError,
-                       match="exceeds physical incumbent|negative beyond the operand"):
-        mod._replay_cg_certificate_evidence(outside, "outside")
+                       match="exceeds the model incumbent"):
+        mod._replay_cg_certificate_evidence(
+            _pricing_order_ck(bound + 2.0 * tau, bound, bound), "outside")
 
 
 def test_ei026_raw_recorded_gap_is_checked_exactly():
@@ -2635,10 +2645,11 @@ def test_ei026_audit_analyzer_parity_generic_pricing_order():
     tau = 1e-10 * 100.0
     bad = _pricing_order_ck(bound + 100.0 * tau, bound, bound)
     audit_errs = audit_mod._cg_sane(json.loads(json.dumps(bad)))
-    assert any("bound exceeds an incumbent beyond the operand" in e
+    assert any("exceeds the model incumbent beyond the operand" in e
                for e in audit_errs)
-    with pytest.raises(AnalysisError,
-                       match="exceeds (model|physical) incumbent|bound exceeds an incumbent"):
+    with pytest.raises(
+            AnalysisError,
+            match="exceeds the (model|physical) incumbent"):
         mod._replay_cg_certificate_evidence(bad, "parity-bad")
 
 
@@ -2649,7 +2660,8 @@ def test_ei026_inflated_bound_beyond_tolerance_still_rejected():
     tau = 1e-10 * 100.0
     # bound exceeds both incumbents by 100*tau
     ck = _pricing_order_ck(bound + 100.0 * tau, bound, bound)
-    with pytest.raises(AnalysisError, match="exceeds (model|physical) incumbent"):
+    with pytest.raises(AnalysisError,
+                       match="exceeds the (model|physical) incumbent"):
         mod._replay_cg_certificate_evidence(ck, "inflated")
 
 
@@ -2702,3 +2714,81 @@ def test_ei026_csv_uses_conservative_claim_bearing_values(mini_root, tmp_path):
         assert float(r["final_gap"]) >= float(r["raw_final_gap"]) - 1e-12
         # zd_minus_lb uses the smaller conservative LB, so it is >= raw
         assert float(r["zd_minus_lb"]) >= float(r["raw_zd_minus_lb"]) - 1e-12
+
+
+# ---------------------------------------------------------------------------
+# EI-027: physical-bridge allowance (frozen incident scalars)
+# ---------------------------------------------------------------------------
+EI027_BOUND = 2417.583855389641
+EI027_MODEL_INCUMBENT = 2417.583855389641   # bound == model incumbent
+EI027_PHYS_INCUMBENT = 2417.583844628412
+EI027_OPERAND_TAU = 2.4175838553896413e-07
+EI027_ADJUSTMENT = 1.0761229077616008e-05
+
+
+def test_ei027_frozen_scalars_accepted_with_exact_gate_values():
+    """The exact EI-027 evidence (cell a2 seed=22 n=12 b=0.01 iteration
+    24) must pass the shared gate with the exact frozen intermediate
+    scalars, and both the analyzer and the audit must certify it."""
+    gate = mod.pricing_order_gate(
+        EI027_BOUND, EI027_MODEL_INCUMBENT, EI027_PHYS_INCUMBENT)
+    assert gate["operand_tau"] == EI027_OPERAND_TAU
+    assert gate["reconstruction_adjustment"] == EI027_ADJUSTMENT
+    assert gate["physical_bridge_allowance"] == (
+        EI027_OPERAND_TAU + EI027_ADJUSTMENT)
+    assert gate["safe_bound"] == EI027_BOUND - (
+        EI027_OPERAND_TAU + EI027_ADJUSTMENT)
+    assert gate["errors"] == []
+
+    ck = _pricing_order_ck(
+        EI027_BOUND, EI027_MODEL_INCUMBENT, EI027_PHYS_INCUMBENT)
+    cert = mod._replay_cg_certificate_evidence(ck, "ei027")
+    assert cert["certified"] is True
+    # raw pricing gap preserved exactly (negative by the adjustment)
+    assert cert["min_raw_pricing_gap"] == (
+        EI027_PHYS_INCUMBENT - EI027_BOUND)
+    # audit/analyzer parity through the one shared implementation
+    import experiments.audit_runs as audit_mod
+    assert audit_mod._cg_sane(json.loads(json.dumps(ck))) == []
+
+
+def test_ei027_safe_chain_subtracts_full_allowance():
+    """Claim-bearing safe bounds use bound - physical_bridge_allowance."""
+    ck = _pricing_order_ck(
+        EI027_BOUND, EI027_MODEL_INCUMBENT, EI027_PHYS_INCUMBENT)
+    conservative = mod.conservative_certificate(ck)
+    assert conservative["errors"] == [] and conservative["evaluable"]
+    allowance = EI027_OPERAND_TAU + EI027_ADJUSTMENT
+    z_model = ck["iteration_events"][0]["z_rmp_model"]
+    sigma = ck["iteration_events"][0]["duals_sigma"]
+    expected_safe_lb = z_model + min(
+        0.0, (EI027_BOUND - allowance) - sigma)
+    assert conservative["safe"]["lb_best"] == expected_safe_lb
+    # raw chain unchanged: raw lb uses the untouched bound
+    expected_raw_lb = z_model + min(0.0, EI027_BOUND - sigma)
+    assert conservative["raw"]["lb_best"] == expected_raw_lb
+
+
+def test_ei027_bridge_never_covers_model_side_inflation():
+    """The physical bridge is one-sided: a bound above the MODEL incumbent
+    beyond operand tau is rejected regardless of the physical distance."""
+    gate = mod.pricing_order_gate(
+        EI027_BOUND + 1e-4, EI027_BOUND, EI027_PHYS_INCUMBENT)
+    assert any("model incumbent" in e for e in gate["errors"])
+    # and a physical incumbent ABOVE the model gains no extra allowance
+    # beyond the reconstruction distance itself
+    gate = mod.pricing_order_gate(100.0 + 1e-6, 100.0, 100.0 + 2e-7)
+    assert any("model incumbent" in e for e in gate["errors"])
+
+
+def test_ei027_audit_analyzer_parity_on_rejection():
+    """Beyond-allowance evidence is rejected identically by the audit and
+    the analyzer through the one shared gate."""
+    import experiments.audit_runs as audit_mod
+    bad = _pricing_order_ck(
+        EI027_BOUND + 1e-3, EI027_MODEL_INCUMBENT, EI027_PHYS_INCUMBENT)
+    errs = audit_mod._cg_sane(json.loads(json.dumps(bad)))
+    assert any("exceeds the model incumbent" in e for e in errs)
+    with pytest.raises(AnalysisError,
+                       match="exceeds the model incumbent"):
+        mod._replay_cg_certificate_evidence(bad, "ei027-bad")

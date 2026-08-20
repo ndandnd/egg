@@ -108,9 +108,18 @@ EXPECTED_GRID_LIST_SHA256 = (
 TRANSFER_RECEIPT_SCHEMA = "a6-holdout-transfer-receipt-v1"
 # EI-026 recovery receipt (versioned) and the frozen recovery base commit.
 TRANSFER_RECEIPT_SCHEMA_RECOVERY = "a6-holdout-transfer-receipt-v2-recovery"
+TRANSFER_RECEIPT_SCHEMA_RECOVERY2 = (
+    "a6-holdout-transfer-receipt-v3-recovery2")
 RECOVERY_INCIDENT_ID = "EI-026"
 RECOVERY_BASE_COMMIT = "740ab0c1578b454268102c0bb15b1104d9ac8d9d"
 RECOVERY_CLAIM_SCHEMA = "a6-holdout-recovery-claim-v1"
+RECOVERY2_CLAIM_SCHEMA = "a6-holdout-recovery2-claim-v1"
+RECOVERY2_INCIDENT_ID = "EI-027"
+RECOVERY2_BASE_COMMIT = "74a9c5d56ae328b5c394537007cc7cefdb6e3441"
+RECOVERY2_FIRST_RECOVERY_COMMIT = (
+    "b81b15ace8ffd7301ce93f349fdb643cdefd5da6")
+RECOVERY2_FIRST_RECOVERY_CLAIM_SHA256 = (
+    "88c22f06ce6bc8dcff56c0d6737c91bbd39fe8da79c2b6ba6d2a987b6b6abe88")
 TRANSFER_RECEIPT_FILENAME = "a6_holdout.TRANSFER_RECEIPT.json"
 CLOSEOUT_CLAIM_SCHEMA = "a6-holdout-closeout-claim-v1"
 IMPORT_LOCK_FILENAME = ".a6_holdout.import-lock"
@@ -119,7 +128,7 @@ ANALYSIS_CLAIM_FILENAME = "a6_holdout.ANALYSIS_CLAIM.json"
 # v3 makes the CONSERVATIVE (reduced-bound) certificate values claim-bearing
 # in every output; producer/raw values are preserved under raw_* columns
 # (EI-026 Task A.7).
-CLOSEOUT_SCHEMA = "a6-holdout-closeout-v3-conservative"
+CLOSEOUT_SCHEMA = "a6-holdout-closeout-v4-physical-bridge"
 MASTER_FW_TOL = 1e-6
 EVIDENCE_LIMITATIONS = (
     "Launch-era clean-master lambdas, aggregate load, and link duals were "
@@ -724,14 +733,21 @@ def validate_transfer_receipt(
     if raw != _canonical_json_bytes(document):
         raise AnalysisError("transfer receipt is not canonical JSON")
     is_recovery = document.get("schema") == TRANSFER_RECEIPT_SCHEMA_RECOVERY
+    is_recovery2 = (document.get("schema")
+                    == TRANSFER_RECEIPT_SCHEMA_RECOVERY2)
     base_keys = {
         "schema", "campaign", "imported_utc", "destination", "bundle",
         "archive", "source", "provenance", "closeout_claim"}
-    expected_top = base_keys | {"recovery"} if is_recovery else base_keys
+    expected_top = base_keys
+    if is_recovery:
+        expected_top = base_keys | {"recovery"}
+    if is_recovery2:
+        expected_top = base_keys | {"recovery2"}
     if set(document) != expected_top:
         raise AnalysisError("transfer receipt top-level keys differ")
     if (document.get("schema") not in (
-            TRANSFER_RECEIPT_SCHEMA, TRANSFER_RECEIPT_SCHEMA_RECOVERY)
+            TRANSFER_RECEIPT_SCHEMA, TRANSFER_RECEIPT_SCHEMA_RECOVERY,
+            TRANSFER_RECEIPT_SCHEMA_RECOVERY2)
             or document.get("campaign") != EXPECTED_EXPERIMENT):
         raise AnalysisError("transfer receipt schema/campaign is invalid")
     try:
@@ -806,9 +822,14 @@ def validate_transfer_receipt(
     # For a recovery receipt the embedded closeout claim is the ORIGINAL claim,
     # whose packaging commit is the original (740ab0c), not the recovery HEAD.
     recovery_block = document.get("recovery") or {}
+    recovery2_block = document.get("recovery2") or {}
     closeout_packaging_commit = (
-        (recovery_block.get("original_claim") or {}).get("packaging_code_commit")
-        if is_recovery else analysis_code_commit)
+        (recovery_block.get("original_claim") or {}).get(
+            "packaging_code_commit")
+        if is_recovery else
+        (recovery2_block.get("original_claim") or {}).get(
+            "packaging_code_commit")
+        if is_recovery2 else analysis_code_commit)
     expected_closeout = {
         "schema": CLOSEOUT_CLAIM_SCHEMA,
         "campaign": EXPECTED_EXPERIMENT,
@@ -908,6 +929,99 @@ def validate_transfer_receipt(
                 "transfer receipt recovery chronology is invalid "
                 "(require closeout <= recovery <= import)")
 
+    # ---- EI-027 second-stage recovery receipt binding ---------------------
+    if is_recovery2:
+        original2 = recovery2_block.get("original_claim") or {}
+        first_rc = recovery2_block.get("first_recovery_claim") or {}
+        first_rc_doc = first_rc.get("document") or {}
+        rc2 = recovery2_block.get("recovery2_claim") or {}
+        rc2_doc = rc2.get("document") or {}
+        rc2_original = rc2_doc.get("original_claim") or {}
+        if (set(recovery2_block) != {
+                    "incident_id", "recovery2_code_commit",
+                    "recovery2_base_commit", "first_recovery_commit",
+                    "experiment_code_commit", "original_claim",
+                    "first_recovery_claim", "recovery2_claim"}
+                or recovery2_block.get("incident_id") != RECOVERY2_INCIDENT_ID
+                or recovery2_block.get("recovery2_code_commit")
+                != analysis_code_commit
+                or recovery2_block.get("recovery2_base_commit")
+                != RECOVERY2_BASE_COMMIT
+                or recovery2_block.get("first_recovery_commit")
+                != RECOVERY2_FIRST_RECOVERY_COMMIT
+                or recovery2_block.get("experiment_code_commit")
+                != preflight.get("code_commit")
+                or set(original2) != {"sha256", "packaging_code_commit",
+                                      "document"}
+                or not _full_hex(original2.get("sha256"), 64)
+                or original2.get("sha256") != closeout.get("sha256")
+                or original2.get("packaging_code_commit")
+                != closeout_packaging_commit
+                or hashlib.sha256(_canonical_json_bytes(
+                    original2.get("document") or {})).hexdigest()
+                != original2.get("sha256")
+                or set(first_rc) != {"sha256", "document"}
+                or first_rc.get("sha256")
+                != RECOVERY2_FIRST_RECOVERY_CLAIM_SHA256
+                or not isinstance(first_rc_doc, dict)
+                or hashlib.sha256(_canonical_json_bytes(
+                    first_rc_doc)).hexdigest() != first_rc.get("sha256")
+                or first_rc_doc.get("schema") != RECOVERY_CLAIM_SCHEMA
+                or first_rc_doc.get("incident_id") != RECOVERY_INCIDENT_ID
+                or first_rc_doc.get("status")
+                != "recovery-claimed-before-outcome-validation"
+                or first_rc_doc.get("recovery_code_commit")
+                != RECOVERY2_FIRST_RECOVERY_COMMIT
+                or (first_rc_doc.get("original_claim") or {}).get("sha256")
+                != original2.get("sha256")
+                or set(rc2) != {"sha256", "document"}
+                or not _full_hex(rc2.get("sha256"), 64)
+                or not isinstance(rc2_doc, dict)
+                or hashlib.sha256(_canonical_json_bytes(
+                    rc2_doc)).hexdigest() != rc2.get("sha256")
+                or rc2_doc.get("schema") != RECOVERY2_CLAIM_SCHEMA
+                or rc2_doc.get("campaign") != EXPECTED_EXPERIMENT
+                or rc2_doc.get("incident_id") != RECOVERY2_INCIDENT_ID
+                or rc2_doc.get("status")
+                != "recovery2-claimed-before-outcome-validation"
+                or rc2_doc.get("recovery2_code_commit")
+                != analysis_code_commit
+                or rc2_doc.get("recovery2_base_commit")
+                != RECOVERY2_BASE_COMMIT
+                or rc2_doc.get("first_recovery_commit")
+                != RECOVERY2_FIRST_RECOVERY_COMMIT
+                or set(rc2_original) != {
+                    "sha256", "packaging_code_commit",
+                    "experiment_code_commit", "launch_job_id"}
+                or rc2_original.get("sha256") != original2.get("sha256")
+                or rc2_original.get("packaging_code_commit")
+                != original2.get("packaging_code_commit")
+                or rc2_original.get("experiment_code_commit")
+                != preflight.get("code_commit")
+                or rc2_original.get("launch_job_id") != launch.get("job_id")
+                or (rc2_doc.get("first_recovery_claim") or {}).get("sha256")
+                != first_rc.get("sha256")
+                or rc2_doc.get("raw_tree_sha256")
+                != expected_source["canonical_tree_sha256"]
+                or not isinstance(rc2_doc.get("failure_fingerprint"), str)
+                or not rc2_doc["failure_fingerprint"]):
+            raise AnalysisError(
+                "transfer receipt recovery2 block is invalid or inconsistent")
+        # chronology: closeout <= first recovery <= recovery2 <= import
+        try:
+            first_recovered_at = datetime.datetime.strptime(
+                first_rc_doc.get("claimed_utc", ""), "%Y-%m-%dT%H:%M:%SZ")
+            recovered2_at = datetime.datetime.strptime(
+                rc2_doc.get("claimed_utc", ""), "%Y-%m-%dT%H:%M:%SZ")
+        except (TypeError, ValueError) as exc:
+            raise AnalysisError(
+                "transfer receipt recovery2 chronology is invalid") from exc
+        if not (claimed_at <= first_recovered_at <= recovered2_at
+                <= imported_at):
+            raise AnalysisError(
+                "transfer receipt recovery2 chronology is invalid (require "
+                "closeout <= recovery1 <= recovery2 <= import)")
+
     if verify_git:
         experiment_commit = expected_provenance["experiment_code_commit"]
         packaging_commit = expected_provenance["packaging_code_commit"]
@@ -945,6 +1059,21 @@ def validate_transfer_receipt(
                      RECOVERY_BASE_COMMIT, packaging_commit],
                     cwd=repository_path, stdout=subprocess.DEVNULL,
                     stderr=subprocess.DEVNULL)
+            if is_recovery2:
+                # EI-027 reviewed ancestry chain: original base ->
+                # first recovery commit -> stage-2 base -> recovery2 commit.
+                for ancestor in (RECOVERY_BASE_COMMIT,
+                                 RECOVERY2_FIRST_RECOVERY_COMMIT,
+                                 RECOVERY2_BASE_COMMIT):
+                    subprocess.check_call(
+                        ["git", "cat-file", "-e", f"{ancestor}^{{commit}}"],
+                        cwd=repository_path, stdout=subprocess.DEVNULL,
+                        stderr=subprocess.DEVNULL)
+                    subprocess.check_call(
+                        ["git", "merge-base", "--is-ancestor",
+                         ancestor, packaging_commit],
+                        cwd=repository_path, stdout=subprocess.DEVNULL,
+                        stderr=subprocess.DEVNULL)
         except (subprocess.CalledProcessError, OSError, TypeError) as exc:
             raise AnalysisError(
                 "transfer receipt Git ancestry is invalid") from exc
@@ -1329,6 +1458,47 @@ def _evidence_close(actual: float, expected: float) -> bool:
         1.0, abs(actual), abs(expected))
 
 
+def pricing_order_gate(bound: float, model_incumbent: float,
+                       physical_incumbent: float) -> dict:
+    """EI-027 physical-bridge pricing-order gate — the ONE shared pure
+    implementation used by both the audit and this analyzer.
+
+    - bound versus the solver MODEL incumbent stays governed by the
+      operand-scaled tolerance (operand_tau);
+    - reconstruction_adjustment is recomputed EXACTLY as
+      abs(model_incumbent - physical_incumbent) (the model-to-physical
+      objective reconstruction magnitude);
+    - physical_bridge_allowance = operand_tau + reconstruction_adjustment;
+    - required orderings: bound <= model_incumbent + operand_tau AND
+      bound <= physical_incumbent + physical_bridge_allowance;
+    - claim-bearing safe bounds use
+      safe_bound = bound - physical_bridge_allowance.
+
+    Raw pricing gaps and recorded reconstruction fields are never altered
+    by this gate; it only classifies orderings and derives the safe bound.
+    """
+    operand_tau = _ordering_tolerance(bound, model_incumbent,
+                                      physical_incumbent)
+    reconstruction_adjustment = abs(model_incumbent - physical_incumbent)
+    physical_bridge_allowance = operand_tau + reconstruction_adjustment
+    errors = []
+    if bound - model_incumbent > operand_tau:
+        errors.append(
+            "pricing bound exceeds the model incumbent beyond the operand "
+            "tolerance")
+    if bound - physical_incumbent > physical_bridge_allowance:
+        errors.append(
+            "pricing bound exceeds the physical incumbent beyond the "
+            "physical bridge allowance")
+    return {
+        "operand_tau": operand_tau,
+        "reconstruction_adjustment": reconstruction_adjustment,
+        "physical_bridge_allowance": physical_bridge_allowance,
+        "safe_bound": bound - physical_bridge_allowance,
+        "errors": errors,
+    }
+
+
 def _ordering_tolerance(*operands: float) -> float:
     """The single operand-scaled absolute tolerance for ordering two solver
     quantities of the same magnitude.
@@ -1451,14 +1621,15 @@ def conservative_certificate(ck: dict) -> dict:
                 return fail(
                     f"conservative certificate: iteration {oracle_call} clean "
                     "bound evidence is not finite")
-            tau = _ordering_tolerance(bound, model, phys)
-            if bound - model > tau or bound - phys > tau:
+            gate = pricing_order_gate(bound, model, phys)
+            if gate["errors"]:
                 return fail(
-                    f"conservative certificate: iteration {oracle_call} bound "
-                    "exceeds an incumbent beyond the operand tolerance")
+                    f"conservative certificate: iteration {oracle_call} "
+                    + "; ".join(gate["errors"]))
             raw_lb_best = max(raw_lb_best, z_model + min(0.0, bound - sigma))
             safe_lb_best = max(
-                safe_lb_best, z_model + min(0.0, (bound - tau) - sigma))
+                safe_lb_best,
+                z_model + min(0.0, gate["safe_bound"] - sigma))
         raw_ub_history.append(ub)
         safe_lb_history.append(safe_lb_best)
         if clean and raw_first is None and (ub - raw_lb_best) <= epsilon:
@@ -1997,20 +2168,18 @@ def _replay_cg_certificate_evidence(ck: dict, label: str) -> dict:
                 solver.get("obj"), f"{elabel} pricing model incumbent")
             pricing_incumbent = _finite_evidence_number(
                 oracle.get("obj_true"), f"{elabel} pricing incumbent")
-            # ONE operand-scaled ordering tolerance covers the certified bound
-            # and BOTH incumbents; the derived pricing gap is judged against
-            # zero at this SAME scale (EI-026), so bound/incumbent equality and
-            # the sign of their derived gap can never disagree.
-            order_tau = _ordering_tolerance(
+            # ONE shared physical-bridge gate (EI-026 unified the operand
+            # scale; EI-027 admits the exact model-to-physical
+            # reconstruction adjustment on the PHYSICAL side only):
+            # bound <= model + operand_tau and
+            # bound <= physical + (operand_tau + |model - physical|).
+            gate = pricing_order_gate(
                 pricing_bound, pricing_model_incumbent, pricing_incumbent)
-            # inflated-bound tamper gate: a certified minimization bound may not
-            # exceed either incumbent beyond the operand-scaled tolerance.
-            if pricing_bound - pricing_model_incumbent > order_tau:
+            if gate["errors"]:
                 raise AnalysisError(
-                    f"{elabel}: pricing bound exceeds model incumbent")
-            if pricing_bound - pricing_incumbent > order_tau:
-                raise AnalysisError(
-                    f"{elabel}: pricing bound exceeds physical incumbent")
+                    f"{elabel}: " + "; ".join(gate["errors"]))
+            order_tau = gate["operand_tau"]
+            bridge_allowance = gate["physical_bridge_allowance"]
             min_rc_lb = pricing_bound - sigma
             min_rc_ub = pricing_incumbent - sigma
             for owner, record in (("iteration", event), ("oracle", extra)):
@@ -2021,14 +2190,16 @@ def _replay_cg_certificate_evidence(ck: dict, label: str) -> dict:
                     record.get("min_reduced_cost_ub"), min_rc_ub,
                     f"{elabel} {owner} min_reduced_cost_ub")
             # RAW pricing gap: preserved and validated EXACTLY against the
-            # recorded value.  A negative raw gap is admitted ONLY within the
-            # SAME operand-scaled tolerance derived from the original operands,
-            # and rejected beyond it.
+            # recorded value.  A negative raw gap is admitted ONLY within
+            # the physical bridge allowance (operand_tau plus the exact
+            # model-to-physical reconstruction adjustment; EI-027), and
+            # rejected beyond it.
             raw_pricing_gap = pricing_incumbent - pricing_bound
-            if raw_pricing_gap < -order_tau:
+            if raw_pricing_gap < -bridge_allowance:
                 raise AnalysisError(
-                    f"{elabel}: pricing gap is negative beyond the operand "
-                    f"tolerance ({raw_pricing_gap!r} < {-order_tau!r})")
+                    f"{elabel}: pricing gap is negative beyond the physical "
+                    f"bridge allowance ({raw_pricing_gap!r} < "
+                    f"{-bridge_allowance!r})")
             _require_evidence_close(
                 event.get("pricing_gap_abs"), raw_pricing_gap,
                 f"{elabel} pricing_gap_abs")
@@ -3584,14 +3755,19 @@ def write_summary(path: str, cells: pd.DataFrame, summary: pd.DataFrame,
         "serious/null steps, trigger selections, corrected wall partitions, "
         "final gaps, and uplift intervals are in the CSV tables. "
         "MANIFEST.json hashes every input and generated artifact.", "",
-        "## Conservative-certificate policy (EI-026)", "",
+        "## Conservative-certificate policy (EI-026 / EI-027)", "",
         "The claim-bearing `lb_best`, `final_gap`, `uplift_hi`, "
         "`uplift_width`, and `zd_minus_lb` (and every summary/decision derived "
         "from them) use the CONSERVATIVE reduced-bound certificate "
-        "(`bound - operand_tau`); the producer/raw values are preserved under "
-        "the `raw_*` CSV columns. Certification must agree between the raw and "
-        "conservative chains, which are the one shared replay used by both the "
-        "audit and this analyzer.", "",
+        "`safe_bound = bound - physical_bridge_allowance`, where "
+        "`physical_bridge_allowance = operand_tau + "
+        "abs(model_incumbent - physical_incumbent)` (EI-027: the exact "
+        "model-to-physical reconstruction adjustment). Ordering requires "
+        "`bound <= model_incumbent + operand_tau` and `bound <= "
+        "physical_incumbent + physical_bridge_allowance`. The producer/raw "
+        "values are preserved under the `raw_*` CSV columns. Certification "
+        "must agree between the raw and conservative chains, which are the "
+        "one shared replay used by both the audit and this analyzer.", "",
         "## Evidence limits", "",
         *[f"- {limitation}" for limitation in EVIDENCE_LIMITATIONS],
     ]
@@ -3810,11 +3986,17 @@ def analyze(
                 "evidence_limitations": list(EVIDENCE_LIMITATIONS),
             },
             "conservative_certificate_policy": {
-                "incident": "EI-026",
+                "incident": "EI-026 / EI-027",
                 "claim_bearing": (
                     "lb_best, final_gap, uplift_hi, uplift_width, zd_minus_lb "
                     "and every summary/decision derived from them use the "
-                    "CONSERVATIVE reduced-bound (bound - operand_tau) chain"),
+                    "CONSERVATIVE reduced-bound chain safe_bound = bound - "
+                    "physical_bridge_allowance"),
+                "physical_bridge_allowance": (
+                    "operand_tau + abs(model_incumbent - "
+                    "physical_incumbent); ordering requires bound <= "
+                    "model_incumbent + operand_tau and bound <= "
+                    "physical_incumbent + physical_bridge_allowance"),
                 "raw_columns_preserved": [
                     "raw_lb_best", "raw_final_gap", "raw_uplift_lo",
                     "raw_uplift_hi", "raw_uplift_width", "raw_zd_minus_lb"],
