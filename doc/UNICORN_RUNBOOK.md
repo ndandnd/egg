@@ -816,6 +816,50 @@ Commit the new
 only after it succeeds. Never delete or rewrite the analysis claim merely to
 obtain another result.
 
+## EI-026 one-shot claimed-incident recovery (protocol only; not yet runnable)
+
+A claimed packaging attempt aborted mid-validation and left the source-side
+`runs/a6_holdout.CLOSEOUT_CLAIM.json` on disk with **no** audit, archive,
+manifest, sidecar, bundle, decision, or score emitted (see `EI-026` in
+`ENGINEERING_INCIDENTS.md` for the exact evidence and root cause). Normal `pack`
+correctly refuses to run while that claim exists. Recovery uses a **separate,
+explicit EI-026-only** command (`package_a6_holdout.py recover-pack`), never a
+generic bypass.
+
+**Do not run any recovery command yet.** No operator launch command is
+published here until the EI-026 tolerance/certificate repair and the recovery
+command have passed independent review and merged into `main`. The intended
+protocol, for review, is:
+
+1. **Preserve the evidence.** Never delete or rewrite
+   `runs/a6_holdout.CLOSEOUT_CLAIM.json` or anything under `runs/a6_holdout`.
+   Record the full original claim SHA-256.
+2. **Recover from a clean, reviewed HEAD** that has the original packaging
+   commit `740ab0c` as an ancestor and equals the recovery commit; the tracked
+   tree must be clean. From a non-login Unicorn shell the Slurm client is not on
+   `PATH` (this is what caused the pre-claim `squeue` failure), so export it
+   before the quiescence checks run:
+
+   ```bash
+   export PATH="/usr/local/slurm/current/bin:$PATH"
+   ```
+3. The recovery command **re-verifies** the immutable original claim (regular,
+   single-link, exact schema/SHA/commit/launch identities/source digest),
+   **re-checks** that the live raw tree still exactly matches that claim before
+   any outcome is read, checks **Slurm quiescence** from a login shell both
+   before reading and immediately before publication, and exclusively creates a
+   second adjacent `runs/a6_holdout.RECOVERY_CLAIM.json` **before** validation.
+   Exactly one recovery attempt is permitted; a pre-existing recovery claim
+   blocks all further attempts.
+4. The recovery bundle, import receipt, and analyzer contract are **versioned**
+   (`…-v3-recovery` / `…-v2-recovery`) and record the original claim commit+SHA,
+   the recovery claim commit+SHA, the experiment commit, and the actual
+   corrected packaging/analysis commit. Import and analysis require HEAD to
+   equal the recovery commit while separately verifying both immutable claims.
+5. Any recovery failure is fail-closed: preserve both claims and the raw tree,
+   diagnose without reading a new decision, and record the disposition here and
+   in `ENGINEERING_INCIDENTS.md` before any further attempt.
+
 ## Branch hygiene
 
 Submit experiments only from a clean, published `main`. The closeout

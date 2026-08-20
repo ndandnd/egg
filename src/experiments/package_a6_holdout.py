@@ -36,11 +36,34 @@ from pathlib import Path, PurePosixPath
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 SCHEMA = "a6-holdout-transfer-bundle-v2"
+# The recovery contract is a SEPARATE, versioned manifest/receipt schema so a
+# recovery bundle can never be confused with a normal one (EI-026 Task B).
+SCHEMA_RECOVERY = "a6-holdout-transfer-bundle-v3-recovery"
 RECEIPT_SCHEMA = "a6-holdout-transfer-receipt-v1"
+RECEIPT_SCHEMA_RECOVERY = "a6-holdout-transfer-receipt-v2-recovery"
 RECEIPT_FILENAME = "a6_holdout.TRANSFER_RECEIPT.json"
 CLOSEOUT_CLAIM_SCHEMA = "a6-holdout-closeout-claim-v1"
 CLOSEOUT_CLAIM_FILENAME = "a6_holdout.CLOSEOUT_CLAIM.json"
+RECOVERY_CLAIM_SCHEMA = "a6-holdout-recovery-claim-v1"
+RECOVERY_CLAIM_FILENAME = "a6_holdout.RECOVERY_CLAIM.json"
+RECOVERY_INCIDENT_ID = "EI-026"
+# The one packaging/claim commit the original (failed) claim was made at; the
+# recovery HEAD must have this as an ancestor.
+RECOVERY_BASE_COMMIT = "740ab0c1578b454268102c0bb15b1104d9ac8d9d"
+# Frozen EI-026 identities (operator evidence).  A merely well-formed
+# operator-supplied SHA is insufficient: the recovery gate requires these exact
+# values (tests inject their own synthetic expectations via parameters).
+RECOVERY_ORIGINAL_CLAIM_SHA256 = (
+    "1b0acf0b8232d4b08e764564e2732fcfa9c28dd53456a1415085b77cb38f6675")
+RECOVERY_ORIGINAL_PACKAGING_COMMIT = (
+    "740ab0c1578b454268102c0bb15b1104d9ac8d9d")
+RECOVERY_ORIGINAL_SOURCE_TREE_SHA256 = (
+    "2c60b3d2feb1f313cb08541556d5e8f95bf40dc76b2c539d78149dd93ad88749")
 SOURCE_ARC_ROOT = "src/runs/a6_holdout"
+# The repository root; every recovery Git command is pinned here, never the
+# caller's cwd (EI-026 Task B.5).
+REPO_ROOT = os.path.dirname(
+    os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 METADATA_ARC_ROOT = "A6_HOLDOUT_TRANSFER"
 DEFAULT_OUT = "runs/a6_holdout_packages"
 AUDIT_EXPECT_CG = 128
@@ -1620,6 +1643,171 @@ def assert_job_quiescent(job_id: str) -> None:
             "no campaign outcomes were read")
 
 
+# ===========================================================================
+# EI-026 one-shot claimed-incident recovery (Task B)
+# ===========================================================================
+def _git_output(args: list[str]) -> str:
+    # every recovery Git command is pinned to REPO_ROOT, never the caller's cwd
+    result = subprocess.run(
+        ["git", "-C", REPO_ROOT, *args], check=False, stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE, text=True)
+    if result.returncode != 0:
+        detail = result.stderr.strip() or f"exit {result.returncode}"
+        raise PackagingError(f"git {' '.join(args)} failed: {detail}")
+    return result.stdout.strip()
+
+
+def _resolve_head_commit() -> str:
+    head = _git_output(["rev-parse", "HEAD^{commit}"])
+    if not _full_hex(head, 40):
+        raise PackagingError(f"HEAD did not resolve to a commit: {head!r}")
+    return head
+
+
+def _require_clean_tracked_tree() -> None:
+    if _git_output(["status", "--porcelain", "--untracked-files=no"]):
+        raise PackagingError(
+            "recovery requires a clean tracked tree; refusing with "
+            "uncommitted tracked changes")
+
+
+def _require_commit_ancestor(ancestor: str, descendant: str) -> None:
+    result = subprocess.run(
+        ["git", "-C", REPO_ROOT, "merge-base", "--is-ancestor",
+         ancestor, descendant],
+        check=False, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+    if result.returncode == 1:
+        raise PackagingError(
+            f"recovery HEAD {descendant} does not have {ancestor} as an "
+            "ancestor")
+    if result.returncode != 0:
+        detail = result.stderr.strip() or f"exit {result.returncode}"
+        raise PackagingError(f"cannot verify commit ancestry: {detail}")
+
+
+def verify_original_claim(
+    root,
+    *,
+    original_claim_sha256: str,
+    expected_sha256: str = RECOVERY_ORIGINAL_CLAIM_SHA256,
+    expected_packaging_commit: str = RECOVERY_ORIGINAL_PACKAGING_COMMIT,
+    expected_source_tree_sha256: str = RECOVERY_ORIGINAL_SOURCE_TREE_SHA256,
+) -> dict:
+    """Open the original (failed) closeout claim adjacent to the raw root as
+    canonical, regular, single-link IMMUTABLE evidence and verify it against the
+    FROZEN EI-026 identities.
+
+    A merely well-formed operator-supplied SHA is insufficient: the supplied SHA
+    must equal the frozen expected SHA, the file must hash to it, the document
+    must have the exact canonical key set, and its packaging commit and source
+    digest must equal the frozen constants.  (Tests inject synthetic
+    expectations via the ``expected_*`` parameters.)
+    """
+    if not _full_hex(original_claim_sha256, 64):
+        raise PackagingError("original claim SHA-256 must be 64 lowercase hex")
+    if original_claim_sha256 != expected_sha256:
+        raise PackagingError(
+            "original claim SHA-256 does not equal the frozen EI-026 claim "
+            "SHA-256")
+    root_path = Path(root).expanduser().resolve()
+    claim_path = root_path.parent / CLOSEOUT_CLAIM_FILENAME
+    raw = _regular_bundle_file(claim_path, "original closeout claim")
+    info = claim_path.lstat()
+    if not stat.S_ISREG(info.st_mode) or info.st_nlink != 1:
+        raise PackagingError(
+            "original closeout claim is not a regular single-link file")
+    if hashlib.sha256(raw).hexdigest() != original_claim_sha256:
+        raise PackagingError(
+            "original closeout claim SHA-256 does not match the supplied claim")
+    try:
+        document = json.loads(raw)
+    except json.JSONDecodeError as exc:
+        raise PackagingError(
+            "original closeout claim is not valid JSON") from exc
+    if raw != _canonical_json_bytes(document):
+        raise PackagingError("original closeout claim is not canonical JSON")
+    # exact canonical key set
+    if set(document) != {
+            "schema", "campaign", "status", "claimed_utc",
+            "packaging_code_commit", "experiment_code_commit",
+            "selection_sha256", "preflight_sha256", "launch_job_id",
+            "grid_list_sha256", "source"}:
+        raise PackagingError("original closeout claim key set is invalid")
+    if (document.get("schema") != CLOSEOUT_CLAIM_SCHEMA
+            or document.get("campaign") != "a6-holdout"
+            or document.get("status") != "claimed-before-outcome-validation"):
+        raise PackagingError("original closeout claim schema/status is invalid")
+    if document.get("packaging_code_commit") != expected_packaging_commit:
+        raise PackagingError(
+            "original closeout claim packaging commit does not equal the "
+            "frozen EI-026 packaging commit")
+    for key in ("experiment_code_commit", "launch_job_id", "grid_list_sha256",
+                "selection_sha256", "preflight_sha256"):
+        if not document.get(key):
+            raise PackagingError(f"original closeout claim missing {key}")
+    src = document.get("source") or {}
+    if set(src) != {"canonical_tree_sha256", "file_count",
+                    "directory_count", "total_bytes"}:
+        raise PackagingError("original closeout claim source key set is invalid")
+    if not (_full_hex(src.get("canonical_tree_sha256"), 64)
+            and isinstance(src.get("file_count"), int)
+            and not isinstance(src.get("file_count"), bool)
+            and isinstance(src.get("directory_count"), int)
+            and isinstance(src.get("total_bytes"), int)):
+        raise PackagingError("original closeout claim source digest is invalid")
+    if src.get("canonical_tree_sha256") != expected_source_tree_sha256:
+        raise PackagingError(
+            "original closeout claim source-tree SHA-256 does not equal the "
+            "frozen EI-026 source-tree SHA-256")
+    return {"path": str(claim_path), "sha256": original_claim_sha256,
+            "document": document}
+
+
+def claim_recovery(root, *, original_claim: dict, recovery_commit: str,
+                   failure_fingerprint: str, raw_tree_sha256: str) -> dict:
+    """Exclusively create the SECOND adjacent recovery claim before any outcome
+    validation.  Exactly one recovery attempt is allowed: a pre-existing
+    recovery claim blocks all further attempts (fail-closed one-shot)."""
+    root_path = Path(root).expanduser().resolve()
+    recovery_path = root_path.parent / RECOVERY_CLAIM_FILENAME
+    doc = original_claim["document"]
+    document = {
+        "schema": RECOVERY_CLAIM_SCHEMA,
+        "campaign": "a6-holdout",
+        "incident_id": RECOVERY_INCIDENT_ID,
+        "status": "recovery-claimed-before-outcome-validation",
+        "claimed_utc": datetime.datetime.now(
+            datetime.timezone.utc).replace(microsecond=0).strftime(
+                "%Y-%m-%dT%H:%M:%SZ"),
+        "recovery_code_commit": recovery_commit,
+        "recovery_base_commit": RECOVERY_BASE_COMMIT,
+        "original_claim": {
+            "sha256": original_claim["sha256"],
+            "packaging_code_commit": doc["packaging_code_commit"],
+            "experiment_code_commit": doc["experiment_code_commit"],
+            "launch_job_id": doc["launch_job_id"],
+        },
+        "raw_tree_sha256": raw_tree_sha256,
+        "failure_fingerprint": failure_fingerprint,
+    }
+    payload = _canonical_json_bytes(document)
+    try:
+        descriptor = os.open(
+            recovery_path, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
+    except FileExistsError as exc:
+        raise PackagingError(
+            "A6 recovery was already claimed; a second recovery claim blocks "
+            f"all further attempts: {recovery_path}") from exc
+    with os.fdopen(descriptor, "wb") as handle:
+        handle.write(payload)
+        handle.flush()
+        os.fsync(handle.fileno())
+    _fsync_directory(root_path.parent)
+    return {"path": str(recovery_path),
+            "sha256": hashlib.sha256(payload).hexdigest(),
+            "document": document}
+
+
 def validate_scientific_population(
     paths: dict,
     preflight: dict,
@@ -1692,11 +1880,12 @@ def _manifest_document(
     scientific: dict,
     snapshot: dict,
     audit_bytes: bytes,
+    recovery: dict | None = None,
 ) -> dict:
     launch_manifest = launch["manifest"]
     launch_lock = launch["lock"]
-    return {
-        "schema": SCHEMA,
+    document = {
+        "schema": SCHEMA_RECOVERY if recovery is not None else SCHEMA,
         "campaign": "a6-holdout",
         "packaging_code_commit": packaging_commit,
         "experiment_code_commit": preflight["code_commit"],
@@ -1784,6 +1973,12 @@ def _manifest_document(
             ),
         },
     }
+    if recovery is not None:
+        # the versioned recovery contract records the ORIGINAL claim
+        # commit+SHA, the recovery claim commit+SHA, the experiment commit, and
+        # the actual corrected packaging/analysis commit (EI-026 Task B.9).
+        document["recovery"] = recovery
+    return document
 
 
 def _safe_inventory_path(value: object) -> str:
@@ -1821,15 +2016,71 @@ def _validated_manifest_snapshot(manifest: dict, audit_bytes: bytes) -> dict:
         "packaging_code_commit", "preflight", "runtime", "schema", "scope",
         "scientific_validation", "selection", "source", "closeout_claim",
     }
+    is_recovery = manifest.get("schema") == SCHEMA_RECOVERY
+    if is_recovery:
+        expected_top = expected_top | {"recovery"}
     if set(manifest) != expected_top:
         raise PackagingError("bundle manifest top-level keys differ")
-    if manifest.get("schema") != SCHEMA or manifest.get("campaign") != "a6-holdout":
+    if (manifest.get("schema") not in (SCHEMA, SCHEMA_RECOVERY)
+            or manifest.get("campaign") != "a6-holdout"):
         raise PackagingError("bundle manifest has wrong schema/campaign")
+    if is_recovery:
+        recovery = manifest.get("recovery")
+        original = (recovery or {}).get("original_claim") or {}
+        recovery_claim = (recovery or {}).get("recovery_claim") or {}
+        rc_doc = recovery_claim.get("document")
+        if (not isinstance(recovery, dict)
+                or set(recovery) != {
+                    "incident_id", "recovery_code_commit",
+                    "recovery_base_commit", "experiment_code_commit",
+                    "original_claim", "recovery_claim"}
+                or recovery.get("incident_id") != RECOVERY_INCIDENT_ID
+                or not _full_hex(recovery.get("recovery_code_commit"), 40)
+                or recovery.get("recovery_base_commit") != RECOVERY_BASE_COMMIT
+                or set(original) != {"sha256", "packaging_code_commit"}
+                or not _full_hex(original.get("sha256"), 64)
+                or not _full_hex(original.get("packaging_code_commit"), 40)
+                or set(recovery_claim) != {"sha256", "document"}
+                or not _full_hex(recovery_claim.get("sha256"), 64)
+                or not isinstance(rc_doc, dict)
+                or set(rc_doc) != {
+                    "schema", "campaign", "incident_id", "status",
+                    "claimed_utc", "recovery_code_commit",
+                    "recovery_base_commit", "original_claim",
+                    "raw_tree_sha256", "failure_fingerprint"}
+                or hashlib.sha256(_canonical_json_bytes(rc_doc)).hexdigest()
+                != recovery_claim.get("sha256")
+                or rc_doc.get("schema") != RECOVERY_CLAIM_SCHEMA
+                or rc_doc.get("campaign") != "a6-holdout"
+                or rc_doc.get("incident_id") != RECOVERY_INCIDENT_ID
+                or rc_doc.get("status")
+                != "recovery-claimed-before-outcome-validation"
+                or rc_doc.get("recovery_code_commit")
+                != recovery.get("recovery_code_commit")
+                or rc_doc.get("recovery_base_commit") != RECOVERY_BASE_COMMIT
+                or set(rc_doc.get("original_claim") or {}) != {
+                    "sha256", "packaging_code_commit",
+                    "experiment_code_commit", "launch_job_id"}
+                or (rc_doc["original_claim"].get("sha256")
+                    != original.get("sha256"))
+                or (rc_doc["original_claim"].get("packaging_code_commit")
+                    != original.get("packaging_code_commit"))
+                or not _full_hex(rc_doc.get("raw_tree_sha256"), 64)
+                or not isinstance(rc_doc.get("failure_fingerprint"), str)
+                or not rc_doc["failure_fingerprint"]
+                or not _full_hex(recovery.get("experiment_code_commit"), 40)):
+            raise PackagingError("bundle manifest recovery block is invalid")
     packaging_commit = manifest.get("packaging_code_commit")
     experiment_commit = manifest.get("experiment_code_commit")
     if not _full_hex(packaging_commit, 40) or not _full_hex(
             experiment_commit, 40):
         raise PackagingError("bundle manifest commit identity is invalid")
+    if is_recovery and (
+            packaging_commit != recovery["recovery_code_commit"]
+            or experiment_commit != recovery["experiment_code_commit"]
+            or rc_doc["original_claim"]["experiment_code_commit"]
+            != experiment_commit):
+        raise PackagingError("bundle manifest recovery commits differ")
 
     selection = manifest.get("selection") or {}
     expected_selection = {
@@ -1909,7 +2160,9 @@ def _validated_manifest_snapshot(manifest: dict, audit_bytes: bytes) -> dict:
             or claim_doc.get("campaign") != "a6-holdout"
             or claim_doc.get("status")
             != "claimed-before-outcome-validation"
-            or claim_doc.get("packaging_code_commit") != packaging_commit
+            or claim_doc.get("packaging_code_commit") != (
+                manifest["recovery"]["original_claim"]["packaging_code_commit"]
+                if is_recovery else packaging_commit)
             or claim_doc.get("experiment_code_commit") != experiment_commit
             or claim_doc.get("selection_sha256") != EXPECTED_SELECTION_SHA256
             or claim_doc.get("preflight_sha256") != preflight["sha256"]
@@ -1921,6 +2174,16 @@ def _validated_manifest_snapshot(manifest: dict, audit_bytes: bytes) -> dict:
         claim_doc.get("claimed_utc"), "closeout claim claimed_utc")
     if claim_time < launch_times[-1]:
         raise PackagingError("bundle closeout claim predates launch records")
+    if is_recovery:
+        recovery_time = _manifest_timestamp(
+            rc_doc.get("claimed_utc"), "recovery claim claimed_utc")
+        if (recovery_time < claim_time
+                or rc_doc["original_claim"]["launch_job_id"]
+                != launch["job_id"]
+                or recovery["original_claim"]["sha256"]
+                != closeout_claim["sha256"]):
+            raise PackagingError(
+                "bundle manifest recovery chronology/identity is invalid")
     launch_manifest = launch.get("manifest") or {}
     lock = launch.get("lock") or {}
     if (set(launch_manifest) != {"path", "sha256"}
@@ -2011,6 +2274,9 @@ def _validated_manifest_snapshot(manifest: dict, audit_bytes: bytes) -> dict:
     }
     if claim_doc.get("source") != expected_claim_source:
         raise PackagingError("bundle closeout claim source tree is invalid")
+    if is_recovery and rc_doc.get("raw_tree_sha256") != (
+            expected_claim_source["canonical_tree_sha256"]):
+        raise PackagingError("bundle recovery claim source tree is invalid")
 
     file_map = {record["path"]: record for record in safe_files}
     evidence_hashes = {
@@ -2149,8 +2415,10 @@ def _receipt_document(
     snapshot: dict,
     imported_utc: str,
 ) -> dict:
-    return {
-        "schema": RECEIPT_SCHEMA,
+    recovery = manifest.get("recovery")
+    document = {
+        "schema": (RECEIPT_SCHEMA_RECOVERY if recovery is not None
+                   else RECEIPT_SCHEMA),
         "campaign": "a6-holdout",
         "imported_utc": imported_utc,
         "destination": {
@@ -2185,6 +2453,12 @@ def _receipt_document(
             "launch_job_id": manifest["launch"]["job_id"],
         },
     }
+    if recovery is not None:
+        # the receipt records the full versioned recovery contract: original
+        # claim commit+SHA, recovery claim commit+SHA, experiment commit, and
+        # the corrected packaging/analysis (recovery) commit.
+        document["recovery"] = recovery
+    return document
 
 
 def validate_transfer_receipt(
@@ -2201,13 +2475,21 @@ def validate_transfer_receipt(
         raise PackagingError("transfer receipt is not valid JSON") from exc
     if raw != _canonical_json_bytes(document):
         raise PackagingError("transfer receipt is not canonical JSON")
-    if set(document) != {
-            "schema", "campaign", "imported_utc", "destination", "bundle",
-            "archive", "source", "provenance", "closeout_claim"}:
+    base_keys = {
+        "schema", "campaign", "imported_utc", "destination", "bundle",
+        "archive", "source", "provenance", "closeout_claim"}
+    is_recovery = document.get("schema") == RECEIPT_SCHEMA_RECOVERY
+    expected_keys = base_keys | {"recovery"} if is_recovery else base_keys
+    if set(document) != expected_keys:
         raise PackagingError("transfer receipt top-level keys differ")
-    if (document.get("schema") != RECEIPT_SCHEMA
+    if (document.get("schema") not in (RECEIPT_SCHEMA, RECEIPT_SCHEMA_RECOVERY)
             or document.get("campaign") != "a6-holdout"):
         raise PackagingError("transfer receipt schema/campaign is invalid")
+    if is_recovery:
+        recovery = document.get("recovery") or {}
+        if (recovery.get("incident_id") != RECOVERY_INCIDENT_ID
+                or not _full_hex(recovery.get("recovery_code_commit"), 40)):
+            raise PackagingError("transfer receipt recovery block is invalid")
     _manifest_timestamp(document.get("imported_utc"), "imported_utc")
     if expected is not None:
         comparable = dict(document)
@@ -2224,6 +2506,8 @@ def import_bundle(
     repo_root: str | os.PathLike,
     *,
     destination_validator=validate_destination_repository,
+    recovery_head_resolver=_resolve_head_commit,
+    recovery_ancestor_checker=_require_commit_ancestor,
 ) -> dict:
     """Verify a bundle and transactionally install raw root plus receipt."""
     raw_bundle = Path(bundle_dir).expanduser()
@@ -2266,6 +2550,47 @@ def import_bundle(
     if manifest_bytes != canonical_manifest:
         raise PackagingError("bundle manifest is not canonical JSON")
     snapshot = _validated_manifest_snapshot(manifest, audit_bytes)
+
+    # EI-026 recovery bundles bind the destination-side HEAD to the recovery
+    # commit and verify BOTH immutable claims recorded in the manifest.
+    if manifest.get("schema") == SCHEMA_RECOVERY:
+        recovery = manifest.get("recovery") or {}
+        head = recovery_head_resolver()
+        recovery_commit = recovery.get("recovery_code_commit")
+        if head != recovery_commit:
+            raise PackagingError(
+                "recovery import requires HEAD to equal the recovery commit "
+                f"{recovery_commit!r}; HEAD is {head!r}")
+        # B6. prove 740ab0c -> recovery commit.
+        recovery_ancestor_checker(RECOVERY_BASE_COMMIT, recovery_commit)
+        original = recovery.get("original_claim") or {}
+        embedded_claim = manifest.get("closeout_claim") or {}
+        rc_doc = (recovery.get("recovery_claim") or {}).get("document") or {}
+        # B6. cross-bind every manifest/claim/source/experiment/packaging
+        # identity: the embedded original claim, the recovery claim document,
+        # and the manifest commits must all agree.
+        if embedded_claim.get("sha256") != original.get("sha256"):
+            raise PackagingError(
+                "recovery manifest original-claim SHA does not match the "
+                "embedded closeout claim")
+        claim_doc = embedded_claim.get("document") or {}
+        if (claim_doc.get("packaging_code_commit")
+                != original.get("packaging_code_commit")):
+            raise PackagingError(
+                "recovery manifest original packaging commit is inconsistent")
+        if (rc_doc.get("recovery_code_commit") != recovery_commit
+                or (rc_doc.get("original_claim") or {}).get("sha256")
+                != original.get("sha256")
+                or (rc_doc.get("original_claim") or {}).get(
+                    "experiment_code_commit")
+                != recovery.get("experiment_code_commit")):
+            raise PackagingError(
+                "recovery manifest recovery-claim identities are inconsistent")
+        if (manifest.get("packaging_code_commit") != recovery_commit
+                or manifest.get("experiment_code_commit")
+                != recovery.get("experiment_code_commit")):
+            raise PackagingError(
+                "recovery manifest commit identities are inconsistent")
 
     expected_sidecar = (
         f"{archive_record['sha256']}  {archive.name}\n"
@@ -2658,6 +2983,7 @@ def package_holdout(
     job_quiescence_validator=assert_job_quiescent,
     closeout_claimer=claim_closeout,
     closeout_claim_validator=assert_closeout_claim_unchanged,
+    recovery=None,
 ) -> dict:
     """Validate, package, and publish one no-overwrite transfer bundle."""
     if (selection_validator is None or preflight_validator is None
@@ -2796,6 +3122,7 @@ def package_holdout(
             scientific=scientific,
             snapshot=snapshot,
             audit_bytes=audit_bytes,
+            recovery=recovery,
         )
         manifest_bytes = (
             json.dumps(manifest, indent=2, sort_keys=True) + "\n"
@@ -2898,6 +3225,165 @@ def package_holdout(
     }
 
 
+def recover_package_holdout(
+    root: str | os.PathLike,
+    out_base: str | os.PathLike,
+    recovery_code_commit: str,
+    *,
+    incident_id: str,
+    original_claim_sha256: str,
+    failure_fingerprint: str,
+    selection_path: str | os.PathLike = DEFAULT_SELECTION,
+    instances=HOLDOUT_INSTANCES,
+    require_frozen_grid: bool = True,
+    verify_selection_git: bool = True,
+    code_verifier=verify_packaging_code_commit,
+    job_quiescence_validator=assert_job_quiescent,
+    head_resolver=_resolve_head_commit,
+    clean_tree_checker=_require_clean_tracked_tree,
+    ancestor_checker=_require_commit_ancestor,
+    original_claim_verifier=verify_original_claim,
+    recovery_claimer=claim_recovery,
+    expected_original_sha256: str = RECOVERY_ORIGINAL_CLAIM_SHA256,
+    expected_original_packaging_commit: str = (
+        RECOVERY_ORIGINAL_PACKAGING_COMMIT),
+    expected_original_source_tree_sha256: str = (
+        RECOVERY_ORIGINAL_SOURCE_TREE_SHA256),
+    **package_kwargs,
+) -> dict:
+    """One-shot EI-026-only claimed-incident recovery.
+
+    This is a SEPARATE, explicit recovery entry point, never a generic bypass:
+    normal ``package_holdout`` still refuses the existing closeout claim.  The
+    gates run in a fixed order and every failure is fail-closed.
+    """
+    # 1. incident + full original claim SHA gate.
+    if incident_id != RECOVERY_INCIDENT_ID:
+        raise PackagingError(
+            f"recovery is restricted to {RECOVERY_INCIDENT_ID}; "
+            f"got {incident_id!r}")
+    if not _full_hex(original_claim_sha256, 64):
+        raise PackagingError("original claim SHA-256 must be 64 lowercase hex")
+    if not isinstance(failure_fingerprint, str) or not failure_fingerprint:
+        raise PackagingError("recovery requires a non-empty failure fingerprint")
+    # 3. clean recovery HEAD equal to the recovery commit, with 740ab0c as an
+    #    ancestor.  code_verifier enforces HEAD == recovery commit and a clean
+    #    tracked tree (EI-004 contract); the ancestry check is additional.
+    recovery_commit = code_verifier(recovery_code_commit)
+    clean_tree_checker()
+    head = head_resolver()
+    if head != recovery_commit:
+        raise PackagingError(
+            "recovery HEAD does not equal the recovery commit "
+            f"({head!r} != {recovery_commit!r})")
+    ancestor_checker(RECOVERY_BASE_COMMIT, head)
+    # 2. open + verify the immutable original claim against the FROZEN
+    #    EI-026 identities.
+    original_claim = original_claim_verifier(
+        root, original_claim_sha256=original_claim_sha256,
+        expected_sha256=expected_original_sha256,
+        expected_packaging_commit=expected_original_packaging_commit,
+        expected_source_tree_sha256=expected_original_source_tree_sha256)
+    doc = original_claim["document"]
+    # 8. Slurm quiescence BEFORE reading any outcome.
+    job_quiescence_validator(doc["launch_job_id"])
+    # 4. the live raw tree must still exactly match the original claim BEFORE
+    #    any outcome validation.
+    root_path = Path(root).expanduser().resolve()
+    live_snapshot = snapshot_source(root_path)
+    src = doc["source"]
+    live_tree_sha = canonical_tree_sha256(live_snapshot)
+    if (live_tree_sha != src["canonical_tree_sha256"]
+            or live_snapshot["file_count"] != src["file_count"]
+            or live_snapshot["directory_count"] != src["directory_count"]
+            or live_snapshot["total_bytes"] != src["total_bytes"]):
+        raise PackagingError(
+            "live raw tree no longer matches the original claim; refusing "
+            "recovery before any outcome validation")
+    # B2. refuse ANY existing final package with the same campaign/job/preflight
+    #     prefix, regardless of packaging commit, before consuming recovery.
+    raw_out_path = Path(out_base).expanduser()
+    if raw_out_path.is_symlink():
+        raise PackagingError(
+            f"unsafe recovery package output directory: {raw_out_path}")
+    out_path = raw_out_path.resolve()
+    if _path_is_within(out_path, root_path):
+        raise PackagingError(
+            "recovery package output must be outside the canonical source root")
+    # Prepare and validate the output container before consuming the one-shot
+    # recovery claim.  A pre-existing non-directory, symlink, or unwritable
+    # parent is an operator/preflight error, not a scientific recovery attempt.
+    try:
+        out_path.mkdir(parents=True, exist_ok=True)
+    except OSError as exc:
+        raise PackagingError(
+            f"cannot prepare recovery package output directory: {out_path}"
+        ) from exc
+    if out_path.is_symlink() or not out_path.is_dir():
+        raise PackagingError(
+            f"unsafe recovery package output directory: {out_path}")
+    prefix = (f"a6_holdout-job{doc['launch_job_id']}-"
+              f"{doc['preflight_sha256'][:12]}-")
+    for entry in out_path.iterdir():
+        if entry.name.startswith(prefix):
+            raise PackagingError(
+                "refusing recovery: an existing package with the same "
+                f"campaign/job/preflight prefix is present: {entry}")
+    # 5. exclusively create the SECOND adjacent recovery claim before outcome
+    #    validation; exactly one attempt (a pre-existing recovery claim blocks
+    #    all further attempts).  6. the original claim/raw root are never
+    #    modified or replaced.
+    recovery_claim = recovery_claimer(
+        root_path, original_claim=original_claim,
+        recovery_commit=recovery_commit,
+        failure_fingerprint=failure_fingerprint,
+        raw_tree_sha256=live_tree_sha)
+    recovery_meta = {
+        "incident_id": RECOVERY_INCIDENT_ID,
+        "recovery_code_commit": recovery_commit,
+        "recovery_base_commit": RECOVERY_BASE_COMMIT,
+        "experiment_code_commit": doc["experiment_code_commit"],
+        "original_claim": {
+            "sha256": original_claim["sha256"],
+            "packaging_code_commit": doc["packaging_code_commit"],
+        },
+        # B3. embed the COMPLETE recovery claim, not only its SHA.
+        "recovery_claim": {
+            "sha256": recovery_claim["sha256"],
+            "document": recovery_claim["document"],
+        },
+    }
+
+    # 7. fresh staging only (package_holdout always mkdtemp's fresh staging).
+    #    The recovery claimer below RETURNS the existing original claim so the
+    #    normal exclusive CLOSEOUT_CLAIM create is never invoked here.
+    def _recovery_closeout_claimer(*_args, **_kwargs):
+        return original_claim
+
+    # B3. revalidate BOTH immutable claims immediately before scientific
+    #     validation/publication; any mutation fails closed.
+    def _recovery_claim_validator(record):
+        assert_closeout_claim_unchanged(record)          # original claim
+        raw = _regular_bundle_file(
+            Path(recovery_claim["path"]), "recovery claim")
+        if (raw != _canonical_json_bytes(recovery_claim["document"])
+                or hashlib.sha256(raw).hexdigest() != recovery_claim["sha256"]):
+            raise PackagingError("recovery claim changed during recovery")
+
+    return package_holdout(
+        root, out_base, recovery_code_commit,
+        selection_path=selection_path, instances=instances,
+        require_frozen_grid=require_frozen_grid,
+        verify_selection_git=verify_selection_git,
+        code_verifier=code_verifier,
+        job_quiescence_validator=job_quiescence_validator,
+        closeout_claimer=_recovery_closeout_claimer,
+        closeout_claim_validator=_recovery_claim_validator,
+        recovery=recovery_meta,
+        **package_kwargs,
+    )
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     commands = parser.add_subparsers(dest="command", required=True)
@@ -2909,6 +3395,16 @@ def main() -> None:
     import_parser = commands.add_parser("import")
     import_parser.add_argument("--bundle-dir", required=True)
     import_parser.add_argument("--repo-root", required=True)
+    # EI-026-only one-shot recovery: a SEPARATE, explicit command (not a
+    # generic bypass). Normal `pack` still refuses the existing claim.
+    recover_parser = commands.add_parser("recover-pack")
+    recover_parser.add_argument("--root", default="runs/a6_holdout")
+    recover_parser.add_argument("--out", default=DEFAULT_OUT)
+    recover_parser.add_argument("--selection", default=str(DEFAULT_SELECTION))
+    recover_parser.add_argument("--recovery-code-commit", required=True)
+    recover_parser.add_argument("--incident-id", required=True)
+    recover_parser.add_argument("--original-claim-sha256", required=True)
+    recover_parser.add_argument("--failure-fingerprint", required=True)
     args = parser.parse_args()
 
     if args.command == "pack":
@@ -2921,6 +3417,19 @@ def main() -> None:
         print(f"[done] wrote {result['bundle_dir']}")
         print(f"archive: {result['archive']}")
         print(f"sidecar: {result['sidecar']}")
+        print(f"sha256:  {result['archive_sha256']}")
+    elif args.command == "recover-pack":
+        result = recover_package_holdout(
+            args.root,
+            args.out,
+            args.recovery_code_commit,
+            incident_id=args.incident_id,
+            original_claim_sha256=args.original_claim_sha256,
+            failure_fingerprint=args.failure_fingerprint,
+            selection_path=args.selection,
+        )
+        print(f"[done] recovery wrote {result['bundle_dir']}")
+        print(f"archive: {result['archive']}")
         print(f"sha256:  {result['archive_sha256']}")
     else:
         result = import_bundle(args.bundle_dir, args.repo_root)

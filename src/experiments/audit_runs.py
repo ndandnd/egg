@@ -117,6 +117,16 @@ def _cg_sane(ck: dict, tol_mono: float = 2e-3) -> list:
             break
     if any(e.get("replay_ok") is not True for e in events):
         errs.append("oracle event without replay_ok=true")
+    # EI-026 conservative-and-raw certificate closure via the ONE shared pure
+    # helper the production analyzer also uses.  This enforces the operand-scaled
+    # ordering AND rejects a raw-only certificate (raw gap <= epsilon while the
+    # reduced-bound conservative gap > epsilon), so the audit and analyzer agree
+    # on generic pricing-order evidence.  Incomplete fixtures (no
+    # solver.obj/obj_true) are not evaluated by this chain.
+    from experiments.analyze_a6_holdout import conservative_certificate
+    cc = conservative_certificate(ck)
+    if cc.get("errors"):
+        errs.extend(cc["errors"])
     # A6 scheduler-stream integrity (falsified trigger streams must fail).
     # The COMPLETE recovery/counter replay — trigger stream, k_since_clean,
     # recovery kind/state, duplicate/refine/escalation counters, and
