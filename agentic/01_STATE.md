@@ -1,0 +1,66 @@
+# 01 — State of the programme, 2026-08-21 (end of session)
+
+`main` = `ed8b06f3d7e8e4a7ecc5fbfd74ff0b819ac24fa4`. **Nothing below is merged.**
+
+## Settled, with evidence
+
+| Fact | Evidence |
+| --- | --- |
+| The 60-cell B3 factor pilot population is **complete** | `sacct -j 311153`: all 60 array tasks `COMPLETED`, exit `0:0`. Elapsed 5 s to 1 h 44 m, ~5.1 CPU-hours total |
+| It **passes** the hardened audit | 60/60 certified A2 cells, 60/60 converged dictators, 12 cells per setting, Gurobi backend, screen SHA `27c04d82…`, run manifest `9f7529fc…`, run commit `5b63e72…` |
+| Its raw tree is pinned **outcome-blind** | `tree_sha256 efc5ca31dcddb21166f6a5da2cf60b4961706c99edf9dbda882f87a18a88ace4`, 363 files, 60 dirs, 17385781 bytes. Captured before the analysis ran, now a frozen constant enforced by analyzer, selector and packager |
+| The run commit is genuine | `5b63e72` resolves to a real commit and is an ancestor of `main`; `MANIFEST.json` is one of the 363 anchored files, so tampering with it trips the anchor |
+| CI exists | CBC-only GitHub Actions, merged as PR #43 |
+| The novelty position holds | No collision found in the 2026-08-20 sweep. Canonical ingestion, dimensional scoring and full-text verification remain pending — do **not** write "re-verified" |
+| Those ~90 other cluster jobs are **not** this project | Every `egg` Slurm job name is prefixed `egg-`; `ft_*`, `fx_*`, `b4_*`, `g_*`, `ch_*` match none. No seed-collision risk with 32–47 |
+
+## Deliberately not done
+
+**The preregistered analysis has not been run. No decision is frozen.** Holding
+it is what keeps analyzer reviews outcome-blind. It costs nothing: the
+confirmation is a ~2–3 hour job whenever it runs.
+
+## Pull requests
+
+| PR | Head | CI | State |
+| --- | --- | --- | --- |
+| #37 | `7c2da34` | check it | B3 closeout: analyzer, selection freeze, pack/import. **Five review rounds.** Last round's only non-same-UID blocker (helper not provenance-pinned) is fixed. Needs a sixth review or a decision to stop |
+| #47 | `770cb60` | **green** | Submit-script output-path fix. **Mergeable and clean.** Without it, re-running the pilot writes into the audited tree |
+| #48 | `aab80d5` | **green** | Replication comparator, contract frozen before any replica. Independent review was blocked by an OpenAI safety filter — **still unreviewed** |
+| #45 | `5a53c11` | green | B3 confirmation driver. **3 blockers + 3 highs open.** Must not launch |
+| #46 | `f709165` | green | ML training-data driver. **Parked**: per-call rather than per-cell wall cap, replay-flag alignment, dual-spread across slots, and it may not encode the price trajectory it claims to learn |
+| #44 | `c5c3aac` | green | Research candidate inbox (notes only) |
+| #41 | `2530ec8` | check | GIRO frozen loader. Clean diff |
+| #42 | `18f4c4d` | check | Column proposer lab. Honest negative: 0 of 160 proposals accepted |
+| #39 | `2ad05f5` | green | Strict two-cycle witness for B1 |
+| #38 | `8521780` | check | Tiny branch-and-price lab. Root intervals matched A2 exactly on seeds 0 and 15 |
+| #40 | `80d0ffd` | check | Uplift settlement arithmetic |
+| #32 | `8d498b8` | — | B31 boundary corpus. Later/optional |
+| #29 | `c32056a` | — | Cloud agent environment. Low priority |
+
+## The blockers that matter, in order
+
+1. **#45 cannot launch anything.** Its launcher can report failure or
+   cancellation *after workers were released*, which invites a retry that
+   consumes seeds 32–37 twice. Its audit accepts 241 oracle calls against a
+   240 budget, a dictator gap of 100.5 against `tol_d = 0.01`, a missing
+   dictator record, and a run commit of forty zeroes with no `JOB.json`. Its
+   self-test hook accepts any existing file as a permission marker
+   (`/etc/hosts` sufficed) and never checks an absolute `EGG_SBATCH`.
+2. **#37 needs one more independent review, or an explicit decision to stop.**
+   See `05_THREAT_MODEL.md`: every remaining finding requires a local same-UID
+   caller, which is not a defensible thing to keep chasing.
+3. **#48 is unreviewed.** Its contract is frozen, which is the property that
+   matters, but nobody has attacked it. The specific question to ask: *can two
+   populations that agree under this comparator yield different preregistered
+   decisions?* If yes, the comparator measures the wrong thing.
+
+## Known-unfixed, deliberately
+
+- Same-UID forgeability across the whole pipeline. See `05_THREAT_MODEL.md`.
+- A linked-worktree gitfile swap after the provenance precheck (same-UID only).
+- `analyze_b2_pilot.py`, `analyze_a6_holdout.py`, `package_a6_holdout.py` and
+  `local_a6_preflight.py` still shell a bare `git`. Out of scope for #37; a
+  repo-wide follow-up. **Relevant if you run the A6 recovery** — see the
+  runbook and note that its recover2 path was never audited for the four
+  defect classes found in the B3 code.
