@@ -40,6 +40,7 @@ import os
 import statistics
 import subprocess
 import sys
+import tempfile
 from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -494,9 +495,191 @@ def _setting_summary_rows(settings: dict) -> list[dict]:
     } for f in FACTOR_ORDER]
 
 
+def verify_run_commit(claimed, *, verifier=None) -> None:
+    """The recorded ``run_commit`` must be a REAL commit object and an ancestor
+    of HEAD, not merely forty hexadecimal characters.
+
+    A shape-only check lets a manifest claim any plausible-looking SHA, so the
+    code that produced a population could never be located.  ``verifier``
+    exists so synthetic tests can inject a checker instead of fabricating
+    repository history; production always resolves through git.
+    """
+    if verifier is not None:
+        verifier(claimed)
+        return
+    if (not isinstance(claimed, str) or len(claimed) != 40
+            or not all(c in "0123456789abcdef" for c in claimed)):
+        raise evidence.EvidenceError(
+            "run_commit must be the full 40-character lowercase hexadecimal "
+            f"SHA of a real commit; got {claimed!r}")
+    try:
+        resolved = subprocess.check_output(
+            ["git", "rev-parse", "--verify", f"{claimed}^{{commit}}"],
+            cwd=REPO_ROOT, stderr=subprocess.DEVNULL).decode().strip()
+    except (subprocess.CalledProcessError, OSError) as exc:
+        raise evidence.EvidenceError(
+            f"run_commit {claimed} does not resolve to a commit object"
+        ) from exc
+    if resolved != claimed:
+        raise evidence.EvidenceError(
+            f"run_commit {claimed} resolves to {resolved}")
+    if subprocess.run(
+            ["git", "merge-base", "--is-ancestor", claimed, "HEAD"],
+            cwd=REPO_ROOT).returncode != 0:
+        raise evidence.EvidenceError(
+            f"run_commit {claimed} is not an ancestor of HEAD")
+
+
+def _required_anchor(live_identity, *, verify_code_commit,
+                     expected_raw_anchor) -> dict:
+    """Resolve which anchor the raw tree must match.
+
+    Production (``verify_code_commit=True``) always requires the frozen,
+    outcome-blind pre-analysis anchor.  The relaxed form exists only so
+    synthetic fixtures can be scored, and is never reachable from the CLI.
+    """
+    required = expected_raw_anchor
+    if required is None:
+        required = (anchor.FROZEN_RAW_ANCHOR if verify_code_commit
+                    else live_identity)
+    if (not isinstance(required, dict)
+            or set(required) != set(anchor.FROZEN_RAW_ANCHOR)):
+        raise evidence.EvidenceError(
+            "expected pre-analysis raw anchor is malformed")
+    return required
+
+
+def _score_frozen_population(runs_dir, screen, screen_dir, *,
+                             verify_code_commit, expected_raw_anchor,
+                             run_commit_verifier):
+    """Freeze the raw tree ONCE, then audit and score only that frozen copy.
+
+    The analyzer must never audit or score bytes it does not also bind.  The
+    order is therefore: snapshot the live tree, verify it against the required
+    pre-analysis anchor, copy it to an immutable regular-file-only tree, verify
+    the copy has the same canonical identity, and read ONLY the copy from then
+    on.  A transient mutate/score/restore sequence against the live tree
+    therefore cannot cause bytes other than the bound ones to be scored, and
+    the live source is re-verified unchanged before the caller publishes.
+
+    Returns ``(result, audit_sha, raw_binding, run_manifest)``.
+    """
+    from experiments.package_a6_holdout import (
+        PackagingError as _PkgError,
+        canonical_tree_sha256 as _tree_sha,
+        freeze_source as _freeze,
+        snapshot_source as _snapshot,
+    )
+    from experiments import audit_b3_factor_pilot as ad
+
+    def _halt(problems):
+        return ({"decision": {"state": "INVALID/HALT", "problems": problems},
+                 "contrasts": [], "settings": {}, "cells": {}},
+                None, None, None)
+
+    with tempfile.TemporaryDirectory(prefix="b3-frozen-") as tmp:
+        frozen_dir = Path(tmp) / "frozen"
+        try:
+            live = _snapshot(runs_dir)
+            live_identity = anchor.snapshot_identity(live, _tree_sha(live))
+            required = _required_anchor(
+                live_identity, verify_code_commit=verify_code_commit,
+                expected_raw_anchor=expected_raw_anchor)
+            pre = anchor.anchor_disagreements(live_identity, required)
+            if pre:
+                raise evidence.EvidenceError(
+                    "pre-analysis raw anchor mismatch: " + ", ".join(pre))
+            frozen = _freeze(runs_dir, frozen_dir)
+            frozen_identity = anchor.snapshot_identity(
+                frozen, _tree_sha(frozen))
+            drift = anchor.anchor_disagreements(frozen_identity, required)
+            if drift:
+                raise evidence.EvidenceError(
+                    "frozen copy differs from the anchored population: "
+                    + ", ".join(drift))
+        except (_PkgError, OSError, evidence.EvidenceError) as exc:
+            return _halt([f"raw tree cannot be frozen: {exc}"])
+
+        frozen_files = {row["path"]: row["sha256"] for row in frozen["files"]}
+        raw_tree_sha = frozen_identity["tree_sha256"]
+
+        # Everything below reads the FROZEN copy only.
+        audit_result = ad.audit(frozen_dir, screen_dir)
+        audit_sha = audit_result.get("run_manifest_sha256")
+        if not audit_result["ok"]:
+            return ({"decision": {"state": "INVALID/HALT",
+                                  "problems": audit_result["problems"]},
+                     "contrasts": [], "settings": {}, "cells": {}},
+                    audit_sha, None, None)
+
+        try:
+            run_manifest = evidence.read_json_object_once(
+                frozen_dir / bp.RUN_MANIFEST_FILENAME, "run MANIFEST.json")
+            if verify_code_commit or run_commit_verifier is not None:
+                verify_run_commit(run_manifest.get("run_commit"),
+                                  verifier=run_commit_verifier)
+            market_by_cell = bp.market_hash_by_cell(run_manifest)
+            pop = load_population(
+                frozen_dir, screen, market_by_cell, run_manifest)
+            result = analyze_population(pop)
+
+            raw_binding = {
+                "raw_tree_sha256": raw_tree_sha,
+                "file_count": frozen["file_count"],
+                "directory_count": frozen["directory_count"],
+                "total_bytes": frozen["total_bytes"],
+                "manifest_sha256": frozen_files.get(bp.RUN_MANIFEST_FILENAME),
+                "job_id": None,
+                "job_sha256": None,
+                "pre_analysis_anchor": dict(required),
+            }
+            if raw_binding["manifest_sha256"] != audit_sha:
+                raise evidence.EvidenceError(
+                    "frozen MANIFEST.json differs from audited bytes")
+            if bp.JOB_FILENAME in frozen_files:
+                job_bytes = evidence.read_regular_bytes_once(
+                    frozen_dir / bp.JOB_FILENAME, bp.JOB_FILENAME)
+                job_sha = hashlib.sha256(job_bytes).hexdigest()
+                if job_sha != frozen_files[bp.JOB_FILENAME]:
+                    raise evidence.EvidenceError(
+                        "JOB.json changed after the raw-tree freeze")
+                job_doc = evidence.strict_json_loads(
+                    job_bytes, bp.JOB_FILENAME)
+                if not isinstance(job_doc, dict):
+                    raise evidence.EvidenceError(
+                        "JOB.json root is not an object")
+                job_id = job_doc.get("job_id")
+                if (job_doc.get("schema") != "b3-factor-pilot-job-v1"
+                        or not isinstance(job_id, str)
+                        or not job_id.isdigit() or job_id.startswith("0")
+                        or len(job_id) > 18):
+                    raise evidence.EvidenceError(
+                        "JOB.json has a noncanonical Slurm job id")
+                if (job_doc.get("run_manifest_sha256") != audit_sha
+                        or job_doc.get("run_commit")
+                        != run_manifest.get("run_commit")):
+                    raise evidence.EvidenceError(
+                        "JOB.json does not bind the exact run manifest")
+                raw_binding["job_id"] = job_id
+                raw_binding["job_sha256"] = job_sha
+
+            # the live source must be untouched across the whole scoring pass
+            after = _snapshot(runs_dir)
+            post = anchor.anchor_disagreements(
+                anchor.snapshot_identity(after, _tree_sha(after)), required)
+            if post:
+                raise evidence.EvidenceError(
+                    "live raw tree changed during scoring: "
+                    + ", ".join(post))
+        except (_PkgError, OSError, evidence.EvidenceError) as exc:
+            return _halt([f"raw tree cannot be bound: {exc}"])
+
+        return result, audit_sha, raw_binding, run_manifest
+
+
 def analyze(runs_dir, out_base, stamp, analysis_code_commit, *,
             screen_dir=None, verify_code_commit=True,
-            expected_raw_anchor=None) -> str:
+            expected_raw_anchor=None, run_commit_verifier=None) -> str:
     refuse_a6_paths(runs_dir, out_base)
     assert_output_separation(runs_dir, out_base)
     if verify_code_commit:
@@ -504,6 +687,7 @@ def analyze(runs_dir, out_base, stamp, analysis_code_commit, *,
 
     audit_sha = None
     run_manifest = None
+    raw_binding = None
     try:
         screen = bp.load_frozen_screen(screen_dir)
     except bp.B3PilotError as exc:
@@ -524,103 +708,16 @@ def analyze(runs_dir, out_base, stamp, analysis_code_commit, *,
                 "contrasts": [], "settings": {}, "cells": {},
             }
         else:
-            # the exact audit MUST pass before any scoring; malformed run
-            # inputs are a STRUCTURED INVALID/HALT, never an uncaught crash
-            from experiments import audit_b3_factor_pilot as ad
-            audit_result = ad.audit(runs_dir, screen_dir)
-            audit_sha = audit_result.get("run_manifest_sha256")
-            if not audit_result["ok"]:
-                result = {"decision": {"state": "INVALID/HALT",
-                                       "problems": audit_result["problems"]},
-                          "contrasts": [], "settings": {}, "cells": {}}
-            else:
-                run_manifest = evidence.read_json_object_once(
-                    Path(runs_dir) / bp.RUN_MANIFEST_FILENAME,
-                    "run MANIFEST.json")
-                market_by_cell = bp.market_hash_by_cell(run_manifest)
-                pop = load_population(
-                    runs_dir, screen, market_by_cell, run_manifest)
-                result = analyze_population(pop)
-
-    # bind the analysis to the EXACT raw job it scored: the raw tree's
-    # canonical digest plus the Slurm job binding (the design manifest is
-    # shared across jobs, so the manifest SHA alone cannot identify a job)
-    raw_binding = None
-    if audit_sha is not None:
-        from experiments.package_a6_holdout import (
-            PackagingError as _PkgError,
-            canonical_tree_sha256 as _tree_sha,
-            snapshot_source as _snapshot,
-        )
-        try:
-            raw_snapshot = _snapshot(runs_dir)
-            raw_files = {
-                row["path"]: row["sha256"] for row in raw_snapshot["files"]}
-            raw_tree_sha = _tree_sha(raw_snapshot)
-            actual_anchor = anchor.snapshot_identity(
-                raw_snapshot, raw_tree_sha)
-            required_anchor = expected_raw_anchor
-            if required_anchor is None:
-                required_anchor = (
-                    actual_anchor if not verify_code_commit
-                    else anchor.FROZEN_RAW_ANCHOR)
-            if (not isinstance(required_anchor, dict)
-                    or set(required_anchor) != set(
-                        anchor.FROZEN_RAW_ANCHOR)):
-                raise evidence.EvidenceError(
-                    "expected pre-analysis raw anchor is malformed")
-            disagreements = anchor.anchor_disagreements(
-                actual_anchor, required_anchor)
-            if disagreements:
-                raise evidence.EvidenceError(
-                    "pre-analysis raw anchor mismatch: "
-                    + ", ".join(disagreements))
-            raw_binding = {
-                "raw_tree_sha256": raw_tree_sha,
-                "file_count": raw_snapshot["file_count"],
-                "directory_count": raw_snapshot["directory_count"],
-                "total_bytes": raw_snapshot["total_bytes"],
-                "manifest_sha256": raw_files.get(bp.RUN_MANIFEST_FILENAME),
-                "job_id": None,
-                "job_sha256": None,
-                "pre_analysis_anchor": dict(required_anchor),
-            }
-            if raw_binding["manifest_sha256"] != audit_sha:
-                raise evidence.EvidenceError(
-                    "snapshotted MANIFEST.json differs from audited bytes")
-            if bp.JOB_FILENAME in raw_files:
-                job_path = Path(runs_dir) / bp.JOB_FILENAME
-                job_bytes = evidence.read_regular_bytes_once(
-                    job_path, bp.JOB_FILENAME)
-                job_sha = hashlib.sha256(job_bytes).hexdigest()
-                if job_sha != raw_files[bp.JOB_FILENAME]:
-                    raise evidence.EvidenceError(
-                        "JOB.json changed after raw-tree snapshot")
-                job_doc = evidence.strict_json_loads(
-                    job_bytes, bp.JOB_FILENAME)
-                if not isinstance(job_doc, dict):
-                    raise evidence.EvidenceError(
-                        "JOB.json root is not an object")
-                job_id = job_doc.get("job_id")
-                if (job_doc.get("schema") != "b3-factor-pilot-job-v1"
-                        or not isinstance(job_id, str)
-                        or not job_id.isdigit() or job_id.startswith("0")
-                        or len(job_id) > 18):
-                    raise evidence.EvidenceError(
-                        "JOB.json has a noncanonical Slurm job id")
-                if (job_doc.get("run_manifest_sha256") != audit_sha
-                        or job_doc.get("run_commit")
-                        != (run_manifest or {}).get("run_commit")):
-                    raise evidence.EvidenceError(
-                        "JOB.json does not bind the exact run manifest")
-                raw_binding["job_id"] = job_id
-                raw_binding["job_sha256"] = job_sha
-        except (_PkgError, OSError, evidence.EvidenceError) as exc:
-            raw_binding = None
-            result = {"decision": {"state": "INVALID/HALT",
-                                   "problems": [
-                                       f"raw tree cannot be bound: {exc}"]},
-                      "contrasts": [], "settings": {}, "cells": {}}
+            # Freeze the raw tree BEFORE auditing or scoring, then read only
+            # the frozen copy, so the analyzer can never score bytes it does
+            # not also bind.  Malformed run inputs remain a STRUCTURED
+            # INVALID/HALT, never an uncaught crash.
+            result, audit_sha, raw_binding, run_manifest = (
+                _score_frozen_population(
+                    runs_dir, screen, screen_dir,
+                    verify_code_commit=verify_code_commit,
+                    expected_raw_anchor=expected_raw_anchor,
+                    run_commit_verifier=run_commit_verifier))
 
     out_base = Path(out_base)
     out_base.mkdir(parents=True, exist_ok=True)

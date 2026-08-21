@@ -53,6 +53,22 @@ def _go_tree(tmp_path, screen, name="runs"):
     return _write_tree(tmp_path / name, screen, u_by_setting=u)
 
 
+def _synthetic_run_commit_ok(claimed) -> None:
+    """Injected run-commit verifier for synthetic fixtures.
+
+    Production resolves ``run_commit`` through git and requires a real
+    ancestor commit; synthetic trees carry fabricated SHAs, so the fixtures
+    inject this checker rather than manufacturing repository history.  It
+    still asserts the recorded shape, so a fixture cannot omit the field.
+    The production resolver itself is exercised directly in
+    ``test_run_commit_*`` below.
+    """
+    if (not isinstance(claimed, str) or len(claimed) != 40
+            or not all(c in "0123456789abcdef" for c in claimed)):
+        raise az.evidence.EvidenceError(
+            f"synthetic run_commit is malformed: {claimed!r}")
+
+
 def _analyze(runs, out, stamp=STAMP, *, verified=True):
     """Analyze a synthetic tree.  ``verified=True`` produces an honestly
     verified artifact (the byte-level provenance check itself is exercised
@@ -63,13 +79,15 @@ def _analyze(runs, out, stamp=STAMP, *, verified=True):
     if not verified:
         artifact = az.analyze(
             runs, out, stamp, CODE, screen_dir=None,
-            verify_code_commit=False, expected_raw_anchor=expected_anchor)
+            verify_code_commit=False, expected_raw_anchor=expected_anchor,
+            run_commit_verifier=_synthetic_run_commit_ok)
     else:
         with mock.patch.object(az, "verify_analysis_code_commit",
                                return_value=True):
             artifact = az.analyze(
                 runs, out, stamp, CODE, screen_dir=None,
-                verify_code_commit=True, expected_raw_anchor=expected_anchor)
+                verify_code_commit=True, expected_raw_anchor=expected_anchor,
+                run_commit_verifier=_synthetic_run_commit_ok)
     _ANALYSIS_RUNS[str(Path(artifact).resolve())] = Path(runs)
     return artifact
 
