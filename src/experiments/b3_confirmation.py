@@ -28,6 +28,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import math
 import os
 import subprocess
 import sys
@@ -37,7 +38,13 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import experiments.b3_factor_pilot as bp
 from egglab.instance import synthetic_instance
-from experiments.b3_factor_screen import GENERATOR_HELD_FIXED_ARGUMENTS
+from experiments.b3_factor_screen import (
+    GENERATOR_HELD_FIXED_ARGUMENTS,
+    n_bounds as _screen_n_bounds,
+    necessity_assertion as _screen_necessity,
+    relevance as _screen_relevance,
+    witness as _screen_witness,
+)
 
 SCHEMA = "b3-confirmation-v1"
 RUN_MANIFEST_SCHEMA = "b3-confirmation-run-v1"
@@ -223,7 +230,7 @@ def _require(doc: dict, key: str, label: str):
     return doc[key]
 
 
-def _commit_is_ancestor(commit: str, label: str) -> None:
+def _commit_is_ancestor(commit: str, label: str, repo_root=REPO_ROOT) -> None:
     if (not isinstance(commit, str) or len(commit) != 40
             or not all(c in "0123456789abcdef" for c in commit)
             or commit == "0" * 40):
@@ -232,7 +239,7 @@ def _commit_is_ancestor(commit: str, label: str) -> None:
     try:
         resolved = subprocess.check_output(
             ["git", "rev-parse", "--verify", f"{commit}^{{commit}}"],
-            cwd=REPO_ROOT, stderr=subprocess.DEVNULL).decode().strip()
+            cwd=repo_root, stderr=subprocess.DEVNULL).decode().strip()
     except subprocess.CalledProcessError as exc:
         raise B3ConfirmationError(
             f"{label}: commit {commit} does not resolve") from exc
@@ -240,16 +247,72 @@ def _commit_is_ancestor(commit: str, label: str) -> None:
         raise B3ConfirmationError(f"{label}: commit resolves to {resolved}")
     if subprocess.run(
             ["git", "merge-base", "--is-ancestor", commit, "HEAD"],
-            cwd=REPO_ROOT).returncode != 0:
+            cwd=repo_root).returncode != 0:
         raise B3ConfirmationError(
             f"{label}: commit {commit} is not an ancestor of HEAD")
 
 
+def _require_finite_number(doc: dict, key: str, label: str) -> float:
+    value = _require(doc, key, label)
+    if isinstance(value, bool) or not isinstance(value, (int, float)):
+        raise B3ConfirmationError(f"{label} is not numeric")
+    if not math.isfinite(value):
+        raise B3ConfirmationError(f"{label} is not finite ({value!r})")
+    return value
+
+
+def _require_committed_artifact(raw: bytes, doc: dict, repo_root) -> str:
+    """CRITICAL 1: the artifact must be a TRACKED, COMMITTED blob at its
+    declared repository path whose committed bytes equal the on-disk bytes
+    EXACTLY.  A self-declared, uncommitted, loose, or byte-divergent artifact
+    is refused.
+
+    (The committed blob is read at the repository's ``HEAD`` rather than at
+    ``selection_code_commit``: an artifact that embeds its own commit SHA can
+    never be byte-identical to the blob in that very commit — a git fixed-point
+    does not exist — so ``selection_code_commit`` is verified as an ancestor
+    for code provenance, and the tracked-and-committed proof is taken against
+    the current committed tree.)"""
+    repo_path = _require(doc, "selection_artifact_path",
+                         "selection_artifact_path")
+    if not isinstance(repo_path, str) or not repo_path \
+            or repo_path.startswith("/") or ".." in Path(repo_path).parts:
+        raise B3ConfirmationError(
+            f"selection_artifact_path {repo_path!r} is not a safe "
+            "repository-relative path")
+    if subprocess.run(
+            ["git", "ls-files", "--error-unmatch", "--", repo_path],
+            cwd=repo_root, stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL).returncode != 0:
+        raise B3ConfirmationError(
+            f"selection artifact path {repo_path!r} is not a tracked file "
+            "(uncommitted artifacts are refused)")
+    try:
+        blob = subprocess.check_output(
+            ["git", "show", f"HEAD:{repo_path}"],
+            cwd=repo_root, stderr=subprocess.DEVNULL)
+    except subprocess.CalledProcessError as exc:
+        raise B3ConfirmationError(
+            f"selection artifact is not committed at HEAD:{repo_path!r}") \
+            from exc
+    if blob != raw:
+        raise B3ConfirmationError(
+            f"selection artifact bytes do not equal the committed blob at "
+            f"HEAD:{repo_path!r} (uncommitted or tampered)")
+    return repo_path
+
+
 def load_selection_artifact(path: str | os.PathLike, *,
-                            verify_commit: bool = True) -> dict:
+                            verify_commit: bool = True,
+                            repo_root=REPO_ROOT) -> dict:
     """Structurally validate a committed GO selection artifact and return
     {document, sha256, selected_factor, direction_sign}.  Every failure is a
-    hard refusal that names the field; there is no bypass."""
+    hard refusal that names the field; there is no bypass.
+
+    ``repo_root`` selects the git repository whose HEAD/ancestry and committed
+    blobs authorize the artifact (defaults to this checkout; tests point it at
+    a throwaway committed repository — the committed-bytes control still runs
+    in full, it is never relaxed)."""
     p = Path(path)
     refuse_pilot_runs_path(p)
     if not p.is_file() or p.is_symlink():
@@ -267,14 +330,24 @@ def load_selection_artifact(path: str | os.PathLike, *,
             f"selection state is {state!r}, not GO; confirmation is not "
             "authorized (INVALID/HALT, NO-GO, UNDER-RESOLVED refuse)")
 
+    # HIGH 5: campaign and baseline_level are mandatory (their absence used
+    # to pass through)
+    if _require(doc, "campaign", "campaign") != "b3-factor-pilot":
+        raise B3ConfirmationError(
+            f"campaign {doc.get('campaign')!r} != 'b3-factor-pilot'")
+
     factor = _require(doc, "selected_factor", "selected_factor")
     if factor not in bp.FROZEN_SELECTED_LEVELS:
         raise B3ConfirmationError(
             f"selected_factor {factor!r} is not a real factor with a frozen "
             "level")
     # direction sign is READ from the artifact, then validated against the
-    # frozen spec table (a mismatch is tampering)
+    # frozen spec table (a mismatch is tampering).  HIGH 5: a JSON bool must
+    # NOT be accepted as an integer sign (in Python True == 1).
     direction = _require(doc, "direction_sign", "direction_sign")
+    if type(direction) is bool or not isinstance(direction, int):
+        raise B3ConfirmationError(
+            f"direction_sign {direction!r} is not an integer sign")
     if direction != DIRECTION_SIGN[factor]:
         raise B3ConfirmationError(
             f"direction_sign {direction!r} disagrees with the frozen sign "
@@ -283,6 +356,14 @@ def load_selection_artifact(path: str | os.PathLike, *,
     if level != bp.FROZEN_SELECTED_LEVELS[factor]:
         raise B3ConfirmationError(
             "frozen_factor_level disagrees with the frozen screen level")
+    baseline = _require(doc, "baseline_level", "baseline_level")
+    expected_baseline = (bp.BASELINE_BATTERY_KWH
+                         if factor.startswith(("S1", "S2"))
+                         else bp.BASELINE_POWER_KW)
+    if baseline != expected_baseline:
+        raise B3ConfirmationError(
+            f"baseline_level {baseline!r} != frozen baseline "
+            f"{expected_baseline}")
 
     # the pilot decision the artifact freezes must itself be a valid GO
     tau = _require(doc, "tau_delta", "tau_delta")
@@ -293,14 +374,22 @@ def load_selection_artifact(path: str | os.PathLike, *,
         raise B3ConfirmationError(
             f"count_gate {count_gate!r} != frozen pilot gate {PILOT_COUNT_GATE}")
     count = _require(doc, "zero_excluding_count", "zero_excluding_count")
-    if not isinstance(count, int) or isinstance(count, bool) \
-            or count < PILOT_COUNT_GATE:
+    if not isinstance(count, int) or isinstance(count, bool):
         raise B3ConfirmationError(
-            f"zero_excluding_count {count!r} is below the pilot GO gate "
+            f"zero_excluding_count {count!r} is not an integer")
+    # HIGH 5: the pilot has exactly 12 matched cells per setting; a count
+    # outside [0, 12] is impossible, and GO requires >= the 9/12 gate
+    if not (0 <= count <= bp.N_BASELINE_CELLS):
+        raise B3ConfirmationError(
+            f"zero_excluding_count {count} is outside the possible "
+            f"[0, {bp.N_BASELINE_CELLS}] pilot cells")
+    if count < PILOT_COUNT_GATE:
+        raise B3ConfirmationError(
+            f"zero_excluding_count {count} is below the pilot GO gate "
             f"{PILOT_COUNT_GATE}")
-    med = _require(doc, "signed_median_midpoint", "signed_median_midpoint")
-    if not isinstance(med, (int, float)) or isinstance(med, bool) \
-            or not (med > TAU_DELTA):
+    med = _require_finite_number(doc, "signed_median_midpoint",
+                                 "signed_median_midpoint")
+    if not (med > TAU_DELTA):
         raise B3ConfirmationError(
             f"signed_median_midpoint {med!r} does not exceed tau_delta "
             f"{TAU_DELTA}; not a GO")
@@ -322,13 +411,15 @@ def load_selection_artifact(path: str | os.PathLike, *,
         raise B3ConfirmationError(
             "pilot.spec_sha256 differs from the frozen pilot spec hash")
     _commit_is_ancestor(pilot["analysis_code_commit"],
-                        "pilot.analysis_code_commit")
+                        "pilot.analysis_code_commit", repo_root)
+    selection_commit = _require(doc, "selection_code_commit",
+                                "selection_code_commit")
     if verify_commit:
-        _commit_is_ancestor(
-            _require(doc, "selection_code_commit", "selection_code_commit"),
-            "selection_code_commit")
-    else:
-        _require(doc, "selection_code_commit", "selection_code_commit")
+        _commit_is_ancestor(selection_commit, "selection_code_commit",
+                            repo_root)
+        # CRITICAL 1: the artifact must be a tracked, committed blob whose
+        # bytes equal the committed blob at its declared repo path
+        _require_committed_artifact(raw, doc, repo_root)
 
     # Task-2 amendment 1: frozen pilot raw-tree binding (validated against the
     # anchor, never recomputed from runs/b3_factor_pilot)
@@ -346,16 +437,10 @@ def load_selection_artifact(path: str | os.PathLike, *,
 
     # Task-2 amendment 2: boundary disclosure; a knife-edge decision needs a
     # human, never an automated launch (no override flag exists)
-    boundary_margin = _require(doc, "boundary_margin", "boundary_margin")
-    if not isinstance(boundary_margin, (int, float)) \
-            or isinstance(boundary_margin, bool):
-        raise B3ConfirmationError("boundary_margin is not numeric")
-    signed_full = _require(doc, "signed_median_full_precision",
+    # HIGH 5: numeric boundary fields must be finite (json allows NaN/Infinity)
+    _require_finite_number(doc, "boundary_margin", "boundary_margin")
+    _require_finite_number(doc, "signed_median_full_precision",
                            "signed_median_full_precision")
-    if not isinstance(signed_full, (int, float)) \
-            or isinstance(signed_full, bool):
-        raise B3ConfirmationError(
-            "signed_median_full_precision is not numeric")
     boundary_adjacent = _require(doc, "boundary_adjacent", "boundary_adjacent")
     if not isinstance(boundary_adjacent, bool):
         raise B3ConfirmationError("boundary_adjacent is not a boolean")
@@ -437,6 +522,63 @@ def build_cells(selected_factor: str) -> list[dict]:
     return cells
 
 
+def screen_instance(inst) -> dict:
+    """The generator-only structural screen (spec Section 4 / Appendix A),
+    reapplied to a FRESH instance: N1-N4 necessity/bounds, the policy-P1
+    witness feasibility, and R1/R2 relevance.  Pure, solver-free."""
+    nec = _screen_necessity(inst)
+    if not nec["ok"]:
+        return {"ok": False, "gate": "necessity"}
+    bounds = _screen_n_bounds(inst)
+    if not bounds["ok"]:
+        return {"ok": False, "gate": "bounds"}
+    w = _screen_witness(inst)
+    if not w["feasible"]:
+        return {"ok": False, "gate": "witness", "reason": w.get("reason")}
+    rel = _screen_relevance(inst, w["events"])
+    if not rel["ok"]:
+        return {"ok": False, "gate": ("r1" if not rel["r1"] else "r2")}
+    return {"ok": True, "gate": None}
+
+
+def screen_fresh_grid(selected_factor: str) -> dict:
+    """HIGH 4: reapply the frozen generator-only screen to ALL fresh
+    confirmation instances (24 physical: [S0, factor] x seeds x n).  Returns
+    per-instance pass/fail plus the frozen screen artifact SHA."""
+    results = []
+    all_pass = True
+    for setting in (BASELINE_SETTING, selected_factor):
+        battery, power = setting_params(setting)
+        for seed in CONFIRMATION_SEEDS:
+            for n in N_TRIPS:
+                inst = build_confirmation_instance(seed, n, battery, power)
+                res = screen_instance(inst)
+                all_pass = all_pass and res["ok"]
+                results.append({
+                    "setting": setting, "seed": seed, "n_trips": n,
+                    "ok": res["ok"], "first_failed_gate": res["gate"],
+                })
+    return {"screen_record_sha256": FROZEN_SCREEN_RECORD_SHA256,
+            "all_pass": all_pass, "results": results}
+
+
+def assert_fresh_screen_passes(selected_factor: str) -> dict:
+    """Refuse (DESIGN-NOT-FROZEN) if any fresh instance fails the screen,
+    before any submission — so seeds 32-37 are never spent on an invalid
+    frozen design."""
+    screen = screen_fresh_grid(selected_factor)
+    if not screen["all_pass"]:
+        failed = [r for r in screen["results"] if not r["ok"]]
+        first = failed[0]
+        raise B3ConfirmationError(
+            f"DESIGN-NOT-FROZEN: fresh instance setting={first['setting']} "
+            f"seed={first['seed']} n={first['n_trips']} failed the generator "
+            f"screen at gate {first['first_failed_gate']!r} "
+            f"({len(failed)} of {len(screen['results'])} failed); refusing to "
+            "spend confirmation seeds on an unfrozen design")
+    return screen
+
+
 def make_cell_instance(cell: dict):
     assert_confirmation_seed(cell["seed"])
     battery, power = setting_params(cell["setting"])
@@ -514,6 +656,10 @@ def build_run_manifest(selected_factor: str, selection: dict, *,
             f"run manifest backend {backend_name!r} is not GRB (Gurobi-only)")
     instance_hashes, market_rows = _recompute_hashes(selected_factor)
     _assert_hash_invariants(instance_hashes, market_rows)
+    # HIGH 4: the fresh-grid structural screen must pass before a manifest can
+    # exist; its per-instance outcome + artifact SHA are recorded (and the
+    # manifest cannot even be built for an unfrozen design)
+    fresh_screen = assert_fresh_screen_passes(selected_factor)
     return {
         "schema": RUN_MANIFEST_SCHEMA,
         "campaign": "b3-confirmation",
@@ -522,6 +668,7 @@ def build_run_manifest(selected_factor: str, selection: dict, *,
         "direction_sign": DIRECTION_SIGN[selected_factor],
         "frozen_factor_level": bp.FROZEN_SELECTED_LEVELS[selected_factor],
         "selection_artifact_sha256": selection["sha256"],
+        "fresh_screen": fresh_screen,
         "spec": {"path": SPEC_RELPATH,
                  "sha256": bp.sha256_file(REPO_ROOT / SPEC_RELPATH)},
         "screen_record_sha256": FROZEN_SCREEN_RECORD_SHA256,
@@ -593,8 +740,6 @@ def bind_job_id(out_dir, job_id: str) -> str:
     loaded = load_run_manifest(out_dir)
     manifest = loaded["manifest"]
     path = Path(out_dir) / JOB_FILENAME
-    if path.exists():
-        raise B3ConfirmationError(f"job binding already exists: {path}")
     import datetime
     doc = {
         "schema": JOB_SCHEMA,
@@ -605,9 +750,60 @@ def bind_job_id(out_dir, job_id: str) -> str:
         "submitted_utc": datetime.datetime.now(
             datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
     }
-    bp._atomic_write_bytes(
-        path, (json.dumps(doc, indent=2, sort_keys=True) + "\n").encode())
+    payload = (json.dumps(doc, indent=2, sort_keys=True) + "\n").encode()
+    # CRITICAL 3: bind ATOMICALLY and EXCLUSIVELY via O_EXCL — a second
+    # concurrent launcher fails to bind rather than overwriting, so two
+    # binders can never both release the same array.
+    try:
+        fd = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o644)
+    except FileExistsError as exc:
+        raise B3ConfirmationError(
+            f"job binding already exists: {path}") from exc
+    try:
+        with os.fdopen(fd, "wb") as handle:
+            handle.write(payload)
+            handle.flush()
+            os.fsync(handle.fileno())
+    except BaseException:
+        os.unlink(path)
+        raise
     return str(path)
+
+
+def load_job_binding(out_dir) -> dict:
+    path = Path(out_dir) / JOB_FILENAME
+    if not path.is_file() or path.is_symlink():
+        raise B3ConfirmationError(f"job binding missing: {path}")
+    job = json.loads(path.read_bytes())
+    if job.get("schema") != JOB_SCHEMA:
+        raise B3ConfirmationError("job binding schema mismatch")
+    return job
+
+
+def assert_worker_authorized(out_dir, run: dict) -> None:
+    """CRITICAL 3: a worker must prove it belongs to the bound, released array
+    before producing ANY evidence.  It requires a JOB.json whose job id equals
+    this task's ``SLURM_ARRAY_JOB_ID`` and whose run-manifest SHA matches the
+    on-disk manifest; a directly-submitted or stale array (or a manual run
+    outside the bound job) is refused without writing anything."""
+    job = load_job_binding(out_dir)
+    bound_job_id = str(job.get("job_id"))
+    array_job_id = os.environ.get("SLURM_ARRAY_JOB_ID")
+    if not array_job_id:
+        raise B3ConfirmationError(
+            "SLURM_ARRAY_JOB_ID is unset; a confirmation cell may run only as "
+            "a task of the bound, launcher-submitted array")
+    if array_job_id != bound_job_id:
+        raise B3ConfirmationError(
+            f"SLURM_ARRAY_JOB_ID {array_job_id} != bound job id "
+            f"{bound_job_id}; refusing a stale/foreign array")
+    if job.get("run_manifest_sha256") != run["sha256"]:
+        raise B3ConfirmationError(
+            "JOB.json run-manifest SHA != on-disk run manifest; refusing")
+    if job.get("selection_artifact_sha256") != run["manifest"].get(
+            "selection_artifact_sha256"):
+        raise B3ConfirmationError(
+            "JOB.json selection SHA != run manifest; refusing")
 
 
 # --------------------------------------------------------------------------
