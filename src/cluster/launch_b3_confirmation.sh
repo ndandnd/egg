@@ -39,14 +39,6 @@ if [[ ! -f "${SEL}" ]]; then
     exit 2
 fi
 
-SBATCH="${EGG_SBATCH:-sbatch}"
-SCANCEL="${EGG_SCANCEL:-scancel}"
-SCONTROL="${EGG_SCONTROL:-scontrol}"
-SQUEUE="${EGG_SQUEUE:-squeue}"
-SACCT="${EGG_SACCT:-sacct}"
-PILOT="${EGG_PILOT:-python experiments/run_b3_confirmation.py}"
-OUT="${EGG_RUN_OUT:-runs/b3_confirmation}"
-
 b3_verify_cancelled() {
     local job="$1" i state
     for i in 1 2 3 4 5; do
@@ -64,11 +56,33 @@ b3_verify_cancelled() {
     return 1
 }
 
-if [[ -z "${EGG_LAUNCH_SELFTEST:-}" ]]; then
-    if ! command -v "${SBATCH%% *}" >/dev/null 2>&1; then
+# CRITICAL 2: cluster-tool and driver indirection are permitted ONLY for
+# shell-level self-tests, and self-test mode is itself refused on any machine
+# where a real `sbatch` exists — so no environment hook can ever bypass a
+# guard on a cluster login node. In production the launcher invokes the real
+# driver by its literal path with no indirection.
+if [[ -n "${EGG_LAUNCH_SELFTEST:-}" ]]; then
+    if command -v sbatch >/dev/null 2>&1; then
+        echo "ERROR: EGG_LAUNCH_SELFTEST refused: a real sbatch is on PATH; hooks may never run on a cluster." >&2
+        exit 1
+    fi
+    SBATCH="${EGG_SBATCH:-sbatch}"
+    SCANCEL="${EGG_SCANCEL:-scancel}"
+    SCONTROL="${EGG_SCONTROL:-scontrol}"
+    SQUEUE="${EGG_SQUEUE:-squeue}"
+    SACCT="${EGG_SACCT:-sacct}"
+    PILOT="${EGG_PILOT:-python ${SRC_DIR}/experiments/run_b3_confirmation.py}"
+    OUT="${EGG_RUN_OUT:-runs/b3_confirmation}"
+else
+    if ! command -v sbatch >/dev/null 2>&1; then
         echo "ERROR: sbatch is unavailable; run from an interactive Unicorn login prompt." >&2
         exit 127
     fi
+    # literal, non-overridable tool + driver + output identities
+    SBATCH="sbatch"; SCANCEL="scancel"; SCONTROL="scontrol"
+    SQUEUE="squeue"; SACCT="sacct"
+    PILOT="python ${SRC_DIR}/experiments/run_b3_confirmation.py"
+    OUT="runs/b3_confirmation"
     export EGGLAB_REQUIRE_GRB=1
     source "${SRC_DIR}/cluster/unicorn_env.sh"
     if ! python -c "import sys; from egglab.solver import backend; sys.exit(0 if backend()=='GRB' else 1)"; then
@@ -118,8 +132,10 @@ if [[ "${N}" != "48" ]]; then
 fi
 CONC=12
 
+# submit HELD; thread the output dir to the worker so the launcher's binding
+# and the worker's evidence always target the SAME directory (CRITICAL 3)
 JOB="$(${SBATCH} --hold --parsable --array="0-$((N - 1))%${CONC}" \
-    --export=ALL,EGG_SELECTION_ARTIFACT="${SEL}" \
+    --export="ALL,EGG_SELECTION_ARTIFACT=${SEL},EGG_RUN_OUT=${OUT}" \
     cluster/submit_b3_confirmation.sub)"
 
 if ! ${PILOT} --selection-artifact "${SEL}" --bind-job "${JOB}" --out "${OUT}"; then
@@ -129,6 +145,37 @@ if ! ${PILOT} --selection-artifact "${SEL}" --bind-job "${JOB}" --out "${OUT}"; 
         echo "CRITICAL: could not confirm cancellation of HELD job ${JOB}; it remains HELD and cannot execute unbound. Manual cleanup required: scancel ${JOB}" >&2
     fi
     echo "MANIFEST.json preserved as incident evidence: ${OUT}/MANIFEST.json" >&2
+    exit 1
+fi
+
+# CRITICAL 2: before releasing the hold, assert the bind is real on disk:
+# MANIFEST.json and JOB.json exist, JOB.json names the EXACT submitted job id,
+# and its recorded run-manifest SHA equals the manifest file's hash and the
+# emitted SHA. Any failure cancels the held job and never releases it.
+if ! python3 - "${OUT}" "${JOB}" "${RUN_SHA}" <<'PYEOF'
+import hashlib, json, sys
+from pathlib import Path
+out, job, run_sha = sys.argv[1], sys.argv[2], sys.argv[3]
+man = Path(out) / "MANIFEST.json"
+jb = Path(out) / "JOB.json"
+if not man.is_file() or not jb.is_file():
+    sys.exit(11)
+try:
+    doc = json.loads(jb.read_bytes())
+except Exception:
+    sys.exit(12)
+if str(doc.get("job_id")) != str(job):
+    sys.exit(13)
+actual = hashlib.sha256(man.read_bytes()).hexdigest()
+if doc.get("run_manifest_sha256") != actual or actual != run_sha:
+    sys.exit(14)
+sys.exit(0)
+PYEOF
+then
+    echo "ERROR: pre-release verification failed for job ${JOB}; cancelling the held job (never releasing)." >&2
+    ${SCANCEL} "${JOB}" || true
+    b3_verify_cancelled "${JOB}" || true
+    echo "MANIFEST.json/JOB.json preserved as incident evidence in ${OUT}" >&2
     exit 1
 fi
 

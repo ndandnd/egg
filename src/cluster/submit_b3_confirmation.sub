@@ -3,9 +3,13 @@
 # cluster/launch_b3_confirmation.sh, which submits this array HELD, binds
 # JOB.json, and releases only after binding.
 #
-# The GO selection artifact path is threaded in by the launcher via
-# --export=ALL,EGG_SELECTION_ARTIFACT=...; each task re-validates the GO
-# gate and cross-checks the artifact SHA against the run manifest.
+# The GO selection artifact path AND the output directory are threaded in by
+# the launcher via --export=ALL,EGG_SELECTION_ARTIFACT=...,EGG_RUN_OUT=...;
+# each task re-validates the GO gate, cross-checks the artifact SHA against the
+# run manifest, and (in run_b3_confirmation.py) proves SLURM_ARRAY_JOB_ID
+# equals the bound JOB.json id before producing any evidence — so a directly
+# submitted or stale array (this file is intentionally not standalone-runnable)
+# writes nothing.
 #
 # Gurobi-only: EGGLAB_REQUIRE_GRB=1 forces GRB; a non-GRB fallback aborts.
 # Preemption safety: --requeue + atomic per-oracle-call checkpoints.
@@ -42,4 +46,5 @@ source "${WORK_DIR}/cluster/unicorn_env.sh"
 
 python experiments/run_b3_confirmation.py \
     --selection-artifact "${EGG_SELECTION_ARTIFACT}" \
-    --cell "${SLURM_ARRAY_TASK_ID}" --out runs/b3_confirmation
+    --cell "${SLURM_ARRAY_TASK_ID}" \
+    --out "${EGG_RUN_OUT:-runs/b3_confirmation}"
