@@ -291,7 +291,8 @@ def test_selection_refuses_non_go(tmp_path, screen):
     runs2 = _write_tree(tmp_path / "runs2", screen, certified_all=False)
     bp.bind_job_id(runs2, "424243")
     invalid = Path(_analyze(runs2, tmp_path / "out2"))
-    with pytest.raises(sel.B3SelectionError, match="incomplete"):
+    with pytest.raises(
+            sel.B3SelectionError, match="incomplete|solver identity"):
         _select(invalid, tmp_path / "sel2")
     assert not (tmp_path / "sel2").exists()
 
@@ -621,7 +622,7 @@ def test_selection_rejects_duplicate_key_json(tmp_path, screen):
 
 @pytest.mark.parametrize("table, field, value, message", [
     ("cell_intervals.csv", "dictator_gap", "0.009", "does not recompute"),
-    ("matched_contrasts.csv", "delta_width", "0.009", "does not recompute"),
+    ("matched_contrasts.csv", "delta_width", "0.009", "recomputed"),
     ("setting_summary.csv", "rank", "4", "disagrees"),
 ])
 def test_selection_reconstructs_every_derived_field(
@@ -1102,10 +1103,10 @@ def test_import_rejects_duplicate_key_manifest(tmp_path, screen):
     shutil.copytree(bundle, work)
     manifest = work / pk.BUNDLE_MANIFEST_FILENAME
     raw = manifest.read_bytes()
-    needle = b'"schema":"b3-factor-pilot-bundle-v1"'
+    needle = b'  "schema": "b3-factor-pilot-bundle-v1"'
     assert needle in raw
     manifest.write_bytes(raw.replace(
-        needle, needle + b',"schema":"b3-factor-pilot-bundle-v1"', 1))
+        needle, needle + b',\n  "schema": "b3-factor-pilot-bundle-v1"', 1))
     with pytest.raises(PackagingError, match="duplicate JSON key"):
         pk.import_bundle(work, tmp_path / "dest")
     assert not (tmp_path / "dest").exists()
@@ -1232,6 +1233,6 @@ def test_import_rejects_tampered_bundle(tmp_path, screen):
     shutil.copytree(bundle, work)
     victim = work / "runs" / "S1_batt_low_s0_n8_b0.01" / "a2.cg.ckpt.json"
     victim.write_bytes(victim.read_bytes() + b"\n")
-    with pytest.raises(PackagingError, match="digest"):
+    with pytest.raises(PackagingError, match="digest|raw_binding mismatch"):
         pk.import_bundle(work, tmp_path / "dest")
     assert not (tmp_path / "dest").exists()

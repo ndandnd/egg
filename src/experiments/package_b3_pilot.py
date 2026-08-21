@@ -584,6 +584,7 @@ def pack(runs_dir: str | os.PathLike, analysis_dir: str | os.PathLike,
     out_path = Path(out_base)
     if out_path.is_symlink():
         raise PackagingError(f"unsafe bundle output directory: {out_path}")
+    out_preexisted = out_path.exists()
     out_path.mkdir(parents=True, exist_ok=True)
     bundle_name = (
         f"b3_pilot-job{job_id}-"
@@ -706,6 +707,11 @@ def pack(runs_dir: str | os.PathLike, analysis_dir: str | os.PathLike,
     except BaseException as exc:
         if staging.exists():
             shutil.rmtree(staging, ignore_errors=True)
+        if not renamed and not out_preexisted and out_path.exists():
+            try:
+                out_path.rmdir()
+            except OSError:
+                pass
         if renamed and (destination / INCOMPLETE_MARKER).exists():
             # Preserve the guarded destination as explicit recovery evidence.
             if isinstance(exc, IncompletePublicationError):
@@ -765,6 +771,9 @@ def import_bundle(bundle_dir: str | os.PathLike,
                 raise PackagingError(
                     "bundle carries the incomplete-publication marker; "
                     "refusing")
+            if BUNDLE_COMPLETE_FILENAME not in top_level:
+                raise PackagingError(
+                    f"bundle {bundle} lacks the completion marker; refusing")
             raise PackagingError(
                 f"bundle top-level population differs: {sorted(top_level)}")
 
