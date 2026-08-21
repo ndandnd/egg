@@ -13,7 +13,7 @@ gh pr list --state open --limit 15
 for n in 37 45 47 48; do printf "#%s " $n; gh pr checks $n | head -1; done
 ```
 
-If `main` has moved past `ed8b06f`, read the intervening merges before trusting
+If `main` has moved past `e1a4e07`, read the intervening merges before trusting
 `01_STATE.md`.
 
 ## 1. Did a replication get launched? (no cluster needed to decide what it means)
@@ -120,8 +120,8 @@ The gate is `MIN_A6_CERTIFIED = 61`, `RATIO_BAR = 0.85`, `WIN_BAR = 38`, in
 In order. Do not skip a step to save time; each one exists because a review
 found a real defect at that step.
 
-1. **Merge PR #47** (submit-path fix). Green and clean. Nothing that re-runs the
-   pilot is safe without it.
+1. ~~Merge PR #47~~ **done** -- merged as `e1a4e07`. A pilot re-run pointed at a
+   fresh output directory is now safe.
 2. **Get PR #37 to a decision.** Either one more independent review by an agent
    that did not write it, or an explicit choice to stop hardening and merge on
    the bounded claim in `05_THREAT_MODEL.md`. Five rounds have happened; every
