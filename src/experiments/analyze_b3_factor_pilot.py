@@ -181,8 +181,14 @@ def cell_interval(ub_ch: float, lb_ch: float, z_d_ub: float,
     return interval
 
 
-def _load(path: Path):
-    return evidence.read_json_object_once(path, str(path))
+def _load(path: Path, label: str | None = None):
+    """Label errors with a RUN-ROOT-RELATIVE name.
+
+    The analyzer scores a frozen copy under a temporary directory, so an
+    absolute label would leak that path into published refusal records and
+    make artifact regeneration non-deterministic.
+    """
+    return evidence.read_json_object_once(path, label or path.name)
 
 
 def load_population(runs_dir: str | os.PathLike, screen: dict,
@@ -205,8 +211,8 @@ def load_population(runs_dir: str | os.PathLike, screen: dict,
             continue
         # malformed inputs are a structured INVALID/HALT, never a crash
         try:
-            ck = _load(cg_path)
-            dd = _load(d_path)
+            ck = _load(cg_path, f"{tag}/a2.cg.ckpt.json")
+            dd = _load(d_path, f"{tag}/dictator.ckpt.json")
         except evidence.EvidenceError as exc:
             problems.append(f"{tag}: {exc}")
             continue
@@ -512,10 +518,18 @@ def verify_run_commit(claimed, *, verifier=None) -> None:
         raise evidence.EvidenceError(
             "run_commit must be the full 40-character lowercase hexadecimal "
             f"SHA of a real commit; got {claimed!r}")
+    # A bare ``git`` inherits GIT_DIR/GIT_WORK_TREE, so an exported GIT_DIR can
+    # make a commit from a FOREIGN repository resolve here.  Unlike
+    # verify_analysis_code_commit there is no byte-compare backstop on this
+    # value, so pin the repository explicitly and scrub the git environment.
+    env = {k: v for k, v in os.environ.items() if not k.startswith("GIT_")}
+    base = ["git", "--git-dir", str(Path(REPO_ROOT) / ".git"),
+            "--work-tree", str(REPO_ROOT)]
     try:
         resolved = subprocess.check_output(
-            ["git", "rev-parse", "--verify", f"{claimed}^{{commit}}"],
-            cwd=REPO_ROOT, stderr=subprocess.DEVNULL).decode().strip()
+            base + ["rev-parse", "--verify", f"{claimed}^{{commit}}"],
+            cwd=REPO_ROOT, env=env,
+            stderr=subprocess.DEVNULL).decode().strip()
     except (subprocess.CalledProcessError, OSError) as exc:
         raise evidence.EvidenceError(
             f"run_commit {claimed} does not resolve to a commit object"
@@ -524,8 +538,8 @@ def verify_run_commit(claimed, *, verifier=None) -> None:
         raise evidence.EvidenceError(
             f"run_commit {claimed} resolves to {resolved}")
     if subprocess.run(
-            ["git", "merge-base", "--is-ancestor", claimed, "HEAD"],
-            cwd=REPO_ROOT).returncode != 0:
+            base + ["merge-base", "--is-ancestor", claimed, "HEAD"],
+            cwd=REPO_ROOT, env=env).returncode != 0:
         raise evidence.EvidenceError(
             f"run_commit {claimed} is not an ancestor of HEAD")
 
@@ -572,10 +586,12 @@ def _score_frozen_population(runs_dir, screen, screen_dir, *,
     )
     from experiments import audit_b3_factor_pilot as ad
 
-    def _halt(problems):
+    def _halt(problems, audit_sha=None, run_manifest=None):
+        """A refusal keeps whatever provenance was already established, so an
+        INVALID/HALT record still names the audited manifest and solver."""
         return ({"decision": {"state": "INVALID/HALT", "problems": problems},
                  "contrasts": [], "settings": {}, "cells": {}},
-                None, None, None)
+                audit_sha, None, run_manifest)
 
     with tempfile.TemporaryDirectory(prefix="b3-frozen-") as tmp:
         frozen_dir = Path(tmp) / "frozen"
@@ -589,6 +605,9 @@ def _score_frozen_population(runs_dir, screen, screen_dir, *,
             if pre:
                 raise evidence.EvidenceError(
                     "pre-analysis raw anchor mismatch: " + ", ".join(pre))
+            # TMPDIR is attacker/operator controlled; the A6 boundary applies
+            # to the frozen copy's location too, not just the inputs.
+            refuse_a6_paths(frozen_dir.parent)
             frozen = _freeze(runs_dir, frozen_dir)
             frozen_identity = anchor.snapshot_identity(
                 frozen, _tree_sha(frozen))
@@ -597,7 +616,17 @@ def _score_frozen_population(runs_dir, screen, screen_dir, *,
                 raise evidence.EvidenceError(
                     "frozen copy differs from the anchored population: "
                     + ", ".join(drift))
-        except (_PkgError, OSError, evidence.EvidenceError) as exc:
+            # Narrow the window in which the copy could be swapped: strip
+            # write permission from the tree we are about to score.  This is
+            # defence in depth, NOT the guarantee -- the guarantee is the
+            # post-scoring re-hash below.
+            for path in sorted(frozen_dir.rglob("*"), reverse=True):
+                try:
+                    path.chmod(0o500 if path.is_dir() else 0o400)
+                except OSError:
+                    pass
+        except (_PkgError, OSError, evidence.EvidenceError,
+                B3AnalysisError, bp.B3PilotError) as exc:
             return _halt([f"raw tree cannot be frozen: {exc}"])
 
         frozen_files = {row["path"]: row["sha256"] for row in frozen["files"]}
@@ -612,9 +641,11 @@ def _score_frozen_population(runs_dir, screen, screen_dir, *,
                      "contrasts": [], "settings": {}, "cells": {}},
                     audit_sha, None, None)
 
+        run_manifest_local = None
         try:
             run_manifest = evidence.read_json_object_once(
                 frozen_dir / bp.RUN_MANIFEST_FILENAME, "run MANIFEST.json")
+            run_manifest_local = run_manifest
             if verify_code_commit or run_commit_verifier is not None:
                 verify_run_commit(run_manifest.get("run_commit"),
                                   verifier=run_commit_verifier)
@@ -623,11 +654,25 @@ def _score_frozen_population(runs_dir, screen, screen_dir, *,
                 frozen_dir, screen, market_by_cell, run_manifest)
             result = analyze_population(pop)
 
+            # The frozen copy was hashed BEFORE the audit and the replay.
+            # Re-hash it now and require it to be unchanged, then bind to the
+            # re-hashed identity: otherwise raw_binding could attest to bytes
+            # other than the ones actually scored.
+            rescan = _snapshot(frozen_dir)
+            rescan_identity = anchor.snapshot_identity(
+                rescan, _tree_sha(rescan))
+            swapped = anchor.anchor_disagreements(rescan_identity, required)
+            if swapped or rescan_identity != frozen_identity:
+                raise evidence.EvidenceError(
+                    "frozen copy changed during scoring: "
+                    + ", ".join(swapped or ["identity drift"]))
+            frozen_files = {row["path"]: row["sha256"]
+                            for row in rescan["files"]}
             raw_binding = {
-                "raw_tree_sha256": raw_tree_sha,
-                "file_count": frozen["file_count"],
-                "directory_count": frozen["directory_count"],
-                "total_bytes": frozen["total_bytes"],
+                "raw_tree_sha256": rescan_identity["tree_sha256"],
+                "file_count": rescan["file_count"],
+                "directory_count": rescan["directory_count"],
+                "total_bytes": rescan["total_bytes"],
                 "manifest_sha256": frozen_files.get(bp.RUN_MANIFEST_FILENAME),
                 "job_id": None,
                 "job_sha256": None,
@@ -671,8 +716,10 @@ def _score_frozen_population(runs_dir, screen, screen_dir, *,
                 raise evidence.EvidenceError(
                     "live raw tree changed during scoring: "
                     + ", ".join(post))
-        except (_PkgError, OSError, evidence.EvidenceError) as exc:
-            return _halt([f"raw tree cannot be bound: {exc}"])
+        except (_PkgError, OSError, evidence.EvidenceError,
+                B3AnalysisError, bp.B3PilotError, ValueError, KeyError) as exc:
+            return _halt([f"raw tree cannot be bound: {exc}"],
+                         audit_sha=audit_sha, run_manifest=run_manifest_local)
 
         return result, audit_sha, raw_binding, run_manifest
 

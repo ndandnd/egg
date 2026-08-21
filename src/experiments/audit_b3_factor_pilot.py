@@ -32,8 +32,14 @@ import experiments.b3_pilot_anchor as anchor
 import experiments.b3_pilot_evidence as evidence
 
 
-def _load(path: Path):
-    return evidence.read_json_object_once(path, str(path))
+def _load(path: Path, label: str | None = None):
+    """Label errors with a RUN-ROOT-RELATIVE name.
+
+    The analyzer scores a frozen copy under a temporary directory, so an
+    absolute label would leak that path into published refusal records and
+    make artifact regeneration non-deterministic.
+    """
+    return evidence.read_json_object_once(path, label or path.name)
 
 
 def _validate_manifest(runs: Path, screen: dict, problems: list) -> dict | None:
@@ -163,8 +169,8 @@ def audit(runs_dir: str | os.PathLike,
                     "run/manifest/commit/screen/market binding")
 
         try:
-            ck = _load(cg_path)
-            dd = _load(d_path)
+            ck = _load(cg_path, f"{tag}/a2.cg.ckpt.json")
+            dd = _load(d_path, f"{tag}/dictator.ckpt.json")
         except evidence.EvidenceError as exc:
             problems.append(f"{tag}: {exc}")
             continue

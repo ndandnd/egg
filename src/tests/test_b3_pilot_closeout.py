@@ -9,6 +9,7 @@ import os
 import shutil
 import subprocess
 import sys
+import tempfile
 from pathlib import Path
 from unittest import mock
 
@@ -1394,3 +1395,64 @@ def test_mutation_after_scoring_before_publication_is_caught(tmp_path,
     assert decision["state"] == "INVALID/HALT"
     assert any("live raw tree changed during scoring" in p
                for p in decision["problems"])
+
+
+def test_frozen_copy_swapped_during_scoring_is_caught(tmp_path, screen):
+    """The frozen copy is hashed before the audit, so it must be re-hashed
+    afterwards: otherwise raw_binding could attest to bytes other than the
+    ones actually scored."""
+    runs = _go_tree(tmp_path, screen)
+    anchor_before = _synthetic_anchor(runs)
+    real_audit = az_audit.audit
+
+    def tamper(runs_dir, screen_dir=None, *a, **k):
+        out = real_audit(runs_dir, screen_dir, *a, **k)
+        frozen = Path(runs_dir)
+        target = frozen / "MANIFEST.json"
+        frozen.chmod(0o700)          # the copy is read-only; an attacker would
+        target.chmod(0o600)          # have to undo that, so the probe does too
+        target.write_bytes(target.read_bytes() + b" ")
+        return out
+
+    with mock.patch.object(az, "verify_analysis_code_commit",
+                           return_value=True), \
+            mock.patch.object(az_audit, "audit", tamper):
+        out = az.analyze(
+            runs, tmp_path / "out", STAMP, CODE, screen_dir=None,
+            verify_code_commit=True, expected_raw_anchor=anchor_before,
+            run_commit_verifier=_synthetic_run_commit_ok)
+    decision = json.loads((Path(out) / "DECISION.json").read_text())
+    assert decision["state"] == "INVALID/HALT"
+    assert any("frozen copy changed during scoring" in p
+               for p in decision["problems"])
+    assert not (Path(out) / "cell_intervals.csv").exists()
+
+
+def test_refusal_records_are_deterministic_and_leak_no_temp_path(tmp_path,
+                                                                 screen):
+    """A refusal must regenerate byte-identically and must not name the
+    temporary frozen tree: scoring happens on a copy under TMPDIR, so an
+    absolute label would leak it and break regeneration."""
+    runs = _go_tree(tmp_path, screen)
+    bad = Path(runs) / "S0_baseline_s0_n8_b0.01" / "a2.cg.ckpt.json"
+    bad.write_text("{ not json")
+    anchor_after = _synthetic_anchor(runs)
+
+    def once(stamp, out_root):
+        with mock.patch.object(az, "verify_analysis_code_commit",
+                               return_value=True):
+            return Path(az.analyze(
+                runs, out_root, stamp, CODE, screen_dir=None,
+                verify_code_commit=True, expected_raw_anchor=anchor_after,
+                run_commit_verifier=_synthetic_run_commit_ok))
+
+    first = once(STAMP, tmp_path / "out1")
+    second = once(STAMP, tmp_path / "out2")
+    decision = json.loads((first / "DECISION.json").read_text())
+    assert decision["state"] == "INVALID/HALT"
+    blob = json.dumps(decision)
+    assert "b3-frozen-" not in blob and tempfile.gettempdir() not in blob
+    assert any("S0_baseline_s0_n8_b0.01/a2.cg.ckpt.json" in p
+               for p in decision["problems"])
+    for name in ("MANIFEST.json", "DECISION.json", "SUMMARY.md"):
+        assert (first / name).read_bytes() == (second / name).read_bytes(), name
