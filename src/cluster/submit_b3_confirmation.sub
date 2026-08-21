@@ -1,0 +1,45 @@
+#!/bin/bash
+# B3 fresh-seed confirmation array (48 cells, A2 only). Launch via
+# cluster/launch_b3_confirmation.sh, which submits this array HELD, binds
+# JOB.json, and releases only after binding.
+#
+# The GO selection artifact path is threaded in by the launcher via
+# --export=ALL,EGG_SELECTION_ARTIFACT=...; each task re-validates the GO
+# gate and cross-checks the artifact SHA against the run manifest.
+#
+# Gurobi-only: EGGLAB_REQUIRE_GRB=1 forces GRB; a non-GRB fallback aborts.
+# Preemption safety: --requeue + atomic per-oracle-call checkpoints.
+#
+#SBATCH --job-name=egg-b3-confirmation
+#SBATCH --output=slurm-%x-%A_%a.out
+#SBATCH --mail-type=END,FAIL,REQUEUE
+#SBATCH --mail-user=nc437@cornell.edu
+#SBATCH --requeue
+#SBATCH --array=0-47%12
+#SBATCH --cpus-per-task=4
+#SBATCH --mem=8G
+#SBATCH --time=24:00:00
+
+set -euo pipefail
+SUBMIT_DIR="${SLURM_SUBMIT_DIR:-$(pwd)}"
+if [[ -f "${SUBMIT_DIR}/experiments/run_b3_confirmation.py" ]]; then
+    WORK_DIR="${SUBMIT_DIR}"
+elif [[ -f "${SUBMIT_DIR}/src/experiments/run_b3_confirmation.py" ]]; then
+    WORK_DIR="${SUBMIT_DIR}/src"
+else
+    echo "ERROR: could not locate the egg src directory from ${SUBMIT_DIR}" >&2
+    exit 1
+fi
+cd "${WORK_DIR}"
+
+if [[ -z "${EGG_SELECTION_ARTIFACT:-}" ]]; then
+    echo "ERROR: EGG_SELECTION_ARTIFACT is not set; the launcher must export it." >&2
+    exit 1
+fi
+
+export EGGLAB_REQUIRE_GRB=1
+source "${WORK_DIR}/cluster/unicorn_env.sh"
+
+python experiments/run_b3_confirmation.py \
+    --selection-artifact "${EGG_SELECTION_ARTIFACT}" \
+    --cell "${SLURM_ARRAY_TASK_ID}" --out runs/b3_confirmation
