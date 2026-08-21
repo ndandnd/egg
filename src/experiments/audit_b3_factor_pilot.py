@@ -8,8 +8,8 @@ rebuild from the frozen screen at the manifest's own commit + solver
 identity), and that every cell is cross-bound to that manifest, the run
 commit, the frozen screen, its instance/market hashes, its solver
 identity, and its matched dictator's ``z_d_ub``/``tol_d`` and recorded
-endpoints.  The full column-generation sanity battery is delegated to
-``experiments.audit_runs._cg_sane`` (the production B2/A2 audit).
+endpoints.  Audit and analyzer use the same primitive replay in
+``experiments.b3_pilot_evidence``; neither trusts bound histories or outcomes.
 
 Refusals (fail-closed): any A6 method/dir, seed >= 16, wrong cell count,
 factor drift, missing/tampered run manifest or cell-identity sidecar,
@@ -19,8 +19,7 @@ solver, a non-OPTIMAL/unconverged dictator, or an uncertified A2 cell.
 from __future__ import annotations
 
 import argparse
-import json
-import math
+import hashlib
 import os
 import sys
 from collections import Counter
@@ -29,30 +28,56 @@ from pathlib import Path
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import experiments.b3_factor_pilot as bp
-from experiments.audit_runs import _cg_sane
+import experiments.b3_pilot_anchor as anchor
+import experiments.b3_pilot_evidence as evidence
 
 
-def _load(path: Path):
-    with open(path) as handle:
-        return json.load(handle)
+def _load(path: Path, label: str | None = None,
+          expected_sha256: str | None = None):
+    """Label errors with a RUN-ROOT-RELATIVE name.
+
+    The analyzer scores a frozen copy under a temporary directory, so an
+    absolute label would leak that path into published refusal records and
+    make artifact regeneration non-deterministic.
+    """
+    return evidence.read_json_object_once(
+        path, label or path.name, expected_sha256=expected_sha256)
 
 
-def _finite(x) -> bool:
-    return (isinstance(x, (int, float)) and not isinstance(x, bool)
-            and math.isfinite(x))
-
-
-def _validate_manifest(runs: Path, screen: dict, problems: list) -> dict | None:
+def _validate_manifest(runs: Path, screen: dict, problems: list,
+                       digests: dict | None = None) -> dict | None:
     """Load the run manifest and prove it is authentic by rebuilding it
     byte-for-byte from the frozen screen at its declared commit + solver
     identity.  Returns {manifest, sha256, market_by_cell} or None."""
+    path = runs / bp.RUN_MANIFEST_FILENAME
     try:
-        loaded = bp.load_run_manifest(runs)
-    except bp.B3PilotError as exc:
+        raw = evidence.read_regular_bytes_once(
+            path, "run MANIFEST.json",
+            expected_sha256=(digests or {}).get(bp.RUN_MANIFEST_FILENAME))
+        manifest = evidence.strict_json_loads(raw, "run MANIFEST.json")
+        if not isinstance(manifest, dict):
+            raise evidence.EvidenceError(
+                "run MANIFEST.json: JSON root is not an object")
+    except evidence.EvidenceError as exc:
         problems.append(f"run manifest: {exc}")
         return None
-    manifest = loaded["manifest"]
+    if raw != bp.canonical_manifest_bytes(manifest):
+        problems.append(
+            "run manifest is not canonical byte-for-byte JSON (tampered)")
+        return None
+    manifest_sha = hashlib.sha256(raw).hexdigest()
+    if manifest.get("schema") != bp.RUN_MANIFEST_SCHEMA:
+        problems.append("run manifest schema mismatch")
+        return None
     solver = manifest.get("solver") or {}
+    run_spec_sha = (manifest.get("spec") or {}).get("sha256")
+    current_spec_sha = bp.sha256_file(bp.REPO_ROOT / bp.SPEC_RELPATH)
+    if run_spec_sha not in {
+            anchor.FROZEN_RUN_SPEC_SHA256, current_spec_sha}:
+        problems.append(
+            "run manifest spec SHA is neither the frozen run identity nor "
+            "the current outcome-blind amendment")
+        return None
     try:
         rebuilt = bp.build_run_manifest(
             screen, git_commit=manifest.get("run_commit", ""),
@@ -61,6 +86,10 @@ def _validate_manifest(runs: Path, screen: dict, problems: list) -> dict | None:
     except bp.B3PilotError as exc:
         problems.append(f"run manifest not reproducible: {exc}")
         return None
+    # The immutable run predates the outcome-blind documentation amendment.
+    # Preserve its exact recorded spec identity while rebuilding all other
+    # manifest fields from current frozen code.
+    rebuilt["spec"]["sha256"] = run_spec_sha
     if bp.canonical_manifest_bytes(rebuilt) != bp.canonical_manifest_bytes(
             manifest):
         problems.append(
@@ -69,25 +98,38 @@ def _validate_manifest(runs: Path, screen: dict, problems: list) -> dict | None:
         return None
     if manifest["screen"]["record_sha256"] != screen["record_sha256"]:
         problems.append("run manifest screen SHA != frozen screen")
-    if manifest["spec"]["sha256"] != bp.sha256_file(
-            bp.REPO_ROOT / bp.SPEC_RELPATH):
-        problems.append("run manifest spec SHA != committed spec")
     if manifest.get("counts") != bp.counts():
         problems.append("run manifest counts mismatch")
-    return {"manifest": manifest, "sha256": loaded["sha256"],
+    return {"manifest": manifest, "sha256": manifest_sha,
             "market_by_cell": bp.market_hash_by_cell(manifest)}
 
 
 def audit(runs_dir: str | os.PathLike,
-          screen_dir: str | os.PathLike | None = None) -> dict:
-    """Return {ok, problems, report, certified, dictators, per_setting}."""
+          screen_dir: str | os.PathLike | None = None,
+          expected_digests: dict | None = None) -> dict:
+    """Return {ok, problems, report, certified, dictators, per_setting}.
+
+    ``expected_digests`` maps run-root-relative paths to SHA-256 digests from
+    the caller's frozen inventory.  When supplied, every file the audit
+    consumes is digest-checked in the same read that parses it and must be
+    present in the inventory: verifying a path afterwards cannot detect
+    substitute-then-restore, so authentication has to happen at consumption.
+    """
     screen = bp.load_frozen_screen(screen_dir)
     runs = Path(runs_dir)
     problems: list[str] = []
     if not runs.is_dir():
         raise bp.B3PilotError(f"runs dir does not exist: {runs}")
 
-    run = _validate_manifest(runs, screen, problems)
+    if expected_digests is not None \
+            and bp.RUN_MANIFEST_FILENAME not in expected_digests:
+        # Supplying a map that omits the root manifest would silently disable
+        # its authentication, which is worse than supplying no map at all.
+        raise bp.B3PilotError(
+            "expected_digests omits "
+            f"{bp.RUN_MANIFEST_FILENAME}; an incomplete inventory would "
+            "silently disable authentication")
+    run = _validate_manifest(runs, screen, problems, expected_digests)
     market_by_cell = run["market_by_cell"] if run else {}
     manifest = run["manifest"] if run else {}
     manifest_sha = run["sha256"] if run else None
@@ -128,96 +170,71 @@ def audit(runs_dir: str | os.PathLike,
             continue
 
         # --- cell-identity sidecar (exact run/manifest/commit binding) ------
-        if not id_path.is_file():
+        if not id_path.is_file() or id_path.is_symlink():
             problems.append(f"{tag}: missing cell-identity sidecar")
         elif run is not None:
             expected_identity = bp.cell_identity(
                 cell, screen, market_hash=expected_market,
                 run_manifest_sha256=manifest_sha, run_commit=run_commit,
                 mip_gap=mip_gap, backend_name=backend_name)
-            if id_path.read_bytes() != bp.canonical_cell_identity_bytes(
+            try:
+                id_rel = f"{tag}/{bp.CELL_IDENTITY_FILENAME}"
+                if expected_digests is not None \
+                        and id_rel not in expected_digests:
+                    raise evidence.EvidenceError(
+                        f"{tag}: cell-identity sidecar is absent from the "
+                        "frozen inventory")
+                identity_bytes = evidence.read_regular_bytes_once(
+                    id_path, f"{tag}: cell-identity sidecar",
+                    expected_sha256=(expected_digests or {}).get(id_rel))
+            except evidence.EvidenceError as exc:
+                problems.append(str(exc))
+                identity_bytes = None
+            if identity_bytes != bp.canonical_cell_identity_bytes(
                     expected_identity):
                 problems.append(
                     f"{tag}: cell-identity sidecar does not match the expected "
                     "run/manifest/commit/screen/market binding")
 
-        ck = _load(cg_path)
-        dd = _load(d_path)
+        try:
+            cg_rel = f"{tag}/a2.cg.ckpt.json"
+            d_rel = f"{tag}/dictator.ckpt.json"
+            if expected_digests is not None and (
+                    cg_rel not in expected_digests
+                    or d_rel not in expected_digests):
+                problems.append(
+                    f"{tag}: checkpoint absent from the frozen inventory")
+                continue
+            ck = _load(cg_path, cg_rel,
+                       (expected_digests or {}).get(cg_rel))
+            dd = _load(d_path, d_rel,
+                       (expected_digests or {}).get(d_rel))
+        except evidence.EvidenceError as exc:
+            problems.append(f"{tag}: {exc}")
+            continue
         ident = ck.get("identity") or {}
         method = ident.get("method", "a2")
         if str(method).lower().startswith("a6"):
             raise bp.B3PilotError(f"{tag}: A6 method {method!r} in a B3 cell")
-        if method != bp.METHOD:
-            problems.append(f"{tag}: method {method!r} != a2")
-        if ident.get("instance_hash") != expected_hash:
-            problems.append(f"{tag}: A2 instance hash != frozen screen (drift)")
-        if expected_market is None:
-            problems.append(f"{tag}: no market hash in run manifest")
-        elif ident.get("market_hash") != expected_market:
-            problems.append(
-                f"{tag}: A2 market hash {ident.get('market_hash')} != manifest "
-                f"{expected_market}")
-        for k, want in (("epsilon", bp.EPSILON), ("budget", bp.BUDGET),
-                        ("tol_d", bp.TOL_D)):
-            if ident.get(k) != want:
-                problems.append(f"{tag}: {k} {ident.get(k)} != {want}")
-        if (ident.get("solver") or {}).get("backend") != "GRB":
-            problems.append(
-                f"{tag}: A2 solver backend "
-                f"{(ident.get('solver') or {}).get('backend')!r} != GRB")
-
-        for err in _cg_sane(ck):
-            problems.append(f"{tag}: {err}")
-
-        # --- CG <-> dictator cross-binding ---------------------------------
-        d_ident = dd.get("identity") or {}
-        z_d_ub = dd.get("z_d_ub")
-        z_d_lb = dd.get("z_d_lb")
-        if not _finite(ident.get("z_d_ub")) or not _finite(z_d_ub):
-            problems.append(f"{tag}: nonfinite z_d_ub (CG/dictator)")
-        elif abs(ident["z_d_ub"] - z_d_ub) > 1e-12:
-            problems.append(
-                f"{tag}: CG z_d_ub {ident['z_d_ub']} != dictator z_d_ub "
-                f"{z_d_ub}")
-        if ident.get("tol_d") != d_ident.get("tol_d"):
-            problems.append(f"{tag}: CG tol_d != dictator tol_d")
-        if d_ident.get("instance_hash") != expected_hash:
-            problems.append(f"{tag}: dictator instance hash != frozen screen")
-        if expected_market is not None and \
-                d_ident.get("market_hash") != expected_market:
-            problems.append(f"{tag}: dictator market hash != manifest")
-        if d_ident.get("screen_record_sha256") != screen["record_sha256"]:
-            problems.append(f"{tag}: dictator screen SHA != frozen screen")
-        if run is not None and d_ident.get("run_manifest_sha256") != manifest_sha:
-            problems.append(f"{tag}: dictator run-manifest SHA != run manifest")
-        if run is not None and d_ident.get("run_commit") != run_commit:
-            problems.append(f"{tag}: dictator run commit != run manifest")
-        if d_ident.get("setting") != cell["setting"]:
-            problems.append(f"{tag}: dictator setting != cell setting")
-
-        # dictator recorded endpoints
-        if not _finite(z_d_lb):
-            problems.append(f"{tag}: dictator z_d_lb missing/nonfinite")
-        else:
-            adaptive_lb = (dd.get("adaptive") or {}).get("adaptive_lb")
-            if not _finite(adaptive_lb) or abs(adaptive_lb - z_d_lb) > 1e-9:
-                problems.append(
-                    f"{tag}: dictator z_d_lb != recorded adaptive_lb")
-        if not (dd.get("adaptive") or {}).get("adaptive_converged"):
-            problems.append(f"{tag}: dictator adaptive certification unconverged")
-        elif dd.get("status") != "OPTIMAL":
-            problems.append(f"{tag}: dictator status {dd.get('status')} != OPTIMAL")
-        else:
-            dictators += 1
-
-        oc = ck.get("outcome") or {}
-        if oc.get("type") == "certified" and oc.get("certified"):
+        if run is None or expected_market is None:
+            problems.append(f"{tag}: no authentic run-manifest identity")
+            continue
+        replayed, replay_problems = evidence.replay_cell_evidence(
+            ck,
+            dd,
+            cell=cell,
+            expected_instance_hash=expected_hash,
+            expected_market_hash=expected_market,
+            screen_record_sha256=screen["record_sha256"],
+            run_manifest_sha256=manifest_sha,
+            run_commit=run_commit,
+            manifest_solver=manifest.get("solver") or {},
+        )
+        if replay_problems:
+            problems.extend(replay_problems)
+        elif replayed is not None:
             certified += 1
-        else:
-            problems.append(
-                f"{tag}: A2 not certified within budget "
-                f"(type={oc.get('type')}, certified={oc.get('certified')}) "
-                "-- INVALID/HALT, not a scientific null")
+            dictators += 1
         per_setting[cell["setting"]] += 1
 
     complete_cells = len([c for c in expected
