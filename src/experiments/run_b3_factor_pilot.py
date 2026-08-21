@@ -210,9 +210,20 @@ def main():
                     help="write the canonical Section-7 run manifest (GRB only)")
     ap.add_argument("--bind-job", default=None,
                     help="record the submitted Slurm job id against the manifest")
+    ap.add_argument("--launch-token", default=None,
+                    help="launcher nonce used only for bind/verify modes")
+    ap.add_argument("--verify-bound-job", default=None,
+                    help="re-read JOB/manifest before releasing this job id")
+    ap.add_argument("--validate-run-out", action="store_true",
+                    help="validate --out and print it without other work")
     ap.add_argument("--cell", type=int, default=None)
     ap.add_argument("--all", action="store_true")
     args = ap.parse_args()
+    args.out = bp.validate_run_out(args.out)
+
+    if args.validate_run_out:
+        print(args.out)
+        return
 
     cells = bp.build_cells()
 
@@ -228,8 +239,20 @@ def main():
         return
 
     if args.bind_job is not None:
-        path = bp.bind_job_id(args.out, args.bind_job)
+        if args.launch_token is None:
+            ap.error("--bind-job requires --launch-token")
+        path = bp.bind_job_id(args.out, args.bind_job, args.launch_token)
         print(f"JOB_BOUND={path}")
+        return
+
+    if args.verify_bound_job is not None:
+        if args.launch_token is None:
+            ap.error("--verify-bound-job requires --launch-token")
+        run = bp.load_run_manifest(args.out)
+        bp.assert_bound_job(
+            args.out, run, job_id=args.verify_bound_job,
+            launch_token=args.launch_token)
+        print(f"JOB_VERIFIED={args.verify_bound_job}")
         return
 
     screen = bp.load_frozen_screen(args.screen_dir)
@@ -283,6 +306,9 @@ def main():
             "under a different code commit than the manifest was emitted for")
     if run["manifest"]["screen"]["record_sha256"] != screen["record_sha256"]:
         raise bp.B3PilotError("run manifest screen SHA != frozen screen")
+    # Defense in depth: no cell may create output unless its immutable
+    # JOB.json + digest, manifest, array id, and launch token all agree.
+    bp.assert_worker_authorized(args.out, run)
 
     if args.cell is not None:
         if not (0 <= args.cell < len(cells)):

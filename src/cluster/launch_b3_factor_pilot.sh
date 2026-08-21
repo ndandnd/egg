@@ -31,15 +31,26 @@ SRC_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 REPO_DIR="$(cd "${SRC_DIR}/.." && pwd)"
 cd "${SRC_DIR}"
 
-# Cluster tools and the pilot driver are overridable for shell-level tests;
-# they default to the real tools in production.
-SBATCH="${EGG_SBATCH:-sbatch}"
-SCANCEL="${EGG_SCANCEL:-scancel}"
-SCONTROL="${EGG_SCONTROL:-scontrol}"
-SQUEUE="${EGG_SQUEUE:-squeue}"
-SACCT="${EGG_SACCT:-sacct}"
-PILOT="${EGG_PILOT:-python experiments/run_b3_factor_pilot.py}"
 OUT="${EGG_RUN_OUT:-runs/b3_factor_pilot}"
+
+# Cluster tools and the pilot driver are overridable only behind the explicit
+# shell-test marker. Production identities are literal and non-overridable.
+if [[ -n "${EGG_LAUNCH_SELFTEST:-}" ]]; then
+    if command -v sbatch >/dev/null 2>&1 || [[ -n "${SLURM_CLUSTER_NAME:-}" ]]; then
+        echo "ERROR: EGG_LAUNCH_SELFTEST refused where a scheduler is reachable." >&2
+        exit 1
+    fi
+    SBATCH="${EGG_SBATCH:-sbatch}"
+    SCANCEL="${EGG_SCANCEL:-scancel}"
+    SCONTROL="${EGG_SCONTROL:-scontrol}"
+    SQUEUE="${EGG_SQUEUE:-squeue}"
+    SACCT="${EGG_SACCT:-sacct}"
+    PILOT="${EGG_PILOT:-python experiments/run_b3_factor_pilot.py}"
+else
+    SBATCH="sbatch"; SCANCEL="scancel"; SCONTROL="scontrol"
+    SQUEUE="squeue"; SACCT="sacct"
+    PILOT="python experiments/run_b3_factor_pilot.py"
+fi
 
 # Verify a cancelled job has actually left the queue (squeue) or shows a
 # CANCELLED state (sacct); used only on the bind-failure recovery path.
@@ -81,6 +92,11 @@ if [[ -z "${EGG_LAUNCH_SELFTEST:-}" ]]; then
     fi
 fi
 
+# NEW #47: EGG_RUN_OUT remains explicitly threaded to every array task, but
+# only a control-free relative child of src/runs is representable in Slurm's
+# comma-delimited --export grammar.
+OUT="$(${PILOT} --validate-run-out --out "${OUT}")"
+
 # --- FRESH run dir: allow only an empty dir or a lone regular MANIFEST.json --
 if [[ -e "${OUT}/JOB.json" ]]; then
     echo "ERROR: ${OUT}/JOB.json already exists; a job was already submitted. Refusing." >&2
@@ -118,15 +134,27 @@ if [[ "${N}" != "60" ]]; then
     exit 1
 fi
 CONC=12  # concurrency capped at %12
+LAUNCH_TOKEN="$(python3 -c 'import secrets; print(secrets.token_hex(32))')"
+export EGG_LAUNCH_TOKEN="${LAUNCH_TOKEN}"
 
 # Submit HELD: the array cannot execute until it is explicitly released, so
-# there is no window in which an unbound array could run.
-JOB="$(${SBATCH} --hold --parsable --array="0-$((N - 1))%${CONC}" cluster/submit_b3_factor_pilot.sub)"
+# there is no window in which an unbound array could run. The resolved run
+# directory is propagated EXPLICITLY on the sbatch line so the array writes
+# where every guard above looked, regardless of the site's default export
+# policy (which may be --export=NONE).
+JOB_RAW="$(${SBATCH} --hold --parsable \
+    --export="ALL,EGG_RUN_OUT=${OUT}" \
+    --array="0-$((N - 1))%${CONC}" cluster/submit_b3_factor_pilot.sub)"
+if [[ ! "${JOB_RAW}" =~ ^[1-9][0-9]{0,17}(;[A-Za-z0-9._-]+)?$ ]]; then
+    echo "CRITICAL: sbatch returned a noncanonical job id ${JOB_RAW@Q}; refusing to bind or release." >&2
+    exit 1
+fi
+JOB="${JOB_RAW%%;*}"
 
 # Bind the job id to the manifest SHA. If binding fails for ANY reason, cancel
 # the exact held job and NEVER release it. Because the job was submitted held,
 # it cannot execute unbound even if the cancellation cannot be confirmed.
-if ! ${PILOT} --bind-job "${JOB}" --out "${OUT}"; then
+if ! ${PILOT} --bind-job "${JOB}" --launch-token "${LAUNCH_TOKEN}" --out "${OUT}"; then
     echo "ERROR: --bind-job failed for job ${JOB}; cancelling the held job (never releasing)." >&2
     ${SCANCEL} "${JOB}" || true
     if ! b3_verify_cancelled "${JOB}"; then
@@ -136,7 +164,17 @@ if ! ${PILOT} --bind-job "${JOB}" --out "${OUT}"; then
     exit 1
 fi
 
-# Binding succeeded -> release the hold so the bound array can run.
+# Re-read and authenticate the immutable-by-mode binding + digest and the
+# manifest immediately before release. A worker repeats these checks.
+if ! ${PILOT} --verify-bound-job "${JOB}" \
+        --launch-token "${LAUNCH_TOKEN}" --out "${OUT}"; then
+    echo "ERROR: pre-release JOB/manifest authentication failed for ${JOB}; cancelling held job." >&2
+    ${SCANCEL} "${JOB}" || true
+    b3_verify_cancelled "${JOB}" || true
+    exit 1
+fi
+
+# Binding succeeded and was re-authenticated -> release the hold.
 if ! ${SCONTROL} release "${JOB}"; then
     echo "ERROR: scontrol release failed for job ${JOB}; cancelling the still-held bound job." >&2
     ${SCANCEL} "${JOB}" || true

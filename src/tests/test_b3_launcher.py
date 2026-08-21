@@ -13,6 +13,7 @@ by stubs that append to a single ORDERED event log, proving:
 - a lone regular MANIFEST.json is reused and submitted.
 """
 import os
+import shutil
 import stat
 import subprocess
 import sys
@@ -20,8 +21,11 @@ from pathlib import Path
 
 import pytest
 
+import experiments.b3_factor_pilot as bp
+
 REPO_ROOT = Path(__file__).resolve().parents[2]
 LAUNCHER = REPO_ROOT / "src" / "cluster" / "launch_b3_factor_pilot.sh"
+SUBMIT = REPO_ROOT / "src" / "cluster" / "submit_b3_factor_pilot.sub"
 
 
 def _write_exec(path: Path, body: str) -> None:
@@ -34,7 +38,11 @@ def _stubs(tmp_path: Path):
     bind = tmp_path / "bin"
     bind.mkdir()
     events = tmp_path / "events.log"
-    out = tmp_path / "out"
+    fake_src = tmp_path / "checkout" / "src"
+    (fake_src / "cluster").mkdir(parents=True)
+    launcher = fake_src / "cluster" / LAUNCHER.name
+    shutil.copy2(LAUNCHER, launcher)
+    out = fake_src / "runs" / "out"
 
     _write_exec(bind / "sbatch_stub",
                 f'echo "SBATCH $*" >> "{events}"\necho "77777"\n')
@@ -56,6 +64,11 @@ for ((i=0;i<${{#args[@]}};i++)); do
     if [[ "${{args[$i]}}" == "--out" ]]; then OUT="${{args[$((i+1))]}}"; fi
 done
 case "$sub" in
+  --validate-run-out)
+     for ((i=0;i<${{#args[@]}};i++)); do
+        if [[ "${{args[$i]}}" == "--out" ]]; then echo "${{args[$((i+1))]}}"; fi
+     done
+     exit 0 ;;
   --dry-run) echo "[dry-run] OK"; exit 0 ;;
   --list) for k in $(seq 0 59); do echo "$k {{}}"; done; echo "total: 60 cells"; exit 0 ;;
   --emit-run-manifest)
@@ -70,6 +83,9 @@ case "$sub" in
         echo "BIND $2" >> "{events}"
         printf '{{"job_id":"%s"}}\\n' "$2" > "$OUT/JOB.json"; exit 0
      else exit 7; fi ;;
+  --verify-bound-job)
+     echo "VERIFY $2" >> "{events}"
+     exit "${{EGG_VERIFY_BOUND_RESULT:-0}}" ;;
 esac
 exit 2
 ''')
@@ -83,14 +99,17 @@ exit 2
         "EGG_SQUEUE": str(bind / "squeue_stub"),
         "EGG_SACCT": str(bind / "sacct_stub"),
         "EGG_PILOT": str(bind / "pilot_stub"),
-        "EGG_RUN_OUT": str(out),
+        "EGG_RUN_OUT": "runs/out",
         "EGG_VERIFY_SLEEP": "0",
+        "_B3_TEST_LAUNCHER": str(launcher),
     })
     return env, events, out
 
 
 def _run(env):
-    return subprocess.run(["bash", str(LAUNCHER)], env=env,
+    child_env = dict(env)
+    launcher = child_env.pop("_B3_TEST_LAUNCHER")
+    return subprocess.run(["bash", launcher], env=child_env,
                           capture_output=True, text=True)
 
 
@@ -140,7 +159,7 @@ def test_lone_manifest_is_reused_and_submits(tmp_path):
     (out / "MANIFEST.json").write_text('{"schema":"b3-factor-pilot-run-v1"}\n')
     r = _run(env)
     assert r.returncode == 0, r.stderr
-    assert _tokens(events) == ["SBATCH", "BIND", "RELEASE"]
+    assert _tokens(events) == ["SBATCH", "BIND", "VERIFY", "RELEASE"]
 
 
 # --------------------------------------------------------------------------
@@ -152,7 +171,7 @@ def test_success_order_hold_bind_release(tmp_path):
     assert r.returncode == 0, r.stderr
     lines = events.read_text().splitlines()
     assert lines[0].startswith("SBATCH ") and "--hold" in lines[0]
-    assert _tokens(events) == ["SBATCH", "BIND", "RELEASE"]
+    assert _tokens(events) == ["SBATCH", "BIND", "VERIFY", "RELEASE"]
     assert "SCANCEL" not in _tokens(events)
     assert (out / "JOB.json").exists()
 
@@ -191,12 +210,150 @@ def test_release_failure_scancels_bound_job(tmp_path):
     env["EGG_RELEASE_RESULT"] = "1"              # scontrol release fails
     r = _run(env)
     assert r.returncode != 0
-    assert _tokens(events) == ["SBATCH", "BIND", "RELEASE", "SCANCEL"]
+    assert _tokens(events) == [
+        "SBATCH", "BIND", "VERIFY", "RELEASE", "SCANCEL"]
     scancel_line = [ln for ln in events.read_text().splitlines()
                     if ln.startswith("SCANCEL")][0]
     assert scancel_line.split()[-1] == "77777"
     assert (out / "JOB.json").exists()           # bound; preserved as evidence
     assert (out / "MANIFEST.json").exists()
+
+
+def test_prerelease_authentication_failure_never_releases(tmp_path):
+    env, events, out = _stubs(tmp_path)
+    env["EGG_VERIFY_BOUND_RESULT"] = "1"
+    r = _run(env)
+    assert r.returncode != 0
+    assert _tokens(events) == ["SBATCH", "BIND", "VERIFY", "SCANCEL"]
+    assert "RELEASE" not in _tokens(events)
+
+
+# --------------------------------------------------------------------------
+# the run directory is THREADED THROUGH to the array (launcher -> sbatch
+# --export -> submit script -> per-cell driver argv)
+# --------------------------------------------------------------------------
+def test_sbatch_line_exports_resolved_run_out(tmp_path):
+    """The launcher must propagate the resolved run directory EXPLICITLY on
+    the sbatch line (the site's default export policy may be
+    --export=NONE); otherwise an EGG_RUN_OUT override passes every guard
+    while all 60 array tasks write into the default tree."""
+    env, events, out = _stubs(tmp_path)
+    r = _run(env)
+    assert r.returncode == 0, r.stderr
+    sbatch_line = [ln for ln in events.read_text().splitlines()
+                   if ln.startswith("SBATCH ")][0]
+    assert "--export=ALL,EGG_RUN_OUT=runs/out" in sbatch_line.split()
+
+
+def _run_submit(tmp_path, *, run_out=None, set_empty=False, selftest=True,
+                silent_true=False):
+    """Execute the REAL submit script off-cluster: the interpreter and
+    environment script are stubbed (EGG_PYTHON / EGG_ENV_SCRIPT) and the
+    stub records the exact argv it receives."""
+    bind = tmp_path / "subbin"
+    bind.mkdir()
+    events = tmp_path / "sub-events.log"
+    _write_exec(bind / "python_stub", f'echo "PY $*" >> "{events}"\n')
+    _write_exec(bind / "env_stub", "# no-op environment for off-cluster tests\n")
+    env = dict(os.environ)
+    env.pop("EGG_RUN_OUT", None)
+    env.update({
+        "EGG_PYTHON": "/usr/bin/true" if silent_true else str(bind / "python_stub"),
+        "EGG_ENV_SCRIPT": "/dev/null" if silent_true else str(bind / "env_stub"),
+        "SLURM_SUBMIT_DIR": str(REPO_ROOT / "src"),
+    })
+    if selftest:
+        env["EGG_SUBMIT_SELFTEST"] = "1"
+        env["EGG_SELFTEST_ARRAY_TASK_ID"] = "7"
+    if set_empty:
+        env["EGG_RUN_OUT"] = ""
+    elif run_out is not None:
+        env["EGG_RUN_OUT"] = str(run_out)
+    r = subprocess.run(["bash", str(SUBMIT)], env=env,
+                       capture_output=True, text=True)
+    return r, events
+
+
+def test_submit_array_targets_the_exported_override(tmp_path):
+    """THE defect: the array task must run the per-cell driver against the
+    exported EGG_RUN_OUT, not a hardcoded default tree."""
+    override = "runs/b3_replication"
+    r, events = _run_submit(tmp_path, run_out=override)
+    assert r.returncode == 0, r.stderr
+    recorded = [ln for ln in events.read_text().splitlines() if ln.strip()]
+    assert recorded == [
+        f"PY experiments/run_b3_factor_pilot.py --cell 7 --out {override}"]
+
+
+def test_submit_default_out_preserved_when_unset(tmp_path):
+    r, events = _run_submit(tmp_path)
+    assert r.returncode == 0, r.stderr
+    recorded = [ln for ln in events.read_text().splitlines() if ln.strip()]
+    assert recorded == [
+        "PY experiments/run_b3_factor_pilot.py --cell 7 "
+        "--out runs/b3_factor_pilot"]
+
+
+def test_submit_refuses_empty_run_out(tmp_path):
+    """A set-but-empty EGG_RUN_OUT is a configuration error: the script
+    must refuse (nonzero) and never invoke the driver."""
+    r, events = _run_submit(tmp_path, set_empty=True)
+    assert r.returncode != 0
+    assert "EGG_RUN_OUT is set but empty" in r.stderr
+    assert not events.exists()
+
+
+def test_submit_refuses_silent_true_override_without_test_marker(tmp_path):
+    """NEW #47 regression: /usr/bin/true must not turn a real task into a
+    successful no-evidence no-op."""
+    r, events = _run_submit(tmp_path, selftest=False, silent_true=True)
+    assert r.returncode != 0
+    assert "test-only overrides" in r.stderr
+    assert not events.exists()
+
+
+def test_submit_direct_execution_refuses_without_bound_files(tmp_path):
+    env = dict(os.environ)
+    env.update({
+        "SLURM_SUBMIT_DIR": str(REPO_ROOT / "src"),
+        "SLURM_ARRAY_JOB_ID": "123456",
+        "SLURM_ARRAY_TASK_ID": "0",
+        "EGG_LAUNCH_TOKEN": "e" * 64,
+        "EGG_RUN_OUT": f"runs/_direct_refusal_{tmp_path.name}",
+    })
+    for name in (
+            "EGG_SUBMIT_SELFTEST", "EGG_PYTHON", "EGG_ENV_SCRIPT"):
+        env.pop(name, None)
+    r = subprocess.run(
+        ["bash", str(SUBMIT)], env=env, capture_output=True, text=True)
+    assert r.returncode != 0
+    assert "run manifest missing" in (r.stderr + r.stdout)
+
+
+@pytest.mark.parametrize("bad", [
+    "/absolute/runs/b3",
+    "runs/../escape",
+    "runs/with,comma",
+    "runs/with\ncontrol",
+    "other/b3",
+    "runs",
+])
+def test_run_out_validator_refuses_unsafe_slurm_paths(tmp_path, bad):
+    src = tmp_path / "src"
+    (src / "runs").mkdir(parents=True)
+    with pytest.raises(bp.B3PilotError):
+        bp.validate_run_out(bad, src_root=src)
+
+
+def test_run_out_validator_refuses_symlink_escape(tmp_path):
+    src = tmp_path / "src"
+    runs = src / "runs"
+    runs.mkdir(parents=True)
+    outside = tmp_path / "outside"
+    outside.mkdir()
+    (runs / "link").symlink_to(outside, target_is_directory=True)
+    with pytest.raises(bp.B3PilotError, match="symlink"):
+        bp.validate_run_out("runs/link/b3", src_root=src)
 
 
 if __name__ == "__main__":
