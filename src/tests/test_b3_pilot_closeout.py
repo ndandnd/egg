@@ -18,6 +18,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import pytest
 
 import experiments.analyze_b3_factor_pilot as az
+import experiments.audit_b3_factor_pilot as az_audit
 import experiments.b3_factor_pilot as bp
 import experiments.package_b3_pilot as pk
 import experiments.select_b3_confirmation as sel
@@ -1254,3 +1255,133 @@ def test_import_rejects_tampered_bundle(tmp_path, screen):
     with pytest.raises(PackagingError, match="digest|raw_binding mismatch"):
         pk.import_bundle(work, tmp_path / "dest")
     assert not (tmp_path / "dest").exists()
+
+
+# --------------------------------------------------------------------------
+# run_commit must be a REAL commit, and scoring must read only frozen bytes
+# --------------------------------------------------------------------------
+def test_run_commit_rejects_malformed_and_unresolvable_shas():
+    """A manifest may not claim a plausible-looking SHA: production resolves
+    it through git, so a shape-only value is refused."""
+    for bad in (None, "", "zz", "A" * 40, "a" * 39, 40 * "a" + "a"):
+        with pytest.raises(az.evidence.EvidenceError,
+                           match="must be the full 40-character"):
+            az.verify_run_commit(bad)
+    # correctly shaped, but no such object exists in this repository
+    with pytest.raises(az.evidence.EvidenceError,
+                       match="does not resolve to a commit object"):
+        az.verify_run_commit("a" * 40)
+
+
+def test_run_commit_rejects_a_real_but_unrelated_commit():
+    """A real commit object that is not an ancestor of HEAD is refused, so a
+    manifest cannot name unrelated history."""
+    head = subprocess.check_output(
+        ["git", "rev-parse", "HEAD"], cwd=az.REPO_ROOT).decode().strip()
+    az.verify_run_commit(head)          # the ancestor case passes
+    # an orphan commit: a real object, unreachable from HEAD
+    tree = subprocess.check_output(
+        ["git", "rev-parse", "HEAD^{tree}"], cwd=az.REPO_ROOT).decode().strip()
+    orphan = subprocess.check_output(
+        ["git", "commit-tree", tree, "-m", "unrelated"],
+        cwd=az.REPO_ROOT).decode().strip()
+    assert orphan != head
+    with pytest.raises(az.evidence.EvidenceError,
+                       match="is not an ancestor of HEAD"):
+        az.verify_run_commit(orphan)
+
+
+def test_scoring_reads_only_the_frozen_copy_never_the_live_tree(tmp_path,
+                                                                screen):
+    """The audit and the population replay must both be handed the frozen
+    copy, not the live run directory."""
+    runs = _go_tree(tmp_path, screen)
+    live = Path(runs).resolve()
+    seen = {}
+    real_audit = az_audit.audit
+    real_load = az.load_population
+
+    def spy_audit(runs_dir, screen_dir=None, *a, **k):
+        seen["audit"] = Path(runs_dir).resolve()
+        return real_audit(runs_dir, screen_dir, *a, **k)
+
+    def spy_load(runs_dir, *a, **k):
+        seen["load"] = Path(runs_dir).resolve()
+        return real_load(runs_dir, *a, **k)
+
+    with mock.patch.object(az_audit, "audit", spy_audit), \
+            mock.patch.object(az, "load_population", spy_load):
+        out = _analyze(runs, tmp_path / "out")
+    decision = json.loads((Path(out) / "DECISION.json").read_text())
+    assert decision["state"] == "GO"
+    assert seen["audit"] != live and seen["load"] != live
+    assert seen["audit"] == seen["load"]
+    # and the frozen copy is gone once scoring finished
+    assert not seen["load"].exists()
+
+
+def test_mutation_before_the_freeze_is_refused(tmp_path, screen):
+    """A tree that no longer matches the pre-analysis anchor is never
+    audited or scored."""
+    runs = _go_tree(tmp_path, screen)
+    anchor_before = _synthetic_anchor(runs)
+    (Path(runs) / "MANIFEST.json").write_bytes(
+        (Path(runs) / "MANIFEST.json").read_bytes() + b" ")
+    with mock.patch.object(az, "verify_analysis_code_commit",
+                           return_value=True):
+        out = az.analyze(
+            runs, tmp_path / "out", STAMP, CODE, screen_dir=None,
+            verify_code_commit=True, expected_raw_anchor=anchor_before,
+            run_commit_verifier=_synthetic_run_commit_ok)
+    decision = json.loads((Path(out) / "DECISION.json").read_text())
+    assert decision["state"] == "INVALID/HALT"
+    assert any("pre-analysis raw anchor mismatch" in p
+               for p in decision["problems"])
+    assert not (Path(out) / "cell_intervals.csv").exists()
+
+
+def _analyze_mutating(runs, out, *, hook_target, hook_owner):
+    """Run the analyzer while the LIVE tree is mutated from inside a stage
+    that runs after the freeze."""
+    live = Path(runs)
+    anchor_before = _synthetic_anchor(runs)
+    original = getattr(hook_owner, hook_target)
+
+    def hook(*a, **k):
+        path = live / "MANIFEST.json"
+        path.write_bytes(path.read_bytes() + b" ")
+        return original(*a, **k)
+
+    with mock.patch.object(az, "verify_analysis_code_commit",
+                           return_value=True), \
+            mock.patch.object(hook_owner, hook_target, hook):
+        return az.analyze(
+            runs, out, STAMP, CODE, screen_dir=None,
+            verify_code_commit=True, expected_raw_anchor=anchor_before,
+            run_commit_verifier=_synthetic_run_commit_ok)
+
+
+def test_mutation_between_freeze_and_scoring_is_caught(tmp_path, screen):
+    """Mutating the live tree during the audit cannot change what was
+    scored, and must still be reported."""
+    runs = _go_tree(tmp_path, screen)
+    out = _analyze_mutating(runs, tmp_path / "out",
+                            hook_target="audit", hook_owner=az_audit)
+    decision = json.loads((Path(out) / "DECISION.json").read_text())
+    assert decision["state"] == "INVALID/HALT"
+    assert any("live raw tree changed during scoring" in p
+               for p in decision["problems"])
+    assert not (Path(out) / "cell_intervals.csv").exists()
+
+
+def test_mutation_after_scoring_before_publication_is_caught(tmp_path,
+                                                             screen):
+    """A mutation that lands after the replay but before publication is
+    refused rather than published against stale bindings."""
+    runs = _go_tree(tmp_path, screen)
+    out = _analyze_mutating(runs, tmp_path / "out",
+                            hook_target="load_population", hook_owner=az)
+    decision = json.loads((Path(out) / "DECISION.json").read_text())
+    assert decision["state"] == "INVALID/HALT"
+    assert any("live raw tree changed during scoring" in p
+               for p in decision["problems"])
