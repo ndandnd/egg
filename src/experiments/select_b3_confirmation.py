@@ -475,10 +475,17 @@ def recompute_decision(cells: list[dict],
         raise B3SelectionError(
             "cell_intervals.csv does not cover the frozen 60-cell grid "
             "exactly")
-    if len(market_hash_by_cell) != 12 \
-            or len(set(market_hash_by_cell.values())) != 12:
+    if len(market_hash_by_cell) != 12:
         raise B3SelectionError(
-            "cell_intervals.csv does not carry 12 distinct matched markets")
+            "cell_intervals.csv does not carry all 12 matched markets")
+    for seed in bp.SEEDS:
+        for n_trips in bp.N_TRIPS:
+            hashes = {
+                market_hash_by_cell[(seed, n_trips, f"{b:g}")]
+                for b in bp.B_SCALES}
+            if len(hashes) != len(bp.B_SCALES):
+                raise B3SelectionError(
+                    "cell_intervals.csv market hashes do not distinguish b")
     recorded = {}
     for row in contrasts:
         key = (
