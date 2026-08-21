@@ -148,5 +148,3 @@ def assert_no_history_rewrites(repo_root) -> None:
                   git_dir(repo_root) / "info" / "grafts"):
         if graft.exists():
             raise ProvenanceError(f"repository has a legacy graft file: {graft}")
-
-

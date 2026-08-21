@@ -91,6 +91,7 @@ PROVENANCE_FILES = (
     "src/experiments/b3_factor_screen.py",
     "src/experiments/b3_pilot_evidence.py",
     "src/experiments/package_a6_holdout.py",
+    "src/experiments/provenance_git.py",
 )
 
 

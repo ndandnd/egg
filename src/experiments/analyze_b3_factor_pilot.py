@@ -49,6 +49,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import experiments.b3_factor_pilot as bp
 import experiments.b3_pilot_anchor as anchor
+import experiments.provenance_git as pgit
 import experiments.b3_pilot_evidence as evidence
 
 SCHEMA = "b3-factor-pilot-analysis-v1"
@@ -62,6 +63,7 @@ PROVENANCE_FILES = (
     "src/experiments/b3_factor_screen.py",
     "src/experiments/b3_pilot_evidence.py",
     "src/experiments/package_a6_holdout.py",
+    "src/experiments/provenance_git.py",
     SPEC_RELPATH,
     "src/tests/test_b3_factor_pilot.py",
 )
@@ -94,66 +96,24 @@ class B3AnalysisError(RuntimeError):
 # The trusted path deliberately excludes user-writable prefixes such as
 # /usr/local/bin and /opt/homebrew/bin: on a single-user machine those are
 # owned by the operator, so a shim placed there would be "trusted".
-_TRUSTED_PATH = "/usr/bin:/bin"
-
-
-def _trusted_git() -> str:
-    exe = shutil.which("git", path=_TRUSTED_PATH)
-    if exe is None:                                  # pragma: no cover
-        raise B3AnalysisError(
-            "no git executable found on the trusted path "
-            f"({_TRUSTED_PATH}); provenance cannot be verified")
-    resolved = Path(exe)
-    if resolved.is_symlink():
-        raise B3AnalysisError(f"trusted git must not be a symlink: {exe}")
-    info = resolved.stat()
-    if not stat.S_ISREG(info.st_mode):
-        raise B3AnalysisError(f"trusted git is not a regular file: {exe}")
-    if info.st_mode & (stat.S_IWGRP | stat.S_IWOTH):
-        raise B3AnalysisError(
-            f"trusted git is group- or world-writable: {exe}")
-    return exe
-
-
+# The hardened runner lives once in experiments/provenance_git.py.  An earlier
+# version of this file kept its own copy whose environment was a DENYLIST, so
+# it still inherited DEVELOPER_DIR -- and on macOS /usr/bin/git is an xcrun
+# dispatcher, so that alone sufficed to fabricate provenance.  These are thin
+# delegations; do not reintroduce a local implementation.
 def _git_argv(*args: str) -> list:
-    """A repository-pinned, replacement-free git invocation."""
-    return [_trusted_git(),
-            "--no-replace-objects",
-            "--git-dir", str(Path(REPO_ROOT) / ".git"),
-            "--work-tree", str(REPO_ROOT), *args]
+    return pgit.git_argv(REPO_ROOT, *args)
 
 
 def _git_env() -> dict:
-    """A scrubbed environment: no GIT_* inherited, replacements disabled."""
-    env = {k: v for k, v in os.environ.items() if not k.startswith("GIT_")}
-    env["GIT_NO_REPLACE_OBJECTS"] = "1"
-    env["PATH"] = _TRUSTED_PATH
-    return env
+    return pgit.git_env()
 
 
 def _assert_no_history_rewrites() -> None:
-    """Refuse if the repository carries replacement refs or legacy grafts.
-
-    ``git replace --graft`` makes an unrelated real commit appear ancestral
-    without dirtying the tracked tree, and environment scrubbing does not
-    disable repository-local ``refs/replace``.  Passing
-    ``--no-replace-objects`` neutralises them for our own queries; failing
-    closed when any exist additionally refuses a repository that has been set
-    up to deceive.
-    """
     try:
-        listed = subprocess.check_output(
-            _git_argv("replace", "--list"), cwd=REPO_ROOT, env=_git_env(),
-            stderr=subprocess.DEVNULL).decode().strip()
-    except (subprocess.CalledProcessError, OSError) as exc:
-        raise B3AnalysisError("could not enumerate replacement refs") from exc
-    if listed:
-        raise B3AnalysisError(
-            "repository has replacement refs; provenance cannot be trusted: "
-            + ", ".join(listed.split()))
-    for legacy in (Path(REPO_ROOT) / ".git" / "info" / "grafts",):
-        if legacy.exists():
-            raise B3AnalysisError(f"repository has a legacy graft file: {legacy}")
+        pgit.assert_no_history_rewrites(REPO_ROOT)
+    except pgit.ProvenanceError as exc:
+        raise B3AnalysisError(str(exc)) from exc
 
 
 def sha256_file(path: str | os.PathLike) -> str:

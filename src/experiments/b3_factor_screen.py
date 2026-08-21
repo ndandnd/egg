@@ -34,9 +34,9 @@ import sys
 import tempfile
 from pathlib import Path
 
-import experiments.provenance_git as pgit
-
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+import experiments.provenance_git as pgit
 
 from egglab.instance import synthetic_instance
 
@@ -74,6 +74,7 @@ SETTING_ORDER = ("S0_baseline", "S1_batt_low", "S2_batt_high",
                  "S3_pow_low", "S4_pow_high")
 
 PROVENANCE_FILES = (
+    "src/experiments/provenance_git.py",
     "src/experiments/b3_factor_screen.py",
     "src/tests/test_b3_factor_screen.py",
     GENERATOR_RELPATH,
