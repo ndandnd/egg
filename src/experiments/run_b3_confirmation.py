@@ -280,6 +280,10 @@ def main():
     if run["manifest"]["selected_factor"] != factor:
         raise cc.B3ConfirmationError(
             "run manifest selected factor != selection artifact factor")
+    # CRITICAL 3: worker self-defense — prove this task belongs to the bound,
+    # released array before producing any evidence (a directly-submitted or
+    # stale array, or a manual run, refuses here without writing anything)
+    cc.assert_worker_authorized(args.out, run)
 
     if args.cell is not None:
         if not (0 <= args.cell < len(cells)):

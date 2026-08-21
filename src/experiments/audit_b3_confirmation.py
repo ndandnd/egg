@@ -84,7 +84,7 @@ def _validate_manifest(runs: Path, problems: list) -> dict | None:
             "factor": factor}
 
 
-def audit(runs_dir, *, selection_artifact=None) -> dict:
+def audit(runs_dir, *, selection_artifact=None, repo_root=cc.REPO_ROOT) -> dict:
     runs = Path(runs_dir)
     cc.refuse_pilot_runs_path(runs)
     problems: list[str] = []
@@ -106,16 +106,27 @@ def audit(runs_dir, *, selection_artifact=None) -> dict:
     mip_gap = (manifest.get("solver") or {}).get("mip_gap")
     backend_name = (manifest.get("solver") or {}).get("backend")
 
-    # optional cross-check against the actual selection artifact bytes
-    if selection_artifact is not None:
-        sel = cc.load_selection_artifact(selection_artifact,
-                                         verify_commit=False)
-        if sel["sha256"] != sel_sha:
-            problems.append(
-                "supplied selection artifact SHA != run manifest binding")
-        if sel["selected_factor"] != factor:
-            problems.append(
-                "supplied selection artifact factor != run manifest factor")
+    # HIGH 6: the GO selection artifact is MANDATORY and must revalidate under
+    # the SAME gate as the driver (including the Critical-1 committed-bytes
+    # check); an internally consistent run tree cannot audit clean without
+    # proving its manifest came from a genuine committed GO.
+    if selection_artifact is None:
+        problems.append(
+            "no selection artifact supplied; the confirmation audit requires "
+            "the committed GO artifact that authorized the run")
+    else:
+        try:
+            sel = cc.load_selection_artifact(selection_artifact,
+                                             verify_commit=True,
+                                             repo_root=repo_root)
+            if sel["sha256"] != sel_sha:
+                problems.append(
+                    "supplied selection artifact SHA != run manifest binding")
+            if sel["selected_factor"] != factor:
+                problems.append(
+                    "supplied selection artifact factor != run manifest factor")
+        except cc.B3ConfirmationError as exc:
+            problems.append(f"selection artifact failed revalidation: {exc}")
 
     cells = cc.build_cells(factor)
     expected = {c["tag"]: c for c in cells}
