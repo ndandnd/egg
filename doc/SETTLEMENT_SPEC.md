@@ -93,8 +93,10 @@ tightened    = [max(0, target - UB), max(0, target - LB)].
 and the evidence price vector. If assigned primitives themselves are
 interval-valued, the implementation applies the same directed-outward
 subtraction to their resulting target interval. Both raw and nonnegative-
-tightened endpoints are retained. A negative raw upper endpoint contradicts
-target feasibility and fails closed.
+tightened endpoints are retained. A raw upper endpoint below the declared
+`-1e-6` solver-validation tolerance contradicts target feasibility and fails
+closed; a smaller signed serialization residual is disclosed in the raw
+interval and tightened to zero.
 
 ## 5. Lost-opportunity cost and tariff
 
