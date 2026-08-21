@@ -1,0 +1,113 @@
+diff --git a/doc/DECISION_LOG.md b/doc/DECISION_LOG.md
+index ea4e332..65e09f5 100644
+--- a/doc/DECISION_LOG.md
++++ b/doc/DECISION_LOG.md
+@@ -225,3 +225,32 @@ review of its open questions. Summary of what is frozen there:
+ **Not decided here**: implementation and launches (follow final spec
+ review); A1 campaign; scale experiments; the 960-cell grid — all remain
+ paused.
++
++## 2026-08-18 — A6 burned-seed pilot passed; `a6_a4` selected for holdout
++
++**Evidence accepted**: the canonical arm-selection artifact is
++`result/a6_pilot/20260819T005514Z/SELECTION.json`, generated from the
++24-cell burned-seed pilot by the verified selection code at
++`c663fcf5b7a142db595738c8b20bb83549f1ab99`. The audit found exactly 24
++complete, sane, certified checkpoints (12 per arm), no budget exhaustion,
++all recorded solves OPTIMAL, and all replay, completeness, trigger-stream,
++and certification gates passing.
++
++**Prespecified selection rule and result**: `a6_a3` would advance only if
++it achieved a strictly lower total-call score than `a6_a4` on at least
++9/12 matched pilot instances, with ties counted as non-wins. It won 2/12;
++`a6_a4` won the other 10 with no ties. Because every cell certified, each
++score is its calls to certificate. Median scores were 23 for `a6_a4`
++(range 13--31) and 32.5 for `a6_a3` (range 21--60).
++
++**Decision**: freeze `a6_a4` as the sole A6 arm for the holdout. The pilot
++is an implementation and arm-selection gate only: seeds 0--15 remain
++burned and these results are not evaluation evidence that A6 beats A2.
++No constants, triggers, recovery rules, budgets, or acceptance thresholds
++change after observing the pilot.
++
++**Next gate**: after this artifact and decision entry are committed, build
++the already-prespecified holdout pipeline for exactly 128 method-cells:
++A2 plus `a6_a4` on seeds 16--31 x n in {8, 12} x b in {0.01, 0.05}.
++No other method, seed, scale, or damping experiment is authorized by this
++decision.
+diff --git a/doc/RESEARCH_STATUS.md b/doc/RESEARCH_STATUS.md
+index 0f917be..4165ef1 100644
+--- a/doc/RESEARCH_STATUS.md
++++ b/doc/RESEARCH_STATUS.md
+@@ -38,6 +38,13 @@ contracts live in `MEASUREMENT_RESULTS.md` and `B2_STABILIZATION_SPEC.md`.
+    256 A2-A5 method-cells. All 256 certified within 240 calls; all
+    provenance, replay, completeness, solver-status, scientific-setting,
+    and corrected wall-partition gates passed.
++7. **A6 burned-seed pilot and arm selection**
++   (`result/a6_pilot/20260819T005514Z/`): exactly 24/24 cells completed,
++   certified, and passed replay, trigger-stream, solver-status, and
++   completeness audits. Under the frozen >= 9/12 rule, `a6_a3` won only
++   2/12 matched comparisons, so `a6_a4` is the sole holdout arm. This
++   pilot is implementation/selection evidence only and is uncitable as
++   evaluation evidence.
+ 
+ ## Current evidence (full 64-instance matched population)
+ 
+@@ -81,41 +88,20 @@ uplift intervals, and the equivalence-theorem framing.
+ 
+ ## Next gate
+ 
+-The full-population closeout is COMPLETE and canonical at
+-`result/b2_full/20260818T140356Z/`. The prespecified decision is recorded
+-in `DECISION_LOG.md`: current A3-A5 variants are rejected on total-call
+-efficiency, while their population-wide clean-call advantage triggers a
+-focused continuation.
++The A6 pilot is COMPLETE: 24/24 certified cells passed every audit, and
++the frozen one-shot rule selected `a6_a4` (`a6_a3` wins 2/12). The
++canonical selection is
++`result/a6_pilot/20260819T005514Z/SELECTION.json`; no pilot constants were
++changed, and the burned results are not evaluation evidence.
+ 
+-**Current step**: the focused continuation is SPECIFIED and
+-review-amended: `doc/A6_SPARSE_STABILIZATION_SPEC.md` (2026-08-18). A6 =
+-event-triggered sparse stabilization — A2's certified loop plus a
+-scheduler spending the seed call and then exactly one oracle call per
+-master iteration, chosen under the frozen priority T0 recovery > T4
+-initialization > T3 candidate stall > T1 closable gap
+-(theta_cert = 10*epsilon) > T2 staleness (K_MAX = 4) > default
+-Wentges-smoothed candidate. T0 forces clean calls through A2's direct
+-escalation/retry logic during ambiguity/refinement/duplicate recovery;
+-candidates never interrupt recovery. Certification remains clean-RMP UB
+-+ clean-dual LB only; skipped calls can never affect validity; terminal
+-states are certified, budget-exhausted, or fail-loud recovery error.
+-Method identities `a6_a4` (primary; clean-call wins 57/64, no stabilized
+-master) and `a6_a3` (pilot-only alternative). Pilot: exactly 24 cells on
+-the burned pilot instances, both arms 12/12 audited, one-shot >= 9/12
+-score selection committed as a machine-readable artifact BEFORE any
+-holdout work. Holdout FROZEN at seeds 16-31 (no substitution;
+-infeasibility halts and amends the preregistration), A2 + the selected
+-arm = 128 cells. Scoring: certified = calls-to-certificate, valid
+-budget-exhausted = 241, both-exhausted = tie, validity failures halt
+-unscored. Exhaustive decision partition: ADOPT (all gates) /
+-HALT-AND-DEBUG / FINAL NEGATIVE (certification shortfall, clear kill,
+-gray, discordant) — any final negative ends the stabilization line
+-absent new theory. All five review questions are resolved (spec Section
+-10). **A6 is now IMPLEMENTED** (`egglab/a6.py`, both identities; 24-cell
+-pilot driver + guarded launcher; audit trigger-stream gates; one-shot
+-selection pipeline `experiments/select_a6_arm.py`) and awaits Codex
+-review before the pilot is launched. The holdout has NO driver by design:
+-it may not be generated, submitted, or inspected before
+-`result/a6_pilot/<stamp>/SELECTION.json` is committed. No Unicorn job is
+-currently running. The 576-cell A1 campaign, the old 960-cell campaign,
+-and any scale experiment remain paused.
++**Current step**: commit the selection artifact and its decision-log
++entry, then implement the already-prespecified holdout without another
++design iteration. The grid is exactly A2 + `a6_a4` on seeds 16--31 x
++n in {8, 12} x b in {0.01, 0.05}: 64 matched instances and 128
++method-cells. The primary endpoint, certification gates, score 241 for
++valid budget exhaustion, adoption threshold (median-score ratio <= 0.85
++and >= 38/64 wins), and exhaustive negative partition remain frozen in
++`doc/A6_SPARSE_STABILIZATION_SPEC.md`. No holdout job may be generated or
++submitted until the selection-gate commit lands. The 576-cell A1
++campaign, old 960-cell campaign, scale experiments, and all further
++stabilization variants remain paused.
