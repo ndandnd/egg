@@ -1279,12 +1279,21 @@ def test_run_commit_rejects_a_real_but_unrelated_commit():
     head = subprocess.check_output(
         ["git", "rev-parse", "HEAD"], cwd=az.REPO_ROOT).decode().strip()
     az.verify_run_commit(head)          # the ancestor case passes
-    # an orphan commit: a real object, unreachable from HEAD
+    # an orphan commit: a real object, unreachable from HEAD.  commit-tree
+    # needs an author/committer identity, which a bare CI checkout does not
+    # configure, so supply one through the environment rather than the
+    # repository config (which must not be mutated by a test).
     tree = subprocess.check_output(
         ["git", "rev-parse", "HEAD^{tree}"], cwd=az.REPO_ROOT).decode().strip()
+    ident = dict(os.environ)
+    ident.update({
+        "GIT_AUTHOR_NAME": "egg tests", "GIT_AUTHOR_EMAIL": "tests@invalid",
+        "GIT_COMMITTER_NAME": "egg tests",
+        "GIT_COMMITTER_EMAIL": "tests@invalid",
+    })
     orphan = subprocess.check_output(
         ["git", "commit-tree", tree, "-m", "unrelated"],
-        cwd=az.REPO_ROOT).decode().strip()
+        cwd=az.REPO_ROOT, env=ident).decode().strip()
     assert orphan != head
     with pytest.raises(az.evidence.EvidenceError,
                        match="is not an ancestor of HEAD"):
