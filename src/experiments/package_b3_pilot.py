@@ -363,27 +363,31 @@ def validate_raw_tree(runs_dir: str | os.PathLike) -> dict:
     for tag in expected_tags:
         cell_hashes[tag] = {
             name: file_sha[f"{tag}/{name}"] for name in CELL_FILES}
+        # Every consumed byte carries its inventoried digest, so validating
+        # one set of bytes and copying another (substitute during validation,
+        # restore afterwards) is detected at the point of consumption rather
+        # than by re-reading the path later.
+        def _cell_read(name, *, as_json):
+            rel = f"{tag}/{name}"
+            digest = file_sha.get(rel)
+            if digest is None:
+                raise PackagingError(
+                    f"{rel} is absent from the raw-tree inventory")
+            reader = (evidence.read_json_object_once if as_json
+                      else evidence.read_regular_bytes_once)
+            return reader(runs / tag / name, rel, expected_sha256=digest)
+
         try:
-            cg = evidence.read_json_object_once(
-                runs / tag / "a2.cg.ckpt.json",
-                f"{tag}/a2.cg.ckpt.json")
-            dictator = evidence.read_json_object_once(
-                runs / tag / "dictator.ckpt.json",
-                f"{tag}/dictator.ckpt.json")
+            cg = _cell_read("a2.cg.ckpt.json", as_json=True)
+            dictator = _cell_read("dictator.ckpt.json", as_json=True)
             oracle_rows = _strict_jsonl(
-                evidence.read_regular_bytes_once(
-                    runs / tag / "a2.oracle.jsonl",
-                    f"{tag}/a2.oracle.jsonl"),
+                _cell_read("a2.oracle.jsonl", as_json=False),
                 f"{tag}/a2.oracle.jsonl")
             iteration_rows = _strict_jsonl(
-                evidence.read_regular_bytes_once(
-                    runs / tag / "a2.iterations.jsonl",
-                    f"{tag}/a2.iterations.jsonl"),
+                _cell_read("a2.iterations.jsonl", as_json=False),
                 f"{tag}/a2.iterations.jsonl")
             dictator_rows = _strict_jsonl(
-                evidence.read_regular_bytes_once(
-                    runs / tag / "dictator.jsonl",
-                    f"{tag}/dictator.jsonl"),
+                _cell_read("dictator.jsonl", as_json=False),
                 f"{tag}/dictator.jsonl")
         except evidence.EvidenceError as exc:
             raise PackagingError(str(exc)) from exc
@@ -395,7 +399,9 @@ def validate_raw_tree(runs_dir: str | os.PathLike) -> dict:
                 "primitive evidence")
     from experiments import audit_b3_factor_pilot as b3_audit
     try:
-        audit_result = b3_audit.audit(runs)
+        # Hand the audit the same inventory the packager validated against, so
+        # the bytes it certifies are provably the bytes that get copied.
+        audit_result = b3_audit.audit(runs, expected_digests=file_sha)
     except bp.B3PilotError as exc:
         raise PackagingError(f"raw tree audit failed: {exc}") from exc
     if not audit_result["ok"]:

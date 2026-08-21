@@ -121,6 +121,14 @@ def audit(runs_dir: str | os.PathLike,
     if not runs.is_dir():
         raise bp.B3PilotError(f"runs dir does not exist: {runs}")
 
+    if expected_digests is not None \
+            and bp.RUN_MANIFEST_FILENAME not in expected_digests:
+        # Supplying a map that omits the root manifest would silently disable
+        # its authentication, which is worse than supplying no map at all.
+        raise bp.B3PilotError(
+            "expected_digests omits "
+            f"{bp.RUN_MANIFEST_FILENAME}; an incomplete inventory would "
+            "silently disable authentication")
     run = _validate_manifest(runs, screen, problems, expected_digests)
     market_by_cell = run["market_by_cell"] if run else {}
     manifest = run["manifest"] if run else {}

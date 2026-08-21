@@ -35,6 +35,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 # Reuse the frozen screen's constants and pure instance builder verbatim so
 # that the pilot cannot silently diverge from the screen it is bound to.
+import experiments.provenance_git as pgit
 from experiments.b3_factor_screen import (
     BASELINE_BATTERY_KWH,
     BASELINE_POWER_KW,
@@ -164,7 +165,8 @@ def assert_grb_backend() -> None:
 def assert_clean_tracked_tree() -> None:
     """Refuse execution against a dirty tracked tree (spec Section 7)."""
     dirty = subprocess.check_output(
-        ["git", "status", "--porcelain"], cwd=REPO_ROOT).decode()
+        pgit.git_argv(REPO_ROOT, "status", "--porcelain"),
+        cwd=REPO_ROOT, env=pgit.git_env()).decode()
     tracked = [ln for ln in dirty.splitlines() if not ln.startswith("??")]
     if tracked:
         raise B3PilotError(
@@ -472,9 +474,17 @@ def counts() -> dict:
 # git provenance
 # --------------------------------------------------------------------------
 def git_head_commit() -> str:
-    """The full 40-char lowercase HEAD commit, pinned to the repo root."""
+    """The full 40-char lowercase HEAD commit, pinned to the repo root.
+
+    Resolved through the hardened runner: a bare ``git`` here let a PATH shim
+    hide a dirty tracked file and name an older real ancestor as the producer
+    commit, so the manifest could attribute a run to reviewed code that was
+    not what executed.
+    """
+    pgit.assert_no_history_rewrites(REPO_ROOT)
     out = subprocess.check_output(
-        ["git", "rev-parse", "HEAD"], cwd=REPO_ROOT).decode().strip()
+        pgit.git_argv(REPO_ROOT, "rev-parse", "HEAD"),
+        cwd=REPO_ROOT, env=pgit.git_env()).decode().strip()
     if len(out) != 40 or not all(c in "0123456789abcdef" for c in out):
         raise B3PilotError(f"HEAD did not resolve to a 40-char SHA: {out!r}")
     return out
