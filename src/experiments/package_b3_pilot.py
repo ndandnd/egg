@@ -454,6 +454,9 @@ def validate_analysis_artifact(
     if manifest.get("analysis_code_verified") is not True:
         raise PackagingError(
             "analysis was produced without code verification; not packable")
+    if manifest.get("run_commit_verified") is not True:
+        raise PackagingError(
+            "analysis run_commit was not production-verified; not packable")
     if (manifest.get("frozen_screen") or {}).get("record_sha256") != (
             bp.FROZEN_SCREEN_RECORD_SHA256) or manifest.get(
             "frozen_screen_verified") is not True:

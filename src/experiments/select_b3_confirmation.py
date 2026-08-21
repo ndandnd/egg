@@ -759,6 +759,15 @@ def load_analysis_artifact(
     if set(raw_binding) != expected_binding_fields:
         raise B3SelectionError(
             "analysis raw_binding fields are incomplete or unexpected")
+    # A recorded flag is only a control if something refuses on it: an
+    # analysis whose run_commit was resolved through the synthetic test seam
+    # rather than through git must never authorize confirmation.  Checked here,
+    # alongside the other raw-provenance bindings, so that an incomplete or
+    # non-frozen artifact is still refused for the more informative reason.
+    if manifest.get("run_commit_verified") is not True:
+        raise B3SelectionError(
+            "analysis run_commit was not production-verified "
+            "(run_commit_verified != true); not selectable")
     live_raw = _load_raw_identity(runs_dir, expected_raw_anchor)
     for field in RAW_BINDING_FIELDS:
         actual = live_raw[field]

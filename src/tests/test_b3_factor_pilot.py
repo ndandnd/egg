@@ -47,7 +47,11 @@ def screen():
 # --------------------------------------------------------------------------
 # fixtures: synthetic sane checkpoints (no solver)
 # --------------------------------------------------------------------------
-RUN_COMMIT = "a" * 40
+# A REAL commit (HEAD), so the analyzer's production run_commit
+# resolution actually runs against these fixtures instead of being
+# bypassed by a test seam.
+RUN_COMMIT = subprocess.check_output(
+    ["git", "rev-parse", "HEAD"], cwd=bp.REPO_ROOT).decode().strip()
 MIP_GAP = bp.MIP_GAP_DEFAULT
 
 

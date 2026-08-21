@@ -24,6 +24,7 @@ import experiments.b3_factor_pilot as bp
 import experiments.package_b3_pilot as pk
 import experiments.select_b3_confirmation as sel
 from experiments.package_a6_holdout import PackagingError
+import test_b3_factor_pilot as _factor
 from test_b3_factor_pilot import _write_tree
 
 STAMP = "20260820T000000Z"
@@ -81,15 +82,14 @@ def _analyze(runs, out, stamp=STAMP, *, verified=True):
     if not verified:
         artifact = az.analyze(
             runs, out, stamp, CODE, screen_dir=None,
-            verify_code_commit=False, expected_raw_anchor=expected_anchor,
-            run_commit_verifier=_synthetic_run_commit_ok)
+            verify_code_commit=False, expected_raw_anchor=expected_anchor)
     else:
         with mock.patch.object(az, "verify_analysis_code_commit",
                                return_value=True):
             artifact = az.analyze(
                 runs, out, stamp, CODE, screen_dir=None,
-                verify_code_commit=True, expected_raw_anchor=expected_anchor,
-                run_commit_verifier=_synthetic_run_commit_ok)
+                verify_code_commit=True,
+                expected_raw_anchor=expected_anchor)
     _ANALYSIS_RUNS[str(Path(artifact).resolve())] = Path(runs)
     return artifact
 
@@ -803,7 +803,7 @@ def test_pack_import_round_trip(tmp_path, screen):
     manifest = json.loads(
         (bundle / "BUNDLE_MANIFEST.json").read_text())
     assert manifest["schema"] == pk.BUNDLE_SCHEMA
-    assert manifest["run_commit"] == "a" * 40
+    assert manifest["run_commit"] == _factor.RUN_COMMIT
     assert set(manifest["code_provenance"]) == set(pk.PROVENANCE_FILES)
     assert len(manifest["raw"]["cells"]) == 60
     for tag, files in manifest["raw"]["cells"].items():
@@ -1522,7 +1522,17 @@ def test_injected_run_commit_verifier_cannot_forge_a_verified_artifact(
                            match="must be the full 40-character"):
             az.verify_run_commit(bad, verifier=lambda _c: None)
     runs = _go_tree(tmp_path, screen)
-    out = _analyze(runs, tmp_path / "out")          # uses the injected seam
+    anchor_before = _synthetic_anchor(runs)
+    with mock.patch.object(az, "verify_analysis_code_commit",
+                           return_value=True):
+        out = az.analyze(
+            runs, tmp_path / "out", STAMP, CODE, screen_dir=None,
+            verify_code_commit=True, expected_raw_anchor=anchor_before,
+            run_commit_verifier=_synthetic_run_commit_ok)
     manifest = json.loads((Path(out) / "MANIFEST.json").read_text())
     assert manifest["analysis_code_verified"] is True
+    # the seam ran, so the artifact is explicitly NOT production-verified
     assert manifest["run_commit_verified"] is False
+    # and it is therefore unusable downstream
+    with pytest.raises(sel.B3SelectionError, match="run_commit"):
+        sel.select(runs, out, tmp_path / "sel", CODE, verify_code_commit=False)

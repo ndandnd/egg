@@ -32,23 +32,28 @@ import experiments.b3_pilot_anchor as anchor
 import experiments.b3_pilot_evidence as evidence
 
 
-def _load(path: Path, label: str | None = None):
+def _load(path: Path, label: str | None = None,
+          expected_sha256: str | None = None):
     """Label errors with a RUN-ROOT-RELATIVE name.
 
     The analyzer scores a frozen copy under a temporary directory, so an
     absolute label would leak that path into published refusal records and
     make artifact regeneration non-deterministic.
     """
-    return evidence.read_json_object_once(path, label or path.name)
+    return evidence.read_json_object_once(
+        path, label or path.name, expected_sha256=expected_sha256)
 
 
-def _validate_manifest(runs: Path, screen: dict, problems: list) -> dict | None:
+def _validate_manifest(runs: Path, screen: dict, problems: list,
+                       digests: dict | None = None) -> dict | None:
     """Load the run manifest and prove it is authentic by rebuilding it
     byte-for-byte from the frozen screen at its declared commit + solver
     identity.  Returns {manifest, sha256, market_by_cell} or None."""
     path = runs / bp.RUN_MANIFEST_FILENAME
     try:
-        raw = evidence.read_regular_bytes_once(path, "run MANIFEST.json")
+        raw = evidence.read_regular_bytes_once(
+            path, "run MANIFEST.json",
+            expected_sha256=(digests or {}).get(bp.RUN_MANIFEST_FILENAME))
         manifest = evidence.strict_json_loads(raw, "run MANIFEST.json")
         if not isinstance(manifest, dict):
             raise evidence.EvidenceError(
@@ -100,15 +105,23 @@ def _validate_manifest(runs: Path, screen: dict, problems: list) -> dict | None:
 
 
 def audit(runs_dir: str | os.PathLike,
-          screen_dir: str | os.PathLike | None = None) -> dict:
-    """Return {ok, problems, report, certified, dictators, per_setting}."""
+          screen_dir: str | os.PathLike | None = None,
+          expected_digests: dict | None = None) -> dict:
+    """Return {ok, problems, report, certified, dictators, per_setting}.
+
+    ``expected_digests`` maps run-root-relative paths to SHA-256 digests from
+    the caller's frozen inventory.  When supplied, every file the audit
+    consumes is digest-checked in the same read that parses it and must be
+    present in the inventory: verifying a path afterwards cannot detect
+    substitute-then-restore, so authentication has to happen at consumption.
+    """
     screen = bp.load_frozen_screen(screen_dir)
     runs = Path(runs_dir)
     problems: list[str] = []
     if not runs.is_dir():
         raise bp.B3PilotError(f"runs dir does not exist: {runs}")
 
-    run = _validate_manifest(runs, screen, problems)
+    run = _validate_manifest(runs, screen, problems, expected_digests)
     market_by_cell = run["market_by_cell"] if run else {}
     manifest = run["manifest"] if run else {}
     manifest_sha = run["sha256"] if run else None
@@ -157,8 +170,15 @@ def audit(runs_dir: str | os.PathLike,
                 run_manifest_sha256=manifest_sha, run_commit=run_commit,
                 mip_gap=mip_gap, backend_name=backend_name)
             try:
+                id_rel = f"{tag}/{bp.CELL_IDENTITY_FILENAME}"
+                if expected_digests is not None \
+                        and id_rel not in expected_digests:
+                    raise evidence.EvidenceError(
+                        f"{tag}: cell-identity sidecar is absent from the "
+                        "frozen inventory")
                 identity_bytes = evidence.read_regular_bytes_once(
-                    id_path, f"{tag}: cell-identity sidecar")
+                    id_path, f"{tag}: cell-identity sidecar",
+                    expected_sha256=(expected_digests or {}).get(id_rel))
             except evidence.EvidenceError as exc:
                 problems.append(str(exc))
                 identity_bytes = None
@@ -169,8 +189,18 @@ def audit(runs_dir: str | os.PathLike,
                     "run/manifest/commit/screen/market binding")
 
         try:
-            ck = _load(cg_path, f"{tag}/a2.cg.ckpt.json")
-            dd = _load(d_path, f"{tag}/dictator.ckpt.json")
+            cg_rel = f"{tag}/a2.cg.ckpt.json"
+            d_rel = f"{tag}/dictator.ckpt.json"
+            if expected_digests is not None and (
+                    cg_rel not in expected_digests
+                    or d_rel not in expected_digests):
+                problems.append(
+                    f"{tag}: checkpoint absent from the frozen inventory")
+                continue
+            ck = _load(cg_path, cg_rel,
+                       (expected_digests or {}).get(cg_rel))
+            dd = _load(d_path, d_rel,
+                       (expected_digests or {}).get(d_rel))
         except evidence.EvidenceError as exc:
             problems.append(f"{tag}: {exc}")
             continue

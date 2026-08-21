@@ -38,6 +38,7 @@ import json
 import math
 import os
 import shutil
+import stat
 import statistics
 import subprocess
 import sys
@@ -85,9 +86,15 @@ class B3AnalysisError(RuntimeError):
     pass
 
 
-# Provenance must not be resolvable through an attacker-controlled PATH: a
-# `git` shim earlier on PATH would otherwise answer every question we ask.
-_TRUSTED_PATH = "/usr/bin:/bin:/usr/local/bin:/opt/homebrew/bin"
+# Provenance must not be answerable by anything the caller controls.  A `git`
+# shim earlier on PATH, an exported GIT_DIR, a repository-local replacement ref
+# or a legacy graft file can each make fabricated history look real, so every
+# provenance query goes through this one runner.
+#
+# The trusted path deliberately excludes user-writable prefixes such as
+# /usr/local/bin and /opt/homebrew/bin: on a single-user machine those are
+# owned by the operator, so a shim placed there would be "trusted".
+_TRUSTED_PATH = "/usr/bin:/bin"
 
 
 def _trusted_git() -> str:
@@ -96,7 +103,57 @@ def _trusted_git() -> str:
         raise B3AnalysisError(
             "no git executable found on the trusted path "
             f"({_TRUSTED_PATH}); provenance cannot be verified")
+    resolved = Path(exe)
+    if resolved.is_symlink():
+        raise B3AnalysisError(f"trusted git must not be a symlink: {exe}")
+    info = resolved.stat()
+    if not stat.S_ISREG(info.st_mode):
+        raise B3AnalysisError(f"trusted git is not a regular file: {exe}")
+    if info.st_mode & (stat.S_IWGRP | stat.S_IWOTH):
+        raise B3AnalysisError(
+            f"trusted git is group- or world-writable: {exe}")
     return exe
+
+
+def _git_argv(*args: str) -> list:
+    """A repository-pinned, replacement-free git invocation."""
+    return [_trusted_git(),
+            "--no-replace-objects",
+            "--git-dir", str(Path(REPO_ROOT) / ".git"),
+            "--work-tree", str(REPO_ROOT), *args]
+
+
+def _git_env() -> dict:
+    """A scrubbed environment: no GIT_* inherited, replacements disabled."""
+    env = {k: v for k, v in os.environ.items() if not k.startswith("GIT_")}
+    env["GIT_NO_REPLACE_OBJECTS"] = "1"
+    env["PATH"] = _TRUSTED_PATH
+    return env
+
+
+def _assert_no_history_rewrites() -> None:
+    """Refuse if the repository carries replacement refs or legacy grafts.
+
+    ``git replace --graft`` makes an unrelated real commit appear ancestral
+    without dirtying the tracked tree, and environment scrubbing does not
+    disable repository-local ``refs/replace``.  Passing
+    ``--no-replace-objects`` neutralises them for our own queries; failing
+    closed when any exist additionally refuses a repository that has been set
+    up to deceive.
+    """
+    try:
+        listed = subprocess.check_output(
+            _git_argv("replace", "--list"), cwd=REPO_ROOT, env=_git_env(),
+            stderr=subprocess.DEVNULL).decode().strip()
+    except (subprocess.CalledProcessError, OSError) as exc:
+        raise B3AnalysisError("could not enumerate replacement refs") from exc
+    if listed:
+        raise B3AnalysisError(
+            "repository has replacement refs; provenance cannot be trusted: "
+            + ", ".join(listed.split()))
+    for legacy in (Path(REPO_ROOT) / ".git" / "info" / "grafts",):
+        if legacy.exists():
+            raise B3AnalysisError(f"repository has a legacy graft file: {legacy}")
 
 
 def sha256_file(path: str | os.PathLike) -> str:
@@ -132,29 +189,33 @@ def verify_analysis_code_commit(claimed: str) -> bool:
         raise B3AnalysisError(
             "analysis-code-commit must be the full 40-character lowercase "
             "hexadecimal SHA")
+    _assert_no_history_rewrites()
+    env = _git_env()
     try:
         resolved = subprocess.check_output(
-            ["git", "rev-parse", "--verify", f"{claimed}^{{commit}}"],
-            cwd=REPO_ROOT, stderr=subprocess.DEVNULL).decode().strip()
-    except subprocess.CalledProcessError as exc:
+            _git_argv("rev-parse", "--verify", f"{claimed}^{{commit}}"),
+            cwd=REPO_ROOT, env=env,
+            stderr=subprocess.DEVNULL).decode().strip()
+    except (subprocess.CalledProcessError, OSError) as exc:
         raise B3AnalysisError(f"claimed commit {claimed} does not resolve") \
             from exc
     if resolved != claimed:
         raise B3AnalysisError(f"claimed commit {claimed} resolves to {resolved}")
     if subprocess.run(
-            ["git", "merge-base", "--is-ancestor", claimed, "HEAD"],
-            cwd=REPO_ROOT).returncode != 0:
+            _git_argv("merge-base", "--is-ancestor", claimed, "HEAD"),
+            cwd=REPO_ROOT, env=env).returncode != 0:
         raise B3AnalysisError(
             f"claimed commit {claimed} is not an ancestor of HEAD")
     dirty = subprocess.check_output(
-        ["git", "status", "--porcelain"], cwd=REPO_ROOT).decode()
+        _git_argv("status", "--porcelain"), cwd=REPO_ROOT, env=env).decode()
     if [ln for ln in dirty.splitlines() if not ln.startswith("??")]:
         raise B3AnalysisError(
             "working tree has tracked modifications; commit the analyzer "
             "before generating artifacts")
     for relpath in PROVENANCE_FILES:
         committed = subprocess.check_output(
-            ["git", "show", f"{claimed}:{relpath}"], cwd=REPO_ROOT)
+            _git_argv("show", f"{claimed}:{relpath}"),
+            cwd=REPO_ROOT, env=env)
         if committed != (REPO_ROOT / relpath).read_bytes():
             raise B3AnalysisError(
                 f"{relpath} differs from the claimed commit {claimed}; "
@@ -382,10 +443,12 @@ DECISION_SCHEMA = "b3-factor-pilot-decision-v1"
 
 
 def _git_commit() -> str | None:
+    """Recorded provenance, resolved through the same hardened runner."""
     try:
         return subprocess.check_output(
-            ["git", "rev-parse", "HEAD"], cwd=REPO_ROOT).decode().strip()
-    except subprocess.CalledProcessError:
+            _git_argv("rev-parse", "HEAD"), cwd=REPO_ROOT, env=_git_env(),
+            stderr=subprocess.DEVNULL).decode().strip()
+    except (subprocess.CalledProcessError, OSError, B3AnalysisError):
         return None
 
 
@@ -558,12 +621,11 @@ def verify_run_commit(claimed, *, verifier=None) -> None:
     # make a commit from a FOREIGN repository resolve here.  Unlike
     # verify_analysis_code_commit there is no byte-compare backstop on this
     # value, so pin the repository explicitly and scrub the git environment.
-    env = {k: v for k, v in os.environ.items() if not k.startswith("GIT_")}
-    base = [_trusted_git(), "--git-dir", str(Path(REPO_ROOT) / ".git"),
-            "--work-tree", str(REPO_ROOT)]
+    _assert_no_history_rewrites()
+    env = _git_env()
     try:
         resolved = subprocess.check_output(
-            base + ["rev-parse", "--verify", f"{claimed}^{{commit}}"],
+            _git_argv("rev-parse", "--verify", f"{claimed}^{{commit}}"),
             cwd=REPO_ROOT, env=env,
             stderr=subprocess.DEVNULL).decode().strip()
     except (subprocess.CalledProcessError, OSError) as exc:
@@ -574,7 +636,7 @@ def verify_run_commit(claimed, *, verifier=None) -> None:
         raise evidence.EvidenceError(
             f"run_commit {claimed} resolves to {resolved}")
     if subprocess.run(
-            base + ["merge-base", "--is-ancestor", claimed, "HEAD"],
+            _git_argv("merge-base", "--is-ancestor", claimed, "HEAD"),
             cwd=REPO_ROOT, env=env).returncode != 0:
         raise evidence.EvidenceError(
             f"run_commit {claimed} is not an ancestor of HEAD")
@@ -601,7 +663,7 @@ def _required_anchor(live_identity, *, verify_code_commit,
 
 def _score_frozen_population(runs_dir, screen, screen_dir, *,
                              verify_code_commit, expected_raw_anchor,
-                             run_commit_verifier):
+                             run_commit_verifier, verified_out=None):
     """Freeze the raw tree ONCE, then audit and score only that frozen copy.
 
     The analyzer must never audit or score bytes it does not also bind.  The
@@ -673,7 +735,8 @@ def _score_frozen_population(runs_dir, screen, screen_dir, *,
         # INVALID/HALT, never an uncaught AttributeError or RecursionError
         # escaping to the caller.
         try:
-            audit_result = ad.audit(frozen_dir, screen_dir)
+            audit_result = ad.audit(frozen_dir, screen_dir,
+                                    expected_digests=frozen_files)
         except (_PkgError, OSError, evidence.EvidenceError, B3AnalysisError,
                 bp.B3PilotError, ValueError, KeyError, TypeError,
                 AttributeError, IndexError, RecursionError) as exc:
@@ -695,6 +758,11 @@ def _score_frozen_population(runs_dir, screen, screen_dir, *,
             if verify_code_commit or run_commit_verifier is not None:
                 verify_run_commit(run_manifest.get("run_commit"),
                                   verifier=run_commit_verifier)
+                # record that verification ACTUALLY ran and succeeded through
+                # the production path, rather than inferring it from the
+                # invocation mode
+                if verified_out is not None and run_commit_verifier is None:
+                    verified_out["run_commit"] = True
             market_by_cell = bp.market_hash_by_cell(run_manifest)
             pop = load_population(
                 frozen_dir, screen, market_by_cell, run_manifest,
@@ -783,6 +851,7 @@ def analyze(runs_dir, out_base, stamp, analysis_code_commit, *,
     audit_sha = None
     run_manifest = None
     raw_binding = None
+    verified = {"run_commit": False}
     try:
         screen = bp.load_frozen_screen(screen_dir)
     except bp.B3PilotError as exc:
@@ -812,7 +881,8 @@ def analyze(runs_dir, out_base, stamp, analysis_code_commit, *,
                     runs_dir, screen, screen_dir,
                     verify_code_commit=verify_code_commit,
                     expected_raw_anchor=expected_raw_anchor,
-                    run_commit_verifier=run_commit_verifier))
+                    run_commit_verifier=run_commit_verifier,
+                    verified_out=verified))
 
     out_base = Path(out_base)
     out_base.mkdir(parents=True, exist_ok=True)
@@ -840,8 +910,7 @@ def analyze(runs_dir, out_base, stamp, analysis_code_commit, *,
         "analysis_code_verified": verify_code_commit,
         # False whenever the synthetic verifier seam was used, so a fixture
         # artifact can never be mistaken for a production-verified one.
-        "run_commit_verified": bool(verify_code_commit
-                                    and run_commit_verifier is None),
+        "run_commit_verified": bool(verified["run_commit"]),
         "frozen_screen_verified": frozen_screen_verified,
         "git_commit": _git_commit(),
         "spec": {"path": SPEC_RELPATH,
