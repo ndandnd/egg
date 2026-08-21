@@ -770,7 +770,7 @@ def _score_frozen_population(runs_dir, screen, screen_dir, *,
                     raise evidence.EvidenceError(
                         "JOB.json root is not an object")
                 job_id = job_doc.get("job_id")
-                if (job_doc.get("schema") != "b3-factor-pilot-job-v1"
+                if (job_doc.get("schema") != bp.JOB_SCHEMA
                         or not isinstance(job_id, str)
                         or not job_id.isdigit() or job_id.startswith("0")
                         or len(job_id) > 18):

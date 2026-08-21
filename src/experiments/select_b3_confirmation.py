@@ -382,7 +382,7 @@ def _load_raw_identity(
     manifest = _json_object_from_bytes(
         manifest_bytes, bp.RUN_MANIFEST_FILENAME)
     job_id = job.get("job_id")
-    if (job.get("schema") != "b3-factor-pilot-job-v1"
+    if (job.get("schema") != bp.JOB_SCHEMA
             or not isinstance(job_id, str) or not job_id.isdigit()
             or job_id.startswith("0") or len(job_id) > 18):
         raise B3SelectionError("raw JOB.json has a noncanonical Slurm job id")

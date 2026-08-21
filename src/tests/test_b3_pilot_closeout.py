@@ -27,6 +27,9 @@ from experiments.package_a6_holdout import PackagingError
 import test_b3_factor_pilot as _factor
 from test_b3_factor_pilot import _write_tree
 
+# PR #47 made the launch token a mandatory part of the job binding; these
+# fixtures need only a well-formed 64-hex value.
+LAUNCH_TOKEN = "a" * 64
 STAMP = "20260820T000000Z"
 # the selector resolves the analyzer commit against REAL repository
 # history, so the fixtures record the actual checkout HEAD
@@ -217,7 +220,7 @@ def test_existing_output_refused(tmp_path, screen):
 # --------------------------------------------------------------------------
 def _go_analysis(tmp_path, screen):
     runs = _go_tree(tmp_path, screen)
-    bp.bind_job_id(runs, "424242")
+    bp.bind_job_id(runs, "424242", LAUNCH_TOKEN)
     return Path(_analyze(runs, tmp_path / "out"))
 
 
@@ -278,7 +281,7 @@ def test_boundary_adjacent_go_requires_human_review_without_rule_change(
     u = {setting: 0.5 for setting in bp.SETTING_ORDER}
     u["S1_batt_low"] = 0.5 + az.TAU_DELTA + 5e-10
     runs = _write_tree(tmp_path / "runs", screen, u_by_setting=u)
-    bp.bind_job_id(runs, "424242")
+    bp.bind_job_id(runs, "424242", LAUNCH_TOKEN)
     analysis = Path(_analyze(runs, tmp_path / "out"))
     decision = json.loads((analysis / "DECISION.json").read_text())
     assert decision["state"] == "GO"
@@ -297,7 +300,7 @@ def test_boundary_adjacent_go_requires_human_review_without_rule_change(
 def test_selection_refuses_non_go(tmp_path, screen):
     # NO-GO / UNDER-RESOLVED style: uniform uplift -> all contrasts zero
     runs = _write_tree(tmp_path / "runs", screen)
-    bp.bind_job_id(runs, "424242")
+    bp.bind_job_id(runs, "424242", LAUNCH_TOKEN)
     analysis = Path(_analyze(runs, tmp_path / "out"))
     state = json.loads((analysis / "DECISION.json").read_text())["state"]
     # uniform uplift -> every matched contrast is exactly zero -> the
@@ -309,7 +312,7 @@ def test_selection_refuses_non_go(tmp_path, screen):
 
     # INVALID/HALT artifact lacks the tables entirely
     runs2 = _write_tree(tmp_path / "runs2", screen, certified_all=False)
-    bp.bind_job_id(runs2, "424243")
+    bp.bind_job_id(runs2, "424243", LAUNCH_TOKEN)
     invalid = Path(_analyze(runs2, tmp_path / "out2"))
     with pytest.raises(
             sel.B3SelectionError, match="incomplete|solver identity"):
@@ -482,7 +485,7 @@ def test_selection_refuses_forged_go_from_under_resolved(tmp_path, screen):
     all hashes recomputed.  The selector recomputes the decision from the
     primitive tables and must refuse."""
     runs = _write_tree(tmp_path / "runs", screen)  # uniform: UNDER-RESOLVED
-    bp.bind_job_id(runs, "424242")
+    bp.bind_job_id(runs, "424242", LAUNCH_TOKEN)
     analysis = Path(_analyze(runs, tmp_path / "out"))
 
     def forge(doc):
@@ -575,7 +578,7 @@ def test_selection_refuses_duplicate_row_replacement(tmp_path, screen,
 def test_selection_requires_verified_analysis_and_real_commit(
         tmp_path, screen):
     runs = _go_tree(tmp_path, screen)
-    bp.bind_job_id(runs, "424242")
+    bp.bind_job_id(runs, "424242", LAUNCH_TOKEN)
     unverified = Path(_analyze(runs, tmp_path / "out-unverified",
                                stamp="20260820T000001Z", verified=False))
     with pytest.raises(sel.B3SelectionError,
@@ -718,7 +721,7 @@ def test_selection_refuses_fabricated_go_without_matching_runs(
 
     runs_b = Path(_go_tree(tmp_path / "b", screen))
     _materialize_jsonl(runs_b)
-    bp.bind_job_id(runs_b, "999999")
+    bp.bind_job_id(runs_b, "999999", LAUNCH_TOKEN)
     (runs_b / "AUDIT.md").write_text("# Different synthetic raw tree\n")
     with pytest.raises(
             sel.B3SelectionError,
@@ -789,7 +792,7 @@ def _materialize_jsonl(runs: Path) -> None:
 def _packable(tmp_path, screen):
     runs = Path(_go_tree(tmp_path, screen))
     _materialize_jsonl(runs)
-    bp.bind_job_id(runs, "424242")
+    bp.bind_job_id(runs, "424242", LAUNCH_TOKEN)
     (runs / "AUDIT.md").write_text(
         "# Synthetic B3 audit report\n\n- result: PASS\n")
     analysis = Path(_analyze(runs, tmp_path / "analysis-out"))
@@ -834,7 +837,7 @@ def test_pack_import_round_trip(tmp_path, screen):
 def test_raw_tree_accepts_only_optional_audit_report(tmp_path, screen):
     runs = Path(_go_tree(tmp_path, screen))
     _materialize_jsonl(runs)
-    bp.bind_job_id(runs, "424242")
+    bp.bind_job_id(runs, "424242", LAUNCH_TOKEN)
     assert "AUDIT.md" not in {
         row["path"] for row in pk.validate_raw_tree(runs)["snapshot"]["files"]}
 
@@ -965,11 +968,11 @@ def test_pack_refuses_cross_job_analysis(tmp_path, screen):
     the analysis must now match the exact raw tree being packaged."""
     runs_a = Path(_go_tree(tmp_path, screen, name="runsA"))
     _materialize_jsonl(runs_a)
-    bp.bind_job_id(runs_a, "424242")
+    bp.bind_job_id(runs_a, "424242", LAUNCH_TOKEN)
     analysis_a = Path(_analyze(runs_a, tmp_path / "analysisA"))
     runs_b = Path(_go_tree(tmp_path, screen, name="runsB"))
     _materialize_jsonl(runs_b)
-    bp.bind_job_id(runs_b, "424243")
+    bp.bind_job_id(runs_b, "424243", LAUNCH_TOKEN)
     # same design manifest => identical run-manifest SHA on both sides,
     # which is exactly why the SHA alone was insufficient
     assert pk.sha256_file(runs_a / "MANIFEST.json") == pk.sha256_file(

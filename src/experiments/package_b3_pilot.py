@@ -75,7 +75,11 @@ CELL_FILES = (
     "a2.cg.ckpt.json", "a2.iterations.jsonl", "a2.oracle.jsonl",
 )
 ROOT_FILES = ("MANIFEST.json", "JOB.json")
-OPTIONAL_ROOT_FILES = ("AUDIT.md",)
+# AUDIT.md is written by the documented audit invocation; JOB.sha256 is
+# written by the job binding (PR #47). Both are legitimately absent from a
+# tree that has not been audited or bound yet, so they are optional rather
+# than required -- but nothing else unexpected is tolerated.
+OPTIONAL_ROOT_FILES = ("AUDIT.md", bp.JOB_DIGEST_FILENAME)
 ANALYSIS_OUTPUTS = ("DECISION.json", "SUMMARY.md", "cell_intervals.csv",
                     "matched_contrasts.csv", "setting_summary.csv")
 JOB_ID_CANONICAL = re.compile(r"^[1-9][0-9]{0,17}$")
@@ -166,7 +170,7 @@ def _read_source_job_identity(runs_dir: str | os.PathLike) -> dict:
     job = _strict_json_object(job_bytes, "JOB.json")
     manifest = _strict_json_object(manifest_bytes, "MANIFEST.json")
     job_id = job.get("job_id")
-    if (job.get("schema") != "b3-factor-pilot-job-v1"
+    if (job.get("schema") != bp.JOB_SCHEMA
             or not isinstance(job_id, str)
             or not JOB_ID_CANONICAL.fullmatch(job_id)):
         raise PackagingError("JOB.json is missing or malformed")
@@ -343,7 +347,7 @@ def validate_raw_tree(runs_dir: str | os.PathLike) -> dict:
     manifest = _strict_json_object(manifest_bytes, "MANIFEST.json")
     if manifest_bytes != bp.canonical_manifest_bytes(manifest):
         raise PackagingError("MANIFEST.json is not canonical JSON")
-    if (job.get("schema") != "b3-factor-pilot-job-v1"
+    if (job.get("schema") != bp.JOB_SCHEMA
             or not job.get("job_id")
             or not job.get("run_manifest_sha256")
             or not job.get("run_commit")):
