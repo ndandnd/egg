@@ -37,6 +37,7 @@ import hashlib
 import json
 import math
 import os
+import shutil
 import statistics
 import subprocess
 import sys
@@ -82,6 +83,20 @@ BOUNDARY_ADJACENT_TOL = 1e-9
 
 class B3AnalysisError(RuntimeError):
     pass
+
+
+# Provenance must not be resolvable through an attacker-controlled PATH: a
+# `git` shim earlier on PATH would otherwise answer every question we ask.
+_TRUSTED_PATH = "/usr/bin:/bin:/usr/local/bin:/opt/homebrew/bin"
+
+
+def _trusted_git() -> str:
+    exe = shutil.which("git", path=_TRUSTED_PATH)
+    if exe is None:                                  # pragma: no cover
+        raise B3AnalysisError(
+            "no git executable found on the trusted path "
+            f"({_TRUSTED_PATH}); provenance cannot be verified")
+    return exe
 
 
 def sha256_file(path: str | os.PathLike) -> str:
@@ -181,19 +196,28 @@ def cell_interval(ub_ch: float, lb_ch: float, z_d_ub: float,
     return interval
 
 
-def _load(path: Path, label: str | None = None):
+def _load(path: Path, label: str | None = None,
+          expected_sha256: str | None = None):
     """Label errors with a RUN-ROOT-RELATIVE name.
 
     The analyzer scores a frozen copy under a temporary directory, so an
     absolute label would leak that path into published refusal records and
     make artifact regeneration non-deterministic.
     """
-    return evidence.read_json_object_once(path, label or path.name)
+    return evidence.read_json_object_once(
+        path, label or path.name, expected_sha256=expected_sha256)
 
 
 def load_population(runs_dir: str | os.PathLike, screen: dict,
-                    market_by_cell: dict, run_manifest: dict) -> dict:
-    """Replay all 60 cells through the same primitive used by the audit."""
+                    market_by_cell: dict, run_manifest: dict,
+                    frozen_digests: dict | None = None) -> dict:
+    """Replay all 60 cells through the same primitive used by the audit.
+
+    When ``frozen_digests`` is supplied (the analyzer always supplies it) every
+    checkpoint is digest-checked against the frozen inventory in the same read
+    that parses it, so evidence cannot be substituted for the duration of the
+    replay and restored afterwards.
+    """
     runs = Path(runs_dir)
     problems: list[str] = []
     cells: dict[tuple, dict] = {}
@@ -211,8 +235,17 @@ def load_population(runs_dir: str | os.PathLike, screen: dict,
             continue
         # malformed inputs are a structured INVALID/HALT, never a crash
         try:
-            ck = _load(cg_path, f"{tag}/a2.cg.ckpt.json")
-            dd = _load(d_path, f"{tag}/dictator.ckpt.json")
+            cg_rel = f"{tag}/a2.cg.ckpt.json"
+            d_rel = f"{tag}/dictator.ckpt.json"
+            if frozen_digests is not None and (
+                    cg_rel not in frozen_digests
+                    or d_rel not in frozen_digests):
+                problems.append(
+                    f"{tag}: checkpoint absent from the frozen inventory")
+                continue
+            digests = frozen_digests or {}
+            ck = _load(cg_path, cg_rel, digests.get(cg_rel))
+            dd = _load(d_path, d_rel, digests.get(d_rel))
         except evidence.EvidenceError as exc:
             problems.append(f"{tag}: {exc}")
             continue
@@ -510,20 +543,23 @@ def verify_run_commit(claimed, *, verifier=None) -> None:
     exists so synthetic tests can inject a checker instead of fabricating
     repository history; production always resolves through git.
     """
-    if verifier is not None:
-        verifier(claimed)
-        return
+    # The shape check is unconditional: an injected verifier may relax the
+    # git resolution for synthetic fixtures, but it may never accept a value
+    # that is not even a well-formed SHA.
     if (not isinstance(claimed, str) or len(claimed) != 40
             or not all(c in "0123456789abcdef" for c in claimed)):
         raise evidence.EvidenceError(
             "run_commit must be the full 40-character lowercase hexadecimal "
             f"SHA of a real commit; got {claimed!r}")
+    if verifier is not None:
+        verifier(claimed)
+        return
     # A bare ``git`` inherits GIT_DIR/GIT_WORK_TREE, so an exported GIT_DIR can
     # make a commit from a FOREIGN repository resolve here.  Unlike
     # verify_analysis_code_commit there is no byte-compare backstop on this
     # value, so pin the repository explicitly and scrub the git environment.
     env = {k: v for k, v in os.environ.items() if not k.startswith("GIT_")}
-    base = ["git", "--git-dir", str(Path(REPO_ROOT) / ".git"),
+    base = [_trusted_git(), "--git-dir", str(Path(REPO_ROOT) / ".git"),
             "--work-tree", str(REPO_ROOT)]
     try:
         resolved = subprocess.check_output(
@@ -632,8 +668,17 @@ def _score_frozen_population(runs_dir, screen, screen_dir, *,
         frozen_files = {row["path"]: row["sha256"] for row in frozen["files"]}
         raw_tree_sha = frozen_identity["tree_sha256"]
 
-        # Everything below reads the FROZEN copy only.
-        audit_result = ad.audit(frozen_dir, screen_dir)
+        # Everything below reads the FROZEN copy only.  The audit is inside
+        # the structured boundary: malformed evidence must become
+        # INVALID/HALT, never an uncaught AttributeError or RecursionError
+        # escaping to the caller.
+        try:
+            audit_result = ad.audit(frozen_dir, screen_dir)
+        except (_PkgError, OSError, evidence.EvidenceError, B3AnalysisError,
+                bp.B3PilotError, ValueError, KeyError, TypeError,
+                AttributeError, IndexError, RecursionError) as exc:
+            return _halt([f"audit could not complete: {type(exc).__name__}: "
+                          f"{exc}"])
         audit_sha = audit_result.get("run_manifest_sha256")
         if not audit_result["ok"]:
             return ({"decision": {"state": "INVALID/HALT",
@@ -644,14 +689,16 @@ def _score_frozen_population(runs_dir, screen, screen_dir, *,
         run_manifest_local = None
         try:
             run_manifest = evidence.read_json_object_once(
-                frozen_dir / bp.RUN_MANIFEST_FILENAME, "run MANIFEST.json")
+                frozen_dir / bp.RUN_MANIFEST_FILENAME, "run MANIFEST.json",
+                expected_sha256=frozen_files.get(bp.RUN_MANIFEST_FILENAME))
             run_manifest_local = run_manifest
             if verify_code_commit or run_commit_verifier is not None:
                 verify_run_commit(run_manifest.get("run_commit"),
                                   verifier=run_commit_verifier)
             market_by_cell = bp.market_hash_by_cell(run_manifest)
             pop = load_population(
-                frozen_dir, screen, market_by_cell, run_manifest)
+                frozen_dir, screen, market_by_cell, run_manifest,
+                frozen_digests=frozen_files)
             result = analyze_population(pop)
 
             # The frozen copy was hashed BEFORE the audit and the replay.
@@ -683,7 +730,8 @@ def _score_frozen_population(runs_dir, screen, screen_dir, *,
                     "frozen MANIFEST.json differs from audited bytes")
             if bp.JOB_FILENAME in frozen_files:
                 job_bytes = evidence.read_regular_bytes_once(
-                    frozen_dir / bp.JOB_FILENAME, bp.JOB_FILENAME)
+                    frozen_dir / bp.JOB_FILENAME, bp.JOB_FILENAME,
+                    expected_sha256=frozen_files.get(bp.JOB_FILENAME))
                 job_sha = hashlib.sha256(job_bytes).hexdigest()
                 if job_sha != frozen_files[bp.JOB_FILENAME]:
                     raise evidence.EvidenceError(
@@ -790,6 +838,10 @@ def analyze(runs_dir, out_base, stamp, analysis_code_commit, *,
         "stamp": stamp,
         "analysis_code_commit": analysis_code_commit,
         "analysis_code_verified": verify_code_commit,
+        # False whenever the synthetic verifier seam was used, so a fixture
+        # artifact can never be mistaken for a production-verified one.
+        "run_commit_verified": bool(verify_code_commit
+                                    and run_commit_verifier is None),
         "frozen_screen_verified": frozen_screen_verified,
         "git_commit": _git_commit(),
         "spec": {"path": SPEC_RELPATH,

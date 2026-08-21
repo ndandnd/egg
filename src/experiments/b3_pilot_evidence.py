@@ -8,6 +8,7 @@ the dictator certificate is rebuilt from its recorded subsolve bounds.
 from __future__ import annotations
 
 import json
+import hashlib
 import math
 import os
 import stat
@@ -70,13 +71,31 @@ def read_regular_bytes_with_signature(
         os.close(descriptor)
 
 
-def read_regular_bytes_once(path: Path, label: str) -> bytes:
-    """Read one stable regular file through a no-follow descriptor exactly once."""
-    return read_regular_bytes_with_signature(path, label)[0]
+def read_regular_bytes_once(path: Path, label: str, *,
+                            expected_sha256: str | None = None) -> bytes:
+    """Read one stable regular file through a no-follow descriptor exactly once.
+
+    ``expected_sha256`` makes the read TOCTOU-proof AT THE POINT OF
+    CONSUMPTION: the bytes that are hashed are the same buffer that is
+    returned and parsed, so substituting the file and restoring it afterwards
+    cannot change what was consumed without being detected here.  Verifying a
+    path again later cannot achieve this -- a swap-and-restore defeats it.
+    """
+    data = read_regular_bytes_with_signature(path, label)[0]
+    if expected_sha256 is not None:
+        seen = hashlib.sha256(data).hexdigest()
+        if seen != expected_sha256:
+            raise EvidenceError(
+                f"{label}: consumed content digest {seen} does not match the "
+                f"frozen inventory digest {expected_sha256}")
+    return data
 
 
-def read_json_object_once(path: Path, label: str) -> dict:
-    value = strict_json_loads(read_regular_bytes_once(path, label), label)
+def read_json_object_once(path: Path, label: str, *,
+                          expected_sha256: str | None = None) -> dict:
+    value = strict_json_loads(
+        read_regular_bytes_once(path, label, expected_sha256=expected_sha256),
+        label)
     if not isinstance(value, dict):
         raise EvidenceError(f"{label}: JSON root is not an object")
     return value

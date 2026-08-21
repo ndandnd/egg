@@ -1429,7 +1429,8 @@ def test_frozen_copy_swapped_during_scoring_is_caught(tmp_path, screen):
             run_commit_verifier=_synthetic_run_commit_ok)
     decision = json.loads((Path(out) / "DECISION.json").read_text())
     assert decision["state"] == "INVALID/HALT"
-    assert any("frozen copy changed during scoring" in p
+    assert any(("frozen copy changed during scoring" in p
+                or "consumed content digest" in p)
                for p in decision["problems"])
     assert not (Path(out) / "cell_intervals.csv").exists()
 
@@ -1462,3 +1463,66 @@ def test_refusal_records_are_deterministic_and_leak_no_temp_path(tmp_path,
                for p in decision["problems"])
     for name in ("MANIFEST.json", "DECISION.json", "SUMMARY.md"):
         assert (first / name).read_bytes() == (second / name).read_bytes(), name
+
+
+def test_frozen_evidence_swapped_and_restored_is_caught(tmp_path, screen):
+    """The attack a post-scoring re-hash CANNOT catch.
+
+    Coherent evidence is substituted while the replay runs and restored
+    before any later verification, so every path-based check afterwards sees
+    pristine bytes.  Only digest-checking each file in the same read that
+    parses it detects this, which is why consumption carries the expected
+    digest rather than the directory being re-hashed at the end.
+    """
+    runs = _go_tree(tmp_path, screen)
+    anchor_before = _synthetic_anchor(runs)
+    real_load = az.load_population
+    swapped_then_restored = {}
+
+    def swap_and_restore(runs_dir, *a, **k):
+        frozen = Path(runs_dir)
+        for cell in sorted(frozen.iterdir()):
+            target = cell / "a2.cg.ckpt.json"
+            if not target.is_file():
+                continue
+            cell.chmod(0o700)
+            target.chmod(0o600)
+            swapped_then_restored[target] = target.read_bytes()
+            # still valid JSON, so only a digest check can notice
+            target.write_bytes(swapped_then_restored[target] + b" ")
+        try:
+            return real_load(runs_dir, *a, **k)
+        finally:
+            for target, original in swapped_then_restored.items():
+                target.chmod(0o600)
+                target.write_bytes(original)
+
+    with mock.patch.object(az, "verify_analysis_code_commit",
+                           return_value=True), \
+            mock.patch.object(az, "load_population", swap_and_restore):
+        out = az.analyze(
+            runs, tmp_path / "out", STAMP, CODE, screen_dir=None,
+            verify_code_commit=True, expected_raw_anchor=anchor_before,
+            run_commit_verifier=_synthetic_run_commit_ok)
+    assert swapped_then_restored, "the probe never ran"
+    decision = json.loads((Path(out) / "DECISION.json").read_text())
+    assert decision["state"] == "INVALID/HALT"
+    assert any("consumed content digest" in p for p in decision["problems"])
+    assert not (Path(out) / "cell_intervals.csv").exists()
+
+
+def test_injected_run_commit_verifier_cannot_forge_a_verified_artifact(
+        tmp_path, screen):
+    """The synthetic seam may relax git resolution but must not produce an
+    artifact indistinguishable from a production-verified one, and it may
+    never accept a value that is not even a well-formed SHA."""
+    # the shape check is unconditional, so a no-op verifier still refuses junk
+    for bad in (None, "not-a-sha", "z" * 40):
+        with pytest.raises(az.evidence.EvidenceError,
+                           match="must be the full 40-character"):
+            az.verify_run_commit(bad, verifier=lambda _c: None)
+    runs = _go_tree(tmp_path, screen)
+    out = _analyze(runs, tmp_path / "out")          # uses the injected seam
+    manifest = json.loads((Path(out) / "MANIFEST.json").read_text())
+    assert manifest["analysis_code_verified"] is True
+    assert manifest["run_commit_verified"] is False
