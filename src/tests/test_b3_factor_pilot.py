@@ -22,6 +22,7 @@ import pytest
 import experiments.analyze_b3_factor_pilot as az
 import experiments.audit_b3_factor_pilot as ad
 import experiments.b3_factor_pilot as bp
+import experiments.b3_pilot_anchor as b3_anchor
 
 REPO_ROOT = bp.REPO_ROOT
 DRIVER = REPO_ROOT / "src" / "experiments" / "run_b3_factor_pilot.py"
@@ -63,7 +64,8 @@ def _cg_ckpt(ihash, mhash, z_d_ub, ub_ch=100.0, lb_best=100.0, certified=True,
             (ub_ch, ub_ch, lb_best)]
     # seed call (chronologically first, referenced by no iteration event)
     oe = [{"extra": {"call_id": "a2-oc0"},
-           "solver": {"status": "OPTIMAL"}, "replay_ok": True}]
+           "solver": {"status": "OPTIMAL", "backend": "GRB"},
+           "replay_ok": True, "replay_violations": []}]
     it, ub_hist, lb_hist = [], [], []
     lbb = -math.inf
     for i, (ub, z_rmp, lb_target) in enumerate(plan):
@@ -71,15 +73,25 @@ def _cg_ckpt(ihash, mhash, z_d_ub, ub_ch=100.0, lb_best=100.0, certified=True,
         rc = lb_target - z_rmp        # <= 0, so lb_ch == lb_target exactly
         oe.append({"extra": {"call_id": call_id,
                              "min_reduced_cost_lb": rc},
-                   "solver": {"status": "OPTIMAL", "bound": sigma + rc},
-                   "replay_ok": True})
+                   "solver": {"status": "OPTIMAL", "backend": "GRB",
+                              "bound": sigma + rc},
+                   "replay_ok": True, "replay_violations": []})
         lb_ch = z_rmp + min(0.0, rc)
         lbb = max(lbb, lb_ch)
+        master = {
+            "solve_id": f"a2-it{i}-rmp-r0", "backend": "GRB",
+            "status": "OPTIMAL", "obj": z_rmp, "bound": z_rmp,
+            "mip_gap": 0.0, "n_vars": 1, "n_int": 0, "n_constrs": 1,
+            "wall_s": 0.0, "threads": 1,
+        }
         it.append({"iteration_id": f"it{i}", "phase": "clean",
+                   "replay_ok": True, "oracle_calls": i + 1,
                    "pricing_solve_id": call_id, "z_rmp_model": z_rmp,
                    "duals_sigma": sigma, "min_reduced_cost_lb": rc,
                    "lb_ch": lb_ch, "lb_best": lbb, "ub_ch": ub,
-                   "certificate_gap": ub - lbb})
+                   "certificate_gap": ub - lbb,
+                   "epsilon": bp.EPSILON, "pwl_tol": 1e-3,
+                   "master_solves": [master]})
         ub_hist.append(ub)
         lb_hist.append(lbb)
     calls = len(oe)
@@ -94,29 +106,56 @@ def _cg_ckpt(ihash, mhash, z_d_ub, ub_ch=100.0, lb_best=100.0, certified=True,
         "ub_history": ub_hist, "lb_history": lb_hist, "lb_best": lbb,
         "outcome": {"type": otype, "ub_ch": ub_ch, "lb_best": lbb,
                     "gap": ub_ch - lbb, "certified": certified,
-                    "oracle_calls": calls, "method": method},
+                    "oracle_calls": calls, "method": method,
+                    "uplift_interval": [
+                        (z_d_ub - bp.TOL_D) - ub_ch,
+                        z_d_ub - lbb,
+                    ]},
     }
 
 
-def _dict_ckpt(ihash, mhash, screen_sha, setting, manifest_sha, z_d_ub, z_d_lb,
+def _dict_ckpt(ihash, mhash, screen_sha, cell, manifest_sha, z_d_ub, z_d_lb,
                converged=True, status="OPTIMAL"):
     """A complete dictator checkpoint mirroring the production driver:
     adaptive endpoints and gap, the committed replay-valid record, and the
     manifest-bound solver identity."""
+    gap = z_d_ub - z_d_lb
+    solve_stats = [{
+        "round": 1, "status": "OPTIMAL", "incumbent": z_d_ub,
+        "bound": z_d_lb, "gap": gap, "n_vars": 1, "n_int": 1,
+        "n_constrs": 1, "wall_s": 0.0, "backend": "GRB", "threads": 1,
+    }]
+    adaptive = {"adaptive_converged": converged,
+                "adaptive_lb": z_d_lb, "adaptive_ub": z_d_ub,
+                "adaptive_gap_abs": gap, "adaptive_tol_abs": bp.TOL_D,
+                "adaptive_rounds": 1,
+                "adaptive_solve_stats": solve_stats}
     return {
         "identity": {"instance_hash": ihash, "market_hash": mhash,
                      "screen_record_sha256": screen_sha,
                      "run_manifest_sha256": manifest_sha,
-                     "run_commit": RUN_COMMIT, "setting": setting,
+                     "run_commit": RUN_COMMIT, "setting": cell["setting"],
                      "tol_d": bp.TOL_D, "experiment": "b3-factor-pilot",
                      "solver": {"backend": "GRB", "max_mip_gap": MIP_GAP,
                                 "time_limit_s": None}},
         "z_d_ub": z_d_ub, "z_d_lb": z_d_lb, "tol_d": bp.TOL_D,
-        "status": status,
-        "adaptive": {"adaptive_converged": converged,
-                     "adaptive_lb": z_d_lb, "adaptive_ub": z_d_ub,
-                     "adaptive_gap_abs": z_d_ub - z_d_lb},
-        "record": {"replay_ok": True, "replay_violations": []},
+        "status": status, "bound": z_d_lb, "adaptive": adaptive,
+        "record": {
+            "experiment": "b3-factor-pilot", "regime": "dictator",
+            "instance_hash": ihash, "obj_true": z_d_ub,
+            "replay_ok": True, "replay_violations": [],
+            "extra": {
+                "tag": cell["tag"],
+                "cell": [cell["setting"], cell["seed"],
+                         cell["n_trips"], cell["b"]],
+                "setting": cell["setting"],
+                "screen_record_sha256": screen_sha,
+            },
+            "solver": {
+                "status": status, "backend": "GRB", "bound": z_d_lb,
+                "extra": copy.deepcopy(adaptive),
+            },
+        },
     }
 
 
@@ -147,7 +186,7 @@ def _write_tree(runs, screen, *, u_by_setting=None, certified_all=True):
             _cg_ckpt(ihash, mhash, z_d, ub_ch, lb_best,
                      certified=certified_all)))
         (cdir / "dictator.ckpt.json").write_text(json.dumps(
-            _dict_ckpt(ihash, mhash, screen["record_sha256"], setting,
+            _dict_ckpt(ihash, mhash, screen["record_sha256"], cell,
                        manifest_sha, z_d, z_d)))
         identity = bp.cell_identity(
             cell, screen, market_hash=mhash, run_manifest_sha256=manifest_sha,
@@ -185,6 +224,16 @@ def test_frozen_screen_loads_and_binds(screen):
     for c in cells:
         per_setting[c["setting"]] += 1
     assert all(v == 12 for v in per_setting.values())
+
+
+def test_preanalysis_raw_anchor_constants_are_frozen():
+    assert b3_anchor.FROZEN_RAW_TREE_SHA256 == (
+        "efc5ca31dcddb21166f6a5da2cf60b4961706c99edf9dbda882f87a18a88ace4")
+    assert b3_anchor.FROZEN_RAW_FILE_COUNT == 363
+    assert b3_anchor.FROZEN_RAW_DIRECTORY_COUNT == 60
+    assert b3_anchor.FROZEN_RAW_TOTAL_BYTES == 17385781
+    assert b3_anchor.FROZEN_RUN_SPEC_SHA256 == (
+        "150f4b32220b13866d2872e4bb8a29bfcc5137cca18ebb55c8ddf3d163d4275f")
 
 
 def test_factor_drift_gate_all_30(screen):
@@ -682,8 +731,8 @@ def test_exploit_ch_history_edit_with_unchanged_solver_evidence(
         tmp_path, screen):
     """Review reproduction: fabricate a 12/12 median-0.12 GO for S1 by
     shifting the CH histories, iteration bound fields, and outcome down
-    while the ORACLE SOLVER EVIDENCE is unchanged.  The audit's coherence
-    battery passes; the analyzer's event replay must refuse."""
+    while the ORACLE SOLVER EVIDENCE is unchanged.  The one shared primitive
+    replay used by audit and analyzer must refuse."""
     runs = _write_tree(tmp_path / "runs", screen)  # uniform 0.5 everywhere
 
     def shift(ck, d=0.12):
@@ -699,8 +748,11 @@ def test_exploit_ch_history_edit_with_unchanged_solver_evidence(
     for cell in bp.build_cells():
         if cell["setting"] == "S1_batt_low":
             _mutate_cg(runs, cell["tag"], shift)
-    # the coherence audit alone does NOT catch this forgery
-    assert ad.audit(runs, screen_dir=None)["ok"]
+    audit = ad.audit(runs, screen_dir=None)
+    assert not audit["ok"]
+    assert any(any(needle in p for needle in (
+        "primitive replay", "RMP", "history edited", "does not match"))
+        for p in audit["problems"])
     decision = _analyze_decision(runs, tmp_path / "out")
     assert decision["state"] == "INVALID/HALT"
     assert any("!= replayed" in p or "history edited" in p
@@ -781,18 +833,22 @@ def test_exploit_budget_exceeded_refused(tmp_path, screen):
 
     def extend(ck):
         last_it = ck["iteration_events"][-1]
-        for j in range(bp.BUDGET):
+        extra = (bp.BUDGET + 1) - len(ck["oracle_events"])
+        for j in range(extra):
             call_id = f"a2-ocx{j}"
             event = copy.deepcopy(ck["oracle_events"][-1])
             event["extra"]["call_id"] = call_id
             ck["oracle_events"].append(event)
-            it = dict(last_it)
+            it = copy.deepcopy(last_it)
             it["pricing_solve_id"] = call_id
             it["iteration_id"] = f"itx{j}"
+            it["oracle_calls"] = len(ck["iteration_events"]) + 1
+            it["master_solves"][0]["solve_id"] = f"a2-itx{j}-rmp-r0"
             ck["iteration_events"].append(it)
             ck["ub_history"].append(it["ub_ch"])
             ck["lb_history"].append(it["lb_best"])
         ck["oracle_calls"] = len(ck["oracle_events"])
+        assert ck["oracle_calls"] == 241
         ck["outcome"]["oracle_calls"] = ck["oracle_calls"]
     _mutate_cg(runs, tag, extend)
     decision = _analyze_decision(runs, tmp_path / "out")
@@ -823,8 +879,8 @@ def test_malformed_checkpoint_is_structured_invalid_halt(tmp_path, screen):
 
 
 def test_screen_override_marks_artifact_non_scoreable(tmp_path):
-    """--screen-dir cannot bypass the frozen screen SHA: a drifted screen
-    yields frozen_screen_verified=false and the selector refuses it."""
+    """The test-only screen hook cannot bypass production scoring: a drifted
+    screen is DESIGN-NOT-FROZEN and the CLI exposes no override."""
     dst = _screen_copy(tmp_path, mutate=lambda r, m: (
         {**r, "synthetic_note": "test-only screen"}, m))
     screen2 = bp.load_frozen_screen(dst)
@@ -840,14 +896,32 @@ def test_screen_override_marks_artifact_non_scoreable(tmp_path):
         out = az.analyze(runs, tmp_path / "out", "sN", head,
                          screen_dir=dst, verify_code_commit=True)
     manifest = json.loads((Path(out) / "MANIFEST.json").read_text())
-    assert manifest["decision"]["state"] == "GO"
+    assert manifest["decision"]["state"] == "DESIGN-NOT-FROZEN"
     assert manifest["frozen_screen_verified"] is False
     decision = json.loads((Path(out) / "DECISION.json").read_text())
+    assert decision["state"] == "DESIGN-NOT-FROZEN"
     assert decision["frozen_screen_verified"] is False
+    assert not (Path(out) / "cell_intervals.csv").exists()
     import experiments.select_b3_confirmation as sel
     with pytest.raises(sel.B3SelectionError, match="frozen screen"):
-        sel.select(out, tmp_path / "sel", head, verify_code_commit=False)
+        sel.select(
+            runs, out, tmp_path / "sel", head,
+            verify_code_commit=False)
     assert not (tmp_path / "sel").exists()
+
+
+def test_production_analyzer_cli_has_no_screen_override():
+    result = subprocess.run(
+        [sys.executable, str(REPO_ROOT / "src/experiments/"
+                            "analyze_b3_factor_pilot.py"),
+         "--runs", "synthetic-does-not-exist",
+         "--out", "synthetic-does-not-exist",
+         "--stamp", "x", "--analysis-code-commit", "0" * 40,
+         "--screen-dir", "forged"],
+        cwd=REPO_ROOT, text=True, stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE)
+    assert result.returncode != 0
+    assert "unrecognized arguments: --screen-dir" in result.stderr
 
 
 # --------------------------------------------------------------------------
@@ -886,6 +960,10 @@ def test_boundary_median_exactly_plus_tau_is_under_resolved():
     res = az.analyze_population(_boundary_pop([az.TAU_DELTA] * 12))
     dec = res["decision"]
     assert dec["signed_median_midpoint"] == az.TAU_DELTA
+    assert dec["signed_median_midpoint_repr"] == repr(az.TAU_DELTA)
+    assert dec["boundary_margin"] == 0.0
+    assert dec["boundary_adjacent"] is True
+    assert dec["boundary_adjacent_tolerance"] == 1e-9
     assert dec["count"] == 12
     assert dec["state"] == "UNDER-RESOLVED"
 
@@ -895,6 +973,8 @@ def test_boundary_median_just_above_tau_is_go():
     res = az.analyze_population(_boundary_pop([value] * 12))
     dec = res["decision"]
     assert dec["signed_median_midpoint"] == value
+    assert 0 < dec["boundary_margin"] < 1e-9
+    assert dec["boundary_adjacent"] is True
     assert dec["state"] == "GO"
 
 
@@ -912,6 +992,8 @@ def test_boundary_median_exactly_minus_tau_is_under_resolved():
     dec = res["decision"]
     assert dec["selected_contrast"] == "S1_batt_low"
     assert dec["signed_median_midpoint"] == -az.TAU_DELTA
+    assert dec["boundary_margin"] == 0.0
+    assert dec["boundary_adjacent"] is True
     assert dec["state"] == "UNDER-RESOLVED"
 
 
@@ -943,6 +1025,7 @@ def test_boundary_count_exactly_nine_is_go_eight_is_no_go():
     go = az.analyze_population(_boundary_pop([0.1] * 9 + [0.0] * 3))
     assert go["decision"]["count"] == 9
     assert go["decision"]["signed_median_midpoint"] == 0.1
+    assert go["decision"]["boundary_adjacent"] is False
     assert go["decision"]["state"] == "GO"
     no_go = az.analyze_population(_boundary_pop([0.1] * 8 + [0.0] * 4))
     assert no_go["decision"]["count"] == 8
@@ -1026,6 +1109,19 @@ def test_analyzer_invalid_on_uncertified(tmp_path, screen):
                      "0" * 40, screen_dir=None, verify_code_commit=False)
     manifest = json.loads((Path(out) / "MANIFEST.json").read_text())
     assert manifest["decision"]["state"] == "INVALID/HALT"
+
+
+def test_analyzer_refuses_preanalysis_anchor_drift(tmp_path, screen):
+    runs = _write_tree(tmp_path / "runs", screen)
+    out = az.analyze(
+        runs, tmp_path / "out", "anchor-drift", "0" * 40,
+        screen_dir=None, verify_code_commit=False,
+        expected_raw_anchor=dict(b3_anchor.FROZEN_RAW_ANCHOR))
+    decision = json.loads((Path(out) / "DECISION.json").read_text())
+    assert decision["state"] == "INVALID/HALT"
+    assert any("pre-analysis raw anchor mismatch" in problem
+               and "tree_sha256" in problem
+               for problem in decision["problems"])
 
 
 def test_analyzer_design_not_frozen_on_bad_screen(tmp_path):

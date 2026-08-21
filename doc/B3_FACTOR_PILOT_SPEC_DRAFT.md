@@ -499,6 +499,15 @@ they are mutually exclusive by this ordering):
 `|med_{f*}| <= tau_Delta` and is ordered first); `GO` and `NO-GO`
 partition the resolved cases exactly.
 
+**Boundary-margin disclosure (diagnostic only; the rule above is unchanged).**
+Because `0.04` is not represented exactly in IEEE-754 binary floating point,
+the artifacts also report, at full `repr()` precision,
+`boundary_margin = |med_{f*}| - 0.04` and
+`boundary_adjacent = (|boundary_margin| < 1e-9)`, together with the fixed
+`1e-9` diagnostic tolerance.  This disclosure does not alter a state,
+threshold, ordering, or comparison operator.  A boundary-adjacent selection
+requires human review before it authorizes any confirmation action.
+
 **Statistical language (frozen).** `9/12` here and `18/24` in Section 8
 are **preregistered engineering gates** — deterministic thresholds a
 future run must meet to justify the next engineering step. They are NOT
@@ -531,6 +540,33 @@ Any future run implementing this spec must, before scoring:
 - Bind the pilot's git commit (full 40-char SHA) and this document's hash into
   the emitted artifacts; refuse a dirty tracked tree; refuse an existing output
   directory; never modify committed inputs or anything under `src/runs/`.
+
+**Certificate scope and independent raw anchor.** The audit/analyzer replay
+the committed RMP/oracle and dictator evidence and prove that those records
+are internally consistent with the stored summaries. They do **not** re-solve
+the LPs or MIPs and therefore cannot independently prove that a
+self-consistent record came from a real solver execution. Decision integrity
+also rests on provenance of the exact raw tree. Before analysis, while still
+outcome-blind, the operator independently captured:
+
+```
+canonical tree SHA-256 = efc5ca31dcddb21166f6a5da2cf60b4961706c99edf9dbda882f87a18a88ace4
+file count             = 363
+directory count        = 60
+total bytes            = 17385781
+```
+
+This anchor covers 60 directories with six required files each, root
+`JOB.json` and `MANIFEST.json`, and the one explicitly allowed root audit
+report `AUDIT.md`. The analyzer and confirmation selector must recompute all
+four fields and refuse any disagreement; the selector must additionally
+cross-bind the analysis claim to the live raw-tree digest, exact `JOB.json`
+hash, and Slurm job id. A future audit re-run must write `--out` **outside**
+`runs/b3_factor_pilot` so this pre-analysis anchor remains stable. Unknown
+root files remain forbidden; `AUDIT.md` is the sole optional named member.
+The immutable run manifest retains the pre-amendment specification SHA-256
+`150f4b32220b13866d2872e4bb8a29bfcc5137cca18ebb55c8ddf3d163d4275f`;
+this outcome-blind clarification does not rewrite that raw evidence.
 
 This draft implements none of the above; it specifies them.
 

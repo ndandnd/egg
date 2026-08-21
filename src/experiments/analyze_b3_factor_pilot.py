@@ -23,6 +23,12 @@ failure), ``UNDER-RESOLVED`` (``|med_{f*}| <= tau_Delta``), ``GO``
 
 It launches nothing, reads no A6 path, and — until a reviewed run
 exists — is exercised only on synthetic fixtures.
+
+Certificate scope: this analyzer replays the committed RMP/oracle and
+dictator evidence; it does not re-solve the underlying LPs or MIPs.  The
+replay proves internal consistency with recorded solver fields, so decision
+integrity additionally rests on the provenance of the raw run tree and its
+independent, outcome-blind pre-analysis digest.
 """
 from __future__ import annotations
 
@@ -39,13 +45,20 @@ from pathlib import Path
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import experiments.b3_factor_pilot as bp
+import experiments.b3_pilot_anchor as anchor
+import experiments.b3_pilot_evidence as evidence
 
 SCHEMA = "b3-factor-pilot-analysis-v1"
 REPO_ROOT = bp.REPO_ROOT
 SPEC_RELPATH = "doc/B3_FACTOR_PILOT_SPEC_DRAFT.md"
 PROVENANCE_FILES = (
     "src/experiments/analyze_b3_factor_pilot.py",
+    "src/experiments/audit_b3_factor_pilot.py",
     "src/experiments/b3_factor_pilot.py",
+    "src/experiments/b3_pilot_anchor.py",
+    "src/experiments/b3_factor_screen.py",
+    "src/experiments/b3_pilot_evidence.py",
+    "src/experiments/package_a6_holdout.py",
     SPEC_RELPATH,
     "src/tests/test_b3_factor_pilot.py",
 )
@@ -63,6 +76,7 @@ BASELINE_SETTING = "S0_baseline"
 TAU_DELTA = bp.TAU_DELTA                 # 0.04 SEK (spec 6)
 COUNT_GATE = 9                           # of 12 (development engineering gate)
 WIDTH_BOUND = bp.TOL_D + bp.EPSILON      # width(U) <= tol_d + epsilon
+BOUNDARY_ADJACENT_TOL = 1e-9
 
 
 class B3AnalysisError(RuntimeError):
@@ -167,157 +181,18 @@ def cell_interval(ub_ch: float, lb_ch: float, z_d_ub: float,
 
 
 def _load(path: Path):
-    with open(path) as handle:
-        return json.load(handle)
-
-
-NUM_TOL = 1e-9
-UB_MONO_TOL = 1e-9
-
-
-def _replay_cg_bounds(ck: dict, tag: str) -> tuple:
-    """Replay ``ub_ch``/``lb_best`` from the CHRONOLOGICAL iteration/oracle
-    event logs (the standing project lesson: never trust stored summary
-    labels).  Every entry of the recorded bound histories must equal the
-    replayed value; every clean iteration must reference a distinct oracle
-    event whose certified solver bound reproduces ``lb_ch = z_rmp +
-    min(0, bound - sigma)`` exactly.
-
-    Returns ``(ub_ch, lb_best, problems)``; the bounds are ``None`` when
-    replay failed."""
-    problems: list[str] = []
-    events = ck.get("oracle_events") or []
-    iterations = ck.get("iteration_events") or []
-    ub_hist = ck.get("ub_history") or []
-    lb_hist = ck.get("lb_history") or []
-    seen_ids: set = set()
-    for event in events:
-        call_id = ((event or {}).get("extra") or {}).get("call_id")
-        if not isinstance(call_id, str) or call_id in seen_ids:
-            problems.append(f"{tag}: oracle event without a unique call_id")
-            return None, None, problems
-        seen_ids.add(call_id)
-    if not iterations:
-        problems.append(f"{tag}: no iteration events to replay")
-        return None, None, problems
-    if len(ub_hist) != len(iterations) or len(lb_hist) != len(iterations):
-        problems.append(
-            f"{tag}: bound history length ({len(ub_hist)}/{len(lb_hist)}) "
-            f"!= iteration events ({len(iterations)}) — history edited")
-        return None, None, problems
-    # chronological binding: events[0] is the seed call; the k-th priced
-    # iteration binds POSITIONALLY to events[k+1], whose call_id must equal
-    # the iteration's pricing_solve_id (no unreferenced or reordered calls)
-    priced_count = sum(1 for it in iterations
-                       if not (it or {}).get("terminal"))
-    if len(events) != priced_count + 1:
-        problems.append(
-            f"{tag}: {len(events)} committed oracle events != seed + "
-            f"{priced_count} priced iterations — event log edited")
-        return None, None, problems
-    lb_best = -math.inf
-    prev_ub = math.inf
-    priced_seen = 0
-    for index, it in enumerate(iterations):
-        it = it or {}
-        ub = it.get("ub_ch")
-        if not _finite(ub):
-            problems.append(f"{tag}: iteration {index}: nonfinite ub_ch")
-            return None, None, problems
-        if ub > prev_ub + UB_MONO_TOL:
-            problems.append(
-                f"{tag}: iteration {index}: UB_CH increased "
-                f"{prev_ub} -> {ub}")
-            return None, None, problems
-        prev_ub = ub
-        if it.get("terminal"):
-            if index != len(iterations) - 1:
-                problems.append(
-                    f"{tag}: terminal iteration event is not last")
-                return None, None, problems
-        else:
-            priced_seen += 1
-            oracle = events[priced_seen]
-            call_id = it.get("pricing_solve_id")
-            if (not isinstance(call_id, str)
-                    or ((oracle or {}).get("extra") or {}).get("call_id")
-                    != call_id):
-                problems.append(
-                    f"{tag}: iteration {index}: pricing_solve_id "
-                    f"{call_id!r} != chronological oracle event "
-                    f"{priced_seen}")
-                return None, None, problems
-            bound = (oracle.get("solver") or {}).get("bound")
-            sigma = it.get("duals_sigma")
-            z_rmp = it.get("z_rmp_model")
-            if not (_finite(bound) and _finite(sigma) and _finite(z_rmp)):
-                problems.append(
-                    f"{tag}: iteration {index}: nonfinite replay evidence "
-                    "(solver bound / duals_sigma / z_rmp_model)")
-                return None, None, problems
-            min_rc_lb = bound - sigma
-            if it.get("min_reduced_cost_lb") != min_rc_lb:
-                problems.append(
-                    f"{tag}: iteration {index}: min_reduced_cost_lb "
-                    f"{it.get('min_reduced_cost_lb')!r} != replayed "
-                    f"{min_rc_lb!r} from the oracle solver bound")
-                return None, None, problems
-            oracle_rc = (oracle.get("extra") or {}).get(
-                "min_reduced_cost_lb")
-            if oracle_rc is not None and oracle_rc != min_rc_lb:
-                problems.append(
-                    f"{tag}: iteration {index}: oracle-side "
-                    "min_reduced_cost_lb disagrees with replay")
-                return None, None, problems
-            lb_ch = z_rmp + min(0.0, min_rc_lb)
-            if it.get("lb_ch") != lb_ch:
-                problems.append(
-                    f"{tag}: iteration {index}: lb_ch {it.get('lb_ch')!r} "
-                    f"!= replayed {lb_ch!r}")
-                return None, None, problems
-            lb_best = max(lb_best, lb_ch)
-            if it.get("lb_best") != lb_best:
-                problems.append(
-                    f"{tag}: iteration {index}: lb_best "
-                    f"{it.get('lb_best')!r} != replayed {lb_best!r}")
-                return None, None, problems
-        if ub_hist[index] != ub or lb_hist[index] != lb_best:
-            problems.append(
-                f"{tag}: iteration {index}: recorded bound history "
-                f"({ub_hist[index]!r}, {lb_hist[index]!r}) != replayed "
-                f"({ub!r}, {lb_best!r}) — CH history edited")
-            return None, None, problems
-    if not _finite(lb_best):
-        problems.append(f"{tag}: replay produced no finite lb_best")
-        return None, None, problems
-    return prev_ub, lb_best, problems
+    return evidence.read_json_object_once(path, str(path))
 
 
 def load_population(runs_dir: str | os.PathLike, screen: dict,
                     market_by_cell: dict, run_manifest: dict) -> dict:
-    """Read all 60 cells and, rather than trusting any recorded outcome or
-    history field, REPLAY the certified bounds from the chronological
-    oracle/iteration event logs, recompute the dictator certificate from
-    its endpoints and committed record, and cross-bind everything to the
-    run manifest (market hashes AND solver identity).  Any failure is
-    collected as an INVALID/HALT problem (no cell is ever silently
-    dropped).
-
-    Rejections: edits to bound histories, iteration bound fields, or
-    outcome bounds (all must equal the event replay); dropped/reordered
-    oracle events; CG/dictator ``z_D`` mismatch; missing or altered market
-    hashes; missing/nonfinite recorded ``z_D_lb``; non-OPTIMAL, unconverged,
-    or gap-violating dictator evidence (the certificate is recomputed —
-    the ``adaptive_converged`` flag is never trusted); invalid or missing
-    dictator replay records; solver identities differing from the run
-    manifest; oracle budgets exceeding the frozen 240; malformed JSON;
-    ``U_hi < 0`` beyond tolerance, interval inversion, and impossible
-    theorem-tightened intervals (``lo > hi``).
-    """
+    """Replay all 60 cells through the same primitive used by the audit."""
     runs = Path(runs_dir)
     problems: list[str] = []
     cells: dict[tuple, dict] = {}
     manifest_solver = run_manifest.get("solver") or {}
+    run_manifest_sha = bp.run_manifest_sha256(run_manifest)
+    run_commit = run_manifest.get("run_commit")
     for cell in bp.build_cells():
         tag = cell["tag"]
         key = (cell["setting"], cell["seed"], cell["n_trips"], cell["b"])
@@ -331,192 +206,42 @@ def load_population(runs_dir: str | os.PathLike, screen: dict,
         try:
             ck = _load(cg_path)
             dd = _load(d_path)
-        except (json.JSONDecodeError, UnicodeDecodeError, OSError) as exc:
-            problems.append(f"{tag}: malformed checkpoint JSON: {exc}")
+        except evidence.EvidenceError as exc:
+            problems.append(f"{tag}: {exc}")
             continue
-        if not isinstance(ck, dict) or not isinstance(dd, dict):
-            problems.append(f"{tag}: checkpoint JSON is not an object")
-            continue
-        ident = ck.get("identity") or {}
         expected_hash = screen["instance_hashes"][
             (cell["setting"], cell["seed"], cell["n_trips"])]
         expected_market = market_by_cell.get(key)
-        if ident.get("method", "a2") != bp.METHOD:
-            problems.append(f"{tag}: method {ident.get('method')!r} != a2")
-        if ident.get("instance_hash") != expected_hash:
-            problems.append(f"{tag}: instance-hash drift vs frozen screen")
-        # market hash must be present and match the manifest, on BOTH sides
         if expected_market is None:
             problems.append(f"{tag}: market hash missing from run manifest")
-        if ident.get("market_hash") != expected_market:
-            problems.append(f"{tag}: CG market hash != manifest (missing/altered)")
-        if (dd.get("identity") or {}).get("market_hash") != expected_market:
-            problems.append(f"{tag}: dictator market hash != manifest")
-
-        oc = ck.get("outcome") or {}
-        if not (oc.get("type") == "certified" and oc.get("certified")):
-            problems.append(
-                f"{tag}: A2 not certified within budget (INVALID/HALT)")
             continue
-
-        # BLOCKER repair: replay UB/LB from the chronological oracle and
-        # iteration event logs — the recorded bound histories and outcome
-        # fields must all equal the replay (editing CH histories with
-        # unchanged solver evidence must be impossible)
-        ub_ch, lb_ch, replay_problems = _replay_cg_bounds(ck, tag)
+        replayed, replay_problems = evidence.replay_cell_evidence(
+            ck,
+            dd,
+            cell=cell,
+            expected_instance_hash=expected_hash,
+            expected_market_hash=expected_market,
+            screen_record_sha256=screen["record_sha256"],
+            run_manifest_sha256=run_manifest_sha,
+            run_commit=run_commit,
+            manifest_solver=manifest_solver,
+        )
         if replay_problems:
             problems.extend(replay_problems)
             continue
-        for label, recomputed, recorded in (
-                ("ub_ch", ub_ch, oc.get("ub_ch")),
-                ("lb_best", lb_ch, oc.get("lb_best"))):
-            if not _finite(recorded) or abs(recomputed - recorded) > NUM_TOL:
-                problems.append(
-                    f"{tag}: outcome {label} {recorded} != replayed "
-                    f"{recomputed} (single-field edit)")
-        if not _finite(oc.get("gap")) or abs(
-                oc["gap"] - (ub_ch - lb_ch)) > NUM_TOL:
-            problems.append(f"{tag}: outcome gap != ub_ch - lb_best")
-        epsilon = ident.get("epsilon")
-        if not _finite(epsilon) or epsilon != bp.EPSILON:
-            problems.append(
-                f"{tag}: identity epsilon {epsilon!r} != frozen "
-                f"{bp.EPSILON}")
-            continue
-        if ub_ch - lb_ch > epsilon + NUM_TOL:
-            problems.append(
-                f"{tag}: replayed certificate gap {ub_ch - lb_ch:.6g} > "
-                f"epsilon {epsilon} yet outcome claims certified")
-            continue
-
-        # dictator endpoints + cross-binding; a converged FLAG is never
-        # trusted — the certificate is recomputed from its endpoints
-        z_d_ub = dd.get("z_d_ub")
-        z_d_lb = dd.get("z_d_lb")
-        adaptive = dd.get("adaptive") or {}
-        if dd.get("status") != "OPTIMAL":
-            problems.append(f"{tag}: dictator status != OPTIMAL")
-            continue
-        if not adaptive.get("adaptive_converged"):
-            problems.append(f"{tag}: dictator not converged (INVALID/HALT)")
-            continue
-        if not _finite(z_d_ub):
-            problems.append(f"{tag}: nonfinite dictator z_d_ub")
-            continue
-        if not _finite(ident.get("z_d_ub")) or abs(
-                ident["z_d_ub"] - z_d_ub) > 1e-12:
-            problems.append(
-                f"{tag}: CG identity z_d_ub != dictator z_d_ub (z_D mismatch)")
-            continue
-        if not _finite(z_d_lb):
-            problems.append(
-                f"{tag}: dictator z_d_lb missing/nonfinite (required)")
-            continue
-        adaptive_lb = adaptive.get("adaptive_lb")
-        if not _finite(adaptive_lb) or abs(adaptive_lb - z_d_lb) > NUM_TOL:
-            problems.append(f"{tag}: dictator z_d_lb != recorded adaptive_lb")
-            continue
-        adaptive_ub = adaptive.get("adaptive_ub")
-        if not _finite(adaptive_ub) or abs(adaptive_ub - z_d_ub) > NUM_TOL:
-            problems.append(f"{tag}: dictator z_d_ub != recorded adaptive_ub")
-            continue
-        dictator_gap = z_d_ub - z_d_lb
-        tol_d = dd.get("tol_d")
-        if tol_d != bp.TOL_D or ident.get("tol_d") != bp.TOL_D:
-            problems.append(f"{tag}: tol_d differs from frozen {bp.TOL_D}")
-            continue
-        if dictator_gap > bp.TOL_D + NUM_TOL:
-            problems.append(
-                f"{tag}: recomputed dictator gap {dictator_gap:.6g} > tol_d "
-                f"{bp.TOL_D} (adaptive_converged flag is not evidence)")
-            continue
-        adaptive_gap = adaptive.get("adaptive_gap_abs")
-        if not _finite(adaptive_gap) or abs(
-                adaptive_gap - dictator_gap) > NUM_TOL:
-            problems.append(
-                f"{tag}: recorded adaptive_gap_abs {adaptive_gap!r} "
-                f"inconsistent with endpoints ({dictator_gap!r})")
-            continue
-        record = dd.get("record")
-        if not isinstance(record, dict) or record.get("replay_ok") is not True:
-            problems.append(
-                f"{tag}: dictator record replay invalid or missing")
-            continue
-        if record.get("replay_violations"):
-            problems.append(
-                f"{tag}: dictator record carries replay violations")
-            continue
-        d_solver = (dd.get("identity") or {}).get("solver") or {}
-        if d_solver.get("backend") != manifest_solver.get("backend") \
-                or d_solver.get("max_mip_gap") != manifest_solver.get(
-                    "mip_gap"):
-            problems.append(
-                f"{tag}: dictator solver identity != run manifest solver")
-            continue
-        if lb_ch > ub_ch + NUM_TOL:
-            problems.append(f"{tag}: lb_CH {lb_ch} > ub_CH {ub_ch}")
-            continue
-
-        # certification call count is cross-checked against the committed
-        # oracle events AND the frozen budget, never trusted from a summary
-        # field alone
-        oracle_calls = ck.get("oracle_calls")
-        events = ck.get("oracle_events") or []
-        if (not isinstance(oracle_calls, int)
-                or isinstance(oracle_calls, bool)
-                or oracle_calls != len(events)):
-            problems.append(
-                f"{tag}: oracle_calls {oracle_calls!r} != committed events "
-                f"({len(events)})")
-            continue
-        if ident.get("budget") != bp.BUDGET:
-            problems.append(
-                f"{tag}: identity budget {ident.get('budget')!r} != frozen "
-                f"{bp.BUDGET}")
-            continue
-        if oracle_calls > bp.BUDGET:
-            problems.append(
-                f"{tag}: oracle_calls {oracle_calls} exceeds the frozen "
-                f"budget {bp.BUDGET}")
-            continue
-        # the solver identity reported per cell is the RUN MANIFEST's bound
-        # solver block; the checkpoint identity must agree with it
-        solver_ident = ident.get("solver") or {}
-        if solver_ident.get("backend") != manifest_solver.get("backend") \
-                or solver_ident.get("max_mip_gap") != manifest_solver.get(
-                    "mip_gap"):
-            problems.append(
-                f"{tag}: CG solver identity != run manifest solver")
-            continue
-        interval = cell_interval(ub_ch, lb_ch, z_d_ub, z_d_lb, cell["n_trips"])
-        if interval["U_hi"] < -1e-6:
-            problems.append(
-                f"{tag}: U_hi {interval['U_hi']:.6g} < 0 beyond tolerance "
-                "(violates z_D >= z_CH)")
-            continue
-        if interval["U_hi"] < interval["U_lo_raw"] - NUM_TOL:
-            problems.append(f"{tag}: U_hi < U_lo_raw (interval inversion)")
-            continue
-        if interval["U_lo"] > interval["U_hi"]:
-            problems.append(
-                f"{tag}: impossible tightened interval "
-                f"[{interval['U_lo']:.6g}, {interval['U_hi']:.6g}] "
-                "(lo > hi after theorem tightening)")
-            continue
-        if interval["width"] > WIDTH_BOUND + NUM_TOL:
-            problems.append(
-                f"{tag}: width(U) {interval['width']:.6g} > tol_d+epsilon "
-                f"{WIDTH_BOUND}")
-            continue
+        assert replayed is not None
+        interval = cell_interval(
+            replayed["ub_ch"], replayed["lb_ch"],
+            replayed["z_d_ub"], replayed["z_d_lb"], cell["n_trips"])
         cells[key] = {
             "cell": cell, "interval": interval,
-            "instance_hash": ident.get("instance_hash"),
-            "market_hash": ident.get("market_hash"),
-            "oracle_calls": oracle_calls,
-            "solver_backend": manifest_solver.get("backend"),
-            "solver_mip_gap": manifest_solver.get("mip_gap"),
-            "dictator_gap": dictator_gap,
-            "ch_gap": ub_ch - lb_ch,
+            "instance_hash": expected_hash,
+            "market_hash": expected_market,
+            "oracle_calls": replayed["oracle_calls"],
+            "solver_backend": replayed["solver_backend"],
+            "solver_mip_gap": replayed["solver_mip_gap"],
+            "dictator_gap": replayed["dictator_gap"],
+            "ch_gap": replayed["ch_gap"],
         }
     if len(cells) != bp.N_CELLS:
         problems.append(
@@ -590,13 +315,19 @@ def analyze_population(pop: dict) -> dict:
         state = "GO"
     else:
         state = "NO-GO"
+    boundary_margin = abs(med_star) - TAU_DELTA
     return {
         "decision": {
             "state": state, "selected_contrast": f_star,
             "count": count_star, "n_cells": len(market_keys),
             "count_gate": COUNT_GATE,
             "signed_median_midpoint": med_star,
+            "signed_median_midpoint_repr": repr(med_star),
             "tau_delta": TAU_DELTA,
+            "boundary_margin": boundary_margin,
+            "boundary_adjacent": abs(boundary_margin)
+            < BOUNDARY_ADJACENT_TOL,
+            "boundary_adjacent_tolerance": BOUNDARY_ADJACENT_TOL,
         },
         "contrasts": contrasts,
         "settings": per_setting,
@@ -648,8 +379,12 @@ def _write_summary(path: Path, manifest: dict, result: dict) -> None:
             f"- direction-consistent zero-excluding count: {dec['count']}/"
             f"{dec['n_cells']} (gate >= {dec['count_gate']})",
             f"- direction-signed median midpoint: "
-            f"{dec['signed_median_midpoint']:.6g} SEK "
+            f"{dec['signed_median_midpoint']!r} SEK "
             f"(tau_Delta = {dec['tau_delta']})",
+            f"- boundary margin |median|-tau_Delta: "
+            f"{dec['boundary_margin']!r}; adjacent="
+            f"{dec['boundary_adjacent']} at "
+            f"{dec['boundary_adjacent_tolerance']!r}",
             "",
             "Confirmation (frozen, separate fresh-seed stage; NOT run here): "
             "seeds {32,33,34,35,36,37}, S0 vs S_{f*}, 24 matched contrasts, "
@@ -760,13 +495,15 @@ def _setting_summary_rows(settings: dict) -> list[dict]:
 
 
 def analyze(runs_dir, out_base, stamp, analysis_code_commit, *,
-            screen_dir=None, verify_code_commit=True) -> str:
+            screen_dir=None, verify_code_commit=True,
+            expected_raw_anchor=None) -> str:
     refuse_a6_paths(runs_dir, out_base)
     assert_output_separation(runs_dir, out_base)
     if verify_code_commit:
         verify_analysis_code_commit(analysis_code_commit)
 
     audit_sha = None
+    run_manifest = None
     try:
         screen = bp.load_frozen_screen(screen_dir)
     except bp.B3PilotError as exc:
@@ -776,25 +513,34 @@ def analyze(runs_dir, out_base, stamp, analysis_code_commit, *,
         screen = {"dir": "<unresolved>", "record_sha256": None,
                   "spec_sha256": None}
     else:
-        # the exact audit MUST pass before any scoring; malformed run
-        # inputs are a STRUCTURED INVALID/HALT, never an uncaught crash
-        from experiments import audit_b3_factor_pilot as ad
-        try:
-            audit_result = ad.audit(runs_dir, screen_dir)
-        except (json.JSONDecodeError, UnicodeDecodeError) as exc:
-            audit_result = {"ok": False, "run_manifest_sha256": None,
-                            "problems": [f"malformed run input: {exc}"]}
-        audit_sha = audit_result.get("run_manifest_sha256")
-        if not audit_result["ok"]:
-            result = {"decision": {"state": "INVALID/HALT",
-                                   "problems": audit_result["problems"]},
-                      "contrasts": [], "settings": {}, "cells": {}}
+        if screen.get("record_sha256") != bp.FROZEN_SCREEN_RECORD_SHA256:
+            result = {
+                "decision": {
+                    "state": "DESIGN-NOT-FROZEN",
+                    "reason": (
+                        "screen record SHA differs from the frozen canonical "
+                        "screen; scoring overrides are forbidden"),
+                },
+                "contrasts": [], "settings": {}, "cells": {},
+            }
         else:
-            run = bp.load_run_manifest(runs_dir)
-            market_by_cell = bp.market_hash_by_cell(run["manifest"])
-            pop = load_population(runs_dir, screen, market_by_cell,
-                                  run["manifest"])
-            result = analyze_population(pop)
+            # the exact audit MUST pass before any scoring; malformed run
+            # inputs are a STRUCTURED INVALID/HALT, never an uncaught crash
+            from experiments import audit_b3_factor_pilot as ad
+            audit_result = ad.audit(runs_dir, screen_dir)
+            audit_sha = audit_result.get("run_manifest_sha256")
+            if not audit_result["ok"]:
+                result = {"decision": {"state": "INVALID/HALT",
+                                       "problems": audit_result["problems"]},
+                          "contrasts": [], "settings": {}, "cells": {}}
+            else:
+                run_manifest = evidence.read_json_object_once(
+                    Path(runs_dir) / bp.RUN_MANIFEST_FILENAME,
+                    "run MANIFEST.json")
+                market_by_cell = bp.market_hash_by_cell(run_manifest)
+                pop = load_population(
+                    runs_dir, screen, market_by_cell, run_manifest)
+                result = analyze_population(pop)
 
     # bind the analysis to the EXACT raw job it scored: the raw tree's
     # canonical digest plus the Slurm job binding (the design manifest is
@@ -807,18 +553,69 @@ def analyze(runs_dir, out_base, stamp, analysis_code_commit, *,
             snapshot_source as _snapshot,
         )
         try:
+            raw_snapshot = _snapshot(runs_dir)
+            raw_files = {
+                row["path"]: row["sha256"] for row in raw_snapshot["files"]}
+            raw_tree_sha = _tree_sha(raw_snapshot)
+            actual_anchor = anchor.snapshot_identity(
+                raw_snapshot, raw_tree_sha)
+            required_anchor = expected_raw_anchor
+            if required_anchor is None:
+                required_anchor = (
+                    actual_anchor if not verify_code_commit
+                    else anchor.FROZEN_RAW_ANCHOR)
+            if (not isinstance(required_anchor, dict)
+                    or set(required_anchor) != set(
+                        anchor.FROZEN_RAW_ANCHOR)):
+                raise evidence.EvidenceError(
+                    "expected pre-analysis raw anchor is malformed")
+            disagreements = anchor.anchor_disagreements(
+                actual_anchor, required_anchor)
+            if disagreements:
+                raise evidence.EvidenceError(
+                    "pre-analysis raw anchor mismatch: "
+                    + ", ".join(disagreements))
             raw_binding = {
-                "raw_tree_sha256": _tree_sha(_snapshot(runs_dir)),
+                "raw_tree_sha256": raw_tree_sha,
+                "file_count": raw_snapshot["file_count"],
+                "directory_count": raw_snapshot["directory_count"],
+                "total_bytes": raw_snapshot["total_bytes"],
+                "manifest_sha256": raw_files.get(bp.RUN_MANIFEST_FILENAME),
                 "job_id": None,
                 "job_sha256": None,
+                "pre_analysis_anchor": dict(required_anchor),
             }
-            job_path = Path(runs_dir) / "JOB.json"
-            if job_path.is_file():
-                job_doc = json.loads(job_path.read_text())
-                raw_binding["job_id"] = str(job_doc.get("job_id"))
-                raw_binding["job_sha256"] = sha256_file(job_path)
-        except (_PkgError, OSError, json.JSONDecodeError,
-                UnicodeDecodeError) as exc:
+            if raw_binding["manifest_sha256"] != audit_sha:
+                raise evidence.EvidenceError(
+                    "snapshotted MANIFEST.json differs from audited bytes")
+            if bp.JOB_FILENAME in raw_files:
+                job_path = Path(runs_dir) / bp.JOB_FILENAME
+                job_bytes = evidence.read_regular_bytes_once(
+                    job_path, bp.JOB_FILENAME)
+                job_sha = hashlib.sha256(job_bytes).hexdigest()
+                if job_sha != raw_files[bp.JOB_FILENAME]:
+                    raise evidence.EvidenceError(
+                        "JOB.json changed after raw-tree snapshot")
+                job_doc = evidence.strict_json_loads(
+                    job_bytes, bp.JOB_FILENAME)
+                if not isinstance(job_doc, dict):
+                    raise evidence.EvidenceError(
+                        "JOB.json root is not an object")
+                job_id = job_doc.get("job_id")
+                if (job_doc.get("schema") != "b3-factor-pilot-job-v1"
+                        or not isinstance(job_id, str)
+                        or not job_id.isdigit() or job_id.startswith("0")
+                        or len(job_id) > 18):
+                    raise evidence.EvidenceError(
+                        "JOB.json has a noncanonical Slurm job id")
+                if (job_doc.get("run_manifest_sha256") != audit_sha
+                        or job_doc.get("run_commit")
+                        != (run_manifest or {}).get("run_commit")):
+                    raise evidence.EvidenceError(
+                        "JOB.json does not bind the exact run manifest")
+                raw_binding["job_id"] = job_id
+                raw_binding["job_sha256"] = job_sha
+        except (_PkgError, OSError, evidence.EvidenceError) as exc:
             raw_binding = None
             result = {"decision": {"state": "INVALID/HALT",
                                    "problems": [
@@ -839,9 +636,9 @@ def analyze(runs_dir, out_base, stamp, analysis_code_commit, *,
             Path(screen_dir_recorded).resolve().relative_to(REPO_ROOT))
     except (ValueError, OSError):
         pass
-    # a --screen-dir override can never bypass the frozen screen SHA: the
-    # binding is recorded and any drift marks the artifact non-scoreable
-    # (the selector and packager refuse non-verified screens)
+    # The internal screen_dir hook exists only for synthetic tests.  Any SHA
+    # drift above becomes DESIGN-NOT-FROZEN and is never scored; the production
+    # CLI exposes no screen override.
     frozen_screen_verified = (
         screen.get("record_sha256") == bp.FROZEN_SCREEN_RECORD_SHA256)
     manifest = {
@@ -858,6 +655,7 @@ def analyze(runs_dir, out_base, stamp, analysis_code_commit, *,
         "run_manifest_sha256": audit_sha,
         "raw_binding": raw_binding,
         "audit_required": True,
+        "solver": (run_manifest or {}).get("solver"),
         "tolerances": {"epsilon": bp.EPSILON, "tol_d": bp.TOL_D,
                        "budget": bp.BUDGET, "tau_delta": TAU_DELTA},
         "counts": bp.counts(),
@@ -884,16 +682,28 @@ def analyze(runs_dir, out_base, stamp, analysis_code_commit, *,
         },
         "signed_median_midpoint": result["decision"].get(
             "signed_median_midpoint"),
+        "signed_median_midpoint_repr": result["decision"].get(
+            "signed_median_midpoint_repr"),
+        "boundary_margin": result["decision"].get("boundary_margin"),
+        "boundary_adjacent": result["decision"].get("boundary_adjacent"),
+        "boundary_adjacent_tolerance": result["decision"].get(
+            "boundary_adjacent_tolerance"),
         "inputs": {
             "run_manifest_sha256": audit_sha,
             "screen_record_sha256": screen.get("record_sha256"),
             "spec_sha256": manifest["spec"]["sha256"],
+            "raw_binding": raw_binding,
+            "solver": manifest["solver"],
         },
         "frozen_screen_verified": frozen_screen_verified,
         "analysis_code_commit": analysis_code_commit,
         "problems": result["decision"].get("problems"),
         "reason": result["decision"].get("reason"),
     }
+    # Two independently shaped manifest copies are intentional: the exact
+    # DECISION.json document and the analyzer's internal decision record.
+    # The selector requires both to equal its primitive reconstruction.
+    manifest["decision_document"] = decision_document
 
     valid_population = bool(result["cells"])
     staging = out_dir.with_name(f".{stamp}.staging")
@@ -953,10 +763,9 @@ def main() -> None:
     ap.add_argument("--out", default=str(REPO_ROOT / "result" / "b3_factor_pilot"))
     ap.add_argument("--stamp", required=True)
     ap.add_argument("--analysis-code-commit", required=True)
-    ap.add_argument("--screen-dir", default=None)
     args = ap.parse_args()
     out_dir = analyze(args.runs, args.out, args.stamp,
-                      args.analysis_code_commit, screen_dir=args.screen_dir)
+                      args.analysis_code_commit)
     print(out_dir)
 
 
