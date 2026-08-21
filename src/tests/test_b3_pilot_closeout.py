@@ -431,7 +431,10 @@ def test_selection_provenance_gates(monkeypatch):
     real_run = sel.subprocess.run
 
     def not_ancestor(args, cwd=None, **kwargs):
-        if args[:2] == ["git", "merge-base"]:
+        # argv is now a hardened invocation
+        # (/usr/bin/git --no-replace-objects --git-dir ... merge-base ...),
+        # so match on the subcommand rather than on a fixed prefix.
+        if "merge-base" in args:
             class R:
                 returncode = 1
             return R()
@@ -444,10 +447,12 @@ def test_selection_provenance_gates(monkeypatch):
 
     real_co = sel.subprocess.check_output
 
-    def dirty(args, cwd=None, stderr=None):
-        if args[1] == "status":
+    def dirty(args, cwd=None, stderr=None, env=None):
+        # the hardened runner passes a scrubbed env and prefixes global flags,
+        # so match on the subcommand, not on a positional index
+        if "status" in args:
             return b" M src/experiments/select_b3_confirmation.py\n"
-        return real_co(args, cwd=cwd, stderr=stderr)
+        return real_co(args, cwd=cwd, stderr=stderr, env=env)
 
     monkeypatch.setattr(sel.subprocess, "check_output", dirty)
     with pytest.raises(sel.B3SelectionError, match="tracked modifications"):
