@@ -62,6 +62,7 @@ def git_argv(repo_root, *args: str) -> list:
             "-c", "core.fsmonitor=",
             "-c", "core.hooksPath=/dev/null",
             "-c", "protocol.ext.allow=never",
+            "-c", "advice.graftFileDeprecated=false",
             "--git-dir", str(git_dir(repo_root)),
             "--work-tree", str(repo_root), *args]
 
