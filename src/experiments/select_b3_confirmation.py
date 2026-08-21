@@ -381,7 +381,7 @@ def recompute_decision(cells: list[dict],
     import statistics
     interval = {}
     screen = bp.load_frozen_screen()
-    market_hashes = set()
+    market_hash_by_cell = {}
     expected_keys = {
         (cell["setting"], cell["seed"], cell["n_trips"], f"{cell['b']:g}")
         for cell in bp.build_cells()}
@@ -406,11 +406,16 @@ def recompute_decision(cells: list[dict],
                 "frozen screen")
         market_hash = row.get("market_hash")
         if (not isinstance(market_hash, str) or len(market_hash) != 64
-                or any(c not in "0123456789abcdef" for c in market_hash)
-                or market_hash in market_hashes):
+                or any(c not in "0123456789abcdef" for c in market_hash)):
             raise B3SelectionError(
-                f"cell_intervals.csv {key}: market hash is invalid/duplicate")
-        market_hashes.add(market_hash)
+                f"cell_intervals.csv {key}: market hash is invalid")
+        market_key = (seed, n_trips, b)
+        prior_market = market_hash_by_cell.setdefault(
+            market_key, market_hash)
+        if prior_market != market_hash:
+            raise B3SelectionError(
+                f"cell_intervals.csv {key}: matched settings disagree on "
+                "market hash")
 
         z_d_lb = _number(row, "z_d_lb", str(key))
         z_d_ub = _number(row, "z_d_ub", str(key))
@@ -470,6 +475,10 @@ def recompute_decision(cells: list[dict],
         raise B3SelectionError(
             "cell_intervals.csv does not cover the frozen 60-cell grid "
             "exactly")
+    if len(market_hash_by_cell) != 12 \
+            or len(set(market_hash_by_cell.values())) != 12:
+        raise B3SelectionError(
+            "cell_intervals.csv does not carry 12 distinct matched markets")
     recorded = {}
     for row in contrasts:
         key = (
