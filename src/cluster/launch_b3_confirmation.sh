@@ -56,14 +56,30 @@ b3_verify_cancelled() {
     return 1
 }
 
-# CRITICAL 2: cluster-tool and driver indirection are permitted ONLY for
-# shell-level self-tests, and self-test mode is itself refused on any machine
-# where a real `sbatch` exists — so no environment hook can ever bypass a
-# guard on a cluster login node. In production the launcher invokes the real
-# driver by its literal path with no indirection.
+# CRITICAL 2 / BLOCKER B: cluster-tool and driver indirection are permitted
+# ONLY when the test harness supplies a POSITIVE permission marker
+# (EGG_LAUNCH_SELFTEST must name an existing regular file it created under a
+# temp dir), AND no plausible scheduler is reachable.  We do not rely on
+# `command -v sbatch` alone: an absolute EGG_SBATCH outside PATH previously
+# reached release.  In production the launcher invokes the driver by its
+# literal path with literal tools/output — no environment hook applies.
 if [[ -n "${EGG_LAUNCH_SELFTEST:-}" ]]; then
-    if command -v sbatch >/dev/null 2>&1; then
-        echo "ERROR: EGG_LAUNCH_SELFTEST refused: a real sbatch is on PATH; hooks may never run on a cluster." >&2
+    if [[ ! -f "${EGG_LAUNCH_SELFTEST}" ]]; then
+        echo "ERROR: EGG_LAUNCH_SELFTEST must name an existing self-test permission marker file." >&2
+        exit 1
+    fi
+    _sched_reachable=""
+    command -v sbatch >/dev/null 2>&1 && _sched_reachable="PATH:sbatch"
+    for _p in /usr/bin/sbatch /usr/local/bin/sbatch /opt/slurm/bin/sbatch \
+              /share/apps/software/slurm/current/bin/sbatch \
+              /usr/local/slurm/current/bin/sbatch; do
+        [[ -x "${_p}" ]] && _sched_reachable="${_p}"
+    done
+    for _v in SLURM_CONF SLURM_CLUSTER_NAME SLURMD_NODENAME SLURM_JOB_ID; do
+        [[ -n "${!_v:-}" ]] && _sched_reachable="env:${_v}"
+    done
+    if [[ -n "${_sched_reachable}" ]]; then
+        echo "ERROR: EGG_LAUNCH_SELFTEST refused: a scheduler is reachable (${_sched_reachable}); hooks may never run on a cluster." >&2
         exit 1
     fi
     SBATCH="${EGG_SBATCH:-sbatch}"
