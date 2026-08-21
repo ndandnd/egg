@@ -1,11 +1,13 @@
-"""Synthetic acceptance battery for outcome-blind settlement arithmetic.
+"""Outcome-blind acceptance battery for settlement arithmetic.
 
-Every endpoint below is invented in this file.  No experiment population,
-checkpoint, run tree, or committed result artifact is opened.
+Fixtures are invented or produced by tiny local CBC solves on burned seeds
+{0, 11, 15}, with at most four trips. No experiment population, checkpoint,
+run tree, or committed result artifact is opened.
 """
 from __future__ import annotations
 
 import copy
+import hashlib
 import json
 import os
 import subprocess
@@ -29,6 +31,103 @@ def _withdrawal(t0, t1):
         {"component_id": "t0", "quantity": _interval(t0)},
         {"component_id": "t1", "quantity": _interval(t1)},
     ]
+
+
+def _best_response_evidence(
+    certificate_id,
+    lower,
+    upper=None,
+    *,
+    prices=("2", "3"),
+    load=("0", "0"),
+):
+    upper = lower if upper is None else upper
+    price_vector = [
+        {"component_id": "t0", "value": str(prices[0])},
+        {"component_id": "t1", "value": str(prices[1])},
+    ]
+    load_values = [str(value) for value in load]
+    private_energy = sum(
+        Decimal(item["value"]) * Decimal(quantity)
+        for item, quantity in zip(price_vector, load_values))
+    intrinsic = Decimal(str(upper)) - private_energy
+    schedule = {
+        "sequences": [[f"{certificate_id}-trip"]],
+        "arc_kinds": [[]],
+        "charges": [],
+        "fleet": 1,
+    }
+    witness = {
+        "schedule": schedule,
+        "load": load_values,
+        "intrinsic_cost": str(intrinsic),
+        "witness_sha256": us.witness_sha256(
+            schedule, load_values, str(intrinsic)),
+        "load_sha256": us.load_sha256(load_values),
+        "certified_feasible": True,
+        "replay_result": {
+            "status": "passed",
+            "policy": "invented-independent-replay-v1",
+            "violations": [],
+        },
+    }
+    return {
+        "schema": us.BEST_RESPONSE_EVIDENCE_SCHEMA,
+        "certificate_id": certificate_id,
+        "status": "certified",
+        "evidence_tier": us.GLOBAL_EXACT_ORACLE_TIER,
+        "instance_hash": hashlib.sha256(
+            certificate_id.encode()).hexdigest(),
+        "price_certificate_id": "invented-price-cert",
+        "price_vector": price_vector,
+        "price_vector_sha256": us.price_vector_sha256(price_vector),
+        "objective_convention": us.PRIVATE_OBJECTIVE_CONVENTION,
+        "witness": witness,
+        "solver": {
+            "backend": "CBC",
+            "solver_version": "invented-cbc",
+            "status": "OPTIMAL",
+            "max_mip_gap": "0.000001",
+        },
+        "incumbent": str(upper),
+        "certified_dual_bound": str(lower),
+    }
+
+
+def _refresh_evidence_witness(evidence):
+    witness = evidence["witness"]
+    prices = [
+        Decimal(item["value"]) for item in evidence["price_vector"]]
+    load = [Decimal(item) for item in witness["load"]]
+    witness["intrinsic_cost"] = str(
+        Decimal(evidence["incumbent"])
+        - sum(price * quantity for price, quantity in zip(prices, load)))
+    witness["witness_sha256"] = us.witness_sha256(
+        witness["schedule"], witness["load"], witness["intrinsic_cost"])
+    witness["load_sha256"] = us.load_sha256(witness["load"])
+
+
+def _set_best_response_interval(participant, lower, upper=None):
+    upper = lower if upper is None else upper
+    evidence = participant["best_response_evidence"]
+    evidence["certified_dual_bound"] = str(lower)
+    evidence["incumbent"] = str(upper)
+    _refresh_evidence_witness(evidence)
+
+
+def _set_evidence_prices(participant, prices):
+    evidence = participant["best_response_evidence"]
+    evidence["price_vector"] = [
+        {"component_id": f"t{index}", "value": str(value)}
+        for index, value in enumerate(prices)
+    ]
+    old_load = list(evidence["witness"]["load"])
+    evidence["witness"]["load"] = (
+        old_load[:len(prices)]
+        + ["0"] * max(0, len(prices) - len(old_load)))
+    evidence["price_vector_sha256"] = us.price_vector_sha256(
+        evidence["price_vector"])
+    _refresh_evidence_witness(evidence)
 
 
 def _identity_certificate():
@@ -72,9 +171,8 @@ def _certificate(*, coverage="complete"):
                 "assigned_action_certified_feasible": True,
                 "assigned_intrinsic_cost": _interval(10),
                 "assigned_net_withdrawal": _withdrawal(4, 1),
-                "best_response_certificate_id": "demand-br-cert",
-                "best_response_status": "certified",
-                "best_response_objective": _interval(19),
+                "best_response_evidence": _best_response_evidence(
+                    "demand-br-cert", 19),
             },
             {
                 "participant_id": "supply",
@@ -83,9 +181,8 @@ def _certificate(*, coverage="complete"):
                 "assigned_action_certified_feasible": True,
                 "assigned_intrinsic_cost": _interval(5),
                 "assigned_net_withdrawal": _withdrawal(-4, -1),
-                "best_response_certificate_id": "supply-br-cert",
-                "best_response_status": "certified",
-                "best_response_objective": _interval(-7),
+                "best_response_evidence": _best_response_evidence(
+                    "supply-br-cert", -7),
             },
         ],
     }
@@ -93,6 +190,35 @@ def _certificate(*, coverage="complete"):
 
 def _participants(result):
     return {row["participant_id"]: row for row in result["participants"]}
+
+
+@pytest.fixture
+def uplift_regret_counterexample():
+    """Two fleet blocks: target regret 2, other regret 1, internal uplift 3."""
+    document = _certificate()
+    document["case_id"] = "explicit-uplift-not-single-fleet-regret"
+    return document
+
+
+def test_internal_uplift_is_not_target_fleet_regret_at_ch_price(
+        uplift_regret_counterexample):
+    result = us.settle(uplift_regret_counterexample)
+    fleets = _participants(result)
+    target_regret = fleets["demand"]["price_conditioned_regret"]
+    other_regret = fleets["supply"]["price_conditioned_regret"]
+    internal_uplift = result["system"]["uplift"]
+
+    assert target_regret == _interval(2)
+    assert other_regret == _interval(1)
+    assert internal_uplift == _interval(3)
+    assert target_regret != internal_uplift
+    # Under this fixture's explicit complete joint identity certificate, the
+    # documented relation is the SUM over fleet blocks, not equality with one
+    # target fleet's regret.
+    assert result["regret_aggregation"][
+        "total_price_conditioned_regret"] == internal_uplift
+    assert result["regret_aggregation"][
+        "uplift_identity_intersection"] == _interval(3)
 
 
 def test_exact_complete_settlement_and_two_part_tariff():
@@ -104,10 +230,18 @@ def test_exact_complete_settlement_and_two_part_tariff():
 
     participants = _participants(result)
     demand = participants["demand"]
+    assert demand["best_response_evidence"]["schema"] == (
+        us.BEST_RESPONSE_EVIDENCE_SCHEMA)
+    assert demand["best_response_evidence"]["evidence_tier"] == (
+        us.GLOBAL_EXACT_ORACLE_TIER)
+    assert demand["best_response_value"] == _interval(19)
     assert demand["volumetric_charge_to_participant"] == _interval(11)
     assert demand["assigned_private_cost_before_commitment"] == _interval(21)
     assert demand["lost_opportunity_cost_raw"] == _interval(2)
     assert demand["lost_opportunity_cost"] == _interval(2)
+    assert demand["target_private_cost_at_best_response_price"] == _interval(21)
+    assert demand["price_conditioned_regret_raw"] == _interval(2)
+    assert demand["price_conditioned_regret"] == _interval(2)
     tariff = demand["two_part_tariff"]
     assert tariff["minimum_commitment_payment_to_participant"] == _interval(2)
     assert tariff["fixed_charge_to_participant"] == _interval(-2)
@@ -133,7 +267,14 @@ def test_exact_complete_settlement_and_two_part_tariff():
     }
     assert aggregate["uplift_loc_identity_consistent"] is True
     assert aggregate["uplift_loc_identity_intersection"] == _interval(3)
+    assert result["regret_aggregation"][
+        "total_price_conditioned_regret"] == _interval(3)
+    assert result["regret_aggregation"][
+        "uplift_identity_intersection"] == _interval(3)
     assert result["boundary"]["budget_balance_claimed"] is False
+    assert result["boundary"]["single_fleet_accounting_only"] is True
+    assert result["boundary"]["per_vehicle_payment_allocation_included"] is False
+    assert result["boundary"]["individual_rationality_claimed"] is False
 
 
 def test_price_components_are_preserved_as_certified_intervals():
@@ -194,11 +335,13 @@ def test_loc_raw_interval_is_preserved_and_nonnegative_theorem_tightens():
     document = _certificate(coverage="partial")
     # Assigned private cost is exactly 21; v in [19,22] gives raw [-1,2].
     document["participants"] = [document["participants"][0]]
-    document["participants"][0]["best_response_objective"] = _interval(19, 22)
+    _set_best_response_interval(document["participants"][0], 19, 22)
     result = us.settle(document)
     participant = result["participants"][0]
     assert participant["lost_opportunity_cost_raw"] == _interval(-1, 2)
     assert participant["lost_opportunity_cost"] == _interval(0, 2)
+    assert participant["price_conditioned_regret_raw"] == _interval(-1, 2)
+    assert participant["price_conditioned_regret"] == _interval(0, 2)
     # Dependency-safe identity v-c, not widened E-[0,2].
     assert participant["two_part_tariff"][
         "net_charge_to_participant_at_minimum_payment"] == _interval(9, 12)
@@ -217,7 +360,8 @@ def test_minimum_net_tariff_uses_dependency_cancellation_identity():
     participant["assigned_net_withdrawal"] = [
         {"component_id": "t0", "quantity": _interval(1)}
     ]
-    participant["best_response_objective"] = _interval(7, 8)
+    _set_evidence_prices(participant, [10])
+    _set_best_response_interval(participant, 7, 8)
     result = us.settle(document)["participants"][0]
     assert result["volumetric_charge_to_participant"] == _interval(9, 11)
     assert result["lost_opportunity_cost"] == _interval(5, 10)
@@ -240,7 +384,7 @@ def test_uplift_raw_interval_is_preserved_and_nonnegative_theorem_tightens():
 def test_negative_loc_upper_endpoint_is_a_certificate_contradiction():
     document = _certificate(coverage="partial")
     document["participants"] = [document["participants"][0]]
-    document["participants"][0]["best_response_objective"] = _interval(22, 23)
+    _set_best_response_interval(document["participants"][0], 22, 23)
     with pytest.raises(us.SettlementError, match="negative upper endpoint"):
         us.settle(document)
 
@@ -324,9 +468,10 @@ def test_identity_certificate_requires_every_joint_premise(premise):
             "objective_certificate.status",
         ),
         (
-            lambda document: document["participants"][0].update(
-                {"best_response_status": "uncertified"}),
-            "best_response_status",
+            lambda document: document["participants"][0][
+                "best_response_evidence"].update(
+                    {"status": "uncertified"}),
+            "best_response_evidence.status",
         ),
         (
             lambda document: document["participants"][0].update(
@@ -381,6 +526,73 @@ def test_schema_identity_and_certificate_gates(mutate, match):
     document = _certificate()
     mutate(document)
     with pytest.raises(us.SettlementError, match=match):
+        us.settle(document)
+
+
+@pytest.mark.parametrize(
+    "mutate, match",
+    [
+        (
+            lambda evidence: evidence.update(
+                {"evidence_tier": "restricted-pool-v1"}),
+            "restricted-pool and heuristic evidence cannot certify",
+        ),
+        (
+            lambda evidence: evidence.update(
+                {"price_vector_sha256": "0" * 64}),
+            "price_vector_sha256 does not recompute",
+        ),
+        (
+            lambda evidence: evidence.update(
+                {"instance_hash": "not-a-hash"}),
+            "instance_hash must be lowercase hexadecimal",
+        ),
+        (
+            lambda evidence: evidence.update(
+                {"certified_dual_bound": "20", "incumbent": "19"}),
+            "certified_dual_bound exceeds incumbent",
+        ),
+        (
+            lambda evidence: evidence["witness"]["schedule"].update(
+                {"fleet": 2}),
+            "fleet must equal",
+        ),
+        (
+            lambda evidence: evidence["witness"]["load"].__setitem__(0, "1"),
+            "witness_sha256 does not recompute",
+        ),
+        (
+            lambda evidence: evidence["witness"]["replay_result"].update(
+                {"violations": ["tampered load"]}),
+            "replay must be passed",
+        ),
+        (
+            lambda evidence: evidence["solver"].update(
+                {"status": "FEASIBLE"}),
+            "solver.status must be 'OPTIMAL'",
+        ),
+    ],
+)
+def test_best_response_evidence_tampering_fails_closed(mutate, match):
+    document = _certificate(coverage="partial")
+    document["participants"] = [document["participants"][0]]
+    evidence = document["participants"][0]["best_response_evidence"]
+    mutate(evidence)
+    with pytest.raises(us.SettlementError, match=match):
+        us.settle(document)
+
+
+def test_coordinated_witness_rehash_still_must_match_incumbent():
+    document = _certificate(coverage="partial")
+    document["participants"] = [document["participants"][0]]
+    evidence = document["participants"][0]["best_response_evidence"]
+    evidence["witness"]["load"][0] = "1"
+    witness = evidence["witness"]
+    witness["witness_sha256"] = us.witness_sha256(
+        witness["schedule"], witness["load"], witness["intrinsic_cost"])
+    witness["load_sha256"] = us.load_sha256(witness["load"])
+    with pytest.raises(
+            us.SettlementError, match="incumbent disagrees with"):
         us.settle(document)
 
 
@@ -454,8 +666,8 @@ def test_cli_round_trip_uses_endpoint_json_only_and_refuses_overwrite(tmp_path):
 def test_loader_refuses_duplicate_json_keys(tmp_path):
     source = tmp_path / "duplicate.json"
     source.write_text(
-        '{"schema":"uplift-settlement-endpoints-v1",'
-        '"schema":"uplift-settlement-endpoints-v1"}\n')
+        '{"schema":"uplift-settlement-endpoints-v2",'
+        '"schema":"uplift-settlement-endpoints-v2"}\n')
     with pytest.raises(us.SettlementError, match="duplicate key 'schema'"):
         us.load_endpoint_certificate(source)
 
@@ -482,6 +694,158 @@ def test_symlink_alias_into_repository_results_is_refused(tmp_path):
     alias.symlink_to(us.REPO_ROOT / "result", target_is_directory=True)
     with pytest.raises(us.SettlementError, match="outcome-blind boundary"):
         us.load_endpoint_certificate(alias / "never-read.json")
+
+
+def _solver_backed_document(inst, prices, solution):
+    from egglab.evsp import REPLAY_POLICY_VERSION, validate_solution
+
+    component_ids = [f"slot-{index:02d}" for index in range(len(prices))]
+    price_vector = [
+        {"component_id": component_id, "value": repr(float(price))}
+        for component_id, price in zip(component_ids, prices)
+    ]
+    schedule = {
+        "sequences": [list(sequence) for sequence in solution.sequences],
+        "arc_kinds": [list(kinds) for kinds in solution.arc_kinds],
+        "charges": [
+            {
+                **{key: charge[key] for key in (
+                    "vehicle", "after_trip", "before_trip", "slot")},
+                "kwh": repr(float(charge["kwh"])),
+            }
+            for charge in solution.charges
+        ],
+        "fleet": solution.fleet,
+    }
+    load = [repr(float(value)) for value in solution.load]
+    intrinsic = repr(float(solution.ops_cost))
+    violations = validate_solution(inst, solution)
+    assert violations == []
+    evidence = {
+        "schema": us.BEST_RESPONSE_EVIDENCE_SCHEMA,
+        "certificate_id": f"solver-{inst.name}",
+        "status": "certified",
+        "evidence_tier": us.GLOBAL_EXACT_ORACLE_TIER,
+        "instance_hash": inst.hash(),
+        "price_certificate_id": "solver-price",
+        "price_vector": price_vector,
+        "price_vector_sha256": us.price_vector_sha256(price_vector),
+        "objective_convention": us.PRIVATE_OBJECTIVE_CONVENTION,
+        "witness": {
+            "schedule": schedule,
+            "load": load,
+            "intrinsic_cost": intrinsic,
+            "witness_sha256": us.witness_sha256(schedule, load, intrinsic),
+            "load_sha256": us.load_sha256(load),
+            "certified_feasible": True,
+            "replay_result": {
+                "status": "passed",
+                "policy": f"evsp-replay-v{REPLAY_POLICY_VERSION}",
+                "violations": [],
+            },
+        },
+        "solver": {
+            "backend": solution.stats.backend,
+            "solver_version": "python-mip",
+            "status": solution.stats.status,
+            "max_mip_gap": repr(float(solution.stats.max_mip_gap)),
+        },
+        "incumbent": repr(float(solution.stats.obj)),
+        "certified_dual_bound": repr(float(solution.stats.bound)),
+    }
+    return {
+        "schema": us.INPUT_SCHEMA,
+        "case_id": f"solver-backed-{inst.name}",
+        "coverage": "partial",
+        "units": {"currency": "SEK", "quantity": "kWh"},
+        "price_certificate": {
+            "certificate_id": "solver-price",
+            "status": "certified",
+            "representation": us.PRICE_REPRESENTATION,
+            "components": [
+                {"component_id": item["component_id"],
+                 "price": _interval(item["value"])}
+                for item in price_vector
+            ],
+        },
+        "objective_certificate": {
+            "certificate_id": "scope-only-system-objectives",
+            "status": "certified",
+            "integrated_integer_objective": _interval(0),
+            "convex_hull_objective": _interval(0),
+        },
+        "uplift_loc_identity_certificate": None,
+        "participants": [{
+            "participant_id": "single-fleet",
+            "assigned_action_id": "solver-incumbent",
+            "price_certificate_id": "solver-price",
+            "assigned_action_certified_feasible": True,
+            "assigned_intrinsic_cost": _interval(intrinsic),
+            "assigned_net_withdrawal": [
+                {"component_id": component_id, "quantity": _interval(quantity)}
+                for component_id, quantity in zip(component_ids, load)
+            ],
+            "best_response_evidence": evidence,
+        }],
+    }
+
+
+@pytest.mark.parametrize("seed", [0, 11, 15])
+def test_burned_seed_solve_taker_certificate_is_enclosed(seed):
+    import numpy as np
+    from egglab.instance import synthetic_instance
+    from egglab.regimes import solve_taker
+
+    inst = synthetic_instance(seed=seed, n_trips=4)
+    prices = np.linspace(0.5, 2.0, inst.n_slots)
+    solution = solve_taker(
+        inst, prices, max_mip_gap=1e-6, time_limit_s=None)
+    assert solution.stats.backend == "CBC"
+    result = us.settle(_solver_backed_document(inst, prices, solution))
+    participant = result["participants"][0]
+    certified = participant["best_response_value"]
+    incumbent = Decimal(repr(float(solution.stats.obj)))
+    tolerance = us.BEST_RESPONSE_VALIDATION_TOLERANCE
+    assert Decimal(certified["lo"]) - tolerance <= incumbent
+    assert incumbent <= Decimal(certified["hi"]) + tolerance
+    regret = participant["price_conditioned_regret"]
+    assert Decimal(regret["lo"]) == 0
+    assert Decimal(regret["hi"]) >= 0
+
+
+def test_complete_tiny_enumeration_agrees_with_global_certificate():
+    import numpy as np
+    from egglab.enumerate_tiny import enumerate_structures
+    from egglab.evsp import solve_fixed_sequences
+    from egglab.instance import synthetic_instance
+    from egglab.regimes import solve_taker
+
+    inst = synthetic_instance(seed=0, n_trips=4)
+    prices = np.linspace(0.75, 1.75, inst.n_slots)
+    global_solution = solve_taker(
+        inst, prices, max_mip_gap=1e-6, time_limit_s=None)
+    partitions = {
+        tuple(tuple(sequence) for sequence in structure["sequences"])
+        for structure in enumerate_structures(inst)
+    }
+    enumerated_values = []
+    for partition in sorted(partitions):
+        candidate = solve_fixed_sequences(
+            inst, [list(sequence) for sequence in partition],
+            ("linear", prices), max_mip_gap=1e-6, time_limit_s=None)
+        if candidate is not None:
+            enumerated_values.append(float(candidate.obj_model))
+    assert enumerated_values
+    enumerated_best = min(enumerated_values)
+
+    result = us.settle(
+        _solver_backed_document(inst, prices, global_solution))
+    certified = result["participants"][0]["best_response_value"]
+    tolerance = float(us.BEST_RESPONSE_VALIDATION_TOLERANCE) + 1e-5
+    assert float(certified["lo"]) - tolerance <= enumerated_best
+    assert enumerated_best <= float(certified["hi"]) + tolerance
+    assert float(global_solution.stats.obj) == pytest.approx(
+        enumerated_best, abs=tolerance)
 
 
 def test_import_is_stdlib_only_and_does_not_load_solver_or_numerical_stack():

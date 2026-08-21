@@ -5,6 +5,11 @@ It does not know how to read an experiment population, checkpoint, CSV, run
 tree, or solver record.  Connecting certified experiment evidence to this
 schema is deliberately left to a later reviewed adapter.
 
+Accounting is at one fleet/participant block at a time.  Vehicle schedules are
+evidence for that fleet's feasible action; this module never allocates a
+payment among vehicles and makes no individual-rationality claim for a driver,
+vehicle, or other sub-fleet actor.
+
 Sign convention
 ---------------
 ``q`` is signed net withdrawal (demand is positive, supply is negative), so
@@ -17,8 +22,7 @@ The two-part tariff charges ``p*q_i`` and pays ``LOC_i`` to the participant.
 All claim-bearing arithmetic uses :class:`decimal.Decimal` with directed
 outward rounding; binary floats are rejected by the programmatic API.
 
-Normative specification:
-``CURSOR_HANDOFF_UPLIFT_SETTLEMENT_20260820.md``.
+Normative specification: ``doc/SETTLEMENT_SPEC.md``.
 """
 from __future__ import annotations
 
@@ -41,8 +45,13 @@ from pathlib import Path
 from typing import Callable
 
 
-INPUT_SCHEMA = "uplift-settlement-endpoints-v1"
-OUTPUT_SCHEMA = "uplift-settlement-arithmetic-v1"
+INPUT_SCHEMA = "uplift-settlement-endpoints-v2"
+OUTPUT_SCHEMA = "uplift-settlement-arithmetic-v2"
+BEST_RESPONSE_EVIDENCE_SCHEMA = "uplift-best-response-evidence-v1"
+GLOBAL_EXACT_ORACLE_TIER = "global-exact-oracle-certified-bound-v1"
+PRIVATE_OBJECTIVE_CONVENTION = (
+    "minimize-intrinsic-cost-plus-price-dot-net-withdrawal")
+BEST_RESPONSE_VALIDATION_TOLERANCE = Decimal("1e-6")
 DECIMAL_PRECISION = 80
 PRICE_REPRESENTATION = "outer-coordinate-projections"
 IDENTITY_PREMISES = (
@@ -141,6 +150,90 @@ def _decimal_text(value: Decimal) -> str:
     if "." in text:
         text = text.rstrip("0").rstrip(".")
     return text
+
+
+def _canonical_json_bytes(value: object, label: str) -> bytes:
+    try:
+        return json.dumps(
+            value,
+            ensure_ascii=False,
+            allow_nan=False,
+            separators=(",", ":"),
+            sort_keys=True,
+        ).encode("utf-8")
+    except (TypeError, ValueError) as exc:
+        raise SettlementError(
+            f"{label} is not canonical-JSON serializable") from exc
+
+
+def canonical_json_sha256(value: object, label: str = "evidence") -> str:
+    return hashlib.sha256(_canonical_json_bytes(value, label)).hexdigest()
+
+
+def _hex_identifier(value: object, label: str, lengths=(12, 64)) -> str:
+    text = _nonempty_text(value, label)
+    if len(text) not in lengths or any(c not in "0123456789abcdef" for c in text):
+        raise SettlementError(
+            f"{label} must be lowercase hexadecimal with length "
+            f"{list(lengths)}")
+    return text
+
+
+def canonical_price_vector(
+    components: list[dict],
+    label: str = "price_vector",
+) -> list[dict[str, str]]:
+    normalized = []
+    for index, component in enumerate(components):
+        item_label = f"{label}[{index}]"
+        _strict_keys(component, {"component_id", "value"}, item_label)
+        assert isinstance(component, dict)
+        normalized.append({
+            "component_id": _nonempty_text(
+                component["component_id"], f"{item_label}.component_id"),
+            "value": _decimal_text(
+                _decimal(component["value"], f"{item_label}.value")),
+        })
+    return normalized
+
+
+def price_vector_sha256(components: list[dict]) -> str:
+    return canonical_json_sha256(
+        canonical_price_vector(components), "price_vector")
+
+
+def canonical_witness_payload(
+    schedule: dict,
+    load: list[object],
+    intrinsic_cost: object,
+) -> dict:
+    return {
+        "schedule": schedule,
+        "load": [
+            _decimal_text(_decimal(value, f"witness.load[{index}]"))
+            for index, value in enumerate(load)
+        ],
+        "intrinsic_cost": _decimal_text(
+            _decimal(intrinsic_cost, "witness.intrinsic_cost")),
+    }
+
+
+def witness_sha256(
+    schedule: dict,
+    load: list[object],
+    intrinsic_cost: object,
+) -> str:
+    return canonical_json_sha256(
+        canonical_witness_payload(schedule, load, intrinsic_cost),
+        "best-response witness")
+
+
+def load_sha256(load: list[object]) -> str:
+    normalized = [
+        _decimal_text(_decimal(value, f"load[{index}]"))
+        for index, value in enumerate(load)
+    ]
+    return canonical_json_sha256(normalized, "best-response load")
 
 
 @dataclass(frozen=True)
@@ -367,11 +460,308 @@ def _parse_identity_certificate(value: object, coverage: str) -> dict | None:
     }
 
 
+def _parse_schedule_witness(value: object, label: str) -> dict:
+    _strict_keys(value, {"sequences", "arc_kinds", "charges", "fleet"}, label)
+    assert isinstance(value, dict)
+    sequences = value["sequences"]
+    arc_kinds = value["arc_kinds"]
+    fleet = value["fleet"]
+    if (not isinstance(sequences, list) or not sequences
+            or not isinstance(arc_kinds, list)
+            or len(arc_kinds) != len(sequences)):
+        raise SettlementError(
+            f"{label} sequences/arc_kinds must be nonempty aligned lists")
+    if (not isinstance(fleet, int) or isinstance(fleet, bool)
+            or fleet != len(sequences) or fleet <= 0):
+        raise SettlementError(
+            f"{label}.fleet must equal the number of nonempty sequences")
+    normalized_sequences = []
+    normalized_kinds = []
+    seen_trips = set()
+    for vehicle, (sequence, kinds) in enumerate(zip(sequences, arc_kinds)):
+        item_label = f"{label}.sequences[{vehicle}]"
+        if not isinstance(sequence, list) or not sequence:
+            raise SettlementError(f"{item_label} must be nonempty")
+        normalized_sequence = [
+            _nonempty_text(trip_id, f"{item_label}[{index}]")
+            for index, trip_id in enumerate(sequence)
+        ]
+        if any(trip_id in seen_trips for trip_id in normalized_sequence):
+            raise SettlementError(
+                f"{label} trip ids must occur exactly once")
+        seen_trips.update(normalized_sequence)
+        if (not isinstance(kinds, list)
+                or len(kinds) != len(normalized_sequence) - 1
+                or any(kind not in ("dir", "dep") for kind in kinds)):
+            raise SettlementError(
+                f"{label}.arc_kinds[{vehicle}] has invalid shape/kind")
+        normalized_sequences.append(normalized_sequence)
+        normalized_kinds.append(list(kinds))
+
+    charges = value["charges"]
+    if not isinstance(charges, list):
+        raise SettlementError(f"{label}.charges must be a list")
+    normalized_charges = []
+    charge_keys = set()
+    for index, charge in enumerate(charges):
+        charge_label = f"{label}.charges[{index}]"
+        _strict_keys(
+            charge,
+            {"vehicle", "after_trip", "before_trip", "slot", "kwh"},
+            charge_label,
+        )
+        assert isinstance(charge, dict)
+        vehicle = charge["vehicle"]
+        slot = charge["slot"]
+        if (not isinstance(vehicle, int) or isinstance(vehicle, bool)
+                or not 0 <= vehicle < fleet):
+            raise SettlementError(f"{charge_label}.vehicle is invalid")
+        if (not isinstance(slot, int) or isinstance(slot, bool) or slot < 0):
+            raise SettlementError(f"{charge_label}.slot is invalid")
+        after_trip = _nonempty_text(
+            charge["after_trip"], f"{charge_label}.after_trip")
+        before_trip = _nonempty_text(
+            charge["before_trip"], f"{charge_label}.before_trip")
+        sequence = normalized_sequences[vehicle]
+        matches = [
+            i for i in range(len(sequence) - 1)
+            if sequence[i] == after_trip and sequence[i + 1] == before_trip
+        ]
+        if len(matches) != 1 \
+                or normalized_kinds[vehicle][matches[0]] != "dep":
+            raise SettlementError(
+                f"{charge_label} is not tied to a consecutive depot arc")
+        kwh = _decimal(charge["kwh"], f"{charge_label}.kwh")
+        if kwh < 0:
+            raise SettlementError(f"{charge_label}.kwh must be nonnegative")
+        key = (vehicle, after_trip, before_trip, slot)
+        if key in charge_keys:
+            raise SettlementError(f"{charge_label} duplicates a charge slot")
+        charge_keys.add(key)
+        normalized_charges.append({
+            "vehicle": vehicle,
+            "after_trip": after_trip,
+            "before_trip": before_trip,
+            "slot": slot,
+            "kwh": _decimal_text(kwh),
+        })
+    return {
+        "sequences": normalized_sequences,
+        "arc_kinds": normalized_kinds,
+        "charges": normalized_charges,
+        "fleet": fleet,
+    }
+
+
+def _parse_best_response_evidence(
+    value: object,
+    label: str,
+    price_certificate_id: str,
+    price_components: list[dict],
+) -> dict:
+    _strict_keys(
+        value,
+        {
+            "schema",
+            "certificate_id",
+            "status",
+            "evidence_tier",
+            "instance_hash",
+            "price_certificate_id",
+            "price_vector",
+            "price_vector_sha256",
+            "objective_convention",
+            "witness",
+            "solver",
+            "incumbent",
+            "certified_dual_bound",
+        },
+        label,
+    )
+    assert isinstance(value, dict)
+    if value["schema"] != BEST_RESPONSE_EVIDENCE_SCHEMA:
+        raise SettlementError(
+            f"{label}.schema must be {BEST_RESPONSE_EVIDENCE_SCHEMA!r}")
+    if value["status"] != "certified":
+        raise SettlementError(f"{label}.status must be exactly 'certified'")
+    if value["evidence_tier"] != GLOBAL_EXACT_ORACLE_TIER:
+        raise SettlementError(
+            f"{label}.evidence_tier must be exactly "
+            f"{GLOBAL_EXACT_ORACLE_TIER!r}; restricted-pool and heuristic "
+            "evidence cannot certify a global best response")
+    if value["price_certificate_id"] != price_certificate_id:
+        raise SettlementError(
+            f"{label}.price_certificate_id does not match the top-level "
+            "price certificate")
+    if value["objective_convention"] != PRIVATE_OBJECTIVE_CONVENTION:
+        raise SettlementError(
+            f"{label}.objective_convention must be exactly "
+            f"{PRIVATE_OBJECTIVE_CONVENTION!r}")
+
+    price_vector = canonical_price_vector(
+        value["price_vector"], f"{label}.price_vector")
+    component_ids = [item["component_id"] for item in price_components]
+    if [item["component_id"] for item in price_vector] != component_ids:
+        raise SettlementError(
+            f"{label}.price_vector component order/identity does not match "
+            "the top-level price certificate")
+    price_hash = _hex_identifier(
+        value["price_vector_sha256"],
+        f"{label}.price_vector_sha256",
+        lengths=(64,),
+    )
+    if price_hash != price_vector_sha256(price_vector):
+        raise SettlementError(f"{label}.price_vector_sha256 does not recompute")
+    prices = [
+        _decimal(item["value"], f"{label}.price_vector[{index}].value")
+        for index, item in enumerate(price_vector)
+    ]
+    for index, (price, component) in enumerate(zip(prices, price_components)):
+        projection = component["price"]
+        if not projection.lo <= price <= projection.hi:
+            raise SettlementError(
+                f"{label}.price_vector[{index}] lies outside the certified "
+                "coordinate projection")
+
+    witness_value = value["witness"]
+    _strict_keys(
+        witness_value,
+        {
+            "schedule",
+            "load",
+            "intrinsic_cost",
+            "witness_sha256",
+            "load_sha256",
+            "certified_feasible",
+            "replay_result",
+        },
+        f"{label}.witness",
+    )
+    assert isinstance(witness_value, dict)
+    if witness_value["certified_feasible"] is not True:
+        raise SettlementError(
+            f"{label}.witness.certified_feasible must be true")
+    schedule = _parse_schedule_witness(
+        witness_value["schedule"], f"{label}.witness.schedule")
+    load_value = witness_value["load"]
+    if not isinstance(load_value, list) or len(load_value) != len(prices):
+        raise SettlementError(
+            f"{label}.witness.load must have {len(prices)} components")
+    load = [
+        _decimal(item, f"{label}.witness.load[{index}]")
+        for index, item in enumerate(load_value)
+    ]
+    intrinsic = _decimal(
+        witness_value["intrinsic_cost"],
+        f"{label}.witness.intrinsic_cost")
+    claimed_witness_hash = _hex_identifier(
+        witness_value["witness_sha256"],
+        f"{label}.witness.witness_sha256",
+        lengths=(64,),
+    )
+    if claimed_witness_hash != witness_sha256(
+            schedule, load, intrinsic):
+        raise SettlementError(
+            f"{label}.witness.witness_sha256 does not recompute")
+    claimed_load_hash = _hex_identifier(
+        witness_value["load_sha256"],
+        f"{label}.witness.load_sha256",
+        lengths=(64,),
+    )
+    if claimed_load_hash != load_sha256(load):
+        raise SettlementError(
+            f"{label}.witness.load_sha256 does not recompute")
+    replay = witness_value["replay_result"]
+    _strict_keys(
+        replay, {"status", "policy", "violations"},
+        f"{label}.witness.replay_result")
+    assert isinstance(replay, dict)
+    if replay["status"] != "passed" or replay["violations"] != []:
+        raise SettlementError(
+            f"{label}.witness replay must be passed with no violations")
+    replay_policy = _nonempty_text(
+        replay["policy"], f"{label}.witness.replay_result.policy")
+
+    solver = value["solver"]
+    _strict_keys(
+        solver,
+        {"backend", "solver_version", "status", "max_mip_gap"},
+        f"{label}.solver",
+    )
+    assert isinstance(solver, dict)
+    if solver["status"] != "OPTIMAL":
+        raise SettlementError(f"{label}.solver.status must be 'OPTIMAL'")
+    max_mip_gap = _decimal(
+        solver["max_mip_gap"], f"{label}.solver.max_mip_gap")
+    if max_mip_gap < 0:
+        raise SettlementError(
+            f"{label}.solver.max_mip_gap must be nonnegative")
+    normalized_solver = {
+        "backend": _nonempty_text(
+            solver["backend"], f"{label}.solver.backend"),
+        "solver_version": _nonempty_text(
+            solver["solver_version"], f"{label}.solver.solver_version"),
+        "status": "OPTIMAL",
+        "max_mip_gap": _decimal_text(max_mip_gap),
+    }
+
+    incumbent = _decimal(value["incumbent"], f"{label}.incumbent")
+    dual_bound = _decimal(
+        value["certified_dual_bound"],
+        f"{label}.certified_dual_bound")
+    if dual_bound > incumbent:
+        raise SettlementError(
+            f"{label}.certified_dual_bound exceeds incumbent")
+    witness_value_interval = Interval.point(intrinsic).add(interval_dot(
+        [Interval.point(price) for price in prices],
+        [Interval.point(quantity) for quantity in load],
+    ))
+    tolerance = BEST_RESPONSE_VALIDATION_TOLERANCE
+    if (incumbent < witness_value_interval.lo - tolerance
+            or incumbent > witness_value_interval.hi + tolerance):
+        raise SettlementError(
+            f"{label}.incumbent disagrees with the primitive witness objective")
+
+    normalized_witness = {
+        "schedule": schedule,
+        "load": [_decimal_text(item) for item in load],
+        "intrinsic_cost": _decimal_text(intrinsic),
+        "witness_sha256": claimed_witness_hash,
+        "load_sha256": claimed_load_hash,
+        "certified_feasible": True,
+        "replay_result": {
+            "status": "passed",
+            "policy": replay_policy,
+            "violations": [],
+        },
+    }
+    return {
+        "schema": BEST_RESPONSE_EVIDENCE_SCHEMA,
+        "certificate_id": _nonempty_text(
+            value["certificate_id"], f"{label}.certificate_id"),
+        "status": "certified",
+        "evidence_tier": GLOBAL_EXACT_ORACLE_TIER,
+        "instance_hash": _hex_identifier(
+            value["instance_hash"], f"{label}.instance_hash"),
+        "price_certificate_id": price_certificate_id,
+        "price_vector": price_vector,
+        "price_vector_sha256": price_hash,
+        "prices": prices,
+        "objective_convention": PRIVATE_OBJECTIVE_CONVENTION,
+        "witness": normalized_witness,
+        "solver": normalized_solver,
+        "incumbent": incumbent,
+        "certified_dual_bound": dual_bound,
+        "objective": Interval(dual_bound, incumbent),
+        "witness_private_cost": witness_value_interval,
+    }
+
+
 def _parse_participant(
     value: object,
     index: int,
     price_certificate_id: str,
-    component_ids: list[str],
+    price_components: list[dict],
 ) -> dict:
     label = f"participants[{index}]"
     _strict_keys(
@@ -383,9 +773,7 @@ def _parse_participant(
             "assigned_action_certified_feasible",
             "assigned_intrinsic_cost",
             "assigned_net_withdrawal",
-            "best_response_certificate_id",
-            "best_response_status",
-            "best_response_objective",
+            "best_response_evidence",
         },
         label,
     )
@@ -401,9 +789,7 @@ def _parse_participant(
     if value["assigned_action_certified_feasible"] is not True:
         raise SettlementError(
             f"{label}.assigned_action_certified_feasible must be true")
-    if value["best_response_status"] != "certified":
-        raise SettlementError(
-            f"{label}.best_response_status must be exactly 'certified'")
+    component_ids = [item["component_id"] for item in price_components]
     withdrawals_value = value["assigned_net_withdrawal"]
     if not isinstance(withdrawals_value, list):
         raise SettlementError(
@@ -429,6 +815,12 @@ def _parse_participant(
             f"{label}.assigned_net_withdrawal component order/identity "
             f"{observed_ids!r} does not match price components "
             f"{component_ids!r}")
+    best_response = _parse_best_response_evidence(
+        value["best_response_evidence"],
+        f"{label}.best_response_evidence",
+        price_certificate_id,
+        price_components,
+    )
     return {
         "participant_id": participant_id,
         "assigned_action_id": assigned_action_id,
@@ -437,14 +829,7 @@ def _parse_participant(
             f"{label}.assigned_intrinsic_cost",
         ),
         "assigned_net_withdrawal": withdrawals,
-        "best_response_certificate_id": _nonempty_text(
-            value["best_response_certificate_id"],
-            f"{label}.best_response_certificate_id",
-        ),
-        "best_response_objective": Interval.from_json(
-            value["best_response_objective"],
-            f"{label}.best_response_objective",
-        ),
+        "best_response": best_response,
     }
 
 
@@ -493,13 +878,20 @@ def _parse_document(document: object) -> dict:
             participant,
             index,
             price["certificate_id"],
-            component_ids,
+            price["components"],
         )
         for index, participant in enumerate(participant_values)
     ]
     participant_ids = [item["participant_id"] for item in participants]
     if len(set(participant_ids)) != len(participant_ids):
         raise SettlementError("participant_id values must be unique")
+    price_hashes = {
+        item["best_response"]["price_vector_sha256"]
+        for item in participants}
+    if len(price_hashes) != 1:
+        raise SettlementError(
+            "all best-response records must use one identical full price "
+            "vector")
     return {
         "case_id": case_id,
         "coverage": coverage,
@@ -532,13 +924,36 @@ def canonical_certificate_sha256(document: object) -> str:
     return hashlib.sha256(payload).hexdigest()
 
 
+def _best_response_evidence_to_json(evidence: dict) -> dict:
+    return {
+        "schema": evidence["schema"],
+        "certificate_id": evidence["certificate_id"],
+        "status": evidence["status"],
+        "evidence_tier": evidence["evidence_tier"],
+        "instance_hash": evidence["instance_hash"],
+        "price_certificate_id": evidence["price_certificate_id"],
+        "price_vector": evidence["price_vector"],
+        "price_vector_sha256": evidence["price_vector_sha256"],
+        "objective_convention": evidence["objective_convention"],
+        "witness": evidence["witness"],
+        "solver": evidence["solver"],
+        "incumbent": _decimal_text(evidence["incumbent"]),
+        "certified_dual_bound":
+            _decimal_text(evidence["certified_dual_bound"]),
+        "certified_value_interval": evidence["objective"].to_json(),
+        "validation_tolerance":
+            _decimal_text(BEST_RESPONSE_VALIDATION_TOLERANCE),
+    }
+
+
 def _participant_settlement(
     participant: dict,
     prices: list[Interval],
     component_ids: list[str],
-) -> tuple[dict, Interval, Interval]:
+) -> tuple[dict, Interval, Interval, Interval, Interval]:
     intrinsic = participant["assigned_intrinsic_cost"]
-    best_response = participant["best_response_objective"]
+    best_response_evidence = participant["best_response"]
+    best_response = best_response_evidence["objective"]
     withdrawal = participant["assigned_net_withdrawal"]
     energy_charge = interval_dot(prices, withdrawal)
     assigned_value = intrinsic.add(energy_charge)
@@ -557,11 +972,23 @@ def _participant_settlement(
     # widening caused by treating E and K as independent intervals.
     minimum_net_charge = best_response.subtract(intrinsic)
 
+    evidence_prices = [
+        Interval.point(value) for value in best_response_evidence["prices"]]
+    target_at_evidence_price = intrinsic.add(
+        interval_dot(evidence_prices, withdrawal))
+    raw_regret = target_at_evidence_price.subtract(best_response)
+    regret = raw_regret.nonnegative_theorem_tightening(
+        f"participant {participant['participant_id']!r} "
+        "price-conditioned regret")
+
     result = {
         "participant_id": participant["participant_id"],
         "assigned_action_id": participant["assigned_action_id"],
         "best_response_certificate_id":
-            participant["best_response_certificate_id"],
+            best_response_evidence["certificate_id"],
+        "best_response_evidence":
+            _best_response_evidence_to_json(best_response_evidence),
+        "best_response_value": best_response.to_json(),
         "assigned_intrinsic_cost": intrinsic.to_json(),
         "assigned_net_withdrawal": [
             {
@@ -575,6 +1002,10 @@ def _participant_settlement(
             assigned_value.to_json(),
         "lost_opportunity_cost_raw": raw_loc.to_json(),
         "lost_opportunity_cost": loc.to_json(),
+        "target_private_cost_at_best_response_price":
+            target_at_evidence_price.to_json(),
+        "price_conditioned_regret_raw": raw_regret.to_json(),
+        "price_conditioned_regret": regret.to_json(),
         "two_part_tariff": {
             "charge_sign_convention":
                 "positive-is-charge-to-participant",
@@ -595,7 +1026,7 @@ def _participant_settlement(
                 guaranteed_all_in.to_json(),
         },
     }
-    return result, raw_loc, loc
+    return result, raw_loc, loc, raw_regret, regret
 
 
 def settle(document: object) -> dict:
@@ -609,12 +1040,16 @@ def settle(document: object) -> dict:
     participant_results = []
     raw_locs = []
     tightened_locs = []
+    raw_regrets = []
+    tightened_regrets = []
     for participant in parsed["participants"]:
-        result, raw_loc, loc = _participant_settlement(
+        result, raw_loc, loc, raw_regret, regret = _participant_settlement(
             participant, prices, component_ids)
         participant_results.append(result)
         raw_locs.append(raw_loc)
         tightened_locs.append(loc)
+        raw_regrets.append(raw_regret)
+        tightened_regrets.append(regret)
 
     integer_objective = parsed["objective"]["integer"]
     convex_hull_objective = parsed["objective"]["convex_hull"]
@@ -623,9 +1058,12 @@ def settle(document: object) -> dict:
         "integrated integer-minus-convex-hull uplift")
     total_raw_loc = interval_sum(raw_locs)
     total_loc = interval_sum(tightened_locs)
+    total_raw_regret = interval_sum(raw_regrets)
+    total_regret = interval_sum(tightened_regrets)
 
     identity_asserted = parsed["identity"] is not None
     identity_intersection = None
+    regret_identity_intersection = None
     identity_consistent = None
     if identity_asserted:
         identity_intersection = uplift.intersection(total_loc)
@@ -634,6 +1072,12 @@ def settle(document: object) -> dict:
                 "the certified uplift/LOC identity premises require total "
                 "lost-opportunity cost to equal integrated uplift, but their "
                 "certified intervals do not intersect")
+        regret_identity_intersection = uplift.intersection(total_regret)
+        if regret_identity_intersection is None:
+            raise SettlementError(
+                "the certified uplift/LOC identity premises require total "
+                "price-conditioned regret to equal integrated uplift, but "
+                "their certified intervals do not intersect")
         identity_consistent = True
 
     return {
@@ -686,6 +1130,18 @@ def settle(document: object) -> dict:
                 else identity_intersection.to_json()
             ),
         },
+        "regret_aggregation": {
+            "reported_fleets": len(participant_results),
+            "total_price_conditioned_regret_raw":
+                total_raw_regret.to_json(),
+            "total_price_conditioned_regret": total_regret.to_json(),
+            "equality_with_internal_uplift_claimed": identity_asserted,
+            "uplift_identity_intersection": (
+                None if regret_identity_intersection is None
+                else regret_identity_intersection.to_json()
+            ),
+            "scope": "sum-over-reported-fleet-blocks",
+        },
         "boundary": {
             "endpoint_arithmetic_only": True,
             "population_adapter_included": False,
@@ -693,6 +1149,9 @@ def settle(document: object) -> dict:
             "budget_balance_claimed": False,
             "coordinate_price_intervals_are_outer_projections": True,
             "arbitrary_price_box_points_claimed_supporting": False,
+            "single_fleet_accounting_only": True,
+            "per_vehicle_payment_allocation_included": False,
+            "individual_rationality_claimed": False,
         },
     }
 
@@ -791,8 +1250,9 @@ def write_result_no_replace(
 def main() -> None:
     parser = argparse.ArgumentParser(
         description=(
-            "Compute outcome-blind convex-hull-price, LOC, and two-part-"
-            "tariff interval arithmetic from a certified endpoint JSON."
+            "Compute outcome-blind convex-hull-price, best-response regret, "
+            "LOC, and two-part-tariff interval arithmetic from a certified "
+            "endpoint JSON."
         ))
     parser.add_argument("--input", required=True)
     parser.add_argument(
