@@ -65,9 +65,10 @@ Expected: `ANCHOR OK`, `files=363 dirs=60 bytes=17385781`.
 **If the anchor is broken, stop.** Something wrote into the audited tree. That is
 an engineering incident: preserve everything, write it up in
 `doc/ENGINEERING_INCIDENTS.md`, and do not score the population until you
-understand what changed. The most likely cause is a pilot re-run launched
-*without* PR #47 merged, since the un-fixed submit script hardcodes its output
-path and ignores `EGG_RUN_OUT`.
+understand what changed. The most likely cause would be a pilot re-run launched from a checkout
+*predating* `e1a4e07` (PR #47), since the un-fixed submit script hardcoded its
+output path and ignored `EGG_RUN_OUT`. Confirm the launching checkout contained
+that commit.
 
 ### What the replication result means
 

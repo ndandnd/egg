@@ -1,6 +1,7 @@
 # 01 — State of the programme, 2026-08-21 (end of session)
 
-`main` = `ed8b06f3d7e8e4a7ecc5fbfd74ff0b819ac24fa4`. **Nothing below is merged.**
+`main` = `e1a4e07` (was `ed8b06f`; **PR #47 has since merged**, see below).
+Nothing else in the table below is merged.
 
 ## Settled, with evidence
 
@@ -24,8 +25,8 @@ confirmation is a ~2–3 hour job whenever it runs.
 
 | PR | Head | CI | State |
 | --- | --- | --- | --- |
-| #37 | `7c2da34` | check it | B3 closeout: analyzer, selection freeze, pack/import. **Five review rounds.** Last round's only non-same-UID blocker (helper not provenance-pinned) is fixed. Needs a sixth review or a decision to stop |
-| #47 | `770cb60` | **green** | Submit-script output-path fix. **Mergeable and clean.** Without it, re-running the pilot writes into the audited tree |
+| #37 | `7c2da34` | check it (was red on a whitespace gate at an earlier head; that is fixed) | B3 closeout: analyzer, selection freeze, pack/import. **Five review rounds.** Last round's only non-same-UID blocker (helper not provenance-pinned) is fixed. Needs a sixth review or a decision to stop |
+| #47 | — | — | **MERGED as `e1a4e07`.** Submit-script output-path fix: the array now honours `EGG_RUN_OUT` instead of hardcoding its output path. This is what makes a replication safe -- without it, re-running the pilot wrote into the audited tree |
 | #48 | `aab80d5` | **green** | Replication comparator, contract frozen before any replica. Independent review was blocked by an OpenAI safety filter — **still unreviewed** |
 | #45 | `5a53c11` | green | B3 confirmation driver. **3 blockers + 3 highs open.** Must not launch |
 | #46 | `f709165` | green | ML training-data driver. **Parked**: per-call rather than per-cell wall cap, replay-flag alignment, dual-spread across slots, and it may not encode the price trajectory it claims to learn |
