@@ -297,13 +297,23 @@ class Interval:
     def negate(self) -> "Interval":
         return Interval(-self.hi, -self.lo)
 
-    def nonnegative_theorem_tightening(self, label: str) -> "Interval":
-        if self.hi < 0:
+    def nonnegative_theorem_tightening(
+        self,
+        label: str,
+        tolerance: Decimal = Decimal(0),
+    ) -> "Interval":
+        tolerance = _decimal(tolerance, f"{label}.tolerance")
+        if tolerance < 0:
+            raise SettlementError(f"{label}.tolerance must be nonnegative")
+        if self.hi < -tolerance:
             raise SettlementError(
                 f"{label} has negative upper endpoint "
                 f"{_decimal_text(self.hi)}; this contradicts the certified "
                 "nonnegativity theorem")
-        return Interval(max(Decimal(0), self.lo), self.hi)
+        return Interval(
+            max(Decimal(0), self.lo),
+            max(Decimal(0), self.hi),
+        )
 
     def intersection(self, other: "Interval") -> "Interval | None":
         lo = max(self.lo, other.lo)
@@ -959,7 +969,8 @@ def _participant_settlement(
     assigned_value = intrinsic.add(energy_charge)
     raw_loc = assigned_value.subtract(best_response)
     loc = raw_loc.nonnegative_theorem_tightening(
-        f"participant {participant['participant_id']!r} lost-opportunity cost")
+        f"participant {participant['participant_id']!r} lost-opportunity cost",
+        BEST_RESPONSE_VALIDATION_TOLERANCE)
 
     # A payment equal to the upper endpoint is conservative for every exact
     # value enclosed by the certificate.
@@ -979,7 +990,8 @@ def _participant_settlement(
     raw_regret = target_at_evidence_price.subtract(best_response)
     regret = raw_regret.nonnegative_theorem_tightening(
         f"participant {participant['participant_id']!r} "
-        "price-conditioned regret")
+        "price-conditioned regret",
+        BEST_RESPONSE_VALIDATION_TOLERANCE)
 
     result = {
         "participant_id": participant["participant_id"],

@@ -796,7 +796,7 @@ def test_burned_seed_solve_taker_certificate_is_enclosed(seed):
     from egglab.instance import synthetic_instance
     from egglab.regimes import solve_taker
 
-    inst = synthetic_instance(seed=seed, n_trips=4)
+    inst = synthetic_instance(seed=seed, n_trips=6)
     prices = np.linspace(0.5, 2.0, inst.n_slots)
     solution = solve_taker(
         inst, prices, max_mip_gap=1e-6, time_limit_s=None)
