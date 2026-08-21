@@ -1541,3 +1541,33 @@ def test_injected_run_commit_verifier_cannot_forge_a_verified_artifact(
     # and it is therefore unusable downstream
     with pytest.raises(sel.B3SelectionError, match="run_commit"):
         sel.select(runs, out, tmp_path / "sel", CODE, verify_code_commit=False)
+
+
+def test_flipping_run_commit_verified_cannot_launder_provenance(tmp_path,
+                                                                screen):
+    """The flag is diagnostic, not the control.
+
+    A seam-derived artifact previously became authorizable by editing one
+    boolean.  The selector now re-resolves the producer commit itself from the
+    run manifest bytes it digest-checked, so flipping the flag changes nothing.
+    """
+    runs = _go_tree(tmp_path, screen)
+    anchor_before = _synthetic_anchor(runs)
+    with mock.patch.object(az, "verify_analysis_code_commit",
+                           return_value=True):
+        out = Path(az.analyze(
+            runs, tmp_path / "out", STAMP, CODE, screen_dir=None,
+            verify_code_commit=True, expected_raw_anchor=anchor_before,
+            run_commit_verifier=_synthetic_run_commit_ok))
+    manifest_path = out / "MANIFEST.json"
+    manifest = json.loads(manifest_path.read_text())
+    assert manifest["run_commit_verified"] is False
+    # launder it: flip the boolean and rehash the manifest into place
+    manifest["run_commit_verified"] = True
+    manifest_path.write_text(json.dumps(manifest, indent=2, sort_keys=True))
+    # the run manifest in the fixture carries a REAL commit, so the selector's
+    # own re-resolution succeeds; the artifact must still be refused for a
+    # substantive reason rather than authorized by the flipped flag
+    with pytest.raises(sel.B3SelectionError):
+        sel.select(runs, out, tmp_path / "sel", CODE, verify_code_commit=False)
+    assert not (tmp_path / "sel").exists()

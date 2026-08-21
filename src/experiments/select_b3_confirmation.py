@@ -35,6 +35,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import experiments.b3_factor_pilot as bp
 import experiments.b3_pilot_anchor as anchor
 import experiments.b3_pilot_evidence as evidence
+import experiments.analyze_b3_factor_pilot as az
 from experiments.analyze_b3_factor_pilot import (
     BASELINE_SETTING,
     BOUNDARY_ADJACENT_TOL,
@@ -358,6 +359,24 @@ def _load_raw_identity(
     if manifest_sha != file_hashes[bp.RUN_MANIFEST_FILENAME]:
         raise B3SelectionError(
             "raw runs tree changed while reading MANIFEST.json")
+    # Provenance is RE-VERIFIED here, not inherited from the analysis
+    # manifest.  ``run_commit_verified`` is a single editable boolean: flipping
+    # it in a seam-derived artifact laundered unverified provenance into
+    # authorization, packaging and import.  The selector therefore resolves the
+    # producer commit itself, from the run manifest bytes it just
+    # digest-checked, and treats the recorded flag as diagnostic only.
+    try:
+        run_manifest_doc = evidence.strict_json_loads(
+            manifest_bytes, bp.RUN_MANIFEST_FILENAME)
+    except evidence.EvidenceError as exc:
+        raise B3SelectionError(str(exc)) from exc
+    if not isinstance(run_manifest_doc, dict):
+        raise B3SelectionError("run MANIFEST.json root is not an object")
+    try:
+        az.verify_run_commit(run_manifest_doc.get("run_commit"))
+    except evidence.EvidenceError as exc:
+        raise B3SelectionError(
+            f"raw run provenance is not verifiable: {exc}") from exc
     job = _json_object_from_bytes(job_bytes, bp.JOB_FILENAME)
     manifest = _json_object_from_bytes(
         manifest_bytes, bp.RUN_MANIFEST_FILENAME)
