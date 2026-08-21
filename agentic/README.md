@@ -3,6 +3,10 @@
 **If you are an LLM or a collaborator picking this up cold, read this file, then
 `01_STATE.md`, then `02_AFTER_BREAK.md`. In that order. Nothing else first.**
 
+The one number worth memorising: the flagship raw tree is pinned at
+`efc5ca31…ace4` with 363 files. If a run tree does not hash to that, stop and
+read `01_STATE.md` before trusting anything in it.
+
 Written 2026-08-21 by Claude (Opus 5), at the end of a long working session, so
 that the programme survives the loss of the laptop the session ran on. Every
 operational document that had been living untracked on one machine is now here.
@@ -23,6 +27,8 @@ This folder is the fix: it is committed, so a fresh `git clone` gets everything.
 | `03_RESEARCH.md` | The scientific programme: what is established, what the next experiments are, the novelty position |
 | `04_LESSONS.md` | Hard-won engineering lessons from this campaign. Read before writing code or dispatching agents |
 | `05_THREAT_MODEL.md` | The bounded integrity claim, in the wording an external reviewer supplied |
+| `06_BRANCH_INVENTORY.md` | What every remote branch is, which to trust, which must not be merged |
+| `local_machine_state/` | The last artefacts that existed only on one laptop, and why they are probably not needed |
 | `A6_RECOVER2_OPERATOR_RUNBOOK_20260821.md` | One-shot A6 recovery: read-only preflight plus the single exact command |
 | `DEEP_RESEARCH_20260820.md` | Literature sweep: novelty verdicts, market-calibration route, ML design contract |
 | `handoffs/LLM_HANDOFF_EGG_20260820.md` | The long-form master handoff (~1200 lines). The science chapters (1–7) are the durable part |

@@ -1,7 +1,11 @@
 # 01 — State of the programme, 2026-08-21 (end of session)
 
-`main` = `e1a4e07` (was `ed8b06f`; **PR #47 has since merged**, see below).
-Nothing else in the table below is merged.
+`main` = `de5182f`. Merged since this pack was started: **PR #47** (submit-path
+fix, `e1a4e07`), **PR #49** (this documentation pack, `d6aecdf`), **PR #44**
+(research inbox, `de5182f`). Nothing else in the table below is merged.
+
+For what every remaining branch is and whether to trust it, see
+`06_BRANCH_INVENTORY.md`.
 
 ## Settled, with evidence
 
@@ -25,12 +29,12 @@ confirmation is a ~2–3 hour job whenever it runs.
 
 | PR | Head | CI | State |
 | --- | --- | --- | --- |
-| #37 | `7c2da34` | check it (was red on a whitespace gate at an earlier head; that is fixed) | B3 closeout: analyzer, selection freeze, pack/import. **Five review rounds.** Last round's only non-same-UID blocker (helper not provenance-pinned) is fixed. Needs a sixth review or a decision to stop |
+| #37 | `36a71be` | check it | B3 closeout: analyzer, selection freeze, pack/import. **Five review rounds.** Last round's only non-same-UID blocker (helper not provenance-pinned) is fixed. Needs a sixth review or a decision to stop |
 | #47 | — | — | **MERGED as `e1a4e07`.** Submit-script output-path fix: the array now honours `EGG_RUN_OUT` instead of hardcoding its output path. This is what makes a replication safe -- without it, re-running the pilot wrote into the audited tree |
 | #48 | `aab80d5` | **green** | Replication comparator, contract frozen before any replica. Independent review was blocked by an OpenAI safety filter — **still unreviewed** |
 | #45 | `5a53c11` | green | B3 confirmation driver. **3 blockers + 3 highs open.** Must not launch |
 | #46 | `f709165` | green | ML training-data driver. **Parked**: per-call rather than per-cell wall cap, replay-flag alignment, dual-spread across slots, and it may not encode the price trajectory it claims to learn |
-| #44 | `c5c3aac` | green | Research candidate inbox (notes only) |
+| #44 | — | — | **MERGED as `de5182f`.** Research candidate inbox, now at its canonical home `ref/review_notes/` |
 | #41 | `2530ec8` | check | GIRO frozen loader. Clean diff |
 | #42 | `18f4c4d` | check | Column proposer lab. Honest negative: 0 of 160 proposals accepted |
 | #39 | `2ad05f5` | green | Strict two-cycle witness for B1 |
@@ -65,3 +69,44 @@ confirmation is a ~2–3 hour job whenever it runs.
   repo-wide follow-up. **Relevant if you run the A6 recovery** — see the
   runbook and note that its recover2 path was never audited for the four
   defect classes found in the B3 code.
+
+## Disaster-recovery status (verified 2026-08-21)
+
+A deliberate "building is on fire" sweep was run. Findings:
+
+- **All project knowledge is on GitHub.** The 34-file continuity pack is on
+  `main` (PR #49). Nothing operational lives only on a laptop any more.
+- **No unpushed code exists.** Two branches looked orphaned
+  (`agent/a6-pilot-selection-closeout`, `agent/a6-holdout-implementation`);
+  `git cherry origin/main` proved every commit already equivalent in `main`.
+- **Two local-only leftovers were preserved** into
+  `local_machine_state/`: one superseded git stash and the untracked
+  `.claude/settings.local.json`. See that folder's README.
+- **Raw evidence is NOT on GitHub, by design.** `src/runs/` is gitignored and
+  lives only on Unicorn. **This is the remaining single point of failure.**
+
+### Which run tree to back up first, and why
+
+Not the B3 pilot. It is re-runnable in about two hours (5.1 CPU-hours, 60
+cells, frozen design, burned dev seeds {0,11,15}) and -- because nobody has
+seen the outcome yet -- a re-captured anchor would still be genuinely
+outcome-blind. Losing it costs cluster time, not the experiment.
+
+**Back up `src/runs/a6_holdout*` first.** Its recovery is gated by two
+committed claim files that pin the exact source-tree digest
+`2c60b3d2feb1f313cb08541556d5e8f95bf40dc76b2c539d78149dd93ad88749`. Lose that
+tree and the recovery can never complete: the claim chain is permanently dead,
+there is no third stage, and A6 would need a fresh 128-cell holdout with a new
+chain.
+
+A restored backup is **self-verifying**: `canonical_tree_sha256` hashes
+path/sha256/size and ignores mtimes, so a tar round-trip preserves it. After
+restoring, confirm the pilot tree with
+
+    python3 -c "import sys; sys.path.insert(0,'src')
+    from experiments.package_a6_holdout import snapshot_source, canonical_tree_sha256
+    s=snapshot_source('src/runs/b3_factor_pilot')
+    print(canonical_tree_sha256(s)=='efc5ca31dcddb21166f6a5da2cf60b4961706c99edf9dbda882f87a18a88ace4', s['file_count'])"
+
+Take the tar while no `egg-` array is running (`squeue --me -h -o '%j' | grep
+'^egg-'`), or the snapshot is inconsistent.
