@@ -770,9 +770,16 @@ def bind_job_id(
     job_created = False
     digest_created = False
     try:
-        _exclusive_readonly_write(path, payload)
+        try:
+            _exclusive_readonly_write(path, payload)
+        except FileExistsError as exc:
+            raise B3PilotError(f"job binding already exists: {path}") from exc
         job_created = True
-        _exclusive_readonly_write(digest_path, digest_payload)
+        try:
+            _exclusive_readonly_write(digest_path, digest_payload)
+        except FileExistsError as exc:
+            raise B3PilotError(
+                f"job binding digest already exists: {digest_path}") from exc
         digest_created = True
         directory_fd = os.open(out, os.O_RDONLY)
         try:
