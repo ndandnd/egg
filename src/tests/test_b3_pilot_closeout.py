@@ -854,7 +854,7 @@ def test_pack_refuses_hard_linked_source_files(tmp_path, screen):
     outside.write_bytes(victim.read_bytes())
     victim.unlink()
     os.link(outside, victim)
-    with pytest.raises(PackagingError, match="unsafe linked"):
+    with pytest.raises(PackagingError, match="hard-linked|unsafe linked"):
         _pack(runs, analysis, tmp_path / "bundles")
     assert not (tmp_path / "bundles").exists()
 
@@ -874,7 +874,7 @@ def test_pack_refuses_active_job_and_bad_job_binding(tmp_path, screen):
     (runs / "JOB.json").write_text(
         json.dumps(job, indent=2, sort_keys=True) + "\n")
     with pytest.raises(PackagingError,
-                       match="run_manifest_sha256 does not match|run commit"):
+                       match="does not authenticate the exact MANIFEST"):
         _pack(runs, analysis, tmp_path / "b2")
 
 

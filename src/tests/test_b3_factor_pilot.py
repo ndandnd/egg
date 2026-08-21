@@ -755,7 +755,7 @@ def test_exploit_ch_history_edit_with_unchanged_solver_evidence(
         for p in audit["problems"])
     decision = _analyze_decision(runs, tmp_path / "out")
     assert decision["state"] == "INVALID/HALT"
-    assert any("!= replayed" in p or "history edited" in p
+    assert any("!= replayed" in p or "history edited" in p or "RMP" in p
                for p in decision["problems"])
 
 

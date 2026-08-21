@@ -358,7 +358,10 @@ def _load_raw_identity(
         raise B3SelectionError(
             "raw JOB.json does not bind the exact MANIFEST.json bytes")
     return {
-        **identity,
+        "raw_tree_sha256": identity["tree_sha256"],
+        "file_count": identity["file_count"],
+        "directory_count": identity["directory_count"],
+        "total_bytes": identity["total_bytes"],
         "manifest_sha256": manifest_sha,
         "job_id": job_id,
         "job_sha256": job_sha,
@@ -642,6 +645,10 @@ def load_analysis_artifact(
         entry.name for entry in os.scandir(base)
     }
     expected_names = required | {"MANIFEST.json"}
+    missing_names = sorted(expected_names - observed_names)
+    if missing_names:
+        raise B3SelectionError(
+            f"missing analysis table: {missing_names[0]}")
     if observed_names != expected_names:
         raise B3SelectionError(
             "analysis directory population differs from the complete "
