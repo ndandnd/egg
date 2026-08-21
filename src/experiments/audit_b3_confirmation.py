@@ -33,8 +33,11 @@ from experiments.audit_runs import _cg_sane
 
 
 def _load(path: Path):
-    with open(path) as handle:
-        return json.load(handle)
+    # BLOCKER D: strict JSON everywhere the audit parses — reject duplicate
+    # keys and non-regular/changing files via the shared primitive
+    import experiments.b3_pilot_evidence as evidence
+    return evidence.strict_json_loads(
+        evidence.read_regular_bytes_once(Path(path), str(path)), str(path))
 
 
 def _finite(x) -> bool:

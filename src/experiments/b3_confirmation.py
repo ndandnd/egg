@@ -37,6 +37,7 @@ from pathlib import Path
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import experiments.b3_factor_pilot as bp
+import experiments.b3_pilot_evidence as evidence
 from egglab.instance import synthetic_instance
 from experiments.b3_factor_screen import (
     GENERATOR_HELD_FIXED_ARGUMENTS,
@@ -261,11 +262,14 @@ def _require_finite_number(doc: dict, key: str, label: str) -> float:
     return value
 
 
-def _require_committed_artifact(raw: bytes, doc: dict, repo_root) -> str:
-    """CRITICAL 1: the artifact must be a TRACKED, COMMITTED blob at its
-    declared repository path whose committed bytes equal the on-disk bytes
-    EXACTLY.  A self-declared, uncommitted, loose, or byte-divergent artifact
-    is refused.
+def _require_committed_artifact(p: Path, raw: bytes, doc: dict,
+                                repo_root) -> str:
+    """CRITICAL 1 + MAJOR E: the supplied filesystem path must resolve to
+    EXACTLY the declared repository-relative file inside ``repo_root`` (an
+    external copy or a symlinked-parent path is refused), and that path must
+    be a TRACKED, COMMITTED blob whose committed bytes equal the on-disk bytes
+    EXACTLY.  A self-declared, uncommitted, loose, external, or byte-divergent
+    artifact is refused.
 
     (The committed blob is read at the repository's ``HEAD`` rather than at
     ``selection_code_commit``: an artifact that embeds its own commit SHA can
@@ -280,6 +284,27 @@ def _require_committed_artifact(raw: bytes, doc: dict, repo_root) -> str:
         raise B3ConfirmationError(
             f"selection_artifact_path {repo_path!r} is not a safe "
             "repository-relative path")
+    # MAJOR E: the supplied path must BE the declared repository file (fully
+    # resolved), not merely share its committed bytes; an external copy or a
+    # symlinked parent is refused.  Reject any symlinked component first (a
+    # symlinked parent would otherwise resolve to the same real file).
+    probe = p.absolute()
+    for candidate in (probe, *probe.parents):
+        if candidate.is_symlink():
+            raise B3ConfirmationError(
+                f"selection artifact path has a symlinked component: "
+                f"{candidate}")
+    repo_real = Path(repo_root).resolve()
+    declared_real = (repo_real / repo_path).resolve()
+    supplied_real = p.resolve()
+    if supplied_real != declared_real:
+        raise B3ConfirmationError(
+            f"selection artifact path {p} does not resolve to the declared "
+            f"repository path {repo_path!r} inside {repo_real}")
+    if repo_real != supplied_real and repo_real not in supplied_real.parents:
+        raise B3ConfirmationError(
+            f"selection artifact {supplied_real} is outside the repository "
+            f"root {repo_real}")
     if subprocess.run(
             ["git", "ls-files", "--error-unmatch", "--", repo_path],
             cwd=repo_root, stdout=subprocess.DEVNULL,
@@ -317,8 +342,16 @@ def load_selection_artifact(path: str | os.PathLike, *,
     refuse_pilot_runs_path(p)
     if not p.is_file() or p.is_symlink():
         raise B3ConfirmationError(f"selection artifact missing: {p}")
-    raw = p.read_bytes()
-    doc = json.loads(raw)
+    # BLOCKER D: read once through a no-follow descriptor and parse with the
+    # shared strict loader that REJECTS duplicate JSON keys (plain json.loads
+    # would keep the last "state" and turn NO-GO into GO).
+    try:
+        raw = evidence.read_regular_bytes_once(p, "selection artifact")
+        doc = evidence.strict_json_loads(raw, "selection artifact")
+    except evidence.EvidenceError as exc:
+        raise B3ConfirmationError(str(exc)) from exc
+    if not isinstance(doc, dict):
+        raise B3ConfirmationError("selection artifact JSON is not an object")
     artifact_sha = hashlib.sha256(raw).hexdigest()
 
     if _require(doc, "schema", "schema") != SELECTION_SCHEMA:
@@ -410,6 +443,15 @@ def load_selection_artifact(path: str | os.PathLike, *,
     if pilot["spec_sha256"] != FROZEN_SPEC_SHA256:
         raise B3ConfirmationError(
             "pilot.spec_sha256 differs from the frozen pilot spec hash")
+    # BLOCKER A: the pilot analysis must have verified the run commit; a
+    # selection recording run_commit_verified != true (or absent) is refused
+    # (a JSON bool is required — not a truthy string/int).
+    run_commit_verified = _require(pilot, "run_commit_verified",
+                                   "pilot.run_commit_verified")
+    if run_commit_verified is not True:
+        raise B3ConfirmationError(
+            f"pilot.run_commit_verified is {run_commit_verified!r}, not true; "
+            "the pilot analysis did not verify its run commit — refusing")
     _commit_is_ancestor(pilot["analysis_code_commit"],
                         "pilot.analysis_code_commit", repo_root)
     selection_commit = _require(doc, "selection_code_commit",
@@ -417,9 +459,10 @@ def load_selection_artifact(path: str | os.PathLike, *,
     if verify_commit:
         _commit_is_ancestor(selection_commit, "selection_code_commit",
                             repo_root)
-        # CRITICAL 1: the artifact must be a tracked, committed blob whose
-        # bytes equal the committed blob at its declared repo path
-        _require_committed_artifact(raw, doc, repo_root)
+        # CRITICAL 1 + MAJOR E: the supplied path must BE the declared,
+        # tracked, committed blob (resolved) whose bytes equal the committed
+        # blob at HEAD
+        _require_committed_artifact(p, raw, doc, repo_root)
 
     # Task-2 amendment 1: frozen pilot raw-tree binding (validated against the
     # anchor, never recomputed from runs/b3_factor_pilot)
@@ -726,20 +769,48 @@ def write_run_manifest(out_dir, manifest: dict) -> str:
     return str(path)
 
 
+def assert_safe_output_dir(out_dir) -> Path:
+    """BLOCKER C: validate an output/run directory before it is written to or
+    trusted.  Rejects comma and control characters, ``..`` traversal, and any
+    symlinked existing component (a same-UID caller can still write to an
+    absolute path it owns — see the PR's residual-forgeability note)."""
+    raw = os.fspath(out_dir)
+    if "," in raw or any(ord(ch) < 32 for ch in raw):
+        raise B3ConfirmationError(
+            f"unsafe output dir {raw!r}: contains a comma or control character")
+    parts = Path(raw).parts
+    if ".." in parts:
+        raise B3ConfirmationError(
+            f"unsafe output dir {raw!r}: contains a '..' component")
+    probe = Path(raw).absolute()
+    for candidate in (probe, *probe.parents):
+        if candidate.is_symlink():
+            raise B3ConfirmationError(
+                f"unsafe output dir {raw!r}: symlinked component {candidate}")
+    return Path(raw)
+
+
 def load_run_manifest(out_dir) -> dict:
     path = Path(out_dir) / RUN_MANIFEST_FILENAME
-    if not path.is_file():
+    if not path.is_file() or path.is_symlink():
         raise B3ConfirmationError(f"run manifest missing: {path}")
-    manifest = json.loads(path.read_bytes())
-    if manifest.get("schema") != RUN_MANIFEST_SCHEMA:
+    try:
+        manifest = evidence.strict_json_loads(
+            evidence.read_regular_bytes_once(path, "run manifest"),
+            "run manifest")
+    except evidence.EvidenceError as exc:
+        raise B3ConfirmationError(str(exc)) from exc
+    if not isinstance(manifest, dict) \
+            or manifest.get("schema") != RUN_MANIFEST_SCHEMA:
         raise B3ConfirmationError("run manifest schema mismatch")
     return {"manifest": manifest, "sha256": run_manifest_sha256(manifest)}
 
 
 def bind_job_id(out_dir, job_id: str) -> str:
-    loaded = load_run_manifest(out_dir)
+    out = assert_safe_output_dir(out_dir)
+    loaded = load_run_manifest(out)
     manifest = loaded["manifest"]
-    path = Path(out_dir) / JOB_FILENAME
+    path = out / JOB_FILENAME
     import datetime
     doc = {
         "schema": JOB_SCHEMA,
@@ -747,15 +818,17 @@ def bind_job_id(out_dir, job_id: str) -> str:
         "run_manifest_sha256": loaded["sha256"],
         "run_commit": manifest["run_commit"],
         "selection_artifact_sha256": manifest["selection_artifact_sha256"],
+        # CRITICAL 3: bind the output location at bind time so a copied JOB.json
+        # run elsewhere is refused (the recorded run_out won't match --out)
+        "run_out": str(out.resolve()),
         "submitted_utc": datetime.datetime.now(
             datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
     }
     payload = (json.dumps(doc, indent=2, sort_keys=True) + "\n").encode()
-    # CRITICAL 3: bind ATOMICALLY and EXCLUSIVELY via O_EXCL — a second
-    # concurrent launcher fails to bind rather than overwriting, so two
-    # binders can never both release the same array.
+    # bind ATOMICALLY and EXCLUSIVELY via O_EXCL — a second concurrent binder
+    # fails rather than overwriting, so two binders can never both release.
     try:
-        fd = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o644)
+        fd = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o444)
     except FileExistsError as exc:
         raise B3ConfirmationError(
             f"job binding already exists: {path}") from exc
@@ -764,7 +837,9 @@ def bind_job_id(out_dir, job_id: str) -> str:
             handle.write(payload)
             handle.flush()
             os.fsync(handle.fileno())
+        os.chmod(path, 0o444)          # read-only: a writable JOB.json refuses
     except BaseException:
+        os.chmod(path, 0o644)
         os.unlink(path)
         raise
     return str(path)
@@ -774,19 +849,45 @@ def load_job_binding(out_dir) -> dict:
     path = Path(out_dir) / JOB_FILENAME
     if not path.is_file() or path.is_symlink():
         raise B3ConfirmationError(f"job binding missing: {path}")
-    job = json.loads(path.read_bytes())
-    if job.get("schema") != JOB_SCHEMA:
+    try:
+        job = evidence.strict_json_loads(
+            evidence.read_regular_bytes_once(path, "job binding"),
+            "job binding")
+    except evidence.EvidenceError as exc:
+        raise B3ConfirmationError(str(exc)) from exc
+    if not isinstance(job, dict) or job.get("schema") != JOB_SCHEMA:
         raise B3ConfirmationError("job binding schema mismatch")
     return job
 
 
 def assert_worker_authorized(out_dir, run: dict) -> None:
     """CRITICAL 3: a worker must prove it belongs to the bound, released array
-    before producing ANY evidence.  It requires a JOB.json whose job id equals
-    this task's ``SLURM_ARRAY_JOB_ID`` and whose run-manifest SHA matches the
-    on-disk manifest; a directly-submitted or stale array (or a manual run
-    outside the bound job) is refused without writing anything."""
-    job = load_job_binding(out_dir)
+    before producing ANY evidence.  Environment alone is never identity: the
+    bound JOB.json must be a READ-ONLY regular file, its recorded ``run_out``
+    must resolve to this worker's output dir (so a copied JOB.json run
+    elsewhere is refused), ``SLURM_ARRAY_JOB_ID`` must equal the bound job id,
+    and the run-manifest + selection SHAs must match.  Any mismatch refuses
+    without writing anything.
+
+    RESIDUAL (irreducible for a local same-UID caller): a same-UID attacker can
+    chmod the bound JOB.json, rewrite ``run_out``/``job_id`` and export a
+    matching ``SLURM_ARRAY_JOB_ID``; this raises the bar (stale copies, foreign
+    arrays, path injection, and accidental direct runs are refused) but cannot
+    make environment unforgeable on a shared UID."""
+    out = assert_safe_output_dir(out_dir)
+    path = out / JOB_FILENAME
+    if not path.is_file() or path.is_symlink():
+        raise B3ConfirmationError(f"job binding missing: {path}")
+    mode = os.stat(path).st_mode
+    if mode & 0o222:
+        raise B3ConfirmationError(
+            "JOB.json is writable; a bound job binding must be read-only "
+            "(a copied/forged binding is refused)")
+    job = load_job_binding(out)
+    if Path(job.get("run_out", "")).resolve() != out.resolve():
+        raise B3ConfirmationError(
+            f"JOB.json run_out {job.get('run_out')!r} != this worker's output "
+            f"dir {out.resolve()}; refusing a relocated/copied binding")
     bound_job_id = str(job.get("job_id"))
     array_job_id = os.environ.get("SLURM_ARRAY_JOB_ID")
     if not array_job_id:

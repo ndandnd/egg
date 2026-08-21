@@ -203,6 +203,9 @@ def main():
     # outcome blindness + boundary refusals apply to every path
     cc.refuse_pilot_runs_path(args.out, args.selection_artifact)
     cc.assert_no_a6(args.out, args.selection_artifact)
+    # BLOCKER C: reject an injected output path (comma/control/.., symlinked
+    # component) before it is bound or written to
+    cc.assert_safe_output_dir(args.out)
 
     # STRUCTURAL GO GATE — no bypass; enforced in every mode
     selection = cc.load_selection_artifact(args.selection_artifact)
