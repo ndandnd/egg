@@ -545,15 +545,88 @@ def test_assert_fresh_run_dir(tmp_path, screen):
         bp.assert_fresh_run_dir(out)
 
 
-def test_job_binding_closes_provenance_gap(tmp_path, screen):
+def test_job_binding_closes_provenance_gap(tmp_path, screen, monkeypatch):
     runs = _write_tree(tmp_path / "runs", screen)
-    path = bp.bind_job_id(runs, "123456")
+    token = "a" * 64
+    path = bp.bind_job_id(runs, "123456", token)
     job = json.loads(Path(path).read_text())
     assert job["job_id"] == "123456"
     assert job["run_commit"] == RUN_COMMIT
     assert job["run_manifest_sha256"] == bp.load_run_manifest(runs)["sha256"]
+    assert not (Path(path).stat().st_mode & 0o222)
+    digest_path = runs / bp.JOB_DIGEST_FILENAME
+    assert digest_path.is_file() and not (digest_path.stat().st_mode & 0o222)
+    run = bp.load_run_manifest(runs)
+    monkeypatch.setenv("SLURM_ARRAY_JOB_ID", "123456")
+    monkeypatch.setenv("SLURM_ARRAY_TASK_ID", "7")
+    monkeypatch.setenv("EGG_LAUNCH_TOKEN", token)
+    bp.assert_worker_authorized(runs, run)
     with pytest.raises(bp.B3PilotError, match="already exists"):
-        bp.bind_job_id(runs, "999")
+        bp.bind_job_id(runs, "999", "b" * 64)
+
+
+def test_worker_refuses_writable_or_digest_mismatched_binding(
+        tmp_path, screen, monkeypatch):
+    runs = _write_tree(tmp_path / "runs", screen)
+    token = "c" * 64
+    path = Path(bp.bind_job_id(runs, "654321", token))
+    run = bp.load_run_manifest(runs)
+    monkeypatch.setenv("SLURM_ARRAY_JOB_ID", "654321")
+    monkeypatch.setenv("SLURM_ARRAY_TASK_ID", "3")
+    monkeypatch.setenv("EGG_LAUNCH_TOKEN", token)
+
+    path.chmod(0o644)
+    with pytest.raises(bp.B3PilotError, match="writable"):
+        bp.assert_worker_authorized(runs, run)
+    path.chmod(0o444)
+    digest = runs / bp.JOB_DIGEST_FILENAME
+    digest.chmod(0o644)
+    digest.write_text("0" * 64 + "\n")
+    digest.chmod(0o444)
+    with pytest.raises(bp.B3PilotError, match="do not match"):
+        bp.assert_worker_authorized(runs, run)
+
+
+def test_worker_refuses_direct_or_spoofed_binding_fields(
+        tmp_path, screen, monkeypatch):
+    runs = _write_tree(tmp_path / "runs", screen)
+    token = "d" * 64
+    bp.bind_job_id(runs, "222222", token)
+    run = bp.load_run_manifest(runs)
+    monkeypatch.delenv("SLURM_ARRAY_JOB_ID", raising=False)
+    monkeypatch.delenv("SLURM_ARRAY_TASK_ID", raising=False)
+    monkeypatch.delenv("EGG_LAUNCH_TOKEN", raising=False)
+    with pytest.raises(bp.B3PilotError, match="SLURM_ARRAY_JOB_ID"):
+        bp.assert_worker_authorized(runs, run)
+    monkeypatch.setenv("SLURM_ARRAY_JOB_ID", "222223")
+    monkeypatch.setenv("SLURM_ARRAY_TASK_ID", "0")
+    monkeypatch.setenv("EGG_LAUNCH_TOKEN", token)
+    with pytest.raises(bp.B3PilotError, match="bound job id"):
+        bp.assert_worker_authorized(runs, run)
+
+
+def test_concurrent_job_binding_has_exactly_one_winner(tmp_path, screen):
+    import concurrent.futures
+    import threading
+
+    runs = _write_tree(tmp_path / "runs", screen)
+    barrier = threading.Barrier(2)
+
+    def bind(job, token):
+        barrier.wait()
+        try:
+            bp.bind_job_id(runs, job, token)
+            return "bound"
+        except bp.B3PilotError:
+            return "refused"
+
+    with concurrent.futures.ThreadPoolExecutor(max_workers=2) as pool:
+        results = list(pool.map(
+            lambda args: bind(*args),
+            [("333331", "1" * 64), ("333332", "2" * 64)],
+        ))
+    assert sorted(results) == ["bound", "refused"]
+    bp.load_job_binding(runs)
 
 
 # --------------------------------------------------------------------------

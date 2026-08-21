@@ -45,12 +45,41 @@ else
 fi
 cd "${WORK_DIR}"
 
-export EGGLAB_REQUIRE_GRB=1
-# Interpreter and environment script are overridable for OFF-CLUSTER shell
-# tests only (same pattern as the launcher's EGG_SBATCH/EGG_PILOT); the
-# production defaults are unchanged.
-PYTHON="${EGG_PYTHON:-python}"
-source "${EGG_ENV_SCRIPT:-${WORK_DIR}/cluster/unicorn_env.sh}"
+OUT="$(python3 -c \
+    'import sys; from experiments.b3_factor_pilot import validate_run_out; print(validate_run_out(sys.argv[1], src_root=sys.argv[2]))' \
+    "${OUT}" "${WORK_DIR}")"
 
-${PYTHON} experiments/run_b3_factor_pilot.py --cell "${SLURM_ARRAY_TASK_ID}" \
+export EGGLAB_REQUIRE_GRB=1
+# Interpreter/environment overrides are accepted only behind an explicit
+# off-cluster harness marker, and that marker is refused when scheduler
+# commands or scheduler identity variables make a real allocation plausible.
+if [[ -n "${EGG_SUBMIT_SELFTEST:-}" ]]; then
+    if command -v sbatch >/dev/null 2>&1 \
+            || command -v scontrol >/dev/null 2>&1 \
+            || command -v srun >/dev/null 2>&1 \
+            || [[ -n "${SLURM_JOB_ID:-}${SLURM_ARRAY_JOB_ID:-}${SLURM_CLUSTER_NAME:-}" ]]; then
+        echo "ERROR: EGG_SUBMIT_SELFTEST refused where a scheduler is reachable." >&2
+        exit 1
+    fi
+    PYTHON="${EGG_PYTHON:-python}"
+    ENV_SCRIPT="${EGG_ENV_SCRIPT:-/dev/null}"
+    TASK_ID="${EGG_SELFTEST_ARRAY_TASK_ID:?self-test task id is required}"
+else
+    if [[ -n "${EGG_PYTHON+x}" || -n "${EGG_ENV_SCRIPT+x}" ]]; then
+        echo "ERROR: EGG_PYTHON/EGG_ENV_SCRIPT are test-only overrides; refusing production task." >&2
+        exit 1
+    fi
+    PYTHON="python"
+    ENV_SCRIPT="${WORK_DIR}/cluster/unicorn_env.sh"
+    TASK_ID="${SLURM_ARRAY_TASK_ID:?SLURM_ARRAY_TASK_ID is required}"
+    # PREEXISTING pilot hardening: authenticate read-only JOB.json + digest,
+    # manifest, array id, run commit, and launch token before invoking the
+    # per-cell driver. The driver repeats this check before creating output.
+    python3 -c \
+        'import sys; from experiments import b3_factor_pilot as bp; run=bp.load_run_manifest(sys.argv[1]); bp.assert_worker_authorized(sys.argv[1], run)' \
+        "${OUT}"
+fi
+source "${ENV_SCRIPT}"
+
+${PYTHON} experiments/run_b3_factor_pilot.py --cell "${TASK_ID}" \
     --out "${OUT}"
