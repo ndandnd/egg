@@ -1164,6 +1164,9 @@ def settle(document: object) -> dict:
             "single_fleet_accounting_only": True,
             "per_vehicle_payment_allocation_included": False,
             "individual_rationality_claimed": False,
+            "schedule_physics_replayed_by_settlement": False,
+            "instance_hash_verified_by_settlement": False,
+            "oracle_re_solved_by_settlement": False,
         },
     }
 

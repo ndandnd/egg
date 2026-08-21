@@ -275,6 +275,10 @@ def test_exact_complete_settlement_and_two_part_tariff():
     assert result["boundary"]["single_fleet_accounting_only"] is True
     assert result["boundary"]["per_vehicle_payment_allocation_included"] is False
     assert result["boundary"]["individual_rationality_claimed"] is False
+    assert result["boundary"][
+        "schedule_physics_replayed_by_settlement"] is False
+    assert result["boundary"]["instance_hash_verified_by_settlement"] is False
+    assert result["boundary"]["oracle_re_solved_by_settlement"] is False
 
 
 def test_price_components_are_preserved_as_certified_intervals():

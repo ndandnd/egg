@@ -76,7 +76,9 @@ V(p) in [certified_dual_bound, incumbent].
 
 The endpoint producer remains responsible for independently replaying physical
 feasibility against the bound instance. The settlement record binds and
-requires a passed replay result; it does not import an optimizer.
+requires a passed replay result; it does not import an optimizer, verify the
+instance hash against an instance object, replay schedule physics itself, or
+re-solve the oracle. Output boundary flags state those non-claims explicitly.
 
 ## 4. Price-conditioned regret
 
