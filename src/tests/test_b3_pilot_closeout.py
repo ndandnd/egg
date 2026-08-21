@@ -1274,27 +1274,33 @@ def test_run_commit_rejects_malformed_and_unresolvable_shas():
         az.verify_run_commit("a" * 40)
 
 
-def test_run_commit_rejects_a_real_but_unrelated_commit():
+def test_run_commit_rejects_a_real_but_unrelated_commit(tmp_path,
+                                                       monkeypatch):
     """A real commit object that is not an ancestor of HEAD is refused, so a
-    manifest cannot name unrelated history."""
-    head = subprocess.check_output(
-        ["git", "rev-parse", "HEAD"], cwd=az.REPO_ROOT).decode().strip()
-    az.verify_run_commit(head)          # the ancestor case passes
-    # an orphan commit: a real object, unreachable from HEAD.  commit-tree
-    # needs an author/committer identity, which a bare CI checkout does not
-    # configure, so supply one through the environment rather than the
-    # repository config (which must not be mutated by a test).
-    tree = subprocess.check_output(
-        ["git", "rev-parse", "HEAD^{tree}"], cwd=az.REPO_ROOT).decode().strip()
-    ident = dict(os.environ)
-    ident.update({
-        "GIT_AUTHOR_NAME": "egg tests", "GIT_AUTHOR_EMAIL": "tests@invalid",
-        "GIT_COMMITTER_NAME": "egg tests",
-        "GIT_COMMITTER_EMAIL": "tests@invalid",
-    })
-    orphan = subprocess.check_output(
-        ["git", "commit-tree", tree, "-m", "unrelated"],
-        cwd=az.REPO_ROOT, env=ident).decode().strip()
+    manifest cannot name unrelated history.
+
+    Built in a throwaway repository: an earlier version of this test ran
+    ``git commit-tree`` against the developer's own repository, which left one
+    unreachable commit in the real object database per test run.
+    """
+    ident = {"GIT_AUTHOR_NAME": "egg tests", "GIT_AUTHOR_EMAIL": "t@invalid",
+             "GIT_COMMITTER_NAME": "egg tests",
+             "GIT_COMMITTER_EMAIL": "t@invalid"}
+    env = {**os.environ, **ident}
+    scratch = tmp_path / "scratch"
+    scratch.mkdir()
+    run = lambda *a: subprocess.check_output(
+        ["git", *a], cwd=scratch, env=env).decode().strip()
+    run("init", "-q", "-b", "main")
+    (scratch / "f.txt").write_text("x")
+    run("add", "f.txt")
+    run("commit", "-qm", "base")
+    monkeypatch.setattr(az, "REPO_ROOT", str(scratch))
+
+    head = run("rev-parse", "HEAD")
+    az.verify_run_commit(head)                      # the ancestor case passes
+    orphan = run("commit-tree", run("rev-parse", "HEAD^{tree}"),
+                 "-m", "unrelated")                 # real, unreachable
     assert orphan != head
     with pytest.raises(az.evidence.EvidenceError,
                        match="is not an ancestor of HEAD"):
