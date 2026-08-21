@@ -26,6 +26,7 @@ from __future__ import annotations
 import hashlib
 import json
 import os
+import stat
 import subprocess
 import sys
 import tempfile
@@ -54,6 +55,8 @@ RUN_MANIFEST_SCHEMA = "b3-factor-pilot-run-v1"
 CELL_IDENTITY_SCHEMA = "b3-factor-pilot-cell-v1"
 RUN_MANIFEST_FILENAME = "MANIFEST.json"
 JOB_FILENAME = "JOB.json"
+JOB_DIGEST_FILENAME = "JOB.sha256"
+JOB_SCHEMA = "b3-factor-pilot-job-v2"
 CELL_IDENTITY_FILENAME = "identity.json"
 MIP_GAP_DEFAULT = 1e-6
 REPO_ROOT = Path(__file__).resolve().parents[2]
@@ -177,6 +180,59 @@ def assert_clean_tracked_tree() -> None:
 def refuse_existing_dir(path: str | os.PathLike) -> None:
     if Path(path).exists():
         raise B3PilotError(f"refusing existing output directory: {path}")
+
+
+def validate_run_out(
+    out_dir: str | os.PathLike,
+    *,
+    src_root: str | os.PathLike | None = None,
+) -> str:
+    """Validate the Slurm-exported run directory without changing it.
+
+    Slurm's ``--export`` value is comma-delimited, so the path must be a
+    control-free relative path below the checkout's ``src/runs`` directory.
+    Existing symlink components are refused before any run artifact is read or
+    written.  The original spelling is returned so launcher and worker receive
+    the exact same EGG_RUN_OUT token.
+    """
+    try:
+        text = os.fspath(out_dir)
+    except TypeError as exc:
+        raise B3PilotError("run output path is not path-like") from exc
+    if not isinstance(text, str) or not text:
+        raise B3PilotError("run output path is empty")
+    if Path(text).is_absolute():
+        raise B3PilotError("run output path must be relative, not absolute")
+    if "," in text:
+        raise B3PilotError(
+            "run output path contains ',' (unsafe in Slurm --export grammar)")
+    if any(ord(character) < 32 or ord(character) == 127 for character in text):
+        raise B3PilotError("run output path contains a control character")
+    parts = Path(text).parts
+    if not parts or parts[0] != "runs" or ".." in parts:
+        raise B3PilotError(
+            "run output path must be a normalized child of the src/runs root")
+    if len(parts) == 1:
+        raise B3PilotError("run output path may not be the runs root itself")
+
+    source = Path(src_root) if src_root is not None else REPO_ROOT / "src"
+    source = source.resolve()
+    runs_root = (source / "runs").resolve()
+    lexical = source
+    for part in parts:
+        lexical = lexical / part
+        if lexical.is_symlink():
+            raise B3PilotError(
+                f"run output path traverses symlink component: {lexical}")
+    resolved = (source / text).resolve()
+    try:
+        resolved.relative_to(runs_root)
+    except ValueError as exc:
+        raise B3PilotError(
+            "run output path resolves outside the src/runs root") from exc
+    if resolved == runs_root:
+        raise B3PilotError("run output path may not resolve to the runs root")
+    return text
 
 
 def assert_fresh_run_dir(out_dir: str | os.PathLike) -> None:
@@ -658,24 +714,164 @@ def load_run_manifest(out_dir: str | os.PathLike) -> dict:
     return {"manifest": manifest, "sha256": sha}
 
 
-def bind_job_id(out_dir: str | os.PathLike, job_id: str) -> str:
-    """Atomically record the submitted Slurm job id, referencing the manifest
-    SHA and run commit, immediately after sbatch — closing the post-sbatch
-    provenance gap.  Refuses to overwrite an existing binding."""
+def _canonical_job_id(job_id: object) -> str:
+    value = str(job_id)
+    if (not value.isascii() or not value.isdigit() or value.startswith("0")
+            or not 1 <= len(value) <= 18):
+        raise B3PilotError(
+            f"Slurm job id {value!r} is not a canonical positive integer")
+    return value
+
+
+def _launch_token_sha256(launch_token: object) -> str:
+    token = str(launch_token)
+    if (len(token) != 64 or not all(c in "0123456789abcdef" for c in token)):
+        raise B3PilotError("launch token is not a 64-character lowercase hex value")
+    return hashlib.sha256(token.encode()).hexdigest()
+
+
+def _exclusive_readonly_write(path: Path, payload: bytes) -> None:
+    flags = os.O_WRONLY | os.O_CREAT | os.O_EXCL
+    if hasattr(os, "O_NOFOLLOW"):
+        flags |= os.O_NOFOLLOW
+    descriptor = os.open(path, flags, 0o444)
+    try:
+        with os.fdopen(descriptor, "wb") as handle:
+            handle.write(payload)
+            handle.flush()
+            os.fsync(handle.fileno())
+        os.chmod(path, 0o444)
+    except BaseException:
+        try:
+            path.unlink()
+        except OSError:
+            pass
+        raise
+
+
+def bind_job_id(
+    out_dir: str | os.PathLike,
+    job_id: str,
+    launch_token: str,
+) -> str:
+    """Exclusively bind one held array to the manifest and launch token.
+
+    ``JOB.json`` and its digest sidecar are immutable-by-mode evidence.  O_EXCL
+    makes concurrent launchers race safely: exactly one binder can succeed.
+    """
     loaded = load_run_manifest(out_dir)
     manifest = loaded["manifest"]
-    path = Path(out_dir) / JOB_FILENAME
-    if path.exists():
-        raise B3PilotError(f"job binding already exists: {path}")
+    out = Path(out_dir)
+    path = out / JOB_FILENAME
+    digest_path = out / JOB_DIGEST_FILENAME
+    canonical_job_id = _canonical_job_id(job_id)
     import datetime
     doc = {
-        "schema": "b3-factor-pilot-job-v1",
-        "job_id": str(job_id),
+        "schema": JOB_SCHEMA,
+        "job_id": canonical_job_id,
         "run_manifest_sha256": loaded["sha256"],
         "run_commit": manifest["run_commit"],
+        "launch_token_sha256": _launch_token_sha256(launch_token),
         "submitted_utc": datetime.datetime.now(
             datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
     }
-    _atomic_write_bytes(
-        path, (json.dumps(doc, indent=2, sort_keys=True) + "\n").encode())
+    payload = (json.dumps(doc, indent=2, sort_keys=True) + "\n").encode()
+    digest_payload = (hashlib.sha256(payload).hexdigest() + "\n").encode()
+    job_created = False
+    digest_created = False
+    try:
+        try:
+            _exclusive_readonly_write(path, payload)
+        except FileExistsError as exc:
+            raise B3PilotError(f"job binding already exists: {path}") from exc
+        job_created = True
+        try:
+            _exclusive_readonly_write(digest_path, digest_payload)
+        except FileExistsError as exc:
+            raise B3PilotError(
+                f"job binding digest already exists: {digest_path}") from exc
+        digest_created = True
+        directory_fd = os.open(out, os.O_RDONLY)
+        try:
+            os.fsync(directory_fd)
+        finally:
+            os.close(directory_fd)
+    except BaseException:
+        for candidate, owned in (
+                (digest_path, digest_created), (path, job_created)):
+            if owned:
+                try:
+                    candidate.unlink()
+                except OSError:
+                    pass
+        raise
     return str(path)
+
+
+def load_job_binding(out_dir: str | os.PathLike) -> dict:
+    out = Path(out_dir)
+    path = out / JOB_FILENAME
+    digest_path = out / JOB_DIGEST_FILENAME
+    for candidate, label in (
+            (path, "job binding"), (digest_path, "job binding digest")):
+        if not candidate.is_file() or candidate.is_symlink():
+            raise B3PilotError(f"{label} missing or non-regular: {candidate}")
+        if stat.S_IMODE(candidate.stat().st_mode) & 0o222:
+            raise B3PilotError(f"{label} is writable; refusing: {candidate}")
+    raw = path.read_bytes()
+    digest = digest_path.read_text().strip()
+    if (len(digest) != 64
+            or any(c not in "0123456789abcdef" for c in digest)):
+        raise B3PilotError("job binding digest is not canonical SHA-256")
+    actual = hashlib.sha256(raw).hexdigest()
+    if digest != actual:
+        raise B3PilotError("JOB.json bytes do not match JOB.sha256")
+    doc = json.loads(raw)
+    if doc.get("schema") != JOB_SCHEMA:
+        raise B3PilotError("job binding schema mismatch")
+    _canonical_job_id(doc.get("job_id"))
+    return {"document": doc, "sha256": actual}
+
+
+def assert_bound_job(
+    out_dir: str | os.PathLike,
+    run: dict,
+    *,
+    job_id: str,
+    launch_token: str,
+) -> dict:
+    bound = load_job_binding(out_dir)
+    job = bound["document"]
+    if job["job_id"] != _canonical_job_id(job_id):
+        raise B3PilotError(
+            f"bound job id {job['job_id']} != expected job id {job_id}")
+    if job.get("run_manifest_sha256") != run["sha256"]:
+        raise B3PilotError("JOB.json run-manifest SHA != on-disk manifest")
+    if job.get("run_commit") != run["manifest"].get("run_commit"):
+        raise B3PilotError("JOB.json run commit != on-disk manifest")
+    if job.get("launch_token_sha256") != _launch_token_sha256(launch_token):
+        raise B3PilotError("JOB.json launch token does not match worker token")
+    return bound
+
+
+def assert_worker_authorized(out_dir: str | os.PathLike, run: dict) -> None:
+    """Refuse workers not bound to this manifest, array, and launch token.
+
+    This prevents accidental/direct execution and stale arrays.  It is not a
+    security boundary against a malicious same-UID process that can read the
+    worker environment and immutable-by-mode files; that limitation is
+    explicit in the launcher documentation.
+    """
+    array_job_id = os.environ.get("SLURM_ARRAY_JOB_ID")
+    launch_token = os.environ.get("EGG_LAUNCH_TOKEN")
+    if not array_job_id:
+        raise B3PilotError(
+            "SLURM_ARRAY_JOB_ID is unset; refusing direct submit execution")
+    if not os.environ.get("SLURM_ARRAY_TASK_ID"):
+        raise B3PilotError(
+            "SLURM_ARRAY_TASK_ID is unset; refusing direct submit execution")
+    if not launch_token:
+        raise B3PilotError(
+            "EGG_LAUNCH_TOKEN is unset; refusing unbound worker execution")
+    assert_bound_job(
+        out_dir, run, job_id=array_job_id, launch_token=launch_token)
