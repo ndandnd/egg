@@ -330,15 +330,15 @@ All sources in this subsection were accessed 2026-08-21.
   [aggregate curve file listing](https://www.omie.es/en/file-access-list?parents=/Day-ahead%20Market/3.%20Curves&dir=Aggregate%20supply%20and%20demand%20curves%20of%20Day-ahead%20market&realdir=curva_pbc)
   and [download FAQ](https://www.omie.es/en/faq/system-access), undated live
   pages.
-- OMIE, *Modelo de Ficheros para el Intercambio de Información entre OM y
-  Agentes*, version 1.37, 30 September 2025,
+- OMIE, *Modelo de Ficheros para la distribución pública de Información del
+  mercado de electricidad*, version 1.37, 30 September 2025,
   [official PDF](https://www.omie.es/sites/default/files/2025-09/formato_ficheros_inf_pub_137_1.pdf):
   revision history p. 3; common format §3, p. 6; `marginalpdbc` §5.1.1.1,
   p. 13; daily curve format §5.1.3.1, pp. 24–26.
 - OMIE, [Legal Warning](https://www.omie.es/en/legal-warning), undated live
   terms.
-- OMIE, *Go-live of the 15-minute Market Time Unit in the Day-Ahead Market*,
-  1 October 2025,
+- OMIE, *OMIE Successfully Implements Trading in 15-Minute Intervals in the
+  Day-Ahead Market*, 1 October 2025,
   [official notice](https://www.omie.es/sites/default/files/2025-10/2501001_go_live_mtu15_md_en_vf.pdf),
   p. 1.
 - CNMC, consolidated day-ahead and intraday market rules, Resolution of
