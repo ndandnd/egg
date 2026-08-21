@@ -1005,7 +1005,7 @@ def test_pack_reverifies_quiescence_before_rename(tmp_path, screen):
         pk.pack(runs, analysis, tmp_path / "b1", CODE,
                 verify_commit=False, job_quiescence_validator=flaky)
     assert calls["n"] == 2
-    assert not any((tmp_path / "b1").iterdir())
+    assert not (tmp_path / "b1").exists()
 
 
 def test_pack_post_rename_failure_stays_explicitly_incomplete(
