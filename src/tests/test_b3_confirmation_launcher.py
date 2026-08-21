@@ -61,9 +61,15 @@ case "$mode" in
 esac
 exit 2
 ''')
+    marker = tmp_path / "selftest.marker"
+    marker.write_text("permitted\n")
     env = dict(os.environ)
+    # scrub any inherited scheduler signals from the harness environment
+    for _v in ("SLURM_CONF", "SLURM_CLUSTER_NAME", "SLURMD_NODENAME",
+               "SLURM_JOB_ID"):
+        env.pop(_v, None)
     env.update({
-        "EGG_LAUNCH_SELFTEST": "1",
+        "EGG_LAUNCH_SELFTEST": str(marker),   # positive permission marker file
         "EGG_SBATCH": str(bind / "sbatch"),
         "EGG_SCANCEL": str(bind / "scancel"),
         "EGG_SCONTROL": str(bind / "scontrol"),
@@ -88,17 +94,33 @@ def _run(env, sel):
                           capture_output=True, text=True)
 
 
-def test_selftest_refused_when_real_sbatch_present(tmp_path):
+def test_selftest_refused_without_marker(tmp_path):
     env, events, out, sel, bind = _stubs(tmp_path)
-    # put a real-looking sbatch on PATH; SELFTEST must be refused
-    _exec(bind / "realbin_sbatch", 'echo 1\n')
+    env["EGG_LAUNCH_SELFTEST"] = "1"      # not a marker file
+    r = _run(env, sel)
+    assert r.returncode != 0
+    assert "must name an existing self-test permission marker" in r.stderr
+    assert _tokens(events) == []
+
+
+def test_selftest_refused_when_sbatch_on_path(tmp_path):
+    env, events, out, sel, bind = _stubs(tmp_path)
     (bind / "sbatch_on_path").mkdir()
     _exec(bind / "sbatch_on_path" / "sbatch", 'echo 1\n')
     env["PATH"] = f"{bind / 'sbatch_on_path'}:{env['PATH']}"
     r = _run(env, sel)
     assert r.returncode != 0
-    assert "EGG_LAUNCH_SELFTEST refused" in r.stderr
-    assert _tokens(events) == []          # nothing submitted
+    assert "a scheduler is reachable" in r.stderr
+    assert _tokens(events) == []
+
+
+def test_selftest_refused_when_slurm_env_present(tmp_path):
+    env, events, out, sel, bind = _stubs(tmp_path)
+    env["SLURM_CONF"] = "/etc/slurm/slurm.conf"     # a scheduler signal
+    r = _run(env, sel)
+    assert r.returncode != 0
+    assert "a scheduler is reachable" in r.stderr
+    assert _tokens(events) == []
 
 
 def test_production_ignores_egg_pilot_hook(tmp_path):

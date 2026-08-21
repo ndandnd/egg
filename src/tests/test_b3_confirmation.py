@@ -42,6 +42,7 @@ def base_doc(factor=DEFAULT_FACTOR, **over):
             "analysis_code_commit": "0" * 40,  # filled by committed_repo
             "screen_record_sha256": cc.FROZEN_SCREEN_RECORD_SHA256,
             "spec_sha256": cc.FROZEN_SPEC_SHA256,
+            "run_commit_verified": True,
         },
         "selection_code_commit": "0" * 40,     # filled by committed_repo
         "selection_artifact_path": "SELECTION.json",
@@ -144,6 +145,58 @@ def test_unsafe_artifact_path_refused(tmp_path):
     repo, art, _ = committed_repo(tmp_path, d, fill_commits=True)
     with pytest.raises(cc.B3ConfirmationError, match="not a safe"):
         cc.load_selection_artifact(art, repo_root=repo)
+
+
+# --------------------------------------------------------------------------
+# BLOCKER A — unverified pilot provenance refused
+# --------------------------------------------------------------------------
+def test_run_commit_unverified_refused(tmp_path):
+    d = base_doc(); d["pilot"]["run_commit_verified"] = False
+    expect_refuse(tmp_path, d, "run_commit_verified")
+
+
+def test_run_commit_verified_missing_refused(tmp_path):
+    d = base_doc(); del d["pilot"]["run_commit_verified"]
+    expect_refuse(tmp_path, d, "run_commit_verified")
+
+
+# --------------------------------------------------------------------------
+# BLOCKER D — duplicate JSON keys rejected (strict loader)
+# --------------------------------------------------------------------------
+def test_duplicate_state_key_refused(tmp_path):
+    # commit raw bytes carrying BOTH state: NO-GO and state: GO
+    repo = Path(tmp_path) / f"repo{next(_counter)}"; repo.mkdir()
+    _git(repo, "init", "-q")
+    _git(repo, "config", "user.email", "t@e"); _git(repo, "config", "user.name", "t")
+    (repo / "README").write_text("x\n"); _git(repo, "add", "README")
+    _git(repo, "commit", "-qm", "init")
+    cm = _git(repo, "rev-parse", "HEAD").stdout.strip()
+    body = ('{"state": "NO-GO", "state": "GO", "schema": '
+            f'"{cc.SELECTION_SCHEMA}"}}\n')
+    art = repo / "SELECTION.json"; art.write_text(body)
+    _git(repo, "add", "SELECTION.json"); _git(repo, "commit", "-qm", "dup")
+    with pytest.raises(cc.B3ConfirmationError, match="duplicate JSON key"):
+        cc.load_selection_artifact(art, repo_root=repo)
+
+
+# --------------------------------------------------------------------------
+# MAJOR E — supplied path must BE the declared repo file
+# --------------------------------------------------------------------------
+def test_external_copy_refused(tmp_path):
+    repo, art, _ = committed_repo(tmp_path, base_doc())
+    external = Path(tmp_path) / "copy.json"
+    external.write_bytes(art.read_bytes())          # identical bytes, wrong path
+    with pytest.raises(cc.B3ConfirmationError,
+                       match="does not resolve to the declared"):
+        cc.load_selection_artifact(external, repo_root=repo)
+
+
+def test_symlinked_parent_refused(tmp_path):
+    repo, art, _ = committed_repo(tmp_path, base_doc())
+    link = Path(tmp_path) / "link"
+    link.symlink_to(repo)                            # symlinked parent
+    with pytest.raises(cc.B3ConfirmationError, match="symlinked component"):
+        cc.load_selection_artifact(link / "SELECTION.json", repo_root=repo)
 
 
 # --------------------------------------------------------------------------
@@ -335,6 +388,59 @@ def test_worker_refuses_missing_job_binding(tmp_path, monkeypatch):
     monkeypatch.setenv("SLURM_ARRAY_JOB_ID", "9001")
     with pytest.raises(cc.B3ConfirmationError, match="job binding missing"):
         cc.assert_worker_authorized(out, run)
+
+
+def test_bound_job_json_is_readonly(tmp_path):
+    out = tmp_path / "runs"
+    _write_manifest(out)
+    cc.bind_job_id(out, "9001")
+    mode = os.stat(out / cc.JOB_FILENAME).st_mode
+    assert not (mode & 0o222)             # read-only
+
+
+def test_worker_refuses_writable_job_binding(tmp_path, monkeypatch):
+    out = tmp_path / "runs"
+    run = _write_manifest(out)
+    cc.bind_job_id(out, "9001")
+    os.chmod(out / cc.JOB_FILENAME, 0o644)    # attacker makes it writable
+    monkeypatch.setenv("SLURM_ARRAY_JOB_ID", "9001")
+    with pytest.raises(cc.B3ConfirmationError, match="writable"):
+        cc.assert_worker_authorized(out, run)
+
+
+def test_worker_refuses_copied_binding_elsewhere(tmp_path, monkeypatch):
+    # direct .sub run: copy JOB.json (+ manifest) to a new dir and spoof env
+    out = tmp_path / "runs"
+    run = _write_manifest(out)
+    cc.bind_job_id(out, "9001")
+    evil = tmp_path / "evil"
+    evil.mkdir()
+    import shutil
+    shutil.copy(out / cc.RUN_MANIFEST_FILENAME, evil / cc.RUN_MANIFEST_FILENAME)
+    shutil.copy(out / cc.JOB_FILENAME, evil / cc.JOB_FILENAME)
+    os.chmod(evil / cc.JOB_FILENAME, 0o444)
+    evil_run = cc.load_run_manifest(evil)
+    monkeypatch.setenv("SLURM_ARRAY_JOB_ID", "9001")
+    # run_out recorded at bind points at `out`, not `evil` -> refused
+    with pytest.raises(cc.B3ConfirmationError, match="run_out"):
+        cc.assert_worker_authorized(evil, evil_run)
+
+
+def test_output_path_injection_refused(tmp_path):
+    with pytest.raises(cc.B3ConfirmationError, match="comma or control"):
+        cc.assert_safe_output_dir("runs,evil")
+    with pytest.raises(cc.B3ConfirmationError, match="comma or control"):
+        cc.assert_safe_output_dir("runs\tevil")
+    with pytest.raises(cc.B3ConfirmationError, match="'\\.\\.' component"):
+        cc.assert_safe_output_dir("runs/../escape")
+    cc.assert_safe_output_dir(str(tmp_path / "runs"))     # a clean path is fine
+
+
+def test_output_path_symlink_component_refused(tmp_path):
+    real = tmp_path / "real"; real.mkdir()
+    link = tmp_path / "link"; link.symlink_to(real)
+    with pytest.raises(cc.B3ConfirmationError, match="symlinked component"):
+        cc.assert_safe_output_dir(link / "runs")
 
 
 # --------------------------------------------------------------------------
