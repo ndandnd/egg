@@ -23,6 +23,17 @@
 #SBATCH --time=24:00:00
 
 set -euo pipefail
+
+# The run directory is threaded from the launcher via EGG_RUN_OUT (kept
+# RELATIVE: the script cds to the src working directory, so a relative
+# path resolves identically in the launcher and in every array task).
+# A set-but-empty value is a configuration error, never a silent default.
+if [[ -n "${EGG_RUN_OUT+x}" && -z "${EGG_RUN_OUT}" ]]; then
+    echo "ERROR: EGG_RUN_OUT is set but empty; refusing to guess the run directory." >&2
+    exit 1
+fi
+OUT="${EGG_RUN_OUT:-runs/b3_factor_pilot}"
+
 SUBMIT_DIR="${SLURM_SUBMIT_DIR:-$(pwd)}"
 if [[ -f "${SUBMIT_DIR}/experiments/run_b3_factor_pilot.py" ]]; then
     WORK_DIR="${SUBMIT_DIR}"
@@ -35,7 +46,11 @@ fi
 cd "${WORK_DIR}"
 
 export EGGLAB_REQUIRE_GRB=1
-source "${WORK_DIR}/cluster/unicorn_env.sh"
+# Interpreter and environment script are overridable for OFF-CLUSTER shell
+# tests only (same pattern as the launcher's EGG_SBATCH/EGG_PILOT); the
+# production defaults are unchanged.
+PYTHON="${EGG_PYTHON:-python}"
+source "${EGG_ENV_SCRIPT:-${WORK_DIR}/cluster/unicorn_env.sh}"
 
-python experiments/run_b3_factor_pilot.py --cell "${SLURM_ARRAY_TASK_ID}" \
-    --out runs/b3_factor_pilot
+${PYTHON} experiments/run_b3_factor_pilot.py --cell "${SLURM_ARRAY_TASK_ID}" \
+    --out "${OUT}"

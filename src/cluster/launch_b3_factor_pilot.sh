@@ -120,8 +120,13 @@ fi
 CONC=12  # concurrency capped at %12
 
 # Submit HELD: the array cannot execute until it is explicitly released, so
-# there is no window in which an unbound array could run.
-JOB="$(${SBATCH} --hold --parsable --array="0-$((N - 1))%${CONC}" cluster/submit_b3_factor_pilot.sub)"
+# there is no window in which an unbound array could run. The resolved run
+# directory is propagated EXPLICITLY on the sbatch line so the array writes
+# where every guard above looked, regardless of the site's default export
+# policy (which may be --export=NONE).
+JOB="$(${SBATCH} --hold --parsable \
+    --export="ALL,EGG_RUN_OUT=${OUT}" \
+    --array="0-$((N - 1))%${CONC}" cluster/submit_b3_factor_pilot.sub)"
 
 # Bind the job id to the manifest SHA. If binding fails for ANY reason, cancel
 # the exact held job and NEVER release it. Because the job was submitted held,
