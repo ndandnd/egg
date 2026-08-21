@@ -114,9 +114,15 @@ def verify_selection_code_commit(claimed: str) -> str:
             "selection-code-commit must be the full 40-character lowercase "
             "hexadecimal SHA")
     try:
+        evidence.assert_no_history_rewrites(REPO_ROOT)
+    except evidence.EvidenceError as exc:
+        raise B3SelectionError(str(exc)) from exc
+    try:
         resolved = subprocess.check_output(
-            ["git", "rev-parse", "--verify", f"{claimed}^{{commit}}"],
-            cwd=REPO_ROOT, stderr=subprocess.DEVNULL).decode().strip()
+            evidence.git_argv(REPO_ROOT, "rev-parse", "--verify",
+                                   f"{claimed}^{{commit}}"),
+            cwd=REPO_ROOT, env=evidence.git_env(),
+            stderr=subprocess.DEVNULL).decode().strip()
     except subprocess.CalledProcessError as exc:
         raise B3SelectionError(
             f"claimed commit {claimed} does not resolve") from exc
@@ -124,19 +130,23 @@ def verify_selection_code_commit(claimed: str) -> str:
         raise B3SelectionError(
             f"claimed commit {claimed} resolves to {resolved}")
     if subprocess.run(
-            ["git", "merge-base", "--is-ancestor", claimed, "HEAD"],
-            cwd=REPO_ROOT).returncode != 0:
+            evidence.git_argv(REPO_ROOT, "merge-base", "--is-ancestor",
+                              claimed, "HEAD"),
+            cwd=REPO_ROOT, env=evidence.git_env()).returncode != 0:
         raise B3SelectionError(
             f"claimed commit {claimed} is not an ancestor of HEAD")
     dirty = subprocess.check_output(
-        ["git", "status", "--porcelain"], cwd=REPO_ROOT).decode()
+        evidence.git_argv(REPO_ROOT, "status", "--porcelain"),
+        cwd=REPO_ROOT, env=evidence.git_env()).decode()
     if [line for line in dirty.splitlines() if not line.startswith("??")]:
         raise B3SelectionError(
             "working tree has tracked modifications; commit the selection "
             "code before freezing")
     for relpath in PROVENANCE_FILES:
         committed = subprocess.check_output(
-            ["git", "show", f"{claimed}:{relpath}"], cwd=REPO_ROOT)
+            evidence.git_argv(REPO_ROOT, "show",
+                              f"{claimed}:{relpath}"),
+            cwd=REPO_ROOT, env=evidence.git_env())
         if committed != (REPO_ROOT / relpath).read_bytes():
             raise B3SelectionError(
                 f"{relpath} differs from the claimed commit {claimed}")
@@ -215,16 +225,19 @@ def _require_commit_in_history(commit: str, label: str) -> None:
             f"{label}: commit {commit!r} is not a real 40-hex commit")
     try:
         resolved = subprocess.check_output(
-            ["git", "rev-parse", "--verify", f"{commit}^{{commit}}"],
-            cwd=REPO_ROOT, stderr=subprocess.DEVNULL).decode().strip()
+            evidence.git_argv(REPO_ROOT, "rev-parse", "--verify",
+                                   f"{commit}^{{commit}}"),
+            cwd=REPO_ROOT, env=evidence.git_env(),
+            stderr=subprocess.DEVNULL).decode().strip()
     except subprocess.CalledProcessError as exc:
         raise B3SelectionError(
             f"{label}: commit {commit} does not resolve") from exc
     if resolved != commit:
         raise B3SelectionError(f"{label}: commit resolves to {resolved}")
     if subprocess.run(
-            ["git", "merge-base", "--is-ancestor", commit, "HEAD"],
-            cwd=REPO_ROOT).returncode != 0:
+            evidence.git_argv(REPO_ROOT, "merge-base", "--is-ancestor",
+                              commit, "HEAD"),
+            cwd=REPO_ROOT, env=evidence.git_env()).returncode != 0:
         raise B3SelectionError(
             f"{label}: commit {commit} is not an ancestor of the current "
             "branch")
@@ -233,8 +246,9 @@ def _require_commit_in_history(commit: str, label: str) -> None:
 def _git_file_at_commit(commit: str, relpath: str, label: str) -> bytes:
     try:
         return subprocess.check_output(
-            ["git", "show", f"{commit}:{relpath}"],
-            cwd=REPO_ROOT, stderr=subprocess.DEVNULL)
+            evidence.git_argv(REPO_ROOT, "show", f"{commit}:{relpath}"),
+            cwd=REPO_ROOT, env=evidence.git_env(),
+            stderr=subprocess.DEVNULL)
     except subprocess.CalledProcessError as exc:
         raise B3SelectionError(
             f"{label}: commit {commit} does not contain {relpath}") from exc

@@ -204,9 +204,15 @@ def verify_b3_packaging_commit(claimed: str) -> str:
             "packaging commit must be the full 40-character lowercase "
             "hexadecimal SHA")
     try:
+        evidence.assert_no_history_rewrites(REPO_ROOT)
+    except evidence.EvidenceError as exc:
+        raise PackagingError(str(exc)) from exc
+    try:
         resolved = subprocess.check_output(
-            ["git", "rev-parse", "--verify", f"{claimed}^{{commit}}"],
-            cwd=REPO_ROOT, stderr=subprocess.DEVNULL).decode().strip()
+            evidence.git_argv(REPO_ROOT, "rev-parse", "--verify",
+                                   f"{claimed}^{{commit}}"),
+            cwd=REPO_ROOT, env=evidence.git_env(),
+            stderr=subprocess.DEVNULL).decode().strip()
     except subprocess.CalledProcessError as exc:
         raise PackagingError(
             f"packaging commit {claimed} does not resolve") from exc
@@ -214,18 +220,22 @@ def verify_b3_packaging_commit(claimed: str) -> str:
         raise PackagingError(
             f"packaging commit {claimed} resolves to {resolved}")
     if subprocess.run(
-            ["git", "merge-base", "--is-ancestor", claimed, "HEAD"],
-            cwd=REPO_ROOT).returncode != 0:
+            evidence.git_argv(REPO_ROOT, "merge-base", "--is-ancestor",
+                              claimed, "HEAD"),
+            cwd=REPO_ROOT, env=evidence.git_env()).returncode != 0:
         raise PackagingError(
             f"packaging commit {claimed} is not an ancestor of HEAD")
     dirty = subprocess.check_output(
-        ["git", "status", "--porcelain"], cwd=REPO_ROOT).decode()
+        evidence.git_argv(REPO_ROOT, "status", "--porcelain"),
+        cwd=REPO_ROOT, env=evidence.git_env()).decode()
     if [line for line in dirty.splitlines() if not line.startswith("??")]:
         raise PackagingError(
             "working tree has tracked modifications; commit before packing")
     for relpath in PROVENANCE_FILES:
         committed = subprocess.check_output(
-            ["git", "show", f"{claimed}:{relpath}"], cwd=REPO_ROOT)
+            evidence.git_argv(REPO_ROOT, "show",
+                              f"{claimed}:{relpath}"),
+            cwd=REPO_ROOT, env=evidence.git_env())
         if committed != (REPO_ROOT / relpath).read_bytes():
             raise PackagingError(
                 f"{relpath} differs from the claimed packaging commit")
@@ -252,22 +262,26 @@ def _verify_recorded_code_provenance(
             "bundle code provenance does not list every executed helper")
     try:
         resolved = subprocess.check_output(
-            ["git", "rev-parse", "--verify",
-             f"{packaging_commit}^{{commit}}"],
-            cwd=REPO_ROOT, stderr=subprocess.DEVNULL).decode().strip()
+            evidence.git_argv(REPO_ROOT, "rev-parse", "--verify",
+                                   f"{packaging_commit}^{{commit}}"),
+            cwd=REPO_ROOT, env=evidence.git_env(),
+            stderr=subprocess.DEVNULL).decode().strip()
     except subprocess.CalledProcessError as exc:
         raise PackagingError(
             "bundle packaging commit does not resolve") from exc
     if resolved != packaging_commit or subprocess.run(
-            ["git", "merge-base", "--is-ancestor",
-             packaging_commit, "HEAD"], cwd=REPO_ROOT).returncode != 0:
+            evidence.git_argv(REPO_ROOT, "merge-base", "--is-ancestor",
+                              packaging_commit, "HEAD"),
+            cwd=REPO_ROOT, env=evidence.git_env()).returncode != 0:
         raise PackagingError(
             "bundle packaging commit is not in current repository history")
     for relpath in PROVENANCE_FILES:
         try:
             committed = subprocess.check_output(
-                ["git", "show", f"{packaging_commit}:{relpath}"],
-                cwd=REPO_ROOT, stderr=subprocess.DEVNULL)
+                evidence.git_argv(REPO_ROOT, "show",
+                                  f"{packaging_commit}:{relpath}"),
+                cwd=REPO_ROOT, env=evidence.git_env(),
+                stderr=subprocess.DEVNULL)
         except subprocess.CalledProcessError as exc:
             raise PackagingError(
                 f"bundle packaging commit lacks helper {relpath}") from exc

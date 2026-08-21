@@ -11,6 +11,10 @@ import json
 import hashlib
 import math
 import os
+import shutil
+import stat
+import subprocess
+import os
 import stat
 from pathlib import Path
 
@@ -69,6 +73,73 @@ def read_regular_bytes_with_signature(
         return raw, signature(after)
     finally:
         os.close(descriptor)
+
+
+# --------------------------------------------------------------------------
+# provenance: ONE hardened git runner for every module in the B3 path
+# --------------------------------------------------------------------------
+# Provenance must not be answerable by anything the caller controls.  A `git`
+# shim earlier on PATH, an exported GIT_DIR, a repository-local replacement ref
+# or a legacy graft file can each make fabricated history look real.  The
+# trusted path deliberately excludes user-writable prefixes such as
+# /usr/local/bin and /opt/homebrew/bin: on a single-user machine those are
+# owned by the operator, so a shim placed there would be "trusted".
+TRUSTED_PATH = "/usr/bin:/bin"
+
+
+def trusted_git() -> str:
+    exe = shutil.which("git", path=TRUSTED_PATH)
+    if exe is None:                                  # pragma: no cover
+        raise EvidenceError(
+            f"no git executable on the trusted path ({TRUSTED_PATH}); "
+            "provenance cannot be verified")
+    resolved = Path(exe)
+    if resolved.is_symlink():
+        raise EvidenceError(f"trusted git must not be a symlink: {exe}")
+    info = resolved.stat()
+    if not stat.S_ISREG(info.st_mode):
+        raise EvidenceError(f"trusted git is not a regular file: {exe}")
+    if info.st_mode & (stat.S_IWGRP | stat.S_IWOTH):
+        raise EvidenceError(f"trusted git is group/world-writable: {exe}")
+    return exe
+
+
+def git_argv(repo_root, *args: str) -> list:
+    """A repository-pinned, replacement-free git invocation."""
+    return [trusted_git(), "--no-replace-objects",
+            "--git-dir", str(Path(repo_root) / ".git"),
+            "--work-tree", str(repo_root), *args]
+
+
+def git_env() -> dict:
+    """A scrubbed environment: no inherited GIT_*, replacements disabled."""
+    env = {k: v for k, v in os.environ.items() if not k.startswith("GIT_")}
+    env["GIT_NO_REPLACE_OBJECTS"] = "1"
+    env["PATH"] = TRUSTED_PATH
+    return env
+
+
+def assert_no_history_rewrites(repo_root) -> None:
+    """Fail closed when the repository can misrepresent its own ancestry.
+
+    ``git replace --graft`` makes an unrelated real commit appear ancestral
+    without dirtying the tracked tree, and environment scrubbing does not
+    disable repository-local ``refs/replace``.
+    """
+    try:
+        listed = subprocess.check_output(
+            git_argv(repo_root, "replace", "--list"),
+            cwd=repo_root, env=git_env(),
+            stderr=subprocess.DEVNULL).decode().strip()
+    except (subprocess.CalledProcessError, OSError) as exc:
+        raise EvidenceError("could not enumerate replacement refs") from exc
+    if listed:
+        raise EvidenceError(
+            "repository has replacement refs; provenance cannot be trusted: "
+            + ", ".join(listed.split()))
+    graft = Path(repo_root) / ".git" / "info" / "grafts"
+    if graft.exists():
+        raise EvidenceError(f"repository has a legacy graft file: {graft}")
 
 
 def read_regular_bytes_once(path: Path, label: str, *,
