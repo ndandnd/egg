@@ -29,6 +29,17 @@ STAMP = "20260820T000000Z"
 # history, so the fixtures record the actual checkout HEAD
 CODE = subprocess.check_output(
     ["git", "rev-parse", "HEAD"], cwd=bp.REPO_ROOT).decode().strip()
+_ANALYSIS_RUNS = {}
+
+
+def _synthetic_anchor(runs):
+    snapshot = pk.snapshot_source(runs)
+    return {
+        "tree_sha256": pk.canonical_tree_sha256(snapshot),
+        "file_count": snapshot["file_count"],
+        "directory_count": snapshot["directory_count"],
+        "total_bytes": snapshot["total_bytes"],
+    }
 
 
 @pytest.fixture(scope="module")
@@ -48,13 +59,19 @@ def _analyze(runs, out, stamp=STAMP, *, verified=True):
     in test_b3_factor_pilot; it cannot pass against fixtures on a dirty
     development tree, so it is stubbed here and the manifest records
     ``analysis_code_verified: true`` through the normal code path)."""
+    expected_anchor = _synthetic_anchor(runs)
     if not verified:
-        return az.analyze(runs, out, stamp, CODE,
-                          screen_dir=None, verify_code_commit=False)
-    with mock.patch.object(az, "verify_analysis_code_commit",
-                           return_value=True):
-        return az.analyze(runs, out, stamp, CODE,
-                          screen_dir=None, verify_code_commit=True)
+        artifact = az.analyze(
+            runs, out, stamp, CODE, screen_dir=None,
+            verify_code_commit=False, expected_raw_anchor=expected_anchor)
+    else:
+        with mock.patch.object(az, "verify_analysis_code_commit",
+                               return_value=True):
+            artifact = az.analyze(
+                runs, out, stamp, CODE, screen_dir=None,
+                verify_code_commit=True, expected_raw_anchor=expected_anchor)
+    _ANALYSIS_RUNS[str(Path(artifact).resolve())] = Path(runs)
+    return artifact
 
 
 # --------------------------------------------------------------------------
@@ -107,6 +124,12 @@ def test_artifact_contents_counts_and_cross_binding(tmp_path, screen):
     assert decision["direction_sign"] == 1
     assert decision["thresholds"] == {
         "count_gate": 9, "tau_delta": 0.04, "width_bound": 0.02}
+    assert decision["signed_median_midpoint_repr"] == repr(
+        decision["signed_median_midpoint"])
+    assert decision["boundary_margin"] == (
+        abs(decision["signed_median_midpoint"]) - 0.04)
+    assert decision["boundary_adjacent"] is False
+    assert decision["boundary_adjacent_tolerance"] == 1e-9
     assert decision["analysis_code_commit"] == CODE
     assert decision["inputs"]["run_manifest_sha256"]
     manifest = json.loads((out / "MANIFEST.json").read_text())
@@ -174,11 +197,17 @@ def test_existing_output_refused(tmp_path, screen):
 # --------------------------------------------------------------------------
 def _go_analysis(tmp_path, screen):
     runs = _go_tree(tmp_path, screen)
+    bp.bind_job_id(runs, "424242")
     return Path(_analyze(runs, tmp_path / "out"))
 
 
 def _select(analysis_dir, out):
-    return sel.select(analysis_dir, out, CODE, verify_code_commit=False)
+    runs = _ANALYSIS_RUNS.get(str(Path(analysis_dir).resolve()))
+    if runs is None:
+        runs = next(reversed(_ANALYSIS_RUNS.values()))
+    return sel.select(
+        runs, analysis_dir, out, CODE, verify_code_commit=False,
+        expected_raw_anchor=_synthetic_anchor(runs))
 
 
 def test_selection_freeze_from_go(tmp_path, screen):
@@ -191,6 +220,18 @@ def test_selection_freeze_from_go(tmp_path, screen):
     assert doc["frozen_factor_level"] == 45.0
     assert doc["baseline_level"] == 60.0
     assert doc["count_gate"] == 9 and doc["tau_delta"] == 0.04
+    assert doc["signed_median_midpoint_repr"] == repr(
+        doc["signed_median_midpoint"])
+    assert doc["boundary_margin"] == (
+        abs(doc["signed_median_midpoint"]) - 0.04)
+    assert doc["boundary_adjacent"] is False
+    assert doc["boundary_adjacent_tolerance"] == 1e-9
+    assert doc["boundary_review_required"] is False
+    assert doc["authorization_state"] == "AUTHORIZED_BY_FROZEN_RULE"
+    assert doc["certificate_integrity"]["attestation"] == (
+        "replayed-not-re-solved")
+    assert doc["certificate_integrity"]["pre_analysis_raw_anchor"] == (
+        doc["pilot"]["raw_binding"]["pre_analysis_anchor"])
     assert doc["pilot"]["analysis_manifest_sha256"] == sel.sha256_file(
         analysis / "MANIFEST.json")
     assert doc["pilot"]["run_manifest_sha256"]
@@ -212,9 +253,31 @@ def test_selection_freeze_from_go(tmp_path, screen):
     assert second.read_bytes() == path.read_bytes()
 
 
+def test_boundary_adjacent_go_requires_human_review_without_rule_change(
+        tmp_path, screen):
+    u = {setting: 0.5 for setting in bp.SETTING_ORDER}
+    u["S1_batt_low"] = 0.5 + az.TAU_DELTA + 5e-10
+    runs = _write_tree(tmp_path / "runs", screen, u_by_setting=u)
+    bp.bind_job_id(runs, "424242")
+    analysis = Path(_analyze(runs, tmp_path / "out"))
+    decision = json.loads((analysis / "DECISION.json").read_text())
+    assert decision["state"] == "GO"
+    assert decision["boundary_adjacent"] is True
+    assert abs(decision["boundary_margin"]) < 1e-9
+
+    selection = Path(_select(analysis, tmp_path / "selection"))
+    document = json.loads(selection.read_text())
+    assert document["state"] == "GO"
+    assert document["boundary_adjacent"] is True
+    assert document["boundary_review_required"] is True
+    assert document["authorization_state"] == "HUMAN_REVIEW_REQUIRED"
+    assert "human review" in document["boundary_policy"]
+
+
 def test_selection_refuses_non_go(tmp_path, screen):
     # NO-GO / UNDER-RESOLVED style: uniform uplift -> all contrasts zero
     runs = _write_tree(tmp_path / "runs", screen)
+    bp.bind_job_id(runs, "424242")
     analysis = Path(_analyze(runs, tmp_path / "out"))
     state = json.loads((analysis / "DECISION.json").read_text())["state"]
     # uniform uplift -> every matched contrast is exactly zero -> the
@@ -226,6 +289,7 @@ def test_selection_refuses_non_go(tmp_path, screen):
 
     # INVALID/HALT artifact lacks the tables entirely
     runs2 = _write_tree(tmp_path / "runs2", screen, certified_all=False)
+    bp.bind_job_id(runs2, "424243")
     invalid = Path(_analyze(runs2, tmp_path / "out2"))
     with pytest.raises(sel.B3SelectionError, match="incomplete"):
         _select(invalid, tmp_path / "sel2")
@@ -392,6 +456,7 @@ def test_selection_refuses_forged_go_from_under_resolved(tmp_path, screen):
     all hashes recomputed.  The selector recomputes the decision from the
     primitive tables and must refuse."""
     runs = _write_tree(tmp_path / "runs", screen)  # uniform: UNDER-RESOLVED
+    bp.bind_job_id(runs, "424242")
     analysis = Path(_analyze(runs, tmp_path / "out"))
 
     def forge(doc):
@@ -410,6 +475,23 @@ def test_selection_refuses_forged_go_from_under_resolved(tmp_path, screen):
     _rehash(analysis, "DECISION.json")
     with pytest.raises(sel.B3SelectionError,
                        match="disagrees with the recomputed decision"):
+        _select(analysis, tmp_path / "sel")
+    assert not (tmp_path / "sel").exists()
+
+
+@pytest.mark.parametrize("copy_name", ["decision", "decision_document"])
+def test_selection_requires_both_manifest_decision_copies(
+        tmp_path, screen, copy_name):
+    analysis = _go_analysis(tmp_path, screen)
+
+    def forge(manifest):
+        if copy_name == "decision":
+            manifest["decision"]["count"] = 8
+        else:
+            manifest["decision_document"]["state"] = "NO-GO"
+
+    _edit_json(analysis / "MANIFEST.json", forge)
+    with pytest.raises(sel.B3SelectionError, match="MANIFEST.json"):
         _select(analysis, tmp_path / "sel")
     assert not (tmp_path / "sel").exists()
 
@@ -467,6 +549,7 @@ def test_selection_refuses_duplicate_row_replacement(tmp_path, screen,
 def test_selection_requires_verified_analysis_and_real_commit(
         tmp_path, screen):
     runs = _go_tree(tmp_path, screen)
+    bp.bind_job_id(runs, "424242")
     unverified = Path(_analyze(runs, tmp_path / "out-unverified",
                                stamp="20260820T000001Z", verified=False))
     with pytest.raises(sel.B3SelectionError,
@@ -521,6 +604,143 @@ def test_selection_publication_isolation(tmp_path, screen):
     assert not (analysis / "sel").exists()
 
 
+def test_selection_rejects_duplicate_key_json(tmp_path, screen):
+    """Pre-fix reproduction: duplicate JSON keys were silently last-wins."""
+    analysis = _go_analysis(tmp_path, screen)
+    path = analysis / "DECISION.json"
+    raw = path.read_bytes()
+    needle = b'  "state": "GO",'
+    assert needle in raw
+    path.write_bytes(raw.replace(
+        needle, needle + b'\n  "state": "GO",', 1))
+    _rehash(analysis, "DECISION.json")
+    with pytest.raises(sel.B3SelectionError, match="duplicate JSON key"):
+        _select(analysis, tmp_path / "sel")
+    assert not (tmp_path / "sel").exists()
+
+
+@pytest.mark.parametrize("table, field, value, message", [
+    ("cell_intervals.csv", "dictator_gap", "0.009", "does not recompute"),
+    ("matched_contrasts.csv", "delta_width", "0.009", "does not recompute"),
+    ("setting_summary.csv", "rank", "4", "disagrees"),
+])
+def test_selection_reconstructs_every_derived_field(
+        tmp_path, screen, table, field, value, message):
+    analysis = _go_analysis(tmp_path, screen)
+    path = analysis / table
+    rows = list(csv.DictReader(open(path)))
+    rows[0][field] = value
+    with open(path, "w", newline="") as handle:
+        writer = csv.DictWriter(
+            handle, fieldnames=list(rows[0]), lineterminator="\n")
+        writer.writeheader()
+        writer.writerows(rows)
+    _rehash(analysis, table)
+    with pytest.raises(sel.B3SelectionError, match=message):
+        _select(analysis, tmp_path / "sel")
+    assert not (tmp_path / "sel").exists()
+
+
+def test_selection_requires_exact_raw_job_binding(tmp_path, screen):
+    analysis = _go_analysis(tmp_path, screen)
+    _edit_json(
+        analysis / "MANIFEST.json",
+        lambda manifest: manifest.update(raw_binding=None))
+    with pytest.raises(sel.B3SelectionError, match="raw_binding is missing"):
+        _select(analysis, tmp_path / "sel")
+    assert not (tmp_path / "sel").exists()
+
+
+@pytest.mark.parametrize("field,bad", [
+    ("raw_tree_sha256", "0" * 64),
+    ("job_id", "999999"),
+    ("job_sha256", "1" * 64),
+])
+def test_selection_names_each_raw_binding_disagreement(
+        tmp_path, screen, field, bad):
+    analysis = _go_analysis(tmp_path, screen)
+    decision_path = analysis / "DECISION.json"
+    decision = json.loads(decision_path.read_text())
+    decision["inputs"]["raw_binding"][field] = bad
+    decision_path.write_text(
+        json.dumps(decision, indent=2, sort_keys=True) + "\n")
+    manifest_path = analysis / "MANIFEST.json"
+    manifest = json.loads(manifest_path.read_text())
+    manifest["raw_binding"][field] = bad
+    manifest["decision_document"] = decision
+    manifest_path.write_text(
+        json.dumps(manifest, indent=2, sort_keys=True) + "\n")
+    _rehash(analysis, "DECISION.json")
+    with pytest.raises(
+            sel.B3SelectionError,
+            match=rf"raw_binding mismatch for {field}"):
+        _select(analysis, tmp_path / "sel")
+    assert not (tmp_path / "sel").exists()
+
+
+def test_selection_refuses_fabricated_go_without_matching_runs(
+        tmp_path, screen):
+    runs_a, analysis_a = _packable(tmp_path / "a", screen)
+    with pytest.raises(
+            sel.B3SelectionError, match="raw runs tree is unreadable"):
+        sel.select(
+            tmp_path / "no-such-runs", analysis_a,
+            tmp_path / "sel-missing", CODE,
+            verify_code_commit=False,
+            expected_raw_anchor=_synthetic_anchor(runs_a))
+    assert not (tmp_path / "sel-missing").exists()
+
+    runs_b = Path(_go_tree(tmp_path / "b", screen))
+    _materialize_jsonl(runs_b)
+    bp.bind_job_id(runs_b, "999999")
+    (runs_b / "AUDIT.md").write_text("# Different synthetic raw tree\n")
+    with pytest.raises(
+            sel.B3SelectionError,
+            match="analysis raw_binding mismatch for raw_tree_sha256"):
+        sel.select(
+            runs_b, analysis_a, tmp_path / "sel", CODE,
+            verify_code_commit=False,
+            expected_raw_anchor=_synthetic_anchor(runs_b))
+    assert runs_a != runs_b
+    assert not (tmp_path / "sel").exists()
+
+
+def test_selector_refuses_live_tree_that_misses_preanalysis_anchor(
+        tmp_path, screen):
+    analysis = _go_analysis(tmp_path, screen)
+    runs = _ANALYSIS_RUNS[str(analysis.resolve())]
+    wrong_anchor = dict(_synthetic_anchor(runs))
+    wrong_anchor["total_bytes"] += 1
+    with pytest.raises(
+            sel.B3SelectionError,
+            match="live raw-tree anchor mismatch for total_bytes"):
+        sel.select(
+            runs, analysis, tmp_path / "sel", CODE,
+            verify_code_commit=False,
+            expected_raw_anchor=wrong_anchor)
+    assert not (tmp_path / "sel").exists()
+
+
+def test_selection_rejects_toctou_replacement_before_commit(
+        tmp_path, screen, monkeypatch):
+    analysis = _go_analysis(tmp_path, screen)
+    victim = analysis / "cell_intervals.csv"
+    real_publish = sel.publish_flat_directory_no_replace
+
+    def replace_then_publish(*args, **kwargs):
+        replacement = victim.with_name(".replacement")
+        replacement.write_bytes(victim.read_bytes())
+        os.replace(replacement, victim)  # same bytes, different opened inode
+        return real_publish(*args, **kwargs)
+
+    monkeypatch.setattr(
+        sel, "publish_flat_directory_no_replace", replace_then_publish)
+    with pytest.raises(sel.B3SelectionError, match="changed after immutable"):
+        _select(analysis, tmp_path / "sel")
+    # A post-rename refusal remains explicitly guarded, never authoritative.
+    assert (tmp_path / "sel" / ".publication-incomplete").exists()
+
+
 # --------------------------------------------------------------------------
 # Task C: pack / import
 # --------------------------------------------------------------------------
@@ -544,6 +764,8 @@ def _packable(tmp_path, screen):
     runs = Path(_go_tree(tmp_path, screen))
     _materialize_jsonl(runs)
     bp.bind_job_id(runs, "424242")
+    (runs / "AUDIT.md").write_text(
+        "# Synthetic B3 audit report\n\n- result: PASS\n")
     analysis = Path(_analyze(runs, tmp_path / "analysis-out"))
     return runs, analysis
 
@@ -561,6 +783,7 @@ def test_pack_import_round_trip(tmp_path, screen):
         (bundle / "BUNDLE_MANIFEST.json").read_text())
     assert manifest["schema"] == pk.BUNDLE_SCHEMA
     assert manifest["run_commit"] == "a" * 40
+    assert set(manifest["code_provenance"]) == set(pk.PROVENANCE_FILES)
     assert len(manifest["raw"]["cells"]) == 60
     for tag, files in manifest["raw"]["cells"].items():
         assert set(files) == set(pk.CELL_FILES)
@@ -582,6 +805,31 @@ def test_pack_import_round_trip(tmp_path, screen):
         _pack(runs, analysis, tmp_path / "bundles")
 
 
+def test_raw_tree_accepts_only_optional_audit_report(tmp_path, screen):
+    runs = Path(_go_tree(tmp_path, screen))
+    _materialize_jsonl(runs)
+    bp.bind_job_id(runs, "424242")
+    assert "AUDIT.md" not in {
+        row["path"] for row in pk.validate_raw_tree(runs)["snapshot"]["files"]}
+
+    (runs / "AUDIT.md").write_text("# Synthetic documented audit\n")
+    validated = pk.validate_raw_tree(runs)
+    assert "AUDIT.md" in {
+        row["path"] for row in validated["snapshot"]["files"]}
+
+    rogue = runs / "NOT_THE_AUDIT.txt"
+    rogue.write_text("unexpected\n")
+    with pytest.raises(
+            PackagingError, match=r"unexpected=\['NOT_THE_AUDIT.txt'\]"):
+        pk.validate_raw_tree(runs)
+    rogue.unlink()
+
+    required = runs / bp.build_cells()[0]["tag"] / "a2.oracle.jsonl"
+    required.unlink()
+    with pytest.raises(PackagingError, match="a2.oracle.jsonl"):
+        pk.validate_raw_tree(runs)
+
+
 def test_pack_refuses_unexpected_and_symlinked_paths(tmp_path, screen):
     runs, analysis = _packable(tmp_path, screen)
     rogue = runs / "rogue.txt"
@@ -597,6 +845,18 @@ def test_pack_refuses_unexpected_and_symlinked_paths(tmp_path, screen):
         _pack(runs, analysis, tmp_path / "b2")
     victim.unlink()
     shutil.move(moved, victim)
+
+
+def test_pack_refuses_hard_linked_source_files(tmp_path, screen):
+    runs, analysis = _packable(tmp_path, screen)
+    victim = runs / "S0_baseline_s0_n8_b0.01" / "a2.oracle.jsonl"
+    outside = tmp_path / "outside.jsonl"
+    outside.write_bytes(victim.read_bytes())
+    victim.unlink()
+    os.link(outside, victim)
+    with pytest.raises(PackagingError, match="unsafe linked"):
+        _pack(runs, analysis, tmp_path / "bundles")
+    assert not (tmp_path / "bundles").exists()
 
 
 def test_pack_refuses_active_job_and_bad_job_binding(tmp_path, screen):
@@ -618,25 +878,43 @@ def test_pack_refuses_active_job_and_bad_job_binding(tmp_path, screen):
         _pack(runs, analysis, tmp_path / "b2")
 
 
+def test_pack_first_quiescence_precedes_outcome_inventory(tmp_path, screen):
+    runs, analysis = _packable(tmp_path, screen)
+
+    def active(job_id):
+        assert job_id == "424242"
+        raise PackagingError(f"Slurm job {job_id} is still active")
+
+    with mock.patch.object(
+            pk, "snapshot_source",
+            side_effect=AssertionError("outcome inventory ran too early")):
+        with pytest.raises(PackagingError, match="still active"):
+            pk.pack(
+                runs, analysis, tmp_path / "bundles", CODE,
+                verify_commit=False, job_quiescence_validator=active)
+    assert not (tmp_path / "bundles").exists()
+
+
 def test_pack_detects_mutation_during_packaging(tmp_path, screen):
     runs, analysis = _packable(tmp_path, screen)
     victim = runs / "S0_baseline_s0_n8_b0.01" / "a2.oracle.jsonl"
-    real_copy = pk._copy_snapshot
+    real_freeze = pk.freeze_source
     state = {"mutated": False}
 
-    def mutating_copy(source, snapshot, destination):
-        real_copy(source, snapshot, destination)
-        if not state["mutated"] and source.name != "analysis-out":
+    def mutating_freeze(source, destination):
+        snapshot = real_freeze(source, destination)
+        if not state["mutated"] and Path(source).resolve() == runs.resolve():
             state["mutated"] = True
             victim.write_bytes(victim.read_bytes() + b"\n")
+        return snapshot
 
-    orig = pk._copy_snapshot
-    pk._copy_snapshot = mutating_copy
+    orig = pk.freeze_source
+    pk.freeze_source = mutating_freeze
     try:
         with pytest.raises(PackagingError, match="mutated during packaging"):
             _pack(runs, analysis, tmp_path / "b1")
     finally:
-        pk._copy_snapshot = orig
+        pk.freeze_source = orig
     assert state["mutated"]
 
 
@@ -648,7 +926,9 @@ def test_pack_refuses_cross_run_analysis(tmp_path, screen):
     manifest["run_manifest_sha256"] = "3" * 64
     (analysis / "MANIFEST.json").write_text(
         json.dumps(manifest, indent=2, sort_keys=True) + "\n")
-    with pytest.raises(PackagingError, match="DIFFERENT run manifest"):
+    with pytest.raises(
+            PackagingError,
+            match="run_manifest_sha256 mismatch|DIFFERENT run manifest"):
         _pack(runs, analysis, tmp_path / "b1")
 
 
@@ -669,7 +949,7 @@ def test_pack_refuses_cross_job_analysis(tmp_path, screen):
     assert pk.sha256_file(runs_a / "MANIFEST.json") == pk.sha256_file(
         runs_b / "MANIFEST.json")
     with pytest.raises(PackagingError,
-                       match="DIFFERENT job|job binding"):
+                       match="raw_binding mismatch for raw_tree_sha256"):
         _pack(runs_b, analysis_a, tmp_path / "b1")
     assert not (tmp_path / "b1").exists()
 
@@ -692,7 +972,7 @@ def test_pack_requires_verified_scoreable_analysis(tmp_path, screen):
     shutil.copytree(analysis, unbound)
     _edit_json(unbound / "MANIFEST.json",
                lambda m: m.update(raw_binding=None))
-    with pytest.raises(PackagingError, match="raw-tree digest"):
+    with pytest.raises(PackagingError, match="raw_binding is missing"):
         _pack(runs, unbound, tmp_path / "b3")
 
 
@@ -725,6 +1005,30 @@ def test_pack_reverifies_quiescence_before_rename(tmp_path, screen):
                 verify_commit=False, job_quiescence_validator=flaky)
     assert calls["n"] == 2
     assert not any((tmp_path / "b1").iterdir())
+
+
+def test_pack_post_rename_failure_stays_explicitly_incomplete(
+        tmp_path, screen, monkeypatch):
+    runs, analysis = _packable(tmp_path, screen)
+    real_unlink = pk.os.unlink
+
+    def fail_guard_unlink(path, *args, **kwargs):
+        if path == pk.INCOMPLETE_MARKER:
+            raise OSError("synthetic marker unlink failure")
+        return real_unlink(path, *args, **kwargs)
+
+    monkeypatch.setattr(pk.os, "unlink", fail_guard_unlink)
+    out = tmp_path / "bundles"
+    with pytest.raises(PackagingError, match="incomplete|guarded"):
+        _pack(runs, analysis, out)
+    published = [path for path in out.iterdir() if path.is_dir()]
+    assert len(published) == 1
+    guarded = published[0]
+    assert (guarded / pk.INCOMPLETE_MARKER).exists()
+    assert (guarded / pk.BUNDLE_COMPLETE_FILENAME).exists()
+    with pytest.raises(PackagingError, match="incomplete-publication"):
+        pk.import_bundle(guarded, tmp_path / "dest")
+    assert not (tmp_path / "dest").exists()
 
 
 def test_pack_and_import_path_isolation(tmp_path, screen):
@@ -791,6 +1095,62 @@ def test_import_refuses_incomplete_or_uncommitted_bundle(tmp_path, screen):
         assert not (tmp_path / d).exists()
 
 
+def test_import_rejects_duplicate_key_manifest(tmp_path, screen):
+    runs, analysis = _packable(tmp_path, screen)
+    bundle = Path(_pack(runs, analysis, tmp_path / "bundles")["bundle_dir"])
+    work = tmp_path / "duplicate-json"
+    shutil.copytree(bundle, work)
+    manifest = work / pk.BUNDLE_MANIFEST_FILENAME
+    raw = manifest.read_bytes()
+    needle = b'"schema":"b3-factor-pilot-bundle-v1"'
+    assert needle in raw
+    manifest.write_bytes(raw.replace(
+        needle, needle + b',"schema":"b3-factor-pilot-bundle-v1"', 1))
+    with pytest.raises(PackagingError, match="duplicate JSON key"):
+        pk.import_bundle(work, tmp_path / "dest")
+    assert not (tmp_path / "dest").exists()
+
+
+def test_import_rejects_toctou_bundle_replacement(
+        tmp_path, screen, monkeypatch):
+    runs, analysis = _packable(tmp_path, screen)
+    bundle = Path(_pack(runs, analysis, tmp_path / "bundles")["bundle_dir"])
+    victim = bundle / pk.BUNDLE_MANIFEST_FILENAME
+    real_snapshot = pk.snapshot_source
+    calls = {"bundle": 0}
+
+    def replace_on_final_revalidation(root):
+        if Path(root).resolve() == bundle.resolve():
+            calls["bundle"] += 1
+            if calls["bundle"] == 2:
+                victim.write_bytes(victim.read_bytes() + b"\n")
+        return real_snapshot(root)
+
+    monkeypatch.setattr(pk, "snapshot_source", replace_on_final_revalidation)
+    with pytest.raises(PackagingError, match="changed immediately"):
+        pk.import_bundle(bundle, tmp_path / "dest")
+    assert calls["bundle"] == 2
+    assert not (tmp_path / "dest").exists()
+
+
+def test_import_post_rename_failure_stays_explicitly_incomplete(
+        tmp_path, screen, monkeypatch):
+    runs, analysis = _packable(tmp_path, screen)
+    bundle = Path(_pack(runs, analysis, tmp_path / "bundles")["bundle_dir"])
+    real_unlink = pk.os.unlink
+
+    def fail_guard_unlink(path, *args, **kwargs):
+        if path == pk.IMPORT_INCOMPLETE_MARKER:
+            raise OSError("synthetic import marker unlink failure")
+        return real_unlink(path, *args, **kwargs)
+
+    monkeypatch.setattr(pk.os, "unlink", fail_guard_unlink)
+    destination = tmp_path / "dest"
+    with pytest.raises(PackagingError, match="incomplete|guarded"):
+        pk.import_bundle(bundle, destination)
+    assert (destination / pk.IMPORT_INCOMPLETE_MARKER).exists()
+
+
 def test_import_reapplies_population_and_manifest_contract(
         tmp_path, screen):
     runs, analysis = _packable(tmp_path, screen)
@@ -827,6 +1187,16 @@ def test_import_reapplies_population_and_manifest_contract(
     with pytest.raises(PackagingError, match="unsafe bundle manifest path"):
         pk.import_bundle(traversal, tmp_path / "d4")
 
+    absolute = tmp_path / "absolute"
+    shutil.copytree(bundle, absolute)
+
+    def add_absolute(m):
+        files = next(iter(m["raw"]["cells"].values()))
+        m["raw"]["cells"]["/tmp/evil"] = dict(files)
+    _rewrite_bundle_manifest(absolute, add_absolute)
+    with pytest.raises(PackagingError, match="unsafe bundle manifest path"):
+        pk.import_bundle(absolute, tmp_path / "d4a")
+
     swapped_job = tmp_path / "swapped-job"
     shutil.copytree(bundle, swapped_job)
     _rewrite_bundle_manifest(
@@ -835,13 +1205,21 @@ def test_import_reapplies_population_and_manifest_contract(
                        match="job id differs from the raw tree"):
         pk.import_bundle(swapped_job, tmp_path / "d5")
 
+    swapped_job_bytes = tmp_path / "swapped-job-bytes"
+    shutil.copytree(bundle, swapped_job_bytes)
+    _rewrite_bundle_manifest(
+        swapped_job_bytes,
+        lambda m: m["raw"].update(job_sha256="0" * 64))
+    with pytest.raises(PackagingError, match="raw contract differs"):
+        pk.import_bundle(swapped_job_bytes, tmp_path / "d5a")
+
     dropped_cell = tmp_path / "dropped-cell"
     shutil.copytree(bundle, dropped_cell)
     tag = bp.build_cells()[0]["tag"]
     shutil.rmtree(dropped_cell / "runs" / tag)
     with pytest.raises(PackagingError, match="population differs"):
         pk.import_bundle(dropped_cell, tmp_path / "d6")
-    for d in ("d1", "d2", "d3", "d4", "d5", "d6"):
+    for d in ("d1", "d2", "d3", "d4", "d4a", "d5", "d5a", "d6"):
         assert not (tmp_path / d).exists()
 
 
