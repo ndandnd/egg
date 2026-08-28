@@ -15,6 +15,7 @@ egglab/            the library
   regimes.py       uncontrolled / taker / strategic (B9) / dictator solves
   loops.py         Phase-1 price fixed-point iteration, cycle detection
   boundary.py      Phase-2 switch-boundary sweeps (economic vs tie-flip switches)
+  column_proposer.py  bounded shadow local-move proposer + independent audit
   records.py       Phase-0 logging contract (JSONL + provenance)
   checkpoint.py    atomic checkpoints (preemption-safe restart)
   collect.py       JSONL -> CSV aggregation
@@ -62,8 +63,14 @@ python3 -m pytest tests/ -q              # smoke (~5 s)
 python3 experiments/run_phase1.py --list # enumerate cells
 python3 experiments/run_phase1.py --cell 0 --out runs/phase1
 python3 experiments/run_phase2.py --cell 0 --out runs/phase2
+python3 experiments/run_column_proposer.py --list
 python3 -m egglab.collect runs -o runs/all.csv
 ```
+
+The local-move proposer is a standalone four-trip mechanism spike, not a
+production A2/A6 option. Its frozen contract is
+`../doc/LOCAL_MOVE_COLUMN_PROPOSER_LAB.md`; fixed-partition solver bounds never
+enter convex-hull certification.
 
 ## Run on the Unicorn cluster (Slurm + Gurobi)
 

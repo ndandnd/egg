@@ -11,6 +11,10 @@ Project operations and evidence:
   evidence.
 - [`UNICORN_RUNBOOK.md`](UNICORN_RUNBOOK.md) records cluster procedures and
   recovery commands.
+- [`LOCAL_MOVE_COLUMN_PROPOSER_LAB.md`](LOCAL_MOVE_COLUMN_PROPOSER_LAB.md)
+  freezes the bounded local-move column-proposer spike: strict physical
+  reduced-cost admission and independent replay only, with an honest negative
+  result accepted in advance.
 
 The incident ledger is authoritative about repair status: a procedure or test
 described in the runbook is not production-ready while its incident remains
