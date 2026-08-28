@@ -60,98 +60,28 @@ A6 wins; it only moves the evidence.
 
 ## 2. Read-only preflight — run this first, change nothing
 
-Every line is read-only. Run it as one block; a subshell keeps a failure from
-closing your login session. If any line prints `FAIL`, stop and diagnose;
-do not proceed to section 3.
+The versioned preflight is outcome-blind and read-only: it hashes the raw
+inventory, validates the three claim documents as direct canonical JSON,
+checks Git ancestry and launch-job quiescence, and inventories only the shape
+and archive sidecar of any package. It never invokes the analyzer, creates a
+claim or package, or grants authorization. Run it after a guarded update:
 
 ```bash
-(
-    set -uo pipefail
-    cd "$HOME/egg/src" || exit 1
-    export PATH="/usr/local/slurm/current/bin:$PATH"
-
-    ok() { printf '  OK   %s\n' "$1"; }
-    bad() { printf '  FAIL %s\n' "$1"; }
-
-    echo "== 1. Slurm tooling (this is what broke EI-026) =="
-    command -v squeue >/dev/null && ok "squeue on PATH: $(command -v squeue)" \
-        || bad "squeue NOT on PATH — the recovery will refuse"
-
-    echo "== 2. the one-shot claim must NOT already exist =="
-    if [ -e runs/a6_holdout.RECOVERY2_CLAIM.json ]; then
-        bad "RECOVERY2 claim already exists — the one shot is spent, STOP"
-    else
-        ok "no RECOVERY2 claim present"
-    fi
-
-    echo "== 3. the two prior claims must exist with EXACT digests =="
-    for pair in \
-      "runs/a6_holdout.CLOSEOUT_CLAIM.json 1b0acf0b8232d4b08e764564e2732fcfa9c28dd53456a1415085b77cb38f6675" \
-      "runs/a6_holdout.RECOVERY_CLAIM.json 88c22f06ce6bc8dcff56c0d6737c91bbd39fe8da79c2b6ba6d2a987b6b6abe88"
-    do
-        set -- $pair
-        if [ ! -f "$1" ]; then bad "missing $1"; continue; fi
-        got="$(sha256sum "$1" | cut -d' ' -f1)"
-        [ "$got" = "$2" ] && ok "$1 digest matches" \
-            || bad "$1 digest is $got, expected $2"
-    done
-
-    echo "== 4. clean tracked tree, HEAD, and the three required ancestors =="
-    if [ -n "$(git -C .. status --porcelain --untracked-files=no)" ]; then
-        bad "tracked tree is dirty — commit or stash first"
-    else
-        ok "tracked tree clean"
-    fi
-    HEAD_SHA="$(git -C .. rev-parse HEAD)"; ok "HEAD = ${HEAD_SHA}"
-    for c in 740ab0c1578b454268102c0bb15b1104d9ac8d9d \
-             b81b15ace8ffd7301ce93f349fdb643cdefd5da6 \
-             74a9c5d56ae328b5c394537007cc7cefdb6e3441
-    do
-        git -C .. merge-base --is-ancestor "$c" HEAD \
-            && ok "ancestor present: ${c:0:12}" \
-            || bad "NOT an ancestor of HEAD: ${c:0:12}"
-    done
-
-    echo "== 5. the live raw tree must still match the original claim =="
-    python3 - <<'PY'
-import json, sys
-sys.path.insert(0, ".")
-from experiments.package_a6_holdout import snapshot_source, canonical_tree_sha256
-claim = json.load(open("runs/a6_holdout.CLOSEOUT_CLAIM.json"))
-src = claim["document"]["source"]
-snap = snapshot_source("runs/a6_holdout")
-live = {"canonical_tree_sha256": canonical_tree_sha256(snap),
-        "file_count": snap["file_count"],
-        "directory_count": snap["directory_count"],
-        "total_bytes": snap["total_bytes"]}
-bad = [k for k in live if src.get(k) != live[k]]
-print("  OK   live raw tree matches the original claim" if not bad
-      else f"  FAIL live raw tree drifted on {bad}: {live}")
-print(f"       launch_job_id = {claim['document']['launch_job_id']}")
-print(f"       preflight_sha256[:12] = {claim['document']['preflight_sha256'][:12]}")
-PY
-
-    echo "== 6. Slurm quiescence for the launch job =="
-    JOB="$(python3 -c 'import json;print(json.load(open("runs/a6_holdout.CLOSEOUT_CLAIM.json"))["document"]["launch_job_id"])')"
-    rows="$(squeue --noheader --me --format='%F' | grep -c "^${JOB}$" || true)"
-    [ "$rows" = "0" ] && ok "job ${JOB} is quiescent" \
-        || bad "job ${JOB} still has ${rows} row(s) in the queue"
-
-    echo "== 7. no existing package with this prefix =="
-    PREFIX="$(python3 -c 'import json;d=json.load(open("runs/a6_holdout.CLOSEOUT_CLAIM.json"))["document"];print(f"a6_holdout-job{d[\"launch_job_id\"]}-{d[\"preflight_sha256\"][:12]}-")')"
-    if ls runs/a6_holdout_packages 2>/dev/null | grep -q "^${PREFIX}"; then
-        bad "a package already exists with prefix ${PREFIX} — this blocks forever"
-    else
-        ok "no package with prefix ${PREFIX}"
-    fi
-
-    echo "== 8. the frozen selection artifact must be untouched =="
-    SEL="../result/a6_pilot/20260819T005514Z/SELECTION.json"
-    got="$(sha256sum "$SEL" | cut -d' ' -f1)"
-    [ "$got" = "026ddc38e90f9dd2e9342a50cfb5550bc52731c5f1ee67d87d53008bd6b4b507" ] \
-        && ok "SELECTION.json digest matches" || bad "SELECTION.json digest is $got"
-)
+cd "$HOME/egg" && git pull --ff-only origin main && \
+    bash src/cluster/preflight_a6_recovery2_readonly.sh
 ```
+
+If it prints `ONE_SHOT_STATE=SPENT`, never run `recover2-pack` again; use the
+reported `PACKAGE_STATE` and section 4 to reconcile the existing attempt. If
+it prints `INVARIANTS=FAIL`, stop and diagnose. Section 3 is reachable only
+when all of these are present together:
+
+- `ONE_SHOT_STATE=UNSPENT`
+- `PACKAGE_STATE=NONE`
+- `INVARIANTS=PASS`
+
+Even that combination prints `AUTHORIZATION=NONE`: explicit operator approval
+is still required before the one-shot command.
 
 ## 3. The one command — only if every line above printed OK
 
