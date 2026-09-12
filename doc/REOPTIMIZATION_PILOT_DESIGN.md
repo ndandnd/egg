@@ -90,7 +90,7 @@ return to the complete pricing problem. Do not alter frozen A6/B3 rules.
 complete four-state trajectory, yield 432 allocated CPU-hours. Add 16 CPU-hours
 for labels, training, tuning and nearest-neighbor validation: 448 total. Within
 each state enforce both 15 minutes and 240 pricing calls; at most four concurrent
-trajectories imply 16 CPUs and a proposed 128 GB total memory (32 GB each).
+trajectories imply 16 CPUs and a proposed 128 GiB total memory (32 GiB each).
 Budget hits remain results. This is a ceiling, not a runtime estimate or verified
 cluster capacity. Separate adapter/feasibility qualification has no allocation
 yet and is not hidden inside the 448-hour number.
