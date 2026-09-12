@@ -15,8 +15,8 @@ fix that stale paragraph once the recovery is done.
 
 1. **There is no dry-run, preflight, `--check`, or `--verify` mode.** None of
    the four subcommands (`pack`, `import`, `recover-pack`, `recover2-pack`) has
-   one. The preflight in section 2 is therefore *manual shell assertions* —
-   the code cannot rehearse itself.
+   one. The separate read-only program in section 2 checks state; it does
+   not rehearse the packager or consume its claim.
 
 2. **The one-shot point is precise, and everything after it is permanent.**
    The attempt is burned by an `O_EXCL` create of
@@ -64,7 +64,18 @@ The versioned preflight is outcome-blind and read-only: it hashes the raw
 inventory, validates the three claim documents as direct canonical JSON,
 checks Git ancestry and launch-job quiescence, and inventories only the shape
 and archive sidecar of any package. It never invokes the analyzer, creates a
-claim or package, or grants authorization. Run it after a guarded update:
+claim or package, or grants authorization. Python starts with `-I -S -B`
+(environment/site isolation and no bytecode), then imports the repository's
+standard-library-only package helper. The script requires a POSIX system
+Python 3.9 or newer at `/usr/bin/python3`; Unicorn compatibility must still be
+checked before operator use. Metadata reads reject symlinks, hardlinks and
+special files; claims are limited to 1 MiB and archive sidecars to 1024 bytes.
+The sidecar must match the packager's exact checksum-plus-archive-name format.
+Malformed metadata is never echoed as error content. A spent claim must match
+its versioned schema, prior bindings, commit ancestry and UTC chronology to
+pass invariants; validation failure still leaves the attempt **SPENT**.
+These checks assume the documented cooperative, quiescent local namespace.
+Run it after a guarded update:
 
 ```bash
 cd "$HOME/egg" && git pull --ff-only origin main && \

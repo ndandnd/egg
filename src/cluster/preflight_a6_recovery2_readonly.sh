@@ -13,8 +13,6 @@ script_dir="$(CDPATH= cd -- "$script_parent" && pwd -P)" || exit 1
 src_dir="$(CDPATH= cd -- "${script_dir}/.." && pwd -P)" || exit 1
 cd "$src_dir" || exit 1
 
-export PYTHONDONTWRITEBYTECODE=1
-
 egg_python=/usr/bin/python3
 egg_git=/usr/bin/git
 egg_squeue=/usr/local/slurm/current/bin/squeue
@@ -24,18 +22,28 @@ if test ! -x "$egg_python"; then
     exit 1
 fi
 
-exec "$egg_python" - "$egg_git" "$egg_squeue" <<'PY'
+# Ignore ambient Python configuration, site hooks and bytecode writes.
+# The package helper imports only the standard library on this read-only path.
+exec "$egg_python" -I -S -B - "$egg_git" "$egg_squeue" <<'PY'
 from __future__ import annotations
 
+import datetime
 import hashlib
 import json
 import os
+import re
 import stat
 import subprocess
 import sys
 from pathlib import Path
 
+# Isolated startup deliberately omits cwd. Add only the script-derived src root
+# after loading standard-library dependencies; never use PYTHONPATH/site hooks.
+sys.path.insert(0, str(Path.cwd()))
 from experiments import package_a6_holdout as package
+
+if Path(package.__file__).resolve() != Path.cwd() / "experiments/package_a6_holdout.py":
+    raise RuntimeError("unexpected package helper location")
 
 
 GIT = sys.argv[1]
@@ -85,9 +93,35 @@ def sha256_bytes(raw: bytes) -> str:
     return hashlib.sha256(raw).hexdigest()
 
 
+def open_regular(path: Path):
+    # Reject symlinks and special files before opening (a FIFO must not block).
+    info = path.lstat()
+    if not stat.S_ISREG(info.st_mode) or info.st_nlink != 1:
+        raise ValueError("not a regular single-link file")
+    descriptor = os.open(path, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK)
+    try:
+        info = os.fstat(descriptor)
+        if not stat.S_ISREG(info.st_mode) or info.st_nlink != 1:
+            raise ValueError("not a regular single-link file")
+        return os.fdopen(descriptor, "rb")
+    except BaseException:
+        os.close(descriptor)
+        raise
+
+
+def bounded_bytes(path: Path, limit: int) -> bytes:
+    with open_regular(path) as handle:
+        if os.fstat(handle.fileno()).st_size > limit:
+            raise ValueError("metadata exceeds size limit")
+        raw = handle.read(limit + 1)
+    if len(raw) > limit:
+        raise ValueError("metadata exceeds size limit")
+    return raw
+
+
 def sha256_file(path: Path) -> str:
     digest = hashlib.sha256()
-    with path.open("rb") as handle:
+    with open_regular(path) as handle:
         for chunk in iter(lambda: handle.read(1 << 20), b""):
             digest.update(chunk)
     return digest.hexdigest()
@@ -97,24 +131,26 @@ def reject_duplicate_keys(pairs):
     value = {}
     for key, item in pairs:
         if key in value:
-            raise ValueError(f"duplicate JSON key: {key}")
+            raise ValueError("duplicate JSON key")
         value[key] = item
     return value
 
 
+def reject_json_constant(value):
+    raise ValueError("non-JSON numeric constant")
+
+
 def strict_claim(path: Path, expected_sha256: str | None = None) -> tuple[bytes, dict]:
-    info = path.lstat()
-    if not stat.S_ISREG(info.st_mode) or info.st_nlink != 1:
-        raise ValueError("not a regular single-link file")
-    raw = path.read_bytes()
-    document = json.loads(raw, object_pairs_hook=reject_duplicate_keys)
+    raw = bounded_bytes(path, 1 << 20)
+    actual = sha256_bytes(raw)
+    if expected_sha256 is not None and actual != expected_sha256:
+        raise ValueError("claim checksum mismatch")
+    document = json.loads(raw, object_pairs_hook=reject_duplicate_keys,
+                          parse_constant=reject_json_constant)
     if not isinstance(document, dict):
         raise ValueError("top-level JSON value is not an object")
     if raw != package._canonical_json_bytes(document):
         raise ValueError("JSON is not canonical")
-    actual = sha256_bytes(raw)
-    if expected_sha256 is not None and actual != expected_sha256:
-        raise ValueError(f"SHA-256 {actual}, expected {expected_sha256}")
     return raw, document
 
 
@@ -133,6 +169,7 @@ print(f"PYTHON={sys.executable}")
 print(f"GIT={GIT}")
 print(f"SQUEUE={SQUEUE}")
 
+head = None
 try:
     head = git_output("rev-parse", "--verify", "HEAD^{commit}")
     dirty = git_output("status", "--porcelain", "--untracked-files=no")
@@ -172,30 +209,75 @@ for label, path, expected in (
             closeout = document
         else:
             recovery1 = document
-    except (OSError, ValueError, json.JSONDecodeError) as exc:
-        fail(label, str(exc))
+    except (OSError, ValueError, RecursionError) as exc:
+        fail(label, type(exc).__name__)
 
-if RECOVERY2.exists() or RECOVERY2.is_symlink():
+# Presence consumes the attempt even if the document is malformed or a dangling
+# symlink. Validation must never downgrade this state to UNSPENT.
+spent = RECOVERY2.exists() or RECOVERY2.is_symlink()
+if spent:
     print("ONE_SHOT_STATE=SPENT")
     try:
         raw, recovery2 = strict_claim(RECOVERY2)
         ok("RECOVERY2_CLAIM_SHA256", sha256_bytes(raw))
-        if recovery2.get("schema") != package.RECOVERY2_CLAIM_SCHEMA:
-            fail("RECOVERY2_SCHEMA", recovery2.get("schema"))
-        if recovery2.get("incident_id") != package.RECOVERY2_INCIDENT_ID:
-            fail("RECOVERY2_INCIDENT", recovery2.get("incident_id"))
-        if recovery2.get("status") != "recovery2-claimed-before-outcome-validation":
-            fail("RECOVERY2_STATUS", recovery2.get("status"))
-        if recovery2.get("raw_tree_sha256") != package.RECOVERY_ORIGINAL_SOURCE_TREE_SHA256:
-            fail("RECOVERY2_RAW_TREE_BINDING", recovery2.get("raw_tree_sha256"))
-        if (recovery2.get("original_claim") or {}).get("sha256") != package.RECOVERY_ORIGINAL_CLAIM_SHA256:
-            fail("RECOVERY2_ORIGINAL_BINDING", recovery2.get("original_claim"))
-        if (recovery2.get("first_recovery_claim") or {}).get("sha256") != package.RECOVERY2_FIRST_RECOVERY_CLAIM_SHA256:
-            fail("RECOVERY2_RECOVERY1_BINDING", recovery2.get("first_recovery_claim"))
-        ok("RECOVERY2_CODE_COMMIT", recovery2.get("recovery2_code_commit"))
-        ok("RECOVERY2_CLAIMED_UTC", recovery2.get("claimed_utc"))
-    except (OSError, ValueError, json.JSONDecodeError) as exc:
-        fail("RECOVERY2_CLAIM", str(exc))
+        expected_keys = {
+            "schema", "campaign", "incident_id", "status", "claimed_utc",
+            "recovery2_code_commit", "recovery2_base_commit",
+            "first_recovery_commit", "original_claim", "first_recovery_claim",
+            "raw_tree_sha256", "failure_fingerprint",
+        }
+        if set(recovery2) != expected_keys:
+            raise ValueError("invalid recovery2 claim fields")
+        expected_values = {
+            "schema": package.RECOVERY2_CLAIM_SCHEMA,
+            "campaign": "a6-holdout",
+            "incident_id": package.RECOVERY2_INCIDENT_ID,
+            "status": "recovery2-claimed-before-outcome-validation",
+            "recovery2_base_commit": package.RECOVERY2_BASE_COMMIT,
+            "first_recovery_commit": package.RECOVERY2_FIRST_RECOVERY_COMMIT,
+            "raw_tree_sha256": package.RECOVERY_ORIGINAL_SOURCE_TREE_SHA256,
+        }
+        if any(recovery2[key] != value for key, value in expected_values.items()):
+            raise ValueError("invalid recovery2 claim bindings")
+        if closeout is None or recovery1 is None:
+            raise ValueError("prior claim unavailable")
+        if recovery2["original_claim"] != {
+            "sha256": package.RECOVERY_ORIGINAL_CLAIM_SHA256,
+            **{key: closeout[key] for key in (
+                "packaging_code_commit", "experiment_code_commit", "launch_job_id")},
+        } or recovery2["first_recovery_claim"] != {
+            "sha256": package.RECOVERY2_FIRST_RECOVERY_CLAIM_SHA256,
+            "recovery_code_commit": recovery1["recovery_code_commit"],
+        }:
+            raise ValueError("invalid recovery2 prior-claim bindings")
+        fingerprint = recovery2["failure_fingerprint"]
+        if not isinstance(fingerprint, str) or not fingerprint:
+            raise ValueError("invalid recovery2 fingerprint")
+        times = []
+        for claim in (closeout, recovery1, recovery2):
+            timestamp = claim["claimed_utc"]
+            if not isinstance(timestamp, str) or not re.fullmatch(
+                    r"[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z", timestamp):
+                raise ValueError("invalid claim timestamp")
+            times.append(datetime.datetime.strptime(timestamp, "%Y-%m-%dT%H:%M:%SZ"))
+        if not times[0] <= times[1] <= times[2]:
+            raise ValueError("invalid claim chronology")
+        code = recovery2["recovery2_code_commit"]
+        if not isinstance(code, str) or not re.fullmatch(r"[0-9a-f]{40}", code):
+            raise ValueError("invalid recovery2 commit")
+        if git_output("rev-parse", "--verify", code + "^{commit}") != code:
+            raise ValueError("recovery2 commit does not resolve")
+        for ancestor, descendant in ((package.RECOVERY2_BASE_COMMIT, code), (code, head)):
+            subprocess.run(
+                [GIT, "-C", str(REPO), "merge-base", "--is-ancestor", ancestor, descendant],
+                env=GIT_ENV, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+                check=True,
+            )
+        ok("RECOVERY2_CODE_COMMIT", code)
+        ok("RECOVERY2_CLAIMED_UTC", recovery2["claimed_utc"])
+    except (OSError, ValueError, KeyError, TypeError, RecursionError, subprocess.CalledProcessError) as exc:
+        # Never echo untrusted fields, keys, parse excerpts, or fingerprint text.
+        fail("RECOVERY2_CLAIM", type(exc).__name__)
 else:
     print("ONE_SHOT_STATE=UNSPENT")
 
@@ -282,15 +364,20 @@ if closeout is not None:
             )
             if complete_shape:
                 archive = path / archives[0]
+                sidecar = bounded_bytes(path / "ARCHIVE.sha256", 1024)
+                # Match the exact writer contract, including this archive basename.
+                match = re.fullmatch(rb"([0-9a-f]{64})  " + re.escape(
+                    archives[0].encode("utf-8")) + rb"\n", sidecar)
+                if match is None:
+                    raise ValueError("invalid archive sidecar format")
                 actual = sha256_file(archive)
-                sidecar = (path / "ARCHIVE.sha256").read_text().strip().split()[0]
-                if actual == sidecar:
+                if actual == match.group(1).decode("ascii"):
                     complete_candidates.append(path.name)
                     ok("PACKAGE_ARCHIVE_SHA256", actual)
                 else:
-                    fail("PACKAGE_ARCHIVE_SIDECAR", f"{path.name}: {actual} != {sidecar}")
-        except (OSError, IndexError) as exc:
-            fail("PACKAGE_ENTRY", f"{path.name}: {exc}")
+                    fail("PACKAGE_ARCHIVE_SIDECAR", "checksum mismatch")
+        except (OSError, ValueError) as exc:
+            fail("PACKAGE_ENTRY", type(exc).__name__)
 
     print("RELATED_PACKAGE_ENTRIES=" + json.dumps([path.name for path in related]))
     print("COMPLETE_PACKAGE_CANDIDATES=" + json.dumps(complete_candidates))
@@ -308,8 +395,8 @@ try:
         ok("SELECTION_SHA256", actual_selection)
     else:
         fail("SELECTION_SHA256", actual_selection)
-except OSError as exc:
-    fail("SELECTION", str(exc))
+except (OSError, ValueError) as exc:
+    fail("SELECTION", type(exc).__name__)
 
 if failures:
     print("INVARIANTS=FAIL")
@@ -318,7 +405,7 @@ if failures:
     raise SystemExit(1)
 
 print("INVARIANTS=PASS")
-if RECOVERY2.exists() or RECOVERY2.is_symlink():
+if spent:
     print("NEXT=DO_NOT_RUN_RECOVER2_PACK; INSPECT_EXISTING_PACKAGE_STATE")
 else:
     print("NEXT=ONE_SHOT_REMAINS_UNSPENT; EXPLICIT_APPROVAL_STILL_REQUIRED")
