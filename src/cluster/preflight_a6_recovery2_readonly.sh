@@ -1,6 +1,7 @@
-#!/usr/bin/env bash
+#!/bin/bash -p
 # Outcome-blind, read-only inspection of the Unicorn A6 recovery2 state.
 # This script never creates a claim or package and never runs the analyzer.
+# Invoke directly or with /bin/bash -p; plain bash processes BASH_ENV before us.
 
 set -uo pipefail
 

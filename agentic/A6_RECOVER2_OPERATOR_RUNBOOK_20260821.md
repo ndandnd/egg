@@ -75,11 +75,17 @@ Malformed metadata is never echoed as error content. A spent claim must match
 its versioned schema, prior bindings, commit ancestry and UTC chronology to
 pass invariants; validation failure still leaves the attempt **SPENT**.
 These checks assume the documented cooperative, quiescent local namespace.
+Use the trusted `/bin/bash -p` entrypoint below (or execute the script directly,
+whose shebang also selects `/bin/bash -p`). Bash privileged startup ignores
+`BASH_ENV` and inherited shell functions before any script command executes.
+Invoking it as plain `bash script` or sourcing it can execute caller startup
+configuration before this program runs; the script cannot secure prior shell
+startup. Python isolation remains an additional, separate boundary.
 Run it after a guarded update:
 
 ```bash
 cd "$HOME/egg" && git pull --ff-only origin main && \
-    bash src/cluster/preflight_a6_recovery2_readonly.sh
+    /bin/bash -p src/cluster/preflight_a6_recovery2_readonly.sh
 ```
 
 If it prints `ONE_SHOT_STATE=SPENT`, never run `recover2-pack` again; use the

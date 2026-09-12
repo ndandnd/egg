@@ -11,6 +11,7 @@ import json
 import os
 from pathlib import Path
 import shutil
+import shlex
 import subprocess
 import sys
 import types
@@ -258,13 +259,15 @@ def test_malformed_sidecar_and_archive_fail_closed(evidence, damage):
     assert_failure(evidence.run())
 
 
-def test_exact_shell_ignores_python_startup_and_shadow_package(tmp_path):
+@pytest.mark.parametrize("entrypoint", ["documented", "direct"])
+def test_exact_shell_ignores_shell_and_python_startup(tmp_path, entrypoint):
     src = tmp_path / "src"
     cluster = src / "cluster"
     cluster.mkdir(parents=True)
     (src / "experiments").mkdir()
     script = cluster / SCRIPT.name
     shutil.copyfile(SCRIPT, script)
+    script.chmod(0o755)
     shutil.copyfile(PACKAGE, src / "experiments/package_a6_holdout.py")
     startup = tmp_path / "ambient"
     startup.mkdir()
@@ -274,9 +277,23 @@ def test_exact_shell_ignores_python_startup_and_shadow_package(tmp_path):
     (startup / "usercustomize.py").write_text(hook)
     (startup / "experiments").mkdir()
     (startup / "experiments/__init__.py").write_text(hook + "raise RuntimeError('shadow package')\n")
-    env = dict(os.environ, PYTHONPATH=str(startup))
-    result = subprocess.run(["/bin/bash", str(script)], cwd=tmp_path, env=env,
+    shell_marker = tmp_path / "shell-startup-marker"
+    shell_hook = startup / "bash_env.sh"
+    shell_hook.write_text("printf '%s\\n' 'synthetic hook' > " +
+                          shlex.quote(str(shell_marker)) + "\n")
+    env = dict(os.environ, PYTHONPATH=str(startup), BASH_ENV=str(shell_hook))
+    if entrypoint == "documented":
+        runbook = SRC.parent / "agentic/A6_RECOVER2_OPERATOR_RUNBOOK_20260821.md"
+        commands = [shlex.split(line.strip()) for line in runbook.read_text().splitlines()
+                    if line.strip().endswith("src/cluster/" + SCRIPT.name)]
+        assert len(commands) == 1
+        # Exercise the actual documented shell flags, changing only the fixture path.
+        command = commands[0][:-1] + [str(script)]
+    else:
+        command = [str(script)]
+    result = subprocess.run(command, cwd=tmp_path, env=env,
                             text=True, capture_output=True, timeout=20)
+    assert not shell_marker.exists()
     assert not marker.exists()
     assert "MODE=READ_ONLY_OUTCOME_BLIND" in result.stdout
     assert "AUTHORIZATION=NONE" in result.stdout
