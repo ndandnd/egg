@@ -35,8 +35,10 @@ arm's solutions. Do not split individual solve calls into training and test.
 ## Arms and adapters that must be reviewed
 
 Run four baseline arms on all 24 bases: cold A2; feasible-incumbent/column-pool
-reuse; reuse with previous link-dual initialization as an initial pricing or
-stabilization center; and reuse with a fixed bundle-level strategy. The current
+reuse; reuse with the intercept-adjusted previous oracle price
+`q_(k-1) + (a_k-a_(k-1))` as an initial pricing center; and reuse with a fixed
+bundle-level strategy. The analytic translation is a cheap baseline the learner
+must improve upon. The current
 A2 API rejects a changed-market checkpoint: implement an explicit fresh-state
 adapter rather than changing checkpoint identity or replaying old bounds.
 
@@ -45,24 +47,31 @@ feasibility persists under fixed physics, but reduced costs and objective bounds
 must be recomputed. Current `ops_cost` is intrinsic; market charges must never
 be folded into it when reusing a complete fleet column. Prices are p=-pi.
 
-After profiling, fit at most one regularized linear residual predictor; use its
-arm only on the four validation and eight test bases. Check nearest-neighbor
-selection within the offline validation allowance. Defer large networks and
+After profiling, select one residual predictor (regularized linear or
+nearest-neighbor) using validation only; use its arm only on the four validation
+and eight test bases. Defer large networks and
 learned pricing-network reduction. If baseline qualification is incomplete or
 there is little avoidable cost, stop before generating a learning dataset.
 
 For transitions k=1,2,3, the target is the 28-component residual
-`q_k - q_(k-1)`, where q is the last clean-master oracle price `-pi` recorded by
+`q_k - q_(k-1) - (a_k-a_(k-1))`, where q is the last clean-master oracle price
+`-pi` recorded by
 the cold-A2 training trajectory. Features are flattened arrays `a_k`,
 `a_k-a_(k-1)`, b, U and q_(k-1), plus n_trips and total service-trip energy.
 Fit feature normalization on training only. Use multi-output ridge regression,
-selecting its penalty from {0.0001,0.01,1,100} on validation; all tuning costs
-count toward the offline cap. A final master price is a solver-selected label,
+selecting its penalty from {0.0001,0.01,1,100}. Compare it with one nearest-neighbor
+predictor using Euclidean distance in those same standardized features, a
+training-only library, and lexicographic base/state tie-breaking. Select the
+candidate with minimum mean squared 28-slot residual error on the existing
+cold-A2 validation labels; break equal errors in favor of nearest-neighbor,
+then the larger ridge penalty. This selection requires no additional solves.
+All fitting and selection costs count toward the offline cap. A final master
+price is a solver-selected label,
 not a claim of unique or exact dual optimality. Record its originating objective
 interval and label convention; do not average an unverified optimal face.
 
 At deployment, q_(k-1) comes only from the same arm's previous state. Form
-`q_hat = q_(k-1) + predicted_residual`. Like the previous-price initializer,
+`q_hat = q_(k-1) + (a_k-a_(k-1)) + predicted_residual`. Like the analytic initializer,
 q_hat proposes one full-feasible-set pricing solve at the transition, counted
 in time and call budgets. Admit only a replay-valid novel column, then use the
 ordinary clean RMP and complete pricing certificate. Do not substitute q_hat

@@ -11,7 +11,7 @@
   "baseline_arms": [
     "cold_a2",
     "reuse_columns_incumbents",
-    "reuse_previous_dual",
+    "reuse_intercept_adjusted_previous_price",
     "reuse_bundle_level"
   ],
   "bases": [
@@ -215,6 +215,7 @@
   ],
   "n_slots": 28,
   "predictor": {
+    "extra_selection_solves": 0,
     "first_state": "charged_cold_initialization",
     "insertion": "one_counted_full_pricing_proposal_then_clean_RMP",
     "label_source": "cold_A2_training_trajectories_only",
@@ -224,8 +225,10 @@
       1,
       100
     ],
-    "target": "last_clean_master_oracle_price_residual",
-    "type": "multi_output_ridge"
+    "selection": "minimum_mean_squared_slot_residual_error_on_existing_cold_A2_validation_labels",
+    "target": "last_clean_master_oracle_price_residual_beyond_delta_a",
+    "tie_break": "nearest_neighbor_then_larger_ridge_penalty",
+    "type": "validation_selected_multi_output_ridge_or_nearest_neighbor"
   },
   "resources": {
     "concurrent_trajectories": 4,
