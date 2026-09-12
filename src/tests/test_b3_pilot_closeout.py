@@ -804,6 +804,24 @@ def _pack(runs, analysis, out):
                    job_quiescence_validator=lambda j: None)
 
 
+def _tamper_readonly_job(runs, **fields):
+    """Construct invalid synthetic binding bytes, then restore binder mode.
+
+    Production bind_job_id deliberately writes JOB.json read-only.  Only
+    this test fixture is made writable, so pack still consumes read-only
+    bytes and must reject their identity rather than a fixture setup error.
+    """
+    path = runs / bp.JOB_FILENAME
+    mode = path.stat().st_mode & 0o777
+    assert mode == 0o444
+    path.chmod(mode | 0o200)
+    try:
+        _edit_json(path, lambda job: job.update(fields))
+    finally:
+        path.chmod(mode)
+    assert path.stat().st_mode & 0o777 == mode
+
+
 def test_pack_import_round_trip(tmp_path, screen):
     runs, analysis = _packable(tmp_path, screen)
     result = _pack(runs, analysis, tmp_path / "bundles")
@@ -897,14 +915,16 @@ def test_pack_refuses_active_job_and_bad_job_binding(tmp_path, screen):
     with pytest.raises(PackagingError, match="still active"):
         pk.pack(runs, analysis, tmp_path / "b1", CODE,
                 verify_commit=False, job_quiescence_validator=active)
+    assert not (tmp_path / "b1").exists()
     # run-commit tamper: JOB.json vs MANIFEST.json mismatch
-    job = json.loads((runs / "JOB.json").read_text())
-    job["run_commit"] = "b" * 40
-    (runs / "JOB.json").write_text(
-        json.dumps(job, indent=2, sort_keys=True) + "\n")
-    with pytest.raises(PackagingError,
-                       match="does not authenticate the exact MANIFEST"):
-        _pack(runs, analysis, tmp_path / "b2")
+    _tamper_readonly_job(runs, run_commit="b" * 40)
+    with mock.patch.object(
+            pk, "snapshot_source",
+            side_effect=AssertionError("outcome inventory ran too early")):
+        with pytest.raises(PackagingError,
+                           match="does not authenticate the exact MANIFEST"):
+            _pack(runs, analysis, tmp_path / "b2")
+    assert not (tmp_path / "b2").exists()
 
 
 def test_pack_first_quiescence_precedes_outcome_inventory(tmp_path, screen):
@@ -1008,13 +1028,13 @@ def test_pack_requires_verified_scoreable_analysis(tmp_path, screen):
 def test_pack_refuses_noncanonical_job_id(tmp_path, screen):
     runs, analysis = _packable(tmp_path, screen)
     for bad in ("0042", "42; scancel", "", 424242):
-        job = json.loads((runs / "JOB.json").read_text())
-        job["job_id"] = bad
-        (runs / "JOB.json").write_text(
-            json.dumps(job, indent=2, sort_keys=True) + "\n")
-        with pytest.raises(PackagingError,
-                           match="canonical Slurm job id|malformed"):
-            _pack(runs, analysis, tmp_path / "b1")
+        _tamper_readonly_job(runs, job_id=bad)
+        with mock.patch.object(
+                pk, "snapshot_source",
+                side_effect=AssertionError("outcome inventory ran too early")):
+            with pytest.raises(PackagingError,
+                               match="canonical Slurm job id|malformed"):
+                _pack(runs, analysis, tmp_path / "b1")
     assert not (tmp_path / "b1").exists()
 
 
