@@ -36,6 +36,8 @@ from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
+import experiments.provenance_git as pgit
+
 from egglab.instance import synthetic_instance
 
 SCHEMA = "b3-factor-screen-v1"
@@ -72,6 +74,7 @@ SETTING_ORDER = ("S0_baseline", "S1_batt_low", "S2_batt_high",
                  "S3_pow_low", "S4_pow_high")
 
 PROVENANCE_FILES = (
+    "src/experiments/provenance_git.py",
     "src/experiments/b3_factor_screen.py",
     "src/tests/test_b3_factor_screen.py",
     GENERATOR_RELPATH,
@@ -145,8 +148,9 @@ def verify_screen_provenance(claimed: str) -> bool:
             "hexadecimal SHA")
     try:
         resolved = subprocess.check_output(
-            ["git", "rev-parse", "--verify", f"{claimed}^{{commit}}"],
-            cwd=REPO_ROOT, stderr=subprocess.DEVNULL).decode().strip()
+            pgit.git_argv(REPO_ROOT, "rev-parse", "--verify",
+                          f"{claimed}^{{commit}}"),
+            cwd=REPO_ROOT, env=pgit.git_env(), stderr=subprocess.DEVNULL).decode().strip()
     except subprocess.CalledProcessError as exc:
         raise B3ScreenError(
             f"claimed commit {claimed} does not resolve") from exc
@@ -154,17 +158,20 @@ def verify_screen_provenance(claimed: str) -> bool:
         raise B3ScreenError(
             f"claimed commit {claimed} resolves to {resolved}")
     if subprocess.run(
-            ["git", "merge-base", "--is-ancestor", claimed, "HEAD"],
-            cwd=REPO_ROOT).returncode != 0:
+            pgit.git_argv(REPO_ROOT, "merge-base", "--is-ancestor",
+                          claimed, "HEAD"),
+            cwd=REPO_ROOT, env=pgit.git_env()).returncode != 0:
         raise B3ScreenError(
             f"claimed commit {claimed} is not an ancestor of HEAD")
     if subprocess.run(
-            ["git", "merge-base", "--is-ancestor", BASE_COMMIT, "HEAD"],
-            cwd=REPO_ROOT).returncode != 0:
+            pgit.git_argv(REPO_ROOT, "merge-base", "--is-ancestor",
+                          BASE_COMMIT, "HEAD"),
+            cwd=REPO_ROOT, env=pgit.git_env()).returncode != 0:
         raise B3ScreenError(
             f"frozen base {BASE_COMMIT} is not an ancestor of HEAD")
     dirty = subprocess.check_output(
-        ["git", "status", "--porcelain"], cwd=REPO_ROOT).decode()
+        pgit.git_argv(REPO_ROOT, "status", "--porcelain"),
+        cwd=REPO_ROOT, env=pgit.git_env()).decode()
     tracked_dirty = [
         line for line in dirty.splitlines() if not line.startswith("??")]
     if tracked_dirty:
@@ -173,7 +180,8 @@ def verify_screen_provenance(claimed: str) -> bool:
             "before generating artifacts")
     for relpath in PROVENANCE_FILES:
         committed = subprocess.check_output(
-            ["git", "show", f"{claimed}:{relpath}"], cwd=REPO_ROOT)
+            pgit.git_argv(REPO_ROOT, "show", f"{claimed}:{relpath}"),
+            cwd=REPO_ROOT, env=pgit.git_env())
         if committed != (REPO_ROOT / relpath).read_bytes():
             raise B3ScreenError(
                 f"{relpath} differs from the claimed commit {claimed}; "

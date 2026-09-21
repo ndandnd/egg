@@ -309,7 +309,7 @@ def test_screen_provenance_verification(monkeypatch):
     merge_base_calls = {"n": 0}
 
     def base_not_ancestor(args, cwd=None, **kwargs):
-        if args[:2] == ["git", "merge-base"]:
+        if "merge-base" in args:
             merge_base_calls["n"] += 1
             if merge_base_calls["n"] == 2:
                 class R:
@@ -322,22 +322,22 @@ def test_screen_provenance_verification(monkeypatch):
         mod.verify_screen_provenance(head)
     monkeypatch.setattr(mod.subprocess, "run", real_run)
 
-    def dirty_status(args, cwd=None, stderr=None):
-        if args[1] == "status":
+    def dirty_status(args, cwd=None, stderr=None, env=None):
+        if "status" in args:
             return b" M src/experiments/b3_factor_screen.py\n"
-        return real_co(args, cwd=cwd, stderr=stderr)
+        return real_co(args, cwd=cwd, stderr=stderr, env=env)
 
     monkeypatch.setattr(mod.subprocess, "check_output", dirty_status)
     with pytest.raises(mod.B3ScreenError, match="tracked modifications"):
         mod.verify_screen_provenance(head)
     monkeypatch.setattr(mod.subprocess, "check_output", real_co)
 
-    def stale_show(args, cwd=None, stderr=None):
-        if args[1] == "status":
+    def stale_show(args, cwd=None, stderr=None, env=None):
+        if "status" in args:
             return b""
-        if args[1] == "show":
+        if "show" in args:
             return b"different bytes"
-        return real_co(args, cwd=cwd, stderr=stderr)
+        return real_co(args, cwd=cwd, stderr=stderr, env=env)
 
     monkeypatch.setattr(mod.subprocess, "check_output", stale_show)
     with pytest.raises(mod.B3ScreenError, match="differs from the claimed"):
@@ -349,15 +349,18 @@ def test_generator_source_is_part_of_claimed_commit_provenance(monkeypatch):
         ["git", "rev-parse", "HEAD"], cwd=mod.REPO_ROOT).decode().strip()
     real_co = mod.subprocess.check_output
 
-    def stale_generator(args, cwd=None, stderr=None):
-        if args[1] == "status":
+    def stale_generator(args, cwd=None, stderr=None, env=None):
+        if "status" in args:
             return b""
-        if args[1] == "show":
-            relpath = args[2].split(":", 1)[1]
+        if "show" in args:
+            # the hardened argv prefixes global flags, so find the
+            # "<commit>:<path>" operand instead of indexing positionally
+            spec = next(a for a in args if ":" in a and a.endswith(".py"))
+            relpath = spec.split(":", 1)[1]
             if relpath == mod.GENERATOR_RELPATH:
                 return b"different generator bytes"
             return (mod.REPO_ROOT / relpath).read_bytes()
-        return real_co(args, cwd=cwd, stderr=stderr)
+        return real_co(args, cwd=cwd, stderr=stderr, env=env)
 
     monkeypatch.setattr(mod.subprocess, "check_output", stale_generator)
     with pytest.raises(mod.B3ScreenError, match="instance.py differs"):
