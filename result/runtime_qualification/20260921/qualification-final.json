@@ -1,0 +1,23 @@
+{
+  "started_at_utc": "2026-09-22T03:16:02.721327+00:00",
+  "command": [
+    "/Users/nadan/Documents/ChatGPT/egg/.research-venv-repaired-1176/bin/python",
+    "-I",
+    "-B",
+    "-c",
+    "\nimport json, platform, sys, importlib.metadata as md\nimport numpy as np\nassert np.allclose(np.array([1.0,2.0]) @ np.array([1.0,2.0]), 5.0)\nfrom mip import Model, CBC, CONTINUOUS, BINARY, MINIMIZE, OptimizationStatus\nresults = []\ndef model():\n    m = Model(sense=MINIMIZE, solver_name=CBC)\n    m.threads = 1\n    m.verbose = 0\n    m.max_mip_gap = 0\n    return m\nm = model()\nx = m.add_var(name='x', var_type=CONTINUOUS, lb=0)\nm += x >= 1\nm.objective = x\ns = m.optimize(max_seconds=5)\nresults.append({'test':'lp_min_x_ge_1','status':s.name,'objective':m.objective_value,'x':x.x})\nassert s == OptimizationStatus.OPTIMAL and abs(m.objective_value-1)<1e-9 and abs(x.x-1)<1e-9\nm = model()\nx = m.add_var(name='x', var_type=BINARY)\ny = m.add_var(name='y', var_type=BINARY)\nm += 2*x + y >= 2\nm.objective = 3*x + 2*y\ns = m.optimize(max_seconds=5)\nresults.append({'test':'binary_min_3x_2y','status':s.name,'objective':m.objective_value,'bound':m.objective_bound,'x':x.x,'y':y.x})\nassert s == OptimizationStatus.OPTIMAL and abs(m.objective_value-3)<1e-9 and abs(m.objective_bound-3)<1e-9 and abs(x.x-1)<1e-9 and abs(y.x)<1e-9\nm = model()\nx = m.add_var(name='x', var_type=BINARY)\nm += x >= 1\nm += x <= 0\nm.objective = x\ns = m.optimize(max_seconds=5)\nresults.append({'test':'binary_infeasible','status':s.name,'num_solutions':m.num_solutions})\nassert s == OptimizationStatus.INFEASIBLE and m.num_solutions == 0\nimport mip.cbc\nprint(json.dumps({'passed':True,'results':results,'python':sys.version,'interpreter':sys.executable,'architecture':platform.machine(),'versions':{k:md.version(k) for k in ['mip','cbcbox','cffi']},'cbc_library':mip.cbc.libfile,'threads':1}), flush=True)\n"
+  ],
+  "pid": 32376,
+  "thread_environment": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1"
+  },
+  "returncode": 0,
+  "stdout": "{\"passed\": true, \"results\": [{\"test\": \"lp_min_x_ge_1\", \"status\": \"OPTIMAL\", \"objective\": 1.0, \"x\": 1.0}, {\"test\": \"binary_min_3x_2y\", \"status\": \"OPTIMAL\", \"objective\": 3.0, \"bound\": 3.0, \"x\": 1.0, \"y\": 0.0}, {\"test\": \"binary_infeasible\", \"status\": \"INFEASIBLE\", \"num_solutions\": 0}], \"python\": \"3.12.2 (v3.12.2:6abddd9f6a, Feb  6 2024, 17:02:06) [Clang 13.0.0 (clang-1300.0.29.30)]\", \"interpreter\": \"/Users/nadan/Documents/ChatGPT/egg/.research-venv-repaired-1176/bin/python\", \"architecture\": \"arm64\", \"versions\": {\"mip\": \"1.17.6\", \"cbcbox\": \"2.929\", \"cffi\": \"2.1.1\"}, \"cbc_library\": \"/Users/nadan/Documents/ChatGPT/egg/.research-venv-repaired-1176/lib/python3.12/site-packages/cbcbox/cbc_dist/lib/libCbc.dylib\", \"threads\": 1}\n",
+  "stderr": "",
+  "timed_out": false,
+  "wall_seconds": 0.7741154590621591,
+  "qualification_script_sha256": "86ff0b0b2bbf98f0e9a29d9ca001638e37fc0889d8c7fa491160b270f3c29a14"
+}
