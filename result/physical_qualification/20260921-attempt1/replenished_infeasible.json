@@ -1,0 +1,138 @@
+{
+  "bound_scope": "numerical CBC and replay tolerance conditional",
+  "calls": [
+    {
+      "iteration": 0,
+      "phase": "ch",
+      "status": "INFEASIBLE",
+      "structures": 2,
+      "threads": 1,
+      "wall_s": 0.0003516669385135174
+    },
+    {
+      "iteration": 0,
+      "phase": "physical",
+      "status": "INFEASIBLE",
+      "structures": 1,
+      "threads": 1,
+      "wall_s": 0.00019187526777386665
+    },
+    {
+      "iteration": 0,
+      "phase": "physical",
+      "status": "INFEASIBLE",
+      "structures": 1,
+      "threads": 1,
+      "wall_s": 0.0002332078292965889
+    }
+  ],
+  "ch": {
+    "status": "INFEASIBLE"
+  },
+  "instance": {
+    "battery_kwh": 1.0,
+    "charge_power_kw": 1.0,
+    "depot": "D",
+    "dh_cost_per_min": 1.0,
+    "dh_kwh": [],
+    "dh_min": [],
+    "max_vehicles": 1,
+    "meta": {
+      "source": "direct seed-free engineering fixture",
+      "terminal_marker": true
+    },
+    "n_slots": 4,
+    "name": "replenished_infeasible",
+    "slot_min": 60,
+    "soc0_kwh": 1.0,
+    "soc_end_kwh": 1.0,
+    "soc_min_kwh": 0.0,
+    "trips": [
+      {
+        "end_loc": "D",
+        "end_min": 60,
+        "energy_kwh": 1.0,
+        "id": "service",
+        "start_loc": "D",
+        "start_min": 0
+      },
+      {
+        "end_loc": "D",
+        "end_min": 240,
+        "energy_kwh": 0.0,
+        "id": "terminal_marker",
+        "start_loc": "D",
+        "start_min": 180
+      }
+    ],
+    "vehicle_fixed_cost": 0.0
+  },
+  "instance_hash": "1a74ef235570",
+  "market": {
+    "U": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "a": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "b": [
+      2.0,
+      2.0,
+      2.0,
+      2.0
+    ]
+  },
+  "name": "replenished_infeasible",
+  "physical": [
+    {
+      "status": "INFEASIBLE"
+    },
+    {
+      "status": "INFEASIBLE"
+    }
+  ],
+  "shared_power_slot_kwh": [
+    0.0,
+    0.4,
+    0.4,
+    0.0
+  ],
+  "status": "INFEASIBLE",
+  "structures": [
+    {
+      "kinds": [
+        [
+          "dir"
+        ]
+      ],
+      "ops_cost": 0.0,
+      "sequences": [
+        [
+          "service",
+          "terminal_marker"
+        ]
+      ]
+    },
+    {
+      "kinds": [
+        [
+          "dep"
+        ]
+      ],
+      "ops_cost": 0.0,
+      "sequences": [
+        [
+          "service",
+          "terminal_marker"
+        ]
+      ]
+    }
+  ],
+  "wall_s": 0.0022748750634491444
+}
