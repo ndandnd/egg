@@ -6,7 +6,7 @@ runner, tests or protocol and did not execute or initialize a native optimizer.
 The reviewer saw the intended model, prospective targets and source; this is an
 independent implementation review and reconstruction, not a blinded review.
 
-**Current V2 verdict: ready for a new prospective source freeze and separate
+**Pre-execution V2 verdict: ready for a new prospective source freeze and separate
 local qualification, provided the files match the hashes below.** No remaining
 blocking issue was identified for the declared single-connector synthetic gate.
 This verdict does not say that V2 has passed a native experiment. Attempt1 stays
@@ -382,3 +382,19 @@ in commit `d37878392f0848d34f28921c97b6e8d8e6533a77` and launched the first
 dedicated native attempt after the preflight. Its results and any failures are
 separate evidence requiring a new result audit; they do not retroactively change
 what the preflight did or tested.
+
+## Subsequent artifact-audit outcomes
+
+The first frozen CBC attempt remains failed (12/15 passing: nine accepted
+certificates, three expected infeasibilities and three extraction/replay
+exceptions). Its independent archived-evidence audit is recorded in
+`result/native_recharge/20260927-attempt1/review/REVIEW.md`.
+
+The separately frozen V2 local attempt passed all 15 controls (12 accepted
+certificates and three expected infeasibilities). Its independent audit checked
+27 raw incumbents, 1,030 variable values, 60 physical sessions and all correction
+ledgers, with 16 corrupted copies rejected. The maximum combined numerical
+correction was 7.105427357601002e-15 kWh under the prospective 1e-8 kWh budget.
+Full scope and limitations are in
+`result/native_recharge/20260927-attempt2/review/REVIEW.md`. These are later
+artifact outcomes, not tests retroactively attributed to either preflight.

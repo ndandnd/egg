@@ -4,9 +4,10 @@
 tracks what is established and what remains. `related-work/` contains source
 checks and BibTeX. `figures/` contains PNG, SVG and vector PDF exports plus
 provenance. `../output/pdf/egg-journal-working-draft.pdf` is the review copy.
-Manuscript 0.2 is being prepared with the audited cyclic extensions. The
-existing reviewed PDF is version 0.1; a rendered and visually checked version
-0.2 has not yet been declared ready.
+The reviewed PDF is version 0.2: 14 pages, five figures, SHA-256
+`1cf8ed050ad5b6d142353996eb299c6d9578a92d7f1f3cd320ed5c08e9af4697`.
+Version 0.3 is being edited with native-model qualification and updated source
+admission; it is not the PDF until rerendering and all-page visual review pass.
 
 Reproduce figures with Python, NumPy and Matplotlib:
 
@@ -85,7 +86,12 @@ operational qualification.
 and visual QA. Its appended principal-researcher check records the 14-page version 0.2 PDF hash and all-page layout review. The original reviewer authored
 the reuse experiment and declares that conflict;
 the cyclic and reuse artifact audits above were performed by a non-author.
-The manuscript remains a working draft pending native-model qualification,
-credible operational evidence and renewed manuscript/visual review. The native
-recharge prototype is under preflight repair; no native optimizer qualification
-has run. The excellent-first-draft goal is still active and incomplete.
+The manuscript remains a working draft pending credible timetable evidence and
+renewed manuscript/visual review. Native recharge qualification passed all 15
+controls on corrected CBC V2 and the identical GRB replication; each has an
+independent raw-variable, physical-witness and bound audit. First CBC attempt1
+remains FAILED 12/15. See the corresponding `result/native_recharge/` reviews.
+GRB licensing stdout is retained only in the complete external original archive;
+its public access note and manifest disclose all omissions. The separate
+half-minute and native-hull extensions are still prospective qualification work.
+The excellent-first-draft goal is active and incomplete.

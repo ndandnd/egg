@@ -1,7 +1,7 @@
 # Manuscript claim and evidence ledger
 
 Working title: **When marginal electricity prices cannot coordinate electric-bus
-schedules: complete-duty certificates and a replenished-fleet counterexample**.
+schedules: complete-fleet certificates and a replenished-fleet counterexample**.
 Working target: Transportation Research Part C, conditional on a credible
 transportation case and substantive managerial findings. Public Transport is a
 plausible narrower alternative. This is positioning, not a submission decision.
@@ -19,7 +19,7 @@ plausible narrower alternative. This is positioning, not a submission decision.
 | Harder competing structures leave discovery work beyond reuse | New 45-cell frontier and 15 separate reference cells, frozen 7d3d764; [independent review](../result/reuse_frontier/20260927-attempt1/review/REVIEW.md) | 44/45 cells certified; one cold return-state failed because pricing returned FEASIBLE at its configured cap, not because of a subprocess timeout. Exact rational pricing/dual bounds independently support all 44 successful cells; numerical physical replay passed. Retained transitions require 17 clean calls against 12 mandatory checks; five extra calls show remaining work, not learnability. |
 | A shifted-price proposal need not reduce clean discovery work | Same frozen frontier, independent replay of all 223 pricing attempts and complete purpose accounting | All matched cells have identical clean-call counts for retention and shifted retention; the latter adds 12 proposal calls and 3 projection-novel columns. Descriptive negative result on three synthetic trajectories, not a general impossibility claim. |
 | Operational benefits on a real timetable | GIRO local readiness audit and public benchmark intake | Not established. Required for intended journal scope; private raw data cannot be a public artifact. |
-| The new native recharge model reproduces the exact controls | Prospective native qualification protocol and prototype under preflight repair | Not established: no native optimizer qualification has run. Finish repair and preflight, freeze corrected source/tests/protocol, execute the bounded synthetic controls, then independently audit witnesses and bounds before operational use. |
+| The native recharge model reproduces the predefined analytical controls on two backends | Corrected CBC V2 frozen 997575d and identical GRB replication at execution commit 24c7e4e, job 557318; separate independent audits | All 15 controls pass on each backend: 12 numerical certificates and three analytically confirmed infeasibilities. Raw variables, constraints, correction ledgers, physical sessions and bounds independently reconstructed; 16 CBC/18 GRB corruptions rejected. Solver-conditional, small synthetic qualification only. First CBC attempt remains FAILED 12/15; no retrospective repair. Timing extension, native hull and public timetable are separate gates. |
 | Stabilization outperforms baseline | Prior B2 reports do not support this | Do not claim. Same16-seed-block population; B3 is retrospective, not replication. |
 | Learned proposals help | No eligible experiment yet | Do not claim or train before useful remaining work and frozen evaluation design. |
 
@@ -73,9 +73,10 @@ while its relative regret divides by D. Its nonzero whole-operator regret
 limit applies only to the stated subsequence, not to all integer sizes.
 The extension figure script records these sample scopes and input hashes.
 
-Working manuscript 0.2 is being prepared to incorporate these results. The
-existing reviewed PDF and its review record belong to version 0.1; no rendered
-version 0.2 is declared ready. The excellent-first-draft goal remains incomplete.
+Reviewed working PDF 0.2 has 14 pages and five figures; its immutable hash and
+all-page author visual check appear in the manuscript review record. Source 0.3
+is in preparation and is not yet a new reviewed PDF. The excellent-first-draft
+goal remains incomplete.
 
 ## Reviewer audit before a first draft is called excellent
 
@@ -93,3 +94,21 @@ version 0.2 is declared ready. The excellent-first-draft goal remains incomplete
 - Figures regenerated from archived data, readable in grayscale/print, with
   units and sample scope in captions; no decorative unsupported diagrams.
 - No private GIRO sources, personal contacts or unrestricted holdouts in GitHub.
+
+## Native and source-admission update
+
+The corrected CBC V2 and separate GRB qualification share identical native
+source hashes and all fifteen physical/objective/target definitions. Each has
+30 returned calls and 27 raw finite incumbents; independent fixture minima
+contain all twelve numerical certificate intervals. Differences in session
+counts reflect alternative valid numerical witnesses, not changed physics.
+Cross-environment timing is not a speed comparison. The original failed CBC
+attempt and its independently checked three exceptions remain visible.
+
+The private 17-service candidate is blocked by off-depot charging and missing
+explicit movement records. A licensed public 37-service Hildenbrand timetable
+with complete directed deadheads is being translated into separately declared
+one-depot, one-connector scenarios. Traction/auxiliary rates, usable inventory,
+constant efficiency, charger cap and synthetic costs are assumptions, not
+measured energy or reproduction of the publisher's optimization. No operational
+benefit or pricing result is established by data intake alone.

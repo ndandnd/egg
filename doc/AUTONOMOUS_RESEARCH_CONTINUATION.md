@@ -216,3 +216,28 @@ The first native attempt remains FAILED 12/15. No operational case is admitted.
 The private 17-service pair has off-depot recharge/missing movement blockers;
 public Sistig/ Figshare data-only intake is underway locally. Manuscript 0.3 is
 being edited; the reviewed/shareable PDF remains 0.2 until rerendered and checked.
+
+## GRB replication completed and independently audited
+
+Unicorn job **557318** ran from published `24c7e4ef30777700e4ea17ddfaacae2de92155ce`
+in `/home/nc437/egg-journal-native-20260927`. It completed `0:0` on
+`snavely-cpu-01` in 39 seconds, batch MaxRSS 74.50 MB, one CPU; reserved-node
+exclusion was confirmed before launch. All 15 unchanged controls passed (12
+numerical certificates and three expected infeasibilities), 30 native calls,
+26.0397 seconds controller elapsed. **Do not resubmit this completed attempt.**
+
+Independent review of the complete immutable 107-file archive passed: 27 raw
+incumbents/1,030 variables, 27 independently minimized finite objectives, three
+analytical infeasibilities, 62 sessions, 217 SOC events, 18 rejected corruptions
+including backend substitution. Backend was GRB, not fallback. This qualifies
+the tested native physics on two backends, not an operational or scaling claim.
+Original CBC attempt1 remains failed 12/15. Full cluster evidence and license
+stdout are retained outside Git in the local research archive; the public copy
+will explicitly disclose stdout omissions without modifying numerical files.
+
+CI also passed at execution commit `24c7e4e`, run 36332937884, including the
+new frozen-evidence audit step. Next: independently review/freeze/run the separate
+19-control half-minute extension gate, then review/freeze the native convex-hull
+qualification. The public 37-service Hildenbrand case is data-only intake;
+modeled energy assumptions and two separate one-depot variants are explicit.
+No native optimizer has yet been run on those new timing/hull/public artifacts.
