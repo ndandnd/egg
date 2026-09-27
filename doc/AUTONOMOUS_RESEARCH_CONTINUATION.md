@@ -49,21 +49,52 @@ for a full-pricing proposal plus mandatory verification has a floor of 24 calls,
 so that architecture cannot win this metric on the observed trajectory. Do not
 launch a learner without a different explicit useful-work hypothesis.
 
-The 16-paper source matrix, editable manuscript and three scientific figures
-are under `paper/`; the rendered review copy is
-`output/pdf/egg-journal-working-draft.pdf`. This is working draft 0.1, not yet
-the excellent first draft promised to the user: operational evidence and
-economic interpretation still need work. Independent artifact audits and an
-author-disclosed manuscript review accompany the analytical evidence.
+Two exact extensions now have completed non-author audits. Robustness at
+`bd022ac32ef680446ee17bc4400843a764acb9f6` reproduces all 16 cases: 9 positive,
+6 zero and 1 infeasible. The joint reserve-1/efficiency-19/20/early-12 kW case
+has gap 94249/28880 using one 30 kW terminal connector. Its 8/19 grid-kWh early
+headroom supports a strict-inequality neighborhood argument. The unchanged
+10 kW early hardware loses the one-bus branch under either reserve or loss;
+this negative control remains central. The nominal terminal-power threshold
+is 23.5 kW. All 22 corruption controls are rejected. Raw
+`result/cyclic_robustness/20260927-attempt1/results.json` SHA-256 is
+`3d5c20a39b2c7176b6ece22bbeb464a42ea7b3bc58498c0959e227469e25ed29`.
+
+Replication at `ce84e9e62b8e3f33d32010d381fd845415eff458` independently passes
+all 86 sizes, 6,448 continuous branch minima and 88 physical optima, preserving
+both ties. Its 21 corruption controls are rejected. Along n=40k+1, gap is
+169/(80n) while whole-operator own-price regret approaches 351/40; regret per
+used bus and relative regret vanish. Multiples of 40 have zero gap and regret.
+Demand, charging resources and supply curvature scale together. This is one
+price-taking operator, not strategic behavior or independent firms. Raw
+`result/cyclic_replication/20260927-attempt1/results.json` SHA-256 is
+`87523bcad8cdb8a3a3383391a6db42566e83498a85da547a184b8218b69cfb1a`.
+Both extension folders have portable reviewers and separate review manifests;
+neither raw attempt was retried or rewritten. They do not qualify a native
+optimizer or demonstrate operational prevalence.
+
+The source matrix, editable manuscript and five scientific figures are under
+`paper/`. Working manuscript 0.2 is being prepared; its rendered review and
+visual QA are not complete. The existing reviewed
+`output/pdf/egg-journal-working-draft.pdf` and manuscript-review hash belong to
+version 0.1. PR56's c0f83f0 hosted CI passed 826 tests; that historical result
+does not certify later source heads. The excellent-first-draft goal remains
+active and incomplete: native-model qualification, operational evidence,
+economic interpretation and renewed review still need work.
 
 ## Current priorities
 
-1. Complete the local-only source-faithful GIRO microcase extraction and
+1. Finish preflight repairs and independent implementation review of the native
+   terminal-recharge prototype. No native optimizer qualification has run.
+   Preserve one common physical builder, directed movement ownership, exact
+   event windows and one-connector replay; avoid terminal service markers.
+   Freeze the corrected source/tests/runner/protocol before executing the
+   bounded 15-control synthetic qualification. Independently audit numerical
+   witnesses, bounds and backend identity before moving to an operational case.
+2. Complete the local-only source-faithful GIRO microcase extraction and
    directed/time-dependent deadhead coverage audit. Preserve raw provenance
-   outside Git; do not describe this subset as a complete named weekday.
-2. Design and independently qualify a native terminal-recharge physical adapter,
-   with precise charging-window overlap and shared-capacity semantics. Avoid
-   terminal service markers in a variable-fleet replenishment claim.
+   outside Git; do not describe this subset as a complete named weekday or
+   missing movements as free. A known-arc subgraph must be explicit.
 3. Freeze a bounded operational microcase protocol before solving. Separate
    source service energy from modeled deadhead energy, battery/charger choices,
    operating costs and supply curvature. Start with falsification controls;
@@ -73,9 +104,13 @@ author-disclosed manuscript review accompany the analytical evidence.
    source-model simplifications are not calibrated bus-operation evidence.
    Local intake is `../research-20260927/agent-notes/public-data/`; do not publish
    raw inputs while data-specific redistribution terms remain unresolved.
-5. Integrate verified operational findings, sensitivity analyses and useful
-   figures into the manuscript; complete reviewer audits and CI. Keep GitHub,
-   this file and the research document current at meaningful milestones.
+5. Integrate the audited replication/robustness evidence into manuscript 0.2,
+   regenerate figures with `paper/make_figures.py` and
+   `paper/make_extension_figures.py`, then render and review every revised page.
+   Preserve tie/normalization and changed-hardware qualifications. Add verified
+   operational findings when available; complete reviewer audits and CI at the
+   actual published head. Keep GitHub, this file and the research document
+   current at meaningful milestones without declaring an unreviewed PDF ready.
 
 ## Autonomous work loop
 
@@ -142,3 +177,11 @@ The hourly heartbeat continues research and monitors jobs. Stay quiet on
 unchanged queue state; report meaningful findings, failures or major decisions.
 After the first draft passes the completion standard, stop launching new
 campaigns, report readiness and monitor only already-authorized active work.
+
+## Latest rendering update
+
+Working draft 0.2 is now rendered: 14 pages, five figures, PDF SHA-256
+`1cf8ed050ad5b6d142353996eb299c6d9578a92d7f1f3cd320ed5c08e9af4697`.
+Author all-page layout QA passed; exact extension artifacts have separate
+non-author audits. This supersedes the earlier rendering-pending entry.
+Operational/native scientific gates remain open, as does the research goal.

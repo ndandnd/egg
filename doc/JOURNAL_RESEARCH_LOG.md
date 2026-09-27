@@ -157,7 +157,7 @@ Saved-to-Drive was verified. A complete text comparison preserved the original
 the document then contained 62,461 characters. The cyclic result table was
 kept together on a fresh page.
 
-### Additional exact verification runs, reviews pending
+### Additional exact verification runs — execution checkpoint
 
 The original example is on a binding early-power boundary. A positive reserve
 or charging loss with unchanged hardware removes its one-bus option. The new
@@ -170,7 +170,8 @@ joint example's gap is 94249/28880. All cases, endpoint schedules and connector
 sessions are preserved in `result/cyclic_robustness/20260927-attempt1`.
 Its raw JSON SHA-256 is
 `3d5c20a39b2c7176b6ece22bbeb464a42ea7b3bc58498c0959e227469e25ed29`.
-Post-result independent review is pending; these are not native solver results.
+Post-result independent review was pending at this execution checkpoint and is
+completed below; these are not native solver results.
 
 A separately frozen replication check at `ce84e9e` scales service demand,
 charging resources and supply curvature together. The first run completed all
@@ -181,7 +182,8 @@ At multiples of 40 both quantities are zero. This is a single operator's
 price-taking deviation and is not a per-bus or independent-firm result.
 The raw result in `result/cyclic_replication/20260927-attempt1` has SHA-256
 `87523bcad8cdb8a3a3383391a6db42566e83498a85da547a184b8218b69cfb1a`.
-A non-author audit is in progress before manuscript integration.
+A non-author audit was in progress before manuscript integration; its completed
+findings are recorded below.
 
 The native recharge design is now documented, and an isolated prototype is in
 development. It will use one common physical feasible-set builder, explicit
@@ -190,3 +192,102 @@ independent replay. Synthetic source/protocol must be committed before its
 first optimizer qualification. Private microcase extraction is still local;
 sparse deadhead coverage may restrict the first case to a declared known-arc
 graph. No operational solver job has been launched.
+
+### Completed independent replication and robustness reviews
+
+The robustness review is archived under
+`result/cyclic_robustness/20260927-attempt1/review/`. Its non-author standard-library
+auditor imports no experiment implementation and runs no optimizer. Frozen source,
+design and protocol are pinned to `bd022ac32ef680446ee17bc4400843a764acb9f6`;
+the raw result remains SHA-256
+`3d5c20a39b2c7176b6ece22bbeb464a42ea7b3bc58498c0959e227469e25ed29`.
+All 16 cases reproduce exactly: 9 positive gaps, 6 zero gaps, 1 infeasible.
+The canonical `independent-audit-v2.json` reconstructs 32 branch intervals,
+46 endpoint witnesses, 100 saved schedules, 161 individual bus/session replays,
+805 SOC events, 26 price/LOC accounts and 3,301 rational/display pairs. All
+22 corruption controls are rejected, including overlapping terminal sessions
+whose energy integrals remain valid. Initial derived audit history is preserved;
+the review manifest is separate from the unchanged raw manifest.
+
+Independent battery-side elimination proves completeness of the one-/two-bus
+intervals, and minimizing every endpoint-pair chord verifies the full projected
+hull without importing the driver's hull implementation. Every used bus is fully
+replenished; efficiency 19/20 requires 600/19 gross grid kWh. Each positive-weight
+component obeys one-connector occupancy before convexification. The joint case
+has physical optimum 38527/361, hull optimum 2987911/28880 and gap 94249/28880.
+Its own-price regret is 307/19; at the common hull price fleet LOC is zero and
+supply LOC equals the gap. The sufficient positive-gap inequalities are strict,
+with 8/19 grid-kWh early headroom and fleet-cost threshold 440/19 greater than 7.
+The neighborhood is within the admissible hardware model; fixing vehicle
+acceptance at 30 kW does not authorize terminal power above 30.
+
+The negative controls remain scientifically material. With the original 10 kW
+early charger and fixed 20 kWh battery, either reserve or charging loss removes
+the one-bus branch; the modified joint example explicitly raises both individual
+and shared early power. The separate nominal terminal-power calculation proves
+infeasibility below 20 kW, zero gap through 23.5 kW and a positive gap above
+23.5 through 30 kW. The 24 kW gap is 5/64. Constant efficiency, zero switching
+time, flexible power and no taper remain declared assumptions. These deterministic
+cases demonstrate existence and sensitivity, not prevalence or field calibration.
+The reviewer visually checked the robustness figure and found faithful values
+and labels; synthetic units and physical assumptions must remain in its caption.
+
+The replication review is archived under
+`result/cyclic_replication/20260927-attempt1/review/`, pinned to source/protocol
+`ce84e9e62b8e3f33d32010d381fd845415eff458` and unchanged raw SHA-256
+`87523bcad8cdb8a3a3383391a6db42566e83498a85da547a184b8218b69cfb1a`.
+The independent solver-free auditor reconstructs all 86 sizes, 6,448 continuous
+branch minima, 88 physical optima, 19,604 grouped physical templates and 288,890
+group-level SOC events. All 17,076 rational/display pairs agree, and all 21
+corruption controls are rejected. Group multiplicities are checked as such;
+they are not reported as millions of individually materialized bus traces.
+
+Its complete projected hull is a triangle; the stored `hull_vertices` field is
+only its lower boundary. The review completes the nearest-integer proof by
+excluding branches below n/2, with n=1 and n=2 evaluated separately. This yields
+gap 20*delta^2/n <= 5/n. Along n=40k+1, gap is 169/(80n) and whole-operator
+own-price regret is 351/40+169/(40n). Per-actual-used-bus and relative regrets
+vanish; multiples of 40 have exactly zero gap and regret. Both planner optima at
+the tested tie sizes 20 and 60 remain recorded, with their different own-price
+regrets. There is no nonzero regret limit over all integer sizes. Supply capacity,
+resources and curvature scale with demand, and the deviation is a single
+whole-fleet price-taking response, not an independent firm's or strategic gain.
+
+`paper/make_extension_figures.py` regenerates the two extension figures from
+the archived JSON without scientific solves, saving PNG/SVG/PDF and
+`paper/figures/extension_provenance.json`. Robustness shows all 16 fixed cases;
+replication displays the first 80 of 86 declared sizes and retains both tie
+regrets. The editable manuscript 0.2 is being prepared. The previous reviewed
+11-page PDF/hash remains version 0.1; no rendered version 0.2 is declared ready.
+
+### Current execution gates after the exact reviews
+
+The native recharge prototype is under preflight repair. **No native optimizer
+qualification has run.** Complete repair and independent model review, then
+commit the corrected source, tests, runner and prospective protocol before
+the bounded 15-control qualification. Preserve native status, failed cells,
+immutable tangent snapshots, backend identity and independent physical replay.
+This prospective protocol's numerical admission rules do not reclassify the
+earlier reuse frontier's failed FEASIBLE cell.
+
+Next gates are synthetic native qualification, independent witness/bound review,
+an explicit source-faithful known-arc operational adapter and a bounded microcase
+protocol before any operational solve. Private GIRO raw sources, row identities
+and fingerprints remain local; neither the exact extensions nor public benchmark
+intake relax that boundary. Renewed source-head CI and all-page manuscript/figure
+review are still required. No new cluster execution, merge, publication or
+journal submission is established by these documentation updates. The research
+goal remains active and incomplete.
+
+### Working draft 0.2 rendering and current backup validation
+
+The exact extensions are now incorporated into a 14-page working manuscript
+with five scientific figures and all original failed outcomes retained.
+Principal-researcher all-page layout inspection passed after keeping the small
+reuse table with its caption. PDF SHA-256 is
+`1cf8ed050ad5b6d142353996eb299c6d9578a92d7f1f3cd320ed5c08e9af4697`.
+This supersedes the preceding in-preparation status for version 0.2, not the
+remaining scientific gates. The version 0.1 PDF remains retrievable from its
+published Git commit. CI also passed at published head
+`4a8e2e52740537c4177906e32d585ad2f064246e` in run 36330964697;
+this does not assert CI success for subsequent edits.

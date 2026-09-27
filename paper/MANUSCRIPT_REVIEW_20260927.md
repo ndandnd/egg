@@ -261,3 +261,22 @@ working draft and is not a blocking defect.
 
 No manuscript, rendering source, figure or raw research artifact was modified
 by this review. Only this note and its QA renders were written.
+
+## Principal-researcher layout check — working draft 0.2
+
+The 27 September version 0.2 PDF is 14 pages, 927,910 bytes, SHA-256
+`1cf8ed050ad5b6d142353996eb299c6d9578a92d7f1f3cd320ed5c08e9af4697`.
+The principal researcher rendered a fixed in-memory PDFium snapshot, inspected
+all 14 page layouts and all five figures, and corrected the small reuse table
+so its three rows and caption remain together. The final affected pages were
+re-rendered and re-inspected. No clipped content, detached captions, unreadable
+mathematical glyphs or orphan headings remain. All-page images and the checked
+PDF identity are retained locally in `research-20260927/agent-notes/manuscript-qa-v02`.
+
+This is author layout/consistency QA, not an independent review of the newly
+written prose. The underlying robustness and replication results have separate
+non-author exact audits; their claims preserve changed-hardware, zero-switching,
+whole-operator, tie and normalization qualifications. Version 0.2 is ready for
+working-draft sharing/backups. It is not submission-ready: native-model
+qualification, source-faithful operational evidence and a final independent
+manuscript review remain open.

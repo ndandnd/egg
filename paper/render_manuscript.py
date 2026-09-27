@@ -32,7 +32,7 @@ styles.add(ParagraphStyle(name='PaperMeta',fontName=italic,fontSize=8.8,leading=
 
 def markup(s):
     s=escape(s.replace('>=','≥').replace('<=','≤').replace('Delta','Δ').replace('lambda','λ'))
-    for token, replacement in [('p_s','p<sub>s</sub>'),('L_D','L<sub>D</sub>'),('U_D','U<sub>D</sub>'),('L_CH','L<sub>CH</sub>'),('U_CH','U<sub>CH</sub>'),('F*','F<super>*</super>'),('x^2','x<super>2</super>'),('e^2','e<super>2</super>'),('l^2','l<super>2</super>'),(')^2',')<super>2</super>')]:
+    for token, replacement in [('F_n','F<sub>n</sub>'),('CH_n','CH<sub>n</sub>'),('r_n','r<sub>n</sub>'),('E^2','E<super>2</super>'),('L^2','L<super>2</super>'),('p_s','p<sub>s</sub>'),('L_D','L<sub>D</sub>'),('U_D','U<sub>D</sub>'),('L_CH','L<sub>CH</sub>'),('U_CH','U<sub>CH</sub>'),('F*','F<super>*</super>'),('x^2','x<super>2</super>'),('e^2','e<super>2</super>'),('l^2','l<super>2</super>'),(')^2',')<super>2</super>')]:
         s=s.replace(token,replacement)
     s=re.sub(r'\*\*([^*]+)\*\*',r'<b>\1</b>',s)
     s=re.sub(r'(https?://[^\s<]+)',r'<link href="\1" color="#156082">\1</link>',s)
@@ -89,7 +89,12 @@ while i<len(lines):
             ('LINEBELOW',(0,-1),(-1,-1),.8,colors.HexColor('#667783')),
             ('VALIGN',(0,0),(-1,-1),'TOP'),('TOPPADDING',(0,0),(-1,-1),7),
             ('BOTTOMPADDING',(0,0),(-1,-1),7)]))
-        story.append(t);story.append(Spacer(1,7));continue
+        parts=[t,Spacer(1,7)]
+        j=i
+        while j<len(lines) and not lines[j].strip(): j+=1
+        if j<len(lines) and lines[j].startswith('Table '):
+            parts.append(Paragraph(markup(lines[j]),styles['PaperCaption']));i=j+1
+        story.append(KeepTogether(parts));continue
     if s.startswith('### '):
         title=s[4:];references=title=='References';style='PaperHeading';s=title
     elif s.startswith('## '):style='PaperSubtitle';s=s[3:]

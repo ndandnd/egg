@@ -4,12 +4,24 @@
 tracks what is established and what remains. `related-work/` contains source
 checks and BibTeX. `figures/` contains PNG, SVG and vector PDF exports plus
 provenance. `../output/pdf/egg-journal-working-draft.pdf` is the review copy.
+Manuscript 0.2 is being prepared with the audited cyclic extensions. The
+existing reviewed PDF is version 0.1; a rendered and visually checked version
+0.2 has not yet been declared ready.
 
 Reproduce figures with Python, NumPy and Matplotlib:
 
 ```sh
 python paper/make_figures.py
+python paper/make_extension_figures.py
 ```
+
+The first script builds the three original cyclic figures and manuscript
+equation images. The extension script reads the immutable robustness and
+replication results, writes `cyclic_robustness` and `cyclic_replication` in
+PNG/SVG/PDF, and records input/script hashes in
+`figures/extension_provenance.json`. It displays all 16 robustness cases and
+the first 80 of the 86 prospectively declared replication sizes, retaining
+both planner optima at ties. Neither script runs a scientific optimizer.
 
 Render the review copy with ReportLab:
 
@@ -41,7 +53,39 @@ and dual bounds, with numerical physical replay. See
 command and the reference-bound limitations. That audit preserves the failed
 cell and does not repeat any scientific solve.
 
-`MANUSCRIPT_REVIEW_20260927.md` records the final 11-page PDF hash and visual
-QA. The reviewer authored the reuse experiment and declares that conflict;
+The two exact cyclic extensions also have portable, non-author audits:
+
+```sh
+python result/cyclic_robustness/20260927-attempt1/review/independent_robustness_audit.py \
+  --repo . --result result/cyclic_robustness/20260927-attempt1/results.json \
+  --report NEW_ROBUSTNESS_REPORT.json
+
+python -B result/cyclic_replication/20260927-attempt1/review/audit_cyclic_replication.py \
+  --repository . --result result/cyclic_replication/20260927-attempt1/results.json \
+  --out /tmp/NEW_REPLICATION_REPORT.json
+```
+
+Use new output paths (replication rejects outputs inside any Git repository) and retain the corresponding frozen Git commits:
+
+| Artifact | Frozen source/protocol | Raw result SHA-256 |
+|---|---|---|
+| `cyclic_robustness/20260927-attempt1/results.json` | `bd022ac32ef680446ee17bc4400843a764acb9f6` | `3d5c20a39b2c7176b6ece22bbeb464a42ea7b3bc58498c0959e227469e25ed29` |
+| `cyclic_replication/20260927-attempt1/results.json` | `ce84e9e62b8e3f33d32010d381fd845415eff458` | `87523bcad8cdb8a3a3383391a6db42566e83498a85da547a184b8218b69cfb1a` |
+
+Paths in this table are relative to `../result/`. Robustness needs Python 3.10
+or later; replication needs Python 3.8 or later. Both use the standard library
+and Git, with no solver dependency. Their review directories contain detailed
+scope reports and separate derived manifests; raw output/manifests remain
+unchanged. Robustness's canonical report is `independent-audit-v2.json`
+(22 corruption controls), and replication's is `audit-result.json`
+(21 controls). These are exact synthetic constructions, not native-model or
+operational qualification.
+
+`MANUSCRIPT_REVIEW_20260927.md` records version 0.1's reviewed 11-page PDF hash
+and visual QA. Its appended principal-researcher check records the 14-page version 0.2 PDF hash and all-page layout review. The original reviewer authored
+the reuse experiment and declares that conflict;
 the cyclic and reuse artifact audits above were performed by a non-author.
-The manuscript remains a working draft pending qualified operational evidence.
+The manuscript remains a working draft pending native-model qualification,
+credible operational evidence and renewed manuscript/visual review. The native
+recharge prototype is under preflight repair; no native optimizer qualification
+has run. The excellent-first-draft goal is still active and incomplete.

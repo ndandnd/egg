@@ -2,11 +2,11 @@
 
 ## Complete-fleet certificates and a replenished-fleet counterexample
 
-Research draft 0.1 | 27 September 2026 | Analytical core independently verified; operational study in preparation
+Research draft 0.2 | 27 September 2026 | Analytical extensions independently verified; operational study in preparation
 
 ### Abstract
 
-Electric-bus charging combines continuous energy decisions with indivisible service assignments. A smooth electricity supply cost therefore need not admit marginal prices that support a physically implementable fleet schedule. We formulate the relevant comparison using the convex hull of complete fleet schedules, with the same service, battery, charging and operating-cost assumptions in the planner and price-response models. A classical convexification argument translates the planning gap into a lower bound on every physical schedule's regret at its own marginal price. We give a fully replenished two-service construction with continuous charging, equal net energy purchases and explicit shared power limits. Its exact physical and convexified costs are 97 and 94.8875 synthetic currency units, respectively. At the physical optimum, own-price fleet regret is 13; at the common convex-hull price, fleet lost-opportunity cost is zero and supplier lost-opportunity cost is 2.1125. The example separates physical dispatch, cost at mean load and participant accounting. A complementary synthetic reoptimization diagnostic compares cold optimization, retained columns and an analytic price-shift proposal under fresh certificates. Forty-four of 45 cells meet the frozen acceptance rule; a pricing time-limit failure remains in the record. These results establish an inspectable mechanism and computational baseline, while operational prevalence, market calibration and a funded coordination mechanism remain open.
+Electric-bus charging combines continuous energy decisions with indivisible service assignments. A smooth electricity supply cost therefore need not admit marginal prices that support a physically implementable fleet schedule. We compare physical planning with the convex hull of complete fleet schedules under the same physical and operating-cost assumptions. A classical convexification argument lower-bounds every physical schedule's regret at its own marginal price. A fully replenished two-service construction has exact physical and convexified costs of 97 and 94.8875 synthetic currency units. Its own-price fleet regret is 13; at the common hull price, fleet lost-opportunity cost is zero and supplier lost-opportunity cost is 2.1125. A modified construction retains a positive gap with a battery reserve, 5% charging loss and one finite connector. Scaling service demand and supply capacity together makes the absolute planning gap vanish, while whole-operator own-price regret need not vanish; per-bus regret does. These results distinguish physical dispatch, mean-load cost and incentive normalization. A complementary synthetic reoptimization diagnostic preserves 44 certified cells and one failed pricing solve from a fixed 45-cell design. Operational prevalence, market calibration and a funded coordination mechanism remain open.
 
 Keywords: electric-bus scheduling; convex-hull pricing; charging coordination; lost-opportunity cost; column reuse; physical feasibility.
 
@@ -16,7 +16,7 @@ An electric-bus operator must deliver mandatory passenger services while choosin
 
 This paper studies that question through complete fleet schedules. A complete schedule contains all mandatory services, their assignment to vehicles, physically feasible charging and the associated intrinsic operating cost. Its convexification permits averages of these complete plans. Such an average is useful for lower bounds and pricing analysis, but need not be a daily dispatch. In particular, evaluating a convex electricity cost at the average load is not the same as averaging the costs of physical daily loads.
 
-The economic principle is established in nonconvex market optimization. Our contribution is a transparent fleet interpretation, a fully replenished physical counterexample and an evidence structure that separates exact arguments, numerical optimization and operational assumptions. We also evaluate simple schedule reuse before proposing a learned acceleration. The paper does not claim a new general welfare theorem, a new principle of convex-hull pricing, or a demonstrated learning improvement.
+The economic principle is established in nonconvex market optimization. Our contribution is a transparent fleet interpretation, fully replenished physical counterexamples with explicit resource and efficiency assumptions, and an exact replication family separating cost-gap convergence from whole-operator incentive convergence. The evidence distinguishes exact arguments, numerical optimization and operational assumptions. We also evaluate simple schedule reuse before proposing a learned acceleration. The paper does not claim a new general welfare theorem, a new principle of convex-hull pricing, or a demonstrated learning improvement.
 
 The distinction is practically relevant for interpreting optimization output. A small convexified objective does not by itself establish an implementable low-cost plan. A small system-cost gap need not imply a similarly small incentive at the realized marginal price. A payment equal to a fleet's lost opportunity does not by itself fund the supply side or define a budget-balanced institution. Each statement requires a specified physical model, price and deviation right.
 
@@ -102,7 +102,47 @@ An independent implementation reconstructs the same optimization using three phy
 
 Figure 3. Gaps on the prospectively fixed analytical grid. Labels are rounded; exact rational values are archived. Fleet cost and early supply intercept vary; service demand, charging windows, shared power and boundary energy stay fixed. Values are synthetic currency. The categorical grid is for mechanism inspection and includes all declared cases, including zeros.
 
-The construction establishes existence under fair boundary-energy accounting. Its operational magnitude remains unknown. Reserve requirements, charging losses, finite plugs, time-dependent travel and nonlinear tapering need qualified extensions before making case-study claims. The exact reference model is separate from the existing production EVSP adapter; no full adapter equivalence is inferred from the example.
+The construction establishes existence under fair boundary-energy accounting. Its operational magnitude remains unknown. The following extensions address reserve, constant charging loss, finite connectors and replication within an exact reference model. Time-dependent travel, nonlinear tapering and operational calibration still require separate qualification; no production-adapter equivalence is inferred from these examples.
+
+### 6.1. Reserve, losses and a finite connector
+
+The nominal point sits on a binding early-power boundary. With the same 20 kWh battery and 10 kW early limit, any positive reserve or efficiency below one removes the one-bus option. When two buses remain feasible, their charging interval is convex and the gap is zero. Adding reserve while also increasing battery capacity by the same amount is an exact SOC translation, but it does not demonstrate robustness at fixed installed capacity.
+
+To examine genuine perturbations, retain battery capacity 20, service energy 15 per trip and the grid-side supply cost F(e,l)=4e+0.1*(e^2+l^2). Let r be the reserve, η the constant grid-to-battery efficiency, P the early power limit and K the power of a single terminal connector. Both windows last one hour. Gross grid purchases total T=30/η for either fleet structure. For 0<=r<=5, define lower early bound l=max(0,T-K), upper bound u=min(P,15/η), and h=max(l,(10+r)/η). The complete two-bus interval is [l,u], and the complete one-bus interval is [h,u]; an interval with lower bound above u is infeasible.
+
+These intervals have explicit connector-feasible realizations. Only A's bus charges early. At the terminal window, use constant aggregate power T-x and serve A's and B's buses consecutively in proportion to their required terminal energy. There is one occupied connector at a time, and every battery finishes full. This assumes zero switching time, constant efficiency and no taper; it is not an assertion about every physical charger.
+
+With r=1, η=19/20, P=12 and K=30, the one-bus optimum buys 220/19 early grid kWh and 20 terminal grid kWh. Its battery trace is 20→5→16→1→20. The early-power slack is 8/19 kWh. The hull mixes that schedule with a two-bus schedule buying 30/19 early and 30 terminal grid kWh, with one-bus weight 453/760. The two terminal sessions occupy 9/19 and 10/19 of an hour. The exact gap is positive:
+
+$$D=\frac{38527}{361},\qquad {\rm CH}=\frac{2987911}{28880},\qquad\Delta=\frac{94249}{28880}\approx3.26347.$$
+
+Strict feasibility and optimization inequalities in the supplementary derivation give an open neighborhood in reserve, efficiency and early power around this modified construction, holding K=30 fixed. This is stronger than a single boundary point, while remaining a synthetic existence result. With vehicle acceptance capped at 30 kW, terminal-resource sensitivity is stated only for K<=30: the original lossless case is infeasible below K=20, has zero gap for 20<=K<=23.5, and has positive gap for 23.5<K<=30.
+
+![Figure 4](figures/cyclic_robustness.png)
+
+Figure 4. All 16 prospectively fixed reserve/loss/connector cases: nine positive gaps, six zero gaps and one infeasible case. Panel (a) crosses reserve, efficiency and early power; panel (b) changes terminal power under the nominal remaining assumptions. The nominal 30 kW case appears in both panels and is executed once. Values are synthetic currency, rounded for display; infeasibility has no numerical gap. An independent exact audit checks the complete intervals, all endpoint and supporting schedules, energy conversion, prices and connector sessions under zero switching time; all 22 corruption controls are rejected.
+
+### 6.2. Replication and the scale of incentive error
+
+Replicate the timetable to n simultaneous A services and n simultaneous B services. Keep individual battery and energy requirements fixed, with n early connectors at 10 kW and n terminal connectors at 30 kW. Scale supply cost as F_n(E,L)=4E+(E^2+L^2)/(10n), preserving marginal prices at fixed per-copy demand. This specifies market growth; holding supply curvature fixed would answer a different question.
+
+If m buses each serve A and B, there are n-m A-only and n-m B-only buses, for 2n-m used buses. Complete physical early loads range from 10m to 10n. Every load in this interval has a replenished physical realization: give each paired bus 10 early kWh and share the remainder among A-only buses. Terminal charging can pair each A-only/B-only pair on one connector, with the m paired buses using the remaining connectors. The projected complete hull is a triangle; its lower boundary has intrinsic cost 14n-0.7E.
+
+The hull optimum is CH_n=7591n/80. Every physical optimizer chooses an integer m nearest to 27n/40, with both choices retained at ties. Writing δ=m-27n/40 gives the exact bound
+
+$$\Delta_n=\frac{20\delta^2}{n}\leq\frac{5}{n}.$$
+
+At that physical optimum's own marginal prices, the whole operator can reconsider all service assignments. Along n=40k+1 its regret r_n satisfies
+
+$$\Delta_n=\frac{169}{80n}\longrightarrow0,\qquad r_n=\frac{351}{40}+\frac{169}{40n}\longrightarrow8.775.$$
+
+This is not an incentive borne by one bus or one independent firm. Regret per used bus and regret divided by total physical cost both vanish. There is no positive regret limit over every size: when n is divisible by 40, the physical and hull optima coincide and regret is zero. At n=20, two equally good physical planners have own-price regrets 7 and 14; selecting one silently would conceal a relevant tie.
+
+![Figure 5](figures/cyclic_replication.png)
+
+Figure 5. Exact replication results for n=1 through 80, covering two integer-rounding cycles; six larger predeclared sizes are also archived. The absolute planning gap decreases under the proved 5/n envelope, while whole-operator regret depends on rounding and need not converge to zero. Vertical segments connect both planner optima at ties. Costs and regret are synthetic currency. The independent audit reconstructs all 86 cases, 6,448 continuous branch minima and 88 physical optima, including finite-connector schedules and all price accounts; 21 corruption controls are rejected.
+
+The welfare gap is therefore not a substitute for a price-response metric. In this family, every physical planner optimum still has zero fleet LOC at the common hull price, with supply LOC equal to the planning gap. The comparison concerns both which price is posted and how the incentive is normalized.
 
 ### 7. Reoptimization before learning
 
@@ -134,13 +174,17 @@ Some retained transitions require two or three clean calls, establishing remaini
 
 The intended transportation contribution needs a timetable-based study in addition to exact constructions. That study must identify mandatory trips separately from a provider's solved vehicle blocks; preserve source-row lineage; specify directed and time-dependent deadheads; and state vehicle energy, reserve, terminal recharge and charger-resource assumptions. Historical block membership can provide a feasible reference or warm start, but cannot establish a globally optimal schedule or reveal the provider's objective weights.
 
-A local GIRO audit has identified a small source-matched subproblem with complete service-energy fields, while full-day weekday selection and deadhead translation need explicit treatment. Private source files remain outside the public artifact. Public benchmark sources are being qualified in parallel. No result in this draft is described as an operational benefit or a measurement from either source.
+A local GIRO audit has matched 30 mandatory services to source rows and separated historical vehicle assignments from trip requirements. Two observed runs supply a 17-service candidate with complete observed movement energies for a fixed-path replay. That is a source qualification result, not an optimization result. Most counterfactual cross-run movements lack matching directed source records, so an unrestricted reblocking claim would be premature. Battery, terminal replenishment and charger assumptions also require explicit declaration. Private source rows, identifiers and hashes remain outside the public artifact.
+
+A public 100-service column-generation benchmark has been pinned and parsed independently. Its energy and time units are abstract, and finite charger capacities and a grid-cost model are not supplied. It can test parser and route feasibility, but does not supply operational calibration for the price-support question. No result in this draft is described as an operational benefit or a measured economic effect from either source.
 
 A timetable alone does not identify the supply curvature. Exogenous time-of-use tariffs, a convex incremental supply cost, contractual demand charges and charger scarcity rents are different economic objects. The first operational sensitivity study should report energy, bus count, physical cost bounds, hull bounds, regret bounds and the stated curvature scale separately. Until calibration is defensible, monetary magnitudes must be labeled stylized.
 
 ### 9. Discussion and limitations
 
-The central construction shows that continuous charging does not erase duty indivisibility, even when all net service energy is purchased and every used battery is replenished. It does not imply that large real fleets have substantial unsupported incentives. Fleet aggregation, the relative scale of indivisible duties, supply curvature and access to shared resources can change the effect. Those factors require controlled extensions rather than a claim that the 24 constructed cases represent bus systems generally.
+The constructions show that continuous charging does not erase duty indivisibility, even when all net service energy is purchased, every used battery is replenished and one finite connector must be scheduled explicitly. The original boundary point is fragile at fixed hardware; a modified point remains positive under reserve and efficiency perturbations. This establishes existence within declared physical assumptions, not prevalence or materiality in real bus systems.
+
+Replication makes the normalization particularly important. Scaling supply capacity with demand yields an absolute planning gap approaching zero, yet whole-operator own-price regret stays positive along a specified subsequence. Per-bus and relative regret vanish, and some fleet sizes have exact price support. Neither small system-cost gaps nor a nonzero whole-fleet deviation should be reported without the other metrics. The result concerns one operator controlling the complete replicated fleet, not a game of independently owned buses.
 
 The certificate interpretation is strongest when physical models match exactly. An easier duty-level relaxation, a partially enumerated schedule menu or an aggregate-only capacity constraint can answer a different question. For large cases, it may still be possible to certify a positive gap without enumerating the entire hull: a valid physical lower bound and a replay-feasible mixture upper bound suffice. Failure to prove a positive gap is not proof of equilibrium existence.
 
@@ -150,11 +194,13 @@ Finally, price support is an incentive statement under specified rights, not an 
 
 ### 10. Conclusion
 
-Complete fleet schedules provide the appropriate object for distinguishing physically implementable bus operations from convexified charging plans. A fully replenished continuous-charging example has an exact positive planning gap and sharply different lost-opportunity accounts at own and common hull prices. Reoptimization experiments show that retained schedules are a necessary baseline and that additional proposal work must justify its cost under a fresh certificate. The next empirical task is to determine the magnitude and relevance of these effects on a provenance-qualified timetable while retaining explicit energy and resource assumptions.
+Complete fleet schedules provide the appropriate object for distinguishing physically implementable bus operations from convexified charging plans. Fully replenished continuous-charging constructions have exact positive planning gaps under explicit reserve, loss and connector assumptions, with different lost-opportunity accounts at own and common hull prices. Replication separates convergence of planning cost from convergence of whole-operator incentives. Reoptimization experiments show that retained schedules are a necessary baseline and that additional proposal work must justify its cost under a fresh certificate. The next empirical task is to determine the magnitude and relevance of these effects on a provenance-qualified timetable while retaining explicit energy and resource assumptions.
 
 ### Reproducibility and draft status
 
-The exact source and protocol were frozen at Git commit 7bf913a before execution. The harder reuse source, protocol and adversarial tests were frozen at 7d3d764 before execution. Both result trees retain source identities and complete declared cases. The exact result and all 44 successful reuse certificates passed independent reconstruction; the reuse result retains its one failure. The audit found 145 mutable master-log snapshots. The solved tangent sets are recoverable from the frozen control flow; a prospective deep-copy repair at 78bb4c0 preserves future snapshots without replacing any first-run artifact. The independent Fenchel certificates do not depend on that log repair. Figure scripts read the archived result JSON. The source-verified related-work matrix and BibTeX accompany this draft. This version is a substantive working manuscript, not a submission-ready claim of operational validation.
+The original exact source and protocol were frozen at Git commit 7bf913a before execution. Replication and robustness were frozen at ce84e9e and bd022ac, respectively. Their independent auditors import no experiment-author code, reconstruct all declared cases using rational arithmetic, and preserve the first-run raw files. Separate manifests distinguish raw evidence from subsequent review artifacts.
+
+The harder reuse source, protocol and adversarial tests were frozen at 7d3d764 before execution. All 44 successful reuse certificates passed independent reconstruction; the result retains its one failure. The audit found 145 mutable master-log snapshots. The solved tangent sets are recoverable from the frozen control flow; a prospective deep-copy repair at 78bb4c0 preserves future snapshots without replacing any first-run artifact. The independent Fenchel certificates do not depend on that log repair. Figure scripts read archived result JSON. The source-verified related-work matrix and BibTeX accompany this draft. This version is a substantive working manuscript; operational validation and the new native charging model remain separate qualification gates.
 
 ### References
 
