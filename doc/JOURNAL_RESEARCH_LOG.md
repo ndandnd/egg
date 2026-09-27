@@ -131,3 +131,62 @@ save/integrity and audit-completion updates will be recorded below.
    source and live resource policy; record exact job receipts and capacity.
 5. Extend the manuscript with the operational study and reviewer-driven
    sensitivity, without forcing an ML contribution or overstating novelty.
+
+### Reviewed working draft and hosted verification
+
+The manuscript review is complete, including all 11 PDF pages and three
+figures. The reviewed PDF SHA-256 is
+`a5b4c9c9754d5a5620704ee8622cea26ca5eef25fdf0c6359677b086615e699a`.
+It remains working draft 0.1 pending operational evidence. Review corrections
+include the global supply domain, explicit two-period cost, endpoint handling,
+complete-fleet terminology, mathematical typesetting and matched work totals.
+The report declares its author's involvement in the reuse implementation;
+the separate result audits are non-author checks.
+
+The milestone was committed and pushed as `c0f83f0`, with draft
+[PR56](https://github.com/ndandnd/egg/pull/56) stacked on PR55. Hosted
+[CI36330227545](https://github.com/ndandnd/egg/actions/runs/36330227545)
+passed **826 tests in 205.28 seconds**, with whitespace and shell checks also
+passing at that exact head. Later heads must receive their own CI assessment.
+No merge or journal submission occurred.
+
+The Google Doc's “Verified manuscript milestone — 27 September 2026” section
+records the completed audit and links PR56, the reviewed PDF and the ledger.
+Saved-to-Drive was verified. A complete text comparison preserved the original
+55,398-character history prefix and found exactly one new milestone heading;
+the document then contained 62,461 characters. The cyclic result table was
+kept together on a fresh page.
+
+### Additional exact verification runs, reviews pending
+
+The original example is on a binding early-power boundary. A positive reserve
+or charging loss with unchanged hardware removes its one-bus option. The new
+analytical design records that negative result and a modified positive example
+with reserve 1 kWh, efficiency 19/20, early power 12 kW and one 30 kW terminal
+connector. Source/design/protocol were frozen at `bd022ac` before the first run.
+All 16 declared cases completed in 0.0054 seconds: nine positive gaps, six zero
+gaps and one infeasible case, matching the prior algebraic predictions. The
+joint example's gap is 94249/28880. All cases, endpoint schedules and connector
+sessions are preserved in `result/cyclic_robustness/20260927-attempt1`.
+Its raw JSON SHA-256 is
+`3d5c20a39b2c7176b6ece22bbeb464a42ea7b3bc58498c0959e227469e25ed29`.
+Post-result independent review is pending; these are not native solver results.
+
+A separately frozen replication check at `ce84e9e` scales service demand,
+charging resources and supply curvature together. The first run completed all
+86 declared sizes and 6,448 continuous branch minima in 0.139 seconds, retaining
+both physical optima at ties. Along n=40k+1, the exact cost gap is 169/(80n)
+while whole-operator own-price regret approaches 8.775; per-bus regret vanishes.
+At multiples of 40 both quantities are zero. This is a single operator's
+price-taking deviation and is not a per-bus or independent-firm result.
+The raw result in `result/cyclic_replication/20260927-attempt1` has SHA-256
+`87523bcad8cdb8a3a3383391a6db42566e83498a85da547a184b8218b69cfb1a`.
+A non-author audit is in progress before manuscript integration.
+
+The native recharge design is now documented, and an isolated prototype is in
+development. It will use one common physical feasible-set builder, explicit
+directed movements, exact charging event intervals, one finite connector and
+independent replay. Synthetic source/protocol must be committed before its
+first optimizer qualification. Private microcase extraction is still local;
+sparse deadhead coverage may restrict the first case to a declared known-arc
+graph. No operational solver job has been launched.
