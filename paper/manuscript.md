@@ -2,7 +2,7 @@
 
 ## Complete-fleet certificates and a replenished-fleet counterexample
 
-Research draft 0.4 in preparation | 27 September 2026 | Last reviewed PDF: version 0.3
+Research draft 0.4 | 27 September 2026 | Working manuscript; nonlinear timetable study pending
 
 ### Abstract
 

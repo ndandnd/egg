@@ -3,16 +3,18 @@
 `manuscript.md` is the editable scientific draft. `CLAIM_EVIDENCE_LEDGER.md`
 tracks what is established and what remains. `related-work/` contains source
 checks and BibTeX. `figures/` contains PNG, SVG and vector PDF exports plus
-provenance. `../output/pdf/egg-journal-working-draft.pdf` is the review copy.
-The reviewed PDF is version 0.3: 17 pages, six figures, SHA-256
-`fac524aff668c2c1d81d027bf67a74894ad943953bf0638ca09d0ab51d035500`.
-`MANUSCRIPT_V03_LAYOUT_REVIEW_20260927.md` records the independent all-page
-layout check. This working draft includes native-model qualification, public
-source intake and explicit participant normalization. Public economic evidence
+provenance. `../output/pdf/egg-journal-working-draft.pdf` is the reviewed
+working version 0.4 PDF: 22 pages, seven figures, SHA-256
+`acae4e1bc915fdf7e7a4cafcd997b91aa6941afe73a9075b37cb6b50514663ca`.
+`MANUSCRIPT_V04_LAYOUT_REVIEW_20260927.md` records its visual and text-integrity
+checks. The prior version 0.3 PDF (17 pages, six figures; SHA-256
+`fac524aff668c2c1d81d027bf67a74894ad943953bf0638ca09d0ab51d035500`) remains
+in Git history. Public nonlinear timetable evidence, operational calibration
 and final whole-manuscript scientific review remain open.
-The editable source is now version0.4 in preparation, adding the independently
-reviewed quadratic regret-radius bound. The PDF remains the reviewed0.3 artifact
-until a fresh render and layout review.
+The editable source is version 0.4, adding the independently reviewed quadratic
+regret-radius bound and appendices. The separate R2 pagination candidate is
+`../output/pdf/egg-journal-working-draft-v04-r2-candidate.pdf`; its References
+page break is retained in the reviewed render.
 
 Reproduce figures with Python, NumPy and Matplotlib:
 
@@ -30,17 +32,20 @@ PNG/SVG/PDF, and records input/script hashes in
 the first 80 of the 86 prospectively declared replication sizes, retaining
 both planner optima at ties. Neither script runs a scientific optimizer.
 
-Render the review copy with ReportLab:
+Render equation images and a separate reviewed working PDF with ReportLab:
 
 ```sh
-python paper/render_manuscript.py
+python paper/render_equations.py
+python paper/render_manuscript.py --output output/pdf/egg-journal-working-draft-v04-reviewed.pdf
 ```
 
 The renderer uses locally available DejaVu Serif when found and otherwise
 standard PDF Times fonts. Exact pagination can depend on that choice. This
-review-PDF generator is not a journal-specific typesetting template. Publication
+review-PDF generator is not a journal-specific typesetting template. Use an
+explicit `--output` path to keep pre-review renders identifiable. Publication
 format and authorship will be set once the paper's evidence and destination are
-ready. The final submission has not been made.
+ready.
+The final submission has not been made.
 
 The exact cyclic audit is independently rerunnable from the repository root:
 
@@ -101,5 +106,5 @@ GRB licensing stdout is retained only in the complete external original archive;
 its public access note and manifest disclose all omissions. The separate
 half-minute and compact physical gates have passed independent result audits.
 The corrected native hull gate returned eight certificates and passed independent
-result review; its original failed attempt remains preserved. The first public pricing pilot completed both full37-service scenarios and passed independent audit. Both are bounded/FEASIBLE, with two-bus witnesses; neither proves cost optimality. See `result/sistig_pricing/20260927-grb-job557543-attempt1/review/REVIEW.md`. The compact-hull integration separately passed8/8 controls and independent audit. Figure7 in editable source0.4 shows both public witnesses; reviewedPDF0.3 is unchanged until the next rendering and all-page review.
+result review; its original failed attempt remains preserved. The first public pricing pilot completed both full37-service scenarios and passed independent audit. Both are bounded/FEASIBLE, with two-bus witnesses; neither proves cost optimality. See `result/sistig_pricing/20260927-grb-job557543-attempt1/review/REVIEW.md`. The compact-hull integration separately passed8/8 controls and independent audit. Figure 7 in the reviewed working PDF 0.4 shows both public witnesses; its layout and source identities are recorded in MANUSCRIPT_V04_LAYOUT_REVIEW_20260927.md.
 The excellent-first-draft goal is active and incomplete.

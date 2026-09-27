@@ -73,7 +73,7 @@ while its relative regret divides by D. Its nonzero whole-operator regret
 limit applies only to the stated subsequence, not to all integer sizes.
 The extension figure script records these sample scopes and input hashes.
 
-Reviewed working PDF 0.3 has 17 pages and six figures. Its immutable identity
+The previous reviewed working PDF 0.3 had 17 pages and six figures. Its immutable identity
 and independent all-page visual check appear in
 `MANUSCRIPT_V03_LAYOUT_REVIEW_20260927.md`. This is layout review, not an
 independent review of all scientific prose. The excellent-first-draft goal
@@ -127,7 +127,10 @@ archived physical optima: each pair's regret is at most20/n, and its aggregate
 reproduces the whole-operator regret under these specific connector rights.
 No general shared-resource-game or large-market contradiction follows.
 The radius-dependent quadratic regret bound passed two independent mathematical
-reviews and is in manuscript source0.4. ReviewedPDF0.3 has not yet been rerendered.
+reviews and is in manuscript source0.4. The current reviewed working PDF is
+version0.4 (22 pages, seven figures; SHA-256
+acae4e1bc915fdf7e7a4cafcd997b91aa6941afe73a9075b37cb6b50514663ca). This
+metadata/layout review does not close the public nonlinear evidence gate.
 
 
 The first full37-service public flat-price pilot is independently audited as
@@ -150,9 +153,12 @@ a native-matrix lower bound or a public nonlinear planning gap.
 The separately frozen energy-band V2 first qualification (66b7054) passed19/20
 and failed joint_planner extraction on positive charge of about1.22e-12kWh
 associated with an unselected movement. All142 original files remain manifested;
-independent audit is underway. No downstream V2 hull/public experiment is
+independent audit confirmed the failed 19/20 gate. No downstream V2 hull/public experiment is
 admitted. Pure preflight and hosted CI success are not substitutes for this
 failed execution gate. The public Figure7 review passed with byte-identical PNG
 reproduction. Source0.4 now explains the actual certificate loop and compact
 model, gives the strict robustness inequalities, and separates repair history
-in an appendix. Its candidate PDF is awaiting fresh full-page review.
+in an appendix. The reviewed working PDF is version0.4 (22 pages, seven figures;
+SHA-256 acae4e1bc915fdf7e7a4cafcd997b91aa6941afe73a9075b37cb6b50514663ca).
+The nonlinear public timetable study remains pending; no public nonlinear
+physical-versus-hull gap is established.

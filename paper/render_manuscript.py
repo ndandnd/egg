@@ -8,7 +8,7 @@ from reportlab.lib import colors
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.enums import TA_LEFT
 from reportlab.lib.utils import ImageReader
-from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Image, Table, TableStyle, KeepTogether
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Image, Table, TableStyle, KeepTogether, PageBreak
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 
@@ -100,7 +100,10 @@ while i<len(lines):
             parts.append(Paragraph(markup(lines[j]),styles['PaperCaption']));i=j+1
         story.append(KeepTogether(parts));continue
     if s.startswith('### '):
-        title=s[4:];references=title=='References';style='PaperHeading';s=title
+        title=s[4:]
+        if title=='References':
+            story.append(PageBreak())
+        references=title=='References';style='PaperHeading';s=title
     elif s.startswith('## '):style='PaperSubtitle';s=s[3:]
     elif s.startswith('# '):style='PaperTitle';s=s[2:]
     elif s.startswith('Research draft '):style='PaperMeta'

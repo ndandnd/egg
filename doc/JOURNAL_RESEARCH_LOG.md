@@ -573,3 +573,29 @@ The prospective compact orphan-projection design awaits independentreview;
 no optimizer has been rerun. A cardinality-constrained exact matching design
 could exploit the reviewed one-bus lowerbound and is not executed. Routine
 work now uses LunaMax andGPT6Sol; rootcoordinates publication/decisions.
+
+
+### Reviewed working manuscript0.4 and next implementation ownership
+
+The canonical PDF now contains reviewed working version0.4:22pages,7figures,
+SHA256 acae4e1bc915fdf7e7a4cafcd997b91aa6941afe73a9075b37cb6b50514663ca.
+Named reviewed copy and two earlier candidates remain separate; PDF0.3remains
+in Git history. Source change during promotion is metadata only; other text
+matches the R2candidate, pages2–22 are pixel-identical, page1was visually
+checked, and all9equation PNGs are unchanged. Sourcehash
+454ec4fd010ed06e5609c49e500ca4493a0cd51faf86b533c413e5c4fae3ecf5.
+Focused scientific and full-page layout reviews are saved. This is a reviewed
+working draft, not completion of the excellent-first-draft goal: the public
+nonlinear physical/hull/regret evidence and final scope review remain open.
+
+One-bus proof/review is published3516d45; exactminimumflow design and its
+independent mathematical PASS are published2da04c8, alongside conditionalPASS
+for the numerical repair design and an explicitly unadmitted candidate
+sensitivity budget. Sol6_numerical_repair owns compact extractor/pure tests
+and prospectiveattempt3 protocol; LunaMax operational_data_audit reviews its
+stable implementation before any sourcefreeze/optimizer. Sol6_cardinality_bound
+is a separate worker implementing newexactflow modules/tests/protocol only.
+No public matching calculation before independent code review and published
+freeze. No oldrawdata/sourcefixture is rewritten. Current publicpilotcandidate
+stillpointsfailedattempt2 and is held; only changeitsgate after a new passed
+audit. No EGG clusterjob isactive. Rootownscommit/push/runadmission.
