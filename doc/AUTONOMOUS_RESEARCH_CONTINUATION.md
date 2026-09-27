@@ -7,7 +7,7 @@ work, GitHub backups and Google Doc updates without repeated approvals.
 ## Latest checkpoint — read this before the historical entries below
 
 27 September 2026. Latest published source freeze
-`227da22074201c583dbcfa971863c8f3c41d7391`; admitted CBC physical/exact-flow
+`62976f11ecf35c837b0573079892ae5095e846b9`; admitted CBC physical/exact-flow
 checkpoint `b502e85` and CBC hull checkpoint `805887d`. Sol 6 handles implementation and analysis; Luna Max handles routine
 verification, documentation and monitoring. Astra coordinates and makes major
 scientific decisions. The hourly heartbeat preserves this routing. Avoid broad
@@ -75,10 +75,26 @@ rereads, redundant tests and idle polling.
 - The old public checkout remains at 282e00b with its raw pilot outputs intact.
   The new qualification uses the isolated checkout above. Exclude
   scaglione-compute-01 and leave other-project held jobs alone.
-- Google Doc now includes the verified compact/bounds milestone. Saved to Drive;
-  its 85,964-byte before export is an exact prefix of the 88,414-byte after
-  export, and the new heading occurs once. The PDF remains byte-identical.
-  Verification note: `../research-20260927/agent-notes/google-doc-verified-bounds-20260927.md`.
+- GRB hull job **559602** was submitted once at the new published freeze
+  62976f11ecf35c837b0573079892ae5095e846b9, in the separate detached worktree
+  `/home/nc437/egg-journal-grb-hull-20260927`. Latest scontrol: COMPLETED,
+  exit 0:0, 26 seconds. All 152 physical raw/launch files matched before the
+  pure physical-admission/source preflight passed. Slurm verified one CPU,
+  8 GB, 15 minutes, default partition, no requeue and excluded reserved node.
+  Local receipts: `../research-20260927/cluster/grb-hull-559602/`.
+  A heredoc preparation error stopped before any intent/submission; the
+  verified continuation submitted exactly once. No scientific retry occurred.
+  **Next bounded work package:** retrieve and seal this completed hull attempt
+  and sibling .launch, obtain final scoped sacct, then assign Luna an independent
+  same-eight-controls result audit outside the raw attempt. Preserve licensing
+  stdout locally. Do not resubmit, launch the public nonlinear pilot, or alter
+  its predeclared model before the hull gate passes and evidence is published.
+- Google Doc includes the verified GRB physical and CBC hull milestone. Saved
+  to Drive; the 88,414-byte before export is an exact prefix of the 89,527-byte
+  after export, and the new heading occurs once. After SHA256:
+  1377215d64b38be24a2934aff9c1b9962bc2bce58bba58f5763654f6884aaccc.
+  The PDF remains byte-identical. Verification note:
+  `../research-20260927/agent-notes/google-doc-verified-grb-hull-20260927.md`.
 
 ## Objective and completion standard
 

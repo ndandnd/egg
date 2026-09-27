@@ -802,3 +802,28 @@ hash. Full local/cluster originals remain intact for the full audit/gate.
 The next step is a new published source freeze and one separate hull job.
 The nonlinear public pilot remains held until that result is independently
 qualified. Hosted CI passed for source227da220.
+
+### Published admission and separate GRB hull launch
+
+The admitted physical checkpoint was published as
+62976f11ecf35c837b0573079892ae5095e846b9 and PR56 updated, still draft/unmerged.
+Source-bundle SHA2560411ebb6e217a4f868a869b4f20c780172b6c62ec874feb4f546c705d10485fb
+matched locally and on Unicorn. Sol owns the sole hull submission, job559602,
+in /home/nc437/egg-journal-grb-hull-20260927. A preparation heredoc error
+stopped before any intent/job; read-only checks established no submission,
+and the corrected continuation filled only20 missing license stdout files.
+All152 physical raw/launch files then matched and the pure admission/source
+preflight passed. No scientific retry occurred. Latest saved scontrol reports
+COMPLETED, exit0:0, runtime26seconds; one CPU,8GB,15minutes,no requeue,
+default partition and reserved-node exclusion, WorkDir/Command all verified.
+Local intent, submitted receipt and scontrol are saved under the outer
+research-20260927/cluster/grb-hull-559602 directory. Results remain unaudited.
+The next hourly work package is retrieval, final accounting and independent
+hull audit; the public nonlinear pilot remains held.
+
+Luna appended the verified physical-GRB/CBC-hull milestone to the original
+Google Doc. Before88,414bytes SHAd5569b56b61e2e44b45228fb422e88741968c780ee917cb9284a5af926a7a809
+is an exact prefix of after89,527bytes SHA1377215d64b38be24a2934aff9c1b9962bc2bce58bba58f5763654f6884aaccc;
+the new heading occurs once and Saved to Drive was observed. PDF0.4 unchanged.
+This bounded work cycle ends with a precise hourly handoff, preserving the
+user's cheaper-model preference and avoiding idle Astra queue monitoring.
