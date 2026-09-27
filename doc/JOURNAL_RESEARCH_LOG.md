@@ -40,7 +40,7 @@ archived construction, price accounts and parameter grid.
 Source/protocol/tests frozen7d3d764. First attempt in
 `result/reuse_frontier/20260927-attempt1` finished in164.2948seconds with exit1:
 all45comparison cells attempted,44certified and matched separate reference
-intervals, all15references complete. Cold/depleted_f20/return_base remains a
+intervals, all 15references complete. Cold/depleted_f20/return_base remains a
 failure because its pricing solve returnedFEASIBLE at the10second cap rather
 thanOPTIMAL. No rerun, tolerance change or reclassification occurred.
 
@@ -312,3 +312,54 @@ new optimization. Any correction requires new source/protocol freeze and a
 separate attempt retaining this failure denominator. No operational or cluster
 solve is yet launched. The 14-page draft and exact extension audits were backed
 up at `200e0e6`; CI for that newer head remains to be checked.
+
+### Corrected native qualification — first V2 execution passes 15/15
+
+V2 was independently reviewed and frozen at
+`997575d049a66d952a0cb8d79f974f7ba5f4ccf0`. Sixty-two pure/fake tests passed
+with native imports blocked, and all 15 complete control inputs/targets were
+verified identical to attempt1. The only changes are pre-decoding raw-variable
+capture and explicitly bounded numerical witness conversion. Positive energies
+are retained; exact cumulative proportions contain serial sessions within their
+original intervals. Negative-to-zero corrections and materialized capacity
+excess share a whole-incumbent `1e-8` kWh budget, followed by the unchanged
+numerical replay/objective/bound admission checks.
+
+The separate `result/native_recharge/20260927-attempt2` first execution passed
+15/15 (12 certificates and three expected infeasibilities) in 33.7343 seconds,
+with 30 returned native calls. Its 107 raw files total 706,562 bytes and are
+manifested before independent result review. The result is numerical and
+solver-conditional. Attempt1 remains 12/15, with its unavailable failed
+incumbents acknowledged. No exact causes or corrected witnesses are retrofitted
+into that earlier run. Independent V2 result audit is pending before the planned
+single bounded Gurobi qualification on Unicorn.
+
+The Google Doc's analytical-extension milestone was appended and verified saved
+to Drive, with previous text retained and a pinned version 0.2 PDF link. A later
+native/operational update will record completed gates, not predictions.
+
+### Independent V2 audit passes; cluster qualification admitted
+
+Independent reconstruction verified all 107 V2 raw files, 27 raw incumbents and
+1,030 variable values, every declared model constraint class, 27 saved witness
+instances, 60 sessions, 215 SOC events and all native objectives/bounds against
+analytical/PWL fixture minima. Sixteen corruption controls were rejected.
+All 12 certificate intervals enclose independently derived optima; three expected
+infeasibilities agree analytically. One recorded negative-to-zero correction is
+5.166411062336897e-15 kWh; maximum combined correction is
+7.105427357601002e-15 kWh. These are raw floating residuals under the frozen
+numerical policy, not exact physical arithmetic. Attempt1 remains FAILED.
+
+The separate bounded Gurobi replication is now admitted under
+`doc/NATIVE_RECHARGE_CLUSTER_PROTOCOL_20260927.md`. Its launcher passed a
+second agent's review. No source/target/budget change is permitted between the
+corrected local design and this backend replication. CI passed at published
+`ba84b11bceb878a7436644ffe62048caa879e945`: 883 tests in 212.08s, run 36332111437.
+The newly added solver-free audit CI commands also passed a local integration
+check; later published-head CI must still run.
+
+Further private-source admission found off-depot recharge and missing explicit
+movements in the proposed 17-service pair. It is not native-model-ready and
+must not be silently translated with zero travel. A CC BY 4.0 public Figshare
+archive (DOI 10.6084/m9.figshare.26088190.v1) has been downloaded and matched to
+its publisher checksum for data-only schema inspection; no supplied code ran.

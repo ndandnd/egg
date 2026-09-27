@@ -29,3 +29,38 @@ attribution and cannot be presented as a new tradeoff or settlement mechanism.
 Both are candidates for the next manuscript revision after full-text inspection.
 The already reviewed working PDF has not been silently recharacterized as
 including these additional sources.
+
+## Charging fidelity and a reusable public data source
+
+**Löbel, Borndörfer and Weider (2024), arXiv:2407.14446v1.**
+[Author manuscript](https://arxiv.org/abs/2407.14446v1),
+[inspected HTML sections 2–4](https://arxiv.org/html/2407.14446v1).
+The paper analyzes errors from approximating nonlinear charging and proposes
+an increment-domain formulation with dynamic power and grid limits. Replacing
+a charge curve by a pointwise lower approximation need not preserve a lower
+SOC trajectory. Our inference: the constant-efficiency/no-taper reference must
+stay explicitly scoped; adding taper requires a separately justified feasible
+set, not cosmetic interpolation. The inspected abstract lists a submitted
+manuscript, not a verified journal version. HTML displays an inconsistent
+render date; cite the explicit arXiv v1 identity, not that date.
+
+**Sistig, Sinhuber, Rogge and Sauer (2025).**
+[Publisher article](https://doi.org/10.1038/s44333-025-00030-y),
+[versioned public dataset](https://doi.org/10.6084/m9.figshare.26088190.v1).
+The study uses twenty German GTFS-based networks, heuristic vehicle/crew
+schedules and electrification scenarios. Its supplementary data includes trips,
+itineraries, stops and possible deadheads, with CC BY 4.0 metadata. This supplies
+a stronger candidate for reproducible timetable/movement intake than forcing
+unresolved private movement gaps. It does not identify a convex electricity
+supply function or prove our own-price effect. Local archive/format inspection
+is pending; do not call it model-ready merely from its description.
+
+**Ricard, Desaulniers, Lodi and Rousseau (2026).**
+[Publisher record](https://doi.org/10.1016/j.ejor.2026.05.046), available online
+1 June 2026, corrected proof. Title: *Chance-constrained battery management for
+electric bus scheduling*. The inspected publisher highlights describe stochastic
+energy, probabilistic SOC limits, branch-and-price, nonlinear partial charging
+and charger capacities. This is an abstract/highlights-level check, not a proof
+or full-method review. Its relevance is the boundary between our deterministic
+certificates and operational uncertainty; no novelty claim for those charging
+features is justified by our prototype.

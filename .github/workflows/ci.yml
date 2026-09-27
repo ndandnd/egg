@@ -64,7 +64,7 @@ jobs:
         run: |
           shopt -s nullglob
           status=0
-          for f in src/cluster/*.sh src/cluster/*.sub; do
+          for f in src/cluster/*.sh src/cluster/*.sub src/cluster/*.sbatch; do
             echo "bash -n ${f}"
             bash -n "${f}" || status=1
           done
@@ -73,3 +73,18 @@ jobs:
       - name: Run the complete test suite (pytest, CBC)
         working-directory: src
         run: python -m pytest tests/ -q
+
+      - name: Reconstruct frozen journal evidence (no optimizer)
+        run: |
+          audit_dir="$(mktemp -d)"
+          python result/cyclic_robustness/20260927-attempt1/review/independent_robustness_audit.py \
+            --repo . --result result/cyclic_robustness/20260927-attempt1/results.json \
+            --report "${audit_dir}/robustness.json"
+          python result/cyclic_replication/20260927-attempt1/review/audit_cyclic_replication.py \
+            --repository . --result result/cyclic_replication/20260927-attempt1/results.json \
+            --out "${audit_dir}/replication.json"
+          # Checks the archived 12/15 result, including its three failures.
+          # A successful audit does not reclassify that qualification as passing.
+          python result/native_recharge/20260927-attempt1/review/audit_native_attempt1.py \
+            --repository . --attempt result/native_recharge/20260927-attempt1 \
+            --out "${audit_dir}/native-attempt1.json"

@@ -195,3 +195,24 @@ extraction/replay exceptions, 23.5736 seconds. Preserve all raw files under
 prior unrun status. Native qualification remains **failed**, with author diagnosis
 and independent review in progress. No cluster or operational solve is admitted
 by partial success. Any corrected run needs a new freeze and separate output.
+
+## Latest V2 native result (independent audit pending)
+
+The separately frozen V2 at `997575d049a66d952a0cb8d79f974f7ba5f4ccf0`
+passed all 15 controls in `result/native_recharge/20260927-attempt2`:
+12 certificates, three expected infeasibilities, 30 native calls, 33.7343s.
+Its 107 raw files and manifest are immutable. Independent variable/session/bound
+review is in progress; do not dispatch cluster qualification before that passes.
+Attempt1 remains 12/15. The cluster protocol and one-CPU/4GB/20-minute script
+are prepared and reviewed but not yet submitted. Read their explicit gates.
+
+## V2 audit gate passed; next explicit action
+
+Independent V2 result audit passed: 27 raw incumbents/1,030 variables, all model
+constraint classes, 27 saved physical witness instances and all objective/bound
+checks; 16 deliberate corruptions rejected. This supersedes the pending-audit
+entry and admits the separately protocolled bounded GRB qualification only.
+The first native attempt remains FAILED 12/15. No operational case is admitted.
+The private 17-service pair has off-depot recharge/missing movement blockers;
+public Sistig/ Figshare data-only intake is underway locally. Manuscript 0.3 is
+being edited; the reviewed/shareable PDF remains 0.2 until rerendered and checked.
