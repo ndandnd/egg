@@ -827,3 +827,29 @@ is an exact prefix of after89,527bytes SHA1377215d64b38be24a2934aff9c1b9962bc2bc
 the new heading occurs once and Saved to Drive was observed. PDF0.4 unchanged.
 This bounded work cycle ends with a precise hourly handoff, preserving the
 user's cheaper-model preference and avoiding idle Astra queue monitoring.
+
+### Independent GRB hull admission and nonlinear release preparation
+
+The prior goal turn was progress, with published physical admission and a
+completed hull job. This turn retrieves/seals job 559602 and independently
+admits all 8 GRB hull controls: 36 calls (21 pricing/15 master), 9 polish transfers,
+24 checks, 44 replayed charging sessions, 48 corruptions rejected. Raw 66-file
+manifest SHA a8e1a883f03c5f8e1d6a710ec70500836f950404b3158331a2ffe668c753acf4
+and review-manifest SHA bc81789519f1f2bb737b7a8f864043f9f58744328805f9f8a64e768bf75538b5
+were verified by the lead. Every control's exact stored-coefficient master,
+global Fenchel bound, retained state, physical replay and target enclosure
+passed. The original bytes and all failed earlier attempts remain intact.
+
+The lead passed the actual pure nonlinear 20+8 admission gate with the pinned
+physical/hull audits. No attempt or optimizer was created by that check. The
+implementation review required a bold-delimiter-only fix for the literal PASS
+marker; no science/code/budget changed. New source publication is required
+before the separate fixed 34-minute pilot. Public hull records omit only 8
+whole licensing-only stdout files, named and hashed outside the raw attempt.
+The full 66-file archive remains local/cluster.
+
+Luna prepared concise manuscript insertions, corrected to keep exact ideal
+bounds and numerical witnesses separate and preserve the original pilot
+intervals. Sol is exploring an exact fixed-route/timing rational repair of one
+archived two-bus witness outside the repo, without changing the fixed pilot.
+Neither that candidate nor the pending nonlinear result is admitted evidence.

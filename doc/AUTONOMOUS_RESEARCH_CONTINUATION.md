@@ -6,95 +6,68 @@ work, GitHub backups and Google Doc updates without repeated approvals.
 
 ## Latest checkpoint — read this before the historical entries below
 
-27 September 2026. Latest published source freeze
-`62976f11ecf35c837b0573079892ae5095e846b9`; admitted CBC physical/exact-flow
-checkpoint `b502e85` and CBC hull checkpoint `805887d`. Sol 6 handles implementation and analysis; Luna Max handles routine
-verification, documentation and monitoring. Astra coordinates and makes major
-scientific decisions. The hourly heartbeat preserves this routing. Avoid broad
-rereads, redundant tests and idle polling.
+27 September 2026. The previous goal turn made concrete progress: audited GRB
+physical evidence was published, the Google Doc updated, and hull job 559602
+completed. This turn independently qualifies that hull result. Sol 6 handles
+implementation/analysis; Luna Max handles bounded review/document/operations;
+Astra coordinates difficult decisions. Avoid broad rereads and duplicate tests.
 
-- Working manuscript 0.4 remains the reviewed 22-page, seven-figure PDF.
-  The first-draft goal is incomplete: matched nonlinear public physical-planner,
-  full-hull and own-price-regret evidence and final scope review remain open.
-- Compact physical attempt3 independently passes all 20 CBC controls: 16
-  numerical certificates and four expected infeasibilities. Its 35 calls took
-  24.707 seconds. Audit covers 31 incumbents, 589 values, 31 physical witnesses
-  and 25 corruption controls. Maximum whole-incumbent correction is
-  1.2261e-12 kWh against the single 1e-8 ceiling. This qualifies only the
-  synthetic compact policy; failed attempt2 is immutable.
-- Exact cardinality-flow attempt1 independently passes both 778-arc, full
-  37-service certificates, with 14 corruption/omission controls. Ideal stored-input
-  lower bounds are 404.924239883878 (depot 15) and 414.394469217211 (depot 16).
-  Keep these separate from native numerical upper witnesses; no exact physical
-  optimum or gap is established. Both calculations took 0.358 seconds.
-- Both sealed audits are in their respective attempt `review/` subtrees. Their
-  manifests were verified by the lead. Reproduce auditors that require live
-  frozen sources in a checkout of dd5ad16 with later evidence copied in and
-  fresh report output paths; never overwrite sealed review reports.
-- V3 hull-policy integration passed independent preflight (96 pure tests) and
-  is published at 03d1da2f3629e722784e97891a8590060fa676ad. The same eight
-  CBC controls ran once: all eight reported certified, 36 native calls,
-  12.267 seconds supervised, no timeout or source drift. The original 62 files
-  are sealed (manifest c3d9da88195161ddd2c054800e4d0a5944998a03b623730a771e7ce9bbb5644b).
-  Independent audit passes all eight, all 21 pricing and 15 master solves,
-  mixtures, retained-policy boundaries and 48 corruption controls. Review
-  manifest SHA c17175c033921553a9f1d58dc5ddb083e412c2fcde3cb4c71ec639b226091166.
-  This qualifies the declared CBC synthetic hull fixtures only. The fake
-  fixture change is prospective and does not alter the old frozen source.
-- Sol 6 has prepared the separate one-cell nonlinear runner: full depot-15
-  case, fixed synthetic curvature, three matched routines, 34-minute total cap.
-  Independent preflight passed (13 pure tests), including saved mixture subsets,
-  useful complete budget-limited evidence, exact GRB input/budget parity and
-  reserved-node exclusion. Runtime caps and inputs remain fixed. It remains
-  NOT-YET-QUALIFIED until the two audited GRB stages have passed.
-- Both new infrastructure preflights passed. Source is published at
-  227da22074201c583dbcfa971863c8f3c41d7391. GRB physical qualification job
-  **559429** completed successfully (exit 0, 49 seconds, one CPU, peak
-  101884 KiB on snavely-cpu-02). All 20 controls report success in 35 native
-  calls. Independent audit now PASSES all 20 controls and 26 corruption checks. The 30-minute allocation, no requeue and
-  reserved-node exclusion were verified. Remote
-  isolated checkout: `/home/nc437/egg-grb-physical-v3-20260927`. Submission
-  sentinel: `grb-physical-submission-20260927`. Do not resubmit this attempt.
-  Local submission evidence: `../research-20260927/cluster/grb-physical-559429/`.
-  Physical GRB audit has passed; a newly published freeze is required for hull. Public nonlinear
-  pilot remains held until both GRB gates pass. Detailed GRB review files must
-  live OUTSIDE the raw attempt because its manifest requires an exact file set.
-  Full transport and all 146 raw manifest entries were verified locally; raw
-  and sibling .launch are installed at canonical paths. The independent review
-  and protocol admission JSON are complete; the lead verified the review
-  manifest and pure admission gate. Public Git preserves 126 scientific files
-  unchanged and omits 20 licensing-only stdout files by declared hash. The
-  full local/cluster archive remains intact and is required by admission.
-  Sol completed a design proof for a stored-native two-bus cut; it remains
-  unimplemented and does not change the fixed pilot. Luna prepared the future
-  nonlinear figure/table plan. The broad campaign remains unadmitted.
-- The old unexecuted flat-pilot2 candidate is shelved, with its exact patch
-  preserved outside Git at `../research-20260927/deferred-flat-pilot2/`;
-  the four tracked files were restored to published HEAD. Do not revive it
-  automatically. No scientific result was removed.
-- The old public checkout remains at 282e00b with its raw pilot outputs intact.
-  The new qualification uses the isolated checkout above. Exclude
-  scaglione-compute-01 and leave other-project held jobs alone.
-- GRB hull job **559602** was submitted once at the new published freeze
-  62976f11ecf35c837b0573079892ae5095e846b9, in the separate detached worktree
-  `/home/nc437/egg-journal-grb-hull-20260927`. Latest scontrol: COMPLETED,
-  exit 0:0, 26 seconds. All 152 physical raw/launch files matched before the
-  pure physical-admission/source preflight passed. Slurm verified one CPU,
-  8 GB, 15 minutes, default partition, no requeue and excluded reserved node.
-  Local receipts: `../research-20260927/cluster/grb-hull-559602/`.
-  A heredoc preparation error stopped before any intent/submission; the
-  verified continuation submitted exactly once. No scientific retry occurred.
-  **Next bounded work package:** retrieve and seal this completed hull attempt
-  and sibling .launch, obtain final scoped sacct, then assign Luna an independent
-  same-eight-controls result audit outside the raw attempt. Preserve licensing
-  stdout locally. Do not resubmit, launch the public nonlinear pilot, or alter
-  its predeclared model before the hull gate passes and evidence is published.
-- Google Doc includes the verified GRB physical and CBC hull milestone. Saved
-  to Drive; the 88,414-byte before export is an exact prefix of the 89,527-byte
-  after export, and the new heading occurs once. After SHA256:
-  1377215d64b38be24a2934aff9c1b9962bc2bce58bba58f5763654f6884aaccc.
-  The PDF remains byte-identical. Verification note:
-  `../research-20260927/agent-notes/google-doc-verified-grb-hull-20260927.md`.
+- Manuscript 0.4 remains the reviewed 22-page/seven-figure PDF. The goal is
+  incomplete: matched nonlinear public-case evidence and the bundled manuscript,
+  figure/table revision plus final scientific/layout review remain.
+- GRB physical job 559429 (source 227da22074201c583dbcfa971863c8f3c41d7391)
+  independently passes 20 controls, 35calls31witnesses26corruptions. Its admission
+  is published at 62976f11ecf35c837b0573079892ae5095e846b9. Original146-file
+  manifest14ce0b4c04eeaeb6b8bafe72f252a9de7f92a723023b11f2c4a82dab83f06adf.
+- GRB hull job 559602 at source 62976f11ecf35c837b0573079892ae5095e846b9
+  independently PASSES all 8 controls, 36 calls (21 pricing/15 master), 9 polish
+  transfers24checks and48corruptions. Completed0:0 in26seconds, 1CPU8GB.
+  Original66-file manifest a8e1a883f03c5f8e1d6a710ec70500836f950404b3158331a2ffe668c753acf4.
+  Review manifest bc81789519f1f2bb737b7a8f864043f9f58744328805f9f8a64e768bf75538b5.
+  Lead verified both manifests and the actual pure nonlinear admission gate.
+  No public nonlinear attempt or optimizer has yet been created/run.
+- Hull review: doc/NATIVE_V3_GRB_HULL_RESULT_AUDIT_20260927.md and
+  research-20260927/agent-notes/grb-hull-result-review/. Nonlinear admission:
+  doc/SISTIG_NONLINEAR_PILOT_ADMISSION_20260927.json, SHA
+  07a21c5aa0d6cfd5f80f78c4d3fac569680e39c06f9a7c4df37e82cf919bb334.
+  Both gate audit JSONs are copied byte-identically into result publication
+  siblings for their evidence pins; no review files are placed inside raw.
+- Full hull transport and receipts: ../research-20260927/cluster/grb-hull-559602/;
+  remote /home/nc437/egg-journal-grb-hull-20260927. Tar SHA
+  3e06140f72d5f511b30e730712eb1a32a2b93549e2f3e2b1cd7675a7b92f2924.
+  Public hull subset retains 58 manifested files and unchanged manifest;8
+  complete license-only stdout files remain private by documented hash. All
+  five launch receipts and two submission sentinels are preserved. Never retry.
+- Next: publish admitted source, then launch the ONE fixed nonlinear depot 15
+  pilot in a new isolated worktree. Protocol and source are already reviewed:
+  37 services, 30-hour finite block, synthetic quadratic F, planner/hull/own-price
+  stages 240/1440/240 seconds, total 2040 seconds. Slurm 1 CPU, 8 GB, 36 minutes, no requeue,
+  default partition, exclude scaglione-compute-01. Keep fixed inputs/caps and
+  signed intervals. No exact-zero, operational tariff/daily-feasibility claim.
+  Pure gate/source check may precede sbatch; freeze creates the exclusive attempt
+  and runs exactly once INSIDE the reviewed sbatch. No broad sensitivity run.
+- The nonlinear implementation review had a bold-marker formatting mismatch
+  with the gate's literal **PASS** check; only the delimiter was corrected.
+  No algorithm, test, budget, protocol or scientific review conclusion changed.
+  The batch env does not source the Slurm profile; no batch edit is needed.
+  Remote submission shells must load the site profile before enabling nounset.
+- Sol is separately checking whether one archived depot 15 two-bus witness can
+  be repaired into an exact rational witness with unchanged routes/times.
+  Candidate-only outer work area: ../research-20260927/exact-public-witness-candidate/.
+  No new scheduling/cluster solve, pilot change or exact-feasibility claim yet.
+- paper/NEXT_REVISION_EVIDENCE_INSERTIONS_20260927.md holds concise prospective
+  insertions for exact cardinality-flow bounds 404.924239883878/414.394469217211
+  and qualifications. Preserve original flat-pilot intervals and Figure7. The
+  exact ideal fleet >= 2 obstruction and numerical two-bus witnesses remain
+  distinct; no exact minimum fleet, physical cost optimum or gap is inferred.
+- Google Doc latest verified append: 89, 527 bytes, SHA
+  1377215d64b38be24a2934aff9c1b9962bc2bce58bba58f5763654f6884aaccc;
+  prior 88, 414 bytes is exact prefix, heading once, Saved to Drive. Update at the
+  next meaningful combined milestone; PDF 0.4 remains unchanged.
+- Hourly heartbeat advance-egg-journal-research remains active with cheaper-model
+  routing. Preserve private GIRO data, all failed attempts and other-project jobs.
+  Keep PR 56 draft/unmerged. Never consume reset credits without explicit per-credit
+  approval. The old flat-pilot2 candidate remains shelved; no revival by default.
 
 ## Objective and completion standard
 
@@ -738,3 +711,97 @@ integration gate, with its own source manifest and controls, not part of the
 current20-control patch. The failed attempt2 archive stays immutable.
 Sol6_cardinality_bound continues the independent exact-flow implementation;
 LunaMax document worker is completing the next GoogleDoc append.
+
+## Archived checkpoint before GRB hull admission
+
+### Prior checkpoint (superseded)
+
+27 September 2026. Latest published source freeze
+`62976f11ecf35c837b0573079892ae5095e846b9`; admitted CBC physical/exact-flow
+checkpoint `b502e85` and CBC hull checkpoint `805887d`. Sol 6 handles implementation and analysis; Luna Max handles routine
+verification, documentation and monitoring. Astra coordinates and makes major
+scientific decisions. The hourly heartbeat preserves this routing. Avoid broad
+rereads, redundant tests and idle polling.
+
+- Working manuscript 0.4 remains the reviewed 22-page, seven-figure PDF.
+  The first-draft goal is incomplete: matched nonlinear public physical-planner,
+  full-hull and own-price-regret evidence and final scope review remain open.
+- Compact physical attempt3 independently passes all 20 CBC controls: 16
+  numerical certificates and four expected infeasibilities. Its 35 calls took
+  24.707 seconds. Audit covers 31 incumbents, 589 values, 31 physical witnesses
+  and 25 corruption controls. Maximum whole-incumbent correction is
+  1.2261e-12 kWh against the single 1e-8 ceiling. This qualifies only the
+  synthetic compact policy; failed attempt2 is immutable.
+- Exact cardinality-flow attempt1 independently passes both 778-arc, full
+  37-service certificates, with 14 corruption/omission controls. Ideal stored-input
+  lower bounds are 404.924239883878 (depot 15) and 414.394469217211 (depot 16).
+  Keep these separate from native numerical upper witnesses; no exact physical
+  optimum or gap is established. Both calculations took 0.358 seconds.
+- Both sealed audits are in their respective attempt `review/` subtrees. Their
+  manifests were verified by the lead. Reproduce auditors that require live
+  frozen sources in a checkout of dd5ad16 with later evidence copied in and
+  fresh report output paths; never overwrite sealed review reports.
+- V3 hull-policy integration passed independent preflight (96 pure tests) and
+  is published at 03d1da2f3629e722784e97891a8590060fa676ad. The same eight
+  CBC controls ran once: all eight reported certified, 36 native calls,
+  12.267 seconds supervised, no timeout or source drift. The original 62 files
+  are sealed (manifest c3d9da88195161ddd2c054800e4d0a5944998a03b623730a771e7ce9bbb5644b).
+  Independent audit passes all eight, all 21 pricing and 15 master solves,
+  mixtures, retained-policy boundaries and 48 corruption controls. Review
+  manifest SHA c17175c033921553a9f1d58dc5ddb083e412c2fcde3cb4c71ec639b226091166.
+  This qualifies the declared CBC synthetic hull fixtures only. The fake
+  fixture change is prospective and does not alter the old frozen source.
+- Sol 6 has prepared the separate one-cell nonlinear runner: full depot-15
+  case, fixed synthetic curvature, three matched routines, 34-minute total cap.
+  Independent preflight passed (13 pure tests), including saved mixture subsets,
+  useful complete budget-limited evidence, exact GRB input/budget parity and
+  reserved-node exclusion. Runtime caps and inputs remain fixed. It remains
+  NOT-YET-QUALIFIED until the two audited GRB stages have passed.
+- Both new infrastructure preflights passed. Source is published at
+  227da22074201c583dbcfa971863c8f3c41d7391. GRB physical qualification job
+  **559429** completed successfully (exit 0, 49 seconds, one CPU, peak
+  101884 KiB on snavely-cpu-02). All 20 controls report success in 35 native
+  calls. Independent audit now PASSES all 20 controls and 26 corruption checks. The 30-minute allocation, no requeue and
+  reserved-node exclusion were verified. Remote
+  isolated checkout: `/home/nc437/egg-grb-physical-v3-20260927`. Submission
+  sentinel: `grb-physical-submission-20260927`. Do not resubmit this attempt.
+  Local submission evidence: `../research-20260927/cluster/grb-physical-559429/`.
+  Physical GRB audit has passed; a newly published freeze is required for hull. Public nonlinear
+  pilot remains held until both GRB gates pass. Detailed GRB review files must
+  live OUTSIDE the raw attempt because its manifest requires an exact file set.
+  Full transport and all 146 raw manifest entries were verified locally; raw
+  and sibling .launch are installed at canonical paths. The independent review
+  and protocol admission JSON are complete; the lead verified the review
+  manifest and pure admission gate. Public Git preserves 126 scientific files
+  unchanged and omits 20 licensing-only stdout files by declared hash. The
+  full local/cluster archive remains intact and is required by admission.
+  Sol completed a design proof for a stored-native two-bus cut; it remains
+  unimplemented and does not change the fixed pilot. Luna prepared the future
+  nonlinear figure/table plan. The broad campaign remains unadmitted.
+- The old unexecuted flat-pilot2 candidate is shelved, with its exact patch
+  preserved outside Git at `../research-20260927/deferred-flat-pilot2/`;
+  the four tracked files were restored to published HEAD. Do not revive it
+  automatically. No scientific result was removed.
+- The old public checkout remains at 282e00b with its raw pilot outputs intact.
+  The new qualification uses the isolated checkout above. Exclude
+  scaglione-compute-01 and leave other-project held jobs alone.
+- GRB hull job **559602** was submitted once at the new published freeze
+  62976f11ecf35c837b0573079892ae5095e846b9, in the separate detached worktree
+  `/home/nc437/egg-journal-grb-hull-20260927`. Latest scontrol: COMPLETED,
+  exit 0:0, 26 seconds. All 152 physical raw/launch files matched before the
+  pure physical-admission/source preflight passed. Slurm verified one CPU,
+  8 GB, 15 minutes, default partition, no requeue and excluded reserved node.
+  Local receipts: `../research-20260927/cluster/grb-hull-559602/`.
+  A heredoc preparation error stopped before any intent/submission; the
+  verified continuation submitted exactly once. No scientific retry occurred.
+  **Next bounded work package:** retrieve and seal this completed hull attempt
+  and sibling .launch, obtain final scoped sacct, then assign Luna an independent
+  same-eight-controls result audit outside the raw attempt. Preserve licensing
+  stdout locally. Do not resubmit, launch the public nonlinear pilot, or alter
+  its predeclared model before the hull gate passes and evidence is published.
+- Google Doc includes the verified GRB physical and CBC hull milestone. Saved
+  to Drive; the 88,414-byte before export is an exact prefix of the 89,527-byte
+  after export, and the new heading occurs once. After SHA256:
+  1377215d64b38be24a2934aff9c1b9962bc2bce58bba58f5763654f6884aaccc.
+  The PDF remains byte-identical. Verification note:
+  `../research-20260927/agent-notes/google-doc-verified-grb-hull-20260927.md`.

@@ -1,6 +1,6 @@
 # Independent implementation preflight review
 
-27 September 2026. **PASS — implementation preflight only.** This review
+27 September 2026. **PASS** — implementation preflight only. This review
 covers the prospective one-cell controller and its protocol; it does not admit
 or authorize a public run. The fresh same-source GRB physical-20 and hull-8
 qualification gates have not run, and no nonlinear pilot or optimizer was
