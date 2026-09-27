@@ -35,11 +35,30 @@ styles.add(ParagraphStyle(name='PaperRef',fontName=body,fontSize=8.4,leading=11.
 styles.add(ParagraphStyle(name='PaperMeta',fontName=italic,fontSize=8.8,leading=12,spaceAfter=12,textColor=colors.HexColor('#53606b')))
 
 def markup(s):
+    links=[]
+    def markdown_link(match):
+        label,target=match.group(1),match.group(2)
+        safe_label=escape(label)
+        if target.startswith(('https://','http://')):
+            safe_target=escape(target, {'"':'&quot;'})
+            rendered=f'<link href="{safe_target}" color="#156082">{safe_label}</link>'
+        else:
+            rendered=safe_label  # local evidence path is not a portable PDF target
+        links.append(rendered)
+        return f'@@MDLINK{len(links)-1}@@'
+    s=re.sub(r'\[([^\]]+)\]\(([^)\s]+)\)',markdown_link,s)
     s=escape(s.replace('>=','≥').replace('<=','≤').replace('Delta','Δ').replace('lambda','λ'))
     for token, replacement in [('F_n','F<sub>n</sub>'),('CH_n','CH<sub>n</sub>'),('r_n','r<sub>n</sub>'),('E^2','E<super>2</super>'),('L^2','L<super>2</super>'),('p_s','p<sub>s</sub>'),('L_D','L<sub>D</sub>'),('U_D','U<sub>D</sub>'),('L_CH','L<sub>CH</sub>'),('U_CH','U<sub>CH</sub>'),('F*','F<super>*</super>'),('x^2','x<super>2</super>'),('e^2','e<super>2</super>'),('l^2','l<super>2</super>'),(')^2',')<super>2</super>')]:
         s=s.replace(token,replacement)
     s=re.sub(r'\*\*([^*]+)\*\*',r'<b>\1</b>',s)
-    s=re.sub(r'(https?://[^\s<]+)',r'<link href="\1" color="#156082">\1</link>',s)
+    def bare_url(match):
+        url=match.group(0).rstrip('.,;:')
+        tail=match.group(0)[len(url):]
+        safe_url=escape(url, {'"':'&quot;'})
+        return f'<link href="{safe_url}" color="#156082">{url}</link>{tail}'
+    s=re.sub(r'https?://[^\s<]+',bare_url,s)
+    for index,rendered in enumerate(links):
+        s=s.replace(f'@@MDLINK{index}@@',rendered)
     return s
 
 class PageCanvas(canvas.Canvas):
@@ -115,6 +134,6 @@ out=args.output.resolve()
 out.parent.mkdir(parents=True,exist_ok=True)
 doc=SimpleDocTemplate(str(out),pagesize=(612,792),rightMargin=56,leftMargin=56,topMargin=45,bottomMargin=51,
  title='When marginal electricity prices cannot coordinate electric-bus schedules',author='EGG Research',
- subject='Working research manuscript; analytical core verified, operational study in preparation')
+ subject='Working analytical and conditional timetable manuscript; case-specific evidence under review')
 doc.build(story,canvasmaker=PageCanvas)
 print(out)

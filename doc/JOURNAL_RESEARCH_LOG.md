@@ -903,3 +903,38 @@ The original Google Doc received one verified appendix covering the exact enclos
 ### Focused manuscript evidence and literature revision
 
 Sol updated the editable manuscript with the admitted exact depot-15 fleet/flat/nonlinear bounds, their energy/Fenchel derivation and provenance, GRB qualification, preserved signed numerical endpoints, and distinct depot-16 scope. Original Table 2 numeric rows and Figure 7 path were preserved. A focused primary-source literature note adds bus-specific Lagrangian decomposition, stochastic battery-policy and preprint aggregator-pricing context with explicit access limits; no priority claim follows from search absence. Luna's focused text review passed at manuscript SHA 38487c3ef68691f105005bef44ba1e2f5761cab25b8891d7b6b1e7fa7e1327b5. Scope/text review copies and manifests are under research-20260927/agent-notes/manuscript-v05-{scope,text}-review/. No PDF was rendered; the manuscript still treats the completed v2 scientific comparison as audit-pending.
+
+### V2 strict-budget finding and separate diagnostic scope
+
+The independent auditor found aggregate hull polishing of 5.1909049 seconds against the unchanged 5.0-second cap; the strict helper rejects it. Root preserves this as a primary protocol-compliance failure, without cap widening, relabeling or automatic new experiment. Numerical certificate/physical reconstruction is still under audit. A separate scope reviewer agrees that, only if independently validated, the returned conditional numerical intervals may be disclosed as an explicitly off-protocol secondary diagnostic. Such reporting must preserve signed intervals, bounded-incumbent regret and the timing deviation, and must make no prospective runtime, exact-gap/optimum or optimal-public-fleet-support claim. No secondary figure has been rendered or scientific value admitted at this checkpoint.
+
+
+### Nonlinear v2 independent reconstruction and secondary reporting decision
+
+Published at 0ce36c1. Job559907 completed, but strict frozen protocol compliance
+fails: aggregate hull polishing5.190904918592423s exceeds5s. Conditional numerical
+reconstruction passes independently; six targeted corruptions reject and exact
+public-copy mode retains all scientific evidence. Sealed audit manifest
+2edb2a60a1efdaf37159d6934e317700953e5013284517d5139fc9a18e726e61 was checked by lead.
+The signed gap remains unresolved at five; positive own-price regret belongs only
+to a named bounded incumbent. Reporting is off-protocol secondary only, per
+SISTIG_NONLINEAR_V2_SECONDARY_REPORTING_20260927.md. No cap waiver or new attempt.
+Final paper science review found the contribution coherent for expert user review;
+Sol is completing scoped clarity fixes and one bundled v05 render. Final layout
+review, combined Doc update and release backup remain.
+
+
+### Reviewed draft 0.5 assembled
+
+Independent final science/layout review passes all27pages, with pages1–6 rechecked
+after the stale abstract sentence was corrected. Eight figures and five tables
+are complete; Table4 displays all five v2 intervals with outward rounding, failed
+protocol and named-incumbent scope retained. Canonical and named v05-reviewed PDFs
+are byte-identical to the accepted r2candidate: SHA
+8c8192c6259b5294449c655047313f7799ee1aa74092fc669748362bbfdad8eb,1954122bytes.
+The old reviewedv04 remains unchanged. Final review and artifact release manifest
+are under research-20260927/agent-notes/manuscript-v05-final-review/ and
+paper/RELEASE_V05_20260927.json. No further actionable claim/layout issues remain
+for expert user review; this is not journal-submission clearance. The23:13:54UTC
+queue check found no active EGG jobs and left other-project held jobs untouched.
+Final GitHub/GoogleDoc release records are being completed; no further experiment.

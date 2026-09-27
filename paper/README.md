@@ -1,20 +1,24 @@
 # EGG working manuscript
 
-`manuscript.md` is the editable scientific draft. `CLAIM_EVIDENCE_LEDGER.md`
-tracks what is established and what remains. `related-work/` contains source
-checks and BibTeX. `figures/` contains PNG, SVG and vector PDF exports plus
-provenance. `../output/pdf/egg-journal-working-draft.pdf` is the reviewed
-working version 0.4 PDF: 22 pages, seven figures, SHA-256
+`manuscript.md` is the editable research draft 0.5: 27 pages, eight figures and
+five tables in the independently reviewed PDF. Its SHA-256 is
+`a97a7f9267d9aa69fdd5d9975bf5282eda47f0aaa10760d270ef86c509f3c88e`.
+The reviewed PDF is `../output/pdf/egg-journal-working-draft-v05-reviewed.pdf`
+(SHA-256 `8c8192c6259b5294449c655047313f7799ee1aa74092fc669748362bbfdad8eb`).
+The byte-identical canonical `../output/pdf/egg-journal-working-draft.pdf` is
+ready for expert user review, not journal submission clearance. The release
+pins are in `RELEASE_V05_20260927.json`. `CLAIM_EVIDENCE_LEDGER.md` tracks claim scope,
+`related-work/` contains source checks and BibTeX, and `figures/` contains
+PNG/SVG/vector PDF exports and provenance.
+
+The preserved `../output/pdf/egg-journal-working-draft-v04-reviewed.pdf` is the
+historically reviewed version 0.4: 22 pages, seven figures, SHA-256
 `acae4e1bc915fdf7e7a4cafcd997b91aa6941afe73a9075b37cb6b50514663ca`.
 `MANUSCRIPT_V04_LAYOUT_REVIEW_20260927.md` records its visual and text-integrity
 checks. The prior version 0.3 PDF (17 pages, six figures; SHA-256
 `fac524aff668c2c1d81d027bf67a74894ad943953bf0638ca09d0ab51d035500`) remains
-in Git history. Public nonlinear timetable evidence, operational calibration
-and final whole-manuscript scientific review remain open.
-The editable source is version 0.4, adding the independently reviewed quadratic
-regret-radius bound and appendices. The separate R2 pagination candidate is
-`../output/pdf/egg-journal-working-draft-v04-r2-candidate.pdf`; its References
-page break is retained in the reviewed render.
+in Git history. The older version 0.4 R2 pagination candidate is
+`../output/pdf/egg-journal-working-draft-v04-r2-candidate.pdf`.
 
 Reproduce figures with Python, NumPy and Matplotlib:
 
@@ -30,13 +34,16 @@ replication results, writes `cyclic_robustness` and `cyclic_replication` in
 PNG/SVG/PDF, and records input/script hashes in
 `figures/extension_provenance.json`. It displays all 16 robustness cases and
 the first 80 of the 86 prospectively declared replication sizes, retaining
-both planner optima at ties. Neither script runs a scientific optimizer.
+both planner optima at ties. Neither script runs a scientific optimizer. Draft
+0.5 also uses the audited Figure 8 exports in
+`figures/public_nonlinear_evidence.*`; input and audit hashes are in
+`figures/public_nonlinear_evidence_provenance.json`.
 
 Render equation images and a separate reviewed working PDF with ReportLab:
 
 ```sh
 python paper/render_equations.py
-python paper/render_manuscript.py --output output/pdf/egg-journal-working-draft-v04-reviewed.pdf
+python paper/render_manuscript.py --output output/pdf/NEW-v05-review-candidate.pdf
 ```
 
 The renderer uses locally available DejaVu Serif when found and otherwise
@@ -45,7 +52,8 @@ review-PDF generator is not a journal-specific typesetting template. Use an
 explicit `--output` path to keep pre-review renders identifiable. Publication
 format and authorship will be set once the paper's evidence and destination are
 ready.
-The final submission has not been made.
+The final submission has not been made. Use a new output path to preserve both
+reviewed versions and the canonical PDF.
 
 The exact cyclic audit is independently rerunnable from the repository root:
 
@@ -97,35 +105,46 @@ operational qualification.
 and visual QA. Its appended principal-researcher check records the 14-page version 0.2 PDF hash and all-page layout review. The original reviewer authored
 the reuse experiment and declares that conflict;
 the cyclic and reuse artifact audits above were performed by a non-author.
-The manuscript remains a working draft pending credible timetable evidence and
-renewed manuscript/visual review. Native recharge qualification passed all 15
-controls on corrected CBC V2 and the identical GRB replication; each has an
-independent raw-variable, physical-witness and bound audit. First CBC attempt1
-remains FAILED 12/15. See the corresponding `result/native_recharge/` reviews.
-GRB licensing stdout is retained only in the complete external original archive;
-its public access note and manifest disclose all omissions. The separate
-half-minute and compact physical gates have passed independent result audits.
-The corrected native hull gate returned eight certificates and passed independent
-result review; its original failed attempt remains preserved. The first public pricing pilot completed both full37-service scenarios and passed independent audit. Both are bounded/FEASIBLE, with two-bus witnesses; neither proves cost optimality. See `result/sistig_pricing/20260927-grb-job557543-attempt1/review/REVIEW.md`. The compact-hull integration separately passed8/8 controls and independent audit. Figure 7 in the reviewed working PDF 0.4 shows both public witnesses; its layout and source identities are recorded in MANUSCRIPT_V04_LAYOUT_REVIEW_20260927.md.
-The excellent-first-draft goal is active and incomplete.
+The public timetable section is now in the editable draft. It distinguishes
+exact ideal stored-input evidence from tolerance-qualified native numerical
+results. The depot-15 exact rational two-bus witness and one-bus obstruction
+prove a minimum fleet of two for that declared finite-block ideal model; its
+flat-cost enclosure and analytic nonlinear `CH <= D` enclosure do not identify
+an optimum or a positive nonlinear gap. Depot 16 has an exact at-least-two
+obstruction and lower bound, but its two-bus upper witness remains numerical.
+See `../doc/SISTIG_EXACT_PUBLIC_WITNESS_ADMISSION_20260927.md`,
+`../doc/SISTIG_EXACT_NONLINEAR_ENCLOSURE_20260927.md`, and the independently
+reconstructed flow certificate under
+`../result/sistig_cardinality_flow/20260927-attempt1/review/`.
 
-The audits published in [PR #56](https://github.com/ndandnd/egg/pull/56) at
-freeze [b502e85](https://github.com/ndandnd/egg/commit/b502e85f4e76ad2fc297199b7c51a0f0022f23d5)
-add compact physical attempt 3 ([review](../result/native_pathflow/20260927-attempt3/review/REVIEW.md))
-and exact cardinality-flow evidence
-([review](../result/sistig_cardinality_flow/20260927-attempt1/review/REVIEW.md)).
-Attempt 3 passes 20/20 synthetic compact-policy controls: 16 certificates and
-four expected infeasibilities, 35 native calls, 24.707 seconds, 589 raw
-incumbent variables, 31 physical witnesses, 25 corruption controls, and maximum
-numerical correction 1.2261e-12 kWh against a 1e-8 ceiling. It prospectively
-corrects the issue behind attempt 2; that failed record remains unchanged. The
-cardinality ideal stored-input bounds are 404.924239883878 (P15) and
-414.394469217211 (P16); earlier one-path matching bounds are 301.315343883878
-and 305.633807883878. The separate numerical upper witnesses are 408.533137 and
-433.746086. No exact physical optimum or physical gap is established. The new eight-control CBC hull run also passed
-independent result audit (21 pricing calls, 15 masters and 48 corruption
-checks), qualifying the declared synthetic fixtures only. These results await the next bundled
-manuscript revision; the current manuscript and reviewed PDF remain unchanged.
-The verified appendix [“Verified compact qualification and stronger ideal fleet
-bounds”](https://docs.google.com/document/d/1NmPC_qo_uOnA48dV6Ibhs3Pj9EgOD-oJTBuVi41p6bg/edit?tab=t.0)
-is saved to Drive.
+The compact physical and full-fleet hull controls passed separate independent
+CBC and GRB audits (20/20 physical and 8/8 hull on each backend). Figure 7 and
+Table 3 preserve the original flat-price public pilot's numerical two-bus
+incumbents without claiming cost optimality. Figure 8 and Table 4 report the
+independently reconstructed nonlinear attempt 2 **only as an off-protocol
+secondary diagnostic**: aggregate hull polishing took 5.190904918592423 s
+against the frozen 5.0 s cap. Its signed gap is unresolved at five, and positive
+own-price regret belongs only to a named bounded planner incumbent, not an
+optimal fleet. Attempt 1's earlier planner-cap failure remains unchanged. See
+`../doc/SISTIG_NONLINEAR_V2_SECONDARY_REPORTING_20260927.md` and the public
+machine audit at
+`../research-20260927/agent-notes/nonlinear-v2-result-review/audit-report-public.json`.
+Neither diagnostic establishes a calibrated market effect, operational savings,
+recurring daily feasibility, or a protocol-passing nonlinear experiment.
+
+To verify the published copy's exact omission policy without a solver, run this
+from the repository root:
+
+```sh
+python3 research-20260927/agent-notes/nonlinear-v2-result-review/test_public_copy_mode.py
+```
+
+The public copy omits only three complete licensing-only stdout files, as pinned
+in `../result/sistig_nonlinear/20260927-attempt2-publication/PUBLIC_MANIFEST.json`.
+The 28 other raw-manifest entries, original manifest and wrapper receipt remain
+unchanged. The complete private archive is preserved separately. A missing
+scientific input fails the public-copy check. Figure 8 is generated only from a
+SHA-pinned public audit with numerical PASS, protocol FAIL and an explicit
+off-protocol scope argument; its renderer invokes no optimizer and refuses to
+overwrite existing exports. The reviewed v0.5 PDF is ready for expert user
+review under these stated limitations.
