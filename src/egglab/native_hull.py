@@ -445,23 +445,32 @@ def import_pool(case, previous, expected_previous, budget, previous_index=None):
     return columns
 
 
-def state_identity(case, market, arm, state_index, budget):
+def state_identity(case, market, arm, state_index, budget, oracle_id=None):
+    metadata = {} if oracle_id is None else {"pricing_oracle": oracle_id}
+    if oracle_id is not None and (not isinstance(oracle_id, str) or not oracle_id.strip()):
+        raise ValueError("Explicit pricing oracle requires a nonempty identity")
     return nr.digest({"schema": SCHEMA, "case": case.identity(), "market": market.identity(),
                       "arm": arm, "state_index": state_index, "budget": asdict(budget),
-                      "extraction_policy": nr.EXTRACTION_POLICY})
+                      "extraction_policy": nr.EXTRACTION_POLICY, **metadata})
 
 
 def certify(case, market, budget=Budget(), *, arm="cold", state_index=0,
-            previous=None, expected_previous=None, record=None):
+            previous=None, expected_previous=None, record=None, pricing_oracle=None, oracle_id=None):
     nr.validate_case(case)
     validate_market(case, market)
     validate_budget(budget)
+    if (pricing_oracle is None) != (oracle_id is None) or (pricing_oracle is not None and not callable(pricing_oracle)):
+        raise ValueError("Explicit pricing oracle requires both a callable and its identity")
+    metadata = {} if oracle_id is None else {"pricing_oracle": oracle_id}
+    oracle = nr.solve_pricing if pricing_oracle is None else pricing_oracle
     if arm not in ("cold", "retained") or type(state_index) is not int or state_index < 0:
         raise ValueError("Invalid hull arm/state")
     if (arm == "cold" or state_index == 0) and (previous is not None or expected_previous is not None):
         raise ValueError("Fresh state cannot import a predecessor")
     deadline = time.monotonic()+budget.wall_seconds
-    identity = state_identity(case, market, arm, state_index, budget)
+    identity = state_identity(case, market, arm, state_index, budget, oracle_id)
+    if previous is not None and previous.get("pricing_oracle") != oracle_id:
+        raise ValueError("Retained predecessor pricing oracle identity differs")
     columns = (import_pool(case, previous, expected_previous, budget, state_index-1)
                if arm == "retained" and state_index > 0 else [])
     counts = {"pricing_requests": 0, "seed_requests": 0, "master_calls": 0,
@@ -469,7 +478,7 @@ def certify(case, market, budget=Budget(), *, arm="cold", state_index=0,
     best_lower, best_mixture = None, None
     points = [[0.0]*len(market.a)]
     emit(record, {"event": "state_start", "state_identity": identity, "market_identity": market.identity(),
-                  "imported_column_keys": [c["key"] for c in columns], "fresh_bounds": True})
+                  "imported_column_keys": [c["key"] for c in columns], "fresh_bounds": True, **metadata})
     def consider_mixture(mix):
         nonlocal best_mixture
         if best_mixture is None or Q(mix["objective_exact"]) < Q(best_mixture["objective_exact"]):
@@ -481,20 +490,23 @@ def certify(case, market, budget=Budget(), *, arm="cold", state_index=0,
         index = counts["pricing_requests"]
         counts["pricing_requests"] += 1
         counts["seed_requests"] += int(seed)
-        emit(record, {"event": "pricing_request", "call": index, "seed": seed, "prices": prices})
+        emit(record, {"event": "pricing_request", "call": index, "seed": seed, "prices": prices, **metadata})
         def oracle_record(event):
             emit(record, {"event": "pricing_native", "call": index, "detail": event})
         remaining = deadline-time.monotonic()
         if remaining <= 0:
             raise LimitReached("time budget exhausted before pricing")
-        result = nr.solve_pricing(case, prices,
+        result = oracle(case, prices,
             nr.Budget(backend=budget.backend, threads=1, phase_seconds=budget.phase_seconds,
                       wall_seconds=remaining, max_rounds=1), record=oracle_record)
         emit(record, {"event": "pricing_result", "call": index, "result": result})
+        if oracle_id is not None and (result.get("formulation") != oracle_id
+                or not isinstance(result.get("plan"), dict) or result["plan"].get("formulation") != oracle_id):
+            raise ValueError("Explicit pricing oracle result/plan formulation mismatch")
         if (result.get("status") not in ("certified", "bounded") or result.get("case_identity") != case.identity()
                 or result.get("prices") != list(prices)):
             raise ValueError("Unresolved/infeasible/mismatched complete-fleet pricing result")
-        column = native_column(case, result["plan"], {"state_identity": identity, "pricing_call": index})
+        column = native_column(case, result["plan"], {"state_identity": identity, "pricing_call": index, **metadata})
         objective = column["ops_cost"]+sum(p*e for p, e in zip(prices, column["load"]))
         lower, upper = nr.admit_bound(result["stats"], objective)
         if result.get("lower") != lower or abs(result.get("upper", math.inf)-upper) > OBJECTIVE_TOL:
@@ -539,7 +551,7 @@ def certify(case, market, budget=Budget(), *, arm="cold", state_index=0,
     result = {"schema": SCHEMA, "status": status, "reason": reason, "state_identity": identity,
               "physical_identity": case.identity(), "market_identity": market.identity(),
               "extraction_policy": nr.EXTRACTION_POLICY, "arm": arm, "state_index": state_index,
-              "columns": columns, "counts": counts, "epsilon": budget.epsilon}
+              "columns": columns, "counts": counts, "epsilon": budget.epsilon, **metadata}
     if best_lower:
         result["lower_certificate"] = best_lower
         result["lower"] = best_lower["lower"]

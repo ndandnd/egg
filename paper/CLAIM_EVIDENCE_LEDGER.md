@@ -118,7 +118,8 @@ The nineteen-control exact source-time extension and twenty-control compact
 formulation each passed independent numerical/raw/physical audits (22 and25
 corruptions rejected). Compact integer feasible-set equivalence does not imply
 identical LP relaxations or solver performance. The corrected native-hull V2
-returned8/8 certificates, with independent result review pending. First-run
+returned8/8 certificates and passed independent result review (31 corruptions
+rejected;21 pricing minima,15 LP minima and all9 polishing transfers checked). First-run
 hull failure2certified/4exhausted/2blocked remains unchanged.
 
 The reserved-pair participant derivation was independently checked against all88

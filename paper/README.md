@@ -10,6 +10,9 @@ The reviewed PDF is version 0.3: 17 pages, six figures, SHA-256
 layout check. This working draft includes native-model qualification, public
 source intake and explicit participant normalization. Public economic evidence
 and final whole-manuscript scientific review remain open.
+The editable source is now version0.4 in preparation, adding the independently
+reviewed quadratic regret-radius bound. The PDF remains the reviewed0.3 artifact
+until a fresh render and layout review.
 
 Reproduce figures with Python, NumPy and Matplotlib:
 
@@ -97,7 +100,7 @@ remains FAILED 12/15. See the corresponding `result/native_recharge/` reviews.
 GRB licensing stdout is retained only in the complete external original archive;
 its public access note and manifest disclose all omissions. The separate
 the half-minute and compact physical gates have passed independent result audits.
-The corrected native hull gate returned eight certificates and is under independent
+The corrected native hull gate returned eight certificates and passed independent
 result review; its original failed attempt remains preserved. The public pricing
 pilot is separately reviewed and frozen before execution.
 The excellent-first-draft goal is active and incomplete.

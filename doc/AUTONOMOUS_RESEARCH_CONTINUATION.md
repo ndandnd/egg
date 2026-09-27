@@ -375,3 +375,32 @@ Slurm wrapper records a560soutercap supervisorreceipt. No public run yet.
 The compact hull integration is separately authored with an explicit injected
 oracle and distinct retained-state identity; it has no optimizer run and awaits
 independent preflight. Do not confuse it with the already executed indexedV2.
+
+## ACTIVE PUBLIC PILOT — job 557543
+
+The independently reviewed complete public pricing pilot is now submitted,
+not merely planned. Source freeze `282e00b80b6fd9457006429b089269b2a9e2be92`.
+Unicorn isolated detached checkout `/home/nc437/egg-journal-public-20260927`.
+Job557543, `egg-sistig-pilot`, default_partition, one CPU/8GB/12minutes,
+no requeue. Effective `ExcNodeList=scaglione-compute-01` verified by scontrol.
+Initial state PENDING(Priority); no user action required. Do not resubmit.
+Sentinel `public-pricing-submission-20260927/{INTENT,SUBMITTED,SCONTROL}.txt`
+and local outer `research-20260927/cluster/public-submission.txt` preserve
+submission evidence. Expected unique result path:
+`result/sistig_pricing/20260927-grb-job557543-attempt1`.
+
+Monitor only this job with squeue/sacct and inspect result/supervisor receipts;
+a queue disappearance does not prove success. After completion, manifest the
+entire raw archive before transfer/audit. Keep complete license-bearing stdout
+local; public copy may omit only independently identified sensitive full stdout
+files with original manifest+explicit omission hashes. Do not modify numeric,
+input, event or result bytes. Independent reviewer is preparing audit under
+`research-20260927/agent-notes/sistig-pricing-review-preparation/` in this worktree.
+No public result or economic effect is known at submission.
+
+The new quadratic regret-radius derivation passed two independent mathematical
+reviews, including PSD/null directions, arbitrary physical schedules, boundary
+loads and all88 archived replication optima. It is an explanatory bound, not a
+novelty claim. Keep manuscriptPDF0.3 unchanged until the next coherent scientific
+revision and layout pass. GoogleDoc milestone is SavedtoDrive,73,585characters;
+all previous content is preserved (only final blank-line normalization changed).
