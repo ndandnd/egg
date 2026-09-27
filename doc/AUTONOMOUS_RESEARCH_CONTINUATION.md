@@ -464,3 +464,68 @@ SVG passed XML/token semantic equivalence and PNG/reviewedPDF bytes are unchange
 A fresh branch CI will determine downstream status; do not report those earlier
 runs as passing. ReviewedPDF0.3 remains the current17-page artifact; manuscript
 source0.4 is in preparation.
+
+
+### Exact matching attempt1 completed; energy-V2 preflight repair
+
+Published matching freeze3014d04a043d5c6b99433fc5458271a3076d16b5 and two
+independent preflight reviews preceded the first public calculation at
+`result/sistig_matching/20260927-attempt1`. Both cases completed: exact ideal
+stored-input lower bounds display301.3153438838777/305.6338078838777, each
+with one relaxed path. No physical-feasibility claim follows. Exactly two
+algorithm calls,0.204274s complete routine,0.280112s supervisor,exit0/no timeout;
+all original output files manifested. Independent no-author-import result audit
+is active. Do not rerun. These are separate post-pilot diagnostics, not changes
+to the original native intervals. Source, protocol and reviews are backed up.
+
+Energy V2 implementation is still in preflight. Reviewer caught a legitimate
+Python-MIP zero-constant expression alias edge case; a scoped guard/normalization
+repair and pure regression are being made before any V2 optimizer. All earlier
+artifacts are intact. Next20+8 qualifications still require final preflight and
+published source freeze. Public pilot2 is not submitted. Both existing EGG
+cluster jobs are complete; no active EGG optimization.
+
+GoogleDoc milestone saved75953characters with prior73585-character content
+preserved after trailing-blank normalization; new heading appears once. Evidence
+head e6ded66 passed full hosted CI run36337297088. Source manuscript0.4 now
+adds both audited public outcomes, a seventh figure of returned physical
+witnesses (independent figure review pending), and explicitly states flat-price
+F is an exact zero-gap control. ReviewedPDF0.3 remains unchanged.
+
+
+### Energy-band V2 first qualification: 19/20; downstream gates held
+
+Final independent preflight PASS preceded published freeze
+66b7054510a8b90471d6abe07d32a9f7f509182d. The local 20-control attempt2
+at `result/native_pathflow/20260927-attempt2` completed with 19 passes and one
+exception in joint_planner: positive charge on an unselected movement during
+physical extraction after the second native call. All raw outputs, including
+failed-cell events, exception and traceback, are retained and manifested.
+Do not rerun or replace this attempt. Independent audit and read-only author
+diagnosis are active. The eight compact-hull V2 controls and public pilot2 are
+held; no cluster job submitted. No user decision needed for this technical
+diagnosis. Matching attempt1 independent exact-certificate audit has passed;
+the review bundle is separate and all original files are unchanged.
+
+
+### Latest user preference: lower token cost and manager-led delegation
+
+User explicitly requests Luna Max and GPT-6 Sol for easier tasks, with the
+primary agent acting as manager. Use gpt-6-luna with max reasoning for routine
+audit checks, documentation, layout and monitoring; gpt-6-sol for bounded
+implementation and analysis. Give concise self-contained handoffs, reuse
+workers, avoid redundant reviews/rereads, and reserve Astra for hard theory or
+major scientific decisions. Do not automatically redeem any reset credit.
+The hourly heartbeat was updated to preserve this routing preference and work
+on one bounded package per wakeup; monitoring cadence and important-decision
+alerts remain unchanged. Current Astra workers are finishing only their
+already active bounded evidence audit and failure diagnosis, then stopping.
+
+Source manuscript0.4 contains the method/compact-model and robust-neighborhood
+appendices, an evidence table and updated abstract. CandidatePDF is
+output/pdf/egg-journal-working-draft-v04-candidate.pdf; reviewedPDF0.3 remains
+unchanged. A separate equation renderer refreshes nine current equations
+without regenerating scientific figures. Fresh scientific/layout review is
+required before promoting the candidate. Figure7 itself passed independent
+review. Sol6 should review the new method/appendices and numerical extraction
+repair design; LunaMax should handle layout and status/docs.

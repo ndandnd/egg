@@ -513,3 +513,37 @@ SVG passed XML/token semantic equivalence and PNG/reviewedPDF bytes are unchange
 A fresh branch CI will determine downstream status; do not report those earlier
 runs as passing. ReviewedPDF0.3 remains the current17-page artifact; manuscript
 source0.4 is in preparation.
+
+
+## 2026-09-27 17:55 UTC — exact matching audited; energy-band gate held
+
+Matching attempt1 at freeze3014d04 completed two exact calculations in0.204274s
+under a0.280112s supervisor. Independent no-author-import/no-optimizer review
+reconstructed both37-by74 assignment matrices,2,035 allowed-edge inequalities
+and74 nonpositive column potentials per case, primal/dual equality, all modes,
+coverage, runtime/source/manifest identities and12 corrupted certificates.
+The exact ideal stored-input lower bounds display301.3153438838777 and
+305.6338078838777; each relaxed cover is one path and is not a physical result.
+
+Energy-band V2 final independent preflight PASS preceded published66b7054 and
+the20-control attempt2. It completed19/20; joint_planner aborted extraction
+after its second OPTIMAL native call because1.2214110437041203e-12 gridkWh was
+assigned to an exactly unselected movement. The strict old policy correctly
+refused it. All142 raw files686302bytes are immutable and manifested, SHA
+dfd956c8da49d03bfec3db77a02396f8974ac4d6ba5ca3a95d713302fa33ebe3.
+Independent full/failed-cell audit and author diagnosis are active;8hull/public
+V2 gates are held. No automatic retry or retrospective zeroing. A durable
+prospective numerical policy will be independently reviewed if needed.
+
+NewFigure7 independent review PASS: every37servicebar per case, all41sessions,
+235SOCpoints (4initial+231subsequent), ownership/captions and byte-identical
+PNG regeneration checked. Manuscript source0.4 now contains a self-contained
+certificate method, ideal compact model appendix, sufficient open-neighborhood
+proof, evidence table, renumbered public table and explicit time-independent
+deadhead scope; scientific/layout review of these changes remains.
+
+One compact17:54UTC Unicorn check found no EGG job active, only unrelated held
+jobs; all left untouched. Hosted CI succeeded for3014d04(run36338020969) and
+66b7054(run36338309581). No important user decision or exceptional compute
+commitment is pending. The main unresolved science remains the matched nonlinear
+public physical/hull/regret comparison, not the incidental extraction exception.

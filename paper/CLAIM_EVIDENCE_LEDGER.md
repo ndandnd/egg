@@ -126,5 +126,33 @@ The reserved-pair participant derivation was independently checked against all88
 archived physical optima: each pair's regret is at most20/n, and its aggregate
 reproduces the whole-operator regret under these specific connector rights.
 No general shared-resource-game or large-market contradiction follows.
-A new radius-dependent quadratic regret bound is under separate mathematical
-review and has not entered the manuscript.
+The radius-dependent quadratic regret bound passed two independent mathematical
+reviews and is in manuscript source0.4. ReviewedPDF0.3 has not yet been rerendered.
+
+
+The first full37-service public flat-price pilot is independently audited as
+bounded/FEASIBLE for both depots, with two-bus witnesses and wide objective
+intervals. This establishes feasible schedules under declared EGG assumptions,
+not cost optimality or an operational benefit. Both original scientific traces
+remain unchanged. The compact-hull integration separately passed8/8 controls
+with independent reconstruction and42 corruption controls. No public nonlinear
+physical-versus-hull gap is established yet. Figure7 plots both pilot witnesses,
+including235 saved SOC points (four initial plus231 subsequent events).
+
+
+The exact post-pilot flat-price matching diagnostic passed independent result
+audit for both public cases (freeze3014d04). The stored-input rational lower
+bounds display301.315344/305.633808 and each relaxation has one path. All
+2,035 allowed-edge dual inequalities per case and12 corruptions were checked.
+This relaxes physical constraints and does not prove a feasible one-bus plan,
+a native-matrix lower bound or a public nonlinear planning gap.
+
+The separately frozen energy-band V2 first qualification (66b7054) passed19/20
+and failed joint_planner extraction on positive charge of about1.22e-12kWh
+associated with an unselected movement. All142 original files remain manifested;
+independent audit is underway. No downstream V2 hull/public experiment is
+admitted. Pure preflight and hosted CI success are not substitutes for this
+failed execution gate. The public Figure7 review passed with byte-identical PNG
+reproduction. Source0.4 now explains the actual certificate loop and compact
+model, gives the strict robustness inequalities, and separates repair history
+in an appendix. Its candidate PDF is awaiting fresh full-page review.

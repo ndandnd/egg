@@ -1,5 +1,6 @@
 """Render the editable manuscript Markdown into a review PDF with ReportLab."""
 from pathlib import Path
+import argparse
 import re
 from xml.sax.saxutils import escape
 from reportlab.pdfgen import canvas
@@ -12,6 +13,9 @@ from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 
 ROOT=Path(__file__).resolve().parents[1]
+parser=argparse.ArgumentParser(description=__doc__)
+parser.add_argument('--output',type=Path,default=ROOT/'output/pdf/egg-journal-working-draft.pdf')
+args=parser.parse_args()
 font=Path('/Users/nadan/Documents/ChatGPT/egg/.research-venv/lib/python3.12/site-packages/matplotlib/mpl-data/fonts/ttf')
 if font.is_dir():
     for name,file in [('Paper','DejaVuSerif.ttf'),('PaperBold','DejaVuSerif-Bold.ttf'),('PaperItalic','DejaVuSerif-Italic.ttf')]:
@@ -104,7 +108,7 @@ while i<len(lines):
     elif references:style='PaperRef'
     else:style='PaperBody'
     story.append(Paragraph(markup(s),styles[style]));i+=1
-out=ROOT/'output/pdf/egg-journal-working-draft.pdf'
+out=args.output.resolve()
 out.parent.mkdir(parents=True,exist_ok=True)
 doc=SimpleDocTemplate(str(out),pagesize=(612,792),rightMargin=56,leftMargin=56,topMargin=45,bottomMargin=51,
  title='When marginal electricity prices cannot coordinate electric-bus schedules',author='EGG Research',

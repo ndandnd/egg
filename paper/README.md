@@ -99,8 +99,7 @@ independent raw-variable, physical-witness and bound audit. First CBC attempt1
 remains FAILED 12/15. See the corresponding `result/native_recharge/` reviews.
 GRB licensing stdout is retained only in the complete external original archive;
 its public access note and manifest disclose all omissions. The separate
-the half-minute and compact physical gates have passed independent result audits.
+half-minute and compact physical gates have passed independent result audits.
 The corrected native hull gate returned eight certificates and passed independent
-result review; its original failed attempt remains preserved. The public pricing
-pilot is separately reviewed and frozen before execution.
+result review; its original failed attempt remains preserved. The first public pricing pilot completed both full37-service scenarios and passed independent audit. Both are bounded/FEASIBLE, with two-bus witnesses; neither proves cost optimality. See `result/sistig_pricing/20260927-grb-job557543-attempt1/review/REVIEW.md`. The compact-hull integration separately passed8/8 controls and independent audit. Figure7 in editable source0.4 shows both public witnesses; reviewedPDF0.3 is unchanged until the next rendering and all-page review.
 The excellent-first-draft goal is active and incomplete.
