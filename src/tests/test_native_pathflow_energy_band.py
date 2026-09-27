@@ -69,10 +69,11 @@ def test_all20_definitions_budgets_and8_hull_definitions_preserved():
     assert pq.PROTOCOL=='native-pathflow-qualification-20260927-v3-orphan-projection'
     previous=json.loads((ROOT/'result/native_pathflow_hull/20260927-attempt1/frozen.json').read_bytes())
     newer=[hq.manifest(c,hull.Budget()) for c in hq.controls()]
-    strip=lambda c:{k:v for k,v in c.items() if k not in ('state_identity','pricing_oracle')}
+    strip=lambda c:{k:v for k,v in c.items() if k not in ('state_identity','pricing_oracle','extraction_policy')}
     assert [strip(c) for c in previous['controls']]==json.loads(json.dumps([strip(c) for c in newer]))
     assert asdict(hull.Budget())==previous['budget']
     assert all(c['pricing_oracle']==pf.FORMULATION for c in newer)
+    assert all(c['extraction_policy']==pf.EXTRACTION_POLICY for c in newer)
     assert all(a['state_identity']!=b['state_identity'] for a,b in zip(previous['controls'],newer))
 
 

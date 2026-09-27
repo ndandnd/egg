@@ -706,3 +706,15 @@ The independent no-author-import result audit is underway; runner success alone
 does not admit downstream use. Sol 6 separately prepares the small nonlinear
 public orchestrator; Luna Max prepares a short same-source Gurobi qualification
 plan. No cluster qualification or nonlinear public run has been launched.
+
+### Prospective cross-suite metadata assertion repair
+
+The lead found that the older energy-band equality test excluded oracle and
+state identities but not the newly declared extraction-policy metadata. Its
+comparison failed despite identical scientific controls. Before editing, all
+19 current hull source files were verified against the frozen 03d1da2 hashes.
+The test now excludes that expected metadata difference and separately asserts
+the new policy identity for every control. All six related pure suites pass:
+195 tests in 0.69 seconds. No native algorithm or archived result changed and
+no optimizer was rerun. Future source checks should read the pinned Git blobs,
+not require a working checkout to remain permanently at an old revision.
