@@ -671,3 +671,38 @@ prospective hull-policy integration; LunaMax independently reviews before any
 8-control execution. The selected next nonlinear pilot is one predetermined
 depot15case with34-minute complete cap after qualification and preflight.
 The large sensitivity campaign remains unadmitted.
+
+### Shared document and next work package
+
+The Google Doc append “Verified compact qualification and stronger ideal fleet
+bounds — 27 September 2026” is saved. Its 85,964-byte pre-append Markdown is
+an exact prefix of the 88,414-byte final export; the heading occurs once and
+all six published links are present. The first insertion landed before two
+existing paragraphs; prefix verification caught it, undo restored the original
+exactly, and the corrected append passed preservation checks. The current PDF
+is unchanged. After-export SHA256:
+d5569b56b61e2e44b45228fb422e88741968c780ee917cb9284a5af926a7a809.
+
+The lead shelved its own unexecuted flat-pilot2 candidate to focus on the
+selected nonlinear question. All four tracked files were restored to HEAD;
+the exact 15,386-byte patch remains at the outer research directory
+`deferred-flat-pilot2/unexecuted-candidate.patch`, SHA256
+913392f0fe8a8b4bffc89fa250535bbd48516a689f47811ca77c2ebca041aba0.
+No attempt or scientific result was removed. Sol 6 is implementing the new
+nonlinear runner in separate files while Luna Max reviews the final small
+hull-policy correction. The old cluster public checkout and its raw outputs
+remain untouched; future cluster work will use an isolated checkout.
+
+### V3 hull qualification executed; independent result audit pending
+
+Published source 03d1da2f3629e722784e97891a8590060fa676ad after Luna's
+independent preflight passed 96 scoped pure tests. The same eight frozen CBC
+controls ran once in the exclusive compact-hull attempt2: runner 8/8 certified,
+36 native calls (21 pricing, 15 master), nine exact-polish transfers and
+24 checks, 12.1265-second controller / 12.267-second supervisor. No timeout or
+source drift. Its 62 original files total 1,284,737 bytes; raw manifest SHA256
+c3d9da88195161ddd2c054800e4d0a5944998a03b623730a771e7ce9bbb5644b.
+The independent no-author-import result audit is underway; runner success alone
+does not admit downstream use. Sol 6 separately prepares the small nonlinear
+public orchestrator; Luna Max prepares a short same-source Gurobi qualification
+plan. No cluster qualification or nonlinear public run has been launched.

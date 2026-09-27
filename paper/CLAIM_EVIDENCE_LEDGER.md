@@ -162,3 +162,32 @@ in an appendix. The reviewed working PDF is version0.4 (22 pages, seven figures;
 SHA-256 acae4e1bc915fdf7e7a4cafcd997b91aa6941afe73a9075b37cb6b50514663ca).
 The nonlinear public timetable study remains pending; no public nonlinear
 physical-versus-hull gap is established.
+
+## Newly audited compact and public-case evidence — 27 September 2026
+
+The published evidence freeze is [b502e85](https://github.com/ndandnd/egg/commit/b502e85f4e76ad2fc297199b7c51a0f0022f23d5), with both result audits included in
+[PR #56](https://github.com/ndandnd/egg/pull/56). The [compact physical attempt 3
+review](../result/native_pathflow/20260927-attempt3/review/REVIEW.md) passes 20/20
+controls (16 numerical certificates and four expected infeasibilities) in 35
+native calls and 24.707 seconds. Its independent review checks 589 raw incumbent
+variables, 31 physical witnesses, and 25 corruption controls; the largest
+whole-incumbent numerical correction is 1.2261e-12 kWh, below the 1e-8 policy
+ceiling. This qualifies only the declared synthetic compact-model policy.
+Attempt 3 prospectively corrects the issue exposed by failed attempt 2; the
+original attempt 2 remains an unchanged failure and is not retroactively passed.
+Hull-policy integration passed independent preflight; its new eight-control
+CBC run is complete and awaits independent result audit.
+
+The [independent exact cardinality-flow
+review](../result/sistig_cardinality_flow/20260927-attempt1/review/REVIEW.md)
+reconstructs both full 37-service single-depot networks. Its
+ideal stored-input lower bounds are 404.924239883878 for P15 and
+414.394469217211 for P16. The earlier exact one-path matching relaxation gave
+301.315343883878 and 305.633807883878, respectively. Separate
+tolerance-qualified two-bus numerical upper witnesses are 408.533137 and
+433.746086. These are distinct evidence types: they establish neither an exact
+physical optimum nor an exact physical optimum gap, and no such gap is claimed.
+The compact and cardinality result directories retain their independent reports
+and raw artifacts. These results are research evidence for the next bundled
+manuscript revision; manuscript source and the reviewed working PDF have not
+been updated with them.

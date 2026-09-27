@@ -6,44 +6,53 @@ work, GitHub backups and Google Doc updates without repeated approvals.
 
 ## Latest checkpoint — read this before the historical entries below
 
-27 September 2026, published source freeze `dd5ad1659248b93d53f7f1515282d9530343567f`.
-Use Sol 6 for implementation/analysis and Luna Max for routine verification,
-documentation and monitoring. Astra coordinates and makes material scientific
-decisions. Avoid redundant broad rereads, tests and idle polling. The hourly
-heartbeat already follows this manager-led routing.
+27 September 2026. Published audit checkpoint `b502e85`; scientific source
+freeze `dd5ad1659248b93d53f7f1515282d9530343567f`; original evidence backup
+`5d7f256`. Sol 6 handles implementation and analysis; Luna Max handles routine
+verification, documentation and monitoring. Astra coordinates and makes major
+scientific decisions. The hourly heartbeat preserves this routing. Avoid broad
+rereads, redundant tests and idle polling.
 
-- Reviewed working manuscript 0.4 is the canonical 22-page, seven-figure PDF.
-  The excellent-first-draft goal remains incomplete; matched nonlinear public
-  physical-planner, full-hull and own-price-regret evidence is still missing.
-- The repaired compact qualification attempt3 has finished once: the runner
-  reports 20/20 controls, 35 native calls, 24.707 seconds and unchanged sources.
-  Its 142 original files are sealed. Independent Luna audit passed all20,
-  31 raw incumbents/589 values,31 witnesses and25 corruption controls. The
-  single whole-incumbent correction max is1.2261e-12kWh; the numerical policy
-  ceiling is1e-8. This qualifies only the synthetic compact policy. Failed
-  attempt2 remains immutable.
-- Exact cardinality-flow attempt1 has finished once: two public calculations,
-  0.358 seconds, supervised exit0 with no timeout or source drift. Its separate
-  Luna no-author-import audit passed both exact778-arc certificates and14
-  corruption/omission checks. Bounds are404.924239883878 (depot15) and
-  414.394469217211 (depot16), strictly ideal stored-input lower bounds, not
-  exact physical/native certificates.
-- No EGG cluster job is active in the latest queue check. Other-project held
-  jobs are untouched. Public pilot2 and the broad sensitivity campaign remain
-  held. Prepare the selected one-cell nonlinear pilot with34-minute total
-  cap, after separate qualification/preflight; no broad campaign is admitted.
-- Before any new compact-hull qualification, repair its hard-coded extraction
-  policy metadata/import checks, independently review and freeze that change.
-  The compact physical20 gate does not itself qualify hull integration.
-- Both independent result packages are sealed and preserve original manifests.
-  Compact review manifest SHA a73c1870fe0243c5b11baf7856efab861277df7852c5386972c604858500d895;
-  cardinality review manifest SHA08912d142a4026e28bd6e4ec0f0fb4876fe58cfc7dcea0e18ddc68b325d34f73.
-  Google Doc update is next. Sol6 owns the hull integration; LunaMax reviews
-  the stable source before any8-control run. Old audit scripts requiring live
-  frozen files should be reproduced in a checkout of dd5ad16, with evidence
-  copied from the later evidence commit and fresh output paths. Do not rerun
-  them into existing sealed review reports. Historical entries below are not
-  the current checkpoint.
+- Working manuscript 0.4 remains the reviewed 22-page, seven-figure PDF.
+  The first-draft goal is incomplete: matched nonlinear public physical-planner,
+  full-hull and own-price-regret evidence and final scope review remain open.
+- Compact physical attempt3 independently passes all 20 CBC controls: 16
+  numerical certificates and four expected infeasibilities. Its 35 calls took
+  24.707 seconds. Audit covers 31 incumbents, 589 values, 31 physical witnesses
+  and 25 corruption controls. Maximum whole-incumbent correction is
+  1.2261e-12 kWh against the single 1e-8 ceiling. This qualifies only the
+  synthetic compact policy; failed attempt2 is immutable.
+- Exact cardinality-flow attempt1 independently passes both 778-arc, full
+  37-service certificates, with 14 corruption/omission controls. Ideal stored-input
+  lower bounds are 404.924239883878 (depot 15) and 414.394469217211 (depot 16).
+  Keep these separate from native numerical upper witnesses; no exact physical
+  optimum or gap is established. Both calculations took 0.358 seconds.
+- Both sealed audits are in their respective attempt `review/` subtrees. Their
+  manifests were verified by the lead. Reproduce auditors that require live
+  frozen sources in a checkout of dd5ad16 with later evidence copied in and
+  fresh report output paths; never overwrite sealed review reports.
+- V3 hull-policy integration passed independent preflight (96 pure tests) and
+  is published at 03d1da2f3629e722784e97891a8590060fa676ad. The same eight
+  CBC controls ran once: all eight reported certified, 36 native calls,
+  12.267 seconds supervised, no timeout or source drift. The original 62 files
+  are sealed (manifest c3d9da88195161ddd2c054800e4d0a5944998a03b623730a771e7ce9bbb5644b).
+  Luna Max is auditing these results; no downstream admission yet. The fake
+  fixture change is prospective and does not alter the old frozen source.
+- Sol 6 is separately preparing a new one-cell nonlinear pilot runner and
+  protocol: full depot-15 case, fixed synthetic curvature, three matched
+  routines, 34-minute total cap. Matching backend qualification and independent
+  preflight remain mandatory. The broad sensitivity campaign is unadmitted.
+- The old unexecuted flat-pilot2 candidate is shelved, with its exact patch
+  preserved outside Git at `../research-20260927/deferred-flat-pilot2/`;
+  the four tracked files were restored to published HEAD. Do not revive it
+  automatically. No scientific result was removed.
+- Latest Unicorn check found no active EGG job. The old public checkout remains
+  at 282e00b with its raw pilot outputs intact. Use an isolated checkout for new
+  work; exclude scaglione-compute-01 and leave other-project held jobs alone.
+- Google Doc now includes the verified compact/bounds milestone. Saved to Drive;
+  its 85,964-byte before export is an exact prefix of the 88,414-byte after
+  export, and the new heading occurs once. The PDF remains byte-identical.
+  Verification note: `../research-20260927/agent-notes/google-doc-verified-bounds-20260927.md`.
 
 ## Objective and completion standard
 

@@ -108,3 +108,24 @@ half-minute and compact physical gates have passed independent result audits.
 The corrected native hull gate returned eight certificates and passed independent
 result review; its original failed attempt remains preserved. The first public pricing pilot completed both full37-service scenarios and passed independent audit. Both are bounded/FEASIBLE, with two-bus witnesses; neither proves cost optimality. See `result/sistig_pricing/20260927-grb-job557543-attempt1/review/REVIEW.md`. The compact-hull integration separately passed8/8 controls and independent audit. Figure 7 in the reviewed working PDF 0.4 shows both public witnesses; its layout and source identities are recorded in MANUSCRIPT_V04_LAYOUT_REVIEW_20260927.md.
 The excellent-first-draft goal is active and incomplete.
+
+The audits published in [PR #56](https://github.com/ndandnd/egg/pull/56) at
+freeze [b502e85](https://github.com/ndandnd/egg/commit/b502e85f4e76ad2fc297199b7c51a0f0022f23d5)
+add compact physical attempt 3 ([review](../result/native_pathflow/20260927-attempt3/review/REVIEW.md))
+and exact cardinality-flow evidence
+([review](../result/sistig_cardinality_flow/20260927-attempt1/review/REVIEW.md)).
+Attempt 3 passes 20/20 synthetic compact-policy controls: 16 certificates and
+four expected infeasibilities, 35 native calls, 24.707 seconds, 589 raw
+incumbent variables, 31 physical witnesses, 25 corruption controls, and maximum
+numerical correction 1.2261e-12 kWh against a 1e-8 ceiling. It prospectively
+corrects the issue behind attempt 2; that failed record remains unchanged. The
+cardinality ideal stored-input bounds are 404.924239883878 (P15) and
+414.394469217211 (P16); earlier one-path matching bounds are 301.315343883878
+and 305.633807883878. The separate numerical upper witnesses are 408.533137 and
+433.746086. No exact physical optimum or physical gap is established. Hull-policy
+integration passed independent preflight; its new eight-control CBC run awaits
+independent result audit. These results await the next bundled
+manuscript revision; the current manuscript and reviewed PDF remain unchanged.
+The verified appendix [“Verified compact qualification and stronger ideal fleet
+bounds”](https://docs.google.com/document/d/1NmPC_qo_uOnA48dV6Ibhs3Pj9EgOD-oJTBuVi41p6bg/edit?tab=t.0)
+is saved to Drive.
