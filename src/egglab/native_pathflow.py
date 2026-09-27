@@ -12,7 +12,9 @@ import time
 
 from egglab import native_recharge as nr
 
-FORMULATION = 'egg-native-pathflow-v2-energy-band'
+FORMULATION = 'egg-native-pathflow-v3-energy-band-orphan-projection'
+NATIVE_MATRIX = 'egg-native-pathflow-v2-energy-band'
+EXTRACTION_POLICY = 'native-pathflow-orphan-projection-v1'
 ENERGY_BALANCE_POLICY = 'stored-row-and-physical-conservation-band-v1'
 Budget = nr.Budget
 BOUND_GUARD = nr.BOUND_GUARD
@@ -251,7 +253,8 @@ def capture_incumbent(case,built):
         return {'value':float(value) if value is not None and math.isfinite(float(value)) else None,
                 'repr':repr(value)}
     return {'case_identity':case.identity(),'formulation':FORMULATION,
-        'extraction_policy':nr.EXTRACTION_POLICY,
+        'native_matrix':NATIVE_MATRIX,'extraction_policy':EXTRACTION_POLICY,
+        'shared_negative_normalizer_policy':nr.EXTRACTION_POLICY,
         'energy_balance':{**built['energy_balance'], 'constraint_indices':built['energy_balance_row_indices']},
         'variables':[{'index':v.idx,'name':v.name,'type':v.var_type,
             'lower':number(v.lb),'upper':number(v.ub),'solution':number(v.x)} for v in built['model'].vars],
@@ -265,6 +268,71 @@ def capture_incumbent(case,built):
             'epigraph':[v.idx for v in built.get('epigraph',[])]}}
 
 
+def _project_charge_energy(case, compiled, owners, raw, raw_load, record=None, round_index=0):
+    """Disclosed compact-only projection under one exact incumbent-wide budget."""
+    Q = Fraction
+    def emit(stage, ledger):
+        if record:
+            record({'event':'charge_projection','round':round_index,'stage':stage,**ledger})
+    def normalized_record(details):
+        if record:
+            record({'event':'charge_normalization','round':round_index,**details})
+    normalized, negative = nr.normalize_charge_energy(raw, normalized_record)
+    periods = len(case.market_edges_min)-1
+    raw_sums, projected_sums = [Q(0) for _ in range(periods)], [Q(0) for _ in range(periods)]
+    projected, changes = {}, []
+    orphan = Q(0)
+    for key, amount in raw.items():
+        if (not isinstance(key, tuple) or len(key) != 2
+                or any(type(v) is not int for v in key)):
+            raise ValueError('Malformed compact charge key')
+        j,k = key
+        if not (0 <= j < len(case.movements) and 0 <= k < len(compiled['intervals'])):
+            raise ValueError('Unknown compact charge key')
+        mode = case.movements[j].id
+        interval = compiled['intervals'][k]
+        if mode not in interval['visits']:
+            raise ValueError('Compact charge key has unavailable visit')
+        t = interval['period']
+        if not 0 <= t < periods:
+            raise ValueError('Compact charge key has invalid market period')
+        raw_sums[t] += Q(amount)
+        value = normalized[key]
+        if value > 0 and mode not in owners:
+            orphan += Q(value)
+            value = 0.0
+            reason = 'positive-unselected-to-zero'
+        elif amount < 0:
+            reason = 'negative-to-zero'
+        else:
+            reason = None
+        projected[key] = value
+        projected_sums[t] += Q(value)
+        if reason:
+            changes.append({'key':list(key),'mode':mode,'interval':k,'period':t,
+                'selected':mode in owners,'reason':reason,'raw_kwh':amount,
+                'raw_repr':repr(amount),'projected_kwh':value,'projected_repr':repr(value)})
+    n = Q(negative['negative_l1_exact'])
+    cap = Q(nr.ROUNDOFF_BUDGET_KWH)
+    load_residual = sum((abs(Q(v)-r) for v,r in zip(raw_load,raw_sums)),Q(0))
+    projection = n+orphan
+    ledger = {'policy':EXTRACTION_POLICY,'shared_negative_normalizer_policy':nr.EXTRACTION_POLICY,
+        'budget_kwh':nr.ROUNDOFF_BUDGET_KWH,'budget_exact':str(cap),
+        'negative_l1_exact':str(n),'orphan_positive_l1_exact':str(orphan),
+        'raw_to_projected_l1_exact':str(projection),'raw_to_projected_l1_kwh':float(projection),
+        'raw_load_row_residual_l1_exact':str(load_residual),
+        'changes':changes,'periods':[{'period':t,'raw_solver_load_kwh':raw_load[t],
+            'raw_solver_load_repr':repr(raw_load[t]),'raw_charge_sum_exact':str(raw_sums[t]),
+            'projected_charge_sum_exact':str(projected_sums[t]),
+            'native_minus_raw_charge_exact':str(Q(raw_load[t])-raw_sums[t]),
+            'projected_minus_raw_charge_exact':str(projected_sums[t]-raw_sums[t])}
+            for t in range(periods)]}
+    emit('before_budget',ledger)
+    if projection+load_residual > cap:
+        raise ValueError('Whole-incumbent charge projection exceeds roundoff budget')
+    return projected, negative, ledger, projection+load_residual, projected_sums
+
+
 def _extract(case,built,record=None,round_index=0):
     def value(var):
         if var.x is None or not math.isfinite(float(var.x)):
@@ -273,23 +341,41 @@ def _extract(case,built,record=None,round_index=0):
     selected = [m.id for j,m in enumerate(case.movements) if value(built['x'][j])>0.5]
     vehicles,owners = recover_paths(case,selected)
     raw_energies = {key:value(var) for key,var in built['charge'].items()}
-    def normalized_record(details):
-        if record: record({'event':'charge_normalization','round':round_index,**details})
-    normalized,correction = nr.normalize_charge_energy(raw_energies,normalized_record)
+    raw_load = [value(v) for v in built['loads']]
+    projected,correction,ledger,spent,projected_sums = _project_charge_energy(
+        case,built['compiled'],owners,raw_energies,raw_load,record,round_index)
     energies = {}
-    for (j,k),amount in normalized.items():
+    for (j,k),amount in projected.items():
         if amount != 0:
             mid = case.movements[j].id
-            if mid not in owners:
-                raise ValueError('Positive charge on an unselected movement')
             energies[owners[mid],mid,k] = amount
-    charges,decoding = nr.decode_serial(case,built['compiled'],energies,
-        return_diagnostics=True,prior_correction_exact=correction['negative_l1_exact'])
-    if record: record({'event':'serial_decoding','round':round_index,**decoding,'charges':charges})
     loads = [0.]*(len(case.market_edges_min)-1)
     for (_,_,k),amount in energies.items():
         loads[built['compiled']['intervals'][k]['period']] += amount
-    raw_load = [value(v) for v in built['loads']]
+    H_defect = sum((abs(Fraction(h)-p) for h,p in zip(loads,projected_sums)),Fraction(0))
+    spent += H_defect
+    for row,load in zip(ledger['periods'],loads):
+        row['physical_plan_load_kwh'] = load
+        row['physical_plan_load_repr'] = repr(load)
+        row['plan_minus_projected_exact'] = str(Fraction(load)-Fraction(row['projected_charge_sum_exact']))
+        row['plan_minus_native_exact'] = str(Fraction(load)-Fraction(row['raw_solver_load_kwh']))
+    ledger['plan_sum_residual_l1_exact'] = str(H_defect)
+    ledger['pre_decode_total_exact'] = str(spent)
+    ledger['pre_decode_accepted'] = spent <= Fraction(nr.ROUNDOFF_BUDGET_KWH)
+    if record: record({'event':'charge_projection','round':round_index,'stage':'before_decoding',**ledger})
+    if not ledger['pre_decode_accepted']:
+        raise ValueError('Whole-incumbent charge/load correction exceeds roundoff budget')
+    charges,decoding = nr.decode_serial(case,built['compiled'],energies,
+        return_diagnostics=True,prior_correction_exact=ledger['raw_to_projected_l1_exact'])
+    if record: record({'event':'serial_decoding','round':round_index,**decoding,'charges':charges})
+    spent += Fraction(decoding['capacity_excess_exact'])+Fraction(decoding['materialized_session_excess_exact'])
+    ledger['interval_capacity_excess_exact'] = decoding['capacity_excess_exact']
+    ledger['session_capacity_excess_exact'] = decoding['materialized_session_excess_exact']
+    ledger['pre_replay_total_exact'] = str(spent)
+    ledger['pre_replay_accepted'] = spent <= Fraction(nr.ROUNDOFF_BUDGET_KWH)
+    if record: record({'event':'charge_projection','round':round_index,'stage':'before_replay',**ledger})
+    if not ledger['pre_replay_accepted']:
+        raise ValueError('Whole-incumbent charge/decoding correction exceeds roundoff budget')
     raw_charge_load = [math.fsum(amount for (_,k),amount in raw_energies.items()
         if built['compiled']['intervals'][k]['period']==t) for t in range(len(loads))]
     if any(abs(a-b)>nr.ENERGY_TOL for a,b in zip(raw_load,loads)):
@@ -298,16 +384,29 @@ def _extract(case,built,record=None,round_index=0):
     ops = len(vehicles)*case.vehicle_cost+case.deadhead_cost_per_min*sum(
         l.arrive_min-l.depart_min for v in vehicles for mid in v['movements'] for l in lookup[mid].legs)
     plan = {'schema':nr.SCHEMA,'case_identity':case.identity(),'formulation':FORMULATION,
+        'native_matrix':NATIVE_MATRIX,'extraction_policy':EXTRACTION_POLICY,
         'vehicles':vehicles,'charges':charges,'load':loads,'ops_cost':ops,
         'raw_solver_load':raw_load,'raw_charge_load':raw_charge_load,
         'roundoff':{'negative_correction':correction,'serial_decoding':decoding,
-                   'load_delta_kwh':[a-b for a,b in zip(loads,raw_charge_load)]}}
+                   'projection':ledger,'load_delta_kwh':[a-b for a,b in zip(loads,raw_charge_load)],
+                   'native_load_delta_kwh':[a-b for a,b in zip(loads,raw_load)]}}
     plan['replay'] = nr.replay_native(case,plan)
+    replay_defect = sum((abs(Fraction(a)-Fraction(b)) for a,b in
+        zip(plan['replay']['load'],loads)),Fraction(0))
+    spent += replay_defect
+    ledger['replay_load_residual_l1_exact'] = str(replay_defect)
+    ledger['whole_incumbent_total_exact'] = str(spent)
+    ledger['whole_incumbent_total_kwh'] = float(spent)
+    ledger['remaining_budget_exact'] = str(Fraction(nr.ROUNDOFF_BUDGET_KWH)-spent)
+    ledger['accepted'] = spent <= Fraction(nr.ROUNDOFF_BUDGET_KWH)
+    if record: record({'event':'charge_projection','round':round_index,'stage':'final',**ledger})
+    if not ledger['accepted']:
+        raise ValueError('Whole-incumbent replay load correction exceeds roundoff budget')
     return plan
 
 
-# The two objective drivers below intentionally preserve the qualified native
-# bound/extraction policy; only the builder and raw-variable mapping differ.
+# The native matrix and bound guards stay unchanged; compact extraction has a
+# separate prospective identity and objective-correction ledger.
 def solve_pricing(case, prices, budget=Budget(), record=None):
     _check_prices(case, prices)
     _check_budget(budget)
@@ -319,7 +418,9 @@ def solve_pricing(case, prices, budget=Budget(), record=None):
     stats = _optimize_once(built, budget, deadline)
     if record:
         record({"event": "native_status", "round": 0, "stats": stats})
-    result = {"case_identity": case.identity(), "objective": "complete-fleet-linear",
+    result = {"case_identity": case.identity(), "formulation": FORMULATION,
+              "native_matrix": NATIVE_MATRIX,"extraction_policy":EXTRACTION_POLICY,
+              "objective": "complete-fleet-linear",
               "prices": list(prices), "stats": stats, "status": "unresolved"}
     if stats["status"] == "INFEASIBLE":
         return {**result, "status": "infeasible"}
@@ -329,14 +430,25 @@ def solve_pricing(case, prices, budget=Budget(), record=None):
         record({"event": "native_incumbent", "round": 0, **capture_incumbent(case, built)})
     plan = _extract(case, built, record=record, round_index=0)
     replay = replay_native(case, plan, prices)
-    delta = sum(p*(new-old) for p, new, old in zip(prices, plan["load"], plan.get("raw_charge_load", plan["load"])))
+    raw_load = plan['raw_solver_load']
+    physical_load = replay['load']
+    raw_objective = plan['ops_cost']+sum(p*l for p,l in zip(prices,raw_load))
+    delta_exact = sum((Fraction(p)*(Fraction(h)-Fraction(l))
+        for p,h,l in zip(prices,physical_load,raw_load)),Fraction(0))
+    delta = replay['pricing_objective']-raw_objective
+    if not math.isfinite(raw_objective) or abs(stats['incumbent']-raw_objective)>nr.OBJECTIVE_TOL:
+        raise ValueError('Native linear incumbent differs from saved solver-load objective')
     if record:
         record({"event": "objective_reconstruction", "round": 0,
-                "linear_objective": replay["pricing_objective"], "charge_correction_objective_delta": delta,
+                "linear_objective": replay["pricing_objective"],
+                "raw_solver_load_objective":raw_objective,
+                "charge_correction_objective_delta": delta,
+                "charge_correction_objective_delta_exact":str(delta_exact),
                 "native_incumbent": stats["incumbent"]})
     lower, upper = admit_bound(stats, replay["pricing_objective"])
     result.update(plan=plan, lower=lower, upper=upper, gap=upper-lower,
                   charge_correction_objective_delta=delta,
+                  charge_correction_objective_delta_exact=str(delta_exact),
                   status="certified" if upper-lower <= budget.epsilon else "bounded")
     return result
 
@@ -364,23 +476,39 @@ def solve_planner(case, a, b, budget=Budget(), record=None):
         if stats["status"] == "INFEASIBLE":
             if best is not None:
                 raise ValueError("Tangent model infeasible after a replay-valid native plan")
-            return {"case_identity": case.identity(), "status": "infeasible", "rounds": records}
+            return {"case_identity": case.identity(), "formulation":FORMULATION,
+                    "native_matrix":NATIVE_MATRIX,"extraction_policy":EXTRACTION_POLICY,
+                    "status": "infeasible", "rounds": records}
         if stats["status"] not in ("OPTIMAL", "FEASIBLE") or stats.get("incumbent") is None:
             break
         if record:
             record({"event": "native_incumbent", "round": len(records)-1, **capture_incumbent(case, built)})
         plan = _extract(case, built, record=record, round_index=len(records)-1)
-        true = plan["ops_cost"]+true_cost(a, b, plan["load"])
+        physical_load = plan['replay']['load']
+        true = plan["ops_cost"]+true_cost(a, b, physical_load)
         envelope = plan["ops_cost"]+sum(max(slope*load+intercept for slope, intercept in rows)
-                                        for load, rows in zip(plan["load"], snapshot))
-        raw_charge_load = plan.get("raw_charge_load", plan["load"])
+                                        for load, rows in zip(physical_load, snapshot))
+        raw_charge_load = plan['raw_solver_load']
         raw_envelope = plan["ops_cost"]+sum(max(slope*load+intercept for slope, intercept in rows)
                                             for load, rows in zip(raw_charge_load, snapshot))
+        raw_true = plan['ops_cost']+true_cost(a,b,raw_charge_load)
+        Q = Fraction
+        raw_q, physical_q = [Q(v) for v in raw_charge_load], [Q(v) for v in physical_load]
+        exact_envelope = lambda loads: sum((max(Q(slope)*load+Q(intercept) for slope,intercept in rows)
+            for load,rows in zip(loads,snapshot)),Q(0))
+        exact_true = lambda loads: sum((Q(aa)*load+Q(bb)*load*load/2
+            for aa,bb,load in zip(a,b,loads)),Q(0))
         objective_deltas = {"pwl_charge_correction_delta": envelope-raw_envelope,
-            "true_charge_correction_delta": true-plan["ops_cost"]-true_cost(a, b, raw_charge_load)}
+            "pwl_charge_correction_delta_exact":str(exact_envelope(physical_q)-exact_envelope(raw_q)),
+            "true_charge_correction_delta": true-raw_true,
+            "true_charge_correction_delta_exact":str(exact_true(physical_q)-exact_true(raw_q))}
+        if not math.isfinite(raw_envelope) or stats['incumbent'] < raw_envelope-nr.OBJECTIVE_TOL:
+            raise ValueError('Native tangent incumbent differs from saved solver-load envelope')
         if record:
             record({"event": "objective_reconstruction", "round": len(records)-1,
                     "true_cost": true, "pwl_objective": envelope,
+                    "raw_solver_load_true_cost":raw_true,
+                    "raw_solver_load_pwl_objective":raw_envelope,
                     "native_incumbent": stats["incumbent"], **objective_deltas})
         lo, hi = admit_bound(stats, true, envelope, allow_epigraph_slack=True)
         iteration.update(objective_deltas)
@@ -398,9 +526,11 @@ def solve_planner(case, a, b, budget=Budget(), record=None):
         if upper-lower <= budget.epsilon:
             status = "certified"
             break
-        for t, load in enumerate(plan["load"]):
+        for t, load in enumerate(physical_load):
             tangents[t].append((float(a[t]+b[t]*load), float(-0.5*b[t]*load*load)))
-    result = {"case_identity": case.identity(), "status": status, "a": list(a), "b": list(b), "rounds": records}
+    result = {"case_identity": case.identity(), "formulation":FORMULATION,
+              "native_matrix":NATIVE_MATRIX,"extraction_policy":EXTRACTION_POLICY,
+              "status": status, "a": list(a), "b": list(b), "rounds": records}
     if best is not None:
         result.update(plan=best, lower=lower, upper=upper, gap=upper-lower)
     return result

@@ -25,7 +25,7 @@ from egglab import native_pathflow as pf
 from experiments import native_recharge_qualification as original
 from experiments import native_halfminute_qualification as timing
 
-PROTOCOL = "native-pathflow-qualification-20260927-v2-energy-band"
+PROTOCOL = "native-pathflow-qualification-20260927-v3-orphan-projection"
 ROOT = Path(__file__).resolve().parents[2]
 SOURCES = ("src/egglab/native_recharge.py", "src/egglab/native_pathflow.py",
     "src/experiments/native_recharge_qualification.py",
@@ -34,7 +34,10 @@ SOURCES = ("src/egglab/native_recharge.py", "src/egglab/native_pathflow.py",
     "doc/NATIVE_PATHFLOW_QUALIFICATION_PROTOCOL_20260927.md",
     "src/tests/test_native_pathflow_energy_band.py",
     "doc/NATIVE_PATHFLOW_ENERGY_BAND_DESIGN_20260927.md",
-    "doc/NATIVE_PATHFLOW_EQUIVALENCE_REVIEW_20260927.md")
+    "doc/NATIVE_PATHFLOW_EQUIVALENCE_REVIEW_20260927.md",
+    "doc/NATIVE_PATHFLOW_ORPHAN_CHARGE_REPAIR_DESIGN_20260927.md",
+    "doc/NATIVE_PATHFLOW_ORPHAN_CHARGE_REPAIR_REVIEW_20260927.md",
+    "doc/NATIVE_PATHFLOW_ORPHAN_CHARGE_QUALIFICATION_PROTOCOL_20260927.md")
 TARGET_TOL = original.TARGET_TOL
 _json = original._json
 environment = original.environment
@@ -112,6 +115,7 @@ def read_worker_evidence(directory):
                 event = json.loads(line)
                 if (not isinstance(event, dict) or event.get("event") not in
                         ("native_start", "native_status", "native_incumbent", "charge_normalization",
+                         "charge_projection",
                          "serial_decoding", "objective_reconstruction", "replayed_iteration")
                         or not nr._minute(event.get("round")) or event["round"] < 0):
                     raise ValueError("Malformed native event record")
@@ -152,7 +156,10 @@ def qualify(output, freeze_label, backend="CBC"):
     cells = controls()
     for cell in cells:
         nr.validate_case(cell["case"])
-    frozen = {"protocol": PROTOCOL, "formulation": pf.FORMULATION, "freeze_label": freeze_label, "source_hashes": hashes,
+    frozen = {"protocol": PROTOCOL, "formulation": pf.FORMULATION,
+              "native_matrix":pf.NATIVE_MATRIX,"extraction_policy":pf.EXTRACTION_POLICY,
+              "shared_negative_normalizer_policy":nr.EXTRACTION_POLICY,
+              "freeze_label": freeze_label, "source_hashes": hashes,
               "budget": asdict(budget), "environment": environment(), "target_tolerance": TARGET_TOL,
               "controls": [{**c, "case": asdict(c["case"]), "case_identity": c["case"].identity()} for c in cells]}
     _json(out/"frozen.json", frozen)

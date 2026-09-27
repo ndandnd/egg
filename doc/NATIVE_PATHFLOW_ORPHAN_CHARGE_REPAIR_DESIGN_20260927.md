@@ -96,8 +96,9 @@ values, unknown keys, malformed intervals or any budget excess. The present
 `1e-6` kWh native-load and physical-replay checks remain independent hard
 checks and are not relaxed by this budget.
 
-After decoding, independently replay the returned physical plan. Record the
-replay-computed per-period loads and `sum_t |Q(replay_load_t)-Q(H_t)|`; require
+After decoding, independently replay the returned physical plan. Denote its
+recomputed per-period loads by `T_t`; record them and
+`sum_t |Q(T_t)-Q(H_t)|`; require
 that additional discrepancy together with `E` fit the same budget. The
 existing replay must still establish valid selected ownership, legal charging
 windows, connector and power limits, SOC reserve/capacity, full terminal
@@ -119,12 +120,12 @@ These remain tolerance-conditional numerical enclosures, not exact physical
 or exact MILP certificates.
 
 For linear pricing, log and check the load correction
-`Delta_t = Q(H_t)-Q(L_t)` and its exact objective effect
+`Delta_t = Q(T_t)-Q(L_t)` and its exact objective effect
 `sum_t Q(price_t)*Delta_t`. For the planner, evaluate the saved tangent
 envelope and the true quadratic cost on both raw native loads and replayed
 physical loads; record their deltas, round and tangent snapshot. A deterministic
 cross-check can bound each true-cost change by
-`(|a_t| + |b_t|*max(|L_t|,|H_t|))*|Delta_t|`, summed over periods,
+`(|a_t| + |b_t|*max(|L_t|,|T_t|))*|Delta_t|`, summed over periods,
 with stored-number arithmetic and outward rounding. The existing incumbent
 versus reconstructed tangent/linear objective guards and native lower/bound
 ordering checks must still pass. If the projection raises the physical upper
