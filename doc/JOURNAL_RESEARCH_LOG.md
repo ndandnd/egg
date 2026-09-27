@@ -395,3 +395,12 @@ one new heading (68,616 total characters). It records both successful native
 qualifications, the preserved first failure, public-data direction and material
 decision policy. The reviewed linked PDF remains version 0.2. CI at `24c7e4e`
 passed 888 tests in 172.41 seconds plus the evidence reconstruction step.
+
+### Timing qualification completed; independent result review pending
+
+The first half-minute CBC gate at `46fd6af573a240d54abb8ea8d7cf7b79cc0af0ee`
+completed all 19 controls successfully (15 certificates, four expected
+infeasibilities). Its raw attempt is manifested under
+`result/native_halfminute/20260927-attempt1`; source hashes are unchanged.
+This supersedes the active-session entry. Do not rerun. Independent artifact
+review must pass before the timing extension supports a timetable result.

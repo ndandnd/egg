@@ -241,3 +241,45 @@ new frozen-evidence audit step. Next: independently review/freeze/run the separa
 qualification. The public 37-service Hildenbrand case is data-only intake;
 modeled energy assumptions and two separate one-depot variants are explicit.
 No native optimizer has yet been run on those new timing/hull/public artifacts.
+
+## Active local timing qualification
+
+The 19-control timing gate was independently reviewed and frozen/published at
+`46fd6af573a240d54abb8ea8d7cf7b79cc0af0ee`. Its first local CBC execution is
+active in `result/native_halfminute/20260927-attempt1` (controller tool session
+88468). Inspect `summary.json` and receipts before doing anything; do not repeat
+or overwrite. The new native source retains original integer control identities
+within its explicit bounded timestamp domain. Pure preflight passed 79 tests
+with solver imports blocked plus independent lattice/adjacent-float checks.
+Native hull source has been authored but remains under independent preflight,
+with no hull solve. Public-case intake is undergoing a separate non-author
+source/arithmetic review; no operational solver execution has occurred.
+
+### Timing qualification completed; independent result review pending
+
+The first half-minute CBC gate at `46fd6af573a240d54abb8ea8d7cf7b79cc0af0ee`
+completed all 19 controls successfully (15 certificates, four expected
+infeasibilities). Its raw attempt is manifested under
+`result/native_halfminute/20260927-attempt1`; source hashes are unchanged.
+This supersedes the active-session entry. Do not rerun. Independent artifact
+review must pass before the timing extension supports a timetable result.
+
+## Public intake admitted; compact representation under development
+
+The complete37-service Sistig input is prepared in
+`data/public/sistig_26088190_v1/hildenbrand_native_cases.json` and independently
+reconstructed from the original public archive. Its two one-depot variants
+preserve all mandatory services and the complete directed travel data; all
+2,705 emitted modes and5,226 legs match independent source arithmetic. Separate
+37-bus constructive references satisfy the single-connector/full-replenishment
+policy, but are not optimized. See the protocol and independent source note
+under `research-20260927/agent-notes/sistig-independent/` inside this worktree.
+
+Do not blindly launch the vehicle-indexed model on this input: candidate charge
+variables number751,914/705,294 and the builder repeatedly scans that large set.
+Root is developing `src/egglab/native_pathflow.py`, an equivalent service-DAG
+path formulation with20,322/19,062 charging variables. It is unqualified; no
+optimizer has run. Its equivalence proof, pure tests and prospective controls
+must pass before any source freeze/solve. It preserves the full declared graph
+and must not claim equal LP relaxations or runtime improvement before testing.
+The original physical module/source remains unchanged by this new formulation.
