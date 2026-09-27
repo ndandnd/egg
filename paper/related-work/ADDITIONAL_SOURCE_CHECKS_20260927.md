@@ -94,3 +94,38 @@ its own direct regret bound; this source is context, not the proof of that bound
 The growing single operator and growing number of bounded operators must remain
 distinct interpretations. The author-hosted Starr PDF timed out again; no full
 review of Starr is claimed.
+
+
+## Classical matching context for the flat-energy lower bound
+
+Fresh primary-source checks on27 September2026; a focused check, not a
+systematic review. The matching reduction is an established optimization idea,
+not a proposed new algorithmic contribution.
+
+- H.W. Kuhn(1955), *The Hungarian method for the assignment problem*, Naval
+  Research Logistics Quarterly2(1–2),83–97,
+  https://doi.org/10.1002/nav.3800020109 . Publisher metadata and abstract read;
+  full algorithm/proofs not retrieved. The source establishes the classical
+  assignment-method antecedent. Our rectangular exact-integer implementation
+  is qualified by independent finite enumeration and primal/dual certificates,
+  not by claiming a line-by-line reproduction of this article.
+- A.A. Bertossi,P. Carraresi,G. Gallo(1987), *On some matching problems arising
+  in vehicle scheduling models*, Networks17(3),271–281,
+  https://doi.org/10.1002/net.3230170303 . Publisher abstract/metadata checked;
+  it concerns capacitated and multicommodity vehicle-scheduling matching.
+  An indexed copy of the opening original-paper text describes the classical
+  single-depot cost-matching reduction; no full-paper correctness audit made.
+- V.S. Árgilán,J. Balogh,A. Tóth(2014), *The basic problem of vehicle scheduling
+  can be solved by maximum bipartite matching*, ICAI proceedings2,209–218,
+  https://doi.org/10.14794/ICAI.9.2014.2.209 . Institutional primary PDF
+  https://publicatio.bibl.u-szeged.hu/35960/1/ICAI.9.2014.2.209.pdf inspected at
+  abstract and selected pp209–215. The paper constructs trip compatibility
+  matchings for a homogeneous fleet-count objective, without driver-shift
+  constraints. This supports the classical path-cover context. EGG's exact
+  per-leg energy telescope, weighted endpoint-cost reduction and distinction
+  between ideal inputs and native rounding require their own stated proof.
+
+Research implication: use matching as a transparent diagnostic comparator.
+Do not advertise it as a new vehicle-scheduling method or infer battery and
+charger feasibility merely from a relaxed path cover. No public matching
+experiment had run when these literature checks were recorded.
