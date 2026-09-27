@@ -1,0 +1,225 @@
+{
+  "assessment": {
+    "pass": true,
+    "reason": "target enclosed and physical witness replayed"
+  },
+  "cell": "cyclic_hull_price",
+  "elapsed_s": 0.084972208365798,
+  "environment": {
+    "executable": "/Users/nadan/Documents/ChatGPT/egg/.research-venv-repaired-1176/bin/python",
+    "gurobipy_version": null,
+    "mip_version": "1.17.6",
+    "platform": "macOS-26.5.2-arm64-arm-64bit",
+    "python": "3.12.2 (v3.12.2:6abddd9f6a, Feb  6 2024, 17:02:06) [Clang 13.0.0 (clang-1300.0.29.30)]"
+  },
+  "result": {
+    "case_identity": "f24ed85ecec207ad543878c4cb247575629026fe1259ba3226155e439905b140",
+    "charge_correction_objective_delta": 0.0,
+    "gap": 2.0000000517939043e-06,
+    "lower": 153.499999,
+    "objective": "complete-fleet-linear",
+    "plan": {
+      "case_identity": "f24ed85ecec207ad543878c4cb247575629026fe1259ba3226155e439905b140",
+      "charges": [
+        {
+          "connector": 0,
+          "end_min": 210.0,
+          "grid_kwh": 15.000000000000005,
+          "movement": "in_A",
+          "start_min": 180.0,
+          "vehicle": 0
+        },
+        {
+          "connector": 0,
+          "end_min": 240.0,
+          "grid_kwh": 15.0,
+          "movement": "in_B",
+          "start_min": 210.0,
+          "vehicle": 1
+        }
+      ],
+      "formulation": "egg-native-pathflow-v2-energy-band",
+      "load": [
+        0.0,
+        0.0,
+        0.0,
+        30.000000000000007
+      ],
+      "ops_cost": 14.0,
+      "raw_charge_load": [
+        0.0,
+        0.0,
+        0.0,
+        30.000000000000007
+      ],
+      "raw_solver_load": [
+        0.0,
+        0.0,
+        0.0,
+        30.000000000000004
+      ],
+      "replay": {
+        "consumption_kwh": 30.0,
+        "grid_kwh": 30.000000000000007,
+        "load": [
+          0.0,
+          0.0,
+          0.0,
+          30.000000000000007
+        ],
+        "max_grid_kw": 30.00000000000001,
+        "ops_cost": 14.0,
+        "replay_ok": true,
+        "soc_trajectories": [
+          [
+            {
+              "kind": "initial",
+              "soc_kwh": 20.0,
+              "time_min": 0.0
+            },
+            {
+              "kind": "movement",
+              "soc_kwh": 20.0,
+              "time_min": 0.0
+            },
+            {
+              "kind": "movement",
+              "soc_kwh": 20.0,
+              "time_min": 60.0
+            },
+            {
+              "kind": "service",
+              "soc_kwh": 5.0,
+              "time_min": 60.0
+            },
+            {
+              "kind": "charge",
+              "soc_kwh": 20.000000000000007,
+              "time_min": 210.0
+            }
+          ],
+          [
+            {
+              "kind": "initial",
+              "soc_kwh": 20.0,
+              "time_min": 0.0
+            },
+            {
+              "kind": "movement",
+              "soc_kwh": 20.0,
+              "time_min": 120.0
+            },
+            {
+              "kind": "movement",
+              "soc_kwh": 20.0,
+              "time_min": 180.0
+            },
+            {
+              "kind": "service",
+              "soc_kwh": 5.0,
+              "time_min": 180.0
+            },
+            {
+              "kind": "charge",
+              "soc_kwh": 20.0,
+              "time_min": 240.0
+            }
+          ]
+        ]
+      },
+      "roundoff": {
+        "load_delta_kwh": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "negative_correction": {
+          "accepted": true,
+          "budget_kwh": 1e-08,
+          "negative_l1_exact": "0",
+          "negative_l1_kwh": 0.0,
+          "negative_to_zero": [],
+          "policy": "native-roundoff-qualification-v2"
+        },
+        "serial_decoding": {
+          "budget_kwh": 1e-08,
+          "capacity_excess_exact": "3/562949953421312",
+          "capacity_excess_kwh": 5.329070518200751e-15,
+          "combined_roundoff_exact": "3/562949953421312",
+          "combined_roundoff_kwh": 5.329070518200751e-15,
+          "endpoint_rule": "exact-energy-proportional-full-interval",
+          "intervals": [
+            {
+              "capacity_excess_exact": "3/562949953421312",
+              "capacity_excess_kwh": 5.329070518200751e-15,
+              "capacity_kwh": 30.0,
+              "end_min": 240,
+              "grid_kwh": 30.000000000000007,
+              "interval": 3,
+              "saturated_roundoff_adjustment": true,
+              "start_min": 180
+            }
+          ],
+          "materialized_session_excess_exact": "3/562949953421312",
+          "materialized_session_excess_kwh": 5.329070518200751e-15,
+          "policy": "native-roundoff-qualification-v2"
+        }
+      },
+      "schema": "egg-native-recharge-v1",
+      "vehicles": [
+        {
+          "movements": [
+            "out_A",
+            "in_A"
+          ],
+          "trips": [
+            "A"
+          ],
+          "vehicle": 0
+        },
+        {
+          "movements": [
+            "out_B",
+            "in_B"
+          ],
+          "trips": [
+            "B"
+          ],
+          "vehicle": 1
+        }
+      ]
+    },
+    "prices": [
+      0,
+      5.35,
+      0,
+      4.65
+    ],
+    "stats": {
+      "backend": "CBC",
+      "backend_runtime": {
+        "model_solver_name": "CBC",
+        "native_library_path": "/Users/nadan/Documents/ChatGPT/egg/.research-venv-repaired-1176/lib/python3.12/site-packages/cbcbox/cbc_dist/lib/libCbc.dylib",
+        "native_library_sha256": "fe44771023b133390daf7b72790c2ce65d1ccb2e5ac77c7a04c8d8f8648aff7d",
+        "requested": "CBC",
+        "solver_class": "SolverCbc",
+        "solver_module": "mip.cbc"
+      },
+      "incumbent": 153.5,
+      "lower_bound": 153.5,
+      "n_constraints": 38,
+      "n_int": 6,
+      "n_vars": 18,
+      "physical_constraints": 38,
+      "raw_incumbent_repr": "153.5",
+      "raw_lower_bound_repr": "153.5",
+      "seconds_cap": 10.0,
+      "status": "OPTIMAL",
+      "threads": 1,
+      "wall_s": 0.006055291276425123
+    },
+    "status": "certified",
+    "upper": 153.50000100000005
+  }
+}

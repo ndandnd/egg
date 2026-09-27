@@ -529,3 +529,26 @@ without regenerating scientific figures. Fresh scientific/layout review is
 required before promoting the candidate. Figure7 itself passed independent
 review. Sol6 should review the new method/appendices and numerical extraction
 repair design; LunaMax should handle layout and status/docs.
+
+
+### Audited V2 failure archived; lower-cost worker handoff
+
+Independent energy-V2 attempt2 audit is complete: PARTIAL/FAIL, downstream
+admission=false. Fifteen certified plus four expected infeasible controls
+passed; joint_planner failed. All142 raw files unchanged;30 nativecalls,
+26snapshots/479variables,25witnesses/54sessions/202SOCevents,37 corruption
+controls checked. Reviewmanifest
+b143fb9d42342b10f50c04bfa539df40a01d877cf00b3829654e30fa1350341d.
+Astra reviewer finished and stopped. The other Astra author was interrupted
+after read-only diagnosis. No Astra execution worker remains active.
+
+Sol6 worker sol6_numerical_repair now owns a prospective orphan-charge policy
+design and focused source0.4method/AppendixA/B scientific check; no optimizer
+or implementation before independent design review. LunaMax worker
+operational_data_audit finishes the one-bus structural proof review and the
+candidate nonlinear budget note (the11hour envelope is a proposal, not an
+admitted campaign). LunaMax worker luna_draft_record owns candidatePDFfullpage
+QA, README reproduction instructions and the next GoogleDoc milestone. Root
+manages publication and major decisions. Reuse these workers if available;
+otherwise read their saved deliverables before dispatching bounded replacements.
+Matching/figure/manuscript milestone is published at e3c3c48.
