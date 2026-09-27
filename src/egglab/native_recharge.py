@@ -24,13 +24,15 @@ BOUND_GUARD = 1e-6
 OBJECTIVE_TOL = 1e-6
 EXTRACTION_POLICY = "native-roundoff-qualification-v2"
 ROUNDOFF_BUDGET_KWH = 1e-8
+# At this ceiling float spacing remains far below TIME_TOL_MIN.
+MAX_TIMESTAMP_MIN = 2**20
 
 
 @dataclass(frozen=True)
 class Trip:
     id: str
-    start_min: int
-    end_min: int
+    start_min: int | float
+    end_min: int | float
     start_place: str
     end_place: str
     energy_kwh: float
@@ -40,8 +42,8 @@ class Trip:
 class Leg:
     origin: str
     destination: str
-    depart_min: int
-    arrive_min: int
+    depart_min: int | float
+    arrive_min: int | float
     energy_kwh: float
 
 
@@ -57,8 +59,8 @@ class Movement:
 
 @dataclass(frozen=True)
 class Resource:
-    start_min: int
-    end_min: int
+    start_min: int | float
+    end_min: int | float
     per_bus_kw: float
     grid_kw: float
     connectors: int = 1
@@ -70,13 +72,13 @@ class NativeCase:
     trips: tuple[Trip, ...]
     movements: tuple[Movement, ...]
     resources: tuple[Resource, ...]
-    market_edges_min: tuple[int, ...]
+    market_edges_min: tuple[int | float, ...]
     depot: str
     max_vehicles: int
     battery_kwh: float
     reserve_kwh: float
-    terminal_open_min: int
-    recharge_deadline_min: int
+    terminal_open_min: int | float
+    recharge_deadline_min: int | float
     vehicle_cost: float
     deadhead_cost_per_min: float = 0.0
     efficiency: float = 1.0
@@ -108,6 +110,17 @@ def _minute(value):
     return isinstance(value, int) and not isinstance(value, bool)
 
 
+def _timestamp(value):
+    """Exact nonnegative half-minute source lattice; never round source times.
+
+    Keep integer input values unchanged for historical JSON identities. Counts,
+    indices and connector IDs still use the stricter integer predicate above.
+    Solver-decoded charging sessions remain continuous, not lattice restricted.
+    """
+    return (isinstance(value, (int, float)) and not isinstance(value, bool)
+            and 0 <= value <= MAX_TIMESTAMP_MIN and (2*value) % 1 == 0)
+
+
 def _window(case, mode):
     if mode.kind == "depot":
         return mode.legs[mode.depot_split-1].arrive_min, mode.legs[mode.depot_split].depart_min
@@ -124,11 +137,11 @@ def validate_case(case):
             or not _finite(case.reserve_kwh) or case.reserve_kwh >= case.battery_kwh
             or not _finite(case.efficiency) or not 0 < case.efficiency <= 1
             or not _finite(case.vehicle_cost) or not _finite(case.deadhead_cost_per_min)
-            or not _minute(case.terminal_open_min) or not _minute(case.recharge_deadline_min)
+            or not _timestamp(case.terminal_open_min) or not _timestamp(case.recharge_deadline_min)
             or not 0 <= case.terminal_open_min <= case.recharge_deadline_min):
         raise ValueError("Invalid native case policy/physics")
     edges = case.market_edges_min
-    if (len(edges) < 2 or any(not _minute(t) for t in edges) or edges[0] != 0
+    if (len(edges) < 2 or any(not _timestamp(t) for t in edges) or edges[0] != 0
             or edges[-1] != case.recharge_deadline_min
             or any(a >= b for a, b in zip(edges, edges[1:]))):
         raise ValueError("Invalid market-period edges")
@@ -137,14 +150,14 @@ def validate_case(case):
     trips = {t.id: t for t in case.trips}
     for t in case.trips:
         if (not t.id or not t.start_place or not t.end_place
-                or not _minute(t.start_min) or not _minute(t.end_min)
+                or not _timestamp(t.start_min) or not _timestamp(t.end_min)
                 or not 0 <= t.start_min < t.end_min <= case.recharge_deadline_min
                 or not _finite(t.energy_kwh)
                 or t.energy_kwh > case.battery_kwh-case.reserve_kwh):
             raise ValueError("Invalid individual service physics")
     end = 0
     for r in case.resources:
-        if (not _minute(r.start_min) or not _minute(r.end_min) or r.start_min != end
+        if (not _timestamp(r.start_min) or not _timestamp(r.end_min) or r.start_min != end
                 or r.end_min <= r.start_min or not _finite(r.per_bus_kw) or not _finite(r.grid_kw)
                 or not _minute(r.connectors) or r.connectors not in (0, 1)):
             raise ValueError("Resources must cover horizon and use zero/one connector")
@@ -162,8 +175,8 @@ def validate_case(case):
                     (m.before not in trips or m.after not in trips or m.before == m.after))):
             raise ValueError("Movement trip ownership is invalid")
         for leg in m.legs:
-            if (not leg.origin or not leg.destination or not _minute(leg.depart_min)
-                    or not _minute(leg.arrive_min)
+            if (not leg.origin or not leg.destination or not _timestamp(leg.depart_min)
+                    or not _timestamp(leg.arrive_min)
                     or not 0 <= leg.depart_min <= leg.arrive_min <= case.recharge_deadline_min
                     or not _finite(leg.energy_kwh)):
                 raise ValueError("Unknown/nonfinite movement time or energy")
