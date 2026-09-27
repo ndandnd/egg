@@ -6,9 +6,9 @@ work, GitHub backups and Google Doc updates without repeated approvals.
 
 ## Latest checkpoint — read this before the historical entries below
 
-27 September 2026. Published audit checkpoint `b502e85`; scientific source
-freeze `dd5ad1659248b93d53f7f1515282d9530343567f`; original evidence backup
-`5d7f256`. Sol 6 handles implementation and analysis; Luna Max handles routine
+27 September 2026. Latest published source freeze
+`227da22074201c583dbcfa971863c8f3c41d7391`; admitted CBC physical/exact-flow
+checkpoint `b502e85` and CBC hull checkpoint `805887d`. Sol 6 handles implementation and analysis; Luna Max handles routine
 verification, documentation and monitoring. Astra coordinates and makes major
 scientific decisions. The hourly heartbeat preserves this routing. Avoid broad
 rereads, redundant tests and idle polling.
@@ -43,21 +43,38 @@ rereads, redundant tests and idle polling.
   fixture change is prospective and does not alter the old frozen source.
 - Sol 6 has prepared the separate one-cell nonlinear runner: full depot-15
   case, fixed synthetic curvature, three matched routines, 34-minute total cap.
-  Luna Max is reviewing final fixes for saved mixture subsets, useful complete
-  budget-limited evidence, and exact GRB qualification input/budget parity.
-  Runtime caps and scientific inputs remain fixed. It is not admitted to run.
-- The GRB adapter and two separate batch scripts are under independent Luna
-  preflight. The physical stage needs its own result audit before the hull
-  stage. No GRB V3 job or public nonlinear pilot has been submitted. Sol owns
-  the source changes; the lead owns freeze, isolated transfer and submission.
-  The broad sensitivity campaign remains unadmitted.
+  Independent preflight passed (13 pure tests), including saved mixture subsets,
+  useful complete budget-limited evidence, exact GRB input/budget parity and
+  reserved-node exclusion. Runtime caps and inputs remain fixed. It remains
+  NOT-YET-QUALIFIED until the two audited GRB stages have passed.
+- Both new infrastructure preflights passed. Source is published at
+  227da22074201c583dbcfa971863c8f3c41d7391. GRB physical qualification job
+  **559429** completed successfully (exit 0, 49 seconds, one CPU, peak
+  101884 KiB on snavely-cpu-02). All 20 controls report success in 35 native
+  calls. Independent audit now PASSES all 20 controls and 26 corruption checks. The 30-minute allocation, no requeue and
+  reserved-node exclusion were verified. Remote
+  isolated checkout: `/home/nc437/egg-grb-physical-v3-20260927`. Submission
+  sentinel: `grb-physical-submission-20260927`. Do not resubmit this attempt.
+  Local submission evidence: `../research-20260927/cluster/grb-physical-559429/`.
+  Physical GRB audit has passed; a newly published freeze is required for hull. Public nonlinear
+  pilot remains held until both GRB gates pass. Detailed GRB review files must
+  live OUTSIDE the raw attempt because its manifest requires an exact file set.
+  Full transport and all 146 raw manifest entries were verified locally; raw
+  and sibling .launch are installed at canonical paths. The independent review
+  and protocol admission JSON are complete; the lead verified the review
+  manifest and pure admission gate. Public Git preserves 126 scientific files
+  unchanged and omits 20 licensing-only stdout files by declared hash. The
+  full local/cluster archive remains intact and is required by admission.
+  Sol completed a design proof for a stored-native two-bus cut; it remains
+  unimplemented and does not change the fixed pilot. Luna prepared the future
+  nonlinear figure/table plan. The broad campaign remains unadmitted.
 - The old unexecuted flat-pilot2 candidate is shelved, with its exact patch
   preserved outside Git at `../research-20260927/deferred-flat-pilot2/`;
   the four tracked files were restored to published HEAD. Do not revive it
   automatically. No scientific result was removed.
-- Latest Unicorn check found no active EGG job. The old public checkout remains
-  at 282e00b with its raw pilot outputs intact. Use an isolated checkout for new
-  work; exclude scaglione-compute-01 and leave other-project held jobs alone.
+- The old public checkout remains at 282e00b with its raw pilot outputs intact.
+  The new qualification uses the isolated checkout above. Exclude
+  scaglione-compute-01 and leave other-project held jobs alone.
 - Google Doc now includes the verified compact/bounds milestone. Saved to Drive;
   its 85,964-byte before export is an exact prefix of the 88,414-byte after
   export, and the new heading occurs once. The PDF remains byte-identical.

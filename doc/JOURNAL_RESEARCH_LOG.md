@@ -741,3 +741,64 @@ revision, with unchanged caps, inputs and native call limits. Independent
 preflight is closing saved-column subset/order handling and exact 20+8 GRB
 qualification parity. GRB qualification wrappers are separately under review;
 no new cluster job has been submitted.
+
+### GRB physical qualification submitted once
+
+Both new implementation preflights passed. The complete source freeze is
+227da22074201c583dbcfa971863c8f3c41d7391. A thin Git bundle transferred all
+new public research commits since 282e00b; local and remote bundle SHA256 both
+fc450be0a6e0081d4cc1eab775d6a7893e515801b9b5032b25a370db9986e337.
+A fresh detached worktree at /home/nc437/egg-grb-physical-v3-20260927 preserves
+the old public checkout and raw outputs.
+
+Slurm job559429 is the sole GRB physical20 submission. The initial receipt is
+PENDING/Priority, one CPU,8GB,30minutes,Requeue=0, and
+ExcNodeList=scaglione-compute-01. Its exclusive submission sentinel and copied
+local receipts prevent accidental resubmission. A shell initialization attempt
+first stopped on the site Slurm script's unset INCLUDE variable, before any
+intent or job existed; loading that site script before enabling nounset fixed
+the invocation. No scientific execution was repeated. The physical result
+requires independent audit before any separate GRB hull submission. The
+public nonlinear pilot remains gated.
+
+### GRB physical run retrieved; independent audit pending
+
+Job559429 completed with exit 0 in 49 seconds, one CPU, peak RSS101884 KiB
+on snavely-cpu-02. The runner reports all20 controls passed,35 native calls
+and36.142 seconds; these remain unaudited result claims. No retry occurred.
+The full transport archive SHA256 is
+d3939c50cef80925139e605b903ab21ac79e18a318583e75084e163b65a72b91.
+The original146-file manifest SHA256 is
+14ce0b4c04eeaeb6b8bafe72f252a9de7f92a723023b11f2c4a82dab83f06adf.
+The lead verified transport, exact raw file set, all byte counts and hashes,
+then exclusively installed the full raw attempt and sibling launch receipts
+in the local canonical paths. Full archive and final Slurm accounting remain
+under the outer research-20260927/cluster/grb-physical-559429 directory.
+Luna is independently auditing science and reviewing a public copy separately.
+Full license-bearing stdout is preserved locally and remotely; nothing inside
+the raw attempt is rewritten. The next hull stage remains gated on admission.
+
+Sol also completed a prospective exact stored-row argument for a native
+two-bus cut in the two named public cases. It is a design note, without model
+changes, optimizer calls or changes to the fixed nonlinear pilot. Luna's
+prospective figure/table plan preserves signed gap and regret intervals and
+distinguishes physical schedules from convex-mixture means.
+
+### GRB physical qualification independently admitted
+
+Luna's solver-free audit passes all20 fixed controls:16 certified and4 expected
+infeasibilities,35 calls,31 physical witnesses and26 rejected corruptions.
+Maximum whole-incumbent correction is97/4503599627370496 kWh, below1e-8.
+The auditor verified exact stored matrix/objective/bound reconstruction,
+physical replay, exact CBC parity except backend,15 source pins, source-stable
+receipts, runtime and Slurm provenance. Signed-zero representation is preserved;
+a1e-12 tangent-formula comparison allowance is explicitly separated from exact
+reconstruction using actual stored coefficients, with a1e-9 corruption rejected.
+The lead verified the independent review manifest and the solver-free physical
+admission gate. This admits only the declared physical GRB synthetic controls.
+The public copy retains126 original science files plus unchanged manifest and
+all5 launch files;20 whole license-only stdout files are omitted by declared
+hash. Full local/cluster originals remain intact for the full audit/gate.
+The next step is a new published source freeze and one separate hull job.
+The nonlinear public pilot remains held until that result is independently
+qualified. Hosted CI passed for source227da220.
