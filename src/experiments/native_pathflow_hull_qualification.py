@@ -20,6 +20,7 @@ from experiments import native_recharge_qualification as nq
 PROTOCOL = "native-pathflow-hull-qualification-20260927-v3-orphan-projection"
 ROOT = Path(__file__).resolve().parents[2]
 ATTEMPT = ROOT / "result/native_pathflow_hull/20260927-attempt2"
+GRB_ATTEMPT = ROOT / "result/native_pathflow_hull_grb/20260927-attempt1"
 SOURCES = tuple(dict.fromkeys(indexed.SOURCES + (
     "src/egglab/native_hull.py", "src/egglab/native_pathflow.py",
     "src/egglab/native_pathflow_hull.py",
@@ -32,7 +33,8 @@ SOURCES = tuple(dict.fromkeys(indexed.SOURCES + (
     "doc/NATIVE_PATHFLOW_HULL_V3_QUALIFICATION_PROTOCOL_20260927.md",
     "doc/NATIVE_PATHFLOW_HULL_INTEGRATION_DESIGN_20260927.md",
     "doc/NATIVE_PATHFLOW_HULL_V3_POLICY_INTEGRATION_20260927.md",
-    "doc/NATIVE_PATHFLOW_HULL_V3_IMPLEMENTATION_REVIEW_20260927.md")))
+    "doc/NATIVE_PATHFLOW_HULL_V3_IMPLEMENTATION_REVIEW_20260927.md",
+    "doc/NATIVE_V3_GRB_REPLICATION_PROTOCOL_20260927.md")))
 WORKER_SECONDS = indexed.WORKER_SECONDS
 OUTER_SECONDS = indexed.OUTER_SECONDS
 TARGET_TOL = indexed.TARGET_TOL
@@ -45,6 +47,13 @@ admitted_predecessor = indexed.admitted_predecessor
 
 def source_hashes():
     return {name:hashlib.sha256((ROOT/name).read_bytes()).hexdigest() for name in SOURCES}
+
+
+def check_output_path(backend, output):
+    expected = {"CBC": ATTEMPT, "GRB": GRB_ATTEMPT}.get(backend)
+    if expected is None or Path(output).resolve() != expected.resolve():
+        raise ValueError("Backend and exclusive qualification attempt path differ")
+    return expected
 
 
 def manifest(cell, budget):
@@ -205,8 +214,10 @@ def main(argv=None):
     if args.worker:
         frozen = json.loads(Path(args.frozen).read_text())
         return worker(args.worker, args.output, nh.Budget(**frozen["budget"]), frozen)
-    if Path(args.output).resolve() != ATTEMPT.resolve():
-        parser.error("Only the exclusive prospective attempt2 path is admitted")
+    try:
+        check_output_path(args.backend, args.output)
+    except ValueError as exc:
+        parser.error(str(exc))
     if not args.freeze_label:
         parser.error("--freeze-label is required before optimizer execution")
     return controller(args.output, args.freeze_label, args.backend) if args.controller else supervise(args.output, args.freeze_label, args.backend)
