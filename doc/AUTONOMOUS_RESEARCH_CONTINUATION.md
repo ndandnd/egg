@@ -10,6 +10,19 @@ work, GitHub backups and Google Doc updates without repeated approvals.
 handles routine independent review, documentation and operations. Astra manages
 scientific decisions. Avoid broad rereads, redundant audits and repeated tests.
 
+- ACTIVE OBSERVATION TARGET: v2 job 559907, submitted once at 22:05:59 UTC,
+  source e23a653dcd77b6ce02eb0af5e544fea7edab9eca. Initially PENDING/Priority, then RUNNING at 3m48s;
+  no scientific result yet. WorkDir /home/nc437/egg-sistig-nonlinear-v2-20260927;
+  exclusive sentinel nonlinear-v2-submission-20260927. Local receipt folder
+  ../research-20260927/cluster/nonlinear-v2-dispatch-e23a653/submission/.
+  Requested 1 CPU/8GB; actually allocated 2 CPUs/8GB on snavely-cpu-16.
+  Native configured 1 thread. Started 22:06:15 UTC; frozen SHA
+  eb1d9f5dc8b8f7f1561c21dd8f8cad6105f8cfbc272c23b8c8a334e6a626f352.
+  Published launch receipts: research-20260927/launches/nonlinear-v2-job559907/. Only one dispatch was made; never resubmit on missing output/SSH errors.
+  Source CI 36353982002 PASSED at e23a653; no repeat test needed without changes.
+  Bundle SHA 582d3763c8813505a594970beb4878caab9f014ce6027a49c28531e1179b382b
+  matched locally/remotely; old worktree stayed at 80eb695. When terminal, retrieve
+  and seal raw/receipts before independent result audit. No automatic attempt 3.
 - Manuscript 0.4 remains the reviewed 22-page/seven-figure PDF. The goal is
   incomplete: matched nonlinear public evidence and a bundled manuscript/visual
   revision plus final scientific/layout review remain. No journal submission.
@@ -55,11 +68,13 @@ scientific decisions. Avoid broad rereads, redundant audits and repeated tests.
   source is published; freeze occurs once inside sbatch, never in preflight.
   Exclusive output result/sistig_nonlinear/20260927-attempt2. Before dispatch,
   verify its absence and fresh queue; preserve submission receipts. No automatic
-  attempt3, budget increase or altered scientific model if v2 fails.
-- Google Doc latest verified append: 90,665 bytes, SHA
-  b846ee877767569e20f8ff521f62b44cdede26423783f3f0e31af9fbdd961192;
-  previous 89,527 bytes is an exact prefix, heading once, Saved to Drive.
-  Update at the next combined publication/launch milestone; PDF stays 0.4.
+  attempt 3, budget increase or altered scientific model if v2 fails.
+- Google Doc latest verified append: 92,478 bytes, SHA
+  5edca9e3374528581e1b6434340967654c047f946c1d0e3b76032ec3bba91b2e;
+  previous 90,665 bytes is an exact prefix, heading once, Saved to Drive.
+  Includes exact enclosures and actual v2 launch/allocation; verification and
+  before/after exports: ../research-20260927/agent-notes/google-doc-v2-milestone-20260927/.
+  Lead independently checked after hash and prefix. PDF stays 0.4.
 - Hourly heartbeat advance-egg-journal-research remains active with cheaper
   model routing. Keep PR56 draft/unmerged. Preserve private GIRO, protected
   outcomes, all failed attempts and other projects. Exclude scaglione-compute-01.
@@ -665,7 +680,7 @@ One-bus proof/review is published3516d45; exactminimumflow design and its
 independent mathematical PASS are published2da04c8, alongside conditionalPASS
 for the numerical repair design and an explicitly unadmitted candidate
 sensitivity budget. Sol6_numerical_repair owns compact extractor/pure tests
-and prospectiveattempt3 protocol; LunaMax operational_data_audit reviews its
+and prospectiveattempt 3 protocol; LunaMax operational_data_audit reviews its
 stable implementation before any sourcefreeze/optimizer. Sol6_cardinality_bound
 is a separate worker implementing newexactflow modules/tests/protocol only.
 No public matching calculation before independent code review and published
@@ -683,7 +698,7 @@ candidate is backed up at b2a5a33; this is NOT qualification admission. Its
 LunaMax operational_data_audit is reviewing the implementation at those hashes;
 Sol6_numerical_repair is idle and available for targeted review fixes. Only
 after independent preflightPASS should root publish the review/finalfreeze
-and run the new exclusive result/native_pathflow/20260927-attempt3 once.
+and run the new exclusive result/native_pathflow/20260927-attempt 3 once.
 Use doc/NATIVE_PATHFLOW_ORPHAN_CHARGE_QUALIFICATION_PROTOCOL_20260927.md,
 not the older V2protocol. All oldrawattempts remain immutable.
 Sol6_cardinality_bound continues its separate pure exact-flow code/protocol.
@@ -694,7 +709,7 @@ GoogleDoc with a before/after preservation check when possible.
 ### Implementation preflight held for focused corrections
 
 Luna's independent review of candidate b2a5a33 passed the 48-test compact
-suite but did not admit attempt3. The shared normalizer can reject N alone
+suite but did not admit attempt 3. The shared normalizer can reject N alone
 before the full N+O correction ledger is emitted. The compact helper must
 record the complete failure ledger first, without changing indexed behavior.
 Additional promised pure controls must cover combined interval/session excess,
@@ -725,7 +740,7 @@ rereads, redundant tests and idle polling.
 - Working manuscript 0.4 remains the reviewed 22-page, seven-figure PDF.
   The first-draft goal is incomplete: matched nonlinear public physical-planner,
   full-hull and own-price-regret evidence and final scope review remain open.
-- Compact physical attempt3 independently passes all 20 CBC controls: 16
+- Compact physical attempt 3 independently passes all 20 CBC controls: 16
   numerical certificates and four expected infeasibilities. Its 35 calls took
   24.707 seconds. Audit covers 31 incumbents, 589 values, 31 physical witnesses
   and 25 corruption controls. Maximum whole-incumbent correction is

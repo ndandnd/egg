@@ -592,7 +592,7 @@ One-bus proof/review is published3516d45; exactminimumflow design and its
 independent mathematical PASS are published2da04c8, alongside conditionalPASS
 for the numerical repair design and an explicitly unadmitted candidate
 sensitivity budget. Sol6_numerical_repair owns compact extractor/pure tests
-and prospectiveattempt3 protocol; LunaMax operational_data_audit reviews its
+and prospectiveattempt 3 protocol; LunaMax operational_data_audit reviews its
 stable implementation before any sourcefreeze/optimizer. Sol6_cardinality_bound
 is a separate worker implementing newexactflow modules/tests/protocol only.
 No public matching calculation before independent code review and published
@@ -604,7 +604,7 @@ audit. No EGG clusterjob isactive. Rootownscommit/push/runadmission.
 ### Implementation preflight held for focused corrections
 
 Luna's independent review of candidate b2a5a33 passed the 48-test compact
-suite but did not admit attempt3. The shared normalizer can reject N alone
+suite but did not admit attempt 3. The shared normalizer can reject N alone
 before the full N+O correction ledger is emitted. The compact helper must
 record the complete failure ledger first, without changing indexed behavior.
 Additional promised pure controls must cover combined interval/session excess,
@@ -624,7 +624,7 @@ LunaMax document worker is completing the next GoogleDoc append.
 ### Reviewed freeze and two bounded local runs
 
 Published `dd5ad1659248b93d53f7f1515282d9530343567f` after independent
-implementation preflight passed both scoped changes. Compact attempt3 ran
+implementation preflight passed both scoped changes. Compact attempt 3 ran
 once: runner20/20,35native calls,24.706728seconds,source hashes unchanged.
 Original142files total1,309,561bytes; raw manifest SHA256
 c855d220a34b931804cf43c7aedf89d432aae41746c4169f3b87888120b2081a.
@@ -646,7 +646,7 @@ preceding db2bf93 and b2a5a33 heads passed; dd5ad16 CI was still running.
 
 ### Independent admission of both bounded results
 
-Both Luna Max result audits pass. Compact attempt3 preserves142original files,
+Both Luna Max result audits pass. Compact attempt 3 preserves142original files,
 accounts for35calls/31incumbents/589variables, replays31witnesses/69sessions/
 253SOC events, and rejects25corrupted copies. The sole projected positive
 orphan is1.2214e-12kWh; largest complete correction1.2261e-12 is below the
@@ -888,4 +888,14 @@ The separate depot-15 rational candidate now has independent PASS for exact idea
 
 The independently checked uniform-price/Fenchel certificate gives ideal depot-15 CH lower 424.365880667204…; independently evaluating the rational feasible witness gives CH≤D≤512.7694256264009…. These exact analytic bounds do not come from the failed pilot and establish neither optimum nor a positive gap. The lead verified the three candidate and three review entries against manifests e4729fcffca456729d7464861228f1f6530b572a3b352fe5abbd63ebd25ec30f and fc7ebbe2d1b5636a430855083b817bc3baf3373f68041ab599c2bc22318a8b19. See SISTIG_EXACT_NONLINEAR_ENCLOSURE_20260927.md.
 
-Sol implemented only a prospective timing allocation change: native 225/1380/225 seconds inside unchanged routine 240/1440/240, with v2/attempt2 identity. Luna's independent review passed; sixteen author pure tests, six reviewer focused checks and batch syntax checks passed. Root ran the actual same-source GRB 20+8 admission gate successfully over 41 source pins, with no optimizer or attempt creation. All native model/replay cores remain byte-identical. Root authorizes one new attempt2 after publication, with one freeze inside sbatch and all original caps/resources/exclusions preserved. A repeated failure must not trigger automatic attempt3, a budget increase or model changes. The first failed attempt and raw outputs remain immutable.
+Sol implemented only a prospective timing allocation change: native 225/1380/225 seconds inside unchanged routine 240/1440/240, with v2/attempt2 identity. Luna's independent review passed; sixteen author pure tests, six reviewer focused checks and batch syntax checks passed. Root ran the actual same-source GRB 20+8 admission gate successfully over 41 source pins, with no optimizer or attempt creation. All native model/replay cores remain byte-identical. Root authorizes one new attempt2 after publication, with one freeze inside sbatch and all original caps/resources/exclusions preserved. A repeated failure must not trigger automatic attempt 3, a budget increase or model changes. The first failed attempt and raw outputs remain immutable.
+
+### Timing-v2 source publication and single cluster submission
+
+Published e23a653dcd77b6ce02eb0af5e544fea7edab9eca, preserving all exact proof and failure-review manifests. Its Git bundle SHA 582d3763c8813505a594970beb4878caab9f014ce6027a49c28531e1179b382b matched locally and remotely. Root created the isolated /home/nc437/egg-sistig-nonlinear-v2-20260927 checkout, checked its source/clean tracked files, absence of attempt2 and fresh empty EGG queue, then made exactly one sbatch submission. Job 559907 was accepted at 22:05:59 UTC, initially PENDING/Priority, with requested 1 CPU/8GB, 36 minutes, no requeue and scaglione-compute-01 excluded. Initial allocated TRES is null. The old failed worktree remains unchanged. Local intent and retrieved submission receipts are under ../research-20260927/cluster/nonlinear-v2-dispatch-e23a653/; remote exclusive sentinel nonlinear-v2-submission-20260927 records the single job ID. The batch owns the one-time freeze; no preflight freeze or optimizer was run. Hosted CI 36353982002 was still running at this checkpoint. This is a submission record, not an experimental result; observe 559907 without resubmission and do not automatically create attempt 3.
+
+A later read-only observation confirmed job 559907 RUNNING at 1m23s, start 22:06:15 UTC, actual 2 CPU/8GB allocation on snavely-cpu-16 and frozen SHA eb1d9f5dc8b8f7f1561c21dd8f8cad6105f8cfbc272c23b8c8a334e6a626f352. The frozen source, v2 protocol, native wall budgets and routine guards match the published configuration. Scientific outputs were not inspected in this observation. Launch receipts and an explicitly transcribed running observation are sealed under research-20260927/launches/nonlinear-v2-job559907/.
+
+Hosted CI run 36353982002 subsequently completed SUCCESS for the actual execution source e23a653dcd77b6ce02eb0af5e544fea7edab9eca.
+
+The original Google Doc received one verified appendix covering the exact enclosures, failed v1, reviewed v2 and actual launch/allocation. Final export 92,478 bytes SHA 5edca9e3374528581e1b6434340967654c047f946c1d0e3b76032ec3bba91b2e; prior 90,665 bytes is an exact prefix, heading once, Saved to Drive. Root independently checked the final hash and prefix. Outer verification: ../research-20260927/agent-notes/google-doc-v2-milestone-20260927/. Final compact queue/accounting snapshot still reports 559907 RUNNING at 3m48s with two allocated CPUs; no scientific outcome is claimed. Hourly monitoring remains active with Sol/Luna routing. No manuscript render or additional experiment campaign was launched.
