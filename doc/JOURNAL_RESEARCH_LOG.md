@@ -291,3 +291,24 @@ remaining scientific gates. The version 0.1 PDF remains retrievable from its
 published Git commit. CI also passed at published head
 `4a8e2e52740537c4177906e32d585ad2f064246e` in run 36330964697;
 this does not assert CI success for subsequent edits.
+
+### First native recharge qualification — 12/15 passed, three preserved failures
+
+The independently reviewed source, tests, runner and prospective protocol were
+frozen at `d37878392f0848d34f28921c97b6e8d8e6533a77`. The first CBC execution
+attempted all 15 controls in 23.5736 seconds; 12 passed and three failed during
+witness extraction/replay. `cyclic_own_price` rejected a negative/nonfinite
+extracted charge; `preserved_reserve_planner` and `serial_connector` rejected
+simultaneous charging. Native starts/status/bounds were preserved before these
+exceptions, all source hashes remain unchanged, and every later cell was still
+attempted. Raw incumbent variable values preceding failed extraction were not
+fully recorded; that diagnostic limitation must not be filled with a rerun
+represented as the first result. The immutable raw tree has a separate manifest.
+
+The first run therefore **does not qualify the native adapter**. The positive
+analytical construction and exact independent audits are unaffected. Author
+and independent reviewer are diagnosing the software/witness failures without
+new optimization. Any correction requires new source/protocol freeze and a
+separate attempt retaining this failure denominator. No operational or cluster
+solve is yet launched. The 14-page draft and exact extension audits were backed
+up at `200e0e6`; CI for that newer head remains to be checked.

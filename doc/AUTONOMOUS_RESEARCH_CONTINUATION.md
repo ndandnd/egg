@@ -185,3 +185,13 @@ Working draft 0.2 is now rendered: 14 pages, five figures, PDF SHA-256
 Author all-page layout QA passed; exact extension artifacts have separate
 non-author audits. This supersedes the earlier rendering-pending entry.
 Operational/native scientific gates remain open, as does the research goal.
+
+## Latest native execution update
+
+The first frozen native CBC qualification has completed at source
+`d37878392f0848d34f28921c97b6e8d8e6533a77`: 12/15 passed, three witness
+extraction/replay exceptions, 23.5736 seconds. Preserve all raw files under
+`result/native_recharge/20260927-attempt1` and its manifest. This supersedes the
+prior unrun status. Native qualification remains **failed**, with author diagnosis
+and independent review in progress. No cluster or operational solve is admitted
+by partial success. Any corrected run needs a new freeze and separate output.
