@@ -74,8 +74,7 @@ Kerdreux, Colin and d'Aspremont, *An Approximate Shapley-Folkman Theorem*,
 arXiv:1712.08559v3 (1 July 2019), describes how aggregation of bounded nonconvex
 sets supports finite-sum duality-gap bounds. Its primary abstract was inspected:
 <https://arxiv.org/abs/1712.08559v3>. This is contextual attribution, not an
-assertion that this paper proves our specific fleet regret formulas. Full
-proof comparison remains pending. Starr's 1969 *Quasi-Equilibria in Markets with
+assertion that this paper proves our specific fleet regret formulas. The introduction and §§2–3 of the primary PDF were subsequently inspected; the later approximate sampling proofs remain unreviewed. The classical finite-dimensional summand bound is context, not an automatic statement about every unnormalized incentive. Starr's 1969 *Quasi-Equilibria in Markets with
 Non-Convex Preferences*, Econometrica 37(1),25–38, is a relevant antecedent;
 the author-hosted PDF at <https://econweb.ucsd.edu/~rstarr/Non-Convex%20Preferences.pdf>
 was located but timed out in this check. Do not describe that source as fully

@@ -73,10 +73,11 @@ while its relative regret divides by D. Its nonzero whole-operator regret
 limit applies only to the stated subsequence, not to all integer sizes.
 The extension figure script records these sample scopes and input hashes.
 
-Reviewed working PDF 0.2 has 14 pages and five figures; its immutable hash and
-all-page author visual check appear in the manuscript review record. Source 0.3
-is in preparation and is not yet a new reviewed PDF. The excellent-first-draft
-goal remains incomplete.
+Reviewed working PDF 0.3 has 17 pages and six figures. Its immutable identity
+and independent all-page visual check appear in
+`MANUSCRIPT_V03_LAYOUT_REVIEW_20260927.md`. This is layout review, not an
+independent review of all scientific prose. The excellent-first-draft goal
+remains incomplete.
 
 ## Reviewer audit before a first draft is called excellent
 
@@ -107,8 +108,22 @@ attempt and its independently checked three exceptions remain visible.
 
 The private 17-service candidate is blocked by off-depot charging and missing
 explicit movement records. A licensed public 37-service Hildenbrand timetable
-with complete directed deadheads is being translated into separately declared
-one-depot, one-connector scenarios. Traction/auxiliary rates, usable inventory,
+with complete directed deadheads has been independently translated into two
+separately declared one-depot, one-connector scenarios. Traction/auxiliary rates, usable inventory,
 constant efficiency, charger cap and synthetic costs are assumptions, not
 measured energy or reproduction of the publisher's optimization. No operational
 benefit or pricing result is established by data intake alone.
+
+The nineteen-control exact source-time extension and twenty-control compact
+formulation each passed independent numerical/raw/physical audits (22 and25
+corruptions rejected). Compact integer feasible-set equivalence does not imply
+identical LP relaxations or solver performance. The corrected native-hull V2
+returned8/8 certificates, with independent result review pending. First-run
+hull failure2certified/4exhausted/2blocked remains unchanged.
+
+The reserved-pair participant derivation was independently checked against all88
+archived physical optima: each pair's regret is at most20/n, and its aggregate
+reproduces the whole-operator regret under these specific connector rights.
+No general shared-resource-game or large-market contradiction follows.
+A new radius-dependent quadratic regret bound is under separate mathematical
+review and has not entered the manuscript.

@@ -440,3 +440,36 @@ preflight with no solver execution. A new participant-normalization derivation
 clarifies that reserved-resource small operators have vanishing individual
 regret in the replication family; it is pending independent review and does not
 change the already established whole-operator formula.
+
+## Compact formulation, repaired hull and participant review
+
+The separately frozen compact model (`ebb146e`) passed all20 synthetic controls:
+16 numerical certificates and four expected infeasibilities,35 native calls,
+24.5333s. Independent audit reconstructed31 raw incumbents/589 values,
+68 sessions/252 SOC events and every analytical/PWL minimum;25 corruptions were
+rejected. Full raw manifest and independent derived package are retained.
+This establishes the small-control gate, not public-case runtime or superiority
+of one formulation.
+
+The hull's separately frozen V2 (`186c987`) returned eight certificates on the
+unchanged eight-cell design,36 native calls and nine rational stored-projection
+polishing transfers. Supervisor22.4423s, exit0/no timeout. Its62 raw files are
+manifested before non-author review. The first attempt's2/4/2 outcomes remain
+unchanged. Native physical witnesses and global lower bounds remain numerical.
+
+A separate participant-rights derivation passed independent exact checks of all
+88 archived optima. With one A/B pair and reserved early/terminal connectors per
+participant, individual regret is bounded by20/n; summed regret matches the
+whole-operator formula only in this explicit symmetric institution. The paper
+now distinguishes these ownership and normalization choices. A focused primary
+PDF check of Kerdreux et al. §§1–3 supports aggregation context, without treating
+its classical summand bound as a proof of the EGG-specific incentive formulas.
+
+The complete37-service public pricing pilot is in final preflight, with two
+unchanged one-depot cases, flat synthetic price0.2 and bus cost100. Its candidate
+allocation is one CPU/8GB/12minutes, reserved node excluded; live queue/policy
+read found capacity and only the previously held user jobs. No public job yet.
+Latest published freeze186c987 and the three earlier checkpoints all passed
+GitHub CI. Manuscript0.3 has been rendered to17pages/sixfigures and is under
+independent layout review; author corrected crowded public-figure labels while
+retaining all37servicebars and unchanged energy totals.

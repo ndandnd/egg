@@ -4,16 +4,19 @@
 tracks what is established and what remains. `related-work/` contains source
 checks and BibTeX. `figures/` contains PNG, SVG and vector PDF exports plus
 provenance. `../output/pdf/egg-journal-working-draft.pdf` is the review copy.
-The reviewed PDF is version 0.2: 14 pages, five figures, SHA-256
-`1cf8ed050ad5b6d142353996eb299c6d9578a92d7f1f3cd320ed5c08e9af4697`.
-Version 0.3 is being edited with native-model qualification and updated source
-admission; it is not the PDF until rerendering and all-page visual review pass.
+The reviewed PDF is version 0.3: 17 pages, six figures, SHA-256
+`fac524aff668c2c1d81d027bf67a74894ad943953bf0638ca09d0ab51d035500`.
+`MANUSCRIPT_V03_LAYOUT_REVIEW_20260927.md` records the independent all-page
+layout check. This working draft includes native-model qualification, public
+source intake and explicit participant normalization. Public economic evidence
+and final whole-manuscript scientific review remain open.
 
 Reproduce figures with Python, NumPy and Matplotlib:
 
 ```sh
 python paper/make_figures.py
 python paper/make_extension_figures.py
+python paper/make_public_case_figure.py
 ```
 
 The first script builds the three original cyclic figures and manuscript
@@ -93,5 +96,8 @@ independent raw-variable, physical-witness and bound audit. First CBC attempt1
 remains FAILED 12/15. See the corresponding `result/native_recharge/` reviews.
 GRB licensing stdout is retained only in the complete external original archive;
 its public access note and manifest disclose all omissions. The separate
-half-minute and native-hull extensions are still prospective qualification work.
+the half-minute and compact physical gates have passed independent result audits.
+The corrected native hull gate returned eight certificates and is under independent
+result review; its original failed attempt remains preserved. The public pricing
+pilot is separately reviewed and frozen before execution.
 The excellent-first-draft goal is active and incomplete.

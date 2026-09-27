@@ -314,3 +314,64 @@ while a separate reviewer audits V1. No rerun before new review/freeze.
 Root compact path-flow module and20-control gate are ready for independent
 preflight, including a three-service/two-depot-visit control. No compact solve.
 The public-case figure is being generated; manuscript0.3 remains unrendered.
+
+## Compact gate passed; corrected hull gate active
+
+The compact twenty-cell first attempt at published `ebb146e` completed with
+20/20 admitted controls (16 numerical certificates and four expected
+infeasibilities), 35 native calls, 24.5333 seconds. Its 142 raw files and
+720,384 bytes are manifested and backed up in commit `186c987`; independent
+flat-mapping result audit is active. Do not rerun or change raw files.
+
+Hull V2 passed independent preflight after strict polishing-deadline and
+phase-accounting checks were added. The published execution freeze is
+`186c9876805d5096632786c5504f507847a5201f`; the corrected eight-cell run is
+active at `result/native_hull/20260927-attempt2`. It retains all scientific
+controls, original native oracle and existing caps/tolerances. Check the
+supervisor receipt before any action. The original V1 failure remains archived.
+
+A two-cell complete public-timetable pricing pilot is under separate preflight:
+`src/experiments/sistig_pricing_pilot.py`. No public optimizer has run. Require
+completed compact result audit and published pilot protocol/source freeze first.
+Prospective allocation is one CPU, 8 GB, 12 minutes, reserved node excluded.
+A live queue check found available default-partition capacity and only the
+existing held user jobs; they remain untouched. No new EGG cluster job yet.
+
+Participant normalization has independently passed all 88 archived optimum
+records, including both ties. The alternative institution explicitly grants
+one early and one terminal connector to each A/B-pair owner. Individual regret
+is at most 20/n while its sum reproduces the whole-fleet regret; no general
+shared-resource-game or anti-convexification claim follows. Manuscript source
+0.3 incorporates this result; the rendered/reviewed PDF remains 0.2 pending
+full layout verification. Google Doc has the saved public/timing/hull milestone
+with prior content preserved (71,160 characters at verification).
+
+### Both next gates completed
+
+The compact first attempt has independent PASS (all142 raw files,31 raw
+incumbents/589 values,68 sessions/252 SOC events,25 corruptions rejected).
+Hull V2 attempt2 has completed8/8 certificates,36 native calls and9 exact
+stored-number polishing transfers; supervisor exit0/no timeout in22.4423s.
+Its62 raw files905,863 bytes are manifested; independent result audit remains
+active. Do not duplicate either run. The public pilot is under source review,
+with added unique-phase/identity/native-bound admission checks and explicit
+cluster dependency hashes. No public job is submitted yet.
+
+### Reviewed manuscript 0.3 checkpoint
+
+The17-page/six-figure PDF0.3 passed independent all-page visual QA; its SHA-256
+is `fac524aff668c2c1d81d027bf67a74894ad943953bf0638ca09d0ab51d035500`.
+It now supersedes reviewedPDF0.2, with both prior hashes/history retained.
+See `paper/MANUSCRIPT_V03_LAYOUT_REVIEW_20260927.md`. It explicitly labels the
+public37-bus energy references as modeled and not optimized, and the new
+reserved-pair participant result as an alternative stated institution.
+This is a working draft, not submission-ready. A separate quadratic regret-radius
+bound is undergoing two independent mathematical checks and is not in thisPDF.
+
+The root public-pilot runner's five pure admission tests pass; final review
+includes full240s scientificroutine deadline,255s externalchildcap, exact
+backend/input identities, native-bound reconstruction and one ordered phase.
+Slurm wrapper records a560soutercap supervisorreceipt. No public run yet.
+The compact hull integration is separately authored with an explicit injected
+oracle and distinct retained-state identity; it has no optimizer run and awaits
+independent preflight. Do not confuse it with the already executed indexedV2.

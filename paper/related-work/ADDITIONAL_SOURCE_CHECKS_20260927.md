@@ -78,3 +78,19 @@ reserves connectors per A/B service-pair operator and derives individual regret
 <=20/n, despite the known possible constant aggregate limit. Independent review
 of that new note is pending. Starr1969 is a relevant classical antecedent; its
 author-hosted PDF was located but timed out, so no full-text-review claim is made.
+
+### Aggregation check extended beyond the abstract
+
+Primary PDF inspected 27 September 2026:
+<https://arxiv.org/pdf/1712.08559v3>, Kerdreux, Colin and d'Aspremont,
+*An Approximate Shapley-Folkman Theorem*. Read the introduction, §2 setup and
+§3 classical statement (PDF pages 1–6); later approximate sampling proofs were
+not reviewed. Theorem 3.3 limits the number of summands requiring convexification
+to the ambient dimension. This is a structural statement about aggregation,
+not an automatic conclusion that every unnormalized absolute incentive vanishes.
+The relevant comparison must declare bounded participant sets, coupling dimension,
+objective scaling and normalization. EGG's reserved-pair calculation supplies
+its own direct regret bound; this source is context, not the proof of that bound.
+The growing single operator and growing number of bounded operators must remain
+distinct interpretations. The author-hosted Starr PDF timed out again; no full
+review of Starr is claimed.
