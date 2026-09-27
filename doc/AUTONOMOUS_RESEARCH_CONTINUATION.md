@@ -27,19 +27,55 @@ a long draft or many experiments with journal readiness.
 - Main is still `7e18463`; PR52–55 are draft research branches. Inspect current
   refs and receipts before assuming any integration or new result.
 
+## Completed 27 September milestones
+
+The fully replenished cyclic construction and all 24 fixed parameter cases
+passed an independent exact arithmetic and physical audit (10 corruption
+controls). Nominal D=97, CH=94.8875, gap=2.1125; both fleet structures buy 30 kWh.
+The frozen source is 7bf913a and the immutable results are in
+`result/cyclic_gap/20260927-attempt1`.
+
+The harder reuse frontier at frozen 7d3d764 attempted all 45 comparison cells
+and 15 references. Exactly 44 cells certified; the cold return-state failure
+remains failed. An independent exact pricing DP and rational Fenchel lower
+bounds support all 44 successful certificates, while physical witnesses retain
+numerical replay tolerances. All 19 corruption controls pass. A prospective
+logging-only repair at 78bb4c0 fixes mutable tangent snapshots; all 244 original
+files remain unchanged. Results and reviews are in
+`result/reuse_frontier/20260927-attempt1`.
+
+Across 12 warm transitions, retained columns need 17 clean calls. Always paying
+for a full-pricing proposal plus mandatory verification has a floor of 24 calls,
+so that architecture cannot win this metric on the observed trajectory. Do not
+launch a learner without a different explicit useful-work hypothesis.
+
+The 16-paper source matrix, editable manuscript and three scientific figures
+are under `paper/`; the rendered review copy is
+`output/pdf/egg-journal-working-draft.pdf`. This is working draft 0.1, not yet
+the excellent first draft promised to the user: operational evidence and
+economic interpretation still need work. Independent artifact audits and an
+author-disclosed manuscript review accompany the analytical evidence.
+
 ## Current priorities
 
-1. Verify a fully replenished continuous-charging positive-gap witness, with
-   equal boundary-energy accounting and independent mathematical/physical audit.
-2. Freeze and run a small harder reuse workload with competing fleet structures
-   and more charging opportunities. Compare cold, retained and analytic-shift
-   arms at the same clean certificate, counting all work and preserving failures.
-3. Establish journal novelty against primary literature; separate classical
-   convex-hull/LOC theory from our application and computational contribution.
-4. Audit GIRO source fidelity locally; favor synthetic/public reproducible
-   evidence while private case-study translation is qualified.
-5. Build the manuscript, proofs, figures and tables from verified artifacts.
-   Train a learner only if simple reuse leaves demonstrated useful work.
+1. Complete the local-only source-faithful GIRO microcase extraction and
+   directed/time-dependent deadhead coverage audit. Preserve raw provenance
+   outside Git; do not describe this subset as a complete named weekday.
+2. Design and independently qualify a native terminal-recharge physical adapter,
+   with precise charging-window overlap and shared-capacity semantics. Avoid
+   terminal service markers in a variable-fleet replenishment claim.
+3. Freeze a bounded operational microcase protocol before solving. Separate
+   source service energy from modeled deadhead energy, battery/charger choices,
+   operating costs and supply curvature. Start with falsification controls;
+   launch scoped Unicorn jobs only when implementation and input gates pass.
+4. The Parmentier companion benchmark is pinned and locally inspected. It is
+   useful for independent parser/route feasibility, but its abstract units and
+   source-model simplifications are not calibrated bus-operation evidence.
+   Local intake is `../research-20260927/agent-notes/public-data/`; do not publish
+   raw inputs while data-specific redistribution terms remain unresolved.
+5. Integrate verified operational findings, sensitivity analyses and useful
+   figures into the manuscript; complete reviewer audits and CI. Keep GitHub,
+   this file and the research document current at meaningful milestones.
 
 ## Autonomous work loop
 

@@ -1,0 +1,4135 @@
+{
+  "arm": "retained",
+  "bound_source": "fresh clean RMP dual plus full-pricing lower bound only",
+  "calls_clean": 2,
+  "calls_proposal": 0,
+  "calls_seed": 0,
+  "columns": [
+    {
+      "arc_kinds": [
+        [
+          "dep",
+          "dep"
+        ],
+        [
+          "dep"
+        ]
+      ],
+      "charges": [
+        {
+          "after_trip": "t0",
+          "before_trip": "t1",
+          "kwh": 9.999999999999995,
+          "slot": 2,
+          "vehicle": 0
+        },
+        {
+          "after_trip": "t1",
+          "before_trip": "marker0",
+          "kwh": 9.999999999999998,
+          "slot": 8,
+          "vehicle": 0
+        },
+        {
+          "after_trip": "t1",
+          "before_trip": "marker0",
+          "kwh": 9.999999999999998,
+          "slot": 9,
+          "vehicle": 0
+        },
+        {
+          "after_trip": "t2",
+          "before_trip": "marker1",
+          "kwh": 9.999999999999998,
+          "slot": 7,
+          "vehicle": 1
+        },
+        {
+          "after_trip": "t2",
+          "before_trip": "marker1",
+          "kwh": 4.999999999999986,
+          "slot": 8,
+          "vehicle": 1
+        }
+      ],
+      "column_key": "3762a8f0f12f7d93fa05bc29051209b9e4dd7109277e172c7b8b0b98df0d416a",
+      "fleet": 2,
+      "instance_hash": "fed7a661911d",
+      "load": [
+        0.0,
+        0.0,
+        9.999999999999995,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        9.999999999999998,
+        14.999999999999984,
+        9.999999999999998,
+        0.0
+      ],
+      "load_hash": "dc0ebc68cf16",
+      "ops_cost": 20.0,
+      "oracle_stats": {
+        "backend": "CBC",
+        "bound": 33.5,
+        "extra": {
+          "load_reconstruction": {
+            "max_abs_residual_kwh": 1.7763568394002505e-15,
+            "max_abs_residual_slot": 8,
+            "physical_min_kwh": 0.0,
+            "policy_version": 1,
+            "raw_load_kwh": [
+              0.0,
+              0.0,
+              9.999999999999995,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              9.999999999999998,
+              14.999999999999986,
+              9.999999999999998,
+              0.0
+            ],
+            "raw_min_kwh": 0.0,
+            "residual_kwh": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              1.7763568394002505e-15,
+              0.0,
+              0.0
+            ],
+            "tolerance_kwh": 0.0001
+          },
+          "pricing_objective_reconstruction": {
+            "abs_adjustment": 7.105427357601002e-15,
+            "model_obj": 33.5,
+            "physical_obj": 33.49999999999999,
+            "policy_version": 1,
+            "prices": [
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3
+            ]
+          },
+          "threads": 1
+        },
+        "lp_mip_gap_abs": 13.5,
+        "lp_obj": 20.0,
+        "lp_wall_s": 0.003049135208129883,
+        "max_mip_gap": 1e-09,
+        "mip_gap": 0.0,
+        "n_constrs": 205,
+        "n_int": 68,
+        "n_vars": 189,
+        "obj": 33.5,
+        "status": "OPTIMAL",
+        "time_limit_s": 10,
+        "wall_s": 0.8172469139099121
+      },
+      "replay_ok": true,
+      "replay_violations": [],
+      "schedule_hash": "bc697843caa0",
+      "sequences": [
+        [
+          "t0",
+          "t1",
+          "marker0"
+        ],
+        [
+          "t2",
+          "marker1"
+        ]
+      ]
+    },
+    {
+      "arc_kinds": [
+        [
+          "dep"
+        ],
+        [
+          "dep",
+          "dep"
+        ]
+      ],
+      "charges": [
+        {
+          "after_trip": "t0",
+          "before_trip": "marker0",
+          "kwh": 9.999999999999998,
+          "slot": 1,
+          "vehicle": 0
+        },
+        {
+          "after_trip": "t0",
+          "before_trip": "marker0",
+          "kwh": 4.999999999999985,
+          "slot": 5,
+          "vehicle": 0
+        },
+        {
+          "after_trip": "t1",
+          "before_trip": "t2",
+          "kwh": 4.99999999999999,
+          "slot": 4,
+          "vehicle": 1
+        },
+        {
+          "after_trip": "t1",
+          "before_trip": "t2",
+          "kwh": 9.999999999999998,
+          "slot": 5,
+          "vehicle": 1
+        },
+        {
+          "after_trip": "t2",
+          "before_trip": "marker1",
+          "kwh": 4.999999999999986,
+          "slot": 7,
+          "vehicle": 1
+        },
+        {
+          "after_trip": "t2",
+          "before_trip": "marker1",
+          "kwh": 9.999999999999998,
+          "slot": 9,
+          "vehicle": 1
+        }
+      ],
+      "column_key": "ff7233d297904d871a47714ab43a4525e1da442a97981886a3148c21ef9a7b8f",
+      "fleet": 2,
+      "instance_hash": "fed7a661911d",
+      "load": [
+        0.0,
+        9.999999999999998,
+        0.0,
+        0.0,
+        4.99999999999999,
+        14.999999999999982,
+        0.0,
+        4.999999999999986,
+        0.0,
+        9.999999999999998,
+        0.0
+      ],
+      "load_hash": "65be62bcd314",
+      "ops_cost": 20.0,
+      "oracle_stats": {
+        "backend": "CBC",
+        "bound": 54.5,
+        "extra": {
+          "load_reconstruction": {
+            "max_abs_residual_kwh": 0.0,
+            "max_abs_residual_slot": 0,
+            "physical_min_kwh": 0.0,
+            "policy_version": 1,
+            "raw_load_kwh": [
+              0.0,
+              9.999999999999998,
+              0.0,
+              0.0,
+              4.99999999999999,
+              14.999999999999982,
+              0.0,
+              4.999999999999986,
+              0.0,
+              9.999999999999998,
+              0.0
+            ],
+            "raw_min_kwh": 0.0,
+            "residual_kwh": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "tolerance_kwh": 0.0001
+          },
+          "pricing_objective_reconstruction": {
+            "abs_adjustment": 4.263256414560601e-14,
+            "model_obj": 54.5,
+            "physical_obj": 54.49999999999996,
+            "policy_version": 1,
+            "prices": [
+              0.0,
+              0.0,
+              2.299999999999999,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              2.3,
+              3.2999999999999967,
+              2.3,
+              0.0
+            ]
+          },
+          "threads": 1
+        },
+        "lp_mip_gap_abs": 34.5,
+        "lp_obj": 20.0,
+        "lp_wall_s": 0.0012748241424560547,
+        "max_mip_gap": 1e-09,
+        "mip_gap": 0.0,
+        "n_constrs": 205,
+        "n_int": 68,
+        "n_vars": 189,
+        "obj": 54.5,
+        "status": "OPTIMAL",
+        "time_limit_s": 10,
+        "wall_s": 0.4793071746826172
+      },
+      "replay_ok": true,
+      "replay_violations": [],
+      "schedule_hash": "3a69c80682b8",
+      "sequences": [
+        [
+          "t0",
+          "marker0"
+        ],
+        [
+          "t1",
+          "t2",
+          "marker1"
+        ]
+      ]
+    },
+    {
+      "arc_kinds": [
+        [
+          "dep"
+        ],
+        [
+          "dep",
+          "dep"
+        ]
+      ],
+      "charges": [
+        {
+          "after_trip": "t1",
+          "before_trip": "marker0",
+          "kwh": 4.999999999999986,
+          "slot": 4,
+          "vehicle": 0
+        },
+        {
+          "after_trip": "t1",
+          "before_trip": "marker0",
+          "kwh": 9.999999999999998,
+          "slot": 6,
+          "vehicle": 0
+        },
+        {
+          "after_trip": "t0",
+          "before_trip": "t2",
+          "kwh": 9.999999999999998,
+          "slot": 3,
+          "vehicle": 1
+        },
+        {
+          "after_trip": "t0",
+          "before_trip": "t2",
+          "kwh": 4.99999999999999,
+          "slot": 4,
+          "vehicle": 1
+        },
+        {
+          "after_trip": "t2",
+          "before_trip": "marker1",
+          "kwh": 4.999999999999986,
+          "slot": 7,
+          "vehicle": 1
+        },
+        {
+          "after_trip": "t2",
+          "before_trip": "marker1",
+          "kwh": 9.999999999999998,
+          "slot": 8,
+          "vehicle": 1
+        }
+      ],
+      "column_key": "7cc376265efbfad3eaa4a38cb28369795197aa467c53da37330f5676fa0fa31d",
+      "fleet": 2,
+      "instance_hash": "fed7a661911d",
+      "load": [
+        0.0,
+        0.0,
+        0.0,
+        9.999999999999998,
+        9.999999999999975,
+        0.0,
+        9.999999999999998,
+        4.999999999999986,
+        9.999999999999998,
+        0.0,
+        0.0
+      ],
+      "load_hash": "028d750209ac",
+      "ops_cost": 20.0,
+      "oracle_stats": {
+        "backend": "CBC",
+        "bound": 54.107142857142776,
+        "extra": {
+          "load_reconstruction": {
+            "max_abs_residual_kwh": 1.7763568394002505e-15,
+            "max_abs_residual_slot": 4,
+            "physical_min_kwh": 0.0,
+            "policy_version": 1,
+            "raw_load_kwh": [
+              0.0,
+              0.0,
+              0.0,
+              9.999999999999998,
+              9.999999999999977,
+              0.0,
+              9.999999999999998,
+              4.999999999999986,
+              9.999999999999998,
+              0.0,
+              0.0
+            ],
+            "raw_min_kwh": 0.0,
+            "residual_kwh": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              1.7763568394002505e-15,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "tolerance_kwh": 0.0001
+          },
+          "pricing_objective_reconstruction": {
+            "abs_adjustment": 5.684341886080802e-14,
+            "model_obj": 54.107142857142776,
+            "physical_obj": 54.10714285714272,
+            "policy_version": 1,
+            "prices": [
+              0.0,
+              1.371428571428571,
+              1.2285714285714298,
+              0.0,
+              0.8357142857142841,
+              1.9071428571428541,
+              0.0,
+              1.7642857142857136,
+              1.6928571428571364,
+              2.3,
+              0.0
+            ]
+          },
+          "threads": 1
+        },
+        "lp_mip_gap_abs": 34.107142857142776,
+        "lp_obj": 20.0,
+        "lp_wall_s": 0.0012140274047851562,
+        "max_mip_gap": 1e-09,
+        "mip_gap": 0.0,
+        "n_constrs": 205,
+        "n_int": 68,
+        "n_vars": 189,
+        "obj": 54.107142857142776,
+        "status": "OPTIMAL",
+        "time_limit_s": 10,
+        "wall_s": 0.435575008392334
+      },
+      "replay_ok": true,
+      "replay_violations": [],
+      "schedule_hash": "5c4d740a670a",
+      "sequences": [
+        [
+          "t1",
+          "marker0"
+        ],
+        [
+          "t0",
+          "t2",
+          "marker1"
+        ]
+      ]
+    },
+    {
+      "arc_kinds": [
+        [
+          "dep"
+        ],
+        [
+          "dep",
+          "dep"
+        ]
+      ],
+      "charges": [
+        {
+          "after_trip": "t1",
+          "before_trip": "marker1",
+          "kwh": 4.999999999999986,
+          "slot": 5,
+          "vehicle": 0
+        },
+        {
+          "after_trip": "t1",
+          "before_trip": "marker1",
+          "kwh": 9.999999999999998,
+          "slot": 6,
+          "vehicle": 0
+        },
+        {
+          "after_trip": "t0",
+          "before_trip": "t2",
+          "kwh": 4.99999999999999,
+          "slot": 1,
+          "vehicle": 1
+        },
+        {
+          "after_trip": "t0",
+          "before_trip": "t2",
+          "kwh": 9.999999999999998,
+          "slot": 2,
+          "vehicle": 1
+        },
+        {
+          "after_trip": "t2",
+          "before_trip": "marker0",
+          "kwh": 4.999999999999986,
+          "slot": 7,
+          "vehicle": 1
+        },
+        {
+          "after_trip": "t2",
+          "before_trip": "marker0",
+          "kwh": 9.999999999999998,
+          "slot": 9,
+          "vehicle": 1
+        }
+      ],
+      "column_key": "19c9b2b5e267ac9442053cf2eeda062bbbaaa6ba3a0dc1647309ea285d93ac61",
+      "fleet": 2,
+      "instance_hash": "fed7a661911d",
+      "load": [
+        0.0,
+        4.99999999999999,
+        9.999999999999998,
+        0.0,
+        0.0,
+        4.999999999999986,
+        9.999999999999998,
+        4.999999999999986,
+        0.0,
+        9.999999999999998,
+        0.0
+      ],
+      "load_hash": "9e1c0b521bf4",
+      "ops_cost": 20.0,
+      "oracle_stats": {
+        "backend": "CBC",
+        "bound": 72.96428571428571,
+        "extra": {
+          "load_reconstruction": {
+            "max_abs_residual_kwh": 0.0,
+            "max_abs_residual_slot": 0,
+            "physical_min_kwh": 0.0,
+            "policy_version": 1,
+            "raw_load_kwh": [
+              0.0,
+              4.99999999999999,
+              9.999999999999998,
+              0.0,
+              0.0,
+              4.999999999999986,
+              9.999999999999998,
+              4.999999999999986,
+              0.0,
+              9.999999999999998,
+              0.0
+            ],
+            "raw_min_kwh": 0.0,
+            "residual_kwh": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "tolerance_kwh": 0.0001
+          },
+          "pricing_objective_reconstruction": {
+            "abs_adjustment": 5.684341886080802e-14,
+            "model_obj": 72.96428571428571,
+            "physical_obj": 72.96428571428565,
+            "policy_version": 1,
+            "prices": [
+              0.0,
+              1.0738095238095258,
+              0.6928571428571406,
+              1.1273809523809535,
+              1.5202380952380936,
+              1.460714285714288,
+              1.1214285714285723,
+              1.4964285714285679,
+              1.7226190476190515,
+              1.4666666666666668,
+              0.0
+            ]
+          },
+          "threads": 1
+        },
+        "lp_mip_gap_abs": 52.96428571428571,
+        "lp_obj": 20.0,
+        "lp_wall_s": 0.0012760162353515625,
+        "max_mip_gap": 1e-09,
+        "mip_gap": 0.0,
+        "n_constrs": 205,
+        "n_int": 68,
+        "n_vars": 189,
+        "obj": 72.96428571428571,
+        "status": "OPTIMAL",
+        "time_limit_s": 10,
+        "wall_s": 1.093026876449585
+      },
+      "replay_ok": true,
+      "replay_violations": [],
+      "schedule_hash": "1bc26dc76639",
+      "sequences": [
+        [
+          "t1",
+          "marker1"
+        ],
+        [
+          "t0",
+          "t2",
+          "marker0"
+        ]
+      ]
+    },
+    {
+      "arc_kinds": [
+        [
+          "dep"
+        ],
+        [
+          "dep",
+          "dep"
+        ]
+      ],
+      "charges": [
+        {
+          "after_trip": "t0",
+          "before_trip": "marker1",
+          "kwh": 9.999999999999998,
+          "slot": 2,
+          "vehicle": 0
+        },
+        {
+          "after_trip": "t0",
+          "before_trip": "marker1",
+          "kwh": 4.999999999999986,
+          "slot": 3,
+          "vehicle": 0
+        },
+        {
+          "after_trip": "t1",
+          "before_trip": "t2",
+          "kwh": 9.999999999999998,
+          "slot": 4,
+          "vehicle": 1
+        },
+        {
+          "after_trip": "t1",
+          "before_trip": "t2",
+          "kwh": 4.99999999999999,
+          "slot": 5,
+          "vehicle": 1
+        },
+        {
+          "after_trip": "t2",
+          "before_trip": "marker0",
+          "kwh": 4.999999999999985,
+          "slot": 7,
+          "vehicle": 1
+        },
+        {
+          "after_trip": "t2",
+          "before_trip": "marker0",
+          "kwh": 9.999999999999998,
+          "slot": 8,
+          "vehicle": 1
+        }
+      ],
+      "column_key": "219fc2b33da9b54376bb3a41211e0e53f4167b6119398371bc4338c4a055abc9",
+      "fleet": 2,
+      "instance_hash": "fed7a661911d",
+      "load": [
+        0.0,
+        0.0,
+        9.999999999999998,
+        4.999999999999986,
+        9.999999999999998,
+        4.99999999999999,
+        0.0,
+        4.999999999999985,
+        9.999999999999998,
+        0.0,
+        0.0
+      ],
+      "load_hash": "12a081c6a6ea",
+      "ops_cost": 20.0,
+      "oracle_stats": {
+        "backend": "CBC",
+        "bound": 76.13796768707557,
+        "extra": {
+          "load_reconstruction": {
+            "max_abs_residual_kwh": 0.0,
+            "max_abs_residual_slot": 0,
+            "physical_min_kwh": 0.0,
+            "policy_version": 1,
+            "raw_load_kwh": [
+              0.0,
+              0.0,
+              9.999999999999998,
+              4.999999999999986,
+              9.999999999999998,
+              4.99999999999999,
+              0.0,
+              4.999999999999985,
+              9.999999999999998,
+              0.0,
+              0.0
+            ],
+            "raw_min_kwh": 0.0,
+            "residual_kwh": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "tolerance_kwh": 0.0001
+          },
+          "pricing_objective_reconstruction": {
+            "abs_adjustment": 5.684341886080802e-14,
+            "model_obj": 76.13796768707557,
+            "physical_obj": 76.13796768707552,
+            "policy_version": 1,
+            "prices": [
+              0.0,
+              1.0857142857142856,
+              1.003358843537435,
+              1.05714285714286,
+              1.3290178571428652,
+              1.3471088435374539,
+              1.5511160714285934,
+              1.4056547619047524,
+              1.3764668367347235,
+              1.542857142857142,
+              0.0
+            ]
+          },
+          "threads": 1
+        },
+        "lp_mip_gap_abs": 56.13796768707557,
+        "lp_obj": 20.0,
+        "lp_wall_s": 0.0014576911926269531,
+        "max_mip_gap": 1e-09,
+        "mip_gap": 0.0,
+        "n_constrs": 205,
+        "n_int": 68,
+        "n_vars": 189,
+        "obj": 76.13796768707557,
+        "status": "OPTIMAL",
+        "time_limit_s": 10,
+        "wall_s": 0.9672560691833496
+      },
+      "replay_ok": true,
+      "replay_violations": [],
+      "schedule_hash": "7bdf7535d15d",
+      "sequences": [
+        [
+          "t0",
+          "marker1"
+        ],
+        [
+          "t1",
+          "t2",
+          "marker0"
+        ]
+      ]
+    },
+    {
+      "arc_kinds": [
+        [
+          "dep",
+          "dep"
+        ],
+        [
+          "dep"
+        ]
+      ],
+      "charges": [
+        {
+          "after_trip": "t0",
+          "before_trip": "t2",
+          "kwh": 10.0,
+          "slot": 1,
+          "vehicle": 0
+        },
+        {
+          "after_trip": "t0",
+          "before_trip": "t2",
+          "kwh": 5.0,
+          "slot": 3,
+          "vehicle": 0
+        },
+        {
+          "after_trip": "t2",
+          "before_trip": "marker0",
+          "kwh": 5.0,
+          "slot": 7,
+          "vehicle": 0
+        },
+        {
+          "after_trip": "t2",
+          "before_trip": "marker0",
+          "kwh": 10.0,
+          "slot": 8,
+          "vehicle": 0
+        },
+        {
+          "after_trip": "t1",
+          "before_trip": "marker1",
+          "kwh": 5.0,
+          "slot": 7,
+          "vehicle": 1
+        },
+        {
+          "after_trip": "t1",
+          "before_trip": "marker1",
+          "kwh": 10.0,
+          "slot": 8,
+          "vehicle": 1
+        }
+      ],
+      "column_key": "f70c732831132640287edbc2832331b3b004ab130cb89caf51969d40d87c84a8",
+      "fleet": 2,
+      "instance_hash": "fed7a661911d",
+      "load": [
+        0.0,
+        10.0,
+        0.0,
+        5.0,
+        0.0,
+        0.0,
+        0.0,
+        10.0,
+        20.0,
+        0.0,
+        0.0
+      ],
+      "load_hash": "857bdfe24801",
+      "ops_cost": 20.0,
+      "oracle_stats": {
+        "backend": "CBC",
+        "bound": 75.60320391414403,
+        "extra": {
+          "load_reconstruction": {
+            "max_abs_residual_kwh": 0.0,
+            "max_abs_residual_slot": 0,
+            "physical_min_kwh": 0.0,
+            "policy_version": 1,
+            "raw_load_kwh": [
+              0.0,
+              10.0,
+              0.0,
+              5.0,
+              0.0,
+              0.0,
+              0.0,
+              10.0,
+              20.0,
+              0.0,
+              0.0
+            ],
+            "raw_min_kwh": 0.0,
+            "residual_kwh": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "tolerance_kwh": 0.0001
+          },
+          "pricing_objective_reconstruction": {
+            "abs_adjustment": 0.0,
+            "model_obj": 75.60320391414403,
+            "physical_obj": 75.60320391414403,
+            "policy_version": 1,
+            "prices": [
+              0.0,
+              1.0320860389611737,
+              1.2464285714285803,
+              1.061697781385118,
+              1.4588947510823163,
+              1.4330357142857189,
+              1.4320975378788827,
+              1.3335227272726973,
+              1.3319313672439865,
+              1.3735344516593928,
+              0.0
+            ]
+          },
+          "threads": 1
+        },
+        "lp_mip_gap_abs": 55.60320391414403,
+        "lp_obj": 20.0,
+        "lp_wall_s": 0.0012710094451904297,
+        "max_mip_gap": 1e-09,
+        "mip_gap": 0.0,
+        "n_constrs": 205,
+        "n_int": 68,
+        "n_vars": 189,
+        "obj": 75.60320391414403,
+        "status": "OPTIMAL",
+        "time_limit_s": 10,
+        "wall_s": 1.0472540855407715
+      },
+      "replay_ok": true,
+      "replay_violations": [],
+      "schedule_hash": "1bc26dc76639",
+      "sequences": [
+        [
+          "t0",
+          "t2",
+          "marker0"
+        ],
+        [
+          "t1",
+          "marker1"
+        ]
+      ]
+    },
+    {
+      "arc_kinds": [
+        [
+          "dep",
+          "dep"
+        ],
+        [
+          "dep"
+        ]
+      ],
+      "charges": [
+        {
+          "after_trip": "t0",
+          "before_trip": "t2",
+          "kwh": 5.0,
+          "slot": 1,
+          "vehicle": 0
+        },
+        {
+          "after_trip": "t0",
+          "before_trip": "t2",
+          "kwh": 10.0,
+          "slot": 3,
+          "vehicle": 0
+        },
+        {
+          "after_trip": "t2",
+          "before_trip": "marker0",
+          "kwh": 5.0,
+          "slot": 7,
+          "vehicle": 0
+        },
+        {
+          "after_trip": "t2",
+          "before_trip": "marker0",
+          "kwh": 10.0,
+          "slot": 9,
+          "vehicle": 0
+        },
+        {
+          "after_trip": "t1",
+          "before_trip": "marker1",
+          "kwh": 5.0,
+          "slot": 4,
+          "vehicle": 1
+        },
+        {
+          "after_trip": "t1",
+          "before_trip": "marker1",
+          "kwh": 10.0,
+          "slot": 9,
+          "vehicle": 1
+        }
+      ],
+      "column_key": "f8dda416bbe87147eecfef88e15bcc00c4a57e984b51407692ed229853ce3aa6",
+      "fleet": 2,
+      "instance_hash": "fed7a661911d",
+      "load": [
+        0.0,
+        5.0,
+        0.0,
+        10.0,
+        5.0,
+        0.0,
+        0.0,
+        5.0,
+        0.0,
+        20.0,
+        0.0
+      ],
+      "load_hash": "2fe30a70a458",
+      "ops_cost": 20.0,
+      "oracle_stats": {
+        "backend": "CBC",
+        "bound": 76.04585475288741,
+        "extra": {
+          "load_reconstruction": {
+            "max_abs_residual_kwh": 0.0,
+            "max_abs_residual_slot": 0,
+            "physical_min_kwh": 0.0,
+            "policy_version": 1,
+            "raw_load_kwh": [
+              0.0,
+              5.0,
+              0.0,
+              10.0,
+              5.0,
+              0.0,
+              0.0,
+              5.0,
+              0.0,
+              20.0,
+              0.0
+            ],
+            "raw_min_kwh": 0.0,
+            "residual_kwh": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "tolerance_kwh": 0.0001
+          },
+          "pricing_objective_reconstruction": {
+            "abs_adjustment": 0.0,
+            "model_obj": 76.04585475288741,
+            "physical_obj": 76.04585475288741,
+            "policy_version": 1,
+            "prices": [
+              0.0,
+              1.1605914051226507,
+              1.2362602024711493,
+              1.0461309523809983,
+              1.3454613095238113,
+              1.392857142857141,
+              1.409623297709221,
+              1.3738095238095214,
+              1.430653916396113,
+              1.3092617018398758,
+              0.0
+            ]
+          },
+          "threads": 1
+        },
+        "lp_mip_gap_abs": 56.04585475288741,
+        "lp_obj": 20.0,
+        "lp_wall_s": 0.00150299072265625,
+        "max_mip_gap": 1e-09,
+        "mip_gap": 0.0,
+        "n_constrs": 205,
+        "n_int": 68,
+        "n_vars": 189,
+        "obj": 76.04585475288741,
+        "status": "OPTIMAL",
+        "time_limit_s": 10,
+        "wall_s": 1.0658960342407227
+      },
+      "replay_ok": true,
+      "replay_violations": [],
+      "schedule_hash": "1bc26dc76639",
+      "sequences": [
+        [
+          "t0",
+          "t2",
+          "marker0"
+        ],
+        [
+          "t1",
+          "marker1"
+        ]
+      ]
+    },
+    {
+      "arc_kinds": [
+        [
+          "dep",
+          "dep"
+        ],
+        [
+          "dep"
+        ]
+      ],
+      "charges": [
+        {
+          "after_trip": "t0",
+          "before_trip": "t2",
+          "kwh": 5.0,
+          "slot": 1,
+          "vehicle": 0
+        },
+        {
+          "after_trip": "t0",
+          "before_trip": "t2",
+          "kwh": 10.0,
+          "slot": 3,
+          "vehicle": 0
+        },
+        {
+          "after_trip": "t2",
+          "before_trip": "marker0",
+          "kwh": 10.0,
+          "slot": 7,
+          "vehicle": 0
+        },
+        {
+          "after_trip": "t2",
+          "before_trip": "marker0",
+          "kwh": 5.0,
+          "slot": 8,
+          "vehicle": 0
+        },
+        {
+          "after_trip": "t1",
+          "before_trip": "marker1",
+          "kwh": 10.0,
+          "slot": 5,
+          "vehicle": 1
+        },
+        {
+          "after_trip": "t1",
+          "before_trip": "marker1",
+          "kwh": 5.0,
+          "slot": 6,
+          "vehicle": 1
+        }
+      ],
+      "column_key": "e1a02696ac9467aafb9e443b276a96200058f21ff31e50de57f66263d26690ad",
+      "fleet": 2,
+      "instance_hash": "fed7a661911d",
+      "load": [
+        0.0,
+        5.0,
+        0.0,
+        10.0,
+        0.0,
+        10.0,
+        5.0,
+        10.0,
+        5.0,
+        0.0,
+        0.0
+      ],
+      "load_hash": "f480e7585812",
+      "ops_cost": 20.0,
+      "oracle_stats": {
+        "backend": "CBC",
+        "bound": 77.3951835780088,
+        "extra": {
+          "load_reconstruction": {
+            "max_abs_residual_kwh": 0.0,
+            "max_abs_residual_slot": 0,
+            "physical_min_kwh": 0.0,
+            "policy_version": 1,
+            "raw_load_kwh": [
+              0.0,
+              5.0,
+              0.0,
+              10.0,
+              0.0,
+              10.0,
+              5.0,
+              10.0,
+              5.0,
+              0.0,
+              0.0
+            ],
+            "raw_min_kwh": 0.0,
+            "residual_kwh": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "tolerance_kwh": 0.0001
+          },
+          "pricing_objective_reconstruction": {
+            "abs_adjustment": 1.4210854715202004e-14,
+            "model_obj": 77.3951835780088,
+            "physical_obj": 77.39518357800878,
+            "policy_version": 1,
+            "prices": [
+              0.0,
+              1.1417264521017974,
+              1.2306074388377293,
+              1.1125000000000052,
+              1.3560865300483191,
+              1.312116773200792,
+              1.3304158254381218,
+              1.3710899921837363,
+              1.4154809072927725,
+              1.4265383858520748,
+              0.0
+            ]
+          },
+          "threads": 1
+        },
+        "lp_mip_gap_abs": 57.3951835780088,
+        "lp_obj": 20.0,
+        "lp_wall_s": 0.0012941360473632812,
+        "max_mip_gap": 1e-09,
+        "mip_gap": 0.0,
+        "n_constrs": 205,
+        "n_int": 68,
+        "n_vars": 189,
+        "obj": 77.3951835780088,
+        "status": "OPTIMAL",
+        "time_limit_s": 10,
+        "wall_s": 0.9572019577026367
+      },
+      "replay_ok": true,
+      "replay_violations": [],
+      "schedule_hash": "1bc26dc76639",
+      "sequences": [
+        [
+          "t0",
+          "t2",
+          "marker0"
+        ],
+        [
+          "t1",
+          "marker1"
+        ]
+      ]
+    },
+    {
+      "arc_kinds": [
+        [
+          "dep",
+          "dep"
+        ],
+        [
+          "dep"
+        ]
+      ],
+      "charges": [
+        {
+          "after_trip": "t0",
+          "before_trip": "t2",
+          "kwh": 10.0,
+          "slot": 1,
+          "vehicle": 0
+        },
+        {
+          "after_trip": "t0",
+          "before_trip": "t2",
+          "kwh": 5.0,
+          "slot": 3,
+          "vehicle": 0
+        },
+        {
+          "after_trip": "t2",
+          "before_trip": "marker0",
+          "kwh": 10.0,
+          "slot": 8,
+          "vehicle": 0
+        },
+        {
+          "after_trip": "t2",
+          "before_trip": "marker0",
+          "kwh": 5.0,
+          "slot": 9,
+          "vehicle": 0
+        },
+        {
+          "after_trip": "t1",
+          "before_trip": "marker1",
+          "kwh": 10.0,
+          "slot": 4,
+          "vehicle": 1
+        },
+        {
+          "after_trip": "t1",
+          "before_trip": "marker1",
+          "kwh": 5.0,
+          "slot": 6,
+          "vehicle": 1
+        }
+      ],
+      "column_key": "c0b24c32f6fe10f28eb09388e4361b8810f417122227ac9a498f7f802c950046",
+      "fleet": 2,
+      "instance_hash": "fed7a661911d",
+      "load": [
+        0.0,
+        10.0,
+        0.0,
+        5.0,
+        10.0,
+        0.0,
+        5.0,
+        0.0,
+        10.0,
+        5.0,
+        0.0
+      ],
+      "load_hash": "992a380f4ccf",
+      "ops_cost": 20.0,
+      "oracle_stats": {
+        "backend": "CBC",
+        "bound": 77.28528139328874,
+        "extra": {
+          "load_reconstruction": {
+            "max_abs_residual_kwh": 0.0,
+            "max_abs_residual_slot": 0,
+            "physical_min_kwh": 0.0,
+            "policy_version": 1,
+            "raw_load_kwh": [
+              0.0,
+              10.0,
+              0.0,
+              5.0,
+              10.0,
+              0.0,
+              5.0,
+              0.0,
+              10.0,
+              5.0,
+              0.0
+            ],
+            "raw_min_kwh": 0.0,
+            "residual_kwh": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "tolerance_kwh": 0.0001
+          },
+          "pricing_objective_reconstruction": {
+            "abs_adjustment": 1.4210854715202004e-14,
+            "model_obj": 77.28528139328874,
+            "physical_obj": 77.28528139328876,
+            "policy_version": 1,
+            "prices": [
+              0.0,
+              1.1173033525518752,
+              1.2411705776844693,
+              1.2068578629822562,
+              1.2844311214469044,
+              1.3560899737568448,
+              1.3157866330717647,
+              1.427672606238605,
+              1.372507030338613,
+              1.3859287739289425,
+              0.0
+            ]
+          },
+          "threads": 1
+        },
+        "lp_mip_gap_abs": 57.28528139328874,
+        "lp_obj": 20.0,
+        "lp_wall_s": 0.0013058185577392578,
+        "max_mip_gap": 1e-09,
+        "mip_gap": 0.0,
+        "n_constrs": 205,
+        "n_int": 68,
+        "n_vars": 189,
+        "obj": 77.28528139328874,
+        "status": "OPTIMAL",
+        "time_limit_s": 10,
+        "wall_s": 1.1142210960388184
+      },
+      "replay_ok": true,
+      "replay_violations": [],
+      "schedule_hash": "1bc26dc76639",
+      "sequences": [
+        [
+          "t0",
+          "t2",
+          "marker0"
+        ],
+        [
+          "t1",
+          "marker1"
+        ]
+      ]
+    },
+    {
+      "arc_kinds": [
+        [
+          "dep",
+          "dep"
+        ],
+        [
+          "dep"
+        ]
+      ],
+      "charges": [
+        {
+          "after_trip": "t0",
+          "before_trip": "t2",
+          "kwh": 10.0,
+          "slot": 3,
+          "vehicle": 0
+        },
+        {
+          "after_trip": "t0",
+          "before_trip": "t2",
+          "kwh": 5.0,
+          "slot": 4,
+          "vehicle": 0
+        },
+        {
+          "after_trip": "t2",
+          "before_trip": "marker0",
+          "kwh": 10.0,
+          "slot": 7,
+          "vehicle": 0
+        },
+        {
+          "after_trip": "t2",
+          "before_trip": "marker0",
+          "kwh": 5.0,
+          "slot": 9,
+          "vehicle": 0
+        },
+        {
+          "after_trip": "t1",
+          "before_trip": "marker1",
+          "kwh": 10.0,
+          "slot": 4,
+          "vehicle": 1
+        },
+        {
+          "after_trip": "t1",
+          "before_trip": "marker1",
+          "kwh": 5.0,
+          "slot": 6,
+          "vehicle": 1
+        }
+      ],
+      "column_key": "076c4cf564151b8576388bd3ce7e5dc331edf2a1cabe70cd47d67eae2b2ec974",
+      "fleet": 2,
+      "instance_hash": "fed7a661911d",
+      "load": [
+        0.0,
+        0.0,
+        0.0,
+        10.0,
+        15.0,
+        0.0,
+        5.0,
+        10.0,
+        0.0,
+        5.0,
+        0.0
+      ],
+      "load_hash": "f7dcd7df7a1d",
+      "ops_cost": 20.0,
+      "oracle_stats": {
+        "backend": "CBC",
+        "bound": 77.94005231582734,
+        "extra": {
+          "load_reconstruction": {
+            "max_abs_residual_kwh": 0.0,
+            "max_abs_residual_slot": 0,
+            "physical_min_kwh": 0.0,
+            "policy_version": 1,
+            "raw_load_kwh": [
+              0.0,
+              0.0,
+              0.0,
+              10.0,
+              15.0,
+              0.0,
+              5.0,
+              10.0,
+              0.0,
+              5.0,
+              0.0
+            ],
+            "raw_min_kwh": 0.0,
+            "residual_kwh": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "tolerance_kwh": 0.0001
+          },
+          "pricing_objective_reconstruction": {
+            "abs_adjustment": 0.0,
+            "model_obj": 77.94005231582734,
+            "physical_obj": 77.94005231582734,
+            "policy_version": 1,
+            "prices": [
+              0.0,
+              1.2731075135015495,
+              1.2787504238954643,
+              1.2670142580654236,
+              1.2673144880935818,
+              1.3075654359213056,
+              1.299026012823405,
+              1.3110624086815836,
+              1.3656458050151894,
+              1.330887652567303,
+              0.0
+            ]
+          },
+          "threads": 1
+        },
+        "lp_mip_gap_abs": 57.940052315827344,
+        "lp_obj": 20.0,
+        "lp_wall_s": 0.001415252685546875,
+        "max_mip_gap": 1e-09,
+        "mip_gap": 0.0,
+        "n_constrs": 205,
+        "n_int": 68,
+        "n_vars": 189,
+        "obj": 77.94005231582734,
+        "status": "OPTIMAL",
+        "time_limit_s": 10,
+        "wall_s": 1.0650832653045654
+      },
+      "replay_ok": true,
+      "replay_violations": [],
+      "schedule_hash": "1bc26dc76639",
+      "sequences": [
+        [
+          "t0",
+          "t2",
+          "marker0"
+        ],
+        [
+          "t1",
+          "marker1"
+        ]
+      ]
+    },
+    {
+      "arc_kinds": [
+        [
+          "dep"
+        ],
+        [
+          "dep",
+          "dep"
+        ]
+      ],
+      "charges": [
+        {
+          "after_trip": "t0",
+          "before_trip": "marker1",
+          "kwh": 4.999999999999986,
+          "slot": 2,
+          "vehicle": 0
+        },
+        {
+          "after_trip": "t0",
+          "before_trip": "marker1",
+          "kwh": 9.999999999999998,
+          "slot": 3,
+          "vehicle": 0
+        },
+        {
+          "after_trip": "t1",
+          "before_trip": "t2",
+          "kwh": 4.99999999999999,
+          "slot": 4,
+          "vehicle": 1
+        },
+        {
+          "after_trip": "t1",
+          "before_trip": "t2",
+          "kwh": 9.999999999999998,
+          "slot": 5,
+          "vehicle": 1
+        },
+        {
+          "after_trip": "t2",
+          "before_trip": "marker0",
+          "kwh": 4.999999999999985,
+          "slot": 8,
+          "vehicle": 1
+        },
+        {
+          "after_trip": "t2",
+          "before_trip": "marker0",
+          "kwh": 9.999999999999998,
+          "slot": 9,
+          "vehicle": 1
+        }
+      ],
+      "column_key": "a85b91c761b7f52a92c08b1e93cf13ab65cd9bd0ae1c75189c2d22b7cd63c8cf",
+      "fleet": 2,
+      "instance_hash": "fed7a661911d",
+      "load": [
+        0.0,
+        0.0,
+        4.999999999999986,
+        9.999999999999998,
+        4.99999999999999,
+        9.999999999999998,
+        0.0,
+        0.0,
+        4.999999999999985,
+        9.999999999999998,
+        0.0
+      ],
+      "load_hash": "fc9143d5c068",
+      "ops_cost": 20.0,
+      "oracle_stats": {
+        "backend": "CBC",
+        "bound": 78.2327194247226,
+        "extra": {
+          "load_reconstruction": {
+            "max_abs_residual_kwh": 0.0,
+            "max_abs_residual_slot": 0,
+            "physical_min_kwh": 0.0,
+            "policy_version": 1,
+            "raw_load_kwh": [
+              0.0,
+              0.0,
+              4.999999999999986,
+              9.999999999999998,
+              4.99999999999999,
+              9.999999999999998,
+              0.0,
+              0.0,
+              4.999999999999985,
+              9.999999999999998,
+              0.0
+            ],
+            "raw_min_kwh": 0.0,
+            "residual_kwh": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "tolerance_kwh": 0.0001
+          },
+          "pricing_objective_reconstruction": {
+            "abs_adjustment": 5.684341886080802e-14,
+            "model_obj": 78.2327194247226,
+            "physical_obj": 78.23271942472255,
+            "policy_version": 1,
+            "prices": [
+              0.0,
+              1.2841496102622998,
+              1.279229751166539,
+              1.2661792181008373,
+              1.2946365769955848,
+              1.2917493863923009,
+              1.3019127288547032,
+              1.333522727272697,
+              1.3297810145586062,
+              1.313519666618756,
+              0.0
+            ]
+          },
+          "threads": 1
+        },
+        "lp_mip_gap_abs": 58.2327194247226,
+        "lp_obj": 20.0,
+        "lp_wall_s": 0.001332998275756836,
+        "max_mip_gap": 1e-09,
+        "mip_gap": 0.0,
+        "n_constrs": 205,
+        "n_int": 68,
+        "n_vars": 189,
+        "obj": 78.2327194247226,
+        "status": "OPTIMAL",
+        "time_limit_s": 10,
+        "wall_s": 0.5897650718688965
+      },
+      "replay_ok": true,
+      "replay_violations": [],
+      "schedule_hash": "7bdf7535d15d",
+      "sequences": [
+        [
+          "t0",
+          "marker1"
+        ],
+        [
+          "t1",
+          "t2",
+          "marker0"
+        ]
+      ]
+    },
+    {
+      "arc_kinds": [
+        [
+          "dep"
+        ],
+        [
+          "dep",
+          "dep"
+        ]
+      ],
+      "charges": [
+        {
+          "after_trip": "t0",
+          "before_trip": "marker1",
+          "kwh": 9.999999999999998,
+          "slot": 1,
+          "vehicle": 0
+        },
+        {
+          "after_trip": "t0",
+          "before_trip": "marker1",
+          "kwh": 4.999999999999986,
+          "slot": 3,
+          "vehicle": 0
+        },
+        {
+          "after_trip": "t1",
+          "before_trip": "t2",
+          "kwh": 9.999999999999998,
+          "slot": 4,
+          "vehicle": 1
+        },
+        {
+          "after_trip": "t1",
+          "before_trip": "t2",
+          "kwh": 4.99999999999999,
+          "slot": 5,
+          "vehicle": 1
+        },
+        {
+          "after_trip": "t2",
+          "before_trip": "marker0",
+          "kwh": 9.999999999999998,
+          "slot": 7,
+          "vehicle": 1
+        },
+        {
+          "after_trip": "t2",
+          "before_trip": "marker0",
+          "kwh": 4.999999999999985,
+          "slot": 9,
+          "vehicle": 1
+        }
+      ],
+      "column_key": "c5b1392860f63d49544e13145441450673b19439b1a4a596b30018846e7de642",
+      "fleet": 2,
+      "instance_hash": "fed7a661911d",
+      "load": [
+        0.0,
+        9.999999999999998,
+        0.0,
+        4.999999999999986,
+        9.999999999999998,
+        4.99999999999999,
+        0.0,
+        9.999999999999998,
+        0.0,
+        4.999999999999985,
+        0.0
+      ],
+      "load_hash": "07a86a0defdc",
+      "ops_cost": 20.0,
+      "oracle_stats": {
+        "backend": "CBC",
+        "bound": 78.3447515034535,
+        "extra": {
+          "load_reconstruction": {
+            "max_abs_residual_kwh": 0.0,
+            "max_abs_residual_slot": 0,
+            "physical_min_kwh": 0.0,
+            "policy_version": 1,
+            "raw_load_kwh": [
+              0.0,
+              9.999999999999998,
+              0.0,
+              4.999999999999986,
+              9.999999999999998,
+              4.99999999999999,
+              0.0,
+              9.999999999999998,
+              0.0,
+              4.999999999999985,
+              0.0
+            ],
+            "raw_min_kwh": 0.0,
+            "residual_kwh": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "tolerance_kwh": 0.0001
+          },
+          "pricing_objective_reconstruction": {
+            "abs_adjustment": 8.526512829121202e-14,
+            "model_obj": 78.3447515034535,
+            "physical_obj": 78.34475150345341,
+            "policy_version": 1,
+            "prices": [
+              0.0,
+              1.2736872608486012,
+              1.279229751166539,
+              1.279229751166534,
+              1.2986284672793045,
+              1.3055565801767224,
+              1.312484693074135,
+              1.3117918817843908,
+              1.327033730158706,
+              1.315948749522843,
+              0.0
+            ]
+          },
+          "threads": 1
+        },
+        "lp_mip_gap_abs": 58.344751503453494,
+        "lp_obj": 20.0,
+        "lp_wall_s": 0.0012941360473632812,
+        "max_mip_gap": 1e-09,
+        "mip_gap": 0.0,
+        "n_constrs": 205,
+        "n_int": 68,
+        "n_vars": 189,
+        "obj": 78.3447515034535,
+        "status": "OPTIMAL",
+        "time_limit_s": 10,
+        "wall_s": 1.0056300163269043
+      },
+      "replay_ok": true,
+      "replay_violations": [],
+      "schedule_hash": "7bdf7535d15d",
+      "sequences": [
+        [
+          "t0",
+          "marker1"
+        ],
+        [
+          "t1",
+          "t2",
+          "marker0"
+        ]
+      ]
+    },
+    {
+      "arc_kinds": [
+        [
+          "dep",
+          "dep"
+        ],
+        [
+          "dep"
+        ]
+      ],
+      "charges": [
+        {
+          "after_trip": "t0",
+          "before_trip": "t2",
+          "kwh": 5.0,
+          "slot": 2,
+          "vehicle": 0
+        },
+        {
+          "after_trip": "t0",
+          "before_trip": "t2",
+          "kwh": 10.0,
+          "slot": 3,
+          "vehicle": 0
+        },
+        {
+          "after_trip": "t2",
+          "before_trip": "marker0",
+          "kwh": 10.0,
+          "slot": 7,
+          "vehicle": 0
+        },
+        {
+          "after_trip": "t2",
+          "before_trip": "marker0",
+          "kwh": 5.0,
+          "slot": 9,
+          "vehicle": 0
+        },
+        {
+          "after_trip": "t1",
+          "before_trip": "marker1",
+          "kwh": 5.0,
+          "slot": 4,
+          "vehicle": 1
+        },
+        {
+          "after_trip": "t1",
+          "before_trip": "marker1",
+          "kwh": 10.0,
+          "slot": 6,
+          "vehicle": 1
+        }
+      ],
+      "column_key": "a3348e08b546f63549f6f003acc2530cd8f3543d91f929b4e5e9aa3f339c8f3c",
+      "fleet": 2,
+      "instance_hash": "fed7a661911d",
+      "load": [
+        0.0,
+        0.0,
+        5.0,
+        10.0,
+        5.0,
+        0.0,
+        10.0,
+        10.0,
+        0.0,
+        5.0,
+        0.0
+      ],
+      "load_hash": "dddf2c4015cc",
+      "ops_cost": 20.0,
+      "oracle_stats": {
+        "backend": "CBC",
+        "bound": 78.46065199552464,
+        "extra": {
+          "load_reconstruction": {
+            "max_abs_residual_kwh": 0.0,
+            "max_abs_residual_slot": 0,
+            "physical_min_kwh": 0.0,
+            "policy_version": 1,
+            "raw_load_kwh": [
+              0.0,
+              0.0,
+              5.0,
+              10.0,
+              5.0,
+              0.0,
+              10.0,
+              10.0,
+              0.0,
+              5.0,
+              0.0
+            ],
+            "raw_min_kwh": 0.0,
+            "residual_kwh": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "tolerance_kwh": 0.0001
+          },
+          "pricing_objective_reconstruction": {
+            "abs_adjustment": 1.4210854715202004e-14,
+            "model_obj": 78.46065199552464,
+            "physical_obj": 78.46065199552463,
+            "policy_version": 1,
+            "prices": [
+              0.0,
+              1.2924613582542277,
+              1.2902635080680773,
+              1.2871402472772198,
+              1.3028722275570646,
+              1.3071522516037888,
+              1.3020624932779512,
+              1.3066317081386394,
+              1.309176587301553,
+              1.3073257660921642,
+              0.0
+            ]
+          },
+          "threads": 1
+        },
+        "lp_mip_gap_abs": 58.46065199552464,
+        "lp_obj": 20.0,
+        "lp_wall_s": 0.0013251304626464844,
+        "max_mip_gap": 1e-09,
+        "mip_gap": 0.0,
+        "n_constrs": 205,
+        "n_int": 68,
+        "n_vars": 189,
+        "obj": 78.46065199552464,
+        "status": "OPTIMAL",
+        "time_limit_s": 10,
+        "wall_s": 1.0498979091644287
+      },
+      "replay_ok": true,
+      "replay_violations": [],
+      "schedule_hash": "1bc26dc76639",
+      "sequences": [
+        [
+          "t0",
+          "t2",
+          "marker0"
+        ],
+        [
+          "t1",
+          "marker1"
+        ]
+      ]
+    },
+    {
+      "arc_kinds": [
+        [
+          "dep"
+        ],
+        [
+          "dep",
+          "dep"
+        ]
+      ],
+      "charges": [
+        {
+          "after_trip": "t2",
+          "before_trip": "marker0",
+          "kwh": 10.0,
+          "slot": 7,
+          "vehicle": 0
+        },
+        {
+          "after_trip": "t2",
+          "before_trip": "marker0",
+          "kwh": 5.0,
+          "slot": 8,
+          "vehicle": 0
+        },
+        {
+          "after_trip": "t0",
+          "before_trip": "t1",
+          "kwh": 10.0,
+          "slot": 2,
+          "vehicle": 1
+        },
+        {
+          "after_trip": "t1",
+          "before_trip": "marker1",
+          "kwh": 10.0,
+          "slot": 8,
+          "vehicle": 1
+        },
+        {
+          "after_trip": "t1",
+          "before_trip": "marker1",
+          "kwh": 10.0,
+          "slot": 9,
+          "vehicle": 1
+        }
+      ],
+      "column_key": "936c1f34971f3e6cc7368602540f1110405ba7cac1d3cb3aafb888309142218e",
+      "fleet": 2,
+      "instance_hash": "fed7a661911d",
+      "load": [
+        0.0,
+        0.0,
+        10.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        10.0,
+        15.0,
+        10.0,
+        0.0
+      ],
+      "load_hash": "dc0ebc68cf16",
+      "ops_cost": 20.0,
+      "oracle_stats": {
+        "backend": "CBC",
+        "bound": 78.4999999999998,
+        "extra": {
+          "load_reconstruction": {
+            "max_abs_residual_kwh": 0.0,
+            "max_abs_residual_slot": 0,
+            "physical_min_kwh": 0.0,
+            "policy_version": 1,
+            "raw_load_kwh": [
+              0.0,
+              0.0,
+              10.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              10.0,
+              15.0,
+              10.0,
+              0.0
+            ],
+            "raw_min_kwh": 0.0,
+            "residual_kwh": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "tolerance_kwh": 0.0001
+          },
+          "pricing_objective_reconstruction": {
+            "abs_adjustment": 4.263256414560601e-14,
+            "model_obj": 78.4999999999998,
+            "physical_obj": 78.49999999999984,
+            "policy_version": 1,
+            "prices": [
+              0.0,
+              1.2999999999999838,
+              1.2999999999999858,
+              1.2999999999999805,
+              1.3000000000000043,
+              1.3000000000000063,
+              1.2999999999999994,
+              1.2999999999999994,
+              1.2999999999999978,
+              1.300000000000002,
+              0.0
+            ]
+          },
+          "threads": 1
+        },
+        "lp_mip_gap_abs": 58.4999999999998,
+        "lp_obj": 20.0,
+        "lp_wall_s": 0.0013659000396728516,
+        "max_mip_gap": 1e-09,
+        "mip_gap": 0.0,
+        "n_constrs": 205,
+        "n_int": 68,
+        "n_vars": 189,
+        "obj": 78.4999999999998,
+        "status": "OPTIMAL",
+        "time_limit_s": 10,
+        "wall_s": 0.9008100032806396
+      },
+      "replay_ok": true,
+      "replay_violations": [],
+      "schedule_hash": "bd19fc3499e9",
+      "sequences": [
+        [
+          "t2",
+          "marker0"
+        ],
+        [
+          "t0",
+          "t1",
+          "marker1"
+        ]
+      ]
+    },
+    {
+      "arc_kinds": [
+        [
+          "dep"
+        ],
+        [
+          "dep",
+          "dep"
+        ]
+      ],
+      "charges": [
+        {
+          "after_trip": "t0",
+          "before_trip": "marker1",
+          "kwh": 4.999999999999986,
+          "slot": 5,
+          "vehicle": 0
+        },
+        {
+          "after_trip": "t0",
+          "before_trip": "marker1",
+          "kwh": 9.999999999999998,
+          "slot": 6,
+          "vehicle": 0
+        },
+        {
+          "after_trip": "t1",
+          "before_trip": "t2",
+          "kwh": 4.99999999999999,
+          "slot": 4,
+          "vehicle": 1
+        },
+        {
+          "after_trip": "t1",
+          "before_trip": "t2",
+          "kwh": 9.999999999999998,
+          "slot": 5,
+          "vehicle": 1
+        },
+        {
+          "after_trip": "t2",
+          "before_trip": "marker0",
+          "kwh": 9.999999999999998,
+          "slot": 7,
+          "vehicle": 1
+        },
+        {
+          "after_trip": "t2",
+          "before_trip": "marker0",
+          "kwh": 4.999999999999985,
+          "slot": 8,
+          "vehicle": 1
+        }
+      ],
+      "column_key": "7dc07bdad2f063004c41a38734d8986f4a6696661a9990e50a0c615a64644077",
+      "fleet": 2,
+      "instance_hash": "fed7a661911d",
+      "load": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        4.99999999999999,
+        14.999999999999984,
+        9.999999999999998,
+        9.999999999999998,
+        4.999999999999985,
+        0.0,
+        0.0
+      ],
+      "load_hash": "91d1e2ee21b2",
+      "ops_cost": 20.0,
+      "oracle_stats": {
+        "backend": "CBC",
+        "bound": 72.31349206349233,
+        "extra": {
+          "load_reconstruction": {
+            "max_abs_residual_kwh": 1.7763568394002505e-15,
+            "max_abs_residual_slot": 5,
+            "physical_min_kwh": 0.0,
+            "policy_version": 1,
+            "raw_load_kwh": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              4.99999999999999,
+              14.999999999999986,
+              9.999999999999998,
+              9.999999999999998,
+              4.999999999999985,
+              0.0,
+              0.0
+            ],
+            "raw_min_kwh": 0.0,
+            "residual_kwh": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              1.7763568394002505e-15,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "tolerance_kwh": 0.0001
+          },
+          "pricing_objective_reconstruction": {
+            "abs_adjustment": 5.684341886080802e-14,
+            "model_obj": 72.31349206349233,
+            "physical_obj": 72.31349206349228,
+            "policy_version": 1,
+            "prices": [
+              0.0,
+              1.3071428571428558,
+              1.239748677248679,
+              1.3285714285714296,
+              1.168386243386246,
+              1.1548941798941899,
+              1.1529100529100607,
+              1.160714285714286,
+              1.2023809523809565,
+              1.2285714285714313,
+              0.0
+            ]
+          },
+          "threads": 1
+        },
+        "lp_mip_gap_abs": 52.31349206349233,
+        "lp_obj": 20.0,
+        "lp_wall_s": 0.001344919204711914,
+        "max_mip_gap": 1e-09,
+        "mip_gap": 0.0,
+        "n_constrs": 205,
+        "n_int": 68,
+        "n_vars": 189,
+        "obj": 72.31349206349233,
+        "status": "OPTIMAL",
+        "time_limit_s": 10,
+        "wall_s": 1.0532398223876953
+      },
+      "replay_ok": true,
+      "replay_violations": [],
+      "schedule_hash": "7bdf7535d15d",
+      "sequences": [
+        [
+          "t0",
+          "marker1"
+        ],
+        [
+          "t1",
+          "t2",
+          "marker0"
+        ]
+      ]
+    },
+    {
+      "arc_kinds": [
+        [
+          "dep"
+        ],
+        [
+          "dep",
+          "dep"
+        ]
+      ],
+      "charges": [
+        {
+          "after_trip": "t0",
+          "before_trip": "marker1",
+          "kwh": 4.999999999999986,
+          "slot": 7,
+          "vehicle": 0
+        },
+        {
+          "after_trip": "t0",
+          "before_trip": "marker1",
+          "kwh": 9.999999999999998,
+          "slot": 9,
+          "vehicle": 0
+        },
+        {
+          "after_trip": "t1",
+          "before_trip": "t2",
+          "kwh": 9.999999999999998,
+          "slot": 5,
+          "vehicle": 1
+        },
+        {
+          "after_trip": "t2",
+          "before_trip": "marker0",
+          "kwh": 9.999999999999998,
+          "slot": 7,
+          "vehicle": 1
+        },
+        {
+          "after_trip": "t2",
+          "before_trip": "marker0",
+          "kwh": 9.999999999999986,
+          "slot": 8,
+          "vehicle": 1
+        }
+      ],
+      "column_key": "ef07f749684f26e171bc6a10862f6e0f37f401be18e6ac3689533d732133f61a",
+      "fleet": 2,
+      "instance_hash": "fed7a661911d",
+      "load": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        9.999999999999998,
+        0.0,
+        14.999999999999984,
+        9.999999999999986,
+        9.999999999999998,
+        0.0
+      ],
+      "load_hash": "1505bd77ce09",
+      "ops_cost": 20.0,
+      "oracle_stats": {
+        "backend": "CBC",
+        "bound": 74.7082498177864,
+        "extra": {
+          "load_reconstruction": {
+            "max_abs_residual_kwh": 1.7763568394002505e-15,
+            "max_abs_residual_slot": 7,
+            "physical_min_kwh": 0.0,
+            "policy_version": 1,
+            "raw_load_kwh": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              9.999999999999998,
+              0.0,
+              14.999999999999986,
+              9.999999999999986,
+              9.999999999999998,
+              0.0
+            ],
+            "raw_min_kwh": 0.0,
+            "residual_kwh": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              1.7763568394002505e-15,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "tolerance_kwh": 0.0001
+          },
+          "pricing_objective_reconstruction": {
+            "abs_adjustment": 4.263256414560601e-14,
+            "model_obj": 74.7082498177864,
+            "physical_obj": 74.70824981778635,
+            "policy_version": 1,
+            "prices": [
+              0.0,
+              1.215738884839705,
+              1.215738884839699,
+              1.2157388848397082,
+              1.2157388848396862,
+              1.2157388848396995,
+              1.2157388848396953,
+              1.2157388848397037,
+              1.2157388848396955,
+              1.215738884839689,
+              0.0
+            ]
+          },
+          "threads": 1
+        },
+        "lp_mip_gap_abs": 54.708249817786395,
+        "lp_obj": 20.0,
+        "lp_wall_s": 0.0012998580932617188,
+        "max_mip_gap": 1e-09,
+        "mip_gap": 0.0,
+        "n_constrs": 205,
+        "n_int": 68,
+        "n_vars": 189,
+        "obj": 74.7082498177864,
+        "status": "OPTIMAL",
+        "time_limit_s": 10,
+        "wall_s": 1.0710327625274658
+      },
+      "replay_ok": true,
+      "replay_violations": [],
+      "schedule_hash": "7bdf7535d15d",
+      "sequences": [
+        [
+          "t0",
+          "marker1"
+        ],
+        [
+          "t1",
+          "t2",
+          "marker0"
+        ]
+      ]
+    }
+  ],
+  "config_sha256": "6b61dd5087c47da98d11c0358d078d35f96bad4d4b541352bd7ea0d37260558f",
+  "final_load": [
+    0.0,
+    3.337053571428665,
+    3.3258928571428976,
+    3.343119566066393,
+    5.832019861516086,
+    5.848214285714306,
+    5.832351754476109,
+    5.836258817941176,
+    5.819196428571502,
+    5.825892857142836,
+    0.0
+  ],
+  "fixture": "replenished_two_bus",
+  "gap": 0.0006426688517180423,
+  "imported_column_keys": [
+    "3762a8f0f12f7d93fa05bc29051209b9e4dd7109277e172c7b8b0b98df0d416a",
+    "ff7233d297904d871a47714ab43a4525e1da442a97981886a3148c21ef9a7b8f",
+    "7cc376265efbfad3eaa4a38cb28369795197aa467c53da37330f5676fa0fa31d",
+    "19c9b2b5e267ac9442053cf2eeda062bbbaaa6ba3a0dc1647309ea285d93ac61",
+    "219fc2b33da9b54376bb3a41211e0e53f4167b6119398371bc4338c4a055abc9",
+    "f70c732831132640287edbc2832331b3b004ab130cb89caf51969d40d87c84a8",
+    "f8dda416bbe87147eecfef88e15bcc00c4a57e984b51407692ed229853ce3aa6",
+    "e1a02696ac9467aafb9e443b276a96200058f21ff31e50de57f66263d26690ad",
+    "c0b24c32f6fe10f28eb09388e4361b8810f417122227ac9a498f7f802c950046",
+    "076c4cf564151b8576388bd3ce7e5dc331edf2a1cabe70cd47d67eae2b2ec974",
+    "a85b91c761b7f52a92c08b1e93cf13ab65cd9bd0ae1c75189c2d22b7cd63c8cf",
+    "c5b1392860f63d49544e13145441450673b19439b1a4a596b30018846e7de642",
+    "a3348e08b546f63549f6f003acc2530cd8f3543d91f929b4e5e9aa3f339c8f3c",
+    "936c1f34971f3e6cc7368602540f1110405ba7cac1d3cb3aafb888309142218e"
+  ],
+  "initial_replay_wall_s": 0.002783707808703184,
+  "instance": {
+    "battery_kwh": 20.0,
+    "charge_power_kw": 10.0,
+    "depot": "D",
+    "dh_cost_per_min": 1.0,
+    "dh_kwh": [],
+    "dh_min": [],
+    "max_vehicles": 2,
+    "meta": {
+      "fixture": "replenished_two_bus",
+      "seed": null,
+      "source": "egg-reuse-frontier-v1",
+      "terminal_policy": "two explicit replenishment markers"
+    },
+    "n_slots": 11,
+    "name": "egg-reuse-frontier-v1-replenished_two_bus",
+    "slot_min": 60,
+    "soc0_kwh": 20.0,
+    "soc_end_kwh": 20.0,
+    "soc_min_kwh": 0.0,
+    "trips": [
+      {
+        "end_loc": "D",
+        "end_min": 60,
+        "energy_kwh": 15.0,
+        "id": "t0",
+        "start_loc": "D",
+        "start_min": 0
+      },
+      {
+        "end_loc": "D",
+        "end_min": 240,
+        "energy_kwh": 15.0,
+        "id": "t1",
+        "start_loc": "D",
+        "start_min": 180
+      },
+      {
+        "end_loc": "D",
+        "end_min": 420,
+        "energy_kwh": 15.0,
+        "id": "t2",
+        "start_loc": "D",
+        "start_min": 360
+      },
+      {
+        "end_loc": "D",
+        "end_min": 660,
+        "energy_kwh": 0.0,
+        "id": "marker0",
+        "start_loc": "D",
+        "start_min": 600
+      },
+      {
+        "end_loc": "D",
+        "end_min": 660,
+        "energy_kwh": 0.0,
+        "id": "marker1",
+        "start_loc": "D",
+        "start_min": 600
+      }
+    ],
+    "vehicle_fixed_cost": 10.0
+  },
+  "instance_hash": "fed7a661911d",
+  "iterations": [
+    {
+      "gap": 2.0135576474511865,
+      "lb_best": 49.078266132842124,
+      "lower": 49.078266132842124,
+      "master_dual_price": [
+        -0.0,
+        1.3071428571428558,
+        1.239748677248679,
+        1.3285714285714296,
+        1.168386243386246,
+        1.1548941798941899,
+        1.1529100529100607,
+        1.160714285714286,
+        1.2023809523809565,
+        1.2285714285714313,
+        -0.0
+      ],
+      "oracle_call": 0,
+      "pwl_slack": 0.0009915098852033566,
+      "reduced_lower": -2.012566137565983,
+      "reduced_upper": -2.01256613756604,
+      "sigma": 74.32605820105832,
+      "upper": 51.09182378029331
+    },
+    {
+      "gap": 0.0006426688517180423,
+      "lb_best": 50.999422618536244,
+      "lower": 50.999422618536244,
+      "master_dual_price": [
+        -0.0,
+        1.215738884839705,
+        1.215738884839699,
+        1.2157388848397082,
+        1.2157388848396862,
+        1.2157388848396995,
+        1.2157388848396953,
+        1.2157388848397037,
+        1.2157388848396955,
+        1.215738884839689,
+        -0.0
+      ],
+      "oracle_call": 1,
+      "pwl_slack": 0.0006426688517180423,
+      "reduced_lower": 7.105427357601002e-14,
+      "reduced_upper": 2.842170943040401e-14,
+      "sigma": 74.70824981778632,
+      "upper": 51.00006528738796
+    }
+  ],
+  "last_clean_price": [
+    -0.0,
+    1.215738884839705,
+    1.215738884839699,
+    1.2157388848397082,
+    1.2157388848396862,
+    1.2157388848396995,
+    1.2157388848396953,
+    1.2157388848397037,
+    1.2157388848396955,
+    1.215738884839689,
+    -0.0
+  ],
+  "lower": 50.999422618536244,
+  "market": {
+    "U": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "a": [
+      0.3,
+      0.55,
+      0.55,
+      0.55,
+      0.04999999999999999,
+      0.04999999999999999,
+      0.04999999999999999,
+      0.04999999999999999,
+      0.04999999999999999,
+      0.04999999999999999,
+      0.04999999999999999
+    ],
+    "b": [
+      0.2,
+      0.2,
+      0.2,
+      0.2,
+      0.2,
+      0.2,
+      0.2,
+      0.2,
+      0.2,
+      0.2,
+      0.2
+    ]
+  },
+  "market_hash": "2c0eb6ac8f71dae7ac3f5bd7caf1d936539194b3d52aece3bc071d076c893c60",
+  "master_events": [
+    {
+      "L": [
+        0.0,
+        3.8191964285714715,
+        3.437500000000021,
+        3.899553571428544,
+        5.607142857142843,
+        5.495535714285799,
+        5.4910714285714155,
+        5.5937499999999325,
+        5.754464285714246,
+        5.901785714285683,
+        0.0
+      ],
+      "column_keys": [
+        "3762a8f0f12f7d93fa05bc29051209b9e4dd7109277e172c7b8b0b98df0d416a",
+        "ff7233d297904d871a47714ab43a4525e1da442a97981886a3148c21ef9a7b8f",
+        "7cc376265efbfad3eaa4a38cb28369795197aa467c53da37330f5676fa0fa31d",
+        "19c9b2b5e267ac9442053cf2eeda062bbbaaa6ba3a0dc1647309ea285d93ac61",
+        "219fc2b33da9b54376bb3a41211e0e53f4167b6119398371bc4338c4a055abc9",
+        "f70c732831132640287edbc2832331b3b004ab130cb89caf51969d40d87c84a8",
+        "f8dda416bbe87147eecfef88e15bcc00c4a57e984b51407692ed229853ce3aa6",
+        "e1a02696ac9467aafb9e443b276a96200058f21ff31e50de57f66263d26690ad",
+        "c0b24c32f6fe10f28eb09388e4361b8810f417122227ac9a498f7f802c950046",
+        "076c4cf564151b8576388bd3ce7e5dc331edf2a1cabe70cd47d67eae2b2ec974",
+        "a85b91c761b7f52a92c08b1e93cf13ab65cd9bd0ae1c75189c2d22b7cd63c8cf",
+        "c5b1392860f63d49544e13145441450673b19439b1a4a596b30018846e7de642",
+        "a3348e08b546f63549f6f003acc2530cd8f3543d91f929b4e5e9aa3f339c8f3c",
+        "936c1f34971f3e6cc7368602540f1110405ba7cac1d3cb3aafb888309142218e"
+      ],
+      "lambdas": [
+        0.0,
+        0.2892857142857178,
+        0.3607142857142849,
+        0.18526785714285926,
+        0.04598214285714899,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.006249999999995187,
+        0.0,
+        0.0,
+        0.0,
+        0.11249999999999388
+      ],
+      "master_solves": [
+        {
+          "backend": "CBC",
+          "bound": 50.71938775510202,
+          "mip_gap": 0.0,
+          "n_constrs": 100,
+          "n_int": 0,
+          "n_vars": 36,
+          "obj": 50.71938775510202,
+          "solve_id": "retained-s3-i0-r0",
+          "status": "OPTIMAL",
+          "threads": 1,
+          "wall_s": 0.02272176742553711
+        },
+        {
+          "backend": "CBC",
+          "bound": 50.872448979591795,
+          "mip_gap": 0.0,
+          "n_constrs": 111,
+          "n_int": 0,
+          "n_vars": 36,
+          "obj": 50.872448979591795,
+          "solve_id": "retained-s3-i0-r1",
+          "status": "OPTIMAL",
+          "threads": 1,
+          "wall_s": 0.021687030792236328
+        },
+        {
+          "backend": "CBC",
+          "bound": 51.035714285714235,
+          "mip_gap": 0.0,
+          "n_constrs": 122,
+          "n_int": 0,
+          "n_vars": 36,
+          "obj": 51.035714285714235,
+          "solve_id": "retained-s3-i0-r2",
+          "status": "OPTIMAL",
+          "threads": 1,
+          "wall_s": 0.023576974868774414
+        },
+        {
+          "backend": "CBC",
+          "bound": 51.07521100901838,
+          "mip_gap": 0.0,
+          "n_constrs": 133,
+          "n_int": 0,
+          "n_vars": 36,
+          "obj": 51.07521100901838,
+          "solve_id": "retained-s3-i0-r3",
+          "status": "OPTIMAL",
+          "threads": 1,
+          "wall_s": 0.024664878845214844
+        },
+        {
+          "backend": "CBC",
+          "bound": 51.08989158163259,
+          "mip_gap": 0.0,
+          "n_constrs": 144,
+          "n_int": 0,
+          "n_vars": 36,
+          "obj": 51.08989158163259,
+          "solve_id": "retained-s3-i0-r4",
+          "status": "OPTIMAL",
+          "threads": 1,
+          "wall_s": 0.025371313095092773
+        },
+        {
+          "backend": "CBC",
+          "bound": 51.09083227040811,
+          "mip_gap": 0.0,
+          "n_constrs": 155,
+          "n_int": 0,
+          "n_vars": 36,
+          "obj": 51.09083227040811,
+          "solve_id": "retained-s3-i0-r5",
+          "status": "OPTIMAL",
+          "threads": 1,
+          "wall_s": 0.026316165924072266
+        }
+      ],
+      "master_wall_s": 0.14433813095092773,
+      "n_refinements": 5,
+      "physical_replay": {
+        "intrinsic_cost": 20.0,
+        "load": [
+          0.0,
+          3.819196428571472,
+          3.437500000000021,
+          3.8995535714285445,
+          5.607142857142843,
+          5.495535714285801,
+          5.491071428571416,
+          5.5937499999999325,
+          5.7544642857142465,
+          5.901785714285684,
+          0.0
+        ],
+        "true_objective": 51.091823780293325
+      },
+      "pi": [
+        0.0,
+        -1.3071428571428558,
+        -1.239748677248679,
+        -1.3285714285714296,
+        -1.168386243386246,
+        -1.1548941798941899,
+        -1.1529100529100607,
+        -1.160714285714286,
+        -1.2023809523809565,
+        -1.2285714285714313,
+        0.0
+      ],
+      "sigma": 74.32605820105832,
+      "tangent_points": [
+        [
+          0.0,
+          4.285714285714284,
+          4.285714285714284,
+          4.285714285714284,
+          7.142857142857145,
+          5.7142857142857055,
+          4.285714285714285,
+          5.437317784256549,
+          4.285714285714285,
+          5.276967930029153,
+          0.0
+        ],
+        [
+          0.0,
+          3.571428571428567,
+          3.571428571428567,
+          3.571428571428573,
+          4.999999999999991,
+          4.99999999999999,
+          4.999999999999998,
+          6.0714285714285605,
+          6.785714285714286,
+          6.428571428571424,
+          0.0
+        ],
+        [
+          0.0,
+          3.785714285714278,
+          3.214285714285708,
+          3.8571428571428554,
+          5.428571428571411,
+          5.35714285714284,
+          5.357142857142849,
+          5.749999999999995,
+          6.178571428571445,
+          6.071428571428575,
+          0.0
+        ],
+        [
+          0.0,
+          3.8571428571428563,
+          3.3928571428571326,
+          3.8928571428571486,
+          5.571428571428562,
+          5.535714285714262,
+          5.535714285714285,
+          5.553571428571431,
+          5.767857142857163,
+          5.892857142857155,
+          0.0
+        ],
+        [
+          0.0,
+          3.7812499999999916,
+          3.4821428571428594,
+          3.9062500000000093,
+          5.642857142857127,
+          5.455357142857143,
+          5.4464285714285845,
+          5.633928571428522,
+          5.7410714285714874,
+          5.91071428571423,
+          0.0
+        ],
+        [
+          0.0,
+          3.8191964285714715,
+          3.437500000000021,
+          3.899553571428544,
+          5.607142857142843,
+          5.495535714285799,
+          5.4910714285714155,
+          5.5937499999999325,
+          5.754464285714246,
+          5.901785714285683,
+          0.0
+        ]
+      ],
+      "ub": 51.09182378029331,
+      "z_model": 51.09083227040811
+    },
+    {
+      "L": [
+        0.0,
+        3.337053571428665,
+        3.3258928571428976,
+        3.343119566066393,
+        5.832019861516086,
+        5.848214285714306,
+        5.832351754476109,
+        5.836258817941176,
+        5.819196428571502,
+        5.825892857142836,
+        0.0
+      ],
+      "column_keys": [
+        "3762a8f0f12f7d93fa05bc29051209b9e4dd7109277e172c7b8b0b98df0d416a",
+        "ff7233d297904d871a47714ab43a4525e1da442a97981886a3148c21ef9a7b8f",
+        "7cc376265efbfad3eaa4a38cb28369795197aa467c53da37330f5676fa0fa31d",
+        "19c9b2b5e267ac9442053cf2eeda062bbbaaa6ba3a0dc1647309ea285d93ac61",
+        "219fc2b33da9b54376bb3a41211e0e53f4167b6119398371bc4338c4a055abc9",
+        "f70c732831132640287edbc2832331b3b004ab130cb89caf51969d40d87c84a8",
+        "f8dda416bbe87147eecfef88e15bcc00c4a57e984b51407692ed229853ce3aa6",
+        "e1a02696ac9467aafb9e443b276a96200058f21ff31e50de57f66263d26690ad",
+        "c0b24c32f6fe10f28eb09388e4361b8810f417122227ac9a498f7f802c950046",
+        "076c4cf564151b8576388bd3ce7e5dc331edf2a1cabe70cd47d67eae2b2ec974",
+        "a85b91c761b7f52a92c08b1e93cf13ab65cd9bd0ae1c75189c2d22b7cd63c8cf",
+        "c5b1392860f63d49544e13145441450673b19439b1a4a596b30018846e7de642",
+        "a3348e08b546f63549f6f003acc2530cd8f3543d91f929b4e5e9aa3f339c8f3c",
+        "936c1f34971f3e6cc7368602540f1110405ba7cac1d3cb3aafb888309142218e",
+        "7dc07bdad2f063004c41a38734d8986f4a6696661a9990e50a0c615a64644077"
+      ],
+      "lambdas": [
+        0.07707685274341709,
+        0.0,
+        0.01291089066136303,
+        0.1550218813240504,
+        0.08317852504087399,
+        0.0,
+        0.09398110487871829,
+        0.0,
+        0.2092038640414823,
+        0.046604713313483155,
+        0.034624053211896835,
+        0.0,
+        0.0,
+        0.0,
+        0.2873981147847149
+      ],
+      "master_solves": [
+        {
+          "backend": "CBC",
+          "bound": 50.96173469387751,
+          "mip_gap": 0.0,
+          "n_constrs": 166,
+          "n_int": 0,
+          "n_vars": 37,
+          "obj": 50.96173469387751,
+          "solve_id": "retained-s3-i1-r0",
+          "status": "OPTIMAL",
+          "threads": 1,
+          "wall_s": 0.028657197952270508
+        },
+        {
+          "backend": "CBC",
+          "bound": 50.98724489795921,
+          "mip_gap": 0.0,
+          "n_constrs": 177,
+          "n_int": 0,
+          "n_vars": 37,
+          "obj": 50.98724489795921,
+          "solve_id": "retained-s3-i1-r1",
+          "status": "OPTIMAL",
+          "threads": 1,
+          "wall_s": 0.03051280975341797
+        },
+        {
+          "backend": "CBC",
+          "bound": 50.988604276213,
+          "mip_gap": 0.0,
+          "n_constrs": 188,
+          "n_int": 0,
+          "n_vars": 37,
+          "obj": 50.988604276213,
+          "solve_id": "retained-s3-i1-r2",
+          "status": "OPTIMAL",
+          "threads": 1,
+          "wall_s": 0.03054523468017578
+        },
+        {
+          "backend": "CBC",
+          "bound": 50.99441514299315,
+          "mip_gap": 0.0,
+          "n_constrs": 199,
+          "n_int": 0,
+          "n_vars": 37,
+          "obj": 50.99441514299315,
+          "solve_id": "retained-s3-i1-r3",
+          "status": "OPTIMAL",
+          "threads": 1,
+          "wall_s": 0.03168678283691406
+        },
+        {
+          "backend": "CBC",
+          "bound": 50.9978641313059,
+          "mip_gap": 0.0,
+          "n_constrs": 210,
+          "n_int": 0,
+          "n_vars": 37,
+          "obj": 50.9978641313059,
+          "solve_id": "retained-s3-i1-r4",
+          "status": "OPTIMAL",
+          "threads": 1,
+          "wall_s": 0.034303903579711914
+        },
+        {
+          "backend": "CBC",
+          "bound": 50.999422618536244,
+          "mip_gap": 0.0,
+          "n_constrs": 221,
+          "n_int": 0,
+          "n_vars": 37,
+          "obj": 50.999422618536244,
+          "solve_id": "retained-s3-i1-r5",
+          "status": "OPTIMAL",
+          "threads": 1,
+          "wall_s": 0.03613591194152832
+        }
+      ],
+      "master_wall_s": 0.19184184074401855,
+      "n_refinements": 5,
+      "physical_replay": {
+        "intrinsic_cost": 20.0,
+        "load": [
+          0.0,
+          3.337053571428665,
+          3.3258928571428976,
+          3.3431195660663935,
+          5.832019861516087,
+          5.848214285714306,
+          5.83235175447611,
+          5.836258817941175,
+          5.819196428571502,
+          5.8258928571428354,
+          0.0
+        ],
+        "true_objective": 51.00006528738796
+      },
+      "pi": [
+        0.0,
+        -1.215738884839705,
+        -1.215738884839699,
+        -1.2157388848397082,
+        -1.2157388848396862,
+        -1.2157388848396995,
+        -1.2157388848396953,
+        -1.2157388848397037,
+        -1.2157388848396955,
+        -1.215738884839689,
+        0.0
+      ],
+      "sigma": 74.70824981778632,
+      "tangent_points": [
+        [
+          0.0,
+          4.285714285714284,
+          4.285714285714284,
+          4.285714285714284,
+          7.142857142857145,
+          5.7142857142857055,
+          4.285714285714285,
+          5.437317784256549,
+          4.285714285714285,
+          5.276967930029153,
+          0.0
+        ],
+        [
+          0.0,
+          3.571428571428567,
+          3.571428571428567,
+          3.571428571428573,
+          4.999999999999991,
+          4.99999999999999,
+          4.999999999999998,
+          6.0714285714285605,
+          6.785714285714286,
+          6.428571428571424,
+          0.0
+        ],
+        [
+          0.0,
+          3.785714285714278,
+          3.214285714285708,
+          3.8571428571428554,
+          5.428571428571411,
+          5.35714285714284,
+          5.357142857142849,
+          5.749999999999995,
+          6.178571428571445,
+          6.071428571428575,
+          0.0
+        ],
+        [
+          0.0,
+          3.8571428571428563,
+          3.3928571428571326,
+          3.8928571428571486,
+          5.571428571428562,
+          5.535714285714262,
+          5.535714285714285,
+          5.553571428571431,
+          5.767857142857163,
+          5.892857142857155,
+          0.0
+        ],
+        [
+          0.0,
+          3.7812499999999916,
+          3.4821428571428594,
+          3.9062500000000093,
+          5.642857142857127,
+          5.455357142857143,
+          5.4464285714285845,
+          5.633928571428522,
+          5.7410714285714874,
+          5.91071428571423,
+          0.0
+        ],
+        [
+          0.0,
+          3.8191964285714715,
+          3.437500000000021,
+          3.899553571428544,
+          5.607142857142843,
+          5.495535714285799,
+          5.4910714285714155,
+          5.5937499999999325,
+          5.754464285714246,
+          5.901785714285683,
+          0.0
+        ],
+        [
+          0.0,
+          3.214285714285708,
+          3.3035714285713995,
+          3.214285714285708,
+          5.67857142857141,
+          7.142857142857145,
+          6.182944606414033,
+          5.732142857142959,
+          5.035714285714171,
+          5.495626822157432,
+          0.0
+        ],
+        [
+          0.0,
+          3.3928571428571326,
+          3.258928571428509,
+          3.392857142857131,
+          5.983392336526881,
+          6.428571428571437,
+          5.840222823822763,
+          5.723214285714635,
+          5.374999999999931,
+          5.60495626822158,
+          0.0
+        ],
+        [
+          0.0,
+          3.3035714285714,
+          3.2366071428571646,
+          3.3035714285714355,
+          5.8488390254063045,
+          6.071428571428583,
+          5.777254269054229,
+          5.907388848397086,
+          5.747767857142343,
+          5.803571428571427,
+          0.0
+        ],
+        [
+          0.0,
+          3.348214285714252,
+          3.2812499999997855,
+          3.326540373802903,
+          5.781562369846,
+          5.892857142857154,
+          5.808738546438434,
+          5.828694424198519,
+          5.973214285714312,
+          5.758928571428617,
+          0.0
+        ],
+        [
+          0.0,
+          3.325892857142941,
+          3.3482142857142776,
+          3.359698758330043,
+          5.815200697626101,
+          5.8035714285714395,
+          5.8244806851304025,
+          5.804191287484798,
+          5.870535714285746,
+          5.84821428571422,
+          0.0
+        ]
+      ],
+      "ub": 51.00006528738796,
+      "z_model": 50.999422618536244
+    }
+  ],
+  "native_solves": [
+    {
+      "backend": "CBC",
+      "bound": 50.71938775510202,
+      "elapsed_s": 0.024724250193685293,
+      "extra": {
+        "threads": 1
+      },
+      "lp_mip_gap_abs": null,
+      "lp_obj": null,
+      "lp_wall_s": 0.0,
+      "max_mip_gap": 1e-06,
+      "mip_gap": 0.0,
+      "model": "b2a2-rmp",
+      "model_time_cap_s": 10,
+      "n_constrs": 100,
+      "n_int": 0,
+      "n_vars": 36,
+      "obj": 50.71938775510202,
+      "status": "OPTIMAL",
+      "time_limit_s": 10,
+      "wall_s": 0.02272176742553711
+    },
+    {
+      "backend": "CBC",
+      "bound": 50.872448979591795,
+      "elapsed_s": 0.023176875431090593,
+      "extra": {
+        "threads": 1
+      },
+      "lp_mip_gap_abs": null,
+      "lp_obj": null,
+      "lp_wall_s": 0.0,
+      "max_mip_gap": 1e-06,
+      "mip_gap": 0.0,
+      "model": "b2a2-rmp",
+      "model_time_cap_s": 10,
+      "n_constrs": 111,
+      "n_int": 0,
+      "n_vars": 36,
+      "obj": 50.872448979591795,
+      "status": "OPTIMAL",
+      "time_limit_s": 10,
+      "wall_s": 0.021687030792236328
+    },
+    {
+      "backend": "CBC",
+      "bound": 51.035714285714235,
+      "elapsed_s": 0.024953375104814768,
+      "extra": {
+        "threads": 1
+      },
+      "lp_mip_gap_abs": null,
+      "lp_obj": null,
+      "lp_wall_s": 0.0,
+      "max_mip_gap": 1e-06,
+      "mip_gap": 0.0,
+      "model": "b2a2-rmp",
+      "model_time_cap_s": 10,
+      "n_constrs": 122,
+      "n_int": 0,
+      "n_vars": 36,
+      "obj": 51.035714285714235,
+      "status": "OPTIMAL",
+      "time_limit_s": 10,
+      "wall_s": 0.023576974868774414
+    },
+    {
+      "backend": "CBC",
+      "bound": 51.07521100901838,
+      "elapsed_s": 0.026223250199109316,
+      "extra": {
+        "threads": 1
+      },
+      "lp_mip_gap_abs": null,
+      "lp_obj": null,
+      "lp_wall_s": 0.0,
+      "max_mip_gap": 1e-06,
+      "mip_gap": 0.0,
+      "model": "b2a2-rmp",
+      "model_time_cap_s": 10,
+      "n_constrs": 133,
+      "n_int": 0,
+      "n_vars": 36,
+      "obj": 51.07521100901838,
+      "status": "OPTIMAL",
+      "time_limit_s": 10,
+      "wall_s": 0.024664878845214844
+    },
+    {
+      "backend": "CBC",
+      "bound": 51.08989158163259,
+      "elapsed_s": 0.026785958092659712,
+      "extra": {
+        "threads": 1
+      },
+      "lp_mip_gap_abs": null,
+      "lp_obj": null,
+      "lp_wall_s": 0.0,
+      "max_mip_gap": 1e-06,
+      "mip_gap": 0.0,
+      "model": "b2a2-rmp",
+      "model_time_cap_s": 10,
+      "n_constrs": 144,
+      "n_int": 0,
+      "n_vars": 36,
+      "obj": 51.08989158163259,
+      "status": "OPTIMAL",
+      "time_limit_s": 10,
+      "wall_s": 0.025371313095092773
+    },
+    {
+      "backend": "CBC",
+      "bound": 51.09083227040811,
+      "elapsed_s": 0.027680832892656326,
+      "extra": {
+        "threads": 1
+      },
+      "lp_mip_gap_abs": null,
+      "lp_obj": null,
+      "lp_wall_s": 0.0,
+      "max_mip_gap": 1e-06,
+      "mip_gap": 0.0,
+      "model": "b2a2-rmp",
+      "model_time_cap_s": 10,
+      "n_constrs": 155,
+      "n_int": 0,
+      "n_vars": 36,
+      "obj": 51.09083227040811,
+      "status": "OPTIMAL",
+      "time_limit_s": 10,
+      "wall_s": 0.026316165924072266
+    },
+    {
+      "backend": "CBC",
+      "bound": 72.31349206349233,
+      "elapsed_s": 1.0561758331023157,
+      "extra": {
+        "threads": 1
+      },
+      "lp_mip_gap_abs": 52.31349206349233,
+      "lp_obj": 20.0,
+      "lp_wall_s": 0.001344919204711914,
+      "max_mip_gap": 1e-09,
+      "mip_gap": 0.0,
+      "model": "evsp",
+      "model_time_cap_s": 10,
+      "n_constrs": 205,
+      "n_int": 68,
+      "n_vars": 189,
+      "obj": 72.31349206349233,
+      "status": "OPTIMAL",
+      "time_limit_s": 10,
+      "wall_s": 1.0532398223876953
+    },
+    {
+      "backend": "CBC",
+      "bound": 50.96173469387751,
+      "elapsed_s": 0.030532333068549633,
+      "extra": {
+        "threads": 1
+      },
+      "lp_mip_gap_abs": null,
+      "lp_obj": null,
+      "lp_wall_s": 0.0,
+      "max_mip_gap": 1e-06,
+      "mip_gap": 0.0,
+      "model": "b2a2-rmp",
+      "model_time_cap_s": 10,
+      "n_constrs": 166,
+      "n_int": 0,
+      "n_vars": 37,
+      "obj": 50.96173469387751,
+      "status": "OPTIMAL",
+      "time_limit_s": 10,
+      "wall_s": 0.028657197952270508
+    },
+    {
+      "backend": "CBC",
+      "bound": 50.98724489795921,
+      "elapsed_s": 0.032306792214512825,
+      "extra": {
+        "threads": 1
+      },
+      "lp_mip_gap_abs": null,
+      "lp_obj": null,
+      "lp_wall_s": 0.0,
+      "max_mip_gap": 1e-06,
+      "mip_gap": 0.0,
+      "model": "b2a2-rmp",
+      "model_time_cap_s": 10,
+      "n_constrs": 177,
+      "n_int": 0,
+      "n_vars": 37,
+      "obj": 50.98724489795921,
+      "status": "OPTIMAL",
+      "time_limit_s": 10,
+      "wall_s": 0.03051280975341797
+    },
+    {
+      "backend": "CBC",
+      "bound": 50.988604276213,
+      "elapsed_s": 0.03255687467753887,
+      "extra": {
+        "threads": 1
+      },
+      "lp_mip_gap_abs": null,
+      "lp_obj": null,
+      "lp_wall_s": 0.0,
+      "max_mip_gap": 1e-06,
+      "mip_gap": 0.0,
+      "model": "b2a2-rmp",
+      "model_time_cap_s": 10,
+      "n_constrs": 188,
+      "n_int": 0,
+      "n_vars": 37,
+      "obj": 50.988604276213,
+      "status": "OPTIMAL",
+      "time_limit_s": 10,
+      "wall_s": 0.03054523468017578
+    },
+    {
+      "backend": "CBC",
+      "bound": 50.99441514299315,
+      "elapsed_s": 0.03359845792874694,
+      "extra": {
+        "threads": 1
+      },
+      "lp_mip_gap_abs": null,
+      "lp_obj": null,
+      "lp_wall_s": 0.0,
+      "max_mip_gap": 1e-06,
+      "mip_gap": 0.0,
+      "model": "b2a2-rmp",
+      "model_time_cap_s": 10,
+      "n_constrs": 199,
+      "n_int": 0,
+      "n_vars": 37,
+      "obj": 50.99441514299315,
+      "status": "OPTIMAL",
+      "time_limit_s": 10,
+      "wall_s": 0.03168678283691406
+    },
+    {
+      "backend": "CBC",
+      "bound": 50.9978641313059,
+      "elapsed_s": 0.036115999799221754,
+      "extra": {
+        "threads": 1
+      },
+      "lp_mip_gap_abs": null,
+      "lp_obj": null,
+      "lp_wall_s": 0.0,
+      "max_mip_gap": 1e-06,
+      "mip_gap": 0.0,
+      "model": "b2a2-rmp",
+      "model_time_cap_s": 10,
+      "n_constrs": 210,
+      "n_int": 0,
+      "n_vars": 37,
+      "obj": 50.9978641313059,
+      "status": "OPTIMAL",
+      "time_limit_s": 10,
+      "wall_s": 0.034303903579711914
+    },
+    {
+      "backend": "CBC",
+      "bound": 50.999422618536244,
+      "elapsed_s": 0.03796016704291105,
+      "extra": {
+        "threads": 1
+      },
+      "lp_mip_gap_abs": null,
+      "lp_obj": null,
+      "lp_wall_s": 0.0,
+      "max_mip_gap": 1e-06,
+      "mip_gap": 0.0,
+      "model": "b2a2-rmp",
+      "model_time_cap_s": 10,
+      "n_constrs": 221,
+      "n_int": 0,
+      "n_vars": 37,
+      "obj": 50.999422618536244,
+      "status": "OPTIMAL",
+      "time_limit_s": 10,
+      "wall_s": 0.03613591194152832
+    },
+    {
+      "backend": "CBC",
+      "bound": 74.7082498177864,
+      "elapsed_s": 1.0746963331475854,
+      "extra": {
+        "threads": 1
+      },
+      "lp_mip_gap_abs": 54.708249817786395,
+      "lp_obj": 20.0,
+      "lp_wall_s": 0.0012998580932617188,
+      "max_mip_gap": 1e-09,
+      "mip_gap": 0.0,
+      "model": "evsp",
+      "model_time_cap_s": 10,
+      "n_constrs": 205,
+      "n_int": 68,
+      "n_vars": 189,
+      "obj": 74.7082498177864,
+      "status": "OPTIMAL",
+      "time_limit_s": 10,
+      "wall_s": 1.0710327625274658
+    }
+  ],
+  "optimizer_wrapper_elapsed_s": 2.487487332895398,
+  "oracle_calls": 2,
+  "oracle_events": [
+    {
+      "call": 0,
+      "column": {
+        "arc_kinds": [
+          [
+            "dep"
+          ],
+          [
+            "dep",
+            "dep"
+          ]
+        ],
+        "charges": [
+          {
+            "after_trip": "t0",
+            "before_trip": "marker1",
+            "kwh": 4.999999999999986,
+            "slot": 5,
+            "vehicle": 0
+          },
+          {
+            "after_trip": "t0",
+            "before_trip": "marker1",
+            "kwh": 9.999999999999998,
+            "slot": 6,
+            "vehicle": 0
+          },
+          {
+            "after_trip": "t1",
+            "before_trip": "t2",
+            "kwh": 4.99999999999999,
+            "slot": 4,
+            "vehicle": 1
+          },
+          {
+            "after_trip": "t1",
+            "before_trip": "t2",
+            "kwh": 9.999999999999998,
+            "slot": 5,
+            "vehicle": 1
+          },
+          {
+            "after_trip": "t2",
+            "before_trip": "marker0",
+            "kwh": 9.999999999999998,
+            "slot": 7,
+            "vehicle": 1
+          },
+          {
+            "after_trip": "t2",
+            "before_trip": "marker0",
+            "kwh": 4.999999999999985,
+            "slot": 8,
+            "vehicle": 1
+          }
+        ],
+        "column_key": "7dc07bdad2f063004c41a38734d8986f4a6696661a9990e50a0c615a64644077",
+        "fleet": 2,
+        "instance_hash": "fed7a661911d",
+        "load": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          4.99999999999999,
+          14.999999999999984,
+          9.999999999999998,
+          9.999999999999998,
+          4.999999999999985,
+          0.0,
+          0.0
+        ],
+        "load_hash": "91d1e2ee21b2",
+        "ops_cost": 20.0,
+        "oracle_stats": {
+          "backend": "CBC",
+          "bound": 72.31349206349233,
+          "extra": {
+            "load_reconstruction": {
+              "max_abs_residual_kwh": 1.7763568394002505e-15,
+              "max_abs_residual_slot": 5,
+              "physical_min_kwh": 0.0,
+              "policy_version": 1,
+              "raw_load_kwh": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                4.99999999999999,
+                14.999999999999986,
+                9.999999999999998,
+                9.999999999999998,
+                4.999999999999985,
+                0.0,
+                0.0
+              ],
+              "raw_min_kwh": 0.0,
+              "residual_kwh": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.7763568394002505e-15,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "tolerance_kwh": 0.0001
+            },
+            "pricing_objective_reconstruction": {
+              "abs_adjustment": 5.684341886080802e-14,
+              "model_obj": 72.31349206349233,
+              "physical_obj": 72.31349206349228,
+              "policy_version": 1,
+              "prices": [
+                0.0,
+                1.3071428571428558,
+                1.239748677248679,
+                1.3285714285714296,
+                1.168386243386246,
+                1.1548941798941899,
+                1.1529100529100607,
+                1.160714285714286,
+                1.2023809523809565,
+                1.2285714285714313,
+                0.0
+              ]
+            },
+            "threads": 1
+          },
+          "lp_mip_gap_abs": 52.31349206349233,
+          "lp_obj": 20.0,
+          "lp_wall_s": 0.001344919204711914,
+          "max_mip_gap": 1e-09,
+          "mip_gap": 0.0,
+          "n_constrs": 205,
+          "n_int": 68,
+          "n_vars": 189,
+          "obj": 72.31349206349233,
+          "status": "OPTIMAL",
+          "time_limit_s": 10,
+          "wall_s": 1.0532398223876953
+        },
+        "replay_ok": true,
+        "replay_violations": [],
+        "schedule_hash": "7bdf7535d15d",
+        "sequences": [
+          [
+            "t0",
+            "marker1"
+          ],
+          [
+            "t1",
+            "t2",
+            "marker0"
+          ]
+        ]
+      },
+      "column_key": "7dc07bdad2f063004c41a38734d8986f4a6696661a9990e50a0c615a64644077",
+      "elapsed_s": 1.0622146660462022,
+      "lower": 72.31349206349233,
+      "novel": true,
+      "prices": [
+        -0.0,
+        1.3071428571428558,
+        1.239748677248679,
+        1.3285714285714296,
+        1.168386243386246,
+        1.1548941798941899,
+        1.1529100529100607,
+        1.160714285714286,
+        1.2023809523809565,
+        1.2285714285714313,
+        -0.0
+      ],
+      "projection_novel": true,
+      "purpose": "clean",
+      "replay_ok": true,
+      "solver": {
+        "backend": "CBC",
+        "bound": 72.31349206349233,
+        "extra": {
+          "load_reconstruction": {
+            "max_abs_residual_kwh": 1.7763568394002505e-15,
+            "max_abs_residual_slot": 5,
+            "physical_min_kwh": 0.0,
+            "policy_version": 1,
+            "raw_load_kwh": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              4.99999999999999,
+              14.999999999999986,
+              9.999999999999998,
+              9.999999999999998,
+              4.999999999999985,
+              0.0,
+              0.0
+            ],
+            "raw_min_kwh": 0.0,
+            "residual_kwh": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              1.7763568394002505e-15,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "tolerance_kwh": 0.0001
+          },
+          "pricing_objective_reconstruction": {
+            "abs_adjustment": 5.684341886080802e-14,
+            "model_obj": 72.31349206349233,
+            "physical_obj": 72.31349206349228,
+            "policy_version": 1,
+            "prices": [
+              0.0,
+              1.3071428571428558,
+              1.239748677248679,
+              1.3285714285714296,
+              1.168386243386246,
+              1.1548941798941899,
+              1.1529100529100607,
+              1.160714285714286,
+              1.2023809523809565,
+              1.2285714285714313,
+              0.0
+            ]
+          },
+          "threads": 1
+        },
+        "lp_mip_gap_abs": 52.31349206349233,
+        "lp_obj": 20.0,
+        "lp_wall_s": 0.001344919204711914,
+        "max_mip_gap": 1e-09,
+        "mip_gap": 0.0,
+        "n_constrs": 205,
+        "n_int": 68,
+        "n_vars": 189,
+        "obj": 72.31349206349233,
+        "status": "OPTIMAL",
+        "time_limit_s": 10,
+        "wall_s": 1.0532398223876953
+      },
+      "status": "completed",
+      "upper": 72.31349206349228,
+      "used_for_lower_bound": true
+    },
+    {
+      "call": 1,
+      "column": {
+        "arc_kinds": [
+          [
+            "dep"
+          ],
+          [
+            "dep",
+            "dep"
+          ]
+        ],
+        "charges": [
+          {
+            "after_trip": "t0",
+            "before_trip": "marker1",
+            "kwh": 4.999999999999986,
+            "slot": 7,
+            "vehicle": 0
+          },
+          {
+            "after_trip": "t0",
+            "before_trip": "marker1",
+            "kwh": 9.999999999999998,
+            "slot": 9,
+            "vehicle": 0
+          },
+          {
+            "after_trip": "t1",
+            "before_trip": "t2",
+            "kwh": 9.999999999999998,
+            "slot": 5,
+            "vehicle": 1
+          },
+          {
+            "after_trip": "t2",
+            "before_trip": "marker0",
+            "kwh": 9.999999999999998,
+            "slot": 7,
+            "vehicle": 1
+          },
+          {
+            "after_trip": "t2",
+            "before_trip": "marker0",
+            "kwh": 9.999999999999986,
+            "slot": 8,
+            "vehicle": 1
+          }
+        ],
+        "column_key": "ef07f749684f26e171bc6a10862f6e0f37f401be18e6ac3689533d732133f61a",
+        "fleet": 2,
+        "instance_hash": "fed7a661911d",
+        "load": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          9.999999999999998,
+          0.0,
+          14.999999999999984,
+          9.999999999999986,
+          9.999999999999998,
+          0.0
+        ],
+        "load_hash": "1505bd77ce09",
+        "ops_cost": 20.0,
+        "oracle_stats": {
+          "backend": "CBC",
+          "bound": 74.7082498177864,
+          "extra": {
+            "load_reconstruction": {
+              "max_abs_residual_kwh": 1.7763568394002505e-15,
+              "max_abs_residual_slot": 7,
+              "physical_min_kwh": 0.0,
+              "policy_version": 1,
+              "raw_load_kwh": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                9.999999999999998,
+                0.0,
+                14.999999999999986,
+                9.999999999999986,
+                9.999999999999998,
+                0.0
+              ],
+              "raw_min_kwh": 0.0,
+              "residual_kwh": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.7763568394002505e-15,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "tolerance_kwh": 0.0001
+            },
+            "pricing_objective_reconstruction": {
+              "abs_adjustment": 4.263256414560601e-14,
+              "model_obj": 74.7082498177864,
+              "physical_obj": 74.70824981778635,
+              "policy_version": 1,
+              "prices": [
+                0.0,
+                1.215738884839705,
+                1.215738884839699,
+                1.2157388848397082,
+                1.2157388848396862,
+                1.2157388848396995,
+                1.2157388848396953,
+                1.2157388848397037,
+                1.2157388848396955,
+                1.215738884839689,
+                0.0
+              ]
+            },
+            "threads": 1
+          },
+          "lp_mip_gap_abs": 54.708249817786395,
+          "lp_obj": 20.0,
+          "lp_wall_s": 0.0012998580932617188,
+          "max_mip_gap": 1e-09,
+          "mip_gap": 0.0,
+          "n_constrs": 205,
+          "n_int": 68,
+          "n_vars": 189,
+          "obj": 74.7082498177864,
+          "status": "OPTIMAL",
+          "time_limit_s": 10,
+          "wall_s": 1.0710327625274658
+        },
+        "replay_ok": true,
+        "replay_violations": [],
+        "schedule_hash": "7bdf7535d15d",
+        "sequences": [
+          [
+            "t0",
+            "marker1"
+          ],
+          [
+            "t1",
+            "t2",
+            "marker0"
+          ]
+        ]
+      },
+      "column_key": "ef07f749684f26e171bc6a10862f6e0f37f401be18e6ac3689533d732133f61a",
+      "elapsed_s": 1.0819027498364449,
+      "lower": 74.7082498177864,
+      "novel": true,
+      "prices": [
+        -0.0,
+        1.215738884839705,
+        1.215738884839699,
+        1.2157388848397082,
+        1.2157388848396862,
+        1.2157388848396995,
+        1.2157388848396953,
+        1.2157388848397037,
+        1.2157388848396955,
+        1.215738884839689,
+        -0.0
+      ],
+      "projection_novel": true,
+      "purpose": "clean",
+      "replay_ok": true,
+      "solver": {
+        "backend": "CBC",
+        "bound": 74.7082498177864,
+        "extra": {
+          "load_reconstruction": {
+            "max_abs_residual_kwh": 1.7763568394002505e-15,
+            "max_abs_residual_slot": 7,
+            "physical_min_kwh": 0.0,
+            "policy_version": 1,
+            "raw_load_kwh": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              9.999999999999998,
+              0.0,
+              14.999999999999986,
+              9.999999999999986,
+              9.999999999999998,
+              0.0
+            ],
+            "raw_min_kwh": 0.0,
+            "residual_kwh": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              1.7763568394002505e-15,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "tolerance_kwh": 0.0001
+          },
+          "pricing_objective_reconstruction": {
+            "abs_adjustment": 4.263256414560601e-14,
+            "model_obj": 74.7082498177864,
+            "physical_obj": 74.70824981778635,
+            "policy_version": 1,
+            "prices": [
+              0.0,
+              1.215738884839705,
+              1.215738884839699,
+              1.2157388848397082,
+              1.2157388848396862,
+              1.2157388848396995,
+              1.2157388848396953,
+              1.2157388848397037,
+              1.2157388848396955,
+              1.215738884839689,
+              0.0
+            ]
+          },
+          "threads": 1
+        },
+        "lp_mip_gap_abs": 54.708249817786395,
+        "lp_obj": 20.0,
+        "lp_wall_s": 0.0012998580932617188,
+        "max_mip_gap": 1e-09,
+        "mip_gap": 0.0,
+        "n_constrs": 205,
+        "n_int": 68,
+        "n_vars": 189,
+        "obj": 74.7082498177864,
+        "status": "OPTIMAL",
+        "time_limit_s": 10,
+        "wall_s": 1.0710327625274658
+      },
+      "status": "completed",
+      "upper": 74.70824981778635,
+      "used_for_lower_bound": true
+    }
+  ],
+  "previous_state": {
+    "digest": "1f938eab697afd7e0b396121146ebb1b7d43a61a5a869fc0b617bf56ee196d5b",
+    "index": 2
+  },
+  "reference_validation": "pending separate reference phase",
+  "runtime": {
+    "machine": "arm64",
+    "platform": "macOS-26.5.2-arm64-arm-64bit",
+    "selected_cbc_library": {
+      "path": "/Users/nadan/Documents/ChatGPT/egg/.research-venv-repaired-1176/lib/python3.12/site-packages/cbcbox/cbc_dist/lib/libCbc.dylib",
+      "sha256": "fe44771023b133390daf7b72790c2ce65d1ccb2e5ac77c7a04c8d8f8648aff7d"
+    },
+    "versions": {
+      "cbcbox": "2.929",
+      "mip": "1.17.6",
+      "numpy": "2.5.3"
+    }
+  },
+  "schema": "egg-reuse-frontier-v1",
+  "solver_wall_s": 2.463097333908081,
+  "state_index": 3,
+  "status": "certified",
+  "upper": 51.00006528738796,
+  "worker_cpu_s": 2.5352419999999998,
+  "worker_wall_s": 2.6058696662075818
+}

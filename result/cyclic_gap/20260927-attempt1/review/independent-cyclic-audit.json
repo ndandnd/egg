@@ -1,0 +1,68 @@
+{
+  "auditor_sha256": "2ed1a9189e205e499015199e26ff2b4968698046d0f84422b3bc9752b1930d3f",
+  "checks": {
+    "bus_trajectories": 150,
+    "complete_schedules": 100,
+    "grid_cases": 24,
+    "nominal_convexified": "7591/80",
+    "nominal_gap": "169/80",
+    "nominal_physical": "97",
+    "positive_components": 37,
+    "positive_gap_cases": 11,
+    "rational_leaves": 1894,
+    "soc_event_values": 750,
+    "zero_gap_cases": 13
+  },
+  "corruption_controls": {
+    "convex_weight": {
+      "reason": "weights sum to one",
+      "rejected": true
+    },
+    "display_only": {
+      "reason": "exact/display mismatch",
+      "rejected": true
+    },
+    "duplicate_case": {
+      "reason": "complete unique Cartesian grid",
+      "rejected": true
+    },
+    "event_SOC": {
+      "reason": "saved SOC differs from raw event replay",
+      "rejected": true
+    },
+    "fleet_LOC": {
+      "reason": "fleet LOC",
+      "rejected": true
+    },
+    "hull_price": {
+      "reason": "hull gradient price",
+      "rejected": true
+    },
+    "mandatory_coverage": {
+      "reason": "event SOC capacity",
+      "rejected": true
+    },
+    "missing_case": {
+      "reason": "complete Cartesian grid count",
+      "rejected": true
+    },
+    "physical_cost": {
+      "reason": "physical",
+      "rejected": true
+    },
+    "supply_LOC": {
+      "reason": "supply LOC",
+      "rejected": true
+    }
+  },
+  "frozen_head": "7bf913a87a455e77a4e309eaa58dfcf0b10f76c0",
+  "method": "independent exact vertex-edge and raw-event reconstruction",
+  "no_author_imports": true,
+  "no_solver": true,
+  "provenance": {
+    "protocol_sha256": "3deb50a9cdf2b1ef9f0dd0b0ca30d3fddff95515053bdc6b69697bf1174fb2f0",
+    "source_sha256": "cfb54a174272ae55530d15dee504ea42cfdb97c5c1a794ac83078dd133d6fdaf"
+  },
+  "result_sha256": "aeda2a5225d0975254248bae0d942aa752f7c1a340f32d7488bf055aa8d997df",
+  "status": "PASS"
+}
