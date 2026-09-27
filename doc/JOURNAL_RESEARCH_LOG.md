@@ -535,7 +535,7 @@ Independent full/failed-cell audit and author diagnosis are active;8hull/public
 V2 gates are held. No automatic retry or retrospective zeroing. A durable
 prospective numerical policy will be independently reviewed if needed.
 
-NewFigure7 independent review PASS: every37servicebar per case, all41sessions,
+NewFigure 7 independent review PASS: every37servicebar per case, all41sessions,
 235SOCpoints (4initial+231subsequent), ownership/captions and byte-identical
 PNG regeneration checked. Manuscript source0.4 now contains a self-contained
 certificate method, ideal compact model appendix, sufficient open-neighborhood
@@ -899,3 +899,7 @@ A later read-only observation confirmed job 559907 RUNNING at 1m23s, start 22:06
 Hosted CI run 36353982002 subsequently completed SUCCESS for the actual execution source e23a653dcd77b6ce02eb0af5e544fea7edab9eca.
 
 The original Google Doc received one verified appendix covering the exact enclosures, failed v1, reviewed v2 and actual launch/allocation. Final export 92,478 bytes SHA 5edca9e3374528581e1b6434340967654c047f946c1d0e3b76032ec3bba91b2e; prior 90,665 bytes is an exact prefix, heading once, Saved to Drive. Root independently checked the final hash and prefix. Outer verification: ../research-20260927/agent-notes/google-doc-v2-milestone-20260927/. Final compact queue/accounting snapshot still reports 559907 RUNNING at 3m48s with two allocated CPUs; no scientific outcome is claimed. Hourly monitoring remains active with Sol/Luna routing. No manuscript render or additional experiment campaign was launched.
+
+### Focused manuscript evidence and literature revision
+
+Sol updated the editable manuscript with the admitted exact depot-15 fleet/flat/nonlinear bounds, their energy/Fenchel derivation and provenance, GRB qualification, preserved signed numerical endpoints, and distinct depot-16 scope. Original Table 2 numeric rows and Figure 7 path were preserved. A focused primary-source literature note adds bus-specific Lagrangian decomposition, stochastic battery-policy and preprint aggregator-pricing context with explicit access limits; no priority claim follows from search absence. Luna's focused text review passed at manuscript SHA 38487c3ef68691f105005bef44ba1e2f5761cab25b8891d7b6b1e7fa7e1327b5. Scope/text review copies and manifests are under research-20260927/agent-notes/manuscript-v05-{scope,text}-review/. No PDF was rendered; the manuscript still treats the completed v2 scientific comparison as audit-pending.
