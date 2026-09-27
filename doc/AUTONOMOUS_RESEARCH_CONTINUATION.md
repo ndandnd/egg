@@ -4,6 +4,36 @@ Updated 27 September 2026. Owner: the EGG task, acting as principal researcher
 under the user's explicit authorization to continue routine research, cluster
 work, GitHub backups and Google Doc updates without repeated approvals.
 
+## Latest checkpoint — read this before the historical entries below
+
+27 September 2026, published source freeze `dd5ad1659248b93d53f7f1515282d9530343567f`.
+Use Sol 6 for implementation/analysis and Luna Max for routine verification,
+documentation and monitoring. Astra coordinates and makes material scientific
+decisions. Avoid redundant broad rereads, tests and idle polling. The hourly
+heartbeat already follows this manager-led routing.
+
+- Reviewed working manuscript 0.4 is the canonical 22-page, seven-figure PDF.
+  The excellent-first-draft goal remains incomplete; matched nonlinear public
+  physical-planner, full-hull and own-price-regret evidence is still missing.
+- The repaired compact qualification attempt3 has finished once: the runner
+  reports 20/20 controls, 35 native calls, 24.707 seconds and unchanged sources.
+  Its 142 original files are sealed; independent Luna result audit is pending.
+  This is not yet audited admission. Failed attempt2 remains immutable.
+- Exact cardinality-flow attempt1 has finished once: two public calculations,
+  0.358 seconds, supervised exit0 with no timeout or source drift. Its separate
+  Luna no-author-import result audit is pending. Results are ideal stored-input
+  lower bounds, not exact physical/native certificates.
+- No EGG cluster job is active in the latest queue check. Other-project held
+  jobs are untouched. Public pilot2 and the broad sensitivity campaign remain
+  held. Sol 6 is recommending a smaller nonlinear pilot.
+- Before any new compact-hull qualification, repair its hard-coded extraction
+  policy metadata/import checks, independently review and freeze that change.
+  The compact physical20 gate does not itself qualify hull integration.
+- Both result reviews must preserve original manifests and write only new
+  review subtrees. After review, publish evidence, update the Google Doc and
+  replace this checkpoint. Do not mistake older append-only entries below for
+  the current state.
+
 ## Objective and completion standard
 
 Produce an excellent journal-oriented first draft with a defensible contribution,

@@ -620,3 +620,26 @@ integration gate, with its own source manifest and controls, not part of the
 current20-control patch. The failed attempt2 archive stays immutable.
 Sol6_cardinality_bound continues the independent exact-flow implementation;
 LunaMax document worker is completing the next GoogleDoc append.
+
+### Reviewed freeze and two bounded local runs
+
+Published `dd5ad1659248b93d53f7f1515282d9530343567f` after independent
+implementation preflight passed both scoped changes. Compact attempt3 ran
+once: runner20/20,35native calls,24.706728seconds,source hashes unchanged.
+Original142files total1,309,561bytes; raw manifest SHA256
+c855d220a34b931804cf43c7aedf89d432aae41746c4169f3b87888120b2081a.
+The repaired joint-planner cell passed the same frozen target. This is still
+pending independent result admission; failed attempt2 remains unchanged.
+
+Exact cardinality-flow attempt1 ran once under its supervisor: two public
+calculations in0.358seconds, supervised0.569seconds,exit0,no timeout,no drift.
+The exact certificates and unchanged source receipts are sealed. Separate
+Luna Max reviewers are auditing each result without author implementation
+imports. No result is admitted solely from author-written checks.
+
+Latest Unicorn queue check found no active EGG job; other-project held jobs
+were left untouched. The manager delegated a smaller nonlinear-pilot design
+to Sol6. The large sensitivity campaign and publicpilot2 remain held. The
+current routing uses Sol6/LunaMax for bounded worker tasks to control token
+cost; the hourly heartbeat already preserves that preference. CI on the
+preceding db2bf93 and b2a5a33 heads passed; dd5ad16 CI was still running.
