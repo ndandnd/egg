@@ -97,6 +97,11 @@ jobs:
           python result/native_pathflow/20260927-attempt1/review/audit_native_pathflow.py \
             --repository . --attempt result/native_pathflow/20260927-attempt1 \
             --out "${audit_dir}/pathflow.json"
+          # Reconstructs the failed 19/20 energy-band attempt, including its
+          # orphan charge. Audit success does not admit that formulation.
+          python result/native_pathflow/20260927-attempt2/review/audit_energy_v2.py \
+            --repository . --attempt result/native_pathflow/20260927-attempt2 \
+            --out "${audit_dir}/pathflow-energy-v2.json"
           python result/native_hull/20260927-attempt2/review/audit_native_hull_v2.py \
             --repository . --attempt result/native_hull/20260927-attempt2 \
             --out "${audit_dir}/hull-v2.json"

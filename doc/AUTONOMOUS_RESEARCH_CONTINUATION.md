@@ -552,3 +552,33 @@ QA, README reproduction instructions and the next GoogleDoc milestone. Root
 manages publication and major decisions. Reuse these workers if available;
 otherwise read their saved deliverables before dispatching bounded replacements.
 Matching/figure/manuscript milestone is published at e3c3c48.
+
+
+### Manager checkpoint: manuscript review and document update
+
+Previous goal turn made progress: published matching/figure/manuscript checkpoint
+e3c3c48 and independently audited failed energy-band archive b77f272; persisted
+LunaMax/Sol6 routing in the hourly automation. Current worker handles confirmed
+live; a fresh scoped Unicorn check found no EGG job active. No jobs restarted.
+
+Sol6's focused review of source0.4abstract/method/evidenceTable3/AppendicesA/B
+found no blocking scientific inconsistency. Its prospective orphan projection
+design is written but awaits LunaMax independent review before implementation.
+LunaMax visual review of the22-page candidate found no clipping/overlap/glyph
+or figure defects, but references begin awkwardly acrosspages21/22. A separate
+v04-r2 pagination candidate and review are now assigned; no oldPDFisreplaced.
+GoogleDoc appended unique heading “Verified manuscript and qualification update
+— 27 September 2026” and showed Saved to Drive. The worker verified the append
+and heading; it did not capture a complete before/after document comparison,
+so full-document byte/content integrity is not claimed for this UI update.
+PR56 body now reflects exact matching, audited19/20failedgate, source0.4and
+remaining nonlinear study.
+
+The failed energy-V2 archival auditor was independently rerun with no optimizer
+and reproduced its explicit PARTIAL/FAIL verdict and37corruption rejections;
+CI now includes this archived-failure check without changing gate admission.
+Sol6 may design a cardinality-constrained matching bound conditional on the
+one-bus obstruction review, without execution. Repairimplementation remains
+its priority once the independent design review passes. No broad11-hour
+nonlinear campaign is admitted; candidate scope/resource gates still need
+manager review.
