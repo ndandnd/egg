@@ -718,3 +718,26 @@ the new policy identity for every control. All six related pure suites pass:
 195 tests in 0.69 seconds. No native algorithm or archived result changed and
 no optimizer was rerun. Future source checks should read the pinned Git blobs,
 not require a working checkout to remain permanently at an old revision.
+
+### V3 CBC hull result admitted
+
+Luna's independent no-author-import audit passes all eight compact-hull cells:
+21 complete-branch pricing minima and global Fenchel checks, 15 exact stored-
+number PWL master minima, physical replay, mixtures, polishing, retained-state
+policy checks and full accounting. All 48 deliberately corrupted copies reject.
+The original 62 files are unchanged. Frozen source blobs and the completed-run
+source-unchanged receipt are checked separately, so later source evolution does
+not invalidate reproducibility. The lead verified every review-manifest entry;
+REVIEW_MANIFEST.json SHA256 is
+c17175c033921553a9f1d58dc5ddb083e412c2fcde3cb4c71ec639b226091166.
+This admits the declared CBC synthetic hull fixtures, not GRB or operational
+results. Latest published compatibility-fix head db7458e passed hosted CI.
+
+The prospective nonlinear pilot permits complete, validated hull evidence
+returned with budget_exhausted status to continue through the already budgeted
+own-price stage; it preserves that status and does not call it optimal. Missing
+evidence or hard timeout still stops the attempt. This is a prelaunch protocol
+revision, with unchanged caps, inputs and native call limits. Independent
+preflight is closing saved-column subset/order handling and exact 20+8 GRB
+qualification parity. GRB qualification wrappers are separately under review;
+no new cluster job has been submitted.

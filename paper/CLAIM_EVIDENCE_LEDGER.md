@@ -175,8 +175,9 @@ whole-incumbent numerical correction is 1.2261e-12 kWh, below the 1e-8 policy
 ceiling. This qualifies only the declared synthetic compact-model policy.
 Attempt 3 prospectively corrects the issue exposed by failed attempt 2; the
 original attempt 2 remains an unchanged failure and is not retroactively passed.
-Hull-policy integration passed independent preflight; its new eight-control
-CBC run is complete and awaits independent result audit.
+The new eight-control CBC hull run also passed independent result audit
+(21 pricing calls, 15 masters and 48 corruption checks), qualifying its
+declared synthetic fixtures only.
 
 The [independent exact cardinality-flow
 review](../result/sistig_cardinality_flow/20260927-attempt1/review/REVIEW.md)

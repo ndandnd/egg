@@ -122,9 +122,9 @@ corrects the issue behind attempt 2; that failed record remains unchanged. The
 cardinality ideal stored-input bounds are 404.924239883878 (P15) and
 414.394469217211 (P16); earlier one-path matching bounds are 301.315343883878
 and 305.633807883878. The separate numerical upper witnesses are 408.533137 and
-433.746086. No exact physical optimum or physical gap is established. Hull-policy
-integration passed independent preflight; its new eight-control CBC run awaits
-independent result audit. These results await the next bundled
+433.746086. No exact physical optimum or physical gap is established. The new eight-control CBC hull run also passed
+independent result audit (21 pricing calls, 15 masters and 48 corruption
+checks), qualifying the declared synthetic fixtures only. These results await the next bundled
 manuscript revision; the current manuscript and reviewed PDF remain unchanged.
 The verified appendix [“Verified compact qualification and stronger ideal fleet
 bounds”](https://docs.google.com/document/d/1NmPC_qo_uOnA48dV6Ibhs3Pj9EgOD-oJTBuVi41p6bg/edit?tab=t.0)

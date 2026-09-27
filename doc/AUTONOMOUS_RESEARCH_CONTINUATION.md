@@ -36,12 +36,21 @@ rereads, redundant tests and idle polling.
   CBC controls ran once: all eight reported certified, 36 native calls,
   12.267 seconds supervised, no timeout or source drift. The original 62 files
   are sealed (manifest c3d9da88195161ddd2c054800e4d0a5944998a03b623730a771e7ce9bbb5644b).
-  Luna Max is auditing these results; no downstream admission yet. The fake
+  Independent audit passes all eight, all 21 pricing and 15 master solves,
+  mixtures, retained-policy boundaries and 48 corruption controls. Review
+  manifest SHA c17175c033921553a9f1d58dc5ddb083e412c2fcde3cb4c71ec639b226091166.
+  This qualifies the declared CBC synthetic hull fixtures only. The fake
   fixture change is prospective and does not alter the old frozen source.
-- Sol 6 is separately preparing a new one-cell nonlinear pilot runner and
-  protocol: full depot-15 case, fixed synthetic curvature, three matched
-  routines, 34-minute total cap. Matching backend qualification and independent
-  preflight remain mandatory. The broad sensitivity campaign is unadmitted.
+- Sol 6 has prepared the separate one-cell nonlinear runner: full depot-15
+  case, fixed synthetic curvature, three matched routines, 34-minute total cap.
+  Luna Max is reviewing final fixes for saved mixture subsets, useful complete
+  budget-limited evidence, and exact GRB qualification input/budget parity.
+  Runtime caps and scientific inputs remain fixed. It is not admitted to run.
+- The GRB adapter and two separate batch scripts are under independent Luna
+  preflight. The physical stage needs its own result audit before the hull
+  stage. No GRB V3 job or public nonlinear pilot has been submitted. Sol owns
+  the source changes; the lead owns freeze, isolated transfer and submission.
+  The broad sensitivity campaign remains unadmitted.
 - The old unexecuted flat-pilot2 candidate is shelved, with its exact patch
   preserved outside Git at `../research-20260927/deferred-flat-pilot2/`;
   the four tracked files were restored to published HEAD. Do not revive it
