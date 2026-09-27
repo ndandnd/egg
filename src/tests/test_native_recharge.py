@@ -125,7 +125,7 @@ def test_serial_decoder_has_explicit_nonoverlapping_sessions():
                    for i, t in enumerate(("A", "B"))], sessions)
     assert nr.replay_native(case, p)["max_grid_kw"] == 10
     assert sessions[0]["end_min"] == sessions[1]["start_min"] == 60
-    with pytest.raises(ValueError, match="exceeds interval"):
+    with pytest.raises(ValueError, match="exceeds roundoff budget"):
         nr.decode_serial(case, compiled, {(0, "in_A", 1): 5, (1, "in_B", 1): 5})
     with pytest.raises(ValueError, match="unknown elementary"):
         nr.decode_serial(case, compiled, {(0, "in_A", 99): 1})
@@ -202,7 +202,8 @@ def fake_oracle(monkeypatch, bounds):
     monkeypatch.setattr(nr, "build_feasible_model", builder)
     monkeypatch.setattr(nr, "attach_objective", attach)
     monkeypatch.setattr(nr, "_optimize_once", lambda *args: next(stats))
-    monkeypatch.setattr(nr, "_extract", lambda case, state: one_bus(case))
+    monkeypatch.setattr(nr, "capture_incumbent", lambda case, state: {"variables": [{"raw": "fake unit-test value"}]})
+    monkeypatch.setattr(nr, "_extract", lambda case, state, **kw: one_bus(case))
     return built, attached
 
 
@@ -213,7 +214,7 @@ def test_feasible_status_can_bound_without_being_renamed_optimal(monkeypatch):
     assert result["status"] == "bounded"
     assert result["stats"]["status"] == "FEASIBLE"
     assert result["lower"] == pytest.approx(36-nr.BOUND_GUARD)
-    assert [e["event"] for e in events] == ["native_start", "native_status"]
+    assert [e["event"] for e in events] == ["native_start", "native_status", "native_incumbent", "objective_reconstruction"]
 
 
 def test_narrow_feasible_bound_certifies_but_preserves_status(monkeypatch):
@@ -240,11 +241,12 @@ def test_planner_uses_global_bound_and_logs_immutable_tangents(monkeypatch):
 
 def test_failed_extraction_still_records_native_status(monkeypatch):
     fake_oracle(monkeypatch, [{"status": "OPTIMAL", "incumbent": 37, "lower_bound": 37}])
-    monkeypatch.setattr(nr, "_extract", lambda *args: (_ for _ in ()).throw(ValueError("corrupt")))
+    monkeypatch.setattr(nr, "_extract", lambda *args, **kw: (_ for _ in ()).throw(ValueError("corrupt")))
     events = []
     with pytest.raises(ValueError, match="corrupt"):
         nr.solve_pricing(q.cyclic_case(), [1]*4, record=events.append)
-    assert events[-1]["event"] == "native_status"
+    assert [e["event"] for e in events][-2:] == ["native_status", "native_incumbent"]
+    assert events[-1]["variables"] == [{"raw": "fake unit-test value"}]
 
 
 def test_receipt_writer_never_overwrites_and_worker_preserves_exception(tmp_path, monkeypatch):
@@ -370,3 +372,90 @@ def test_phase_settings_apply_before_single_native_call(monkeypatch):
     with pytest.raises(TimeoutError):
         nr._optimize_once(built, nr.Budget(), deadline=99)
     assert model.calls == 1
+
+
+def test_v2_correction_is_finite_negative_only_under_one_total_budget():
+    raw = {(0, 0, 0): -1e-12, (0, 1, 0): 1e-300, (0, 2, 0): 5.0}
+    normalized, audit = nr.normalize_charge_energy(raw)
+    assert normalized == {(0, 0, 0): 0.0, (0, 1, 0): 1e-300, (0, 2, 0): 5.0}
+    assert raw[(0, 0, 0)] == -1e-12
+    assert audit["negative_l1_kwh"] == 1e-12 and audit["accepted"]
+    assert audit["negative_to_zero"] == [{"key": [0, 0, 0], "before_kwh": -1e-12, "after_kwh": 0.0}]
+    events = []
+    with pytest.raises(ValueError, match="Aggregate"):
+        nr.normalize_charge_energy({(0, 0, 0): -6e-9, (1, 0, 0): -6e-9}, record=events.append)
+    assert not events[0]["accepted"] and events[0]["negative_l1_kwh"] == pytest.approx(1.2e-8)
+    for invalid in (float("nan"), float("inf"), -float("inf")):
+        with pytest.raises(ValueError, match="Nonfinite"):
+            nr.normalize_charge_energy({(0, 0, 0): invalid})
+
+
+def test_v2_exact_interval_endpoints_retain_energy_without_overlap():
+    case = q.overlap_case(90)
+    energies = {(0, "in_A", 1): 5.000000000000002, (1, "in_B", 2): 5.0}
+    sessions, audit = nr.decode_serial(case, nr.compile_case(case), energies, return_diagnostics=True)
+    assert sessions[0]["grid_kwh"] == energies[(0, "in_A", 1)]
+    assert sessions[0]["start_min"] == 30 and sessions[0]["end_min"] == 60
+    assert sessions[1]["start_min"] == 60 and sessions[1]["end_min"] == 90
+    assert audit["intervals"][0]["saturated_roundoff_adjustment"]
+    assert 0 < audit["combined_roundoff_kwh"] < 1e-8
+    p = plan(case, [{"vehicle": i, "trips": [t], "movements": ["out_"+t, "in_"+t]}
+                   for i, t in enumerate(("A", "B"))], sessions)
+    assert nr.replay_native(case, p)["replay_ok"]
+    # Negative normalization and interval capacity excess share one fleet budget.
+    with pytest.raises(ValueError, match="Combined"):
+        nr.decode_serial(case, nr.compile_case(case), {(0, "in_A", 1): 5+3e-9},
+                         prior_correction_exact="8/1000000000")
+    with pytest.raises(ValueError, match="Combined"):
+        nr.decode_serial(case, nr.compile_case(case),
+                         {(0, "in_A", 1): 5+6e-9, (1, "in_B", 2): 5+6e-9})
+
+
+def test_v2_full_interval_allocation_is_proportional_and_positive_tail_never_deleted():
+    case = replace(q.overlap_case(90), market_edges_min=(0, 90))
+    compiled = nr.compile_case(case)
+    sessions = nr.decode_serial(case, compiled, {(0, "in_A", 1): 2, (1, "in_B", 1): 3})
+    assert [(s["start_min"], s["end_min"]) for s in sessions] == [(30, 54), (54, 90)]
+    assert [s["grid_kwh"] for s in sessions] == [2, 3]
+    with pytest.raises(ValueError, match="representable"):
+        nr.decode_serial(case, compiled, {(0, "in_A", 1): 1e-300, (1, "in_B", 1): 5})
+    with pytest.raises(ValueError, match="representable"):
+        nr.decode_serial(case, compiled, {(0, "in_A", 1): 5, (1, "in_B", 1): 1e-300})
+
+
+def test_v2_extraction_normalization_replays_and_preserves_before_after_evidence():
+    case = q.cyclic_case()
+    idx = {m.id: j for j, m in enumerate(case.movements)}
+    var = lambda x: SimpleNamespace(x=x)
+    built = {"used": [var(1), var(1)], "compiled": nr.compile_case(case),
+             "x": [[var(float(m.id in selected)) for m in case.movements]
+                   for selected in ({"out_A", "in_A"}, {"out_B", "in_B"})],
+             "charge": {(0, idx["in_A"], 1): var(-1e-12), (0, idx["in_A"], 3): var(15),
+                        (1, idx["in_B"], 3): var(15)},
+             "loads": [var(0), var(-1e-12), var(0), var(30)]}
+    events = []
+    p = nr._extract(case, built, record=events.append)
+    assert p["replay"]["replay_ok"]
+    assert p["raw_charge_load"] == [0, -1e-12, 0, 30]
+    assert p["load"] == [0, 0, 0, 30]
+    assert p["roundoff"]["load_delta_kwh"] == [0, 1e-12, 0, 0]
+    assert [e["event"] for e in events] == ["charge_normalization", "serial_decoding"]
+    assert events[0]["negative_to_zero"][0]["before_kwh"] == -1e-12
+    assert all(c["grid_kwh"] > 0 for c in p["charges"])
+
+
+def test_v2_snapshot_preserves_raw_variable_values_and_semantic_indices():
+    case = q.single_case()
+    variables = [SimpleNamespace(idx=i, name="raw"+str(i), var_type="C", lb=0, ub=float("inf"), x=x)
+                 for i, x in enumerate((-1e-12, float("nan"), 1))]
+    built = {"model": SimpleNamespace(vars=variables), "compiled": nr.compile_case(case),
+             "used": [variables[2]], "u": [[variables[2]]], "x": [[variables[0], variables[2]]],
+             "soc_before": [[variables[1]]], "soc_after": [[variables[2]]],
+             "charge": {(0, 1, 1): variables[0]}, "loads": [variables[2], variables[0]], "epigraph": [variables[1]]}
+    snapshot = nr.capture_incumbent(case, built)
+    assert snapshot["variables"][0]["solution"]["value"] == -1e-12
+    assert snapshot["variables"][1]["solution"] == {"value": None, "repr": "nan"}
+    assert snapshot["mapping"]["grid_energy"] == [{"key": [0, 1, 1], "variable": 0}]
+    assert snapshot["mapping"]["epigraph"] == [1]
+    assert snapshot["mapping"]["movement_ids"] == [m.id for m in case.movements]
+    json.dumps(snapshot, allow_nan=False)

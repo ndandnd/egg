@@ -21,7 +21,7 @@ import traceback
 
 from egglab import native_recharge as nr
 
-PROTOCOL = "native-recharge-qualification-20260927-v1"
+PROTOCOL = "native-recharge-qualification-20260927-v2"
 ROOT = Path(__file__).resolve().parents[2]
 SOURCES = ("src/egglab/native_recharge.py", "src/experiments/native_recharge_qualification.py",
            "src/tests/test_native_recharge.py", "doc/NATIVE_RECHARGE_QUALIFICATION_PROTOCOL_20260927.md")
@@ -183,7 +183,8 @@ def read_worker_evidence(directory):
             try:
                 event = json.loads(line)
                 if (not isinstance(event, dict) or event.get("event") not in
-                        ("native_start", "native_status", "replayed_iteration")
+                        ("native_start", "native_status", "native_incumbent", "charge_normalization",
+                         "serial_decoding", "objective_reconstruction", "replayed_iteration")
                         or not nr._minute(event.get("round")) or event["round"] < 0):
                     raise ValueError("Malformed native event record")
                 if event["event"] == "native_status" and (

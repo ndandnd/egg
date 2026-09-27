@@ -9,6 +9,7 @@ from __future__ import annotations
 
 from dataclasses import asdict, dataclass
 from functools import lru_cache
+from fractions import Fraction
 import hashlib
 import json
 import math
@@ -21,6 +22,8 @@ ENERGY_TOL = 1e-6
 TIME_TOL_MIN = 1e-7
 BOUND_GUARD = 1e-6
 OBJECTIVE_TOL = 1e-6
+EXTRACTION_POLICY = "native-roundoff-qualification-v2"
+ROUNDOFF_BUDGET_KWH = 1e-8
 
 
 @dataclass(frozen=True)
@@ -454,6 +457,7 @@ def build_feasible_model(case, backend="CBC"):
         x[v][j]*sum(leg.arrive_min-leg.depart_min for leg in m.legs)
         for v in range(V) for j, m in enumerate(case.movements))
     return {"model": model, "compiled": compiled, "used": used, "x": x,
+            "u": u, "soc_before": sb, "soc_after": sa,
             "charge": charge, "loads": loads, "ops": ops,
             "physical_identity": case.identity(), "backend": backend,
             "backend_runtime": runtime,
@@ -471,6 +475,7 @@ def attach_objective(built, kind, payload):
         if len(payload) != len(loads) or any(not rows for rows in payload):
             raise ValueError("Incomplete tangent objective")
         cost = [model.add_var(lb=-mip.INF) for _ in loads]
+        built["epigraph"] = cost
         for t, rows in enumerate(payload):
             for slope, intercept in rows:
                 if not all(_finite(z, -math.inf) for z in (slope, intercept)):
@@ -509,29 +514,106 @@ def _optimize_once(built, budget, deadline):
             "physical_constraints": built["constraint_count_before_objective"]}
 
 
-def decode_serial(case, compiled, energies):
-    """Materialize one-connector sessions instead of assuming average power."""
-    charges = []
+def normalize_charge_energy(raw, record=None):
+    """Only finite negative residuals may move to zero, under one fleet budget."""
+    normalized, corrections = {}, []
+    total = Fraction(0)
+    for key, amount in raw.items():
+        if not _finite(amount, -math.inf):
+            raise ValueError("Nonfinite extracted native charge")
+        if amount < 0:
+            total -= Fraction.from_float(float(amount))
+            corrections.append({"key": list(key), "before_kwh": amount, "after_kwh": 0.0})
+            normalized[key] = 0.0
+        else:
+            normalized[key] = amount  # Every strictly positive energy is retained.
+    details = {"policy": EXTRACTION_POLICY, "budget_kwh": ROUNDOFF_BUDGET_KWH,
+               "negative_to_zero": corrections, "negative_l1_kwh": float(total),
+               "negative_l1_exact": str(total), "accepted": total <= Fraction.from_float(ROUNDOFF_BUDGET_KWH)}
+    if record:
+        record(details)
+    if total > Fraction.from_float(ROUNDOFF_BUDGET_KWH):
+        raise ValueError("Aggregate negative-charge correction exceeds roundoff budget")
+    return normalized, details
+
+
+def decode_serial(case, compiled, energies, *, return_diagnostics=False, prior_correction_exact="0"):
+    """Fill each interval in energy proportion, with exact cumulative arithmetic.
+
+    Conversion to float happens only at session endpoints; nonrepresentable
+    strictly positive sessions fail rather than being erased or overlapped.
+    """
+    charges, interval_records = [], []
+    excess_total, session_excess_total = Fraction(0), Fraction(0)
+    prior = Fraction(prior_correction_exact)
+    if prior < 0 or prior > Fraction.from_float(ROUNDOFF_BUDGET_KWH):
+        raise ValueError("Invalid prior roundoff correction")
     for k, interval in enumerate(compiled["intervals"]):
         cursor, rate = float(interval["start"]), interval["rate_kw"]
         rows = sorted((v, mid, e) for (v, mid, kk), e in energies.items() if kk == k and e != 0)
         if any(not _finite(e) for _, _, e in rows):
             raise ValueError("Negative/nonfinite extracted native charge")
-        for v, mid, energy in rows:
+        if not rows:
+            continue
+        total = sum((Fraction.from_float(float(e)) for _, _, e in rows), Fraction(0))
+        duration = Fraction(interval["end"]-interval["start"])
+        capacity = Fraction.from_float(float(rate))*duration/60
+        excess = max(Fraction(0), total-capacity)
+        excess_total += excess
+        if prior+excess_total > Fraction.from_float(ROUNDOFF_BUDGET_KWH):
+            raise ValueError("Combined negative correction/capacity excess exceeds roundoff budget")
+        cumulative = Fraction(0)
+        for index, (v, mid, energy) in enumerate(rows):
             if mid not in interval["visits"] or rate <= 0:
                 raise ValueError("Charge has no available interval/resource")
-            end = cursor + energy*60/rate
-            if end > interval["end"]+TIME_TOL_MIN:
-                raise ValueError("Serial connector decoding exceeds interval")
+            cumulative += Fraction.from_float(float(energy))
+            end = (float(interval["end"]) if index == len(rows)-1 else
+                   float(Fraction(interval["start"])+duration*cumulative/total))
+            if not cursor < end <= interval["end"]:
+                raise ValueError("Positive charge has no representable interval-contained session")
+            session_capacity = Fraction.from_float(float(rate))*(Fraction.from_float(end)-Fraction.from_float(cursor))/60
+            session_excess_total += max(Fraction(0), Fraction.from_float(float(energy))-session_capacity)
+            if prior+session_excess_total > Fraction.from_float(ROUNDOFF_BUDGET_KWH):
+                raise ValueError("Materialized session capacity excess exceeds roundoff budget")
             charges.append({"vehicle": v, "movement": mid, "connector": 0,
                             "start_min": cursor, "end_min": end, "grid_kwh": float(energy)})
             cursor = end
+        interval_records.append({"interval": k, "start_min": interval["start"], "end_min": interval["end"],
+            "grid_kwh": float(total), "capacity_kwh": float(capacity), "capacity_excess_kwh": float(excess),
+            "capacity_excess_exact": str(excess), "saturated_roundoff_adjustment": excess > 0})
     if any(k not in range(len(compiled["intervals"])) for (_, _, k) in energies):
         raise ValueError("Charge references an unknown elementary interval")
-    return charges
+    details = {"policy": EXTRACTION_POLICY, "endpoint_rule": "exact-energy-proportional-full-interval",
+               "intervals": interval_records, "capacity_excess_kwh": float(excess_total),
+               "capacity_excess_exact": str(excess_total), "combined_roundoff_kwh": float(prior+session_excess_total),
+               "materialized_session_excess_kwh": float(session_excess_total),
+               "materialized_session_excess_exact": str(session_excess_total),
+               "combined_roundoff_exact": str(prior+session_excess_total), "budget_kwh": ROUNDOFF_BUDGET_KWH}
+    return (charges, details) if return_diagnostics else charges
 
 
-def _extract(case, built):
+def capture_incumbent(case, built):
+    """Raw model variables and semantic indices, before any witness conversion."""
+    def number(value):
+        return {"value": float(value) if value is not None and math.isfinite(float(value)) else None,
+                "repr": repr(value)}
+    def matrix(key):
+        return [[var.idx for var in row] for row in built[key]]
+    variables = [{"index": var.idx, "name": var.name, "type": var.var_type,
+                  "lower": number(var.lb), "upper": number(var.ub), "solution": number(var.x)}
+                 for var in built["model"].vars]
+    return {"case_identity": case.identity(), "extraction_policy": EXTRACTION_POLICY,
+            "variables": variables, "mapping": {
+                "trip_ids": [t.id for t in case.trips], "movement_ids": [m.id for m in case.movements],
+                "intervals": built["compiled"]["intervals"], "used": [var.idx for var in built["used"]],
+                "assignment": matrix("u"), "movement_selection": matrix("x"),
+                "soc_before": matrix("soc_before"), "soc_after": matrix("soc_after"),
+                "grid_energy": [{"key": list(key), "variable": var.idx} for key, var in built["charge"].items()],
+                "market_load": [var.idx for var in built["loads"]],
+                "epigraph": [var.idx for var in built.get("epigraph", [])]}}
+
+
+def _extract(case, built, record=None, round_index=0):
     def value(var):
         if var.x is None or not math.isfinite(float(var.x)):
             raise ValueError("Missing/nonfinite native variable")
@@ -561,26 +643,39 @@ def _extract(case, built):
         map_v[v] = len(vehicles)
         used_modes |= {(v, mid) for mid in ids}
         vehicles.append({"vehicle": len(vehicles), "trips": seq, "movements": path})
+    raw_energies = {key: value(var) for key, var in built["charge"].items()}
+    def normalization_record(details):
+        if record:
+            record({"event": "charge_normalization", "round": round_index, **details})
+    normalized, negative_correction = normalize_charge_energy(raw_energies, normalization_record)
     energies = {}
-    for (v, j, k), var in built["charge"].items():
-        amount = value(var)
+    for (v, j, k), amount in normalized.items():
         if amount != 0:
             mid = case.movements[j].id
             if v not in map_v or (v, mid) not in used_modes:
                 raise ValueError("Charging on an unused vehicle or mode")
             energies[(map_v[v], mid, k)] = amount
-    charges = decode_serial(case, built["compiled"], energies)
+    charges, session_details = decode_serial(case, built["compiled"], energies,
+        return_diagnostics=True, prior_correction_exact=negative_correction["negative_l1_exact"])
+    if record:
+        record({"event": "serial_decoding", "round": round_index, **session_details, "charges": charges})
     loads = [0.0] * (len(case.market_edges_min)-1)
     for (_, _, k), amount in energies.items():
         loads[built["compiled"]["intervals"][k]["period"]] += amount
     raw_load = [value(var) for var in built["loads"]]
+    raw_charge_load = [math.fsum(amount for (_, _, k), amount in raw_energies.items()
+                               if built["compiled"]["intervals"][k]["period"] == t)
+                       for t in range(len(loads))]
     if any(abs(a-b) > ENERGY_TOL for a, b in zip(raw_load, loads)):
         raise ValueError("Raw native aggregate disagrees with physical charge")
     modes = {m.id: m for m in case.movements}
     ops = len(vehicles)*case.vehicle_cost + case.deadhead_cost_per_min*sum(
         leg.arrive_min-leg.depart_min for v in vehicles for mid in v["movements"] for leg in modes[mid].legs)
     plan = {"schema": SCHEMA, "case_identity": case.identity(), "vehicles": vehicles,
-            "charges": charges, "load": loads, "ops_cost": ops, "raw_solver_load": raw_load}
+            "charges": charges, "load": loads, "ops_cost": ops, "raw_solver_load": raw_load,
+            "raw_charge_load": raw_charge_load,
+            "roundoff": {"negative_correction": negative_correction, "serial_decoding": session_details,
+                         "load_delta_kwh": [new-old for new, old in zip(loads, raw_charge_load)]}}
     plan["replay"] = replay_native(case, plan)
     return plan
 
@@ -629,10 +724,18 @@ def solve_pricing(case, prices, budget=Budget(), record=None):
         return {**result, "status": "infeasible"}
     if stats["status"] not in ("OPTIMAL", "FEASIBLE") or stats.get("incumbent") is None:
         return result
-    plan = _extract(case, built)
+    if record:
+        record({"event": "native_incumbent", "round": 0, **capture_incumbent(case, built)})
+    plan = _extract(case, built, record=record, round_index=0)
     replay = replay_native(case, plan, prices)
+    delta = sum(p*(new-old) for p, new, old in zip(prices, plan["load"], plan.get("raw_charge_load", plan["load"])))
+    if record:
+        record({"event": "objective_reconstruction", "round": 0,
+                "linear_objective": replay["pricing_objective"], "charge_correction_objective_delta": delta,
+                "native_incumbent": stats["incumbent"]})
     lower, upper = admit_bound(stats, replay["pricing_objective"])
     result.update(plan=plan, lower=lower, upper=upper, gap=upper-lower,
+                  charge_correction_objective_delta=delta,
                   status="certified" if upper-lower <= budget.epsilon else "bounded")
     return result
 
@@ -663,11 +766,23 @@ def solve_planner(case, a, b, budget=Budget(), record=None):
             return {"case_identity": case.identity(), "status": "infeasible", "rounds": records}
         if stats["status"] not in ("OPTIMAL", "FEASIBLE") or stats.get("incumbent") is None:
             break
-        plan = _extract(case, built)
+        if record:
+            record({"event": "native_incumbent", "round": len(records)-1, **capture_incumbent(case, built)})
+        plan = _extract(case, built, record=record, round_index=len(records)-1)
         true = plan["ops_cost"]+true_cost(a, b, plan["load"])
         envelope = plan["ops_cost"]+sum(max(slope*load+intercept for slope, intercept in rows)
                                         for load, rows in zip(plan["load"], snapshot))
+        raw_charge_load = plan.get("raw_charge_load", plan["load"])
+        raw_envelope = plan["ops_cost"]+sum(max(slope*load+intercept for slope, intercept in rows)
+                                            for load, rows in zip(raw_charge_load, snapshot))
+        objective_deltas = {"pwl_charge_correction_delta": envelope-raw_envelope,
+            "true_charge_correction_delta": true-plan["ops_cost"]-true_cost(a, b, raw_charge_load)}
+        if record:
+            record({"event": "objective_reconstruction", "round": len(records)-1,
+                    "true_cost": true, "pwl_objective": envelope,
+                    "native_incumbent": stats["incumbent"], **objective_deltas})
         lo, hi = admit_bound(stats, true, envelope, allow_epigraph_slack=True)
+        iteration.update(objective_deltas)
         iteration["replayed_tangent_objective"] = envelope
         iteration["native_epigraph_slack"] = stats["incumbent"]-envelope
         iteration.update(plan=plan, lower=lo, upper=hi)

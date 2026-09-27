@@ -1,12 +1,39 @@
 # Native recharge qualification: prospective protocol
 
-27 September 2026. Protocol `native-recharge-qualification-20260927-v1`.
+27 September 2026. Protocol `native-recharge-qualification-20260927-v2`.
 This is an isolated synthetic qualification of a new research feasible set.
 No production behavior, historical result, protected campaign, or private source
 is modified. The source, tests, runner, and this protocol must be committed by
-the principal researcher before the first scientific optimizer execution.
+the principal researcher before each new scientific qualification attempt.
 Pure replay, fake-oracle tests, and analytical fixture construction may precede
-that freeze. At protocol preparation, **no native qualification has run**.
+that freeze. This is a prospective software amendment after the first frozen
+V1 attempt; **no V2 native qualification has run at amendment preparation**.
+
+## V2 amendment and preserved first attempt
+
+The first frozen CBC attempt, `result/native_recharge/20260927-attempt1`, remains
+immutable. It attempted all 15 controls in 23.5736 seconds: 12 passed and three
+failed during extraction/replay. `cyclic_own_price` rejected a finite negative
+native charge; `preserved_reserve_planner` and `serial_connector` rejected emitted
+session overlaps. Their native statuses/bounds are preserved, but the failed raw
+incumbent variables and decoded sessions were not saved. Their exact magnitude
+and schedules therefore **cannot be reconstructed from this attempt**. Native
+`OPTIMAL` objective values do not convert these failed cells into certificates.
+
+Read-only code analysis and a pure constructed example establish a decoder
+failure mechanism: permitting an endpoint slightly beyond one elementary
+interval and starting the next interval at its exact boundary can create an
+overlap or entry into a closed resource. For example, 5.000000000000002 kWh at
+10 kW from minute 30 formerly ended at 60.000000000000014. This constructed
+example is not a recovered failed incumbent. Negative solver roundoff is a
+plausible explanation for the other rejection, not a proved diagnosis without
+the missing raw values.
+
+V2 is a distinct software qualification with the **same 15 physical inputs,
+analytical targets, objectives, native caps, replay tolerances, and certificate
+checks**. It changes evidence capture and numerical witness conversion only;
+the physical schema and shared MILP feasible set are unchanged. The first
+attempt remains 12/15, and a later outcome must be reported separately.
 
 ## Scope and interfaces
 
@@ -55,6 +82,36 @@ energies can be scheduled consecutively at that common rate within the interval.
 The decoder actually emits those consecutive sessions, with owner, connector,
 start/end time and grid energy. It never treats average hourly energy as proof
 of simultaneous resource feasibility.
+
+V2 uses energy-proportional allocation over the full elementary interval. For
+positive energies `e_1,...,e_n`, interval `[a,b]` and total `E`, the internal
+endpoints are `a+(b-a)*(e_1+...+e_j)/E`; the first start is exactly `a` and last
+end exactly `b`. Cumulative arithmetic uses the exact rational values of the
+input floats before endpoint conversion. Every emitted endpoint must be strictly
+increasing and within the interval. Any positive energy whose session cannot be
+represented by distinct float endpoints fails; it is never erased or moved to
+another period. This rule is sound because each selected visit is available
+throughout the interval. It changes timing within an interval, not its energy.
+
+Finite negative native charge residuals alone may be replaced by zero under an
+explicit fleet-level numerical policy, `native-roundoff-qualification-v2`.
+The sum of their absolute magnitudes plus the sum of all positive materialized
+session capacity excesses is at most **1e-8 kWh for the entire incumbent**,
+matching the configured native feasibility tolerance. This is one combined
+budget, not one allowance per variable or interval. Capacity excess is measured
+exactly from each retained energy minus the resource rate times the actual
+float-endpoint duration; interval aggregate excess is recorded separately.
+Every strictly positive energy is unchanged. Larger/nonfinite residuals fail.
+Small saturated-capacity timing adjustments retain energy and still undergo the
+existing independent resource, SOC, load and objective checks. The numerical
+certificate remains conditional on its declared tolerances, not exact physical
+feasibility in real arithmetic.
+
+Each correction records its variable key, before/after values, total negative
+L1 correction, interval and materialized-session capacity excess, combined
+budget usage and exact rational totals. Grid-energy changes by period and their
+linear/PWL/true-cost objective effects are saved. This policy is frozen before
+the V2 solve; no cutoff is selected from failed values, which were not recorded.
 
 Battery gain is `efficiency * grid_kwh`; load, price expenditure and supply cost
 all use grid kWh. SOC conservation and reserve/capacity hold before/after every
@@ -177,6 +234,13 @@ those source hashes again. For every declared control it saves input and launch
 receipts, stdout/stderr, native-call start/status events, round witnesses,
 result/assessment or exception traceback, and a controller receipt. Native status
 is flushed before decoding/replay so a witness failure cannot erase the solve.
+V2 additionally flushes every raw incumbent variable with its index, name, type,
+bounds, raw value representation and semantic mappings before decoding.
+Mappings cover assignments, movement selection, SOC, interval charging, market
+loads and epigraphs. Normalization, serial decoding and objective reconstruction
+are separate flushed events before bound admission. The raw snapshot is retained
+even when a later conversion step fails; the original V1 missing snapshots are
+not manufactured retrospectively.
 A hard timeout preserves whatever events were flushed. A truncated event or
 result file remains unmodified: the controller records parse issues, retains
 the valid event prefix, marks accounting incomplete and the cell failed, and
@@ -189,7 +253,7 @@ After the principal researcher commits all four files, the intended local comman
 from the research worktree is:
 
 ```sh
-PYTHONPATH=src ../.research-venv-repaired-1176/bin/python -m experiments.native_recharge_qualification --output result/native_recharge/20260927-attempt1 --freeze-label COMMIT_ID --backend CBC
+PYTHONPATH=src ../.research-venv-repaired-1176/bin/python -m experiments.native_recharge_qualification --output result/native_recharge/20260927-attempt2 --freeze-label COMMIT_ID --backend CBC
 ```
 
 `COMMIT_ID` must be replaced by the actual source commit. The runner is not an
