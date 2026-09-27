@@ -122,6 +122,55 @@ def test_clean_bound_ignores_proposal_bound(monkeypatch, tmp_path):
     assert result["reference_validation"] == "pending separate reference phase"
 
 
+def test_master_trace_is_snapshot_while_next_solve_gets_added_tangent(monkeypatch, tmp_path):
+    """Exercise the actual post-pricing append, not merely deepcopy in isolation."""
+    import json
+
+    returned_masters, input_tangents = [], []
+
+    def fake_taker(inst, prices, **kwargs):
+        sol = solution(list(prices))
+        # A physically valid, novel load allows one continuing iteration.
+        # Charging prices are equal here, so its linear objective is unchanged.
+        sol.charges[0]["kwh"] -= 0.25
+        sol.charges[1]["kwh"] += 0.25
+        sol.load[1] -= 0.25
+        sol.load[2] += 0.25
+        return sol
+
+    def two_step_master(inst, market, columns, tangent_points, **kwargs):
+        input_tangents.append(copy.deepcopy(tangent_points))
+        rmp = fake_master(inst, market, columns, [])
+        rmp["lambdas"] = [1.0] + [0.0] * (len(columns)-1)
+        rmp["tangent_points"] = copy.deepcopy(tangent_points)
+        if not returned_masters:
+            # Fake an improving new pricing column, then close on iteration 2.
+            rmp["sigma"] += 0.1
+        returned_masters.append(rmp)
+        return rmp
+
+    monkeypatch.setattr(regimes, "solve_taker", fake_taker)
+    monkeypatch.setattr(b2a2, "solve_rmp", two_step_master)
+    output = tmp_path / "state.json"
+    result = rf.solve_state("depleted_f20", "retained", 1, predecessor(), output)
+    assert result["status"] == "certified", result.get("error")
+    assert result["calls_clean"] == 2
+    expected_load = [0, 6.25, 6.25, 0, 6.25, 6.25, 0]
+    # Solver behavior is unchanged: the next solve receives the new tangent.
+    assert input_tangents == [[], [expected_load]]
+    assert returned_masters[0]["tangent_points"] == [expected_load]
+    # The previous solve's log must describe its solved set, before that append.
+    assert result["master_events"][0]["tangent_points"] == []
+    assert result["master_events"][1]["tangent_points"] == [expected_load]
+    persisted = json.loads(output.read_text())
+    assert persisted["master_events"][0]["tangent_points"] == []
+    # A shallow dictionary copy would also let nested witness mutations leak.
+    returned_masters[1]["tangent_points"][0][1] = 999.0
+    returned_masters[1]["physical_replay"]["load"][1] = 999.0
+    assert result["master_events"][1]["tangent_points"] == [expected_load]
+    assert result["master_events"][1]["physical_replay"]["load"] == expected_load
+
+
 def test_failed_pricing_attempt_is_preserved_and_counted(monkeypatch, tmp_path):
     def fail(*args, **kwargs):
         raise RuntimeError("deliberate fake failure")

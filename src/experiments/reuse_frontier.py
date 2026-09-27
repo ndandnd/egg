@@ -263,7 +263,9 @@ def solve_state(name, arm, index, previous, output):
                 tangents = rmp["tangent_points"]
                 rmp["column_keys"] = [c["column_key"] for c in columns]
                 rmp["physical_replay"] = replay_master(inst, market, columns, rmp)
-                result["master_events"].append(rmp)
+                # The local tangent list is extended after continuing pricing.
+                # Freeze the log at solve return, before that later mutation.
+                result["master_events"].append(copy.deepcopy(rmp))
                 if rmp["ub"] > previous_ub + CONFIG["pwl_tol"] + 1e-6:
                     raise RuntimeError("Clean RMP upper bound increased")
                 previous_ub = rmp["ub"]
