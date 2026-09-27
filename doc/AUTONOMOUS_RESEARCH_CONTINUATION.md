@@ -17,22 +17,33 @@ heartbeat already follows this manager-led routing.
   physical-planner, full-hull and own-price-regret evidence is still missing.
 - The repaired compact qualification attempt3 has finished once: the runner
   reports 20/20 controls, 35 native calls, 24.707 seconds and unchanged sources.
-  Its 142 original files are sealed; independent Luna result audit is pending.
-  This is not yet audited admission. Failed attempt2 remains immutable.
+  Its 142 original files are sealed. Independent Luna audit passed all20,
+  31 raw incumbents/589 values,31 witnesses and25 corruption controls. The
+  single whole-incumbent correction max is1.2261e-12kWh; the numerical policy
+  ceiling is1e-8. This qualifies only the synthetic compact policy. Failed
+  attempt2 remains immutable.
 - Exact cardinality-flow attempt1 has finished once: two public calculations,
   0.358 seconds, supervised exit0 with no timeout or source drift. Its separate
-  Luna no-author-import result audit is pending. Results are ideal stored-input
-  lower bounds, not exact physical/native certificates.
+  Luna no-author-import audit passed both exact778-arc certificates and14
+  corruption/omission checks. Bounds are404.924239883878 (depot15) and
+  414.394469217211 (depot16), strictly ideal stored-input lower bounds, not
+  exact physical/native certificates.
 - No EGG cluster job is active in the latest queue check. Other-project held
   jobs are untouched. Public pilot2 and the broad sensitivity campaign remain
-  held. Sol 6 is recommending a smaller nonlinear pilot.
+  held. Prepare the selected one-cell nonlinear pilot with34-minute total
+  cap, after separate qualification/preflight; no broad campaign is admitted.
 - Before any new compact-hull qualification, repair its hard-coded extraction
   policy metadata/import checks, independently review and freeze that change.
   The compact physical20 gate does not itself qualify hull integration.
-- Both result reviews must preserve original manifests and write only new
-  review subtrees. After review, publish evidence, update the Google Doc and
-  replace this checkpoint. Do not mistake older append-only entries below for
-  the current state.
+- Both independent result packages are sealed and preserve original manifests.
+  Compact review manifest SHA a73c1870fe0243c5b11baf7856efab861277df7852c5386972c604858500d895;
+  cardinality review manifest SHA08912d142a4026e28bd6e4ec0f0fb4876fe58cfc7dcea0e18ddc68b325d34f73.
+  Google Doc update is next. Sol6 owns the hull integration; LunaMax reviews
+  the stable source before any8-control run. Old audit scripts requiring live
+  frozen files should be reproduced in a checkout of dd5ad16, with evidence
+  copied from the later evidence commit and fresh output paths. Do not rerun
+  them into existing sealed review reports. Historical entries below are not
+  the current checkpoint.
 
 ## Objective and completion standard
 

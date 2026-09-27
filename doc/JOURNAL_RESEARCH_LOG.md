@@ -643,3 +643,31 @@ to Sol6. The large sensitivity campaign and publicpilot2 remain held. The
 current routing uses Sol6/LunaMax for bounded worker tasks to control token
 cost; the hourly heartbeat already preserves that preference. CI on the
 preceding db2bf93 and b2a5a33 heads passed; dd5ad16 CI was still running.
+
+### Independent admission of both bounded results
+
+Both Luna Max result audits pass. Compact attempt3 preserves142original files,
+accounts for35calls/31incumbents/589variables, replays31witnesses/69sessions/
+253SOC events, and rejects25corrupted copies. The sole projected positive
+orphan is1.2214e-12kWh; largest complete correction1.2261e-12 is below the
+single1e-8budget. All16numerical certificates and4expectedinfeasibilities pass.
+This admits the synthetic compact policy only, not its hull integration.
+
+The exact flow audit reconstructs778arcs per full37service depot case,
+including both direct and depot modes, verifies exact primal-dual equality,
+35realconnections and2unmatched paths. New ideal stored-input lower bounds
+are404.924239883878 and414.394469217211, versus prior301.315343883878 and
+305.633807883878. Separate native numerical upper witnesses remain408.5331369
+and433.7460862; no exact physical gap/optimum is claimed. Twelve certificate
+corruptions plus two direct-only omission checks are rejected. The reviewer
+initially omitted depot parallel modes; the lead identified this and the
+reviewer corrected its own code. No author source or raw result was changed.
+
+Sealed independent review manifest hashes: compact
+a73c1870fe0243c5b11baf7856efab861277df7852c5386972c604858500d895;
+cardinality08912d142a4026e28bd6e4ec0f0fb4876fe58cfc7dcea0e18ddc68b325d34f73.
+Sourcefreeze dd5ad16 CI passed. Raw evidence backup is5d7f256. Sol6 now owns
+prospective hull-policy integration; LunaMax independently reviews before any
+8-control execution. The selected next nonlinear pilot is one predetermined
+depot15case with34-minute complete cap after qualification and preflight.
+The large sensitivity campaign remains unadmitted.
