@@ -6,68 +6,67 @@ work, GitHub backups and Google Doc updates without repeated approvals.
 
 ## Latest checkpoint — read this before the historical entries below
 
-27 September 2026. The previous goal turn made concrete progress: audited GRB
-physical evidence was published, the Google Doc updated, and hull job 559602
-completed. This turn independently qualifies that hull result. Sol 6 handles
-implementation/analysis; Luna Max handles bounded review/document/operations;
-Astra coordinates difficult decisions. Avoid broad rereads and duplicate tests.
+27 September 2026. Sol 6 handles bounded implementation/analysis; Luna Max
+handles routine independent review, documentation and operations. Astra manages
+scientific decisions. Avoid broad rereads, redundant audits and repeated tests.
 
 - Manuscript 0.4 remains the reviewed 22-page/seven-figure PDF. The goal is
-  incomplete: matched nonlinear public-case evidence and the bundled manuscript,
-  figure/table revision plus final scientific/layout review remain.
-- GRB physical job 559429 (source 227da22074201c583dbcfa971863c8f3c41d7391)
-  independently passes 20 controls, 35calls31witnesses26corruptions. Its admission
-  is published at 62976f11ecf35c837b0573079892ae5095e846b9. Original146-file
-  manifest14ce0b4c04eeaeb6b8bafe72f252a9de7f92a723023b11f2c4a82dab83f06adf.
-- GRB hull job 559602 at source 62976f11ecf35c837b0573079892ae5095e846b9
-  independently PASSES all 8 controls, 36 calls (21 pricing/15 master), 9 polish
-  transfers24checks and48corruptions. Completed0:0 in26seconds, 1CPU8GB.
-  Original66-file manifest a8e1a883f03c5f8e1d6a710ec70500836f950404b3158331a2ffe668c753acf4.
-  Review manifest bc81789519f1f2bb737b7a8f864043f9f58744328805f9f8a64e768bf75538b5.
-  Lead verified both manifests and the actual pure nonlinear admission gate.
-  No public nonlinear attempt or optimizer has yet been created/run.
-- Hull review: doc/NATIVE_V3_GRB_HULL_RESULT_AUDIT_20260927.md and
-  research-20260927/agent-notes/grb-hull-result-review/. Nonlinear admission:
-  doc/SISTIG_NONLINEAR_PILOT_ADMISSION_20260927.json, SHA
-  07a21c5aa0d6cfd5f80f78c4d3fac569680e39c06f9a7c4df37e82cf919bb334.
-  Both gate audit JSONs are copied byte-identically into result publication
-  siblings for their evidence pins; no review files are placed inside raw.
-- Full hull transport and receipts: ../research-20260927/cluster/grb-hull-559602/;
-  remote /home/nc437/egg-journal-grb-hull-20260927. Tar SHA
-  3e06140f72d5f511b30e730712eb1a32a2b93549e2f3e2b1cd7675a7b92f2924.
-  Public hull subset retains 58 manifested files and unchanged manifest;8
-  complete license-only stdout files remain private by documented hash. All
-  five launch receipts and two submission sentinels are preserved. Never retry.
-- Next: publish admitted source, then launch the ONE fixed nonlinear depot 15
-  pilot in a new isolated worktree. Protocol and source are already reviewed:
-  37 services, 30-hour finite block, synthetic quadratic F, planner/hull/own-price
-  stages 240/1440/240 seconds, total 2040 seconds. Slurm 1 CPU, 8 GB, 36 minutes, no requeue,
-  default partition, exclude scaglione-compute-01. Keep fixed inputs/caps and
-  signed intervals. No exact-zero, operational tariff/daily-feasibility claim.
-  Pure gate/source check may precede sbatch; freeze creates the exclusive attempt
-  and runs exactly once INSIDE the reviewed sbatch. No broad sensitivity run.
-- The nonlinear implementation review had a bold-marker formatting mismatch
-  with the gate's literal **PASS** check; only the delimiter was corrected.
-  No algorithm, test, budget, protocol or scientific review conclusion changed.
-  The batch env does not source the Slurm profile; no batch edit is needed.
-  Remote submission shells must load the site profile before enabling nounset.
-- Sol is separately checking whether one archived depot 15 two-bus witness can
-  be repaired into an exact rational witness with unchanged routes/times.
-  Candidate-only outer work area: ../research-20260927/exact-public-witness-candidate/.
-  No new scheduling/cluster solve, pilot change or exact-feasibility claim yet.
-- paper/NEXT_REVISION_EVIDENCE_INSERTIONS_20260927.md holds concise prospective
-  insertions for exact cardinality-flow bounds 404.924239883878/414.394469217211
-  and qualifications. Preserve original flat-pilot intervals and Figure7. The
-  exact ideal fleet >= 2 obstruction and numerical two-bus witnesses remain
-  distinct; no exact minimum fleet, physical cost optimum or gap is inferred.
-- Google Doc latest verified append: 89, 527 bytes, SHA
-  1377215d64b38be24a2934aff9c1b9962bc2bce58bba58f5763654f6884aaccc;
-  prior 88, 414 bytes is exact prefix, heading once, Saved to Drive. Update at the
-  next meaningful combined milestone; PDF 0.4 remains unchanged.
-- Hourly heartbeat advance-egg-journal-research remains active with cheaper-model
-  routing. Preserve private GIRO data, all failed attempts and other-project jobs.
-  Keep PR 56 draft/unmerged. Never consume reset credits without explicit per-credit
-  approval. The old flat-pilot2 candidate remains shelved; no revival by default.
+  incomplete: matched nonlinear public evidence and a bundled manuscript/visual
+  revision plus final scientific/layout review remain. No journal submission.
+- The GRB physical-20 and hull-8 qualification packages passed independent
+  reconstruction. Their actual same-source nonlinear gate passes. Existing
+  native/core sources remain unchanged; do not repeat qualification without a
+  relevant source change. Source 80eb69544f568a7ed346f0d603004a10f61c481a and
+  earlier 63f0b2a CI runs passed.
+- Nonlinear v1 job 559683 is terminal FAILED 1:0, 4m22s, allocated 2 CPUs,
+  requested 1 CPU/8GB, native 1 thread. It ran only once at source 80eb69544f56
+  in /home/nc437/egg-sistig-nonlinear-20260927. Never resume/resubmit it.
+  Worker elapsed 242.315324s exceeded its 240s routine cap; child 243.217558s
+  stayed below hard cap 255s. Two raw planner rounds survive, but no assessed
+  stage package, hull or own-price result exists. No scientific pilot PASS.
+  Independent review: research-20260927/agent-notes/nonlinear-pilot-result-review/,
+  manifest 0ff30ec3bd187e39ae92bb92dff44a29471ec961ee426d3fa8dc4fab18630380.
+  Complete archive is required by that verifier. Public copy omits only the
+  whole licensing-only stdout, explicitly hashed in its publication sibling.
+  Raw manifest 796a9c26b968a35a616269043708ba71f95defe1848547ce191d12ecc11f0c2d;
+  full transport ../research-20260927/cluster/nonlinear-559683/, tar SHA
+  69491c8695119eed650b42dcb1c8ead7efc347d20f3f53223d29d4d15fb3c4f3.
+- Exact depot-15 rational witness independently PASSES: minimum fleet exactly
+  two for the ideal stored-input 37-service/30-hour case; flat optimum enclosed
+  by [404.924239883878...,408.5331358838777...]. This is depot15 only and does
+  not establish cost optimality, a positive gap, daily operation or native
+  rounded-matrix feasibility. See doc/SISTIG_EXACT_PUBLIC_WITNESS_ADMISSION_20260927.md.
+  Raw manifest 18614a45e1506398cf05665a88b4c717ca7bc76e5eaeb3a48639ef60d4828b70;
+  independent review ba09db351651c6ce9d7cf8cd85460745f377f8772c0cd98f8f23e533077b5af3.
+  Lead checked both manifests. Sealed candidate-time pending labels stay intact.
+- The exact uniform-price certificate independently PASSES; combining only with
+  the exact feasible witness gives 424.365880667204... <= CH <= D <=512.7694256264009...
+  for that same ideal depot15 nonlinear model. No positive-gap/optimum claim.
+  See doc/SISTIG_EXACT_NONLINEAR_ENCLOSURE_20260927.md for sealed evidence and
+  portable reproduction; original candidate is preserved unchanged.
+- Prospective nonlinear v2 timing patch independently PASSES preflight, and the
+  lead passed its actual 41-source admission gate without a freeze or optimizer.
+  Only native wall budgets shrink to 225/1380/225, reserving 15/60/15s inside
+  unchanged routine caps 240/1440/240. Phase/call/pool/polish limits, child caps,
+  total2040s, batch2070s, 36-minute allocation and one-thread GRB stay fixed.
+  New protocol/review: doc/SISTIG_NONLINEAR_PILOT_V2_{PROTOCOL,IMPLEMENTATION_REVIEW}_20260927.md.
+  Author's 16 pure tests passed; reviewer ran six focused checks. Native sources
+  are byte-identical to v1. Root authorizes ONE attempt2 after this reviewed
+  source is published; freeze occurs once inside sbatch, never in preflight.
+  Exclusive output result/sistig_nonlinear/20260927-attempt2. Before dispatch,
+  verify its absence and fresh queue; preserve submission receipts. No automatic
+  attempt3, budget increase or altered scientific model if v2 fails.
+- Google Doc latest verified append: 90,665 bytes, SHA
+  b846ee877767569e20f8ff521f62b44cdede26423783f3f0e31af9fbdd961192;
+  previous 89,527 bytes is an exact prefix, heading once, Saved to Drive.
+  Update at the next combined publication/launch milestone; PDF stays 0.4.
+- Hourly heartbeat advance-egg-journal-research remains active with cheaper
+  model routing. Keep PR56 draft/unmerged. Preserve private GIRO, protected
+  outcomes, all failed attempts and other projects. Exclude scaglione-compute-01.
+  No reset credits without per-credit consent. Flat-pilot2 candidate stays shelved.
+- SSH/SCP require explicit network escalation, ControlMaster=no/ControlPath=none.
+  Submission shells load /etc/profile.d/slurm.sh before set -u. No batch edit
+  for the site profile is needed. Observation failures never trigger resubmission.
 
 ## Objective and completion standard
 
@@ -805,3 +804,35 @@ rereads, redundant tests and idle polling.
   1377215d64b38be24a2934aff9c1b9962bc2bce58bba58f5763654f6884aaccc.
   The PDF remains byte-identical. Verification note:
   `../research-20260927/agent-notes/google-doc-verified-grb-hull-20260927.md`.
+
+## 2026-09-27 terminal update: nonlinear failure and exact depot-15 witness
+
+- Job 559683 is terminal `FAILED 1:0` (00:04:22; two allocated CPUs;
+  `MaxRSS=351628K`). The independent audit identifies the cause: the planner
+  worker raised `TimeoutError: Scientific routine/admission cap exceeded` at
+  242.315324 s, 2.315324 s beyond its 240 s routine cap. It returned at
+  243.217558 s, before the 255 s child hard stop (`hard_timeout=false`). The
+  frozen batch directives **exclude** `scaglione-compute-01`. Two native GRB
+  calls returned; the saved planner interval is partial and solver-conditioned.
+  The final assessment file is absent and `hull`/`own_price` remain unstarted.
+  This attempt is failed/incomplete and **not scientifically admitted**. Its
+  original 15-entry raw archive and manifest SHA
+  `796a9c26b968a35a616269043708ba71f95defe1848547ce191d12ecc11f0c2d` are
+  unchanged. Full-manifest reproduction requires the complete private archive;
+  a public subset omitting declared licensing-only stdout files is not a valid
+  input to that driver.
+- The separate depot-15 exact-witness review passes for the ideal stored-input
+  case only. The rationally replayed two-bus witness plus exact one-bus
+  obstruction establish minimum fleet exactly two for this finite depot-15
+  model. Its ideal flat synthetic-cost optimum is enclosed by the exact
+  interval about `[404.924239883878, 408.5331358838777]`; the optimum itself is
+  not identified. Candidate and independent review manifests are pinned in
+  `doc/SISTIG_EXACT_PUBLIC_WITNESS_ADMISSION_20260927.md`. This separate result
+  does not change the failed nonlinear-pilot status or supply its missing
+  hull/own-price stages.
+- The independent failure-review package and its SHA-256 manifest are outside
+  the raw attempt under
+  `research-20260927/agent-notes/nonlinear-pilot-result-review/`. Current queue
+  snapshot: no active EGG or other running jobs; held/dependency-pending user
+  jobs were left untouched. No new optimizer, cluster, Git, or Google Doc action
+  is part of this update.

@@ -56,8 +56,14 @@ def package(assessment):
 def test_declared_cell_budgets_and_unqualified_hold(tmp_path, monkeypatch):
     assert pilot.STAGES == ("planner", "hull", "own_price")
     assert list(pilot.ROUTINE_CAPS.values()) == [240, 1440, 240]
+    assert list(pilot.NATIVE_WALL_CAPS.values()) == [225, 1380, 225]
+    assert [pilot.ROUTINE_CAPS[s] - pilot.NATIVE_WALL_CAPS[s] for s in pilot.STAGES] == [15, 60, 15]
     assert list(pilot.CHILD_CAPS.values()) == [255, 1455, 255]
     assert pilot.TOTAL_CAP == 2040 and pilot.BACKEND == "GRB"
+    assert pilot.PROTOCOL == "sistig-nonlinear-one-cell-20260927-v2"
+    assert pilot.ATTEMPT.name == "20260927-attempt2"
+    assert [pilot.budget(s).wall_seconds for s in pilot.STAGES] == [225, 1380, 225]
+    assert [pilot.budget(s).phase_seconds for s in pilot.STAGES] == [180, 180, 180]
     assert pilot.budget("planner").max_rounds == 48
     assert pilot.budget("hull").pricing_calls == 6
     assert pilot.budget("hull").master_calls == 8
@@ -68,6 +74,43 @@ def test_declared_cell_budgets_and_unqualified_hold(tmp_path, monkeypatch):
     with pytest.raises(pilot.QualificationHold, match="NOT-YET-QUALIFIED"):
         pilot.freeze(tmp_path / "attempt")
     assert not (tmp_path / "attempt").exists()
+
+
+def test_attempt2_freezes_and_rechecks_both_timing_maps(tmp_path, monkeypatch):
+    case, market = pilot._case_and_market()
+    attempt = tmp_path / "result/sistig_nonlinear/20260927-attempt2"
+    source = b"frozen pure source"
+    digest = pilot.hashlib.sha256(source).hexdigest()
+    monkeypatch.setattr(pilot, "ROOT", tmp_path)
+    monkeypatch.setattr(pilot, "ATTEMPT", attempt)
+    monkeypatch.setattr(pilot, "require_admission_files", lambda: None)
+    monkeypatch.setattr(pilot, "source_hashes", lambda: {"pure.py": digest})
+    monkeypatch.setattr(pilot, "check_admission", lambda hashes: {"status": "PASS"})
+    monkeypatch.setattr(pilot, "sha", lambda path: "pinned-admission")
+    monkeypatch.setattr(pilot, "_case_and_market", lambda: (case, market))
+    monkeypatch.setattr(pilot, "environment", lambda: {"pure": True})
+    monkeypatch.setattr(pilot.subprocess, "check_output", lambda command, **kwargs:
+                        "published-head" if command[1] == "rev-parse" else source)
+    pilot.freeze(attempt)
+    frozen = attempt / "frozen.json"
+    original = json.loads(frozen.read_text())
+    assert original["routine_caps"] == pilot.ROUTINE_CAPS
+    assert original["native_wall_caps"] == pilot.NATIVE_WALL_CAPS
+    assert [original["budgets"][s]["wall_seconds"] for s in pilot.STAGES] == [225, 1380, 225]
+    assert pilot._frozen(attempt)[0] == original
+    for section, key in (("routine_caps", "planner"),
+                         ("native_wall_caps", "hull"),
+                         ("budgets", "planner")):
+        changed = copy.deepcopy(original)
+        if section == "budgets":
+            changed[section][key]["wall_seconds"] += 1
+        else:
+            changed[section][key] += 1
+        frozen.write_text(json.dumps(changed))
+        with pytest.raises(ValueError, match="Frozen execution identity or budget changed"):
+            pilot._frozen(attempt)
+    frozen.write_text(json.dumps(original))
+    assert pilot._frozen(attempt)[0] == original
 
 
 def test_same_source_grb_twenty_plus_eight_gate(tmp_path, monkeypatch):
@@ -230,9 +273,35 @@ def test_mock_worker_uses_frozen_planner_budget_only(tmp_path, monkeypatch):
     monkeypatch.setattr(pilot, "assess", lambda *a: {"status": "bounded"})
     assert pilot.worker(tmp_path, stage) == 0
     assert len(calls) == 1 and calls[0][0] is case
-    assert calls[0][3].backend == "GRB" and calls[0][3].wall_seconds == 240
+    assert calls[0][3].backend == "GRB" and calls[0][3].wall_seconds == 225
     assert json.loads((folder / "result.json").read_text())["assessment"]["status"] == "bounded"
     assert json.loads((folder / "raw_result.json").read_text())["result"]["status"] == "bounded"
+
+
+@pytest.mark.parametrize("elapsed,accepted", [(239, True), (241, False)])
+def test_worker_keeps_returned_raw_evidence_at_original_routine_guard(
+        tmp_path, monkeypatch, elapsed, accepted):
+    stage = "planner"
+    folder = tmp_path / stage
+    folder.mkdir()
+    pilot.write_new(tmp_path / "STARTED.json", {"mock": True})
+    pilot.write_new(folder / "launch.json", {"mock": True})
+    pilot.write_new(folder / "input.json", {"stage": stage, "frozen_sha256": "frozen",
+                    "budget": pilot.asdict(pilot.budget(stage))})
+    spec = {"budgets": {stage: pilot.asdict(pilot.budget(stage))}}
+    monkeypatch.setattr(pilot, "_frozen", lambda attempt: (
+        spec, object(), SimpleNamespace(a=(.2,) * 30, b=(1/900,) * 30), "frozen"))
+    monkeypatch.setattr(pilot.pf, "solve_planner", lambda *a, **k: {"status": "bounded"})
+    monkeypatch.setattr(pilot, "assess", lambda *a: {"status": "bounded"})
+    ticks = iter((0, elapsed, elapsed + 1))
+    monkeypatch.setattr(pilot, "time", SimpleNamespace(monotonic=lambda: next(ticks)))
+    assert pilot.worker(tmp_path, stage) == (0 if accepted else 2)
+    assert json.loads((folder / "raw_result.json").read_text())["result"]["status"] == "bounded"
+    assert (folder / "result.json").exists() is accepted
+    assert (folder / "exception.json").exists() is not accepted
+    if not accepted:
+        assert "Scientific routine/admission cap exceeded" in (
+            json.loads((folder / "exception.json").read_text())["message"])
 
 
 def test_worker_preserves_returned_raw_result_when_assessment_fails(tmp_path, monkeypatch):

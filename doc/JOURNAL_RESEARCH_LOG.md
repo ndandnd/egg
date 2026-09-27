@@ -853,3 +853,39 @@ bounds and numerical witnesses separate and preserve the original pilot
 intervals. Sol is exploring an exact fixed-route/timing rational repair of one
 archived two-bus witness outside the repo, without changing the fixed pilot.
 Neither that candidate nor the pending nonlinear result is admitted evidence.
+
+### Fixed nonlinear public pilot launched once; result pending
+
+The independently qualified GRB physical and hull gates admitted the fixed one-cell depot-15 nonlinear pilot. Source commit 80eb69544f568a7ed346f0d603004a10f61c481a was published. Two initial SSH transport calls failed locally before remote execution; their receipts remain in two outer `research-20260927/cluster/nonlinear-dispatch-ambiguous*` folders. Root then used fresh escalated-network `squeue`/`sacct` checks and confirmed the attempt and submission sentinel were absent before making exactly one `sbatch` submission. Local SSH with `ControlMaster=no ControlPath=none` succeeded. There was no scientific retry.
+
+The resulting job is 559683, currently RUNNING in `/home/nc437/egg-sistig-nonlinear-20260927`, with remote exclusive sentinel `nonlinear-submission-20260927`. Local submission evidence is under `../research-20260927/cluster/nonlinear-559683/submission`. Live `scontrol` reports ReqTRES cpu=1/mem=8G, CPUsPerTask=1, ALLOCATED cpu=2/mem=8G, node snavely-cpu-16, 36-minute limit, no requeue, and exclusion of scaglione-compute-01. The actual allocation must not be described as one CPU. No stage result has yet been observed. Next steps are authoritative queue/accounting for this job, transport sealing once terminal, independent nonlinear result audit, and post-run verification of native thread 1. Observation failures must not trigger restart or resubmission.
+
+The separate exact rational depot-15 two-bus witness is packaged as a candidate at `result/sistig_exact_witness/20260927-depot15-attempt1/`; Luna is independently reviewing it. It is not yet an admitted exact physical feasibility result and does not change the pilot or establish cost optimality.
+
+### Nonlinear pilot terminal failure preserved
+
+Fresh scoped sacct at 21:30 UTC reports job 559683 FAILED 1:0 after 4 minutes
+22 seconds; batch peak RSS 351628K, allocated CPUs 2. Full private transport
+SHA 69491c8695119eed650b42dcb1c8ead7efc347d20f3f53223d29d4d15fb3c4f3
+was verified locally. The lead checked all 15 manifest entries and the exact
+file set plus MANIFEST and the declared later Slurm wrapper receipt; raw
+manifest SHA 796a9c26b968a35a616269043708ba71f95defe1848547ce191d12ecc11f0c2d.
+Canonical raw was installed exclusively, without editing any original output.
+The summary reports planner failure with returncode 2, elapsed 243.2176 seconds,
+complete accounting of two starts/two returns, no hard timeout and unchanged
+sources. Hull and own-price were unstarted. No cause or scientific conclusion
+is inferred until independent audit; no retry or resumed stage is authorized
+by this status. A separately frozen prospective amendment may be considered
+only after diagnosis. The original failed attempt remains immutable.
+
+### 2026-09-27 — independent nonlinear failure audit and depot-15 witness admission
+
+The independent review at `research-20260927/agent-notes/nonlinear-pilot-result-review/REVIEW.md` verifies the sealed failure archive without reading stdout/stderr contents. The worker raised `TimeoutError: Scientific routine/admission cap exceeded` at 242.315324 seconds, 2.315324 seconds past the 240-second planner routine cap. The child returned at 243.217558 seconds before its 255-second hard stop; the saved receipt has `hard_timeout=false`. Job 559683 ended `FAILED 1:0` after 00:04:22, with two CPUs allocated and 351628K peak RSS. The archived batch directives exclude `scaglione-compute-01`. Two GRB calls returned and the planner raw result preserves a partial solver-conditioned interval, but the final assessment package is absent; hull and own-price were unstarted. The scientific pilot is **failed/incomplete and not admitted**, with no full-pilot gap or regret result. The 15-entry original manifest SHA remains `796a9c26b968a35a616269043708ba71f95defe1848547ce191d12ecc11f0c2d`.
+
+The separate depot-15 rational candidate now has independent PASS for exact ideal stored-input feasibility. Its two routes cover all 37 services and its exact replay supports a two-bus feasible schedule; the reviewed one-bus obstruction gives the matching lower bound. Thus minimum fleet is exactly two only for this declared depot-15 ideal case. The ideal flat synthetic-cost optimum is enclosed by the exact stored-input interval `[404.924239883878…, 408.5331358838777…]`; it is not identified. Candidate package manifest SHA is `18614a45e1506398cf05665a88b4c717ca7bc76e5eaeb3a48639ef60d4828b70`; independent-review manifest SHA is `ba09db351651c6ce9d7cf8cd85460745f377f8772c0cd98f8f23e533077b5af3`. See `doc/SISTIG_EXACT_PUBLIC_WITNESS_ADMISSION_20260927.md`. This distinct witness does not cure or upgrade the failed nonlinear pilot. The portable failure review requires the complete private archive; a publication subset that omits declared licensing-only stdout files cannot be replayed by its full-manifest driver. No Git, cluster, or Google Doc action was taken in this update.
+
+### Exact nonlinear enclosure and prospective v2 timing review
+
+The independently checked uniform-price/Fenchel certificate gives ideal depot-15 CH lower 424.365880667204…; independently evaluating the rational feasible witness gives CH≤D≤512.7694256264009…. These exact analytic bounds do not come from the failed pilot and establish neither optimum nor a positive gap. The lead verified the three candidate and three review entries against manifests e4729fcffca456729d7464861228f1f6530b572a3b352fe5abbd63ebd25ec30f and fc7ebbe2d1b5636a430855083b817bc3baf3373f68041ab599c2bc22318a8b19. See SISTIG_EXACT_NONLINEAR_ENCLOSURE_20260927.md.
+
+Sol implemented only a prospective timing allocation change: native 225/1380/225 seconds inside unchanged routine 240/1440/240, with v2/attempt2 identity. Luna's independent review passed; sixteen author pure tests, six reviewer focused checks and batch syntax checks passed. Root ran the actual same-source GRB 20+8 admission gate successfully over 41 source pins, with no optimizer or attempt creation. All native model/replay cores remain byte-identical. Root authorizes one new attempt2 after publication, with one freeze inside sbatch and all original caps/resources/exclusions preserved. A repeated failure must not trigger automatic attempt3, a budget increase or model changes. The first failed attempt and raw outputs remain immutable.

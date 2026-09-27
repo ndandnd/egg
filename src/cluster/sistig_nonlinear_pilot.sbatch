@@ -22,7 +22,7 @@ source cluster/unicorn_env.sh
 cd ..
 export PYTHONPATH=src
 
-OUT=result/sistig_nonlinear/20260927-attempt1
+OUT=result/sistig_nonlinear/20260927-attempt2
 test ! -e "${OUT}"
 python -m experiments.sistig_nonlinear_pilot freeze --attempt "${OUT}"
 START_UTC=$(date -u +%FT%TZ)

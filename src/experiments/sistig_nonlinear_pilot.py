@@ -29,15 +29,16 @@ from experiments import native_pathflow_hull_qualification as hull_gate
 from experiments import sistig_native_case as intake
 
 ROOT = Path(__file__).resolve().parents[2]
-ATTEMPT = ROOT / "result/sistig_nonlinear/20260927-attempt1"
-PROTOCOL = "sistig-nonlinear-one-cell-20260927-v1"
+ATTEMPT = ROOT / "result/sistig_nonlinear/20260927-attempt2"
+PROTOCOL = "sistig-nonlinear-one-cell-20260927-v2"
 PAYLOAD = "data/public/sistig_26088190_v1/hildenbrand_native_cases.json"
 PAYLOAD_SHA256 = "af6da4dea220063d1b2486a4c958bff19ae621328f07bde4a95a5c70690ebeb6"
 CASE_ID = "1917409b43c0433b4ac2504b0b28c1bb2aa63a033c79ba1a4057418b63874ed7"
 ADMISSION = "doc/SISTIG_NONLINEAR_PILOT_ADMISSION_20260927.json"
-REVIEW = "doc/SISTIG_NONLINEAR_PILOT_IMPLEMENTATION_REVIEW_20260927.md"
+REVIEW = "doc/SISTIG_NONLINEAR_PILOT_V2_IMPLEMENTATION_REVIEW_20260927.md"
 STAGES = ("planner", "hull", "own_price")
 ROUTINE_CAPS = {"planner": 240, "hull": 1440, "own_price": 240}
+NATIVE_WALL_CAPS = {"planner": 225, "hull": 1380, "own_price": 225}
 CHILD_CAPS = {"planner": 255, "hull": 1455, "own_price": 255}
 TOTAL_CAP = 2040
 RESOLUTION = Q(5)
@@ -55,6 +56,7 @@ PILOT_SOURCES = (
     "src/cluster/sistig_nonlinear_pilot.sbatch",
     "src/cluster/unicorn_env.sh",
     "doc/SISTIG_NONLINEAR_PILOT_PROTOCOL_20260927.md",
+    "doc/SISTIG_NONLINEAR_PILOT_V2_PROTOCOL_20260927.md",
     "doc/SISTIG_MINIMAL_NONLINEAR_PILOT_RECOMMENDATION_20260927.md",
     REVIEW, ADMISSION, PAYLOAD,
 )
@@ -194,11 +196,11 @@ def market(case):
 def budget(stage):
     if stage == "hull":
         return nh.Budget(backend=BACKEND, threads=1, phase_seconds=180,
-                         wall_seconds=1440, pricing_calls=6, master_calls=8,
+                         wall_seconds=NATIVE_WALL_CAPS[stage], pricing_calls=6, master_calls=8,
                          pool_cap=48, epsilon=1e-4, pool_tolerance=1e-6,
                          polish_steps=256, rational_bits=8192, polish_seconds=5)
     return nr.Budget(backend=BACKEND, threads=1, phase_seconds=180,
-                     wall_seconds=240, max_rounds=48 if stage == "planner" else 1,
+                     wall_seconds=NATIVE_WALL_CAPS[stage], max_rounds=48 if stage == "planner" else 1,
                      epsilon=1e-4)
 
 
@@ -351,7 +353,7 @@ def _case_and_market():
 
 def freeze(attempt):
     if Path(attempt).resolve() != ATTEMPT.resolve():
-        raise ValueError("Only the exclusive attempt1 path is admitted")
+        raise ValueError("Only the exclusive attempt2 path is admitted")
     require_admission_files()
     hashes = source_hashes()
     admission = check_admission(hashes)
@@ -366,6 +368,7 @@ def freeze(attempt):
             "case": asdict(case), "case_identity": case.identity(),
             "market": asdict(m), "market_identity": m.identity(),
             "backend": BACKEND, "stages": list(STAGES), "routine_caps": ROUTINE_CAPS,
+            "native_wall_caps": NATIVE_WALL_CAPS,
             "child_caps": CHILD_CAPS, "total_cap": TOTAL_CAP,
             "budgets": {stage: asdict(budget(stage)) for stage in STAGES},
             "resolution": str(RESOLUTION), "negative_guard": str(NEGATIVE_GUARD),
@@ -390,7 +393,9 @@ def _frozen(attempt):
             or spec.get("market") != json.loads(json.dumps(asdict(m)))
             or spec.get("market_identity") != m.identity()
             or spec.get("backend") != BACKEND or spec.get("stages") != list(STAGES)
-            or spec.get("routine_caps") != ROUTINE_CAPS or spec.get("child_caps") != CHILD_CAPS
+            or spec.get("routine_caps") != ROUTINE_CAPS
+            or spec.get("native_wall_caps") != NATIVE_WALL_CAPS
+            or spec.get("child_caps") != CHILD_CAPS
             or spec.get("total_cap") != TOTAL_CAP
             or spec.get("budgets") != {s: asdict(budget(s)) for s in STAGES}
             or spec.get("resolution") != str(RESOLUTION)
