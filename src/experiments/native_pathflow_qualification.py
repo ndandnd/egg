@@ -33,11 +33,13 @@ SOURCES = ("src/egglab/native_recharge.py", "src/egglab/native_pathflow.py",
     "src/experiments/native_pathflow_qualification.py", "src/tests/test_native_pathflow.py",
     "doc/NATIVE_PATHFLOW_QUALIFICATION_PROTOCOL_20260927.md",
     "src/tests/test_native_pathflow_energy_band.py",
+    "src/tests/test_native_pathflow_hull.py",
     "doc/NATIVE_PATHFLOW_ENERGY_BAND_DESIGN_20260927.md",
     "doc/NATIVE_PATHFLOW_EQUIVALENCE_REVIEW_20260927.md",
     "doc/NATIVE_PATHFLOW_ORPHAN_CHARGE_REPAIR_DESIGN_20260927.md",
     "doc/NATIVE_PATHFLOW_ORPHAN_CHARGE_REPAIR_REVIEW_20260927.md",
-    "doc/NATIVE_PATHFLOW_ORPHAN_CHARGE_QUALIFICATION_PROTOCOL_20260927.md")
+    "doc/NATIVE_PATHFLOW_ORPHAN_CHARGE_QUALIFICATION_PROTOCOL_20260927.md",
+    "doc/NATIVE_PATHFLOW_ORPHAN_CHARGE_IMPLEMENTATION_REVIEW_20260927.md")
 TARGET_TOL = original.TARGET_TOL
 _json = original._json
 environment = original.environment

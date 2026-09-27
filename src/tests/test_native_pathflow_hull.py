@@ -55,6 +55,15 @@ def test_eight_definitions_and_original_budgets_are_preserved():
     assert cq.WORKER_SECONDS==75 and cq.OUTER_SECONDS==650
 
 
+def test_energy_band_v2_to_projection_v3_oracle_identity_changes():
+    c=indexed.controls()[0];budget=nh.Budget()
+    v2=nh.state_identity(c['case'],c['market'],c['arm'],c['state_index'],budget,
+        oracle_id=compact.pathflow.NATIVE_MATRIX)
+    v3=compact.state_identity(c['case'],c['market'],c['arm'],c['state_index'],budget)
+    assert compact.ORACLE_ID==compact.pathflow.FORMULATION
+    assert compact.pathflow.NATIVE_MATRIX!='' and v2!=v3
+
+
 def test_indexed_default_state_digest_is_exactly_unchanged():
     c=indexed.controls()[0];b=nh.Budget()
     old_payload={'schema':nh.SCHEMA,'case':c['case'].identity(),'market':c['market'].identity(),

@@ -58,10 +58,15 @@ def build_fake(monkeypatch,case):
 
 def test_all20_definitions_budgets_and8_hull_definitions_preserved():
     old=json.loads((ROOT/'result/native_pathflow/20260927-attempt1/frozen.json').read_bytes())
+    energy_v2=json.loads((ROOT/'result/native_pathflow/20260927-attempt2/frozen.json').read_bytes())
     now=[{**c,'case':asdict(c['case']),'case_identity':c['case'].identity()} for c in pq.controls()]
-    assert json.loads(json.dumps(now))==old['controls']
+    assert json.loads(json.dumps(now))==old['controls']==energy_v2['controls']
     budget=pf.Budget(backend='CBC',threads=1,phase_seconds=10,wall_seconds=45,max_rounds=48,epsilon=1e-4)
-    assert asdict(budget)==old['budget']
+    assert asdict(budget)==old['budget']==energy_v2['budget']
+    assert pq.TARGET_TOL==energy_v2['target_tolerance']
+    assert energy_v2['formulation']==pf.NATIVE_MATRIX
+    assert pf.FORMULATION!=pf.NATIVE_MATRIX
+    assert pq.PROTOCOL=='native-pathflow-qualification-20260927-v3-orphan-projection'
     previous=json.loads((ROOT/'result/native_pathflow_hull/20260927-attempt1/frozen.json').read_bytes())
     newer=[hq.manifest(c,hull.Budget()) for c in hq.controls()]
     strip=lambda c:{k:v for k,v in c.items() if k not in ('state_identity','pricing_oracle')}

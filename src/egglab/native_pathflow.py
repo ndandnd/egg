@@ -274,10 +274,27 @@ def _project_charge_energy(case, compiled, owners, raw, raw_load, record=None, r
     def emit(stage, ledger):
         if record:
             record({'event':'charge_projection','round':round_index,'stage':stage,**ledger})
-    def normalized_record(details):
-        if record:
-            record({'event':'charge_normalization','round':round_index,**details})
-    normalized, negative = nr.normalize_charge_energy(raw, normalized_record)
+    # Accumulate before enforcing the shared ceiling: the indexed normalizer
+    # rejects N alone, which would hide a simultaneous positive orphan here.
+    normalized, negative_changes, n = {}, [], Q(0)
+    cap = Q(nr.ROUNDOFF_BUDGET_KWH)
+    for key, amount in raw.items():
+        if (not isinstance(key, tuple) or len(key) != 2
+                or any(type(v) is not int for v in key)):
+            raise ValueError('Malformed compact charge key')
+        if not nr._finite(amount, -math.inf):
+            raise ValueError('Nonfinite extracted native charge')
+        if amount < 0:
+            n -= Q(amount)
+            normalized[key] = 0.0
+            negative_changes.append({'key':list(key),'before_kwh':amount,'after_kwh':0.0})
+        else:
+            normalized[key] = amount
+    negative = {'policy':nr.EXTRACTION_POLICY,'budget_kwh':nr.ROUNDOFF_BUDGET_KWH,
+        'negative_to_zero':negative_changes,'negative_l1_kwh':float(n),
+        'negative_l1_exact':str(n),'accepted':n <= cap}
+    if record:
+        record({'event':'charge_normalization','round':round_index,**negative})
     periods = len(case.market_edges_min)-1
     raw_sums, projected_sums = [Q(0) for _ in range(periods)], [Q(0) for _ in range(periods)]
     projected, changes = {}, []
@@ -312,8 +329,6 @@ def _project_charge_energy(case, compiled, owners, raw, raw_load, record=None, r
             changes.append({'key':list(key),'mode':mode,'interval':k,'period':t,
                 'selected':mode in owners,'reason':reason,'raw_kwh':amount,
                 'raw_repr':repr(amount),'projected_kwh':value,'projected_repr':repr(value)})
-    n = Q(negative['negative_l1_exact'])
-    cap = Q(nr.ROUNDOFF_BUDGET_KWH)
     load_residual = sum((abs(Q(v)-r) for v,r in zip(raw_load,raw_sums)),Q(0))
     projection = n+orphan
     ledger = {'policy':EXTRACTION_POLICY,'shared_negative_normalizer_policy':nr.EXTRACTION_POLICY,
