@@ -547,3 +547,29 @@ jobs; all left untouched. Hosted CI succeeded for3014d04(run36338020969) and
 66b7054(run36338309581). No important user decision or exceptional compute
 commitment is pending. The main unresolved science remains the matched nonlinear
 public physical/hull/regret comparison, not the incidental extraction exception.
+
+
+## 2026-09-27 — reviewed one-bus obstruction and manuscript checkpoint
+
+Independent exact reconstruction confirms that neither declared public graph
+can cover all37services with one bus: all36chronologically forced connections
+are direct, without a depot recharge opportunity, and service energy alone
+is889.1175194194kWh against400kWh capacity. First16services and their forced
+legs require428.6372586702kWh by14:07. This proves an ideal stored-input lower
+bound of2buses. The existing audited2bus witnesses provide a numerical upper
+under the declared replay policy, not exact rational physical feasibility.
+The proof, diagnostic and result are preserved with a separate independent
+review. Original cost intervals and matching results remain unchanged.
+
+Sol6 reviewed newsource0.4method, abstract, evidence table andAppendicesA/B: no
+blocking scientific inconsistency. LunaMax reviewed22candidatePDFpages with
+no clipping/overlap/glyph defects; references pagination is being repaired in
+a separately named candidate. GoogleDoc milestone “Verified manuscript and
+qualification update — 27 September 2026” was appended and SavedtoDrive; only
+append/currentstate were verified, without a complete pre-edit snapshot. PR56
+now describes all current evidence and remaining nonlinear study accurately.
+
+The prospective compact orphan-projection design awaits independentreview;
+no optimizer has been rerun. A cardinality-constrained exact matching design
+could exploit the reviewed one-bus lowerbound and is not executed. Routine
+work now uses LunaMax andGPT6Sol; rootcoordinates publication/decisions.
