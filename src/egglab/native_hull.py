@@ -13,7 +13,7 @@ import time
 
 from egglab import native_recharge as nr
 
-SCHEMA = "egg-native-hull-v1"
+SCHEMA = "egg-native-hull-v2"
 MASS_TOL = 1e-10
 OBJECTIVE_TOL = 1e-6
 
@@ -39,9 +39,16 @@ class Budget:
     pool_cap: int = 48
     epsilon: float = 1e-4
     pool_tolerance: float = 1e-6
+    polish_steps: int = 256
+    rational_bits: int = 8192
+    polish_seconds: float = 5.0
 
 
 class LimitReached(RuntimeError):
+    pass
+
+
+class PoolStalled(RuntimeError):
     pass
 
 
@@ -78,9 +85,10 @@ def validate_market(case, market):
 
 def validate_budget(budget):
     if (budget.backend not in ("CBC", "GRB") or type(budget.threads) is not int or budget.threads != 1
-            or any(type(x) is not int or x < 1 for x in (budget.pricing_calls, budget.master_calls, budget.pool_cap))
+            or any(type(x) is not int or x < 1 for x in (budget.pricing_calls, budget.master_calls, budget.pool_cap,
+                                                       budget.polish_steps, budget.rational_bits))
             or any(not nr._finite(x) or x <= 0 for x in (budget.phase_seconds, budget.wall_seconds,
-                                                        budget.epsilon, budget.pool_tolerance))
+                                                        budget.epsilon, budget.pool_tolerance, budget.polish_seconds))
             or budget.epsilon <= 2*nr.BOUND_GUARD or budget.pool_tolerance >= budget.epsilon):
         raise ValueError("Invalid bounded native hull policy")
 
@@ -155,15 +163,33 @@ def replay_mixture(case, market, columns, raw_weights):
         raise ValueError("Mixture/pool size mismatch")
     projections = [replay_column(case, c) for c in columns]
     weights, correction = simplex(raw_weights)
+    return _project_mixture(market, columns, projections, weights, correction)
+
+
+def _project_mixture(market, columns, projections, weights, correction, bit_limit=None):
     loads = [sum((w*rational(c["load"][t]) for w, c in zip(weights, projections)), Q(0))
              for t in range(len(market.a))]
     ops = sum((w*rational(c["ops_cost"]) for w, c in zip(weights, projections)), Q(0))
     cost = supply(market, loads)
     true = ops+cost
+    if bit_limit is not None and _fraction_bits(loads+[ops, cost, true]) > bit_limit:
+        raise LimitReached("rational polishing projected bit-size budget exhausted")
     return {"column_keys": [c["key"] for c in columns], "simplex": correction,
             "load_exact": [str(x) for x in loads], "load": [float(x) for x in loads],
             "ops_exact": str(ops), "supply_exact": str(cost), "objective_exact": str(true),
             "upper": outward(true, True), "replayed_columns": len(columns)}
+
+
+def replay_exact_mixture(case, market, columns, weights, bit_limit=None):
+    """Polished weights stay rational; never materialize them through float."""
+    validate_market(case, market)
+    if (not columns or len(weights) != len(columns) or any(not isinstance(w, Q) or w < 0 for w in weights)
+            or sum(weights, Q(0)) != 1):
+        raise ValueError("Polished simplex must be exactly nonnegative with unit mass")
+    projections = [replay_column(case, c) for c in columns]
+    return _project_mixture(market, columns, projections, weights,
+        {"source": "exact-pairwise-polish", "weights_exact": [str(w) for w in weights],
+         "positive_weights": sum(w > 0 for w in weights), "mass_exact": "1"}, bit_limit)
 
 
 def mixture_price(market, mixture):
@@ -277,24 +303,129 @@ def check_master_primal(columns, raw):
     return native_objective
 
 
-def solve_native_rmp(case, market, columns, points, budget, deadline, counts, record):
+def _fraction_bits(values):
+    return max((max(x.numerator.bit_length(), x.denominator.bit_length()) for x in values), default=0)
+
+
+def polish_pool(case, market, columns, mixture, budget, deadline, counts, record, consider=None, master_call=0):
+    """Bounded exact pairwise line search; acceptance still needs g_pool."""
+    started = time.monotonic()
+    counts.setdefault("polish_steps", 0)
+    counts.setdefault("polish_checks", 0)
+    counts.setdefault("polish_wall_s", 0.0)
+    counts.setdefault("max_rational_bits", 0)
+    available = budget.polish_seconds-counts["polish_wall_s"]
+    stop = min(deadline, started+available)
+    seen = set()
+    initial_steps, initial_checks = counts["polish_steps"], counts["polish_checks"]
+    outcome = "started"
+    emit(record, {"event": "pool_polish_start", "master_call": master_call,
+                  "cumulative_steps": initial_steps, "remaining_seconds": max(0.0, available)})
+    def check_bits(values):
+        bits = _fraction_bits(values)
+        counts["max_rational_bits"] = max(counts["max_rational_bits"], bits)
+        if bits > budget.rational_bits:
+            raise LimitReached("rational polishing bit-size budget exhausted")
+    try:
+        while True:
+            if time.monotonic() >= stop:
+                raise LimitReached("rational polishing/time budget exhausted")
+            weights = [Q(x) for x in mixture["simplex"]["weights_exact"]]
+            loads = [Q(x) for x in mixture["load_exact"]]
+            check_bits(weights+loads+[Q(mixture["objective_exact"])])
+            if consider:
+                consider(mixture)
+            prices = mixture_price(market, mixture)
+            pool = pool_certificate(market, columns, mixture, prices)
+            counts["polish_checks"] += 1
+            emit(record, {"event": "pool_polish_check", "master_call": master_call,
+                "step": counts["polish_steps"], "mixture": mixture, "pool": pool,
+                "elapsed_s": time.monotonic()-started})
+            if time.monotonic() >= stop:
+                raise LimitReached("rational polishing/time budget exhausted after pool check")
+            if Q(pool["pool_gap_exact"]) <= rational(budget.pool_tolerance):
+                outcome = "qualified"
+                return mixture, pool
+            state = tuple(weights)
+            if state in seen:
+                raise PoolStalled("exact pairwise simplex repeated with open pool gap")
+            seen.add(state)
+            if counts["polish_steps"] >= budget.polish_steps:
+                raise LimitReached("rational polishing step budget exhausted")
+            gradient = [rational(a)+rational(b)*x for a, b, x in zip(market.a, market.b, loads)]
+            scores = [rational(c["ops_cost"])+sum((p*rational(e) for p, e in zip(gradient, c["load"])), Q(0))
+                      for c in columns]
+            toward = min(range(len(columns)), key=lambda j: (scores[j], j))
+            away = max((j for j, w in enumerate(weights) if w > 0), key=lambda j: (scores[j], -j))
+            decrease = scores[away]-scores[toward]
+            direction = [rational(b)-rational(a) for a, b in zip(columns[away]["load"], columns[toward]["load"])]
+            curvature = sum((rational(b)*d*d for b, d in zip(market.b, direction)), Q(0))
+            check_bits(gradient+scores+direction+[decrease, curvature])
+            if decrease <= 0:
+                raise PoolStalled("exact pool stationary but serialized-price gap remains open")
+            gamma = min(weights[away], decrease/curvature) if curvature > 0 else weights[away]
+            updated = list(weights)
+            updated[away] -= gamma
+            updated[toward] += gamma
+            check_bits(updated+[gamma])
+            if gamma <= 0 or updated == weights:
+                raise PoolStalled("exact pairwise polishing made no simplex progress")
+            new = replay_exact_mixture(case, market, columns, updated, budget.rational_bits)
+            predicted = Q(mixture["objective_exact"])-gamma*decrease+curvature*gamma*gamma/2
+            if Q(new["objective_exact"]) != predicted or predicted >= Q(mixture["objective_exact"]):
+                raise ValueError("Exact pairwise objective equation/decrease failed")
+            check_bits([Q(x) for x in new["load_exact"]]+[predicted])
+            counts["polish_steps"] += 1
+            emit(record, {"event": "pool_polish_step", "master_call": master_call,
+                "step": counts["polish_steps"], "column_keys": [c["key"] for c in columns],
+                "away": away, "toward": toward, "away_key": columns[away]["key"],
+                "toward_key": columns[toward]["key"], "weights_before_exact": [str(w) for w in weights],
+                "weights_after_exact": [str(w) for w in updated], "gradient_exact": [str(p) for p in gradient],
+                "scores_exact": [str(s) for s in scores], "direction_exact": [str(d) for d in direction],
+                "directional_decrease_exact": str(decrease), "curvature_exact": str(curvature),
+                "gamma_exact": str(gamma), "objective_before_exact": mixture["objective_exact"],
+                "objective_after_exact": str(predicted), "mixture": new,
+                "max_rational_bits": counts["max_rational_bits"], "elapsed_s": time.monotonic()-started})
+            mixture = new
+            if consider:
+                consider(mixture)  # Preserve this feasible UB even if the next check hits a cap.
+    except Exception as exc:
+        outcome = type(exc).__name__
+        raise
+    finally:
+        elapsed = time.monotonic()-started
+        counts["polish_wall_s"] += elapsed
+        emit(record, {"event": "pool_polish_finish", "master_call": master_call, "outcome": outcome,
+                      "elapsed_s": elapsed, "steps_completed": counts["polish_steps"]-initial_steps,
+                      "checks_completed": counts["polish_checks"]-initial_checks})
+
+
+def solve_native_rmp(case, market, columns, points, budget, deadline, counts, record, consider=None):
     for c in columns:
         replay_column(case, c)
-    while True:
-        if time.monotonic() >= deadline or counts["master_calls"] >= budget.master_calls:
-            raise LimitReached("master/time budget exhausted")
-        index = counts["master_calls"]
-        counts["master_calls"] += 1
-        raw = _master_once(case, market, columns, copy.deepcopy(points), budget, deadline, index, record)
-        check_master_primal(columns, raw)
-        mixture = replay_mixture(case, market, columns, raw["lambda"])
-        prices = mixture_price(market, mixture)
-        pool = pool_certificate(market, columns, mixture, prices)
-        emit(record, {"event": "master_replay", "call": index, "mixture": mixture, "pool": pool,
-                      "raw_tangent_objective": raw["stats"]["incumbent"]})
-        if Q(pool["pool_gap_exact"]) <= rational(budget.pool_tolerance):
-            return mixture, pool
-        points.append(list(mixture["load"]))
+    if time.monotonic() >= deadline or counts["master_calls"] >= budget.master_calls:
+        raise LimitReached("master/time budget exhausted")
+    index = counts["master_calls"]
+    counts["master_calls"] += 1
+    raw = _master_once(case, market, columns, copy.deepcopy(points), budget, deadline, index, record)
+    check_master_primal(columns, raw)
+    mixture = replay_mixture(case, market, columns, raw["lambda"])
+    if consider:
+        consider(mixture)
+    pool = pool_certificate(market, columns, mixture, mixture_price(market, mixture))
+    repeated = list(mixture["load"]) in points
+    emit(record, {"event": "master_replay", "call": index, "mixture": mixture, "pool": pool,
+                  "raw_tangent_objective": raw["stats"]["incumbent"], "repeated_tangent_point": repeated})
+    # V2 makes one native LP call per pool. It never appends duplicate cuts and
+    # repeats an identical native master to resolve a first-order pool gap.
+    mixture, pool = polish_pool(case, market, columns, mixture, budget, deadline, counts, record, consider, index)
+    point = list(mixture["load"])
+    added = point not in points
+    if added:
+        points.append(point)
+    emit(record, {"event": "master_progress", "call": index, "new_tangent_added": added,
+                  "repeated_raw_tangent_point": repeated, "polished_load_exact": mixture["load_exact"]})
+    return mixture, pool
 
 
 def import_pool(case, previous, expected_previous, budget, previous_index=None):
@@ -333,7 +464,8 @@ def certify(case, market, budget=Budget(), *, arm="cold", state_index=0,
     identity = state_identity(case, market, arm, state_index, budget)
     columns = (import_pool(case, previous, expected_previous, budget, state_index-1)
                if arm == "retained" and state_index > 0 else [])
-    counts = {"pricing_requests": 0, "seed_requests": 0, "master_calls": 0}
+    counts = {"pricing_requests": 0, "seed_requests": 0, "master_calls": 0,
+              "polish_steps": 0, "polish_checks": 0, "polish_wall_s": 0.0, "max_rational_bits": 0}
     best_lower, best_mixture = None, None
     points = [[0.0]*len(market.a)]
     emit(record, {"event": "state_start", "state_identity": identity, "market_identity": market.identity(),
@@ -378,7 +510,7 @@ def certify(case, market, budget=Budget(), *, arm="cold", state_index=0,
             columns.append(price(list(market.a), seed=True))
             consider_mixture(replay_mixture(case, market, columns, [1.0]))
         while True:
-            mixture, pool = solve_native_rmp(case, market, columns, points, budget, deadline, counts, record)
+            mixture, pool = solve_native_rmp(case, market, columns, points, budget, deadline, counts, record, consider_mixture)
             consider_mixture(mixture)
             candidate = price(pool["prices"])
             gap = Q(best_mixture["objective_exact"])-Q(best_lower["lower_exact"])
@@ -402,6 +534,8 @@ def certify(case, market, budget=Budget(), *, arm="cold", state_index=0,
             emit(record, {"event": "column_added", "key": candidate["key"], "size": len(columns)})
     except (LimitReached, TimeoutError) as exc:
         status, reason = "budget_exhausted", str(exc)
+    except PoolStalled as exc:
+        status, reason = "stalled_bounded", str(exc)
     result = {"schema": SCHEMA, "status": status, "reason": reason, "state_identity": identity,
               "physical_identity": case.identity(), "market_identity": market.identity(),
               "extraction_policy": nr.EXTRACTION_POLICY, "arm": arm, "state_index": state_index,

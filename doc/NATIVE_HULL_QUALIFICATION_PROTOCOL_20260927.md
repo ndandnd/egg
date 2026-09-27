@@ -1,9 +1,13 @@
 # Native complete-fleet hull qualification protocol
 
-27 September 2026. Protocol `native-hull-qualification-20260927-v1`;
-result/column schema `egg-native-hull-v1`. **No native hull optimizer has run at
-protocol preparation.** Source, fixtures, this protocol and dependency hashes
-must be frozen by the principal researcher before the first scientific attempt.
+27 September 2026. Prospective protocol `native-hull-qualification-20260927-v2`;
+result/column schema `egg-native-hull-v2`. **V2 has not run.** V1 source is
+preserved at `f549100`, with immutable results in
+`result/native_hull/20260927-attempt1`: two certified cells, four master-cap
+failures and two correctly blocked successor cells. Its statuses are unchanged.
+V2 repairs restricted-pool progress and upper-bound reporting; all eight cases,
+targets, native caps and certificate tolerances remain fixed. Source, fixtures,
+this protocol and dependency hashes must be frozen before a distinct V2 attempt.
 The qualified native physical/pricing module remains a separate dependency;
 this implementation does not change its feasible-set builder or replay.
 
@@ -81,7 +85,7 @@ is used once. The reported global enclosure retains the maximum fresh lower
 bound and minimum true mixture objective within the current state. Negative
 stored-number widths fail; successful termination requires width `<=1e-4`.
 
-## Ordinary master and stopping logic
+## Ordinary LP master, exact pairwise polishing and stopping logic
 
 The restricted master is a pure LP: nonnegative weights summing to one, load
 links to their convex combination, and free-below epigraph variables for valid
@@ -105,8 +109,38 @@ At a candidate mixture, form the actual float gradient price and compute
 
 This restricted-pool certificate, including the Fenchel residual of the rounded
 price, must be `<=1e-6` before requesting another global price. A small tangent
-slack alone is insufficient. If not, add the candidate's load as a tangent point
-and re-solve within the cumulative master/time budget.
+slack alone is insufficient. V1 repeatedly returned the same near-optimal LP
+point while this first-order gap remained open; duplicate tangents did not
+resolve native numerical tolerance. V2 makes **one native LP call per current
+pool**, then applies a generic exact-rational pairwise simplex refinement.
+
+Let `w` be the exact normalized weights and `L=sum w_j e_j`. With the exact
+stored-number gradient `h=a+bL`, set `s_j=c_j+h dot e_j`. Select the smallest
+index among minimum-score columns as toward index i, and the smallest index
+among maximum-score **positive-weight** columns as away index j. Set
+`d=s_j-s_i`, `H=sum b_t (e_it-e_jt)^2`, and
+`gamma=min(w_j,d/H)` if H>0, otherwise `gamma=w_j` when d>0.
+Transfer gamma from j to i. Preserve every other weight exactly. Require
+nonnegative exact weights summing to one and verify the exact objective equation
+`new = old - gamma*d + H*gamma^2/2 < old`. No analytical target, supporting price
+or known solution participates in the refinement.
+
+After each accepted transfer, physically replay the columns and reconstruct the
+true rational mixture. The next pool test uses the **actual serialized float
+gradient price**, not the unrounded gradient used for choosing the direction.
+Weights remain exact rational strings even below the float underflow range;
+float loads are display values only. The proof justifies feasible improvement,
+not finite-step exact optimization of arbitrary pools. An open gap at a fixed
+step, rational-size or time cap ends as `budget_exhausted`; exact stationarity
+with an open serialized-price gap or an exact repeated simplex ends as
+`stalled_bounded`. Neither permits certification. Duplicate tangent points are
+detected/logged and are not appended or used to repeat an identical LP.
+
+Every raw master mixture and accepted polished mixture immediately updates the
+state's best feasible upper bound. A later inner cap therefore preserves the
+best saved UB in the final result. It cannot turn that failed state into a
+certificate; a fresh global pricing lower bound and the unchanged final width
+test are still required.
 
 After clean pricing, certify using the global enclosure. Otherwise add a novel
 replayed projection and re-optimize the full pool. A duplicate with an open gap
@@ -154,7 +188,8 @@ costs or period partition reject import. A failed/missing predecessor yields
 Import also requires the predecessor controller receipt to identify the expected
 cell, pass, exit with return code zero, report no timeout and no evidence issues,
 and mark the result certified. The successor independently recounts the saved
-trace: native phase accounting must be complete and nonzero, with every count
+trace: native phase accounting must be complete and nonzero, polishing phase
+accounting must be complete, with every count
 and returned phase time agreeing with that receipt. A completed result followed
 by a timeout/nonzero exit, a truncated trace, or a missing/malformed receipt is
 therefore a failed dependency even if its result file says certified.
@@ -175,6 +210,14 @@ creates a new process group and enforces a 650-second outer timeout, then TERM
 and at most 10 seconds before KILL for any remaining group members. No existing
 attempt is resumed or overwritten. A later GRB replication is a separate gate.
 
+Additional V2 per-state caps are 256 accepted pairwise transfers, 8,192 bits
+per checked rational numerator/denominator, and five cumulative seconds in
+polishing, also capped by the remaining 60-second cell deadline. These are
+fixed resource limits, not adaptive requests for success. Counts include
+polishing checks, accepted steps, maximum observed rational size, and time for
+successful and failed polishing phases. Master/pricing native call caps remain
+64/16 and all native admission policies are unchanged.
+
 The supervisor writes its launch before creating the controller. The controller
 writes all eight inputs, targets, identities, dependencies, budgets, source
 hashes and environment before any worker solve. Source hashes include the new
@@ -190,6 +233,11 @@ column addition and terminal state. Save stdout, stderr, exceptions, per-cell
 receipts and a supervisor receipt. Every phase count includes unsuccessful calls;
 seed, pricing and master counts remain separately available. Timing includes
 column replay/import/master refinement, not only the final successful oracle.
+V2 also flushes each polishing start/check/step/finish, exact before/after
+weights, immutable column keys, gradient/scores/direction, curvature, gamma,
+the exact objective equation and elapsed time. Independent accounting matches
+unique polishing phase IDs and verifies completed step/check totals; a killed
+polishing phase cannot be imported as a complete predecessor.
 
 Malformed/truncated worker files remain unchanged. Read only the valid trace
 prefix, record parse issues and incomplete accounting, fail that cell and
@@ -201,7 +249,7 @@ is called success, and no timeout/cap/backend switch is retried inside an attemp
 After pure tests and independent preflight, freeze before running:
 
 ```sh
-PYTHONPATH=src ../.research-venv-repaired-1176/bin/python -m experiments.native_hull_qualification --output result/native_hull/20260927-attempt1 --freeze-label COMMIT_ID --backend CBC
+PYTHONPATH=src ../.research-venv-repaired-1176/bin/python -m experiments.native_hull_qualification --output result/native_hull/20260927-attempt2 --freeze-label COMMIT_ID --backend CBC
 ```
 
 Replace `COMMIT_ID` with the actual full committed execution state. Qualify all

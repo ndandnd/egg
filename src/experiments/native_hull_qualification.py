@@ -18,7 +18,7 @@ import traceback
 from egglab import native_hull as nh
 from experiments import native_recharge_qualification as nq
 
-PROTOCOL = "native-hull-qualification-20260927-v1"
+PROTOCOL = "native-hull-qualification-20260927-v2"
 ROOT = Path(__file__).resolve().parents[2]
 SOURCES = ("src/egglab/native_hull.py", "src/experiments/native_hull_qualification.py",
            "src/tests/test_native_hull.py", "doc/NATIVE_HULL_QUALIFICATION_PROTOCOL_20260927.md",
@@ -26,7 +26,8 @@ SOURCES = ("src/egglab/native_hull.py", "src/experiments/native_hull_qualificati
            "src/egglab/native_recharge.py", "src/experiments/native_recharge_qualification.py")
 EVENTS = {"state_start", "pricing_request", "pricing_native", "pricing_result", "global_bound",
           "master_start", "master_status", "master_incumbent", "master_replay", "column_added",
-          "state_finish", "dependency_blocked"}
+          "state_finish", "dependency_blocked", "pool_polish_check", "pool_polish_step", "master_progress",
+          "pool_polish_start", "pool_polish_finish"}
 WORKER_SECONDS = 75.0
 OUTER_SECONDS = 650.0
 TARGET_TOL = 2e-4
@@ -118,7 +119,42 @@ def read_evidence(directory):
 
 def accounting(events):
     starts, returns, walls = [], [], []
+    polish_starts, polish_returns, polish_walls, completed_steps, completed_checks = [], [], [], [], []
+    active, cumulative_steps, phase_steps, phase_checks, last_polish = None, 0, 0, 0, None
+    ordered_polish = True
     for e in events:
+        if e["event"] == "pool_polish_start":
+            ordered_polish &= (active is None and type(e.get("master_call")) is int
+                               and e["master_call"] >= 0 and type(e.get("cumulative_steps")) is int
+                               and e["cumulative_steps"] == cumulative_steps)
+            active, phase_steps, phase_checks, last_polish = e.get("master_call"), 0, 0, "start"
+            polish_starts.append(e["master_call"])
+        if e["event"] == "pool_polish_check":
+            ordered_polish &= (active is not None and e.get("master_call") == active
+                               and type(e.get("step")) is int and e["step"] == cumulative_steps
+                               and last_polish in ("start", "step"))
+            phase_checks += 1
+            last_polish = "check"
+        if e["event"] == "pool_polish_step":
+            ordered_polish &= (active is not None and e.get("master_call") == active
+                               and type(e.get("step")) is int and e["step"] == cumulative_steps+1
+                               and last_polish == "check")
+            cumulative_steps += 1
+            phase_steps += 1
+            last_polish = "step"
+        if e["event"] == "pool_polish_finish":
+            ordered_polish &= (active is not None and e.get("master_call") == active
+                               and e.get("steps_completed") == phase_steps
+                               and e.get("checks_completed") == phase_checks
+                               and (e.get("outcome") != "qualified" or last_polish == "check"))
+            active, last_polish = None, None
+            polish_returns.append(e["master_call"])
+            if (not nh.nr._finite(e.get("elapsed_s"))
+                    or any(type(e.get(k)) is not int or e[k] < 0 for k in ("steps_completed", "checks_completed"))):
+                raise ValueError("Invalid exact-polishing time/call accounting")
+            polish_walls.append(e["elapsed_s"])
+            completed_steps.append(e["steps_completed"])
+            completed_checks.append(e["checks_completed"])
         kind, item = ("pricing", e["detail"]) if e["event"] == "pricing_native" else ("master", e)
         if item.get("event") == ("native_start" if kind == "pricing" else "master_start"):
             starts.append((kind, e["call"]))
@@ -130,12 +166,21 @@ def accounting(events):
             walls.append(wall)
     complete = (len(starts) == len(set(starts)) and len(returns) == len(set(returns))
                 and set(starts) == set(returns))
+    steps = sum(e["event"] == "pool_polish_step" for e in events)
+    checks = sum(e["event"] == "pool_polish_check" for e in events)
+    polish_complete = (ordered_polish and active is None and len(polish_starts) == len(set(polish_starts))
+                       and len(polish_returns) == len(set(polish_returns))
+                       and set(polish_starts) == set(polish_returns)
+                       and sum(completed_steps) == steps and sum(completed_checks) == checks)
     return {"native_starts": len(starts), "native_returns": len(returns),
             "pricing_starts": sum(k == "pricing" for k, _ in starts),
             "master_starts": sum(k == "master" for k, _ in starts),
             "seed_requests": sum(e["event"] == "pricing_request" and e.get("seed", False) for e in events),
             "pricing_requests": sum(e["event"] == "pricing_request" for e in events),
-            "native_wall_s": math.fsum(walls), "native_accounting_complete": complete}
+            "native_wall_s": math.fsum(walls), "native_accounting_complete": complete,
+            "polish_starts": len(polish_starts), "polish_returns": len(polish_returns),
+            "polish_steps": steps, "polish_checks": checks, "polish_wall_s": math.fsum(polish_walls),
+            "polish_accounting_complete": polish_complete}
 
 
 def admitted_predecessor(directory, expected_cell):
@@ -150,7 +195,8 @@ def admitted_predecessor(directory, expected_cell):
                 or receipt.get("status") != "certified" or receipt.get("evidence_issues") != []):
             raise ValueError("Predecessor controller receipt is missing, failed, or mismatched")
         counts = accounting(events)
-        if not counts["native_accounting_complete"] or counts["native_starts"] < 1:
+        if (not counts["native_accounting_complete"] or not counts["polish_accounting_complete"]
+                or counts["native_starts"] < 1):
             raise ValueError("Predecessor trace has no complete nonzero native accounting")
         if any(type(receipt.get(k)) is not type(v) or receipt[k] != v for k, v in counts.items()):
             raise ValueError("Predecessor receipt accounting disagrees with its saved trace")
@@ -238,12 +284,14 @@ def controller(output, freeze_label, backend="CBC"):
             counts = accounting(events)
         except (ValueError, TypeError, KeyError) as exc:
             issues.append({"file": "events.jsonl", "message": "accounting: "+str(exc)})
-            counts = {"native_accounting_complete": False, "native_starts": None, "native_returns": None}
+            counts = {"native_accounting_complete": False, "native_starts": None, "native_returns": None,
+                      "polish_accounting_complete": False}
         row = {"cell": cell["id"], "returncode": rc, "timeout": timeout,
                "elapsed_s": time.perf_counter()-launch, "evidence_issues": issues, **counts,
                "status": package["result"]["status"] if package else "timeout" if timeout else "exception",
                "pass": bool(rc == 0 and not timeout and package and package["assessment"]["pass"] and not issues
-                            and counts["native_accounting_complete"] and counts["native_starts"] >= 1)}
+                            and counts["native_accounting_complete"] and counts["polish_accounting_complete"]
+                            and counts["native_starts"] >= 1)}
         nq._json(folder/"receipt.json", row)
         rows.append(row)
         print(json.dumps(row, sort_keys=True), flush=True)

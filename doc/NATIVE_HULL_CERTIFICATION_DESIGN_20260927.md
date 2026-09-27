@@ -313,3 +313,61 @@ a preserved attempt and prospective correction, not a reclassified success.
 Only after local qualification and audit may a single bounded cross-backend
 replication be proposed. A private operational microcase remains a later gate
 with a separately validated declared movement graph and no public raw data.
+
+## Prospective V2 amendment: bounded exact pairwise pool refinement
+
+V1 (`f549100`, preserved attempt1) produced two accepted cells, four repeated-LP
+master-cap failures and two blocked retained successors. The original tangent
+refinement proposal above is superseded for V2 by one ordinary native LP per
+pool, then the bounded exact polishing procedure in
+`NATIVE_HULL_QUALIFICATION_PROTOCOL_20260927.md`. The scientific controls,
+complete physical set, pricing admission and final Fenchel proof are unchanged.
+No V1 failure is relabeled. The author diagnosis and raw-trace arithmetic are
+under `research-20260927/agent-notes/native-hull-attempt1-author/`.
+
+For stored pool projection `(e_j,c_j)` and an exact feasible simplex w, write
+`Q(w)=sum_j w_j c_j + F(sum_j w_j e_j)`. Define scores
+`s_j=c_j+grad F(L) dot e_j`. Choose a minimum-score toward column i and a
+maximum-score away column j among **strictly positive** weights, using fixed
+smallest-index tie breaking. If `d=s_j-s_i>0`, move gamma along
+`unit_i-unit_j`, with `0<gamma<=w_j`. Its exact one-dimensional objective is
+
+`Q(w+gamma(unit_i-unit_j)) = Q(w)-gamma*d + H*gamma^2/2`,
+
+where `H=sum_t b_t(e_it-e_jt)^2>=0`. For H>0 the feasible line minimum is at
+`gamma=min(w_j,d/H)`; for H=0 and d>0 it is at gamma=w_j. The new simplex is
+nonnegative and sums to one. The exact objective decreases, so its repeated
+identical simplex cannot occur in exact arithmetic. All rational weights,
+including ones below float representability, remain authoritative strings;
+aggregate values are computed from them without a float round trip. Every
+accepted step independently replays the physical columns and checks the exact
+quadratic equation before recording the feasible upper bound.
+
+If d<=0, all positive-weight scores equal the minimum score, which is the
+simplex first-order optimality condition for this convex quadratic. Nonetheless
+V2 does not substitute that condition for its implemented stopping test:
+`g_pool` is recomputed using the actual serialized float price and its exact
+stored-number conjugate. An open serialized-price gap still causes a bounded
+stall. Step/time/bit-size limits likewise terminate without assuming an exact
+restricted optimum. This is a generic feasible improvement method with a
+checked certificate, not a promise that 256 steps solve any finite pool.
+
+The new fixed limits are 256 accepted transfers, 8,192 bits per checked rational
+numerator/denominator and five cumulative seconds in polishing per state,
+within the unchanged state deadline. These limits may fail; no adaptive
+increase is authorized inside a scientific attempt. One native LP per pool and
+duplicate-tangent detection avoid consuming the same native call repeatedly at
+a floating tolerance plateau. Successful polishing is still followed by fresh
+complete-fleet pricing and the unchanged global Fenchel enclosure test.
+
+The state now records the minimum true objective across every replayed raw
+master and polished mixture immediately, including when a later inner cap
+prevents return. Each such point is a feasible convex mixture, so this only
+tightens a valid upper bound. It does not improve the native pricing lower
+bound, rescue missing accounting, or convert a failed cell to a success.
+
+Prospective regressions cover the preserved numerical-plateau shape, the exact
+step equation, zero curvature, multiple positive components, no float underflow
+of exact weights, cumulative step/time/bit caps, streamed bounds on failure,
+immutable raw tangents and complete polishing start/finish accounting. Source
+freeze and a new independent preflight precede any V2 optimizer execution.

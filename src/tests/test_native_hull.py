@@ -323,7 +323,7 @@ def test_master_refinement_records_do_not_mutate_solved_tangents(monkeypatch):
     points = [[0.0]*4]
     mix, pool_certificate = nh.solve_native_rmp(cell['case'], cell['market'], pool, points, nh.Budget(),
         nh.time.monotonic()+10, {'master_calls': 0}, records.append)
-    assert len(calls) == 2 and len(calls[0]) == 1 and len(calls[1]) == 2
+    assert len(calls) == 1 and len(calls[0]) == 1 and len(points) == 2
     assert len(records[0]['tangent_points']) == 1
     assert pool_certificate['pool_gap'] <= 1e-6
 
@@ -427,3 +427,132 @@ def test_admitted_predecessor_requires_matching_complete_receipt(tmp_path):
     nq._json(tmp_path/'receipt.json', {'cell': 'prior', 'pass': True, 'returncode': 0,
         'timeout': False, 'status': 'certified', 'evidence_issues': [], **hq.accounting(events)})
     assert hq.admitted_predecessor(tmp_path, 'prior') == (package, [])
+
+
+def test_polishing_repairs_repeated_lp_plateau_without_another_native_call(monkeypatch):
+    cell = hq.controls()[0]
+    pool = columns(cell['case'])
+    calls, records = [], []
+    def plateau(case, market, cols, points, budget, deadline, index, record):
+        calls.append(index)
+        return raw_master(market, cols, points, [.3249816894616279, .6750183105383719])
+    monkeypatch.setattr(nh, '_master_once', plateau)
+    counts = {'master_calls': 0}
+    mix, cert = nh.solve_native_rmp(cell['case'], cell['market'], pool, [[0.]*4], nh.Budget(),
+        nh.time.monotonic()+10, counts, records.append)
+    assert calls == [0] and counts['polish_steps'] == 1
+    assert cert['pool_gap'] <= 1e-6 and abs(mix['upper']-7591/80) < 1e-12
+    event = next(e for e in records if e['event'] == 'pool_polish_step')
+    before, after = Q(event['objective_before_exact']), Q(event['objective_after_exact'])
+    gamma, decrease, curvature = map(Q, [event['gamma_exact'], event['directional_decrease_exact'], event['curvature_exact']])
+    assert after == before-gamma*decrease+curvature*gamma**2/2 < before
+    assert sum(map(Q, event['weights_after_exact'])) == 1
+    assert all(Q(w) >= 0 for w in event['weights_after_exact'])
+
+
+def test_zero_curvature_polishing_moves_full_positive_away_mass():
+    c = nq.cyclic_case(); pool = columns(c)
+    m = nh.Market('linear',(1,1,1,1),(0,0,0,0))
+    mix = nh.replay_mixture(c,m,pool,[.5,.5]); events=[]; counts={}
+    result,cert = nh.polish_pool(c,m,pool,mix,nh.Budget(),nh.time.monotonic()+10,counts,events.append)
+    step=next(e for e in events if e['event']=='pool_polish_step')
+    assert Q(step['curvature_exact'])==0 and Q(step['gamma_exact'])==Q(1,2)
+    assert result['simplex']['weights_exact']==['0','1'] and cert['pool_gap']==0
+
+
+def test_exact_polished_weights_below_float_range_are_preserved_in_json():
+    c=nq.cyclic_case(); pool=columns(c); tiny=Q(1,10**1000)
+    mix=nh.replay_exact_mixture(c,hq.controls()[0]['market'],pool,[1-tiny,tiny])
+    decoded=json.loads(json.dumps(mix,allow_nan=False))
+    assert Q(decoded['simplex']['weights_exact'][1])==tiny
+    assert Q(decoded['load_exact'][1])==10*tiny>0
+    assert decoded['load'][1]==0.0  # display underflows; authoritative exact value survives.
+    assert decoded['replayed_columns']==2
+
+
+def test_polishing_step_cap_preserves_last_exact_feasible_improvement():
+    c=nq.cyclic_case(); m=hq.controls()[0]['market']
+    pool=columns(c)
+    pool.insert(1,nh.native_column(c,physical(c,2,5),{'source':'pure-third-column'}))
+    mix=nh.replay_mixture(c,m,pool,[1/3]*3)
+    seen=[];events=[];counts={}
+    with pytest.raises(nh.LimitReached,match='step budget'):
+        nh.polish_pool(c,m,pool,mix,nh.Budget(polish_steps=1),nh.time.monotonic()+10,
+                       counts,events.append,seen.append)
+    assert counts['polish_steps']==1
+    assert Q(seen[-1]['objective_exact'])<Q(mix['objective_exact'])
+    assert sum(map(Q,seen[-1]['simplex']['weights_exact']))==1
+    assert events[-1]['event']=='pool_polish_finish' and events[-1]['outcome']=='LimitReached'
+    assert hq.accounting(events)['polish_accounting_complete']
+
+
+def test_polishing_bit_budget_fails_instead_of_rounding_weights():
+    c=nq.cyclic_case();m=hq.controls()[0]['market'];pool=columns(c)
+    mix=nh.replay_mixture(c,m,pool,[.5,.5]);counts={}
+    with pytest.raises(nh.LimitReached,match='bit-size'):
+        nh.polish_pool(c,m,pool,mix,nh.Budget(rational_bits=8),nh.time.monotonic()+10,counts,None)
+    assert counts['polish_steps']==0
+
+
+def test_polishing_time_budget_fails_closed(monkeypatch):
+    c=nq.cyclic_case();m=hq.controls()[0]['market'];pool=columns(c)
+    mix=nh.replay_mixture(c,m,pool,[.5,.5]);times=iter([0.,6.,7.]);counts={};events=[]
+    monkeypatch.setattr(nh.time,'monotonic',lambda:next(times))
+    with pytest.raises(nh.LimitReached,match='time budget'):
+        nh.polish_pool(c,m,pool,mix,nh.Budget(polish_seconds=5),100.,counts,events.append)
+    assert counts['polish_steps']==0 and counts['polish_wall_s']==7
+    assert events[-1]['outcome']=='LimitReached'
+
+
+def test_state_streams_master_upper_before_inner_budget_failure(monkeypatch):
+    install_fakes(monkeypatch)
+    polish=nh.polish_pool
+    def capped(case,market,cols,mix,budget,deadline,counts,record,consider=None,master_call=0):
+        if len(cols)>1:raise nh.LimitReached('pure forced inner cap')
+        return polish(case,market,cols,mix,budget,deadline,counts,record,consider,master_call)
+    monkeypatch.setattr(nh,'polish_pool',capped)
+    cell=hq.controls()[0];result=nh.certify(cell['case'],cell['market'])
+    assert result['status']=='budget_exhausted' and result['upper']<95
+    assert abs(result['upper']-7591/80)<1e-12
+    assert result['upper']>result['lower'] and result['gap']>result['epsilon']
+
+
+def test_incomplete_polishing_trace_is_not_complete_accounting():
+    events=[{'event':'pool_polish_start','master_call':0}]
+    assert not hq.accounting(events)['polish_accounting_complete']
+    events.append({'event':'pool_polish_finish','master_call':0,'elapsed_s':.1,
+                   'steps_completed':1,'checks_completed':0})
+    assert not hq.accounting(events)['polish_accounting_complete']
+
+
+@pytest.mark.parametrize('budget',[nh.Budget(polish_steps=0),nh.Budget(rational_bits=0),
+                                  nh.Budget(polish_seconds=float('inf'))])
+def test_invalid_polishing_budget_fails(budget):
+    with pytest.raises(ValueError,match='policy'):nh.validate_budget(budget)
+
+
+def test_already_stationary_pool_cannot_qualify_after_polishing_deadline(monkeypatch):
+    c=nq.cyclic_case();m=hq.controls()[0]['market'];pool=columns(c)[:1]
+    mix=nh.replay_mixture(c,m,pool,[1.]);times=iter([0.,1.,6.,7.,8.]);counts={};seen=[]
+    monkeypatch.setattr(nh.time,'monotonic',lambda:next(times,8.))
+    with pytest.raises(nh.LimitReached,match='after pool check'):
+        nh.polish_pool(c,m,pool,mix,nh.Budget(polish_seconds=5),100.,counts,None,seen.append)
+    assert seen and seen[-1]['objective_exact']==mix['objective_exact']
+    assert counts['polish_steps']==0
+
+
+@pytest.mark.parametrize('damage',['wrong-phase','duplicate-step','wrong-step','phase-counts','after-finish','missing-check'])
+def test_polishing_accounting_rejects_per_phase_misattribution_and_bad_order(damage):
+    events=[{'event':'pool_polish_start','master_call':0,'cumulative_steps':0},
+            {'event':'pool_polish_check','master_call':0,'step':0},
+            {'event':'pool_polish_step','master_call':0,'step':1},
+            {'event':'pool_polish_finish','master_call':0,'steps_completed':1,'checks_completed':1,
+             'elapsed_s':.1,'outcome':'LimitReached'}]
+    assert hq.accounting(events)['polish_accounting_complete']
+    if damage=='wrong-phase':events[2]['master_call']=999
+    if damage=='duplicate-step':events.insert(3,copy.deepcopy(events[2]));events[-1]['steps_completed']=2
+    if damage=='wrong-step':events[2]['step']=7
+    if damage=='phase-counts':events[-1]['steps_completed']=0
+    if damage=='after-finish':events[2],events[3]=events[3],events[2]
+    if damage=='missing-check':events.pop(1);events[-1]['checks_completed']=0
+    assert not hq.accounting(events)['polish_accounting_complete']
