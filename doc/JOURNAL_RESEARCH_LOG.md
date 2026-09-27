@@ -599,3 +599,24 @@ No public matching calculation before independent code review and published
 freeze. No oldrawdata/sourcefixture is rewritten. Current publicpilotcandidate
 stillpointsfailedattempt2 and is held; only changeitsgate after a new passed
 audit. No EGG clusterjob isactive. Rootownscommit/push/runadmission.
+
+
+### Implementation preflight held for focused corrections
+
+Luna's independent review of candidate b2a5a33 passed the 48-test compact
+suite but did not admit attempt3. The shared normalizer can reject N alone
+before the full N+O correction ledger is emitted. The compact helper must
+record the complete failure ledger first, without changing indexed behavior.
+Additional promised pure controls must cover combined interval/session excess,
+materialized/replay load differences, nonzero planner objective corrections,
+unavailable visits, and specifically V2-to-V3 identity invalidation. Direct
+comparison of all20inputs, targets and budgets with attempt2 is still pending.
+See NATIVE_PATHFLOW_ORPHAN_CHARGE_IMPLEMENTATION_REVIEW_20260927.md.
+
+Sol6_numerical_repair is working only on these scoped corrections. No optimizer
+has run and no new experiment is admitted. The native-hull coordinator still
+hard-codes the indexed extraction-policy identity; this is a separate later
+integration gate, with its own source manifest and controls, not part of the
+current20-control patch. The failed attempt2 archive stays immutable.
+Sol6_cardinality_bound continues the independent exact-flow implementation;
+LunaMax document worker is completing the next GoogleDoc append.
