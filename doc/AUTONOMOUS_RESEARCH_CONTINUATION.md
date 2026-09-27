@@ -4,65 +4,61 @@ Updated 27 September 2026. Owner: the EGG task, acting as principal researcher
 under the user's explicit authorization to continue routine research, cluster
 work, GitHub backups and Google Doc updates without repeated approvals.
 
-## Latest checkpoint — read this before the historical entries below
+## Latest checkpoint — first draft delivered; no automatic research remains
 
-27 September 2026. Cheap routing remains in force: GPT-6 Sol for bounded
-implementation; Luna Max for audits, documents and operations; Astra manages.
-No new experiments, attempt 3, budget increases or reset-credit consumption.
+27 September 2026. The journal-oriented first-draft objective is complete for
+expert user review. No journal submission or PR merge has occurred. Keep routine
+future work on GPT-6 Sol and Luna Max; Astra manages scientific decisions.
 
-- Published backup: `0ce36c1` on `codex/journal-research-20260927`, draft PR56.
-  The reviewed v2 evidence is published; execution source remains `e23a653`.
-- Job 559907 is COMPLETED 0:0 in 9m36s; no EGG computation remains from this
-  attempt. Requested 1 CPU/8GB, allocated 2 CPU/8GB, native one thread,
-  snavely-cpu-16, MaxRSS379376K. All raw bytes and prior failures are preserved.
-- Independent result verdict: conditional numerical reconstruction PASS,
-  strict protocol FAIL, NO OVERALL PASS. Hull polishing was 5.190904918592423s
-  against the frozen cumulative 5s cap. Only prominently labelled off-protocol
-  secondary reporting is allowed. No retrospective waiver or new run.
-  The signed public gap remains unresolved at five; positive regret belongs
-  only to the named time-limited planner incumbent, not a proven optimum.
-- Sealed review: research-20260927/agent-notes/nonlinear-v2-result-review/.
-  Manifest 2edb2a60a1efdaf37159d6934e317700953e5013284517d5139fc9a18e726e61;
-  full report dc1b176371cd5295d9bfcfd562b7cb69aaa8c3026c5c3a344a023d83a8027598.
-  Lead verified all13 entries. Full and explicit public-copy numerical audits
-  pass, six targeted corruptions rejected; omitted scientific input rejects.
-  Read doc/SISTIG_NONLINEAR_V2_SECONDARY_REPORTING_20260927.md for scope and
-  corrected fresh-output reproduction instructions. Never overwrite a seal.
-- Raw manifest68032692ea5c5b349115bd6bd64740f0bd799fac9a8a4dcdf09462a844901cf9;
-  frozen eb1d9f5dc8b8f7f1561c21dd8f8cad6105f8cfbc272c23b8c8a334e6a626f352.
-  Public copy excludes exactly three licensing-only stdout files, by hash;
-  28 scientific/control entries plus original manifest and later wrapper remain.
-  Terminal receipts are in research-20260927/launches/nonlinear-v2-job559907/terminal/.
-- Exact ideal depot15 minimum fleet2 and flat-cost enclosure independently pass.
-  Separate exact ideal nonlinear enclosure: 424.365880667204... <= CH <= D
-  <=512.7694256264009..., without identifying optimum or gap. Depot16 numerical
-  upper stays distinct. Do not combine ideal and native bounds into an exact claim.
-- Final scientific/editorial review finds a coherent excellent first draft for
-  expert user review, not submission clearance. Review is under
-  research-20260927/agent-notes/manuscript-final-science-review/.
-  Both clarity findings and a stale abstract sentence are corrected. Final v05
-  science/layout review PASSES all27 pages and outward-rounded Table4 endpoints.
-  Reviewed canonical PDF is now v05: 27pages,8figures,5tables,1954122bytes, SHA
-  8c8192c6259b5294449c655047313f7799ee1aa74092fc669748362bbfdad8eb.
-  The named v05-reviewed copy and r2candidate are byte-identical; v04 is preserved.
-  Final review: research-20260927/agent-notes/manuscript-v05-final-review/.
-  Release file pins: paper/RELEASE_V05_20260927.json. Original flat-pilot numerical
-  contents and Figures1–7 remain. This is ready for expert user review, not submission.
-- Luna is preparing one combined GoogleDoc append; wait for reviewed PDF and
-  final artifact commit before publishing it. Fresh before export matches the prior
-  version exactly. Current last verified Doc export remains
-  92478bytes SHA5edca9e3374528581e1b6434340967654c047f946c1d0e3b76032ec3bba91b2e.
-  Three recent primary-source checks are published in
-  paper/related-work/RECENT_SCOPE_CHECK_20260927.md.
-- Finish this bounded release: GitHub backup/PR body, verified GoogleDoc append,
-  and final user report. Scientific draft/visuals are reviewed; release work remains.
-  Do not grow the campaign to chase a positive public gap. Once the draft is
-  ready and no authorized EGG jobs remain, stop unnecessary follow-up spending.
-- Preserve private GIRO, protected outcomes, other projects and all spent runs.
-  Exclude scaglione-compute-01. PR56 stays draft/unmerged. No actual submission.
-  Fresh queue23:13:54UTC showed no active EGG jobs; only other-project held jobs,
-  which were left untouched. CI36357284609 passed at0ce36c1.
-  SSH/SCP use explicit network escalation and ControlMaster=no/ControlPath=none.
+- Reviewed draft0.5: 27pages,8figures,5tables. Canonical PDF and the named
+  output/pdf/egg-journal-working-draft-v05-reviewed.pdf are byte-identical to
+  the accepted r2candidate: SHA256
+  8c8192c6259b5294449c655047313f7799ee1aa74092fc669748362bbfdad8eb,
+  1954122bytes. Reviewedv04 is preserved unchanged. Editable manuscript SHA
+  a97a7f9267d9aa69fdd5d9975bf5282eda47f0aaa10760d270ef86c509f3c88e.
+- Final independent science/layout review passes all27pages, with pages1–6
+  rechecked after the abstract correction. All five numerical intervals round
+  outward. No actionable claim/layout issues remain for user review. See
+  research-20260927/agent-notes/manuscript-v05-final-review/ and
+  paper/RELEASE_V05_20260927.json. This is not journal-submission clearance.
+- Artifact release commit10d3381ea725ae893cadbf574a220bbb0157c704 is published
+  on codex/journal-research-20260927. PR56 description is current, draft/unmerged.
+  CI36358582888 passed the complete CBC suite and frozen journal reconstruction.
+  Evidence backup0ce36c184a5c9725462694dfe376d7c75a0ecb43 also passed CI.
+- Original GoogleDoc now has one 'Reviewed research draft0.5' milestone.
+  SavedtoDrive; before92478bytes are an exact prefix of after94931bytes.
+  After SHA256ac33ad4d498ed47ba0de3c8e5a03e146cafe9b543c52ac4e0000662420556dcd.
+  Exact heading spacing and verification are recorded under
+  research-20260927/agent-notes/google-doc-v05-final-release/.
+  Full before/after exports stay outside public Git in the outer workspace.
+- Job559907 is COMPLETED0:0,9m36s. Conditional numerical reconstruction PASS;
+  strict protocol FAIL; NO OVERALL PASS. Hull polishing5.190904918592423s
+  exceeded the frozen cumulative5s cap. Only off-protocol secondary reporting
+  is allowed. Signed public gap remains unresolved at five; positive regret
+  belongs only to the named bounded incumbent, not a proven physical optimum.
+  No retrospective waiver, third attempt, larger budget or new campaign.
+- Sealed v2 review manifest2edb2a60a1efdaf37159d6934e317700953e5013284517d5139fc9a18e726e61;
+  full reportdc1b176371cd5295d9bfcfd562b7cb69aaa8c3026c5c3a344a023d83a8027598.
+  Execution sourcee23a653; raw manifest
+  68032692ea5c5b349115bd6bd64740f0bd799fac9a8a4dcdf09462a844901cf9.
+  Public subset retains all scientific bytes and declares only three whole
+  licensing-only stdout omissions. Complete local/cluster archives remain.
+  See doc/SISTIG_NONLINEAR_V2_SECONDARY_REPORTING_20260927.md for scope and
+  fresh-output/public-copy reproduction. Never overwrite sealed evidence.
+- Exact ideal depot15 minimum fleet2 and flat enclosure independently pass;
+  separate exact ideal nonlinear bounds give424.365880667204... <= CH <= D
+  <=512.7694256264009... without determining a gap. Depot16 numerical upper
+  stays distinct. Do not combine ideal and native bounds into an exact claim.
+- Fresh queue23:13:54UTC showed no active EGG jobs; other-project held jobs were
+  untouched. Hourly heartbeatadvance-egg-journal-research is now PAUSED and was
+  verified in its saved config. Do not restart automatic research on completion.
+  No reset credits were used. No further monitoring is needed for these runs.
+- Next substantial decision belongs to the user: pursue an analytical/methods
+  journal framing, or invest in calibrated operational evidence before submission.
+  The draft supports existence and declared-model claims, not prevalence,
+  operational savings, daily recurrence, stochastic reliability or deployment.
+  Preserve private GIRO, protected outcomes, all failed attempts and other projects.
+  Future CPU jobs must exclude scaglione-compute-01 if separately authorized.
 
 ## Objective and completion standard
 

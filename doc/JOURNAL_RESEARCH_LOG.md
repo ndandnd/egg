@@ -938,3 +938,19 @@ paper/RELEASE_V05_20260927.json. No further actionable claim/layout issues remai
 for expert user review; this is not journal-submission clearance. The23:13:54UTC
 queue check found no active EGG jobs and left other-project held jobs untouched.
 Final GitHub/GoogleDoc release records are being completed; no further experiment.
+
+
+### First-draft release completed and automatic follow-up stopped
+
+Reviewed draft0.5 is published at10d3381ea725ae893cadbf574a220bbb0157c704;
+CI36358582888 passed the full CBC suite and frozen journal evidence reconstruction.
+PR56 remains draft/unmerged with an updated description. The original GoogleDoc
+received one final milestone and reports SavedtoDrive; its92478-byte prior export
+is an exact prefix of the94931-byte after export, SHA256
+ac33ad4d498ed47ba0de3c8e5a03e146cafe9b543c52ac4e0000662420556dcd.
+The final public verification record is in agent-notes/google-doc-v05-final-release.
+No active EGG jobs remain. Hourly heartbeatadvance-egg-journal-research was set to
+PAUSED through the app and verified in saved configuration to stop unnecessary
+automatic spending. No reset credit, new campaign, merge or submission occurred.
+The first-draft objective is satisfied for expert user review; journal positioning
+and any calibrated operational validation remain future user decisions.
