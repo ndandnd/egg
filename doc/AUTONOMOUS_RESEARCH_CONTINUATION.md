@@ -283,3 +283,34 @@ optimizer has run. Its equivalence proof, pure tests and prospective controls
 must pass before any source freeze/solve. It preserves the full declared graph
 and must not claim equal LP relaxations or runtime improvement before testing.
 The original physical module/source remains unchanged by this new formulation.
+
+## Active native hull gate
+
+The native hull module/runner/tests/design/protocol and their physical
+dependencies passed independent preflight (46 pure/fake tests and targeted
+corruption/arithmetic checks) and were published at
+`f549100587cdf561c978e145e73e86dbadc9f27e`. The first8-control CBC run is
+active under `result/native_hull/20260927-attempt1`. Inspect its supervisor
+receipt/summary before any action; never duplicate or overwrite. The retained
+predecessor admission bug was corrected before this first freeze/run; its failed
+preflight reproducer and repair are documented. No operational solve is active.
+
+### Native hull first execution failed qualification
+
+The8-cell native hull attempt at `f549100587cdf561c978e145e73e86dbadc9f27e`
+is complete, not active:2 cells certified,4 exhausted the64-master-call cap,
+and2 retained successor states correctly blocked after their predecessor failed.
+Supervisor exit1, no outer timeout,14.2354s. Raw evidence and all failure work
+are manifested in `result/native_hull/20260927-attempt1`; do not rerun or rewrite.
+The physical timing gate independently passed all19 controls; this new failure
+concerns the separate hull restricted-master refinement and is under diagnosis.
+No timetable solver or hull scientific claim is admitted by partial success.
+
+Independent timing review is now complete and PASS (all135 raw files and19
+controls;22 corruption checks). Final derived review is packaged. The hull V1
+failure is a diagnosed repeated-tangent/master precision stall; author is
+preparing V2 with bounded exact pairwise simplex polishing and streamed bestUB,
+while a separate reviewer audits V1. No rerun before new review/freeze.
+Root compact path-flow module and20-control gate are ready for independent
+preflight, including a three-service/two-depot-visit control. No compact solve.
+The public-case figure is being generated; manuscript0.3 remains unrendered.

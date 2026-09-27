@@ -64,3 +64,17 @@ and charger capacities. This is an abstract/highlights-level check, not a proof
 or full-method review. Its relevance is the boundary between our deterministic
 certificates and operational uncertainty; no novelty claim for those charging
 features is justified by our prototype.
+
+## Aggregation and individual incentive scope
+
+Kerdreux, Colin and d’Aspremont, *An Approximate Shapley-Folkman Theorem*,
+arXiv1712.08559v3 (1July2019), primary abstract inspected at
+https://arxiv.org/abs/1712.08559v3. It relates aggregation of uniformly bounded
+nonconvex sets to finite-sum duality-gap bounds. Full proof comparison was not
+performed. This motivates checking whether a growing whole-operator regret is
+being confused with one small participant's incentive; it does not establish
+the EGG formulas by citation. A new algebraic normalization note explicitly
+reserves connectors per A/B service-pair operator and derives individual regret
+<=20/n, despite the known possible constant aggregate limit. Independent review
+of that new note is pending. Starr1969 is a relevant classical antecedent; its
+author-hosted PDF was located but timed out, so no full-text-review claim is made.

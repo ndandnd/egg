@@ -404,3 +404,39 @@ infeasibilities). Its raw attempt is manifested under
 `result/native_halfminute/20260927-attempt1`; source hashes are unchanged.
 This supersedes the active-session entry. Do not rerun. Independent artifact
 review must pass before the timing extension supports a timetable result.
+
+### Native hull first execution failed qualification
+
+The8-cell native hull attempt at `f549100587cdf561c978e145e73e86dbadc9f27e`
+is complete, not active:2 cells certified,4 exhausted the64-master-call cap,
+and2 retained successor states correctly blocked after their predecessor failed.
+Supervisor exit1, no outer timeout,14.2354s. Raw evidence and all failure work
+are manifested in `result/native_hull/20260927-attempt1`; do not rerun or rewrite.
+The physical timing gate independently passed all19 controls; this new failure
+concerns the separate hull restricted-master refinement and is under diagnosis.
+No timetable solver or hull scientific claim is admitted by partial success.
+
+### Independent timing audit passes; hull refinement diagnosed
+
+Independent review confirms the complete19-cell timing attempt:135 original
+files,30 finite analytical/PWL minima plus4 infeasibilities,1,075 raw variables,
+64 sessions and233 SOC events;22 corruption controls rejected. The coincidence
+cell preserves native8.99999998 versus exact9, correctly enclosed by its fixed
+guard. No residual was rounded away. The final review package supersedes the
+provisional audit scripts checkpointed in the previous commit.
+
+Both hull reviewers identify a restricted-master precision stall: near-optimal
+quadratic objective values coexist with a still-open first-order pool criterion,
+and identical final tangent/mixture points repeat. The nominal saved inner
+mixture has true objective94.8875000067 but pool gap about0.0004944, above1e-6.
+The V1 final summary also misses improved UBs seen inside an interrupted inner
+master; those remain visible in raw traces. This does not certify the failed
+cells. A separately reviewed/frozen V2 will use bounded exact-rational pairwise
+simplex polishing and stream the best feasible UB. All original failures remain.
+
+CI passed at hull/public-input freeze `f549100`, run36334386899. Native physical
+source remains unchanged; compact path-flow code and a20-control gate are under
+preflight with no solver execution. A new participant-normalization derivation
+clarifies that reserved-resource small operators have vanishing individual
+regret in the replication family; it is pending independent review and does not
+change the already established whole-operator formula.

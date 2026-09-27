@@ -32,8 +32,20 @@ base.TARGETS.update(halfminute_multileg=Q(36),halfminute_capacity=Q(15,2),
 _original_branches=base.branches
 
 def branches(cell):
-    if cell['id']!='halfminute_coincidence':
+    if not cell['id'].startswith('halfminute_'):
         return _original_branches(cell)
+    if cell['id']!='halfminute_coincidence':
+        c=cell['case'];need(len(c['trips'])==1,'new single-service fixture')
+        energy=Q(c['trips'][0]['energy_kwh'])+sum((Q(l['energy_kwh']) for m in c['movements'] for l in m['legs']),Q(0))
+        total=energy/Q(c['efficiency'])
+        returned=Q(next(m['legs'][-1]['arrive_min'] for m in c['movements'] if m['kind']=='pullin'))
+        capacity=sum((Q(min(r['per_bus_kw'],r['grid_kw']))*max(Q(0),Q(r['end_min'])-max(returned,Q(c['terminal_open_min']),Q(r['start_min'])))/60
+                      for r in c['resources'] if r['connectors']),Q(0))
+        if total>capacity:return []
+        duration=sum((Q(l['arrive_min'])-Q(l['depart_min']) for m in c['movements'] for l in m['legs']),Q(0))
+        ops=Q(c['vehicle_cost'])+Q(c['deadhead_cost_per_min'])*duration
+        need(len(c['market_edges_min'])==3 and returned>=Q(c['market_edges_min'][1]),'new fixed terminal allocation')
+        return [(ops,[Q(0),total],[Q(0),Q(0)],Q(0),Q(0))]
     # The immutable fixture has one bus and only one service-covering path:
     # pullout A -> depot AB -> pullin B. A consumes 1, then the instantaneous
     # outbound depot leg consumes 1; zero-energy B finishes at 2. Full initial
