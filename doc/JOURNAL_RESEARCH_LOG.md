@@ -473,3 +473,43 @@ Latest published freeze186c987 and the three earlier checkpoints all passed
 GitHub CI. Manuscript0.3 has been rendered to17pages/sixfigures and is under
 independent layout review; author corrected crowded public-figure labels while
 retaining all37servicebars and unchanged energy totals.
+
+## Completed public pilot and compact hull audit — 27 September 2026
+
+This checkpoint supersedes the active-job descriptions immediately above.
+There is no active EGG solver job. Public job557543 COMPLETED0:0 in6m35s,
+397140KiB peak batch RSS, oneCPU/8GB, excluded node respected. Frozen source
+282e00b80b6fd9457006429b089269b2a9e2be92 was not changed or rerun.
+Both full37-service cells are independently audited bounded/FEASIBLE results:
+depot15 [237.14148764071234,408.5331368838794], depot16
+[232.14633164554616,433.74608621721006]. Both have two-bus physical witnesses,
+with1042.665679419397/1168.73042608605 gridkWh. Neither proves optimality.
+The audit reconstructed42,297 raw values,41 charging sessions and231 SOC events;
+16 corruption controls were rejected. Complete17-file external archive verified.
+The public copy retains15 original scientific files byte-for-byte, the unchanged
+raw manifest and explicit omission hashes for two license-bearing whole stdout
+files. PUBLIC_COPY_VERIFICATION.json separately verifies final assembled bytes.
+No input, numerical result, event or failure is omitted or edited.
+
+Compact hull attempt1 at frozen72a1f71 completed8/8 certificates and independently
+passed:36 native calls (21 pricing/15 masters),9 exact pairwise transfers,
+24 checks,45 sessions/171 SOC events,42 corruption controls. All62 original
+files750,529 bytes remain unchanged. Some ideal-target differences are about
+3e-14 under the disclosed native floating witness policy; not exact physical
+certificates. Public study has no hull/planner/gap result yet.
+
+Next, separately version and independently review aggregate full-replenishment
+energy inequalities before20-control and8-hull-control requalification. The
+band must account for stored coefficient assembly roundoff, with unchanged
+physical replay and admission tolerances. An exact DAG matching relaxation for
+flat prices is also under mathematical design. No V2 or matching experiment has
+run. Keep first attempts intact. The broader public nonlinear study remains a
+candidate design until pricing-bound quality and prospective protocol gates
+are resolved. No user decision or exceptional compute authorization is needed.
+
+Recent CI runs stopped before pytest on trailing whitespace in the generated
+public SVG. Its generator now normalizes those insignificant spaces; the saved
+SVG passed XML/token semantic equivalence and PNG/reviewedPDF bytes are unchanged.
+A fresh branch CI will determine downstream status; do not report those earlier
+runs as passing. ReviewedPDF0.3 remains the current17-page artifact; manuscript
+source0.4 is in preparation.

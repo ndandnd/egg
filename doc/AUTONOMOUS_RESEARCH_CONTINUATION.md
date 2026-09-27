@@ -404,3 +404,63 @@ loads and all88 archived replication optima. It is an explanatory bound, not a
 novelty claim. Keep manuscriptPDF0.3 unchanged until the next coherent scientific
 revision and layout pass. GoogleDoc milestone is SavedtoDrive,73,585characters;
 all previous content is preserved (only final blank-line normalization changed).
+
+### Compact hull integration is executing
+
+All79 pure tests and independent integration preflight passed, preserving the
+original eight scientific controls and budgets. Published source freeze
+`72a1f715e9e6714746f9c0638c50d2cba6bfcfdb`. First compact-hull run is now
+active at `result/native_pathflow_hull/20260927-attempt1`; local supervisor
+session81493. Do not duplicate or modify any of its hashed physical/compact/hull
+sources until it completes and is manifested. Independent reviewer is preparing
+its flat-variable audit. IndexedV2's eight certificates already passed the
+complete independent audit, which is published at72a1f71;31 corruptions rejected.
+
+Public job557543 is running, last seen6m28s. The first cell completed bounded
+in186.278s: nativeFEASIBLE180.012s, lower237.14148764071234,
+upper408.5331368838794, two buses,1042.665679419397 gridkWh. Do not call it
+optimal; full independent result audit remains required. Second cell has no
+reported outcome yet. A possible next mathematical strengthening is the
+full-replenishment aggregate energy balance (service+selectedtravel=eta*grid);
+this needs a separately reviewed/frozen revision, never an in-attempt change.
+An exact matching relaxation for flat-price lower bounds is also under design.
+
+## Completed public pilot and compact hull audit — 27 September 2026
+
+This checkpoint supersedes the active-job descriptions immediately above.
+There is no active EGG solver job. Public job557543 COMPLETED0:0 in6m35s,
+397140KiB peak batch RSS, oneCPU/8GB, excluded node respected. Frozen source
+282e00b80b6fd9457006429b089269b2a9e2be92 was not changed or rerun.
+Both full37-service cells are independently audited bounded/FEASIBLE results:
+depot15 [237.14148764071234,408.5331368838794], depot16
+[232.14633164554616,433.74608621721006]. Both have two-bus physical witnesses,
+with1042.665679419397/1168.73042608605 gridkWh. Neither proves optimality.
+The audit reconstructed42,297 raw values,41 charging sessions and231 SOC events;
+16 corruption controls were rejected. Complete17-file external archive verified.
+The public copy retains15 original scientific files byte-for-byte, the unchanged
+raw manifest and explicit omission hashes for two license-bearing whole stdout
+files. PUBLIC_COPY_VERIFICATION.json separately verifies final assembled bytes.
+No input, numerical result, event or failure is omitted or edited.
+
+Compact hull attempt1 at frozen72a1f71 completed8/8 certificates and independently
+passed:36 native calls (21 pricing/15 masters),9 exact pairwise transfers,
+24 checks,45 sessions/171 SOC events,42 corruption controls. All62 original
+files750,529 bytes remain unchanged. Some ideal-target differences are about
+3e-14 under the disclosed native floating witness policy; not exact physical
+certificates. Public study has no hull/planner/gap result yet.
+
+Next, separately version and independently review aggregate full-replenishment
+energy inequalities before20-control and8-hull-control requalification. The
+band must account for stored coefficient assembly roundoff, with unchanged
+physical replay and admission tolerances. An exact DAG matching relaxation for
+flat prices is also under mathematical design. No V2 or matching experiment has
+run. Keep first attempts intact. The broader public nonlinear study remains a
+candidate design until pricing-bound quality and prospective protocol gates
+are resolved. No user decision or exceptional compute authorization is needed.
+
+Recent CI runs stopped before pytest on trailing whitespace in the generated
+public SVG. Its generator now normalizes those insignificant spaces; the saved
+SVG passed XML/token semantic equivalence and PNG/reviewedPDF bytes are unchanged.
+A fresh branch CI will determine downstream status; do not report those earlier
+runs as passing. ReviewedPDF0.3 remains the current17-page artifact; manuscript
+source0.4 is in preparation.

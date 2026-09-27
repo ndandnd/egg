@@ -299,6 +299,12 @@ def main() -> None:
                 metadata={"Creator": "Matplotlib", "Title": "Public timetable intake and modeled energy reference",
                           "CreationDate": None, "ModDate": None})
     fig.savefig(FIG_DIR / f"{STEM}.svg", bbox_inches="tight", metadata={"Title": "Public timetable intake and modeled energy reference"})
+    # Matplotlib emits trailing spaces in SVG path data; normalize only those
+    # insignificant spaces so generated artifacts pass the repository check.
+    svg_path = FIG_DIR / f"{STEM}.svg"
+    svg_path.write_text("\n".join(line.rstrip() for line in
+                                  svg_path.read_text(encoding="utf-8").splitlines()) + "\n",
+                        encoding="utf-8")
     plt.close(fig)
     write_provenance(document, figure_data)
     print(json.dumps({
