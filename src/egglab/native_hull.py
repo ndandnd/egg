@@ -121,21 +121,39 @@ def projection_key(load, ops):
                       "ops_cost": float(ops+0.0).hex()})
 
 
-def native_column(case, plan, source):
+def _extraction_policy(value):
+    if value is None:
+        return nr.EXTRACTION_POLICY
+    if type(value) is not str or not value.strip() or value != value.strip():
+        raise ValueError("Explicit extraction policy requires a nonempty identity")
+    return value
+
+
+def native_column(case, plan, source, extraction_policy=None):
+    policy = _extraction_policy(extraction_policy)
+    saved_policy = plan.get("extraction_policy")
+    if ((extraction_policy is not None and saved_policy != policy)
+            or (extraction_policy is None and saved_policy not in (None, policy))):
+        raise ValueError("Native plan extraction policy mismatch")
     witness = copy.deepcopy(plan)
     replay = nr.replay_native(case, witness)
     load, ops = replay["load"], replay["ops_cost"]
     return {"schema": SCHEMA, "physical_identity": case.identity(),
-            "extraction_policy": nr.EXTRACTION_POLICY, "plan": witness,
+            "extraction_policy": policy, "plan": witness,
             "witness_hash": nr.digest(witness), "source": copy.deepcopy(source),
             "load": load, "ops_cost": ops, "key": projection_key(load, ops)}
 
 
-def replay_column(case, column):
+def replay_column(case, column, extraction_policy=None):
+    policy = _extraction_policy(extraction_policy)
     if (column.get("schema") != SCHEMA or column.get("physical_identity") != case.identity()
-            or column.get("extraction_policy") != nr.EXTRACTION_POLICY
+            or column.get("extraction_policy") != policy
             or column.get("witness_hash") != nr.digest(column.get("plan"))):
         raise ValueError("Native column physical/provenance identity mismatch")
+    saved_policy = column["plan"].get("extraction_policy")
+    if ((extraction_policy is not None and saved_policy != policy)
+            or (extraction_policy is None and saved_policy not in (None, policy))):
+        raise ValueError("Native column plan extraction policy mismatch")
     replay = nr.replay_native(case, column["plan"])
     if (column.get("load") != replay["load"] or column.get("ops_cost") != replay["ops_cost"]
             or column.get("key") != projection_key(replay["load"], replay["ops_cost"])):
@@ -157,11 +175,11 @@ def simplex(raw):
                      "tolerance": MASS_TOL}
 
 
-def replay_mixture(case, market, columns, raw_weights):
+def replay_mixture(case, market, columns, raw_weights, extraction_policy=None):
     validate_market(case, market)
     if len(columns) != len(raw_weights) or not columns:
         raise ValueError("Mixture/pool size mismatch")
-    projections = [replay_column(case, c) for c in columns]
+    projections = [replay_column(case, c, extraction_policy) for c in columns]
     weights, correction = simplex(raw_weights)
     return _project_mixture(market, columns, projections, weights, correction)
 
@@ -180,13 +198,13 @@ def _project_mixture(market, columns, projections, weights, correction, bit_limi
             "upper": outward(true, True), "replayed_columns": len(columns)}
 
 
-def replay_exact_mixture(case, market, columns, weights, bit_limit=None):
+def replay_exact_mixture(case, market, columns, weights, bit_limit=None, extraction_policy=None):
     """Polished weights stay rational; never materialize them through float."""
     validate_market(case, market)
     if (not columns or len(weights) != len(columns) or any(not isinstance(w, Q) or w < 0 for w in weights)
             or sum(weights, Q(0)) != 1):
         raise ValueError("Polished simplex must be exactly nonnegative with unit mass")
-    projections = [replay_column(case, c) for c in columns]
+    projections = [replay_column(case, c, extraction_policy) for c in columns]
     return _project_mixture(market, columns, projections, weights,
         {"source": "exact-pairwise-polish", "weights_exact": [str(w) for w in weights],
          "positive_weights": sum(w > 0 for w in weights), "mass_exact": "1"}, bit_limit)
@@ -307,7 +325,8 @@ def _fraction_bits(values):
     return max((max(x.numerator.bit_length(), x.denominator.bit_length()) for x in values), default=0)
 
 
-def polish_pool(case, market, columns, mixture, budget, deadline, counts, record, consider=None, master_call=0):
+def polish_pool(case, market, columns, mixture, budget, deadline, counts, record,
+                consider=None, master_call=0, extraction_policy=None):
     """Bounded exact pairwise line search; acceptance still needs g_pool."""
     started = time.monotonic()
     counts.setdefault("polish_steps", 0)
@@ -370,7 +389,8 @@ def polish_pool(case, market, columns, mixture, budget, deadline, counts, record
             check_bits(updated+[gamma])
             if gamma <= 0 or updated == weights:
                 raise PoolStalled("exact pairwise polishing made no simplex progress")
-            new = replay_exact_mixture(case, market, columns, updated, budget.rational_bits)
+            new = replay_exact_mixture(case, market, columns, updated, budget.rational_bits,
+                                       extraction_policy)
             predicted = Q(mixture["objective_exact"])-gamma*decrease+curvature*gamma*gamma/2
             if Q(new["objective_exact"]) != predicted or predicted >= Q(mixture["objective_exact"]):
                 raise ValueError("Exact pairwise objective equation/decrease failed")
@@ -400,16 +420,17 @@ def polish_pool(case, market, columns, mixture, budget, deadline, counts, record
                       "checks_completed": counts["polish_checks"]-initial_checks})
 
 
-def solve_native_rmp(case, market, columns, points, budget, deadline, counts, record, consider=None):
+def solve_native_rmp(case, market, columns, points, budget, deadline, counts, record,
+                     consider=None, extraction_policy=None):
     for c in columns:
-        replay_column(case, c)
+        replay_column(case, c, extraction_policy)
     if time.monotonic() >= deadline or counts["master_calls"] >= budget.master_calls:
         raise LimitReached("master/time budget exhausted")
     index = counts["master_calls"]
     counts["master_calls"] += 1
     raw = _master_once(case, market, columns, copy.deepcopy(points), budget, deadline, index, record)
     check_master_primal(columns, raw)
-    mixture = replay_mixture(case, market, columns, raw["lambda"])
+    mixture = replay_mixture(case, market, columns, raw["lambda"], extraction_policy)
     if consider:
         consider(mixture)
     pool = pool_certificate(market, columns, mixture, mixture_price(market, mixture))
@@ -418,7 +439,12 @@ def solve_native_rmp(case, market, columns, points, budget, deadline, counts, re
                   "raw_tangent_objective": raw["stats"]["incumbent"], "repeated_tangent_point": repeated})
     # V2 makes one native LP call per pool. It never appends duplicate cuts and
     # repeats an identical native master to resolve a first-order pool gap.
-    mixture, pool = polish_pool(case, market, columns, mixture, budget, deadline, counts, record, consider, index)
+    if extraction_policy is None:
+        mixture, pool = polish_pool(case, market, columns, mixture, budget, deadline,
+                                    counts, record, consider, index)
+    else:
+        mixture, pool = polish_pool(case, market, columns, mixture, budget, deadline,
+                                    counts, record, consider, index, extraction_policy)
     point = list(mixture["load"])
     added = point not in points
     if added:
@@ -428,39 +454,47 @@ def solve_native_rmp(case, market, columns, points, budget, deadline, counts, re
     return mixture, pool
 
 
-def import_pool(case, previous, expected_previous, budget, previous_index=None):
+def import_pool(case, previous, expected_previous, budget, previous_index=None,
+                extraction_policy=None):
+    policy = _extraction_policy(extraction_policy)
     if (not isinstance(expected_previous, str) or not expected_previous
             or not previous or previous.get("schema") != SCHEMA or previous.get("status") != "certified"
             or previous.get("arm") != "retained"
             or (previous_index is not None and previous.get("state_index") != previous_index)
             or previous.get("state_identity") != expected_previous
             or previous.get("physical_identity") != case.identity()
-            or previous.get("extraction_policy") != nr.EXTRACTION_POLICY):
+            or previous.get("extraction_policy") != policy):
         raise ValueError("Invalid retained predecessor identity/status")
     columns = copy.deepcopy(previous.get("columns", []))
     if not 1 <= len(columns) <= budget.pool_cap or len({c["key"] for c in columns}) != len(columns):
         raise ValueError("Invalid retained pool size/duplicate projection")
     for c in columns:
-        replay_column(case, c)
+        replay_column(case, c, extraction_policy)
     return columns
 
 
-def state_identity(case, market, arm, state_index, budget, oracle_id=None):
+def state_identity(case, market, arm, state_index, budget, oracle_id=None,
+                   extraction_policy=None):
+    policy = _extraction_policy(extraction_policy)
     metadata = {} if oracle_id is None else {"pricing_oracle": oracle_id}
     if oracle_id is not None and (not isinstance(oracle_id, str) or not oracle_id.strip()):
         raise ValueError("Explicit pricing oracle requires a nonempty identity")
     return nr.digest({"schema": SCHEMA, "case": case.identity(), "market": market.identity(),
                       "arm": arm, "state_index": state_index, "budget": asdict(budget),
-                      "extraction_policy": nr.EXTRACTION_POLICY, **metadata})
+                      "extraction_policy": policy, **metadata})
 
 
 def certify(case, market, budget=Budget(), *, arm="cold", state_index=0,
-            previous=None, expected_previous=None, record=None, pricing_oracle=None, oracle_id=None):
+            previous=None, expected_previous=None, record=None, pricing_oracle=None,
+            oracle_id=None, extraction_policy=None):
     nr.validate_case(case)
     validate_market(case, market)
     validate_budget(budget)
     if (pricing_oracle is None) != (oracle_id is None) or (pricing_oracle is not None and not callable(pricing_oracle)):
         raise ValueError("Explicit pricing oracle requires both a callable and its identity")
+    policy = _extraction_policy(extraction_policy)
+    if oracle_id is None and policy != nr.EXTRACTION_POLICY:
+        raise ValueError("Non-indexed extraction policy requires an explicit oracle")
     metadata = {} if oracle_id is None else {"pricing_oracle": oracle_id}
     oracle = nr.solve_pricing if pricing_oracle is None else pricing_oracle
     if arm not in ("cold", "retained") or type(state_index) is not int or state_index < 0:
@@ -468,10 +502,11 @@ def certify(case, market, budget=Budget(), *, arm="cold", state_index=0,
     if (arm == "cold" or state_index == 0) and (previous is not None or expected_previous is not None):
         raise ValueError("Fresh state cannot import a predecessor")
     deadline = time.monotonic()+budget.wall_seconds
-    identity = state_identity(case, market, arm, state_index, budget, oracle_id)
+    identity = state_identity(case, market, arm, state_index, budget, oracle_id, extraction_policy)
     if previous is not None and previous.get("pricing_oracle") != oracle_id:
         raise ValueError("Retained predecessor pricing oracle identity differs")
-    columns = (import_pool(case, previous, expected_previous, budget, state_index-1)
+    columns = (import_pool(case, previous, expected_previous, budget, state_index-1,
+                           extraction_policy)
                if arm == "retained" and state_index > 0 else [])
     counts = {"pricing_requests": 0, "seed_requests": 0, "master_calls": 0,
               "polish_steps": 0, "polish_checks": 0, "polish_wall_s": 0.0, "max_rational_bits": 0}
@@ -503,10 +538,15 @@ def certify(case, market, budget=Budget(), *, arm="cold", state_index=0,
         if oracle_id is not None and (result.get("formulation") != oracle_id
                 or not isinstance(result.get("plan"), dict) or result["plan"].get("formulation") != oracle_id):
             raise ValueError("Explicit pricing oracle result/plan formulation mismatch")
+        if extraction_policy is not None and (result.get("extraction_policy") != policy
+                or result["plan"].get("extraction_policy") != policy):
+            raise ValueError("Explicit pricing oracle extraction policy mismatch")
         if (result.get("status") not in ("certified", "bounded") or result.get("case_identity") != case.identity()
                 or result.get("prices") != list(prices)):
             raise ValueError("Unresolved/infeasible/mismatched complete-fleet pricing result")
-        column = native_column(case, result["plan"], {"state_identity": identity, "pricing_call": index, **metadata})
+        column = native_column(case, result["plan"],
+                               {"state_identity": identity, "pricing_call": index, **metadata},
+                               extraction_policy)
         objective = column["ops_cost"]+sum(p*e for p, e in zip(prices, column["load"]))
         lower, upper = nr.admit_bound(result["stats"], objective)
         if result.get("lower") != lower or abs(result.get("upper", math.inf)-upper) > OBJECTIVE_TOL:
@@ -520,9 +560,10 @@ def certify(case, market, budget=Budget(), *, arm="cold", state_index=0,
     try:
         if not columns:
             columns.append(price(list(market.a), seed=True))
-            consider_mixture(replay_mixture(case, market, columns, [1.0]))
+            consider_mixture(replay_mixture(case, market, columns, [1.0], extraction_policy))
         while True:
-            mixture, pool = solve_native_rmp(case, market, columns, points, budget, deadline, counts, record, consider_mixture)
+            mixture, pool = solve_native_rmp(case, market, columns, points, budget, deadline,
+                                             counts, record, consider_mixture, extraction_policy)
             consider_mixture(mixture)
             candidate = price(pool["prices"])
             gap = Q(best_mixture["objective_exact"])-Q(best_lower["lower_exact"])
@@ -550,7 +591,7 @@ def certify(case, market, budget=Budget(), *, arm="cold", state_index=0,
         status, reason = "stalled_bounded", str(exc)
     result = {"schema": SCHEMA, "status": status, "reason": reason, "state_identity": identity,
               "physical_identity": case.identity(), "market_identity": market.identity(),
-              "extraction_policy": nr.EXTRACTION_POLICY, "arm": arm, "state_index": state_index,
+              "extraction_policy": policy, "arm": arm, "state_index": state_index,
               "columns": columns, "counts": counts, "epsilon": budget.epsilon, **metadata}
     if best_lower:
         result["lower_certificate"] = best_lower

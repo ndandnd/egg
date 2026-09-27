@@ -17,16 +17,22 @@ from egglab import native_pathflow_hull as compact
 from experiments import native_hull_qualification as indexed
 from experiments import native_recharge_qualification as nq
 
-PROTOCOL = "native-pathflow-hull-qualification-20260927-v2-energy-band"
+PROTOCOL = "native-pathflow-hull-qualification-20260927-v3-orphan-projection"
 ROOT = Path(__file__).resolve().parents[2]
+ATTEMPT = ROOT / "result/native_pathflow_hull/20260927-attempt2"
 SOURCES = tuple(dict.fromkeys(indexed.SOURCES + (
-    "src/egglab/native_pathflow.py", "src/egglab/native_pathflow_hull.py",
+    "src/egglab/native_hull.py", "src/egglab/native_pathflow.py",
+    "src/egglab/native_pathflow_hull.py",
     "src/experiments/native_pathflow_hull_qualification.py",
+    "src/tests/test_native_pathflow_hull_policy.py",
     "src/tests/test_native_pathflow_hull.py",
     "src/tests/test_native_pathflow_energy_band.py",
     "doc/NATIVE_PATHFLOW_ENERGY_BAND_DESIGN_20260927.md",
     "doc/NATIVE_PATHFLOW_HULL_QUALIFICATION_PROTOCOL_20260927.md",
-    "doc/NATIVE_PATHFLOW_HULL_INTEGRATION_DESIGN_20260927.md")))
+    "doc/NATIVE_PATHFLOW_HULL_V3_QUALIFICATION_PROTOCOL_20260927.md",
+    "doc/NATIVE_PATHFLOW_HULL_INTEGRATION_DESIGN_20260927.md",
+    "doc/NATIVE_PATHFLOW_HULL_V3_POLICY_INTEGRATION_20260927.md",
+    "doc/NATIVE_PATHFLOW_HULL_V3_IMPLEMENTATION_REVIEW_20260927.md")))
 WORKER_SECONDS = indexed.WORKER_SECONDS
 OUTER_SECONDS = indexed.OUTER_SECONDS
 TARGET_TOL = indexed.TARGET_TOL
@@ -44,7 +50,7 @@ def source_hashes():
 def manifest(cell, budget):
     return {**cell, "case":asdict(cell["case"]), "market":asdict(cell["market"]),
         "physical_identity":cell["case"].identity(), "market_identity":cell["market"].identity(),
-        "pricing_oracle":compact.ORACLE_ID,
+        "pricing_oracle":compact.ORACLE_ID, "extraction_policy":compact.EXTRACTION_POLICY,
         "state_identity":compact.state_identity(cell["case"],cell["market"],cell["arm"],cell["state_index"],budget)}
 
 
@@ -59,7 +65,8 @@ def worker(cell_id, directory, budget, frozen):
     start = time.perf_counter()
     try:
         if (source_hashes() != frozen["source_hashes"] or frozen.get("protocol") != PROTOCOL
-                or frozen.get("pricing_oracle") != compact.ORACLE_ID):
+                or frozen.get("pricing_oracle") != compact.ORACLE_ID
+                or frozen.get("extraction_policy") != compact.EXTRACTION_POLICY):
             raise ValueError("Hull source changed after source freeze")
         previous = expected = None
         if cell["predecessor"]:
@@ -73,6 +80,10 @@ def worker(cell_id, directory, budget, frozen):
             expected = next(c["state_identity"] for c in frozen["controls"] if c["id"] == cell["predecessor"])
         result = compact.certify(cell["case"], cell["market"], budget, arm=cell["arm"], state_index=cell["state_index"],
                             previous=previous, expected_previous=expected, record=record)
+        if (result.get("extraction_policy") != compact.EXTRACTION_POLICY
+                or any(column.get("extraction_policy") != compact.EXTRACTION_POLICY
+                       for column in result.get("columns", []))):
+            raise ValueError("Compact hull result/column extraction policy mismatch")
         assessment = assess(cell, result)
         nq._json(folder/"result.json", {"result": result, "assessment": assessment,
                 "elapsed_s": time.perf_counter()-start, "environment": nq.environment()})
@@ -95,7 +106,9 @@ def controller(output, freeze_label, backend="CBC"):
     for c in cells:
         nh.nr.validate_case(c["case"])
         nh.validate_market(c["case"], c["market"])
-    frozen = {"protocol": PROTOCOL, "pricing_oracle": compact.ORACLE_ID, "source_hashes": hashes, "freeze_label": freeze_label,
+    frozen = {"protocol": PROTOCOL, "pricing_oracle": compact.ORACLE_ID,
+              "extraction_policy": compact.EXTRACTION_POLICY,
+              "source_hashes": hashes, "freeze_label": freeze_label,
               "budget": asdict(budget), "environment": nq.environment(), "worker_seconds": WORKER_SECONDS,
               "outer_seconds": OUTER_SECONDS, "controls": [manifest(c, budget) for c in cells]}
     nq._json(out/"frozen.json", frozen)
@@ -192,6 +205,8 @@ def main(argv=None):
     if args.worker:
         frozen = json.loads(Path(args.frozen).read_text())
         return worker(args.worker, args.output, nh.Budget(**frozen["budget"]), frozen)
+    if Path(args.output).resolve() != ATTEMPT.resolve():
+        parser.error("Only the exclusive prospective attempt2 path is admitted")
     if not args.freeze_label:
         parser.error("--freeze-label is required before optimizer execution")
     return controller(args.output, args.freeze_label, args.backend) if args.controller else supervise(args.output, args.freeze_label, args.backend)

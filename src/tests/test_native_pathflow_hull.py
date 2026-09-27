@@ -34,9 +34,10 @@ def fakes(monkeypatch):
     def compact_price(case,prices,budget,record=None):
         calls.append((case.identity(),list(prices)))
         r=price(case,prices,budget,record)
-        # Match qualified V1 compact contract: plan identifies formulation;
-        # the top-level result need not carry it until the adapter tags dispatch.
+        # Synthetic V3 result/plan carry the compact extraction policy.
         r['plan']['formulation']=compact.ORACLE_ID
+        r['plan']['extraction_policy']=compact.EXTRACTION_POLICY
+        r['extraction_policy']=compact.EXTRACTION_POLICY
         return r
     monkeypatch.setattr(compact.pathflow,'solve_pricing',compact_price)
     monkeypatch.setattr(nh.nr,'solve_pricing',lambda *a,**k:pytest.fail('indexed oracle was invoked'))
@@ -47,9 +48,10 @@ def test_eight_definitions_and_original_budgets_are_preserved():
     assert cq.controls()==indexed.controls()
     cell=cq.controls()[0];budget=nh.Budget()
     a,b=indexed.manifest(cell,budget),cq.manifest(cell,budget)
-    assert {k:v for k,v in a.items() if k!='state_identity'}=={k:v for k,v in b.items() if k not in ('state_identity','pricing_oracle')}
+    assert {k:v for k,v in a.items() if k!='state_identity'}=={k:v for k,v in b.items() if k not in ('state_identity','pricing_oracle','extraction_policy')}
     assert a['state_identity']!=b['state_identity']
     assert b['pricing_oracle']==compact.ORACLE_ID
+    assert b['extraction_policy']==compact.EXTRACTION_POLICY
     assert 'src/egglab/native_pathflow.py' in cq.SOURCES
     assert set(indexed.SOURCES).issubset(cq.SOURCES)
     assert cq.WORKER_SECONDS==75 and cq.OUTER_SECONDS==650
@@ -149,9 +151,11 @@ def test_worker_owns_compact_identity_and_dispatch(tmp_path,monkeypatch):
     monkeypatch.setattr(cq.nq,'environment',lambda:{'runtime':'fake'})
     monkeypatch.setattr(cq,'assess',lambda *a:{'pass':True})
     monkeypatch.setattr(nh,'certify',lambda *a,**k:pytest.fail('unwrapped coordinator reached'))
-    def certify(*args,**kwargs):seen.append(kwargs);return {'status':'certified','pricing_oracle':compact.ORACLE_ID}
+    def certify(*args,**kwargs):seen.append(kwargs);return {'status':'certified','pricing_oracle':compact.ORACLE_ID,
+        'extraction_policy':compact.EXTRACTION_POLICY,'columns':[]}
     monkeypatch.setattr(compact,'certify',certify)
-    frozen={'source_hashes':{'pure':'fixed'},'protocol':cq.PROTOCOL,'pricing_oracle':compact.ORACLE_ID}
+    frozen={'source_hashes':{'pure':'fixed'},'protocol':cq.PROTOCOL,'pricing_oracle':compact.ORACLE_ID,
+        'extraction_policy':compact.EXTRACTION_POLICY}
     assert cq.worker(c['id'],tmp_path,nh.Budget(),frozen)==0
     assert seen and json.loads((tmp_path/'result.json').read_text())['result']['pricing_oracle']==compact.ORACLE_ID
 
