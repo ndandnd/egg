@@ -1,9 +1,13 @@
 # Compact-oracle native hull qualification protocol
 
 27 September 2026. Prospective protocol
-`native-pathflow-hull-qualification-20260927-v1`, shared result schema
-`egg-native-hull-v2`, explicit pricing identity `egg-native-pathflow-v1`.
-**No compact-hull optimizer execution has occurred at protocol preparation.**
+`native-pathflow-hull-qualification-20260927-v2-energy-band`, shared result schema
+`egg-native-hull-v2`, explicit pricing identity `egg-native-pathflow-v2-energy-band`.
+**No V2 energy-band compact-hull optimizer execution has occurred at protocol preparation.**
+The first compact-hull attempt remains preserved at `72a1f715e9e6714746f9c0638c50d2cba6bfcfdb`,
+with its original oracle identity and outcomes. This V2 gate uses the same eight
+scientific definitions and budgets under a new oracle/version identity and
+requires the separate V2 twenty-control physical qualification first.
 The indexed V2 eight-cell attempt remains frozen at `186c987`. Its saved source,
 results and independent audit are separate evidence. The compact native physical
 oracle passed its separate twenty-control gate; this does not automatically
@@ -11,8 +15,14 @@ qualify integration with the hull coordinator.
 
 ## Scope and fixed mathematical contract
 
-This gate changes only which complete-fleet pricing implementation the hull
-coordinator explicitly calls. The compact integer path-flow model represents
+This gate requalifies the same explicit compact-oracle integration after adding
+two valid aggregate-energy inequalities to the compact physical model. The
+shared hull coordinator, master/polishing algorithm and objective are unchanged.
+The exact band covers intended physical energy conservation and exact
+binary-stored V1 integer row points, with both rounding ledgers recorded; see
+`NATIVE_PATHFLOW_ENERGY_BAND_DESIGN_20260927.md`. No native tolerance is changed.
+This does not assert identical fractional relaxations or numerical execution.
+The compact integer path-flow model represents
 the same complete physical set and cost/load projection as the qualified indexed
 model, under the homogeneous fleet, positive-duration service DAG, declared
 directed movement modes, native terminal replenishment and one finite connector
@@ -46,7 +56,7 @@ An opt-in call requires a callable plus a nonempty identity. The new
 fixed formulation identity without mutating any module global or copying the
 certificate coordinator.
 
-The qualified compact V1 driver identifies its raw-variable snapshots and
+The compact driver identifies its raw-variable snapshots and
 decoded plans but does not tag top-level results. The adapter rejects a
 contradictory top-level tag, checks the existing plan tag for an admitted status,
 then adds the explicit dispatch identity to its return. Before every admission,
@@ -112,11 +122,12 @@ Before any worker solve, save all eight inputs, exact analytical targets,
 identities, predecessor links, budgets, environment and source hashes. Hash the
 hook-bearing hull module, compact physical model, compact adapter, both runners,
 native physics/replay and fixture helpers, original/new tests, original/new
-protocols and design documents as enumerated in `SOURCES`. Workers verify those
+protocols and energy-band/integration design documents as enumerated in `SOURCES`. Workers verify those
 hashes and the protocol/oracle identity. A commit label alone is insufficient;
 the principal researcher must publish the full reviewed execution state first.
 
-Retain the unchanged nested compact raw-variable mappings, backend/runtime
+Retain the compact raw-variable mappings and additional aggregate-energy
+row/rounding ledger, backend/runtime
 identities, phase starts/statuses, dimensions, bound/objective data, complete
 decoded plans, replay and normalization evidence. Retain immutable master column
 orders/tangents/raw weights, exact simplex corrections and mixture arithmetic,
@@ -138,7 +149,7 @@ hook, adapter, runner and protocol before a new source freeze and one attempt.
 After that freeze, the principal researcher may execute:
 
 ```sh
-PYTHONPATH=src ../.research-venv-repaired-1176/bin/python -m experiments.native_pathflow_hull_qualification --output result/native_pathflow_hull/20260927-attempt1 --freeze-label COMMIT_ID --backend CBC
+PYTHONPATH=src ../.research-venv-repaired-1176/bin/python -m experiments.native_pathflow_hull_qualification --output result/native_pathflow_hull/20260927-attempt2 --freeze-label COMMIT_ID --backend CBC
 ```
 
 Use the actual published full commit in place of `COMMIT_ID`. Independently audit

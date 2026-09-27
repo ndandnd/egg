@@ -6,12 +6,14 @@ No optimizer import on module import; physical schema/replay are unchanged.
 from __future__ import annotations
 
 from collections import defaultdict
+from fractions import Fraction
 import math
 import time
 
 from egglab import native_recharge as nr
 
-FORMULATION = 'egg-native-pathflow-v1'
+FORMULATION = 'egg-native-pathflow-v2-energy-band'
+ENERGY_BALANCE_POLICY = 'stored-row-and-physical-conservation-band-v1'
 Budget = nr.Budget
 BOUND_GUARD = nr.BOUND_GUARD
 _check_prices = nr._check_prices
@@ -22,6 +24,83 @@ _optimize_once = nr._optimize_once
 replay_native = nr.replay_native
 true_cost = nr.true_cost
 admit_bound = nr.admit_bound
+
+
+def energy_balance_spec(case):
+    """Outward band valid for physical conservation AND the stored V1 matrix.
+
+    All arithmetic in the proof ledger is exact on stored floats. This is not
+    an additional feasibility tolerance or a claim of exact native solves.
+    """
+    nr.validate_case(case)
+    Q = Fraction
+    B = Q(case.battery_kwh)
+    service = sum((Q(t.energy_kwh) for t in case.trips), Q(0))
+    service_float = sum(t.energy_kwh for t in case.trips)
+    if not math.isfinite(service_float):
+        raise ValueError('Nonfinite aggregate service coefficient')
+    modes, physical_lo, physical_hi, row_lo, row_hi = [], [], [], [], []
+    for index, mode in enumerate(case.movements):
+        energy = sum(leg.energy_kwh for leg in mode.legs)
+        big_m = case.battery_kwh+energy
+        if not math.isfinite(energy) or not math.isfinite(big_m):
+            raise ValueError('Nonfinite aggregate movement coefficient')
+        semantic = sum((Q(leg.energy_kwh) for leg in mode.legs), Q(0))
+        if mode.kind == 'pullout':
+            constant = -(case.battery_kwh-energy)
+            ideal_constant = -B+Q(energy)
+        elif mode.kind == 'pullin':
+            constant = -energy-case.battery_kwh
+            ideal_constant = -B-Q(energy)
+        else:
+            constant = energy
+            ideal_constant = Q(energy)
+        # In Python-MIP the normalized big-M row constants are fl(C +/- M).
+        # At y=1 these two inequalities bound phi+C, not necessarily zero.
+        plus, minus = constant+big_m, constant-big_m
+        if not all(math.isfinite(v) for v in (constant, plus, minus)):
+            raise ValueError('Nonfinite stored SOC row constant')
+        defect = Q(constant)-ideal_constant
+        lower = Q(constant)+Q(big_m)-Q(plus)-defect
+        upper = Q(constant)-Q(big_m)-Q(minus)-defect
+        signed_lower, signed_upper = (-upper, -lower) if mode.kind == 'pullin' else (lower, upper)
+        difference = semantic-Q(energy)
+        physical_lo.append(min(Q(0), difference)); physical_hi.append(max(Q(0), difference))
+        row_lo.append(min(Q(0), signed_lower)); row_hi.append(max(Q(0), signed_upper))
+        modes.append({'index':index,'id':mode.id,'kind':mode.kind,'energy_float':energy,
+            'semantic_energy_exact':str(semantic),'energy_aggregation_defect_exact':str(difference),
+            'big_m_float':big_m,'residual_constant_float':constant,
+            'normalized_plus_constant_float':plus,'normalized_minus_constant_float':minus,
+            'residual_constant_defect_exact':str(defect),
+            'selected_intended_residual_lower_exact':str(lower),
+            'selected_intended_residual_upper_exact':str(upper),
+            'signed_contribution_lower_exact':str(signed_lower),
+            'signed_contribution_upper_exact':str(signed_upper)})
+    selected_cap = 2*len(case.trips)
+    physical_lower = service+sum(sorted(physical_lo)[:selected_cap], Q(0))
+    physical_upper = service+sum(sorted(physical_hi, reverse=True)[:selected_cap], Q(0))
+    stored_lower = service-sum(sorted(row_hi, reverse=True)[:selected_cap], Q(0))
+    stored_upper = service-sum(sorted(row_lo)[:selected_cap], Q(0))
+    lower, upper = min(physical_lower, stored_lower), max(physical_upper, stored_upper)
+    def outward(value, direction):
+        result = float(value)
+        if not math.isfinite(result):
+            raise ValueError('Nonfinite aggregate energy endpoint')
+        if (direction < 0 and Q(result) > value) or (direction > 0 and Q(result) < value):
+            result = math.nextafter(result, -math.inf if direction < 0 else math.inf)
+        if not math.isfinite(result):
+            raise ValueError('Nonfinite outward aggregate energy endpoint')
+        return result
+    return {'policy':ENERGY_BALANCE_POLICY,'charge_coefficient':case.efficiency,
+        'service_energy_exact':str(service),'service_energy_float':service_float,
+        'service_aggregation_defect_exact':str(service-Q(service_float)),
+        'selected_mode_cap':selected_cap,'modes':modes,
+        'physical_lower_exact':str(physical_lower),'physical_upper_exact':str(physical_upper),
+        'stored_matrix_lower_exact':str(stored_lower),'stored_matrix_upper_exact':str(stored_upper),
+        'union_lower_exact':str(lower),'union_upper_exact':str(upper),
+        'lower_rhs':outward(lower,-1),'upper_rhs':outward(upper,1),
+        'additional_constraints':2,
+        'interpretation':'Union of intended per-leg conservation and exact binary-stored integer matrix bands; native tolerances unchanged'}
 
 
 def recover_paths(case, selected_ids):
@@ -69,6 +148,7 @@ def recover_paths(case, selected_ids):
 def build_feasible_model(case, backend='CBC'):
     """One selected incoming/outgoing movement per service, unlabelled paths."""
     compiled = nr.compile_case(case)
+    balance = energy_balance_spec(case)
     if backend not in ('CBC','GRB'):
         raise ValueError('Explicit CBC/GRB backend required')
     import mip
@@ -92,7 +172,10 @@ def build_feasible_model(case, backend='CBC'):
     for i,t in enumerate(case.trips):
         model += mip.xsum(incoming[t.id]) == 1
         model += mip.xsum(outgoing[t.id]) == 1
-        model += sa[i] == sb[i]-t.energy_kwh
+        service_row = sa[i] == sb[i]-t.energy_kwh
+        if service_row.const != t.energy_kwh:
+            raise ValueError('Native service row assembly differs from proved energy band')
+        model += service_row
     charge, by_mode, by_period = {}, defaultdict(list), defaultdict(list)
     for k,interval in enumerate(compiled['intervals']):
         cap = interval['rate_kw']*interval['hours']
@@ -124,8 +207,32 @@ def build_feasible_model(case, backend='CBC'):
             arrival = sa[tripidx[m.before]]-energy
             model += arrival >= r-M*(1-selected)
             residual = arrival+eta*q-B
-        model += residual <= M*(1-selected)
-        model += residual >= -M*(1-selected)
+        # Python-MIP may return the original Var from Var-0. Normalize its
+        # representation without changing any coefficient or constant.
+        residual = mip.xsum([residual])
+        if residual.const != balance['modes'][j]['residual_constant_float']:
+            raise ValueError('Native expression assembly differs from proved energy band')
+        upper_row = residual <= M*(1-selected)
+        lower_row = residual >= -M*(1-selected)
+        if (upper_row.const != balance['modes'][j]['normalized_minus_constant_float']
+                or lower_row.const != balance['modes'][j]['normalized_plus_constant_float']):
+            raise ValueError('Native big-M row normalization differs from proved energy band')
+        model += upper_row
+        model += lower_row
+    aggregate = eta*mip.xsum(charge.values())-mip.xsum(
+        entry['energy_float']*x[j] for j,entry in enumerate(balance['modes']))
+    actual_coefficients = {v.idx:a for v,a in aggregate.expr.items() if a != 0}
+    expected_coefficients = {v.idx:eta for v in charge.values()}
+    expected_coefficients.update({x[j].idx:-entry['energy_float'] for j,entry in enumerate(balance['modes']) if entry['energy_float'] != 0})
+    if aggregate.const != 0 or actual_coefficients != expected_coefficients:
+        raise ValueError('Native aggregate coefficients differ from proved energy band')
+    balance_rows = [model.num_rows, model.num_rows+1]
+    lower_energy_row = aggregate >= balance['lower_rhs']
+    upper_energy_row = aggregate <= balance['upper_rhs']
+    if lower_energy_row.const != -balance['lower_rhs'] or upper_energy_row.const != -balance['upper_rhs']:
+        raise ValueError('Native aggregate endpoints differ from proved energy band')
+    model += lower_energy_row
+    model += upper_energy_row
     loads = [model.add_var(lb=0) for _ in range(len(case.market_edges_min)-1)]
     for t,L in enumerate(loads):
         model += L == mip.xsum(by_period[t])
@@ -134,6 +241,8 @@ def build_feasible_model(case, backend='CBC'):
     return {'model':model,'compiled':compiled,'x':x,'soc_before':sb,'soc_after':sa,
             'charge':charge,'loads':loads,'ops':ops,'physical_identity':case.identity(),
             'backend':backend,'backend_runtime':runtime,'formulation':FORMULATION,
+            'energy_balance':balance,
+            'energy_balance_row_indices':balance_rows,
             'constraint_count_before_objective':model.num_rows}
 
 
@@ -143,6 +252,7 @@ def capture_incumbent(case,built):
                 'repr':repr(value)}
     return {'case_identity':case.identity(),'formulation':FORMULATION,
         'extraction_policy':nr.EXTRACTION_POLICY,
+        'energy_balance':{**built['energy_balance'], 'constraint_indices':built['energy_balance_row_indices']},
         'variables':[{'index':v.idx,'name':v.name,'type':v.var_type,
             'lower':number(v.lb),'upper':number(v.ub),'solution':number(v.x)} for v in built['model'].vars],
         'mapping':{'trip_ids':[t.id for t in case.trips],

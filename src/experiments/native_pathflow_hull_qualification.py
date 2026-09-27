@@ -17,12 +17,14 @@ from egglab import native_pathflow_hull as compact
 from experiments import native_hull_qualification as indexed
 from experiments import native_recharge_qualification as nq
 
-PROTOCOL = "native-pathflow-hull-qualification-20260927-v1"
+PROTOCOL = "native-pathflow-hull-qualification-20260927-v2-energy-band"
 ROOT = Path(__file__).resolve().parents[2]
 SOURCES = tuple(dict.fromkeys(indexed.SOURCES + (
     "src/egglab/native_pathflow.py", "src/egglab/native_pathflow_hull.py",
     "src/experiments/native_pathflow_hull_qualification.py",
     "src/tests/test_native_pathflow_hull.py",
+    "src/tests/test_native_pathflow_energy_band.py",
+    "doc/NATIVE_PATHFLOW_ENERGY_BAND_DESIGN_20260927.md",
     "doc/NATIVE_PATHFLOW_HULL_QUALIFICATION_PROTOCOL_20260927.md",
     "doc/NATIVE_PATHFLOW_HULL_INTEGRATION_DESIGN_20260927.md")))
 WORKER_SECONDS = indexed.WORKER_SECONDS

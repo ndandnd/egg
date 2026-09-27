@@ -25,13 +25,15 @@ from egglab import native_pathflow as pf
 from experiments import native_recharge_qualification as original
 from experiments import native_halfminute_qualification as timing
 
-PROTOCOL = "native-pathflow-qualification-20260927-v1"
+PROTOCOL = "native-pathflow-qualification-20260927-v2-energy-band"
 ROOT = Path(__file__).resolve().parents[2]
 SOURCES = ("src/egglab/native_recharge.py", "src/egglab/native_pathflow.py",
     "src/experiments/native_recharge_qualification.py",
     "src/experiments/native_halfminute_qualification.py",
     "src/experiments/native_pathflow_qualification.py", "src/tests/test_native_pathflow.py",
     "doc/NATIVE_PATHFLOW_QUALIFICATION_PROTOCOL_20260927.md",
+    "src/tests/test_native_pathflow_energy_band.py",
+    "doc/NATIVE_PATHFLOW_ENERGY_BAND_DESIGN_20260927.md",
     "doc/NATIVE_PATHFLOW_EQUIVALENCE_REVIEW_20260927.md")
 TARGET_TOL = original.TARGET_TOL
 _json = original._json
@@ -150,7 +152,7 @@ def qualify(output, freeze_label, backend="CBC"):
     cells = controls()
     for cell in cells:
         nr.validate_case(cell["case"])
-    frozen = {"protocol": PROTOCOL, "freeze_label": freeze_label, "source_hashes": hashes,
+    frozen = {"protocol": PROTOCOL, "formulation": pf.FORMULATION, "freeze_label": freeze_label, "source_hashes": hashes,
               "budget": asdict(budget), "environment": environment(), "target_tolerance": TARGET_TOL,
               "controls": [{**c, "case": asdict(c["case"]), "case_identity": c["case"].identity()} for c in cells]}
     _json(out/"frozen.json", frozen)
