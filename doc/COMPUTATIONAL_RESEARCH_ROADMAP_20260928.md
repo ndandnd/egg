@@ -210,16 +210,22 @@ reserved independent test groups stay closed until a later frozen evaluation.
 
 ## Manuscript direction
 
-The six-page computational chapter now consolidates the three completed,
-reviewed campaigns into four tables, two vector figures and an evidence map.
-Source: `paper/latex/computational_results.tex`; standalone review PDF:
-`output/pdf/egg-computational-chapter-20260928.pdf`. Its numerical claims and all
-rendered pages have been checked. The expanded first draft still requires the
-exact theory, physical/economic model and related work to be integrated in
-LaTeX. The attempted six-case comparison stopped before optimization; it adds
+The complete19-page LaTeX research draft0.6 is now ready for author review:
+`output/pdf/egg-journal-v0.6-computational-draft.pdf`, built from
+`paper/latex/main.tex`. It integrates theory, model, related work, exact/public
+bounds and the reviewed computational chapter, with five figures and four
+tables. All rendered pages and bounded source claims have been reviewed.
+The archived depot-15 flat round0 is now recognized as a native numerical
+optimum near408.53, separately from the exact ideal flat enclosure. Exact
+nonlinear bounds give0<=D-CH<=88.41 but no strictly positive public gap.
+
+This first-draft milestone does not close the computational research questions.
+The attempted six-case comparison stopped before optimization; it contributes
 no algorithm evidence, and one replacement remains a pending user decision.
-Continue manuscript integration using the existing evidence while that decision
-is pending. Nearest-neighbor retrieval and learned proposals remain untested.
+Nearest-neighbor retrieval and learned proposals remain untested. The next
+bounded task is a reviewer-style contribution/evidence-gap assessment of this
+integrated draft, without repeating old numerical/proof qualification or starting
+another experiment while the recorded exception decision is pending.
 
 Retain the exact mechanism and replication results, but support the computational
 story with substantive multi-instance comparisons. Move reuse development and

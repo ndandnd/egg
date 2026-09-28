@@ -6,7 +6,49 @@ optimization first, then retrieval/learned proposals. The v0.5 draft is historic
 Use GPT-6 Sol for implementation/analysis and Luna Max for supporting work; root
 manages. Hourly `advance-egg-journal-research` remains ACTIVE, quiet when unchanged.
 
-## Latest checkpoint — computational chapter ready for review
+## Latest checkpoint — integrated research draft 0.6 complete
+
+- The complete LaTeX first draft is ready for author review: 19 pages, five
+  vector figures, four tables, twelve cited references and a149-word abstract.
+  PDF `output/pdf/egg-journal-v0.6-computational-draft.pdf`, SHA-256
+  `1689d2e24538eb4761bdfd05624f01c55239862cb93d10d2f692fc031e905962`.
+  `paper/latex/main.tex` now integrates model, theory, proofs, related work,
+  condensed public case and the unchanged reviewed computational chapter.
+  Historical v0.5 and the standalone six-page chapter remain untouched.
+- Sol wrote the theory/model/proofs and independently checked the flat-round-0
+  reconciliation; Luna checked the twelve primary literature records and the
+  assembled core's consistency. Root checked the math, final source hashes and
+  all19 rendered pages; final Tectonic/BibTeX compilation has no warnings.
+  Source maps, bounded reviews, QA and ARTIFACTS.json are under
+  `research-20260928/manuscript-integration/`. No solver suite was rerun.
+- The reviewer's flat-price observation is confirmed: archived attempt2 round0
+  has the identical physical case and a tangent objective that eliminates to
+  the flat linear objective. Native OPTIMAL value is approximately408.53.
+  A read-only compact metadata script and independent source-diff/design review
+  distinguish redundant energy rows and native tolerances from the ideal model.
+  Exact ideal flat enclosure remains[404.92,408.54]; no exact equality or
+  experimental reclassification. Exact nonlinear evidence gives
+  424.36<=CH<=D<=512.77 and0<=D-CH<=88.41, without a positive gap certificate.
+- This completes a readable first draft, not journal readiness. The public
+  evidence remains one Hildenbrand timetable/two depots; public global gaps
+  remain open and no equal-quality speedup, retrieval or learned result exists.
+  Qualification history/failed nonlinear headline moved out of the main story;
+  the useful original public witness visual and computational evidence map stay.
+- No active EGG jobs or cluster calls. Prior backup df1d562 passed
+  CI36479784860. Do not poll old584876/577225 or resubmit them. The one-replacement
+  decision below is still pending; do not infer approval or ask again.
+  No reserved/protected/private data, native optimization or new allocation.
+- Publication of the integrated artifact, source, source maps and reviews is
+  in progress; append one consolidated original Google Doc update and record
+  its verified receipt before ending this package. PR56 stays draft/unmerged.
+- Next bounded package: an independent reviewer-style assessment of the
+  integrated draft's scientific contribution and the precise computational
+  evidence still needed for the intended journal scope. Do not repeat proof,
+  scalar-data or corruption audits. Use the existing pending comparison design
+  and decision; no new run or training is authorized by manuscript completion.
+  Flag any major change of scientific direction, not routine editorial fixes.
+
+## Prior checkpoint — computational chapter ready for review
 
 - The six-page LaTeX computational chapter is complete and independently checked:
   `output/pdf/egg-computational-chapter-20260928.pdf`, SHA-256

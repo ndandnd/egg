@@ -1,6 +1,15 @@
 # EGG working manuscript
 
-`manuscript.md` is the editable research draft 0.5: 27 pages, eight figures and
+The current integrated research draft is **0.6**, built from `latex/main.tex`:
+[19-page computational draft](../output/pdf/egg-journal-v0.6-computational-draft.pdf).
+It includes five figures, four tables and the reviewed theory/computational
+material. See `../research-20260928/manuscript-integration/` for source maps,
+reviews and artifact pins. It is ready for author review; broader computational
+validation remains needed before journal submission.
+
+## Historical Markdown draft
+
+`manuscript.md` preserves research draft 0.5: 27 pages, eight figures and
 five tables in the independently reviewed PDF. Its SHA-256 is
 `a97a7f9267d9aa69fdd5d9975bf5282eda47f0aaa10760d270ef86c509f3c88e`.
 The reviewed PDF is `../output/pdf/egg-journal-working-draft-v05-reviewed.pdf`
