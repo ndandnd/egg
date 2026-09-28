@@ -15,7 +15,7 @@ this is not a test of complete iterative speedup or independent scalability.
 The [source inventory](../pricing-start/SOURCE_INVENTORY.json) pins four initial
 qp-cache fleet pools from the previous comparison. A read-only Unicorn check
 matched all eight recorded raw-result and receipt hashes. The selected plans
-and query prices will be frozen in the exclusive execution checkout before
+and query prices were frozen in the exclusive execution checkout before
 submission. The pilot consumes physical plans, not historical pricing bounds.
 
 The execution ceiling is one serial Slurm job requesting one CPU, 8 GB and one
@@ -26,5 +26,25 @@ Controller and outer caps are 2,700 and 3,000 seconds.
 The [runner](../../src/experiments/pricing_start_pilot.py) and bounded Slurm wrapper
 are implemented. Ten focused pure tests, shell syntax and compile checks pass;
 all four actual source pools passed non-optimizing physical admission. Independent
-launch review and published CI precede the prospective freeze and submission.
-No job has been submitted and no pilot outcomes have been inspected.
+launch review found no blocking issue, and source `6759daa4eaeb92152607a3d60840d52988093973`
+passed [full CI](https://github.com/ndandnd/egg/actions/runs/36443216684).
+
+Job **577225** was submitted once at 15:28 UTC. The single launch observation
+was `PENDING (Priority)`, requesting 1 CPU/8 GB/1 hour. All four source pools
+were eligible and all eight selected queries were frozen before submission.
+No pilot outcomes have been inspected.
+
+Receipts: [freeze](FREEZE_RECEIPT.json), [CI](CI_RECEIPT.md),
+[submission](../cluster/pricing-start-pilot-577225.json),
+[preparation and preserved helper failure](PREPARATION_NOTES.md), and
+[independent review](../agent-notes/pricing-start-runner-review/REVIEW.md).
+The original Google Doc launch update was appended once and verified after
+reload; [persistence receipt](../agent-notes/google-doc-pricing-start-pilot/RECEIPT.md).
+The README has subsequently gained launch status; the review records its
+prospective version. Execution code and protocol pins are unchanged.
+
+Next: one scoped queue observation for job 577225 at the next heartbeat.
+After it vanishes, use scoped accounting and wrapper/supervisor receipts to
+confirm termination and a stable seal before collecting and independently
+reviewing all 16 declared calls. Do not resubmit, inspect active outcomes, or
+start a larger sweep based on partial results.

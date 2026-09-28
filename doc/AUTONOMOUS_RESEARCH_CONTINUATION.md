@@ -6,45 +6,54 @@ optimization first, then retrieval/learned proposals. The v0.5 draft is historic
 Use GPT-6 Sol for implementation/analysis and Luna Max for supporting work; root
 manages. Hourly `advance-egg-journal-research` remains ACTIVE, quiet when unchanged.
 
-## Latest checkpoint — pricing-start pilot runner and launch in progress
+## Latest checkpoint — pricing-start pilot submitted
 
-- At the 14:59 UTC heartbeat, prior receipt backup
-  e72779f105b07eee0d289f2f87ed678bf00bd8e0 passed full CI 36436107349.
-  No active EGG job remained; completed jobs were not polled or resubmitted.
-- Sol completed the runner, focused tests and Slurm wrapper under the existing
-  reviewed 16-call protocol: ten pure tests, shell syntax and compile checks pass.
-  All four actual source pools passed physical-only admission without a solve.
-  Luna's independent static review found no blocking issue; root matched all
-  seven reviewed file pins and the review receipt hash. Review:
-  `research-20260928/agent-notes/pricing-start-runner-review/REVIEW.md`.
-  Root manages isolated checkout, input freeze, GitHub/CI, single submission
-  and Google Doc update. No core or protocol redesign is planned.
-- Remote source availability check matched all eight raw/receipt inventory
-  hashes. Receipt: `research-20260928/pricing-start/REMOTE_PREFLIGHT.json`.
-  Only physical source plans are consumed; no new historical cache-bound audit
-  is needed. Source remains the four state-0 qp-cache pools from f4b342d.
-- Isolated checkout prepared at
-  `/home/nc437/egg-pricing-start-pilot-20260928`, initially e72779f. The old
-  comparison checkout remains at f4b342d. Existing runtime: GRB 12.0.3,
-  Python 3.12.13, MIP 1.17.6, NumPy 1.26.4, SciPy 1.13.1. No optimization
-  was run during preparation. Runtime receipt:
-  `research-20260928/pricing-start-pilot/RUNTIME_PREFLIGHT.json`.
-- Exact selected plans/prices, source/input hashes and observed runtime controls will
-  be frozen on Unicorn login BEFORE sbatch; the wrapper must validate and
-  consume the preexisting frozen attempt. Freeze records preparation time;
-  host/platform metadata is separate from control-relevant runtime matching.
-  The actual model seed and native library identity are observed without a solve.
-  Root records full freeze-command wall time separately from internal preparation.
-  Exclusive attempt: `result/pricing_start_pilot/20260928-attempt1`.
-- No job has been submitted. Do not submit until focused validation, independent
-  review, published source CI and prospective input freeze pass. The prepared
-  root submission helper `/private/tmp/egg-submit-pricing-start-pilot.py` writes
-  an exclusive intent before sbatch, saves the receipt, and makes one scoped
-  queue observation. Never rerun it after an uncertain submission.
-- Resource ceiling is unchanged: one serial job requesting 1 CPU/8 GB/1 hour,
-  all native/numerical threads one, no retry/requeue, exclude scaglione-compute-01.
-  After submission, record the actual job/source/freeze receipts and append a
-  consolidated Doc update. The next package will collect/review sealed results.
+- At the 14:59 UTC heartbeat, prior receipt backup e72779f passed CI 36436107349.
+  Sol implemented the fixed-price runner; Luna's independent static review found
+  no blocking issue. Root matched the seven reviewed pins. Ten pure tests,
+  shell syntax and compile checks passed. No extra optimizer qualification ran.
+- Execution source **6759daa4eaeb92152607a3d60840d52988093973** is pushed and
+  passed full CI **36443216684** (test job 4m21s). Draft PR 56 stays unmerged.
+  `research-20260928/pricing-start-pilot/` contains the current launch receipts.
+- **Active job 577225**, submitted once 28 September at 15:28 UTC. One launch
+  queue observation: `PENDING (Priority)`, 1 CPU/8 GB requested, 1-hour limit,
+  one native/numerical thread, no retry/requeue, exclude scaglione-compute-01.
+  Receipt: `research-20260928/cluster/pricing-start-pilot-577225.json`.
+- Execution checkout: `/home/nc437/egg-pricing-start-pilot-20260928` at 6759daa.
+  Attempt: `result/pricing_start_pilot/20260928-attempt1`.
+  Keep this checkout at its execution commit until collection. The old source
+  comparison checkout remains f4b342d; completed job 575215 was not polled.
+- Prospective frozen input SHA-256:
+  `3204f528d8ef25b75c76841a5d0ed8d86b914d3f30126f5aabf580fb7aab385a`.
+  All four pools eligible; eight selected fleet/price queries, 16 cold/start
+  calls. All marginal vectors differ from their linear query. Observed GRB
+  seed 0 and library hash, Python 3.12.13/MIP 1.17.6/GRB 12.0.3,
+  NumPy 1.26.4/SciPy 1.13.1. Source physical plans only; no historical bounds
+  consumed. Both arms share the known feasible-plan baseline.
+- Freeze command 1.956s including startup/write; internal preparation 1.652s
+  overlaps it. A first root helper failed Python parsing before any freeze,
+  native probe or submission; transport is preserved, complete wall unmeasured.
+  Corrected helper performed the sole input freeze. Details in PREPARATION_NOTES.md.
+  Controller/outer caps 2700/3000s; synthetic core/child 60/90s, public 180/210s.
+- No outcomes have been inspected. Next bounded package: one compact queue check
+  for 577225 via unicorn2 after loading `/etc/profile.d/slurm.sh`. If vanished,
+  inspect scoped sacct and the sibling `.slurm_wrapper_receipt.json`, attempt
+  `supervisor_receipt.json` and `MANIFEST.json`. Require quiescence/stable seal
+  before collection and independent review. Preserve all failures/paid time.
+  Compare quality and timing against the common feasible baseline; do not infer
+  start acceptance, global certification, full iterative speedup or ML benefit.
+  No resubmission, enlarged sweep, or partial-outcome adaptation.
+- Original Google Doc appended ONCE with “Fixed-price starting-point pilot
+  launched — 28 September 2026”. Luna verified Saved to Drive, final heading,
+  body and four links, then one normal reload with a unique body match.
+  Source `research-20260928/pricing-start-pilot/GOOGLE_DOC_UPDATE.md` SHA-256
+  `aa83e9258899b956d35e11e1a7c8364400e85da90ad1340560f5c1bb5bbcefaf`;
+  receipt `research-20260928/agent-notes/google-doc-pricing-start-pilot/RECEIPT.md`
+  SHA-256 `c0765ff0f1463f389f398cb797ca59a828b6275b462b76598fc0c9104e3d3bd8`.
+  Root matched both. No export or duplicate append. Draft PR 56 updated with
+  the actual launch and claim limits. The receipt backup containing this
+  checkpoint changes documentation/receipts only; check its CI once next
+  heartbeat, without changing the remote execution commit.
 
 ## Previous checkpoint — pricing-start core and prospective design complete
 

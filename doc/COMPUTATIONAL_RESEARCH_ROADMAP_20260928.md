@@ -172,8 +172,14 @@ checks and input inventory: `research-20260928/pricing-start/`.
 The runner now preserves all 16 declared calls, physically checks and freezes the
 selected source fleets/prices before submission, observes the actual native seed,
 and records source, setup, complete-call and solver costs separately. Ten focused
-pure tests pass; independent review and publication precede the single launch.
-No cluster pilot or main-hull integration has run; no speed claim is made.
+pure tests passed. Independent review found no blocking issue; source `6759daa`
+passed full CI 36443216684. All four pools passed the prospective freeze, and
+job **577225** was submitted once at 15:28 UTC (initially pending for priority),
+requesting 1 CPU/8 GB/1 hour without retry or requeue.
+The next package collects the sealed attempt and compares all 16 calls, keeping
+the common feasible baseline separate from native incumbents and admitted bounds.
+No outcomes have been inspected and no main-hull integration has run; no speed
+claim is made. Launch receipts: `research-20260928/pricing-start-pilot/`.
 [Python-MIP documents the initial-solution interface](https://python-mip.readthedocs.io/en/latest/classes.html).
 Broader independent public timetables and nearest-neighbor retrieval still
 precede learned proposals. Reserve grouped independent test networks before
