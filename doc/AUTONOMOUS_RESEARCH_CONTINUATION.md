@@ -33,9 +33,19 @@ manages. Hourly `advance-egg-journal-research` remains ACTIVE, quiet when unchan
   passed CI36472242725. Do not poll completed584876 or577225. The pending
   one-replacement question below remains unanswered; do not infer approval or
   ask it again. No protected/reserved/private data were opened.
-- Source, PDF and review are being backed up; the original Google Doc will receive
-  one consolidated chapter update with immutable links. Record the verified
-  append receipt and publication commit here before finishing this heartbeat.
+- Chapter source, PDF and reviews are backed up at
+  `70eb7173b1b4347d99e5475354ed3f77e825b8ec`. PR56 now describes the completed
+  chapter and remaining full-draft work and is confirmed OPEN/draft.
+- Original Google Doc chapter update appended once and verified Saved after
+  one normal reload: new heading last, unique body sentence1 of1, four links
+  rendered. Source `research-20260928/manuscript-computational/GOOGLE_DOC_UPDATE.md`,
+  SHA-256 `50ed9184f865074268e4f414e7cdaaaa2fe73ab9ecaf4f4ad678ccdebdf202e6`.
+  Receipt `research-20260928/agent-notes/google-doc-computational-chapter/RECEIPT.md`,
+  SHA-256 `2e5fcb78d207d016223a6f4bc9bffa8e003a0026395ff883a09ab3827d802b82`.
+  No active implementation/review/Doc workers remain; ignore stale pending agent.
+  Final source/receipt checkpoint backup CI can be checked once next heartbeat;
+  no new solver test run is needed. Resume the manuscript integration above,
+  without another queue poll or another request for the pending exception.
 
 ## Prior checkpoint — preflight failure repaired; replacement decision pending
 
