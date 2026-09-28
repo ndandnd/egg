@@ -6,7 +6,36 @@ optimization first, then retrieval/learned proposals. The v0.5 draft is historic
 Use GPT-6 Sol for implementation/analysis and Luna Max for supporting work; root
 manages. Hourly `advance-egg-journal-research` remains ACTIVE, quiet when unchanged.
 
-## Latest checkpoint — completed solver comparison results
+## Latest checkpoint — no-plan pricing repair, validation complete
+
+- At the 12:58 UTC heartbeat, no active EGG job or outstanding worker assignment
+  remained. Previous receipt backup 453783266d5bfff0fcb80f762540ca95d9e5acd7
+  passed full CI 36423716489. Completed job 575215 was not polled or rerun.
+- Sol repaired the compact wrapper and shared coordinator: both assumed an
+  explicit pricing result contained a plan. A distinct `pricing_unresolved`
+  event retains the full return and is accepted by the qualification reader.
+  Successful pricing-result/bound/cache admission remains strict. No cluster
+  submission or MIP-start implementation was made.
+- Final behavior: a correctly identified unresolved return with no
+  plan ends without a new certificate. Earlier verified lower and feasible
+  mixture are preserved as `stalled_bounded`; without both, status is
+  `unresolved`. The reason identifies the no-plan pricing return. Invalid
+  present witnesses and claimed success without a witness remain errors.
+- Package index: `research-20260928/no-plan-repair/README.md`.
+  Implementation note: `research-20260928/agent-notes/no-plan-repair/`.
+  Independent review: `research-20260928/agent-notes/no-plan-repair-review/`.
+  All 156 focused tests passed in 0.87s over seven test files, including first
+  and late unresolved calls, finite decoy lower, invalid present witnesses,
+  cache-only noncertification and admission of a bounded prefix with unresolved
+  tail. No local optimization was run. Luna's independent code/contract review
+  passed; root matched all six review pins. CI and publication receipts remain
+  pending; record them before closing this package.
+- The next separate package will assess a known-feasible-fleet physical-pricing
+  MIP start under a prospective protocol. No speed or optimality claim is added,
+  no failed comparison row is reclassified, and no additional experiment budget
+  is committed by this repair.
+
+## Previous checkpoint — completed solver comparison results
 
 - At the 11:58 UTC heartbeat, one scoped squeue check reported no current job
   575215. Scoped sacct records COMPLETED, exit 0:0, elapsed 48m15s, allocated

@@ -24,7 +24,7 @@ SOURCES = ("src/egglab/native_hull.py", "src/experiments/native_hull_qualificati
            "src/tests/test_native_hull.py", "doc/NATIVE_HULL_QUALIFICATION_PROTOCOL_20260927.md",
            "doc/NATIVE_HULL_CERTIFICATION_DESIGN_20260927.md",
            "src/egglab/native_recharge.py", "src/experiments/native_recharge_qualification.py")
-EVENTS = {"state_start", "pricing_request", "pricing_native", "pricing_result", "global_bound",
+EVENTS = {"state_start", "pricing_request", "pricing_native", "pricing_result", "pricing_unresolved", "global_bound",
           "master_start", "master_status", "master_incumbent", "master_replay", "column_added",
           "state_finish", "dependency_blocked", "pool_polish_check", "pool_polish_step", "master_progress",
           "pool_polish_start", "pool_polish_finish"}

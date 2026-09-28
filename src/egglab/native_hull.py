@@ -57,6 +57,10 @@ class ProposalFailed(RuntimeError):
     pass
 
 
+class PricingUnresolved(RuntimeError):
+    pass
+
+
 def rational(value):
     if isinstance(value, Q):
         return value
@@ -866,11 +870,22 @@ def certify(case, market, budget=Budget(), *, arm="cold", state_index=0,
         result = oracle(case, prices,
             nr.Budget(backend=budget.backend, threads=1, phase_seconds=budget.phase_seconds,
                       wall_seconds=remaining, max_rounds=1), record=oracle_record)
+        if (result.get("status") == "unresolved" and "plan" not in result
+                and result.get("case_identity") == case.identity()
+                and result.get("prices") == list(prices)
+                and (oracle_id is None or result.get("formulation") == oracle_id)
+                and (extraction_policy is None or result.get("extraction_policy") == policy)):
+            emit(record, {"event": "pricing_unresolved", "call": index, "result": result})
+            raise PricingUnresolved("pricing oracle unresolved without a plan")
         emit(record, {"event": "pricing_result", "call": index, "result": result})
-        if oracle_id is not None and (result.get("formulation") != oracle_id
-                or not isinstance(result.get("plan"), dict) or result["plan"].get("formulation") != oracle_id):
+        if oracle_id is not None and result.get("formulation") != oracle_id:
             raise ValueError("Explicit pricing oracle result/plan formulation mismatch")
-        if extraction_policy is not None and (result.get("extraction_policy") != policy
+        if extraction_policy is not None and result.get("extraction_policy") != policy:
+            raise ValueError("Explicit pricing oracle extraction policy mismatch")
+        if oracle_id is not None and (not isinstance(result.get("plan"), dict)
+                or result["plan"].get("formulation") != oracle_id):
+            raise ValueError("Explicit pricing oracle result/plan formulation mismatch")
+        if extraction_policy is not None and (not isinstance(result.get("plan"), dict)
                 or result["plan"].get("extraction_policy") != policy):
             raise ValueError("Explicit pricing oracle extraction policy mismatch")
         if (result.get("status") not in ("certified", "bounded") or result.get("case_identity") != case.identity()
@@ -949,6 +964,9 @@ def certify(case, market, budget=Budget(), *, arm="cold", state_index=0,
         status, reason = "stalled_bounded", str(exc)
     except ProposalFailed as exc:
         status, reason = "proposal_failed", str(exc)
+    except PricingUnresolved as exc:
+        status = "stalled_bounded" if best_lower and best_mixture else "unresolved"
+        reason = str(exc)
     result = {"schema": SCHEMA, "status": status, "reason": reason, "state_identity": identity,
               "physical_identity": case.identity(), "market_identity": market.identity(),
               "extraction_policy": policy, "arm": arm, "state_index": state_index,

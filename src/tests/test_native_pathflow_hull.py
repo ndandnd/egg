@@ -13,6 +13,7 @@ sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
 from egglab import native_hull as nh, native_pathflow_hull as compact
 from experiments import native_hull_qualification as indexed
 from experiments import native_pathflow_hull_qualification as cq
+from experiments import solver_baseline_comparison as comparison
 import test_native_hull as helper
 
 
@@ -174,3 +175,146 @@ def test_compact_controller_uses_own_workers_and_continues_failures(tmp_path,mon
     frozen=json.loads((tmp_path/'frozen.json').read_text())
     assert frozen['pricing_oracle']==compact.ORACLE_ID and frozen['protocol']==cq.PROTOCOL
     assert len(frozen['controls'])==8
+
+
+def no_plan(case, prices, record=None):
+    stats = {'status': 'NO_SOLUTION_FOUND', 'incumbent': None,
+             'lower_bound': 100.0, 'wall_s': 0.0}
+    if record:
+        record({'event': 'native_status', 'round': 0, 'stats': stats})
+    return {'case_identity': case.identity(), 'formulation': compact.ORACLE_ID,
+            'extraction_policy': compact.EXTRACTION_POLICY, 'prices': list(prices),
+            'stats': stats, 'status': 'unresolved'}
+
+
+def test_late_compact_no_plan_keeps_prior_bound_and_feasible_mixture(monkeypatch, tmp_path):
+    fakes(monkeypatch)
+    original = compact.pathflow.solve_pricing
+    calls = []
+    def pricing(case, prices, budget, record=None):
+        calls.append(1)
+        if len(calls) == 2:
+            return no_plan(case, prices, record)
+        return original(case, prices, budget, record)
+    monkeypatch.setattr(compact.pathflow, 'solve_pricing', pricing)
+    cell = cq.controls()[0]
+    events = []
+    result = compact.certify(cell['case'], cell['market'], record=events.append)
+    bounds = [event for event in events if event['event'] == 'global_bound']
+    assert len(calls) == result['counts']['pricing_requests'] == 2
+    assert len(bounds) == 1
+    assert result['status'] == 'stalled_bounded'
+    assert result['reason'] == 'pricing oracle unresolved without a plan'
+    assert result['lower_certificate'] == bounds[0]['certificate']
+    assert result['mixture'] and result['lower'] <= result['upper']
+    assert result['gap'] >= 0
+    assert len([event for event in events if event['event'] == 'pricing_result']) == 1
+    unresolved = [event for event in events if event['event'] == 'pricing_unresolved']
+    assert len(unresolved) == 1
+    assert unresolved[0]['result']['stats']['status'] == 'NO_SOLUTION_FOUND'
+    assert unresolved[0]['result']['stats']['lower_bound'] == 100.0
+    assert events[-1]['event'] == 'state_finish'
+    (tmp_path / 'events.jsonl').write_text(''.join(json.dumps(event) + '\n' for event in events))
+    admitted, _, issues = indexed.read_evidence(tmp_path)
+    assert admitted == events and not issues
+
+
+def test_first_compact_no_plan_finishes_unresolved_without_bounds(monkeypatch):
+    fakes(monkeypatch)
+    monkeypatch.setattr(compact.pathflow, 'solve_pricing',
+                        lambda case, prices, budget, record=None: no_plan(case, prices, record))
+    cell = cq.controls()[0]
+    events = []
+    result = compact.certify(cell['case'], cell['market'], record=events.append)
+    assert result['status'] == 'unresolved'
+    assert result['reason'] == 'pricing oracle unresolved without a plan'
+    assert result['counts']['pricing_requests'] == 1
+    assert result['columns'] == []
+    assert not any(key in result for key in ('lower_certificate', 'lower', 'mixture', 'upper', 'gap'))
+    assert [event['event'] for event in events if event['event'].startswith('pricing_')
+            and event['event'] != 'pricing_native'] == ['pricing_request', 'pricing_unresolved']
+    assert events[-1]['event'] == 'state_finish'
+
+
+def test_cached_bounded_prefix_admits_unresolved_tail_event(monkeypatch):
+    fakes(monkeypatch)
+    original = compact.pathflow.solve_pricing
+    calls = []
+    def pricing(case, prices, budget, record=None):
+        calls.append(1)
+        return (original(case, prices, budget, record) if len(calls) == 1
+                else no_plan(case, prices, record))
+    monkeypatch.setattr(compact.pathflow, 'solve_pricing', pricing)
+    cell = cq.controls()[0]
+    case, market = cell['case'], cell['market']
+    budget = nh.Budget(pricing_calls=2, wall_seconds=60)
+    events = []
+    result = compact.certify(case, market, budget, bound_cache_policy='physical_pricing',
+                             record=events.append)
+    assert result['status'] == 'stalled_bounded'
+    assert result['counts']['pricing_requests'] == 2
+    assert len(result['physical_pricing_evidence']) == 1
+    assert [event['event'] for event in events if event['event'] in
+            ('pricing_result', 'pricing_unresolved', 'global_bound')] == [
+                'pricing_result', 'global_bound', 'pricing_unresolved']
+    comparison._cache_event_check(case, market, result, events,
+                                  result['state_identity'], budget)
+
+
+def test_cached_compact_bound_cannot_certify_after_no_fresh_plan(monkeypatch):
+    fakes(monkeypatch)
+    cell = cq.controls()[0]
+    case, market = cell['case'], cell['market']
+    shifted = nh.Market('shifted', (0, 3.8, 0, .2), market.b)
+    budget = nh.Budget(pricing_calls=1, wall_seconds=60)
+    reuse = {'reuse_policy': 'feasible_pool', 'pricing_reserve_seconds': 10}
+    prior = compact.certify(case, market, budget, arm='retained',
+        bound_cache_policy='physical_pricing', **reuse)
+    assert prior['physical_pricing_evidence'] and prior['columns']
+    monkeypatch.setattr(compact.pathflow, 'solve_pricing',
+                        lambda case, prices, budget, record=None: no_plan(case, prices, record))
+    events = []
+    result = compact.certify(case, shifted, budget, arm='retained', state_index=1,
+        previous=prior, expected_previous=prior['state_identity'],
+        bound_cache_policy='physical_pricing', cached_from=prior,
+        expected_cached_state=prior['state_identity'], record=events.append, **reuse)
+    assert result['status'] == 'stalled_bounded'
+    assert result['reason'] == 'pricing oracle unresolved without a plan'
+    assert result['counts']['pricing_requests'] == 1
+    assert result['fresh_pricing_successes'] == 0
+    assert result['fresh_lower_certificate'] is None
+    assert result['physical_pricing_evidence'] == []
+    assert result['lower_certificate_origin']['kind'] == 'cached_physical_pricing'
+    assert result['lower_certificate'] and result['mixture']
+    assert not [event for event in events if event['event'] == 'global_bound']
+
+
+@pytest.mark.parametrize('status,plan,error', [
+    ('bounded', None, 'bounded result has no witness'),
+    ('certified', None, 'bounded result has no witness'),
+    ('unresolved', None, None),
+    ('unresolved', {}, 'formulation'),
+    ('unresolved', {'formulation': 'wrong', 'extraction_policy': compact.EXTRACTION_POLICY}, 'formulation'),
+    ('unresolved', {'formulation': compact.ORACLE_ID}, 'extraction policy'),
+])
+def test_compact_no_plan_admission_and_present_witness_validation(monkeypatch, status, plan, error):
+    cell = cq.controls()[0]
+    response = no_plan(cell['case'], list(cell['market'].a))
+    response['status'] = status
+    if plan is not None:
+        response['plan'] = plan
+    monkeypatch.setattr(compact.pathflow, 'solve_pricing', lambda *a, **k: response)
+    if error:
+        with pytest.raises(ValueError, match=error):
+            compact._pricing(cell['case'], list(cell['market'].a), nh.Budget())
+    else:
+        assert compact._pricing(cell['case'], list(cell['market'].a), nh.Budget()) == response
+
+
+def test_compact_present_null_plan_is_rejected_even_when_unresolved(monkeypatch):
+    cell = cq.controls()[0]
+    response = no_plan(cell['case'], list(cell['market'].a))
+    response['plan'] = None
+    monkeypatch.setattr(compact.pathflow, 'solve_pricing', lambda *a, **k: response)
+    with pytest.raises(ValueError, match='formulation'):
+        compact._pricing(cell['case'], list(cell['market'].a), nh.Budget())

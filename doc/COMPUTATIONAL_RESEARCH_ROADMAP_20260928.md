@@ -111,8 +111,9 @@ optimization. It changes no frozen status or timing. An explicit opt-in checked
 oracle-bound cache has now been implemented, with source lineage, target-market
 conjugate re-evaluation and a fresh-target-pricing certification gate. It is
 independently reviewed with 26 focused tests passing, and implementation
-8a54521 passed full CI 36396410119. It has no measured online performance
-result yet.
+8a54521 passed full CI 36396410119. The completed ordered comparison below
+now measures its online work and resulting bounds; no equal-quality speedup
+has been established.
 Different physical cases cannot automatically share these certificates. The
 core preserves measured source work and leaves unmeasured child/preparation
 costs explicit for the later experiment runner.
@@ -144,12 +145,17 @@ each failed trace. This identifies no-plan handling rather than an invalid
 completed physical witness; it does not reclassify those failed attempts.
 Physical pricing remains the principal measured runtime cost.
 
-The next bounded package is a source repair for the no-plan return path, with
-focused regression checks based on the observed return shape. Preserve prior
-verified evidence, keep unresolved outcomes explicit, reject genuinely invalid
-present witnesses, and retain the fresh-pricing certification rules. Do not
-rerun all 32 cells solely to change status handling or rewrite frozen outcomes.
-After that repair, assess a prospective physical-pricing MIP-start baseline
+The no-plan return path is now repaired in the compact wrapper and shared
+coordinator, with 156 focused tests passing. A distinct unresolved-call event
+preserves the full raw return without creating a column, admitted lower or cache
+record. Earlier verified lower and feasible mixture remain bounded but
+uncertified; without both, the state remains unresolved. Invalid present
+witnesses and claimed success without a witness remain rejected. The event
+reader accepts the new record while the cache-bound admission contract stays
+strict. Independent review and publication checks are recorded in
+`research-20260928/no-plan-repair/`. Historical outcomes remain unchanged.
+
+Next, assess a prospective physical-pricing MIP-start baseline
 using an already-known feasible fleet. Retained master columns need not provide
 such a native solver start. This is an untested candidate, not a speed claim;
 [Python-MIP documents an initial-solution interface](https://python-mip.readthedocs.io/en/latest/classes.html).
