@@ -51,6 +51,18 @@ manages. Hourly `advance-egg-journal-research` remains ACTIVE, quiet when unchan
 - Public `scientific_evidence.zip` contains 101 original scientific JSON files
   (263,156 bytes); its selection manifest records all included/omitted hashes.
   No raw logs/JSONL were published. The complete private archive remains available.
+- Results are published at 967f603; SVG export whitespace was corrected at aa7442b
+  without changing figure content or scientific data. Full CI 36381206518
+  completed SUCCESS after that correction. The final handoff/Doc-receipt backup
+  is documentation only; inspect any newer CI once at the next follow-up.
+- Google Doc updated ONCE with “First computational screen — findings and next
+  experiment (28 September 2026)”. Saved-to-Drive and exact prior-export prefix
+  preservation were verified by Luna and root (99,374 to 102,109 bytes).
+  After Markdown SHA 7c822028b4b860307924206f147037395f81032d975600b7f0516eb28b5bbee1.
+  Public receipt: `research-20260928/agent-notes/google-doc-screen-results/`;
+  full exports remain private in the outer `research-20260928/google-doc-screen-results/`.
+  Do not append this milestone again. PR56 description now reflects the completed
+  screen and remains draft/unmerged. Hourly follow-ups continue.
 
 ## Next bounded work package
 

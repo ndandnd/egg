@@ -154,3 +154,12 @@ final mixture update when an expensive pricing call returns a new plan.
 The curated public evidence ZIP contains 101 original scientific JSON files,
 including frozen inputs, witnesses and receipts, with a complete selection
 manifest. The full private archive also preserves the omitted logs and JSONL.
+
+The scientific milestone is backed up at 967f603. CI found trailing whitespace
+in Matplotlib SVG output; export normalization at aa7442b preserves all figure
+content, and the full branch whitespace check passes. Full CI 36381206518 then
+completed SUCCESS. The original Google Doc now contains one consolidated
+findings/next-experiment update, with prior content preserved byte-for-byte in
+the Markdown export and saved-to-Drive verified. The receipt is under
+`research-20260928/agent-notes/google-doc-screen-results/`; full Doc exports stay
+private. No new cluster job was launched during this analysis follow-up.
