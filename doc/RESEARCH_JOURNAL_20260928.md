@@ -272,3 +272,22 @@ Root verified the exact append-source hash. Full-export/prefix verification
 remains unavailable after the earlier browser export block; no export route
 was retried. The receipt records that limit. This completes the implementation
 package without a new cluster job or a performance claim.
+
+## Numerical restricted-master proposal — integration
+
+Added an opt-in master policy using the existing SLSQP proposal helper with
+fixed-denominator rounding. Its rational simplex and physical columns/mixture
+are replayed, and the exact restricted-pool residual is retained. It bypasses
+the native LP and repeated rational pairwise polish for that call; all default
+and frozen methods remain unchanged. The full-space bound and replayed upper
+still determine certification after fresh pricing, regardless of SciPy's
+termination flag. Valid non-success proposals can be useful candidates.
+
+Proposal failures retain previously verified evidence as `proposal_failed`;
+physical replay failures remain hard validation errors. Time/bit limits are
+budget stops and cannot silently trigger fallback. Component times, setup,
+replay and maximum rational bits are accounted. Whole-child deadlines remain
+necessary because an in-process SciPy call cannot be forcibly preempted. Final
+focused checks, independent review and CI are pending. No cluster experiment
+was launched. The next package is a new frozen ordered comparison on the four
+existing development cases, with two markets and four policy arms.

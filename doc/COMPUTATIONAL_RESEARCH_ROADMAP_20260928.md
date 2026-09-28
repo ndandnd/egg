@@ -117,11 +117,16 @@ Different physical cases cannot automatically share these certificates. The
 core preserves measured source work and leaves unmeasured child/preparation
 costs explicit for the later experiment runner.
 
-Then integrate the existing numerical restricted-QP proposal under physical
-mixture replay and global-bound checks to address projected rational-bit stops.
-Pricing remains expensive, and a useful master proposal does not prove a global
-optimum. Use focused tests and a new prospective comparison before counting any
-online benefit. Broader independent public timetables and retained/retrieved
+The numerical restricted-QP proposal is now integrated as a separate opt-in
+master policy under exact simplex/physical-mixture replay and global-bound
+checks. Fixed-denominator proposals replace repeated pairwise rational updates;
+proposal failures retain prior evidence, and fresh global pricing still decides
+certification. Final review/CI are pending. Pricing remains expensive, and the
+new policy has no measured online benefit yet. Next, freeze an ordered comparison
+of reserve-cold, retained feasible plans, numerical master with retained plans,
+and that method with cached physical bounds. Keep paid initial-state work,
+failures and incomplete results; this is an incremental comparison rather than
+a full factorial interaction study. Broader independent public timetables and retained/retrieved
 proposal comparisons follow these baseline corrections; reserve grouped test
 networks before training. Do not repeat broad qualification campaigns or
 reinterpret completed runs.

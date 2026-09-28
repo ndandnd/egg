@@ -6,7 +6,45 @@ optimization first, then retrieval/learned proposals. The v0.5 draft is historic
 Use GPT-6 Sol for implementation/analysis and Luna Max for supporting work; root
 manages. Hourly `advance-egg-journal-research` remains ACTIVE, quiet when unchanged.
 
-## Latest checkpoint — physical pricing-bound cache implementation
+## Latest checkpoint — numerical restricted-master integration
+
+- Previous documentation backup 2e15dec passed full CI 36396998189. No active
+  EGG jobs; do not poll/resubmit completed 569799/572392.
+- Added explicit `master_policy="numerical_qp_proposal"` to core and compact
+  wrapper, with `qp_denominator=1_000_000_000` and `qp_maxiter=500`. Controls
+  enter opt-in identity/events. The default native-LP path stays unchanged.
+- One SLSQP proposal replaces the native LP and pairwise rational polish for
+  each selected master call. Exact fixed-denominator simplex and physical
+  mixture replay produce an upper; exact restricted-pool residual is reported.
+  An open restricted residual may proceed to fresh physical pricing, which
+  remains required before global numerical certification. SLSQP success is
+  diagnostic only; valid non-success candidates can still be used.
+- Proposer/import/malformed-weight failures return `proposal_failed` with prior
+  verified bounds/mixture retained. Physical replay errors remain hard failures;
+  time/bit limits remain `budget_exhausted`. No hidden native fallback. A final
+  negative enclosure fails closed in either new opt-in policy.
+- Proposal/setup and replay work count inside the target deadline; solver
+  status, iteration diagnostics, rational-bit maximum and component time are
+  recorded. In-process SciPy is not forcibly preempted: the new runner must
+  preserve whole-child deadlines, actual elapsed and all overshoot/failures.
+- Core files: `src/egglab/native_hull.py`, `src/egglab/native_pathflow_hull.py`.
+  New tests: `src/tests/test_native_hull_numerical_master.py`.
+  Existing helper: `src/egglab/restricted_qp_proposal.py`.
+  Note: `research-20260928/numerical-master/README.md`;
+  focused review: `research-20260928/agent-notes/numerical-master/REVIEW.md`.
+  The 37 focused numerical-master/cache/reuse tests passed; final independent
+  review and full CI will be recorded before launch.
+- **Next bounded package:** freeze and run a new matched development comparison,
+  retaining reserve-cold and reserve-feasible baselines, then adding numerical
+  master and numerical master + cached bounds. Candidate: the same four physical
+  cases and two markets, four ordered arms (32 cells), not a full factorial.
+  Use one serial job requesting 1 CPU/8 GB, native/BLAS threads=1, <=2 h, no
+  retry/requeue, exclude scaglione-compute-01. Freeze exact caps/source/accounting
+  before submission; do not reuse completed attempt paths. Preserve
+  `proposal_failed`, bounded/late/ineligible outcomes and all paid preparation.
+  No new cluster experiment or performance claim belongs to this code package.
+
+## Previous checkpoint — physical pricing-bound cache implementation
 
 - Prior documentation backup 703f460 passed full CI 36392455640. No active
   EGG jobs; do not poll or resubmit completed 569799/572392.

@@ -14,11 +14,14 @@ Market = hull.Market
 
 def state_identity(case, market, arm, state_index, budget, *,
                    reuse_policy='certified_only', pricing_reserve_seconds=0.0,
-                   bound_cache_policy='none', expected_cached_state=None):
+                   bound_cache_policy='none', expected_cached_state=None,
+                   master_policy='native_lp', qp_denominator=1_000_000_000,
+                   qp_maxiter=500):
     return hull.state_identity(case, market, arm, state_index, budget,
         oracle_id=ORACLE_ID, extraction_policy=EXTRACTION_POLICY,
         reuse_policy=reuse_policy, pricing_reserve_seconds=pricing_reserve_seconds,
-        bound_cache_policy=bound_cache_policy, expected_cached_state=expected_cached_state)
+        bound_cache_policy=bound_cache_policy, expected_cached_state=expected_cached_state,
+        master_policy=master_policy, qp_denominator=qp_denominator, qp_maxiter=qp_maxiter)
 
 
 def _pricing(case, prices, budget, record=None):
@@ -39,11 +42,13 @@ def _pricing(case, prices, budget, record=None):
 def certify(case, market, budget=Budget(), *, arm='cold', state_index=0,
             previous=None, expected_previous=None, record=None,
             reuse_policy='certified_only', pricing_reserve_seconds=0.0,
-            bound_cache_policy='none', cached_from=None, expected_cached_state=None):
+            bound_cache_policy='none', cached_from=None, expected_cached_state=None,
+            master_policy='native_lp', qp_denominator=1_000_000_000, qp_maxiter=500):
     return hull.certify(case, market, budget, arm=arm, state_index=state_index,
         previous=previous, expected_previous=expected_previous, record=record,
         pricing_oracle=_pricing, oracle_id=ORACLE_ID,
         extraction_policy=EXTRACTION_POLICY, reuse_policy=reuse_policy,
         pricing_reserve_seconds=pricing_reserve_seconds,
         bound_cache_policy=bound_cache_policy, cached_from=cached_from,
-        expected_cached_state=expected_cached_state)
+        expected_cached_state=expected_cached_state, master_policy=master_policy,
+        qp_denominator=qp_denominator, qp_maxiter=qp_maxiter)

@@ -53,6 +53,10 @@ class PoolStalled(RuntimeError):
     pass
 
 
+class ProposalFailed(RuntimeError):
+    pass
+
+
 def rational(value):
     if isinstance(value, Q):
         return value
@@ -455,6 +459,116 @@ def solve_native_rmp(case, market, columns, points, budget, deadline, counts, re
     return mixture, pool
 
 
+def solve_qp_rmp(case, market, columns, budget, deadline, counts, record,
+                 consider=None, extraction_policy=None, denominator=1_000_000_000,
+                 maxiter=500):
+    """Numerical pool candidate; exact replay/residual, never a global oracle."""
+    if time.monotonic() >= deadline or counts["master_calls"] >= budget.master_calls:
+        raise LimitReached("master/time budget exhausted")
+    for column in columns:
+        replay_column(case, column, extraction_policy)
+    if time.monotonic() >= deadline:
+        raise LimitReached("master/time budget exhausted after column replay")
+    index = counts["master_calls"]
+    counts["master_calls"] += 1
+    counts["qp_proposal_calls"] += 1
+    emit(record, {"event": "master_start", "call": index,
+                  "master_policy": "numerical_qp_proposal",
+                  "column_keys": [c["key"] for c in columns]})
+    # Keep SciPy out of the default native-LP import path.
+    started = time.monotonic()
+    try:
+        from egglab import restricted_qp_proposal as qp
+    except Exception as exc:
+        elapsed = time.monotonic()-started
+        counts["qp_proposal_wall_s"] += elapsed
+        emit(record, {"event": "qp_proposal_failure", "call": index,
+                      "error_type": type(exc).__name__, "reason": str(exc),
+                      "proposal_wall_s": elapsed})
+        raise ProposalFailed("numerical QP import failed: " + str(exc)) from exc
+    if time.monotonic() >= deadline:
+        elapsed = time.monotonic()-started
+        counts["qp_proposal_wall_s"] += elapsed
+        emit(record, {"event": "qp_proposal_timeout", "call": index,
+                      "reason": "QP import/setup exhausted target wall", "proposal_wall_s": elapsed})
+        raise LimitReached("QP import/setup exhausted target wall")
+    try:
+        proposal = qp.propose([c["ops_cost"] for c in columns],
+                              [c["load"] for c in columns], market.a, market.b,
+                              denominator=denominator, maxiter=maxiter)
+    except (TimeoutError, LimitReached):
+        counts["qp_proposal_wall_s"] += time.monotonic()-started
+        raise
+    except Exception as exc:
+        elapsed = time.monotonic()-started
+        counts["qp_proposal_wall_s"] += elapsed
+        emit(record, {"event": "qp_proposal_failure", "call": index,
+                      "error_type": type(exc).__name__, "reason": str(exc),
+                      "proposal_wall_s": elapsed})
+        raise ProposalFailed("numerical QP proposal failed: " + str(exc)) from exc
+    elapsed = time.monotonic()-started
+    counts["qp_proposal_wall_s"] += elapsed
+    emit(record, {"event": "qp_proposal_result", "call": index, "proposal": proposal,
+                  "proposal_wall_s": elapsed})
+    def reject(reason):
+        emit(record, {"event": "qp_proposal_failure", "call": index,
+                      "error_type": "InvalidProposal", "reason": reason,
+                      "proposal_wall_s": elapsed})
+        raise ProposalFailed(reason)
+    if (not isinstance(proposal, dict) or type(proposal.get("success")) is not bool
+            or proposal.get("denominator") != denominator
+            or not isinstance(proposal.get("weights_exact"), list)
+            or not isinstance(proposal.get("integer_units"), list)
+            or len(proposal["weights_exact"]) != len(columns)
+            or len(proposal["integer_units"]) != len(columns)):
+        reject("Malformed QP simplex proposal")
+    counts["qp_non_success"] += int(not proposal["success"])
+    try:
+        weights = [Q(value) if isinstance(value, str) else None
+                   for value in proposal["weights_exact"]]
+    except (TypeError, ValueError, ZeroDivisionError) as exc:
+        reject("Invalid exact QP weights")
+    units = proposal["integer_units"]
+    if (any(weight is None or weight < 0 for weight in weights)
+            or sum(weights, Q(0)) != 1
+            or any(type(unit) is not int or unit < 0 for unit in units)
+            or sum(units) != denominator
+            or any(weight*denominator != unit for weight, unit in zip(weights, units))):
+        reject("QP weights violate exact simplex policy")
+    counts["max_rational_bits"] = max(counts["max_rational_bits"], _fraction_bits(weights))
+    if counts["max_rational_bits"] > budget.rational_bits:
+        raise LimitReached("QP weight rational bit-size budget exhausted")
+    if time.monotonic() >= deadline:
+        raise LimitReached("QP proposal exceeded target wall before replay")
+    replay_started = time.monotonic()
+    try:
+        mixture = replay_exact_mixture(case, market, columns, weights,
+                                       extraction_policy=extraction_policy)
+        mixture["simplex"]["source"] = "fixed-denominator-qp-proposal"
+        counts["max_rational_bits"] = max(counts["max_rational_bits"], _fraction_bits(
+            [Q(x) for x in mixture["load_exact"]] +
+            [Q(mixture[key]) for key in ("ops_exact", "supply_exact", "objective_exact")]))
+        if counts["max_rational_bits"] > budget.rational_bits:
+            raise LimitReached("QP mixture rational bit-size budget exhausted")
+        if consider:
+            consider(mixture)
+        pool = pool_certificate(market, columns, mixture, mixture_price(market, mixture))
+        counts["max_rational_bits"] = max(counts["max_rational_bits"], _fraction_bits(
+            [Q(pool["pool_lower_exact"]), Q(pool["pool_gap_exact"]), Q(pool["conjugate_exact"])]))
+        if counts["max_rational_bits"] > budget.rational_bits:
+            raise LimitReached("QP restricted-pool residual bit-size budget exhausted")
+        qualified = Q(pool["pool_gap_exact"]) <= rational(budget.pool_tolerance)
+        emit(record, {"event": "qp_candidate_replay", "call": index, "mixture": mixture,
+                      "pool": pool, "pool_qualified": qualified,
+                      "proposal_success": proposal["success"],
+                      "replay_wall_s": time.monotonic()-replay_started})
+    finally:
+        counts["qp_replay_wall_s"] += time.monotonic()-replay_started
+    if time.monotonic() >= deadline:
+        raise LimitReached("QP replay/residual exceeded target wall")
+    return mixture, pool
+
+
 def import_pool(case, previous, expected_previous, budget, previous_index=None,
                 extraction_policy=None, reuse_policy="certified_only", oracle_id=None,
                 pricing_reserve_seconds=0.0):
@@ -507,6 +621,19 @@ def _cache_controls(bound_cache_policy, expected_cached_state):
         raise ValueError("Invalid expected cached source state")
     return {"bound_cache_policy": bound_cache_policy,
             **({"cache_source_state_identity": expected_cached_state} if expected_cached_state else {})}
+
+
+def _master_controls(master_policy, qp_denominator, qp_maxiter, budget):
+    if master_policy == "native_lp":
+        if qp_denominator != 1_000_000_000 or qp_maxiter != 500:
+            raise ValueError("QP controls require the opt-in numerical master")
+        return {}
+    if (master_policy != "numerical_qp_proposal" or type(qp_denominator) is not int
+            or qp_denominator < 1 or qp_denominator.bit_length() > budget.rational_bits
+            or type(qp_maxiter) is not int or qp_maxiter < 1):
+        raise ValueError("Invalid numerical restricted-master policy")
+    return {"master_policy": master_policy, "qp_denominator": qp_denominator,
+            "qp_maxiter": qp_maxiter}
 
 
 def _cached_pricing_bounds(case, market, source, expected_state, oracle, policy):
@@ -596,30 +723,35 @@ def _cached_pricing_bounds(case, market, source, expected_state, oracle, policy)
 def state_identity(case, market, arm, state_index, budget, oracle_id=None,
                    extraction_policy=None, reuse_policy="certified_only",
                    pricing_reserve_seconds=0.0, bound_cache_policy="none",
-                   expected_cached_state=None):
+                   expected_cached_state=None, master_policy="native_lp",
+                   qp_denominator=1_000_000_000, qp_maxiter=500):
     policy = _extraction_policy(extraction_policy)
     metadata = {} if oracle_id is None else {"pricing_oracle": oracle_id}
     controls = _controls(reuse_policy, pricing_reserve_seconds, budget)
     cache_controls = _cache_controls(bound_cache_policy, expected_cached_state)
+    master_controls = _master_controls(master_policy, qp_denominator, qp_maxiter, budget)
     if cache_controls and oracle_id is None:
         metadata = {"pricing_oracle": DEFAULT_PRICING_ORACLE}
     if oracle_id is not None and (not isinstance(oracle_id, str) or not oracle_id.strip()):
         raise ValueError("Explicit pricing oracle requires a nonempty identity")
     return nr.digest({"schema": SCHEMA, "case": case.identity(), "market": market.identity(),
                       "arm": arm, "state_index": state_index, "budget": asdict(budget),
-                      "extraction_policy": policy, **metadata, **controls, **cache_controls})
+                      "extraction_policy": policy, **metadata, **controls, **cache_controls,
+                      **master_controls})
 
 
 def certify(case, market, budget=Budget(), *, arm="cold", state_index=0,
             previous=None, expected_previous=None, record=None, pricing_oracle=None,
             oracle_id=None, extraction_policy=None, reuse_policy="certified_only",
             pricing_reserve_seconds=0.0, bound_cache_policy="none", cached_from=None,
-            expected_cached_state=None):
+            expected_cached_state=None, master_policy="native_lp",
+            qp_denominator=1_000_000_000, qp_maxiter=500):
     nr.validate_case(case)
     validate_market(case, market)
     validate_budget(budget)
     controls = _controls(reuse_policy, pricing_reserve_seconds, budget)
     cache_controls = _cache_controls(bound_cache_policy, expected_cached_state)
+    master_controls = _master_controls(master_policy, qp_denominator, qp_maxiter, budget)
     if (cached_from is None) != (expected_cached_state is None):
         raise ValueError("Cached source and expected state must be supplied together")
     if cached_from is not None and bound_cache_policy != "physical_pricing":
@@ -640,7 +772,8 @@ def certify(case, market, budget=Budget(), *, arm="cold", state_index=0,
     started = time.monotonic()
     deadline = started+budget.wall_seconds
     identity = state_identity(case, market, arm, state_index, budget, oracle_id, extraction_policy,
-                              reuse_policy, pricing_reserve_seconds, bound_cache_policy, expected_cached_state)
+                              reuse_policy, pricing_reserve_seconds, bound_cache_policy, expected_cached_state,
+                              master_policy, qp_denominator, qp_maxiter)
     if previous is not None and previous.get("pricing_oracle") != column_oracle:
         raise ValueError("Retained predecessor pricing oracle identity differs")
     columns = (import_pool(case, previous, expected_previous, budget, state_index-1,
@@ -648,6 +781,9 @@ def certify(case, market, budget=Budget(), *, arm="cold", state_index=0,
                if arm == "retained" and state_index > 0 else [])
     counts = {"pricing_requests": 0, "seed_requests": 0, "master_calls": 0,
               "polish_steps": 0, "polish_checks": 0, "polish_wall_s": 0.0, "max_rational_bits": 0}
+    if master_controls:
+        counts.update(qp_proposal_calls=0, qp_non_success=0,
+                      qp_proposal_wall_s=0.0, qp_replay_wall_s=0.0)
     best_lower, best_mixture = None, None
     best_lower_origin = None
     fresh_best_lower, fresh_pricing_successes = None, 0
@@ -668,6 +804,7 @@ def certify(case, market, budget=Budget(), *, arm="cold", state_index=0,
     emit(record, {"event": "state_start", "state_identity": identity, "market_identity": market.identity(),
                   "imported_column_keys": [c["key"] for c in columns], "fresh_bounds": True,
                   **metadata, **controls, **cache_controls,
+                  **master_controls,
                   **({"fresh_target_pricing_required": True,
                       "target_conjugates_rebuilt_from_cached_physical_lowers": True,
                       "cached_bound_candidates": len(cache_candidates)} if cache_controls else {})})
@@ -678,14 +815,20 @@ def certify(case, market, budget=Budget(), *, arm="cold", state_index=0,
                                          if cache_candidates else None)})
     def consider_mixture(mix):
         nonlocal best_mixture
-        if best_mixture is None or Q(mix["objective_exact"]) < Q(best_mixture["objective_exact"]):
+        if (best_mixture is None or Q(mix["objective_exact"]) < Q(best_mixture["objective_exact"])
+                or (master_controls and best_mixture is not None
+                    and Q(mix["objective_exact"]) == Q(best_mixture["objective_exact"])
+                    and mix["simplex"].get("source") == "fixed-denominator-qp-proposal")):
             best_mixture = copy.deepcopy(mix)
     if columns and reuse_policy == "feasible_pool":
         # Reconstruct an upper in the NEW market from physical columns only.
         # Neither old simplex weights nor old lower certificates cross states.
         for index in range(len(columns)):
             one_hot = [float(j == index) for j in range(len(columns))]
-            consider_mixture(replay_mixture(case, market, columns, one_hot, extraction_policy))
+            retained_mix = replay_mixture(case, market, columns, one_hot, extraction_policy)
+            if master_controls:
+                retained_mix["simplex"]["source"] = "retained-column-one-hot"
+            consider_mixture(retained_mix)
     def price(prices, seed=False):
         nonlocal best_lower, best_lower_origin, fresh_best_lower, fresh_pricing_successes
         now = time.monotonic()
@@ -768,10 +911,17 @@ def certify(case, market, budget=Budget(), *, arm="cold", state_index=0,
     try:
         if not columns:
             columns.append(price(list(market.a), seed=True))
-            consider_mixture(replay_mixture(case, market, columns, [1.0], extraction_policy))
+            seed_mix = replay_mixture(case, market, columns, [1.0], extraction_policy)
+            if master_controls:
+                seed_mix["simplex"]["source"] = "fresh-seed-one-hot"
+            consider_mixture(seed_mix)
         while True:
-            mixture, pool = solve_native_rmp(case, market, columns, points, budget, deadline,
-                                             counts, record, consider_mixture, extraction_policy)
+            if master_policy == "native_lp":
+                mixture, pool = solve_native_rmp(case, market, columns, points, budget, deadline,
+                                                 counts, record, consider_mixture, extraction_policy)
+            else:
+                mixture, pool = solve_qp_rmp(case, market, columns, budget, deadline, counts, record,
+                                             consider_mixture, extraction_policy, qp_denominator, qp_maxiter)
             consider_mixture(mixture)
             candidate = price(pool["prices"])
             gap = Q(best_mixture["objective_exact"])-Q(best_lower["lower_exact"])
@@ -797,11 +947,13 @@ def certify(case, market, budget=Budget(), *, arm="cold", state_index=0,
         status, reason = "budget_exhausted", str(exc)
     except PoolStalled as exc:
         status, reason = "stalled_bounded", str(exc)
+    except ProposalFailed as exc:
+        status, reason = "proposal_failed", str(exc)
     result = {"schema": SCHEMA, "status": status, "reason": reason, "state_identity": identity,
               "physical_identity": case.identity(), "market_identity": market.identity(),
               "extraction_policy": policy, "arm": arm, "state_index": state_index,
               "columns": columns, "counts": counts, "epsilon": budget.epsilon,
-              **metadata, **controls, **cache_controls}
+              **metadata, **controls, **cache_controls, **master_controls}
     if bound_cache_policy != "none":
         result.update(pricing_oracle=canonical_oracle, physical_pricing_evidence=pricing_evidence,
                       physical_pricing_evidence_digest=nr.digest(pricing_evidence),
@@ -825,7 +977,7 @@ def certify(case, market, budget=Budget(), *, arm="cold", state_index=0,
         result["upper"] = best_mixture["upper"]
     if best_lower and best_mixture:
         gap = Q(best_mixture["objective_exact"])-Q(best_lower["lower_exact"])
-        if bound_cache_policy != "none" and gap < 0:
+        if (bound_cache_policy != "none" or master_controls) and gap < 0:
             raise ValueError("Cached physical bound reverses target feasible enclosure")
         result.update(gap=outward(gap, True), gap_exact=str(gap))
     emit(record, {"event": "state_finish", "result": result})
