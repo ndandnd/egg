@@ -31,8 +31,19 @@ cache-event matching, failed-source handling, complete paid totals and partial
 termination accounting. Shell syntax checks passed. Independent review is
 recorded at `../agent-notes/solver-baseline-comparison/REVIEW.md`.
 
-The comparison is prospective. Runner review, CI, committed source and an
-exclusive submission receipt must precede any result claim. Completed attempts
-remain unchanged. A later report will show every outcome alongside bounds and
-paid time, and use a common-quality speed claim only when supported by the
-recorded on-time evidence.
+Execution source `f4b342dc85799d01d9313baeaf8c9ec527759d59` passed full CI
+36408897677 on attempt 2. The first attempt stopped before tests because an
+unchanged plotting dependency was unavailable; the successful retry and original
+failure are recorded in [CI_RECEIPT.md](CI_RECEIPT.md).
+
+Job **575215** was submitted once at 10:25 UTC on 28 September and observed
+**PENDING (Priority)**. The [submission receipt](../cluster/solver-baseline-comparison-575215.json)
+records the source, request and exclusive attempt. Execution checkout:
+`/home/nc437/egg-solver-baseline-comparison-20260928`; output:
+`result/solver_baseline_comparison/20260928-attempt1`.
+No scientific outcomes have been read. Allocation and runtime freeze remain
+unconfirmed until the pending job starts.
+
+Completed attempts remain unchanged. A later report will show every outcome
+alongside bounds and paid time, and use a common-quality speed claim only when
+supported by the recorded on-time evidence.

@@ -6,7 +6,7 @@ optimization first, then retrieval/learned proposals. The v0.5 draft is historic
 Use GPT-6 Sol for implementation/analysis and Luna Max for supporting work; root
 manages. Hourly `advance-egg-journal-research` remains ACTIVE, quiet when unchanged.
 
-## Latest checkpoint — ordered solver comparison prepared
+## Latest checkpoint — ordered solver comparison submitted
 
 - Documentation backup cb70b35 passed full CI 36403560605. The completed jobs
   569799/572392 remain unchanged; no job was active at the start of this package.
@@ -21,7 +21,11 @@ manages. Hourly `advance-egg-journal-research` remains ACTIVE, quiet when unchan
   Sol completed implementation; all 12 focused pure tests passed. Luna's
   independent static review passed; root checked the final source/protocol
   hashes. Review: `research-20260928/agent-notes/solver-baseline-comparison/REVIEW.md`.
-  Source must pass CI and be published before submission.
+  Execution source **f4b342dc85799d01d9313baeaf8c9ec527759d59** is published
+  and passed full CI **36408897677**, attempt 2. Attempt 1 stopped during
+  unchanged dependency installation (kiwisolver unavailable), before tests;
+  one CI retry passed all gates in 4m13s. Both attempts are retained in
+  `research-20260928/solver-baseline-comparison/CI_RECEIPT.md`.
 - Paid two-state totals include each method's own initial solve, target solve,
   and parent source-validation overhead outside those children. Worker replay
   remains inside the child time. Failed or ineligible sources are preserved;
@@ -31,13 +35,40 @@ manages. Hourly `advance-egg-journal-research` remains ACTIVE, quiet when unchan
   Native targets sum to 64 minutes; child hard caps to 80; controller cap 90;
   outer wrapper cap 100. Runtime preflight found existing NumPy 1.26.4 and
   SciPy 1.13.1 with GRB; no install or optimization was performed.
-- Intended exclusive execution checkout:
+- Exclusive execution checkout:
   `/home/nc437/egg-solver-baseline-comparison-20260928`; attempt
   `result/solver_baseline_comparison/20260928-attempt1`. An exclusive submission
-  intent precedes the single sbatch call. Do not retry an ambiguous submission;
-  inspect that intent and receipt. No comparative result is claimed yet.
-- In-progress checkpoint: root will replace this final item with source CI and
-  the actual submission receipt before handing off. PR56 stays draft/unmerged.
+  intent preceded the single sbatch call. **Job 575215** was submitted once at
+  10:25 UTC and observed **PENDING (Priority)** with 1 CPU/8 GB requested.
+  Receipt: `research-20260928/cluster/solver-baseline-comparison-575215.json`.
+  No scientific outcomes have been read. Runtime freeze/manifest are unknown
+  until execution; the request is not an allocation or completion claim.
+- Next heartbeat: make one compact scoped queue check for **575215**, via
+  unicorn2 after loading `/etc/profile.d/slurm.sh`. If vanished, use scoped
+  sacct and the recorded attempt/wrapper/supervisor receipts. Do not duplicate
+  submission or retry/requeue. Collect/review all declared rows only after
+  quiescence; preserve failures, spent time and incomplete cells. Compare
+  bounds and paid time before claiming improvement or expanding the sweep.
+- Original Google Doc appended ONCE with “Ordered solver comparison launched
+  — 28 September 2026”. Luna observed Saved to Drive, the launch outline entry,
+  corrected body wording and commit links. Root verified source/receipt hashes.
+  Source: `research-20260928/solver-baseline-comparison/GOOGLE_DOC_UPDATE.md`;
+  receipt: `research-20260928/agent-notes/google-doc-solver-baseline/RECEIPT.md`.
+  Full-export/prefix verification remains unavailable after the prior browser
+  block; do not repeat that route or duplicate the section.
+- A narrow reconciliation found zero matches for both the previous numerical
+  master title and its distinctive opening, despite the earlier save receipt.
+  The saved source remains intact. Luna restored that one missing note ONCE as
+  “Recovered prior update: Numerical master integration completed — 28 September
+  2026”, with a historical lead noting that the comparison is now submitted.
+  Saved to Drive and final heading 39/39 were observed; the unique opening now
+  matches once, and the launch heading remains present. Exact recovery source:
+  `research-20260928/solver-baseline-comparison/RECOVERED_NUMERICAL_MASTER_UPDATE.md`.
+  Root verified both append sources and the final receipt hashes. The cause of
+  the earlier discrepancy is unknown; no broader history audit was performed.
+- Final backup is documentation/receipts only; check its CI once next heartbeat.
+  No implementation or Doc worker remains active. PR56 describes the submitted
+  comparison and stays draft/unmerged. No user decision is pending.
 
 ## Previous checkpoint — numerical restricted-master integration
 

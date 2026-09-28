@@ -139,8 +139,11 @@ initial market solve. Source admission outside the child is added once to the
 two-state total; verification inside the child stays in child wall time.
 The 64-minute sum of native targets sits inside an 80-minute sum of child
 deadlines, a 90-minute controller cap and a 100-minute wrapper cap, under the
-existing two-hour allocation ceiling. Review and source CI precede submission.
-This is still prospective; numerical-master/cache performance is unmeasured.
+existing two-hour allocation ceiling. Independent review, 12 focused tests and
+full CI passed. Source f4b342d was submitted once as job 575215, observed pending
+for priority at 10:25 UTC. See `research-20260928/solver-baseline-comparison/`
+for launch and CI receipts. Numerical-master/cache performance remains unmeasured;
+the next package collects and interprets this comparison after completion.
 
 ## Manuscript direction
 
