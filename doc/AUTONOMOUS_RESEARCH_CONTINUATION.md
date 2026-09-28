@@ -6,7 +6,54 @@ optimization first, then retrieval/learned proposals. The v0.5 draft is historic
 Use GPT-6 Sol for implementation/analysis and Luna Max for supporting work; root
 manages. Hourly `advance-egg-journal-research` remains ACTIVE, quiet when unchanged.
 
-## Latest checkpoint — pricing-start pilot submitted
+## Latest checkpoint — pricing-start result package complete, publication in progress
+
+- At the 16:01 UTC heartbeat, receipt backup b912078 passed CI 36444453893.
+  One queue check for 577225 reported a vanished job ID; scoped accounting
+  confirmed COMPLETED 0:0, 22m14s, one allocated CPU, 8 GB requested, on
+  jingjie-cpu-15. No second queue check, optimizer call or new submission.
+  **No active EGG job remains. Do not poll or resubmit completed job 577225.**
+- Wrapper and supervisor returned 0, all processes quiescent, stable seal,
+  frozen source/inputs unchanged. Execution checkout stays at 6759daa.
+  Full private archive:
+  `/Users/nadan/Documents/ChatGPT/egg/research-20260928/cluster/pricing-start-pilot-attempt1/sealed/20260928-attempt1`.
+  Root matched all 119 manifest entries and the prospective frozen hash.
+  MONITOR_20260928T1601Z.json, TERMINATION_577225.json and COLLECTION_RECEIPT.json
+  are in `research-20260928/pricing-start-pilot/`.
+- Sol's analysis is complete under `results-attempt1/analysis/`: all 16 calls,
+  eight pairs, source/time accounting and two PNG/PDF scientific figures. Luna's
+  independent physical/bound/source reconciliation passed without optimization;
+  review at `research-20260928/agent-notes/pricing-start-result-review/REVIEW.md`
+  (SHA-256 78be0fe9e3d89e2f8b9266e0a1f1df6b2b865946a02d05b30d9873fd234abf32).
+  Root matched all reviewed pins and visually checked final figures. CSV line
+  endings were normalized to LF for publication, with parsed values unchanged.
+- All 16 calls returned on time: eight synthetic numerical certifications and
+  eight public bounded outcomes. All eight hints were submitted; native
+  acceptance is unobserved. Public native phases all reach roughly 160s.
+  Starts improve one public incumbent by 1.105 and one lower by 11.785, weaken
+  two lowers, and otherwise tie within the stated numerical tolerance. No
+  general speedup, full iterative benefit or ML benefit follows.
+- Common source costs are 0.32–2.74% above the best returned public incumbents,
+  not the unknown optimum. Source generation once is 358.211s; online complete
+  children 1317.507s; whole freeze command 1.956s. Their sum is 1677.674s.
+  Internal freeze preparation 1.652s overlaps the whole command. Supervisor,
+  wrapper and Slurm clocks enclose online work and are not added to that sum.
+  The earlier pre-freeze helper parse failure remains preserved with unknown
+  complete transport wall time. Raw logs stay in the private archive.
+- **Next bounded package: independent timetable benchmark intake/design.**
+  Validate one additional public network and a small synthetic scaling family;
+  record physical assumptions and freeze base-network train/development/test
+  grouping before training or comparative outcomes. Prepare cold, retained-
+  column and nearest-neighbor proposal/repair comparisons with common quality
+  targets and prospective resource caps. Current cases remain development.
+  No immediate full-method start integration or enlarged start sweep; separate
+  proposal feasibility/quality, repair and global verification. No protected
+  A6/B3/confirmation outcomes or private GIRO publication.
+- Root is publishing the reviewed result milestone, appending the consolidated
+  original Google Doc update, and backing up its persistence receipt. No new
+  experiment runs in this results-publication package.
+
+## Previous checkpoint — pricing-start pilot submitted
 
 - At the 14:59 UTC heartbeat, prior receipt backup e72779f passed CI 36436107349.
   Sol implemented the fixed-price runner; Luna's independent static review found

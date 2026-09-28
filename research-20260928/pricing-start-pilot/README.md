@@ -1,5 +1,9 @@
 # Fixed-price cold/start diagnostic
 
+Job 577225 completed in 22m14s on one CPU. All 16 calls returned; the public
+quality effects of starts are mixed, with no demonstrated speedup.
+[Reviewed results, complete tables and figures](results-attempt1/README.md).
+
 This pilot measures whether a checked feasible fleet helps the compact native
 pricing solver return a better incumbent or bound under the same time cap.
 The [reviewed protocol](../../doc/PRICING_START_PILOT_PROTOCOL_20260928.md)
@@ -32,7 +36,7 @@ passed [full CI](https://github.com/ndandnd/egg/actions/runs/36443216684).
 Job **577225** was submitted once at 15:28 UTC. The single launch observation
 was `PENDING (Priority)`, requesting 1 CPU/8 GB/1 hour. All four source pools
 were eligible and all eight selected queries were frozen before submission.
-No pilot outcomes have been inspected.
+These are the launch facts; completed outcomes are summarized in the results link above.
 
 Receipts: [freeze](FREEZE_RECEIPT.json), [CI](CI_RECEIPT.md),
 [submission](../cluster/pricing-start-pilot-577225.json),
@@ -43,8 +47,8 @@ reload; [persistence receipt](../agent-notes/google-doc-pricing-start-pilot/RECE
 The README has subsequently gained launch status; the review records its
 prospective version. Execution code and protocol pins are unchanged.
 
-Next: one scoped queue observation for job 577225 at the next heartbeat.
-After it vanishes, use scoped accounting and wrapper/supervisor receipts to
-confirm termination and a stable seal before collecting and independently
-reviewing all 16 declared calls. Do not resubmit, inspect active outcomes, or
-start a larger sweep based on partial results.
+The scoped 16:01 UTC follow-up confirmed completion, successful wrapper and
+supervisor exits, quiescence and a stable seal. Collection matched the full
+manifest and prospective input hash. No active EGG job remains. No rerun,
+full-method integration or enlarged start sweep was launched. The next work
+package prepares independent timetable groups and retrieval comparisons.

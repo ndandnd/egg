@@ -163,23 +163,33 @@ acceptance and a returned certified result remain different observations.
 Start validation and setup are measured inside the pricing wall deadline.
 Retained master columns alone still do not supply a native solver start.
 
-The current bounded package implements and launches the prospective fixed-price
-diagnostic in `doc/PRICING_START_PILOT_PROTOCOL_20260928.md`: 16 cold/start calls
-across the same four development cases and two predetermined query prices.
-It uses matched caps, counterbalanced order and a common known feasible-plan
-baseline, retaining historical source cost separately from online work. Core,
-checks and input inventory: `research-20260928/pricing-start/`.
-The runner now preserves all 16 declared calls, physically checks and freezes the
-selected source fleets/prices before submission, observes the actual native seed,
-and records source, setup, complete-call and solver costs separately. Ten focused
-pure tests passed. Independent review found no blocking issue; source `6759daa`
-passed full CI 36443216684. All four pools passed the prospective freeze, and
-job **577225** was submitted once at 15:28 UTC (initially pending for priority),
-requesting 1 CPU/8 GB/1 hour without retry or requeue.
-The next package collects the sealed attempt and compares all 16 calls, keeping
-the common feasible baseline separate from native incumbents and admitted bounds.
-No outcomes have been inspected and no main-hull integration has run; no speed
-claim is made. Launch receipts: `research-20260928/pricing-start-pilot/`.
+The fixed-price starting-point pilot is now complete: job 577225, execution
+source 6759daa, 16 calls and 22m14s on one CPU. All eight synthetic calls were
+numerically certified; all eight public calls returned bounded results at their
+160-second native phase allowance. Common feasible baselines and counterbalanced
+order were frozen before execution; the public depots remain one development
+timetable group and one observed solver seed.
+
+The quality effects are mixed. Depot 15's linear query has the same incumbent
+and a weaker lower bound with a start. Its marginal-price query improves the
+incumbent by 1.10 but weakens the lower bound. Depot 16's linear query ties; its
+marginal query improves the lower bound by 11.78 with the same incumbent. The
+original source fleet costs are 0.32–2.74% above the best newly returned public
+incumbents, which is not a bound on their distance from the unknown optimum.
+Returning a feasible proposal and certifying its quality remain separate tasks.
+The pilot establishes no general acceleration, full iterative speedup or learned
+benefit, and does not justify immediate integration of starts into the full method.
+Tables, figures and recorded paid work:
+`research-20260928/pricing-start-pilot/results-attempt1/`.
+
+The next bounded package is benchmark intake/design: validate one independent
+public timetable and a small synthetic scaling family, record all physical
+assumptions, and prospectively reserve independent base-network groups before
+training or comparative outcomes. Prepare cold, retained-column and nearest-
+neighbor proposal/repair comparisons at common quality targets and explicit
+resource caps. Keep existing cases in development. Do not conduct another start
+sweep merely to seek a favorable result. No new optimization was launched during
+the results-review package; there are currently no active EGG jobs.
 [Python-MIP documents the initial-solution interface](https://python-mip.readthedocs.io/en/latest/classes.html).
 Broader independent public timetables and nearest-neighbor retrieval still
 precede learned proposals. Reserve grouped independent test networks before
