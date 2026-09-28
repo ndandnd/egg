@@ -38,9 +38,21 @@ manages. Hourly `advance-egg-journal-research` remains ACTIVE, quiet when unchan
   CI36479784860. Do not poll old584876/577225 or resubmit them. The one-replacement
   decision below is still pending; do not infer approval or ask again.
   No reserved/protected/private data, native optimization or new allocation.
-- Publication of the integrated artifact, source, source maps and reviews is
-  in progress; append one consolidated original Google Doc update and record
-  its verified receipt before ending this package. PR56 stays draft/unmerged.
+- Artifact/source/maps/reviews backed up at
+  `6ffe5f8171c75c6a2646b253f6f63bcfab54d8a7`. PR56 reflects the complete draft
+  and is confirmed OPEN/draft, unmerged. Original Google Doc update appended
+  once, Saved and reload-verified: original heading intact, new heading last,
+  unique body sentence1 of1, four links rendered. One stray verification phrase
+  from an early keyboard action during reload was removed before the final
+  persistence check; receipt records the correction. Wait for loaded UI before
+  keyboard actions after a Docs reload.
+  Source `research-20260928/manuscript-integration/GOOGLE_DOC_UPDATE.md`,
+  SHA-256 `d8292f875c0bab4fa9c79383e3aec08cffce96d26d7e72c5deadeed81ed64b3a`.
+  Receipt `research-20260928/agent-notes/google-doc-integrated-draft/RECEIPT.md`,
+  SHA-256 `e7bae9575f1f8ae319a5fee9ccedce1a521f94fe558889f1e4a567479e327c86`.
+  No active workers remain except stale pending cardinality agent (ignore).
+  One Doc-helper follow-up hit the agent task limit; root completed the append.
+  Final receipt/checkpoint backup CI can be checked once next heartbeat.
 - Next bounded package: an independent reviewer-style assessment of the
   integrated draft's scientific contribution and the precise computational
   evidence still needed for the intended journal scope. Do not repeat proof,
