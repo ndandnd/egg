@@ -6,7 +6,7 @@ optimization first, then retrieval/learned proposals. The v0.5 draft is historic
 Use GPT-6 Sol for implementation/analysis and Luna Max for supporting work; root
 manages. Hourly `advance-egg-journal-research` remains ACTIVE, quiet when unchanged.
 
-## Latest checkpoint — feasible pricing start, core and prospective design
+## Latest checkpoint — pricing-start core and prospective design complete
 
 - At the 13:58 UTC heartbeat, prior receipt backup
   9867fdf27d7444a65706dbcd2bb36f36782d2c09 passed full CI 36429393790.
@@ -41,7 +41,23 @@ manages. Hourly `advance-egg-journal-research` remains ACTIVE, quiet when unchan
   Implementation and smoke receipt: `research-20260928/agent-notes/pricing-start/`.
   Luna's independent code/protocol review passed; root matched its six pins.
   The final index merely records that review verdict; code and protocol are
-  unchanged. Publication CI and Google Doc receipts remain pending.
+  unchanged. Core/protocol source **d0df8d7440d026aabe236bafa3c8031b31b14bc9**
+  is pushed; draft PR 56 links the implementation and prospective protocol.
+  Full CI **36435346518** passed on attempt 1 (test job 4m19s), including the
+  complete CBC suite and frozen-evidence reconstruction. Receipt:
+  `research-20260928/pricing-start/CI_RECEIPT.md`.
+- Original Google Doc appended ONCE with “A feasible fleet as a solver starting
+  point — 28 September 2026”. Luna verified Saved to Drive, heading/body/links,
+  then one normal reload with the distinctive claim-limit phrase found once.
+  Source: `research-20260928/pricing-start/GOOGLE_DOC_UPDATE.md` (SHA-256
+  `1208336bf2abd50a82d15442d2049311c62292beaf159dee8f9f325993e84890`).
+  Receipt: `research-20260928/agent-notes/google-doc-pricing-start/RECEIPT.md`
+  (SHA-256 `d603bf396c27d4f19cbd4f5915b6ff12d5a53b22ab1f9c3e11194617647e4cf4`).
+  Root matched both hashes. No export or duplicate append.
+- This package is complete; no worker assignment or EGG job remains active.
+  Next heartbeat: check the final receipt-only backup's CI once, then proceed
+  directly to the runner/launch package below. No core or protocol redesign is
+  needed unless implementation exposes a specific new issue.
 - Next separate package: build the bounded pilot runner, freeze source and
   exact selected inputs, complete relevant checks, then submit the one job.
   Its reader must account for `mip_start_setup` submission/rejection/timeout;

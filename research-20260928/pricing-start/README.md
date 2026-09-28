@@ -29,7 +29,10 @@ was run. Solver acceptance of the hint is recorded as unknown. See the
 [implementation note](../agent-notes/pricing-start/IMPLEMENTATION.md) and
 [smoke receipt](../agent-notes/pricing-start/SMOKE_RECEIPT.json). The independent
 [code and protocol review](../agent-notes/pricing-start-review/REVIEW.md) passed.
-Publication CI is pending.
+[Full CI passed](CI_RECEIPT.md) on its first attempt. The original Google Doc
+received the [consolidated update](GOOGLE_DOC_UPDATE.md) once; its
+[receipt](../agent-notes/google-doc-pricing-start/RECEIPT.md) records the
+post-reload persistence check.
 
 No cluster pilot has been launched. Next: build the bounded runner against this
 protocol, freeze source and inputs, pass relevant checks, and submit the single
