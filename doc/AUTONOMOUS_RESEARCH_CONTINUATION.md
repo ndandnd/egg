@@ -12,11 +12,13 @@ This supersedes the theory-only recommendation and completed-draft stop below.
 The v05 evidence/artifacts remain immutable historical results. No old result is
 reclassified. Active roadmap: doc/COMPUTATIONAL_RESEARCH_ROADMAP_20260928.md.
 
-- Sol is designing/implementing a new bounded development-screen harness using
-  existing native physical/planner/hull APIs. No new cluster solve has run yet.
-- Luna inventory worker is checking available public/synthetic cases and live
-  Unicorn capacity; a separate Luna worker is checking relevant learned-route/
-  learned-column primary literature and strong retrieval/reuse baselines.
+- Sol completed the new development-screen harness using existing native APIs.
+  Nine focused tests, Python compilation and batch syntax checks pass; independent
+  preflight review is PASS in doc/COMPUTATIONAL_SCREEN_REVIEW_20260928.md.
+  No new cluster solve has run yet.
+- Luna completed the public/synthetic inventory and learned-route literature
+  review. The operations worker has prepared a Google Doc append and will submit
+  once root sends the independently reviewed, published execution commit.
 - Candidate first screen: two synthetic base timetables plus Hildenbrand depot15
   and 16, two market states, cold/retained hull and matched planner/response.
   All screening cases are development. Both public depots share one timetable group.

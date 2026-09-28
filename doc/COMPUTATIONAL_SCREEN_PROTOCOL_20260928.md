@@ -58,9 +58,12 @@ adds a supervisor and trace exports, not a new mathematical formulation.
 Each stage runs in a separate process with a hard deadline equal to its native
 wall target plus 30 seconds. This includes initialization, solving and export.
 The controller has a 5,400-second execution budget. An outer 5,500-second hard
-supervisor cap includes initialization, controller execution, cleanup and sealing,
-within the separate two-hour Slurm allocation. Record both elapsed times; the
-5,400-second controller allowance is not a full-supervisor timing claim.
+supervisor cap covers the supervisor invocation: its source/design precheck,
+controller execution, cleanup and sealing. Job environment setup and the one-time
+freeze precede this invocation and are covered by the separate two-hour Slurm
+allocation. Record supervisor elapsed time and Slurm's complete job elapsed time
+so that setup is not free work; the 5,400-second controller allowance is not a
+full-supervisor or whole-job timing claim.
 Native targets are stopping rules, not promises that a non-preemptible native or
 exact-arithmetic step ends at that instant. Record every actual elapsed time and
 overshoot. A result finishing after its hard deadline is not an on-time success.
