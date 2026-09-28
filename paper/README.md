@@ -1,11 +1,19 @@
 # EGG working manuscript
 
-The current integrated research draft is **0.6**, built from `latex/main.tex`:
-[19-page computational draft](../output/pdf/egg-journal-v0.6-computational-draft.pdf).
-It includes five figures, four tables and the reviewed theory/computational
-material. See `../research-20260928/manuscript-integration/` for source maps,
-reviews and artifact pins. It is ready for author review; broader computational
-validation remains needed before journal submission.
+The current research draft is **0.7**, built from `latex/main.tex`:
+[revised manuscript](../output/pdf/egg-journal-v0.7-reviewed-draft.pdf).
+It adds analytical public lower bounds and joint D/CH/gap/incumbent-regret
+reporting, restores three direct antecedents, and preserves exploratory
+solver comparisons in a separate
+[development supplement](../output/pdf/egg-journal-v0.7-development-supplement.pdf).
+See `../research-20260928/review-response-v07/` for the selective response,
+read-only calculations, independent review and artifact pins.
+The broader computational research objective remains active; this revision
+is for author review and leaves public support and scalability unresolved.
+
+The historical 19-page v0.6 PDF remains
+`../output/pdf/egg-journal-v0.6-computational-draft.pdf`, with its original
+source maps and release pins in `../research-20260928/manuscript-integration/`.
 
 ## Historical Markdown draft
 

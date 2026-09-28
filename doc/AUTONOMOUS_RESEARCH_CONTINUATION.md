@@ -6,7 +6,49 @@ optimization first, then retrieval/learned proposals. The v0.5 draft is historic
 Use GPT-6 Sol for implementation/analysis and Luna Max for supporting work; root
 manages. Hourly `advance-egg-journal-research` remains ACTIVE, quiet when unchanged.
 
-## Latest checkpoint — integrated research draft 0.6 complete
+## Latest checkpoint — selective external-review revision 0.7
+
+- User supplied Claude's review and authorized selected corrections. The review's
+  strongest points are the missing analytic baseline, missing joint economic
+  quantities, cap-dependent reuse claim and unconfirmed single-seed starts.
+  We do not adopt a two-paper split, categorical rejection predictions, or the
+  untested claim that sixteen pricing calls would certify the toy in seconds.
+- Revised main draft `output/pdf/egg-journal-v0.7-reviewed-draft.pdf`: 17 pages,
+  three figures, three tables, fifteen references, 150-word abstract. SHA-256
+  `b02ed646e415686d74cd09f42d503e1dea46777cad93b9996628317113d4edea`.
+  Seven-page historical development supplement:
+  `output/pdf/egg-journal-v0.7-development-supplement.pdf`, SHA-256
+  `dbb10babe6d291fae6e6555cd211b81334426b489aa659d6c3c20cd7031ce154`.
+  The old computational chapter, figures, failures and spent time remain intact;
+  main now inputs `computational_support.tex` and `joint_support_table.tex`.
+- Sol reconstructed exact ideal energy floors for both matched depot cases:
+  original/changed d15 424.365880667204 / 418.965880667204; d16
+  435.674556453753 / 430.274556453753. The one-bus obstruction and positive
+  three-plus-bus margins cover all cardinalities. The native-flat-derived
+  423.27 proposal is not admitted as an exact ideal floor.
+- Joint same-screen native D/CH/gap/incumbent-regret table includes all four
+  changed-market cases. Existing response Fenchel evidence improves multivisit
+  CH lower to84.622956 and gap upper to0.10 without another solve. Public
+  incumbent regret is positive, but neither public optimality nor a positive
+  public gap is proved. Conditional mixed exact-floor/native-upper gap caps
+  are98.37/117.61; original-market exact d15 cap88.41 remains separate.
+- Luna restored Andrianesis/Madani/Hümbs from primary records and reviewed the
+  new claim scope. Root checked the bound logic and all rendered pages; clean
+  builds, exact reconstruction and generated table reproduce. Response, scripts,
+  independent checks, QA and release hashes: `research-20260928/review-response-v07/`.
+- No new native optimization, cluster call or allocation. No active EGG jobs.
+  No protected/private data accessed. The old no-incumbent bug was already
+  fixed and tested; historical failures are not reclassified. No old-terminal
+  damping outcomes imported, and cycling is not equated with no price support.
+- Computational research objective remains active. Next bounded package:
+  integrate a scope-checked analytical baseline in reporting/coordinator,
+  then design a bounded sizing diagnostic before any further comparative run.
+  Review the frozen retrieval design's four-call/4096-bit limits against actual
+  stops; do not silently alter it, submit a duplicate, or infer approval for
+  the still-pending one-replacement exception. Eberbach is already adapted;
+  independent cases, repeated-seed/common-quality evaluation precede ML.
+
+## Prior checkpoint — integrated research draft 0.6 complete
 
 - The complete LaTeX first draft is ready for author review: 19 pages, five
   vector figures, four tables, twelve cited references and a149-word abstract.

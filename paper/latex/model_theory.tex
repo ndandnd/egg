@@ -37,8 +37,8 @@ convex hull of feasible loads.
 The physical and complete-fleet-hull values are
 \begin{equation}\label{eq:theory-values}
 \begin{aligned}
- D=\min_{x\in\Fleet}\{c(x)+F(e(x))\},\\
- CH=\min_{(e,c)\in\operatorname{conv}\{(e(x),c(x)):x\in\Fleet\}}
+ D&=\min_{x\in\Fleet}\{c(x)+F(e(x))\},\\
+ CH&=\min_{(e,c)\in\operatorname{conv}\{(e(x),c(x)):x\in\Fleet\}}
        \{c+F(e)\},\qquad \Delta=D-CH\geq0.
 \end{aligned}
 \end{equation}
@@ -119,5 +119,4 @@ $F(e)=\sum_t(a_te_t+b_te_t^2/2)$ and $b_t\geq0$; the conjugate term is
 $[p_t-a_t]_+^2/(2b_t)$ when $b_t>0$, and is finite at $b_t=0$ only for
 $p_t\leq a_t$.  These are standard convexification and Fenchel certificates
 over complete plans, rather than a new general convex-hull pricing method
-\citep{huaBaldick2017}.  Section~\ref{sec:computational} writes
-$G_s$ for this supply function in market state $s$.
+\citep{huaBaldick2017}.  Section~\ref{sec:computational} compares two specified market states.

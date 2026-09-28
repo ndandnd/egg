@@ -6,6 +6,39 @@ This supersedes the completed-draft stop and the suggested theory-only direction
 It does not authorize relabelling old results, opening protected evaluation data,
 publishing private GIRO data, or spending reset credits.
 
+## Review-driven correction — v0.7, 28 September 2026
+
+The author's external review identifies a missing analytical baseline and
+cap-dependent development comparisons. The current manuscript is being revised
+to report D, CH, their gap and own-price regret of a named planner incumbent
+together. Analytical cardinality/energy floors must accompany computational
+bounds. The historical reuse and start pilots remain in a separate supplement;
+their failures, caps and resource use are not erased or relabelled.
+
+The computational-paper objective remains active. Before another comparative
+campaign, implement the analytical baseline with explicit physical-case and
+market scope, then perform a bounded sizing diagnostic for pricing-call and
+arithmetic limits. Do not infer that changing four calls to sixteen will certify
+a case, or remove resource limits altogether. A pricing cut needs its own valid
+energy/cardinality inequality, not the hull-objective bound pasted into a
+linear-price subproblem. Record whether a native start was accepted before
+interpreting its effect; seed repetition and common-quality targets follow a
+viable configuration. The existing no-incumbent bug is already repaired and
+independently tested; new experiments must retain the failed historical records.
+
+The frozen retrieval design still uses four pricing calls and 4096 arithmetic
+bits. Review those limits against measured stops before deciding how to proceed;
+its old preflight failure and the pending one-replacement exception remain as
+recorded. This manuscript correction does not launch or authorize that
+replacement, and the old protocol cannot silently change. Eberbach has already
+been adapted and replayed as described below; neither it nor future independent
+timetables have comparative results yet. No training or protected test access.
+
+Old-terminal-inventory iteration outcomes cannot be imported as current-model
+results. Cycling of an update rule does not prove that no supporting physical
+plan exists. A new same-model convergence study is a distinct possible work
+package, not a prerequisite implied by this editorial correction.
+
 ## Research questions and order
 
 1. Establish complete physical-planning, full-fleet hull and own-price-response
