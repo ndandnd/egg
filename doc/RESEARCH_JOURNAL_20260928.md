@@ -233,3 +233,14 @@ ZIP and the separate bound note are under
 research-20260928/feasible-pool-pilot/results-attempt1/. The full raw archive stays
 private. The new read-only reporter passed six focused tests; the independent
 review replayed all saved physical columns, mixtures and target Fenchel bounds.
+
+Analysis commit b2b160046cd56dfcab87986b961011b0041d8345 was backed up to GitHub
+and passed full CI 36391559312, including the complete CBC test suite and frozen
+evidence reconstruction. Draft PR56 now reflects the completed pilot and its
+limits. The original Google Doc received one “Matched pilot results and next
+baseline — 28 September 2026” append and showed Saved to Drive; Luna observed
+the full body/link and last outline heading. Both post-edit exports were blocked
+by Chrome (ERR_BLOCKED_BY_CLIENT), so exact prefix/full-export preservation
+verification remains incomplete. The public receipt explicitly records this;
+root verified the available before-export and append-source hashes. Do not
+duplicate the append. No new cluster submission accompanied this milestone.

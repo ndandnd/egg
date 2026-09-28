@@ -28,6 +28,8 @@ manages. Hourly `advance-egg-journal-research` remains ACTIVE, quiet when unchan
   Full raw events/logs stay private. Never edit the sealed attempt.
 - Results/figures/evidence index:
   `research-20260928/feasible-pool-pilot/results-attempt1/README.md`.
+  Analysis backup: **b2b160046cd56dfcab87986b961011b0041d8345** on GitHub;
+  full CI 36391559312 passed (including complete tests and frozen-evidence reconstruction).
   Pure reporter: `src/experiments/feasible_pool_pilot_report.py` (6 focused tests
   passed). It accounts for all 24 cells, 12 paired comparisons and 12 paid
   two-state totals, with 57 compact pricing traces. Bounds display outward;
@@ -63,10 +65,19 @@ manages. Hourly `advance-egg-journal-research` remains ACTIVE, quiet when unchan
   not another broad qualification campaign. Then address the rational-polishing
   stop using the existing separate numerical-QP proposal before a larger sweep
   or learning. Different timetables cannot inherit pricing certificates directly.
-- Google Doc launch update was already verified; do not repeat it. A consolidated
-  results update is being prepared, with private before-export verified by Luna.
-  Check active workers and the final results-update receipt before appending.
-  PR56 remains draft/unmerged. No new optimizer run was made in this analysis.
+- Google Doc results update was appended ONCE and showed Saved to Drive, with
+  its heading last in the outline and full body/link observed by Luna. **Do not
+  append again.** Receipt/manifest: `research-20260928/agent-notes/google-doc-feasible-pilot-results/`.
+  Chrome blocked both post-edit exports (ERR_BLOCKED_BY_CLIENT), so exact
+  before-prefix/full-export preservation verification remains incomplete. Root
+  verified all three available manifest file hashes; no after export exists.
+  This export limitation does not block the next solver package. Avoid repeated
+  export retries; verify at a later meaningful Doc update if the route works.
+- PR56 description now reflects the completed pilot, mixed reuse outcome and
+  separate posthoc bound lead; draft/unmerged. No new optimizer run was made
+  in this analysis. The final receipt/handoff backup is documentation only;
+  check its latest CI once at the next heartbeat before code work, without
+  repeating the completed execution or analysis checks.
 
 ## Previous checkpoint — first computational screen completed
 
