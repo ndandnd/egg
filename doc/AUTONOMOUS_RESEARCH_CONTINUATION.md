@@ -6,7 +6,19 @@ optimization first, then retrieval/learned proposals. The v0.5 draft is historic
 Use GPT-6 Sol for implementation/analysis and Luna Max for supporting work; root
 manages. Hourly `advance-egg-journal-research` remains ACTIVE, quiet when unchanged.
 
-## Latest checkpoint — bounded cold-hull sizing diagnostic prepared
+## Latest checkpoint — bounded cold-hull sizing diagnostic submitted
+
+- Active EGG job591255, submitted once at23:32 UTC on28 September2026.
+  The one launch queue observation was PENDING/Priority,1 CPU/8GB. Do not
+  duplicate or poll old jobs. Receipt:
+  `research-20260928/cluster/budget-sizing-591255.json`.
+- Isolated execution checkout `/home/nc437/egg-budget-sizing-20260928`, source
+  `1dba007ee4868f0d29373a84b7880171ab3c358c`, passed full CI36498066050.
+  Leave this checkout unchanged. Attempt:
+  `result/budget_sizing_diagnostic/20260928-attempt1`; runtime/design freeze
+  occurs on its allocated compute node before any optimization. Sibling
+  `.launch` holds the exclusive intent and submission receipt; sibling
+  `.slurm_wrapper_receipt.json` records setup/freeze/preflight/run outcomes.
 
 - New development diagnostic under `research-20260928/budget-sizing-diagnostic/`:
   eight independent cold cells on the existing three-service multivisit case,
@@ -21,8 +33,10 @@ manages. Hourly `advance-egg-journal-research` remains ACTIVE, quiet when unchan
   replacement decision. All eight outcomes and all time must remain visible.
 - New runner/batch/pure tests are isolated from the core solver. Root's three
   focused tests, shell syntax and diff checks pass; Sol reports20 focused plus
-  adjacent checks during implementation. Execution/independent review receipts
-  will identify the pinned source and any job. Do not duplicate a submission.
+  adjacent checks during implementation. Luna's bounded review found no
+  remaining launch blocker. Preparation used22.337s SSH wall without solving;
+  submission used0.931s. Both transport receipts are preserved; these are not
+  solver performance times. No core solver or manuscript/PDF change was made.
 - Prior backupbef58e6 passed full CI36493009651. Its source-only predecessor
   CI36492634326 was superseded/cancelled, not a test failure. v0.7 remains the
   current author-review manuscript; this package makes no PDF change.
@@ -30,6 +44,16 @@ manages. Hourly `advance-egg-journal-research` remains ACTIVE, quiet when unchan
   limits as censoring. No assertion that sixteen calls suffices, and no automatic
   larger sweep. If arithmetic still binds, diagnose master/charging work before
   attributing benefit to route prediction. All cases remain development-only.
+- Next follow-up: one scoped `squeue` check for591255 viaunicorn2 after sourcing
+  `/etc/profile.d/slurm.sh`; if absent, scoped `sacct` and wrapper/supervisor
+  receipts. Collect and interpret the eight-row result before any new run.
+  No retry/requeue or wider sweep. The original Google Doc has one Saved and
+  reload-verified append, “Testing the stopping limits — 28 September 2026”,
+  with its opening phrase1of1, original heading intact and new heading last.
+  Text/receipt are in this package. PR56 describes the new diagnostic and
+  remains an unmerged draft. No active workers remain except stale pending
+  cardinality agent (ignore). Check final receipt-backup CI once next follow-up;
+  execution source1dba007 already passed and must not be changed on the cluster.
 
 ## Prior checkpoint — analytical baseline integrated into reporting
 
