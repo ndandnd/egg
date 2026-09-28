@@ -1,0 +1,95 @@
+% PRELIMINARY SCAFFOLD ONLY — not a replacement for paper/manuscript.md.
+% No PDF has been built from this file. Placeholders are intentionally open.
+\documentclass[11pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{graphicx,booktabs,tabularx}
+\usepackage{natbib}
+\usepackage[hidelinks]{hyperref}
+\usepackage{microtype}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}{Proposition}
+\newtheorem{lemma}{Lemma}
+\newtheorem{definition}{Definition}
+\newcommand{\Fleet}{\mathcal{F}}
+\newcommand{\Loads}{\mathcal{L}}
+\newcommand{\R}{\mathbb{R}}
+
+\title{Price Support and Indivisibility in Electric-Bus Fleet Scheduling}
+\author{Preliminary research scaffold}
+\date{Draft framework --- results and text require author review}
+
+\begin{document}
+\maketitle
+
+\begin{center}
+\fbox{\parbox{0.9\linewidth}{\centering\textbf{Staging only.} This file is an outline for a future revision. It contains no new numerical result, theorem claim, or journal-submission formatting.}}
+\end{center}
+
+\section*{Proposed abstract}
+Discrete service assignments, battery states, charging windows, shared chargers, and terminal replenishment can prevent an hourly marginal price from supporting a physically feasible electric-bus schedule, even with smooth convex supply costs. We compare complete feasible fleet plans with the convex relaxation over their joint operating-cost and load vectors. In a fully replenished two-service construction, physical and convexified costs are 97 and 94.8875; at a common hull price, fleet lost opportunity is zero while supplier lost opportunity is 2.1125, and the fleet's own-price regret is 13. A robustness variant retains positive nonconvexity with a reserve, 5\% charging loss, and one finite connector. In a scaling family, the absolute planning gap tends to zero even as whole-operator regret can remain positive, whereas per-bus and individually reserved-pair incentives vanish. For one 37-service, depot-15 stored-input instance, an exact rational witness and one-bus obstruction establish a two-bus minimum. An independently reconstructed, off-protocol nonlinear diagnostic leaves the public gap unresolved; its positive own-price regret concerns a bounded planner incumbent, not a proven optimum.
+
+\section{Introduction and scope}
+% TODO: State problem, contribution, and limits using only admitted evidence.
+% Keep price-taking support separate from strategic price impact.
+
+\section{Complete fleet and supply model}
+% TODO: Define the complete feasible-plan set, service obligations, SOC,
+% charging resources, terminal replenishment, horizon, and convex supply cost.
+Let $\Fleet(I)$ denote the set of complete physically feasible fleet plans for
+stored input $I$. Each $x\in\Fleet(I)$ has operating cost $c(x)$ and a full
+horizon load vector $e(x)\in\R^T$. Let $G(e)=\sum_{t=1}^T\phi_t(e_t)$ be the
+modeled convex supply cost. Freeze and justify these definitions before using
+them in any theorem or numerical claim.
+
+\section{Price-taking support and convexification}
+% TODO: State and prove the model-specific price-support result. The following
+% pair is an outline of the pure and convexified objectives, not a result claim.
+\[
+D(I)=\min_{x\in\Fleet(I)}\{c(x)+G(e(x))\},\qquad
+CH(I)=\min_{(e,c)\in\operatorname{conv}\{(e(x),c(x)):x\in\Fleet(I)\}}
+\{c+G(e)\}.
+\]
+% TODO: Connect price support and any compensation statement to assumptions,
+% attainment, and finite stored-input scope; cite established pricing theory
+% (\citep{gribikHoganPope2007,oneill2005,schiro2016,huaBaldick2017,starr1969}).
+% Report the finite stored-input computation and its audit separately.
+
+\section{Strategic price impact is a separate model}
+A price-taking fleet chooses among feasible plans while treating the posted
+hourly price vector as fixed during its deviation. This tests whether that
+marginal tariff decentralizes the plan, even though the price itself is
+determined by aggregate load. For a strategic fleet, the settlement rule
+matters: a bill of $c(x)+p(e(x))\cdot e(x)$ makes the fleet internalize how its
+load changes the price, whereas a system planner minimizes $c(x)+G(e(x))$.
+Even when the supply curve is known, the former can be a one-level strategic
+bill optimization; it is not automatically the same model as price-taking
+support. Convex-hull or uplift bounds for price-taking do not measure market
+power or strategic surplus. Decentralized price coordination is a related but
+distinct question (\citep{ganTopcuLow2013}); strategic-market and nonconvex
+pricing formulations also differ in their objectives
+(\citep{oneill2005,gribikHoganPope2007}).
+
+\section{Computational evidence}
+% TODO: Separate exact stored-input ideal bounds, complete-plan witnesses, and
+% tolerance-qualified native bounds. Keep Dantzig--Fulkerson tanker-scheduling
+% context distinct from the current fleet proof (\citep{dantzigFulkerson1954}).
+% Add any matched learned-plan benchmark only after experiment and independent review.
+
+\section{Related work, limitations, and implications}
+% TODO: Position the contribution as a fleet-application/certification result;
+% do not claim a new general convex-hull pricing principle.
+
+\section{Conclusion}
+% TODO: Summarize only verified scope and limits.
+
+\appendix
+\section{Proofs and computational provenance}
+% TODO: Proofs, input hashes, solver identities, and audit references.
+
+\bibliographystyle{plainnat}
+\nocite{gribikHoganPope2007,oneill2005,huaBaldick2017,schiro2016,starr1969,dantzigFulkerson1954,ganTopcuLow2013}
+\bibliography{references}
+\end{document}

@@ -1,10 +1,59 @@
 # EGG journal research continuation
 
-Updated 27 September 2026. Owner: the EGG task, acting as principal researcher
+Updated 28 September 2026 UTC. Owner: the EGG task, acting as principal researcher
 under the user's explicit authorization to continue routine research, cluster
 work, GitHub backups and Google Doc updates without repeated approvals.
 
-## Latest checkpoint — first draft delivered; no automatic research remains
+## Latest checkpoint — computational expansion authorized
+
+28 September 2026 UTC. The user explicitly wants many computational examples and
+possibly machine-learned route proposals, beginning with iterative optimization.
+This supersedes the theory-only recommendation and completed-draft stop below.
+The v05 evidence/artifacts remain immutable historical results. No old result is
+reclassified. Active roadmap: doc/COMPUTATIONAL_RESEARCH_ROADMAP_20260928.md.
+
+- Sol is designing/implementing a new bounded development-screen harness using
+  existing native physical/planner/hull APIs. No new cluster solve has run yet.
+- Luna inventory worker is checking available public/synthetic cases and live
+  Unicorn capacity; a separate Luna worker is checking relevant learned-route/
+  learned-column primary literature and strong retrieval/reuse baselines.
+- Candidate first screen: two synthetic base timetables plus Hildenbrand depot15
+  and 16, two market states, cold/retained hull and matched planner/response.
+  All screening cases are development. Both public depots share one timetable group.
+- Freeze concrete cases, budgets and code after a focused independent review.
+  Initial ceiling: one serial CPU job <=2h, request 1 CPU/8 GB, native 1 thread, no retry or
+  requeue, exclude scaglione-compute-01. Leave other projects untouched.
+- Existing hull exact polishing can end the loop before its overall budget; log
+  that bottleneck. New screen uses prospectively declared algorithm stopping
+  limits and a complete-cell hard watchdog, preserving valid bounded returns.
+  The old nonlinear v2 strict-polish failure stays failed. Do not blindly sweep
+  or expand the same bottleneck, and do not require a new broad qualification
+  campaign when the qualified physical source is unchanged.
+- After useful iterative baselines, test retained columns and nearest-neighbor
+  retrieval before learned proposal/repair. Report direct prediction separately
+  from global certification. Split by base timetable, including all its variants;
+  no private GIRO, protected A6/B3/confirmation data or reset-credit redemption.
+- Root manages; use GPT-6 Sol and Luna Max, short handoffs, compact outputs and
+  consolidated GitHub/Google Doc milestones. The final v05 review overestimated editorial
+  readiness; user critique governs the next revision. Resume bounded hourly
+  follow-ups for this newly authorized computational direction.
+
+Supporting work is now saved under research-20260928/computational-design/:
+the six-reference learned-route review, 20-base public-data inventory and an
+offline three-column restricted-QP probe. The probe used SciPy locally (no new
+global pricing or cluster solve): exact-simplex replay reduced the restricted
+pool gap from about 0.00202 to 7.23e-8, with a tiny 3.60e-8 cost decrease. The
+entire probe function took 0.244 s excluding imports/output writing; this is not
+a full-solver speedup. A candidate next-step note is
+doc/RESTRICTED_MASTER_NEXT_STEP_20260928.md. First-screen core stays unchanged.
+paper/latex/ is a preliminary scaffold with a shorter proposed abstract and
+foundational bibliography, not a completed manuscript conversion. A private
+Google Doc before-export is preserved in the outer research-20260928 folder;
+the original Doc has not yet been appended for this phase.
+
+### Historical delivered first draft (superseded as active direction)
+
+### Delivered first draft checkpoint
 
 27 September 2026. The journal-oriented first-draft objective is complete for
 expert user review. No journal submission or PR merge has occurred. Keep routine
