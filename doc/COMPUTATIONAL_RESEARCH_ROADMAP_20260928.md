@@ -155,10 +155,22 @@ reader accepts the new record while the cache-bound admission contract stays
 strict. Independent review and publication checks are recorded in
 `research-20260928/no-plan-repair/`. Historical outcomes remain unchanged.
 
-Next, assess a prospective physical-pricing MIP-start baseline
-using an already-known feasible fleet. Retained master columns need not provide
-such a native solver start. This is an untested candidate, not a speed claim;
-[Python-MIP documents an initial-solution interface](https://python-mip.readthedocs.io/en/latest/classes.html).
+An opt-in physical-pricing start now maps an already checked complete fleet
+to every compact movement binary, leaving continuous charging to the native
+solver. The core passed 40 focused pure tests and a small CBC functional check;
+this supplies no Gurobi or public-case performance evidence. Hint submission,
+acceptance and a returned certified result remain different observations.
+Start validation and setup are measured inside the pricing wall deadline.
+Retained master columns alone still do not supply a native solver start.
+
+The next bounded package will implement and launch the prospective fixed-price
+diagnostic in `doc/PRICING_START_PILOT_PROTOCOL_20260928.md`: 16 cold/start calls
+across the same four development cases and two predetermined query prices.
+It uses matched caps, counterbalanced order and a common known feasible-plan
+baseline, retaining historical source cost separately from online work. Core,
+checks and input inventory: `research-20260928/pricing-start/`.
+No cluster pilot or main-hull integration has run; no speed claim is made.
+[Python-MIP documents the initial-solution interface](https://python-mip.readthedocs.io/en/latest/classes.html).
 Broader independent public timetables and nearest-neighbor retrieval still
 precede learned proposals. Reserve grouped independent test networks before
 training and keep the price-support question central.

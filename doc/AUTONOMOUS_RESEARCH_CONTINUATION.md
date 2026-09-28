@@ -6,7 +6,51 @@ optimization first, then retrieval/learned proposals. The v0.5 draft is historic
 Use GPT-6 Sol for implementation/analysis and Luna Max for supporting work; root
 manages. Hourly `advance-egg-journal-research` remains ACTIVE, quiet when unchanged.
 
-## Latest checkpoint — no-plan pricing repair complete
+## Latest checkpoint — feasible pricing start, core and prospective design
+
+- At the 13:58 UTC heartbeat, prior receipt backup
+  9867fdf27d7444a65706dbcd2bb36f36782d2c09 passed full CI 36429393790.
+  No active EGG job remains; completed jobs were not polled or resubmitted.
+- Current bounded package: an opt-in known-feasible-fleet start for compact
+  fixed-price native pricing, plus prospective pilot design. Sol owns core
+  mapping/validation/telemetry and focused tests; Luna reviews the contract and
+  method; root manages protocol, source inventory and publication. No main-hull
+  integration, pilot runner or cluster launch in this package.
+- Mapping is viable: the compact model has one binary family, movement
+  selection. Assign every movement binary, including zeros, after checking the
+  full physical plan and provenance; native continuous variables are completed
+  by the solver. Hint submission is not evidence of native acceptance or a
+  certificate. Start setup belongs inside the same complete-call deadline.
+- Draft protocol: `doc/PRICING_START_PILOT_PROTOCOL_20260928.md`.
+  It declares 16 calls, four existing development cases by two price queries
+  by cold/start, with order counterbalanced within query across cases. Both
+  arms share a known feasible baseline when interpreting quality. Preserve
+  historical source generation cost separately from measured online work.
+  Public variants remain one timetable group. Prospective resource ceiling:
+  one serial job, 1 CPU/8 GB/1 hour, all threads one, no retry/requeue, exclude
+  scaglione-compute-01. No submission has occurred.
+- Metadata inventory: `research-20260928/pricing-start/SOURCE_INVENTORY.json`.
+  Intended state-0 qp-cache pools contain 2/4/2/2 columns and have on-time
+  return-0 receipts. Original public child costs are about 175.48/175.47s.
+  This is an inventory, not a new source admission or solver-start check.
+- Core implemented in `src/egglab/native_pathflow.py`; 40 focused pure tests
+  passed. One CBC cyclic-case functional check (5s wall/3s phase cap) returned
+  a certified numerical interval around 37 in about 0.23s total. It preceded
+  the final pure-tested guard against unexpected integer variables. This is
+  not Gurobi/public-case performance evidence; start acceptance is unknown.
+  Implementation and smoke receipt: `research-20260928/agent-notes/pricing-start/`.
+  Luna's independent code/protocol review passed; root matched its six pins.
+  The final index merely records that review verdict; code and protocol are
+  unchanged. Publication CI and Google Doc receipts remain pending.
+- Next separate package: build the bounded pilot runner, freeze source and
+  exact selected inputs, complete relevant checks, then submit the one job.
+  Its reader must account for `mip_start_setup` submission/rejection/timeout;
+  the legacy pathflow qualification reader rejects this new opt-in event.
+  Freeze Python-MIP/backend versions and effective model seed for both arms.
+  Do not repeat core design, old outcome audits or tiny smoke tests without a
+  specific new issue. No pilot or main-hull integration has run.
+
+## Previous checkpoint — no-plan pricing repair complete
 
 - At the 12:58 UTC heartbeat, no active EGG job or outstanding worker assignment
   remained. Previous receipt backup 453783266d5bfff0fcb80f762540ca95d9e5acd7

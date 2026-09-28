@@ -420,16 +420,107 @@ def _extract(case,built,record=None,round_index=0):
     return plan
 
 
+def _checked_pricing_start(case, source_plan):
+    """Check a saved physical fleet before using its movement choices as a hint.
+
+    Replay checks continuous-time charging, resources and SOC. It does not
+    certify feasibility of the native matrix or acceptance of a MIP start.
+    """
+    if not isinstance(source_plan, dict):
+        raise ValueError('MIP start source must be a physical plan mapping')
+    expected = {'schema':nr.SCHEMA,'case_identity':case.identity(),
+        'formulation':FORMULATION,'native_matrix':NATIVE_MATRIX,
+        'extraction_policy':EXTRACTION_POLICY}
+    for key, value in expected.items():
+        if source_plan.get(key) != value:
+            raise ValueError(f'MIP start source {key} mismatch')
+    try:
+        replay = replay_native(case, source_plan)
+        selected = [mid for vehicle in source_plan['vehicles'] for mid in vehicle['movements']]
+        paths, owners = recover_paths(case, selected)
+    except (KeyError, TypeError, AttributeError, ValueError, IndexError,
+            ZeroDivisionError, OverflowError) as exc:
+        raise ValueError(f'MIP start source is malformed or physically infeasible: {exc}') from exc
+    if len(selected) != len(owners) or len(paths) != len(source_plan['vehicles']):
+        raise ValueError('MIP start source movement ownership mismatch')
+    if replay.get('replay_ok') is not True:
+        raise ValueError('MIP start source physical replay did not pass')
+    return set(selected)
+
+
+def _attach_pricing_start(case, built, selected):
+    """Supply every compact binary movement value; solver fills continuous vars."""
+    x = built['x']
+    discrete = [v for v in built['model'].vars if v.var_type != 'C']
+    if (len(x) != len(case.movements) or any(v.var_type != 'B' for v in x)
+            or len(discrete) != len(x)
+            or {v.idx for v in discrete} != {v.idx for v in x}):
+        raise ValueError('MIP start binary mapping differs from compact model')
+    assignments = [(var, int(mode.id in selected)) for var,mode in zip(x,case.movements)]
+    built['model'].start = assignments
+    return {'binary_count':len(assignments),
+            'selected_count':sum(value for _,value in assignments),
+            'zero_count':sum(value == 0 for _,value in assignments)}
+
+
 # The native matrix and bound guards stay unchanged; compact extraction has a
 # separate prospective identity and objective-correction ledger.
-def solve_pricing(case, prices, budget=Budget(), record=None):
+def solve_pricing(case, prices, budget=Budget(), record=None, start_plan=None):
     _check_prices(case, prices)
     _check_budget(budget)
     deadline = time.monotonic()+budget.wall_seconds
-    built = build_feasible_model(case, budget.backend)
-    attach_objective(built, "linear", prices)
+    if start_plan is None:
+        built = build_feasible_model(case, budget.backend)
+        attach_objective(built, "linear", prices)
+    else:
+        setup_started = time.perf_counter()
+        stage = 'validation'
+        timings = {}
+        try:
+            selected = _checked_pricing_start(case, start_plan)
+            timings['validation_s'] = time.perf_counter()-setup_started
+            if time.monotonic() >= deadline:
+                raise TimeoutError('MIP start validation exhausted native wall budget')
+            stage = 'model_build'
+            step_started = time.perf_counter()
+            built = build_feasible_model(case, budget.backend)
+            timings['model_build_s'] = time.perf_counter()-step_started
+            if time.monotonic() >= deadline:
+                raise TimeoutError('MIP start model build exhausted native wall budget')
+            stage = 'objective_attach'
+            step_started = time.perf_counter()
+            attach_objective(built, "linear", prices)
+            timings['objective_attach_s'] = time.perf_counter()-step_started
+            if time.monotonic() >= deadline:
+                raise TimeoutError('MIP start objective attachment exhausted native wall budget')
+            stage = 'start_attach'
+            step_started = time.perf_counter()
+            mapping = _attach_pricing_start(case, built, selected)
+            timings['start_attach_s'] = time.perf_counter()-step_started
+            if time.monotonic() >= deadline:
+                raise TimeoutError('MIP start attachment exhausted native wall budget')
+        except Exception as exc:
+            if record:
+                record({'event':'mip_start_setup',
+                    'status':'timed_out' if isinstance(exc,TimeoutError) else 'rejected',
+                    'stage':stage,
+                    'setup_elapsed_s':time.perf_counter()-setup_started,
+                    'wall_remaining_s':deadline-time.monotonic(),
+                    'timings':timings,'error_type':type(exc).__name__,
+                    'error':str(exc)})
+            raise
+        if record:
+            record({'event':'mip_start_setup','status':'submitted',
+                'setup_elapsed_s':time.perf_counter()-setup_started,
+                'wall_remaining_s':deadline-time.monotonic(),
+                'timings':timings,**mapping,
+                'meaning':'binary hint submitted; solver acceptance and feasibility unverified'})
     if record:
-        record({"event": "native_start", "round": 0})
+        model = built.get('model')
+        record({"event": "native_start", "round": 0,
+                "backend":built.get('backend',budget.backend),
+                "backend_runtime":built.get('backend_runtime'),
+                "model_seed":getattr(model,'seed',None)})
     stats = _optimize_once(built, budget, deadline)
     if record:
         record({"event": "native_status", "round": 0, "stats": stats})
