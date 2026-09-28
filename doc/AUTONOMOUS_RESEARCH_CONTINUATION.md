@@ -6,7 +6,7 @@ optimization first, then retrieval/learned proposals. The v0.5 draft is historic
 Use GPT-6 Sol for implementation/analysis and Luna Max for supporting work; root
 manages. Hourly `advance-egg-journal-research` remains ACTIVE, quiet when unchanged.
 
-## Latest checkpoint — independent timetable intake complete; publication in progress
+## Latest checkpoint — independent timetable intake published
 
 - Receipt backup 570f822 passed CI 36450899363. No active EGG jobs remain.
   No cluster queue query, solver or submission occurred in this package; do not
@@ -59,7 +59,26 @@ manages. Hourly `advance-egg-journal-research` remains ACTIVE, quiet when unchan
   consolidate the revised manuscript in LaTeX even if no speedup is observed.
   The v0.5 draft is historical; the expanded computational first draft is not
   yet complete. ML training is optional and cannot indefinitely delay writing.
-- Publication, CI and Google Doc receipt will be recorded here after completion.
+- Intake milestone **4e789e3cc2a0b050040e827a9996b64eeb1c7b54** is pushed.
+  Full CI **36458753423 passed** (test job4m24s): complete CBC tests and
+  frozen-evidence reconstruction. Receipt `benchmark-intake/CI_RECEIPT.md`.
+  Draft PR56 is updated and remains unmerged. The documentation/receipt backup
+  CI may be checked once next heartbeat; no research workers remain active. Group reservation SHA-256
+  34ba9087bc4ed1e6b55bfdce20f29ab501cfa3f7fa59dbc112d04ee4b6f055a3;
+  final synthetic design SHA-256
+  6e794dfd28d56eb5ae2016b3e5a80a334fd0c53cdf4af5644cdddecbbb30f02d;
+  final review SHA-256
+  c2ea810be3b761098f025de87ddf8d21b6e4a560a3589076f432062cb660ccd4.
+  Root clarified that an energy upper bound does not prove realized charging
+  pressure; retain uncongested generated cases rather than filtering outcomes.
+- Original Google Doc appended ONCE under “Preparing independent timetables and
+  protecting evaluation — 28 September 2026”. Luna verified Saved, final
+  heading/body/four links and one normal reload with a unique body match.
+  Source: `research-20260928/benchmark-intake/GOOGLE_DOC_UPDATE.md`, SHA-256
+  f350add9a06a8683cda47e7e1e38e728f0af8f1b24ad3fcdc60862b9cd79dde4.
+  Receipt: `research-20260928/agent-notes/google-doc-benchmark-intake/RECEIPT.md`,
+  SHA-256 f18a0b742e3ddbd0c1c647c8b29672cd1e8eb68e5a4f5f61697bf64b5624bcf6.
+  Root matched both. No export, duplicate append, or new cluster work.
 
 ## Previous checkpoint — pricing-start results published
 
