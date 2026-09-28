@@ -6,43 +6,64 @@ optimization first, then retrieval/learned proposals. The v0.5 draft is historic
 Use GPT-6 Sol for implementation/analysis and Luna Max for supporting work; root
 manages. Hourly `advance-egg-journal-research` remains ACTIVE, quiet when unchanged.
 
-## Latest checkpoint — bounded retrieval comparison ready for publication and launch
+## Latest checkpoint — six-case retrieval comparison submitted
 
-- At the 18:03 UTC heartbeat, prior receipt backup f8535c1 passed CI36459430546.
-  No active EGG jobs or newer execution state; no queue query was needed.
-  Existing execution checkouts/results remain unchanged.
-- Current bounded package: five synthetic development cases plus Eberbach105,
-  two source markets, four target initialization methods, shared target planner
-  and own-price response. Root protocol:
-  `doc/RETRIEVAL_COMPARISON_PROTOCOL_20260928.md`. No optimizer has run yet.
-- Sol owns the full-charge synthetic generator and pure witness preflight;
-  a separate Sol owns the bounded runner/tests/Slurm wrapper. Root manages the
-  protocol, review, Git/CI and launch/publication. No broader sweep or ML work.
-- Only DEV seeds1006 (8/16/24 services),1012 (16),1009 (16) may be generated.
-  Eberbach remains DEV; protected data and reserved train/test groups stay shut.
-- Two fresh source hull runs create the common physically checked fleet pool.
-  Target arms are cold, retained whole pool, nearest actual source price, and
-  exact cheapest-current-bill fleet. Each receives common fresh global pricing;
-  no inherited lower cache/native starts. Query is target linear price vector.
-  Any derived pool import envelope is explicitly feasible-only and contains no
-  source certification or lower bounds. Full original provenance remains intact.
-- Prospective ceiling: 48 children, 5160s routine allowances +1440s complete-child
-  margins; controller6900s/outer7100s/Slurm2h, one CPU/8GB, one native thread,
-  no retry/requeue, excluded reserved node. Counterbalance target order.
-- Five synthetic cases now pass replay and3 focused pure tests; service-energy
-  conservation forces approximately33.59–234.34kWh outside any four-hour/90kW
-  window in the16/24-service cases. The8-service witness fits the window.
-  Root matched generator/source receipt; Luna's generator/protocol review has
-  no blocker. No model or solver has run for these cases.
-- The runner fixes are complete: controller6900 leaves cleanup before outer7100;
-  paid source work includes measured pool construction; primary intervals exclude
-  late/failed returns; direct proposals persist before iterative verification;
-  reported bounds must match replayed certificate/mixture values. Eight focused
-  pure tests, Python compilation and shell syntax checks pass. Luna’s independent
-  review found no remaining blocker; root matched all nine review pins. Source
-  publication/full CI and the single cluster freeze/launch are next.
-- After the single attempt and result review, consolidate the LaTeX draft even
-  if reuse/retrieval brings no acceleration. No repeated favorable-result search.
+- **Active EGG job584876**: submitted once at18:46 UTC on28 September2026.
+  The one launch queue check was PENDING/Priority,1 CPU/8GB. Do not resubmit.
+  Launch receipt: `research-20260928/cluster/retrieval-comparison-584876.json`.
+- Frozen execution checkout `/home/nc437/egg-retrieval-comparison-20260928`, HEAD
+  `68cfa64fed41b61b423628b5f112eeb0b43934e2`; source passed full CI36466637135
+  (test job4m56s). Do not pull or change this checkout while the attempt runs.
+  Result path `result/retrieval_comparison/20260928-attempt1`; sibling `.launch`
+  and `.prepare` hold exclusive intent/receipts. Frozen SHA-256
+  `9fb6c638cef4c40de79b4084f82129fd5b2c76f634c33f7110ab3c0cf3f51889`.
+- Scope: five generated synthetic DEV cases (seed1006:8/16/24 services;
+  seeds1012/1009:16 each) plus Eberbach105. No reserved groups opened. Two fresh
+  source hulls produce the shared checked pool; target arms are cold, retained,
+  nearest actual source price and exact cheapest-current-bill. Each receives
+  fresh global pricing without inherited bounds/native starts. Shared target
+  planner/own-price response preserve the price-support question.
+- Prospective cap:48 children,5160s routine allowances+1440s complete-child
+  margins; controller6900s/outer7100s/Slurm2h,1 CPU/8GB,1 native thread, seed0,
+  serial, no retry/requeue, excluded reserved node. Target arm order rotates.
+  Full protocol `doc/RETRIEVAL_COMPARISON_PROTOCOL_20260928.md`.
+- Three pure generator tests and eight pure runner tests passed. Independent
+  Luna review found no remaining blocker; root matched all nine review pins.
+  Direct proposals persist before verification; primary intervals exclude late
+  or failed returns; paid source work includes pool preparation. Earlier checked
+  source plans remain usable after later failed calls without relabeling failure.
+- Mandatory service energy forces approximately33.59–234.34kWh outside any
+  four-hour/90kW window for16/24-service cases; the8-service witness fits.
+  These are input properties, not optimized fleet counts. Every fixed case stays.
+- Initial remote preparation stopped at Slurm profile initialization under
+  nounset before checkout creation/freeze/submission. Correcting source order
+  allowed one successful freeze (2.906s); total preparation SSH work32.103s,
+  including failed0.052s. Logs/time are preserved in PREPARATION_RECEIPT.json
+  under `research-20260928/retrieval-comparison/`, raw logs privately at
+  `/Users/nadan/Documents/ChatGPT/egg/research-20260928/cluster/retrieval-comparison-attempt1/`.
+  This was not a solver attempt or job retry; exactly one sbatch succeeded.
+- Original Google Doc updated once, Saved/reload verified: the new heading is
+  last, its unique body phrase occurs once and all four links render. Source
+  `research-20260928/retrieval-comparison/GOOGLE_DOC_UPDATE.md` SHA-256
+  `37583ff8ae8b49528ea22f6a5ac509b10d1ecd99380be9d054d1390d80e5c2f2`;
+  receipt `research-20260928/agent-notes/google-doc-retrieval-comparison/RECEIPT.md`
+  SHA-256 `257686871da3eff7a2c9c2eb6f1df82e46c6033626013e69f32cbfc5389472a7`.
+  PR56 description now reflects the fixed comparison and launch; stays draft.
+  No implementation workers remain active. The only active research execution
+  is job584876; do not revive the stale pending cardinality worker.
+- Launch/CI/preparation/Doc receipts are being backed up in the current final
+  documentation commit. At the next heartbeat check that newest backup CI once;
+  do not rerun the already successful execution-source gate.
+- Next heartbeat: one scoped `squeue -j584876` via unicorn2 after sourcing
+  `/etc/profile.d/slurm.sh` BEFORE enabling nounset. If vanished, use scoped
+  sacct and terminal receipts. If active, do not inspect partial outcomes or
+  submit duplicates. On completion, collect sealed results plus sibling
+  wrapper/preparation/launch receipts, independently review once, then produce
+  complete tables/figures with failures, paid source costs, direct proposals,
+  fresh intervals and qualified price-support metrics. Do not rerun to seek
+  a favorable result. Consolidate the LaTeX draft after that review even if
+  retrieval has no acceleration; ML is optional for the first draft.
+- Old checkouts and completed jobs remain unchanged; do not poll577225.
 
 ## Previous checkpoint — independent timetable intake published
 

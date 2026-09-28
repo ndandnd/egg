@@ -26,3 +26,12 @@ sources and unavailable comparisons will be preserved. The single serial
 attempt has a two-hour ceiling, one CPU and 8 GB, with no retry or requeue.
 After its result review, the evidence is consolidated into the LaTeX draft;
 ML training is optional for that first draft.
+
+Execution source `68cfa64` passed [full CI](https://github.com/ndandnd/egg/actions/runs/36466637135).
+The frozen attempt was submitted once as **job 584876** at 18:46 UTC on 28 September;
+the launch queue observation is PENDING for Priority. No scientific outcomes
+have been read. [Launch receipt](../cluster/retrieval-comparison-584876.json)
+and [preparation receipt](PREPARATION_RECEIPT.json) preserve the prospective
+source/input pins, solver seed 0, paid preparation and initial shell-bootstrap
+failure before any freeze or job submission. The execution checkout remains
+frozen at the published source while results accumulate.
