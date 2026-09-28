@@ -69,3 +69,6 @@ before training or comparative outcomes. Prepare the cold, retained-column and
 nearest-neighbor proposal/repair comparisons with common quality targets and
 explicit budgets. The current cases stay development data. Do not enlarge the
 solver-start experiment merely to seek a more favorable result.
+
+The consolidated result update was appended once to the original Google Doc and
+verified after reload; [persistence receipt](../../agent-notes/google-doc-pricing-start-results/RECEIPT.md).

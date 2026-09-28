@@ -6,7 +6,7 @@ optimization first, then retrieval/learned proposals. The v0.5 draft is historic
 Use GPT-6 Sol for implementation/analysis and Luna Max for supporting work; root
 manages. Hourly `advance-egg-journal-research` remains ACTIVE, quiet when unchanged.
 
-## Latest checkpoint — pricing-start result package complete, publication in progress
+## Latest checkpoint — pricing-start results published
 
 - At the 16:01 UTC heartbeat, receipt backup b912078 passed CI 36444453893.
   One queue check for 577225 reported a vanished job ID; scoped accounting
@@ -49,9 +49,21 @@ manages. Hourly `advance-egg-journal-research` remains ACTIVE, quiet when unchan
   No immediate full-method start integration or enlarged start sweep; separate
   proposal feasibility/quality, repair and global verification. No protected
   A6/B3/confirmation outcomes or private GIRO publication.
-- Root is publishing the reviewed result milestone, appending the consolidated
-  original Google Doc update, and backing up its persistence receipt. No new
-  experiment runs in this results-publication package.
+- Results milestone **f3a388cda3034f212aeeb141acd7b17022706501** is pushed.
+  Full CI **36450248274** passed (test job 4m26s); receipt is
+  `research-20260928/pricing-start-pilot/results-attempt1/CI_RECEIPT.md`.
+  Draft PR 56 now links the result tables and figures and records the next
+  benchmark-intake step; it remains draft and unmerged. Original Google Doc
+  appended ONCE with “Feasible starts help selectively, without a measured
+  speedup — 28 September 2026”. Luna verified Saved, final heading/body/four
+  links, then one normal reload with a unique body match. Source:
+  `research-20260928/pricing-start-pilot/results-attempt1/GOOGLE_DOC_UPDATE.md`
+  SHA-256 `1e90dc175e3d1b204ba73e91d193a3bb5e9158597243c4758e59a92e6e5d3f57`;
+  receipt `research-20260928/agent-notes/google-doc-pricing-start-results/RECEIPT.md`
+  SHA-256 `ab6a13e4f8be90bbddfd74480ef4dcbc2f3eceb60e2ed8b02bea51d59134936f`.
+  Root matched both. No export or duplicate append. No new experiment ran in
+  this results-publication package. Final documentation/receipt backup CI can
+  be checked once next heartbeat; do not alter the remote execution checkout.
 
 ## Previous checkpoint — pricing-start pilot submitted
 
