@@ -6,29 +6,56 @@ optimization first, then retrieval/learned proposals. The v0.5 draft is historic
 Use GPT-6 Sol for implementation/analysis and Luna Max for supporting work; root
 manages. Hourly `advance-egg-journal-research` remains ACTIVE, quiet when unchanged.
 
-## Latest checkpoint — retrieval job failed before optimization; repair reviewed, publication next
+## Latest checkpoint — preflight failure repaired; replacement decision pending
 
-- At the19:05 UTC heartbeat, backup513bc48 passed CI36468333145. No newer
-  execution source or active workers existed. One scoped queue query found
-  job584876 absent; scoped sacct reports FAILED1:0,12s on unicorn-cpu-75,1 CPU.
-  No active EGG job remains. Do not poll completed584876 or resubmit it.
-- Wrapper setup/preflight failed after7s before supervisor/controller/native
-  probe. The collected attempt contains only frozen.json; all48 declared
-  children are unstarted, no optimizer outcomes or algorithm evidence exist.
-  Frozen SHA matches the launch pin. Failure package:
+- No active EGG jobs remain. At the19:05 UTC heartbeat, receipt backup513bc48
+  passed CI36468333145. One scoped queue query found584876 absent; sacct reports
+  FAILED1:0,12s on unicorn-cpu-75,1 CPU/8GB. Do not poll/resubmit that job.
+- The wrapper failed in preflight after7s (all setup), before native probe,
+  supervisor/controller or any of48 planned optimization children. Attempt
+  directory contains only frozen.json. Its SHA matches the launch pin. Failure
+  does not provide algorithm evidence. Preserved receipts, all48 unstarted rows,
+  traceback and private-collection hashes are in
   `research-20260928/retrieval-comparison/failure-attempt1/`.
-- Exact equality of the complete environment dictionary rejects login kernel
-  6.8.0-136 versus compute kernel6.8.0-138. Scoped node metadata confirms this
-  sufficient failure cause. The generic error did not log all failed predicates.
-- Sol’s minimal runtime repair plus root’s strict Python-build/ABI/architecture
-  preservation passed nine pure tests, py_compile and diffcheck. Luna’s narrow
-  independent repair review found no blocker; full publication CI is next. No
-  optimizer, test dataset, new resource allocation or launch is authorized in
-  this package. Preserve the frozen68cfa64 remote checkout and all spent time.
-- The protocol expressly forbids retry/requeue. Do not change attempt paths or
-  budgets to bypass it. Finish the repair and a concrete reviewed disposition
-  before flagging any replacement-attempt decision. LaTeX consolidation remains
-  the next manuscript milestone; ML is optional.
+- Login kernel6.8.0-136 versus compute kernel6.8.0-138 necessarily fails the old
+  exact full-environment equality check. Scoped scontrol node metadata confirms
+  this sufficient cause; old generic diagnostics did not prove all other checks.
+  Raw archive is private under
+  `/Users/nadan/Documents/ChatGPT/egg/research-20260928/cluster/retrieval-comparison-attempt1/failed-job-584876/`.
+- Minimal repair source `478d5656fac27173187e69d7c932da2d133a7055` is published
+  and passed full CI36471163895 (4m25s). Nine focused pure tests, py_compile and
+  independent Luna review passed. Full Python build/implementation/ABI, machine,
+  packages, Gurobi runtime and native library/seed checks remain strict; kernel
+  and hostname are recorded separately. Mismatch errors now identify fields.
+  No native probe, optimization, replacement freeze or new allocation occurred.
+- **User decision pending:** the frozen protocol expressly forbids retries.
+  Root asked once via async question whether to permit one separately recorded
+  replacement with identical scientific design and1 CPU/8GB/2h, or consolidate
+  with existing evidence. Proposed disposition is
+  `failure-attempt1/REPLACEMENT_DECISION.md` under the research package. Do not
+  infer approval, repeat the question every heartbeat, or launch while pending.
+- If the user authorizes exactly one replacement, use a NEW isolated checkout,
+  leave `/home/nc437/egg-retrieval-comparison-20260928` at failed source68cfa64,
+  and execute repaired source478d565. Freeze once, require unchanged scientific
+  design digest `dc9ca0df332650f48dc4bb4ba1905dc80103847ce6c7202f239b494f91851abd`,
+  create an exclusive new launch intent, then one sbatch. Full cases/markets/
+  controls/order/caps stay fixed. No further replacement or wider sweep follows
+  automatically. Relative attempt paths stay source-defined in the new checkout;
+  job ID, source and isolated root distinguish it from the preserved failed run.
+- While waiting, the next bounded package may start LaTeX consolidation from
+  already reviewed evidence under DRAFT_COMPLETION_PLAN_20260928.md. Keep the
+  six-case retrieval study explicitly unexecuted unless new results exist.
+  ML remains optional; do not open reserved groups or train on failed labels.
+- Original Google Doc failure/repair update appended once, Saved and one reload
+  verified: new heading last, unique sentence1 of1, four links rendered. Source
+  `research-20260928/retrieval-comparison/failure-attempt1/GOOGLE_DOC_UPDATE.md`,
+  SHA-256 `e5170566cb29458d4279692004bf0b2f812b4edb6c544210ab6e9fe551e96ce0`.
+  Receipt: `research-20260928/agent-notes/google-doc-retrieval-preflight-failure/RECEIPT.md`,
+  SHA-256 `7e41a8cc16f2e5fd14a3d133199a41aad6b64bf10e600e57e61a3d4e55012d0f`.
+  PR56 reflects the failed preflight and repaired source, stays draft/unmerged.
+  No active implementation/review/Doc workers remain; ignore stale pending agent.
+  Current final receipt backup CI can be checked once on the next heartbeat;
+  do not repeat the already successful repair-source validation.
 
 ## Prior launch checkpoint — six-case retrieval comparison submitted
 

@@ -30,6 +30,7 @@ A minimal source repair now compares software/package identity
 strictly while recording host/kernel metadata separately, and identifies future
 failed predicates explicitly. Nine focused pure tests pass, including rejection of changed Python builds.
 The independent [repair review](REPAIR_REVIEW.md) found no blocker; publication
-CI is the remaining source check. It does not alter this attempt, its resource use
+[full CI](https://github.com/ndandnd/egg/actions/runs/36471163895) also passed
+for repair source `478d565` (test job 4m25s). It does not alter this attempt, its resource use
 or its failure classification. The fixed comparison protocol forbids retries;
 a replacement compute attempt is not launched by this repair package.
