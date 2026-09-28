@@ -27,8 +27,16 @@ manages. Hourly `advance-egg-journal-research` remains ACTIVE, quiet when unchan
   endpoints; these do not prove a positive public gap or a speedup.
 - No native optimization, new experiment, cluster call/allocation, protected or
   private data, manuscript/PDF revision, or ML training. No active EGG jobs.
-  Previous receipt backup248f6b8 passed CI36490723183. Backup/Doc receipts for
-  this package are recorded below when complete.
+  Previous receipt backup248f6b8 passed CI36490723183. Source backup
+  `88daef8482aadd27bcf7605c4aced765fbffb205` is published. PR56 was updated and
+  remains OPEN/draft, unmerged. Source CI36492634326 is still in progress at
+  the final scoped check (setup/whitespace/shell checks passed).
+- Original Google Doc update “Analytical benchmark integrated — 28 September
+  2026” is appended once, Saved and reload-verified. Complete opening sentence
+  appears1of1; original heading intact, new heading last, two source links.
+  Text and receipt are `GOOGLE_DOC_UPDATE.md` and `GOOGLE_DOC_RECEIPT.md` in
+  this package. No active workers remain except the stale pending cardinality
+  agent (ignore). Check source/final receipt hosted CI once next continuation.
 - Next bounded package: design a sizing diagnostic against the observed
   pricing-call/arithmetic stops before another comparison. Do not silently
   change the frozen four-call/4096-bit retrieval design, infer that sixteen
