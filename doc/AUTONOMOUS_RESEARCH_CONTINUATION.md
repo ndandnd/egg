@@ -50,8 +50,28 @@ manages. Hourly `advance-egg-journal-research` remains ACTIVE, quiet when unchan
   timed known-feasible-fleet MIP-start baseline for physical pricing before
   broader cases, nearest-neighbor retrieval and learned proposals.
 - No active EGG job remains. Do not poll/resubmit 575215. No rerun, new
-  experiment or solver change was made in this results package. Root is
-  completing the GitHub and original Google Doc milestone receipts.
+  experiment or solver change was made in this results package.
+- Reviewed results milestone **5e53dc81ed4a05711e76fa647f23a9f31afae81a**
+  is backed up on the existing research branch. Draft PR 56 now describes
+  the complete comparison, unresolved public gaps and observed return-path
+  defect, and links immutable reviewed tables and figures. Results CI
+  **36422951827** passed the complete gate on attempt 1 (test job 4m23s).
+  Receipt: `research-20260928/solver-baseline-comparison/RESULTS_CI_RECEIPT.md`.
+- Original Google Doc appended ONCE with “Completed ordered solver comparison
+  — 28 September 2026”, including immutable report/figure links. Luna observed
+  Saved to Drive, the new outline heading and the distinctive interval phrase
+  exactly once; after one normal reload the heading and same body match
+  persisted. No export or duplicate append was attempted.
+  Source: `research-20260928/solver-baseline-comparison/RESULTS_GOOGLE_DOC_UPDATE.md`
+  (SHA-256 `19ce40943eb0e09492a8bc3c30640a44053f1bc5d6d1acd2b91a3b9ae11a25f3`).
+  Receipt: `research-20260928/agent-notes/google-doc-solver-baseline-results/RECEIPT.md`
+  (SHA-256 `cb71ea0130d9602fcd099c48f48b5f22955e92ad46e79d9cfab9f5c69c417b90`).
+  Root matched both hashes. Final source differs from the reviewed draft only
+  by the explicit outward-rounding label and published immutable links.
+- Results package is complete. No workers have outstanding assignments and
+  no EGG job remains active. Next heartbeat should check the final receipt-only
+  backup's CI once, then undertake the bounded no-plan wrapper repair above.
+  Do not repeat the sealed archive/replay review or poll completed job 575215.
 
 ## Previous checkpoint — ordered solver comparison running
 
