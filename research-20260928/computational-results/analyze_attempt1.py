@@ -187,6 +187,14 @@ def display(number):
     return "—" if number is None else f"{number:.2f}"
 
 
+def save_figure(fig, out, stem):
+    for extension in ("png", "svg", "pdf"):
+        path = out / f"{stem}.{extension}"
+        fig.savefig(path, dpi=220)
+        if extension == "svg":
+            path.write_text("\n".join(line.rstrip() for line in path.read_text().splitlines()) + "\n")
+
+
 def figure_runtime(data, out):
     order = [(case, state) for case in CASES for state in (0, 1)]
     matrix = np.full((8, 4), np.nan)
@@ -216,8 +224,7 @@ def figure_runtime(data, out):
     ax.axhline(3.5, color="#63717d", linewidth=1)
     ax.set_title("End-to-end stage wall time and recorded outcome", fontsize=10)
     fig.colorbar(image, ax=ax, label="Child wall seconds (log scale)", shrink=.9)
-    for extension in ("png", "svg", "pdf"):
-        fig.savefig(out / f"runtime_status.{extension}", dpi=220)
+    save_figure(fig, out, "runtime_status")
     plt.close(fig)
 
 
@@ -246,8 +253,7 @@ def figure_public_bounds(data, out):
             ax.tick_params(axis="x", labelsize=8)
             ax.set_xlabel("Numerical objective enclosure", fontsize=8)
             ax.set_xlim(330, 570)
-    for extension in ("png", "svg", "pdf"):
-        fig.savefig(out / f"public_bounds.{extension}", dpi=220)
+    save_figure(fig, out, "public_bounds")
     plt.close(fig)
 
 

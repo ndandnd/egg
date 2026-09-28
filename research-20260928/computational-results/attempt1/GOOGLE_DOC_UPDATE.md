@@ -9,3 +9,5 @@ The public hull runs spent about 173 of 184 seconds in native pricing solves, wi
 The next experiment will reserve time to process returned plans and test a separate reuse mode that accepts physically verified pools even when the preceding solve has an open optimality gap. It must recompute target-market weights, prices and global bounds, count preparation and checking time, and preserve the original certified-predecessor comparison. The shifted three-service example hit a separate rational-arithmetic limit; the numerical mixture proposal remains relevant there. Retrieval baselines and these solver improvements come before learned route proposals.
 
 The result tables, two diagnostic figures and a compact package of replayable scientific evidence are backed up with the research code. No ML advantage or public reuse speedup is claimed. Hourly research follow-ups continue.
+
+Tables, figures and scientific evidence: https://github.com/ndandnd/egg/blob/967f603059467fdf3af25ef61634f9253e9a7c5b/research-20260928/computational-results/attempt1/README.md
