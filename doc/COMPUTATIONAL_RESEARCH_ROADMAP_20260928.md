@@ -210,6 +210,17 @@ reserved independent test groups stay closed until a later frozen evaluation.
 
 ## Manuscript direction
 
+The six-page computational chapter now consolidates the three completed,
+reviewed campaigns into four tables, two vector figures and an evidence map.
+Source: `paper/latex/computational_results.tex`; standalone review PDF:
+`output/pdf/egg-computational-chapter-20260928.pdf`. Its numerical claims and all
+rendered pages have been checked. The expanded first draft still requires the
+exact theory, physical/economic model and related work to be integrated in
+LaTeX. The attempted six-case comparison stopped before optimization; it adds
+no algorithm evidence, and one replacement remains a pending user decision.
+Continue manuscript integration using the existing evidence while that decision
+is pending. Nearest-neighbor retrieval and learned proposals remain untested.
+
 Retain the exact mechanism and replication results, but support the computational
 story with substantive multi-instance comparisons. Move reuse development and
 qualification histories out of the main narrative. Use one reproducibility

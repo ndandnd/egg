@@ -6,7 +6,38 @@ optimization first, then retrieval/learned proposals. The v0.5 draft is historic
 Use GPT-6 Sol for implementation/analysis and Luna Max for supporting work; root
 manages. Hourly `advance-egg-journal-research` remains ACTIVE, quiet when unchanged.
 
-## Latest checkpoint — preflight failure repaired; replacement decision pending
+## Latest checkpoint — computational chapter ready for review
+
+- The six-page LaTeX computational chapter is complete and independently checked:
+  `output/pdf/egg-computational-chapter-20260928.pdf`, SHA-256
+  `4873ab9db128ab3ba4a98c4ca4a9505a78e1bbad3597a0e80580d4181f1a88eb`.
+  It contains four tables and two vector figures, with all six pages visually
+  inspected after the final changes and a clean Tectonic log. Source and wrapper
+  are `paper/latex/computational_results.tex` and `computational_review.tex`.
+  `research-20260928/manuscript-computational/` records the source map, independent
+  claim review, rendering QA and artifact hashes. No solver suite was rerun for
+  this manuscript-only package.
+- The chapter consolidates three overlapping development campaigns: 24 feasible-
+  pool cells, 32 ordered-baseline cells, and 16 fixed-price calls. Both public
+  depots are one Hildenbrand timetable. Reuse improves particular bounds, public
+  global gaps remain open, and pricing starts show mixed effects. No public
+  optimality, equal-quality acceleration, independent-network generalization or
+  learned benefit is claimed. Failed rows retain missing intervals and paid time.
+- This is a readable component, not the completed expanded first draft. The old
+  v0.5 and `paper/manuscript.md` remain historical; `paper/latex/main.tex` remains
+  an old outline. Next bounded package: consolidate theory, physical/economic
+  model and literature into the complete LaTeX manuscript, integrating this
+  reviewed chapter under `DRAFT_COMPLETION_PLAN_20260928.md`. Do not start a new
+  experiment, sweep or training campaign merely to fill the manuscript.
+- No active EGG jobs or cluster calls in this package. Prior backup e84642a
+  passed CI36472242725. Do not poll completed584876 or577225. The pending
+  one-replacement question below remains unanswered; do not infer approval or
+  ask it again. No protected/reserved/private data were opened.
+- Source, PDF and review are being backed up; the original Google Doc will receive
+  one consolidated chapter update with immutable links. Record the verified
+  append receipt and publication commit here before finishing this heartbeat.
+
+## Prior checkpoint — preflight failure repaired; replacement decision pending
 
 - No active EGG jobs remain. At the19:05 UTC heartbeat, receipt backup513bc48
   passed CI36468333145. One scoped queue query found584876 absent; sacct reports
