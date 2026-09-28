@@ -163,12 +163,16 @@ acceptance and a returned certified result remain different observations.
 Start validation and setup are measured inside the pricing wall deadline.
 Retained master columns alone still do not supply a native solver start.
 
-The next bounded package will implement and launch the prospective fixed-price
+The current bounded package implements and launches the prospective fixed-price
 diagnostic in `doc/PRICING_START_PILOT_PROTOCOL_20260928.md`: 16 cold/start calls
 across the same four development cases and two predetermined query prices.
 It uses matched caps, counterbalanced order and a common known feasible-plan
 baseline, retaining historical source cost separately from online work. Core,
 checks and input inventory: `research-20260928/pricing-start/`.
+The runner now preserves all 16 declared calls, physically checks and freezes the
+selected source fleets/prices before submission, observes the actual native seed,
+and records source, setup, complete-call and solver costs separately. Ten focused
+pure tests pass; independent review and publication precede the single launch.
 No cluster pilot or main-hull integration has run; no speed claim is made.
 [Python-MIP documents the initial-solution interface](https://python-mip.readthedocs.io/en/latest/classes.html).
 Broader independent public timetables and nearest-neighbor retrieval still

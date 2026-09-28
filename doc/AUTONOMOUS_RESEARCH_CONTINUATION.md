@@ -6,7 +6,47 @@ optimization first, then retrieval/learned proposals. The v0.5 draft is historic
 Use GPT-6 Sol for implementation/analysis and Luna Max for supporting work; root
 manages. Hourly `advance-egg-journal-research` remains ACTIVE, quiet when unchanged.
 
-## Latest checkpoint — pricing-start core and prospective design complete
+## Latest checkpoint — pricing-start pilot runner and launch in progress
+
+- At the 14:59 UTC heartbeat, prior receipt backup
+  e72779f105b07eee0d289f2f87ed678bf00bd8e0 passed full CI 36436107349.
+  No active EGG job remained; completed jobs were not polled or resubmitted.
+- Sol completed the runner, focused tests and Slurm wrapper under the existing
+  reviewed 16-call protocol: ten pure tests, shell syntax and compile checks pass.
+  All four actual source pools passed physical-only admission without a solve.
+  Luna's independent static review found no blocking issue; root matched all
+  seven reviewed file pins and the review receipt hash. Review:
+  `research-20260928/agent-notes/pricing-start-runner-review/REVIEW.md`.
+  Root manages isolated checkout, input freeze, GitHub/CI, single submission
+  and Google Doc update. No core or protocol redesign is planned.
+- Remote source availability check matched all eight raw/receipt inventory
+  hashes. Receipt: `research-20260928/pricing-start/REMOTE_PREFLIGHT.json`.
+  Only physical source plans are consumed; no new historical cache-bound audit
+  is needed. Source remains the four state-0 qp-cache pools from f4b342d.
+- Isolated checkout prepared at
+  `/home/nc437/egg-pricing-start-pilot-20260928`, initially e72779f. The old
+  comparison checkout remains at f4b342d. Existing runtime: GRB 12.0.3,
+  Python 3.12.13, MIP 1.17.6, NumPy 1.26.4, SciPy 1.13.1. No optimization
+  was run during preparation. Runtime receipt:
+  `research-20260928/pricing-start-pilot/RUNTIME_PREFLIGHT.json`.
+- Exact selected plans/prices, source/input hashes and observed runtime controls will
+  be frozen on Unicorn login BEFORE sbatch; the wrapper must validate and
+  consume the preexisting frozen attempt. Freeze records preparation time;
+  host/platform metadata is separate from control-relevant runtime matching.
+  The actual model seed and native library identity are observed without a solve.
+  Root records full freeze-command wall time separately from internal preparation.
+  Exclusive attempt: `result/pricing_start_pilot/20260928-attempt1`.
+- No job has been submitted. Do not submit until focused validation, independent
+  review, published source CI and prospective input freeze pass. The prepared
+  root submission helper `/private/tmp/egg-submit-pricing-start-pilot.py` writes
+  an exclusive intent before sbatch, saves the receipt, and makes one scoped
+  queue observation. Never rerun it after an uncertain submission.
+- Resource ceiling is unchanged: one serial job requesting 1 CPU/8 GB/1 hour,
+  all native/numerical threads one, no retry/requeue, exclude scaglione-compute-01.
+  After submission, record the actual job/source/freeze receipts and append a
+  consolidated Doc update. The next package will collect/review sealed results.
+
+## Previous checkpoint — pricing-start core and prospective design complete
 
 - At the 13:58 UTC heartbeat, prior receipt backup
   9867fdf27d7444a65706dbcd2bb36f36782d2c09 passed full CI 36429393790.
