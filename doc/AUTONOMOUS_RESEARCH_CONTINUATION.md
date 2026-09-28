@@ -6,7 +6,7 @@ optimization first, then retrieval/learned proposals. The v0.5 draft is historic
 Use GPT-6 Sol for implementation/analysis and Luna Max for supporting work; root
 manages. Hourly `advance-egg-journal-research` remains ACTIVE, quiet when unchanged.
 
-## Latest checkpoint — no-plan pricing repair, validation complete
+## Latest checkpoint — no-plan pricing repair complete
 
 - At the 12:58 UTC heartbeat, no active EGG job or outstanding worker assignment
   remained. Previous receipt backup 453783266d5bfff0fcb80f762540ca95d9e5acd7
@@ -28,12 +28,31 @@ manages. Hourly `advance-egg-journal-research` remains ACTIVE, quiet when unchan
   and late unresolved calls, finite decoy lower, invalid present witnesses,
   cache-only noncertification and admission of a bounded prefix with unresolved
   tail. No local optimization was run. Luna's independent code/contract review
-  passed; root matched all six review pins. CI and publication receipts remain
-  pending; record them before closing this package.
-- The next separate package will assess a known-feasible-fleet physical-pricing
-  MIP start under a prospective protocol. No speed or optimality claim is added,
-  no failed comparison row is reclassified, and no additional experiment budget
-  is committed by this repair.
+  passed; root matched all six review pins. Repair source
+  **2343d492fe629af2fe2b70b2bbbc79b123fecbb3** is pushed to the existing branch;
+  draft PR 56 describes the repair and links the immutable package. Full CI
+  **36428652019** passed on attempt 1 (4m27s test job), including complete CBC
+  tests and frozen-evidence reconstruction. Receipt:
+  `research-20260928/no-plan-repair/CI_RECEIPT.md`.
+- Original Google Doc appended ONCE with “Handling incomplete pricing calls —
+  28 September 2026”. Luna verified Saved to Drive, heading/body/immutable link,
+  then one normal reload and a unique body match. Source:
+  `research-20260928/no-plan-repair/GOOGLE_DOC_UPDATE.md` (SHA-256
+  `caafbf8075012fe6264906a3ad7ce7df1f4b57a9dfc41e3c5b1ae71facf46c75`).
+  Receipt: `research-20260928/agent-notes/google-doc-no-plan-repair/RECEIPT.md`
+  (SHA-256 `e1508176b32652715325aca1964e9d45fe199506bb902f0492e4648e9ce2f08d`).
+  Root matched source and receipt; only an immutable link was added to the
+  reviewed Doc draft. No export, retry or duplicate append.
+- This work package is complete; no EGG job or worker assignment remains active.
+  Next heartbeat: check this final receipt-only backup's CI once, then move to
+  the next package below. Do not repeat source/evidence audits or poll 575215.
+- Next separate package: assess mapping a checked known feasible fleet into a
+  physical-pricing MIP start. Keep the other master/cache choices fixed, define
+  outcomes (incumbent availability, final bounds and complete paid time), and
+  record prospective cases/caps before launching any comparison. Start mapping,
+  validation and overhead all count; a retained master column alone is not a
+  native start. No speed or optimality claim is added, no failed comparison row
+  is reclassified, and this repair commits no additional experiment budget.
 
 ## Previous checkpoint — completed solver comparison results
 

@@ -27,7 +27,10 @@ admission of a bounded prefix followed by an unresolved call. No native
 optimization was run locally. The independent [review](../agent-notes/no-plan-repair-review/REVIEW.md)
 found the implementation and focused cases consistent with this contract.
 The [implementation note](../agent-notes/no-plan-repair/IMPLEMENTATION.md)
-records the exact test command. Publication CI is pending.
+records the exact test command. [Full CI passed](CI_RECEIPT.md) on its first attempt.
+The [Google Doc update](GOOGLE_DOC_UPDATE.md) was appended once and checked
+after reload; its [receipt](../agent-notes/google-doc-no-plan-repair/RECEIPT.md)
+records the persistence check.
 The next separate research package will assess supplying a known feasible fleet
 as a physical-pricing MIP start, with a prospective comparison and complete
 cost accounting before any new experiment. No additional cluster budget is
