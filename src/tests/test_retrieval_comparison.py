@@ -197,3 +197,44 @@ def test_hull_assessment_binds_reported_interval_to_replayed_evidence():
     changed["upper"] += 0.01
     with pytest.raises(ValueError, match="reported upper"):
         run.assess_hull(case, m, changed)
+
+
+def test_frozen_ignores_host_kernel_but_keeps_software_source_and_input_strict(tmp_path, monkeypatch):
+    runtime = {"python_version": "3.12.0", "python_build": "3.12.0 build-a",
+               "python_implementation": "cpython", "python_abi": "cpython-312",
+               "machine": "x86_64", "mip": "1.15", "gurobipy": "12.0",
+               "scipy": "1.15", "numpy": "2.0", "gurobi_runtime": "12.0.0"}
+    sources = {"runner.py": "abc"}
+    design = {"case": {"identity": "physical-a"}}
+    spec = {"protocol": run.PROTOCOL, "source_commit": "commit-a",
+            "source_hashes": sources, "environment": runtime,
+            "freeze_host_environment": {"platform": "Linux-6.8.0-136-generic",
+                                        "hostname": "login"},
+            "cases": design, "hull_controls": run.HULL_CONTROLS,
+            "controller_cap_seconds": run.CONTROLLER_CAP,
+            "supervisor_cap_seconds": run.SUPERVISOR_CAP,
+            "children_declared": 48}
+    (tmp_path / "frozen.json").write_text(json.dumps(spec))
+    monkeypatch.setattr(run, "_attempt", lambda path: tmp_path)
+    monkeypatch.setattr(run.subprocess, "check_output", lambda *args, **kwargs: "commit-a\n")
+    monkeypatch.setattr(run, "software_runtime", lambda: runtime)
+    monkeypatch.setattr(run, "source_hashes", lambda: sources)
+    monkeypatch.setattr(run, "design", lambda: design)
+    monkeypatch.setattr(run.platform, "platform", lambda: "Linux-6.8.0-138-generic")
+    monkeypatch.setattr(run.platform, "node", lambda: "unicorn-cpu-75")
+    assert run.frozen(tmp_path) == spec
+
+    monkeypatch.setattr(run, "software_runtime", lambda: {**runtime, "scipy": "1.16"})
+    with pytest.raises(ValueError, match="software runtime differs in: scipy"):
+        run.frozen(tmp_path)
+    monkeypatch.setattr(run, "software_runtime", lambda: {**runtime, "python_build": "3.12.0 build-b"})
+    with pytest.raises(ValueError, match="software runtime differs in: python_build"):
+        run.frozen(tmp_path)
+    monkeypatch.setattr(run, "software_runtime", lambda: runtime)
+    monkeypatch.setattr(run, "source_hashes", lambda: {"runner.py": "changed"})
+    with pytest.raises(ValueError, match="source hashes differ"):
+        run.frozen(tmp_path)
+    monkeypatch.setattr(run, "source_hashes", lambda: sources)
+    monkeypatch.setattr(run, "design", lambda: {"case": {"identity": "physical-b"}})
+    with pytest.raises(ValueError, match="physical input/market/case design differs"):
+        run.frozen(tmp_path)

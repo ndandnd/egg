@@ -1,5 +1,10 @@
 # Bounded whole-fleet retrieval comparison
 
+**Current status:** job 584876 failed in environment preflight before any of the
+48 planned solver calls started. It has no retrieval-performance outcomes and
+has not been retried. See the [failure and repair package](failure-attempt1/README.md).
+The input validation and prospective design below remain intact.
+
 This development experiment compares cold iterative solving with all retained
 fleet columns, nearest-source-price retrieval, and exact cheapest-current-bill
 selection from the same admitted pool. Direct proposal quality and feasibility

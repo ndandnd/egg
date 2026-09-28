@@ -8,6 +8,7 @@ from __future__ import annotations
 import argparse
 from dataclasses import asdict
 from fractions import Fraction
+import importlib.metadata
 import json
 import math
 import os
@@ -82,6 +83,26 @@ def canonical(obj):
 
 def source_hashes():
     return {name: base.sha(ROOT / name) for name in HASHED_SOURCES}
+
+
+def software_runtime():
+    """Portable software identity; native library/seed are checked by native_probe."""
+    import gurobipy
+    return {"python_version": platform.python_version(),
+            "python_build": sys.version,
+            "python_implementation": sys.implementation.name,
+            "python_abi": sys.implementation.cache_tag,
+            "machine": platform.machine(),
+            "mip": importlib.metadata.version("mip"),
+            "gurobipy": importlib.metadata.version("gurobipy"),
+            "scipy": importlib.metadata.version("scipy"),
+            "numpy": importlib.metadata.version("numpy"),
+            "gurobi_runtime": ".".join(map(str, gurobipy.gurobi.version()))}
+
+
+def host_environment():
+    return {"platform": platform.platform(), "hostname": platform.node(),
+            "python_build": sys.version}
 
 
 def cases():
@@ -181,7 +202,8 @@ def freeze(path):
     if subprocess.check_output(["git", "status", "--porcelain", "--untracked-files=no"], cwd=ROOT):
         raise ValueError("Tracked execution source is not clean")
     spec = {"protocol": PROTOCOL, "source_commit": commit,
-            "source_hashes": source_hashes(), "environment": base.environment(),
+            "source_hashes": source_hashes(), "environment": software_runtime(),
+            "freeze_host_environment": host_environment(),
             "native_probe": native_probe(), "cases": design(),
             "hull_controls": HULL_CONTROLS,
             "controller_cap_seconds": CONTROLLER_CAP,
@@ -197,15 +219,23 @@ def frozen(path, *, check_sources=True):
     target = _attempt(path)
     spec = json.loads((target / "frozen.json").read_text())
     commit = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()
-    if (spec.get("protocol") != PROTOCOL or spec.get("source_commit") != commit
-            or spec.get("environment") != base.environment()
-            or canonical(spec.get("cases")) != canonical(design())
-            or spec.get("hull_controls") != HULL_CONTROLS
+    if spec.get("protocol") != PROTOCOL or spec.get("source_commit") != commit:
+        raise ValueError("Frozen protocol or execution commit differs")
+    actual_runtime = software_runtime()
+    if spec.get("environment") != actual_runtime:
+        expected = spec.get("environment") or {}
+        changed = sorted(key for key in set(expected) | set(actual_runtime)
+                         if expected.get(key) != actual_runtime.get(key))
+        raise ValueError("Frozen software runtime differs in: " + ", ".join(changed))
+    if check_sources and spec.get("source_hashes") != source_hashes():
+        raise ValueError("Frozen execution source hashes differ")
+    if canonical(spec.get("cases")) != canonical(design()):
+        raise ValueError("Frozen physical input/market/case design differs")
+    if (spec.get("hull_controls") != HULL_CONTROLS
             or spec.get("controller_cap_seconds") != CONTROLLER_CAP
             or spec.get("supervisor_cap_seconds") != SUPERVISOR_CAP
-            or spec.get("children_declared") != 48
-            or (check_sources and spec.get("source_hashes") != source_hashes())):
-        raise ValueError("Frozen prospective design/source differs")
+            or spec.get("children_declared") != 48):
+        raise ValueError("Frozen hull controls or resource caps differ")
     return spec
 
 
@@ -982,6 +1012,8 @@ def main(argv=None):
         freeze(args.attempt)
         return 0
     if args.mode == "preflight":
+        print(json.dumps({"preflight_host_environment": host_environment(),
+                          "software_runtime": software_runtime()}, sort_keys=True), flush=True)
         frozen(args.attempt)
         if native_probe() != json.loads((args.attempt / "frozen.json").read_text())["native_probe"]:
             raise ValueError("Effective native backend or model seed differs from freeze")

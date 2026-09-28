@@ -13,6 +13,19 @@ service-energy lower bound. The runner reconstructs the cases and checks all
 physical IDs and 30 hourly periods before a child begins. Hildenbrand is not
 run. All fixed a/b market choices, budgets, case order, rotating target-arm
 order, solver seed, runtime and source files enter `frozen.json`.
+Software/package versions, full Python build/implementation/ABI and machine
+architecture are compared across login and compute hosts. Host name, kernel
+and Python build are also recorded separately in
+`freeze_host_environment`. Preflight prints its compute-host environment
+before validation. Host-kernel variation alone does not reject an otherwise
+identical run. The native backend library identity and model seed remain a
+strict preflight check.
+
+The first submitted attempt failed in preflight before any controller or
+optimization child began: the earlier frozen `platform.platform()` value
+included login kernel `6.8.0-136`, while its compute node used `6.8.0-138`.
+That immutable failed attempt is preserved separately. This source change
+only corrects the portable environment comparison; it is not a retry.
 
 For each case, the controller pays for two source hull children once, then
 writes a source pool. A source with an open or failed solve can contribute a

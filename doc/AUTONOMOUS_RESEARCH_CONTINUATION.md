@@ -6,7 +6,31 @@ optimization first, then retrieval/learned proposals. The v0.5 draft is historic
 Use GPT-6 Sol for implementation/analysis and Luna Max for supporting work; root
 manages. Hourly `advance-egg-journal-research` remains ACTIVE, quiet when unchanged.
 
-## Latest checkpoint — six-case retrieval comparison submitted
+## Latest checkpoint — retrieval job failed before optimization; repair reviewed, publication next
+
+- At the19:05 UTC heartbeat, backup513bc48 passed CI36468333145. No newer
+  execution source or active workers existed. One scoped queue query found
+  job584876 absent; scoped sacct reports FAILED1:0,12s on unicorn-cpu-75,1 CPU.
+  No active EGG job remains. Do not poll completed584876 or resubmit it.
+- Wrapper setup/preflight failed after7s before supervisor/controller/native
+  probe. The collected attempt contains only frozen.json; all48 declared
+  children are unstarted, no optimizer outcomes or algorithm evidence exist.
+  Frozen SHA matches the launch pin. Failure package:
+  `research-20260928/retrieval-comparison/failure-attempt1/`.
+- Exact equality of the complete environment dictionary rejects login kernel
+  6.8.0-136 versus compute kernel6.8.0-138. Scoped node metadata confirms this
+  sufficient failure cause. The generic error did not log all failed predicates.
+- Sol’s minimal runtime repair plus root’s strict Python-build/ABI/architecture
+  preservation passed nine pure tests, py_compile and diffcheck. Luna’s narrow
+  independent repair review found no blocker; full publication CI is next. No
+  optimizer, test dataset, new resource allocation or launch is authorized in
+  this package. Preserve the frozen68cfa64 remote checkout and all spent time.
+- The protocol expressly forbids retry/requeue. Do not change attempt paths or
+  budgets to bypass it. Finish the repair and a concrete reviewed disposition
+  before flagging any replacement-attempt decision. LaTeX consolidation remains
+  the next manuscript milestone; ML is optional.
+
+## Prior launch checkpoint — six-case retrieval comparison submitted
 
 - **Active EGG job584876**: submitted once at18:46 UTC on28 September2026.
   The one launch queue check was PENDING/Priority,1 CPU/8GB. Do not resubmit.
