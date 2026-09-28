@@ -6,7 +6,40 @@ optimization first, then retrieval/learned proposals. The v0.5 draft is historic
 Use GPT-6 Sol for implementation/analysis and Luna Max for supporting work; root
 manages. Hourly `advance-egg-journal-research` remains ACTIVE, quiet when unchanged.
 
-## Latest checkpoint — numerical restricted-master integration
+## Latest checkpoint — ordered solver comparison prepared
+
+- Documentation backup cb70b35 passed full CI 36403560605. The completed jobs
+  569799/572392 remain unchanged; no job was active at the start of this package.
+- New protocol: `doc/SOLVER_BASELINE_COMPARISON_PROTOCOL_20260928.md`.
+  It freezes 32 development cells: four cases, four ordered methods, two states.
+  Methods are reserve-cold, reserve with retained feasible plans, numerical
+  master with retained plans, and numerical master with retained plans plus
+  checked physical pricing bounds. Both public depots share one timetable.
+- New runner/wrapper: `src/experiments/solver_baseline_comparison.py` and
+  `src/cluster/solver_baseline_comparison.sbatch`; index:
+  `research-20260928/solver-baseline-comparison/README.md`.
+  Sol completed implementation; all 12 focused pure tests passed. Luna's
+  independent static review passed; root checked the final source/protocol
+  hashes. Review: `research-20260928/agent-notes/solver-baseline-comparison/REVIEW.md`.
+  Source must pass CI and be published before submission.
+- Paid two-state totals include each method's own initial solve, target solve,
+  and parent source-validation overhead outside those children. Worker replay
+  remains inside the child time. Failed or ineligible sources are preserved;
+  there is no fallback to another method's pool or a substituted cold run.
+- Resource ceiling: one serial job requesting 1 CPU/8 GB, all native/BLAS
+  threads one, Slurm two hours, no retry/requeue, exclude scaglione-compute-01.
+  Native targets sum to 64 minutes; child hard caps to 80; controller cap 90;
+  outer wrapper cap 100. Runtime preflight found existing NumPy 1.26.4 and
+  SciPy 1.13.1 with GRB; no install or optimization was performed.
+- Intended exclusive execution checkout:
+  `/home/nc437/egg-solver-baseline-comparison-20260928`; attempt
+  `result/solver_baseline_comparison/20260928-attempt1`. An exclusive submission
+  intent precedes the single sbatch call. Do not retry an ambiguous submission;
+  inspect that intent and receipt. No comparative result is claimed yet.
+- In-progress checkpoint: root will replace this final item with source CI and
+  the actual submission receipt before handing off. PR56 stays draft/unmerged.
+
+## Previous checkpoint — numerical restricted-master integration
 
 - Previous documentation backup 2e15dec passed full CI 36396998189. No active
   EGG jobs; do not poll/resubmit completed 569799/572392.

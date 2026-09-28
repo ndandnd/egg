@@ -132,6 +132,16 @@ proposal comparisons follow these baseline corrections; reserve grouped test
 networks before training. Do not repeat broad qualification campaigns or
 reinterpret completed runs.
 
+The prospective 32-cell design is now fixed in
+`doc/SOLVER_BASELINE_COMPARISON_PROTOCOL_20260928.md`, with a new exclusive
+attempt and separate runner. Its four ordered methods each pay for their own
+initial market solve. Source admission outside the child is added once to the
+two-state total; verification inside the child stays in child wall time.
+The 64-minute sum of native targets sits inside an 80-minute sum of child
+deadlines, a 90-minute controller cap and a 100-minute wrapper cap, under the
+existing two-hour allocation ceiling. Review and source CI precede submission.
+This is still prospective; numerical-master/cache performance is unmeasured.
+
 ## Manuscript direction
 
 Retain the exact mechanism and replication results, but support the computational
