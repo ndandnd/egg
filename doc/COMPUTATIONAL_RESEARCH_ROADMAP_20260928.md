@@ -57,7 +57,7 @@ overlap, battery size and charger scarcity. Freeze grouped evaluation assignment
 before inspecting comparative outcomes. The two tiny synthetic diagnostics are
 regression anchors, not evidence of scalability.
 
-The first bounded screen will use two declared synthetic base timetables and the
+The first bounded screen used two declared synthetic base timetables and the
 two already modeled public depot variants, with two market states per case.
 Compare cold/retained hull solves and compute common physical/own-price results.
 The new driver uses the existing physical model. A failed or uncertified
@@ -84,6 +84,27 @@ setup that stage sums omit. Compare time to a common quality target when the
 traces support it; otherwise report time and final bounds together without a
 speedup claim. Keep the two Hildenbrand depots grouped. Fraction-valued exports
 of native numerical bounds do not convert them into ideal-model exact proofs.
+
+## First screen findings and immediate next step
+
+Job 569799 completed in 35:57 on one CPU. All 32 declared stages are accounted:
+10 native-certified, 10 bounded, 9 budget-exhausted and 3 ineligible. The public
+hulls spent about 173 of 184 seconds in native pricing solves and only about
+0.005 seconds polishing. Two columns were returned, but the remaining wall
+budget did not allow a master solve using the second. The shifted multivisit
+example instead reached the rational-bit limit. These are different limitations;
+the historical QP lead does not establish a speedup for the public screen.
+
+The next experiment should preserve time for processing newly found columns and
+compare a separate reuse mode that accepts replayed feasible pools from bounded
+predecessors. The strict certified-predecessor arm remains a baseline. Rebuild
+the target-market mixture and obtain fresh pricing/global bounds; prior-market
+weights, duals and certificates do not transfer. Include predecessor preparation
+and checking time, preserve incomplete outcomes, and keep the same physical and
+market cases for the first comparison. Define and freeze this pilot before
+execution under the existing resource ceiling. Public enclosures are still broad;
+this screen establishes neither a positive planner-hull gap nor a public reuse or
+learning advantage. See `research-20260928/computational-results/attempt1/`.
 
 ## Manuscript direction
 

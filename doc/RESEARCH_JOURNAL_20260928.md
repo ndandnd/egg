@@ -122,3 +122,35 @@ misleading overall-validity flag. Root renamed it to supervisor integrity,
 clarified that stage success and scientific validity remain separate, and reran
 the five focused tests successfully. No full-suite rerun was needed locally;
 the standard GitHub CI gate will run on the backup commit.
+
+## First screen collected and analyzed
+
+The 04:50 UTC follow-up found job 569799 had completed successfully. Whole-job
+elapsed was 35:57, with one CPU/8 GB. The full private archive and all manifest
+files were verified; the original attempt remains unchanged. Reporter commit
+6242218 passed full CI. The screen accounts for 32 stages: 10 native-certified,
+10 bounded, 9 budget-exhausted and 3 ineligible, with all 29 launched stages on
+time. Sol prepared the descriptive tables/figures and Luna checked the claims.
+
+The measured public bottleneck differs from the earlier three-column probe:
+about 173 of 184 seconds per hull stage was recorded native pricing time, while
+polish was roughly five milliseconds. The second returned column arrived too
+late for another master solve. In contrast, the shifted multivisit case hit a
+rational-bit limit. Next work targets time allocation and feasible-pool reuse,
+with the numerical QP addressing the separate arithmetic issue. Public bounds
+remain broad; no public optimality-gap, reuse-speedup or learning claim follows.
+The cyclic example alone provides a certified reuse comparison, with shifted
+pricing requests reduced from three to one and preparation time included.
+
+A closed-form two-column diagnostic uses the saved public cold pools, with no
+new pricing solve. Physical-column and exact stored-number mixture replay reduce
+this run's upper costs by about 37–69 units. Roughly 0.1 s per-pool processing
+excludes imports, case construction and output writing; it is additional work,
+not credited to the frozen run. The mixtures are convex-hull points, not individual
+fleet schedules. Saved lower bounds are unchanged and stronger compatible older
+bounds remain valid. This isolates a concrete improvement: reserve time for a
+final mixture update when an expensive pricing call returns a new plan.
+
+The curated public evidence ZIP contains 101 original scientific JSON files,
+including frozen inputs, witnesses and receipts, with a complete selection
+manifest. The full private archive also preserves the omitted logs and JSONL.

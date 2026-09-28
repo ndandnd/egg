@@ -1,96 +1,82 @@
 # EGG journal research continuation
 
 Updated 28 September 2026 UTC. Owner: the EGG task, acting as principal researcher
-under the user's explicit authorization to continue routine research, cluster
-work, GitHub backups and Google Doc updates without repeated approvals.
+under the user's standing authorization. Computational journal paper; iterative
+optimization first, then retrieval/learned proposals. The v0.5 draft is historical.
+Use GPT-6 Sol for implementation/analysis and Luna Max for supporting work; root
+manages. Hourly `advance-egg-journal-research` remains ACTIVE, quiet when unchanged.
 
-## Latest checkpoint — computational screen submitted
+## Latest checkpoint — first computational screen completed
 
-28 September 2026 UTC. The user wants many computational examples and possible
-learned route proposals, beginning with iterative optimization. This supersedes
-the historical completed-draft stop. Roadmap:
-doc/COMPUTATIONAL_RESEARCH_ROADMAP_20260928.md. Hourly heartbeat
-`advance-egg-journal-research` is ACTIVE, quiet on unchanged state.
+- **No active EGG job is recorded.** Job 569799 completed 0:0 in 35:57, on one
+  CPU/8 GB. Do not poll or resubmit it. Execution source e39bc7e31ea21dae64365c31fa88a85e4b0de349;
+  frozen SHA b36b15a5b9ac8945cff3b4cfd5e8441c705c3c536870f7a34c3d08e7f6f2dca2.
+  Wrapper elapsed 2,139 s; supervisor elapsed 2,136.29 s; whole Slurm elapsed
+  2,157 s includes setup. Reporter source 6242218 passed full CI 36376089314.
+- Collection receipt: `research-20260928/cluster/computational-screen-569799-collection.json`.
+  Full 155 MB archive stays private in the OUTER workspace at
+  `research-20260928/cluster/computational-screen-attempt1/collected/full-private-archive.tar`.
+  Extracted attempt is in `collected/package/result/computational_benchmark/20260928-attempt1`.
+  Original manifest SHA 78d642e204143a05938a19fc447791178ae7890f5a01a8e05a179e73f6eab160;
+  237 listed files plus seal verified unchanged. No raw stdout/stderr publication.
+- All 32 declared stages are accounted: 10 native-certified, 10 bounded,
+  9 budget-exhausted, 3 ineligible. All 29 launched stages returned on time with
+  complete author-side assessments. No hard stage failures/timeouts. The two
+  Hildenbrand depot variants are ONE timetable group; all screen cases are development.
+- Only the cyclic example supports a certified two-state cold/retained comparison.
+  Shifted-state pricing requests drop 3 to 1; both initial states are paid for.
+  This tiny example is not a public-data speedup or a learning result.
+- All six launched public hull stages spent about 173 s in two native pricing
+  solves out of about 184 s end-to-end, versus about 0.005 s in polish. Each
+  returned two columns but only completed the one-column master; the next master
+  stopped at its wall limit. Public planner/hull enclosures remain broad and do
+  not establish a positive planner-hull gap or equality. This screen's public
+  bottleneck is pricing time and time allocation, not expensive polishing.
+- Multivisit shifted hull instead stopped at the rational-bit limit, after
+  19 polish steps and about 0.236 s polish. The existing numerical-QP proposal
+  remains relevant to this separate arithmetic issue. Do not conflate time,
+  pricing-call, and bit-limit stops.
+- Public derived analysis/figures: `research-20260928/computational-results/attempt1/`;
+  reproducible analysis script is `research-20260928/computational-results/analyze_attempt1.py`.
+  Native enclosures remain numerical/tolerance-qualified. Full-fleet hull
+  mixtures are not individual operational schedules. Any offline postprocessing
+  must be timed separately and cannot change the recorded baseline outcomes.
+- A closed-form two-column calculation on the four public cold pools reduces
+  this run's mixture upper bounds by about 37–69 cost units, with about 0.1 s
+  measured per-pool postprocessing (excluding imports/case construction/output).
+  Physical columns and the new exact stored-number mixtures replayed. Saved
+  global lower bounds are unchanged; this is additional analysis, not baseline
+  timing, a physical fleet, a global optimum, or a replacement for stronger
+  compatible historical bounds. It supports reserving a final master step.
+- Public `scientific_evidence.zip` contains 101 original scientific JSON files
+  (263,156 bytes); its selection manifest records all included/omitted hashes.
+  No raw logs/JSONL were published. The complete private archive remains available.
 
-- **Active job 569799**, submitted once from
-  `/home/nc437/egg-computational-screen-20260928` on Unicorn. Execution source
-  `e39bc7e31ea21dae64365c31fa88a85e4b0de349` is published on the current branch.
-  At the 03:49 UTC heartbeat it was RUNNING on `snavely-cpu-01`, elapsed
-  23:10, allocated 1 CPU/8 GB. One compact queue check; no resubmission.
-  Frozen SHA-256: b36b15a5b9ac8945cff3b4cfd5e8441c705c3c536870f7a34c3d08e7f6f2dca2.
-  Request 1 CPU/8 GB, native 1 thread, 2 h allocation, no requeue/retry,
-  exclude `scaglione-compute-01`. Preserve submission sentinels; do not resubmit.
-- Attempt: `result/computational_benchmark/20260928-attempt1`. The Slurm wrapper
-  receipt is a sibling file ending `.slurm_wrapper_receipt.json`, outside the
-  attempt's sealed manifest. Collect full job elapsed with scoped `sacct`;
-  wrapper elapsed covers only the supervisor invocation. Raw stdout may contain
-  license diagnostics: keep full archives private and publish only a documented
-  scientific subset. Public receipt: `research-20260928/cluster/computational-screen-569799.json`;
-  full private deployment receipt is in the outer research folder. Execution
-  commit CI run 36373363756 completed SUCCESS. Subsequent source/documentation
-  head d8fc860 also passed full CI (36374758707).
-- Eight development case–market combinations, up to 32 stages: cyclic two-service,
-  multivisit three-service and both Hildenbrand 37-service depot variants; two
-  markets each; planner, cold hull, retained hull and own-price response.
-  Both public depots are ONE base-timetable group. An uncertified predecessor
-  makes the next retained stage ineligible. Failed/partial/unstarted stages count.
-  Prospective protocol and independent PASS review are in
-  `doc/COMPUTATIONAL_SCREEN_PROTOCOL_20260928.md` and
-  `doc/COMPUTATIONAL_SCREEN_REVIEW_20260928.md`. Nine focused tests passed.
-  Physical/hull core is unchanged. No new scientific result is admitted yet.
-- Completed-attempt reporting is ready in
-  `src/experiments/computational_benchmark_report.py`; five focused tests pass.
-  It verifies the stable attempt manifest, accounts for all 32 stages and writes
-  JSON/CSV/Markdown to a NEW directory outside the sealed attempt. Run from the
-  repository with `PYTHONPATH=src python -m experiments.computational_benchmark_report
-  <collected-attempt> <new-report-directory>` using the research Python runtime.
-  Receipt failures take precedence over native status, missing timing stays
-  missing, and two-state hull totals include preparation. It reads summary/count
-  data only; pricing/master event-time extraction and scientific result review
-  remain next-step work. No archived outcomes were read during its development.
-  Luna's narrow static review passed after separating supervisor integrity from
-  stage success; root reran the five focused tests after that labeling correction.
-- Completed notes in `research-20260928/computational-design/`: six-reference
-  learned-route review, 20-base public-data inventory, and offline three-column
-  QP probe. The probe reduced the restricted-pool gap from about 0.00202 to
-  7.23e-8 with a 3.60e-8 cost decrease. Total probe function: 0.244 s excluding
-  imports/output writing. This is not a global hull result or full-solver speedup.
-- Sol completed a NEW standalone `src/egglab/restricted_qp_proposal.py` and five
-  focused tests. It produces rational simplex proposals with SciPy; it is not
-  integrated into the frozen benchmark/native core and does not certify anything.
-  Review/integrate only after baseline analysis. See
-  `doc/RESTRICTED_MASTER_NEXT_STEP_20260928.md` and the proposal note.
-- Eberbach's next-development intake plan is complete: 105 mandatory services,
-  14 stops, one depot, nine routes, complete directed movement data. See
-  `research-20260928/computational-design/EBERBACH_INTAKE_PLAN.md`. Estimate native
-  model size before solving (~10,000 inter-service movement options). Other
-  public bases' outcomes remain untouched. Older
-  synthetic generator runs have a different terminal-SOC rule; adapt explicitly
-  to full replenishment before pooling them with this physical model.
-- `paper/latex/` is a preliminary scaffold with a shorter abstract, strategic
-  price-impact explanation and foundational bibliography, not a completed paper
-  conversion. Historical v0.5 PDF/results stay intact. The user's editorial
-  critique governs the next draft. PR56 remains draft/unmerged; no submission.
-- Google Doc updated once: “Computational program update — 28 September 2026”.
-  Saved to Drive verified; root independently checked old export is exact prefix
-  of new (94,931→99,374 bytes). After SHA-256:
-  420270357767d64d8ad4a0db898e98592528a6269695226a3d66d90960568a74.
-  Public receipt/manifest: `research-20260928/agent-notes/google-doc-computational-update/`.
-  Full exports stay private in the outer research folder. Do not append again
-  for this same milestone.
+## Next bounded work package
 
-Next: inspect only this recorded job; if finished, retrieve/verify the frozen
-attempt and produce a concise all-stage comparison and bottleneck figures using
-Sol, with Luna checking the claims. Do not repeat broad physical qualification.
-Use the offline QP lead to improve the restricted master if supported, then make
-matched iterative comparisons and expand public/synthetic cases. Retained plans
-and nearest-neighbor reconstruction/repair precede a learned-proposal campaign.
-Separate direct prediction, repair and global verification; split by base
-network before training. Do not use protected A6/B3/confirmation outcomes or
-publish private GIRO; do not redeem reset credits. Routine work continues without
-approval. Flag major scientific/resource/data-release decisions. Keep root work
-managerial, use GPT-6 Sol and Luna Max with short handoffs, and back up meaningful
-milestones rather than generating repeated audit/status documents.
+Use the measured bottlenecks to design and implement a separate feasible-pool
+reuse mode and reserve time for processing a newly returned column. The current
+strict certified-predecessor arm stays unchanged. A bounded predecessor can
+supply physically replayed complete-fleet columns, but never transfer its old
+market weights, duals, or lower certificate as new-market evidence. Preserve
+physical/source/extraction identities, unique keys, all preparation costs and
+fresh global pricing. Use focused tests for the changed admission/budget logic;
+reuse existing physical qualification rather than starting another audit campaign.
+Specify/freeze a matched development pilot before execution, within the standing
+one serial job / one CPU / 8 GB / two-hour ceiling, no automatic retries, excluding
+`scaglione-compute-01`. Do not alter other projects or held jobs. Improve the
+restricted QP separately where the arithmetic limit matters, using the existing
+standalone helper and exact replay/global-bound checks. No larger sweep or ML
+training should precede this measured solver work and retained/retrieval baselines.
+
+Roadmap: `doc/COMPUTATIONAL_RESEARCH_ROADMAP_20260928.md`. The six-reference learned
+proposal review, 20-base public inventory and Eberbach 105-service input plan are
+under `research-20260928/computational-design/`. The LaTeX scaffold is preliminary;
+the user's manuscript critique still governs the next draft. No submission or
+PR merge. No protected A6/B3/confirmation outcomes, private GIRO publication or
+reset-credit redemption. Routine work needs no approval; flag major scientific,
+resource or data-release decisions. Back up useful milestones and append verified
+consolidated findings to the original Google Doc, preserving history/visuals.
 
 ### Historical delivered first draft (superseded as active direction)
 
