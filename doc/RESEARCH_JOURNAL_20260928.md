@@ -67,3 +67,29 @@ source and prospective protocol, freeze and submit once, then retain launch
 receipts. Analyze stage bottlenecks and equal-quality reuse comparisons before
 a larger sweep. Append one consolidated Google Doc update at a concrete launch
 or result milestone. Continue the computational manuscript as new evidence arrives.
+
+## First screen submitted
+
+The reviewed execution source e39bc7e31ea21dae64365c31fa88a85e4b0de349 was
+published and submitted once as Unicorn job 569799. At 03:26:12 UTC it was
+PENDING (Priority); no allocation or frozen input existed yet. The dedicated
+checkout is /home/nc437/egg-computational-screen-20260928. Nine focused harness
+tests and independent implementation review passed. The current scientific
+core is unchanged; outcomes are pending. The source's CI run is 36373363756.
+
+A standalone numerical restricted-QP proposal helper is also complete with five
+focused tests. It is not integrated into this baseline and makes no certificate
+claim. Eberbach source-input adaptation planning proceeds independently.
+
+At 03:28:45 UTC the job was RUNNING on snavely-cpu-01 with 1 CPU/8 GB.
+Frozen input SHA-256: b36b15a5b9ac8945cff3b4cfd5e8441c705c3c536870f7a34c3d08e7f6f2dca2.
+The execution commit's full CI run 36373363756 completed SUCCESS. No stage
+outcomes are claimed before collection and analysis.
+
+The Google Doc now contains one “Computational program update — 28 September
+2026” append. Saved-to-Drive and exact prior-export prefix preservation were
+verified; public receipt is under research-20260928/agent-notes/. Eberbach's
+input-only plan confirms 105 services, 14 stops, one depot and 9 routes. Its roughly
+10,000 movement choices warrant a model-size estimate before the next solve.
+The optional one-trip-per-bus construction is a feasibility attempt, not a
+necessary condition for the chained fleet model.

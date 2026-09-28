@@ -4,54 +4,79 @@ Updated 28 September 2026 UTC. Owner: the EGG task, acting as principal research
 under the user's explicit authorization to continue routine research, cluster
 work, GitHub backups and Google Doc updates without repeated approvals.
 
-## Latest checkpoint — computational expansion authorized
+## Latest checkpoint — computational screen submitted
 
-28 September 2026 UTC. The user explicitly wants many computational examples and
-possibly machine-learned route proposals, beginning with iterative optimization.
-This supersedes the theory-only recommendation and completed-draft stop below.
-The v05 evidence/artifacts remain immutable historical results. No old result is
-reclassified. Active roadmap: doc/COMPUTATIONAL_RESEARCH_ROADMAP_20260928.md.
+28 September 2026 UTC. The user wants many computational examples and possible
+learned route proposals, beginning with iterative optimization. This supersedes
+the historical completed-draft stop. Roadmap:
+doc/COMPUTATIONAL_RESEARCH_ROADMAP_20260928.md. Hourly heartbeat
+`advance-egg-journal-research` is ACTIVE, quiet on unchanged state.
 
-- Sol completed the new development-screen harness using existing native APIs.
-  Nine focused tests, Python compilation and batch syntax checks pass; independent
-  preflight review is PASS in doc/COMPUTATIONAL_SCREEN_REVIEW_20260928.md.
-  No new cluster solve has run yet.
-- Luna completed the public/synthetic inventory and learned-route literature
-  review. The operations worker has prepared a Google Doc append and will submit
-  once root sends the independently reviewed, published execution commit.
-- Candidate first screen: two synthetic base timetables plus Hildenbrand depot15
-  and 16, two market states, cold/retained hull and matched planner/response.
-  All screening cases are development. Both public depots share one timetable group.
-- Freeze concrete cases, budgets and code after a focused independent review.
-  Initial ceiling: one serial CPU job <=2h, request 1 CPU/8 GB, native 1 thread, no retry or
-  requeue, exclude scaglione-compute-01. Leave other projects untouched.
-- Existing hull exact polishing can end the loop before its overall budget; log
-  that bottleneck. New screen uses prospectively declared algorithm stopping
-  limits and a complete-cell hard watchdog, preserving valid bounded returns.
-  The old nonlinear v2 strict-polish failure stays failed. Do not blindly sweep
-  or expand the same bottleneck, and do not require a new broad qualification
-  campaign when the qualified physical source is unchanged.
-- After useful iterative baselines, test retained columns and nearest-neighbor
-  retrieval before learned proposal/repair. Report direct prediction separately
-  from global certification. Split by base timetable, including all its variants;
-  no private GIRO, protected A6/B3/confirmation data or reset-credit redemption.
-- Root manages; use GPT-6 Sol and Luna Max, short handoffs, compact outputs and
-  consolidated GitHub/Google Doc milestones. The final v05 review overestimated editorial
-  readiness; user critique governs the next revision. Resume bounded hourly
-  follow-ups for this newly authorized computational direction.
+- **Active job 569799**, submitted once from
+  `/home/nc437/egg-computational-screen-20260928` on Unicorn. Execution source
+  `e39bc7e31ea21dae64365c31fa88a85e4b0de349` is published on the current branch.
+  At 03:31:29 UTC it was RUNNING on `snavely-cpu-01`, allocated 1 CPU/8 GB.
+  Frozen SHA-256: b36b15a5b9ac8945cff3b4cfd5e8441c705c3c536870f7a34c3d08e7f6f2dca2.
+  Request 1 CPU/8 GB, native 1 thread, 2 h allocation, no requeue/retry,
+  exclude `scaglione-compute-01`. Preserve submission sentinels; do not resubmit.
+- Attempt: `result/computational_benchmark/20260928-attempt1`. The Slurm wrapper
+  receipt is a sibling file ending `.slurm_wrapper_receipt.json`, outside the
+  attempt's sealed manifest. Collect full job elapsed with scoped `sacct`;
+  wrapper elapsed covers only the supervisor invocation. Raw stdout may contain
+  license diagnostics: keep full archives private and publish only a documented
+  scientific subset. Public receipt: `research-20260928/cluster/computational-screen-569799.json`;
+  full private deployment receipt is in the outer research folder. Execution
+  commit CI run 36373363756 completed SUCCESS.
+- Eight development case–market combinations, up to 32 stages: cyclic two-service,
+  multivisit three-service and both Hildenbrand 37-service depot variants; two
+  markets each; planner, cold hull, retained hull and own-price response.
+  Both public depots are ONE base-timetable group. An uncertified predecessor
+  makes the next retained stage ineligible. Failed/partial/unstarted stages count.
+  Prospective protocol and independent PASS review are in
+  `doc/COMPUTATIONAL_SCREEN_PROTOCOL_20260928.md` and
+  `doc/COMPUTATIONAL_SCREEN_REVIEW_20260928.md`. Nine focused tests passed.
+  Physical/hull core is unchanged. No new scientific result is admitted yet.
+- Completed notes in `research-20260928/computational-design/`: six-reference
+  learned-route review, 20-base public-data inventory, and offline three-column
+  QP probe. The probe reduced the restricted-pool gap from about 0.00202 to
+  7.23e-8 with a 3.60e-8 cost decrease. Total probe function: 0.244 s excluding
+  imports/output writing. This is not a global hull result or full-solver speedup.
+- Sol completed a NEW standalone `src/egglab/restricted_qp_proposal.py` and five
+  focused tests. It produces rational simplex proposals with SciPy; it is not
+  integrated into the frozen benchmark/native core and does not certify anything.
+  Review/integrate only after baseline analysis. See
+  `doc/RESTRICTED_MASTER_NEXT_STEP_20260928.md` and the proposal note.
+- Eberbach's next-development intake plan is complete: 105 mandatory services,
+  14 stops, one depot, nine routes, complete directed movement data. See
+  `research-20260928/computational-design/EBERBACH_INTAKE_PLAN.md`. Estimate native
+  model size before solving (~10,000 inter-service movement options). Other
+  public bases' outcomes remain untouched. Older
+  synthetic generator runs have a different terminal-SOC rule; adapt explicitly
+  to full replenishment before pooling them with this physical model.
+- `paper/latex/` is a preliminary scaffold with a shorter abstract, strategic
+  price-impact explanation and foundational bibliography, not a completed paper
+  conversion. Historical v0.5 PDF/results stay intact. The user's editorial
+  critique governs the next draft. PR56 remains draft/unmerged; no submission.
+- Google Doc updated once: “Computational program update — 28 September 2026”.
+  Saved to Drive verified; root independently checked old export is exact prefix
+  of new (94,931→99,374 bytes). After SHA-256:
+  420270357767d64d8ad4a0db898e98592528a6269695226a3d66d90960568a74.
+  Public receipt/manifest: `research-20260928/agent-notes/google-doc-computational-update/`.
+  Full exports stay private in the outer research folder. Do not append again
+  for this same milestone.
 
-Supporting work is now saved under research-20260928/computational-design/:
-the six-reference learned-route review, 20-base public-data inventory and an
-offline three-column restricted-QP probe. The probe used SciPy locally (no new
-global pricing or cluster solve): exact-simplex replay reduced the restricted
-pool gap from about 0.00202 to 7.23e-8, with a tiny 3.60e-8 cost decrease. The
-entire probe function took 0.244 s excluding imports/output writing; this is not
-a full-solver speedup. A candidate next-step note is
-doc/RESTRICTED_MASTER_NEXT_STEP_20260928.md. First-screen core stays unchanged.
-paper/latex/ is a preliminary scaffold with a shorter proposed abstract and
-foundational bibliography, not a completed manuscript conversion. A private
-Google Doc before-export is preserved in the outer research-20260928 folder;
-the original Doc has not yet been appended for this phase.
+Next: inspect only this recorded job; if finished, retrieve/verify the frozen
+attempt and produce a concise all-stage comparison and bottleneck figures using
+Sol, with Luna checking the claims. Do not repeat broad physical qualification.
+Use the offline QP lead to improve the restricted master if supported, then make
+matched iterative comparisons and expand public/synthetic cases. Retained plans
+and nearest-neighbor reconstruction/repair precede a learned-proposal campaign.
+Separate direct prediction, repair and global verification; split by base
+network before training. Do not use protected A6/B3/confirmation outcomes or
+publish private GIRO; do not redeem reset credits. Routine work continues without
+approval. Flag major scientific/resource/data-release decisions. Keep root work
+managerial, use GPT-6 Sol and Luna Max with short handoffs, and back up meaningful
+milestones rather than generating repeated audit/status documents.
 
 ### Historical delivered first draft (superseded as active direction)
 
