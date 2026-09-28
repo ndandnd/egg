@@ -29,6 +29,7 @@ if str(PROJECT_ROOT / "src") not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT / "src"))
 DEFAULT_ARCHIVE = WORKSPACE_ROOT / "research-20260927/agent-notes/public-data/sistig-26088190-v1.zip"
 DEFAULT_OUTPUT = PROJECT_ROOT / "data/public/sistig_26088190_v1/hildenbrand_native_cases.json"
+EBERBACH_OUTPUT = PROJECT_ROOT / "data/public/sistig_26088190_v1/eberbach_native_case.json"
 DOI = "10.6084/m9.figshare.26088190.v1"
 FIGSHARE_URL = "https://figshare.com/articles/dataset/Dataset_for_Evaluating_Costs_and_Operations_of_Public_Bus_Fleet_Electrification/26088190"
 PAPER_URL = "https://www.nature.com/articles/s44333-025-00030-y"
@@ -37,6 +38,21 @@ ZIP_SHA256 = "3c6c2ed7c45fc441f4cb6108d830769b60c0de5e44e1a3a6fc72bed4f5f07317"
 ZIP_MD5 = "89b04ee5e8cd54997df51211d2c264d2"
 ZIP_BYTES = 267_312_231
 OPERATOR = "10__data/20__Selected_transport_operators/020__Hildenbrand/"
+OPERATOR_CONFIGS = {
+    "hildenbrand": {
+        "member_prefix": OPERATOR, "directory": "020__Hildenbrand",
+        "name": "Hildenbrand", "trip_prefix": "H", "service_count": 37,
+        "depot_ids": (15, 16), "max_vehicles": 37,
+        "case_prefix": "sistig_hildenbrand_single_depot",
+    },
+    "eberbach": {
+        "member_prefix": "10__data/20__Selected_transport_operators/003__Stadtwerke Eberbach/",
+        "directory": "003__Stadtwerke Eberbach", "name": "Stadtwerke Eberbach",
+        "trip_prefix": "E", "service_count": 105,
+        "depot_ids": (36,), "max_vehicles": 105,
+        "case_prefix": "sistig_eberbach_single_depot",
+    },
+}
 EXPECTED_MEMBERS = (
     "bus_route_info.xlsx",
     "bus_stops.xlsx",
@@ -142,10 +158,12 @@ def read_xlsx(zf: zipfile.ZipFile, member: str) -> tuple[list[str], list[dict]]:
         workbook.close()
 
 
-def member_provenance(zf: zipfile.ZipFile, archive_path: Path) -> dict:
+def member_provenance(zf: zipfile.ZipFile, archive_path: Path,
+                      operator: str = "hildenbrand") -> dict:
+    prefix = OPERATOR_CONFIGS[operator]["member_prefix"]
     files = []
     for short in EXPECTED_MEMBERS:
-        name = OPERATOR + short
+        name = prefix + short
         info = zf.getinfo(name)
         payload = zf.read(name)
         files.append({
@@ -159,7 +177,7 @@ def member_provenance(zf: zipfile.ZipFile, archive_path: Path) -> dict:
                 "deadhead_trip_matrix.mat": "directed OD distance/time/elevation fields",
                 "itineraries.xlsx": "service itinerary identifiers and endpoints",
                 "itineraries_course.mat": "fingerprinted for complete source provenance; opaque MCOS route-course table, not parsed or used by endpoint model",
-                "trip_set.xlsx": "the full 37 mandatory fixed service records",
+                "trip_set.xlsx": f"the full {OPERATOR_CONFIGS[operator]['service_count']} mandatory fixed service records",
             }[short],
         })
     return {
@@ -178,7 +196,10 @@ def member_provenance(zf: zipfile.ZipFile, archive_path: Path) -> dict:
     }
 
 
-def extract_source(zf: zipfile.ZipFile, archive_path: Path) -> dict:
+def extract_source(zf: zipfile.ZipFile, archive_path: Path,
+                   operator: str = "hildenbrand") -> dict:
+    config = OPERATOR_CONFIGS[operator]
+    prefix = config["member_prefix"]
     try:
         import numpy as np
         from scipy.io import loadmat
@@ -189,12 +210,12 @@ def extract_source(zf: zipfile.ZipFile, archive_path: Path) -> dict:
         raise ValueError("Unsafe ZIP member path found")
     if len(zf.namelist()) != len(set(zf.namelist())):
         raise ValueError("Duplicate ZIP member paths")
-    _, trips = read_xlsx(zf, OPERATOR + "trip_set.xlsx")
-    _, stops = read_xlsx(zf, OPERATOR + "bus_stops.xlsx")
-    _, routes = read_xlsx(zf, OPERATOR + "bus_route_info.xlsx")
-    _, itineraries = read_xlsx(zf, OPERATOR + "itineraries.xlsx")
-    if len(trips) != 37:
-        raise ValueError(f"Pinned Hildenbrand service count changed: expected 37, got {len(trips)}")
+    _, trips = read_xlsx(zf, prefix + "trip_set.xlsx")
+    _, stops = read_xlsx(zf, prefix + "bus_stops.xlsx")
+    _, routes = read_xlsx(zf, prefix + "bus_route_info.xlsx")
+    _, itineraries = read_xlsx(zf, prefix + "itineraries.xlsx")
+    if len(trips) != config["service_count"]:
+        raise ValueError(f"Pinned {config['name']} service count changed: expected {config['service_count']}, got {len(trips)}")
     trip_fields = {
         "trip_id", "day_type_id", "bus_type_id", "itinerary_id", "bus_route_id",
         "dep_time", "dep_time_sec", "dep_stop_id", "dep_stop_name", "arr_time",
@@ -221,7 +242,7 @@ def extract_source(zf: zipfile.ZipFile, archive_path: Path) -> dict:
         if dep % 30 or arr % 30 or duration % 30:
             raise ValueError("Source trip time cannot be represented at exact half-minute resolution")
         if int(row["trip_type"]) != 1 or row["bool_service"] is not True:
-            raise ValueError("Hildenbrand raw timetable contains an unexpected nonservice row")
+            raise ValueError(f"{config['name']} raw timetable contains an unexpected nonservice row")
         if int(row["itinerary_id"]) not in itinerary_ids or int(row["bus_route_id"]) not in route_ids:
             raise ValueError("Unresolved source itinerary or route reference")
         if int(row["dep_stop_id"]) not in stop_ids or int(row["arr_stop_id"]) not in stop_ids:
@@ -238,13 +259,13 @@ def extract_source(zf: zipfile.ZipFile, archive_path: Path) -> dict:
             "_dep_time_sec_exact": dep,
             "_arr_time_sec_exact": arr,
             "_duration_sec_exact": duration,
-            "_native_id": f"H{int(row['trip_id']):04d}",
+            "_native_id": f"{config['trip_prefix']}{int(row['trip_id']):04d}",
         })
         source_trips.append(source_row)
-    if len({int(x["trip_id"]) for x in source_trips}) != 37:
-        raise ValueError("Service set did not retain all 37 unique source trips")
+    if len({int(x["trip_id"]) for x in source_trips}) != config["service_count"]:
+        raise ValueError(f"Service set did not retain all {config['service_count']} unique source trips")
 
-    mat_data = loadmat(io.BytesIO(zf.read(OPERATOR + "deadhead_trip_matrix.mat")),
+    mat_data = loadmat(io.BytesIO(zf.read(prefix + "deadhead_trip_matrix.mat")),
                        squeeze_me=True, struct_as_record=False)
     public_fields = [v for k, v in mat_data.items() if not k.startswith("__")]
     if len(public_fields) != 1 or not hasattr(public_fields[0], "_fieldnames"):
@@ -281,8 +302,8 @@ def extract_source(zf: zipfile.ZipFile, archive_path: Path) -> dict:
                 "source_energy_status": "not supplied; modeled separately from Table 2 assumptions",
             })
     depot_ids = sorted(int(s["id"]) for s in stops if s["b_depot"] in (True, 1))
-    if len(depot_ids) != 2:
-        raise ValueError(f"Expected two flagged depots for separate single-depot variants; found {depot_ids}")
+    if tuple(depot_ids) != config["depot_ids"]:
+        raise ValueError(f"Expected flagged depots {config['depot_ids']}; found {depot_ids}")
     counts_by_route: dict[int, int] = {}
     for t in source_trips:
         rid = int(t["bus_route_id"])
@@ -292,8 +313,8 @@ def extract_source(zf: zipfile.ZipFile, archive_path: Path) -> dict:
         raise ValueError("Trip route totals do not match source route metadata")
 
     return {
-        "operator_directory": "020__Hildenbrand",
-        "operator_name": "Hildenbrand",
+        "operator_directory": config["directory"],
+        "operator_name": config["name"],
         "service_trips": source_trips,
         "stops": [
             {k: s[k] for k in sorted(s)} | {
@@ -327,7 +348,7 @@ def extract_source(zf: zipfile.ZipFile, archive_path: Path) -> dict:
         "deadhead_arcs_directed_row_major": dhd_arcs,
         "source_day_type_ids": sorted({int(t["day_type_id"]) for t in source_trips}),
         "calendar_date_present": False,
-        "source_member_manifest": member_provenance(zf, archive_path),
+        "source_member_manifest": member_provenance(zf, archive_path, operator),
         "matrix_index_by_stop_id": matrix_index,
     }
 
@@ -366,8 +387,10 @@ def _modeled_service_energy(source_trip: dict) -> dict:
             "formula": "1.20 kWh/km * source service distance + 16 kWh/h * source service duration"}
 
 
-def build_depot_variant(source: dict, depot_id: int) -> tuple[object, dict]:
+def build_depot_variant(source: dict, depot_id: int,
+                        operator: str = "hildenbrand") -> tuple[object, dict]:
     """Build one explicit single-depot NativeCase plus movement provenance."""
+    config = OPERATOR_CONFIGS[operator]
     if depot_id not in {int(s["id"]) for s in source["stops"] if s["b_depot"] in (True, 1)}:
         raise ValueError(f"Depot {depot_id} is not source-flagged")
     from egglab import native_recharge as nr
@@ -398,7 +421,7 @@ def build_depot_variant(source: dict, depot_id: int) -> tuple[object, dict]:
             "source_energy_kwh": None,
             "modeled_energy_kwh": e["total_kwh"],
             "energy_components": e,
-            "source_member": OPERATOR + "trip_set.xlsx",
+            "source_member": config["member_prefix"] + "trip_set.xlsx",
             "source_excel_physical_row": t["source_excel_physical_row"],
         }
 
@@ -435,7 +458,7 @@ def build_depot_variant(source: dict, depot_id: int) -> tuple[object, dict]:
             "modeled_energy_kwh": energy["total_kwh"],
             "modeled_energy_components": energy,
             "leg_role": role,
-            "source_member": (OPERATOR + "deadhead_trip_matrix.mat"
+            "source_member": (config["member_prefix"] + "deadhead_trip_matrix.mat"
                               if role != "off_depot_stationary_wait" else None),
             "energy_status": "modeled from declared EB-3 assumptions; no source leg energy supplied",
         }
@@ -544,7 +567,7 @@ def build_depot_variant(source: dict, depot_id: int) -> tuple[object, dict]:
 
     # Complete the direct time-of-day market at exact hourly minute boundaries.
     market_edges = tuple(range(0, 30 * 60 + 1, 60))
-    case_name = f"sistig_hildenbrand_single_depot_{depot_id}_eb3"
+    case_name = f"{config['case_prefix']}_{depot_id}_eb3"
     case = nr.NativeCase(
         name=case_name,
         trips=tuple(service_native),
@@ -552,7 +575,7 @@ def build_depot_variant(source: dict, depot_id: int) -> tuple[object, dict]:
         resources=(nr.Resource(0, 1800, 360.0, 360.0, 1),),
         market_edges_min=market_edges,
         depot=_place(depot_id),
-        max_vehicles=37,
+        max_vehicles=config["max_vehicles"],
         battery_kwh=400.0,
         reserve_kwh=0.0,
         terminal_open_min=0,
@@ -562,7 +585,7 @@ def build_depot_variant(source: dict, depot_id: int) -> tuple[object, dict]:
         efficiency=1.0,
         graph_scope="declared-movement-modes-only",
     )
-    if pair_counts["pullout"] != 37 or pair_counts["pullin"] != 37:
+    if pair_counts["pullout"] != config["service_count"] or pair_counts["pullin"] != config["service_count"]:
         raise ValueError("Every mandatory trip must have a source-resolved pullout and pullin in this depot variant")
     model_trips = []
     for nt in case.trips:
@@ -579,7 +602,9 @@ def build_depot_variant(source: dict, depot_id: int) -> tuple[object, dict]:
     return case, {
         "case_name": case.name,
         "case_identity": case.identity(),
-        "variant_policy": "single source-flagged depot only; not the source two-depot fleet model",
+        "variant_policy": ("single source-flagged depot only; not the source two-depot fleet model"
+                           if operator == "hildenbrand" else
+                           "single source-flagged depot EGG scenario; not a publisher fleet result"),
         "selected_depot_id": depot_id,
         "selected_depot_native_place": _place(depot_id),
         "service_count": len(case.trips),
@@ -598,7 +623,7 @@ def build_depot_variant(source: dict, depot_id: int) -> tuple[object, dict]:
         "trips": model_trips,
         "resource_policy": asdict(case.resources[0]),
         "market_edges_min": list(case.market_edges_min),
-        "vehicle_cap": 37,
+        "vehicle_cap": config["max_vehicles"],
         "initial_inventory_policy": "every used bus starts at full usable EB-3 inventory (400 kWh)",
         "terminal_policy": "every used bus returns to its selected depot and must restore full usable inventory by 30:00 (1800 min); terminal opening is 00:00, so all post-pull-in time is available",
         "availability_horizon_sec": [HORIZON_START_SEC, HORIZON_END_SEC],
@@ -625,7 +650,9 @@ def build_depot_variant(source: dict, depot_id: int) -> tuple[object, dict]:
             "per_bus_kw": 360.0,
             "shared_grid_kw": 360.0,
             "connectors": 1,
-            "relationship_to_publisher": "EGG idealization, not a reproduction of publisher's assumed one charger with four outputs",
+            "relationship_to_publisher": ("EGG idealization, not a reproduction of publisher's assumed one charger with four outputs"
+                                          if operator == "hildenbrand" else
+                                          "EGG idealization; charger configuration is not observed in Eberbach source inputs"),
         },
         "cost_policy": {
             "vehicle_cost": VEHICLE_COST_SYNTHETIC,
@@ -715,6 +742,34 @@ def _construct_and_replay_one_trip_witness(case, compiled: dict) -> dict:
     }
 
 
+def estimate_compact_model_dimensions(case, compiled: dict) -> dict:
+    """Count path-flow variables/rows from compiled intervals; allocate no MIP."""
+    n = len(case.trips)
+    m = len(case.movements)
+    intervals = compiled["intervals"]
+    charge = sum(len(x["visits"]) for x in intervals if x["rate_kw"] > 0)
+    depot = sum(x.kind == "depot" for x in case.movements)
+    pullin = sum(x.kind == "pullin" for x in case.movements)
+    periods = len(case.market_edges_min) - 1
+    variables = m + 2*n + charge + periods
+    rows = (2 + 3*n + charge + len(intervals) + 2*m + 2*depot
+            + pullin + 2 + periods)
+    return {
+        "formulation": "egg-native-pathflow-v3-energy-band-orphan-projection",
+        "basis": "combinatorial count of native_pathflow.build_feasible_model; no model allocated",
+        "movement_binary_variables": m,
+        "service_soc_continuous_variables": 2*n,
+        "charge_interval_continuous_variables": charge,
+        "market_load_continuous_variables": periods,
+        "total_variables_before_objective": variables,
+        "estimated_constraints_before_objective": rows,
+        "compiled_resource_intervals": len(intervals),
+        "ordered_service_pairs": n*(n-1),
+        "solver_invoked": False,
+        "model_allocated": False,
+    }
+
+
 def json_ready_source(source: dict) -> dict:
     """Remove only private in-script indexes and parsing scratch fields."""
     value = json.loads(json.dumps(source, allow_nan=False))
@@ -751,24 +806,38 @@ def native_case_from_payload(variant: dict):
     )
 
 
-def build_document(archive_path: Path, validate_native: bool = False) -> dict:
+def build_document(archive_path: Path, validate_native: bool = False,
+                   operator: str = "hildenbrand") -> dict:
+    config = OPERATOR_CONFIGS[operator]
     if archive_path.stat().st_size != ZIP_BYTES:
         raise ValueError(f"Unexpected archive size: {archive_path.stat().st_size}")
     if sha256_file(archive_path) != ZIP_SHA256 or md5_file(archive_path) != ZIP_MD5:
         raise ValueError("Archive bytes do not match the DOI-pinned publisher checksums")
     with zipfile.ZipFile(archive_path) as zf:
-        source = extract_source(zf, archive_path)
+        source = extract_source(zf, archive_path, operator)
     depot_ids = sorted(int(s["id"]) for s in source["stops"] if s["b_depot"] in (True, 1))
+    if operator == "eberbach" and len(source["service_trips"]) * (len(source["service_trips"])-1) > 12_000:
+        raise ValueError("Source-only size screen exceeds the bounded Eberbach intake")
     variants = []
     for depot_id in depot_ids:
-        case, variant = build_depot_variant(source, depot_id)
+        case, variant = build_depot_variant(source, depot_id, operator)
         if validate_native:
             from egglab import native_recharge as nr
             nr.validate_case(case)
             compiled = nr.compile_case(case)  # schema compilation only; no solver
             variant["native_schema_validation"] = "passed"
             variant["compiled_resource_interval_count"] = len(compiled["intervals"])
-            variant["preflight_witness_and_dimensions"] = _construct_and_replay_one_trip_witness(case, compiled)
+            if operator == "eberbach":
+                variant["compact_preflight_dimensions"] = estimate_compact_model_dimensions(case, compiled)
+                try:
+                    variant["preflight_witness_and_dimensions"] = _construct_and_replay_one_trip_witness(case, compiled)
+                except ValueError as exc:
+                    variant["preflight_witness_and_dimensions"] = {
+                        "classification": "conservative one-trip-per-bus construction failed; not a fleet infeasibility proof",
+                        "reason": str(exc), "solver_invoked": False,
+                    }
+            else:
+                variant["preflight_witness_and_dimensions"] = _construct_and_replay_one_trip_witness(case, compiled)
         else:
             variant["native_schema_validation"] = "not-run (use --validate-native after exact half-minute support is present)"
         variants.append(variant)
@@ -823,7 +892,7 @@ def build_document(archive_path: Path, validate_native: bool = False) -> dict:
             "costs": {"vehicle_cost": 100.0, "unit": "f100 synthetic currency per used bus",
                       "deadhead_cost_per_min": 0.0, "source_economic_data": False},
             "terminal_open_sec": 0,
-            "max_used_vehicles": 37,
+            "max_used_vehicles": config["max_vehicles"],
             "departure_policies": {
                 "pullout": "latest feasible: leave selected depot at service start minus directed DHD travel time",
                 "direct": "leave immediately after prior service; add explicit off-depot stationary wait at next service origin",
@@ -843,11 +912,15 @@ def build_document(archive_path: Path, validate_native: bool = False) -> dict:
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--archive", type=Path, default=DEFAULT_ARCHIVE)
-    parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
+    parser.add_argument("--output", type=Path)
+    parser.add_argument("--operator", choices=tuple(OPERATOR_CONFIGS), default="hildenbrand")
     parser.add_argument("--validate-native", action="store_true",
                         help="run pure NativeCase validation/compile (requires exact half-minute time support; never solves)")
     args = parser.parse_args(argv)
-    document = build_document(args.archive, validate_native=args.validate_native)
+    if args.output is None:
+        args.output = DEFAULT_OUTPUT if args.operator == "hildenbrand" else EBERBACH_OUTPUT
+    document = build_document(args.archive, validate_native=args.validate_native,
+                              operator=args.operator)
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(document, indent=2, ensure_ascii=False, allow_nan=False) + "\n", encoding="utf-8")
     print(json.dumps({

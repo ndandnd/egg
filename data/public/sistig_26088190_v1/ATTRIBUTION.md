@@ -34,3 +34,20 @@ https://doi.org/10.6084/m9.figshare.26088190.v1.
   publisher-generated solution, or raw GitHub code is included here.
 
 The authors and source study are not endorsing EGG or this transformation.
+
+## Eberbach development intake — 28 September 2026
+
+`eberbach_native_case.json` adds all 105 mandatory services from the Stadtwerke
+Eberbach source operator, its 14 stops and complete directed 14×14 travel matrix.
+It creates one EGG single-depot case for the source-flagged depot 36. Source
+member fingerprints, seconds, units and modeled energy remain explicit. The
+existing Hildenbrand input is unchanged.
+
+The Eberbach case uses the same stated EGG vehicle/charging assumptions and
+30-hour full-replenishment policy as the earlier comparison. These are not
+observations about Eberbach equipment or demand. Source-study deadhead values
+include geographic/routing estimates. A constructed one-service-per-bus
+charging witness establishes feasibility under the EGG assumptions; its fleet
+size is not optimized and is not a source-study result. No publisher-generated
+vehicle or charging schedule was used. This operator and all derived variants
+are development data.

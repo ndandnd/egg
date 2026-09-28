@@ -46,16 +46,17 @@ before training. A second evaluation should vary the economic/physical regime.
 All initial screening cases are DEVELOPMENT. They cannot later become untouched
 ML test data. No existing protected A6/B3/confirmation data or private GIRO enters.
 
-The public archive contains 20 distinct selected-operator base networks. Only
-Hildenbrand has been adapted and checked for the current physical model. Metadata
-identifies Eberbach (105 services), Dreieich (131), Bad Nauheim (137) and
-Pfaffenhofen (323) as plausible next intake candidates; these counts do not imply
-that their energy, depots or operating assumptions have been validated. After
-the diagnostic screen, adapt a small number of these independent networks and
-build synthetic families with increasing service counts and variation in temporal
-overlap, battery size and charger scarcity. Freeze grouped evaluation assignments
-before inspecting comparative outcomes. The two tiny synthetic diagnostics are
-regression anchors, not evidence of scalability.
+The public archive contains 20 selected-operator base groups. Hildenbrand and
+Eberbach (105 services) have now been adapted to the current physical model.
+Eberbach's conservative one-service-per-bus witness passes physical replay with
+full replenishment; its 105 buses are not an optimized fleet result. Its compact
+model has an estimated 291,637 variables and 312,316 rows, without allocating a
+native solver model. The first solve must measure construction within its cap.
+Metadata counts for other operators do not imply physical-model validation or
+semantic independence. The prospective group reservation and synthetic scaling
+design are in `research-20260928/benchmark-intake/`; all existing screens remain
+development. The two tiny synthetic diagnostics are regression anchors, not
+evidence of scalability.
 
 The first bounded screen used two declared synthetic base timetables and the
 two already modeled public depot variants, with two market states per case.
@@ -182,14 +183,18 @@ benefit, and does not justify immediate integration of starts into the full meth
 Tables, figures and recorded paid work:
 `research-20260928/pricing-start-pilot/results-attempt1/`.
 
-The next bounded package is benchmark intake/design: validate one independent
-public timetable and a small synthetic scaling family, record all physical
-assumptions, and prospectively reserve independent base-network groups before
-training or comparative outcomes. Prepare cold, retained-column and nearest-
-neighbor proposal/repair comparisons at common quality targets and explicit
-resource caps. Keep existing cases in development. Do not conduct another start
-sweep merely to seek a favorable result. No new optimization was launched during
-the results-review package; there are currently no active EGG jobs.
+The benchmark intake package adds Eberbach and reserves future base groups before
+training or comparative outcomes. The synthetic family is designed, not yet
+generated or solved. Next, prepare one bounded cold, retained-column and
+nearest-neighbor comparison with common quality targets and explicit resource
+caps. For price-only changes on the same physical case, include exact
+lowest-current-bill selection over the same stored fleet pool: every checked
+fleet remains feasible, so nearest-price lookup must face this simple baseline.
+Cross-timetable route transfer requires explicit trip correspondence and repair.
+Do not conduct another start sweep merely to seek a favorable result. No solver
+or cluster job was launched during intake; no active EGG jobs remain. Follow
+`doc/DRAFT_COMPLETION_PLAN_20260928.md`: consolidate a readable LaTeX draft after
+the bounded comparison, regardless of whether acceleration is observed.
 [Python-MIP documents the initial-solution interface](https://python-mip.readthedocs.io/en/latest/classes.html).
 Broader independent public timetables and nearest-neighbor retrieval still
 precede learned proposals. Reserve grouped independent test networks before

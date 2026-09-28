@@ -1,0 +1,684 @@
+{
+  "assignment": {
+    "additional_quotas_after_fixed_development": {
+      "large_1000_plus": {
+        "dev": 1,
+        "test": 3,
+        "train": 6
+      },
+      "medium_201_999": {
+        "dev": 1,
+        "test": 2,
+        "train": 3
+      },
+      "small_1_200": {
+        "test": 1,
+        "train": 1
+      }
+    },
+    "fixed_public_development_bases": [
+      "Hildenbrand",
+      "Stadtwerke Eberbach"
+    ],
+    "prior_screen_cases_development": [
+      "cyclic2",
+      "multivisit3",
+      "every prior screen case and its variants through 2026-09-28"
+    ],
+    "rank": "ascending SHA-256 of seed|size_stratum|base_fingerprint; fingerprint breaks rank ties",
+    "seed": "egg-base-network-reservation-2026-09-28-v1",
+    "size_strata_from_inventory_metadata_only": {
+      "large_1000_plus": "1,000+ service rows",
+      "medium_201_999": "201\u2013999 service rows",
+      "small_1_200": "1\u2013200 service rows"
+    }
+  },
+  "fingerprint_policy": {
+    "definition": "SHA-256 of the sorted selected-member basename/hash pairs; file contents are hashed but never parsed",
+    "exact_duplicate_policy": "merge operator records only when both selected input files are byte-identical",
+    "inputs_only": [
+      "trip_set.xlsx",
+      "deadhead_trip_matrix.mat"
+    ],
+    "semantic_alias_limit": "different bytes do not establish semantically distinct timetables; if a candidate test base is later found to alias any already-studied train/dev/prior-screen base, quarantine the merged base from the clean test set and do not backfill after outcomes",
+    "variant_policy": "every depot/day/vehicle/tariff/timing/scenario variant of one base timetable inherits its base group split"
+  },
+  "group_counts": {
+    "by_stratum": {
+      "large_1000_plus": {
+        "dev": 1,
+        "test": 3,
+        "train": 6
+      },
+      "medium_201_999": {
+        "dev": 1,
+        "test": 2,
+        "train": 3
+      },
+      "small_1_200": {
+        "dev": 2,
+        "test": 1,
+        "train": 1
+      }
+    },
+    "dev": 4,
+    "test": 6,
+    "total_public_base_groups": 20,
+    "train": 10
+  },
+  "groups": [
+    {
+      "assignment_rank_hash": "a7b2c80c57bdb4ace04dedf770c5b4969cf187fd5740f78193816364b05ff3b3",
+      "assignment_reason": "SHA-256 rank within large_1000_plus stratum",
+      "base_fingerprint": "2ae98512ba2b13111ff4d28c237f3855a47ddbfe5b9b1878083077c7cbf8b87d",
+      "members": [
+        {
+          "base_fingerprint": "2ae98512ba2b13111ff4d28c237f3855a47ddbfe5b9b1878083077c7cbf8b87d",
+          "inputs": {
+            "deadhead_trip_matrix.mat": {
+              "bytes": 25449,
+              "member": "10__data/20__Selected_transport_operators/004__DVG_Duisburg/deadhead_trip_matrix.mat",
+              "sha256": "c20f161172dc181a211f7318e6a0fc2e5f6f10905418e520f1ce172bce0b81e7"
+            },
+            "trip_set.xlsx": {
+              "bytes": 176443,
+              "member": "10__data/20__Selected_transport_operators/004__DVG_Duisburg/trip_set.xlsx",
+              "sha256": "309930a90e811c9c9f3a5a3e0cc11b67110c9229b75d33909c2bde7b8008cbe2"
+            }
+          },
+          "operator": "DVG Duisburg",
+          "service_rows": 2141
+        }
+      ],
+      "operators": [
+        "DVG Duisburg"
+      ],
+      "service_rows": 2141,
+      "split": "dev",
+      "stratum": "large_1000_plus"
+    },
+    {
+      "assignment_rank_hash": "864aa55043bcd41e9c7fa0cdf01c74644b26ea16d313b98a564caaf4ab01a493",
+      "assignment_reason": "SHA-256 rank within large_1000_plus stratum",
+      "base_fingerprint": "170fe8c2d55dca39a1306184fef5d7ec925490f85dca97ec097b7510362a490f",
+      "members": [
+        {
+          "base_fingerprint": "170fe8c2d55dca39a1306184fef5d7ec925490f85dca97ec097b7510362a490f",
+          "inputs": {
+            "deadhead_trip_matrix.mat": {
+              "bytes": 1771920,
+              "member": "10__data/20__Selected_transport_operators/014__ASEAG/deadhead_trip_matrix.mat",
+              "sha256": "e73a67b8bc0de4c929cc4642ef91709316e48f5cfba8e1c3b11de6d68739daec"
+            },
+            "trip_set.xlsx": {
+              "bytes": 477614,
+              "member": "10__data/20__Selected_transport_operators/014__ASEAG/trip_set.xlsx",
+              "sha256": "bec115af64768195e87f2ddb36223fce100ebbbf958c5dc2df49bcd845a6bed6"
+            }
+          },
+          "operator": "ASEAG",
+          "service_rows": 5147
+        }
+      ],
+      "operators": [
+        "ASEAG"
+      ],
+      "service_rows": 5147,
+      "split": "test",
+      "stratum": "large_1000_plus"
+    },
+    {
+      "assignment_rank_hash": "92060fc27c492195b671a6015aca480f17136a5e8938283fd95d218c2c7328c4",
+      "assignment_reason": "SHA-256 rank within large_1000_plus stratum",
+      "base_fingerprint": "7cce6edcaef8caa8e5f0b7ca4820f5e4c858da94877086b85be39133bb493c06",
+      "members": [
+        {
+          "base_fingerprint": "7cce6edcaef8caa8e5f0b7ca4820f5e4c858da94877086b85be39133bb493c06",
+          "inputs": {
+            "deadhead_trip_matrix.mat": {
+              "bytes": 1621453,
+              "member": "10__data/20__Selected_transport_operators/005__NIAG/deadhead_trip_matrix.mat",
+              "sha256": "12d455f8c6b378ef4886bc7391df08656804abfc1d066e0648e9959661c0993c"
+            },
+            "trip_set.xlsx": {
+              "bytes": 348110,
+              "member": "10__data/20__Selected_transport_operators/005__NIAG/trip_set.xlsx",
+              "sha256": "f96e463b973b96b3cf7f0cbff0b45923db9f9b48d412ab52a3bb75f21c91876b"
+            }
+          },
+          "operator": "NIAG",
+          "service_rows": 3909
+        }
+      ],
+      "operators": [
+        "NIAG"
+      ],
+      "service_rows": 3909,
+      "split": "test",
+      "stratum": "large_1000_plus"
+    },
+    {
+      "assignment_rank_hash": "3d5cad310cb8d4a1c27c063fd36f8ac0f2acef527333a919953cde649f34ee54",
+      "assignment_reason": "SHA-256 rank within large_1000_plus stratum",
+      "base_fingerprint": "c3503516a222fbd6209e5f5e69245eae776c5abd0d3dee7620fc1a0ac7ecbd88",
+      "members": [
+        {
+          "base_fingerprint": "c3503516a222fbd6209e5f5e69245eae776c5abd0d3dee7620fc1a0ac7ecbd88",
+          "inputs": {
+            "deadhead_trip_matrix.mat": {
+              "bytes": 232877,
+              "member": "10__data/20__Selected_transport_operators/006__K\u00f6lner_Verkehrsbetriebe/deadhead_trip_matrix.mat",
+              "sha256": "e42c9d5d29e0617786354fb21e88b553462912600260c1de32102e2f52cd4c00"
+            },
+            "trip_set.xlsx": {
+              "bytes": 501773,
+              "member": "10__data/20__Selected_transport_operators/006__K\u00f6lner_Verkehrsbetriebe/trip_set.xlsx",
+              "sha256": "8e96d19ff55a6eadf6df1d300836174d753069fbbcad8680c777e79647153f32"
+            }
+          },
+          "operator": "K\u00f6lner Verkehrsbetriebe",
+          "service_rows": 6281
+        }
+      ],
+      "operators": [
+        "K\u00f6lner Verkehrsbetriebe"
+      ],
+      "service_rows": 6281,
+      "split": "test",
+      "stratum": "large_1000_plus"
+    },
+    {
+      "assignment_rank_hash": "d80a05bddabaa627f2c4a1d273044d96b611514d73880419c52abd32833c5cd5",
+      "assignment_reason": "SHA-256 rank within large_1000_plus stratum",
+      "base_fingerprint": "09dbcfbba04ffa1de7f30a963c230f1ff623923aee0ef2bf7e5d77a15972bca1",
+      "members": [
+        {
+          "base_fingerprint": "09dbcfbba04ffa1de7f30a963c230f1ff623923aee0ef2bf7e5d77a15972bca1",
+          "inputs": {
+            "deadhead_trip_matrix.mat": {
+              "bytes": 2003879,
+              "member": "10__data/20__Selected_transport_operators/013__Kombus/deadhead_trip_matrix.mat",
+              "sha256": "d1781c39e2572d472e35b4bfef075d07ba41327911edd9321db9e622a350daf8"
+            },
+            "trip_set.xlsx": {
+              "bytes": 207471,
+              "member": "10__data/20__Selected_transport_operators/013__Kombus/trip_set.xlsx",
+              "sha256": "34c0e62164471318cb0929a15368c3323648229155b3a8bd75379d4c7a8f519e"
+            }
+          },
+          "operator": "Kombus",
+          "service_rows": 2030
+        }
+      ],
+      "operators": [
+        "Kombus"
+      ],
+      "service_rows": 2030,
+      "split": "train",
+      "stratum": "large_1000_plus"
+    },
+    {
+      "assignment_rank_hash": "b4b1908eb82b86d15afed11febfb28cfc33c8e210b6bbd9dfde54e355e9529c7",
+      "assignment_reason": "SHA-256 rank within large_1000_plus stratum",
+      "base_fingerprint": "0e4daa47e3d9c09333fcccdf0a5b1bfb1bcd8971746fa7a83b4a435b974e6668",
+      "members": [
+        {
+          "base_fingerprint": "0e4daa47e3d9c09333fcccdf0a5b1bfb1bcd8971746fa7a83b4a435b974e6668",
+          "inputs": {
+            "deadhead_trip_matrix.mat": {
+              "bytes": 111376,
+              "member": "10__data/20__Selected_transport_operators/007__Stadtwerke_Bonn/deadhead_trip_matrix.mat",
+              "sha256": "898b4e40264580d3a7420d343d6fab21abe88aeb8fe42106bb94c3f105c55a3d"
+            },
+            "trip_set.xlsx": {
+              "bytes": 238930,
+              "member": "10__data/20__Selected_transport_operators/007__Stadtwerke_Bonn/trip_set.xlsx",
+              "sha256": "36cd3436a3e14d2fef865d373c773e16aa015353cc7df94401da00b8559d2397"
+            }
+          },
+          "operator": "Stadtwerke Bonn",
+          "service_rows": 2895
+        }
+      ],
+      "operators": [
+        "Stadtwerke Bonn"
+      ],
+      "service_rows": 2895,
+      "split": "train",
+      "stratum": "large_1000_plus"
+    },
+    {
+      "assignment_rank_hash": "d8983fe50bf01593f54ecbdaabdb0fe7696ef6f9e4f78ed899a37c0056cd54de",
+      "assignment_reason": "SHA-256 rank within large_1000_plus stratum",
+      "base_fingerprint": "1423f2e6cf9938e94f060f7a985ab7247aea2168fb87732d3ac0e85b3362536f",
+      "members": [
+        {
+          "base_fingerprint": "1423f2e6cf9938e94f060f7a985ab7247aea2168fb87732d3ac0e85b3362536f",
+          "inputs": {
+            "deadhead_trip_matrix.mat": {
+              "bytes": 186667,
+              "member": "10__data/20__Selected_transport_operators/011__wupsi/deadhead_trip_matrix.mat",
+              "sha256": "2434141ab48f4017e0fa97828acf9cde9b4b1ae6242a0317da52cfaaad4ffc9d"
+            },
+            "trip_set.xlsx": {
+              "bytes": 274591,
+              "member": "10__data/20__Selected_transport_operators/011__wupsi/trip_set.xlsx",
+              "sha256": "5dd5eab521f7b12d0a687dc87314f6b75f681f902ac5e40c999245c81b9e9d99"
+            }
+          },
+          "operator": "wupsi",
+          "service_rows": 3315
+        }
+      ],
+      "operators": [
+        "wupsi"
+      ],
+      "service_rows": 3315,
+      "split": "train",
+      "stratum": "large_1000_plus"
+    },
+    {
+      "assignment_rank_hash": "fe6180a8bf59b75119e6a311cdf6e79cc2ab9f4845d99b7de8a87a8825256cd9",
+      "assignment_reason": "SHA-256 rank within large_1000_plus stratum",
+      "base_fingerprint": "2716c7ef4b2b7dbf7fc31fc2bd89cbac00be84a157545f30aacdd6d23e8bd1b7",
+      "members": [
+        {
+          "base_fingerprint": "2716c7ef4b2b7dbf7fc31fc2bd89cbac00be84a157545f30aacdd6d23e8bd1b7",
+          "inputs": {
+            "deadhead_trip_matrix.mat": {
+              "bytes": 261972,
+              "member": "10__data/20__Selected_transport_operators/015__Landkreis_Gotha/deadhead_trip_matrix.mat",
+              "sha256": "dc1d4041548a7ff1dccdbef7b4619d3f5e82fc0ca49537a991b4dbeda2f269ca"
+            },
+            "trip_set.xlsx": {
+              "bytes": 106366,
+              "member": "10__data/20__Selected_transport_operators/015__Landkreis_Gotha/trip_set.xlsx",
+              "sha256": "0ddb19246bf3a94f7e2ac1994ce8bab526e87d50adf177d1eb55f147530c51d9"
+            }
+          },
+          "operator": "Landkreis Gotha",
+          "service_rows": 1096
+        }
+      ],
+      "operators": [
+        "Landkreis Gotha"
+      ],
+      "service_rows": 1096,
+      "split": "train",
+      "stratum": "large_1000_plus"
+    },
+    {
+      "assignment_rank_hash": "bb3febf81b6af354a418987c415a28ea00659b6cf2026979832ea7e390357c01",
+      "assignment_reason": "SHA-256 rank within large_1000_plus stratum",
+      "base_fingerprint": "652ef180501324abff247b7314c11979a10a0406419d1e7fe105e39222d4e211",
+      "members": [
+        {
+          "base_fingerprint": "652ef180501324abff247b7314c11979a10a0406419d1e7fe105e39222d4e211",
+          "inputs": {
+            "deadhead_trip_matrix.mat": {
+              "bytes": 8353,
+              "member": "10__data/20__Selected_transport_operators/009__OVB_Offenbach/deadhead_trip_matrix.mat",
+              "sha256": "a5f5d65ddeed53dfd4614dfe32894d076b81fc35330391764182c15650fcdce4"
+            },
+            "trip_set.xlsx": {
+              "bytes": 88133,
+              "member": "10__data/20__Selected_transport_operators/009__OVB_Offenbach/trip_set.xlsx",
+              "sha256": "307e4d5167d67274fa388f8498e9e7cb2c957cd48e31b25bb3cd8b079eb22136"
+            }
+          },
+          "operator": "OVB Offenbach",
+          "service_rows": 1034
+        }
+      ],
+      "operators": [
+        "OVB Offenbach"
+      ],
+      "service_rows": 1034,
+      "split": "train",
+      "stratum": "large_1000_plus"
+    },
+    {
+      "assignment_rank_hash": "bb659d06a7636e5b28ac06fcf50b405071291dae947e8c938a0a8b312b337819",
+      "assignment_reason": "SHA-256 rank within large_1000_plus stratum",
+      "base_fingerprint": "8fd0a08168594ef938847ce80fde6247a1579c7857df4907cdf52844b5b3efa7",
+      "members": [
+        {
+          "base_fingerprint": "8fd0a08168594ef938847ce80fde6247a1579c7857df4907cdf52844b5b3efa7",
+          "inputs": {
+            "deadhead_trip_matrix.mat": {
+              "bytes": 761000,
+              "member": "10__data/20__Selected_transport_operators/016__Vetter_Verkehrsbetriebe/deadhead_trip_matrix.mat",
+              "sha256": "32d8dda3efbcbe620da719d0280e622580aa28e57be9b4520da5ec685f2f6faf"
+            },
+            "trip_set.xlsx": {
+              "bytes": 221920,
+              "member": "10__data/20__Selected_transport_operators/016__Vetter_Verkehrsbetriebe/trip_set.xlsx",
+              "sha256": "5d521e30fcc336b374eb9ca5615eaf5cda13b8fbffbe85ba670904ecfed89789"
+            }
+          },
+          "operator": "Vetter Verkehrsbetriebe",
+          "service_rows": 2422
+        }
+      ],
+      "operators": [
+        "Vetter Verkehrsbetriebe"
+      ],
+      "service_rows": 2422,
+      "split": "train",
+      "stratum": "large_1000_plus"
+    },
+    {
+      "assignment_rank_hash": "3b272b211c12f45544d0d96d8ba03a7d322afa44a4516efaf936b0d981803575",
+      "assignment_reason": "SHA-256 rank within medium_201_999 stratum",
+      "base_fingerprint": "bb5772a633c463bd31131319b0758fef1a15c934140adc1b7cf1cccd21801d40",
+      "members": [
+        {
+          "base_fingerprint": "bb5772a633c463bd31131319b0758fef1a15c934140adc1b7cf1cccd21801d40",
+          "inputs": {
+            "deadhead_trip_matrix.mat": {
+              "bytes": 49797,
+              "member": "10__data/20__Selected_transport_operators/008__Stadtwerke_Passau/deadhead_trip_matrix.mat",
+              "sha256": "42b66f6d65e8e8dd4dc793d60c8a6c3718beac1a97254d7faf466a8ba9d58b7e"
+            },
+            "trip_set.xlsx": {
+              "bytes": 91121,
+              "member": "10__data/20__Selected_transport_operators/008__Stadtwerke_Passau/trip_set.xlsx",
+              "sha256": "ece6faa042b1a589c1e90121b3a714b77d2934b30baaf432e31e1a232583f404"
+            }
+          },
+          "operator": "Stadtwerke Passau",
+          "service_rows": 984
+        }
+      ],
+      "operators": [
+        "Stadtwerke Passau"
+      ],
+      "service_rows": 984,
+      "split": "dev",
+      "stratum": "medium_201_999"
+    },
+    {
+      "assignment_rank_hash": "2969a7018823b459a218803db3aceb0f9c408b461d638899054780962ddc4b7b",
+      "assignment_reason": "SHA-256 rank within medium_201_999 stratum",
+      "base_fingerprint": "423ac69c138483af7e531d01499ac78e6ea95ce672e169e11e7f08cd419faf77",
+      "members": [
+        {
+          "base_fingerprint": "423ac69c138483af7e531d01499ac78e6ea95ce672e169e11e7f08cd419faf77",
+          "inputs": {
+            "deadhead_trip_matrix.mat": {
+              "bytes": 154802,
+              "member": "10__data/20__Selected_transport_operators/010__Nahverkehrsgesellschaft_Jerichower_Land/deadhead_trip_matrix.mat",
+              "sha256": "5bdbba512168c93b120cace599d850687ab9a893ea969d2aec82e881d6aec5f5"
+            },
+            "trip_set.xlsx": {
+              "bytes": 65909,
+              "member": "10__data/20__Selected_transport_operators/010__Nahverkehrsgesellschaft_Jerichower_Land/trip_set.xlsx",
+              "sha256": "6d620194730f41522a9826547945bc260756f1db6fe1ce3351d4e27e4283a106"
+            }
+          },
+          "operator": "Nahverkehrsgesellschaft Jerichower Land",
+          "service_rows": 616
+        }
+      ],
+      "operators": [
+        "Nahverkehrsgesellschaft Jerichower Land"
+      ],
+      "service_rows": 616,
+      "split": "test",
+      "stratum": "medium_201_999"
+    },
+    {
+      "assignment_rank_hash": "2ce8aa39089197545c4593d29ad0ecef25fc741ea98e48ea485d99a5826daf4e",
+      "assignment_reason": "SHA-256 rank within medium_201_999 stratum",
+      "base_fingerprint": "bfdef3f8a32526847d81df1835ca17db2cadadcbdf5018c2fb6f5ab713534827",
+      "members": [
+        {
+          "base_fingerprint": "bfdef3f8a32526847d81df1835ca17db2cadadcbdf5018c2fb6f5ab713534827",
+          "inputs": {
+            "deadhead_trip_matrix.mat": {
+              "bytes": 146635,
+              "member": "10__data/20__Selected_transport_operators/012__Weimar/deadhead_trip_matrix.mat",
+              "sha256": "a6a220d7a36d0f6ccad9473b1ede210951c400a6405fa69899b66a1c054ca954"
+            },
+            "trip_set.xlsx": {
+              "bytes": 83978,
+              "member": "10__data/20__Selected_transport_operators/012__Weimar/trip_set.xlsx",
+              "sha256": "05f7a076ac2deae07599f1e8d6d01e1c161f83fe43bfbe99e874ff4de58e5c47"
+            }
+          },
+          "operator": "Weimar",
+          "service_rows": 839
+        }
+      ],
+      "operators": [
+        "Weimar"
+      ],
+      "service_rows": 839,
+      "split": "test",
+      "stratum": "medium_201_999"
+    },
+    {
+      "assignment_rank_hash": "5a5a823ddc0af2cce36624e79a75a01798c6b25b8b5a0dac83149d74e87994a5",
+      "assignment_reason": "SHA-256 rank within medium_201_999 stratum",
+      "base_fingerprint": "1f3acfd39e966eeed76685de3dabc7b47810f0b23e74803ea31d24342c9ab603",
+      "members": [
+        {
+          "base_fingerprint": "1f3acfd39e966eeed76685de3dabc7b47810f0b23e74803ea31d24342c9ab603",
+          "inputs": {
+            "deadhead_trip_matrix.mat": {
+              "bytes": 17565,
+              "member": "10__data/20__Selected_transport_operators/001__Stadtverkehr_Euskirchen/deadhead_trip_matrix.mat",
+              "sha256": "8633419d83f514956287c13a2b180092386630b9d39c762b9c304777437c6966"
+            },
+            "trip_set.xlsx": {
+              "bytes": 58631,
+              "member": "10__data/20__Selected_transport_operators/001__Stadtverkehr_Euskirchen/trip_set.xlsx",
+              "sha256": "b44410c7c9504698a57a6fbb65a0ac2efa4d4415c4a1db3d3716973ab3aa1c02"
+            }
+          },
+          "operator": "Stadtverkehr Euskirchen",
+          "service_rows": 664
+        }
+      ],
+      "operators": [
+        "Stadtverkehr Euskirchen"
+      ],
+      "service_rows": 664,
+      "split": "train",
+      "stratum": "medium_201_999"
+    },
+    {
+      "assignment_rank_hash": "e8e7f66a921e6f9bcd422d142d6c802107d360d2f49d7c30d368f1b00c30cc86",
+      "assignment_reason": "SHA-256 rank within medium_201_999 stratum",
+      "base_fingerprint": "2d654236ceb964d94a9126efd80c42126293a4b944108c3aa2187796a5732fcf",
+      "members": [
+        {
+          "base_fingerprint": "2d654236ceb964d94a9126efd80c42126293a4b944108c3aa2187796a5732fcf",
+          "inputs": {
+            "deadhead_trip_matrix.mat": {
+              "bytes": 1307,
+              "member": "10__data/20__Selected_transport_operators/018__Pfaffenhofen/deadhead_trip_matrix.mat",
+              "sha256": "85fc39247497987e325ef913264b40ebe708abfc89078530e486cb0baccdd960"
+            },
+            "trip_set.xlsx": {
+              "bytes": 28754,
+              "member": "10__data/20__Selected_transport_operators/018__Pfaffenhofen/trip_set.xlsx",
+              "sha256": "391163afffa638093b000d83182e19d9152eb2401671c8768911eaaf9baeff2e"
+            }
+          },
+          "operator": "Pfaffenhofen",
+          "service_rows": 323
+        }
+      ],
+      "operators": [
+        "Pfaffenhofen"
+      ],
+      "service_rows": 323,
+      "split": "train",
+      "stratum": "medium_201_999"
+    },
+    {
+      "assignment_rank_hash": "9c2736eabd39251c82ada6e88c45fbb5c5b30374ecd2a7422abf98865c682ea3",
+      "assignment_reason": "SHA-256 rank within medium_201_999 stratum",
+      "base_fingerprint": "fc17ca8d865fc7038967b2e50aa107d41ebf5f7a3a4b22e5ed5292de423e5a56",
+      "members": [
+        {
+          "base_fingerprint": "fc17ca8d865fc7038967b2e50aa107d41ebf5f7a3a4b22e5ed5292de423e5a56",
+          "inputs": {
+            "deadhead_trip_matrix.mat": {
+              "bytes": 9296,
+              "member": "10__data/20__Selected_transport_operators/002__Stadtbus_Konstanz/deadhead_trip_matrix.mat",
+              "sha256": "d3ddccc95bcea80e5b3190ffa80d2f576bcaa4e946d14096a8f2f253db1de7de"
+            },
+            "trip_set.xlsx": {
+              "bytes": 79973,
+              "member": "10__data/20__Selected_transport_operators/002__Stadtbus_Konstanz/trip_set.xlsx",
+              "sha256": "b5a650593ee206b143bdea537d43d2e4122010d9b4911c326b174cfe7c760975"
+            }
+          },
+          "operator": "Stadtbus Konstanz",
+          "service_rows": 936
+        }
+      ],
+      "operators": [
+        "Stadtbus Konstanz"
+      ],
+      "service_rows": 936,
+      "split": "train",
+      "stratum": "medium_201_999"
+    },
+    {
+      "assignment_rank_hash": null,
+      "assignment_reason": "irrevocably development: already selected/studied base",
+      "base_fingerprint": "cdd85be76303333b9b27dcd8e7034d4c52e80148e38b1a2fccfc0b9cac131fda",
+      "members": [
+        {
+          "base_fingerprint": "cdd85be76303333b9b27dcd8e7034d4c52e80148e38b1a2fccfc0b9cac131fda",
+          "inputs": {
+            "deadhead_trip_matrix.mat": {
+              "bytes": 596,
+              "member": "10__data/20__Selected_transport_operators/020__Hildenbrand/deadhead_trip_matrix.mat",
+              "sha256": "9dff521e549964217449f931ba49767f445714ada4a835a434ee36c79feefe6b"
+            },
+            "trip_set.xlsx": {
+              "bytes": 12529,
+              "member": "10__data/20__Selected_transport_operators/020__Hildenbrand/trip_set.xlsx",
+              "sha256": "a0aa47883a03293bff081b7b93d5efabf27842e39cddaed278a55c0001428c38"
+            }
+          },
+          "operator": "Hildenbrand",
+          "service_rows": 37
+        }
+      ],
+      "operators": [
+        "Hildenbrand"
+      ],
+      "service_rows": 37,
+      "split": "dev",
+      "stratum": "small_1_200"
+    },
+    {
+      "assignment_rank_hash": null,
+      "assignment_reason": "irrevocably development: already selected/studied base",
+      "base_fingerprint": "d7948f23f7399f269059f32054ed59b1b44c30a7370e0f763a57a629379cab97",
+      "members": [
+        {
+          "base_fingerprint": "d7948f23f7399f269059f32054ed59b1b44c30a7370e0f763a57a629379cab97",
+          "inputs": {
+            "deadhead_trip_matrix.mat": {
+              "bytes": 2409,
+              "member": "10__data/20__Selected_transport_operators/003__Stadtwerke Eberbach/deadhead_trip_matrix.mat",
+              "sha256": "de6c79a361f6d85deabda294e9acad62db8efde685b4f82385577300cabfb054"
+            },
+            "trip_set.xlsx": {
+              "bytes": 12794,
+              "member": "10__data/20__Selected_transport_operators/003__Stadtwerke Eberbach/trip_set.xlsx",
+              "sha256": "7e0f7b144637e184b4983d447233fb8c28d174f612ecaae48f41d2f8cc256f48"
+            }
+          },
+          "operator": "Stadtwerke Eberbach",
+          "service_rows": 105
+        }
+      ],
+      "operators": [
+        "Stadtwerke Eberbach"
+      ],
+      "service_rows": 105,
+      "split": "dev",
+      "stratum": "small_1_200"
+    },
+    {
+      "assignment_rank_hash": "8b25f2f05c25ec175d7cf7ae20c50406de2c0a246c720e5a0a08490fcda96b5f",
+      "assignment_reason": "SHA-256 rank within small_1_200 stratum",
+      "base_fingerprint": "19034817c340af65b170e562fca09f64aee2232b3e035ea6f448e8150f668dab",
+      "members": [
+        {
+          "base_fingerprint": "19034817c340af65b170e562fca09f64aee2232b3e035ea6f448e8150f668dab",
+          "inputs": {
+            "deadhead_trip_matrix.mat": {
+              "bytes": 1682,
+              "member": "10__data/20__Selected_transport_operators/017__Bad_Nauheim/deadhead_trip_matrix.mat",
+              "sha256": "b5de3093b82428d34221c3e31c1f66612784fe3ca64e901cf9db1f13f1de642f"
+            },
+            "trip_set.xlsx": {
+              "bytes": 14726,
+              "member": "10__data/20__Selected_transport_operators/017__Bad_Nauheim/trip_set.xlsx",
+              "sha256": "82b5bcd43e946fa40fb070ccf466d64690ddebc3fe39251fe39b6d682342d35a"
+            }
+          },
+          "operator": "Bad Nauheim",
+          "service_rows": 137
+        }
+      ],
+      "operators": [
+        "Bad Nauheim"
+      ],
+      "service_rows": 137,
+      "split": "test",
+      "stratum": "small_1_200"
+    },
+    {
+      "assignment_rank_hash": "fb7ddd9ff4d58f6f8b7ee12fac57407f5c0a6272372ae847960c0ee6f0392c6f",
+      "assignment_reason": "SHA-256 rank within small_1_200 stratum",
+      "base_fingerprint": "7932da922baf6d4a40c963525870c875a695dab1b39d5c0f4bc7d654ee823a68",
+      "members": [
+        {
+          "base_fingerprint": "7932da922baf6d4a40c963525870c875a695dab1b39d5c0f4bc7d654ee823a68",
+          "inputs": {
+            "deadhead_trip_matrix.mat": {
+              "bytes": 846,
+              "member": "10__data/20__Selected_transport_operators/019__Dreieich/deadhead_trip_matrix.mat",
+              "sha256": "f1cb517d60fc634f78453e7026270eb68d5177f50817f5892f061179ab691c98"
+            },
+            "trip_set.xlsx": {
+              "bytes": 14259,
+              "member": "10__data/20__Selected_transport_operators/019__Dreieich/trip_set.xlsx",
+              "sha256": "1222cde6dfecdd4d2abc98f74475a046c2ff5d8611315664ffc04d730e334ba4"
+            }
+          },
+          "operator": "Dreieich",
+          "service_rows": 131
+        }
+      ],
+      "operators": [
+        "Dreieich"
+      ],
+      "service_rows": 131,
+      "split": "train",
+      "stratum": "small_1_200"
+    }
+  ],
+  "interpretation": "Held-out groups are reserved before outcomes; this metadata split does not promise that every public base will be qualified or solved. Do not open test groups for adaptation, comparative outcomes, or training. A later cross-split semantic alias contaminates the candidate holdout: quarantine the merged group from clean test membership and never promote an exposed alias to a clean holdout.",
+  "public_archive": {
+    "bytes": 267312231,
+    "local_size_verified": true,
+    "path": "/Users/nadan/Documents/ChatGPT/egg/research-20260927/agent-notes/public-data/sistig-26088190-v1.zip",
+    "sha256": "3c6c2ed7c45fc441f4cb6108d830769b60c0de5e44e1a3a6fc72bed4f5f07317"
+  },
+  "schema": "egg.grouped-reservation.v1",
+  "source_inventory": {
+    "path": "research-20260928/computational-design/inventory.md",
+    "sha256": "911df7aa68721cab9f2de189927a5ad120911964b0b0d8eec94fdd78a07efecd"
+  },
+  "status": "prospective metadata-only reservation; not a qualification or run list"
+}
