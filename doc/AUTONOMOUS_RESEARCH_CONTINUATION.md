@@ -6,7 +6,38 @@ optimization first, then retrieval/learned proposals. The v0.5 draft is historic
 Use GPT-6 Sol for implementation/analysis and Luna Max for supporting work; root
 manages. Hourly `advance-egg-journal-research` remains ACTIVE, quiet when unchanged.
 
-## Latest checkpoint — selective external-review revision 0.7
+## Latest checkpoint — analytical baseline integrated into reporting
+
+- Bounded package `research-20260928/analytic-baseline-integration/` implements
+  the reviewed v0.7 public energy/cardinality floor as a pure module and opt-in
+  `--analytic-energy-floor` appendix in the computational screen reporter.
+  It checks complete physical-case identity, pinned proof lineage, supply-price
+  conditions and all cardinalities. It covers only the two reviewed public
+  cases and supported price-only changes; other cases remain unavailable.
+- Exact ideal bounds remain separate from numerical solver evidence. Optional
+  mixed intervals use native upper witnesses only, conditional on their ideal
+  feasibility. Complete on-time stages and successful supervisor integrity are
+  required; missing or incompatible evidence stays unavailable. Native lower
+  bounds, statuses, timings, stage rows, CSV and default reports are unchanged.
+  No coordinator, cache, pricing-cut or certification change was made.
+- Sol implemented and Luna independently reviewed; root's final 10 focused
+  tests pass, curated smoke reproduces byte-for-byte and all 32 native rows are
+  unchanged. Four public floors reproduce the reviewed calculation. Outward
+  conditional changed-market gap caps are 98.3611/117.6042, with zero lower
+  endpoints; these do not prove a positive public gap or a speedup.
+- No native optimization, new experiment, cluster call/allocation, protected or
+  private data, manuscript/PDF revision, or ML training. No active EGG jobs.
+  Previous receipt backup248f6b8 passed CI36490723183. Backup/Doc receipts for
+  this package are recorded below when complete.
+- Next bounded package: design a sizing diagnostic against the observed
+  pricing-call/arithmetic stops before another comparison. Do not silently
+  change the frozen four-call/4096-bit retrieval design, infer that sixteen
+  calls would suffice, or launch the still-pending one-replacement exception.
+  Do not re-ask that unanswered question. The v0.7 author-review draft remains
+  current; computational scope, independent cases and equal-quality comparison
+  remain unfinished. The wider research objective continues.
+
+## Prior checkpoint — selective external-review revision 0.7
 
 - User supplied Claude's review and authorized selected corrections. The review's
   strongest points are the missing analytic baseline, missing joint economic

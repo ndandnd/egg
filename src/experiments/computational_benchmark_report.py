@@ -84,6 +84,17 @@ def bounds(assessment):
     return str(lower), str(upper), str(upper - lower)
 
 
+def outward_decimal(value, digits=4, *, upper=False):
+    """Exact directed decimal display of a saved rational endpoint."""
+    amount = Fraction(value)
+    scale = 10 ** digits
+    units = -((-amount.numerator * scale) // amount.denominator) if upper else (
+        amount.numerator * scale) // amount.denominator
+    sign = "-" if units < 0 else ""
+    magnitude = abs(units)
+    return f"{sign}{magnitude // scale}.{magnitude % scale:0{digits}d}"
+
+
 def stage_row(attempt, frozen, case, state, stage):
     folder = attempt / case / f"state{state}" / stage
     row = dict.fromkeys(FIELDS)
@@ -138,7 +149,7 @@ def stage_row(attempt, frozen, case, state, stage):
     return row
 
 
-def build_report(attempt):
+def build_report(attempt, *, analytic_energy_floor=False, repo=None):
     attempt = Path(attempt)
     manifest, supervisor = verify_manifest(attempt)
     frozen, summary = declared_rows(attempt)
@@ -156,7 +167,7 @@ def build_report(attempt):
                          "two_state_wall_seconds": sum(times) if all(
                              type(value) in (int, float) for value in times) else None,
                          "outcomes": [row["outcome"] for row in pair]})
-    return {"scope": "development screen descriptive report; no scientific admission",
+    report = {"scope": "development screen descriptive report; no scientific admission",
             "attempt": str(attempt), "manifest_sha256": hashlib.sha256(
                 (attempt / "MANIFEST.json").read_bytes()).hexdigest(),
             "source_commit": frozen.get("source_commit"),
@@ -173,6 +184,90 @@ def build_report(attempt):
                        "Supervisor integrity does not establish scientific validity or success of individual stages.",
                        "Source drift or nonzero supervisor exit precludes a valid-run interpretation.",
                        "No equal-quality speedup, regret, global certificate or whole-job timing is inferred."]}
+    if analytic_energy_floor:
+        return with_analytic_energy_floor(report, frozen, repo=repo)
+    return report
+
+
+def with_analytic_energy_floor(report, frozen, *, repo=None):
+    """Add a separate ideal-model appendix; never change native stage rows."""
+    from egglab.analytic_energy_floor import UnsupportedBaseline, evaluate
+
+    rows = report["rows"]
+    appendix = {"scope": "reviewed ideal stored-input CH baseline for reporting only",
+                "native_certification": False,
+                "native_bounds_status_timing_unchanged": True,
+                "cases": {}}
+    for case_name, declaration in frozen["cases"].items():
+        if case_name not in ("public_depot15", "public_depot16"):
+            appendix["cases"][case_name] = {"status": "unavailable",
+                                            "reason": "no reviewed public energy-floor certificate"}
+            continue
+        states = {}
+        for state, market in enumerate(declaration["markets"]):
+            try:
+                baseline = evaluate(declaration["case"], declaration["case_identity"],
+                                    market, repo=repo)
+            except UnsupportedBaseline as exc:
+                states[str(state)] = {"status": "unavailable", "reason": str(exc),
+                                      "native_certification": False}
+                continue
+            entry = {"status": "ideal_baseline_available", "ideal_ch_lower": baseline,
+                     "native_certification": False, "conditional_mixed_enclosures": {}}
+            planner = next((row for row in rows if row["case"] == case_name
+                            and row["state"] == state and row["stage"] == "planner"), None)
+            def admitted(row):
+                return (row is not None and row.get("complete_evidence") is True
+                        and row.get("eligibility") == "attempted"
+                        and row.get("on_time") is True
+                        and row.get("outcome") in ("certified", "bounded", "budget_exhausted")
+                        and row.get("lower_exact") is not None
+                        and row.get("upper_exact") is not None)
+            for stage in ("cold_hull", "retained_hull"):
+                hull = next((row for row in rows if row["case"] == case_name
+                             and row["state"] == state and row["stage"] == stage), None)
+                if report.get("supervisor_integrity_ok") is not True:
+                    entry["conditional_mixed_enclosures"][stage] = {
+                        "status": "unavailable", "reason": "supervisor source/process integrity not established",
+                        "native_certification": False}
+                    continue
+                if not admitted(planner) or not admitted(hull):
+                    entry["conditional_mixed_enclosures"][stage] = {
+                        "status": "unavailable", "reason": "complete planner/hull native evidence missing",
+                        "native_certification": False}
+                    continue
+                try:
+                    if any(type(value) is bool for value in
+                           (planner["lower_exact"], planner["upper_exact"],
+                            hull["lower_exact"], hull["upper_exact"])):
+                        raise ValueError("boolean native endpoint")
+                    d_lower, d_upper = Fraction(planner["lower_exact"]), Fraction(planner["upper_exact"])
+                    ch_lower, ch_upper = Fraction(hull["lower_exact"]), Fraction(hull["upper_exact"])
+                    floor = Fraction(baseline["ch_lower_exact"])
+                except (TypeError, ValueError, ZeroDivisionError):
+                    entry["conditional_mixed_enclosures"][stage] = {
+                        "status": "unavailable", "reason": "malformed native bound endpoint",
+                        "native_certification": False}
+                    continue
+                combined_ch_upper = min(ch_upper, d_upper)
+                if (floor > combined_ch_upper or floor > d_upper
+                        or d_lower > d_upper or ch_lower > combined_ch_upper):
+                    entry["conditional_mixed_enclosures"][stage] = {
+                        "status": "inconsistent_unavailable",
+                        "reason": "native upper below ideal floor or inverted native interval",
+                        "native_certification": False}
+                    continue
+                entry["conditional_mixed_enclosures"][stage] = {
+                    "status": "conditional_mixed_enclosure", "native_certification": False,
+                    "physical_interval_exact": [str(floor), str(d_upper)],
+                    "hull_interval_exact": [str(floor), str(combined_ch_upper)],
+                    "gap_interval_exact": ["0", str(d_upper - floor)],
+                    "native_lower_bounds_not_transferred_to_ideal_model": True,
+                    "qualification": "exact ideal lower plus same-case native upper witnesses, conditional on those witnesses being feasible for the ideal model; no status or time change",
+                }
+            states[str(state)] = entry
+        appendix["cases"][case_name] = states
+    return {**report, "analytic_energy_floor_baseline": appendix}
 
 
 def write_report(report, out):
@@ -214,6 +309,32 @@ def write_report(report, out):
                   "Pricing and master solver wall times remain missing unless assessed counts record them.",
                   "Supervisor integrity describes source and process status, not success of individual stages or scientific validity.",
                   "No source-drifted or failed attempt is interpreted as a valid run.", ""])
+    if "analytic_energy_floor_baseline" in report:
+        lines.extend(["## Optional ideal stored-input energy-floor baseline", "",
+                      "This appendix is mathematical postprocessing for the two reviewed public physical cases. "
+                      "It is not a native-MIP lower bound, cache entry, solver certificate, stage outcome, or timed method.", "",
+                      "| Case | State | Exact ideal CH lower | Cold-hull conditional mixed gap |",
+                      "| --- | ---: | ---: | ---: |"])
+        for case, states in report["analytic_energy_floor_baseline"]["cases"].items():
+            if not case.startswith("public_"):
+                continue
+            if states.get("status") == "unavailable":
+                lines.append(f"| {case} | — | unavailable: {states['reason']} | — |")
+                continue
+            for state, item in states.items():
+                if item["status"] != "ideal_baseline_available":
+                    lines.append(f"| {case} | {state} | unavailable: {item['reason']} | — |")
+                    continue
+                exact = item["ideal_ch_lower"]["ch_lower_exact"]
+                mixed = item["conditional_mixed_enclosures"]["cold_hull"]
+                gap = ("[" + outward_decimal(mixed["gap_interval_exact"][0]) + ", "
+                       + outward_decimal(mixed["gap_interval_exact"][1], upper=True) + "]") if mixed["status"] == "conditional_mixed_enclosure" else mixed["status"]
+                lines.append(f"| {case} | {state} | {outward_decimal(exact)} | {gap} |")
+        lines.extend(["", "Conditional mixed intervals combine an exact ideal lower with existing "
+                      "native upper witnesses, conditional on those witnesses being feasible for the ideal model. "
+                      "All displayed endpoints round outward. "
+                      "Missing or inconsistent native evidence stays unavailable. "
+                      "All native stage rows, statuses, bounds and timings above are unchanged.", ""])
     (out / "comparison.md").write_text("\n".join(lines))
 
 
@@ -221,10 +342,12 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("attempt", type=Path)
     parser.add_argument("out", type=Path, help="New sibling output directory, outside the sealed attempt")
+    parser.add_argument("--analytic-energy-floor", action="store_true",
+                        help="Append reviewed ideal public CH floors as separate reporting evidence")
     args = parser.parse_args()
     if args.out.resolve().is_relative_to(args.attempt.resolve()):
         parser.error("Report output must be outside the sealed attempt")
-    write_report(build_report(args.attempt), args.out)
+    write_report(build_report(args.attempt, analytic_energy_floor=args.analytic_energy_floor), args.out)
 
 
 if __name__ == "__main__":

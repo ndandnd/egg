@@ -9,17 +9,22 @@ publishing private GIRO data, or spending reset credits.
 ## Review-driven correction — v0.7, 28 September 2026
 
 The author's external review identifies a missing analytical baseline and
-cap-dependent development comparisons. The current manuscript is being revised
-to report D, CH, their gap and own-price regret of a named planner incumbent
-together. Analytical cardinality/energy floors must accompany computational
-bounds. The historical reuse and start pilots remain in a separate supplement;
+cap-dependent development comparisons. The revised v0.7 manuscript reports D,
+CH, their gap and own-price regret of a named planner incumbent together.
+Analytical cardinality/energy floors must accompany computational bounds.
+The historical reuse and start pilots remain in a separate supplement;
 their failures, caps and resource use are not erased or relabelled.
 
-The computational-paper objective remains active. Before another comparative
-campaign, implement the analytical baseline with explicit physical-case and
-market scope, then perform a bounded sizing diagnostic for pricing-call and
-arithmetic limits. Do not infer that changing four calls to sixteen will certify
-a case, or remove resource limits altogether. A pricing cut needs its own valid
+The computational-paper objective remains active. The analytical baseline now
+has an opt-in reporting implementation, restricted to the two reviewed public
+physical cases and supported price-only changes. It checks proof lineage and
+keeps ideal bounds separate from native results; conditional combinations use
+native upper witnesses only. It does not enter the coordinator, pricing cache,
+native status or MIP cuts. Code, focused checks and a replay preserving all 32
+historical rows are in `research-20260928/analytic-baseline-integration/`.
+Before another comparative campaign, design a bounded sizing diagnostic for
+pricing-call and arithmetic limits. Do not infer that changing four calls to
+sixteen will certify a case, or remove resource limits altogether. A pricing cut needs its own valid
 energy/cardinality inequality, not the hull-objective bound pasted into a
 linear-price subproblem. Record whether a native start was accepted before
 interpreting its effect; seed repetition and common-quality targets follow a
