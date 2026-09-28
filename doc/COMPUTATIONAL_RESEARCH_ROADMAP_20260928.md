@@ -85,36 +85,41 @@ traces support it; otherwise report time and final bounds together without a
 speedup claim. Keep the two Hildenbrand depots grouped. Fraction-valued exports
 of native numerical bounds do not convert them into ideal-model exact proofs.
 
-## First screen findings and immediate next step
+## Current computational evidence and next step
 
-Job 569799 completed in 35:57 on one CPU. All 32 declared stages are accounted:
-10 native-certified, 10 bounded, 9 budget-exhausted and 3 ineligible. The public
-hulls spent about 173 of 184 seconds in native pricing solves and only about
-0.005 seconds polishing. Two columns were returned, but the remaining wall
-budget did not allow a master solve using the second. The shifted multivisit
-example instead reached the rational-bit limit. These are different limitations;
-the historical QP lead does not establish a speedup for the public screen.
+The completed first screen (job 569799) identified public pricing as the main
+runtime cost: new plans arrived too late for another master. A separate matched
+24-cell pilot (job 572392, source 77dee96) now confirms that a ten-second reserve
+inside the pricing budget lets all four public cold runs process a second plan.
+Their upper bounds improved by roughly 18–69 cost units. All 24 cells returned
+on time: 7 certified native enclosures and 17 budget stops. Both public depots
+remain one development timetable group. Public optimality gaps remain open.
 
-The next experiment should preserve time for processing newly found columns and
-compare a separate reuse mode that accepts replayed feasible pools from bounded
-predecessors. The strict certified-predecessor arm remains a baseline. Rebuild
-the target-market mixture and obtain fresh pricing/global bounds; prior-market
-weights, duals and certificates do not transfer. Include predecessor preparation
-and checking time, preserve incomplete outcomes, and keep the same physical and
-market cases for the first comparison. Define and freeze this pilot before
-execution under the existing resource ceiling. Public enclosures are still broad;
-this screen establishes neither a positive planner-hull gap nor a public reuse or
-learning advantage. See `research-20260928/computational-results/attempt1/`.
+Feasible-pool reuse certified the shifted three-service diagnostic, where cold
+runs reached an arithmetic limit. In the public cases it improved upper costs
+but weakened fresh lower bounds: the final interval narrowed in one case and
+widened in the other. Paid two-market time was slightly higher than reserved-time
+cold solving. This is not yet an equal-quality speedup or learning result.
+Full tables, figures and evidence are at
+`research-20260928/feasible-pool-pilot/results-attempt1/`.
 
-The follow-up is now specified as a 24-cell hull-only pilot, with legacy cold,
-reserved-time cold and reserved-time feasible-pool reuse arms. Each pays for
-its own initial solve. The opt-in implementation and focused source review are
-complete. Published execution source 77dee96 passed full CI 36385045833 and was
-submitted once as job 572392 at 06:14 UTC, pending at the initial observation.
-Collect its frozen inputs and sealed results before interpreting the pilot.
-The design and stopping rules are in
-`doc/FEASIBLE_POOL_PILOT_PROTOCOL_20260928.md`. This direct two-market reuse mode
-does not yet support ancestral pools over longer market sequences.
+A separate posthoc calculation exposes a missing baseline: a physical pricing
+bound at a fixed price is still valid for the same physical feasible set after
+changing only the supply cost. Recomputing the target Fenchel conjugate tightens
+this run's shifted public intervals to widths about 64 and 70, with no additional
+optimization. It changes no frozen status or timing. Build an explicit checked
+oracle-bound cache next, preserving all provenance and preparation costs and
+requiring fresh target pricing before certification. Different physical cases
+cannot automatically share these certificates.
+
+Then integrate the existing numerical restricted-QP proposal under physical
+mixture replay and global-bound checks to address projected rational-bit stops.
+Pricing remains expensive, and a useful master proposal does not prove a global
+optimum. Use focused tests and a new prospective comparison before counting any
+online benefit. Broader independent public timetables and retained/retrieved
+proposal comparisons follow these baseline corrections; reserve grouped test
+networks before training. Do not repeat broad qualification campaigns or
+reinterpret completed runs.
 
 ## Manuscript direction
 

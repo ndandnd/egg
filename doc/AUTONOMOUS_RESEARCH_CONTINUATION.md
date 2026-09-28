@@ -6,62 +6,67 @@ optimization first, then retrieval/learned proposals. The v0.5 draft is historic
 Use GPT-6 Sol for implementation/analysis and Luna Max for supporting work; root
 manages. Hourly `advance-egg-journal-research` remains ACTIVE, quiet when unchanged.
 
-## Latest checkpoint — matched feasible-pool pilot submitted
+## Latest checkpoint — matched pilot completed and analyzed
 
-- **Active job 572392**, submitted once at 06:14:34 UTC; the one queue observation
-  was PENDING (Priority). Do not duplicate or retry it. Execution source
-  **77dee963eb30ba85bca68b3efcf61d099fa33076** passed full CI **36385045833**, including
-  the complete CBC suite and historical evidence reconstruction.
-  Dedicated checkout: `/home/nc437/egg-feasible-pool-pilot-20260928`.
-  Receipt: `research-20260928/cluster/feasible-pool-pilot-572392.json`.
-  The exclusive submission intent and receipt are also in that remote checkout.
-  Frozen input did not yet exist at submission; collect its hash after the job
-  starts. No new scientific outcomes have been read.
-- Protocol: `doc/FEASIBLE_POOL_PILOT_PROTOCOL_20260928.md`; scoped review:
-  `doc/FEASIBLE_POOL_PILOT_REVIEW_20260928.md`. Runner:
-  `src/experiments/feasible_pool_pilot.py`; wrapper:
-  `src/cluster/feasible_pool_pilot.sbatch`. Exclusive new attempt:
-  `result/feasible_pool_pilot/20260928-attempt1`.
-- Four existing cases × two markets × three hull arms: legacy cold, cold with
-  a 10-second pricing reserve, and feasible-pool reuse with that same reserve.
-  Each arm pays its own initial solve. This separates reserve from reuse; all
-  cases remain development, with both public depots one timetable group.
-- The new optional policy replays bounded but complete predecessor pools, with
-  strict on-time receipt and provenance checks. Only physical fleet columns
-  transfer; the target market rebuilds mixture weights and global certificates.
-  No fresh target pricing means no certification. This first mode supports
-  direct state0→state1 reuse, not recursive ancestral pools. Defaults and old
-  strict certified-predecessor behavior are preserved.
-- Focused validation: 9 new core tests, 96 existing core/wrapper/policy tests,
-  and 8 runner tests passed. No native MIP or new qualification campaign ran.
-  Luna's scoped independent review passed; root consolidated the review.
-- Keep the same one serial CPU/8-GB/two-hour ceiling, one native thread,
-  no retry/requeue, reserved node excluded. Public native targets remain 180 s,
-  synthetic 60 s; the 10 s reserve is inside those limits. Hard child caps add
-  30 s; controller/outer caps remain 5,400/5,500 s. Retain all 24 outcome rows.
-- Next: one compact queue check for 572392 through unicorn2 after loading
-  `/etc/profile.d/slurm.sh`; scoped sacct and receipts if it has vanished.
-  The wrapper freezes the source/design once on job start and writes its final
-  receipt beside the attempt, outside its seal. Preserve all failures/time;
-  collect sealed results before scientific analysis. Do not poll job 569799.
-  Analyze this matched pilot before any broader sweep or ML; the standalone
-  numerical-QP helper remains separate.
-- Analyze the new matched arms within this pilot, with initial preparation,
-  target checking and both-state totals included. Track whether each returned
-  column reached a master, and distinguish pricing reserve/call/wall stops
-  from arithmetic limits. The old reporter assumes 32 cells and is not directly
-  a 24-cell pilot reporter; do not silently reuse its outcome denominators.
-- Google Doc updated ONCE with “Matched computational pilot launched —
-  28 September 2026”, from the exact text at
-  `research-20260928/feasible-pool-pilot/GOOGLE_DOC_UPDATE.md`. Luna and root
-  verified the entire before-export is an exact prefix and the heading occurs
-  once. Final Markdown: 104,024 bytes, SHA
-  2cf19c451c2edef6677f8e3090000ec05093b54a9990905f801af0c449291625.
-  Receipt: `research-20260928/agent-notes/google-doc-feasible-pilot/`; full exports
-  remain private in OUTER `research-20260928/google-doc-feasible-pilot/`.
-  Do not append this milestone again. PR56 remains draft/unmerged and its
-  description includes the launch. The next backup is documentation/receipts;
-  check its CI once on the next follow-up, without retesting unchanged code.
+- **No active EGG job is recorded.** Job 572392 completed 0:0 in 36:49 on
+  snavely-cpu-15. Requested 1 CPU/8 GB; Slurm allocated 2 CPUs, while the serial
+  runner, native solver and numerical libraries were configured for one thread.
+  Wrapper elapsed 2,194 s; supervisor 2,188.9533 s; batch MaxRSS 408,956 K.
+  No timeout, source drift, extra job or retry. Do not poll jobs 569799 or 572392.
+- Execution source **77dee963eb30ba85bca68b3efcf61d099fa33076** passed full CI
+  36385045833; launch/Doc backup 3bdf51d also passed full CI 36386621965.
+  Remote checkout: `/home/nc437/egg-feasible-pool-pilot-20260928`.
+  Attempt: `result/feasible_pool_pilot/20260928-attempt1`.
+  Frozen SHA cc3f61e5357680064da513bbbf93e8f2e62f46d749ee94463db2e541a3f73649;
+  original seal SHA b2f3630f4229792c47f60bc2a1a60645d506fd887feaa2a3e379bd8107628e6a.
+- Collection: `research-20260928/cluster/feasible-pool-pilot-572392-collection.json`.
+  All 191 sealed entries plus the seal verified unchanged. Private 147,312,640-byte
+  archive SHA a5cf8dbd31a1a18e417871b57a57d3deb27602399a5672705dad42157868d2e0.
+  It and the extracted package are in OUTER
+  `research-20260928/cluster/feasible-pool-pilot-attempt1/collected/`.
+  Public ZIP contains 75 original scientific files; 117 omissions are listed.
+  Full raw events/logs stay private. Never edit the sealed attempt.
+- Results/figures/evidence index:
+  `research-20260928/feasible-pool-pilot/results-attempt1/README.md`.
+  Pure reporter: `src/experiments/feasible_pool_pilot_report.py` (6 focused tests
+  passed). It accounts for all 24 cells, 12 paired comparisons and 12 paid
+  two-state totals, with 57 compact pricing traces. Bounds display outward;
+  root visually reviewed both final figures. Independent review checks raw
+  receipts, all saved physical/mixture/Fenchel replays and matched arithmetic.
+- **7 native-certified, 17 budget-exhausted**, all 24 on time with complete
+  evidence. The four public reserve-cold runs processed two masters instead
+  of one and improved upper bounds by about 17.80–69.39 cost units. Paid public
+  two-state time was about 350 s versus 369 s legacy cold. These are descriptive
+  final-bound/time results, not a measured equal-quality speedup.
+- Feasible reuse certified the shifted three-service case; both cold arms hit
+  rational-polishing limits. Public reused pools improved upper costs but
+  weakened fresh lower bounds: shifted widths 154.12 versus 186.96 for depot15,
+  and 161.44 versus 154.24 for depot16. Both public reused runs stopped on the
+  projected rational-bit limit after adding a current-market column. Their paid
+  times were slightly above reserve cold (~351 versus ~350 s). No public gap
+  closure, scalable acceleration or learning claim follows. Both public depots
+  remain one base timetable; all these cases are development data.
+- **Separate posthoc lead:** a saved physical pricing bound at unchanged p=.20
+  is reusable under a changed supply cost after RECOMPUTING its target Fenchel
+  conjugate. The penalty is about 2.70, giving shifted target lower bounds
+  405.8331/420.4551 and gaps about 64.05/70.21 using this run's saved uppers.
+  This changes no frozen outcome/time and remains tolerance-qualified.
+  Script: `research-20260928/feasible-pool-pilot/cached_oracle_bound_diagnostic.py`;
+  note/data: `results-attempt1/posthoc_oracle_bound/` under that pilot directory.
+  Root and Luna independently checked the algebra and original pricing evidence.
+- **Next bounded work package:** add a separate opt-in physical-oracle-bound
+  cache with verified same-physical-model/oracle/extraction/price provenance,
+  re-evaluate the target conjugate, include all preparation/checking costs,
+  and still require fresh target-market pricing before certification. Preserve
+  current defaults and old frozen arms. This is a prospective policy change;
+  never silently relabel the posthoc bound as a timed result. Use focused tests,
+  not another broad qualification campaign. Then address the rational-polishing
+  stop using the existing separate numerical-QP proposal before a larger sweep
+  or learning. Different timetables cannot inherit pricing certificates directly.
+- Google Doc launch update was already verified; do not repeat it. A consolidated
+  results update is being prepared, with private before-export verified by Luna.
+  Check active workers and the final results-update receipt before appending.
+  PR56 remains draft/unmerged. No new optimizer run was made in this analysis.
 
 ## Previous checkpoint — first computational screen completed
 

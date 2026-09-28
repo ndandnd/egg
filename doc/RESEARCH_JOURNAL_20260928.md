@@ -198,3 +198,38 @@ new heading. Final Markdown is 104,024 bytes, SHA-256
 Markdown and PDF exports remain private; the compact receipt is under
 research-20260928/agent-notes/google-doc-feasible-pilot/. PR56 remains draft and
 unmerged, with its description updated for this launch.
+
+## Matched pilot results and a stronger reuse baseline
+
+Job 572392 completed 0:0 in 36:49. Slurm allocated two CPUs despite the one-CPU
+request; native and numerical-library threads were configured to one. All
+191 sealed entries and the original seal were preserved. All 24 calculations
+returned on time with complete evidence: seven native-certified and seventeen
+budget stops. The public reserve-cold cases processed a second fleet plan and
+improved upper bounds by about 18–69 cost units. Full two-market time was about
+350 seconds rather than 369 seconds for legacy cold. These final-bound/time
+comparisons do not measure time to a common quality target.
+
+Reuse closed the shifted three-service example, but public results were mixed.
+It improved upper costs while weakening fresh lower bounds, narrowing depot15's
+interval and widening depot16's. Both reused public runs reached the rational
+polishing bit limit. Their paid time was slightly above reserved-time cold.
+No public optimality closure, general acceleration or learning benefit follows.
+
+Root identified and Luna independently verified an additional algebraic bound.
+The same physical pricing problem at p=.20 supplies a reusable lower bound on
+operating cost plus posted-price energy cost. Recomputing the NEW market's
+Fenchel conjugate (about 2.70) gives target lower bounds 405.8331 and 420.4551.
+Using this run's existing mixtures, the posthoc widths are about 64.05 and
+70.21 instead of 154.12 and 161.44. This calculation uses saved evidence only,
+changes no recorded outcome/time and remains numerically tolerance-qualified.
+The next baseline should explicitly cache physical pricing bounds, with same-
+model provenance checks and fresh target pricing, before attributing gains to
+learned proposals. The numerical-QP helper is a separate remedy for arithmetic
+stops. No new optimization was launched during this analysis.
+
+Tables, two reviewed figures, compact pricing traces, a curated original-evidence
+ZIP and the separate bound note are under
+research-20260928/feasible-pool-pilot/results-attempt1/. The full raw archive stays
+private. The new read-only reporter passed six focused tests; the independent
+review replayed all saved physical columns, mixtures and target Fenchel bounds.

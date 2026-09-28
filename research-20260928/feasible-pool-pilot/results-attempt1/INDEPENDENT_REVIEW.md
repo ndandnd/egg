@@ -1,0 +1,27 @@
+# Independent scientific check — feasible-pool pilot
+
+**Verdict: the sealed descriptive analysis is consistent with the raw attempt and stays within its development-only scope.** This is not evidence of general speedup, exact fleet optimality, or a new physical qualification.
+
+I reviewed the sealed attempt `20260928-attempt1` (source commit `77dee963eb30ba85bca68b3efcf61d099fa33076`, manifest SHA-256 `b2f3630f4229792c47f60bc2a1a60645d506fd887feaa2a3e379bd8107628e6a`). The collector verified all 191 manifest entries with no missing, extra, or mismatched files. The summary has 24 unique declared rows: 7 `certified`, 17 `budget_exhausted`; every row has an on-time return-code-0 receipt and finite complete evidence. The supervisor and wrapper returned 0 without timeout; process group was quiescent, stable sealing succeeded, and source hashes remained unchanged. I independently reran the pinned saved column, exact-mixture, and target-market Fenchel-bound assessment for all 24 raw hull results; every assessment matched its saved result and summary row.
+
+The matched public reserve-cold cells all recorded the reserve-stop event after two pricing requests and two master calls; each reported a newly priced column reaching the later master. The legacy cells used two pricing requests but ended after one master. Reserve-cold therefore returned narrower saved enclosures in these four cells, with stage times around 175 seconds versus 184–185 seconds. This is a single deterministic run with different final bound quality, so it supports descriptive bounds/timings, not a same-quality speedup claim.
+
+For state-1 reuse, imported column keys exactly match that case's own state-0 feasible-pool keys and retain their predecessor state identity. The target state has a distinct identity and market identity; its state-start event marks fresh bounds, and its saved certificate and mixture replay under the target market. In the two public cases, each reused run adds one current-market pricing column, starts the ordinary next master, then stops on projected rational bit size. Both remain `budget_exhausted`. Relative to reserve-cold, depot 15's width shrinks from 186.956402 to 154.116877 while its lower bound weakens from 339.353524 to 315.767078; depot 16's width grows from 154.237750 to 161.435603 while its lower bound weakens from 377.659895 to 329.226097. Both feasible uppers improve, but the enclosure response is mixed. Paid state-0-plus-state-1 time is slightly higher for reuse in both cases: 351.585 versus 350.406 seconds at depot 15, and 351.440 versus 350.083 seconds at depot 16. The public variants are two depots on the same Hildenbrand timetable, not independent test bases.
+
+The separate cached-oracle note is mathematically consistent with an independent stored-float Fraction calculation. Re-evaluating the saved state-0 physical pricing lower at constant price 0.20 under the shifted state-1 supply cost adds a Fenchel penalty of approximately 2.70, giving outward lower bounds 405.8331348838783 (depot 15) and 420.45512955054414 (depot 16). Combined with the already replayed state-1 mixture uppers, these are posthoc enclosures of approximately 64.050820 and 70.206570. They rely on the saved numerical physical-pricing lower certificate, are not the frozen pilot's recorded target lower bounds or a measured cache-arm result, and do not establish an exact optimum. The note correctly keeps this lead outside the timed comparison.
+
+The public endpoint table and state-1 figure now round lower bounds downward and upper bounds upward; the time figure is clearly labeled as paid two-state wall time. Keep “certified” tied to the configured numerical tolerance. For extra precision in the posthoc note, describe the source result as a native pricing status reported `OPTIMAL` under the solver's configured tolerances rather than implying exact mathematical optimization.
+
+Operational accounting for job 572392 reports 36:49 total Slurm elapsed. The wrapper asked for one CPU per task and 8 GB, while its receipt reports two allocated CPUs; the native thread setting remained one. Preserve that requested-versus-reported allocation distinction in any run summary.
+
+## Reviewed artifact pins
+
+- Protocol: `doc/FEASIBLE_POOL_PILOT_PROTOCOL_20260928.md`, SHA-256 `009fbcfa0db04dece226586609007930b6857972565694f7a114e45a82d9638a`.
+- Analysis README: SHA-256 `3f1d8d3f3712039fc293a244f1506a86a638ffcb53aff11a45fbf5dabd4036c6`.
+- Analysis report: SHA-256 `01292c2f51c3005cec7b7e9cfda1c41f126fbd014f55032964d0d6debe154317`.
+- Paired comparisons: SHA-256 `c00e5f85b124bb093e5e8872e47011c7501a96f493b4e32260382e922d8ad03f`.
+- Public state-1 bounds figure: SHA-256 `4416ad123442ec1a5209c5956a06bbe3ff9b31a017b37fd54ca98bc9d37c515d`.
+- Paid two-state time figure: SHA-256 `2dfc1ef7708db817cce9d389b1828202aa611f3421fd8548df7395a7b05f425c`.
+- Posthoc oracle-bound README/diagnostic: SHA-256 `1442d6a2bf7b949d414004a27eb86a5dc9f4170fdab92a78497dbdd4d8d7c15e` / `b3f03bf5d1c0f33127e3a682a86ed54a630b9d809a3dcb1e6ea96ccee36b8aab`.
+
+Root finalization: the requested numerical-tolerance wording is applied in the posthoc note, and the generated analysis README now includes its reproduction command. Root reviewed both documentation adjustments and the final figures; scientific values and conclusions are unchanged. Final CSV line endings and SVG trailing whitespace were normalized without changing scientific values, PNGs or PDFs. Artifact pins above refer to these final files.
