@@ -24,8 +24,8 @@ native status or MIP cuts. Code, focused checks and a replay preserving all 32
 historical rows are in `research-20260928/analytic-baseline-integration/`.
 Before another comparative campaign, design a bounded sizing diagnostic for
 pricing-call and arithmetic limits. Do not infer that changing four calls to
-sixteen will certify a case, or remove resource limits altogether. A pricing cut needs its own valid
-energy/cardinality inequality, not the hull-objective bound pasted into a
+sixteen will certify a case, or remove resource limits altogether. A pricing cut
+needs its own valid energy/cardinality inequality, not the hull-objective bound pasted into a
 linear-price subproblem. Record whether a native start was accepted before
 interpreting its effect; seed repetition and common-quality targets follow a
 viable configuration. The existing no-incumbent bug is already repaired and
@@ -228,8 +228,9 @@ for each of seeds1012 and1009. Their mandatory service-energy lower bounds show
 real charging pressure outside any four-hour/90kW window in all16/24-service
 cases; the8-service witness fits. Every prespecified case is retained.
 
-The next and final bounded comparison before draft consolidation uses these five
-cases plus Eberbach. Two source markets build the same checked whole-fleet pool
+The separately frozen retrieval comparison was designed for these five cases
+plus Eberbach. It failed before optimization and its one-replacement exception
+remains pending. Its design has two source markets building the same checked whole-fleet pool
 for retained columns, nearest-source-price retrieval and exact cheapest-current-
 bill selection; cold iterative solving is the common baseline. Target bounds
 require fresh global pricing, with no inherited bound cache or native MIP start.
@@ -241,39 +242,36 @@ price-only comparison. Full protocol, caps and case order are in
 `doc/AUTONOMOUS_RESEARCH_CONTINUATION.md`.
 
 Do not conduct another start or retrieval sweep to seek a favorable result.
-Follow `doc/DRAFT_COMPLETION_PLAN_20260928.md`: consolidate a readable LaTeX draft
-after this single comparison and result review, regardless of whether
-acceleration is observed. Learned proposals remain optional for the first draft;
-reserved independent test groups stay closed until a later frozen evaluation.
+The readable draft has been consolidated; the immediate research priority is
+a small diagnostic of the stopping limits, not another comparative sweep.
+Learned proposals remain optional; reserved independent test groups stay closed
+until a later declared evaluation.
 
 ## Manuscript direction
 
-The complete19-page LaTeX research draft0.6 is now ready for author review:
-`output/pdf/egg-journal-v0.6-computational-draft.pdf`, built from
-`paper/latex/main.tex`. It integrates theory, model, related work, exact/public
-bounds and the reviewed computational chapter, with five figures and four
-tables. All rendered pages and bounded source claims have been reviewed.
-The archived depot-15 flat round0 is now recognized as a native numerical
-optimum near408.53, separately from the exact ideal flat enclosure. Exact
-nonlinear bounds give0<=D-CH<=88.41 but no strictly positive public gap.
+The current author-review manuscript is the17-page LaTeX draft0.7:
+`output/pdf/egg-journal-v0.7-reviewed-draft.pdf`, built from
+`paper/latex/main.tex`. It reports joint cost/gap/incumbent-regret evidence and
+analytical public bounds. Historical reuse/start comparisons are in a separate
+seven-page development supplement. Prior drafts remain preserved.
 
 This first-draft milestone does not close the computational research questions.
 The attempted six-case comparison stopped before optimization; it contributes
 no algorithm evidence, and one replacement remains a pending user decision.
 Nearest-neighbor retrieval and learned proposals remain untested. The next
-bounded task is a reviewer-style contribution/evidence-gap assessment of this
-integrated draft, without repeating old numerical/proof qualification or starting
-another experiment while the recorded exception decision is pending.
+bounded task is a new development sizing diagnostic, separate from the failed
+retrieval attempt and its pending exception. Keep one computational paper as
+the working target and a short theory paper as an editorial fallback. Resolve
+informative public bounds whether the eventual gap is positive, small or zero;
+do not select experiments until a positive result appears.
 
 Retain the exact mechanism and replication results, but support the computational
 story with substantive multi-instance comparisons. Move reuse development and
-qualification histories out of the main narrative. Use one reproducibility
-paragraph plus supplementary detail. Plan a LaTeX source and a roughly 150-word
-abstract. Consolidate compatible bounds and explicitly state the later numerical
-flat-price optimum; keep exact and tolerance-qualified claims distinct. Add the
-foundational pricing/aggregation/EV-coordination literature identified in review.
-Explain competitive price support and strategic price impact as distinct questions.
-Do not promote the old unresolved nonlinear run as the main computational figure.
+qualification histories out of the main narrative, as implemented in v0.7.
+Keep exact and tolerance-qualified claims distinct. Preserve the foundational
+pricing/aggregation/EV-coordination antecedents and the distinction between
+competitive price support and strategic price impact. The next effort should
+produce stronger computational evidence, not another manuscript-polishing cycle.
 
 ## Execution and cost controls
 

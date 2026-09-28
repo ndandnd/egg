@@ -6,7 +6,32 @@ optimization first, then retrieval/learned proposals. The v0.5 draft is historic
 Use GPT-6 Sol for implementation/analysis and Luna Max for supporting work; root
 manages. Hourly `advance-egg-journal-research` remains ACTIVE, quiet when unchanged.
 
-## Latest checkpoint — analytical baseline integrated into reporting
+## Latest checkpoint — bounded cold-hull sizing diagnostic prepared
+
+- New development diagnostic under `research-20260928/budget-sizing-diagnostic/`:
+  eight independent cold cells on the existing three-service multivisit case,
+  both markets, pricing calls4/16 crossed with arithmetic bits4096/8192. Native
+  LP master and compact pricing stay fixed; master/pool64 provide common
+  headroom. No retention, bound cache, starts or pricing reserve. Seed0, one
+  native thread;60s coordinator/45s native phase,90s child hard limit plus
+  termination grace,900s controller,1000s outer,20min Slurm,1 CPU/8GB.
+- This separately recorded diagnostic follows the latest review discussion.
+  It tests early stopping, not scalability, reuse speedup or learning. It does
+  not rerun or change the failed frozen retrieval comparison or its pending
+  replacement decision. All eight outcomes and all time must remain visible.
+- New runner/batch/pure tests are isolated from the core solver. Root's three
+  focused tests, shell syntax and diff checks pass; Sol reports20 focused plus
+  adjacent checks during implementation. Execution/independent review receipts
+  will identify the pinned source and any job. Do not duplicate a submission.
+- Prior backupbef58e6 passed full CI36493009651. Its source-only predecessor
+  CI36492634326 was superseded/cancelled, not a test failure. v0.7 remains the
+  current author-review manuscript; this package makes no PDF change.
+- Interpret call and bit contrasts within each market and report other binding
+  limits as censoring. No assertion that sixteen calls suffices, and no automatic
+  larger sweep. If arithmetic still binds, diagnose master/charging work before
+  attributing benefit to route prediction. All cases remain development-only.
+
+## Prior checkpoint — analytical baseline integrated into reporting
 
 - Bounded package `research-20260928/analytic-baseline-integration/` implements
   the reviewed v0.7 public energy/cardinality floor as a pure module and opt-in
