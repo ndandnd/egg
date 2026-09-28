@@ -9,7 +9,7 @@ learning claim belongs to this screen.
 
 The numerical master addresses the earlier rational-polishing stop. The bound
 cache addresses the loss of useful lower bounds after market changes. Both are
-implemented and reviewed; their online benefit has not yet been measured.
+implemented and reviewed; this attempt now records their measured outcomes.
 Every arm pays its own initial solve. Source validation, failed runs and all
 work already spent remain part of the accounting.
 
@@ -41,9 +41,15 @@ Job **575215** was submitted once at 10:25 UTC on 28 September and observed
 records the source, request and exclusive attempt. Execution checkout:
 `/home/nc437/egg-solver-baseline-comparison-20260928`; output:
 `result/solver_baseline_comparison/20260928-attempt1`.
-No scientific outcomes have been read. Allocation and runtime freeze remain
-unconfirmed until the pending job starts.
+The job subsequently completed in **48m15s** with a quiescent sealed result.
+Slurm allocated two CPUs and 8 GB; the source configured one native/numerical
+thread. Frozen runtime and source match the declared setup. The
+[completion receipt](../cluster/solver-baseline-comparison-575215-completion.json)
+records collection and integrity checks.
 
-Completed attempts remain unchanged. A later report will show every outcome
-alongside bounds and paid time, and use a common-quality speed claim only when
-supported by the recorded on-time evidence.
+The [results, tables and figures](results-attempt1/README.md) retain all 32
+outcomes: 11 numerical certifications, 18 work-limit outcomes with open bounds,
+and three child failures. The failures expose no-plan return handling in the
+compact wrapper. Within the public cache-enabled runs, inherited evidence
+strengthens the lower bounds; public gaps remain open and no equal-quality
+speedup is established. The next source repair will retain these frozen outcomes.

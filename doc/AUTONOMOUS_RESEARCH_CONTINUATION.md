@@ -6,10 +6,57 @@ optimization first, then retrieval/learned proposals. The v0.5 draft is historic
 Use GPT-6 Sol for implementation/analysis and Luna Max for supporting work; root
 manages. Hourly `advance-egg-journal-research` remains ACTIVE, quiet when unchanged.
 
-## Latest checkpoint — ordered solver comparison submitted
+## Latest checkpoint — completed solver comparison results
 
-- Documentation backup cb70b35 passed full CI 36403560605. The completed jobs
-  569799/572392 remain unchanged; no job was active at the start of this package.
+- At the 11:58 UTC heartbeat, one scoped squeue check reported no current job
+  575215. Scoped sacct records COMPLETED, exit 0:0, elapsed 48m15s, allocated
+  2 CPUs/8 GB on snavely-cpu-16. The request was 1 CPU and configured threads
+  remain one. Wrapper elapsed is 2887s; supervisor elapsed is 2873.925s.
+- Supervisor confirms quiescence, stable seal and unchanged source. Root
+  collected the sealed attempt privately and verified all 260 manifest files,
+  all 25 frozen source pins, and the previously recorded frozen-file hash.
+  Source remains f4b342dc85799d01d9313baeaf8c9ec527759d59.
+  Completion receipt: `research-20260928/cluster/solver-baseline-comparison-575215-completion.json`.
+  Private evidence root:
+  `/Users/nadan/Documents/ChatGPT/egg/research-20260928/cluster/solver-baseline-comparison-attempt1/sealed/20260928-attempt1`.
+- All 32 declared rows are present: final counts are 11 certified,
+  18 budget-exhausted and 3 failed. Failed rows are public depot15/state1/cold,
+  and public depot15 and depot16/state1/QP feasible without cache. These child
+  failures occurred inside their hard deadlines; `on_time=false` reflects
+  exit 2, not a timeout. Keep their spent time and failure status visible.
+- Results, full tables, compact traces and two PNG/PDF figures:
+  `research-20260928/solver-baseline-comparison/results-attempt1/`.
+  Luna independently reproduced all 29 available raw assessments, all 12
+  own-source admissions, four target-cache lineages and 16 paid-pair totals.
+  Review: `research-20260928/agent-notes/solver-baseline-comparison-results/`.
+  Root visually checked the final figures, including failed-target markers.
+- Public cache targets end at numerical intervals [405.83, 471.52] and
+  [420.45, 491.46], with paid two-state time about 352s each. Within those
+  same runs, inherited pricing evidence strengthens the lower by 98.82/69.83
+  over the fresh target lower. This posthoc decomposition does not isolate a
+  cross-arm speed effect. The intervals remain open; stored-float exact replay
+  does not remove native solver-tolerance qualifications. Both depots share
+  one development timetable. No optimality, scalability or ML benefit claim.
+- Three failures share one confirmed wrapper bug: native pricing returns
+  NO_SOLUTION_FOUND with no incumbent/plan, and the compact wrapper checks the
+  absent plan's extraction policy. An earlier bounded pricing call exists in
+  each trace. This is not evidence of a bad completed physical witness. Keep
+  all three attempts failed; never promote their saved prefixes to final runs.
+- **Next bounded package:** repair that no-plan return path in the compact
+  oracle wrapper, with focused regressions for the observed shape. Preserve
+  previous verified evidence, explicit unresolved outcomes, rejection of bad
+  present witnesses and the fresh-pricing certification gate. Do not rerun the
+  full 32-cell comparison solely for a status fix. Then assess a prospectively
+  timed known-feasible-fleet MIP-start baseline for physical pricing before
+  broader cases, nearest-neighbor retrieval and learned proposals.
+- No active EGG job remains. Do not poll/resubmit 575215. No rerun, new
+  experiment or solver change was made in this results package. Root is
+  completing the GitHub and original Google Doc milestone receipts.
+
+## Previous checkpoint — ordered solver comparison running
+
+- Documentation backup db46181 passed full CI 36410820696, verified at the
+  10:57 UTC heartbeat. Completed jobs 569799/572392 remain unchanged.
 - New protocol: `doc/SOLVER_BASELINE_COMPARISON_PROTOCOL_20260928.md`.
   It freezes 32 development cells: four cases, four ordered methods, two states.
   Methods are reserve-cold, reserve with retained feasible plans, numerical
@@ -41,8 +88,15 @@ manages. Hourly `advance-egg-journal-research` remains ACTIVE, quiet when unchan
   intent preceded the single sbatch call. **Job 575215** was submitted once at
   10:25 UTC and observed **PENDING (Priority)** with 1 CPU/8 GB requested.
   Receipt: `research-20260928/cluster/solver-baseline-comparison-575215.json`.
-  No scientific outcomes have been read. Runtime freeze/manifest are unknown
-  until execution; the request is not an allocation or completion claim.
+  At the 10:57 UTC heartbeat's one scoped queue check, the job was RUNNING,
+  elapsed 32:40, on snavely-cpu-16, with 2 CPUs and 8 GB allocated despite the
+  1-CPU request. The source still configures all numerical/native threads to one.
+  Frozen metadata confirms f4b342d and GRB 12.0.3, MIP 1.17.6, NumPy 1.26.4,
+  SciPy 1.13.1 and Python 3.12.13. Frozen file SHA-256:
+  `62411caa9bf34b2de2d825c681e76f37386118aee1bda4e110b1bd524c740f38`.
+  Private metadata snapshot is retained; compact observation:
+  `research-20260928/cluster/solver-baseline-comparison-575215-monitor-20260928T1057.json`.
+  No scientific outcomes have been read; the running attempt is not yet sealed.
 - Next heartbeat: make one compact scoped queue check for **575215**, via
   unicorn2 after loading `/etc/profile.d/slurm.sh`. If vanished, use scoped
   sacct and the recorded attempt/wrapper/supervisor receipts. Do not duplicate
@@ -66,7 +120,10 @@ manages. Hourly `advance-egg-journal-research` remains ACTIVE, quiet when unchan
   `research-20260928/solver-baseline-comparison/RECOVERED_NUMERICAL_MASTER_UPDATE.md`.
   Root verified both append sources and the final receipt hashes. The cause of
   the earlier discrepancy is unknown; no broader history audit was performed.
-- Final backup is documentation/receipts only; check its CI once next heartbeat.
+- Launch documentation backup db46181 is verified; do not recheck that CI.
+  This heartbeat records operational monitoring locally; consolidate its receipt
+  into the next completed-results GitHub/Google Doc milestone. No duplicate
+  Doc update, submission or new experiment was made while the job is running.
   No implementation or Doc worker remains active. PR56 describes the submitted
   comparison and stays draft/unmerged. No user decision is pending.
 

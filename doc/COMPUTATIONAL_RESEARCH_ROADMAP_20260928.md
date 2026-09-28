@@ -117,33 +117,45 @@ Different physical cases cannot automatically share these certificates. The
 core preserves measured source work and leaves unmeasured child/preparation
 costs explicit for the later experiment runner.
 
-The numerical restricted-QP proposal is now integrated as a separate opt-in
-master policy under exact simplex/physical-mixture replay and global-bound
-checks. Fixed-denominator proposals replace repeated pairwise rational updates;
-proposal failures retain prior evidence, and fresh global pricing still decides
-certification. All 37 focused tests and independent review passed, and implementation dc5e014
-passed full CI 36402944039. Pricing remains expensive, and the
-new policy has no measured online benefit yet. Next, freeze an ordered comparison
-of reserve-cold, retained feasible plans, numerical master with retained plans,
-and that method with cached physical bounds. Keep paid initial-state work,
-failures and incomplete results; this is an incremental comparison rather than
-a full factorial interaction study. Broader independent public timetables and retained/retrieved
-proposal comparisons follow these baseline corrections; reserve grouped test
-networks before training. Do not repeat broad qualification campaigns or
-reinterpret completed runs.
+The numerical restricted-QP proposal is integrated under exact simplex and
+physical-mixture replay, with a fresh-pricing certification gate. The completed
+ordered 32-cell comparison (job 575215, source f4b342d) now gives 11 numerical
+certifications, 18 budget-exhausted outcomes and three child failures. All
+attempts and paid time are retained. Both public depots still share one base
+network; these are development results rather than replicated scalability or
+learning evidence. Results and figures:
+`research-20260928/solver-baseline-comparison/results-attempt1/`.
 
-The prospective 32-cell design is now fixed in
-`doc/SOLVER_BASELINE_COMPARISON_PROTOCOL_20260928.md`, with a new exclusive
-attempt and separate runner. Its four ordered methods each pay for their own
-initial market solve. Source admission outside the child is added once to the
-two-state total; verification inside the child stays in child wall time.
-The 64-minute sum of native targets sits inside an 80-minute sum of child
-deadlines, a 90-minute controller cap and a 100-minute wrapper cap, under the
-existing two-hour allocation ceiling. Independent review, 12 focused tests and
-full CI passed. Source f4b342d was submitted once as job 575215, observed pending
-for priority at 10:25 UTC. See `research-20260928/solver-baseline-comparison/`
-for launch and CI receipts. Numerical-master/cache performance remains unmeasured;
-the next package collects and interprets this comparison after completion.
+The clearest positive finding is a within-run bound decomposition. In the two
+public cache-enabled target runs, inherited evidence improves the lower bound
+by 98.82 and 69.83 over each run's own fresh-pricing lower. The final numerical
+intervals are [405.83, 471.52] and [420.45, 491.46]; paid two-market time is about
+352 seconds each. The intervals remain open, with Gurobi tolerance qualifications.
+Exact replay of stored numerical values does not turn the native lower into an
+ideal-model proof. No public optimality, equal-quality speedup or learned benefit
+is established. Convex mixtures remain distinct from executable whole fleets.
+
+The numerical master stayed within the configured arithmetic limit in the
+completed public cache runs. Its public targets without cache both failed;
+a cold public target also failed. All three native calls returned no new
+incumbent (`NO_SOLUTION_FOUND`), and the compact wrapper incorrectly checked
+an absent plan's extraction policy. An earlier valid pricing result exists in
+each failed trace. This identifies no-plan handling rather than an invalid
+completed physical witness; it does not reclassify those failed attempts.
+Physical pricing remains the principal measured runtime cost.
+
+The next bounded package is a source repair for the no-plan return path, with
+focused regression checks based on the observed return shape. Preserve prior
+verified evidence, keep unresolved outcomes explicit, reject genuinely invalid
+present witnesses, and retain the fresh-pricing certification rules. Do not
+rerun all 32 cells solely to change status handling or rewrite frozen outcomes.
+After that repair, assess a prospective physical-pricing MIP-start baseline
+using an already-known feasible fleet. Retained master columns need not provide
+such a native solver start. This is an untested candidate, not a speed claim;
+[Python-MIP documents an initial-solution interface](https://python-mip.readthedocs.io/en/latest/classes.html).
+Broader independent public timetables and nearest-neighbor retrieval still
+precede learned proposals. Reserve grouped independent test networks before
+training and keep the price-support question central.
 
 ## Manuscript direction
 
