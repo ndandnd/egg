@@ -16,6 +16,7 @@ from egglab import native_recharge as nr
 SCHEMA = "egg-native-hull-v2"
 MASS_TOL = 1e-10
 OBJECTIVE_TOL = 1e-6
+DEFAULT_PRICING_ORACLE = "egg-native-recharge.solve_pricing-v1"
 
 
 @dataclass(frozen=True)
@@ -494,53 +495,187 @@ def _controls(reuse_policy, pricing_reserve_seconds, budget):
              "pricing_reserve_seconds": float(pricing_reserve_seconds)})
 
 
+def _cache_controls(bound_cache_policy, expected_cached_state):
+    if bound_cache_policy not in ("none", "physical_pricing"):
+        raise ValueError("Unknown physical pricing-bound cache policy")
+    if bound_cache_policy == "none":
+        if expected_cached_state is not None:
+            raise ValueError("Disabled cache cannot name a source state")
+        return {}
+    if expected_cached_state is not None and (not isinstance(expected_cached_state, str)
+                                              or not expected_cached_state):
+        raise ValueError("Invalid expected cached source state")
+    return {"bound_cache_policy": bound_cache_policy,
+            **({"cache_source_state_identity": expected_cached_state} if expected_cached_state else {})}
+
+
+def _cached_pricing_bounds(case, market, source, expected_state, oracle, policy):
+    """Re-evaluate checked physical pricing lowers; caller owns source receipt trust."""
+    if (not isinstance(source, dict) or source.get("schema") != SCHEMA
+            or source.get("state_identity") != expected_state
+            or source.get("physical_identity") != case.identity()
+            or source.get("pricing_oracle") != oracle
+            or source.get("extraction_policy") != policy
+            or source.get("bound_cache_policy") != "physical_pricing"
+            or not isinstance(source.get("market_identity"), str)
+            or not source["market_identity"]
+            or type(source.get("state_index")) is not int):
+        raise ValueError("Cached source case/state/oracle/policy mismatch")
+    records = source.get("physical_pricing_evidence")
+    counts = source.get("counts")
+    cap = source.get("source_pricing_call_cap")
+    costs = source.get("source_costs")
+    if (type(cap) is not int or cap < 1 or not isinstance(costs, dict)
+            or not nr._finite(costs.get("source_coordinator_elapsed_s"))
+            or not nr._finite(costs.get("native_pricing_solver_wall_s"))
+            or costs.get("full_child_wall_s") is not None
+            or costs.get("unmeasured_preparation_wall_s") is not None):
+        raise ValueError("Cached source work cap/cost lineage is invalid")
+    try:
+        records_digest = nr.digest(records)
+    except (TypeError, ValueError) as exc:
+        raise ValueError("Malformed physical pricing evidence") from exc
+    if (not isinstance(records, list) or not records
+            or not isinstance(counts, dict)
+            or type(counts.get("pricing_requests")) is not int
+            or counts["pricing_requests"] > cap
+            or len(records) > counts["pricing_requests"]
+            or source.get("physical_pricing_evidence_digest") != records_digest):
+        raise ValueError("Missing, oversized or changed physical pricing evidence")
+    candidates, calls = [], set()
+    for item in records:
+        if not isinstance(item, dict) or set(item) != {"record", "digest"}:
+            raise ValueError("Malformed cached pricing record")
+        data = item["record"]
+        try:
+            record_digest = nr.digest(data)
+        except (TypeError, ValueError) as exc:
+            raise ValueError("Malformed cached pricing record") from exc
+        if not isinstance(data, dict) or item["digest"] != record_digest:
+            raise ValueError("Changed cached pricing record")
+        call = data.get("pricing_call")
+        if (type(call) is not int or call < 0 or call >= counts["pricing_requests"] or call in calls
+                or data.get("source_state_identity") != expected_state
+                or data.get("source_market_identity") != source["market_identity"]
+                or data.get("physical_identity") != case.identity()
+                or data.get("pricing_oracle") != oracle
+                or data.get("extraction_policy") != policy
+                or data.get("native_result_status") not in ("certified", "bounded")
+                or not isinstance(data.get("prices"), list)
+                or len(data["prices"]) != len(market.a)
+                or any(not nr._finite(p, -math.inf) for p in data["prices"])
+                or not nr._finite(data.get("pricing_objective"), -math.inf)
+                or not nr._finite(data.get("pricing_lower"), -math.inf)
+                or not nr._finite(data.get("pricing_upper"), -math.inf)
+                or not nr._finite(data.get("ops_cost"), -math.inf)
+                or not isinstance(data.get("load"), list)
+                or len(data["load"]) != len(market.a)
+                or any(not nr._finite(e) for e in data["load"])
+                or not isinstance(data.get("column_key"), str) or not data["column_key"]
+                or not isinstance(data.get("witness_hash"), str) or not data["witness_hash"]):
+            raise ValueError("Incompatible cached physical pricing provenance")
+        calls.add(call)
+        objective = data["ops_cost"] + sum(p*e for p, e in zip(data["prices"], data["load"]))
+        if (abs(objective-data["pricing_objective"]) > OBJECTIVE_TOL
+                or data["column_key"] != projection_key(data["load"], data["ops_cost"])):
+            raise ValueError("Cached pricing price/projection/objective mismatch")
+        stats = data.get("native_stats")
+        if not isinstance(stats, dict) or not nr._finite(stats.get("wall_s")):
+            raise ValueError("Cached native pricing statistics incomplete")
+        lower, upper = nr.admit_bound(stats, data["pricing_objective"])
+        if data["pricing_lower"] != lower or data["pricing_upper"] != upper:
+            raise ValueError("Cached physical pricing bound differs from native evidence")
+        cert = fenchel_bound(market, data["prices"], lower)
+        candidates.append({"certificate": cert, "source_state_identity": expected_state,
+                           "source_market_identity": source["market_identity"],
+                           "source_pricing_call": call, "source_record_digest": item["digest"],
+                           "source_column_key": data["column_key"]})
+    return candidates
+
+
 def state_identity(case, market, arm, state_index, budget, oracle_id=None,
                    extraction_policy=None, reuse_policy="certified_only",
-                   pricing_reserve_seconds=0.0):
+                   pricing_reserve_seconds=0.0, bound_cache_policy="none",
+                   expected_cached_state=None):
     policy = _extraction_policy(extraction_policy)
     metadata = {} if oracle_id is None else {"pricing_oracle": oracle_id}
     controls = _controls(reuse_policy, pricing_reserve_seconds, budget)
+    cache_controls = _cache_controls(bound_cache_policy, expected_cached_state)
+    if cache_controls and oracle_id is None:
+        metadata = {"pricing_oracle": DEFAULT_PRICING_ORACLE}
     if oracle_id is not None and (not isinstance(oracle_id, str) or not oracle_id.strip()):
         raise ValueError("Explicit pricing oracle requires a nonempty identity")
     return nr.digest({"schema": SCHEMA, "case": case.identity(), "market": market.identity(),
                       "arm": arm, "state_index": state_index, "budget": asdict(budget),
-                      "extraction_policy": policy, **metadata, **controls})
+                      "extraction_policy": policy, **metadata, **controls, **cache_controls})
 
 
 def certify(case, market, budget=Budget(), *, arm="cold", state_index=0,
             previous=None, expected_previous=None, record=None, pricing_oracle=None,
             oracle_id=None, extraction_policy=None, reuse_policy="certified_only",
-            pricing_reserve_seconds=0.0):
+            pricing_reserve_seconds=0.0, bound_cache_policy="none", cached_from=None,
+            expected_cached_state=None):
     nr.validate_case(case)
     validate_market(case, market)
     validate_budget(budget)
     controls = _controls(reuse_policy, pricing_reserve_seconds, budget)
+    cache_controls = _cache_controls(bound_cache_policy, expected_cached_state)
+    if (cached_from is None) != (expected_cached_state is None):
+        raise ValueError("Cached source and expected state must be supplied together")
+    if cached_from is not None and bound_cache_policy != "physical_pricing":
+        raise ValueError("Physical pricing-bound cache must be explicitly enabled")
     if (pricing_oracle is None) != (oracle_id is None) or (pricing_oracle is not None and not callable(pricing_oracle)):
         raise ValueError("Explicit pricing oracle requires both a callable and its identity")
     policy = _extraction_policy(extraction_policy)
     if oracle_id is None and policy != nr.EXTRACTION_POLICY:
         raise ValueError("Non-indexed extraction policy requires an explicit oracle")
-    metadata = {} if oracle_id is None else {"pricing_oracle": oracle_id}
+    canonical_oracle = oracle_id if oracle_id is not None else DEFAULT_PRICING_ORACLE
+    column_oracle = canonical_oracle if bound_cache_policy != "none" else oracle_id
+    metadata = {} if column_oracle is None else {"pricing_oracle": column_oracle}
     oracle = nr.solve_pricing if pricing_oracle is None else pricing_oracle
     if arm not in ("cold", "retained") or type(state_index) is not int or state_index < 0:
         raise ValueError("Invalid hull arm/state")
     if (arm == "cold" or state_index == 0) and (previous is not None or expected_previous is not None):
         raise ValueError("Fresh state cannot import a predecessor")
-    deadline = time.monotonic()+budget.wall_seconds
+    started = time.monotonic()
+    deadline = started+budget.wall_seconds
     identity = state_identity(case, market, arm, state_index, budget, oracle_id, extraction_policy,
-                              reuse_policy, pricing_reserve_seconds)
-    if previous is not None and previous.get("pricing_oracle") != oracle_id:
+                              reuse_policy, pricing_reserve_seconds, bound_cache_policy, expected_cached_state)
+    if previous is not None and previous.get("pricing_oracle") != column_oracle:
         raise ValueError("Retained predecessor pricing oracle identity differs")
     columns = (import_pool(case, previous, expected_previous, budget, state_index-1,
-                           extraction_policy, reuse_policy, oracle_id, pricing_reserve_seconds)
+                           extraction_policy, reuse_policy, column_oracle, pricing_reserve_seconds)
                if arm == "retained" and state_index > 0 else [])
     counts = {"pricing_requests": 0, "seed_requests": 0, "master_calls": 0,
               "polish_steps": 0, "polish_checks": 0, "polish_wall_s": 0.0, "max_rational_bits": 0}
     best_lower, best_mixture = None, None
+    best_lower_origin = None
+    fresh_best_lower, fresh_pricing_successes = None, 0
+    pricing_evidence, cache_candidates = [], []
+    cache_started = time.monotonic()
+    if cached_from is not None:
+        if (state_index < 1 or not isinstance(cached_from, dict)
+                or cached_from.get("state_index") != state_index - 1):
+            raise ValueError("Cached source is not the preceding state")
+        cache_candidates = _cached_pricing_bounds(case, market, cached_from, expected_cached_state,
+                                                   canonical_oracle, policy)
+        best = max(cache_candidates, key=lambda item: Q(item["certificate"]["lower_exact"]))
+        best_lower = copy.deepcopy(best["certificate"])
+        best_lower_origin = {"kind": "cached_physical_pricing", **{key: value for key, value in best.items()
+                              if key != "certificate"}}
+    cache_validation_wall_s = time.monotonic() - cache_started if bound_cache_policy != "none" else None
     points = [[0.0]*len(market.a)]
     emit(record, {"event": "state_start", "state_identity": identity, "market_identity": market.identity(),
                   "imported_column_keys": [c["key"] for c in columns], "fresh_bounds": True,
-                  **metadata, **controls})
+                  **metadata, **controls, **cache_controls,
+                  **({"fresh_target_pricing_required": True,
+                      "target_conjugates_rebuilt_from_cached_physical_lowers": True,
+                      "cached_bound_candidates": len(cache_candidates)} if cache_controls else {})})
+    if bound_cache_policy != "none":
+        emit(record, {"event": "physical_pricing_cache_checked", "source_state_identity": expected_cached_state,
+                      "candidate_count": len(cache_candidates), "validation_wall_s": cache_validation_wall_s,
+                      "best_candidate": (max(cache_candidates, key=lambda item: Q(item["certificate"]["lower_exact"]))
+                                         if cache_candidates else None)})
     def consider_mixture(mix):
         nonlocal best_mixture
         if best_mixture is None or Q(mix["objective_exact"]) < Q(best_mixture["objective_exact"]):
@@ -552,7 +687,7 @@ def certify(case, market, budget=Budget(), *, arm="cold", state_index=0,
             one_hot = [float(j == index) for j in range(len(columns))]
             consider_mixture(replay_mixture(case, market, columns, one_hot, extraction_policy))
     def price(prices, seed=False):
-        nonlocal best_lower
+        nonlocal best_lower, best_lower_origin, fresh_best_lower, fresh_pricing_successes
         now = time.monotonic()
         if pricing_reserve_seconds == 0:
             if now >= deadline or counts["pricing_requests"] >= budget.pricing_calls:
@@ -607,8 +742,27 @@ def certify(case, market, budget=Budget(), *, arm="cold", state_index=0,
             raise ValueError("Pricing reported enclosure changed on physical replay")
         certificate = fenchel_bound(market, prices, lower)
         emit(record, {"event": "global_bound", "call": index, "certificate": certificate, "column": column})
+        fresh_pricing_successes += 1
+        if bound_cache_policy != "none":
+            if not nr._finite(result["stats"].get("wall_s")):
+                raise ValueError("Physical pricing solver wall time is unavailable for cache evidence")
+            evidence = {"source_state_identity": identity, "source_market_identity": market.identity(),
+                        "physical_identity": case.identity(), "pricing_oracle": canonical_oracle,
+                        "extraction_policy": policy, "pricing_call": index, "prices": list(prices),
+                        "pricing_objective": objective, "pricing_lower": lower, "pricing_upper": upper,
+                        "load": list(column["load"]), "ops_cost": column["ops_cost"],
+                        "native_result_status": result["status"],
+                        "native_stats": {key: result["stats"].get(key) for key in
+                                         ("status", "incumbent", "lower_bound", "wall_s", "backend", "threads")},
+                        "column_key": column["key"], "witness_hash": column["witness_hash"]}
+            pricing_evidence.append({"record": evidence, "digest": nr.digest(evidence)})
+            if fresh_best_lower is None or Q(certificate["lower_exact"]) > Q(fresh_best_lower["lower_exact"]):
+                fresh_best_lower = copy.deepcopy(certificate)
         if best_lower is None or Q(certificate["lower_exact"]) > Q(best_lower["lower_exact"]):
             best_lower = copy.deepcopy(certificate)
+            if bound_cache_policy != "none":
+                best_lower_origin = {"kind": "fresh_target_pricing", "pricing_call": index,
+                                     "source_state_identity": identity}
         return column
     reason, status = None, "unresolved"
     try:
@@ -625,7 +779,7 @@ def certify(case, market, budget=Budget(), *, arm="cold", state_index=0,
                 raise ValueError("Native hull global enclosure reversed")
             if gap < 0:
                 raise ValueError("Negative exact stored-number certificate width")
-            if gap <= rational(budget.epsilon):
+            if gap <= rational(budget.epsilon) and (bound_cache_policy == "none" or fresh_pricing_successes > 0):
                 if candidate["key"] not in {c["key"] for c in columns} and len(columns) < budget.pool_cap:
                     columns.append(candidate)
                     emit(record, {"event": "column_added", "key": candidate["key"], "size": len(columns),
@@ -647,7 +801,22 @@ def certify(case, market, budget=Budget(), *, arm="cold", state_index=0,
               "physical_identity": case.identity(), "market_identity": market.identity(),
               "extraction_policy": policy, "arm": arm, "state_index": state_index,
               "columns": columns, "counts": counts, "epsilon": budget.epsilon,
-              **metadata, **controls}
+              **metadata, **controls, **cache_controls}
+    if bound_cache_policy != "none":
+        result.update(pricing_oracle=canonical_oracle, physical_pricing_evidence=pricing_evidence,
+                      physical_pricing_evidence_digest=nr.digest(pricing_evidence),
+                      source_pricing_call_cap=budget.pricing_calls,
+                      cached_lower_candidates=cache_candidates,
+                      cache_validation_wall_s=cache_validation_wall_s,
+                      cache_source_costs=(copy.deepcopy(cached_from.get("source_costs")) if cached_from else None),
+                      fresh_pricing_successes=fresh_pricing_successes,
+                      fresh_lower_certificate=fresh_best_lower,
+                      lower_certificate_origin=best_lower_origin,
+                      source_costs={"source_coordinator_elapsed_s": time.monotonic()-started,
+                                    "native_pricing_solver_wall_s": sum(
+                                        item["record"]["native_stats"]["wall_s"] for item in pricing_evidence),
+                                    "full_child_wall_s": None, "unmeasured_preparation_wall_s": None,
+                                    "scope": "core certify call only; excludes runner preparation/child overhead"})
     if best_lower:
         result["lower_certificate"] = best_lower
         result["lower"] = best_lower["lower"]
@@ -656,6 +825,8 @@ def certify(case, market, budget=Budget(), *, arm="cold", state_index=0,
         result["upper"] = best_mixture["upper"]
     if best_lower and best_mixture:
         gap = Q(best_mixture["objective_exact"])-Q(best_lower["lower_exact"])
+        if bound_cache_policy != "none" and gap < 0:
+            raise ValueError("Cached physical bound reverses target feasible enclosure")
         result.update(gap=outward(gap, True), gap_exact=str(gap))
     emit(record, {"event": "state_finish", "result": result})
     return result

@@ -244,3 +244,22 @@ by Chrome (ERR_BLOCKED_BY_CLIENT), so exact prefix/full-export preservation
 verification remains incomplete. The public receipt explicitly records this;
 root verified the available before-export and append-source hashes. Do not
 duplicate the append. No new cluster submission accompanied this milestone.
+
+## Checked physical pricing-bound cache — implementation
+
+Added a separate opt-in cache to the native hull coordinator and compact-pricing
+wrapper. It preserves the source's original posted-price physical lower bounds,
+checks their numerical and physical provenance, and recomputes every target
+Fenchel conjugate. Bound reuse is independent of feasible-plan reuse; default
+behavior and historical pilot outcomes remain unchanged. A fresh successful
+target pricing call is still required before certification, and contradictory
+final enclosures fail closed even on early work-limit exits.
+
+Validation and re-evaluation count inside the target deadline. Source coordinator
+and native pricing costs remain visible; child/preparation costs are unknown in
+the core and must be measured by the later runner. A record digest is an integrity
+check, not proof of a native solver bound; runner file/code/receipt pins remain
+required. The 26 focused new-cache and feasible-reuse tests passed, and Luna's
+review found no remaining admission/mathematical blocker. Root checked the review's
+three final source hashes. Full CI is pending backup. No cluster submission or
+new optimizer benchmark was made; numerical restricted-master integration is next.

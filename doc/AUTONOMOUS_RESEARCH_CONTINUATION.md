@@ -6,7 +6,39 @@ optimization first, then retrieval/learned proposals. The v0.5 draft is historic
 Use GPT-6 Sol for implementation/analysis and Luna Max for supporting work; root
 manages. Hourly `advance-egg-journal-research` remains ACTIVE, quiet when unchanged.
 
-## Latest checkpoint — matched pilot completed and analyzed
+## Latest checkpoint — physical pricing-bound cache implementation
+
+- Prior documentation backup 703f460 passed full CI 36392455640. No active
+  EGG jobs; do not poll or resubmit completed 569799/572392.
+- A separate opt-in `bound_cache_policy="physical_pricing"` now supports checked
+  transfer of the immediately preceding state's physical pricing bounds. It is
+  independent of feasible-column reuse. Source calls retain original prices,
+  numerical bounds, replay projections, oracle/physical/extraction identity,
+  source-state lineage and integrity digests. Target Fenchel conjugates are
+  recomputed individually; their strongest valid lower is eligible for use.
+- Core/wrapper: `src/egglab/native_hull.py`, `src/egglab/native_pathflow_hull.py`.
+  Focused tests: `src/tests/test_native_hull_pricing_cache.py`; 26 new-cache and
+  existing feasible-reuse tests passed. Independent review passed against the final three source hashes; full CI is
+  pending this backup. No new run should start until its required CI passes.
+- Source/preparation accounting: validation/re-evaluation occurs within the
+  target deadline; measured coordinator/native pricing costs are retained.
+  Complete child/startup/preparation costs stay unknown in the core. A future
+  runner must pin source files, code and original on-time receipts, and account
+  for complete paid costs. Digests do not independently prove native bounds.
+- Certification requires a successful fresh target pricing call. A cache can
+  strengthen an unfinished result but cannot alone certify it. A reversed final
+  enclosure fails closed even when a work limit prevents fresh pricing. Default
+  outputs/identities and all frozen pilot arms remain unchanged.
+- Scientific/API note: `research-20260928/pricing-bound-cache/README.md`.
+  Focused review: `research-20260928/agent-notes/pricing-bound-cache/`.
+  This is implementation only: no new optimizer benchmark, timing advantage,
+  public gap closure, data intake or learned method is claimed.
+- Next bounded package after this change passes CI/review: integrate the existing
+  separate numerical restricted-master QP proposal under replay/global-bound
+  checks, then freeze a new matched comparison. Keep reserve-cold/feasible-plan
+  baselines and make cached bounds an explicit factor. No new cluster job yet.
+
+## Previous checkpoint — matched pilot completed and analyzed
 
 - **No active EGG job is recorded.** Job 572392 completed 0:0 in 36:49 on
   snavely-cpu-15. Requested 1 CPU/8 GB; Slurm allocated 2 CPUs, while the serial

@@ -107,10 +107,14 @@ A separate posthoc calculation exposes a missing baseline: a physical pricing
 bound at a fixed price is still valid for the same physical feasible set after
 changing only the supply cost. Recomputing the target Fenchel conjugate tightens
 this run's shifted public intervals to widths about 64 and 70, with no additional
-optimization. It changes no frozen status or timing. Build an explicit checked
-oracle-bound cache next, preserving all provenance and preparation costs and
-requiring fresh target pricing before certification. Different physical cases
-cannot automatically share these certificates.
+optimization. It changes no frozen status or timing. An explicit opt-in checked
+oracle-bound cache has now been implemented, with source lineage, target-market
+conjugate re-evaluation and a fresh-target-pricing certification gate. It is
+independently reviewed with 26 focused tests passing; full CI is pending.
+It has no measured online performance result yet.
+Different physical cases cannot automatically share these certificates. The
+core preserves measured source work and leaves unmeasured child/preparation
+costs explicit for the later experiment runner.
 
 Then integrate the existing numerical restricted-QP proposal under physical
 mixture replay and global-bound checks to address projected rational-bit stops.
