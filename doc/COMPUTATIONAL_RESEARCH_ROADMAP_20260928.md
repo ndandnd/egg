@@ -109,7 +109,9 @@ learning advantage. See `research-20260928/computational-results/attempt1/`.
 The follow-up is now specified as a 24-cell hull-only pilot, with legacy cold,
 reserved-time cold and reserved-time feasible-pool reuse arms. Each pays for
 its own initial solve. The opt-in implementation and focused source review are
-complete; publication, full CI and one frozen submission are the next steps.
+complete. Published execution source 77dee96 passed full CI 36385045833 and was
+submitted once as job 572392 at 06:14 UTC, pending at the initial observation.
+Collect its frozen inputs and sealed results before interpreting the pilot.
 The design and stopping rules are in
 `doc/FEASIBLE_POOL_PILOT_PROTOCOL_20260928.md`. This direct two-market reuse mode
 does not yet support ancestral pools over longer market sequences.

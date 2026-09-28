@@ -180,3 +180,21 @@ evidence admission path before execution. The prospective resource envelope
 remains one serial CPU, 8 GB and two hours, with no automatic retries. Source
 publication and full CI precede a single frozen launch; no new result is claimed.
 See doc/FEASIBLE_POOL_PILOT_PROTOCOL_20260928.md and its review.
+
+Published execution commit 77dee963eb30ba85bca68b3efcf61d099fa33076 passed full
+CI 36385045833, including the complete CBC suite and reconstruction of historical
+evidence. The new pilot was submitted exactly once as job 572392 at 06:14:34 UTC,
+PENDING (Priority) at its initial observation. The dedicated checkout is
+/home/nc437/egg-feasible-pool-pilot-20260928. The remote exclusive intent and
+submission receipt prevent an accidental second submission; the public receipt
+is research-20260928/cluster/feasible-pool-pilot-572392.json. Frozen input will be
+created by the wrapper at job start. No result has been inspected.
+
+The original Google Doc now contains one “Matched computational pilot launched”
+append with a functional link to the frozen prospective protocol. Luna and root
+verified exact preservation of the fresh 102,111-byte Markdown baseline and one
+new heading. Final Markdown is 104,024 bytes, SHA-256
+2cf19c451c2edef6677f8e3090000ec05093b54a9990905f801af0c449291625. Full before/after
+Markdown and PDF exports remain private; the compact receipt is under
+research-20260928/agent-notes/google-doc-feasible-pilot/. PR56 remains draft and
+unmerged, with its description updated for this launch.

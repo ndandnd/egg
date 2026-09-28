@@ -6,12 +6,17 @@ optimization first, then retrieval/learned proposals. The v0.5 draft is historic
 Use GPT-6 Sol for implementation/analysis and Luna Max for supporting work; root
 manages. Hourly `advance-egg-journal-research` remains ACTIVE, quiet when unchanged.
 
-## Latest checkpoint — matched feasible-pool pilot ready
+## Latest checkpoint — matched feasible-pool pilot submitted
 
-- No new cluster job has been submitted yet; no active EGG job is recorded.
-  The optional core change and separate 24-cell runner are implemented and
-  reviewed. Publish the source, confirm full CI, then submit ONCE from a new
-  dedicated checkout. Do not rerun the completed first screen.
+- **Active job 572392**, submitted once at 06:14:34 UTC; the one queue observation
+  was PENDING (Priority). Do not duplicate or retry it. Execution source
+  **77dee963eb30ba85bca68b3efcf61d099fa33076** passed full CI **36385045833**, including
+  the complete CBC suite and historical evidence reconstruction.
+  Dedicated checkout: `/home/nc437/egg-feasible-pool-pilot-20260928`.
+  Receipt: `research-20260928/cluster/feasible-pool-pilot-572392.json`.
+  The exclusive submission intent and receipt are also in that remote checkout.
+  Frozen input did not yet exist at submission; collect its hash after the job
+  starts. No new scientific outcomes have been read.
 - Protocol: `doc/FEASIBLE_POOL_PILOT_PROTOCOL_20260928.md`; scoped review:
   `doc/FEASIBLE_POOL_PILOT_REVIEW_20260928.md`. Runner:
   `src/experiments/feasible_pool_pilot.py`; wrapper:
@@ -34,9 +39,29 @@ manages. Hourly `advance-egg-journal-research` remains ACTIVE, quiet when unchan
   no retry/requeue, reserved node excluded. Public native targets remain 180 s,
   synthetic 60 s; the 10 s reserve is inside those limits. Hard child caps add
   30 s; controller/outer caps remain 5,400/5,500 s. Retain all 24 outcome rows.
-- Next: publish and inspect CI; freeze/submit once; save receipt and append a
-  consolidated Google Doc launch update. Analyze completed results before any
-  broader sweep or ML. The standalone numerical-QP helper remains separate.
+- Next: one compact queue check for 572392 through unicorn2 after loading
+  `/etc/profile.d/slurm.sh`; scoped sacct and receipts if it has vanished.
+  The wrapper freezes the source/design once on job start and writes its final
+  receipt beside the attempt, outside its seal. Preserve all failures/time;
+  collect sealed results before scientific analysis. Do not poll job 569799.
+  Analyze this matched pilot before any broader sweep or ML; the standalone
+  numerical-QP helper remains separate.
+- Analyze the new matched arms within this pilot, with initial preparation,
+  target checking and both-state totals included. Track whether each returned
+  column reached a master, and distinguish pricing reserve/call/wall stops
+  from arithmetic limits. The old reporter assumes 32 cells and is not directly
+  a 24-cell pilot reporter; do not silently reuse its outcome denominators.
+- Google Doc updated ONCE with “Matched computational pilot launched —
+  28 September 2026”, from the exact text at
+  `research-20260928/feasible-pool-pilot/GOOGLE_DOC_UPDATE.md`. Luna and root
+  verified the entire before-export is an exact prefix and the heading occurs
+  once. Final Markdown: 104,024 bytes, SHA
+  2cf19c451c2edef6677f8e3090000ec05093b54a9990905f801af0c449291625.
+  Receipt: `research-20260928/agent-notes/google-doc-feasible-pilot/`; full exports
+  remain private in OUTER `research-20260928/google-doc-feasible-pilot/`.
+  Do not append this milestone again. PR56 remains draft/unmerged and its
+  description includes the launch. The next backup is documentation/receipts;
+  check its CI once on the next follow-up, without retesting unchanged code.
 
 ## Previous checkpoint — first computational screen completed
 
