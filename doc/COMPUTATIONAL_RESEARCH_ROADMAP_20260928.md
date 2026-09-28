@@ -184,21 +184,29 @@ Tables, figures and recorded paid work:
 `research-20260928/pricing-start-pilot/results-attempt1/`.
 
 The benchmark intake package adds Eberbach and reserves future base groups before
-training or comparative outcomes. The synthetic family is designed, not yet
-generated or solved. Next, prepare one bounded cold, retained-column and
-nearest-neighbor comparison with common quality targets and explicit resource
-caps. For price-only changes on the same physical case, include exact
-lowest-current-bill selection over the same stored fleet pool: every checked
-fleet remains feasible, so nearest-price lookup must face this simple baseline.
-Cross-timetable route transfer requires explicit trip correspondence and repair.
-Do not conduct another start sweep merely to seek a favorable result. No solver
-or cluster job was launched during intake; no active EGG jobs remain. Follow
-`doc/DRAFT_COMPLETION_PLAN_20260928.md`: consolidate a readable LaTeX draft after
-the bounded comparison, regardless of whether acceleration is observed.
-[Python-MIP documents the initial-solution interface](https://python-mip.readthedocs.io/en/latest/classes.html).
-Broader independent public timetables and nearest-neighbor retrieval still
-precede learned proposals. Reserve grouped independent test networks before
-training and keep the price-support question central.
+training or comparative outcomes. Five synthetic cases are now generated and
+physically replayed: 8/16/24 services for development seed1006, plus16 services
+for each of seeds1012 and1009. Their mandatory service-energy lower bounds show
+real charging pressure outside any four-hour/90kW window in all16/24-service
+cases; the8-service witness fits. Every prespecified case is retained.
+
+The next and final bounded comparison before draft consolidation uses these five
+cases plus Eberbach. Two source markets build the same checked whole-fleet pool
+for retained columns, nearest-source-price retrieval and exact cheapest-current-
+bill selection; cold iterative solving is the common baseline. Target bounds
+require fresh global pricing, with no inherited bound cache or native MIP start.
+Direct proposal feasibility/quality, checking, full verification and paid source
+work are distinct measurements. A shared target planner and own-price response
+keep the price-support question central. Cross-timetable transfer is outside this
+price-only comparison. Full protocol, caps and case order are in
+`doc/RETRIEVAL_COMPARISON_PROTOCOL_20260928.md`; current launch status is in
+`doc/AUTONOMOUS_RESEARCH_CONTINUATION.md`.
+
+Do not conduct another start or retrieval sweep to seek a favorable result.
+Follow `doc/DRAFT_COMPLETION_PLAN_20260928.md`: consolidate a readable LaTeX draft
+after this single comparison and result review, regardless of whether
+acceleration is observed. Learned proposals remain optional for the first draft;
+reserved independent test groups stay closed until a later frozen evaluation.
 
 ## Manuscript direction
 
