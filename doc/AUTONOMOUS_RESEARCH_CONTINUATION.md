@@ -48,6 +48,18 @@ manages. Hourly `advance-egg-journal-research` remains ACTIVE, quiet when unchan
   the still-pending one-replacement exception. Eberbach is already adapted;
   independent cases, repeated-seed/common-quality evaluation precede ML.
 
+- Source/artifact backup: `c058236436fe84d83dde1f1e5769f53e5e550c5c`.
+  PR56 is OPEN/draft and updated, unmerged. Initial CI36490355397 stopped only
+  on trailing whitespace in four generated-log lines; those are normalized
+  in the receipt follow-up, with no scientific/PDF change.
+- Original Google Doc has one appended, Saved/reload-verified update titled
+  “Review response and stronger bounds — 28 September 2026”; original heading
+  intact, new heading last, complete opening sentence1of1, three links rendered.
+  Source/receipt: `research-20260928/review-response-v07/GOOGLE_DOC_UPDATE.md`
+  and `GOOGLE_DOC_RECEIPT.md`. Luna's final independent review found no blocker.
+  Final receipt-backup CI should be checked once, without rerunning solvers.
+  No active workers remain except stale pending cardinality agent (ignore).
+
 ## Prior checkpoint — integrated research draft 0.6 complete
 
 - The complete LaTeX first draft is ready for author review: 19 pages, five

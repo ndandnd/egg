@@ -8,3 +8,5 @@
 - Historical computational_results.tex retains SHA-256 50fda5437632c7286bff016df8c688e7d9a0e5b54896393e271d62834913ffdb. All failed historical cells, caps and reported elapsed time remain in the development record.
 - Exact ideal-model energy floors, native postprocessed screen intervals and conditional mixed-evidence caps are explicitly separated. No positive public gap, optimal-fleet regret, speedup, learned result or cross-network generalization is claimed.
 - Selective response and literature verification are in REVIEW_RESPONSE.md and LITERATURE.md; Luna's independent scope/claim review is in INDEPENDENT_REVIEW.md. ARTIFACTS.json pins released PDFs, source and calculation files.
+
+- Backup CI 36490355397 initially stopped at the whitespace gate because Tectonic's generated logs contained four trailing-space lines. Only trailing whitespace in those logs was normalized, with their substantive contents and PDFs unchanged; a fresh branch check follows. The raw failed check remains in GitHub history.
