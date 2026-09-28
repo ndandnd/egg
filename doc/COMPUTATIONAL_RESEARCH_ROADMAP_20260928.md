@@ -121,7 +121,8 @@ The numerical restricted-QP proposal is now integrated as a separate opt-in
 master policy under exact simplex/physical-mixture replay and global-bound
 checks. Fixed-denominator proposals replace repeated pairwise rational updates;
 proposal failures retain prior evidence, and fresh global pricing still decides
-certification. Final review/CI are pending. Pricing remains expensive, and the
+certification. All 37 focused tests and independent review passed, and implementation dc5e014
+passed full CI 36402944039. Pricing remains expensive, and the
 new policy has no measured online benefit yet. Next, freeze an ordered comparison
 of reserve-cold, retained feasible plans, numerical master with retained plans,
 and that method with cached physical bounds. Keep paid initial-state work,

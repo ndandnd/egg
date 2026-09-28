@@ -291,3 +291,19 @@ necessary because an in-process SciPy call cannot be forcibly preempted. Final
 focused checks, independent review and CI are pending. No cluster experiment
 was launched. The next package is a new frozen ordered comparison on the four
 existing development cases, with two markets and four policy arms.
+
+The final 37 focused numerical-master/cache/reuse tests passed. Independent
+review passed after checking typed import failures and hard physical replay
+errors; root verified all four reviewed file hashes, including the unchanged
+proposal helper. Full CI is pending this implementation backup. No solver
+benchmark or cluster action accompanied the tests.
+
+Implementation dc5e01480996ae97adb08821e9fb518cba43492b was backed up and passed
+full CI 36402944039, including the complete CBC test suite and frozen-evidence
+reconstruction. The original Google Doc received one saved numerical-master
+implementation update; Luna observed its final heading, full body and review
+link, and root verified the append-source bytes/hash. Full-export preservation
+verification remains unavailable after the earlier browser block. The compact
+receipt records that limit; no export retry or cluster job accompanied this
+completed implementation package. Next is the prospective 32-cell ordered
+comparison, with source/caps/accounting frozen before launch.

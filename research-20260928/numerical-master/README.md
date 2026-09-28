@@ -80,5 +80,9 @@ The focused numerical-master, pricing-cache and feasible-reuse suite passed
 37 tests. Checks include malformed-weight failure with prior bounds retained,
 non-success finite proposals, late return, arithmetic caps, hard physical replay
 failures, missing numerical dependencies, and default-policy compatibility.
-Independent source review and full CI are pending. No performance result is
-implied by these checks.
+Independent [source review](../agent-notes/numerical-master/REVIEW.md) passed;
+root verified its four final file hashes, including the unchanged proposal helper.
+Implementation `dc5e01480996ae97adb08821e9fb518cba43492b` passed
+[full CI 36402944039](https://github.com/ndandnd/egg/actions/runs/36402944039),
+including the complete CBC suite and frozen-evidence reconstruction. No
+performance result is implied by these checks.

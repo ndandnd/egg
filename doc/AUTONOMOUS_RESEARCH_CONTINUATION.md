@@ -32,8 +32,11 @@ manages. Hourly `advance-egg-journal-research` remains ACTIVE, quiet when unchan
   Existing helper: `src/egglab/restricted_qp_proposal.py`.
   Note: `research-20260928/numerical-master/README.md`;
   focused review: `research-20260928/agent-notes/numerical-master/REVIEW.md`.
-  The 37 focused numerical-master/cache/reuse tests passed; final independent
-  review and full CI will be recorded before launch.
+  The 37 focused numerical-master/cache/reuse tests passed. Independent review
+  passed and root verified all four reviewed file hashes (including the unchanged
+  proposal helper). Implementation **dc5e01480996ae97adb08821e9fb518cba43492b**
+  is backed up and passed full CI **36402944039**, including the complete CBC
+  suite and frozen-evidence reconstruction.
 - **Next bounded package:** freeze and run a new matched development comparison,
   retaining reserve-cold and reserve-feasible baselines, then adding numerical
   master and numerical master + cached bounds. Candidate: the same four physical
@@ -43,6 +46,17 @@ manages. Hourly `advance-egg-journal-research` remains ACTIVE, quiet when unchan
   before submission; do not reuse completed attempt paths. Preserve
   `proposal_failed`, bounded/late/ineligible outcomes and all paid preparation.
   No new cluster experiment or performance claim belongs to this code package.
+- Original Google Doc updated ONCE with “Numerical master integration completed
+  — 28 September 2026”; Luna observed Saved to Drive, final heading, full body
+  and review link. Do not duplicate. Source and receipt:
+  `research-20260928/numerical-master/GOOGLE_DOC_UPDATE.md` and
+  `research-20260928/agent-notes/google-doc-numerical-master/RECEIPT.md`. Root
+  verified source bytes/hash. Full-export/prefix verification remains unavailable
+  after the prior browser block; do not repeatedly retry that route.
+- Final receipt/handoff backup is documentation only. Check its latest CI once
+  next heartbeat, then build/freeze the comparison runner and proceed under the
+  existing resource ceiling after its required checks. No active agents/jobs
+  remain at handoff. PR56 remains draft/unmerged. No user decision is pending.
 
 ## Previous checkpoint — physical pricing-bound cache implementation
 
