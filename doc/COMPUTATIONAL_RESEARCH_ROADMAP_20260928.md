@@ -106,6 +106,14 @@ execution under the existing resource ceiling. Public enclosures are still broad
 this screen establishes neither a positive planner-hull gap nor a public reuse or
 learning advantage. See `research-20260928/computational-results/attempt1/`.
 
+The follow-up is now specified as a 24-cell hull-only pilot, with legacy cold,
+reserved-time cold and reserved-time feasible-pool reuse arms. Each pays for
+its own initial solve. The opt-in implementation and focused source review are
+complete; publication, full CI and one frozen submission are the next steps.
+The design and stopping rules are in
+`doc/FEASIBLE_POOL_PILOT_PROTOCOL_20260928.md`. This direct two-market reuse mode
+does not yet support ancestral pools over longer market sequences.
+
 ## Manuscript direction
 
 Retain the exact mechanism and replication results, but support the computational

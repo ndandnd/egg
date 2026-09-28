@@ -163,3 +163,20 @@ findings/next-experiment update, with prior content preserved byte-for-byte in
 the Markdown export and saved-to-Drive verified. The receipt is under
 `research-20260928/agent-notes/google-doc-screen-results/`; full Doc exports stay
 private. No new cluster job was launched during this analysis follow-up.
+
+## Matched reserve and feasible-pool pilot prepared
+
+A separate 24-cell hull pilot now isolates two changes suggested by the first
+screen: preserving ten seconds inside the pricing budget for processing newly
+returned fleet columns, and reusing feasible columns from a bounded predecessor.
+Legacy cold, reserve cold and reserve reuse arms each pay for their own initial
+solve. Only replayed physical columns cross markets; target mixtures and global
+bounds are rebuilt. Strict historical reuse behavior and prior results remain
+unchanged. All cells are development data, with the public depots grouped.
+
+The core and runner passed 113 relevant focused/existing tests, without native
+optimization, and a scoped independent review. Review fixed an incomplete-
+evidence admission path before execution. The prospective resource envelope
+remains one serial CPU, 8 GB and two hours, with no automatic retries. Source
+publication and full CI precede a single frozen launch; no new result is claimed.
+See doc/FEASIBLE_POOL_PILOT_PROTOCOL_20260928.md and its review.

@@ -455,41 +455,66 @@ def solve_native_rmp(case, market, columns, points, budget, deadline, counts, re
 
 
 def import_pool(case, previous, expected_previous, budget, previous_index=None,
-                extraction_policy=None):
+                extraction_policy=None, reuse_policy="certified_only", oracle_id=None,
+                pricing_reserve_seconds=0.0):
     policy = _extraction_policy(extraction_policy)
+    controls = _controls(reuse_policy, pricing_reserve_seconds, budget)
+    allowed = ({"certified"} if reuse_policy == "certified_only" else
+               {"certified", "budget_exhausted", "stalled_bounded", "bounded"})
     if (not isinstance(expected_previous, str) or not expected_previous
-            or not previous or previous.get("schema") != SCHEMA or previous.get("status") != "certified"
+            or not previous or previous.get("schema") != SCHEMA or previous.get("status") not in allowed
             or previous.get("arm") != "retained"
             or (previous_index is not None and previous.get("state_index") != previous_index)
             or previous.get("state_identity") != expected_previous
             or previous.get("physical_identity") != case.identity()
-            or previous.get("extraction_policy") != policy):
+            or previous.get("extraction_policy") != policy
+            or any(previous.get(key) != value for key, value in controls.items())):
         raise ValueError("Invalid retained predecessor identity/status")
     columns = copy.deepcopy(previous.get("columns", []))
     if not 1 <= len(columns) <= budget.pool_cap or len({c["key"] for c in columns}) != len(columns):
         raise ValueError("Invalid retained pool size/duplicate projection")
     for c in columns:
         replay_column(case, c, extraction_policy)
+        if reuse_policy == "feasible_pool":
+            source = c.get("source")
+            if (not isinstance(source, dict) or source.get("state_identity") != expected_previous
+                    or source.get("pricing_oracle") != oracle_id):
+                raise ValueError("Imported column provenance/oracle identity mismatch")
     return columns
 
 
+def _controls(reuse_policy, pricing_reserve_seconds, budget):
+    if reuse_policy not in ("certified_only", "feasible_pool"):
+        raise ValueError("Unknown retained-pool reuse policy")
+    if (not nr._finite(pricing_reserve_seconds)
+            or pricing_reserve_seconds >= budget.wall_seconds):
+        raise ValueError("Invalid pricing-time reserve")
+    return ({} if reuse_policy == "certified_only" and pricing_reserve_seconds == 0 else
+            {"reuse_policy": reuse_policy,
+             "pricing_reserve_seconds": float(pricing_reserve_seconds)})
+
+
 def state_identity(case, market, arm, state_index, budget, oracle_id=None,
-                   extraction_policy=None):
+                   extraction_policy=None, reuse_policy="certified_only",
+                   pricing_reserve_seconds=0.0):
     policy = _extraction_policy(extraction_policy)
     metadata = {} if oracle_id is None else {"pricing_oracle": oracle_id}
+    controls = _controls(reuse_policy, pricing_reserve_seconds, budget)
     if oracle_id is not None and (not isinstance(oracle_id, str) or not oracle_id.strip()):
         raise ValueError("Explicit pricing oracle requires a nonempty identity")
     return nr.digest({"schema": SCHEMA, "case": case.identity(), "market": market.identity(),
                       "arm": arm, "state_index": state_index, "budget": asdict(budget),
-                      "extraction_policy": policy, **metadata})
+                      "extraction_policy": policy, **metadata, **controls})
 
 
 def certify(case, market, budget=Budget(), *, arm="cold", state_index=0,
             previous=None, expected_previous=None, record=None, pricing_oracle=None,
-            oracle_id=None, extraction_policy=None):
+            oracle_id=None, extraction_policy=None, reuse_policy="certified_only",
+            pricing_reserve_seconds=0.0):
     nr.validate_case(case)
     validate_market(case, market)
     validate_budget(budget)
+    controls = _controls(reuse_policy, pricing_reserve_seconds, budget)
     if (pricing_oracle is None) != (oracle_id is None) or (pricing_oracle is not None and not callable(pricing_oracle)):
         raise ValueError("Explicit pricing oracle requires both a callable and its identity")
     policy = _extraction_policy(extraction_policy)
@@ -502,35 +527,64 @@ def certify(case, market, budget=Budget(), *, arm="cold", state_index=0,
     if (arm == "cold" or state_index == 0) and (previous is not None or expected_previous is not None):
         raise ValueError("Fresh state cannot import a predecessor")
     deadline = time.monotonic()+budget.wall_seconds
-    identity = state_identity(case, market, arm, state_index, budget, oracle_id, extraction_policy)
+    identity = state_identity(case, market, arm, state_index, budget, oracle_id, extraction_policy,
+                              reuse_policy, pricing_reserve_seconds)
     if previous is not None and previous.get("pricing_oracle") != oracle_id:
         raise ValueError("Retained predecessor pricing oracle identity differs")
     columns = (import_pool(case, previous, expected_previous, budget, state_index-1,
-                           extraction_policy)
+                           extraction_policy, reuse_policy, oracle_id, pricing_reserve_seconds)
                if arm == "retained" and state_index > 0 else [])
     counts = {"pricing_requests": 0, "seed_requests": 0, "master_calls": 0,
               "polish_steps": 0, "polish_checks": 0, "polish_wall_s": 0.0, "max_rational_bits": 0}
     best_lower, best_mixture = None, None
     points = [[0.0]*len(market.a)]
     emit(record, {"event": "state_start", "state_identity": identity, "market_identity": market.identity(),
-                  "imported_column_keys": [c["key"] for c in columns], "fresh_bounds": True, **metadata})
+                  "imported_column_keys": [c["key"] for c in columns], "fresh_bounds": True,
+                  **metadata, **controls})
     def consider_mixture(mix):
         nonlocal best_mixture
         if best_mixture is None or Q(mix["objective_exact"]) < Q(best_mixture["objective_exact"]):
             best_mixture = copy.deepcopy(mix)
+    if columns and reuse_policy == "feasible_pool":
+        # Reconstruct an upper in the NEW market from physical columns only.
+        # Neither old simplex weights nor old lower certificates cross states.
+        for index in range(len(columns)):
+            one_hot = [float(j == index) for j in range(len(columns))]
+            consider_mixture(replay_mixture(case, market, columns, one_hot, extraction_policy))
     def price(prices, seed=False):
         nonlocal best_lower
-        if time.monotonic() >= deadline or counts["pricing_requests"] >= budget.pricing_calls:
-            raise LimitReached("pricing/time budget exhausted")
+        now = time.monotonic()
+        if pricing_reserve_seconds == 0:
+            if now >= deadline or counts["pricing_requests"] >= budget.pricing_calls:
+                raise LimitReached("pricing/time budget exhausted")
+        else:
+            if counts["pricing_requests"] >= budget.pricing_calls:
+                raise LimitReached("pricing call budget exhausted")
+            if deadline-now <= pricing_reserve_seconds:
+                emit(record, {"event": "pricing_reserve_stop", "remaining_seconds": deadline-now,
+                              "reserve_seconds": pricing_reserve_seconds})
+                raise LimitReached("pricing reserve prevented a new request")
+        if pricing_reserve_seconds:
+            remaining = deadline-time.monotonic()-pricing_reserve_seconds
+            if remaining <= 0:
+                emit(record, {"event": "pricing_reserve_stop", "remaining_seconds": remaining+pricing_reserve_seconds,
+                              "reserve_seconds": pricing_reserve_seconds})
+                raise LimitReached("pricing reserve prevented a new request")
         index = counts["pricing_requests"]
         counts["pricing_requests"] += 1
         counts["seed_requests"] += int(seed)
-        emit(record, {"event": "pricing_request", "call": index, "seed": seed, "prices": prices, **metadata})
+        trace = ({"pricing_wall_allowance_seconds": remaining,
+                  "reserve_seconds": pricing_reserve_seconds,
+                  "remaining_total_seconds": remaining+pricing_reserve_seconds}
+                 if pricing_reserve_seconds else {})
+        emit(record, {"event": "pricing_request", "call": index, "seed": seed, "prices": prices,
+                      **metadata, **trace})
         def oracle_record(event):
             emit(record, {"event": "pricing_native", "call": index, "detail": event})
-        remaining = deadline-time.monotonic()
-        if remaining <= 0:
-            raise LimitReached("time budget exhausted before pricing")
+        if not pricing_reserve_seconds:
+            remaining = deadline-time.monotonic()
+            if remaining <= 0:
+                raise LimitReached("time budget exhausted before pricing")
         result = oracle(case, prices,
             nr.Budget(backend=budget.backend, threads=1, phase_seconds=budget.phase_seconds,
                       wall_seconds=remaining, max_rounds=1), record=oracle_record)
@@ -592,7 +646,8 @@ def certify(case, market, budget=Budget(), *, arm="cold", state_index=0,
     result = {"schema": SCHEMA, "status": status, "reason": reason, "state_identity": identity,
               "physical_identity": case.identity(), "market_identity": market.identity(),
               "extraction_policy": policy, "arm": arm, "state_index": state_index,
-              "columns": columns, "counts": counts, "epsilon": budget.epsilon, **metadata}
+              "columns": columns, "counts": counts, "epsilon": budget.epsilon,
+              **metadata, **controls}
     if best_lower:
         result["lower_certificate"] = best_lower
         result["lower"] = best_lower["lower"]

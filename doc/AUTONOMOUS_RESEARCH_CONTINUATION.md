@@ -6,7 +6,39 @@ optimization first, then retrieval/learned proposals. The v0.5 draft is historic
 Use GPT-6 Sol for implementation/analysis and Luna Max for supporting work; root
 manages. Hourly `advance-egg-journal-research` remains ACTIVE, quiet when unchanged.
 
-## Latest checkpoint — first computational screen completed
+## Latest checkpoint — matched feasible-pool pilot ready
+
+- No new cluster job has been submitted yet; no active EGG job is recorded.
+  The optional core change and separate 24-cell runner are implemented and
+  reviewed. Publish the source, confirm full CI, then submit ONCE from a new
+  dedicated checkout. Do not rerun the completed first screen.
+- Protocol: `doc/FEASIBLE_POOL_PILOT_PROTOCOL_20260928.md`; scoped review:
+  `doc/FEASIBLE_POOL_PILOT_REVIEW_20260928.md`. Runner:
+  `src/experiments/feasible_pool_pilot.py`; wrapper:
+  `src/cluster/feasible_pool_pilot.sbatch`. Exclusive new attempt:
+  `result/feasible_pool_pilot/20260928-attempt1`.
+- Four existing cases × two markets × three hull arms: legacy cold, cold with
+  a 10-second pricing reserve, and feasible-pool reuse with that same reserve.
+  Each arm pays its own initial solve. This separates reserve from reuse; all
+  cases remain development, with both public depots one timetable group.
+- The new optional policy replays bounded but complete predecessor pools, with
+  strict on-time receipt and provenance checks. Only physical fleet columns
+  transfer; the target market rebuilds mixture weights and global certificates.
+  No fresh target pricing means no certification. This first mode supports
+  direct state0→state1 reuse, not recursive ancestral pools. Defaults and old
+  strict certified-predecessor behavior are preserved.
+- Focused validation: 9 new core tests, 96 existing core/wrapper/policy tests,
+  and 8 runner tests passed. No native MIP or new qualification campaign ran.
+  Luna's scoped independent review passed; root consolidated the review.
+- Keep the same one serial CPU/8-GB/two-hour ceiling, one native thread,
+  no retry/requeue, reserved node excluded. Public native targets remain 180 s,
+  synthetic 60 s; the 10 s reserve is inside those limits. Hard child caps add
+  30 s; controller/outer caps remain 5,400/5,500 s. Retain all 24 outcome rows.
+- Next: publish and inspect CI; freeze/submit once; save receipt and append a
+  consolidated Google Doc launch update. Analyze completed results before any
+  broader sweep or ML. The standalone numerical-QP helper remains separate.
+
+## Previous checkpoint — first computational screen completed
 
 - **No active EGG job is recorded.** Job 569799 completed 0:0 in 35:57, on one
   CPU/8 GB. Do not poll or resubmit it. Execution source e39bc7e31ea21dae64365c31fa88a85e4b0de349;
