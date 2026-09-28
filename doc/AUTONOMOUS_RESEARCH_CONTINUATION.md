@@ -15,7 +15,8 @@ doc/COMPUTATIONAL_RESEARCH_ROADMAP_20260928.md. Hourly heartbeat
 - **Active job 569799**, submitted once from
   `/home/nc437/egg-computational-screen-20260928` on Unicorn. Execution source
   `e39bc7e31ea21dae64365c31fa88a85e4b0de349` is published on the current branch.
-  At 03:31:29 UTC it was RUNNING on `snavely-cpu-01`, allocated 1 CPU/8 GB.
+  At the 03:49 UTC heartbeat it was RUNNING on `snavely-cpu-01`, elapsed
+  23:10, allocated 1 CPU/8 GB. One compact queue check; no resubmission.
   Frozen SHA-256: b36b15a5b9ac8945cff3b4cfd5e8441c705c3c536870f7a34c3d08e7f6f2dca2.
   Request 1 CPU/8 GB, native 1 thread, 2 h allocation, no requeue/retry,
   exclude `scaglione-compute-01`. Preserve submission sentinels; do not resubmit.
@@ -26,7 +27,8 @@ doc/COMPUTATIONAL_RESEARCH_ROADMAP_20260928.md. Hourly heartbeat
   license diagnostics: keep full archives private and publish only a documented
   scientific subset. Public receipt: `research-20260928/cluster/computational-screen-569799.json`;
   full private deployment receipt is in the outer research folder. Execution
-  commit CI run 36373363756 completed SUCCESS.
+  commit CI run 36373363756 completed SUCCESS. Subsequent source/documentation
+  head d8fc860 also passed full CI (36374758707).
 - Eight development case–market combinations, up to 32 stages: cyclic two-service,
   multivisit three-service and both Hildenbrand 37-service depot variants; two
   markets each; planner, cold hull, retained hull and own-price response.
@@ -36,6 +38,18 @@ doc/COMPUTATIONAL_RESEARCH_ROADMAP_20260928.md. Hourly heartbeat
   `doc/COMPUTATIONAL_SCREEN_PROTOCOL_20260928.md` and
   `doc/COMPUTATIONAL_SCREEN_REVIEW_20260928.md`. Nine focused tests passed.
   Physical/hull core is unchanged. No new scientific result is admitted yet.
+- Completed-attempt reporting is ready in
+  `src/experiments/computational_benchmark_report.py`; five focused tests pass.
+  It verifies the stable attempt manifest, accounts for all 32 stages and writes
+  JSON/CSV/Markdown to a NEW directory outside the sealed attempt. Run from the
+  repository with `PYTHONPATH=src python -m experiments.computational_benchmark_report
+  <collected-attempt> <new-report-directory>` using the research Python runtime.
+  Receipt failures take precedence over native status, missing timing stays
+  missing, and two-state hull totals include preparation. It reads summary/count
+  data only; pricing/master event-time extraction and scientific result review
+  remain next-step work. No archived outcomes were read during its development.
+  Luna's narrow static review passed after separating supervisor integrity from
+  stage success; root reran the five focused tests after that labeling correction.
 - Completed notes in `research-20260928/computational-design/`: six-reference
   learned-route review, 20-base public-data inventory, and offline three-column
   QP probe. The probe reduced the restricted-pool gap from about 0.00202 to

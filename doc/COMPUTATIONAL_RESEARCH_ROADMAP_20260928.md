@@ -74,6 +74,17 @@ claim a time-to-target success after a hard deadline. The old 5 s protocol failu
 remains immutable. If numerical restricted-master work dominates, improve that
 bottleneck before attributing benefit to route learning or launching a large sweep.
 
+The diagnostic presentation will pair a complete 32-stage outcome table with
+runtime and bound-quality panels. Show each cold/retained arm's initial-state
+cost, second-state cost and two-state total; a transition-only timing is not a
+total speedup. Show unsuccessful and ineligible stages explicitly. Component
+times are available only where recorded, and missing times stay missing rather
+than becoming zero or an inferred routing cost. Whole-job Slurm elapsed includes
+setup that stage sums omit. Compare time to a common quality target when the
+traces support it; otherwise report time and final bounds together without a
+speedup claim. Keep the two Hildenbrand depots grouped. Fraction-valued exports
+of native numerical bounds do not convert them into ideal-model exact proofs.
+
 ## Manuscript direction
 
 Retain the exact mechanism and replication results, but support the computational

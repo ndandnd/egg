@@ -93,3 +93,32 @@ input-only plan confirms 105 services, 14 stops, one depot and 9 routes. Its rou
 10,000 movement choices warrant a model-size estimate before the next solve.
 The optional one-trip-per-bus construction is a feasibility attempt, not a
 necessary condition for the chained fleet model.
+
+## Diagnostic reporting preparation
+
+The 03:49 UTC follow-up made one compact queue check: job 569799 remained RUNNING
+on one CPU/8 GB, with 23:10 elapsed. No additional job was submitted and no stage
+outcomes were collected. The subsequent documentation/proposal source d8fc860
+passed full CI (36374758707).
+
+This follow-up prepares the completed-attempt report rather than expanding the
+experiment. The report must preserve all 32 declared stages, keep execution
+failures distinct from native solver status, and include each hull arm's first
+and second states when comparing total work. Missing pricing/master time stays
+missing; it cannot be reconstructed as routing time from a remainder. Human
+tables use approximate numerical bounds while machine exports retain the reported
+fraction strings. Neither representation upgrades native results to ideal-model
+exact proofs. The Google Doc's launch update remains current; the next consolidated
+append should describe verified findings after the run, not repeat queue status.
+
+The reporter is complete at `src/experiments/computational_benchmark_report.py`.
+Five focused tests passed, covering timeout/native-status precedence, missing times,
+32-stage accounting, incomplete files and stable-manifest checks. It consumes
+summary/count fields only; detailed pricing/master event timing and independent
+scientific interpretation remain for result analysis. No optimization was run
+and no archived scientific outcomes were read for this implementation.
+Luna's independent static review confirmed the accounting and identified a
+misleading overall-validity flag. Root renamed it to supervisor integrity,
+clarified that stage success and scientific validity remain separate, and reran
+the five focused tests successfully. No full-suite rerun was needed locally;
+the standard GitHub CI gate will run on the backup commit.
