@@ -263,3 +263,12 @@ required. The 26 focused new-cache and feasible-reuse tests passed, and Luna's
 review found no remaining admission/mathematical blocker. Root checked the review's
 three final source hashes. Full CI is pending backup. No cluster submission or
 new optimizer benchmark was made; numerical restricted-master integration is next.
+
+Implementation commit 8a54521b92c518aa999c6f18a915eca2ffdc8e21 passed full CI
+36396410119, including all CBC tests and frozen-evidence reconstruction. The
+original Google Doc now contains one saved “Pricing-bound reuse implemented —
+28 September 2026” update; Luna observed its final heading, full body and link.
+Root verified the exact append-source hash. Full-export/prefix verification
+remains unavailable after the earlier browser export block; no export route
+was retried. The receipt records that limit. This completes the implementation
+package without a new cluster job or a performance claim.

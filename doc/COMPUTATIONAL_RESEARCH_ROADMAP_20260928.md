@@ -110,8 +110,9 @@ this run's shifted public intervals to widths about 64 and 70, with no additiona
 optimization. It changes no frozen status or timing. An explicit opt-in checked
 oracle-bound cache has now been implemented, with source lineage, target-market
 conjugate re-evaluation and a fresh-target-pricing certification gate. It is
-independently reviewed with 26 focused tests passing; full CI is pending.
-It has no measured online performance result yet.
+independently reviewed with 26 focused tests passing, and implementation
+8a54521 passed full CI 36396410119. It has no measured online performance
+result yet.
 Different physical cases cannot automatically share these certificates. The
 core preserves measured source work and leaves unmeasured child/preparation
 costs explicit for the later experiment runner.

@@ -68,5 +68,7 @@ retrieval/learning comparisons follow these stronger baselines.
 The focused cache and existing feasible-reuse suite passed 26 tests without
 native optimization. An independent [change review](../agent-notes/pricing-bound-cache/REVIEW.md)
 found no remaining mathematical or admission blocker. Invalid cache exceptions
-must be preserved by the later runner's failure receipts. Full CI is pending
-the implementation backup; native performance validation is a later experiment.
+must be preserved by the later runner's failure receipts. Implementation commit `8a54521b92c518aa999c6f18a915eca2ffdc8e21` passed
+[full CI 36396410119](https://github.com/ndandnd/egg/actions/runs/36396410119),
+including all CBC tests and frozen-evidence reconstruction. Native performance
+validation remains a later experiment.

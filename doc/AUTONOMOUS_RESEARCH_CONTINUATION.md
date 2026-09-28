@@ -18,8 +18,10 @@ manages. Hourly `advance-egg-journal-research` remains ACTIVE, quiet when unchan
   recomputed individually; their strongest valid lower is eligible for use.
 - Core/wrapper: `src/egglab/native_hull.py`, `src/egglab/native_pathflow_hull.py`.
   Focused tests: `src/tests/test_native_hull_pricing_cache.py`; 26 new-cache and
-  existing feasible-reuse tests passed. Independent review passed against the final three source hashes; full CI is
-  pending this backup. No new run should start until its required CI passes.
+  existing feasible-reuse tests passed. Independent review passed against the final three source hashes. Execution
+  implementation **8a54521b92c518aa999c6f18a915eca2ffdc8e21** is backed up and
+  passed full CI **36396410119**, including complete CBC tests and reconstruction
+  of frozen journal evidence. This does not benchmark native cache performance.
 - Source/preparation accounting: validation/re-evaluation occurs within the
   target deadline; measured coordinator/native pricing costs are retained.
   Complete child/startup/preparation costs stay unknown in the core. A future
@@ -34,9 +36,21 @@ manages. Hourly `advance-egg-journal-research` remains ACTIVE, quiet when unchan
   This is implementation only: no new optimizer benchmark, timing advantage,
   public gap closure, data intake or learned method is claimed.
 - Next bounded package after this change passes CI/review: integrate the existing
-  separate numerical restricted-master QP proposal under replay/global-bound
-  checks, then freeze a new matched comparison. Keep reserve-cold/feasible-plan
+  separate numerical restricted-master proposal in
+  `src/egglab/restricted_qp_proposal.py` (tests in
+  `src/tests/test_restricted_qp_proposal.py`) under replay/global-bound checks,
+  then freeze a new matched comparison. Keep reserve-cold/feasible-plan
   baselines and make cached bounds an explicit factor. No new cluster job yet.
+- Original Google Doc updated ONCE with “Pricing-bound reuse implemented —
+  28 September 2026”; Saved to Drive, last heading, full body and link were
+  observed by Luna. Do not duplicate. Source and receipt: respectively
+  `research-20260928/pricing-bound-cache/GOOGLE_DOC_UPDATE.md` and
+  `research-20260928/agent-notes/google-doc-pricing-cache/RECEIPT.md`. Root verified
+  the append-source hash. Full-export preservation verification remains
+  unavailable; do not repeat the blocked export route at each heartbeat.
+- Final receipt/handoff backup is documentation only. Check its latest CI once
+  next heartbeat, then proceed with the next bounded QP integration package.
+  PR56 stays draft/unmerged. No active workers or EGG jobs remain at handoff.
 
 ## Previous checkpoint — matched pilot completed and analyzed
 
