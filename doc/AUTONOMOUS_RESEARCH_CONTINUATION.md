@@ -6,41 +6,69 @@ optimization first, then retrieval/learned proposals. The v0.5 draft is historic
 Use GPT-6 Sol for implementation/analysis and Luna Max for supporting work; root
 manages. Hourly `advance-egg-journal-research` remains ACTIVE, quiet when unchanged.
 
-## Latest checkpoint — joint economic diagnostic prepared; v0.8 revision underway
+## Latest checkpoint — six economic examples complete; reviewed v0.8 ready
 
-- No new job submitted yet. Current work owns a NEW exclusive six-cell physical
-  planning/own-price-response attempt, reusing completed CH evidence595105.
-  Do not rerun hull, prior jobs or failed retrieval584876. Implementer/root five
-  focused pure checks passed plus shell syntax; bounded Luna launch review passed.
-  Previous backup508b3d2 passedCI36506277911.
-- Runner `src/experiments/economic_support_diagnostic.py`; source/design/review
-  `research-20260929/economic-support-diagnostic/`. Max12 sequential children:
-  planner180s/160s native/16rounds/hard210s, response60s/45s/hard90s, seed0/thread1.
-  Controller2100s, outer2200s, Slurm40min, oneCPU8GB, exclude scaglione-compute-01,
-  no retry/requeue. Response requires an on-time replayed bounded planner and is
-  tied to that incumbent's hash/gradient. Imported hull case/market/receipt hashes
-  are checked; raw D/CH and tightened intervals stay separate; numerical scope.
-- Intended isolated remote checkout `/home/nc437/egg-economic-support-20260929`;
-  attempt `result/economic_support_diagnostic/20260929-attempt1`. Exclusive helper
-  `/private/tmp/egg_economic_support_remote.py`; private transport/result receipts
-  in workspace-parent `research-20260929/cluster/economic-support-diagnostic-attempt1/`.
-  Check receipts before action, publish reviewed source before single submission.
-- Review response: v0.8 source merges best public bounds and both markets,
-  relabels incumbent regret, adds exact undamped price cycle and tariff institution,
-  restores three verified references. Root rendering/QA in `tmp/pdfs/review-v08/`;
-  v0.7 PDFs preserved. Do not claim v0.8 release until final PDF/QA receipt exists.
-- New exact reporting-only bound: union ALL allowed charging visits. Six initial
-  hourly energies are zero; first positive caps87/69kWh, others360. Four floors
-  improve to429.22/430.29 (depot15,original/changed) and440.99/442.30 (depot16).
-  Positive caps do not bind; gains4.86–12.03. Independent Sol closed-form/window
-  review passed. `research-20260929/charging-availability-bound/` has code, proof,
-  exact values and review. No native solver/cut or historical evidence changed.
-- After this six-cell diagnostic, use the prospectively stated public economic
-  sensitivity in `economic-support-diagnostic/NEXT_PUBLIC_SENSITIVITY.md`:
-  two depots×four(f,curvature)scenarios, retainf100control;100min ceiling, not
-  submitted. A32–44 fee threshold is a dual-certificate threshold, not a physical
-  fleet crossover. Preserve zero/unresolved gaps; no search only for positive gaps.
-  Independent/protected timetables stay reserved; noML before fair reusebaselines.
+- No active EGG cluster jobs. Job 597526 completed in 176 seconds, exit 0:0,
+  on sonic-cpu-01, 29 September 2026 01:41:15–01:44:11 UTC, one CPU/8 GB.
+  All six planners and six own-price responses certified with complete on-time
+  evidence. The completed QP hull bounds from job 595105 were imported, not rerun.
+  Source 41fa5f1e23833922292e2f70e346f386485aaa51 passed CI 36508984595.
+  Five focused pure tests, shell syntax and independent launch review passed.
+- Flat-intercept cases with 8/16/24 services have native physical-minus-hull
+  gap intervals approximately [0.005249,0.005328], [0.114493,0.114544] and
+  [0.006730,0.006809]; named-incumbent regret is about 0.150/0.432/0.128.
+  All three shifted-intercept gaps contain zero with upper endpoints about
+  0.000002; regret is about 0.000001 or less. Both markets remain quadratic.
+  Largest positive gap is below 0.03% of physical cost. Native solver/replay
+  tolerances apply; one nested seed-1006 development family is not independent
+  timetable evidence or an ideal-model exact proof. All positive and null results
+  are retained. Every planner/response uses four buses; no hull fleet-size claim.
+- Curated table, paired figure, summary-only curator, independent result review,
+  raw summary/frozen identity, manifest and receipts are in
+  `research-20260929/economic-support-diagnostic/results-attempt1/`.
+  Luna verified all 97 manifest files, source identity and exact interval/regret
+  arithmetic; Sol curated the interpretation and root checked the figure.
+  Manifest describes the complete private raw tree, not the curated Git subset.
+  Full archive remains outside this worktree in workspace-parent
+  `research-20260929/cluster/economic-support-diagnostic-attempt1/`.
+- Preserve all time: planners 133.29 s, responses 25.42 s, supervisor 161.58 s,
+  wrapper 174 s (setup 10 s), Slurm 176 s are nested clocks, not additive.
+  Imported hull job used 107 s separately. Preparation/submission/collection/
+  accounting SSH times are in COLLECTION_RECEIPT.json. No retries or login-node
+  optimization. Keep remote `/home/nc437/egg-economic-support-20260929` frozen;
+  do not poll or resubmit 597526/595105 or retry retrieval 584876.
+- Reviewed draft v0.8 merges both markets with the strongest public bounds,
+  labels incumbent regret, adds exact undamped price cycle and posted-tariff
+  institution, and restores three primary-source-checked references.
+  `output/pdf/egg-journal-v0.8-reviewed-draft.pdf`: 17 pages, 3 figures, 2 tables,
+  18 references; SHA 16afdc242f4007da8aa0a17e0a5e4904f8b2bb06caec53ec189bd89cf31d8db5.
+  Root reviewed all page contact sheets and changed pages at full size. Cycle
+  bills compare actual current loads: 147→134 and 194→167; 174 is a different
+  two-bus charging optimum. Earlier PDFs remain preserved. Release/QA receipts:
+  `research-20260929/review-response-v08/`. This PDF predates the new six-case
+  results; do not silently claim they are already in this release.
+- New reporting-only exact bound uses the union of ALL allowed charging visits.
+  Six initial hourly energies are zero; first positive caps are 87/69 kWh,
+  others 360. Four public floors improve to 429.22/430.29 (depot 15,
+  original/changed) and 440.99/442.30 (depot 16), gains 4.86–12.03.
+  Positive caps do not bind in these four bounds. Independent Sol window and
+  closed-form review passed. Code/proof/values/review are in
+  `research-20260929/charging-availability-bound/`. No native cut, solver status
+  or historical evidence changed. The public positive-gap question remains open.
+- Next bounded work package: implement and run the prospectively specified
+  `research-20260929/economic-support-diagnostic/NEXT_PUBLIC_SENSITIVITY.md`.
+  Two public depots × four bus-fee/curvature scenarios, keep f=100 control;
+  one CPU/8 GB/100-minute ceiling, no retry, not yet submitted. Check active
+  workers/newer receipts before acting. A 32–44 fee threshold is a dual-bound
+  comparison, not a proved physical fleet crossover. Keep zero/unresolved gaps;
+  do not search only for positives. This precedes a wider reuse/ML benchmark.
+  Independent/protected test groups remain reserved; no protected data access,
+  private GIRO publication, reset-credit redemption, merge or journal submission.
+- Original Google Doc receives the v0.8/bound update and the independently
+  reviewed experiment completion as distinct historical entries; save/reload
+  receipts accompany each package. PR 56 remains OPEN/draft, unmerged.
+  This package is complete after its GitHub backup. Next continuation checks
+  that backup's CI once and advances the public study, not another audit.
 
 ## Prior checkpoint — QP master resolves six-cell arithmetic stops
 

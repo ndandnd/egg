@@ -1,35 +1,29 @@
 # LaTeX manuscript
 
-`main.tex` builds research draft 0.7. The versioned reviewed PDF is
-`output/pdf/egg-journal-v0.7-reviewed-draft.pdf` at repository root.
-`development_supplement.tex` builds the separate historical development record,
-`output/pdf/egg-journal-v0.7-development-supplement.pdf`. The main draft has
-three figures, three tables and fifteen references.
+`main.tex` builds research draft0.8. The reviewed PDF is
+`output/pdf/egg-journal-v0.8-reviewed-draft.pdf`. It has17pages,3figures,2tables
+and18references. Both markets use the strongest reviewed public bounds; the
+exact undamped price cycle replaces the historical flat-price witness figure.
+The historical v0.7 development supplement and all prior reviewed PDFs remain
+preserved. The new sources/review/QA are in `research-20260929/review-response-v08/`.
 
-From this directory, compile each wrapper into an existing scratch directory:
-
-```sh
-tectonic --keep-logs --outdir ../../tmp/pdfs/review-v07 main.tex
-tectonic --keep-logs --outdir ../../tmp/pdfs/review-v07 development_supplement.tex
-```
-
-The new `computational_support.tex` and generated `joint_support_table.tex`
-report analytical public floors and joint numerical support diagnostics.
-Reproduce the new calculations and table from repository root:
+Compile from this directory with an existing output folder:
 
 ```sh
-python3 research-20260928/review-response-v07/analytic-bounds/compute_bounds.py --repo . > /tmp/egg-v07-bounds.json
-python3 research-20260928/review-response-v07/build_joint_table.py
+tectonic --keep-logs --outdir ../../tmp/pdfs/review-v08 main.tex
 ```
 
-The first command reads frozen metadata and curated scalar evidence without
-solving; compare its output with the tracked `analytic-bounds/bounds.json`.
-The second generates the table from that tracked JSON. The response folder
-contains the source map, derivation, literature checks, independent review,
-presentation QA and release hashes.
+Reproduce the availability floors, merged table and exact cycle from repo root:
 
-`computational_results.tex` remains byte-identical to the v0.6 chapter and is
-now included only by the development supplement and its historical standalone
-wrapper. Old PDFs, figures, Markdown v0.5 and release pins remain untouched.
-No new native optimization or cluster allocation produced draft 0.7.
-It is an author-review milestone, not journal submission clearance.
+```sh
+python3 research-20260929/charging-availability-bound/compute.py
+python3 research-20260929/review-response-v08/build_joint_table.py
+python3 paper/make_cyclic_price_update.py
+```
+
+The reporting-only availability calculation makes no native optimization call.
+Its proof and independent check are in `research-20260929/charging-availability-bound/`.
+Native upper witnesses remain conditional on feasibility for the ideal model,
+except the separately reviewed exact depot-15 original-market upper witness.
+The accompanying new six-cell economic experiment has its own frozen source,
+protocol and receipts; its results are not assumed by this manuscript release.

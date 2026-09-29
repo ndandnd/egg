@@ -3,9 +3,8 @@
 The computational question is whether a physical optimum is supported by its
 own marginal price. A useful diagnostic therefore reports the physical value
 $D$, hull value $CH$, their nonnegative difference and own-price regret together.
-We first strengthen the public lower bounds analytically, then summarize an
-existing development screen. All cases in that screen are development cases;
-two depot variants still represent one public timetable.
+We combine analytical public lower bounds with archived development-screen
+results. The two depot variants represent one public timetable.
 
 \subsection{An analytical baseline for both markets}
 
@@ -35,53 +34,46 @@ hull. For $p\geq\max_t a_{s,t}$, Fenchel's inequality then gives
 CH_s\ \geq\ 2f+pE_{\min}
        -\sum_{t=1}^{30}\frac{(p-a_{s,t})^2}{2b}.
 \end{equation}
-The maximizing uniform test price is
-$p_s^*=\bar a_s+bE_{\min}/30$, where $\bar a_s=\sum_t a_{s,t}/30$.
-For both markets it exceeds 0.22 in each depot case, and the left minus
-right side of~\eqref{eq:public-cardinality-check} is strictly positive:
-about 67.76 at depot 15 and 56.17 at depot 16. Thus no unexamined fleet
-cardinality invalidates the bound.
-
-\begin{table}[t]
-\centering\small
-\caption{Analytical hull lower bounds for the ideal public model, rounded
-down to two decimals. The last column is a numerical lower bound from the
-separate later solver-baseline comparison, included only to expose the
-missing analytical baseline. No runtime comparison or exact native-model
-certificate is implied.}\label{tab:analytic-baseline}
-\begin{tabular}{lrrr}
-\toprule
-Depot & Analytical, market 0 & Analytical, market 1 & Later computed, market 1\\
-\midrule
-15 & 424.36 & 418.96 & 405.83\\
-16 & 435.67 & 430.27 & 420.45\\
-\bottomrule
-\end{tabular}
-\end{table}
-
-Table~\ref{tab:analytic-baseline} recovers the existing depot-15 original-market
-certificate and extends it to the other depot and market. In the changed
-market, the exact floors exceed the later numerical lower endpoints by
-about 13.13 and 9.82 cost units. These inexpensive bounds should be included
-before assessing what iterative optimization adds. The hypothetical higher
-floor obtained by substituting a native flat optimum would retain native
-model and tolerance qualifications; it is not used as an exact certificate.
+The full-horizon bound uses all 30 hours. The pinned physical case permits
+charging only on depot or terminal-return movements. Taking the union of
+\emph{all} such declared windows, including movements a fleet may never
+select, gives no charging before minute 405.5 at depot 15 or 408.5 at depot
+16. Thus the first six hourly loads are zero for every fleet. The single
+connector allows at most 87 and 69 kWh, respectively, in hour seven and at
+most 360 kWh in each later hour. Let $C_t$ denote those outer hourly caps.
+Using the conjugate of supply restricted to $0\leq e_t\leq C_t$ sharpens
+\eqref{eq:public-energy-floor} to
+\begin{equation}\label{eq:public-availability-floor}
+CH_s\geq\min\{2f+pE_{\min},\,3f+pE_{\rm svc}\}
+-\sum_{t=1}^{30}\sup_{0\leq u\leq C_t}
+\{(p-a_{s,t})u-bu^2/2\},\qquad p\geq0.
+\end{equation}
+At the maximizing uniform test price for these four cells, the positive
+hourly caps do not bind. The price is
+$p_s^*=\bar a_{s,\rm active}+bE_{\min}/24$, and the two-bus branch of the
+minimum applies; the three-or-more-bus expression exceeds it by
+53.44--66.48 units. Exact ideal-model floors are 429.22 and 430.29 for
+depot 15 in original and changed markets, and 440.99 and 442.30 for depot
+16. Table~\ref{tab:joint-support} incorporates them directly. The separate
+later solver-baseline comparison reported changed-market native lower
+endpoints 405.83 and 420.45. Its runs and timing are not pooled with the
+initial screen. Substituting a native flat optimum into the energy argument
+would make the floor native-tolerance-qualified rather than an exact
+ideal-model certificate.
 
 \subsection{Physical cost, hull cost and incumbent regret}
 
 The initial screen used the same two public cases and two small synthetic
 cases: the two-service cyclic construction and a three-service case with
 multiple depot visits. Each was evaluated in an original and a changed
-market. Table~\ref{tab:joint-support} shows all four changed-market cases,
+market. Table~\ref{tab:joint-support} shows all eight archived cells,
 using the screen's physical planner, cold hull calculation and response at
-the returned planner incumbent's own price, combined after the run. Public planner and hull stages had nominal 180-second wall allowances and
-160-second native phases; responses had 60 seconds. Synthetic planner and hull
-stages had 60-second wall allowances with 45-second native phases, and responses
-had 30 seconds. Complete wrapper allowances were recorded separately. Call
-and arithmetic limits also restricted the calculations. In the four-hour
-synthetic target markets, the cyclic case uses $a_1=(0,3.8,0,0.2)$ and
+the returned planner incumbent's own price, combined after the run. In the
+four-hour synthetic changed markets, the cyclic case uses $a_1=(0,3.8,0,0.2)$ and
 $b=(0,0.2,0,0.2)$; the multivisit case uses $a_1=(0.18,0.18,0.22,0.22)$
-and $b=(0.2,0.2,0.2,0.2)$. The archive fixes their physical inputs.
+and $b=(0.2,0.2,0.2,0.2)$. The cyclic market has zero intercept and
+curvature in its service hours; only the two charging windows affect price.
+The archive fixes the physical inputs and detailed run budgets.
 
 For the specific planner incumbent $\hat x$, let
 $B_{\hat x}=c(\hat x)+p_{\hat x}^{\top}e(\hat x)$. A response enclosure
@@ -91,32 +83,31 @@ The stored response price matches the gradient computed for that incumbent.
 We also use the response lower bound to improve the hull lower bound through
 $L_V-F_s^*(p_{\hat x})$, and any physical upper witness as a hull upper witness.
 The physical lower bound cannot be weaker than the hull lower bound. The table
-combines these same-screen inequalities before computing the gap interval;
-it claims no reduction in the original algorithm's time.
+combines these same-screen inequalities before computing the gap interval.
+Public rows also use the exact analytical floor; depot 15's original-market
+upper uses the separately archived rational witness.
 These are native numerical results: they retain solver and physical-replay
 tolerances and use rounded prices. Exact processing of their stored values
 does not make them ideal-model proofs.
 
 \input{joint_support_table}
 
-The public rows establish sizeable incentives to change the \emph{returned}
-schedules under their fixed own prices. They do not establish regret of an
-optimal public fleet: the planner bounds remain open, so these schedules
-may simply be costly incumbents. The gap intervals include zero and do not
-certify that the public timetable lacks a supporting physical plan.
+The public regret column checks the returned schedules at their posted
+prices. It is not an optimal-fleet incentive estimate: planner bounds remain
+open and incumbent excess cost can contribute to regret. The public gap
+intervals all include zero.
 
 The multivisit response supplies a hull lower bound of 84.62, reducing the
 same-screen planning-gap upper bound to 0.10 without another optimization.
 This is a consequence of combining already available certificates, not a
 measured benefit of reuse.
 
-Postprocessing the same public planner uppers with the exact energy floors
-from Table~\ref{tab:analytic-baseline} reduces the changed-market gap caps to
-98.37 at depot 15 and 117.61 at depot 16. These are mixed-evidence bounds,
+Postprocessing with the exact energy floors reduces the changed-market gap
+caps to 87.03 at depot 15 and 105.58 at depot 16. These are mixed-evidence bounds,
 conditional on the native upper witnesses representing feasible plans of the
-ideal model; the lower floors themselves are exact. They are not timed results
-of the original algorithm. The original-market exact depot-15 certificate
-in~\eqref{eq:public-nonlinear} remains separate and stronger for that market.
+ideal model; the lower floors themselves are exact. Depot 15's original-market
+row uses the stronger exact certificate from~\eqref{eq:public-nonlinear}.
+None of the postprocessed intervals is a timed result of the original algorithm.
 
 \subsection{What the computations establish}
 
@@ -132,9 +123,8 @@ robust variant have a positive gap; replication separates the planning gap
 from whole-operator regret.\\
 Analytical public bounds & Flow, cardinality and energy inequalities give exact
 ideal-model lower bounds in two markets. Both depot variants share one timetable.\\
-Incumbent public incentives & Native responses improve the bill of each named
-screen incumbent at its own price. Regret at a planner optimum and a positive
-public planning gap remain unresolved.\\
+Incumbent diagnostic & Fixed-price responses test each named screen incumbent.
+The planner gap leaves optimal-fleet regret and public price support unresolved.\\
 Repeated-solve acceleration & Development comparisons are preserved in the
 supplement. Cap dependence, software failures and unconfirmed start acceptance
 prevent a general speedup claim. Retrieval and learned proposals remain untested.\\
@@ -142,8 +132,7 @@ prevent a general speedup claim. Retrieval and learned proposals remain untested
 \end{tabularx}
 \end{table}
 
-The computation presently demonstrates useful bounds and incumbent incentives,
-with the limits in Table~\ref{tab:evidence-map}. It does not measure the
-prevalence of price-support failure across transport networks. Further work
+The computation presently gives public cost bounds and an incumbent response
+diagnostic, with the limits in Table~\ref{tab:evidence-map}. Further work
 must improve physical-pricing bounds, compare methods at common quality and
 scale to independent timetables before making general computational claims.

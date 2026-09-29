@@ -57,6 +57,27 @@ objective 153.5.  At that price, the physical one-bus optimum has no fleet
 lost opportunity, but the supplier term is $169/80$.  These two diagnostics
 use different prices and answer different questions.
 
+Starting the undamped best-response iteration at the one-bus load gives the
+exact two-cycle in Figure~\ref{fig:exact-cycle}. At $p=(6,4)$, one bus pays
+147 and the two-bus fleet with load $(0,30)$ pays 134, so the response is two
+buses. Updating the same supply gradient at that load gives $p=(4,6)$; now
+the current two-bus plan pays 194, while the one-bus fleet with load
+$(10,20)$ pays 167. Even the cheapest two-bus alternative at this price
+costs 174. Both schedules fully replenish their buses. The iteration alternates
+without damping or tie breaking. It illustrates this posted-price rule, not
+a general claim about price-update algorithms.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=.91\linewidth]{../figures/cyclic_price_update.pdf}
+\caption{Exact undamped best-response cycle in the nominal two-service model.
+Initialize at the one-bus physical optimum; each arrow holds the displayed
+price fixed for the response, then updates to the marginal price of the new
+load. Numbers on arrows compare the current fleet's bill with the responding
+fleet's bill, in synthetic units.}
+\label{fig:exact-cycle}
+\end{figure}
+
 \begin{figure}[t]
 \centering
 \includegraphics[width=.91\linewidth]{../figures/cyclic_gap_and_prices.pdf}

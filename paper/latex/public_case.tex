@@ -75,27 +75,16 @@ flat-cost relaxation value.  Because monetary travel cost is zero, it
 implies at least $E_{\min}=(L_{\rm flow}-2f)/a\approx1024.62$ kWh for any
 two-bus plan.  One bus is impossible, and a uniform-price comparison using
 the service-energy floor excludes three-or-more-bus plans from improving the
-dual lower certificate.  The 30-period Fenchel inequality then gives the
-exact rational lower bound displayed as 424.36.  Therefore
+dual lower certificate. Restricting the Fenchel inequality to the 24 hours
+when charging can occur gives the exact rational lower bound displayed as
+429.22; Section~\ref{sec:computational} derives the charging-window cap.
+Therefore
 \begin{equation}\label{eq:public-nonlinear}
- 424.36\leq CH_{15}\leq D_{15}\leq512.77,
- \qquad 0\leq D_{15}-CH_{15}\leq88.41.
+ 429.22\leq CH_{15}\leq D_{15}\leq512.77,
+ \qquad 0\leq D_{15}-CH_{15}\leq83.55.
 \end{equation}
 All displayed endpoints are rounded outward from the exact bounds.  They
 do not establish $CH_{15}$ or $D_{15}$ individually, nor a strictly positive
 gap.  The public case thus demonstrates physically feasible complete-fleet
 witnesses and useful bounds under declared assumptions, while leaving
 public price support open.
-
-
-\begin{figure}[t]
-\centering
-\includegraphics[width=\linewidth]{../figures/public_pilot_witnesses.pdf}
-\caption{Two-bus schedules returned by the original flat-price pilot for
-the two depot variants of the same Hildenbrand timetable.  Battery and
-charging traces describe numerical feasible witnesses under the declared
-scenario assumptions.  They are not measured operation, two independent
-networks, or proofs of cost optimality.  The separately constructed exact
-depot-15 witness supplies the ideal-model bounds in the text.}
-\label{fig:public-witnesses}
-\end{figure}

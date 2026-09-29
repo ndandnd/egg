@@ -34,6 +34,13 @@ energy separately.
 Let $F:\R_+^T\to\R\cup\{+\infty\}$ be a proper, closed, convex supply cost
 that admits a finite differentiable convex extension to a neighborhood of the
 convex hull of feasible loads.
+Here $F$ represents the supplier's aggregate incremental provision cost for
+fleet charging, conditional on background demand already accounted for. A
+system operator posts the marginal tariff calculated from a candidate or
+forecast fleet load before the fleet chooses a schedule. The tariff is held
+fixed when evaluating alternative complete fleets. This ex-ante pricing rule
+is the institution tested below; the supplier is not a strategic player and
+the fleet does not anticipate a tariff reset during its deviation.
 The physical and complete-fleet-hull values are
 \begin{equation}\label{eq:theory-values}
 \begin{aligned}
@@ -50,9 +57,8 @@ $p_x=\nabla F(e(x))$ and
 \begin{equation}\label{eq:theory-regret}
  r(x)=c(x)+p_x^\top e(x)-V(p_x).
 \end{equation}
-The alternative in $V(p_x)$ takes the posted price as fixed.  This is the
-appropriate support test for a price-taking fleet, even though its original
-load determined $p_x$.  A strategic fleet instead compares bills such as
+The alternative in $V(p_x)$ takes the posted price as fixed, as the stated
+tariff rule requires.  A strategic fleet instead compares bills such as
 $c(y)+\nabla F(e(y))^\top e(y)$ across its alternatives $y$ and anticipates
 the resulting price change.  That objective differs from both
 $c(y)+p_x^\top e(y)$ and the planner's $c(y)+F(e(y))$; it needs a specified

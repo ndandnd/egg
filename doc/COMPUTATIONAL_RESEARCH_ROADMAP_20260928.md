@@ -6,6 +6,33 @@ This supersedes the completed-draft stop and the suggested theory-only direction
 It does not authorize relabelling old results, opening protected evaluation data,
 publishing private GIRO data, or spending reset credits.
 
+## Latest review response — v0.8 and economic evaluation, 29 September 2026
+
+The reviewed v0.8 manuscript merges both markets with the strongest public
+bounds, shows the exact undamped toy price cycle, states a posted-tariff
+institution, and treats incumbent regret as a diagnostic. Three relevant
+references are restored with primary-source checks. A universal charging-visit
+availability argument improves exact public floors by4.86–12.03 cost units;
+positive connector caps do not bind in these four bounds. The proof/source/review
+are in `research-20260929/charging-availability-bound/`. None proves a positive
+public gap. No native cut, solver status or historical result is changed.
+
+Job 597526 completed all six physical D and six own-price responses in 176 s.
+The three flat-intercept cases have positive native D−CH gaps (about 0.005,
+0.114 and 0.007), while the three changed-intercept cases remain zero-compatible
+within about 0.000002. The largest positive gap is below 0.03% of physical cost;
+these are related cases in one development family, with native solver/replay
+tolerances. Results and independent review are in
+`research-20260929/economic-support-diagnostic/results-attempt1/`.
+The v0.8 PDF predates this package. Next, the prospective public economic
+sensitivity is specified in
+`research-20260929/economic-support-diagnostic/NEXT_PUBLIC_SENSITIVITY.md`:
+both depots, four bus-fee/curvature scenarios including the original control,
+oneCPU8GB100min ceiling, not submitted yet. Select the range before outcomes;
+keep zero/unresolved gaps. The32–44 fee values are dual-certificate thresholds,
+not proven physical fleet crossovers. Only then compare retained/nearest-neighbor
+proposals at common quality; independent test groups remain reserved and ML waits.
+
 ## Review-driven correction — v0.7, 28 September 2026
 
 The author's external review identifies a missing analytical baseline and
@@ -39,11 +66,10 @@ all six cells meet the same numerical accuracy target, resolving the three
 flat-price arithmetic stops under unchanged caps. Times are mixed; this is no
 general speedup claim. Paired evidence and figure are in
 `research-20260929/qp-baseline-diagnostic/results-attempt1/`.
-Next complete physical-planner D bounds and own-price-response regret on these
-SAME six development cells, reusing the completed CH bounds. A separate
-prospective protocol must preserve incomplete outcomes and identify the planner
-incumbent whose regret is measured. This directly addresses the cost/incentive
-question; successful CH solves alone do not prove a cost gap or lack of support.
+The matched physical-planner/own-price-response package is now complete, as
+recorded above. It reuses completed CH bounds, preserves all outcomes and names
+the incumbent whose regret is measured. A public fee/curvature study follows;
+successful CH solves alone do not prove a cost gap or lack of support.
 Then design a wider common-quality cold/retained/nearest-neighbor comparison,
 with independent test groups still reserved. Preserve all outcomes; no naive
 bit expansion or ML training. A pricing cut
@@ -272,8 +298,8 @@ until a later declared evaluation.
 
 ## Manuscript direction
 
-The current author-review manuscript is the17-page LaTeX draft0.7:
-`output/pdf/egg-journal-v0.7-reviewed-draft.pdf`, built from
+The current author-review manuscript is the17-page LaTeX draft0.8:
+`output/pdf/egg-journal-v0.8-reviewed-draft.pdf`, built from
 `paper/latex/main.tex`. It reports joint cost/gap/incumbent-regret evidence and
 analytical public bounds. Historical reuse/start comparisons are in a separate
 seven-page development supplement. Prior drafts remain preserved.
