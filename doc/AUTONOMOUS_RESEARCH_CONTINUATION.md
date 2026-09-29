@@ -12,7 +12,32 @@ local follow-up are complete, pause the existing automation if no active job or
 concrete next launch remains. Do not poll an empty queue or invent work to keep
 the schedule alive. This condition supersedes earlier unconditional monitoring.
 
-## Latest checkpoint — public sensitivity complete; idle monitoring paused
+## Latest checkpoint — generation-pricing literature assessed; no new launch
+
+- User asked for a deeper search beyond Scaglione-authored papers and whether
+  the methods fit EGG. The source trace and mathematical mapping are in
+  `research-20260929/generation-pricing-literature/REVIEW.md`. Wang et al. (2013)
+  EPSD Part I and Gribik–Hogan–Pope (2007) are closer recognition candidates;
+  the specific paper sent to the user remains unidentified. A verified related
+  Parvania–Khatami (2017) bibliography connects Scaglione's trajectory work to
+  CHP references; do not misstate this as direct citation by the seed papers.
+- Sol assessed the existing whole-fleet hull/Fenchel implementation and checked
+  the proposed dispatch-LP dual and nonsmooth support diagnostic. A convex
+  generation value function can replace quadratic supply, but requires reviewed
+  domain, price-selection and dual-attainment assumptions. Several admissible
+  prices require a support test over the price set. Generator UC hulls and the
+  complete-fleet hull address different nonconvexities.
+- The note proposes a same-model direct MIQP/MISOCP comparison with tangent
+  planning, and separately a tiny convex-generator/ramp example. These are
+  formulation recommendations, not implemented launches or measured speedups.
+  The earlier cardinality/energy-row nonredundancy check remains a candidate.
+  Current bottleneck/results remain as recorded below; v0.8 is unchanged.
+- No EGG job is recorded active. Automation remains PAUSED; do not resume
+  empty-queue checks. No solver, cluster launch, protected outcome or new compute
+  budget was used for the literature assessment. The original Google Doc has
+  a consolidated literature entry; see this package's documentation receipt.
+
+## Latest experiment checkpoint — public sensitivity complete; idle monitoring paused
 
 - Job 600028 completed successfully in 54 min 9 s (3249 s), exit 0:0,
   29 September 2026 02:12:17–03:06:26 UTC, on sonic-cpu-01, one CPU/8 GB.
