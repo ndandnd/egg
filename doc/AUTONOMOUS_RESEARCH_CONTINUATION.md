@@ -4,10 +4,28 @@ Updated 29 September 2026 UTC. Owner: the EGG task, acting as principal research
 under the user's standing authorization. Computational journal paper; iterative
 optimization first, then retrieval/learned proposals. The v0.5 draft is historical.
 Use GPT-6 Sol for implementation/analysis and Luna Max for supporting work; root
-manages. Hourly `advance-egg-journal-research` remains ACTIVE, quiet when unchanged.
+manages. `advance-egg-journal-research` remains active only while there is an EGG job to
+follow or a concrete justified next launch under implementation. Latest user
+preference: no routine status notifications; report substantive results, decisions
+or artifacts ready for user review. Once the current result package and useful
+local follow-up are complete, pause the existing automation if no active job or
+concrete next launch remains. Do not poll an empty queue or invent work to keep
+the schedule alive. This condition supersedes earlier unconditional monitoring.
 
 ## Latest checkpoint — public sensitivity job 600028 running
 
+- User monitoring preference updated after a scoped check at 02:17:42 UTC:
+  job 600028 was RUNNING, elapsed 5:25, one stage receipt. The existing hourly
+  heartbeat was updated in place and read back as ACTIVE; it must pause when
+  no active experiment or concrete justified next launch remains. Results,
+  decisions and review-ready artifacts are the only requested notifications.
+  No routine cluster-status or test-passing messages. Scheduling intent is saved
+  in the automation and this checkpoint; no duplicate automation was created.
+- Sol worker `sol6_integrate_theory` is preparing local result curation only,
+  owning `research-20260929/public-economic-sensitivity/summarize.py` and
+  `RESULT_REVIEW_PLAN.md`. Check its state before any overlapping work; no new
+  solve/submission authorized by that subtask. This prepares the eight-cell
+  table with all missing/failed outcomes and separate native/analytical bounds.
 - Job 600028 submitted once at 02:11:37 UTC on 29 September 2026. A compact
   check at 02:12:37 UTC found RUNNING, elapsed 20 s, on sonic-cpu-01, one CPU/8 GB.
   The eight-case/24-stage design is frozen. A receipt-only check at 02:15:48 UTC
@@ -20,8 +38,9 @@ manages. Hourly `advance-egg-journal-research` remains ACTIVE, quiet when unchan
   syntax, compile and deterministic source/design checks passed. Luna's bounded
   source review passed before submission, checking the exact runner/wrapper hashes;
   its final text was added after execution-source publication and is backed up
-  with this launch receipt. Full source CI 36511357899 was in progress at launch;
-  check its final result once next continuation. Earlier backup CI 36510140256
+  with this launch receipt. Full source CI 36511357899 was in progress at launch and subsequently passed;
+  do not poll it again. Backup 51a66b3 CI36511839207 was in progress at the
+  monitoring-preference update. Earlier backup CI 36510140256
   was in progress when checked at turn start; source 41fa5f1 CI36508984595 passed.
 - New driver/wrapper/tests are `src/experiments/public_economic_sensitivity.py`,
   `src/cluster/public_economic_sensitivity.sbatch`, and
