@@ -6,7 +6,43 @@ optimization first, then retrieval/learned proposals. The v0.5 draft is historic
 Use GPT-6 Sol for implementation/analysis and Luna Max for supporting work; root
 manages. Hourly `advance-egg-journal-research` remains ACTIVE, quiet when unchanged.
 
-## Latest checkpoint — QP master resolves six-cell arithmetic stops
+## Latest checkpoint — joint economic diagnostic prepared; v0.8 revision underway
+
+- No new job submitted yet. Current work owns a NEW exclusive six-cell physical
+  planning/own-price-response attempt, reusing completed CH evidence595105.
+  Do not rerun hull, prior jobs or failed retrieval584876. Implementer/root five
+  focused pure checks passed plus shell syntax; bounded Luna launch review passed.
+  Previous backup508b3d2 passedCI36506277911.
+- Runner `src/experiments/economic_support_diagnostic.py`; source/design/review
+  `research-20260929/economic-support-diagnostic/`. Max12 sequential children:
+  planner180s/160s native/16rounds/hard210s, response60s/45s/hard90s, seed0/thread1.
+  Controller2100s, outer2200s, Slurm40min, oneCPU8GB, exclude scaglione-compute-01,
+  no retry/requeue. Response requires an on-time replayed bounded planner and is
+  tied to that incumbent's hash/gradient. Imported hull case/market/receipt hashes
+  are checked; raw D/CH and tightened intervals stay separate; numerical scope.
+- Intended isolated remote checkout `/home/nc437/egg-economic-support-20260929`;
+  attempt `result/economic_support_diagnostic/20260929-attempt1`. Exclusive helper
+  `/private/tmp/egg_economic_support_remote.py`; private transport/result receipts
+  in workspace-parent `research-20260929/cluster/economic-support-diagnostic-attempt1/`.
+  Check receipts before action, publish reviewed source before single submission.
+- Review response: v0.8 source merges best public bounds and both markets,
+  relabels incumbent regret, adds exact undamped price cycle and tariff institution,
+  restores three verified references. Root rendering/QA in `tmp/pdfs/review-v08/`;
+  v0.7 PDFs preserved. Do not claim v0.8 release until final PDF/QA receipt exists.
+- New exact reporting-only bound: union ALL allowed charging visits. Six initial
+  hourly energies are zero; first positive caps87/69kWh, others360. Four floors
+  improve to429.22/430.29 (depot15,original/changed) and440.99/442.30 (depot16).
+  Positive caps do not bind; gains4.86–12.03. Independent Sol closed-form/window
+  review passed. `research-20260929/charging-availability-bound/` has code, proof,
+  exact values and review. No native solver/cut or historical evidence changed.
+- After this six-cell diagnostic, use the prospectively stated public economic
+  sensitivity in `economic-support-diagnostic/NEXT_PUBLIC_SENSITIVITY.md`:
+  two depots×four(f,curvature)scenarios, retainf100control;100min ceiling, not
+  submitted. A32–44 fee threshold is a dual-certificate threshold, not a physical
+  fleet crossover. Preserve zero/unresolved gaps; no search only for positive gaps.
+  Independent/protected timetables stay reserved; noML before fair reusebaselines.
+
+## Prior checkpoint — QP master resolves six-cell arithmetic stops
 
 - No active EGG jobs. Job595105 completed in1m47s, exit0:0, oneCPU/8GB on
   unicorn-cpu-87 at00:52:05–00:53:52 UTC29September2026. All six cells returned
