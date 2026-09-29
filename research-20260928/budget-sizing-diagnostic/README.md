@@ -1,5 +1,10 @@
 # Cold iterative solving: budget-sizing diagnostic
 
+**Completed:** job 591255 returned all eight cells in 51 seconds. Cold solving
+certified at five calls in the original market and six in the changed market
+with the relaxed arithmetic limit. See [results and limitations](results-attempt1/RESULTS.md).
+The original launch design and prior Doc update below remain historical.
+
 This new development experiment isolates pricing-call and arithmetic limits on
 the existing three-service multivisit case. Eight independent cold cells cover
 both markets and the full four/sixteen-call by4096/8192-bit grid. It addresses

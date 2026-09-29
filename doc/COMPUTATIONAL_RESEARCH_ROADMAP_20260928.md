@@ -22,9 +22,16 @@ keeps ideal bounds separate from native results; conditional combinations use
 native upper witnesses only. It does not enter the coordinator, pricing cache,
 native status or MIP cuts. Code, focused checks and a replay preserving all 32
 historical rows are in `research-20260928/analytic-baseline-integration/`.
-Before another comparative campaign, design a bounded sizing diagnostic for
-pricing-call and arithmetic limits. Do not infer that changing four calls to
-sixteen will certify a case, or remove resource limits altogether. A pricing cut
+The completed eight-cell sizing diagnostic (job 591255) now shows that the
+three-service cold baseline certifies with five calls in the original market
+and six in the changed market when the bit limit is 8192. Four-call arms stop;
+4096 bits also stops the changed market even with sixteen calls. This diagnoses
+the earlier cap-dependent tiny-case advantage, without a reuse speedup claim.
+Results are in `research-20260928/budget-sizing-diagnostic/results-attempt1/`.
+The next bounded package should establish cold-baseline viability on the already
+generated 8/16/24-service development cases, using a separately frozen design
+and all outcomes, before a common-quality retained/nearest-neighbor comparison.
+The tiny-case setting is not assumed sufficient on larger cases. A pricing cut
 needs its own valid energy/cardinality inequality, not the hull-objective bound pasted into a
 linear-price subproblem. Record whether a native start was accepted before
 interpreting its effect; seed repetition and common-quality targets follow a

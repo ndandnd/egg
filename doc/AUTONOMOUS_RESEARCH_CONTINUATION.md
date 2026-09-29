@@ -6,7 +6,58 @@ optimization first, then retrieval/learned proposals. The v0.5 draft is historic
 Use GPT-6 Sol for implementation/analysis and Luna Max for supporting work; root
 manages. Hourly `advance-egg-journal-research` remains ACTIVE, quiet when unchanged.
 
-## Latest checkpoint — bounded cold-hull sizing diagnostic submitted
+## Latest checkpoint — cold baseline limit diagnosis completed
+
+- No active EGG job. Job591255 completed successfully (exit0) in51s on one
+  CPU/8GB, 23:33:03–23:33:54 UTC,28 September2026. Source1dba007 and its
+  remote checkout remain frozen. One scoped queue/accounting check found it
+  finished; do not repoll or resubmit. Complete result archive is preserved
+  privately under `research-20260928/cluster/budget-sizing-attempt1/` in the
+  workspace parent, outside this git worktree. Curated results/receipts:
+  `research-20260928/budget-sizing-diagnostic/results-attempt1/`.
+- All eight cells returned on time with complete native evidence: three
+  certified and five budget stops. Original market certifies in five pricing
+  calls with either bit cap when sixteen calls are allowed. Changed market
+  certifies in six calls at8192 bits;4096 bits stops it after three calls
+  even with sixteen allowed. Four calls do not certify either market.
+- This is controlled evidence for restrictive stopping limits on one development
+  case/seed. It weakens the earlier tiny-case reuse advantage. No general
+  speedup, public-case conclusion, learned benefit or ideal-model exact proof.
+  Changed-market polishing took0.81s versus0.01s recorded native pricing;
+  complete child3.70s. Keep component and whole-child times separate.
+- Whole Slurm51s includes wrapper48s, setup17s and supervisor27.51s;
+  child sum and measured components are nested, not additive. Preserve all
+  five budget stops. Collection used4.730s SSH transport. Source/receipt CI
+  passed:36498066050/36498838834. No new solver/source or manuscript change.
+- User asked why idle. Explained the short job finished between hourly follow-ups;
+  this was a follow-through delay, not cluster access or a permission gate.
+  For future short jobs, collect completion in the same work session with
+  bounded waits/checks; hourly automation is fallback, not a reason to leave
+  a completed result unprocessed. Do not run arbitrary work just to fill the queue.
+- Next bounded computational package: establish cold-baseline viability on the
+  already generated larger 8/16/24-service development timetables with a new
+  prospective source/design/resource freeze. Then compare cold/retained/nearest
+  neighbor at common solution quality and paid source-plus-online cost. The
+  tiny-case16-call/8192-bit result does not establish larger-case sufficiency.
+  Diagnose the actually binding component; preserve all outcomes; no training.
+- The old frozen retrieval attempt584876 and pending one-replacement exception
+  are unchanged. Do not silently alter/retry it or use this diagnostic as a
+  backdoor replacement. No protected/private cases or other-project resources.
+- Sol completed the eight-row report, compact data, reproducible curator and
+  SVG/PDF matrix; root inspected the rendered figure. Luna independently
+  verified complete manifest/receipts/source pins and all eight assessments.
+  Exactly three certifications/five budget stops; do not confuse the two
+  relaxed-setting cells with the total number of certified cells.
+- Original Google Doc appended once with “Cold solving succeeds when the
+  stopping limits are relaxed — 28 September2026”, Saved and reload-verified;
+  full opening sentence1of1, original heading intact, new heading last. Text
+  and receipt are in the result package. v0.7 remains the author-review draft.
+  No active workers except stale pending cardinality agent (ignore). This
+  checkpoint/result package is being backed up on the existing research branch;
+  check its newest hosted CI once on next continuation, without rerunning any
+  experiment. The next six-cell design is prospective, not launched.
+
+## Prior checkpoint — bounded cold-hull sizing diagnostic submitted
 
 - Active EGG job591255, submitted once at23:32 UTC on28 September2026.
   The one launch queue observation was PENDING/Priority,1 CPU/8GB. Do not
