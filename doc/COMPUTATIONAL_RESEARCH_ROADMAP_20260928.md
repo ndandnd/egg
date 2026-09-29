@@ -28,10 +28,15 @@ and six in the changed market when the bit limit is 8192. Four-call arms stop;
 4096 bits also stops the changed market even with sixteen calls. This diagnoses
 the earlier cap-dependent tiny-case advantage, without a reuse speedup claim.
 Results are in `research-20260928/budget-sizing-diagnostic/results-attempt1/`.
-The next bounded package should establish cold-baseline viability on the already
-generated 8/16/24-service development cases, using a separately frozen design
-and all outcomes, before a common-quality retained/nearest-neighbor comparison.
-The tiny-case setting is not assumed sufficient on larger cases. A pricing cut
+The larger cold-baseline viability screen is now complete (job593482, source
+e3ac75f): all three cheap-window target cases certify, while the three flat-price
+cases stop at projected8192bits with useful narrow bounds. These 8/16/24-service
+cases are nested variants of one development family. At24services, pricing is
+the largest measured runtime component; arithmetic prevents flat-price
+certification. Results: `research-20260929/cold-baseline-viability/results-attempt1/`.
+Next diagnose the existing numerical-QP master on the SAME six cells with other
+controls held fixed, before a wider common-quality retained/nearest-neighbor
+comparison. Preserve all outcomes; no naive bit expansion or ML training. A pricing cut
 needs its own valid energy/cardinality inequality, not the hull-objective bound pasted into a
 linear-price subproblem. Record whether a native start was accepted before
 interpreting its effect; seed repetition and common-quality targets follow a

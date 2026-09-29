@@ -6,37 +6,58 @@ optimization first, then retrieval/learned proposals. The v0.5 draft is historic
 Use GPT-6 Sol for implementation/analysis and Luna Max for supporting work; root
 manages. Hourly `advance-egg-journal-research` remains ACTIVE, quiet when unchanged.
 
-## Latest checkpoint — larger cold-baseline screen prepared for same-session launch
+## Latest checkpoint — six larger-case baseline runs completed and reviewed
 
-- The eight-cell limit diagnosis is complete, reviewed, in the original Google
-  Doc and backed up as8a278dd. No further checks or reruns of job591255 needed.
-  Its full hosted CI36502491981 was still in progress at the last check.
-- User asked why the queue was empty. Explained successful51s completion and
-  the hourly follow-through delay. Root now carries the next bounded experiment
-  through preparation and launch in this session, under standing authorization.
-- New isolated package `research-20260929/cold-baseline-viability/`, runner
-  `src/experiments/cold_baseline_viability.py`: six cold cells at8/16/24services
-  of the existing seed1006 development family, paired original/target markets.
-  These are nested variants, not independent test timetables. NativeLP/GRBseed0,
-  one thread,16pricingcalls8192bits64master/pool,180scoordinator160snative,
- 10sreserve,210shardchild,1500scontroller1600souter,30minSlurm1CPU8GB.
-  No retry/requeue, starts, cache, retention, protected/public/private new data.
-- Exclusive next checkout `/home/nc437/egg-cold-baseline-20260929`; new attempt
-  `result/cold_baseline_viability/20260929-attempt1`. Freeze/preflight on its
-  compute node before solving. Private transport folder in workspace parent:
-  `research-20260929/cluster/cold-baseline-viability-attempt1/`.
-  `/private/tmp/egg_cold_baseline_remote.py` has exclusive prepare/submit modes;
-  inspect receipts before invoking, never rerun an uncertain submission.
-- Sol prepared code and seven focused/adjacent pure checks. Root ran the four
-  final focused tests (pass), shell syntax and diff checks. Luna's independent
-  bounded review found no launch blocker. Core solver/shared helpers are unchanged from
-  full-CI-passed601102a/36498838834. New exact-source hosted CI will run on
-  publication; the launch gate is focused tests plus review, not a repeated
-  complete core-qualification campaign. Record all CI status honestly.
-- No new job submitted yet at this checkpoint. Root will replace this status
-  with the actual exclusive launch receipt and same-session observation. If the
-  user interrupts, inspect current transport/cluster receipts before acting.
-  Old failed frozen retrieval584876 and pending replacement remain unchanged.
+- No active EGG jobs. Job593482 completed1m54s (exit0) on unicorn-cpu-87,
+  oneCPU/8GB,00:30:04–00:31:58 UTC29September2026. Root caught completion,
+  collected and reviewed all six outcomes in the launch session. Do not poll
+  or resubmit593482/591255. No prior failed attempt was retried.
+- Execution sourcee3ac75fc53c00594572126413b704ab1de42086e passed full hosted
+  CI36503342208 after submission. Focused checks/independent review allowed
+  launch while CI ran; solver/shared helpers were unchanged from601102a.
+  Resultbackup8a278dd also passedCI36502491981. Remote execution checkout
+  `/home/nc437/egg-cold-baseline-20260929` stays frozen, never pull/alter it.
+- All six returned on time with complete native evidence: target prices
+  certified in2/2/3pricingcalls for8/16/24services; all three flat source markets
+  stopped on projected8192bit growth after3/4/5calls. Their native widths are
+  at most0.347382/0.181109/0.053880cost units. Sixteen pricing calls did not bind.
+  These are nested variants of seed1006, one development family and GRBseed0;
+  no general speedup, independent-timetable result or ideal-model exact proof.
+- At8/16services flat-market polishing exceeds recorded pricing; at24services
+  pricing dominates (35.43s versus9.15s polishing). Arithmetic is a barrier to
+  certification, not a universal runtime bottleneck. Missing model-construction
+  time stays unknown. Retained/NN/ML benefit remains unestablished.
+- Results/compact data and summary-only curator:
+  `research-20260929/cold-baseline-viability/results-attempt1/`. Luna verified
+  manifest/receipts/six assessments; Sol and root reviewed interpretation.
+  Complete raw archive is outside git in workspace-parent
+  `research-20260929/cluster/cold-baseline-viability-attempt1/`; all failures,
+  stops and time preserved. Launch receipt `research-20260929/cluster/cold-baseline-593482.json`.
+  Published identity summary omits reconstructed physical payloads; full frozen
+  JSON remains in raw archive with its SHA. Wrapper112s/setup14s/supervisor96.61s
+  and childsum94.05s are nested clocks, not additive. Preparation18.028s and
+  submission0.579s SSH; result collection0.793s. No solver ran on login host.
+- Next bounded computational package: separately freeze the SAME six cells with
+  existing numerical-QP restricted-master proposal, changing only master policy
+  and its declared existing controls (fixed denominator10^9/maxiterations500).
+  Same16calls/8192bits/64master-pool/180scoordinator160sphase10sreserve,
+  hardchild210s/controller1500s/outer1600s/Slurm30min1CPU8GB, no retry/requeue.
+  Compare bound quality and all time, not one-run speedup. This tests the
+  arithmetic barrier before a wider cold/retained/NN study. Do not inflate bits
+  blindly or start ML. Old frozen retrieval584876/pending replacement unchanged.
+- The user's idle-queue concern was addressed with concrete same-session work:
+  previous591255 had finished51s; the new reviewed six-cell experiment was
+  implemented, submitted, completed and interpreted. Short jobs must be followed
+  in the same session where possible; hourly automation is fallback. No access
+  or routine approval blocker. Do not fill the queue with arbitrary work.
+- Original Google Doc launch and reviewed completion entries are both appended,
+  Saved/reload-verified and found1of1, preserving history/visuals. Source/receipt
+  files are in the package and result subfolder. PR56 is still OPEN/draft and
+  describes both completed screens. No manuscript/PDF change; v0.7 remains
+  current. Workers complete except stale pending cardinality agent (ignore).
+  This package's receipt backup may have a new hosted CI; check it once next
+  continuation. Next research package starts at the QP diagnosis above, not
+  another audit of these completed jobs.
 
 ## Prior checkpoint — cold baseline limit diagnosis completed
 
