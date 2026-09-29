@@ -12,7 +12,60 @@ local follow-up are complete, pause the existing automation if no active job or
 concrete next launch remains. Do not poll an empty queue or invent work to keep
 the schedule alive. This condition supersedes earlier unconditional monitoring.
 
-## Latest checkpoint — generation-pricing literature assessed; no new launch
+## Latest checkpoint — hourly generation extension implemented; draft 0.9 ready
+
+- The user recognizes Hreinsson et al. (2021) as the likely paper and authorized
+  the hourly dispatch / dual decomposition / nonsmooth support extension. It is
+  now implemented in draft 0.9, `output/pdf/egg-journal-v0.9-reviewed-draft.pdf`
+  (21 pages). The earlier v0.8 and all prior PDFs remain preserved. Read the new
+  Sections 3, 4.1 and 5 for this change; the public computations are unchanged.
+- New `src/egglab/convex_dispatch.py` supplies a small linear-cost convex dispatch
+  LP with capacities, initial outputs and hourly up/down ramps, balance prices,
+  primal/dual checks and an optimal-price-face range diagnostic. Each LP requests
+  one native thread and a ten-second limit. It is not wired into timetable MIPs.
+- Exact three-consecutive-hour example: fleet load `(x,0,30-x)`, background
+  `(0,15,0)`, two generators, both A up-ramps binding. Physical optimum 112,
+  hull optimum 110.5, gap 1.5; hull price `(5.7,5,5)` and physical-optimum
+  dispatch price `(6,5,5)` with regret 3. Mean-load price face `(s,5,5)`,
+  `3<=s<=6`; best-price regret of the physical two-bus mean-load plan is 3.5.
+  Relaxing only the two up-ramps gives physical=hull=104. Exact algebra,
+  rational certificate, LP receipts and independent review are in
+  `research-20260929/generation-dispatch-pilot/`. These are synthetic examples.
+- Proposition 1 now handles subgradients and states dual attainment qualifications.
+  Dual best-value convergence is distinguished from last-price convergence;
+  positive gap excludes a balanced joint limit of exact fleet/supply responses,
+  not all possible schedule convergence. The family's O(1) whole-operator
+  incentive is not a universal Shapley–Folkman theorem. Hreinsson is cited for
+  aggregation context; full theorem text was unavailable, so no constants or
+  rates are borrowed. Source and independent theory checks are in
+  `research-20260929/nonsmooth-coordination/`.
+- An independent 20,000-call analytic replay logs current and best bounds
+  separately: final current 94.830026914, best 94.887498781 versus exact 94.8875;
+  38 switches in the last 60 responses. The supplied note had mixed diagnostics.
+  This trace is not a timetable MIP experiment and establishes no speedup.
+- Sol completed implementation and independent algebra/replay reviews; Luna
+  completed primary-source attribution checks. Two focused tests and the
+  Fraction certificate passed. The built PDF and all pages were visually
+  checked. `RELEASE_QA.md` records scope and limitations. The initial two-period
+  pilot omitted the middle hour and its JSON was overwritten; this failure is
+  explicitly retained in `RUN_LOG.md`, not reconstructed or promoted as evidence.
+- The original Google Doc received one consolidated v0.9 result entry and Saved
+  to Drive was verified; see `nonsmooth-coordination/DOC_UPDATE_RECEIPT.json`.
+  This is a meaningful GitHub backup milestone on the existing draft-PR branch.
+- No EGG job is active or newly launched. The conditional automation remains
+  PAUSED. Do not resume empty-queue polling. No native fleet code, protected
+  outcomes or compute budgets were changed. Timetable-scale exact fleet pricing
+  remains the bottleneck; dual coordination calls that oracle repeatedly.
+- Next useful implementation is a same-model formulation study to improve the
+  fleet oracle before scaling dispatch coordination. The cardinality/energy-row
+  nonredundancy check and direct quadratic-planner comparison remain candidate
+  approaches, not implemented launches. Keep network LMPs and generator UC
+  separate until the single-node convex generation/fleet model has a useful
+  computational baseline. Retrieval precedes learning, with independent tests
+  still reserved. This release is ready for author review; the larger
+  computational journal-paper objective remains incomplete.
+
+## Prior checkpoint — generation-pricing literature assessed; no new launch
 
 - User asked for a deeper search beyond Scaglione-authored papers and whether
   the methods fit EGG. The source trace and mathematical mapping are in

@@ -1,29 +1,39 @@
 \section{Proofs for the complete-fleet statements}\label{app:theory-proofs}
 
 \begin{proof}[Proof of Proposition~\ref{prop:theory-support}]
-For physical $x$ and any hull point $(e,c)$, linear minimization over the
-convex hull gives $c+p_x^\top e\geq V(p_x)$.  Convexity gives
-$F(e)\geq F(e(x))+p_x^\top(e-e(x))$.  Adding and minimizing over the hull
-yields $CH\geq c(x)+F(e(x))-r(x)$, proving the first inequality;
-$c(x)+F(e(x))\geq D\geq CH$ proves the second.  If $r(x)=0$, all
-inequalities collapse to $CH=D=c(x)+F(e(x))$.  Conversely, if $CH=D$,
-compactness supplies a physical minimizer $x^*$.  It is also a hull
-minimizer.  For every physical $y$, the directional derivative of
-$c+F(e)$ at $(e(x^*),c(x^*))$ toward $(e(y),c(y))$ is nonnegative:
-$c(y)+p_{x^*}^\top e(y)\geq c(x^*)+p_{x^*}^\top e(x^*)$.
-Thus $r(x^*)=0$.  The same argument applies to every physical minimizer.
+For physical $x$, $p\in\partial F(e(x))$, and any hull point $(e,c)$,
+linear minimization over the convex hull gives
+$c+p^\top e\geq V(p)$.  The subgradient inequality gives
+$F(e)\geq F(e(x))+p^\top(e-e(x))$.  Adding and minimizing over the hull
+yields $CH\geq c(x)+F(e(x))-r(x;p)$, proving the first inequality;
+$c(x)+F(e(x))\geq D\geq CH$ proves the second.  If $r(x;p)=0$, all
+inequalities collapse to $CH=D=c(x)+F(e(x))$.  Conversely, compactness
+supplies a physical minimizer when $D=CH$.  Under the relative-interior
+condition, Fenchel--Rockafellar duality gives an attained maximum
+$CH=V(p^*)-F^*(p^*)$.  Under the alternative minorant condition, apply
+the same duality theorem to that finite minorant.  It agrees with $F$
+on all hull loads, while its conjugate bounds $F^*$ from above; weak
+duality for $F$ then makes the same $p^*$ optimal for $F$.  For any
+physical minimizer $x^*$, the two
+nonnegative Fenchel terms satisfy
+\[
+r(x^*;p^*)+
+F(e(x^*))-(p^*)^\top e(x^*)+F^*(p^*)
+=D-CH=0.
+\]
+Each term is therefore zero.  Fenchel equality gives
+$p^*\in\partial F(e(x^*))$ and the first equality gives
+$r(x^*;p^*)=0$.  This holds for every physical minimizer and every
+attained hull-dual maximizer.
 \end{proof}
 
 For the accounting identity, $F^*(p)\geq p^\top e(x)-F(e(x))$ by
 definition, so supplier LOC is nonnegative.  Substitution in
-\eqref{eq:theory-loc} gives the claimed sum.  A compact hull and a supply
-cost differentiable near it yield a supporting price $p^*$ at a hull
-minimizer $(e^*,c^*)$; linear first-order optimality gives
-$V(p^*)=c^*+(p^*)^\top e^*$, and Fenchel equality gives
-$F^*(p^*)=(p^*)^\top e^*-F(e^*)$.  Hence
-$V(p^*)-F^*(p^*)=CH$.  At a physical planner optimizer the LOC sum is
-$D-CH$.  At the plan's own gradient price, Fenchel equality makes
-supplier LOC zero.
+\eqref{eq:theory-loc} gives the claimed sum.  The same
+qualification above yields an attained hull-dual price
+$p^*$ and $V(p^*)-F^*(p^*)=CH$.  At a physical planner optimizer the
+LOC sum is $D-CH$.  At any price in the plan's subdifferential, Fenchel
+equality makes supplier LOC zero.
 
 \begin{proof}[Proof of \eqref{eq:theory-upper}]
 Let $(e^*,c^*)$ be a hull minimizer, $p^*=a+Qe^*$,

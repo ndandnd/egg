@@ -1,0 +1,99 @@
+\section{Generation dispatch and price coordination}\label{sec:generation}
+
+\subsection{An hourly convex supply model}
+Let $b_t$ be background demand and $L_t$ fleet energy in one-hour intervals.
+With linear marginal costs $a_{it}$, generator limits $\bar g_{it}$, and
+declared initial outputs $g_{i0}$, define
+\begin{equation}\label{eq:dispatch-value}
+\begin{aligned}
+ H(d)=\min_g\quad &\sum_{i,t}a_{it}g_{it},\\
+ \text{subject to}\quad &\sum_i g_{it}=d_t,\quad
+ 0\le g_{it}\le\bar g_{it},\\
+ &-R^-_{it}\le g_{it}-g_{i,t-1}\le R^+_{it}.
+\end{aligned}
+\end{equation}
+Piecewise-linear or convex quadratic production costs give analogous convex
+models. The incremental supply cost is $G(L)=H(b+L)-H(b)$, identified with
+$F$ in Section~\ref{sec:model}. The baseline is fixed across alternatives.
+Balance multipliers are marginal prices; ramps couple their determination
+across time. This hourly model follows the dispatch-price interpretation of
+\citet{scaglione2016marginal}, without claiming to reproduce that paper's
+continuous-time trajectory model. No generator commitment binaries or
+network congestion are included. Nodal balances and transmission constraints
+would require depot-specific loads and locational prices.
+
+All physical fleet loads in the example below are supply-feasible. More
+generally, capacity limits require an explicit supply-feasible deviation set
+or a specified backup-supply rule. Extending a cost as $+\infty$ cannot
+silently change which fleet alternatives are admissible. A generation LP
+may have several optimal balance multipliers. Report a selected price and,
+when testing existence of support, consider the full declared admissible
+price set. One solver-selected price alone cannot exclude the others.
+
+\subsection{What dual coordination does and does not imply}
+Dualize $L=e(x)$ in joint fleet and supply planning. With
+$V(p)=\min_{x\in\Fleet}\{c(x)+p^\top e(x)\}$, the dual is
+\begin{equation}\label{eq:dispatch-dual}
+ \max_p Q(p),\qquad Q(p)=V(p)-G^*(p).
+\end{equation}
+Under Proposition~\ref{prop:theory-support}'s qualification its value is
+$CH$, so the physical primal--dual gap is exactly $D-CH$. This is the
+classical convex-hull pricing connection \citep{gribikHoganPope2007}.
+\citet{alizadeh2016coupled} coordinate convex traffic flows and power
+dispatch through dual prices. Replacing those divisible flows by an atomic
+complete-fleet oracle retains a concave dual but need not retain zero
+physical duality gap. Complete-schedule column generation provides another
+route to the same convexification \citep{andrianesis2022hull}.
+
+At $p_k$, let $x_k$ globally minimize the fleet objective and let $s_k$
+maximize $p_k^\top s-G(s)$. Then $e(x_k)-s_k$ is a supergradient of $Q$,
+and a projected ascent step is
+\begin{equation}\label{eq:dispatch-update}
+ p_{k+1}=\Pi_P\{p_k+\alpha_k[e(x_k)-s_k]\}.
+\end{equation}
+Suppose a closed convex price region $P$ contains an unrestricted dual
+optimizer $p^*$, the oracles attain their optima, and the supergradient norms
+are at most $M$ along the run. The projection inequality gives
+\begin{equation}\label{eq:dispatch-rate}
+ Q(p^*)-\max_{1\le k\le K}Q(p_k)
+ \le\frac{\|p_1-p^*\|^2+M^2\sum_{k=1}^K\alpha_k^2}
+ {2\sum_{k=1}^K\alpha_k}.
+\end{equation}
+Thus $\alpha_k\propto k^{-1/2}$ gives a best-dual-value guarantee of order
+$\log K/\sqrt K$. It does not alone prove convergence of each price
+iterate, a unique limiting price, or a physical fleet. A price restriction
+excluding all unrestricted optimizers instead solves a different dual.
+An inexact fleet incumbent is not an exact supergradient oracle.
+
+A balanced fleet and supply response at one common price would attain
+both primal and dual values and force $D=CH$. A positive gap therefore
+excludes a balanced joint limit of exact responses at a finite limiting
+price. It does not imply that every schedule sequence must switch forever:
+a tie rule can repeatedly choose one fleet at a hull price while its load
+still differs from the supply response. The undamped gradient-reset cycle
+in Figure~\ref{fig:exact-cycle} is a different update from
+\eqref{eq:dispatch-update}.
+
+For the quadratic construction, we ran \eqref{eq:dispatch-update} for
+20,000 analytic oracle calls, starting at $(6,4)$, projecting onto
+$\R_+^2$, and taking $\alpha_k=0.5/\sqrt k$. All continuous two-bus
+charging choices are minimized analytically; fleet ties select one bus.
+Before call 20,000, the price is approximately $(5.3412,4.6588)$, the
+current dual is 94.8300, and the best dual so far is 94.887499, compared
+with exact $CH=94.8875$. The one-bus frequency is 0.6682 versus the hull
+weight 0.675; the step-weighted frequency is 0.6603. The last 60 responses
+contain 38 bus-count switches. Figure~\ref{fig:dual-replay} distinguishes
+current from best dual bounds. These are cheap analytic calls and finite-run
+diagnostics, not 20,000 timetable MIPs or a proof of primal convergence.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{figures/quadratic_dual_replay.pdf}
+\caption{Projected dual ascent on the existing quadratic two-service
+example, with the declared initialization and step sizes. Dashed lines are
+the exact hull-price coordinates. A nearly optimal best dual bound coexists
+with changing physical responses and a less accurate current dual bound.}
+\label{fig:dual-replay}
+\end{figure}
+
+\input{dispatch_example}

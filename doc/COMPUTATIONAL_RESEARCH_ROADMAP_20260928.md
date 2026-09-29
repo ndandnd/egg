@@ -6,7 +6,33 @@ This supersedes the completed-draft stop and the suggested theory-only direction
 It does not authorize relabelling old results, opening protected evaluation data,
 publishing private GIRO data, or spending reset credits.
 
-## Latest review response — v0.8 and economic evaluation, 29 September 2026
+## New supply-side direction — implemented in draft 0.9, 29 September 2026
+
+The user selected hourly convex generation with ramp limits and balance prices,
+dual decomposition, a subgradient support theorem, and Shapley–Folkman framing.
+The first bounded package is complete: nonsmooth Proposition 1, qualified dual
+best-value convergence, a 20,000-call analytic illustration with full trace, and
+an exact two-generator/three-hour example. The latter gives physical 112,
+hull 110.5, gap 1.5; relaxing only the up-ramps gives equality at 104. It also
+tests support over a nonunique dispatch-price face. Two new figures accompany
+the 21-page author-review PDF. See `research-20260929/generation-dispatch-pilot/`
+and `research-20260929/nonsmooth-coordination/` for proofs, receipts and reviews.
+
+This adds a dispatch value function, not generator commitment or a network.
+The middle service hour and its background load remain explicit. Positive gap
+rules out balanced joint convergence of exact responses, not universal schedule
+nonconvergence. The O(1) operator incentive is a construction-specific result;
+Hreinsson et al. supply aggregation context rather than its rate proof.
+
+The timetable-scale fleet formulation still gates the computational program.
+Improve and compare its exact-oracle formulation before running many dual
+iterations, adding nodal prices, or training proposals. A proof-driven check
+of the candidate cardinality/energy row and a same-model direct quadratic
+planner comparison are prospective options; neither is currently an implemented
+cluster launch. No new cluster work or budget was used here. Conditional
+monitoring stays paused, while meaningful local research can continue on request.
+
+## Prior review response — v0.8 and economic evaluation, 29 September 2026
 
 The reviewed v0.8 manuscript merges both markets with the strongest public
 bounds, shows the exact undamped toy price cycle, states a posted-tariff

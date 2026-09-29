@@ -31,9 +31,15 @@ taper.  The worked constructions below assume zero travel cost and no
 unlisted travel or auxiliary load; the public case declares its movement
 energy separately.
 
-Let $F:\R_+^T\to\R\cup\{+\infty\}$ be a proper, closed, convex supply cost
-that admits a finite differentiable convex extension to a neighborhood of the
-convex hull of feasible loads.
+Let $F:\R^T\to\R\cup\{+\infty\}$ be a proper, closed, convex supply cost,
+finite at every physical load.  Its effective domain includes the feasible
+loads but may also encode generation capacity and ramp limits.  Write
+$\mathcal E=\operatorname{conv}\{e(x):x\in\Fleet\}$.  For the support
+equivalence, assume either
+$\operatorname{ri}\mathcal E\cap\operatorname{ri}(\operatorname{dom}F)
+\ne\varnothing$, or that $F$ has a finite convex minorant on $\R^T$ that
+agrees with it on $\mathcal E$.  The latter covers the nonnegative-domain
+quadratic used below via its unrestricted quadratic formula.
 Here $F$ represents the supplier's aggregate incremental provision cost for
 fleet charging, conditional on background demand already accounted for. A
 system operator posts the marginal tariff calculated from a candidate or
@@ -52,44 +58,52 @@ The physical and complete-fleet-hull values are
 The hull mixes whole feasible plans, including their charger constraints;
 its mean load is a pricing and bounding object, not necessarily a dispatch.
 For a posted price $p$, define the complete-fleet response
-$V(p)=\min_{x\in\Fleet}\{c(x)+p^\top e(x)\}$.  At a physical plan $x$,
-$p_x=\nabla F(e(x))$ and
+$V(p)=\min_{x\in\Fleet}\{c(x)+p^\top e(x)\}$.  A marginal price at a
+physical plan $x$ is any $p\in\partial F(e(x))$; this set can contain more
+than one price and need not be nonempty at every boundary load.  Define
 \begin{equation}\label{eq:theory-regret}
- r(x)=c(x)+p_x^\top e(x)-V(p_x).
+ r(x;p)=c(x)+p^\top e(x)-V(p).
 \end{equation}
-The alternative in $V(p_x)$ takes the posted price as fixed, as the stated
+For a stated price selection $p_x$, write $r(x)=r(x;p_x)$; a nonsmooth
+model must declare that selection when reporting own-price regret.
+The alternative in $V(p)$ takes the posted price as fixed, as the stated
 tariff rule requires.  A strategic fleet instead compares bills such as
-$c(y)+\nabla F(e(y))^\top e(y)$ across its alternatives $y$ and anticipates
+$c(y)+p_y^\top e(y)$ across its alternatives $y$ and anticipates
 the resulting price change.  That objective differs from both
-$c(y)+p_x^\top e(y)$ and the planner's $c(y)+F(e(y))$; it needs a specified
+$c(y)+p^\top e(y)$ and the planner's $c(y)+F(e(y))$; it needs a specified
 settlement rule and strategic game.  The present price-support and
 compensation statements make no claim about strategic behavior
 \citep{oneill2005,gribikHoganPope2007,ganTopcuLow2013}.
 
 \begin{proposition}[Complete-fleet support]\label{prop:theory-support}
 Under the common-model and attainment assumptions above, every physical
-$x\in\Fleet$ satisfies
+$x\in\Fleet$ and every $p\in\partial F(e(x))$ satisfy
 \begin{equation}\label{eq:theory-support}
- r(x)\geq c(x)+F(e(x))-CH\geq D-CH=\Delta.
+ r(x;p)\geq c(x)+F(e(x))-CH\geq D-CH=\Delta.
 \end{equation}
-Moreover, $D=CH$ if and only if some physical plan is a best response at its
-own marginal price.  If $D=CH$, every physical planner optimizer has this
-property.
+Moreover, $D=CH$ if and only if some physical plan is a best response at
+some price in its subdifferential.  If $D=CH$, every physical planner
+optimizer is supported by every attained maximizer of the hull dual
+$V(p)-F^*(p)$.
 \end{proposition}
 
 The proof in Appendix~\ref{app:theory-proofs} is a specialization of classical
 nonconvex price-support and convexification arguments
 \citep{starr1969,oneill2005,gribikHoganPope2007,huaBaldick2017,schiro2016}.
 It says nothing about whether an iterative price adjustment converges or
-which optimum an algorithm selects.  Attainment matters in the converse:
-equality of infima alone does not produce a physical supporting plan.
+which optimum an algorithm selects.  The stated qualification
+ensures strong Fenchel duality and an attained supporting price.  If an
+economic price convention admits only a subset of $\partial F(e(x))$, the
+converse additionally requires an attained supporting price in that subset.
+In particular, a normal caused solely by extending a nonnegative-load cost
+as $+\infty$ to negative loads is not automatically a generation price.
 
 The accounting identity also requires a stated deviation right.  In this
 paper one fleet controls all buses and its alternative must be a member of
 the same $\Fleet$.  Separate operators using shared chargers would need
 reserved capacities, trades, or congestion rights before a unilateral
 opportunity set could be defined.  For the single fleet, put
-$F^*(p)=\sup_{u\geq0}\{p^\top u-F(u)\}$ and define
+$F^*(p)=\sup_{u\in\R^T}\{p^\top u-F(u)\}$ and define
 \begin{align}\label{eq:theory-loc}
  \mathrm{LOC}_{\rm fleet}(x;p)&=c(x)+p^\top e(x)-V(p),\\
  \mathrm{LOC}_{\rm supply}(x;p)&=F(e(x))-p^\top e(x)+F^*(p).
@@ -97,11 +111,14 @@ $F^*(p)=\sup_{u\geq0}\{p^\top u-F(u)\}$ and define
 Whenever $F^*(p)$ is finite, both terms are nonnegative and their sum is
 $c(x)+F(e(x))-[V(p)-F^*(p)]$.  At a hull-optimal price and a physical planner
 optimizer, strong Fenchel duality makes that sum $\Delta$; the fleet and
-supply portions depend on the chosen common price.  At $p_x$, supply LOC is
-zero and fleet LOC equals $r(x)$.  No budget-balance or payment institution
+supply portions depend on the chosen common price.  At any
+$p\in\partial F(e(x))$, supply LOC is zero and fleet LOC equals $r(x;p)$.
+No budget-balance or payment institution
 follows from this arithmetic.
 
-For quadratic supply $F(e)=a^\top e+\tfrac12 e^\top Qe$ with $Q\succeq0$,
+For quadratic supply $F(e)=a^\top e+\tfrac12 e^\top Qe$ on $\R_+^T$ with
+$Q\succeq0$, take the unrestricted-quadratic gradient price
+$p_x=a+Qe(x)$ and
 write $\|z\|_Q=(z^\top Qz)^{1/2}$.  There is a useful complement
 to the lower bound.  Let
 $R_Q=\max_{x,y\in\Fleet}\|e(x)-e(y)\|_Q$ and
@@ -121,7 +138,8 @@ an upper bound on $CH$.  At any price with finite $F^*(p)$, a global
 price-response lower bound $\underline V(p)\leq V(p)$ gives the hull lower
 bound $\underline V(p)-F^*(p)$.  A nearly solved restricted column pool alone
 cannot supply that global lower bound.  In the separable implementation,
-$F(e)=\sum_t(a_te_t+b_te_t^2/2)$ and $b_t\geq0$; the conjugate term is
+$F(e)=\sum_t(a_te_t+b_te_t^2/2)$ for $e\geq0$ and $b_t\geq0$;
+the conjugate term is
 $[p_t-a_t]_+^2/(2b_t)$ when $b_t>0$, and is finite at $b_t=0$ only for
 $p_t\leq a_t$.  These are standard convexification and Fenchel certificates
 over complete plans, rather than a new general convex-hull pricing method
