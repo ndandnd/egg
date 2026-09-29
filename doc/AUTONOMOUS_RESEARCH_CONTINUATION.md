@@ -1,12 +1,47 @@
 # EGG journal research continuation
 
-Updated 28 September 2026 UTC. Owner: the EGG task, acting as principal researcher
+Updated 29 September 2026 UTC. Owner: the EGG task, acting as principal researcher
 under the user's standing authorization. Computational journal paper; iterative
 optimization first, then retrieval/learned proposals. The v0.5 draft is historical.
 Use GPT-6 Sol for implementation/analysis and Luna Max for supporting work; root
 manages. Hourly `advance-egg-journal-research` remains ACTIVE, quiet when unchanged.
 
-## Latest checkpoint — six larger-case baseline runs completed and reviewed
+## Latest checkpoint — matched QP master diagnostic prepared
+
+- No active EGG job at source preparation. Previous six-cell baseline and
+  eight-cell sizing diagnostics are complete; do not poll or rerun them.
+- One bounded package now compares the existing numerical-QP master with the
+  completed native-LP baseline on the SAME six8/16/24-service case/market cells.
+  New design/runner/review under `research-20260929/qp-baseline-diagnostic/`;
+  `src/experiments/qp_baseline_diagnostic.py`. Only master policy and its
+  explicit existing QP controls change (denominator10^9/maxiterations500).
+  Cases/order/markets/GRBseed0/thread1/16calls8192bits64master-pool/
+  180scoordinator160sphase10sreserve/210shardchild remain fixed.
+- Resource envelope stays1500scontroller1600souter30minSlurm1CPU8GB, no
+  retry/requeue and exclude scaglione-compute-01. No retained columns/cache/
+  native starts/ML. Preserve all six outcomes and all spent work. Sequential
+  single-seed times do not establish a speedup; native numerical bounds do
+  not become ideal exact proofs. Record QP proposal/non-success/replay work;
+  native-LP master time is null/not applicable. Model construction stays unknown.
+- NumPy/SciPy and restricted_qp_proposal source are explicitly pinned. Sol
+  reports8focused+adjacent pure checks; root's4final checks passed, as did
+  shell syntax and diff checks. No core solver or old protocol changed. Luna
+  completed the bounded independent review with no blocker. Focused checks+review
+  gate launch; full hosted CI runs concurrently and must be reported honestly.
+- New isolated checkout `/home/nc437/egg-qp-baseline-20260929`, exclusive
+  attempt `result/qp_baseline_diagnostic/20260929-attempt1`, freeze on compute
+  node before solving. Root's exclusive prepare/submit helper is
+  `/private/tmp/egg_qp_baseline_remote.py`; private transport receipts outside
+  git in workspace-parent `research-20260929/cluster/qp-baseline-diagnostic-attempt1/`.
+  Inspect receipts before any action; never resubmit if an ID is uncertain.
+- At this source-preparation checkpoint no new job is submitted. Root will
+  record the single launch ID, monitor short-job completion within this session,
+  collect results and make one consolidated Doc update. Existing baseline
+  sourcee3ac75f passed full CI36503342208; receiptbackup0bf533f CI36504233699
+  was in progress at its one initial check. Do not reopen protected cases,
+  alter other projects, or retry the old frozen retrieval attempt584876.
+
+## Prior checkpoint — six larger-case baseline runs completed and reviewed
 
 - No active EGG jobs. Job593482 completed1m54s (exit0) on unicorn-cpu-87,
   oneCPU/8GB,00:30:04–00:31:58 UTC29September2026. Root caught completion,
