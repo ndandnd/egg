@@ -1,0 +1,47 @@
+{
+  "accounting_transport": {
+    "complete_ssh_seconds": 0.09457987500354648,
+    "returncode": 0,
+    "utc": "2026-09-29T00:54:31.469392+00:00"
+  },
+  "collect_transport": {
+    "archive_sha256": "b3cd9dd1c5836e34dcb0f847cfa7673647879f41036093b54e511dc7d8eeb817",
+    "bytes": 1520526,
+    "command": [
+      "ssh",
+      "-o",
+      "BatchMode=yes",
+      "-o",
+      "ConnectTimeout=15",
+      "unicorn2",
+      "tar -czf - -C /home/nc437/egg-qp-baseline-20260929 result/qp_baseline_diagnostic/20260929-attempt1 result/qp_baseline_diagnostic/20260929-attempt1.launch result/qp_baseline_diagnostic/20260929-attempt1.slurm_wrapper_receipt.json egg-qp-baseline-595105.out egg-qp-baseline-595105.err"
+    ],
+    "complete_ssh_seconds": 0.31814574962481856,
+    "returncode": 0,
+    "utc": "2026-09-29T00:54:31.289078+00:00"
+  },
+  "collected_utc": "2026-09-29T00:54:31.289078+00:00",
+  "curated_file_sha256": {
+    "MANIFEST.json": "6606267bd59df01c5a6d6b5aa500d37353f2cb9a232a062cd87dbbcbf04d49b9",
+    "frozen_identity.json": "e50d83c6804e83f60f723fa21471b77a43a001507aa2d43d3c45d3aa008a9ced",
+    "sacct.txt": "498c1dde7e9c2a356eb969ffae0bd0b815334c62dc1536f1776c70531c29da63",
+    "summary.json": "6c739dd25e9c6e1665ec0445aac3319acd648447ebc7736150fcb68f3d99382b",
+    "supervisor_receipt.json": "c90ff7525021a5fb63ac1c7f449d6123f9b76f2c974ceec8f52d90bb073f5bcf",
+    "wrapper_receipt.json": "fbe4da7b56b8299076eeb2804bfe070a1759e391b0f1c42b309db113684ff8a7"
+  },
+  "job_id": "595105",
+  "manifest_scope": "complete raw attempt, not curated subset",
+  "private_raw_attempt": "/Users/nadan/Documents/ChatGPT/egg/research-20260929/cluster/qp-baseline-diagnostic-attempt1/collected/result/qp_baseline_diagnostic/20260929-attempt1",
+  "raw_archive_path": "/Users/nadan/Documents/ChatGPT/egg/research-20260929/cluster/qp-baseline-diagnostic-attempt1/collected-results.tar.gz",
+  "raw_archive_sha256": "b3cd9dd1c5836e34dcb0f847cfa7673647879f41036093b54e511dc7d8eeb817",
+  "raw_frozen_sha256": "d0f42608e3f9b2f260eb67b566a2831cf48ca8a2657c872b91e0b327c4a5bde0",
+  "root_visual_check": "PNG inspected: both panels legible, no clipping; SVG normalized with unchanged PNG",
+  "slurm_accounting_timezone": "America/New_York; UTC start2026-09-29T00:52:05Z and end2026-09-29T00:53:52Z",
+  "source_ci": {
+    "conclusion": "success",
+    "run": 36504901386,
+    "status": "completed",
+    "url": "https://github.com/ndandnd/egg/actions/runs/36504901386"
+  },
+  "source_commit": "60a66e77be18e067aee4026f0e3a31dc120ec427"
+}

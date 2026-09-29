@@ -34,9 +34,19 @@ cases stop at projected8192bits with useful narrow bounds. These 8/16/24-service
 cases are nested variants of one development family. At24services, pricing is
 the largest measured runtime component; arithmetic prevents flat-price
 certification. Results: `research-20260929/cold-baseline-viability/results-attempt1/`.
-Next diagnose the existing numerical-QP master on the SAME six cells with other
-controls held fixed, before a wider common-quality retained/nearest-neighbor
-comparison. Preserve all outcomes; no naive bit expansion or ML training. A pricing cut
+The matched numerical-QP diagnostic is now complete (job595105, source60a66e7):
+all six cells meet the same numerical accuracy target, resolving the three
+flat-price arithmetic stops under unchanged caps. Times are mixed; this is no
+general speedup claim. Paired evidence and figure are in
+`research-20260929/qp-baseline-diagnostic/results-attempt1/`.
+Next complete physical-planner D bounds and own-price-response regret on these
+SAME six development cells, reusing the completed CH bounds. A separate
+prospective protocol must preserve incomplete outcomes and identify the planner
+incumbent whose regret is measured. This directly addresses the cost/incentive
+question; successful CH solves alone do not prove a cost gap or lack of support.
+Then design a wider common-quality cold/retained/nearest-neighbor comparison,
+with independent test groups still reserved. Preserve all outcomes; no naive
+bit expansion or ML training. A pricing cut
 needs its own valid energy/cardinality inequality, not the hull-objective bound pasted into a
 linear-price subproblem. Record whether a native start was accepted before
 interpreting its effect; seed repetition and common-quality targets follow a
@@ -254,8 +264,9 @@ price-only comparison. Full protocol, caps and case order are in
 `doc/AUTONOMOUS_RESEARCH_CONTINUATION.md`.
 
 Do not conduct another start or retrieval sweep to seek a favorable result.
-The readable draft has been consolidated; the immediate research priority is
-a small diagnostic of the stopping limits, not another comparative sweep.
+The readable draft has been consolidated and the bounded stopping-limit/master
+diagnostics are complete. The immediate research priority is the joint
+D/CH/regret evidence on the now-solvable development cells.
 Learned proposals remain optional; reserved independent test groups stay closed
 until a later declared evaluation.
 
@@ -271,8 +282,8 @@ This first-draft milestone does not close the computational research questions.
 The attempted six-case comparison stopped before optimization; it contributes
 no algorithm evidence, and one replacement remains a pending user decision.
 Nearest-neighbor retrieval and learned proposals remain untested. The next
-bounded task is a new development sizing diagnostic, separate from the failed
-retrieval attempt and its pending exception. Keep one computational paper as
+bounded task is joint D/CH/regret evaluation on the six completed QP development
+cells, separate from the failed retrieval attempt and its pending exception. Keep one computational paper as
 the working target and a short theory paper as an editorial fallback. Resolve
 informative public bounds whether the eventual gap is positive, small or zero;
 do not select experiments until a positive result appears.

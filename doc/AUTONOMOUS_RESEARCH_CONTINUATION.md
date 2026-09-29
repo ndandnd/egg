@@ -6,40 +6,54 @@ optimization first, then retrieval/learned proposals. The v0.5 draft is historic
 Use GPT-6 Sol for implementation/analysis and Luna Max for supporting work; root
 manages. Hourly `advance-egg-journal-research` remains ACTIVE, quiet when unchanged.
 
-## Latest checkpoint — matched QP master diagnostic prepared
+## Latest checkpoint — QP master resolves six-cell arithmetic stops
 
-- No active EGG job at source preparation. Previous six-cell baseline and
-  eight-cell sizing diagnostics are complete; do not poll or rerun them.
-- One bounded package now compares the existing numerical-QP master with the
-  completed native-LP baseline on the SAME six8/16/24-service case/market cells.
-  New design/runner/review under `research-20260929/qp-baseline-diagnostic/`;
-  `src/experiments/qp_baseline_diagnostic.py`. Only master policy and its
-  explicit existing QP controls change (denominator10^9/maxiterations500).
-  Cases/order/markets/GRBseed0/thread1/16calls8192bits64master-pool/
-  180scoordinator160sphase10sreserve/210shardchild remain fixed.
-- Resource envelope stays1500scontroller1600souter30minSlurm1CPU8GB, no
-  retry/requeue and exclude scaglione-compute-01. No retained columns/cache/
-  native starts/ML. Preserve all six outcomes and all spent work. Sequential
-  single-seed times do not establish a speedup; native numerical bounds do
-  not become ideal exact proofs. Record QP proposal/non-success/replay work;
-  native-LP master time is null/not applicable. Model construction stays unknown.
-- NumPy/SciPy and restricted_qp_proposal source are explicitly pinned. Sol
-  reports8focused+adjacent pure checks; root's4final checks passed, as did
-  shell syntax and diff checks. No core solver or old protocol changed. Luna
-  completed the bounded independent review with no blocker. Focused checks+review
-  gate launch; full hosted CI runs concurrently and must be reported honestly.
-- New isolated checkout `/home/nc437/egg-qp-baseline-20260929`, exclusive
-  attempt `result/qp_baseline_diagnostic/20260929-attempt1`, freeze on compute
-  node before solving. Root's exclusive prepare/submit helper is
-  `/private/tmp/egg_qp_baseline_remote.py`; private transport receipts outside
-  git in workspace-parent `research-20260929/cluster/qp-baseline-diagnostic-attempt1/`.
-  Inspect receipts before any action; never resubmit if an ID is uncertain.
-- At this source-preparation checkpoint no new job is submitted. Root will
-  record the single launch ID, monitor short-job completion within this session,
-  collect results and make one consolidated Doc update. Existing baseline
-  sourcee3ac75f passed full CI36503342208; receiptbackup0bf533f CI36504233699
-  was in progress at its one initial check. Do not reopen protected cases,
-  alter other projects, or retry the old frozen retrieval attempt584876.
+- No active EGG jobs. Job595105 completed in1m47s, exit0:0, oneCPU/8GB on
+  unicorn-cpu-87 at00:52:05–00:53:52 UTC29September2026. All six cells returned
+  on time with complete native evidence. Do not poll or rerun595105/593482/591255.
+  The short job was launched, completed and interpreted in this same session.
+- QP certified6/6 versus native-LP3/6 on the SAME nested8/16/24-service seed1006
+  development cells, two markets each. Flat-market QP native widths are at most
+  0.000001/0.000003/0.000003; arithmetic maxima273/269/262bits versus
+  LP8025/7978/8186. Existing QP master resolves the observed arithmetic stop under
+  the unchanged16calls/8192bits/180scoordinator160sphase caps. All QP proposal
+  non-success counts are zero. This does not establish ideal exact optima,
+  physical D−CH gaps or price-support failure.
+- Timing is mixed: flat16 child11.71→17.89s (4→10pricingcalls); flat24
+  50.87→43.47s (5→6calls). Single sequential seed/one nested family, no general
+  speedup. QP changes the price/column trajectory; route pricing is the largest
+  measured component at16/24services. Native-LP master time is null/not applicable,
+  not zero QP work. QP childsum91.62s, supervisor94.16s, wrapper102s and Slurm107s
+  are nested clocks, not additive. Missing model-construction time stays unknown.
+- Curated results/paired figure/summary-only curator/independent review and
+  receipts: `research-20260929/qp-baseline-diagnostic/results-attempt1/`.
+  Luna verified the49-file raw manifest and all six outcomes; Sol curated the
+  paired table/figure and root visually checked it. Raw archive remains outside
+  this git worktree under workspace-parent
+  `research-20260929/cluster/qp-baseline-diagnostic-attempt1/`.
+  Frozen identity summary omits bulky physical payloads, preserves raw hash;
+  MANIFEST describes the complete private raw tree, not the curated subset.
+- Source60a66e77be18e067aee4026f0e3a31dc120ec427 passedCI36504901386. The
+  source/review/focused-check launch gate and earlier in-progress CI observation
+  remain recorded honestly. Isolated remote checkout
+  `/home/nc437/egg-qp-baseline-20260929` stays frozen. Launch receipt
+  `research-20260929/cluster/qp-baseline-595105.json` now records completion.
+  SSH preparation14.283s/submission0.871s/collection0.318s/accounting0.095s
+  are preserved separately. No retries, login-node solves or other-project changes.
+- Next bounded package: complete joint physical-planner D / CH / own-price-response
+  regret evidence for these SAME six development cells, using the completed QP
+  bounds for CH. Declare a separate prospective protocol and finite budget before
+  launch; preserve incomplete planner bounds and name the incumbent whose regret
+  is measured. Do not rerun CH solely to obtain new labels. This puts the paper's
+  cost/incentive question ahead of another speed comparison. Then design matched
+  cold/retained/nearest-neighbor evaluation using the viable QP baseline; ML waits.
+  Independent test timetables stay reserved. No protected data or584876 retry;
+  its pending one-replacement exception and frozen protocol are unchanged.
+- One consolidated verified finding is appended to the original Google Doc;
+  exact text and save/reload receipt accompany the result package. PR56 remains
+  OPEN/draft, unmerged. No manuscript/PDF change; v0.7 remains current. Workers
+  finished. Back up this meaningful milestone; next continuation checks only its
+  newest CI once, then starts the economic-evidence package, not another audit.
 
 ## Prior checkpoint — six larger-case baseline runs completed and reviewed
 
