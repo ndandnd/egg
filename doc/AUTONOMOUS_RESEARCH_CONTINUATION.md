@@ -12,7 +12,75 @@ local follow-up are complete, pause the existing automation if no active job or
 concrete next launch remains. Do not poll an empty queue or invent work to keep
 the schedule alive. This condition supersedes earlier unconditional monitoring.
 
-## Latest checkpoint — public sensitivity job 600028 running
+## Latest checkpoint — public sensitivity complete; idle monitoring paused
+
+- Job 600028 completed successfully in 54 min 9 s (3249 s), exit 0:0,
+  29 September 2026 02:12:17–03:06:26 UTC, on sonic-cpu-01, one CPU/8 GB.
+  All 24 declared stages returned on time; there was no retry or requeue.
+  No EGG experiment remains recorded active and no new launch is implemented.
+  The existing `advance-egg-journal-research` automation was updated through
+  the app tool to PAUSED at 03:18:59 UTC and its saved state was verified.
+  Do not resume empty-queue polling or rerun preparation/submission helpers.
+- All eight native physical-minus-hull intervals include zero, with upper
+  endpoints about 106–282. Eight planners are bounded; eight cold hulls
+  exhausted wall time at the pricing reserve; three own-price responses
+  certified and five are bounded. This establishes neither a positive public
+  gap nor its absence. The 204–563-unit regret belongs to named bounded planner
+  incumbents and cannot establish lack of support at an optimal dispatch.
+  The two depots and all economic variants are one development timetable.
+- Complete curated results, outward-rounded table, PNG/SVG interval figure,
+  diagnosis, 183-file raw manifest, frozen identities and receipts are in
+  `research-20260929/public-economic-sensitivity/results-attempt1/`.
+  Luna independently checked all manifest entries, 24 stages, eight identities,
+  interval arithmetic and saved-price/regret lineage. The curator now verifies
+  manifest coverage/bytes/hashes, retains paid receipt time even on rejected
+  rows, and suppresses ideal upper claims without ideal witness verification.
+  Its initial review and resolution are preserved. No raw event-log dump or
+  new native qualification was performed.
+- Sol diagnosed the limiting work: native MIP time is 1411.77 of 1469.95
+  planner-child seconds. The hull made 24 total pricing/master calls; QP
+  proposals total 6.29 s and exact replay 3.19 s, with zero pairwise polishing
+  and rational sizes well below the cap. Other hull work includes global
+  pricing, construction and validation but is not fully timed separately.
+  Raising master or rational-size limits would miss these observed stops.
+- Useful solver-free follow-up replayed saved individual pool fleets. Three
+  guarded native physical uppers improve by about 9.88, 9.28 and 6.66 units;
+  corresponding gap caps become 96.110615, 126.249088 and 258.333062, all still
+  zero-compatible. `evaluate_pool.py` and `pool_candidates.json` record the
+  column/witness identities and gates. Root inspected and independently reran
+  this evaluation, obtaining a byte-identical receipt. These are separate
+  post hoc native uppers, not ideal exact witnesses or convex hull mixtures.
+  Original stage table/figure and original incumbent regrets remain unchanged.
+- Paid child totals: planner 1469.95 s, hull 1402.01 s, response 357.64 s;
+  supervisor 3233.90 s, wrapper 3247 s, Slurm 3249 s are nested clocks.
+  All transports are recorded in COLLECTION_RECEIPT.json. Full raw archive
+  stays outside Git in workspace-parent
+  `research-20260929/cluster/public-economic-sensitivity-attempt1/`;
+  archive SHA256 501818f182cbd3c1f037c49fd225505cf27ac4b14b6aafa77bca5c782cafe8d8.
+  Keep remote `/home/nc437/egg-public-economic-20260929` frozen. Do not poll
+  completed 600028/597526/595105 or retry retrieval 584876.
+- Next useful research target, when work resumes, is a proof-driven check of
+  whether the cardinality/energy inequality adds a nonredundant root-relaxation
+  constraint beyond the existing aggregate energy-balance rows. Inspect the
+  proof/model first; only a justified formulation should lead to a prospective
+  native pilot. This is a recommendation, not a concrete implemented launch.
+  Do not turn it into an automatic larger sweep or ML experiment. A separate
+  route-fixed convex charging refinement is another possible upper-bound
+  method, not something measured by the existing hull polish counter.
+- Both result workers (Sol `sol6_integrate_theory`, Luna
+  `luna_integrate_literature`) finished their assigned package. The old
+  `sol6_cardinality_bound` pending-init entry is stale, not a running study.
+  Execution-source CI36511357899 and backup b200445 CI36512241508 passed;
+  do not repoll them. This result package is a new GitHub backup milestone.
+- The original Google Doc received one consolidated result/bottleneck entry;
+  Saved to Drive and a unique match after reload were verified. Local update
+  and receipt accompany the result package. Reviewed v0.8 PDF remains unchanged
+  and predates both the six economic examples and this public sensitivity.
+  PR56 remains OPEN/draft; no merge or journal submission. The computational
+  journal objective remains incomplete; scheduled idle checks are paused,
+  not scientific work declared complete.
+
+## Prior launch checkpoint — public sensitivity job 600028 running
 
 - User monitoring preference updated after a scoped check at 02:17:42 UTC:
   job 600028 was RUNNING, elapsed 5:25, one stage receipt. The existing hourly

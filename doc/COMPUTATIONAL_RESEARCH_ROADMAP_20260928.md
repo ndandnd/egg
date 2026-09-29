@@ -29,12 +29,38 @@ sensitivity is specified in
 `research-20260929/economic-support-diagnostic/NEXT_PUBLIC_SENSITIVITY.md`:
 both depots, four bus-fee/curvature scenarios including the original control,
 one CPU/8 GB/100 min ceiling. The reviewed implementation was submitted once
-as job 600028 on 29 September at 02:11:37 UTC and is running. Source, protocol
+as job 600028 on 29 September at 02:11:37 UTC and completed in 54 min 9 s.
+All 24 declared stages returned on time. All eight native cost-gap intervals
+include zero: the public question remains unresolved. All planners remain
+bounded and all cold hulls exhausted their wall budget; three own-price
+responses certified and five remain bounded. The 204–563-unit regret concerns
+the returned uncertain planner schedules, not optimal public dispatches.
+Source, protocol
 and launch review: `research-20260929/public-economic-sensitivity/`; receipt:
 `research-20260929/cluster/public-economic-600028.json`. The fixed range predates outcomes;
 keep zero/unresolved gaps. The32–44 fee values are dual-certificate thresholds,
 not proven physical fleet crossovers. Only then compare retained/nearest-neighbor
 proposals at common quality; independent test groups remain reserved and ML waits.
+
+The complete eight-case table, figure and diagnosis are in
+`research-20260929/public-economic-sensitivity/results-attempt1/`.
+Recorded native MIP time accounts for 1411.77 of 1469.95 planner-child seconds.
+The hull made only 24 total pricing calls; its QP proposal and exact replay
+counters sum to 9.48 s, with no rational-size or master-call stop. Raising those
+master caps would not address the measured bottleneck. Saved individual hull
+fleet columns provide three material physical-upper improvements without
+optimization; these are separate from the hull mixture and from the original
+planner whose regret was measured. No exact ideal upper is newly certified.
+
+The next scientific target is a proof-driven check of whether the existing
+cardinality/energy inequality supplies a nonredundant native root-relaxation
+improvement. Its relationship to aggregate energy-balance rows must be checked
+before spending on another solve. This is a recommendation, not an implemented
+launch or authorization to enlarge resources. No new cluster job is submitted;
+do not keep polling completed 600028. A wider sweep and ML training wait for a
+useful certificate strategy. The user's conditional monitor was paused after
+this result package and its local follow-up, with no active experiment or
+concrete next launch under implementation.
 
 ## Review-driven correction — v0.7, 28 September 2026
 
