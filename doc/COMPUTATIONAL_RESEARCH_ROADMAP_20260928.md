@@ -28,7 +28,10 @@ The v0.8 PDF predates this package. Next, the prospective public economic
 sensitivity is specified in
 `research-20260929/economic-support-diagnostic/NEXT_PUBLIC_SENSITIVITY.md`:
 both depots, four bus-fee/curvature scenarios including the original control,
-oneCPU8GB100min ceiling, not submitted yet. Select the range before outcomes;
+one CPU/8 GB/100 min ceiling. The reviewed implementation was submitted once
+as job 600028 on 29 September at 02:11:37 UTC and is running. Source, protocol
+and launch review: `research-20260929/public-economic-sensitivity/`; receipt:
+`research-20260929/cluster/public-economic-600028.json`. The fixed range predates outcomes;
 keep zero/unresolved gaps. The32–44 fee values are dual-certificate thresholds,
 not proven physical fleet crossovers. Only then compare retained/nearest-neighbor
 proposals at common quality; independent test groups remain reserved and ML waits.

@@ -6,7 +6,65 @@ optimization first, then retrieval/learned proposals. The v0.5 draft is historic
 Use GPT-6 Sol for implementation/analysis and Luna Max for supporting work; root
 manages. Hourly `advance-egg-journal-research` remains ACTIVE, quiet when unchanged.
 
-## Latest checkpoint — six economic examples complete; reviewed v0.8 ready
+## Latest checkpoint — public sensitivity job 600028 running
+
+- Job 600028 submitted once at 02:11:37 UTC on 29 September 2026. A compact
+  check at 02:12:37 UTC found RUNNING, elapsed 20 s, on sonic-cpu-01, one CPU/8 GB.
+  The eight-case/24-stage design is frozen. A receipt-only check at 02:15:48 UTC
+  confirmed controller/supervisor startup: the first planner returned on time
+  (183.736 s child wall, exit 0) and the first cold hull had launched. This is
+  startup verification, not scientific result admission. No result claims yet. Do not duplicate
+  submission, modify the execution checkout or poll completed jobs 597526/595105.
+- Execution source 07b8ca94798b8872239113e00781ad81fde315d1 is published.
+  Four focused pure tests passed independently by implementer and root; shell
+  syntax, compile and deterministic source/design checks passed. Luna's bounded
+  source review passed before submission, checking the exact runner/wrapper hashes;
+  its final text was added after execution-source publication and is backed up
+  with this launch receipt. Full source CI 36511357899 was in progress at launch;
+  check its final result once next continuation. Earlier backup CI 36510140256
+  was in progress when checked at turn start; source 41fa5f1 CI36508984595 passed.
+- New driver/wrapper/tests are `src/experiments/public_economic_sensitivity.py`,
+  `src/cluster/public_economic_sensitivity.sbatch`, and
+  `src/tests/test_public_economic_sensitivity.py`. Protocol, implementation,
+  validation and review: `research-20260929/public-economic-sensitivity/`.
+  Launch receipt: `research-20260929/cluster/public-economic-600028.json`.
+- Fixed order: (f, curvature multiplier) (100,1), (40,1), (20,1), (40,2),
+  each with public depot 15 then 16. Intercept 0.20, base curvature 1/900.
+  All are development variants of one 37-service Hildenbrand timetable.
+  Each uses a fresh cost/market identity and fresh planner, cold QP hull and
+  eligible own-price response. No old native bound/witness is imported; analytical
+  availability/cardinality floors remain separate from solver bounds and cuts.
+- Per cell: planner/hull 180 s wall, 160 s native; response 60/45 s;
+  hard limits 210/210/90 s. Planner 16 rounds; hull 16 pricing/64 master calls,
+  8192 bits, QP denominator 10^9/maxiter 500, reserve 10 s. Controller 5400 s,
+  outer 5700 s, Slurm 100 min; one native thread/seed 0, no retry/requeue,
+  exclude scaglione-compute-01. Keep every failed/incomplete/null outcome and
+  every paid time; a skipped response remains a declared stage. No other
+  projects or held jobs touched. No protected data, GIRO publication or ML.
+- Remote checkout `/home/nc437/egg-public-economic-20260929` stays frozen.
+  Attempt `result/public_economic_sensitivity/20260929-attempt1`; wrapper receipt
+  is its sibling `.slurm_wrapper_receipt.json`, submission receipts in sibling
+  `.launch/`; logs `egg-public-sensitivity-600028.out/.err`.
+  Private local receipts (outside this worktree) are in workspace-parent
+  `research-20260929/cluster/public-economic-sensitivity-attempt1/`.
+  SSH preparation 18.630 s, submission 1.667 s, initial inspection 0.731 s
+  are recorded separately; the receipt-only startup check cost 0.091 s SSH.
+  Helpers `/private/tmp/egg_public_economic_remote.py`
+  and `/private/tmp/egg_public_economic_inspect.py` are already spent; do not rerun.
+- Next continuation: check newer state/active workers, one compact queue check
+  for 600028 via unicorn2 after sourcing /etc/profile.d/slurm.sh. If vanished,
+  use scoped sacct and saved receipts, collect all outcomes, and independently
+  review the complete public cost/hull/incumbent-regret table before any new sweep.
+  Do not treat a null gap as failure requiring a retry; diagnose the limiting
+  stage/bounds. Retain D and CH native bounds separately from conditional uses
+  of the ideal analytical floor. The 32–44 fee thresholds concern the bound,
+  not a proved physical fleet crossover. No widening or ML launch while active.
+- The original Google Doc has one consolidated launch entry; local text and
+  save/reload receipt accompany this package. Manuscript v0.8 remains unchanged
+  and readable; the six synthetic economic examples are in their separate result
+  package below. PR 56 remains OPEN/draft. Hourly heartbeat remains active.
+
+## Prior checkpoint — six economic examples complete; reviewed v0.8 ready
 
 - No active EGG cluster jobs. Job 597526 completed in 176 seconds, exit 0:0,
   on sonic-cpu-01, 29 September 2026 01:41:15–01:44:11 UTC, one CPU/8 GB.
