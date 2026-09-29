@@ -6,7 +6,39 @@ optimization first, then retrieval/learned proposals. The v0.5 draft is historic
 Use GPT-6 Sol for implementation/analysis and Luna Max for supporting work; root
 manages. Hourly `advance-egg-journal-research` remains ACTIVE, quiet when unchanged.
 
-## Latest checkpoint — cold baseline limit diagnosis completed
+## Latest checkpoint — larger cold-baseline screen prepared for same-session launch
+
+- The eight-cell limit diagnosis is complete, reviewed, in the original Google
+  Doc and backed up as8a278dd. No further checks or reruns of job591255 needed.
+  Its full hosted CI36502491981 was still in progress at the last check.
+- User asked why the queue was empty. Explained successful51s completion and
+  the hourly follow-through delay. Root now carries the next bounded experiment
+  through preparation and launch in this session, under standing authorization.
+- New isolated package `research-20260929/cold-baseline-viability/`, runner
+  `src/experiments/cold_baseline_viability.py`: six cold cells at8/16/24services
+  of the existing seed1006 development family, paired original/target markets.
+  These are nested variants, not independent test timetables. NativeLP/GRBseed0,
+  one thread,16pricingcalls8192bits64master/pool,180scoordinator160snative,
+ 10sreserve,210shardchild,1500scontroller1600souter,30minSlurm1CPU8GB.
+  No retry/requeue, starts, cache, retention, protected/public/private new data.
+- Exclusive next checkout `/home/nc437/egg-cold-baseline-20260929`; new attempt
+  `result/cold_baseline_viability/20260929-attempt1`. Freeze/preflight on its
+  compute node before solving. Private transport folder in workspace parent:
+  `research-20260929/cluster/cold-baseline-viability-attempt1/`.
+  `/private/tmp/egg_cold_baseline_remote.py` has exclusive prepare/submit modes;
+  inspect receipts before invoking, never rerun an uncertain submission.
+- Sol prepared code and seven focused/adjacent pure checks. Root ran the four
+  final focused tests (pass), shell syntax and diff checks. Luna's independent
+  bounded review found no launch blocker. Core solver/shared helpers are unchanged from
+  full-CI-passed601102a/36498838834. New exact-source hosted CI will run on
+  publication; the launch gate is focused tests plus review, not a repeated
+  complete core-qualification campaign. Record all CI status honestly.
+- No new job submitted yet at this checkpoint. Root will replace this status
+  with the actual exclusive launch receipt and same-session observation. If the
+  user interrupts, inspect current transport/cluster receipts before acting.
+  Old failed frozen retrieval584876 and pending replacement remain unchanged.
+
+## Prior checkpoint — cold baseline limit diagnosis completed
 
 - No active EGG job. Job591255 completed successfully (exit0) in51s on one
   CPU/8GB, 23:33:03–23:33:54 UTC,28 September2026. Source1dba007 and its
