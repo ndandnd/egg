@@ -64,8 +64,9 @@ than one price and need not be nonempty at every boundary load.  Define
 \begin{equation}\label{eq:theory-regret}
  r(x;p)=c(x)+p^\top e(x)-V(p).
 \end{equation}
-For a stated price selection $p_x$, write $r(x)=r(x;p_x)$; a nonsmooth
-model must declare that selection when reporting own-price regret.
+Write $H(x)=c(x)+F(e(x))-CH$ for the cost of plan $x$ above the hull
+optimum. For a stated price selection $p_x$, write $r(x)=r(x;p_x)$.
+When several dispatch prices are valid, reported regret depends on that choice.
 The alternative in $V(p)$ takes the posted price as fixed, as the stated
 tariff rule requires.  A strategic fleet instead compares bills such as
 $c(y)+p_y^\top e(y)$ across its alternatives $y$ and anticipates
@@ -98,6 +99,20 @@ converse additionally requires an attained supporting price in that subset.
 In particular, a normal caused solely by extending a nonnegative-load cost
 as $+\infty$ to negative loads is not automatically a generation price.
 
+\begin{corollary}[Best price at a hull-optimal load]\label{cor:best-price}
+Under Proposition~\ref{prop:theory-support}'s assumptions, if a physical plan
+$x$ has the same load as a hull minimizer, then
+\begin{equation}\label{eq:best-price}
+ \min_{p\in\partial F(e(x))}r(x;p)=H(x).
+\end{equation}
+\end{corollary}
+Any attained hull-dual price realizes this minimum: it supports supply at
+that load, leaving the fleet's cost excess as its regret. Thus minimizing
+regret over the price set has an exact benchmark. The same conclusion holds
+for a restricted set of economic prices if it contains such a hull-dual
+price. Appendix~\ref{app:theory-proofs} gives the proof; the ramped example
+in Section~\ref{sec:generation} realizes the equality with positive regret.
+
 The accounting identity also requires a stated deviation right.  In this
 paper one fleet controls all buses and its alternative must be a member of
 the same $\Fleet$.  Separate operators using shared chargers would need
@@ -121,8 +136,7 @@ $Q\succeq0$, take the unrestricted-quadratic gradient price
 $p_x=a+Qe(x)$ and
 write $\|z\|_Q=(z^\top Qz)^{1/2}$.  There is a useful complement
 to the lower bound.  Let
-$R_Q=\max_{x,y\in\Fleet}\|e(x)-e(y)\|_Q$ and
-$H(x)=c(x)+F(e(x))-CH$.  Then
+$R_Q=\max_{x,y\in\Fleet}\|e(x)-e(y)\|_Q$. Then
 \begin{equation}\label{eq:theory-upper}
  H(x)\leq r(x)\leq H(x)+R_Q\sqrt{2H(x)}.
 \end{equation}

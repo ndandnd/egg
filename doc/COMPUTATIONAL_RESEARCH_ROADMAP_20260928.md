@@ -6,7 +6,22 @@ This supersedes the completed-draft stop and the suggested theory-only direction
 It does not authorize relabelling old results, opening protected evaluation data,
 publishing private GIRO data, or spending reset credits.
 
-## New supply-side direction — implemented in draft 0.9, 29 September 2026
+## Coauthor discussion draft 0.10 — 29 September 2026
+
+The review response clarifies the computational role of column generation and
+the institutional role of dual price adjustment. Archived same-toy evidence
+uses three pricing calls; the separate 20,000-call analytic run stops just
+outside a 1e-6 best-bound error. A direct proof now establishes convergence
+of the quadratic recurrence's step-weighted hull average, despite continuing
+physical bus-count switches. A best-price corollary, a two-institution table,
+the observed HiGHS endpoint and clearer generator economics complete the change.
+The reserved-pair link to Alizadeh remains an analogy, not a proved network limit.
+The 23-page draft and targeted reviews are ready for coauthor discussion; public
+support/scalability remain unresolved. No new solver or cluster experiment was
+run. The next computational work remains the formulation study below; idle
+monitoring remains paused.
+
+## Prior supply-side direction — implemented in draft 0.9, 29 September 2026
 
 The user selected hourly convex generation with ramp limits and balance prices,
 dual decomposition, a subgradient support theorem, and Shapley–Folkman framing.

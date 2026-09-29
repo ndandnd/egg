@@ -12,7 +12,45 @@ local follow-up are complete, pause the existing automation if no active job or
 concrete next launch remains. Do not poll an empty queue or invent work to keep
 the schedule alive. This condition supersedes earlier unconditional monitoring.
 
-## Latest checkpoint — hourly generation extension implemented; draft 0.9 ready
+## Latest checkpoint — draft 0.10 ready for coauthor discussion
+
+- User's detailed review is incorporated with three scientific qualifications:
+  the analytic dual run stops 1.21877605e-6 below CH (not within 1e-6); standard
+  averaging citations do not directly cover its .5/sqrt(k) steps; and neither
+  a universal Shapley–Folkman own-price-regret bound nor literal derivation of
+  Alizadeh's network as a continuum limit is asserted.
+- Same-model archived evidence confirms three column-generation pricing calls,
+  including one initialization call, with a final hull interval about 1e-6 wide.
+  Global/pool stopping tolerances were 1e-4/1e-6. Section 5.2 contrasts this
+  computational method with 20,000 cheap analytic coordination calls; it is
+  not a matched runtime experiment. No new solve was run or receipt changed.
+- A new direct proof for the exact quadratic recurrence establishes convergence
+  of step-weighted fleet cost/load to the unique hull optimizer. Projection is
+  inactive from k=7; boundedness, telescoping updates and the norm identity allow
+  the nonsquare-summable steps. Weighted one-bus frequency tends to 27/40, so both
+  counts recur infinitely often in this specific iteration. The finite value
+  stays .6603. Cite LPS1999 and Gustavsson et al.2015 as context; AW2009's checked
+  primal claim is LP-specific. All details/access limits are in
+  `research-20260929/review-response-v010/THEORY_AND_AVERAGING.md`.
+- New Corollary 1: at a hull-optimal load, minimum marginal-price regret equals
+  the physical plan's cost excess H(x). A restricted price set must contain an
+  attained hull-dual price. The saved HiGHS endpoint (6,5,5) and the ramp example's
+  minimum regret 3.5 are now explicit. Gross generation cost notation C_gen avoids
+  reusing H. A two-row institution table separates Figures 1 and 4.
+- Replication prose leads with gap/incentive decoupling and connects separately
+  reserved pairs to divisible-flow coordination as an analogy. The revised
+  abstract has 147 words. Sol independently verified the proof and corollary;
+  Luna checked receipts/model identity and the targeted prose. The 23-page
+  `output/pdf/egg-journal-v0.10-coauthor-draft.pdf` is built and visually checked.
+  Release QA and the verified Google Doc append receipt accompany the review.
+- This is a coauthor discussion draft, not a completed journal submission.
+  The public-timetable support question and fleet-solver bottleneck remain open.
+  No new cluster experiment or native implementation change; automation remains
+  PAUSED. The next substantive computational choices remain the justified
+  fleet-oracle formulation studies described in the preceding checkpoint.
+  Do not restart idle checks or broaden a sweep just to keep research active.
+
+## Prior checkpoint — hourly generation extension implemented; draft 0.9 ready
 
 - The user recognizes Hreinsson et al. (2021) as the likely paper and authorized
   the hourly dispatch / dual decomposition / nonsmooth support extension. It is

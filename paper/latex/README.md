@@ -1,16 +1,18 @@
 # LaTeX manuscript
 
-`main.tex` builds research draft 0.9 for author review. The 21-page PDF is
-`output/pdf/egg-journal-v0.9-reviewed-draft.pdf`, with five figures and two tables.
-This release adds nonsmooth marginal-price support, qualified dual coordination,
-a reproducible analytic subgradient run, and an exact two-generator example
-with hourly ramps. The public-timetable numerical results are unchanged and
-remain unresolved. All earlier PDFs and the development supplement are preserved.
+`main.tex` builds research draft 0.10 for coauthor discussion. The 23-page PDF is
+`output/pdf/egg-journal-v0.10-coauthor-draft.pdf`, with five figures and three tables.
+This release separates computation from coordination, proves convergence of the
+quadratic iteration's weighted hull average, adds the best-price corollary and
+two-institution table, and reports the saved HiGHS price selection. The abstract
+has 147 words. Public-timetable support remains unresolved. All earlier PDFs and
+the development supplement are preserved. Reviews, citation qualifications and
+release QA are in `research-20260929/review-response-v010/`.
 
 Compile from this directory with an existing output folder:
 
 ```sh
-tectonic --keep-logs --outdir ../../tmp/pdfs/review-v09 main.tex
+tectonic --keep-logs --outdir ../../tmp/pdfs/review-v010 main.tex
 ```
 
 The new exact derivation, LP implementation and reviews are in

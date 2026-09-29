@@ -154,31 +154,34 @@ Along $n=40k+1$, the whole-operator own-price regret is
 For multiples of 40, both quantities are exactly zero.
 \end{proposition}
 
-The operator in \eqref{eq:exact-replication-regret} can rearrange the whole
-growing fleet while taking its posted price as fixed.  Its regret per used
-bus, and regret divided by physical cost, vanish.  A different institution
-gives each of $n$ operators one A/B pair plus a reserved early and terminal
-connector.  Each then chooses either the one-bus plan or a two-bus plan
-with $x\in[0,10]$; these separate deviations are physically compatible
-under the reserved rights.  At the original fleet optimum's marginal price,
-each pair's regret is at most $20/n$, and their sum equals the whole-fleet
-regret in this symmetric construction.  Along $n=40k+1$ a dissatisfied
-one-bus operator has regret $13/n$, although the aggregate tends to
-$351/40$.  The scaling example consequently distinguishes absolute cost
-gap, whole-operator incentive, and per-participant incentive without
-asserting a result for arbitrary shared-charger games.  At $n=20$, the two
-tied planner optima have distinct own-price regrets, 7 and 14.
+The planning gap and the whole-operator incentive decouple:
+$\Delta_n=O(1/n)$, yet $r_n$ stays bounded away from zero along
+$n=40k+1$. Both are bounded independently of $n$ in this family, but only
+the gap vanishes along that subsequence. Regret per bus and regret as a
+fraction of physical cost also vanish. Shapley--Folkman theory explains why
+sums of small nonconvex participants can become approximately convex
+\citep{starr1969,hreinsson2021}; the exact rates here show why a small
+planning gap alone does not control the absolute incentive of the operator
+that owns the entire sum.
 
-Shapley--Folkman aggregation arguments, as used for nonconvex power-market
-demand by \citet{hreinsson2021}, concern sums of separately bounded
-participant sets in a fixed coupling dimension.  They can bound aggregate
-convexification effects as the number of sufficiently small participants
-grows.  The $5/n$ bound here instead follows from the exact geometry and
-cost scaling of this replicated family.  Its persistent $O(1)$ absolute
-whole-operator regret is likewise a property of this family's single
-operator and posted-price deviation set, not a general consequence of the
-Shapley--Folkman theorem.  Per-pair regret refers only to the separate
-reserved-resource institution just defined.
+Now divide ownership among $n$ operators, each with one A/B service pair
+and reserved early and terminal connectors. Each can choose the one-bus
+plan or any two-bus plan with $x\in[0,10]$, and these deviations remain
+compatible with the others' connector rights. At the physical optimum's
+marginal price, each participant's regret is at most $20/n$. Their regrets
+sum to the whole-fleet regret in this symmetric construction. Along
+$n=40k+1$, each dissatisfied one-bus owner can gain only $13/n$, even
+though their total gain tends to $351/40$. At $n=20$, the two tied planner
+optima have whole-fleet regrets 7 and 14.
+
+With separate ownership, each participant becomes negligible relative to
+the growing market and its incentive vanishes. This is a small-participant
+analogue of the divisible traffic flows coordinated by
+\citet{alizadeh2016coupled}. With common ownership, the operator can instead
+change the entire fleet at once. These two ends of the participant scale
+connect the aggregation argument to the coordination model in
+Section~\ref{sec:generation}; they do not identify the reserved-connector
+model with Alizadeh et al.'s transportation network.
 
 \begin{figure}[t]
 \centering

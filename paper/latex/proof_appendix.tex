@@ -27,6 +27,17 @@ $r(x^*;p^*)=0$.  This holds for every physical minimizer and every
 attained hull-dual maximizer.
 \end{proof}
 
+\begin{proof}[Proof of Corollary~\ref{cor:best-price}]
+Let $(e^*,c^*)$ be a hull minimizer with $e^*=e(x)$, and let $p^*$ be an
+attained hull-dual maximizer. The nonnegative terms
+$c^*+(p^*)^\top e^*-V(p^*)$ and
+$F(e^*)-(p^*)^\top e^*+F^*(p^*)$ sum to zero by strong duality.
+Hence $p^*\in\partial F(e^*)$ and
+$r(x;p^*)=c(x)-c^*=c(x)+F(e(x))-CH=H(x)$.
+Proposition~\ref{prop:theory-support} supplies the matching lower bound
+for every price in $\partial F(e(x))$.
+\end{proof}
+
 For the accounting identity, $F^*(p)\geq p^\top e(x)-F(e(x))$ by
 definition, so supplier LOC is nonnegative.  Substitution in
 \eqref{eq:theory-loc} gives the claimed sum.  The same
@@ -154,3 +165,56 @@ $|40\delta/n|\leq20/n$.  Summing the disadvantaged pairs reproduces
 the whole-operator expression because each pair has its own reserved
 connector rights.
 \end{proof}
+
+\subsection{Averaged responses in the quadratic example}\label{app:averaged-responses}
+
+Consider the exact recurrence in Section~\ref{sec:generation}, with
+$\alpha_k=0.5/\sqrt{k}$ and projection onto $\R_+^2$. Put
+$e_k=e(x_k)$, $c_k=c(x_k)$, $s_k=(5[p_{1,k}-4]_+,5p_{2,k})$,
+$d_k=e_k-s_k$, and $A_K=\sum_{k=1}^K\alpha_k$.
+The fleet loads satisfy $0\le e_{1,k}\le10$ and $20\le e_{2,k}\le30$.
+For $k\ge7$, $5\alpha_k<1$. If $p_{1,k}\ge4$, its unprojected successor
+is a convex combination of $p_{1,k}$ and $4+e_{1,k}/5\in[4,6]$.
+If $p_{1,k}<4$, that successor is $p_{1,k}+\alpha_ke_{1,k}\in[0,6)$.
+The second coordinate is a convex combination of $p_{2,k}$ and
+$e_{2,k}/5\in[4,6]$. Thus projection is inactive from $k=7$ onward,
+and prices, supply responses and $d_k$ remain bounded.
+
+Summing $\alpha_kd_k=p_{k+1}-p_k$ from $k=7$ shows that
+$\bar e_K-\bar s_K\to0$, where bars denote step-weighted averages.
+The finite prefix has vanishing weight. Also,
+\[
+ \sum_{k=7}^K\alpha_kp_k^\top d_k
+ =\frac12\left(\|p_{K+1}\|^2-\|p_7\|^2
+                  -\sum_{k=7}^K\alpha_k^2\|d_k\|^2\right).
+\]
+Dividing by $A_K$ gives zero in the limit, since
+$A_K\asymp\sqrt K$ and $\sum_{k=1}^K\alpha_k^2=O(\log K)$.
+The projection inequality underlying \eqref{eq:dispatch-rate} gives the
+stronger weighted statement
+\[
+ 0\le\frac1{A_K}\sum_{k=1}^K\alpha_k[CH-Q(p_k)]
+ \le\frac{\|p_1-p^*\|^2+M^2\sum_{k=1}^K\alpha_k^2}{2A_K}
+ \longrightarrow0,
+\]
+with the attained price $p^*=(107/20,93/20)$ and a bound $M$ on
+$\|d_k\|$. Exact oracle solutions satisfy
+$c_k+F(s_k)=Q(p_k)-p_k^\top d_k$, so their step-weighted mean tends
+to $CH$. Jensen's inequality, the vanishing load mismatch, and uniform
+continuity of the quadratic on bounded loads now imply
+\[
+ CH\le\bar c_K+F(\bar e_K)
+ \le\frac1{A_K}\sum_{k=1}^K\alpha_k[c_k+F(s_k)]+o(1)
+ \longrightarrow CH.
+\]
+The averaged fleet point belongs to the compact complete-fleet hull.
+Its unique optimizer therefore gives
+$(\bar e_K,\bar c_K)\to((27/4,93/4),371/40)$.
+Since $c_k$ equals 7 for one bus and 14 for two,
+$\bar c_K=14-7\bar w_K$, where $\bar w_K$ is the step-weighted one-bus
+frequency. Hence $\bar w_K\to27/40$. An eventually constant bus count
+would instead give zero or one, so both counts occur infinitely often.
+
+This proof concerns the stated quadratic recurrence and exact responses.
+It does not apply a square-summable-step theorem to $1/\sqrt{k}$ steps,
+or assert recovery of a physical fleet from its convexified average.
