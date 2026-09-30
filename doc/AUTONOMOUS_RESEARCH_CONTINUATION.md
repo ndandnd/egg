@@ -8,7 +8,41 @@ supersedes the earlier idle-monitor pause condition and blanket deferral of ML.
 Notify only substantive findings, major decisions, important failures or review
 artifacts. Continue useful local work between jobs; do not pause on an empty queue.
 
-## Latest checkpoint — first expanded physical-training batch submitted
+## Latest checkpoint — train-only dataset adapter prepared during shard 00
+
+- **703461 remains the sole recorded EGG job.** One scoped check in this follow-up
+  observed RUNNING at 5:12 elapsed, 1 CPU / 8 GB, snavely-cpu-01 (recorded
+  2026-09-30T16:05:30Z). No further queue check or partial scientific outcome
+  access. Execution commit/path/budget remain the unchanged LAUNCH_703461.json.
+- Sol implemented, Root and Luna reviewed a completed-shard dataset adapter:
+  `src/egglab/physical_learning_dataset.py` and its experiments CLI. It validates
+  train identity, exactly 64 cells/receipts, one matching successful wrapper,
+  saved source lineage, physical/cost replay and fixed-route source joins. Failed
+  cells remain censored; returned incumbents and curved LP bills remain uncertified.
+  Source bounds are preserved imported evidence, not re-certified by this adapter.
+- New PHYSICAL_DATASET_INTERFACE.md explains immutable outputs and usage. Input
+  hashes and downstream adapter policy hashes are separate from frozen solver pins;
+  the running job's code/protocol/pins were not edited. Input containers preserve
+  full routes, graphs and direct pre-charge bills; outcome/status/time/bounds are
+  separate. A future trainer must define an explicit numeric feature projection
+  excluding IDs and outcomes. This package fits no model and opens no dev/test data.
+- Four synthetic completed-shard fixture tests cover normal compile, missing cells,
+  failed wrapper admission and mixed censored/replayed labels. Data health records
+  group/regime/size denominators, source equality, exact paired margins/ties,
+  descriptive winner entropy and exclusions. These are infrastructure checks, not
+  results from 703461. CLI help and diff checks also passed.
+- Next follow-up: one scoped check of 703461; if vanished, scoped accounting and
+  complete receipts. Collect the entire NEW physical_learning attempt plus its
+  sibling wrapper receipt. Compile once using the interface command, preserve all
+  failures/time, review actual label yield and source-plan diversity, then continue
+  justified new training shards toward 32/64/128 groups. Incomplete attempts remain
+  archived and are excluded from training; do not retry automatically. Any resource
+  scaling needs a recorded prospective budget, not renewed routine user approval.
+- Manuscript deferred; hourly learning automation ACTIVE. No second job submitted,
+  no fitted-model claim, and no original Google Doc append for infrastructure-only
+  preparation; consolidate the next append with verified first-shard findings.
+
+## Prior checkpoint — first expanded physical-training batch submitted
 
 - **Recorded EGG job 703461**, submitted 2026-09-30T15:58:56Z. The guard found
   no active EGG job. No post-submission queue or scientific outcome inspection.
