@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import argparse
+from dataclasses import dataclass
 import fcntl
 import json
 import os
@@ -40,10 +41,26 @@ SOURCE_FILES = tuple(dict.fromkeys((
 ) + DIAGNOSIS_FILES + cost.SOURCE_FILES))
 
 
-def attempt(path):
+@dataclass(frozen=True)
+class PilotProfile:
+    attempt: Path
+    protocol: str
+    module: str
+    label: str
+    source_files: tuple[str, ...]
+    diagnosis_files: tuple[str, ...]
+    charging_caps: bool = False
+
+
+ENERGY_PROFILE = PilotProfile(
+    ATTEMPT, PROTOCOL, "experiments.energy_aware_repair_pilot", "energy-aware",
+    SOURCE_FILES, DIAGNOSIS_FILES)
+
+
+def attempt(path, profile=ENERGY_PROFILE):
     value = Path(path).resolve()
-    if value != ATTEMPT.resolve():
-        raise ValueError("Only the new exclusive energy-aware attempt is allowed")
+    if value != profile.attempt.resolve():
+        raise ValueError("Only the declared exclusive " + profile.label + " attempt is allowed")
     return value
 
 
@@ -51,58 +68,65 @@ def folder(path, case_name, mode):
     return Path(path) / case_name / "state0" / mode
 
 
-def source_hashes():
-    return {name: base.sha(ROOT / name) for name in SOURCE_FILES}
+def source_hashes(profile=ENERGY_PROFILE):
+    return {name: base.sha(ROOT / name) for name in profile.source_files}
 
 
-def design():
+def design(profile=ENERGY_PROFILE):
     baseline = cost.design()
     if [(row["case"], row["mode"]) for row in baseline["cells"]] != list(CELLS):
         raise ValueError("Crossed development cell order changed")
-    return {**baseline, "energy_relaxation": True,
+    design = {**baseline, "energy_relaxation": True,
             "energy_relaxation_meaning":
                 "necessary segment energy only; optimistic full reset at declared depot charging opportunities",
-            "diagnosis_hashes": {name: base.sha(ROOT / name) for name in DIAGNOSIS_FILES},
+            "diagnosis_hashes": {name: base.sha(ROOT / name) for name in profile.diagnosis_files},
             "child_hard_seconds": CHILD_HARD_SECONDS,
             "controller_cap_seconds": CONTROLLER_CAP_SECONDS,
             "skip_hull_for_replayed_source_fallback": True,
             "no_refit": True, "reserved_test_groups_unobserved": True}
+    if profile.charging_caps:
+        design["charging_caps"] = True
+        design["energy_relaxation_meaning"] = (
+            "necessary route SOC with individual depot and terminal charging-window caps; "
+            "shared capacity omitted")
+        design["charging_caps_meaning"] = "individual compiled charging-window energy limits"
+    return design
 
 
-def freeze(path):
-    target = attempt(path)
+def freeze(path, profile=ENERGY_PROFILE):
+    target = attempt(path, profile)
     commit = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()
     if subprocess.check_output(["git", "status", "--porcelain", "--untracked-files=no"], cwd=ROOT):
         raise ValueError("Tracked execution source is not clean")
-    spec = {"protocol": PROTOCOL, "source_commit": commit,
-            "source_hashes": source_hashes(), "runtime": common.sizing.software_runtime(),
-            "native_probe": common.sizing.native_probe(), "design": design(),
+    spec = {"protocol": profile.protocol, "source_commit": commit,
+            "source_hashes": source_hashes(profile), "runtime": common.sizing.software_runtime(),
+            "native_probe": common.sizing.native_probe(), "design": design(profile),
             "scientific_admission": "pending independent result review"}
     target.mkdir(parents=True, exist_ok=False)
     base.save_new(target / "frozen.json", spec)
     return spec
 
 
-def frozen(path):
-    target = attempt(path)
+def frozen(path, profile=ENERGY_PROFILE):
+    target = attempt(path, profile)
     spec = json.loads((target / "frozen.json").read_text())
     commit = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()
-    if (spec.get("protocol") != PROTOCOL or spec.get("source_commit") != commit
-            or spec.get("source_hashes") != source_hashes()
+    if (spec.get("protocol") != profile.protocol or spec.get("source_commit") != commit
+            or spec.get("source_hashes") != source_hashes(profile)
             or not common.sizing.runtime_compatible(spec.get("runtime"),
                                                      common.sizing.software_runtime())
             or spec.get("native_probe") != common.sizing.native_probe()
-            or base.canonical(spec.get("design")) != base.canonical(design())):
-        raise ValueError("Frozen energy-aware source/runtime/backend/input/design changed")
+            or base.canonical(spec.get("design")) != base.canonical(design(profile))):
+        raise ValueError("Frozen " + profile.label + " source/runtime/backend/input/design changed")
     return spec
 
 
-def worker(path, case_name, mode):
-    target = attempt(path)
+def worker(path, case_name, mode, profile=ENERGY_PROFILE):
+    target = attempt(path, profile)
     dest = folder(target, case_name, mode)
     started = time.monotonic()
     try:
-        spec = frozen(target)
+        spec = frozen(target, profile)
         if (case_name, mode) not in CELLS or not (dest / "launch.json").is_file():
             raise ValueError("Undeclared energy-aware cell or missing launch receipt")
         prior_frozen, model = common._stage2_inputs()
@@ -117,10 +141,12 @@ def worker(path, case_name, mode):
         controls = common.control_rows(case_name, case, market)
         base.save_new(dest / "controls.json", controls)
         prior = model if mode == "cost_learned" else None
+        kwargs = {"cover_policy": mode, "energy_relaxation": True,
+                  "skip_hull_for_fallback": True}
+        if profile.charging_caps:
+            kwargs["charging_caps"] = True
         return common.evaluate_case(dest, case_name, case, market, prior, spec,
-                                    controls, started, cover_policy=mode,
-                                    energy_relaxation=True,
-                                    skip_hull_for_fallback=True)
+                                    controls, started, **kwargs)
     except Exception as exc:
         base.save_new(dest / "exception.json", {"type": type(exc).__name__,
             "message": str(exc), "traceback": traceback.format_exc(),
@@ -128,72 +154,74 @@ def worker(path, case_name, mode):
         return 2
 
 
-def result_row(path, case_name, mode):
+def result_row(path, case_name, mode, profile=ENERGY_PROFILE):
     dest = folder(path, case_name, mode)
     row = cost.result_row_at(dest, case_name, mode)
     if (dest / "result.json").is_file():
         result = json.loads((dest / "result.json").read_text())
         if result.get("energy_relaxation") is not True:
             raise ValueError("Result omitted declared energy relaxation")
+        if profile.charging_caps and result.get("charging_caps") is not True:
+            raise ValueError("Result omitted declared charging-window caps")
     return row
 
 
-def controller(path):
-    target = attempt(path)
-    frozen(target)
+def controller(path, profile=ENERGY_PROFILE):
+    target = attempt(path, profile)
+    frozen(target, profile)
     started = time.monotonic()
     with (target / ".controller.lock").open("a+") as lock:
         try:
             fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
         except BlockingIOError as exc:
-            raise ValueError("Another energy-aware controller holds the run lock") from exc
+            raise ValueError("Another " + profile.label + " controller holds the run lock") from exc
         if not (target / "controller_started.json").exists():
-            base.save_new(target / "controller_started.json", {"protocol": PROTOCOL,
+            base.save_new(target / "controller_started.json", {"protocol": profile.protocol,
                                                                   "utc": time.time()})
         for name, mode in CELLS:
             if time.monotonic()-started > CONTROLLER_CAP_SECONDS-CHILD_HARD_SECONDS:
-                raise TimeoutError("Energy-aware controller budget exhausted before next cell")
+                raise TimeoutError(profile.label + " controller budget exhausted before next cell")
             dest = folder(target, name, mode)
             if (dest / "receipt.json").exists():
                 continue
             if dest.exists():
-                raise ValueError("Interrupted unreceipted energy-aware cell preserved: " + str(dest))
+                raise ValueError("Interrupted unreceipted " + profile.label + " cell preserved: " + str(dest))
             dest.mkdir(parents=True, exist_ok=False)
-            command = [sys.executable, "-m", "experiments.energy_aware_repair_pilot", "worker",
+            command = [sys.executable, "-m", profile.module, "worker",
                        "--attempt", str(target), "--case", name, "--mode", mode]
             base.launch_child(target, name, 0, mode, CHILD_HARD_SECONDS, command=command)
-        rows = [result_row(target, name, mode) for name, mode in CELLS]
+        rows = [result_row(target, name, mode, profile) for name, mode in CELLS]
         if not (target / "summary.json").exists():
-            base.save_new(target / "summary.json", {"protocol": PROTOCOL,
+            base.save_new(target / "summary.json", {"protocol": profile.protocol,
                 "declared_cells": len(CELLS), "accounted_cells": len(rows),
                 "rows": rows, "scientific_admission": "pending independent result review",
                 "matched_runtime_speedup_claim": False})
     return 0
 
 
-def main(argv=None):
+def main(argv=None, profile=ENERGY_PROFILE):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("mode", choices=("design", "freeze", "preflight", "controller", "worker"))
-    parser.add_argument("--attempt", type=Path, default=ATTEMPT)
+    parser.add_argument("--attempt", type=Path, default=profile.attempt)
     parser.add_argument("--case", choices=common.CASE_NAMES)
     parser.add_argument("--mode", dest="cover_mode", choices=MODES)
     args = parser.parse_args(argv)
     if args.mode == "design":
-        print(json.dumps(design(), sort_keys=True, indent=2))
+        print(json.dumps(design(profile), sort_keys=True, indent=2))
         return 0
     if args.mode == "freeze":
-        freeze(args.attempt)
+        freeze(args.attempt, profile)
         return 0
     if args.mode == "preflight":
-        frozen(args.attempt)
+        frozen(args.attempt, profile)
         print(json.dumps({"runtime": common.sizing.software_runtime(),
                           "native_probe": common.sizing.native_probe()}, sort_keys=True))
         return 0
     if args.mode == "controller":
-        return controller(args.attempt)
+        return controller(args.attempt, profile)
     if not args.case or not args.cover_mode:
         parser.error("worker requires --case and --mode")
-    return worker(args.attempt, args.case, args.cover_mode)
+    return worker(args.attempt, args.case, args.cover_mode, profile)
 
 
 if __name__ == "__main__":

@@ -26,7 +26,7 @@ FIELDS = (
     "repair_status", "repair_failure_stage", "cover_solver_status", "cover_mip_gap",
     "cover_minimum_bus_count_reported", "minimum_bus_count_scope",
     "relaxation_minimum_bus_count_reported", "proposed_structural_buses",
-    "proposed_pullout_count", "energy_relaxation",
+    "proposed_pullout_count", "energy_relaxation", "charging_caps",
     "candidate_kind", "saved_independent_replay_ok", "replayed_candidate_buses",
     "direct_repaired_cost_exact", "fallback_cost_exact",
     "inference_attempted", "inference_performed", "inference_seconds", "cover_seconds",
@@ -170,6 +170,11 @@ def summarize_cell(attempt: Path, order: int, case: str, services: int,
         energy_relaxation = _first(cover, "energy_relaxation", "soc_relaxation")
     if energy_relaxation is None:
         energy_relaxation = _first(result or {}, "energy_relaxation", "soc_relaxation")
+    charging_caps = _first(proposed, "charging_caps")
+    if charging_caps is None:
+        charging_caps = _first(cover, "charging_caps")
+    if charging_caps is None:
+        charging_caps = _first(result or {}, "charging_caps")
     hull_skipped_reason = _first(result or {}, "hull_skipped_reason", "hull_skip_reason")
     if hull_skipped_reason is None:
         hull_skipped_reason = _first(result_assessment,
@@ -217,6 +222,7 @@ def summarize_cell(attempt: Path, order: int, case: str, services: int,
         "proposed_structural_buses": _bus_count(_get(cover, "vehicles")),
         "proposed_pullout_count": _get(cover, "pullout_count"),
         "energy_relaxation": _csv_value(energy_relaxation),
+        "charging_caps": _csv_value(charging_caps),
         "candidate_kind": candidate_kind,
         "saved_independent_replay_ok": _bool(saved_replay_ok if independent else None),
         "replayed_candidate_buses": replayed_candidate_buses,
