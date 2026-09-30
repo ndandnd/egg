@@ -8,12 +8,20 @@ supersedes the earlier idle-monitor pause condition and blanket deferral of ML.
 Notify only substantive findings, major decisions, important failures or review
 artifacts. Continue useful local work between jobs; do not pause on an empty queue.
 
-## Latest checkpoint — larger computational and learning batch running
+## Latest checkpoint — larger batch complete; route repair under implementation
 
-- **Active job 678708**, execution commit `822be2c7bdc2bef9ab6364c2e97d9747c048898b`,
-  runs from `/home/nc437/egg-learning-stage2-20260930`. At 04:59:32 UTC it was
-  RUNNING on snavely-cpu-04 with 10 of 44 cell receipts, no exception files,
-  and the correct frozen source. Training had not yet begun. Do not resubmit.
+- **Completed job 678708**, execution commit `822be2c7bdc2bef9ab6364c2e97d9747c048898b`,
+  finished with exit 0 in 38:05 on snavely-cpu-04. All 44 cells have feasible
+  fleet labels; no child exception files. The trainer completed in 14.97 seconds.
+  Actual allocation: one CPU, 8 GB, batch MaxRSS 258724 KiB. Full artifacts are
+  downloaded locally and retained at `/home/nc437/egg-learning-stage2-20260930`.
+  See ACCOUNTING_678708.json and RESULT_MANIFEST_STAGE2.json. Do not resubmit.
+- Luna is analyzing stage2 quality/time comparisons. Sol proposal-learning and
+  campaign-runner workers are implementing one bounded route-fixed charging
+  repair pilot on development cases 2016/2017 using the frozen stage2 model.
+  Root alone submits after their implementation, tests and prospective protocol.
+  No EGG job is active at this checkpoint; keep the heartbeat active while this
+  concrete next launch is being implemented. Inspect workers and newer state.
 - The current attempt is `result/learning_campaign/20260930-stage2-attempt1`.
   See `research-20260930/learning-campaign/CAMPAIGN_STATE.json`,
   `LAUNCH_678708.json`, `PROTOCOL_STAGE2.md` and `STAGE2_LAUNCH_REVIEW.md`.
@@ -48,12 +56,12 @@ artifacts. Continue useful local work between jobs; do not pause on an empty que
   `DOC_LAUNCH_RECEIPT.json` and `DOC_RESULTS_RECEIPT.json`. Coauthor draft 0.10
   remains historical; no new computational result has been inserted into it.
 
-Next: one compact scoped queue check via unicorn2 after sourcing
-/etc/profile.d/slurm.sh; use scoped sacct/receipts if 678708 vanished. Collect the
-complete stage2 package and compare cold/retained/nearest/cheapest/learned arms,
-including acquisition, training, prediction, replay and target verification.
-Then implement a bounded route-fixed charging repair for newly predicted routes
-under a new prospective protocol; today's model is limited to its source pool.
+Next: finish compact stage2 analysis and the bounded repair pilot. Compare
+cold/retained/nearest/cheapest/learned arms including acquisition, training,
+prediction, replay and target verification. Do not refit on development outcomes.
+Separate legal-route decoding, charging repair, physical replay and global hull
+verification. Today's learned proposal is limited to its existing source pool;
+repair should test whether a newly generated route can produce a feasible fleet.
 Follow CONTINUATION_PLAN.md, preserve all failed attempts and spent time, and
 back up meaningful milestones. Check newer workers/state first. No protected
 A6/B3/confirmation outcomes, private GIRO publication, PR merge, journal
