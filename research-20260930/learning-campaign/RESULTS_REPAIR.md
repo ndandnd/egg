@@ -1,11 +1,11 @@
 # Route-fixed repair pilot results
 
-Both frozen development cells completed with `repair_status=replayed`; neither used the source fallback. I independently replayed each saved repaired plan: physical replay passed, plan hashes matched, and exact nonlinear target objectives matched the saved receipt. The candidate plans are feasible incumbents, not proven physical optima. The run finished in 2:28 on one allocated CPU with 214,948 KiB maximum RSS, per Slurm accounting.
+Both frozen development cells completed with `repair_status=replayed`; neither used the source fallback. I independently replayed each saved repaired plan: physical replay passed, plan hashes matched, and exact nonlinear target objectives matched the saved receipt. The candidate plans are feasible incumbents, not proven physical optima. Both path-cover MILPs returned optimal status with zero reported gap, and both fixed-route charge LPs returned `OPTIMAL`. Cached source costs below are target revaluations of replayed source fleets whose physical optimality remains unknown. The run finished in 2:28 on one allocated CPU with 214,948 KiB maximum RSS, per Slurm accounting.
 
 | Case | Repaired fleet | Cached source fleets: direct target cost | Stage 2 learned / cheapest target incumbent |
 |---|---|---|---|
-| 20 services (2016) | 1,919.931 (ops 1,800); 18 buses: 16 single-trip routes and two pairs, T03→T02 and T17→T16 | source0 553.475 (4 buses); source1 586.760 (4 buses) | 515.516; both arms used the same plan |
-| 28 services (2017) | 2,999.525 (ops 2,800); 28 buses, each with one trip | source0 724.660 (5 buses); source1 749.310 (5 buses) | 689.474; both arms used the same plan |
+| 20 services (2016) | 1,919.931 (ops 1,800); 18 buses: 16 single-trip routes and two pairs, T03→T02 and T17→T16 | source0 553.475 (4 buses); source1 586.760 (4 buses) | 515.516; both arms used the same plan, status budget_exhausted |
+| 28 services (2017) | 2,999.525 (ops 2,800); 28 buses, each with one trip | source0 724.660 (5 buses); source1 749.310 (5 buses) | 689.474; both arms used the same plan, status budget_exhausted |
 
 The repair candidates are much more expensive than either cached source fleet: 3.47× the cheapest source plan in 2016 and 4.14× in 2017. Their fixed vehicle costs alone are 1,800 and 2,800 objective units, versus 400 and 500 for the cached source0 plans. The route-cover MILP maximizes learned edge log-odds subject to a vehicle-count ceiling; it has no vehicle-cost term. That matches the observed results: the 28-service cover uses one bus per trip, while the 20-service cover pairs only two trip pairs.
 
