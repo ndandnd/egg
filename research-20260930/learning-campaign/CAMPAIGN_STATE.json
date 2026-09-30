@@ -1,7 +1,9 @@
 {
-  "updated_at_utc": "2026-09-30T09:41:38.881355+00:00",
-  "phase": "charging_cap_completed_under_analysis",
-  "active_job_ids": [],
+  "updated_at_utc": "2026-09-30T10:01:51.910625+00:00",
+  "phase": "shared_interval_repair_pilot_submitted",
+  "active_job_ids": [
+    "695461"
+  ],
   "completed_job_ids": [
     "677817",
     "678708",
@@ -10,13 +12,13 @@
     "688750",
     "691594"
   ],
-  "launch_receipt": "LAUNCH_691594.json",
-  "source_commit": "77122c800bbc04fec35dffd43a1f4030bf1699b1",
-  "remote_checkout": "/home/nc437/egg-charging-cap-repair-20260930",
-  "attempt_relative": "result/learning_repair/20260930-charging-cap-attempt1",
+  "launch_receipt": "LAUNCH_695461.json",
+  "source_commit": "96ac96da5250d1b44b3a19aae5a066ee2fdc748c",
+  "remote_checkout": "/home/nc437/egg-shared-interval-repair-20260930",
+  "attempt_relative": "result/learning_repair/20260930-shared-interval-attempt1",
   "startup_observation": {
-    "recorded_at_utc": "2026-09-30T08:56:45.834473+00:00",
-    "squeue_row": "691594|PENDING|0:00|1|8G|",
+    "recorded_at_utc": "2026-09-30T10:01:51.910625+00:00",
+    "squeue_row": "695461|PENDING|0:00|1|8G|",
     "state": "PENDING",
     "requested_cpus": 1,
     "node": null
@@ -27,7 +29,7 @@
     "cadence": "hourly",
     "notification_policy": "Substantive results, major decisions, failures or review artifacts only"
   },
-  "next_action": "Independently replay four cap-aware outcomes and diagnose remaining three charge failures; choose next bounded step. One new 2017 learned8bus physical candidate is preliminary, costlier than existing controls; no learned advantage. Keep automation ACTIVE.",
+  "next_action": "One scoped check of695461; collect full artifacts/accounting when complete. Compare shared charging covers, saved positive charge witnesses, new physical costs and all failures/timing. Do not infer learning superiority from four cases or method inferiority from a five-second no-incumbent. No duplicate submission/refit/reserved tests. Automation ACTIVE.",
   "stage1_results": "RESULTS_STAGE1.md",
   "stage1_model_analysis": "MODEL_STAGE1.md",
   "test_groups_unobserved": [
@@ -36,25 +38,25 @@
   ],
   "stage2_results": "RESULTS_STAGE2.md",
   "repair_results": "RESULTS_REPAIR.md",
-  "result_backup_commit": "535fc364d7aef25b51e94c4abda9961946904fb5",
+  "result_backup_commit": "7a589147ee0103854edfec16848ebca7ef5df5f0",
   "doc_receipts": [
     "DOC_COST_AWARE_RESULTS_RECEIPT.json",
-    "DOC_ENERGY_AWARE_RESULTS_RECEIPT.json"
+    "DOC_ENERGY_AWARE_RESULTS_RECEIPT.json",
+    "DOC_CHARGING_CAP_RESULTS_RECEIPT.json"
   ],
   "latest_observation": {
-    "job_id": "691594",
-    "state": "COMPLETED",
-    "exit_code": "0:0",
-    "elapsed_seconds": 109,
-    "allocated_cpus": 1,
-    "batch_max_rss_kib": 230152,
-    "node": "snavely-cpu-04",
-    "source": "scoped sacct after completion",
-    "recorded_at_utc": "2026-09-30T09:41:38.881355+00:00"
+    "job_id": "695461",
+    "recorded_at_utc": "2026-09-30T10:01:51.910625+00:00",
+    "squeue_row": "695461|PENDING|0:00|1|8G|",
+    "state": "PENDING",
+    "requested_cpus": 1,
+    "node": null
   },
   "result_summarizer": "summarize_cost_aware_repair.py",
   "cost_aware_results": "RESULTS_COST_AWARE_REPAIR.md",
   "energy_aware_results": "RESULTS_ENERGY_AWARE_REPAIR.md",
   "charging_window_diagnosis": "CHARGING_WINDOW_DIAGNOSIS.md",
-  "charging_cap_results": "RESULTS_CHARGING_CAP_REPAIR.md"
+  "charging_cap_results": "RESULTS_CHARGING_CAP_REPAIR.md",
+  "charging_cap_failure_diagnosis": "CHARGING_CAP_FAILURE_DIAGNOSIS.md",
+  "charging_cap_bound_comparison": "BOUNDS_CHARGING_CAP_COMPARISON.json"
 }

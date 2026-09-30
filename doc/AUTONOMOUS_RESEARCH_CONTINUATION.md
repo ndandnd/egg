@@ -8,7 +8,57 @@ supersedes the earlier idle-monitor pause condition and blanket deferral of ML.
 Notify only substantive findings, major decisions, important failures or review
 artifacts. Continue useful local work between jobs; do not pause on an empty queue.
 
-## Latest checkpoint — charging-cap result collected; shared capacity diagnosis underway
+## Latest checkpoint — shared-interval repair pilot launched
+
+- **Recorded EGG job695461**, submitted2026-09-30T10:00:53Z; one scoped startup
+  check observed PENDING, requesting1CPU/8GB. No result inspected. Do not duplicate
+  this attempt. Existing hourly automation remains ACTIVE.
+- Execution commit `96ac96da5250d1b44b3a19aae5a066ee2fdc748c`, remote checkout
+  `/home/nc437/egg-shared-interval-repair-20260930`, exclusive attempt
+  `result/learning_repair/20260930-shared-interval-attempt1`. LAUNCH_695461.json,
+  PROTOCOL_SHARED_INTERVAL_REPAIR.md and SHARED_INTERVAL_LAUNCH_REVIEW.md under
+  research-20260930/learning-campaign are authoritative. Source backed up to GitHub.
+- New screen includes continuous grid energy per eligible visit/compiled interval,
+  linked to selected movements, shared interval capacity, depot SOC and terminal
+  refill equalities. Positive charge allocations are saved for diagnosis. Full
+  native charging and physical replay remain mandatory. This approaches a coupled
+  fleet MILP; a5sec failure to find a useful incumbent is not method inferiority.
+- Same4 crossed development cells, frozen stage2 model, no refit/test access.
+  Costs, open gaps, failures, repair/verification time and fallback provenance are
+  separate. Fallbacks skip redundant hulls; new physical plans get fresh hull checks.
+  Budget1CPU/8GB/30min/one native thread/no retry/exclude01; cover5sec,
+  charge45phase/55wall, hull70wall, child240, controller1500, shell1650.
+- Sol aggregate38tests+6subtests, wrapper/design/48sourcepins and diff checks
+  passed. Final charge-witness addition passed2focused tests. Root reviewed units,
+  selected/unselected implications, refill and physical source witnesses. No local
+  GRB or full development fleet optimization was run.
+- Completed691594:109sec, one new2017 learned8bus plan at980.998586; worse than
+  source724.660042 and archived target-verified689.474312. Three charging failures
+  used source fallbacks. Independent replay exactly matches all4 saved outcomes.
+  No learned advantage or speedup. Evidence/diagnosis backed up in7a58914.
+- Fixed-cover LP isolation: all4 feasible with independent visit capacities;
+  shared interval sums make precisely the3 native failures infeasible. Diagnostic
+  extra grid energy5.189/1.922/70.822kWh (2016only/learned,2017only). Numerical
+  findings, not exact or global infeasibility proofs. See CHARGING_CAP_FAILURE_DIAGNOSIS.
+- Compatible cost-aware/charging-cap receipts combine to CH approximately
+  [588.165909,686.653533] and physical optimum[588.165909,689.474312]; both open.
+  New lower588.165909 beats prior579.538921, but its mixture upper688.761949
+  is weaker than prior686.653533. Do not treat a mixture upper as physical.
+  BOUNDS_CHARGING_CAP_COMPARISON.json stores exact endpoints/domain IDs/hashes;
+  scope is these compared runs, not a claim of strongest bounds over all history.
+- Google Doc verified consolidated results/diagnosis append; previous history and
+  both figures preserved. DOC_CHARGING_CAP_RESULTS_RECEIPT.json records the check.
+- Next: one scoped queue check of695461, scoped sacct/receipts if vanished. Collect
+  complete attempt/native logs/wrapper receipt. Summarize with existing
+  summarize_cost_aware_repair.py using the shared-interval attempt and output
+  SHARED_INTERVAL_REPAIR_CELLS.csv. Independently replay new candidates/fallbacks,
+  assess physical cost and repair/verification work. Use saved positive charge
+  witness if native charging disagrees. Diagnose before choosing the next bounded
+  protocol; no automatic repeat, extra-bus repair or refit to these2development cases.
+  All implementation workers finished; inspect active/newer state before action.
+  Reserved2004/2005, protected outcomes/privateGIRO/PRmerge/submission untouched.
+
+## Prior checkpoint — charging-cap result collected; shared capacity diagnosis underway
 
 - Job691594 COMPLETED exit0 in109seconds, one allocated CPU/8GB, MaxRSS230152KiB,
   snavely-cpu-04. Complete attempt and native logs collected; ACCOUNTING_691594.json

@@ -54,3 +54,13 @@ numerical evidence, not an exact infeasibility certificate. Independent
 replay reconfirmed all four plan identities and exact costs. See the [diagnosis
 summary](CHARGING_CAP_FAILURE_DIAGNOSIS.md), [diagnosis data](CHARGING_CAP_FAILURE_DIAGNOSIS.json),
 and [independent replay receipt](INDEPENDENT_REPLAY_CHARGING_CAP.json).
+
+Across the two compared same-case, same-market hull runs, the combined
+target-hull interval is [588.165909, 686.653533] cost units (the charging-cap
+global lower and the lower of the two mixture uppers). The physical-optimum
+enclosure is [588.165909, 689.474312], using the same global lower and the
+archived target-verified feasible control. Both gaps remain open. This
+two-run comparison does not establish an ML benefit or speedup and makes no
+claim to the strongest bound across uninspected older runs; exact values and
+receipt hashes are recorded in
+[BOUNDS_CHARGING_CAP_COMPARISON.json](BOUNDS_CHARGING_CAP_COMPARISON.json).
