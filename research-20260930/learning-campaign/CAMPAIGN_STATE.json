@@ -1,16 +1,15 @@
 {
-  "updated_at_utc": "2026-09-30T10:01:51.910625+00:00",
-  "phase": "shared_interval_repair_pilot_submitted",
-  "active_job_ids": [
-    "695461"
-  ],
+  "updated_at_utc": "2026-09-30T10:42:37.787242+00:00",
+  "phase": "shared_interval_completed_verifying_results",
+  "active_job_ids": [],
   "completed_job_ids": [
     "677817",
     "678708",
     "682689",
     "685697",
     "688750",
-    "691594"
+    "691594",
+    "695461"
   ],
   "launch_receipt": "LAUNCH_695461.json",
   "source_commit": "96ac96da5250d1b44b3a19aae5a066ee2fdc748c",
@@ -29,7 +28,7 @@
     "cadence": "hourly",
     "notification_policy": "Substantive results, major decisions, failures or review artifacts only"
   },
-  "next_action": "One scoped check of695461; collect full artifacts/accounting when complete. Compare shared charging covers, saved positive charge witnesses, new physical costs and all failures/timing. Do not infer learning superiority from four cases or method inferiority from a five-second no-incumbent. No duplicate submission/refit/reserved tests. Automation ACTIVE.",
+  "next_action": "Independently replay four saved outcomes/shared charge witnesses. Two new 2016 four-bus repairs;2017 two no-incumbent cover timeouts, not infeasibility. Root reviewing prospective targeted30sec cover study for2017only; no new launch yet. Keep automation ACTIVE.",
   "stage1_results": "RESULTS_STAGE1.md",
   "stage1_model_analysis": "MODEL_STAGE1.md",
   "test_groups_unobserved": [
@@ -46,11 +45,14 @@
   ],
   "latest_observation": {
     "job_id": "695461",
-    "recorded_at_utc": "2026-09-30T10:01:51.910625+00:00",
-    "squeue_row": "695461|PENDING|0:00|1|8G|",
-    "state": "PENDING",
-    "requested_cpus": 1,
-    "node": null
+    "state": "COMPLETED",
+    "exit_code": "0:0",
+    "elapsed_seconds": 171,
+    "allocated_cpus": 1,
+    "batch_max_rss_kib": 205836,
+    "node": "snavely-cpu-04",
+    "source": "scoped sacct after completion",
+    "recorded_at_utc": "2026-09-30T10:42:37.787242+00:00"
   },
   "result_summarizer": "summarize_cost_aware_repair.py",
   "cost_aware_results": "RESULTS_COST_AWARE_REPAIR.md",
@@ -58,5 +60,6 @@
   "charging_window_diagnosis": "CHARGING_WINDOW_DIAGNOSIS.md",
   "charging_cap_results": "RESULTS_CHARGING_CAP_REPAIR.md",
   "charging_cap_failure_diagnosis": "CHARGING_CAP_FAILURE_DIAGNOSIS.md",
-  "charging_cap_bound_comparison": "BOUNDS_CHARGING_CAP_COMPARISON.json"
+  "charging_cap_bound_comparison": "BOUNDS_CHARGING_CAP_COMPARISON.json",
+  "shared_interval_results": "RESULTS_SHARED_INTERVAL_REPAIR.md"
 }

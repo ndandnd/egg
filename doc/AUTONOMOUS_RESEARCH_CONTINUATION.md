@@ -8,7 +8,29 @@ supersedes the earlier idle-monitor pause condition and blanket deferral of ML.
 Notify only substantive findings, major decisions, important failures or review
 artifacts. Continue useful local work between jobs; do not pause on an empty queue.
 
-## Latest checkpoint — shared-interval repair pilot launched
+## Latest checkpoint — shared-interval results collected; targeted budget study in preparation
+
+- Job695461 COMPLETED exit0 in171seconds,1CPU/8GB,MaxRSS205836KiB on
+  snavely-cpu-04. Full artifacts/logs/receipt collected,55 file hashes preserved
+  in RESULT_MANIFEST_SHARED_INTERVAL.json; ACCOUNTING_695461.json authoritative.
+  No EGG job active. Do not repeat this attempt. Automation remains ACTIVE.
+-2016 both arms yield new replayed4bus fleets: cost_only522.792412, learned
+  516.926077; historical target-verified control515.515556 remains better. Learned
+  hull lower515.356816, mixture upper515.471130; open gap. These are preliminary
+  until independent verification/report completes.2017 both cover solves hit5s
+  with no integral incumbent, so source fallback724.660042, no newhull or
+  infeasibility conclusion.
+- Root managing one targeted next package: sol6_campaign_runner implements
+  2017-only two-arm30sec cover study with all other budgets unchanged and an
+  explicit frozen profile; energy_diagnosis independently replays4outcomes and
+  positive charge witnesses; Luna prepares concise report and actual2016 learned
+  schedule/charging plot. No launch approved or recorded yet. Check active workers.
+- Prospective outer budget stays1CPU/8GB/30min/one native thread/no retry/exclude01;
+  no refit, protected outcomes or reserved-test access. New30sec cover is a
+  separately recorded budget experiment justified by no-incumbent5sec results,
+  not an automatic retry. Review source/protocol before root-only submission.
+
+## Prior checkpoint — shared-interval repair pilot launched
 
 - **Recorded EGG job695461**, submitted2026-09-30T10:00:53Z; one scoped startup
   check observed PENDING, requesting1CPU/8GB. No result inspected. Do not duplicate

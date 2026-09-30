@@ -5,6 +5,7 @@ import argparse
 from dataclasses import dataclass
 import fcntl
 import json
+import math
 import os
 from pathlib import Path
 import subprocess
@@ -51,10 +52,17 @@ class PilotProfile:
     diagnosis_files: tuple[str, ...]
     charging_caps: bool = False
     shared_charging: bool = False
+    cells: tuple[tuple[str, str], ...] = CELLS
+    path_seconds: float = common.REPAIR_PATH_SECONDS
 
     def __post_init__(self):
         if self.shared_charging and not self.charging_caps:
             raise ValueError("Shared interval charging requires individual charging caps")
+        if not self.cells or len(set(self.cells)) != len(self.cells) or any(
+                cell not in CELLS for cell in self.cells):
+            raise ValueError("Profile cells must be a nonempty unique subset of declared development cells")
+        if not math.isfinite(self.path_seconds) or self.path_seconds <= 0 or self.path_seconds > 120:
+            raise ValueError("Invalid bounded route-cover time cap")
 
 
 ENERGY_PROFILE = PilotProfile(
@@ -81,6 +89,11 @@ def design(profile=ENERGY_PROFILE):
     baseline = cost.design()
     if [(row["case"], row["mode"]) for row in baseline["cells"]] != list(CELLS):
         raise ValueError("Crossed development cell order changed")
+    baseline["cells"] = [row for row in baseline["cells"]
+                         if (row["case"], row["mode"]) in profile.cells]
+    if [(row["case"], row["mode"]) for row in baseline["cells"]] != list(profile.cells):
+        raise ValueError("Profile cells must preserve declared crossed order")
+    baseline["path_seconds"] = profile.path_seconds
     design = {**baseline, "energy_relaxation": True,
             "energy_relaxation_meaning":
                 "necessary segment energy only; optimistic full reset at declared depot charging opportunities",
@@ -139,7 +152,7 @@ def worker(path, case_name, mode, profile=ENERGY_PROFILE):
     started = time.monotonic()
     try:
         spec = frozen(target, profile)
-        if (case_name, mode) not in CELLS or not (dest / "launch.json").is_file():
+        if (case_name, mode) not in profile.cells or not (dest / "launch.json").is_file():
             raise ValueError("Undeclared energy-aware cell or missing launch receipt")
         prior_frozen, model = common._stage2_inputs()
         declared = prior_frozen["design"]["groups"][case_name]
@@ -159,6 +172,8 @@ def worker(path, case_name, mode, profile=ENERGY_PROFILE):
             kwargs["charging_caps"] = True
         if profile.shared_charging:
             kwargs["shared_charging"] = True
+        if profile.path_seconds != common.REPAIR_PATH_SECONDS:
+            kwargs["path_seconds"] = profile.path_seconds
         return common.evaluate_case(dest, case_name, case, market, prior, spec,
                                     controls, started, **kwargs)
     except Exception as exc:
@@ -179,6 +194,9 @@ def result_row(path, case_name, mode, profile=ENERGY_PROFILE):
             raise ValueError("Result omitted declared charging-window caps")
         if profile.shared_charging and result.get("shared_charging") is not True:
             raise ValueError("Result omitted declared shared interval charging")
+        if profile.path_seconds != common.REPAIR_PATH_SECONDS and (
+                result.get("path_seconds") != profile.path_seconds):
+            raise ValueError("Result route-cover cap differs from frozen profile")
     return row
 
 
@@ -194,7 +212,7 @@ def controller(path, profile=ENERGY_PROFILE):
         if not (target / "controller_started.json").exists():
             base.save_new(target / "controller_started.json", {"protocol": profile.protocol,
                                                                   "utc": time.time()})
-        for name, mode in CELLS:
+        for name, mode in profile.cells:
             if time.monotonic()-started > CONTROLLER_CAP_SECONDS-CHILD_HARD_SECONDS:
                 raise TimeoutError(profile.label + " controller budget exhausted before next cell")
             dest = folder(target, name, mode)
@@ -206,10 +224,10 @@ def controller(path, profile=ENERGY_PROFILE):
             command = [sys.executable, "-m", profile.module, "worker",
                        "--attempt", str(target), "--case", name, "--mode", mode]
             base.launch_child(target, name, 0, mode, CHILD_HARD_SECONDS, command=command)
-        rows = [result_row(target, name, mode, profile) for name, mode in CELLS]
+        rows = [result_row(target, name, mode, profile) for name, mode in profile.cells]
         if not (target / "summary.json").exists():
             base.save_new(target / "summary.json", {"protocol": profile.protocol,
-                "declared_cells": len(CELLS), "accounted_cells": len(rows),
+                "declared_cells": len(profile.cells), "accounted_cells": len(rows),
                 "rows": rows, "scientific_admission": "pending independent result review",
                 "matched_runtime_speedup_claim": False})
     return 0
