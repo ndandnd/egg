@@ -8,7 +8,51 @@ supersedes the earlier idle-monitor pause condition and blanket deferral of ML.
 Notify only substantive findings, major decisions, important failures or review
 artifacts. Continue useful local work between jobs; do not pause on an empty queue.
 
-## Latest checkpoint — shared-interval results collected; targeted budget study in preparation
+## Latest checkpoint — targeted 28-service cover budget study launched
+
+- **Recorded EGG job696067**, submitted2026-09-30T10:52:23Z. Single scoped startup
+  check observed PENDING, requesting1CPU/8GB. No result inspected. Do not duplicate.
+  Existing hourly automation stays ACTIVE.
+- Execution commit `3e32d3189fa42ac971c6ee0319bfb54555072f2e`, remote checkout
+  `/home/nc437/egg-shared-budget-repair-20260930`, exclusive attempt
+  `result/learning_repair/20260930-shared-budget-attempt1`. LAUNCH_696067.json,
+  PROTOCOL_SHARED_BUDGET_REPAIR.md and SHARED_BUDGET_LAUNCH_REVIEW.md authoritative.
+- Only2017/28service learned then cost_only run, with cover30sec instead of5.
+  Model/case/market/objectives/constraints unchanged; no refit/test access. Other
+  limits stay charge45phase/55wall,hull70wall,child240,controller1500,shell1650;
+  oneCPU/8GB/30min/one native thread,no retry/requeue,exclude01. This is a separate
+  prospective budget comparison justified by prior no-incumbent outcomes.
+- Sol final aggregate42tests+8subtests,wrapper/design/54sourcepins/diff checks
+  pass. Root reviewed subset guards, cap propagation/receipts and resource budget.
+  Historical4cell/5sec profiles preserved. No local GRB/full development solve.
+- Completed695461 in171sec:2016only and learned new4bus repairs522.792412 and
+  516.926077. Direct source baseline553.474774; historical target-verified
+  control515.515556 remains cheaper. Both2017 cover solves hit5sec without
+  integral incumbent, so sourcefallback724.660042; no infeasibility conclusion.
+- Fresh independent replay/hash/exact-cost checks pass all4; positive shared
+  charge witnesses of two2016 covers satisfy rows within4e-13kWh. Learned hull
+  bounds515.356816–515.471130 (upper mixture, not physical). Compatible historical
+  physical control gives physical enclosure515.356816–515.515556, still open.
+  No general ML benefit or speedup. Full evidence/script backed up in3e32d31.
+- Saved-column review replays10new and5archived2016 plans. Best new515.648054
+  does not improve on archived515.515556. At that archived incumbent's own-load
+  gradient prices, another replayed4bus plan witnesses regret>=0.724020 while its
+  true target cost is higher516.505682. Incumbent gap<=0.158740 from freshlower.
+  This supports an incentive mismatch at this near-optimal incumbent, not the
+  unknown true optimum. SHARED_INTERVAL_PHYSICAL_POOL_REVIEW.json/.md and its
+  reproducibility script retain exact arithmetic/provenance. Scope15plans only.
+- Root finishing consolidated Doc/report and the schedule figure with Luna;
+  source/result code workers finished. No additional cluster submission planned
+  this turn. Read newest state/active workers before touching those files.
+- Next: one scoped check of696067; use scoped sacct/receipts if vanished, collect
+  complete attempt/native logs/wrapper. Summarize with existing summarizer into
+  SHARED_BUDGET_REPAIR_CELLS.csv; the attempt has2cells, read frozen design.
+  Independently replay candidates/fallbacks, assess full repair+verification time
+  and open bounds. Select next step from evidence, with no automatic budget
+  escalation, duplicate, extra-bus repair or refit to these development cases.
+  Reserved2004/2005,protected outcomes/privateGIRO/PRmerge/submission untouched.
+
+## Prior checkpoint — shared-interval results collected; targeted budget study in preparation
 
 - Job695461 COMPLETED exit0 in171seconds,1CPU/8GB,MaxRSS205836KiB on
   snavely-cpu-04. Full artifacts/logs/receipt collected,55 file hashes preserved
