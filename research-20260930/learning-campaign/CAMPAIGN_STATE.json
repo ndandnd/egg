@@ -1,9 +1,7 @@
 {
-  "updated_at_utc": "2026-09-30T22:30:44.704678+00:00",
-  "phase": "model_families_v5_submitted",
-  "active_job_ids": [
-    "720831"
-  ],
+  "updated_at_utc": "2026-09-30T22:49:06.187735+00:00",
+  "phase": "family_native_failure_diagnosis_and_graph_implementation",
+  "active_job_ids": [],
   "completed_job_ids": [
     "677817",
     "678708",
@@ -88,7 +86,7 @@
     "notification_policy": "Substantive results, major decisions, failures or review artifacts only",
     "resource_policy": "Parallel label8 + training4; initial single-job limit superseded."
   },
-  "next_action": "One scoped check of720831; if terminal collect full candidates/results/receipts/logs/accounting, preserve failures and no automatic retry. Independently replay XGBoost JSON with selected iteration range, CatBoost CBM retained trees and ExtraTrees joblib under pinned libraries; check weighted inner choice and promoted-family policy before comparing paired full128/common32 to v3/v4 anchors. All model selection remains internal/exploratory; dev/test sealed. Next neural work: design small timetable graph scorer with prospective grouped training protocol while diagnosing10039 decoder failure and weak incumbent-edge supervision. Continue versioned data diversification to remove stride confounding; manuscript remains deferred.",
+  "next_action": "Freeze independently reviewed infrastructure recovery for nine SIGILL tasks before submitting a new immutable attempt. Preserve three successes. Graph package in implementation; no bankfit until protocol/runtime/review. Do not poll empty queue. GPT-6.1 Sol heavy implementation preference persisted in project memory and automation.",
   "stage1_results": "RESULTS_STAGE1.md",
   "stage1_model_analysis": "MODEL_STAGE1.md",
   "test_groups_unobserved": [
@@ -122,12 +120,27 @@
     "DOC_MODEL128_BUDGET_V4_RESULTS_RECEIPT.json"
   ],
   "latest_observation": {
-    "source": "new family submission guard, scoped719750 accounting and fullartifactcollection",
-    "prior719750_all12_completed_exit0": true,
-    "prior719750_collected": true,
-    "new720831_submitted": true,
-    "no_dependency_needed": true,
-    "no_postsubmission_queue_or_partial_outcome_read": true
+    "array_job_id": "720831",
+    "utc_submit": "2026-09-30T22:19:24Z",
+    "completed_task_ids": [
+      2,
+      3,
+      10
+    ],
+    "failed_task_ids": [
+      0,
+      1,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      11
+    ],
+    "all_artifacts_collected": true,
+    "native_crash_before_any_candidate_start": true,
+    "model_quality_failure": false
   },
   "result_summarizer": "summarize_cost_aware_repair.py",
   "cost_aware_results": "RESULTS_COST_AWARE_REPAIR.md",
@@ -261,21 +274,11 @@
     "requested_memory_gb": 96
   },
   "active_label_job_ids": [],
-  "active_training_array_ids": [
-    "720831"
-  ],
+  "active_training_array_ids": [],
   "route_model_launch_receipt": "LAUNCH_713295.json",
   "route_model_training_protocol": "ROUTE_MODEL_TRAINING_PROTOCOL.md",
   "physical_shard01_accounting": "ACCOUNTING_711779.json",
-  "active_attempts": [
-    {
-      "array_job_id": "720831",
-      "remote_checkout": "/home/nc437/egg-route-families-20260930-v5",
-      "attempt_relative": "result/physical_learning/20260930-route-model128-families-v5",
-      "launch_receipt": "LAUNCH_720831.json",
-      "source_commit": "75dd4cf19f1f735cc3dea559567da3b2bd32013e"
-    }
-  ],
+  "active_attempts": [],
   "physical_shard01_dataset": "result/physical_learning/20260930-shard01-dataset-v1",
   "physical_shard01_results": "RESULTS_PHYSICAL_SHARD01.md",
   "physical_shard01_derived": "PHYSICAL_SHARD01_DERIVED.json",
@@ -309,7 +312,11 @@
   },
   "route_model_review_backup_commit": "febc81543784694f1db702dbac3da9f7b8183cbe",
   "physical_shard01_review_backup_commit": "febc81543784694f1db702dbac3da9f7b8183cbe",
-  "current_work_owners": {},
+  "current_work_owners": {
+    "sol61_runtime_repair": "Infrastructure recovery source/protocol; no submission",
+    "sol61_graph_models": "New graph package; no bank fit",
+    "luna_family_review": "Accounting and recovery review"
+  },
   "modern_ml_methods_note": "MODERN_ML_METHODS_AND_VALIDATION.md",
   "route_training_environment": "ROUTE_TRAINING_ENVIRONMENT.json",
   "physical_parallel_wave1_raw_backup_commit": "6b29c7286f85f33dab92dd139be6b3082be3dbd8",
@@ -350,7 +357,7 @@
   "latest_training_submission": {
     "array_job_id": "720831",
     "submitted_at_utc": "2026-09-30T22:19:24Z",
-    "state": "SUBMITTED",
+    "state": "TERMINAL_PARTIAL_SIGILL",
     "no_postsubmission_queue_or_partial_outcome_read": true
   },
   "route_model32_conclusion": {
@@ -368,15 +375,7 @@
     "all_mlp_and_boosted_runs_selected_maximum_inner_checkpoint": true,
     "no_complete_route_feasibility_cost_or_online_speedup_claim": true
   },
-  "active_training_attempts": [
-    {
-      "array_job_id": "720831",
-      "remote_checkout": "/home/nc437/egg-route-families-20260930-v5",
-      "attempt_relative": "result/physical_learning/20260930-route-model128-families-v5",
-      "launch_receipt": "LAUNCH_720831.json",
-      "source_commit": "75dd4cf19f1f735cc3dea559567da3b2bd32013e"
-    }
-  ],
+  "active_training_attempts": [],
   "route_model64_accounting": "ACCOUNTING_717453.json",
   "route_model64_result_manifest": "RESULT_MANIFEST_ROUTE_MODEL64.json",
   "route_model64_results": "ROUTE_MODEL64_RESULTS.md",
@@ -478,7 +477,7 @@
     "ch_certificate_does_not_certify_physical_optimum": true,
     "matched_online_speedup_established": false
   },
-  "user_model_direction": "Explicit request to try different ML families: add XGBoost, CatBoost and ExtraTrees now with grouped inner-only selection; next neural direction graph/attention with separate prospective design.",
+  "user_model_direction": "User authorized all promising families including GNN/graph attention/attention route proposals and GPT-6.1 Sol for heavy implementation; bounded prospective protocols and same validation protections.",
   "route_model_families_v5_protocol": "ROUTE_MODEL_FAMILIES_V5_PROTOCOL.md",
   "route_model_families_v5_environment": "ROUTE_FAMILY_ENVIRONMENT.json",
   "route_model_families_methods": "MODEL_FAMILY_COMPARISON_METHODS.md",
@@ -524,5 +523,10 @@
     "logistic_max_task_logloss_drift_vs_v3": 1.4217490980905634e-06,
     "route_cost_or_speedup_established": false
   },
-  "route_model128_budget_v4_report_backup_commit": "2b455602a4dce6ce19d4af90f82af018974f8a1b"
+  "route_model128_budget_v4_report_backup_commit": "2b455602a4dce6ce19d4af90f82af018974f8a1b",
+  "terminal_partial_array_ids": [
+    "720831"
+  ],
+  "route_model_families_v5_accounting": "ACCOUNTING_720831.json",
+  "route_model_families_v5_partial_manifest": "RESULT_MANIFEST_ROUTE_FAMILIES_V5_PARTIAL.json"
 }

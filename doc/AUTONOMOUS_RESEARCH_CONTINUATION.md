@@ -1,6 +1,6 @@
 # EGG journal research continuation
 
-Updated 30 September 2026 UTC. Root manages; GPT-6 Sol implements/analyzes and
+Updated 30 September 2026 UTC. Root manages; GPT-6.1 Sol implements/analyzes and
 Luna Max reviews. The user's latest instruction is to keep experiments and model
 training moving without routine approval, even while exact solving remains slow.
 The existing hourly `advance-egg-journal-research` heartbeat is ACTIVE. This
@@ -8,7 +8,36 @@ supersedes the earlier idle-monitor pause condition and blanket deferral of ML.
 Notify only substantive findings, major decisions, important failures or review
 artifacts. Continue useful local work between jobs; do not pause on an empty queue.
 
-## Latest checkpoint — XGBoost, CatBoost and ExtraTrees submitted
+## Latest checkpoint — graph exploration authorized; native-runtime failure recovery
+
+- User explicitly authorizes all promising model families, including GNNs, and
+  asks that **GPT-6.1 Sol (`gpt-6.1-sol`) handle heavy implementation**. Persisted in
+  doc/RESEARCH_OPERATING_PREFERENCES.md and the ACTIVE hourly automation. Luna Max
+  remains routine reviewer. MODEL_EXPLORATION_ROADMAP.md records tabular, graph,
+  attention, cost-aware and hybrid studies. Manuscript deferred; protections unchanged.
+- Array720831 is terminal: tasks2/3/10 COMPLETED, nine tasks0/1/4/5/6/7/8/9/11
+  FAILED with SIGILL (Slurm4:0; wrapper132), before any candidate-start checkpoint.
+  Three complete tasks and nine incomplete attempts are preserved. Exact native
+  library/CPU instruction cause has not yet been localized; successful nodes were
+  snavely-cpu-16 and unicorn-cpu-75; failures on snavely-cpu-01/09. Do not call this
+  a model-quality result or aggregate an incomplete cohort as a complete comparison.
+- Full current attempt collected locally. ACCOUNTING_720831.json filters UTC submit
+  22:19:24Z, user nc437 and job name egg-route-families128: historical reused Slurm
+  job IDs are excluded. All12 elapsed total512s, allocatedCPU701s; task2 allocated2
+  despite request1. Result manifest and stdout hash receipts preserve every failure.
+  ROUTE_FAMILIES_V5_PARTIAL_REVIEW.md independently checks completeness/accounting.
+- Work in progress: Sol6.1 `sol61_runtime_repair` prepares an isolated, explicitly
+  diagnosed recovery for the nine failed tasks; no automatic retry or launch yet.
+  Sol6.1 `sol61_graph_models` implements PyTorch CPU message passing and graph attention
+  with a frozen grouped pilot and tiny fixtures, no bank fit yet. Luna reviews.
+  Root owns submission/state/GitHub/Google Doc. No active EGG job after720831.
+- Next: review and freeze recovery protocol/source before launch; preserve completed
+  tasks without refitting. Then replay all saved family models before scientific
+  comparisons. Graph package needs isolated torch runtime/compatibility evidence
+  and independent review before deployment. Keep four training workers total until
+  a new prospective budget is recorded. Dev/test sealed; all128 are exploratory TRAIN.
+
+## Previous checkpoint — XGBoost, CatBoost and ExtraTrees submitted
 
 - New explicit user direction: try different ML families now; explain current models
   and promising alternatives. This authorizes the next declared family comparison.

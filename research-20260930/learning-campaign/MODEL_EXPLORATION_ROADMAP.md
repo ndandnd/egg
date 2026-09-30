@@ -1,0 +1,20 @@
+# Model exploration with shared evaluation
+
+The user authorized exploration of the promising model families on Unicorn and specified GPT-6.1 Sol for heavy implementation. This extends the model menu; the current resource ceiling, timetable grouping, sealed tests and physical verification remain in force. Manuscript work remains deferred.
+
+| Study | Model family | Question | Current stage |
+|---|---|---|---|
+| Existing anchors | Logistic regression, small MLP, histogram gradient boosting | How much signal is available in the current edge features? | Trained and replayed on the exact128 TRAIN bank; longer MLP training improved classification. |
+| Tree-family comparison | XGBoost, CatBoost, ExtraTrees | Do other tree constructions improve incumbent-edge prediction with the same data and selection rule? | Three of twelve tasks complete; nine native-runtime crashes preserved. Infrastructure recovery is separate from scientific selection. |
+| Graph comparison | Directed message-passing network and graph attention | Does compatibility-graph context add useful information beyond independent edge features? | GPT-6.1 Sol implementing a small PyTorch CPU pilot and prospective grouped protocol. |
+| Structured attention | Transformer/attention decoder with feasibility masks | Can the model construct coherent route proposals rather than classify each edge independently? | Next architecture package after the graph interface and replay contract are verified; do not require a positive graph-classification result to study it. |
+| Cost-aware learning | Ranking candidate plans or feasible local moves; later policy-gradient improvement | Can training improve fleet cost instead of only imitating incumbent membership? | Define feasible action/state/reward and time accounting before fitting. Candidate ranking can start before a full learned route policy. |
+| Hybrid proposals | Retrieval plus learned ranking; retained plans plus graph scores | Is learning useful beyond cheap reuse and exact rescoring? | Keep as a matched downstream comparison for every proposal family. |
+
+Each study receives a versioned small pilot before a larger learning curve. Freeze its architecture menu, data registry, split, stopping rule, seeds, time cap and reporting metrics before outcomes. Keep completed and failed attempts, including environment failures. Hardware compatibility must be verified on the execution node, not inferred from a login-node import.
+
+The current128 timetables are development research within the TRAIN partition. Repeated model exploration makes these cross-validation reports exploratory. A family/configuration can be selected only through its inner groups; a final locked comparison on independent timetables is needed for stronger generalization claims. No outer score should silently become the next early-stopping or tuning input. Expand timetable/charging diversity alongside architecture work, rather than relying on more epochs over the same narrow bank.
+
+Judge proposals by whole-fleet feasibility, target electricity/fleet cost, quality of available bounds, total online latency, repair effort and global verification calls. Classification loss and ranking recall diagnose the scorer; they do not establish route quality. Report cold solving, retained plans/columns, nearest-neighbor retrieval and cheap exact rescoring under matched budgets.
+
+The attention-policy direction is motivated by [Kool, van Hoof and Welling, Attention, Learn to Solve Routing Problems!](https://arxiv.org/abs/1803.08475), which studies attention-based construction with policy-gradient training. [POMO](https://papers.neurips.cc/paper_files/paper/2020/hash/f231f2107df69eab0a3862d50018a9b2-Abstract.html) offers a later multi-start policy-training reference. Their routing problems do not establish performance on our timetable, battery and charging constraints; adapting the action masks and evaluating physical plans are research tasks here. Graph references and exact first-pilot settings belong in the graph protocol.
