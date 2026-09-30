@@ -8,7 +8,60 @@ supersedes the earlier idle-monitor pause condition and blanket deferral of ML.
 Notify only substantive findings, major decisions, important failures or review
 artifacts. Continue useful local work between jobs; do not pause on an empty queue.
 
-## Latest checkpoint — parallel labels and completed route-model pilot
+## Latest checkpoint — stronger grouped training and remaining registry launched
+
+- Latest human direction: continue sustained training with modern ML plus sound
+  classical controls against overfitting. Manuscript deferred; hourly automation
+  ACTIVE. Use Root to manage, Sol for bounded implementation and Luna for concise
+  research/review. All workers completed their packages; no agent owns pending edits.
+- **Array 716152 submitted 2026-09-30T19:22:15Z**, four tasks observed RUNNING and
+  eight pending in the single startup check. Each requests 1 CPU / 8 GB / 30 min,
+  native1, no retry/requeue, exclude scaglione-compute-01. One task was allocated
+  two logical CPUs; retain requested/actual distinction. LAUNCH_716152.json governs.
+  Remote `/home/nc437/egg-route-model32-20260930-v2`; sparse checkout of src, campaign
+  docs and exact pooled inputs. Execution commit **8fc64fb**. No partial scientific
+  outcomes were read. Attempt `result/physical_learning/20260930-route-model32-v2`.
+- Frozen dataset: exact TRAIN prefix10000–10031, 32 timetables / 64 observed feasible
+  source fleets / 32,148 candidate movements. Pool `20260930-route-pool32-v1`, manifest
+  SHA `35251cbc8c81787263b51f6259820299e862fba97efa6b8d09c9b1f9c8211842`.
+  Four outer folds × seeds17/29/43; each task has20fit/4inner/8outer whole timetables.
+  Compare constant/kind controls, regularized LBFGS logistic, histogram boosted trees,
+  and Adam MLP32. Inner groups alone select tree iterations/MLP checkpoint; fit-only
+  preprocessing, no row-level validation, no outer tuning or refit. Predictions,
+  convergence, curves, AP, probability metrics, fixed0.5 recalls/support and ranking
+  recall at input-only k=tripcount are saved. These are edge scores, not route benefits.
+  Seven focused fixture checks and bounded source review passed. Isolated environment
+  pins sklearn1.7.2/joblib1.5.2/NumPy1.26.4/SciPy1.13.1; no global solver-env changes.
+- **Wave2 label jobs715490–715496**, shards9–15 / IDs10072–10127, submitted
+  2026-09-30T19:15:33Z and all seven observed RUNNING. Execution commit6b29c72;
+  remote `/home/nc437/egg-physical-parallel-labels-20260930-wave2`;
+  individual attempts `result/physical_learning/20260930-shardNN-attempt1`.
+  Seven jobs ×1requested CPU/8GB/2h/native1, no retry/requeue, exclude01;14CPUh cap.
+  NEXT_PARALLEL_LABEL_WAVE2_PROTOCOL.md and individual LAUNCH receipts govern.
+  Combined ceiling remains8label+4training workers /12requested CPUs /96GB.
+- Previous wave1 jobs712946–712952 all completed; every shard02–08 admitted once.
+  448 intended outcomes:444replayed plans and4censors (one source failure and three
+  dependent target labels for10037, outside current32prefix). Source charge projection
+  exceeded roundoff budget; failure and all time preserved, no retry. Cumulative bank:
+  **72 TRAIN timetables /571 replayed plans /5censors**, including original preemption.
+  Wave1 child time4172.29s; allocated CPU time6036s across parallel jobs. Source incumbents
+  remain provisional where native budgets ended; target OPTIMAL is only linear-LP.
+  See RESULTS_PHYSICAL_PARALLEL_WAVE1.md / PHYSICAL_PARALLEL_WAVE1_DERIVED.json / accounting.
+  Raw/admitted backup6b29c72; source/protocol/review/pool backup8fc64fb.
+- MODERN_ML_METHODS_AND_VALIDATION.md links established tabular and recent RouteFinder/
+  RRNCO graph-attention approaches, with explicit EV timetable transfer limits. No
+  current-SOTA claim or route-quality claim. Preserve base-group splits, small fixed
+  selection budgets, per-group seed averaging, learning curves and sealed dev/test.
+- Next: one scoped check of716152and715490–715496. Collect complete outputs, companion
+  model files, wrappers/logs/accounting and preserve all failures. Review saved32group
+  predictions/models without refit, including optimizer convergence and fit/inner curves;
+  report seed-averaged per-timetable metrics, not edge-row pseudo-replication. Continue
+  censor-aware exact64/128prefix pooling, then structured route decoding/charging replay
+  and matched cold/retained/retrieval/exact-rescore baselines. Do not promote classifiers
+  from accuracy alone or train extra epochs solely to use compute. Keep all reserved
+  outcomes sealed. Do not stop the campaign when this array or wave finishes.
+
+## Prior checkpoint — parallel labels and completed route-model pilot
 
 - The human requested parallel use of the cluster. The previous one-job bootstrap
   rule is superseded by PARALLEL_LEARNING_RESOURCE_PROTOCOL.md: up to eight label

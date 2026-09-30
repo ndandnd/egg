@@ -1,6 +1,6 @@
 {
-  "updated_at_utc": "2026-09-30T19:17:08.571469+00:00",
-  "phase": "wave2_labels_submitted_grouped32_training_review",
+  "updated_at_utc": "2026-09-30T19:23:37.224014+00:00",
+  "phase": "grouped32_training_and_registry_completion_submitted",
   "active_job_ids": [
     "715490",
     "715491",
@@ -8,7 +8,8 @@
     "715493",
     "715494",
     "715495",
-    "715496"
+    "715496",
+    "716152"
   ],
   "completed_job_ids": [
     "677817",
@@ -39,19 +40,41 @@
   "remote_checkout": "/home/nc437/egg-physical-parallel-labels-20260930-wave2",
   "attempt_relative": null,
   "startup_observation": {
-    "recorded_at_utc": "2026-09-30T18:40:00Z",
-    "timestamp_precision": "minute",
-    "state": "RUNNING",
-    "job_ids": [
-      "712946",
-      "712947",
-      "712948",
-      "712949",
-      "712950",
-      "712951",
-      "712952"
+    "recorded_at_utc": "2026-09-30T19:24:42.498936+00:00",
+    "label_jobs_running": [
+      "715490",
+      "715491",
+      "715492",
+      "715493",
+      "715494",
+      "715495",
+      "715496"
     ],
-    "source": "Scoped startup squeue check for submitted label wave"
+    "training_array": "716152",
+    "training_running_tasks": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "training_pending_tasks": [
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11
+    ],
+    "training_actual_allocated_cpus_first_wave": [
+      1,
+      1,
+      1,
+      2
+    ],
+    "requested_native_threads": 1,
+    "partial_scientific_outcomes_read": false
   },
   "automation": {
     "id": "advance-egg-journal-research",
@@ -60,7 +83,7 @@
     "notification_policy": "Substantive results, major decisions, failures or review artifacts only",
     "resource_policy": "Parallel label8 + training4; initial single-job limit superseded."
   },
-  "next_action": "Root will finish reviewed32-group comparison launch. Monitor wave2 jobs715490\u2013715496 via scoped receipts/accounting, then admit each once, preserving all censors. Follow grouped validation plan; no test access.",
+  "next_action": "One scoped queue check for recorded716152and715490\u2013715496. Collect complete model array/labels, preserve failures and times. Review grouped32 outer predictions and saved models without refit; report seed-averaged per-timetable metrics, inner/fit curves and convergence. No promotion from edge scores to routes. Next implement censor-aware64/128 pooling and matched structured route decoding; follow modern ML methods note. Dev/test sealed; manuscript deferred.",
   "stage1_results": "RESULTS_STAGE1.md",
   "stage1_model_analysis": "MODEL_STAGE1.md",
   "test_groups_unobserved": [
@@ -88,9 +111,41 @@
     "DOC_ROUTE_MODEL_PILOT_RESULTS_RECEIPT.json"
   ],
   "latest_observation": {
-    "all_seven_wave1_jobs_completed": true,
-    "source": "Scoped sacct and all successful replay-only shard admissions",
-    "accounting": "ACCOUNTING_PARALLEL_LABEL_WAVE1.json"
+    "recorded_at_utc": "2026-09-30T19:24:42.498936+00:00",
+    "label_jobs_running": [
+      "715490",
+      "715491",
+      "715492",
+      "715493",
+      "715494",
+      "715495",
+      "715496"
+    ],
+    "training_array": "716152",
+    "training_running_tasks": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "training_pending_tasks": [
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11
+    ],
+    "training_actual_allocated_cpus_first_wave": [
+      1,
+      1,
+      1,
+      2
+    ],
+    "requested_native_threads": 1,
+    "partial_scientific_outcomes_read": false
   },
   "result_summarizer": "summarize_cost_aware_repair.py",
   "cost_aware_results": "RESULTS_COST_AWARE_REPAIR.md",
@@ -104,7 +159,7 @@
   "shared_interval_physical_pool_review": "SHARED_INTERVAL_PHYSICAL_POOL_REVIEW.json",
   "shared_interval_report_backup_commit": "8e17264ffc71eb9b5ed0851b429d5d3927f43ac8",
   "shared_interval_figure": "figures/shared_interval_2016_learned.png",
-  "local_follow_up": "All 12 saved pilot models/predictions independently replayed. MLP held-group log loss 0.2083 does not improve kind-frequency 0.2079, although Brier improves 0.0550 to 0.0527. Every method predicts no selected edges at threshold 0.5, so 93.88% accuracy is an all-negative baseline. Shard 1 is admitted; the pilot remains frozen to the original eight groups.",
+  "local_follow_up": "32-group logistic/boosted-tree/Adam-MLP comparison launched with group-separated fit/inner/outer stages, fixed model menu, reserved tests untouched. Remaining56registry TRAIN timetables collecting in parallel.",
   "shared_budget_results": "RESULTS_SHARED_BUDGET_REPAIR.md",
   "shared_budget_verification": "INDEPENDENT_REPLAY_SHARED_BUDGET.json",
   "shared_budget_physical_pool_review": "SHARED_BUDGET_PHYSICAL_POOL_REVIEW.json",
@@ -232,7 +287,9 @@
     "715495",
     "715496"
   ],
-  "active_training_array_ids": [],
+  "active_training_array_ids": [
+    "716152"
+  ],
   "route_model_launch_receipt": "LAUNCH_713295.json",
   "route_model_training_protocol": "ROUTE_MODEL_TRAINING_PROTOCOL.md",
   "physical_shard01_accounting": "ACCOUNTING_711779.json",
@@ -306,12 +363,7 @@
   },
   "route_model_review_backup_commit": "febc81543784694f1db702dbac3da9f7b8183cbe",
   "physical_shard01_review_backup_commit": "febc81543784694f1db702dbac3da9f7b8183cbe",
-  "current_work_owners": {
-    "root": "wave2 launch, pinned environment, final review and training launch",
-    "sol6_campaign_runner": "fresh32group pooled manifest/trainer/protocol",
-    "luna_wave1_admission": "compact wave1 data report",
-    "luna_campaign_review": "methods note and grouped selection review"
-  },
+  "current_work_owners": {},
   "modern_ml_methods_note": "MODERN_ML_METHODS_AND_VALIDATION.md",
   "route_training_environment": "ROUTE_TRAINING_ENVIRONMENT.json",
   "physical_parallel_wave1_raw_backup_commit": "6b29c7286f85f33dab92dd139be6b3082be3dbd8",
@@ -322,5 +374,14 @@
     "failure_reason": "Whole-incumbent charge projection exceeds roundoff budget",
     "no_retry": true,
     "outside_current32prefix": true
-  }
+  },
+  "route_model32_launch_receipt": "LAUNCH_716152.json",
+  "route_model32_protocol": "ROUTE_MODEL32_TRAINING_PROTOCOL.md",
+  "route_model32_review": "ROUTE_MODEL32_V2_REVIEW.md",
+  "route_model32_pool_manifest": "result/physical_learning/20260930-route-pool32-v1/pool_manifest.json",
+  "route_model32_pool_sha256": "35251cbc8c81787263b51f6259820299e862fba97efa6b8d09c9b1f9c8211842",
+  "route_model32_execution_commit": "8fc64fbf64a82f8dc8a2ff36c5ea0230c126b6ff",
+  "physical_parallel_wave1_results": "RESULTS_PHYSICAL_PARALLEL_WAVE1.md",
+  "physical_parallel_wave1_derived": "PHYSICAL_PARALLEL_WAVE1_DERIVED.json",
+  "physical_parallel_wave1_report_backup_commit": "8fc64fbf64a82f8dc8a2ff36c5ea0230c126b6ff"
 }
