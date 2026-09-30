@@ -8,7 +8,50 @@ supersedes the earlier idle-monitor pause condition and blanket deferral of ML.
 Notify only substantive findings, major decisions, important failures or review
 artifacts. Continue useful local work between jobs; do not pause on an empty queue.
 
-## Latest checkpoint — energy-aware pilot completed; charging limits under diagnosis
+## Latest checkpoint — charging-cap repair pilot launched
+
+- **Recorded EGG job 691594**, submitted 2026-09-30T08:55:45Z. One scoped
+  startup check observed PENDING, requesting one CPU/8GB. No result inspected.
+  Do not duplicate this attempt. Existing hourly automation remains ACTIVE.
+- Execution commit `77122c800bbc04fec35dffd43a1f4030bf1699b1`, remote checkout
+  `/home/nc437/egg-charging-cap-repair-20260930`, exclusive attempt
+  `result/learning_repair/20260930-charging-cap-attempt1`. Authoritative receipts:
+  LAUNCH_691594.json, PROTOCOL_CHARGING_CAP_REPAIR.md and
+  CHARGING_CAP_LAUNCH_REVIEW.md under research-20260930/learning-campaign.
+- Completed energy-aware job 688750 produced no feasible new repaired fleet:
+  all four optimal energy-relaxed covers failed native charging. Independent
+  arithmetic now identifies insufficient individual charging windows in 12/14
+  selected routes, across all four fleets. It grants each bus exclusive charging,
+  so shared congestion is unnecessary to explain these selected failures. This
+  does not rule out every 3/4-bus fleet. See CHARGING_WINDOW_DIAGNOSIS.md/.json
+  and RESULTS_ENERGY_AWARE_REPAIR.md. Full evidence backed up in 535fc36.
+- New cap-aware screen adds maximum depot energy gains from actual compiled
+  charging windows and terminal refill capacity. These are necessary bounds;
+  shared charging competition remains omitted. Native fixed-route charging and
+  independent replay decide feasibility. No new charging-cap result claimed yet.
+- Same four crossed development cells and frozen stage2 model; no refit or
+  reserved test access. Compare cost_only/cost_learned separately. Failed repairs
+  preserve failures/time and replay the archived fallback without redundant
+  hull solving; new feasible repairs receive fresh bounded hull verification.
+- Resource budget: one CPU/8GB/30min/one native thread, no retry/requeue,
+  exclude scaglione-compute-01. Cover5sec, charge45phase/55wall, hull70wall,
+  child240, controller1500, shell1650. Root reviewed inequalities/profile/budget;
+  Sol aggregate checks passed 33 tests+4subtests, diagnosis/design/39sourcepins,
+  wrapper syntax and diff checks. No local GRB fleet optimization ran.
+- Google Doc has the verified charging-window diagnosis/results append and
+  immutable evidence link. History and two existing inline figures preserved.
+  Receipt: DOC_ENERGY_AWARE_RESULTS_RECEIPT.json. No new failure figure added.
+- Next: make one scoped check of691594; use scoped sacct/receipts if vanished.
+  Collect the complete attempt, native stdout/stderr and wrapper receipt.
+  Summarize with `python3 research-20260930/learning-campaign/summarize_cost_aware_repair.py
+  --attempt result/learning_repair/20260930-charging-cap-attempt1
+  --output research-20260930/learning-campaign/CHARGING_CAP_REPAIR_CELLS.csv`
+  (one shell line). Replay new candidates and fallbacks, retain all costs/bounds/
+  status/time, and choose the next bounded step from evidence. Do not refit merely
+  to these two development cases. All workers finished; check newer state before
+  acting. Reserved2004/2005, protected outcomes and privateGIRO remain untouched.
+
+## Prior checkpoint — energy-aware pilot completed; charging limits under diagnosis
 
 - Job **688750 completed**, exit 0 in 35 seconds on snavely-cpu-04,
   one allocated CPU, 8 GB, MaxRSS 116972 KiB. No EGG job is active.
