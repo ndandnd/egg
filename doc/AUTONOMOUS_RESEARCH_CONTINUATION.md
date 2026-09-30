@@ -8,7 +8,43 @@ supersedes the earlier idle-monitor pause condition and blanket deferral of ML.
 Notify only substantive findings, major decisions, important failures or review
 artifacts. Continue useful local work between jobs; do not pause on an empty queue.
 
-## Latest checkpoint — independent transfer campaign ready for one launch
+## Latest checkpoint — independent transfer campaign submitted
+
+- **Recorded EGG job 696441**, submitted 2026-09-30T12:06:42Z. Scoped startup
+  check: PENDING, one requested CPU/8GB. No outcome inspected; do not duplicate.
+  Existing hourly automation ACTIVE. All three workers finished; no pending edits.
+- Execution commit `2f382902163c55d565f0964320d9e7c47cb036ae`, fresh remote
+  `/home/nc437/egg-transfer-campaign-20260930`, exclusive attempt
+  `result/learning_campaign/20260930-transfer-attempt1`.
+  LAUNCH_696441.json / PROTOCOL_TRANSFER_CAMPAIGN.md / TRANSFER_LAUNCH_REVIEW.md
+  are authoritative. No old checkout or other project/held job altered.
+- Only new development 2018/20services and 2019/28services generated. Frozen
+  stage-2 model, no refit. Reserved 2004/2005 plus future size-matched
+  2020/20services and 2021/28services stay unmaterialized. Four source cells,
+  one prospective inference attempt, then ten target native and four repair
+  cells (18 total). Direct prediction/replay, repair and hull checking distinct.
+- Budget: native70solver/100hard; repair30cover,45/55charge,70hull,240hard;
+  inference45hard; controller3000/shell3300/Slurm3600; oneCPU/8GB/thread,
+  no retry/requeue, exclude scaglione-compute-01. Fourteen pure tests, wrapper,
+  31 source pins/design/diff checks and two bounded reviews pass. Failed
+  inference kept without retry; independent controls continue. A projected
+  learned proposal needs successful hash-checked inference. Provisional feasible
+  repairs survive later hull failure with failure status and unknown optimality.
+- Prior job 696067 complete in214s: replayed five-bus direct repairs689.100163
+  learned/691.228570 cost-only, covergap~0.20. New saved physical685.695043,
+  targetglobalLB597.829694; wide gap87.865349. Among21replayedplans, own-price
+  regret>=5.092135 at that incumbent; no unknown-optimum support claim.
+  Exact results/independent replay/core evidence backed up5a7c7b04, pool review
+  25fe868. Original Google Doc append verified; three previous figures retained.
+  DOC_SHARED_BUDGET_RESULTS_RECEIPT.json records it. No general ML or speedup claim.
+- Next: one scoped queue check of696441, scoped sacct/receipts if vanished;
+  collect complete18cellattempt, catalog/inference receipt, native logs, wrapper.
+  Independent same-case/market replay and costs, bound status, full paid times;
+  source acquisition once per timetable, shared inference once, don't add lookup
+  twice to worker wall. Preserve every failure. Choose next bounded campaign
+  step from this evidence; no automatic refit, budget escalation or test access.
+
+## Prior checkpoint — independent transfer campaign ready for one launch
 
 - No active EGG job: 696067 completed in 214s, full evidence collected and
   independently reviewed. Two new five-bus direct repairs cost 689.100163

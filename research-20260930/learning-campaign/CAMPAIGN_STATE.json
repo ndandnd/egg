@@ -1,7 +1,9 @@
 {
-  "updated_at_utc": "2026-09-30T12:05:48.530224+00:00",
-  "phase": "independent_transfer_ready_to_launch",
-  "active_job_ids": [],
+  "updated_at_utc": "2026-09-30T12:07:55.562939+00:00",
+  "phase": "independent_transfer_campaign_submitted",
+  "active_job_ids": [
+    "696441"
+  ],
   "completed_job_ids": [
     "677817",
     "678708",
@@ -12,13 +14,13 @@
     "695461",
     "696067"
   ],
-  "launch_receipt": "LAUNCH_696067.json",
-  "source_commit": "3e32d3189fa42ac971c6ee0319bfb54555072f2e",
-  "remote_checkout": "/home/nc437/egg-shared-budget-repair-20260930",
-  "attempt_relative": "result/learning_repair/20260930-shared-budget-attempt1",
+  "launch_receipt": "LAUNCH_696441.json",
+  "source_commit": "2f382902163c55d565f0964320d9e7c47cb036ae",
+  "remote_checkout": "/home/nc437/egg-transfer-campaign-20260930",
+  "attempt_relative": "result/learning_campaign/20260930-transfer-attempt1",
   "startup_observation": {
-    "recorded_at_utc": "2026-09-30T10:53:41.986031+00:00",
-    "squeue_row": "696067|PENDING|0:00|1|8G|",
+    "recorded_at_utc": "2026-09-30T12:07:55.562939+00:00",
+    "squeue_row": "696441|PENDING|0:00|1|8G|",
     "state": "PENDING",
     "requested_cpus": 1,
     "node": null
@@ -29,7 +31,7 @@
     "cadence": "hourly",
     "notification_policy": "Substantive results, major decisions, failures or review artifacts only"
   },
-  "next_action": "Commit/push reviewed transfer source and launch once in fresh checkout; 18cells, 2018/2019 development only, frozen model, no refit, 1CPU8GB60min. Old696067 complete; no activejob. Reserved2004/2005/2020/2021 untouched.",
+  "next_action": "One scoped check of696441; if vanished use scoped sacct/receipts, collect full18cellattempt/accounting/logs. Independently compare direct proposal, repair and native verified outcomes againstcold/retained/nearest/cheapest withpaidtimes andopenbounds. No refit/test access, no duplicate or automaticbudgetescalation; automationACTIVE.",
   "stage1_results": "RESULTS_STAGE1.md",
   "stage1_model_analysis": "MODEL_STAGE1.md",
   "test_groups_unobserved": [
@@ -49,12 +51,12 @@
     "DOC_SHARED_BUDGET_RESULTS_RECEIPT.json"
   ],
   "latest_observation": {
-    "job_id": "696067",
-    "recorded_at_utc": "2026-09-30T11:44:48.719084+00:00",
-    "state": "COMPLETED",
-    "elapsed_seconds": 214,
-    "exit_code": "0:0",
-    "source": "ACCOUNTING_696067.json"
+    "job_id": "696441",
+    "recorded_at_utc": "2026-09-30T12:07:55.562939+00:00",
+    "squeue_row": "696441|PENDING|0:00|1|8G|",
+    "state": "PENDING",
+    "requested_cpus": 1,
+    "node": null
   },
   "result_summarizer": "summarize_cost_aware_repair.py",
   "cost_aware_results": "RESULTS_COST_AWARE_REPAIR.md",
@@ -68,7 +70,7 @@
   "shared_interval_physical_pool_review": "SHARED_INTERVAL_PHYSICAL_POOL_REVIEW.json",
   "shared_interval_report_backup_commit": "8e17264ffc71eb9b5ed0851b429d5d3927f43ac8",
   "shared_interval_figure": "figures/shared_interval_2016_learned.png",
-  "local_follow_up": "All completed696067 evidence/report/Doc append finished; transfer source/tests/independent review finished. Ready for one bounded launch.",
+  "local_follow_up": "All result verification/report/Doc append and transfer implementation/reviews complete. All three workers finished. New job last observedPENDING; no result inspected.",
   "shared_budget_results": "RESULTS_SHARED_BUDGET_REPAIR.md",
   "shared_budget_verification": "INDEPENDENT_REPLAY_SHARED_BUDGET.json",
   "shared_budget_physical_pool_review": "SHARED_BUDGET_PHYSICAL_POOL_REVIEW.json",
