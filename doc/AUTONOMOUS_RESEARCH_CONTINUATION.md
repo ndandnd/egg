@@ -8,7 +8,29 @@ supersedes the earlier idle-monitor pause condition and blanket deferral of ML.
 Notify only substantive findings, major decisions, important failures or review
 artifacts. Continue useful local work between jobs; do not pause on an empty queue.
 
-## Latest checkpoint — train-only dataset adapter prepared during shard 00
+## Latest checkpoint — shard 00 preempted; explicit continuation in preparation
+
+- One scoped queue check found 703461 absent. Scoped accounting confirms PREEMPTED,
+  713 allocation seconds; batch CANCELLED 0:15 / 714 seconds, 234056 KiB peak RSS.
+  No final wrapper or summary exists. Whole partial attempt and both Slurm logs
+  collected: 315 files / 82.79 MB hashed, stdout retained locally and ignored by Git.
+- All 16 source solves and 24 charging cells have catalog rows and child receipts;
+  all 40 report feasible plans. One additional launched cell, base10004/source0
+  late charging, has no receipt and remains interrupted/censored. Exactly23 cells
+  were never launched. Accounting and manifest name the raw evidence. No model fit
+  or complete-shard admission; Root/Luna reviewing partial evidence once.
+- Sol is implementing an explicit new continuation attempt for only the23 untouched
+  cells, with parent hashes and an accounting-based censor for the interrupted cell.
+  Parent files stay unchanged; no completed or interrupted solve is retried. Proposed
+  bound: one CPU/8GB/thread,45minutes, child100/controller2500/shell2600 seconds,
+  no requeue, excluded node unchanged. New composite-admission policy will distinguish
+  old/new receipts and spent time. No new job is submitted yet. Keep this concrete
+  implementation moving; do not launch another shard before checking newer receipts.
+- Existing physical generator/first-shard protocol and v1 adapter remain historical
+  source evidence. No sealed-test material or manuscript work. The next checkpoint
+  will replace this implementation status after review and one guarded launch.
+
+## Prior checkpoint — train-only dataset adapter prepared during shard 00
 
 - **703461 remains the sole recorded EGG job.** One scoped check in this follow-up
   observed RUNNING at 5:12 elapsed, 1 CPU / 8 GB, snavely-cpu-01 (recorded
