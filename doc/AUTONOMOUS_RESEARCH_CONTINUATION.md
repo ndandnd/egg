@@ -8,7 +8,36 @@ supersedes the earlier idle-monitor pause condition and blanket deferral of ML.
 Notify only substantive findings, major decisions, important failures or review
 artifacts. Continue useful local work between jobs; do not pause on an empty queue.
 
-## Latest checkpoint — cost-aware four-cell experiment submitted
+## Latest checkpoint — cost-aware failure diagnosed; energy-aware cover in implementation
+
+- Job **685697 completed**, exit0 in4:43 on snavely-cpu-04, one allocated CPU,
+  8GB, MaxRSS229396KiB. Full attempt collected at
+  `result/learning_repair/20260930-cost-aware-attempt1`; accounting, manifest,
+  four-cell CSV and RESULTS_COST_AWARE_REPAIR.md are under
+  research-20260930/learning-campaign. Do not repeat this attempt.
+- All four covers achieved native optimal structural bus counts (3/4), but
+  every fixed-route charging LP reported INFEASIBLE. All four cells used the
+  archived source0 fallback. Root freshly replayed and exactly rescored each
+  saved fallback: 4buses/553.47 for2016 and5buses/724.66 for2017. No learned
+  benefit, new feasible repaired plan or speedup. Hull checks stayed open.
+- Necessary energy diagnosis: each selected vehicle route has a segment without
+  charging whose drain exceeds usable battery80kWh. This rejects these covers;
+  it does not prove 3/4buses impossible in the full physical model.
+- No EGG job currently active. Root manages the next concrete four-cell
+  development package: optional necessary SOC relaxation in the route-cover
+  MILP, allowing optimistic full reset at a positive declared depot charging
+  opportunity, then unchanged full charging LP/replay/fallback/hull checking.
+  Sol energy_diagnosis owns module/tests and diagnosis; Sol campaign_runner owns
+  harness/protocol; Luna result report and subsequent review. Check active
+  workers/newer state before edits. Root alone submits after review/freeze.
+- Prospective initial next ceiling is unchanged:1CPU/8GB/30min, one native
+  thread, no retry/requeue, exclude scaglione-compute-01; no refit/test access.
+  Do not launch until final PROTOCOL_ENERGY_AWARE_REPAIR.md and source reviewed.
+  Existing ACTIVE hourly heartbeat continues. Meaningful findings only.
+- Prior source remains682a860; raw logs (including native diagnostics) retained
+  locally/remotely and hashed. Reserved2004/2005 and protected outcomes untouched.
+
+## Prior checkpoint — cost-aware four-cell experiment submitted
 
 - **Recorded EGG job: 685697**, submitted at 2026-09-30T06:52:37Z. Initial
   scoped queue check was PENDING; later scoped accounting confirmed PENDING,

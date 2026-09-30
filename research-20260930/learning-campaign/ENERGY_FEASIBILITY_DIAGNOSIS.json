@@ -1,0 +1,833 @@
+{
+  "arithmetic": "Decimal sums of serialized JSON numeric spellings, not exact binary-rational float values; no rounding or optimization",
+  "bound": "Between charging opportunities, movement plus service energy must be <= battery_kwh - reserve_kwh; a depot departure is optimistically allowed a full battery.",
+  "cells": [
+    {
+      "all_selected_routes_have_certificate": true,
+      "battery_kwh": "100.0",
+      "case": "learning_s2016_n20",
+      "case_identity": "1a67e5991dca59a6dbd5d0390a2b02647d86a4b7cf2585f9af9f02da9981438e",
+      "policy": "cost_only",
+      "repair_json": "result/learning_repair/20260930-cost-aware-attempt1/learning_s2016_n20/state0/cost_only/repair.json",
+      "repair_sha256": "a81634e7f706c03055b66f86586e98f5f7564867ce0390fd559639972a5bb89f",
+      "reported_native_status": "INFEASIBLE",
+      "reserve_kwh": "20.0",
+      "selected_bus_count": 3,
+      "usable_battery_kwh": "80.0",
+      "vehicles": [
+        {
+          "has_violating_segment": true,
+          "route_movements": [
+            "out_T01",
+            "direct_T01_T05",
+            "direct_T05_T06",
+            "direct_T06_T11",
+            "direct_T11_T12",
+            "direct_T12_T17",
+            "direct_T17_T16",
+            "direct_T16_T20",
+            "in_T20"
+          ],
+          "route_trips": [
+            "T01",
+            "T05",
+            "T06",
+            "T11",
+            "T12",
+            "T17",
+            "T16",
+            "T20"
+          ],
+          "segments": [
+            {
+              "consumption_kwh": "200.35",
+              "excess_kwh": "120.35",
+              "from": "initial_full_battery",
+              "movement_kwh": "6.98",
+              "movements": [
+                "out_T01",
+                "direct_T01_T05",
+                "direct_T05_T06",
+                "direct_T06_T11",
+                "direct_T11_T12",
+                "direct_T12_T17",
+                "direct_T17_T16",
+                "direct_T16_T20",
+                "in_T20"
+              ],
+              "service_kwh": "193.37",
+              "to": "terminal_arrival_before_pullin_charge",
+              "trips": [
+                "T01",
+                "T05",
+                "T06",
+                "T11",
+                "T12",
+                "T17",
+                "T16",
+                "T20"
+              ],
+              "usable_battery_kwh": "80.0",
+              "violates_necessary_bound": true
+            }
+          ],
+          "vehicle": 0
+        },
+        {
+          "has_violating_segment": true,
+          "route_movements": [
+            "out_T03",
+            "direct_T03_T02",
+            "direct_T02_T07",
+            "direct_T07_T08",
+            "direct_T08_T13",
+            "direct_T13_T14",
+            "direct_T14_T18",
+            "in_T18"
+          ],
+          "route_trips": [
+            "T03",
+            "T02",
+            "T07",
+            "T08",
+            "T13",
+            "T14",
+            "T18"
+          ],
+          "segments": [
+            {
+              "consumption_kwh": "162.600000000000000",
+              "excess_kwh": "82.600000000000000",
+              "from": "initial_full_battery",
+              "movement_kwh": "4.480000000000000",
+              "movements": [
+                "out_T03",
+                "direct_T03_T02",
+                "direct_T02_T07",
+                "direct_T07_T08",
+                "direct_T08_T13",
+                "direct_T13_T14",
+                "direct_T14_T18",
+                "in_T18"
+              ],
+              "service_kwh": "158.120000000000000",
+              "to": "terminal_arrival_before_pullin_charge",
+              "trips": [
+                "T03",
+                "T02",
+                "T07",
+                "T08",
+                "T13",
+                "T14",
+                "T18"
+              ],
+              "usable_battery_kwh": "80.0",
+              "violates_necessary_bound": true
+            }
+          ],
+          "vehicle": 1
+        },
+        {
+          "has_violating_segment": true,
+          "route_movements": [
+            "out_T04",
+            "direct_T04_T09",
+            "direct_T09_T10",
+            "direct_T10_T15",
+            "direct_T15_T19",
+            "in_T19"
+          ],
+          "route_trips": [
+            "T04",
+            "T09",
+            "T10",
+            "T15",
+            "T19"
+          ],
+          "segments": [
+            {
+              "consumption_kwh": "122.75",
+              "excess_kwh": "42.75",
+              "from": "initial_full_battery",
+              "movement_kwh": "5.64",
+              "movements": [
+                "out_T04",
+                "direct_T04_T09",
+                "direct_T09_T10",
+                "direct_T10_T15",
+                "direct_T15_T19",
+                "in_T19"
+              ],
+              "service_kwh": "117.11",
+              "to": "terminal_arrival_before_pullin_charge",
+              "trips": [
+                "T04",
+                "T09",
+                "T10",
+                "T15",
+                "T19"
+              ],
+              "usable_battery_kwh": "80.0",
+              "violates_necessary_bound": true
+            }
+          ],
+          "vehicle": 2
+        }
+      ]
+    },
+    {
+      "all_selected_routes_have_certificate": true,
+      "battery_kwh": "100.0",
+      "case": "learning_s2016_n20",
+      "case_identity": "1a67e5991dca59a6dbd5d0390a2b02647d86a4b7cf2585f9af9f02da9981438e",
+      "policy": "cost_learned",
+      "repair_json": "result/learning_repair/20260930-cost-aware-attempt1/learning_s2016_n20/state0/cost_learned/repair.json",
+      "repair_sha256": "636cc81423c8bebb11ebd2dfb55fb0ef8789a1f60c90c350fb0e48355bb803db",
+      "reported_native_status": "INFEASIBLE",
+      "reserve_kwh": "20.0",
+      "selected_bus_count": 3,
+      "usable_battery_kwh": "80.0",
+      "vehicles": [
+        {
+          "has_violating_segment": true,
+          "route_movements": [
+            "out_T01",
+            "direct_T01_T02",
+            "direct_T02_T07",
+            "direct_T07_T08",
+            "direct_T08_T13",
+            "direct_T13_T14",
+            "direct_T14_T19",
+            "direct_T19_T20",
+            "in_T20"
+          ],
+          "route_trips": [
+            "T01",
+            "T02",
+            "T07",
+            "T08",
+            "T13",
+            "T14",
+            "T19",
+            "T20"
+          ],
+          "segments": [
+            {
+              "consumption_kwh": "176.740000000000002",
+              "excess_kwh": "96.740000000000002",
+              "from": "initial_full_battery",
+              "movement_kwh": "2.910000000000000",
+              "movements": [
+                "out_T01",
+                "direct_T01_T02",
+                "direct_T02_T07",
+                "direct_T07_T08",
+                "direct_T08_T13",
+                "direct_T13_T14",
+                "direct_T14_T19",
+                "direct_T19_T20",
+                "in_T20"
+              ],
+              "service_kwh": "173.830000000000002",
+              "to": "terminal_arrival_before_pullin_charge",
+              "trips": [
+                "T01",
+                "T02",
+                "T07",
+                "T08",
+                "T13",
+                "T14",
+                "T19",
+                "T20"
+              ],
+              "usable_battery_kwh": "80.0",
+              "violates_necessary_bound": true
+            }
+          ],
+          "vehicle": 0
+        },
+        {
+          "has_violating_segment": true,
+          "route_movements": [
+            "out_T03",
+            "direct_T03_T04",
+            "direct_T04_T09",
+            "direct_T09_T10",
+            "direct_T10_T15",
+            "direct_T15_T18",
+            "in_T18"
+          ],
+          "route_trips": [
+            "T03",
+            "T04",
+            "T09",
+            "T10",
+            "T15",
+            "T18"
+          ],
+          "segments": [
+            {
+              "consumption_kwh": "144.049999999999998",
+              "excess_kwh": "64.049999999999998",
+              "from": "initial_full_battery",
+              "movement_kwh": "2.890000000000000",
+              "movements": [
+                "out_T03",
+                "direct_T03_T04",
+                "direct_T04_T09",
+                "direct_T09_T10",
+                "direct_T10_T15",
+                "direct_T15_T18",
+                "in_T18"
+              ],
+              "service_kwh": "141.159999999999998",
+              "to": "terminal_arrival_before_pullin_charge",
+              "trips": [
+                "T03",
+                "T04",
+                "T09",
+                "T10",
+                "T15",
+                "T18"
+              ],
+              "usable_battery_kwh": "80.0",
+              "violates_necessary_bound": true
+            }
+          ],
+          "vehicle": 1
+        },
+        {
+          "has_violating_segment": true,
+          "route_movements": [
+            "out_T05",
+            "direct_T05_T06",
+            "direct_T06_T11",
+            "direct_T11_T12",
+            "direct_T12_T17",
+            "direct_T17_T16",
+            "in_T16"
+          ],
+          "route_trips": [
+            "T05",
+            "T06",
+            "T11",
+            "T12",
+            "T17",
+            "T16"
+          ],
+          "segments": [
+            {
+              "consumption_kwh": "156.12",
+              "excess_kwh": "76.12",
+              "from": "initial_full_battery",
+              "movement_kwh": "2.51",
+              "movements": [
+                "out_T05",
+                "direct_T05_T06",
+                "direct_T06_T11",
+                "direct_T11_T12",
+                "direct_T12_T17",
+                "direct_T17_T16",
+                "in_T16"
+              ],
+              "service_kwh": "153.61",
+              "to": "terminal_arrival_before_pullin_charge",
+              "trips": [
+                "T05",
+                "T06",
+                "T11",
+                "T12",
+                "T17",
+                "T16"
+              ],
+              "usable_battery_kwh": "80.0",
+              "violates_necessary_bound": true
+            }
+          ],
+          "vehicle": 2
+        }
+      ]
+    },
+    {
+      "all_selected_routes_have_certificate": true,
+      "battery_kwh": "100.0",
+      "case": "learning_s2017_n28",
+      "case_identity": "d90b4d889fae5f3df4d9b254b87053333f00da48bbe71e258445840fcc4eb8d0",
+      "policy": "cost_only",
+      "repair_json": "result/learning_repair/20260930-cost-aware-attempt1/learning_s2017_n28/state0/cost_only/repair.json",
+      "repair_sha256": "2e07d0b7d3b157fda1000271ff169a6a38b832299ef4e0d7312423a7a0efe9a4",
+      "reported_native_status": "INFEASIBLE",
+      "reserve_kwh": "20.0",
+      "selected_bus_count": 4,
+      "usable_battery_kwh": "80.0",
+      "vehicles": [
+        {
+          "has_violating_segment": true,
+          "route_movements": [
+            "out_T01",
+            "direct_T01_T02",
+            "direct_T02_T04",
+            "direct_T04_T10",
+            "direct_T10_T14",
+            "direct_T14_T19",
+            "direct_T19_T20",
+            "direct_T20_T25",
+            "direct_T25_T26",
+            "in_T26"
+          ],
+          "route_trips": [
+            "T01",
+            "T02",
+            "T04",
+            "T10",
+            "T14",
+            "T19",
+            "T20",
+            "T25",
+            "T26"
+          ],
+          "segments": [
+            {
+              "consumption_kwh": "216.720000000000003",
+              "excess_kwh": "136.720000000000003",
+              "from": "initial_full_battery",
+              "movement_kwh": "9.240000000000000",
+              "movements": [
+                "out_T01",
+                "direct_T01_T02",
+                "direct_T02_T04",
+                "direct_T04_T10",
+                "direct_T10_T14",
+                "direct_T14_T19",
+                "direct_T19_T20",
+                "direct_T20_T25",
+                "direct_T25_T26",
+                "in_T26"
+              ],
+              "service_kwh": "207.480000000000003",
+              "to": "terminal_arrival_before_pullin_charge",
+              "trips": [
+                "T01",
+                "T02",
+                "T04",
+                "T10",
+                "T14",
+                "T19",
+                "T20",
+                "T25",
+                "T26"
+              ],
+              "usable_battery_kwh": "80.0",
+              "violates_necessary_bound": true
+            }
+          ],
+          "vehicle": 0
+        },
+        {
+          "has_violating_segment": true,
+          "route_movements": [
+            "out_T03",
+            "direct_T03_T08",
+            "direct_T08_T17",
+            "direct_T17_T18",
+            "direct_T18_T22",
+            "direct_T22_T27",
+            "in_T27"
+          ],
+          "route_trips": [
+            "T03",
+            "T08",
+            "T17",
+            "T18",
+            "T22",
+            "T27"
+          ],
+          "segments": [
+            {
+              "consumption_kwh": "149.70000000000000203",
+              "excess_kwh": "69.70000000000000203",
+              "from": "initial_full_battery",
+              "movement_kwh": "6.06000000000000003",
+              "movements": [
+                "out_T03",
+                "direct_T03_T08",
+                "direct_T08_T17",
+                "direct_T17_T18",
+                "direct_T18_T22",
+                "direct_T22_T27",
+                "in_T27"
+              ],
+              "service_kwh": "143.640000000000002",
+              "to": "terminal_arrival_before_pullin_charge",
+              "trips": [
+                "T03",
+                "T08",
+                "T17",
+                "T18",
+                "T22",
+                "T27"
+              ],
+              "usable_battery_kwh": "80.0",
+              "violates_necessary_bound": true
+            }
+          ],
+          "vehicle": 1
+        },
+        {
+          "has_violating_segment": true,
+          "route_movements": [
+            "out_T05",
+            "direct_T05_T06",
+            "direct_T06_T13",
+            "direct_T13_T12",
+            "direct_T12_T21",
+            "direct_T21_T23",
+            "direct_T23_T24",
+            "direct_T24_T28",
+            "in_T28"
+          ],
+          "route_trips": [
+            "T05",
+            "T06",
+            "T13",
+            "T12",
+            "T21",
+            "T23",
+            "T24",
+            "T28"
+          ],
+          "segments": [
+            {
+              "consumption_kwh": "189.31",
+              "excess_kwh": "109.31",
+              "from": "initial_full_battery",
+              "movement_kwh": "7.38",
+              "movements": [
+                "out_T05",
+                "direct_T05_T06",
+                "direct_T06_T13",
+                "direct_T13_T12",
+                "direct_T12_T21",
+                "direct_T21_T23",
+                "direct_T23_T24",
+                "direct_T24_T28",
+                "in_T28"
+              ],
+              "service_kwh": "181.93",
+              "to": "terminal_arrival_before_pullin_charge",
+              "trips": [
+                "T05",
+                "T06",
+                "T13",
+                "T12",
+                "T21",
+                "T23",
+                "T24",
+                "T28"
+              ],
+              "usable_battery_kwh": "80.0",
+              "violates_necessary_bound": true
+            }
+          ],
+          "vehicle": 2
+        },
+        {
+          "has_violating_segment": true,
+          "route_movements": [
+            "out_T07",
+            "direct_T07_T09",
+            "direct_T09_T11",
+            "direct_T11_T15",
+            "direct_T15_T16",
+            "in_T16"
+          ],
+          "route_trips": [
+            "T07",
+            "T09",
+            "T11",
+            "T15",
+            "T16"
+          ],
+          "segments": [
+            {
+              "consumption_kwh": "125.469999999999998",
+              "excess_kwh": "45.469999999999998",
+              "from": "initial_full_battery",
+              "movement_kwh": "8.320000000000000",
+              "movements": [
+                "out_T07",
+                "direct_T07_T09",
+                "direct_T09_T11",
+                "direct_T11_T15",
+                "direct_T15_T16",
+                "in_T16"
+              ],
+              "service_kwh": "117.149999999999998",
+              "to": "terminal_arrival_before_pullin_charge",
+              "trips": [
+                "T07",
+                "T09",
+                "T11",
+                "T15",
+                "T16"
+              ],
+              "usable_battery_kwh": "80.0",
+              "violates_necessary_bound": true
+            }
+          ],
+          "vehicle": 3
+        }
+      ]
+    },
+    {
+      "all_selected_routes_have_certificate": true,
+      "battery_kwh": "100.0",
+      "case": "learning_s2017_n28",
+      "case_identity": "d90b4d889fae5f3df4d9b254b87053333f00da48bbe71e258445840fcc4eb8d0",
+      "policy": "cost_learned",
+      "repair_json": "result/learning_repair/20260930-cost-aware-attempt1/learning_s2017_n28/state0/cost_learned/repair.json",
+      "repair_sha256": "ee3d96193e49e6912518a7d05393e39608abf74b0f8828624fd836b3bae2bca1",
+      "reported_native_status": "INFEASIBLE",
+      "reserve_kwh": "20.0",
+      "selected_bus_count": 4,
+      "usable_battery_kwh": "80.0",
+      "vehicles": [
+        {
+          "has_violating_segment": true,
+          "route_movements": [
+            "out_T01",
+            "direct_T01_T02",
+            "direct_T02_T07",
+            "direct_T07_T08",
+            "direct_T08_T13",
+            "direct_T13_T12",
+            "direct_T12_T21",
+            "direct_T21_T22",
+            "direct_T22_T27",
+            "direct_T27_T28",
+            "in_T28"
+          ],
+          "route_trips": [
+            "T01",
+            "T02",
+            "T07",
+            "T08",
+            "T13",
+            "T12",
+            "T21",
+            "T22",
+            "T27",
+            "T28"
+          ],
+          "segments": [
+            {
+              "consumption_kwh": "241.63",
+              "excess_kwh": "161.63",
+              "from": "initial_full_battery",
+              "movement_kwh": "3.76",
+              "movements": [
+                "out_T01",
+                "direct_T01_T02",
+                "direct_T02_T07",
+                "direct_T07_T08",
+                "direct_T08_T13",
+                "direct_T13_T12",
+                "direct_T12_T21",
+                "direct_T21_T22",
+                "direct_T22_T27",
+                "direct_T27_T28",
+                "in_T28"
+              ],
+              "service_kwh": "237.87",
+              "to": "terminal_arrival_before_pullin_charge",
+              "trips": [
+                "T01",
+                "T02",
+                "T07",
+                "T08",
+                "T13",
+                "T12",
+                "T21",
+                "T22",
+                "T27",
+                "T28"
+              ],
+              "usable_battery_kwh": "80.0",
+              "violates_necessary_bound": true
+            }
+          ],
+          "vehicle": 0
+        },
+        {
+          "has_violating_segment": true,
+          "route_movements": [
+            "out_T03",
+            "direct_T03_T04",
+            "depot_T04_T17",
+            "direct_T17_T18",
+            "direct_T18_T23",
+            "direct_T23_T24",
+            "in_T24"
+          ],
+          "route_trips": [
+            "T03",
+            "T04",
+            "T17",
+            "T18",
+            "T23",
+            "T24"
+          ],
+          "segments": [
+            {
+              "consumption_kwh": "42.19",
+              "excess_kwh": "-37.81",
+              "from": "initial_full_battery",
+              "movement_kwh": "2.22",
+              "movements": [
+                "out_T03",
+                "direct_T03_T04",
+                "depot_T04_T17:inbound"
+              ],
+              "service_kwh": "39.97",
+              "to": "depot_arrival:depot_T04_T17",
+              "trips": [
+                "T03",
+                "T04"
+              ],
+              "usable_battery_kwh": "80.0",
+              "violates_necessary_bound": false
+            },
+            {
+              "consumption_kwh": "97.450000000000002",
+              "excess_kwh": "17.450000000000002",
+              "from": "depot_departure:depot_T04_T17",
+              "movement_kwh": "2.340000000000000",
+              "movements": [
+                "depot_T04_T17:outbound",
+                "direct_T17_T18",
+                "direct_T18_T23",
+                "direct_T23_T24",
+                "in_T24"
+              ],
+              "service_kwh": "95.110000000000002",
+              "to": "terminal_arrival_before_pullin_charge",
+              "trips": [
+                "T17",
+                "T18",
+                "T23",
+                "T24"
+              ],
+              "usable_battery_kwh": "80.0",
+              "violates_necessary_bound": true
+            }
+          ],
+          "vehicle": 1
+        },
+        {
+          "has_violating_segment": true,
+          "route_movements": [
+            "out_T05",
+            "direct_T05_T06",
+            "direct_T06_T11",
+            "direct_T11_T14",
+            "direct_T14_T19",
+            "direct_T19_T20",
+            "direct_T20_T25",
+            "direct_T25_T26",
+            "in_T26"
+          ],
+          "route_trips": [
+            "T05",
+            "T06",
+            "T11",
+            "T14",
+            "T19",
+            "T20",
+            "T25",
+            "T26"
+          ],
+          "segments": [
+            {
+              "consumption_kwh": "191.570000000000003",
+              "excess_kwh": "111.570000000000003",
+              "from": "initial_full_battery",
+              "movement_kwh": "3.060000000000000",
+              "movements": [
+                "out_T05",
+                "direct_T05_T06",
+                "direct_T06_T11",
+                "direct_T11_T14",
+                "direct_T14_T19",
+                "direct_T19_T20",
+                "direct_T20_T25",
+                "direct_T25_T26",
+                "in_T26"
+              ],
+              "service_kwh": "188.510000000000003",
+              "to": "terminal_arrival_before_pullin_charge",
+              "trips": [
+                "T05",
+                "T06",
+                "T11",
+                "T14",
+                "T19",
+                "T20",
+                "T25",
+                "T26"
+              ],
+              "usable_battery_kwh": "80.0",
+              "violates_necessary_bound": true
+            }
+          ],
+          "vehicle": 2
+        },
+        {
+          "has_violating_segment": true,
+          "route_movements": [
+            "out_T09",
+            "direct_T09_T10",
+            "direct_T10_T15",
+            "direct_T15_T16",
+            "in_T16"
+          ],
+          "route_trips": [
+            "T09",
+            "T10",
+            "T15",
+            "T16"
+          ],
+          "segments": [
+            {
+              "consumption_kwh": "91.329999999999998",
+              "excess_kwh": "11.329999999999998",
+              "from": "initial_full_battery",
+              "movement_kwh": "2.590000000000000",
+              "movements": [
+                "out_T09",
+                "direct_T09_T10",
+                "direct_T10_T15",
+                "direct_T15_T16",
+                "in_T16"
+              ],
+              "service_kwh": "88.739999999999998",
+              "to": "terminal_arrival_before_pullin_charge",
+              "trips": [
+                "T09",
+                "T10",
+                "T15",
+                "T16"
+              ],
+              "usable_battery_kwh": "80.0",
+              "violates_necessary_bound": true
+            }
+          ],
+          "vehicle": 3
+        }
+      ]
+    }
+  ],
+  "frozen_json": "result/learning_campaign/20260930-stage2-attempt1/frozen.json",
+  "frozen_sha256": "6de8846d024f3a7bc59e6c19e7c30086061b967b8e9fcdcc7a62496dd6b24cb6",
+  "schema": "egg-selected-cover-energy-certificate-v1",
+  "scope": "Only the four selected fixed path covers; no conclusion about any alternative cover or global fleet feasibility"
+}

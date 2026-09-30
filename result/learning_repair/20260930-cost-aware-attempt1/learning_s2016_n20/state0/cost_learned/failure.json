@@ -1,0 +1,176 @@
+{
+  "cover": {
+    "cover_objective": 2.9864930134050214,
+    "logit_scale": 0.00038476835187556234,
+    "meaning": "legal path cover only; battery and charging not yet checked",
+    "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+    "minimum_bus_count_scope": "declared structural route covers, ignoring charging",
+    "mip_gap": 0.0,
+    "mip_gap_raw": "0.0",
+    "mip_node_count": 1,
+    "native_minimum_bus_count_reported": true,
+    "objective_policy": "cost_learned",
+    "pullout_count": 3,
+    "random_seed": 0,
+    "score": 35.10420368291357,
+    "selected_movements": [
+      "out_T01",
+      "out_T03",
+      "out_T05",
+      "in_T16",
+      "in_T18",
+      "in_T20",
+      "direct_T01_T02",
+      "direct_T02_T07",
+      "direct_T03_T04",
+      "direct_T04_T09",
+      "direct_T05_T06",
+      "direct_T06_T11",
+      "direct_T07_T08",
+      "direct_T08_T13",
+      "direct_T09_T10",
+      "direct_T10_T15",
+      "direct_T11_T12",
+      "direct_T12_T17",
+      "direct_T13_T14",
+      "direct_T14_T19",
+      "direct_T15_T18",
+      "direct_T17_T16",
+      "direct_T19_T20"
+    ],
+    "status": 0,
+    "threads": 1,
+    "vehicles": [
+      {
+        "movements": [
+          "out_T01",
+          "direct_T01_T02",
+          "direct_T02_T07",
+          "direct_T07_T08",
+          "direct_T08_T13",
+          "direct_T13_T14",
+          "direct_T14_T19",
+          "direct_T19_T20",
+          "in_T20"
+        ],
+        "trips": [
+          "T01",
+          "T02",
+          "T07",
+          "T08",
+          "T13",
+          "T14",
+          "T19",
+          "T20"
+        ],
+        "vehicle": 0
+      },
+      {
+        "movements": [
+          "out_T03",
+          "direct_T03_T04",
+          "direct_T04_T09",
+          "direct_T09_T10",
+          "direct_T10_T15",
+          "direct_T15_T18",
+          "in_T18"
+        ],
+        "trips": [
+          "T03",
+          "T04",
+          "T09",
+          "T10",
+          "T15",
+          "T18"
+        ],
+        "vehicle": 1
+      },
+      {
+        "movements": [
+          "out_T05",
+          "direct_T05_T06",
+          "direct_T06_T11",
+          "direct_T11_T12",
+          "direct_T12_T17",
+          "direct_T17_T16",
+          "in_T16"
+        ],
+        "trips": [
+          "T05",
+          "T06",
+          "T11",
+          "T12",
+          "T17",
+          "T16"
+        ],
+        "vehicle": 2
+      }
+    ],
+    "wall_seconds": 0.008394424978177994
+  },
+  "cover_policy": "cost_learned",
+  "failure": {
+    "message": "Fixed-route charging has no native incumbent: INFEASIBLE",
+    "stage": "charging",
+    "type": "RepairStageFailure"
+  },
+  "native_stats": {
+    "backend": "GRB",
+    "backend_runtime": {
+      "model_solver_name": "GRB",
+      "native_library_path": "/home/nc437/evsp_env/lib/python3.12/site-packages/gurobipy/_attrutil.cpython-312-x86_64-linux-gnu.so",
+      "native_library_sha256": "57f87a886aa5a1fd8356494fa1b81e9f9c7d957c898d09e96145440c76c762b7",
+      "requested": "GRB",
+      "solver_class": "SolverGurobi",
+      "solver_module": "mip.gurobi"
+    },
+    "incumbent": null,
+    "lower_bound": null,
+    "n_constraints": 3224,
+    "n_int": 353,
+    "n_vars": 2457,
+    "physical_constraints": 3224,
+    "raw_incumbent_repr": "None",
+    "raw_lower_bound_repr": "None",
+    "seconds_cap": 45.0,
+    "status": "INFEASIBLE",
+    "threads": 1,
+    "wall_s": 0.007186083006672561
+  },
+  "raw_topology": [
+    "direct_T01_T02",
+    "direct_T02_T07",
+    "direct_T03_T02",
+    "direct_T03_T04",
+    "direct_T05_T06",
+    "direct_T06_T11",
+    "direct_T07_T08",
+    "direct_T08_T13",
+    "direct_T09_T10",
+    "direct_T10_T15",
+    "direct_T11_T12",
+    "direct_T12_T17",
+    "direct_T13_T14",
+    "direct_T14_T19",
+    "direct_T15_T16",
+    "direct_T17_T16",
+    "direct_T17_T18",
+    "direct_T19_T20",
+    "in_T04",
+    "in_T16",
+    "in_T18",
+    "in_T20",
+    "out_T01",
+    "out_T03",
+    "out_T05",
+    "out_T09"
+  ],
+  "repair_status": "fallback",
+  "repair_wall_seconds": 0.7310075240093283,
+  "timing_seconds": {
+    "charging_and_replay": 0.24452565104002133,
+    "cover": 0.44931718800216913,
+    "topology": 0.03648055699886754,
+    "total": 0.7309753689914942
+  }
+}

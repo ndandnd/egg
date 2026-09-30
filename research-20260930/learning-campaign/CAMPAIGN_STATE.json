@@ -1,13 +1,12 @@
 {
-  "updated_at_utc": "2026-09-30T07:01:16.261020+00:00",
-  "phase": "cost_aware_repair_queued",
-  "active_job_ids": [
-    "685697"
-  ],
+  "updated_at_utc": "2026-09-30T07:41:13.213821+00:00",
+  "phase": "cost_aware_repair_analyzed_next_design",
+  "active_job_ids": [],
   "completed_job_ids": [
     "677817",
     "678708",
-    "682689"
+    "682689",
+    "685697"
   ],
   "launch_receipt": "LAUNCH_685697.json",
   "source_commit": "682a8604a93804a74bc54666cbe1f626e5c9c788",
@@ -27,7 +26,7 @@
     "cadence": "hourly",
     "notification_policy": "Substantive results, major decisions, failures or review artifacts only"
   },
-  "next_action": "Check existing job685697 once; no duplicate submission. After completion collect full evidence, run summarize_cost_aware_repair.py, independently review/replay four crossed dev cells, and report failure/feasibility, structural vs physical bus counts, repaired cost vs fallback/source cost and separate global hull work. No retraining/test access. Doc launch entry verified and all workers complete; hourly automation remains active.",
+  "next_action": "All four cost-aware covers failed fixed-route charging; native INFEASIBLE. Independently replayed existing source fallbacks. Diagnose necessary battery constraints and implement one bounded energy-aware decoder ablation; no refit or reserved test access. No active EGG job until prospective protocol and reviewed source are frozen. Keep hourly heartbeat active.",
   "stage1_results": "RESULTS_STAGE1.md",
   "stage1_model_analysis": "MODEL_STAGE1.md",
   "test_groups_unobserved": [
@@ -42,21 +41,15 @@
   ],
   "latest_observation": {
     "job_id": "685697",
-    "state": "PENDING",
-    "elapsed_seconds": 0,
-    "allocated_cpus": 0,
-    "node": null,
-    "exit_code_field": "0:0",
-    "note": "Pending accounting exit-code field is not an execution-success claim; job has not started.",
-    "rows": [
-      "685697|PENDING|00:00:00|0:0|0|None assigned|None"
-    ],
-    "frozen": false,
-    "completed_cells": 0,
-    "summary": false,
-    "wrapper": false,
-    "source": "scoped sacct plus compact artifact-existence check",
-    "recorded_at_utc": "2026-09-30T07:01:16.261020+00:00"
+    "state": "COMPLETED",
+    "exit_code": "0:0",
+    "elapsed_seconds": 283,
+    "allocated_cpus": 1,
+    "batch_max_rss_kib": 229396,
+    "node": "snavely-cpu-04",
+    "source": "scoped sacct after completion",
+    "recorded_at_utc": "2026-09-30T07:41:13.213821+00:00"
   },
-  "result_summarizer": "summarize_cost_aware_repair.py"
+  "result_summarizer": "summarize_cost_aware_repair.py",
+  "cost_aware_results": "RESULTS_COST_AWARE_REPAIR.md"
 }
