@@ -8,7 +8,55 @@ supersedes the earlier idle-monitor pause condition and blanket deferral of ML.
 Notify only substantive findings, major decisions, important failures or review
 artifacts. Continue useful local work between jobs; do not pause on an empty queue.
 
-## Latest checkpoint — route repair works, but uses too many buses
+## Latest checkpoint — cost-aware four-cell experiment submitted
+
+- **Recorded EGG job: 685697**, submitted at 2026-09-30T06:52:37Z. Initial
+  scoped queue check was PENDING; later scoped accounting confirmed PENDING,
+  zero allocated CPUs and no execution artifacts (PENDING_685697.json).
+  No result is available at this checkpoint.
+  Do not submit another job or repeat this attempt. The heartbeat stays ACTIVE.
+- Pinned execution commit `682a8604a93804a74bc54666cbe1f626e5c9c788`, remote
+  checkout `/home/nc437/egg-cost-aware-repair-20260930`, attempt
+  `result/learning_repair/20260930-cost-aware-attempt1`. See LAUNCH_685697.json,
+  PROTOCOL_COST_AWARE_REPAIR.md and COST_AWARE_REPAIR_LAUNCH_REVIEW.md under
+  research-20260930/learning-campaign. The source/protocol is backed up on GitHub.
+- Four serial cells: 2016/cost_only, 2016/cost_learned,
+  2017/cost_learned, 2017/cost_only. Only frozen stage2 development cases and
+  model are used; no refit or test access. The unlearned arm passes no model to
+  repair and performs no inference. Both cost modes minimize structural pullout
+  count; the learned score perturbation cannot compensate for one extra bus at
+  an exact optimum. Positive vehicle cost and zero deadhead cost are required.
+- This does not minimize the whole nonlinear supply bill or certify physical
+  minimum fleet size. Native cover status/gap, charging feasibility and physical
+  replay remain separate. Charging is still an LP under the linear tariff;
+  full nonlinear cost is computed after replay. Failed repairs retain evidence
+  and use the pre-target source fallback, followed by fresh target hull checking.
+  No second cover, extra bus, hidden cold solve or retry is used for a failure.
+- Requested resource budget: one CPU/8GB/one native thread/30 minutes,
+  no requeue, exclude scaglione-compute-01. Cover5 seconds, charging55 wall/45
+  solve, target hull 70, child 240, controller 1500, shell 1650 seconds. Report actual
+  allocation separately after start/completion. Do not alter other projects.
+- Root and Luna reviewed the math and launch delta; 18 focused tests passed.
+  The historical repair runner now uses a shared explicit per-cell evaluator;
+  its historical attempt remains untouched. A Sol capacity error was handled
+  by root finishing the small module delta; it did not block the launch.
+- Original Google Doc has a verified append explaining the comparison and
+  linking the prospective protocol (DOC_COST_AWARE_LAUNCH_RECEIPT.json).
+  No new native result, learning benefit or runtime improvement is claimed.
+- Next: collect complete receipts for job685697, preserve failed/missing cells
+  and all spent time, compare structural bus count, repaired feasibility, direct
+  candidate cost, source-fallback cost and separate hull work. Luna completed
+  summarize_cost_aware_repair.py to produce COST_AWARE_REPAIR_CELLS.csv; run it
+  after collecting the attempt. It keeps all four rows and gates candidate cost
+  on saved independent replay. All workers have finished this package. Check
+  newer state before acting; independently replay new candidates,
+  write RESULTS_COST_AWARE_REPAIR.md, make a useful comparison visual if supported,
+  then append the consolidated result to the Doc and back up all evidence.
+- Previous results remain in RESULTS_STAGE2.md and RESULTS_REPAIR.md. Reserved
+  seeds 2004/2005 and protected A6/B3/confirmation outcomes remain untouched. No
+  private GIRO publication, PR merge, journal submission or reset-credit use.
+
+## Prior checkpoint — route repair works, but uses too many buses
 
 - **No EGG job is currently active. Do not pause the heartbeat.** Both newly
   analyzed batches are complete; the next justified package is a cost-aware

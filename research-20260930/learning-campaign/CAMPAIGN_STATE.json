@@ -1,27 +1,25 @@
 {
-  "updated_at_utc": "2026-09-30T06:11:01.572858+00:00",
-  "phase": "route_repair_reviewed_next_cost_aware_decoder",
-  "active_job_ids": [],
+  "updated_at_utc": "2026-09-30T07:01:16.261020+00:00",
+  "phase": "cost_aware_repair_queued",
+  "active_job_ids": [
+    "685697"
+  ],
   "completed_job_ids": [
     "677817",
     "678708",
     "682689"
   ],
-  "launch_receipt": "LAUNCH_682689.json",
-  "source_commit": "d731a416c1ac560a840869000e8f51248643a8f0",
-  "remote_checkout": "/home/nc437/egg-route-repair-20260930",
-  "attempt_relative": "result/learning_repair/20260930-attempt1",
+  "launch_receipt": "LAUNCH_685697.json",
+  "source_commit": "682a8604a93804a74bc54666cbe1f626e5c9c788",
+  "remote_checkout": "/home/nc437/egg-cost-aware-repair-20260930",
+  "attempt_relative": "result/learning_repair/20260930-cost-aware-attempt1",
   "startup_observation": {
-    "recorded_at_utc": "2026-09-30T06:00:31.414764+00:00",
-    "squeue_state": "RUNNING",
-    "elapsed": "0:25",
-    "node": "snavely-cpu-04",
-    "allocated_cpus": 1,
-    "memory": "8G",
-    "frozen": true,
+    "recorded_at_utc": "2026-09-30T06:54:25.903352+00:00",
+    "squeue_state": "PENDING",
+    "elapsed": "0:00",
+    "frozen": false,
     "completed_cells": 0,
-    "exception_files": 0,
-    "source_commit_verified": true
+    "exception_files": 0
   },
   "automation": {
     "id": "advance-egg-journal-research",
@@ -29,7 +27,7 @@
     "cadence": "hourly",
     "notification_policy": "Substantive results, major decisions, failures or review artifacts only"
   },
-  "next_action": "Implement a vehicle-cost-aware route decoder and matched unlearned cost-only ablation on frozen dev2016/2017 under a new prospective protocol and the same per-cell budgets. Root submits one bounded serial job after review. Both prior repairs are independently replayed but use18/28 buses vs cached4/5; neither target hull closed. No repeated attempt, refit, reserved2004/2005 access, or expansion yet. Automation stays active; current EGG queue is empty because this reviewed pilot completed.",
+  "next_action": "Check existing job685697 once; no duplicate submission. After completion collect full evidence, run summarize_cost_aware_repair.py, independently review/replay four crossed dev cells, and report failure/feasibility, structural vs physical bus counts, repaired cost vs fallback/source cost and separate global hull work. No retraining/test access. Doc launch entry verified and all workers complete; hourly automation remains active.",
   "stage1_results": "RESULTS_STAGE1.md",
   "stage1_model_analysis": "MODEL_STAGE1.md",
   "test_groups_unobserved": [
@@ -40,7 +38,25 @@
   "repair_results": "RESULTS_REPAIR.md",
   "result_backup_commit": "f498e282d960f3b8e58cbee21e4f74077053384c",
   "doc_receipts": [
-    "DOC_STAGE2_REPAIR_LAUNCH_RECEIPT.json",
-    "DOC_REPAIR_RESULTS_RECEIPT.json"
-  ]
+    "DOC_COST_AWARE_LAUNCH_RECEIPT.json"
+  ],
+  "latest_observation": {
+    "job_id": "685697",
+    "state": "PENDING",
+    "elapsed_seconds": 0,
+    "allocated_cpus": 0,
+    "node": null,
+    "exit_code_field": "0:0",
+    "note": "Pending accounting exit-code field is not an execution-success claim; job has not started.",
+    "rows": [
+      "685697|PENDING|00:00:00|0:0|0|None assigned|None"
+    ],
+    "frozen": false,
+    "completed_cells": 0,
+    "summary": false,
+    "wrapper": false,
+    "source": "scoped sacct plus compact artifact-existence check",
+    "recorded_at_utc": "2026-09-30T07:01:16.261020+00:00"
+  },
+  "result_summarizer": "summarize_cost_aware_repair.py"
 }
