@@ -8,7 +8,50 @@ supersedes the earlier idle-monitor pause condition and blanket deferral of ML.
 Notify only substantive findings, major decisions, important failures or review
 artifacts. Continue useful local work between jobs; do not pause on an empty queue.
 
-## Latest checkpoint — grouped charge-response learning ready for one launch
+## Latest checkpoint — grouped charge-response training/evaluation submitted
+
+- **Recorded EGG job 697180**, submitted 2026-09-30T14:15:07Z after the guard
+  found no active EGG job. No subsequent queue or outcome inspection yet.
+  Do not duplicate. Hourly automation ACTIVE. All workers finished.
+- Execution commit `9232d5250158d7402c896de33c99d0225e8a914a`; fresh remote
+  `/home/nc437/egg-charge-response-learning-20260930`; exclusive attempt
+  `result/learning_campaign/20260930-charge-response-attempt1`.
+  `LAUNCH_697180.json`, `PROTOCOL_CHARGE_RESPONSE_LEARNING.md`, and
+  `CHARGE_RESPONSE_LEARNING_LAUNCH_REVIEW.md` are authoritative. Source pushed.
+- **44 cells:** 20 source acquisitions; 12 training charging labels; one
+  fit/inference call; then eight development charging and four cold cells.
+  Fresh training seeds 2022–2027 have 12/20/28 services twice each; development
+  seeds 2028–2031 have 20/28 services twice each. All six training pairs must
+  replay before fitting. Missing labels cause a recorded model failure while
+  independent controls continue. All four development choices are frozen before
+  any development outcome. Ridge penalty 1.0, training-only scaling, no tuning;
+  old EdgePrior retains its original topology projection and tie rule.
+- Labels are nonlinear costs from the pinned linear-tariff charging procedure,
+  not minimum nonlinear costs for those routes. Compare each one-LP chooser's
+  cost, feasibility and excess over the paid best of two LPs. Baselines are
+  cheapest-direct, nearest-price, old EdgePrior, two-LP best and contextual cold.
+  Preserve source acquisition, model/inference/LP/replay time, all failures and
+  provisional labels separately. Candidate-pool excess is not global regret.
+- Budget: 44 children capped at 100 seconds plus a 60-second fit/inference call;
+  controller 5400, shell 5700, Slurm 6000 seconds (100 minutes). One requested
+  CPU, 8 GB, one native thread; no retry/requeue; exclude scaglione-compute-01.
+  Eight focused tests, wrapper/design/diff checks and bounded reviews passed.
+  23 source pins and three archived old-model inputs. Reserved seeds
+  2004/2005/2020/2021 remain untouched.
+- Previous job 696684 completed in 84 seconds (wrapper 78): one requested CPU,
+  two allocated, one native thread, 8 GB, MaxRSS 154000 KiB. All eight original
+  and eight recharged plans verified. Recharging improves archived native
+  controls on both 28-service cases by 1.277433 and 2.163295; nonlinear/global
+  optimality remains unknown. Raw backup e8fb362, replay 2bdaaef, report/CSV/figure
+  55e3e16. Google Doc append and fifth image verified, preserving all history:
+  `DOC_FIXED_SOURCE_CHARGE_RESULTS_RECEIPT.json`.
+- Next: one scoped queue check of 697180; scoped accounting/receipts if vanished.
+  Collect the full catalog/labels, coverage/model/proposals/inference and logs.
+  Verify prediction order and exact-cost/source lineage; compare paired excess
+  costs and all paid time. No outcome-tuned refit or test access. Choose the
+  next justified data, model or solver package from complete evidence.
+
+## Prior checkpoint — grouped charge-response learning ready for one launch
 
 - No active EGG job: 696684 completed, all eight direct and eight recharged
   plans independently verified. Best recharged costs 516.150310 /684.511264 /
