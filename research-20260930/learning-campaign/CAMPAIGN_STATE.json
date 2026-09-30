@@ -1,25 +1,26 @@
 {
-  "updated_at_utc": "2026-09-30T05:38:48.892105+00:00",
-  "phase": "stage2_complete_repair_pilot_implementation",
+  "updated_at_utc": "2026-09-30T06:04:52.618014+00:00",
+  "phase": "route_repair_complete_analysis",
   "active_job_ids": [],
   "completed_job_ids": [
     "677817",
-    "678708"
+    "678708",
+    "682689"
   ],
-  "launch_receipt": "LAUNCH_678708.json",
-  "source_commit": "822be2c7bdc2bef9ab6364c2e97d9747c048898b",
-  "remote_checkout": "/home/nc437/egg-learning-stage2-20260930",
-  "attempt_relative": "result/learning_campaign/20260930-stage2-attempt1",
+  "launch_receipt": "LAUNCH_682689.json",
+  "source_commit": "d731a416c1ac560a840869000e8f51248643a8f0",
+  "remote_checkout": "/home/nc437/egg-route-repair-20260930",
+  "attempt_relative": "result/learning_repair/20260930-attempt1",
   "startup_observation": {
-    "at_utc": "2026-09-30T04:59:32.790941+00:00",
+    "recorded_at_utc": "2026-09-30T06:00:31.414764+00:00",
     "squeue_state": "RUNNING",
-    "elapsed": "1:55",
+    "elapsed": "0:25",
     "node": "snavely-cpu-04",
+    "allocated_cpus": 1,
+    "memory": "8G",
     "frozen": true,
-    "completed_cells": 10,
+    "completed_cells": 0,
     "exception_files": 0,
-    "training_receipt": false,
-    "summary": false,
     "source_commit_verified": true
   },
   "automation": {
@@ -28,11 +29,13 @@
     "cadence": "hourly",
     "notification_policy": "Substantive results, major decisions, failures or review artifacts only"
   },
-  "next_action": "Stage2 complete (44/44 feasible; analysis ongoing). Sol agents implement one bounded route-fixed charging repair pilot for dev2016/2017 under frozen stage2 model; root alone reviews/submits after prospective protocol. Do not repeat stage2. Keep automation active.",
+  "next_action": "Review completed repair evidence, then implement cost-aware route-cover decoder and unlearned cost-only ablation under a new prospective bounded development protocol. Both current repairs replayed quickly but used18/28 buses vs cached4/5; optimize fleet cost before expanding data or retraining. No repeat attempt; reserved2004/2005 remain untouched. Automation stays active.",
   "stage1_results": "RESULTS_STAGE1.md",
   "stage1_model_analysis": "MODEL_STAGE1.md",
   "test_groups_unobserved": [
     2004,
     2005
-  ]
+  ],
+  "stage2_results": "RESULTS_STAGE2.md",
+  "repair_results": "RESULTS_REPAIR.md"
 }

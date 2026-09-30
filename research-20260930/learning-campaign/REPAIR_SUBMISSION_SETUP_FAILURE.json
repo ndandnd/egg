@@ -1,0 +1,14 @@
+{
+  "stage": "remote_submission_shell_before_checkout_creation",
+  "source_commit": "d731a416c1ac560a840869000e8f51248643a8f0",
+  "returncode": 1,
+  "message": "/etc/profile.d/slurm.sh: line 2: INCLUDE: unbound variable",
+  "cause": "Local submission script enabled bash nounset before loading the site's Slurm profile.",
+  "correction": "Load /etc/profile.d/slurm.sh before enabling nounset, as in the committed batch wrapper.",
+  "job_submitted": false,
+  "experiment_started": false,
+  "cluster_compute_seconds": 0,
+  "elapsed_submission_wall_seconds": null,
+  "elapsed_note": "No independent wall-clock receipt was captured for the failed SSH setup command. The original tool output remains in this chat.",
+  "attempt_preserved": "No checkout or submission marker was created; failure occurred at profile sourcing."
+}

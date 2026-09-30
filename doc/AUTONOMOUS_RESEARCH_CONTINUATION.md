@@ -8,7 +8,56 @@ supersedes the earlier idle-monitor pause condition and blanket deferral of ML.
 Notify only substantive findings, major decisions, important failures or review
 artifacts. Continue useful local work between jobs; do not pause on an empty queue.
 
-## Latest checkpoint — larger batch complete; route repair under implementation
+## Latest checkpoint — route repair works, but uses too many buses
+
+- **No EGG job is currently active. Do not pause the heartbeat.** Both newly
+  analyzed batches are complete; the next justified package is a cost-aware
+  route-cover decoder with a cost-only (unlearned) ablation on the same frozen
+  development cases. Implement and review its prospective protocol before one
+  serial launch; do not retrain or expand the sweep to hide the present result.
+- **Job 682689 completed**, exit 0 in 2:28 on snavely-cpu-04, one allocated CPU,
+  8 GB, MaxRSS 214948 KiB. Frozen execution commit
+  `d731a416c1ac560a840869000e8f51248643a8f0`; remote checkout
+  `/home/nc437/egg-route-repair-20260930`. Complete attempt is downloaded at
+  `result/learning_repair/20260930-attempt1`. See LAUNCH_682689.json,
+  ACCOUNTING_682689.json, RESULT_MANIFEST_REPAIR.json, PROTOCOL_REPAIR.md and
+  RESULTS_REPAIR.md under research-20260930/learning-campaign. Do not resubmit.
+- The new decoder produced legal routes and the fixed-route charging LP yielded
+  replayed feasible fleets in both cases, with repair routines taking 1.01 and
+  1.40 seconds. However, it used **18 and 28 buses**, versus **4 and 5** in the
+  cheapest archived source fleets. Direct costs were **1919.93 and 2999.52**,
+  versus **553.47 and 724.66** for those sources. The score-only route objective
+  omits fleet cost. Charging feasibility works; proposal quality is poor.
+- Separate global hull checks took 60.75 and 61.30 seconds and remained
+  budget-exhausted. Both lower and mixture certificates replayed. No fallback
+  was used; the fallback branch has unit/replay checks, not a native failure
+  demonstration. No speedup, learning benefit or physical optimum is established.
+- Next correction: account for bus cost while decoding routes, and compare a
+  matched cost-only decoder to the learned-score variant. Keep charging repair,
+  physical replay and target hull checking separate, with all failure/time
+  receipts. The current LP optimizes the linear tariff and then scores the full
+  nonlinear bill; it is not a fixed-route quadratic optimizer. Keep that limit
+  explicit. Use only dev2016/2017 and the frozen stage2 model initially.
+- **Stage2 job 678708 is also complete**, 44/44 replayed feasible fleets in 38:05;
+  5 hull results certified, 37 budget-exhausted, 2 stalled-bounded. All physical
+  labels remain provisional. The model trained on 18 labels from six groups in
+  14.97 seconds (outer receipt). Learned, nearest-price and cheapest selection
+  chose the same source in both development cases; all ten dev hull arms remained
+  open. Source acquisition cost 124.82/128.72 seconds. See RESULTS_STAGE2.md,
+  RESULTS_STAGE2_CELLS.csv and stage2_development_bounds.png. Both stages and
+  all raw evidence are retained; native license stdout is hashed but not public.
+- The original Google Doc has a verified appended stage2 result/launch section
+  and the objective-bound figure (DOC_STAGE2_REPAIR_LAUNCH_RECEIPT.json).
+  Append the reviewed repair result next, then back up this handoff and receipts.
+  The existing hourly automation is ACTIVE. No user approval is needed for the
+  routine next package; notify substantive results or genuine decisions only.
+- Preserve reserved test seeds2004/2005, no protected A6/B3/confirmation data,
+  no private GIRO publication, PR merge, journal submission or reset-credit use.
+  Initial resource ceiling stays one requested CPU/8GB/one native thread/<=2h,
+  no retry/requeue and exclude scaglione-compute-01. The completed repair pilot
+  used a tighter30-minute allocation. Check active workers/newer state first.
+
+## Prior checkpoint — larger batch complete; route repair under implementation
 
 - **Completed job 678708**, execution commit `822be2c7bdc2bef9ab6364c2e97d9747c048898b`,
   finished with exit 0 in 38:05 on snavely-cpu-04. All 44 cells have feasible
