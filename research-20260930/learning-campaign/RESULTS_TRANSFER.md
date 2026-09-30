@@ -1,5 +1,9 @@
 # Frozen-model transfer campaign results
 
+![Direct route-repair cost and time on two independent development timetables](figures/transfer_campaign_cost_time.png)
+
+The figure separates direct route repair from the later hull checks. [Vector figure](figures/transfer_campaign_cost_time.svg) · [Plot script](plot_transfer_campaign.py).
+
 Job 696441 completed successfully in 941 seconds with one allocated CPU and 8 GB; the catalog contains 18/18 feasible cells, and all four newly repaired fleets passed their independent replay. The frozen model was not refit. Its single inference call completed before any target cell, and the 2018/2019 cases were held out from the stage-2 fit and labels. These two development cases provide transfer evidence only.
 
 The target-table “direct proposal” is the selected source-pool plan's target-price cost before the target hull search. “After hull” is the best feasible incumbent returned by that target-native search. Hull lower bounds are lower bounds on physical optimum; the reported mixture upper is not necessarily a feasible physical fleet cost. A `certified` hull status does not establish physical fleet optimality.

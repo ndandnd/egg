@@ -1,9 +1,7 @@
 {
-  "updated_at_utc": "2026-09-30T12:07:55.562939+00:00",
-  "phase": "independent_transfer_campaign_submitted",
-  "active_job_ids": [
-    "696441"
-  ],
+  "updated_at_utc": "2026-09-30T13:08:17.915058+00:00",
+  "phase": "fixed_source_charge_ready_for_reviewed_launch",
+  "active_job_ids": [],
   "completed_job_ids": [
     "677817",
     "678708",
@@ -12,7 +10,8 @@
     "688750",
     "691594",
     "695461",
-    "696067"
+    "696067",
+    "696441"
   ],
   "launch_receipt": "LAUNCH_696441.json",
   "source_commit": "2f382902163c55d565f0964320d9e7c47cb036ae",
@@ -31,7 +30,7 @@
     "cadence": "hourly",
     "notification_policy": "Substantive results, major decisions, failures or review artifacts only"
   },
-  "next_action": "One scoped check of696441; if vanished use scoped sacct/receipts, collect full18cellattempt/accounting/logs. Independently compare direct proposal, repair and native verified outcomes againstcold/retained/nearest/cheapest withpaidtimes andopenbounds. No refit/test access, no duplicate or automaticbudgetescalation; automationACTIVE.",
+  "next_action": "Commit/push and submit the reviewed eight-cell fixed-source-route charging comparison once, then record job and receipt. No duplicate submission.",
   "stage1_results": "RESULTS_STAGE1.md",
   "stage1_model_analysis": "MODEL_STAGE1.md",
   "test_groups_unobserved": [
@@ -48,15 +47,15 @@
     "DOC_ENERGY_AWARE_RESULTS_RECEIPT.json",
     "DOC_CHARGING_CAP_RESULTS_RECEIPT.json",
     "DOC_SHARED_INTERVAL_RESULTS_RECEIPT.json",
-    "DOC_SHARED_BUDGET_RESULTS_RECEIPT.json"
+    "DOC_SHARED_BUDGET_RESULTS_RECEIPT.json",
+    "DOC_TRANSFER_RESULTS_RECEIPT.json"
   ],
   "latest_observation": {
     "job_id": "696441",
-    "recorded_at_utc": "2026-09-30T12:07:55.562939+00:00",
-    "squeue_row": "696441|PENDING|0:00|1|8G|",
-    "state": "PENDING",
-    "requested_cpus": 1,
-    "node": null
+    "state": "COMPLETED",
+    "elapsed_seconds": 941,
+    "recorded_at_utc": "2026-09-30T12:44:56.611791+00:00",
+    "source": "ACCOUNTING_696441.json"
   },
   "result_summarizer": "summarize_cost_aware_repair.py",
   "cost_aware_results": "RESULTS_COST_AWARE_REPAIR.md",
@@ -70,10 +69,16 @@
   "shared_interval_physical_pool_review": "SHARED_INTERVAL_PHYSICAL_POOL_REVIEW.json",
   "shared_interval_report_backup_commit": "8e17264ffc71eb9b5ed0851b429d5d3927f43ac8",
   "shared_interval_figure": "figures/shared_interval_2016_learned.png",
-  "local_follow_up": "All result verification/report/Doc append and transfer implementation/reviews complete. All three workers finished. New job last observedPENDING; no result inspected.",
+  "local_follow_up": "Transfer results/figure and Google Doc verified; Sol implementation and independent selection review complete. Final focused tests passed 6/6. Root owns launch.",
   "shared_budget_results": "RESULTS_SHARED_BUDGET_REPAIR.md",
   "shared_budget_verification": "INDEPENDENT_REPLAY_SHARED_BUDGET.json",
   "shared_budget_physical_pool_review": "SHARED_BUDGET_PHYSICAL_POOL_REVIEW.json",
   "transfer_protocol": "PROTOCOL_TRANSFER_CAMPAIGN.md",
-  "transfer_launch_review": "TRANSFER_LAUNCH_REVIEW.md"
+  "transfer_launch_review": "TRANSFER_LAUNCH_REVIEW.md",
+  "transfer_results": "RESULTS_TRANSFER.md",
+  "transfer_verification": "INDEPENDENT_REPLAY_TRANSFER.json",
+  "transfer_figure": "figures/transfer_campaign_cost_time.png",
+  "transfer_result_backup_commit": "13fe963c8a8c67f7c0784178d7a054db13262930",
+  "fixed_source_charge_protocol": "PROTOCOL_FIXED_SOURCE_CHARGE.md",
+  "fixed_source_charge_launch_review": "FIXED_SOURCE_CHARGE_LAUNCH_REVIEW.md"
 }

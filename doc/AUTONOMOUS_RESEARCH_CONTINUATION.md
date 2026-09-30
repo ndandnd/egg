@@ -8,7 +8,62 @@ supersedes the earlier idle-monitor pause condition and blanket deferral of ML.
 Notify only substantive findings, major decisions, important failures or review
 artifacts. Continue useful local work between jobs; do not pause on an empty queue.
 
-## Latest checkpoint — independent transfer campaign submitted
+## Latest checkpoint — transfer reviewed; fixed-source charging comparison ready for launch
+
+- Completed job 696441: 18/18 feasible cells, 941 seconds, one CPU/8 GB,
+  339384 KiB MaxRSS. Complete attempt/wrapper/accounting and 185 hashes preserved.
+  No active EGG job as of collection; no retry. Hourly automation ACTIVE.
+- Independent replay verifies all 18 labels and four new repaired fleets. On the
+  new 20-service development timetable, the best physical fleet costs 520.892028
+  with target lower bound 520.793306 (physical gap at most 0.098722). Another
+  verified fleet saves 0.486362 at its own-load prices but costs 521.004698 in
+  true system cost. This concerns a near-optimal incumbent, not support of the
+  unknown exact optimum. For 28 services, the physical gap remains wide.
+- Frozen learned proposals did not beat cold solving overall. Learned direct
+  route repair was cheaper but slower for 20 services; its time-limited cover
+  had an extra bus and much higher cost for 28 services. No speedup/generalization
+  claim. Report, CSV and cost/time figure backed up at 13fe963; evidence b26e6d9.
+  Original Google Doc append, report link and new figure verified; all three
+  prior figures preserved. DOC_TRANSFER_RESULTS_RECEIPT.json records the update.
+- Next package is the missing cheap baseline: fix each of two pre-target source
+  fleets' routes for development seeds 2016–2019, minimize charging at the target
+  linear tariff, independently replay and rescore the nonlinear target cost.
+  Eight cells, no route MILP/refit/fresh hull. Single-LP cheapest-direct and frozen
+  learned source choices are separate from paying for both LPs and choosing best.
+  Original schedules remain alternatives because linear charging can worsen F.
+- Prospective budget: 45-second charge phase / 55-second wall / 100-second child;
+  controller 1200, shell 1350, Slurm 1800 seconds; one CPU/8 GB/native thread,
+  no retry/requeue, exclude scaglione-compute-01. Protocol/runner/wrapper and
+  tests passed: 20 related checks, then 6 focused checks after final fixes.
+  Failures retain feasible replayed plans with provisional status. No unknown
+  time becomes zero. Reserved 2004/2005/2020/2021 untouched.
+- Root next: commit/push and submit exactly once from
+  fresh /home/nc437/egg-fixed-source-charge-20260930; exclusive attempt
+  result/learning_repair/20260930-fixed-source-charge-attempt1. Record job receipt
+  before ending turn. Do not duplicate any existing submission. After completion,
+  assess whether stored topology selection adds value once charging is updated;
+  use that evidence for the next training or solver package.
+
+## Prior checkpoint — independent transfer collected; diagnosis before next campaign
+
+- Job696441 COMPLETED exit0 in941s, oneCPU,339384KiB on snavely-cpu-01.
+  Complete18cellattempt/wrapper/logs collected;185hashes in RESULT_MANIFEST_TRANSFER.json,
+  ACCOUNTING_696441.json. No activeEGGjob; no retry. Automation ACTIVE.
+- Summary18/18feasible labels; frozen inference succeeded3.995s beforetargets.
+  Initialcompactresults:2018/20 allnativephysical520.892, warmhulls certified
+  about520.793 while physicaloptimumunknown.2019/28 learnednative685.709 vs
+  cheapest689.533, cold685.468; directsharedlearned782.648 vs costonly693.552.
+  Do not admit beyond independent review or call this generalMLbenefit/speedup.
+- Activeworkers: Energy independentlyreplays18labels/candidatebounds and scoped
+  own-pricewitness; Luna producesTRANSFER_CELLS.csv/results/figure; Sol diagnoses
+  model-vs-time-limitedsearch and recommendsnextboundedpackage (noimplementationyet).
+  Root collected185files and startedtrustedDocread; no newjobsubmissionauthorized
+  untilnextspecificprotocol/resourcebudgetreviewed. No duplicates/broadsweeps.
+- Next: complete evidence review, back up andappendoriginalGoogleDoc; use observed
+  bottleneck/negativelearnedrepair outcome tochooseconcrete nexttraining/solver
+  package.2004/2005/2020/2021 reserved untouched. Sourceboundsnevertransfertotarget.
+
+## Prior checkpoint — independent transfer campaign submitted
 
 - **Recorded EGG job 696441**, submitted 2026-09-30T12:06:42Z. Scoped startup
   check: PENDING, one requested CPU/8GB. No outcome inspected; do not duplicate.
