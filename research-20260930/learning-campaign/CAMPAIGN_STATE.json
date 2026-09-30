@@ -1,9 +1,7 @@
 {
-  "updated_at_utc": "2026-09-30T14:16:23.711399+00:00",
-  "phase": "charge_response_learning_submitted",
-  "active_job_ids": [
-    "697180"
-  ],
+  "updated_at_utc": "2026-09-30T15:06:04.494019+00:00",
+  "phase": "tariff_response_transfer_ready_for_publication",
+  "active_job_ids": [],
   "completed_job_ids": [
     "677817",
     "678708",
@@ -14,7 +12,8 @@
     "695461",
     "696067",
     "696441",
-    "696684"
+    "696684",
+    "697180"
   ],
   "launch_receipt": "LAUNCH_697180.json",
   "source_commit": "9232d5250158d7402c896de33c99d0225e8a914a",
@@ -31,7 +30,7 @@
     "cadence": "hourly",
     "notification_policy": "Substantive results, major decisions, failures or review artifacts only"
   },
-  "next_action": "One scoped queue check of697180; scoped sacct/receipts if vanished. Collect complete44cell catalog, source and charge labels, training coverage/model/proposals/inference receipts, wrapper/logs. Verify six train pairs and all four prospective dev choices precede dev outcomes; independently replay candidate costs. Compare paired candidate-pool excess and feasibility against cheapest-direct/nearest/frozenEdgePrior/paidtwoLPbest/cold, with all source/inference/LP/failed time. No test access or outcome-tuned refit.",
+  "next_action": "Publish reviewed frozen-model tariff-transfer runner and protocol, then submit one guarded 44-cell batch. Four independent groups, twelve prospective tariff variants; no refit or reserved-test access.",
   "stage1_results": "RESULTS_STAGE1.md",
   "stage1_model_analysis": "MODEL_STAGE1.md",
   "test_groups_unobserved": [
@@ -50,13 +49,23 @@
     "DOC_SHARED_INTERVAL_RESULTS_RECEIPT.json",
     "DOC_SHARED_BUDGET_RESULTS_RECEIPT.json",
     "DOC_TRANSFER_RESULTS_RECEIPT.json",
-    "DOC_FIXED_SOURCE_CHARGE_RESULTS_RECEIPT.json"
+    "DOC_FIXED_SOURCE_CHARGE_RESULTS_RECEIPT.json",
+    "DOC_CHARGE_RESPONSE_RESULTS_RECEIPT.json"
   ],
   "latest_observation": {
     "job_id": "697180",
-    "recorded_at_utc": "2026-09-30T14:16:23.711399+00:00",
-    "state": "SUBMITTED",
-    "queue_state_not_polled_after_submission": true
+    "state": "COMPLETED",
+    "exit_code": "0:0",
+    "elapsed_seconds": 1427,
+    "wrapper_elapsed_seconds": 1421,
+    "requested_cpus_per_task": 1,
+    "allocated_cpus": 1,
+    "native_threads": 1,
+    "requested_memory_gb": 8,
+    "batch_max_rss_kib": 246832,
+    "node": "snavely-cpu-01",
+    "source": "scoped sacct and wrapper receipt after completion",
+    "recorded_at_utc": "2026-09-30T14:47:58.840241+00:00"
   },
   "result_summarizer": "summarize_cost_aware_repair.py",
   "cost_aware_results": "RESULTS_COST_AWARE_REPAIR.md",
@@ -70,7 +79,7 @@
   "shared_interval_physical_pool_review": "SHARED_INTERVAL_PHYSICAL_POOL_REVIEW.json",
   "shared_interval_report_backup_commit": "8e17264ffc71eb9b5ed0851b429d5d3927f43ac8",
   "shared_interval_figure": "figures/shared_interval_2016_learned.png",
-  "local_follow_up": "All workers finished. Verified charging comparison and fifth Google Doc figure are backed up. Reviewed44cell training/evaluation job submitted once, no outcomes inspected. Hourly automation remains active.",
+  "local_follow_up": "Completed charge-response results independently verified and backed up; Google Doc report and sixth figure verified. New tariff-transfer implementation passed focused checks and bounded code review. Root owns Git, submission and state.",
   "shared_budget_results": "RESULTS_SHARED_BUDGET_REPAIR.md",
   "shared_budget_verification": "INDEPENDENT_REPLAY_SHARED_BUDGET.json",
   "shared_budget_physical_pool_review": "SHARED_BUDGET_PHYSICAL_POOL_REVIEW.json",
@@ -88,5 +97,12 @@
   "fixed_source_charge_result_backup_commit": "55e3e165a66010a238dac2f1c26d8e786a24c5fd",
   "fixed_source_charge_figure": "figures/fixed_source_charge_cost_time.png",
   "charge_response_protocol": "PROTOCOL_CHARGE_RESPONSE_LEARNING.md",
-  "charge_response_launch_review": "CHARGE_RESPONSE_LEARNING_LAUNCH_REVIEW.md"
+  "charge_response_launch_review": "CHARGE_RESPONSE_LEARNING_LAUNCH_REVIEW.md",
+  "charge_response_raw_backup_commit": "59b3acab4492e0227cd7118d87cda120e2ac60b4",
+  "charge_response_results": "RESULTS_CHARGE_RESPONSE.md",
+  "charge_response_verification": "INDEPENDENT_REPLAY_CHARGE_RESPONSE.json",
+  "charge_response_figure": "figures/charge_response_quality_time.png",
+  "charge_response_result_backup_commit": "433ca1c038d58bc5fbef4ad5d037c9eb64135e26",
+  "tariff_response_protocol": "PROTOCOL_TARIFF_RESPONSE_TRANSFER.md",
+  "tariff_response_launch_review": "TARIFF_RESPONSE_LAUNCH_REVIEW.md"
 }

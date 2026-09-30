@@ -8,7 +8,39 @@ supersedes the earlier idle-monitor pause condition and blanket deferral of ML.
 Notify only substantive findings, major decisions, important failures or review
 artifacts. Continue useful local work between jobs; do not pause on an empty queue.
 
-## Latest checkpoint — grouped charge-response training/evaluation submitted
+## Latest checkpoint — charge-response result reviewed; tariff transfer ready
+
+- Job 697180 completed successfully: 1427 Slurm seconds, 1421 wrapper seconds,
+  one requested/allocated CPU, one native thread, 8 GB, 246832 KiB MaxRSS.
+  All 44 cells and source topology, exact costs and prediction order were
+  independently verified. Accounting and full result manifest are archived.
+- Ridge chose source 1 on all four development timetables. Mean candidate-pool
+  excess was 0.0555 versus 0.3901 for cheapest-direct and 0.1827 for the old
+  EdgePrior. An always-source-1 rule and the six-pair training majority match
+  ridge exactly; these were post hoc diagnostics in this completed attempt.
+  No adaptive learning or global speedup has been established. Source acquisition,
+  shared model processing and charging times remain separately reported.
+- Raw evidence backed up at 59b3acab; independent verification at c7d6bc5;
+  report, CSV and figure at 433ca1c. Original Google Doc update and sixth image
+  verified, preserving all five previous images. Receipt:
+  DOC_CHARGE_RESPONSE_RESULTS_RECEIPT.json. The saved-incumbent own-price
+  pool has positive deviation witnesses in three of four cases, not a claim
+  about unknown optimal fleets. See RESULTS_CHARGE_RESPONSE.md.
+- Next package: unchanged frozen model on four new development groups, seeds
+  2032–2035 with 20/28 services twice each. Every group has late-cheap 22–26,
+  day-cheap 10–14 and flat 41/150 tariffs, equal nominal 30-hour mean and b=1/900.
+  Eight source acquisitions, 24 charging LPs and 12 cold controls: 44 cells.
+  Always-0, always-1 and training-majority controls are now prospective.
+  All twelve choices precede target outcomes; no refit. Four independent groups,
+  not twelve. Reserved seeds 2004/2005/2020/2021 remain untouched.
+- Budget: 100 seconds per child, 60 seconds inference; controller 5400,
+  shell 5700 and Slurm 6000 seconds. One CPU, 8 GB, one native/BLAS thread,
+  no retry/requeue; exclude scaglione-compute-01. Bounded independent code
+  review found no blocker. Root finishes publication and a single guarded
+  submission from /home/nc437/egg-tariff-response-20260930. No launch yet.
+  Existing hourly automation ACTIVE. Never duplicate the completed attempt.
+
+## Prior checkpoint — grouped charge-response training/evaluation submitted
 
 - **Recorded EGG job 697180**, submitted 2026-09-30T14:15:07Z after the guard
   found no active EGG job. No subsequent queue or outcome inspection yet.
