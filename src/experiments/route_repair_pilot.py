@@ -298,15 +298,19 @@ def worker(path, case_name):
         return 2
 
 
-def evaluate_case(dest, case_name, case, market, prior, spec, controls, started, *, cover_policy="score_only"):
+def evaluate_case(dest, case_name, case, market, prior, spec, controls, started, *,
+                  cover_policy="score_only", energy_relaxation=False,
+                  skip_hull_for_fallback=False):
     """Evaluate one already-validated cell; caller owns attempt and input guards."""
     from egglab import route_fixed_repair as repair
     repair_started = time.monotonic()
     proposed = repair.repair_target(case, market, prior, budget=repair_budget(),
                                     path_seconds=REPAIR_PATH_SECONDS, cover_policy=cover_policy,
+                                    energy_relaxation=energy_relaxation,
                                     record=_events(dest))
     repair_wall = time.monotonic() - repair_started
-    base.save_new(dest / "repair.json", {"result": proposed,
+    base.save_new(dest / "repair.json", {"energy_relaxation": energy_relaxation,
+                                           "result": proposed,
                                            "repair_wall_seconds": repair_wall})
     candidate_kind = "repaired"
     fallback_provenance = None
@@ -314,6 +318,7 @@ def evaluate_case(dest, case_name, case, market, prior, spec, controls, started,
     if proposed.get("repair_status") != "replayed":
         base.save_new(dest / "failure.json", {
             "cover_policy": cover_policy,
+            "energy_relaxation": energy_relaxation,
             "repair_status": proposed.get("repair_status"),
             "failure": proposed.get("failure"),
             "native_stats": proposed.get("native_stats"),
@@ -327,6 +332,7 @@ def evaluate_case(dest, case_name, case, market, prior, spec, controls, started,
         fallback_wall = time.monotonic()-fallback_started
         base.save_new(dest / "fallback.json", {"candidate_kind": candidate_kind,
             "cover_policy": cover_policy,
+            "energy_relaxation": energy_relaxation,
             "plan": plan, "provenance": fallback_provenance,
             "selection_and_replay_wall_seconds": fallback_wall})
     else:
@@ -349,12 +355,40 @@ def evaluate_case(dest, case_name, case, market, prior, spec, controls, started,
     replay_wall = time.monotonic()-replay_started
     base.save_new(dest / "independent_replay.json", {
         "cover_policy": cover_policy,
+        "energy_relaxation": energy_relaxation,
         "candidate_kind": candidate_kind, "fallback_provenance": fallback_provenance,
         "case_identity": case.identity(), "market_identity": market.identity(),
         "plan_hash": nr.digest(plan), "replay": replay,
         "objective_exact": str(exact), "replay_wall_seconds": replay_wall,
         "elapsed_seconds": time.monotonic()-started})
+    if candidate_kind == "source_fallback" and skip_hull_for_fallback:
+        reference = {arm: {"row_id": case_name + "/" + arm,
+                           "lower_exact": row.get("lower_exact"),
+                           "upper_exact": row.get("upper_exact"),
+                           "native_status": row.get("native_status")}
+                     for arm, row in controls.items()}
+        reason = ("The same archived stage-2 source candidate already had target native "
+                  "verification; this replay adds no new physical candidate.")
+        base.save_new(dest / "hull_skipped.json", {
+            "cover_policy": cover_policy, "energy_relaxation": energy_relaxation,
+            "reason": reason, "historical_bounds_reference": reference,
+            "fresh_bound": False, "hull_wall_seconds": 0.0})
+        base.save_new(dest / "result.json", {"case": case_name,
+            "outcome": "fallback_replayed_no_new_hull",
+            "cover_policy": cover_policy, "energy_relaxation": energy_relaxation,
+            "candidate_kind": candidate_kind, "repair_status": proposed.get("repair_status"),
+            "candidate_objective_exact": str(exact), "candidate_plan_hash": nr.digest(plan),
+            "fallback_provenance": fallback_provenance,
+            "repair_wall_seconds": repair_wall, "independent_replay_wall_seconds": replay_wall,
+            "fallback_selection_and_replay_wall_seconds": fallback_wall,
+            "pool_preparation_wall_seconds": 0.0, "hull_wall_seconds": 0.0,
+            "hull_assessment": {}, "hull_skipped_reason": reason,
+            "historical_bounds_reference": reference, "controls": controls,
+            "elapsed_seconds": time.monotonic()-started,
+            "scientific_admission": "pending independent result review"})
+        return 0
     lineage = {"kind": candidate_kind, "cover_policy": cover_policy,
+               "energy_relaxation": energy_relaxation,
                "case_identity": case.identity(),
                "market_identity": market.identity(), "plan_hash": nr.digest(plan),
                "fallback_provenance": fallback_provenance,
@@ -366,6 +400,7 @@ def evaluate_case(dest, case_name, case, market, prior, spec, controls, started,
     base.save_new(dest / "import_envelope.json", envelope)
     base.save_new(dest / "pool_preparation.json", {
         "cover_policy": cover_policy,
+        "energy_relaxation": energy_relaxation,
         "candidate_kind": candidate_kind, "pool_preparation_wall_seconds": pool_wall,
         "lineage_digest": envelope["lineage_digest"],
         "column_key": envelope["columns"][0]["key"]})
@@ -380,6 +415,7 @@ def evaluate_case(dest, case_name, case, market, prior, spec, controls, started,
     base.save_new(dest / "result.json", {"case": case_name,
         "outcome": "candidate_and_native_hull_checked",
         "cover_policy": cover_policy,
+        "energy_relaxation": energy_relaxation,
         "candidate_kind": candidate_kind, "repair_status": proposed.get("repair_status"),
         "candidate_objective_exact": str(exact), "candidate_plan_hash": nr.digest(plan),
         "fallback_provenance": fallback_provenance,

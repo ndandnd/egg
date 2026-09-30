@@ -14,10 +14,10 @@ newly repaired fleet or a direct cost for one.
 
 | Order | Case | Decoder | Proposed structural buses | Charging | Selected fleet / buses | Source0 fallback direct cost | Target hull status; lower–mixture upper; pricing / master calls |
 |---:|---|---|---:|---|---|---:|---|
-| 1 | 20 services (2016) | Cost only | 3 (proved minimum) | Infeasible | Source0 fallback / 4 | 553.47 | `budget_exhausted`; 515.285–515.439; 4 / 5 |
-| 2 | 20 services (2016) | Cost + learned tie score | 3 (proved minimum) | Infeasible | Source0 fallback / 4 | 553.47 | `budget_exhausted`; 515.285–515.439; 4 / 5 |
-| 3 | 28 services (2017) | Cost + learned tie score | 4 (proved minimum) | Infeasible | Source0 fallback / 5 | 724.66 | `budget_exhausted`; 579.539–686.654; 2 / 3 |
-| 4 | 28 services (2017) | Cost only | 4 (proved minimum) | Infeasible | Source0 fallback / 5 | 724.66 | `budget_exhausted`; 579.539–686.654; 2 / 3 |
+| 1 | 20 services (2016) | Cost only | 3 (native optimum) | Infeasible | Source0 fallback / 4 | 553.47 | `budget_exhausted`; 515.285–515.439; 4 / 5 |
+| 2 | 20 services (2016) | Cost + learned tie score | 3 (native optimum) | Infeasible | Source0 fallback / 4 | 553.47 | `budget_exhausted`; 515.285–515.439; 4 / 5 |
+| 3 | 28 services (2017) | Cost + learned tie score | 4 (native optimum) | Infeasible | Source0 fallback / 5 | 724.66 | `budget_exhausted`; 579.539–686.654; 2 / 3 |
+| 4 | 28 services (2017) | Cost only | 4 (native optimum) | Infeasible | Source0 fallback / 5 | 724.66 | `budget_exhausted`; 579.539–686.654; 2 / 3 |
 
 The saved global lower certificates and mixture uppers replayed, and the fresh
 independent physical replay of all four fallback plans passed with matching
@@ -38,7 +38,7 @@ costs in Stage 2; source1 cost 586.76 and 749.31 in those cases. Stage 2's
 learned and cheapest arms had physical incumbents 515.52 and 689.47, and this
 run recovered the same hull intervals from the fallback pool. The earlier
 route-fixed score-only repair produced replayed 18- and 28-bus fleets at
-1,919.93 and 2,999.52. The new decoders proved smaller structural covers, but
+1,919.93 and 2,999.52. The new decoders found smaller structural covers, but
 those covers failed charging. Learned scores selected a different cover than
 cost-only in each case, yet did not yield a feasible repaired fleet, better
 fallback cost, or a different hull result. Thus this run shows no learned

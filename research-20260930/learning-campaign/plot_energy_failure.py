@@ -34,3 +34,6 @@ fig.text(.07,.902,'All 14 proposed routes exceed the usable 80 kWh battery (dash
 fig.text(.07,.025,'Four development cells; these failures concern the selected routes only.\nThey do not establish that every fleet with three or four buses is infeasible.',fontsize=9,color='#555555')
 fig.subplots_adjust(left=.10,right=.975,top=.82,bottom=.15,wspace=.27,hspace=.38)
 for ext in ('png','svg'): fig.savefig(HERE/f'cost_aware_energy_failure.{ext}',dpi=180,facecolor='white')
+
+svg = HERE / "cost_aware_energy_failure.svg"
+svg.write_text("\n".join(line.rstrip() for line in svg.read_text().splitlines())+"\n")

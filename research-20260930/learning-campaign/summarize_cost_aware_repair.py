@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import csv
+import argparse
 import json
 from pathlib import Path
 from typing import Any
@@ -23,7 +24,9 @@ FIELDS = (
     "child_outcome", "child_return_code", "child_elapsed_seconds", "child_hard_timeout",
     "result_outcome", "result_elapsed_seconds",
     "repair_status", "repair_failure_stage", "cover_solver_status", "cover_mip_gap",
-    "cover_minimum_bus_count_reported", "proposed_structural_buses", "proposed_pullout_count",
+    "cover_minimum_bus_count_reported", "minimum_bus_count_scope",
+    "relaxation_minimum_bus_count_reported", "proposed_structural_buses",
+    "proposed_pullout_count", "energy_relaxation",
     "candidate_kind", "saved_independent_replay_ok", "replayed_candidate_buses",
     "direct_repaired_cost_exact", "fallback_cost_exact",
     "inference_attempted", "inference_performed", "inference_seconds", "cover_seconds",
@@ -31,6 +34,7 @@ FIELDS = (
     "fallback_selection_replay_seconds", "pool_preparation_seconds", "hull_seconds",
     "worker_exception_type", "worker_exception_message",
     "hull_status", "hull_lower_bound", "hull_mixture_upper_bound",
+    "hull_skipped_reason",
     "hull_global_certificate_replayed", "hull_mixture_replayed",
     "hull_pricing_requests", "hull_seed_requests", "hull_master_calls", "hull_columns",
     "artifact_errors",
@@ -83,8 +87,15 @@ def _bus_count(vehicles: Any) -> int | None:
     return None
 
 
-def summarize_cell(order: int, case: str, services: int, mode: str) -> dict[str, Any]:
-    folder = ATTEMPT / case / "state0" / mode
+def _csv_value(value: Any) -> Any:
+    if isinstance(value, (dict, list)):
+        return json.dumps(value, sort_keys=True, separators=(",", ":"))
+    return value
+
+
+def summarize_cell(attempt: Path, order: int, case: str, services: int,
+                   mode: str) -> dict[str, Any]:
+    folder = attempt / case / "state0" / mode
     errors: list[str] = []
     receipt = _read_json(folder / "receipt.json", errors)
     repair_file = _read_json(folder / "repair.json", errors)
@@ -93,6 +104,7 @@ def summarize_cell(order: int, case: str, services: int, mode: str) -> dict[str,
     failure_receipt = _read_json(folder / "failure.json", errors)
     exception = _read_json(folder / "exception.json", errors)
     pool = _read_json(folder / "pool_preparation.json", errors)
+    hull_skip = _read_json(folder / "hull_skip.json", errors)
     result = _read_json(folder / "result.json", errors)
 
     proposed = repair_file.get("result", {}) if repair_file else {}
@@ -153,6 +165,17 @@ def summarize_cell(order: int, case: str, services: int, mode: str) -> dict[str,
     counts = result_assessment.get("counts", {})
     if not isinstance(counts, dict):
         counts = {}
+    energy_relaxation = _first(proposed, "energy_relaxation", "soc_relaxation")
+    if energy_relaxation is None:
+        energy_relaxation = _first(cover, "energy_relaxation", "soc_relaxation")
+    if energy_relaxation is None:
+        energy_relaxation = _first(result or {}, "energy_relaxation", "soc_relaxation")
+    hull_skipped_reason = _first(result or {}, "hull_skipped_reason", "hull_skip_reason")
+    if hull_skipped_reason is None:
+        hull_skipped_reason = _first(result_assessment,
+                                     "hull_skipped_reason", "skipped_reason", "skip_reason")
+    if hull_skipped_reason is None:
+        hull_skipped_reason = _first(hull_skip or {}, "hull_skipped_reason", "reason")
 
     repair_total_seconds = _first(repair_file or {}, "repair_wall_seconds")
     if repair_total_seconds is None:
@@ -188,8 +211,12 @@ def summarize_cell(order: int, case: str, services: int, mode: str) -> dict[str,
         "cover_solver_status": _get(cover, "status"),
         "cover_mip_gap": _get(cover, "mip_gap"),
         "cover_minimum_bus_count_reported": _bool(_get(cover, "native_minimum_bus_count_reported")),
+        "minimum_bus_count_scope": _get(cover, "minimum_bus_count_scope"),
+        "relaxation_minimum_bus_count_reported": _bool(
+            _get(cover, "relaxation_minimum_bus_count_reported")),
         "proposed_structural_buses": _bus_count(_get(cover, "vehicles")),
         "proposed_pullout_count": _get(cover, "pullout_count"),
+        "energy_relaxation": _csv_value(energy_relaxation),
         "candidate_kind": candidate_kind,
         "saved_independent_replay_ok": _bool(saved_replay_ok if independent else None),
         "replayed_candidate_buses": replayed_candidate_buses,
@@ -211,6 +238,7 @@ def summarize_cell(order: int, case: str, services: int, mode: str) -> dict[str,
         "hull_status": _get(result_assessment, "status"),
         "hull_lower_bound": lower,
         "hull_mixture_upper_bound": upper,
+        "hull_skipped_reason": hull_skipped_reason,
         "hull_global_certificate_replayed": _bool(
             _get(result_assessment, "global_certificate_replayed")),
         "hull_mixture_replayed": _bool(_get(result_assessment, "mixture_replayed")),
@@ -223,17 +251,25 @@ def summarize_cell(order: int, case: str, services: int, mode: str) -> dict[str,
     return row
 
 
-def main() -> None:
-    OUTPUT.parent.mkdir(parents=True, exist_ok=True)
-    rows = [summarize_cell(*cell) for cell in CELLS]
-    temporary = OUTPUT.with_suffix(OUTPUT.suffix + ".tmp")
+def main(argv: list[str] | None = None) -> None:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--attempt", type=Path, default=ATTEMPT,
+                        help="attempt directory (default: cost-aware attempt 1)")
+    parser.add_argument("--output", type=Path, default=OUTPUT,
+                        help="CSV destination (default: COST_AWARE_REPAIR_CELLS.csv)")
+    args = parser.parse_args(argv)
+    attempt = args.attempt.resolve()
+    output = args.output.resolve()
+    output.parent.mkdir(parents=True, exist_ok=True)
+    rows = [summarize_cell(attempt, *cell) for cell in CELLS]
+    temporary = output.with_suffix(output.suffix + ".tmp")
     with temporary.open("w", encoding="utf-8", newline="") as stream:
         writer = csv.DictWriter(stream, fieldnames=FIELDS, extrasaction="raise",
                                 lineterminator="\n")
         writer.writeheader()
         writer.writerows(rows)
-    temporary.replace(OUTPUT)
-    print(f"wrote {len(rows)} rows to {OUTPUT}")
+    temporary.replace(output)
+    print(f"wrote {len(rows)} rows to {output}")
 
 
 if __name__ == "__main__":

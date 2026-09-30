@@ -29,21 +29,66 @@ class RepairStageFailure(ValueError):
         self.telemetry = telemetry
 
 
+def _energy_relaxation_rows(case, compiled):
+    """Necessary route-energy rows; column order is movements, then post-trip SOC."""
+    m = len(case.movements)
+    trip_index = {trip.id:i for i,trip in enumerate(case.trips)}
+    positive_visits = {mid for interval in compiled["intervals"]
+                       if interval["rate_kw"]*interval["hours"] > 0
+                       for mid in interval["visits"]}
+    B, reserve = case.battery_kwh, case.reserve_kwh
+    rows = []
+    def add(coefficients, lo=-math.inf, hi=math.inf):
+        rows.append((coefficients, lo, hi))
+    for j, movement in enumerate(case.movements):
+        energy = sum(leg.energy_kwh for leg in movement.legs)
+        before = (m+trip_index[movement.before]
+                  if movement.before is not None else None)
+        after = (m+trip_index[movement.after]
+                 if movement.after is not None else None)
+        service = (case.trips[trip_index[movement.after]].energy_kwh
+                   if after is not None else 0.0)
+        # Every inactive implication is redundant over SOC bounds.
+        big_m = B+energy+service
+        if movement.kind == "pullout":
+            # s_after <= B - pullout energy - service energy.
+            add({after:1.0, j:big_m}, hi=B-energy-service+big_m)
+        elif movement.kind == "pullin":
+            # Arrive at the depot with reserve before terminal charging.
+            add({before:1.0, j:-big_m}, lo=reserve+energy-big_m)
+        elif movement.kind == "depot" and movement.id in positive_visits:
+            inbound = sum(leg.energy_kwh for leg in movement.legs[:movement.depot_split])
+            outbound = energy-inbound
+            # Optimistic full reset; arrival must still reach the depot.
+            add({before:1.0, j:-big_m}, lo=reserve+inbound-big_m)
+            add({after:1.0, j:big_m}, hi=B-outbound-service+big_m)
+        else:
+            # Direct, or a depot visit at which charging is impossible.
+            add({after:1.0, before:-1.0, j:big_m},
+                hi=-energy-service+big_m)
+    return rows
+
+
 def decode_path_cover(case, logits=None, *, time_limit_seconds=5.0,
-                      cover_policy="score_only"):
+                      cover_policy="score_only", energy_relaxation=False):
     """Find a binary declared-movement path cover with a vehicle count cap.
 
     ``score_only`` preserves the original logit objective. ``cost_only``
     minimizes pullouts without logits. ``cost_learned`` adds a logit term whose
     change across covers is at most 1/4, so one bus dominates at an exact optimum.
     The cost modes require positive vehicle cost and zero deadhead cost.
-    These are structural covers; battery and charging feasibility remain open.
+    With ``energy_relaxation=True``, continuous post-trip SOC variables impose
+    necessary route-energy bounds. Depot departures may reset optimistically to
+    full only when their frozen charging window has positive available capacity.
+    Shared connector, charging duration, and terminal refill remain unchecked.
     """
     from scipy.optimize import Bounds, LinearConstraint, milp
     from scipy.sparse import lil_matrix
     nr.validate_case(case)
     if cover_policy not in COVER_POLICIES:
         raise ValueError("Unknown cover policy")
+    if not isinstance(energy_relaxation, bool):
+        raise ValueError("energy_relaxation must be a boolean")
     if not nr._finite(time_limit_seconds) or time_limit_seconds <= 0:
         raise ValueError("Invalid route time cap")
     if cover_policy in ("cost_only", "cost_learned") and (
@@ -65,16 +110,26 @@ def decode_path_cover(case, logits=None, *, time_limit_seconds=5.0,
     started = time.perf_counter()
     n, m = len(case.trips), len(case.movements)
     trip_index = {trip.id:i for i, trip in enumerate(case.trips)}
-    matrix = lil_matrix((2*n+1, m), dtype=float)
-    for j, movement in enumerate(case.movements):
-        if movement.after is not None:
-            matrix[trip_index[movement.after], j] = 1
-        if movement.before is not None:
-            matrix[n+trip_index[movement.before], j] = 1
-        if movement.kind == "pullout":
-            matrix[2*n, j] = 1
-    lower = [1.0]*(2*n)+[-math.inf]
-    upper = [1.0]*(2*n)+[float(case.max_vehicles)]
+    rows = []
+    def add(coefficients, lo=-math.inf, hi=math.inf):
+        rows.append((coefficients, lo, hi))
+    for trip in case.trips:
+        add({j:1.0 for j,movement in enumerate(case.movements)
+             if movement.after == trip.id}, 1.0, 1.0)
+    for trip in case.trips:
+        add({j:1.0 for j,movement in enumerate(case.movements)
+             if movement.before == trip.id}, 1.0, 1.0)
+    add({j:1.0 for j,movement in enumerate(case.movements)
+         if movement.kind == "pullout"}, hi=float(case.max_vehicles))
+    if energy_relaxation:
+        rows.extend(_energy_relaxation_rows(case, nr.compile_case(case)))
+    matrix = lil_matrix((len(rows), m+(n if energy_relaxation else 0)), dtype=float)
+    lower, upper = [], []
+    for row, (coefficients, lo, hi) in enumerate(rows):
+        for col, coefficient in coefficients.items():
+            matrix[row, col] = coefficient
+        lower.append(lo)
+        upper.append(hi)
     if cover_policy == "score_only":
         objective = [-v for v in values]
     elif cover_policy == "cost_only":
@@ -82,13 +137,17 @@ def decode_path_cover(case, logits=None, *, time_limit_seconds=5.0,
     else:
         objective = [float(m.kind == "pullout")-scale*v
                      for m,v in zip(case.movements,values)]
+    if energy_relaxation:
+        objective += [0.0]*n
     # SciPy forwards these named options to HiGHS. Thread count and seed are
     # explicit; suppress only SciPy's forwarding notice in this scope.
     with warnings.catch_warnings():
         warnings.filterwarnings("ignore", message="Unrecognized options detected:",
                                 category=RuntimeWarning)
-        result = milp(c=objective, integrality=[1]*m,
-            bounds=Bounds([0.0]*m, [1.0]*m),
+        result = milp(c=objective, integrality=[1]*m+[0]*n if energy_relaxation else [1]*m,
+            bounds=Bounds([0.0]*m+[case.reserve_kwh]*n if energy_relaxation else [0.0]*m,
+                          [1.0]*m+[case.battery_kwh-trip.energy_kwh for trip in case.trips]
+                          if energy_relaxation else [1.0]*m),
             constraints=LinearConstraint(matrix.tocsr(), lower, upper),
             options={"time_limit":float(time_limit_seconds), "mip_rel_gap":0.0,
                      "threads":1, "random_seed":0})
@@ -100,27 +159,40 @@ def decode_path_cover(case, logits=None, *, time_limit_seconds=5.0,
         "wall_seconds":time.perf_counter()-started,
         "objective_policy":cover_policy, "logit_scale":scale,
         "random_seed":0, "threads":1}
-    if result.x is None or any(not math.isfinite(float(v)) or abs(v-round(v)) > 1e-6
-                               for v in result.x):
+    if (result.x is None or len(result.x) != m+(n if energy_relaxation else 0)
+            or any(not math.isfinite(float(v)) for v in result.x)
+            or any(abs(v-round(v)) > 1e-6 for v in result.x[:m])
+            or getattr(result, "fun", None) is None
+            or not math.isfinite(float(result.fun))):
         raise RepairStageFailure("Route cover solver has no integral incumbent",
             cover={**diagnostics, "selected_movements":None, "vehicles":None})
-    selected = [movement.id for movement, value in zip(case.movements, result.x)
+    selected = [movement.id for movement, value in zip(case.movements, result.x[:m])
                 if value > 0.5]
     try:
         vehicles, _ = pf.recover_paths(case, selected)
     except ValueError as exc:
         raise RepairStageFailure(f"Route cover recovery failed: {exc}",
             cover={**diagnostics, "selected_movements":selected, "vehicles":None}) from exc
-    return {"selected_movements":selected, "vehicles":vehicles, **diagnostics,
+    cover = {"selected_movements":selected, "vehicles":vehicles, **diagnostics,
         "pullout_count":sum(case.movements[j].kind == "pullout"
-                            for j,x in enumerate(result.x) if x > 0.5),
+                            for j,x in enumerate(result.x[:m]) if x > 0.5),
         "score":(sum(v for v,x in zip(values,result.x) if x > 0.5)
                  if values is not None else None),
         "cover_objective":float(result.fun),
         "native_minimum_bus_count_reported":bool(result.status == 0 and
-            cover_policy in ("cost_only", "cost_learned")),
-        "minimum_bus_count_scope":"declared structural route covers, ignoring charging",
-        "meaning":"legal path cover only; battery and charging not yet checked"}
+            cover_policy in ("cost_only", "cost_learned") and not energy_relaxation),
+        "minimum_bus_count_scope":("declared energy-relaxed route covers; optimistic depot resets"
+            if energy_relaxation else "declared structural route covers, ignoring charging"),
+        "meaning":("legal path cover satisfying necessary energy bounds; charging schedule and physical replay not yet checked"
+            if energy_relaxation else "legal path cover only; battery and charging not yet checked")}
+    if energy_relaxation:
+        cover.update(energy_relaxation=True,
+            energy_relaxation_scope="post-trip SOC, no-charge propagation, reserve on depot/terminal arrival; optimistic full reset only at positive-capacity depot window; shared connector and terminal refill omitted",
+            relaxation_minimum_bus_count_reported=bool(result.status == 0 and
+                cover_policy in ("cost_only", "cost_learned")),
+            soc_after_trip_witness_kwh={trip.id:float(result.x[m+i])
+                                        for i,trip in enumerate(case.trips)})
+    return cover
 
 
 def _solve_fixed_charge(case, market, selected, budget, record=None):
@@ -175,7 +247,7 @@ def _solve_fixed_charge(case, market, selected, budget, record=None):
 
 
 def repair_target(case, market, model=None, *, budget, path_seconds=5.0,
-                  cover_policy="score_only", record=None):
+                  cover_policy="score_only", energy_relaxation=False, record=None):
     """Return a replayed new fleet, or a typed fallback for the source pool.
 
     `market` is a native_hull.Market; `model` is a frozen EdgePrior, except that
@@ -188,7 +260,8 @@ def repair_target(case, market, model=None, *, budget, path_seconds=5.0,
     stage_started = started
     result = {"policy":POLICY, "case_identity":case.identity(),
         "market_identity":market.identity(), "repair_status":"fallback",
-        "cover_policy":cover_policy, "raw_topology":None, "cover":None,
+        "cover_policy":cover_policy, "energy_relaxation":energy_relaxation,
+        "raw_topology":None, "cover":None,
         "inference_attempted":False, "inference_performed":False,
         "charging_subproblem":"fixed-binary native linear program",
         "timing_seconds":{}}
@@ -213,7 +286,7 @@ def repair_target(case, market, model=None, *, budget, path_seconds=5.0,
         stage = "cover"
         stage_started = time.perf_counter()
         cover = decode_path_cover(case, logits, time_limit_seconds=path_seconds,
-            cover_policy=cover_policy)
+            cover_policy=cover_policy, energy_relaxation=energy_relaxation)
         result["cover"] = cover
         result["timing_seconds"]["cover"] = time.perf_counter()-started-result["timing_seconds"]["topology"]
         stage = "charging"
