@@ -8,27 +8,39 @@ supersedes the earlier idle-monitor pause condition and blanket deferral of ML.
 Notify only substantive findings, major decisions, important failures or review
 artifacts. Continue useful local work between jobs; do not pause on an empty queue.
 
-## Latest checkpoint — shard 00 preempted; explicit continuation in preparation
+## Latest checkpoint — partial batch reviewed; continuation ready for submission
 
-- One scoped queue check found 703461 absent. Scoped accounting confirms PREEMPTED,
-  713 allocation seconds; batch CANCELLED 0:15 / 714 seconds, 234056 KiB peak RSS.
-  No final wrapper or summary exists. Whole partial attempt and both Slurm logs
-  collected: 315 files / 82.79 MB hashed, stdout retained locally and ignored by Git.
-- All 16 source solves and 24 charging cells have catalog rows and child receipts;
-  all 40 report feasible plans. One additional launched cell, base10004/source0
-  late charging, has no receipt and remains interrupted/censored. Exactly23 cells
-  were never launched. Accounting and manifest name the raw evidence. No model fit
-  or complete-shard admission; Root/Luna reviewing partial evidence once.
-- Sol is implementing an explicit new continuation attempt for only the23 untouched
-  cells, with parent hashes and an accounting-based censor for the interrupted cell.
-  Parent files stay unchanged; no completed or interrupted solve is retried. Proposed
-  bound: one CPU/8GB/thread,45minutes, child100/controller2500/shell2600 seconds,
-  no requeue, excluded node unchanged. New composite-admission policy will distinguish
-  old/new receipts and spent time. No new job is submitted yet. Keep this concrete
-  implementation moving; do not launch another shard before checking newer receipts.
-- Existing physical generator/first-shard protocol and v1 adapter remain historical
-  source evidence. No sealed-test material or manuscript work. The next checkpoint
-  will replace this implementation status after review and one guarded launch.
+- Job 703461 was PREEMPTED after 713 allocation seconds. All 40 completed plans
+  (16 source, 24 charging) passed independent physical/native replay and exact
+  curved-cost checks. Raw evidence and both Slurm logs are preserved; no parent
+  wrapper or complete-shard summary exists. One launched cell remains censored
+  with unknown outcome and child time; exactly 23 cells were never launched.
+- Source pairs share movement topology in 5/8 groups. Among the first four ordered
+  groups, 9/12 tariff pairs tie within the preset 1e-6 tolerance; source0 wins two
+  and source1 one, all three separated outcomes in base10003. This ordered prefix
+  does not establish registry-wide generalization. No new model fit or speedup.
+  See RESULTS_PHYSICAL_SHARD00_PREEMPTED.md and its replay JSON/reproducer.
+- Sol implemented and Root reviewed a separate no-retry continuation for only the
+  23 untouched charging cells. Parent inventory and source plans are frozen and
+  checked; the interrupted cell is never retried. Budget: 1 CPU, 8 GB, one thread,
+  45 minutes; child/controller/shell caps 100/2500/2600 seconds; no requeue;
+  exclude scaglione-compute-01. No new job submitted yet. Root will submit once
+  after the final Luna review and GitHub backup, using a fresh remote checkout.
+- The separate v2 composite adapter admits parent plus continuation only after a
+  successful continuation wrapper and 23 new receipts. It preserves row origins,
+  the typed censor and separate spent-time totals, and replay-checks saved plans.
+  Seven focused checks passed; full composite replay remains due on completion.
+  Archive integration checks require collected parent stdout, which is gitignored.
+- Parent evidence backed up at 8803962; reviewed results at 10ccbd7. The original
+  Google Doc now contains the partial findings and prospective continuation, with
+  all six figures preserved (DOC_PHYSICAL_PREEMPTION_RECEIPT.json).
+- Next: collect this one continuation, compile/review the complete composite once,
+  then advance distinct eight-group training shards toward 32/64/128 independent
+  groups and grouped learning curves. Compare constant/direct-bill/EdgePrior,
+  ridge and a modest nonlinear baseline. Weak source-choice signal favors route
+  proposals, not more epochs on ties. If preemption repeats, generalize this
+  explicit censor/continuation policy rather than repeat bespoke recovery audits.
+  No development/test data opened, no manuscript work; hourly automation ACTIVE.
 
 ## Prior checkpoint — train-only dataset adapter prepared during shard 00
 
