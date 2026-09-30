@@ -8,35 +8,45 @@ supersedes the earlier idle-monitor pause condition and blanket deferral of ML.
 Notify only substantive findings, major decisions, important failures or review
 artifacts. Continue useful local work between jobs; do not pause on an empty queue.
 
-## Latest checkpoint — first eight-group dataset admitted; next shard ready
+## Latest checkpoint — next eight-group training shard submitted
 
-- Job709011 COMPLETED:155 Slurm seconds,149 wrapper seconds,107.67 receipted
-  child seconds. All23 new charging cells replayed. Requested1 CPU; Slurm
-  allocated2 logical CPUs; native/library threads requested1; peak RSS184868KiB.
-  Raw continuation, wrapper, logs and accounting collected and preserved.
-- Composite v2 admitted once in6.74s:8 independent TRAIN groups,16 source plans,
-  47 target charging plans and1 explicit preemption censor. Seven groups have
-  all three tariff pairs;23/24 comparisons eligible. Parent713 allocation seconds
-  and667.82 child seconds remain separate. No incomplete cell was retried.
-- At the preset1e-6 tolerance,20/23 pairs tie; all three non-ties are in base10003.
-  Five of8 source pairs share topology; none share full plans;11 source topologies
-  across16 fleets. Source status13 budget_exhausted/3 certified;47 linear LPs
-  OPTIMAL does not certify curved/global optimality. No new model fit.
-- Raw/admitted dataset backup1aa42d4; report, derived counts and Luna admission
-  review f694d48. Read RESULTS_PHYSICAL_SHARD00.md / PHYSICAL_SHARD00_DERIVED.json
-  rather than re-audit raw parents. Composite output is immutable at
-  result/physical_learning/20260930-shard00-composite-v2.
-- NEXT_PHYSICAL_SHARD01_PROTOCOL.md freezes unchanged shard1, IDs10008–10015,
-  64 cells:16 source route solves +48 charging labels. One requested CPU/8GB,
-  one native thread,2h,100/6600/6900-second child/controller/shell caps,
-  no requeue, exclude scaglione-compute-01. No new job submitted yet; Root will
-  back up and make one guarded submission using EGG_SHARD_INDEX=1.
-- Then continue independent shards toward32/64/128 groups and implement pooled
-  route/edge training from saved source fleets ahead of the32-group fit checkpoint.
-  More tuning of the current two-source selector has little signal. Keep grouped
-  baselines, direct prediction, charging repair and global verification separate.
-  Dev/test and historical protected IDs remain untouched; manuscript deferred;
-  hourly learning automation ACTIVE. No additional source/physics audit needed.
+- **Recorded EGG job 711779**, submitted 2026-09-30T18:14:02Z. The guard found
+  no active EGG job; no post-submission polling. Execution commit
+  `b5647e78928a3b6bcdcc5448a8c5d5e8bad2f71d`; remote checkout
+  `/home/nc437/egg-physical-shard01-20260930`; exclusive attempt
+  `result/physical_learning/20260930-shard01-attempt1`. LAUNCH_711779.json governs.
+- Job 709011 COMPLETED: 155 Slurm seconds, 149 wrapper seconds, 107.67 receipted
+  child seconds. All 23 new charging cells replayed. Requested 1 CPU; Slurm
+  allocated 2 logical CPUs; native/library threads requested 1; peak RSS 184868 KiB.
+  Raw continuation, wrapper, logs and accounting are collected and preserved.
+- Composite v2 admitted once in 6.74 seconds: 8 independent TRAIN groups,
+  16 source plans, 47 target charging plans and 1 explicit preemption censor.
+  Seven groups have all three tariff pairs; 23/24 comparisons are eligible.
+  Parent allocation (713 seconds) and child time (667.82 seconds) remain separate.
+  No incomplete cell was retried.
+- At the preset 1e-6 tolerance, 20/23 pairs tie; all three non-ties are in base10003.
+  Five of eight source pairs share topology; none share full plans; there are
+  11 source topologies across 16 fleets. Source status: 13 budget_exhausted,
+  3 certified. The 47 OPTIMAL linear LPs do not certify curved/global optimality.
+  No new model fit. See RESULTS_PHYSICAL_SHARD00.md and PHYSICAL_SHARD00_DERIVED.json;
+  do not repeat raw-parent audits. Immutable dataset:
+  `result/physical_learning/20260930-shard00-composite-v2`.
+- Raw/admitted dataset backup: 1aa42d4; report and Luna admission review: f694d48.
+  The original Google Doc now records these findings and the learning direction;
+  exact append, report link and all six figures were verified
+  (DOC_PHYSICAL_SHARD00_RECEIPT.json).
+- NEXT_PHYSICAL_SHARD01_PROTOCOL.md freezes unchanged shard 1, IDs 10008–10015:
+  16 source route solves plus 48 charging labels. One requested CPU, 8 GB, one
+  native thread, two hours; child/controller/shell caps 100/6600/6900 seconds;
+  no requeue; exclude scaglione-compute-01. Protocol/source backed up before launch.
+- Next: one scoped check of 711779. On completion collect the entire new shard,
+  sibling wrapper and Slurm logs/accounting. Compile once with the existing v1
+  adapter, review compact health, then continue shard 2. While jobs run, implement
+  pooled route/edge training from source-fleet supervision ahead of the 32-group
+  fit checkpoint. Avoid further selector tuning on ties. Subsequent learning-curve
+  checkpoints remain 64 and 128 independent groups; keep prediction, charging
+  repair and global verification separate. Development/test and historical
+  protected IDs remain untouched; manuscript deferred; hourly automation ACTIVE.
 
 ## Prior checkpoint — continuation submitted; partial findings preserved
 

@@ -1,7 +1,9 @@
 {
-  "updated_at_utc": "2026-09-30T18:12:33.910681+00:00",
-  "phase": "physical_learning_shard00_admitted_shard01_ready",
-  "active_job_ids": [],
+  "updated_at_utc": "2026-09-30T18:15:45.536905+00:00",
+  "phase": "physical_learning_shard01_submitted",
+  "active_job_ids": [
+    "711779"
+  ],
   "completed_job_ids": [
     "677817",
     "678708",
@@ -17,12 +19,12 @@
     "700498",
     "709011"
   ],
-  "launch_receipt": "LAUNCH_709011.json",
-  "source_commit": "2460d43d4161449aaeeda0699e2f4ac10418f739",
-  "remote_checkout": "/home/nc437/egg-physical-continuation-20260930",
-  "attempt_relative": "result/physical_learning/20260930-shard00-continuation-attempt1",
+  "launch_receipt": "LAUNCH_711779.json",
+  "source_commit": "b5647e78928a3b6bcdcc5448a8c5d5e8bad2f71d",
+  "remote_checkout": "/home/nc437/egg-physical-shard01-20260930",
+  "attempt_relative": "result/physical_learning/20260930-shard01-attempt1",
   "startup_observation": {
-    "recorded_at_utc": "2026-09-30T17:35:22.152308+00:00",
+    "recorded_at_utc": "2026-09-30T18:15:45.536905+00:00",
     "state": "SUBMITTED",
     "queue_state_not_polled_after_submission": true
   },
@@ -32,7 +34,7 @@
     "cadence": "hourly",
     "notification_policy": "Substantive results, major decisions, failures or review artifacts only"
   },
-  "next_action": "Back up and submit unchanged shard1 for train IDs10008\u201310015 under the prospective 1CPU/8GB/2h budget. Then prepare pooled route/edge training architecture ahead of the32-group fit checkpoint; avoid further selector tuning on ties.",
+  "next_action": "One scoped queue check of 711779; if complete, collect full shard 1, wrapper and Slurm accounting/logs. Compile once with the v1 dataset CLI, then continue shard 2 toward 32 groups. While jobs run, implement the pooled route/edge trainer and grouped-baseline interface ahead of the 32-group fit; avoid further selector tuning on ties.",
   "stage1_results": "RESULTS_STAGE1.md",
   "stage1_model_analysis": "MODEL_STAGE1.md",
   "test_groups_unobserved": [
@@ -54,38 +56,14 @@
     "DOC_FIXED_SOURCE_CHARGE_RESULTS_RECEIPT.json",
     "DOC_CHARGE_RESPONSE_RESULTS_RECEIPT.json",
     "DOC_LEARNING_PRIORITY_RECEIPT.json",
-    "DOC_PHYSICAL_PREEMPTION_RECEIPT.json"
+    "DOC_PHYSICAL_PREEMPTION_RECEIPT.json",
+    "DOC_PHYSICAL_SHARD00_RECEIPT.json"
   ],
   "latest_observation": {
-    "job_id": "709011",
-    "recorded_at_utc": "2026-09-30T18:08:20.787142+00:00",
-    "state": "COMPLETED",
-    "exit_code": "0:0",
-    "elapsed_seconds": 155,
-    "allocated_cpus": 2,
-    "requested_cpus_per_task": 1,
-    "requested_memory_gb": 8,
-    "batch_max_rss_kib": 184868,
-    "node": "snavely-cpu-16",
-    "allocation_cpu_seconds": 310,
-    "native_threads_requested": 1,
-    "wrapper_elapsed_seconds": 149,
-    "wrapper_returncode": 0,
-    "wrapper_receipt_present": true,
-    "summary_present": true,
-    "catalog_rows": 23,
-    "feasible_catalog_rows": 23,
-    "receipted_child_seconds": 107.67477200645953,
-    "parent_job_id": "703461",
-    "parent_allocation_seconds": 713,
-    "parent_completed_cells": 40,
-    "parent_unreceipted_censors": 1,
-    "sacct_raw": [
-      "709011|egg-physical-continuation|COMPLETED|0:0|155|2|8G||snavely-cpu-16",
-      "709011.batch|batch|COMPLETED|0:0|155|2||184868K|snavely-cpu-16",
-      "709011.extern|extern|COMPLETED|0:0|155|2|||snavely-cpu-16"
-    ],
-    "note": "Slurm allocated two logical CPUs despite the one-CPU request. Native and numerical-library thread requests remained one. Allocation, wrapper and child times are separate measurements; do not add nested times."
+    "job_id": "711779",
+    "recorded_at_utc": "2026-09-30T18:15:45.536905+00:00",
+    "state": "SUBMITTED",
+    "queue_state_not_polled_after_submission": true
   },
   "result_summarizer": "summarize_cost_aware_repair.py",
   "cost_aware_results": "RESULTS_COST_AWARE_REPAIR.md",
@@ -99,7 +77,7 @@
   "shared_interval_physical_pool_review": "SHARED_INTERVAL_PHYSICAL_POOL_REVIEW.json",
   "shared_interval_report_backup_commit": "8e17264ffc71eb9b5ed0851b429d5d3927f43ac8",
   "shared_interval_figure": "figures/shared_interval_2016_learned.png",
-  "local_follow_up": "Composite CLI admitted once in6.74s with no adapter changes; Sol report and Luna review agree on63 replayed plans, one censor,20/23 ties and only one informative group. Next8-group launch prepared, not submitted yet.",
+  "local_follow_up": "First eight-group dataset admitted and independently reviewed; original Google Doc append/link/6 figures verified. Unchanged shard1 submitted once; no post-submission polling. No development/test access or manuscript work.",
   "shared_budget_results": "RESULTS_SHARED_BUDGET_REPAIR.md",
   "shared_budget_verification": "INDEPENDENT_REPLAY_SHARED_BUDGET.json",
   "shared_budget_physical_pool_review": "SHARED_BUDGET_PHYSICAL_POOL_REVIEW.json",
