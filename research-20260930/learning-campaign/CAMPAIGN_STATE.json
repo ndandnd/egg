@@ -1,8 +1,8 @@
 {
-  "updated_at_utc": "2026-09-30T21:51:39.821038+00:00",
-  "phase": "model128_budget_v4_submitted",
+  "updated_at_utc": "2026-09-30T22:29:01.220641+00:00",
+  "phase": "model_families_v5_submitted",
   "active_job_ids": [
-    "719750"
+    "720831"
   ],
   "completed_job_ids": [
     "677817",
@@ -37,12 +37,13 @@
     "715495",
     "715496",
     "718744",
-    "718861"
+    "718861",
+    "719750"
   ],
-  "launch_receipt": "LAUNCH_719750.json",
-  "source_commit": "e947a0e87f4977b74dab375fe4dabdbf55f98667",
-  "remote_checkout": "/home/nc437/egg-route-model128-budget-20260930-v4",
-  "attempt_relative": "result/physical_learning/20260930-route-model128-budget-v4",
+  "launch_receipt": "LAUNCH_720831.json",
+  "source_commit": "75dd4cf19f1f735cc3dea559567da3b2bd32013e",
+  "remote_checkout": "/home/nc437/egg-route-families-20260930-v5",
+  "attempt_relative": "result/physical_learning/20260930-route-model128-families-v5",
   "startup_observation": {
     "recorded_at_utc": "2026-09-30T19:24:42.498936+00:00",
     "label_jobs_running": [
@@ -87,7 +88,7 @@
     "notification_policy": "Substantive results, major decisions, failures or review artifacts only",
     "resource_policy": "Parallel label8 + training4; initial single-job limit superseded."
   },
-  "next_action": "One scoped check of719750. When terminal collect complete artifacts, logs and accounting, retain all failures/progress without retry. Verify actual-pool 300-epoch/200-tree anchors against frozen v3 inputs, preprocessing and predictions before interpreting incremental training; replay only inner-selected models and report full128/common32 grouped performance without selecting from outer results. In parallel, next bounded local package is saved-evidence decoder diagnosis on TRAIN10036-10039: explain learned cover failure10039 and why novel10037/10038 fleets lose to matched charged sources. Gate a new decoder protocol on mechanism; version any new dataset to remove stride confounding and diversify charging/route structure. Do not stop at128, open dev/test, or resume manuscript work.",
+  "next_action": "One scoped check of720831; if terminal collect full candidates/results/receipts/logs/accounting, preserve failures and no automatic retry. Independently replay XGBoost JSON with selected iteration range, CatBoost CBM retained trees and ExtraTrees joblib under pinned libraries; check weighted inner choice and promoted-family policy before comparing paired full128/common32 to v3/v4 anchors. All model selection remains internal/exploratory; dev/test sealed. Next neural work: design small timetable graph scorer with prospective grouped training protocol while diagnosing10039 decoder failure and weak incumbent-edge supervision. Continue versioned data diversification to remove stride confounding; manuscript remains deferred.",
   "stage1_results": "RESULTS_STAGE1.md",
   "stage1_model_analysis": "MODEL_STAGE1.md",
   "test_groups_unobserved": [
@@ -116,17 +117,16 @@
     "DOC_GROUPED32_LAUNCH_RECEIPT.json",
     "DOC_MODEL32_RESULTS_RECEIPT.json",
     "DOC_MODEL64_RESULTS_RECEIPT.json",
-    "DOC_MODEL128_DECODER_RESULTS_RECEIPT.json"
+    "DOC_MODEL128_DECODER_RESULTS_RECEIPT.json",
+    "DOC_MODEL_FAMILIES_V5_RECEIPT.json"
   ],
   "latest_observation": {
-    "source": "scoped queue/sacct for718744/718861, then v4 duplicate submission guard",
-    "prior_arrays_all_completed_collected": [
-      "718744",
-      "718861"
-    ],
-    "guard_no_active_egg_jobs_before719750": true,
-    "new_array_submitted": "719750",
-    "postsubmission_state_not_yet_polled": true
+    "source": "new family submission guard, scoped719750 accounting and fullartifactcollection",
+    "prior719750_all12_completed_exit0": true,
+    "prior719750_collected": true,
+    "new720831_submitted": true,
+    "no_dependency_needed": true,
+    "no_postsubmission_queue_or_partial_outcome_read": true
   },
   "result_summarizer": "summarize_cost_aware_repair.py",
   "cost_aware_results": "RESULTS_COST_AWARE_REPAIR.md",
@@ -140,7 +140,7 @@
   "shared_interval_physical_pool_review": "SHARED_INTERVAL_PHYSICAL_POOL_REVIEW.json",
   "shared_interval_report_backup_commit": "8e17264ffc71eb9b5ed0851b429d5d3927f43ac8",
   "shared_interval_figure": "figures/shared_interval_2016_learned.png",
-  "local_follow_up": "Verified model128 saved predictions and common32 learning curves; matched source charging removes every apparent learned fleet gain in four TRAIN cases. CH mixture certificates separated from physical single-fleet costs. Coverage audit finds stride confounding/fixed charger. Inner-cap evidence motivates reviewed v4 longer-training study; 12 tasks submitted,4 concurrent. All agent edits complete.",
+  "local_follow_up": "XGBoost/CatBoost/ExtraTrees comparison implemented, tiny model/weighted-validation fixtures passed, independently reviewed, submitted720831. Prior longer training fully replayed: MLP benefits, tree extension mixed; anchors match; small repeated logistic drift retained. All artifacts/current directions documented; no reserved data opened.",
   "shared_budget_results": "RESULTS_SHARED_BUDGET_REPAIR.md",
   "shared_budget_verification": "INDEPENDENT_REPLAY_SHARED_BUDGET.json",
   "shared_budget_physical_pool_review": "SHARED_BUDGET_PHYSICAL_POOL_REVIEW.json",
@@ -261,18 +261,18 @@
   },
   "active_label_job_ids": [],
   "active_training_array_ids": [
-    "719750"
+    "720831"
   ],
   "route_model_launch_receipt": "LAUNCH_713295.json",
   "route_model_training_protocol": "ROUTE_MODEL_TRAINING_PROTOCOL.md",
   "physical_shard01_accounting": "ACCOUNTING_711779.json",
   "active_attempts": [
     {
-      "array_job_id": "719750",
-      "remote_checkout": "/home/nc437/egg-route-model128-budget-20260930-v4",
-      "attempt_relative": "result/physical_learning/20260930-route-model128-budget-v4",
-      "launch_receipt": "LAUNCH_719750.json",
-      "source_commit": "e947a0e87f4977b74dab375fe4dabdbf55f98667"
+      "array_job_id": "720831",
+      "remote_checkout": "/home/nc437/egg-route-families-20260930-v5",
+      "attempt_relative": "result/physical_learning/20260930-route-model128-families-v5",
+      "launch_receipt": "LAUNCH_720831.json",
+      "source_commit": "75dd4cf19f1f735cc3dea559567da3b2bd32013e"
     }
   ],
   "physical_shard01_dataset": "result/physical_learning/20260930-shard01-dataset-v1",
@@ -347,8 +347,8 @@
   "route_model32_report_backup_commit": "ff40919b562d63166938d3eae29b75347218860c",
   "physical_shard09_report_backup_commit": "ff40919b562d63166938d3eae29b75347218860c",
   "latest_training_submission": {
-    "array_job_id": "719750",
-    "submitted_at_utc": "2026-09-30T21:48:19Z",
+    "array_job_id": "720831",
+    "submitted_at_utc": "2026-09-30T22:19:24Z",
     "state": "SUBMITTED",
     "no_postsubmission_queue_or_partial_outcome_read": true
   },
@@ -369,11 +369,11 @@
   },
   "active_training_attempts": [
     {
-      "array_job_id": "719750",
-      "remote_checkout": "/home/nc437/egg-route-model128-budget-20260930-v4",
-      "attempt_relative": "result/physical_learning/20260930-route-model128-budget-v4",
-      "launch_receipt": "LAUNCH_719750.json",
-      "source_commit": "e947a0e87f4977b74dab375fe4dabdbf55f98667"
+      "array_job_id": "720831",
+      "remote_checkout": "/home/nc437/egg-route-families-20260930-v5",
+      "attempt_relative": "result/physical_learning/20260930-route-model128-families-v5",
+      "launch_receipt": "LAUNCH_720831.json",
+      "source_commit": "75dd4cf19f1f735cc3dea559567da3b2bd32013e"
     }
   ],
   "route_model64_accounting": "ACCOUNTING_717453.json",
@@ -476,5 +476,51 @@
     "all_final_cold_retained_hull_mixtures_nonpure": true,
     "ch_certificate_does_not_certify_physical_optimum": true,
     "matched_online_speedup_established": false
+  },
+  "user_model_direction": "Explicit request to try different ML families: add XGBoost, CatBoost and ExtraTrees now with grouped inner-only selection; next neural direction graph/attention with separate prospective design.",
+  "route_model_families_v5_protocol": "ROUTE_MODEL_FAMILIES_V5_PROTOCOL.md",
+  "route_model_families_v5_environment": "ROUTE_FAMILY_ENVIRONMENT.json",
+  "route_model_families_methods": "MODEL_FAMILY_COMPARISON_METHODS.md",
+  "route_model128_budget_v4_accounting": "ACCOUNTING_719750.json",
+  "route_model128_budget_v4_manifest": "RESULT_MANIFEST_ROUTE_MODEL128_BUDGET_V4.json",
+  "route_model128_budget_v4_raw_backup_commit": "491c2e9db7569e87f35c65457d699cdbba6f4114",
+  "route_model_families_v5_launch_receipt": "LAUNCH_720831.json",
+  "route_model_families_v5_execution_commit": "75dd4cf19f1f735cc3dea559567da3b2bd32013e",
+  "route_model_families_v5_review": "ROUTE_MODEL_FAMILIES_V5_REVIEW.md",
+  "route_model128_budget_v4_results": "ROUTE_MODEL128_BUDGET_V4_RESULTS.md",
+  "route_model128_budget_v4_replay": "ROUTE_MODEL128_BUDGET_V4_REPLAY.json",
+  "route_model128_budget_v4_result_review": "ROUTE_MODEL128_BUDGET_V4_RESULT_REVIEW.md",
+  "route_model128_budget_v4_conclusion": {
+    "completed_tasks": 12,
+    "groups": 128,
+    "observed_source_fleets": 255,
+    "strict_saved_model_replay": true,
+    "mlp300_and_tree200_anchors_match_v3": true,
+    "mlp_full128_log_loss_v3_v4": [
+      0.091523,
+      0.084204
+    ],
+    "mlp_full128_topk_v3_v4": [
+      0.659818,
+      0.673704
+    ],
+    "mlp_early_stopped_tasks": 9,
+    "mlp_selected_epoch_range": [
+      730,
+      1200
+    ],
+    "tree_selected_iterations": {
+      "200": 3,
+      "400": 3,
+      "800": 6
+    },
+    "tree_full128_log_loss_v3_v4": [
+      0.069894,
+      0.070373
+    ],
+    "tree_common32_all_three_primary_metrics_worse": true,
+    "logistic_max_probability_drift_vs_v3": 9.751936955373908e-05,
+    "logistic_max_task_logloss_drift_vs_v3": 1.4217490980905634e-06,
+    "route_cost_or_speedup_established": false
   }
 }

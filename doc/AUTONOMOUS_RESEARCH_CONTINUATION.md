@@ -8,7 +8,62 @@ supersedes the earlier idle-monitor pause condition and blanket deferral of ML.
 Notify only substantive findings, major decisions, important failures or review
 artifacts. Continue useful local work between jobs; do not pause on an empty queue.
 
-## Latest checkpoint — matched charging resolves route attribution; longer training submitted
+## Latest checkpoint — XGBoost, CatBoost and ExtraTrees submitted
+
+- New explicit user direction: try different ML families now; explain current models
+  and promising alternatives. This authorizes the next declared family comparison.
+  Manuscript deferred; hourly automation ACTIVE; all prior data protections remain.
+- Existing classifiers: regularized logistic, custom one-hidden-layer32-unit MLP,
+  scikit-learn HistGradientBoosting, plus constant/kind-frequency controls. They score
+  observed incumbent movements; fleet construction/charging/replay remain separate.
+- **Array720831 submitted22:19:24Z.** Execution75dd4cf19f1f735cc3dea559567da3b2bd32013e;
+  remote `/home/nc437/egg-route-families-20260930-v5`; output
+  `result/physical_learning/20260930-route-model128-families-v5`. LAUNCH_720831.json
+  and ROUTE_MODEL_FAMILIES_V5_PROTOCOL/CHECKS/REVIEW govern. Same exact128pool SHA
+  d9aad5b5ea62fd82a8b4f6a3c20a95c57953ba12c7bf0949fa06004aa511c40d;255/256sources.
+  No postsubmission queue or partial outcome read. Guard found no active EGG job;
+  no dependency needed. No other project's job or held job changed.
+- New menu: XGBoost depths3/6 and CatBoost depths4/6, at most800rounds,lr.05,
+  weighted inner early-stop patience50; ExtraTrees300trees,leaf5/20. Same17features,
+  four80/16/32 grouped folds and3seeds. Six candidates/task saved before outer scoring;
+  config selection AND separately reported promoted-family policy use only inner
+  weighted log loss. All3families are reported; no outer winner-selection. Dev/test
+  sealed. CPU/runtime/imports and model roundtrips verified on tiny syntheticdata.
+- Resource cap:12tasks%4,1CPU/8GB/30min/native1,1700s child cap,6requestedCPUh total,
+  no retry/requeue,exclude scaglione-compute-01. All candidates, models, progress,
+  failures and time retained. Global ceiling12requestedCPUs/96GB unchanged.
+- New isolated runtime `/home/nc437/egg-route-family-env-20260930/bin/python` pins
+  xgboost-cpu3.0.5,CatBoost1.2.8,sklearn1.7.2,numpy1.26.4,scipy1.13.1,joblib1.5.2.
+  ROUTE_FAMILY_ENVIRONMENT.json and route-family-requirements-frozen.txt. Local tiny
+  tests use tmp/route-family-v5-env plus DYLD_LIBRARY_PATH to sklearn/.dylibs;
+  no system install/old environment mutation. Five focused fixtures passed, including
+  native weighted stopping loss and best-iteration portable prediction checks.
+- Prior array719750 all12 COMPLETED0:0, complete artifacts collected and raw backup
+ 491c2e9db7569e87f35c65457d699cdbba6f4114 pushed. ACCOUNTING_719750.json:
+  task elapsed sum4340s,allocatedCPU5761s; task receipts sum4146.30s. These are not
+  online inference time. RESULT_MANIFEST_ROUTE_MODEL128_BUDGET_V4.json pins2544files.
+  All12tasks passed strict saved-model replay; MLP300 and tree200 anchors match v3.
+  MLP full128 logloss .091523→.084204,AP .730048→.747740,top-k .659818→.673704;
+  common32 also improves. Selected epochs730–1200;9/12stopped early. Tree extension
+  is mixed: full128logloss .069894→.070373 worsens,AP/top-k slightly improve;
+  common32all3worsen. Tree selections200/400/800=3/3/6. Logistic coefficients vary
+  across repeats but maxprobability drift9.75e-5/logloss1.42e-6; retained as control
+  drift, not a training-budget gain. See ROUTE_MODEL128_BUDGET_V4_RESULTS/REPLAY and
+  RESULT_REVIEW. No refit or reserved outcomes. Sol/Luna finished; no pending edits.
+- MODEL_FAMILY_COMPARISON_METHODS.md gives official APIs and graph/attention direction.
+  Next neural package should encode timetable compatibility structure with a small
+  graph network under its own frozen protocol; larger model size alone is no benefit.
+  Retain cost-only/source charging controls and diagnose the failed route cover.
+- Google Doc appended with current/new families, fixed selection rule, scope and
+  graph direction;2links/all7nativefigures verified (DOC_MODEL_FAMILIES_V5_RECEIPT).
+- Next: one scoped720831 check next wake, collect complete outputs when terminal
+  and independently
+  replay portable models with pinned versions, including best-round inference,
+  inner selections and promoted policy. Never retry failed/partial tasks automatically.
+  Then compare full128/common32 to existing baselines with timetable-level aggregation;
+  no route-benefit claim from classification. Keep useful graph/data/decoder work moving.
+
+## Previous checkpoint — matched charging resolves route attribution; longer training submitted
 
 - User direction unchanged: sustained parallel ML/data research, manuscript deferred,
   automation ACTIVE, no routine approval. Sol implementation/analysis and Luna review
