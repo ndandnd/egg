@@ -1,18 +1,39 @@
 # EGG journal research continuation
 
-Updated 29 September 2026 UTC. Owner: the EGG task, acting as principal researcher
-under the user's standing authorization. Computational journal paper; iterative
-optimization first, then retrieval/learned proposals. The v0.5 draft is historical.
-Use GPT-6 Sol for implementation/analysis and Luna Max for supporting work; root
-manages. `advance-egg-journal-research` remains active only while there is an EGG job to
-follow or a concrete justified next launch under implementation. Latest user
-preference: no routine status notifications; report substantive results, decisions
-or artifacts ready for user review. Once the current result package and useful
-local follow-up are complete, pause the existing automation if no active job or
-concrete next launch remains. Do not poll an empty queue or invent work to keep
-the schedule alive. This condition supersedes earlier unconditional monitoring.
+Updated 30 September 2026 UTC. Owner: the EGG task under the user's standing
+authorization. Use GPT-6 Sol for implementation/analysis and Luna Max for review;
+root manages. Report substantive results, major decisions or artifacts ready for
+review, not routine queue states or test passes.
 
-## Latest checkpoint — draft 0.10 ready for coauthor discussion
+## Latest checkpoint — computational and learning campaign resumed
+
+The user's latest instruction explicitly authorizes starting cluster experiments,
+building a persistent data/learning pipeline and training ML now, alongside exact
+solver development. This supersedes the earlier idle-monitor pause condition and
+the requirement to postpone all learning until timetable solving is fast. The
+existing hourly `advance-egg-journal-research` heartbeat is ACTIVE again; continue
+useful implementation and analysis between jobs instead of pausing on an empty
+queue. Check current workers and launch receipts before submitting anything.
+
+- Live Unicorn check found no active EGG job and available default-partition
+  capacity. Other held jobs are unrelated and must not be changed.
+- Sol workers are implementing the first synthetic campaign runner and CPU route
+  proposal model; Luna is reviewing launch-critical scientific/resource controls.
+  Root alone submits. No new job has been submitted at this checkpoint.
+- First launch ceiling: one serial job, one CPU/8GB, one native thread, at most
+  two hours, no retry/requeue, exclude scaglione-compute-01. The frozen protocol
+  in `research-20260930/learning-campaign/` sets the tighter actual budget.
+- Collect immutable solver receipts, feasible whole-fleet labels and uncertainties.
+  Train a topology proposal model with independent timetable-group splits, then
+  project onto a target timetable's replayed source pool for valid native starts.
+  Preserve source acquisition cost; compare cold, retained, nearest-price and
+  cheap objective rescoring. A fitted model alone is not evidence of speedup.
+- Reserved test seeds stay unmaterialized. No protected A6/B3/confirmation data,
+  private GIRO publication, PR merge, journal submission or reset-credit use.
+- Preserve failures/time, GitHub backups and consolidated Google Doc milestones.
+  See campaign protocol, architecture and current receipts for the next action.
+
+## Prior checkpoint — draft 0.10 ready for coauthor discussion
 
 - User's detailed review is incorporated with three scientific qualifications:
   the analytic dual run stops 1.21877605e-6 below CH (not within 1e-6); standard

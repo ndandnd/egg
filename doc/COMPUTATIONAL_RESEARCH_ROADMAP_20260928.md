@@ -6,6 +6,24 @@ This supersedes the completed-draft stop and the suggested theory-only direction
 It does not authorize relabelling old results, opening protected evaluation data,
 publishing private GIRO data, or spending reset credits.
 
+## Active direction — solver data and learned proposals, 30 September 2026
+
+The user now explicitly requests cluster work and model training in parallel with
+solver improvement, even if the research takes a long time. This overrides the
+older postponement of learning and idle-monitor pause instructions below. The
+hourly heartbeat is active; future runs must inspect the newest continuation
+checkpoint and campaign receipts, then advance a justified bounded work package.
+
+The first campaign builds independent synthetic timetables, records bounded
+native solves, trains a CPU route-topology predictor and compares feasible
+projected starts against cold solving and simple reuse. Incumbent labels remain
+provisional unless certified. Source-pool generation time, prediction, projection,
+replay and global verification are reported separately. Two independent test
+seeds remain reserved; development outcomes do not become confirmatory evidence.
+Initial concurrent budget is one job/one CPU/8GB/two hours, with a tighter first
+batch recorded in `research-20260930/learning-campaign/PROTOCOL.md` before launch.
+Scale only after examining complete receipts and recording the next budget.
+
 ## Coauthor discussion draft 0.10 — 29 September 2026
 
 The review response clarifies the computational role of column generation and
