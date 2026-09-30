@@ -8,7 +8,53 @@ supersedes the earlier idle-monitor pause condition and blanket deferral of ML.
 Notify only substantive findings, major decisions, important failures or review
 artifacts. Continue useful local work between jobs; do not pause on an empty queue.
 
-## Latest checkpoint — cost-aware failure diagnosed; energy-aware cover in implementation
+## Latest checkpoint — energy-aware four-cell pilot launched
+
+- **Recorded EGG job688750**, submitted2026-09-30T08:02:39Z; one initial
+  scoped queue check observed RUNNING, one allocated CPU/8GB on snavely-cpu-04.
+  No result inspected yet. Do not duplicate this attempt. Heartbeat remains ACTIVE.
+- Execution commit`f45c5a99850266831c0cd257d2117226c33644e4`, remote checkout
+  `/home/nc437/egg-energy-aware-repair-20260930`, exclusive attempt
+  `result/learning_repair/20260930-energy-aware-attempt1`. LAUNCH_688750.json,
+  PROTOCOL_ENERGY_AWARE_REPAIR.md and ENERGY_AWARE_LAUNCH_REVIEW.md under
+  research-20260930/learning-campaign are authoritative. Source is on GitHub.
+- Four crossed cells:2016/cost_only,2016/cost_learned,2017/cost_learned,
+  2017/cost_only. Same development cases and frozen stage2 model; no refit or
+  reserved test access. Cost-only receives no model. A necessary post-trip SOC
+  relaxation screens route covers, allowing optimistic full reset only where
+  positive charging capacity exists. It ignores capacity size/competition and
+  terminal full refill. Passing it is not physical feasibility or optimality.
+- Full fixed-route linear-tariff GRB charging and independent physical replay
+  still follow. New repaired plans get fresh target-hull checks. Failed repairs
+  preserve evidence/time and replay the historical source fallback; they skip
+  another redundant hull solve and claim no fresh bounds. Historical runner
+  defaults unchanged. Report direct proposals, repair, fallback and hull separately.
+- Budget:1CPU/8GB/30min/one native thread, no retry/requeue, exclude01.
+  Cover5sec, charge45phase/55wall, hull70wall, child240, controller1500,
+  shell1650. Root/ Sol implementation and Luna review found no launch blocker;
+  27 focused tests+2subtests passed, including small HiGHS fixtures and archived
+  physical SOC witnesses. No local GRB fleet optimization ran.
+- Completed job685697: all four minimum-structural-bus covers failed charging.
+  Independent route arithmetic rejects14/14 proposed routes: uncharged stretches
+  exceed80kWh usable battery (91.33–241.63kWh longest stretches). This does not
+  rule out other3/4bus fleets. All cells fell back to existing4/5bus source plans
+  at553.47/724.66; fresh physical replay passed. No learned benefit or speedup.
+  Full results/failures/time/figure backed up in7a35971 and later clarification.
+- Google Doc has verified consolidated results plus the new14-route energy
+  figure, preserving prior history/figure. Receipt:DOC_COST_AWARE_RESULTS_RECEIPT.json.
+  Source PNG visually checked; native placement verified, full Doc pagination not.
+- Next: one scoped check of688750, collect full artifacts and wrapper accounting.
+  Run `python3 research-20260930/learning-campaign/summarize_cost_aware_repair.py
+  --attempt result/learning_repair/20260930-energy-aware-attempt1
+  --output research-20260930/learning-campaign/ENERGY_AWARE_REPAIR_CELLS.csv`
+  (one shell line). Review new candidates with fresh physical replay, report all
+  failures/skipped hulls/timing, compare feasible costs against frozen sources and
+  each other. Then choose the next bounded step from evidence, without repeating
+  the same failed covers or refitting to these two development cases.
+- All workers finished; check newer state/active workers before acting. No
+  protected outcomes, reserved2004/2005, privateGIRO, PRmerge or submission.
+
+## Prior checkpoint — cost-aware failure diagnosed; energy-aware cover in implementation
 
 - Job **685697 completed**, exit0 in4:43 on snavely-cpu-04, one allocated CPU,
   8GB, MaxRSS229396KiB. Full attempt collected at

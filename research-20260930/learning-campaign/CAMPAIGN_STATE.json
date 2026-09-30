@@ -1,24 +1,25 @@
 {
-  "updated_at_utc": "2026-09-30T07:41:13.213821+00:00",
-  "phase": "cost_aware_repair_analyzed_next_design",
-  "active_job_ids": [],
+  "updated_at_utc": "2026-09-30T08:04:03.374431+00:00",
+  "phase": "energy_aware_repair_running",
+  "active_job_ids": [
+    "688750"
+  ],
   "completed_job_ids": [
     "677817",
     "678708",
     "682689",
     "685697"
   ],
-  "launch_receipt": "LAUNCH_685697.json",
-  "source_commit": "682a8604a93804a74bc54666cbe1f626e5c9c788",
-  "remote_checkout": "/home/nc437/egg-cost-aware-repair-20260930",
-  "attempt_relative": "result/learning_repair/20260930-cost-aware-attempt1",
+  "launch_receipt": "LAUNCH_688750.json",
+  "source_commit": "f45c5a99850266831c0cd257d2117226c33644e4",
+  "remote_checkout": "/home/nc437/egg-energy-aware-repair-20260930",
+  "attempt_relative": "result/learning_repair/20260930-energy-aware-attempt1",
   "startup_observation": {
-    "recorded_at_utc": "2026-09-30T06:54:25.903352+00:00",
-    "squeue_state": "PENDING",
-    "elapsed": "0:00",
-    "frozen": false,
-    "completed_cells": 0,
-    "exception_files": 0
+    "recorded_at_utc": "2026-09-30T08:04:03.374431+00:00",
+    "squeue_row": "688750|RUNNING|0:04|1|8G|snavely-cpu-04",
+    "state": "RUNNING",
+    "allocated_cpus": 1,
+    "node": "snavely-cpu-04"
   },
   "automation": {
     "id": "advance-egg-journal-research",
@@ -26,7 +27,7 @@
     "cadence": "hourly",
     "notification_policy": "Substantive results, major decisions, failures or review artifacts only"
   },
-  "next_action": "All four cost-aware covers failed fixed-route charging; native INFEASIBLE. Independently replayed existing source fallbacks. Diagnose necessary battery constraints and implement one bounded energy-aware decoder ablation; no refit or reserved test access. No active EGG job until prospective protocol and reviewed source are frozen. Keep hourly heartbeat active.",
+  "next_action": "Check existing job688750 once, no duplicate submission. Collect complete evidence and wrapper/log hashes after completion. Summarize four energy-aware cells with --attempt/--output options; independently replay new repaired plans, compare true nonlinear cost vs frozen source plans and cost-only, separate skipped-hull fallbacks from fresh certificates. Do not refit or open reserved tests. No speedup/learning benefit inferred from training or launch. Active hourly automation continues.",
   "stage1_results": "RESULTS_STAGE1.md",
   "stage1_model_analysis": "MODEL_STAGE1.md",
   "test_groups_unobserved": [
@@ -35,20 +36,16 @@
   ],
   "stage2_results": "RESULTS_STAGE2.md",
   "repair_results": "RESULTS_REPAIR.md",
-  "result_backup_commit": "f498e282d960f3b8e58cbee21e4f74077053384c",
+  "result_backup_commit": "7a359717c21a919d03daceb240092511222ca74a",
   "doc_receipts": [
-    "DOC_COST_AWARE_LAUNCH_RECEIPT.json"
+    "DOC_COST_AWARE_RESULTS_RECEIPT.json"
   ],
   "latest_observation": {
-    "job_id": "685697",
-    "state": "COMPLETED",
-    "exit_code": "0:0",
-    "elapsed_seconds": 283,
+    "recorded_at_utc": "2026-09-30T08:04:03.374431+00:00",
+    "squeue_row": "688750|RUNNING|0:04|1|8G|snavely-cpu-04",
+    "state": "RUNNING",
     "allocated_cpus": 1,
-    "batch_max_rss_kib": 229396,
-    "node": "snavely-cpu-04",
-    "source": "scoped sacct after completion",
-    "recorded_at_utc": "2026-09-30T07:41:13.213821+00:00"
+    "node": "snavely-cpu-04"
   },
   "result_summarizer": "summarize_cost_aware_repair.py",
   "cost_aware_results": "RESULTS_COST_AWARE_REPAIR.md"
