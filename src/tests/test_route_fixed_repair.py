@@ -129,3 +129,57 @@ def test_no_charge_incumbent_preserves_native_stats_and_stage_time(monkeypatch):
     assert result["failure"]["stage"] == "charging"
     assert result["native_stats"] == stats
     assert result["timing_seconds"]["charging_and_replay"] >= 0
+
+
+def test_cost_cover_objectives_seed_and_normalization(monkeypatch):
+    import scipy.optimize
+    case = cyclic_case()
+    selected = [int(m.id in SELECTED) for m in case.movements]
+    calls = []
+    def fake_milp(*args,**kwargs):
+        calls.append(kwargs)
+        objective = kwargs["c"]
+        return SimpleNamespace(x=selected,status=0,message="optimal",mip_gap=0.,
+            mip_node_count=1,fun=sum(c*x for c,x in zip(objective,selected)))
+    monkeypatch.setattr(scipy.optimize,"milp",fake_milp)
+    costs = repair.decode_path_cover(case,cover_policy="cost_only")
+    assert calls[0]["c"] == [float(m.kind == "pullout") for m in case.movements]
+    assert calls[0]["options"]["threads"] == 1
+    assert calls[0]["options"]["random_seed"] == 0
+    assert costs["pullout_count"] == 1 and costs["score"] is None
+    assert costs["native_minimum_bus_count_reported"]
+    logits = [3., -2., 0., 1., -4., 2.]
+    learned = repair.decode_path_cover(case,logits,cover_policy="cost_learned")
+    scale = 1/(4*sum(abs(v) for v in logits))
+    assert learned["logit_scale"] == pytest.approx(scale)
+    assert calls[1]["c"] == pytest.approx([
+        float(m.kind == "pullout")-scale*v for m,v in zip(case.movements,logits)])
+    assert 2*scale*sum(abs(v) for v in logits) <= 0.5
+    zero = repair.decode_path_cover(case,[0.]*len(case.movements),
+        cover_policy="cost_learned")
+    assert zero["logit_scale"] == .25
+    with pytest.raises(ValueError,match="Invalid route logits"):
+        repair.decode_path_cover(case,[float("inf")]*len(case.movements),
+            cover_policy="cost_learned")
+
+
+def test_cost_only_skips_model_inference_and_preserves_replay_gate(monkeypatch):
+    case = cyclic_case()
+    market = nh.Market("target",(1.,)*4,(0.,)*4)
+    plan = known_plan(case)
+    monkeypatch.setattr(repair,"_solve_fixed_charge",lambda *args,**kwargs:
+        (plan,nr.replay_native(case,plan),{"status":"OPTIMAL"}))
+    result = repair.repair_target(case,market,None,
+        budget=nr.Budget(backend="CBC",phase_seconds=1.,wall_seconds=2.),
+        cover_policy="cost_only",path_seconds=1.)
+    assert result["repair_status"] == "replayed"
+    assert result["raw_topology"] is None and not result["inference_performed"]
+    assert result["timing_seconds"]["topology"] == 0
+    assert result["cover_policy"] == result["cover"]["objective_policy"] == "cost_only"
+
+
+def test_stage_two_operating_cost_has_no_deadhead_component():
+    from experiments.learning_campaign_stage2 import make_case
+    for seed in (2016,2017):
+        case = make_case(seed)
+        assert case.vehicle_cost == 100 and case.deadhead_cost_per_min == 0

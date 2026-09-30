@@ -290,95 +290,106 @@ def worker(path, case_name):
             raise ValueError("Repair cell input identities changed")
         controls = control_rows(case_name, case, market)
         base.save_new(dest / "controls.json", controls)
-        from egglab import route_fixed_repair as repair
-        repair_started = time.monotonic()
-        proposed = repair.repair_target(case, market, prior, budget=repair_budget(),
-                                        path_seconds=REPAIR_PATH_SECONDS,
-                                        record=_events(dest))
-        repair_wall = time.monotonic() - repair_started
-        base.save_new(dest / "repair.json", {"result": proposed,
-                                               "repair_wall_seconds": repair_wall})
-        candidate_kind = "repaired"
-        fallback_provenance = None
-        fallback_wall = None
-        if proposed.get("repair_status") != "replayed":
-            base.save_new(dest / "failure.json", {
-                "repair_status": proposed.get("repair_status"),
-                "failure": proposed.get("failure"),
-                "native_stats": proposed.get("native_stats"),
-                "raw_topology": proposed.get("raw_topology"),
-                "cover": proposed.get("cover"),
-                "timing_seconds": proposed.get("timing_seconds"),
-                "repair_wall_seconds": repair_wall})
-            candidate_kind = "source_fallback"
-            fallback_started = time.monotonic()
-            plan, _, fallback_provenance = source_fallback(case_name, case, market)
-            fallback_wall = time.monotonic()-fallback_started
-            base.save_new(dest / "fallback.json", {"candidate_kind": candidate_kind,
-                "plan": plan, "provenance": fallback_provenance,
-                "selection_and_replay_wall_seconds": fallback_wall})
-        else:
-            plan = proposed["plan"]
-        replay_started = time.monotonic()
-        replay = nr.replay_native(case, plan)
-        if candidate_kind == "repaired" and proposed.get("replay") != replay:
-            raise ValueError("Repair-reported replay differs from independent replay")
-        pf._checked_pricing_start(case, plan)
-        if candidate_kind == "repaired":
-            selected = proposed["cover"]["selected_movements"]
-            pf.recover_paths(case, selected)
-            if {mid for vehicle in plan["vehicles"] for mid in vehicle["movements"]} != set(selected):
-                raise ValueError("Repaired plan route differs from legal decoded cover")
-        exact = Fraction(replay["ops_cost"]) + nh.supply(market, replay["load"])
-        if candidate_kind == "repaired" and proposed.get("true_cost_exact") != str(exact):
-            raise ValueError("Repair true target cost differs from independent exact cost")
-        if candidate_kind == "source_fallback" and fallback_provenance["objective_exact"] != str(exact):
-            raise ValueError("Fallback target cost differs from source selection")
-        replay_wall = time.monotonic()-replay_started
-        base.save_new(dest / "independent_replay.json", {
-            "candidate_kind": candidate_kind, "fallback_provenance": fallback_provenance,
-            "case_identity": case.identity(), "market_identity": market.identity(),
-            "plan_hash": nr.digest(plan), "replay": replay,
-            "objective_exact": str(exact), "replay_wall_seconds": replay_wall,
-            "elapsed_seconds": time.monotonic()-started})
-        lineage = {"kind": candidate_kind, "case_identity": case.identity(),
-                   "market_identity": market.identity(), "plan_hash": nr.digest(plan),
-                   "fallback_provenance": fallback_provenance,
-                   "stage2_input_hashes": spec["design"]["stage2_input_hashes"],
-                   "repair_source_commit": spec["source_commit"]}
-        pool_started = time.monotonic()
-        envelope, identity = repaired_envelope(case, market, plan, lineage)
-        pool_wall = time.monotonic()-pool_started
-        base.save_new(dest / "import_envelope.json", envelope)
-        base.save_new(dest / "pool_preparation.json", {
-            "candidate_kind": candidate_kind, "pool_preparation_wall_seconds": pool_wall,
-            "lineage_digest": envelope["lineage_digest"],
-            "column_key": envelope["columns"][0]["key"]})
-        hull_started = time.monotonic()
-        result = compact.certify(case, market, hull_budget(), arm="retained",
-                                 state_index=1, previous=envelope,
-                                 expected_previous=identity, record=_events(dest), **POLICY)
-        hull_wall = time.monotonic()-hull_started
-        base.save_new(dest / "raw_hull.json", {"result": result,
-                                                "hull_wall_seconds": hull_wall})
-        assessment = retrieval.assess_hull(case, market, result)
-        base.save_new(dest / "result.json", {"case": case_name,
-            "outcome": "candidate_and_native_hull_checked",
-            "candidate_kind": candidate_kind, "repair_status": proposed.get("repair_status"),
-            "candidate_objective_exact": str(exact), "candidate_plan_hash": nr.digest(plan),
-            "fallback_provenance": fallback_provenance,
-            "repair_wall_seconds": repair_wall, "independent_replay_wall_seconds": replay_wall,
-            "fallback_selection_and_replay_wall_seconds": fallback_wall,
-            "pool_preparation_wall_seconds": pool_wall, "hull_wall_seconds": hull_wall,
-            "hull_assessment": assessment, "controls": controls,
-            "elapsed_seconds": time.monotonic()-started,
-            "scientific_admission": "pending independent result review"})
-        return 0
+        return evaluate_case(dest, case_name, case, market, prior, spec, controls, started)
     except Exception as exc:
         base.save_new(dest / "exception.json", {"type": type(exc).__name__,
             "message": str(exc), "traceback": traceback.format_exc(),
             "elapsed_seconds": time.monotonic()-started})
         return 2
+
+
+def evaluate_case(dest, case_name, case, market, prior, spec, controls, started, *, cover_policy="score_only"):
+    """Evaluate one already-validated cell; caller owns attempt and input guards."""
+    from egglab import route_fixed_repair as repair
+    repair_started = time.monotonic()
+    proposed = repair.repair_target(case, market, prior, budget=repair_budget(),
+                                    path_seconds=REPAIR_PATH_SECONDS, cover_policy=cover_policy,
+                                    record=_events(dest))
+    repair_wall = time.monotonic() - repair_started
+    base.save_new(dest / "repair.json", {"result": proposed,
+                                           "repair_wall_seconds": repair_wall})
+    candidate_kind = "repaired"
+    fallback_provenance = None
+    fallback_wall = None
+    if proposed.get("repair_status") != "replayed":
+        base.save_new(dest / "failure.json", {
+            "cover_policy": cover_policy,
+            "repair_status": proposed.get("repair_status"),
+            "failure": proposed.get("failure"),
+            "native_stats": proposed.get("native_stats"),
+            "raw_topology": proposed.get("raw_topology"),
+            "cover": proposed.get("cover"),
+            "timing_seconds": proposed.get("timing_seconds"),
+            "repair_wall_seconds": repair_wall})
+        candidate_kind = "source_fallback"
+        fallback_started = time.monotonic()
+        plan, _, fallback_provenance = source_fallback(case_name, case, market)
+        fallback_wall = time.monotonic()-fallback_started
+        base.save_new(dest / "fallback.json", {"candidate_kind": candidate_kind,
+            "cover_policy": cover_policy,
+            "plan": plan, "provenance": fallback_provenance,
+            "selection_and_replay_wall_seconds": fallback_wall})
+    else:
+        plan = proposed["plan"]
+    replay_started = time.monotonic()
+    replay = nr.replay_native(case, plan)
+    if candidate_kind == "repaired" and proposed.get("replay") != replay:
+        raise ValueError("Repair-reported replay differs from independent replay")
+    pf._checked_pricing_start(case, plan)
+    if candidate_kind == "repaired":
+        selected = proposed["cover"]["selected_movements"]
+        pf.recover_paths(case, selected)
+        if {mid for vehicle in plan["vehicles"] for mid in vehicle["movements"]} != set(selected):
+            raise ValueError("Repaired plan route differs from legal decoded cover")
+    exact = Fraction(replay["ops_cost"]) + nh.supply(market, replay["load"])
+    if candidate_kind == "repaired" and proposed.get("true_cost_exact") != str(exact):
+        raise ValueError("Repair true target cost differs from independent exact cost")
+    if candidate_kind == "source_fallback" and fallback_provenance["objective_exact"] != str(exact):
+        raise ValueError("Fallback target cost differs from source selection")
+    replay_wall = time.monotonic()-replay_started
+    base.save_new(dest / "independent_replay.json", {
+        "cover_policy": cover_policy,
+        "candidate_kind": candidate_kind, "fallback_provenance": fallback_provenance,
+        "case_identity": case.identity(), "market_identity": market.identity(),
+        "plan_hash": nr.digest(plan), "replay": replay,
+        "objective_exact": str(exact), "replay_wall_seconds": replay_wall,
+        "elapsed_seconds": time.monotonic()-started})
+    lineage = {"kind": candidate_kind, "cover_policy": cover_policy,
+               "case_identity": case.identity(),
+               "market_identity": market.identity(), "plan_hash": nr.digest(plan),
+               "fallback_provenance": fallback_provenance,
+               "stage2_input_hashes": spec["design"]["stage2_input_hashes"],
+               "repair_source_commit": spec["source_commit"]}
+    pool_started = time.monotonic()
+    envelope, identity = repaired_envelope(case, market, plan, lineage)
+    pool_wall = time.monotonic()-pool_started
+    base.save_new(dest / "import_envelope.json", envelope)
+    base.save_new(dest / "pool_preparation.json", {
+        "cover_policy": cover_policy,
+        "candidate_kind": candidate_kind, "pool_preparation_wall_seconds": pool_wall,
+        "lineage_digest": envelope["lineage_digest"],
+        "column_key": envelope["columns"][0]["key"]})
+    hull_started = time.monotonic()
+    result = compact.certify(case, market, hull_budget(), arm="retained",
+                             state_index=1, previous=envelope,
+                             expected_previous=identity, record=_events(dest), **POLICY)
+    hull_wall = time.monotonic()-hull_started
+    base.save_new(dest / "raw_hull.json", {"result": result,
+                                            "hull_wall_seconds": hull_wall})
+    assessment = retrieval.assess_hull(case, market, result)
+    base.save_new(dest / "result.json", {"case": case_name,
+        "outcome": "candidate_and_native_hull_checked",
+        "cover_policy": cover_policy,
+        "candidate_kind": candidate_kind, "repair_status": proposed.get("repair_status"),
+        "candidate_objective_exact": str(exact), "candidate_plan_hash": nr.digest(plan),
+        "fallback_provenance": fallback_provenance,
+        "repair_wall_seconds": repair_wall, "independent_replay_wall_seconds": replay_wall,
+        "fallback_selection_and_replay_wall_seconds": fallback_wall,
+        "pool_preparation_wall_seconds": pool_wall, "hull_wall_seconds": hull_wall,
+        "hull_assessment": assessment, "controls": controls,
+        "elapsed_seconds": time.monotonic()-started,
+        "scientific_admission": "pending independent result review"})
+    return 0
 
 
 def result_row(path, case_name):

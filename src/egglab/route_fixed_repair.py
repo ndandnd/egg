@@ -19,6 +19,7 @@ from egglab import native_pathflow as pf
 from egglab import native_recharge as nr
 
 POLICY = "route-cover-fixed-charge-repair-v1"
+COVER_POLICIES = ("score_only", "cost_only", "cost_learned")
 
 
 class RepairStageFailure(ValueError):
@@ -28,19 +29,39 @@ class RepairStageFailure(ValueError):
         self.telemetry = telemetry
 
 
-def decode_path_cover(case, logits, *, time_limit_seconds=5.0):
+def decode_path_cover(case, logits=None, *, time_limit_seconds=5.0,
+                      cover_policy="score_only"):
     """Find a binary declared-movement path cover with a vehicle count cap.
 
-    Scores are a proposal objective only. A valid cover says nothing about
-    battery, charging, connector, or terminal-energy feasibility.
+    ``score_only`` preserves the original logit objective. ``cost_only``
+    minimizes pullouts without logits. ``cost_learned`` adds a logit term whose
+    change across covers is at most 1/4, so one bus dominates at an exact optimum.
+    The cost modes require positive vehicle cost and zero deadhead cost.
+    These are structural covers; battery and charging feasibility remain open.
     """
     from scipy.optimize import Bounds, LinearConstraint, milp
     from scipy.sparse import lil_matrix
     nr.validate_case(case)
-    if (not nr._finite(time_limit_seconds) or time_limit_seconds <= 0
-            or len(logits) != len(case.movements)
-            or any(not nr._finite(float(v), -math.inf) for v in logits)):
-        raise ValueError("Invalid route logits or time cap")
+    if cover_policy not in COVER_POLICIES:
+        raise ValueError("Unknown cover policy")
+    if not nr._finite(time_limit_seconds) or time_limit_seconds <= 0:
+        raise ValueError("Invalid route time cap")
+    if cover_policy in ("cost_only", "cost_learned") and (
+            case.vehicle_cost <= 0 or case.deadhead_cost_per_min != 0):
+        raise ValueError("Pullout count is not the declared positive operating cost")
+    if cover_policy == "cost_only":
+        values = None  # Deliberately no model or logit access.
+        scale = 0.0
+    else:
+        if logits is None or len(logits) != len(case.movements):
+            raise ValueError("Invalid route logits")
+        values = [float(v) for v in logits]
+        if any(not nr._finite(v, -math.inf) for v in values):
+            raise ValueError("Invalid route logits")
+        magnitude = sum(abs(v) for v in values)
+        if not math.isfinite(magnitude):
+            raise ValueError("Route logit magnitude overflows")
+        scale = (0.25/max(1.0,magnitude) if cover_policy == "cost_learned" else 1.0)
     started = time.perf_counter()
     n, m = len(case.trips), len(case.movements)
     trip_index = {trip.id:i for i, trip in enumerate(case.trips)}
@@ -54,22 +75,31 @@ def decode_path_cover(case, logits, *, time_limit_seconds=5.0):
             matrix[2*n, j] = 1
     lower = [1.0]*(2*n)+[-math.inf]
     upper = [1.0]*(2*n)+[float(case.max_vehicles)]
-    # SciPy forwards unsupported named options to HiGHS. `threads=1` is a
-    # HiGHS option; suppress only SciPy's forwarding notice for that option.
+    if cover_policy == "score_only":
+        objective = [-v for v in values]
+    elif cover_policy == "cost_only":
+        objective = [float(m.kind == "pullout") for m in case.movements]
+    else:
+        objective = [float(m.kind == "pullout")-scale*v
+                     for m,v in zip(case.movements,values)]
+    # SciPy forwards these named options to HiGHS. Thread count and seed are
+    # explicit; suppress only SciPy's forwarding notice in this scope.
     with warnings.catch_warnings():
-        warnings.filterwarnings("ignore", message="Unrecognized options detected:.*threads",
+        warnings.filterwarnings("ignore", message="Unrecognized options detected:",
                                 category=RuntimeWarning)
-        result = milp(c=[-float(v) for v in logits], integrality=[1]*m,
+        result = milp(c=objective, integrality=[1]*m,
             bounds=Bounds([0.0]*m, [1.0]*m),
             constraints=LinearConstraint(matrix.tocsr(), lower, upper),
             options={"time_limit":float(time_limit_seconds), "mip_rel_gap":0.0,
-                     "threads":1})
+                     "threads":1, "random_seed":0})
     gap, nodes = getattr(result, "mip_gap", None), getattr(result, "mip_node_count", None)
     diagnostics = {"status":int(result.status), "message":str(result.message),
         "mip_gap":float(gap) if gap is not None and math.isfinite(float(gap)) else None,
         "mip_gap_raw":repr(gap),
         "mip_node_count":int(nodes) if nodes is not None else None,
-        "wall_seconds":time.perf_counter()-started}
+        "wall_seconds":time.perf_counter()-started,
+        "objective_policy":cover_policy, "logit_scale":scale,
+        "random_seed":0, "threads":1}
     if result.x is None or any(not math.isfinite(float(v)) or abs(v-round(v)) > 1e-6
                                for v in result.x):
         raise RepairStageFailure("Route cover solver has no integral incumbent",
@@ -82,7 +112,14 @@ def decode_path_cover(case, logits, *, time_limit_seconds=5.0):
         raise RepairStageFailure(f"Route cover recovery failed: {exc}",
             cover={**diagnostics, "selected_movements":selected, "vehicles":None}) from exc
     return {"selected_movements":selected, "vehicles":vehicles, **diagnostics,
-        "score":sum(float(v) for v, x in zip(logits, result.x) if x > 0.5),
+        "pullout_count":sum(case.movements[j].kind == "pullout"
+                            for j,x in enumerate(result.x) if x > 0.5),
+        "score":(sum(v for v,x in zip(values,result.x) if x > 0.5)
+                 if values is not None else None),
+        "cover_objective":float(result.fun),
+        "native_minimum_bus_count_reported":bool(result.status == 0 and
+            cover_policy in ("cost_only", "cost_learned")),
+        "minimum_bus_count_scope":"declared structural route covers, ignoring charging",
         "meaning":"legal path cover only; battery and charging not yet checked"}
 
 
@@ -137,10 +174,12 @@ def _solve_fixed_charge(case, market, selected, budget, record=None):
     return plan, replay, stats
 
 
-def repair_target(case, market, model, *, budget, path_seconds=5.0, record=None):
+def repair_target(case, market, model=None, *, budget, path_seconds=5.0,
+                  cover_policy="score_only", record=None):
     """Return a replayed new fleet, or a typed fallback for the source pool.
 
-    `market` is a native_hull.Market; `model` is a frozen EdgePrior. The caller
+    `market` is a native_hull.Market; `model` is a frozen EdgePrior, except that
+    `cost_only` accepts None and performs no inference. The caller
     must use an external hard cap around this routine and independently replay
     the returned plan before importing it into a target hull state.
     """
@@ -149,22 +188,32 @@ def repair_target(case, market, model, *, budget, path_seconds=5.0, record=None)
     stage_started = started
     result = {"policy":POLICY, "case_identity":case.identity(),
         "market_identity":market.identity(), "repair_status":"fallback",
-        "raw_topology":None, "cover":None,
+        "cover_policy":cover_policy, "raw_topology":None, "cover":None,
+        "inference_attempted":False, "inference_performed":False,
         "charging_subproblem":"fixed-binary native linear program",
         "timing_seconds":{}}
     try:
-        if not isinstance(model, lp.EdgePrior):
-            raise TypeError("Expected frozen EdgePrior")
+        if cover_policy not in COVER_POLICIES:
+            raise ValueError("Unknown cover policy")
         nh.validate_market(case, market)
-        stage = "topology"
-        stage_started = time.perf_counter()
-        raw = model.propose_topology(case, market.a)
-        logits = model.logits(case, market.a)
-        result["raw_topology"] = list(raw)
-        result["timing_seconds"]["topology"] = time.perf_counter()-started
+        if cover_policy == "cost_only":
+            logits = None
+            result["timing_seconds"]["topology"] = 0.0
+        else:
+            if not isinstance(model, lp.EdgePrior):
+                raise TypeError("Expected frozen EdgePrior")
+            stage = "topology"
+            stage_started = time.perf_counter()
+            result["inference_attempted"] = True
+            raw = model.propose_topology(case, market.a)
+            logits = model.logits(case, market.a)
+            result["raw_topology"] = list(raw)
+            result["inference_performed"] = True
+            result["timing_seconds"]["topology"] = time.perf_counter()-started
         stage = "cover"
         stage_started = time.perf_counter()
-        cover = decode_path_cover(case, logits, time_limit_seconds=path_seconds)
+        cover = decode_path_cover(case, logits, time_limit_seconds=path_seconds,
+            cover_policy=cover_policy)
         result["cover"] = cover
         result["timing_seconds"]["cover"] = time.perf_counter()-started-result["timing_seconds"]["topology"]
         stage = "charging"
