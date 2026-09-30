@@ -41,9 +41,13 @@ artifacts. Continue useful local work between jobs; do not pause on an empty que
   This supports an incentive mismatch at this near-optimal incumbent, not the
   unknown true optimum. SHARED_INTERVAL_PHYSICAL_POOL_REVIEW.json/.md and its
   reproducibility script retain exact arithmetic/provenance. Scope15plans only.
-- Root finishing consolidated Doc/report and the schedule figure with Luna;
-  source/result code workers finished. No additional cluster submission planned
-  this turn. Read newest state/active workers before touching those files.
+- Consolidated report and verified schedule figure are complete and backed up in
+  `8e17264ffc71eb9b5ed0851b429d5d3927f43ac8`. The original Google Doc now includes
+  the results, incentive witness and actual fleet figure; text, heading, link and
+  all three inline figures verified. DOC_SHARED_INTERVAL_RESULTS_RECEIPT.json
+  records the append. All three workers finished; no edits pending. No second
+  cluster check or additional submission this turn; job696067 remains recorded
+  as last observed PENDING, not rechecked. Read newer state/workers next turn.
 - Next: one scoped check of696067; use scoped sacct/receipts if vanished, collect
   complete attempt/native logs/wrapper. Summarize with existing summarizer into
   SHARED_BUDGET_REPAIR_CELLS.csv; the attempt has2cells, read frozen design.
