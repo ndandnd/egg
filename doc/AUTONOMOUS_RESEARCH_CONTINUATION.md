@@ -8,7 +8,55 @@ supersedes the earlier idle-monitor pause condition and blanket deferral of ML.
 Notify only substantive findings, major decisions, important failures or review
 artifacts. Continue useful local work between jobs; do not pause on an empty queue.
 
-## Latest checkpoint — stronger grouped training and remaining registry launched
+## Latest checkpoint — verified learning gains; 64-group training submitted
+
+- **32-group array716152 completed all 12 tasks.** Saved-model hashes, splits,
+  preprocessing, predictions and metrics independently replayed without refitting.
+  At the fixed input-trip-count candidate budget, held-timetable selected-edge recall
+  is 14.2% for the kind-frequency control, 60.6% logistic, 66.2% Adam MLP and 68.8%
+  histogram boosted trees. Boosted trees beat that control on all 32 timetables.
+  See ROUTE_MODEL32_RESULTS.md, ROUTE_MODEL32_REPLAY.json and the paired-timetable
+  figure. Equal timetable weighting follows seed and source averaging. These are
+  observed feasible-incumbent edge labels, not optimal-route labels. No complete-route
+  feasibility, cost improvement or online speedup is established. All MLP/tree runs
+  selected their maximum allowed inner checkpoint; this is not proof against overfitting.
+- Model32 allocation totals 784 CPU-seconds; model receipts total 351.79 seconds,
+  summed over parallel tasks, not campaign wall time or online solve time. Raw outputs
+  and accounting backed up at5c5916c; verified report/replay/figure atff40919b.
+- Shard09/job715490 completed and was admitted once: 16 source fleets and48 target
+  plans replayed; zero new censors. Cumulative admitted TRAIN bank is **80 independent
+  timetables, 635 replayed plans, five preserved censors**. Six remaining label jobs
+  **715491–715496** (shards10–15) were last observed RUNNING in the19:27 scoped check.
+  Their remote checkout is `/home/nc437/egg-physical-parallel-labels-20260930-wave2`.
+  No later label outcomes were checked in this run; individual receipts govern.
+- **64-group array717453 submitted2026-09-30T19:41:59Z** under
+  ROUTE_MODEL64_128_V3_PROTOCOL.md and LAUNCH_717453.json. Execution commit8da9d59e;
+  remote `/home/nc437/egg-route-model64-20260930-v3`; attempt
+  `result/physical_learning/20260930-route-model64-v3`. Twelve fold/seed tasks, at most
+  four concurrent, each1requested CPU/8GB/30min/native1, no retry/requeue, exclude
+  scaglione-compute-01. No postsubmission queue or partial-result check was made.
+  Combined resource ceiling remains8label+4training workers/12requested CPUs/96GB;
+  actual Slurm allocations must be recorded separately.
+- Exact64 prefix pool has127 observed/128 intended source fleets. Source0 for10037
+  remains missing; source1 retained, no imputation/retry. Pool hash is
+  `64791ec33307612bd8ad7f3c2396c42e0ffdc44717d2c865fe268f61bdab5eb0`.
+  Fresh v3 code preserves frozen32 model settings/features/seeds, fit-only transforms
+  and inner-only checkpoint selection. Each64 task has40fit/8inner/16outer whole
+  timetables. Equal timetable metrics handle unequal source counts; the original32
+  evaluation timetables are a prespecified common-population comparison. Sol implemented
+  and Luna independently reviewed; no pending worker edits. No64 model was fit locally.
+- Original Google Doc updated with verified32 results, two source links and a native
+  paired-timetable figure; all six prior figures preserved (seven total). Receipt:
+  DOC_MODEL32_RESULTS_RECEIPT.json. Manuscript remains deferred; automation ACTIVE.
+- Next: one scoped check of717453 and715491–715496, collect complete outputs with
+  accounting, preserve all failures and admit each new shard once. Replay saved64
+  models without refit, compare learning curves including common32 groups. After
+  all shards0–15 are admitted, freeze exact128 pool and launch under already recorded
+  budget. Continue structured route decoding, physical charging replay and separate
+  global verification with cold/retained/retrieval/exact-rescore controls. Do not use
+  reserved dev/test outcomes, tune on outer folds or retry unreceipted attempts.
+
+## Prior checkpoint — stronger grouped training and remaining registry launched
 
 - Latest human direction: continue sustained training with modern ML plus sound
   classical controls against overfitting. Manuscript deferred; hourly automation

@@ -1,15 +1,14 @@
 {
-  "updated_at_utc": "2026-09-30T19:26:50.608195+00:00",
-  "phase": "grouped32_training_and_registry_completion_submitted",
+  "updated_at_utc": "2026-09-30T19:46:30.173286+00:00",
+  "phase": "grouped32_verified_grouped64_submitted",
   "active_job_ids": [
-    "715490",
     "715491",
     "715492",
     "715493",
     "715494",
     "715495",
     "715496",
-    "716152"
+    "717453"
   ],
   "completed_job_ids": [
     "677817",
@@ -33,7 +32,9 @@
     "712949",
     "712950",
     "712951",
-    "712952"
+    "712952",
+    "715490",
+    "716152"
   ],
   "launch_receipt": "LAUNCH_PARALLEL_LABEL_WAVE2.json",
   "source_commit": "6b29c7286f85f33dab92dd139be6b3082be3dbd8",
@@ -83,7 +84,7 @@
     "notification_policy": "Substantive results, major decisions, failures or review artifacts only",
     "resource_policy": "Parallel label8 + training4; initial single-job limit superseded."
   },
-  "next_action": "Make one scoped queue check for recorded jobs 716152 and 715490\u2013715496. Collect complete model-array and label outputs; preserve failures and times. Review grouped32 outer predictions and saved models without refitting, including per-timetable seed averages, fit/inner curves and convergence. Edge scores do not establish route quality. Continue censor-aware 64/128 pooling and matched structured decoding under the modern-ML plan. Keep dev/test sealed and manuscript work deferred.",
+  "next_action": "One scoped check of array717453 and label jobs715491\u2013715496. Collect complete outputs with accounting and all failures; admit each new label shard once. Replay saved64 models without refit and compare equal-timetable metrics plus the prespecified common32 groups. Once all shards0\u201315 are admitted, freeze the exact128 pool and launch under the recorded protocol/budget. Continue structured decoding and independent charging/global verification with matched classical baselines; dev and sealed tests stay untouched.",
   "stage1_results": "RESULTS_STAGE1.md",
   "stage1_model_analysis": "MODEL_STAGE1.md",
   "test_groups_unobserved": [
@@ -109,12 +110,13 @@
     "DOC_PHYSICAL_SHARD00_RECEIPT.json",
     "DOC_PARALLEL_LEARNING_RECEIPT.json",
     "DOC_ROUTE_MODEL_PILOT_RESULTS_RECEIPT.json",
-    "DOC_GROUPED32_LAUNCH_RECEIPT.json"
+    "DOC_GROUPED32_LAUNCH_RECEIPT.json",
+    "DOC_MODEL32_RESULTS_RECEIPT.json"
   ],
   "latest_observation": {
-    "recorded_at_utc": "2026-09-30T19:24:42.498936+00:00",
-    "label_jobs_running": [
-      "715490",
+    "recorded_at_utc": "2026-09-30T19:31:52.105825+00:00",
+    "source": "single scoped queue/accounting check at heartbeat19:27",
+    "label_jobs_running_last_check": [
       "715491",
       "715492",
       "715493",
@@ -122,31 +124,11 @@
       "715495",
       "715496"
     ],
-    "training_array": "716152",
-    "training_running_tasks": [
-      0,
-      1,
-      2,
-      3
-    ],
-    "training_pending_tasks": [
-      4,
-      5,
-      6,
-      7,
-      8,
-      9,
-      10,
-      11
-    ],
-    "training_actual_allocated_cpus_first_wave": [
-      1,
-      1,
-      1,
-      2
-    ],
-    "requested_native_threads": 1,
-    "partial_scientific_outcomes_read": false
+    "completed_model_array": "716152",
+    "all12tasks_completed": true,
+    "completed_label_job": "715490",
+    "model_allocated_cpu_seconds": 784,
+    "model_receipted_seconds": 351.7863633460365
   },
   "result_summarizer": "summarize_cost_aware_repair.py",
   "cost_aware_results": "RESULTS_COST_AWARE_REPAIR.md",
@@ -160,7 +142,7 @@
   "shared_interval_physical_pool_review": "SHARED_INTERVAL_PHYSICAL_POOL_REVIEW.json",
   "shared_interval_report_backup_commit": "8e17264ffc71eb9b5ed0851b429d5d3927f43ac8",
   "shared_interval_figure": "figures/shared_interval_2016_learned.png",
-  "local_follow_up": "32-group logistic/boosted-tree/Adam-MLP comparison launched with group-separated fit/inner/outer stages, fixed model menu, reserved tests untouched. Remaining56registry TRAIN timetables collecting in parallel.",
+  "local_follow_up": "32-group saved-model predictions independently replayed; boosted trees improve held-timetable ranking over simple controls. Fresh censor-aware64/128 pooling reviewed. Exact64 prefix submitted with unchanged models/configs and original32 comparison fixed prospectively. No route-feasibility or speedup claim.",
   "shared_budget_results": "RESULTS_SHARED_BUDGET_REPAIR.md",
   "shared_budget_verification": "INDEPENDENT_REPLAY_SHARED_BUDGET.json",
   "shared_budget_physical_pool_review": "SHARED_BUDGET_PHYSICAL_POOL_REVIEW.json",
@@ -280,7 +262,6 @@
     "requested_memory_gb": 96
   },
   "active_label_job_ids": [
-    "715490",
     "715491",
     "715492",
     "715493",
@@ -289,17 +270,12 @@
     "715496"
   ],
   "active_training_array_ids": [
-    "716152"
+    "717453"
   ],
   "route_model_launch_receipt": "LAUNCH_713295.json",
   "route_model_training_protocol": "ROUTE_MODEL_TRAINING_PROTOCOL.md",
   "physical_shard01_accounting": "ACCOUNTING_711779.json",
   "active_attempts": [
-    {
-      "shard": 9,
-      "job_id": "715490",
-      "attempt_relative": "result/physical_learning/20260930-shard09-attempt1"
-    },
     {
       "shard": 10,
       "job_id": "715491",
@@ -338,8 +314,8 @@
   "route_model_raw_backup_commit": "9c275ae",
   "route_model_accounting": "ACCOUNTING_713295.json",
   "route_model_result_manifest": "RESULT_MANIFEST_ROUTE_MODEL_PILOT.json",
-  "physical_admitted_training_groups": 72,
-  "physical_replayed_plans": 571,
+  "physical_admitted_training_groups": 80,
+  "physical_replayed_plans": 635,
   "physical_explicit_censors": 5,
   "route_model_results": "RESULTS_ROUTE_MODEL_PILOT.md",
   "route_model_review": "ROUTE_MODEL_PILOT_REVIEW.json",
@@ -385,5 +361,50 @@
   "physical_parallel_wave1_results": "RESULTS_PHYSICAL_PARALLEL_WAVE1.md",
   "physical_parallel_wave1_derived": "PHYSICAL_PARALLEL_WAVE1_DERIVED.json",
   "physical_parallel_wave1_report_backup_commit": "8fc64fbf64a82f8dc8a2ff36c5ea0230c126b6ff",
-  "grouped32_launch_handoff_backup_commit": "81c9ded22b727ad587a0240ebb4e46db6fbf8554"
+  "grouped32_launch_handoff_backup_commit": "81c9ded22b727ad587a0240ebb4e46db6fbf8554",
+  "route_model32_accounting": "ACCOUNTING_716152.json",
+  "route_model32_result_manifest": "RESULT_MANIFEST_ROUTE_MODEL32.json",
+  "physical_shard09_accounting": "ACCOUNTING_715490.json",
+  "route_model32_raw_backup_commit": "5c5916cda7043530370c4b5aacde80b7d5b91265",
+  "route_model32_results": "ROUTE_MODEL32_RESULTS.md",
+  "route_model32_replay": "ROUTE_MODEL32_REPLAY.json",
+  "physical_shard09_admission": "PHYSICAL_SHARD09_ADMISSION.md",
+  "route_model64_launch_receipt": "LAUNCH_717453.json",
+  "route_model64_protocol": "ROUTE_MODEL64_128_V3_PROTOCOL.md",
+  "route_model64_review": "ROUTE_MODEL64_V3_REVIEW.md",
+  "route_model64_pool_manifest": "result/physical_learning/20260930-route-pool64-v3/pool_manifest.json",
+  "route_model64_pool_sha256": "64791ec33307612bd8ad7f3c2396c42e0ffdc44717d2c865fe268f61bdab5eb0",
+  "route_model64_execution_commit": "8da9d59e17f8087aed9790be85fa075431217823",
+  "route_model32_figure": "figures/route_model32_grouped_comparison.png",
+  "route_model32_report_backup_commit": "ff40919b562d63166938d3eae29b75347218860c",
+  "physical_shard09_report_backup_commit": "ff40919b562d63166938d3eae29b75347218860c",
+  "latest_training_submission": {
+    "array_job_id": "717453",
+    "submitted_at_utc": "2026-09-30T19:41:59Z",
+    "state": "SUBMITTED",
+    "no_postsubmission_queue_or_partial_outcome_read": true
+  },
+  "route_model32_conclusion": {
+    "independent_groups": 32,
+    "completed_tasks": 12,
+    "verification": "Saved-model replay in isolated matching environment; no refit",
+    "input_tripcount_topk_recall": {
+      "kind_frequency": 0.1424,
+      "logistic": 0.6055,
+      "mlp32": 0.6624,
+      "hist_boosted": 0.6879
+    },
+    "aggregation": "Average seeds within source, source metrics within timetable, then equal timetable weight",
+    "hist_boosted_better_than_kind_frequency_on_all32_groups": true,
+    "all_mlp_and_boosted_runs_selected_maximum_inner_checkpoint": true,
+    "no_complete_route_feasibility_cost_or_online_speedup_claim": true
+  },
+  "active_training_attempts": [
+    {
+      "array_job_id": "717453",
+      "attempt_relative": "result/physical_learning/20260930-route-model64-v3",
+      "remote_checkout": "/home/nc437/egg-route-model64-20260930-v3",
+      "source_commit": "8da9d59e17f8087aed9790be85fa075431217823"
+    }
+  ]
 }
