@@ -52,3 +52,19 @@ The learned 2016 repair phase took longer than cost-only (5.764 versus 4.012
 seconds), and the two fresh hull checks took 54.788 and 60.631 seconds. This
 pilot supports a meaningful feasible 2016 repair, not a speedup claim or a
 general learned-policy benefit.
+
+A separate read-only review replayed the ten physical columns from these two
+new hull runs and five archived control columns. The new columns did not improve
+on the archived physical incumbent at 515.515556. At that incumbent's own-load
+marginal electricity prices, however, a different replayed four-bus plan lowers
+the price-taking objective by at least 0.724020 cost units while increasing true
+target cost to 516.505682. The incumbent is within 0.158740 of the physical optimum
+using the fresh lower certificate. This documents an incentive mismatch at a
+verified near-optimal incumbent; it does not establish support failure of the
+unknown exact optimum. See [the physical pool and price-response review](SHARED_INTERVAL_PHYSICAL_POOL_REVIEW.md)
+for exact arithmetic, scope and reproducibility.
+
+The [development schedule figure](figures/shared_interval_2016_learned.png)
+shows the new learned repair at 516.93, distinct from the archived 515.52
+incumbent used in that incentive test. Its [plot script](plot_shared_interval_example.py)
+uses the saved physical schedule and charging segments; no optimization is run.
