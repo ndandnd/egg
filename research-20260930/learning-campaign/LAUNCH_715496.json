@@ -1,0 +1,51 @@
+{
+  "job_id": "715496",
+  "shard": 15,
+  "submitted_at_utc": "2026-09-30T19:15:33Z",
+  "source_commit": "6b29c7286f85f33dab92dd139be6b3082be3dbd8",
+  "source_branch": "codex/journal-research-20260927",
+  "remote_checkout": "/home/nc437/egg-physical-parallel-labels-20260930-wave2",
+  "attempt_relative": "result/physical_learning/20260930-shard15-attempt1",
+  "protocol": "NEXT_PARALLEL_LABEL_WAVE2_PROTOCOL.md",
+  "base_protocol": "PROTOCOL_PHYSICAL_LEARNING.md",
+  "wrapper": "src/cluster/physical_learning.sbatch",
+  "selected_training_ids": [
+    10120,
+    10121,
+    10122,
+    10123,
+    10124,
+    10125,
+    10126,
+    10127
+  ],
+  "declared_cells": 64,
+  "native_source_cells": 16,
+  "fixed_route_charging_cells": 48,
+  "requested": {
+    "cpus_per_task": 1,
+    "memory_gb": 8,
+    "wall_seconds": 7200,
+    "native_threads": 1,
+    "requeue": false,
+    "excluded_nodes": [
+      "scaglione-compute-01"
+    ]
+  },
+  "caps_seconds": {
+    "child_hard": 100,
+    "controller": 6600,
+    "outer_shell": 6900
+  },
+  "execution_source_pin_count": 18,
+  "model_fit_in_this_job": false,
+  "development_test_materialized": false,
+  "submission_guard": ".submission-parallel-label-wave2/shard15.jobid.txt",
+  "launch_script_sha256": "97967befd457579d72767f7f5af8bb05b9db5d7f85d5d7438b14ecce099dec84",
+  "observation": {
+    "recorded_at_utc": "2026-09-30T19:17:08.571469+00:00",
+    "state": "SUBMITTED",
+    "startup_queue_check_pending": true
+  },
+  "submission_guard_observed_no_active_egg_jobs": true
+}

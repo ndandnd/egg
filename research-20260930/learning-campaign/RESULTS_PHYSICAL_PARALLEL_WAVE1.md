@@ -1,0 +1,23 @@
+# Physical parallel wave 1: admission and health
+
+Seven completed first-attempt TRAIN shards (02–08) were admitted independently through the existing replay-only v1 adapter, with eight independent timetable groups per shard. Admission launched no solver or model and made no code changes. Dataset receipts hash the original attempt inputs, cell evidence and receipts, wrapper receipts, and immutable output tables.
+
+| Shard | Source replayed/censored (budget/certified/not reported) | Target replayed/censored | Distinct topologies; same-topology groups | Eligible pairs source0/source1/tie; exact/near ties | Groups with tariff winner changes | Child paid seconds source/target | Wrapper receipt / Slurm seconds | Receipt links |
+|---:|---:|---:|---:|---:|---:|---:|---:|---|
+| 02 | 16/0 (14/2/0) | 48/0 | 14; 2/8 | 24 7/5/12; 8/4 | 2/8 | 391.268/211.424 | 688/693 | [wrapper](../../result/physical_learning/20260930-shard02-attempt1.slurm_wrapper_receipt.712946.json) · [dataset](../../result/physical_learning/20260930-shard02-dataset-v1/dataset_receipt.json) |
+| 03 | 16/0 (10/6/0) | 48/0 | 13; 3/8 | 24 8/4/12; 12/0 | 5/8 | 435.662/200.411 | 714/723 | [wrapper](../../result/physical_learning/20260930-shard03-attempt1.slurm_wrapper_receipt.712947.json) · [dataset](../../result/physical_learning/20260930-shard03-dataset-v1/dataset_receipt.json) |
+| 04 | 15/1 (10/5/1) | 45/3 | 13; 2/7 | 21 6/6/9; 7/2 | 2/8 | 410.428/149.706 | 618/623 | [wrapper](../../result/physical_learning/20260930-shard04-attempt1.slurm_wrapper_receipt.712948.json) · [dataset](../../result/physical_learning/20260930-shard04-dataset-v1/dataset_receipt.json) |
+| 05 | 16/0 (13/3/0) | 48/0 | 12; 4/8 | 24 2/7/15; 12/3 | 2/8 | 448.530/168.147 | 682/688 | [wrapper](../../result/physical_learning/20260930-shard05-attempt1.slurm_wrapper_receipt.712949.json) · [dataset](../../result/physical_learning/20260930-shard05-dataset-v1/dataset_receipt.json) |
+| 06 | 16/0 (12/4/0) | 48/0 | 14; 2/8 | 24 7/8/9; 8/1 | 3/8 | 418.930/153.506 | 632/638 | [wrapper](../../result/physical_learning/20260930-shard06-attempt1.slurm_wrapper_receipt.712950.json) · [dataset](../../result/physical_learning/20260930-shard06-dataset-v1/dataset_receipt.json) |
+| 07 | 16/0 (11/5/0) | 48/0 | 11; 4/8 | 24 2/10/12; 12/0 | 2/8 | 441.153/160.973 | 666/672 | [wrapper](../../result/physical_learning/20260930-shard07-attempt1.slurm_wrapper_receipt.712951.json) · [dataset](../../result/physical_learning/20260930-shard07-dataset-v1/dataset_receipt.json) |
+| 08 | 16/0 (12/4/0) | 48/0 | 15; 1/8 | 24 7/5/12; 7/5 | 4/8 | 413.351/168.801 | 648/653 | [wrapper](../../result/physical_learning/20260930-shard08-attempt1.slurm_wrapper_receipt.712952.json) · [dataset](../../result/physical_learning/20260930-shard08-dataset-v1/dataset_receipt.json) |
+
+The 56 groups contain 448 intended labels: 444 replayed feasible and 4 retained as failed/censored. Source native statuses were 82 `budget_exhausted`, 29 `certified`, and 1 not reported; 82 source labels are provisional after native limits. Targets include 333 `OPTIMAL` fixed-route linear-tariff LP outcomes and 3 not reported. All 333 replayed target labels remain uncertified for curved/global optimality.
+
+Across 112 source fleets there are 88 distinct movement-set topologies. 18/55 available source pairs share a topology; 0/55 share the full plan. Among 165/168 eligible/intended target-tariff comparisons, observed wins were 39 source0, 45 source1, and 81 ties. 66 ties had exactly equal costs; 15 had nonzero margins within 1e-6. Winners changed across tariffs in 20 groups. Per-tariff source0/source1/tie counts were day 18/10/27, flat 15/14/26, late 6/21/28.
+
+Summed child `paid_seconds` were 2959.321 source and 1212.968 target (4172.289 total), including 12.100 seconds on failed/censored outcomes. Wrapper receipts sum to 4648 seconds; Slurm per-job elapsed sums to 4690 seconds. These sums span parallel jobs and are not campaign wall time.
+
+Shard 04 contains the only failure cluster, for base group `physical_v2_s10037`: source0 failed with “Whole-incumbent charge projection exceeds roundoff budget”; its day, flat, and late target rows failed because no replayed same-base source plan was available. All four rows and their paid times remain in the health totals; no retry was made. The three missing pairs are explicitly excluded. Base ID 10037 lies in shard 04, outside the shard 00–03 exact32prefix.
+
+Per-cell failure messages and times, per-shard input hashes, wrapper hashes, and dataset receipt hashes are in [PHYSICAL_PARALLEL_WAVE1_DERIVED.json](PHYSICAL_PARALLEL_WAVE1_DERIVED.json).

@@ -1,14 +1,14 @@
 {
-  "updated_at_utc": "2026-09-30T18:57:26.389562+00:00",
-  "phase": "parallel_labels_running_route_pilot_reviewed",
+  "updated_at_utc": "2026-09-30T19:17:08.571469+00:00",
+  "phase": "wave2_labels_submitted_grouped32_training_review",
   "active_job_ids": [
-    "712946",
-    "712947",
-    "712948",
-    "712949",
-    "712950",
-    "712951",
-    "712952"
+    "715490",
+    "715491",
+    "715492",
+    "715493",
+    "715494",
+    "715495",
+    "715496"
   ],
   "completed_job_ids": [
     "677817",
@@ -25,11 +25,18 @@
     "700498",
     "709011",
     "711779",
-    "713295"
+    "713295",
+    "712946",
+    "712947",
+    "712948",
+    "712949",
+    "712950",
+    "712951",
+    "712952"
   ],
-  "launch_receipt": "LAUNCH_PARALLEL_LABEL_WAVE1.json",
-  "source_commit": "25aee9b6b36795f9f8c20227703602e2fba16084",
-  "remote_checkout": "/home/nc437/egg-physical-parallel-labels-20260930-wave1",
+  "launch_receipt": "LAUNCH_PARALLEL_LABEL_WAVE2.json",
+  "source_commit": "6b29c7286f85f33dab92dd139be6b3082be3dbd8",
+  "remote_checkout": "/home/nc437/egg-physical-parallel-labels-20260930-wave2",
   "attempt_relative": null,
   "startup_observation": {
     "recorded_at_utc": "2026-09-30T18:40:00Z",
@@ -53,7 +60,7 @@
     "notification_policy": "Substantive results, major decisions, failures or review artifacts only",
     "resource_policy": "Parallel label8 + training4; initial single-job limit superseded."
   },
-  "next_action": "Use one scoped check of seven label jobs; collect complete artifacts and admit completed shards once. Build versioned pooled input manifests and prespecified 32/64/128-group learning curves. Diagnose optimizer convergence and class imbalance using training groups only; prospectively evaluate ranking and structured decoding, then physical charging repair and matched online baselines. Do not tune thresholds on this pilot held-out evidence or open reserved groups.",
+  "next_action": "Root will finish reviewed32-group comparison launch. Monitor wave2 jobs715490\u2013715496 via scoped receipts/accounting, then admit each once, preserving all censors. Follow grouped validation plan; no test access.",
   "stage1_results": "RESULTS_STAGE1.md",
   "stage1_model_analysis": "MODEL_STAGE1.md",
   "test_groups_unobserved": [
@@ -81,21 +88,9 @@
     "DOC_ROUTE_MODEL_PILOT_RESULTS_RECEIPT.json"
   ],
   "latest_observation": {
-    "recorded_at_utc": "2026-09-30T18:51:09.746513+00:00",
-    "label_jobs_at_last_queue_check": [
-      "712946",
-      "712947",
-      "712948",
-      "712949",
-      "712950",
-      "712951",
-      "712952"
-    ],
-    "training_array": "713295",
-    "training_completed_tasks": 12,
-    "training_declared_tasks": 12,
-    "shard1_completed_and_admitted": true,
-    "source": "Complete local receipts plus final scoped sacct; no new label queue poll"
+    "all_seven_wave1_jobs_completed": true,
+    "source": "Scoped sacct and all successful replay-only shard admissions",
+    "accounting": "ACCOUNTING_PARALLEL_LABEL_WAVE1.json"
   },
   "result_summarizer": "summarize_cost_aware_repair.py",
   "cost_aware_results": "RESULTS_COST_AWARE_REPAIR.md",
@@ -220,7 +215,7 @@
   "physical_shard00_admitted_backup_commit": "1aa42d4",
   "physical_shard00_final_review_backup_commit": "f694d48e64976c2d399817de65c1d143ab7eed26",
   "next_physical_shard_protocol": "NEXT_PHYSICAL_SHARD01_PROTOCOL.md",
-  "parallel_label_launch_receipt": "LAUNCH_PARALLEL_LABEL_WAVE1.json",
+  "parallel_label_launch_receipt": "LAUNCH_PARALLEL_LABEL_WAVE2.json",
   "parallel_resource_protocol": "PARALLEL_LEARNING_RESOURCE_PROTOCOL.md",
   "execution_resource_limits": {
     "label_workers": 8,
@@ -229,13 +224,13 @@
     "requested_memory_gb": 96
   },
   "active_label_job_ids": [
-    "712946",
-    "712947",
-    "712948",
-    "712949",
-    "712950",
-    "712951",
-    "712952"
+    "715490",
+    "715491",
+    "715492",
+    "715493",
+    "715494",
+    "715495",
+    "715496"
   ],
   "active_training_array_ids": [],
   "route_model_launch_receipt": "LAUNCH_713295.json",
@@ -243,46 +238,39 @@
   "physical_shard01_accounting": "ACCOUNTING_711779.json",
   "active_attempts": [
     {
-      "job_id": "712946",
-      "shard_index": 2,
-      "attempt_relative": "result/physical_learning/20260930-shard02-attempt1",
-      "launch_receipt": "LAUNCH_712946.json"
+      "shard": 9,
+      "job_id": "715490",
+      "attempt_relative": "result/physical_learning/20260930-shard09-attempt1"
     },
     {
-      "job_id": "712947",
-      "shard_index": 3,
-      "attempt_relative": "result/physical_learning/20260930-shard03-attempt1",
-      "launch_receipt": "LAUNCH_712947.json"
+      "shard": 10,
+      "job_id": "715491",
+      "attempt_relative": "result/physical_learning/20260930-shard10-attempt1"
     },
     {
-      "job_id": "712948",
-      "shard_index": 4,
-      "attempt_relative": "result/physical_learning/20260930-shard04-attempt1",
-      "launch_receipt": "LAUNCH_712948.json"
+      "shard": 11,
+      "job_id": "715492",
+      "attempt_relative": "result/physical_learning/20260930-shard11-attempt1"
     },
     {
-      "job_id": "712949",
-      "shard_index": 5,
-      "attempt_relative": "result/physical_learning/20260930-shard05-attempt1",
-      "launch_receipt": "LAUNCH_712949.json"
+      "shard": 12,
+      "job_id": "715493",
+      "attempt_relative": "result/physical_learning/20260930-shard12-attempt1"
     },
     {
-      "job_id": "712950",
-      "shard_index": 6,
-      "attempt_relative": "result/physical_learning/20260930-shard06-attempt1",
-      "launch_receipt": "LAUNCH_712950.json"
+      "shard": 13,
+      "job_id": "715494",
+      "attempt_relative": "result/physical_learning/20260930-shard13-attempt1"
     },
     {
-      "job_id": "712951",
-      "shard_index": 7,
-      "attempt_relative": "result/physical_learning/20260930-shard07-attempt1",
-      "launch_receipt": "LAUNCH_712951.json"
+      "shard": 14,
+      "job_id": "715495",
+      "attempt_relative": "result/physical_learning/20260930-shard14-attempt1"
     },
     {
-      "job_id": "712952",
-      "shard_index": 8,
-      "attempt_relative": "result/physical_learning/20260930-shard08-attempt1",
-      "launch_receipt": "LAUNCH_712952.json"
+      "shard": 15,
+      "job_id": "715496",
+      "attempt_relative": "result/physical_learning/20260930-shard15-attempt1"
     }
   ],
   "physical_shard01_dataset": "result/physical_learning/20260930-shard01-dataset-v1",
@@ -292,9 +280,9 @@
   "route_model_raw_backup_commit": "9c275ae",
   "route_model_accounting": "ACCOUNTING_713295.json",
   "route_model_result_manifest": "RESULT_MANIFEST_ROUTE_MODEL_PILOT.json",
-  "physical_admitted_training_groups": 16,
-  "physical_replayed_plans": 127,
-  "physical_explicit_censors": 1,
+  "physical_admitted_training_groups": 72,
+  "physical_replayed_plans": 571,
+  "physical_explicit_censors": 5,
   "route_model_results": "RESULTS_ROUTE_MODEL_PILOT.md",
   "route_model_review": "ROUTE_MODEL_PILOT_REVIEW.json",
   "route_model_summarizer": "summarize_route_model_pilot.py",
@@ -317,5 +305,22 @@
     "no_route_feasibility_or_speedup_claim": true
   },
   "route_model_review_backup_commit": "febc81543784694f1db702dbac3da9f7b8183cbe",
-  "physical_shard01_review_backup_commit": "febc81543784694f1db702dbac3da9f7b8183cbe"
+  "physical_shard01_review_backup_commit": "febc81543784694f1db702dbac3da9f7b8183cbe",
+  "current_work_owners": {
+    "root": "wave2 launch, pinned environment, final review and training launch",
+    "sol6_campaign_runner": "fresh32group pooled manifest/trainer/protocol",
+    "luna_wave1_admission": "compact wave1 data report",
+    "luna_campaign_review": "methods note and grouped selection review"
+  },
+  "modern_ml_methods_note": "MODERN_ML_METHODS_AND_VALIDATION.md",
+  "route_training_environment": "ROUTE_TRAINING_ENVIRONMENT.json",
+  "physical_parallel_wave1_raw_backup_commit": "6b29c7286f85f33dab92dd139be6b3082be3dbd8",
+  "physical_parallel_wave1_censors": {
+    "base_group": "physical_v2_s10037",
+    "source_failures": 1,
+    "dependent_target_censors": 3,
+    "failure_reason": "Whole-incumbent charge projection exceeds roundoff budget",
+    "no_retry": true,
+    "outside_current32prefix": true
+  }
 }
