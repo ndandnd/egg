@@ -1,0 +1,200 @@
+{
+  "assessment": {
+    "breadth_limit": "All groups retain one fixed depot/resource setup and the same 36-km/h timing/energy formula with three scalar consumption levels. The 20/28-service schedule family, one shared connector, 90-kW grid/per-bus limit, and terminal window are common. The battery spans broaden SOC assumptions but are not a field-calibrated fleet distribution.",
+    "coverage": "The prefix covers the complete 54-cell battery \u00d7 service-count \u00d7 consumption \u00d7 minimum-depot-gap factorial, with 34 cells represented twice and 20 three times. Duty start stride is 64/64 marginally, but every primary cell uses only one stride, so only 54 of the possible 108 five-factor cells appear. Thus 128 IDs are replicated samples of one finite synthetic design; they do not independently identify the stride effect.",
+    "future_gaps": [
+      "Factorial separation: cross the 25/30-minute start stride within each existing battery \u00d7 service-count \u00d7 consumption \u00d7 depot-gap cell, so stride effects are not aliased with the primary design.",
+      "External physical breadth: vary depot/charger topology, connector count and power limits, terminal availability, and route/timetable geometry; validate usable-capacity/SOC assumptions instead of treating the nameplate-scaled spans as field-calibrated profiles."
+    ]
+  },
+  "charging_opportunity_design": {
+    "generated_movement_arc_counts_by_services": {
+      "20": {
+        "depot": {
+          "max": 159,
+          "median": 132,
+          "min": 108
+        },
+        "direct": {
+          "max": 170,
+          "median": 158,
+          "min": 154
+        }
+      },
+      "28": {
+        "depot": {
+          "max": 334,
+          "median": 305,
+          "min": 257
+        },
+        "direct": {
+          "max": 347,
+          "median": 337,
+          "min": 327
+        }
+      }
+    },
+    "operating_configs_efficiency_speed_idle_depot_idle_terminal_open_deadline": [
+      {
+        "deadline_min": 1800,
+        "depot_dwell_idle_kw": 0.0,
+        "efficiency": 0.9,
+        "idle_kw": 1.2,
+        "speed_kmh": 36.0,
+        "terminal_open_min": 1080
+      }
+    ],
+    "resource_configs_connectors_gridkw_perbuskw_start_end": [
+      {
+        "connectors": 1,
+        "grid_kw": 90.0,
+        "per_bus_kw": 90.0,
+        "resource_end_min": 1800,
+        "resource_start_min": 0
+      }
+    ],
+    "source_plan_usage_from_source_inputs": {
+      "count_definition": "unique (vehicle,movement) pairs whose summed grid_kwh exceeds 1e-9 and movement ID starts with depot_; source plans only, not an availability or feasibility recount.",
+      "distinct_positive_depot_stop_count_per_plan": {
+        "max": 13,
+        "median": 2,
+        "min": 0
+      },
+      "plans_with_at_least_one_positive_depot_named_charge_stop": 162,
+      "plans_without_positive_depot_named_charge_stop": 93,
+      "source_plans": 255
+    }
+  },
+  "factor_coverage": {
+    "battery_profiles": [
+      {
+        "groups": 43,
+        "model_upper_kwh": 100.0,
+        "nameplate_kwh": 100.0,
+        "operating_span_kwh": 80.0,
+        "reserve_kwh": 20.0
+      },
+      {
+        "groups": 43,
+        "model_upper_kwh": 232.32,
+        "nameplate_kwh": 290.4,
+        "operating_span_kwh": 174.24,
+        "reserve_kwh": 58.08
+      },
+      {
+        "groups": 42,
+        "model_upper_kwh": 261.36,
+        "nameplate_kwh": 290.4,
+        "operating_span_kwh": 232.32,
+        "reserve_kwh": 29.04
+      }
+    ],
+    "drive_consumption_kwh_per_km": {
+      "1.2": 43,
+      "1.45": 43,
+      "1.7": 42
+    },
+    "duty_start_stride_by_services": {
+      "20": {
+        "25": 43,
+        "30": 22
+      },
+      "28": {
+        "25": 21,
+        "30": 42
+      }
+    },
+    "duty_start_stride_minutes": {
+      "25": 64,
+      "30": 64
+    },
+    "including_duty_start_stride": {
+      "factor": "duty_start_stride_minutes",
+      "interpretation": "Stride is balanced marginally but is not crossed within any primary four-factor cell; its effect is aliased with the primary design.",
+      "observed_unique_cells": 54,
+      "primary_cells_represented_by_both_stride_values": 0,
+      "primary_cells_represented_by_one_stride_value": 54,
+      "replication_count_distribution_for_observed_cells": {
+        "2": 34,
+        "3": 20
+      },
+      "stride_marginal_counts": {
+        "25": 64,
+        "30": 64
+      },
+      "theoretical_full_cross_product_cells": 108
+    },
+    "minimum_depot_gap_minutes": {
+      "0": 44,
+      "15": 43,
+      "30": 41
+    },
+    "primary_factorial_cells": {
+      "factors": [
+        "battery_profile",
+        "services",
+        "drive_consumption_kwh_per_km",
+        "minimum_depot_gap_minutes"
+      ],
+      "replication_count_distribution": {
+        "2": 34,
+        "3": 20
+      },
+      "unique_of_54": 54
+    },
+    "services": {
+      "20": 65,
+      "28": 63
+    }
+  },
+  "groups": {
+    "ids": [
+      10000,
+      10127
+    ],
+    "intended": 128,
+    "split_counts": {
+      "train": 128
+    },
+    "unique_case_identities": 128
+  },
+  "schema": "physical-training-pool128-coverage-v1",
+  "scope": "Frozen TRAIN pool only: cases.jsonl and source_inputs.jsonl; no outcome tables, native replay, fit, dev/test, or trace access.",
+  "source_hashes": {
+    "cases_jsonl_sha256": "faf0428f79744a9e26fa04e80baec4734443e3cfe538e404d74f41f626a294d6",
+    "context_documents_sha256": {
+      "research-20260930/learning-campaign/BATTERY_REGIMES_AND_TRAINING_DIRECTION.md": "3b374e335e88fb3168f2270b51e1378cac56293281f5ef6d6d5efab62de56abe",
+      "research-20260930/learning-campaign/LEARNING_SCALE_PLAN.md": "7669f9710f1fdca92dd1638af8553412e0b49931a7ad428d4af15d69e6e9f632",
+      "research-20260930/learning-campaign/PROTOCOL_PHYSICAL_LEARNING.md": "f85b09475ac5433d198ea805ca987d15837ea19d3d82d3da6e0b4f19b436d97f",
+      "research-20260930/learning-campaign/ROUTE_MODEL64_128_V3_PROTOCOL.md": "2af61b59d53ad660d4306d3bc7e92abdefdbab0b7903b97bd724776d1dfc62a7"
+    },
+    "pool_manifest_sha256": "d9aad5b5ea62fd82a8b4f6a3c20a95c57953ba12c7bf0949fa06004aa511c40d",
+    "source_inputs_jsonl_sha256": "7c5fab4c648b27fda5e9ecc55cd418f0a066c8e46196bc31d5f9405e5a6409d5"
+  },
+  "source_input_coverage": {
+    "full_pair_groups": 127,
+    "intended_source_fleets": 256,
+    "missing_source_groups": [
+      "physical_v2_s10037"
+    ],
+    "observed_source_inputs": 255,
+    "single_source_groups": 1
+  },
+  "trip_load": {
+    "individual_service_energy_kwh": {
+      "max": 31.62,
+      "median": 21.599999999999998,
+      "min": 14.399999999999999
+    },
+    "service_duration_minutes": {
+      "max": 31,
+      "median": 25.0,
+      "min": 20
+    },
+    "trip_energy_sum_kwh_by_case": {
+      "max": 757.86,
+      "median": 516.54,
+      "min": 344.88
+    }
+  }
+}
