@@ -8,7 +8,66 @@ supersedes the earlier idle-monitor pause condition and blanket deferral of ML.
 Notify only substantive findings, major decisions, important failures or review
 artifacts. Continue useful local work between jobs; do not pause on an empty queue.
 
-## Latest checkpoint — 64-group gains verified; 128 training complete; route test submitted
+## Latest checkpoint — matched charging resolves route attribution; longer training submitted
+
+- User direction unchanged: sustained parallel ML/data research, manuscript deferred,
+  automation ACTIVE, no routine approval. Sol implementation/analysis and Luna review
+  are complete; no active local worker or pending edit. Report substantive results only.
+- Arrays718744 (model128) and718861 (decoder) finished COMPLETED0:0; complete artifacts,
+  logs and scoped accounting collected and backed up in c77b950. Task elapsed sums are
+  1,404.35s and443.34s; actual allocated CPU totals2,344s and783s, distinct from requested
+  CPUs and online runtime. No repeat solves/fits were used for result analysis.
+- All12 model128 tasks passed strict saved-model replay under matching sklearn1.7.2.
+  On the same original32 timetables, boosted-tree log loss improves
+  .07378→.07157→.06928 and input-trip-count top-k recall .68792→.69867→.70066 for
+  bank32/64/128. At128, 25/32 improve log loss over64, but recall changes are mixed.
+  Neural gains remain small. Bank counts are not per-fold fit counts:20/40/80 fit,
+  4/8/16 inner,8/16/32 outer. Labels are observed incumbent membership, not optimal
+  routes. ROUTE_MODEL128_RESULTS/REPLAY and figures/route_model32_to128_common32
+  provide the verified report and figure; source/report backup e947a0e.
+- Decoder:12/16 learned arms replay as full fleets on TRAIN10036–10038; all4 arms on
+  10039 fail to find an integral cover at the cap. Cost-only succeeds4/4. Five learned
+  fleets use novel topology,7 reuse sources. Matched source charging eliminates every
+  apparent learned route-cost gain: direct-or-recharged source policy matches/beats
+  every learned fleet. Four predeclared timetables, not16 independent observations.
+  The matched comparison used saved admitted TRAIN/day outcomes only after prospective
+  protocol commit b33f028;7 available sources and1 censor preserved, no new solve.
+  See ROUTE_DECODER_MATCHED_SOURCE_CHARGE_V1_RESULTS/REPLAY, its verifier and protocol.
+- Cold solving found cheaper individual fleet columns on all3 learned-success cases.
+  **All8 cold/retained hull mixtures are nonpure.** Their certificates apply to CH,
+  not an optimal physical fleet D. Decoder V2 replay verifies every physical column
+  and mixture distinction; retain historical V1 replay. Fixed-route charging OPTIMAL
+  certifies only its linear subproblem; curved full-fleet bills are replayed exactly.
+  No incremental learned cost benefit or matched-quality online speedup established.
+- Coverage note:128 independent TRAIN groups,255/256 sources; main54 physical cells
+  have2–3 groups, but stride is confounded (54/108 joint cells). Charger topology,
+  power and terminal window are fixed. See TRAIN128_COVERAGE_NOTE. Dev/test remain sealed.
+- **Longer-training array719750 submitted21:48:19Z**, after guard found no active EGG
+  jobs. No postsubmission queue/partial outcome read. Execution e947a0e87f4977b74dab375fe4dabdbf55f98667;
+  remote `/home/nc437/egg-route-model128-budget-20260930-v4`; attempt
+  `result/physical_learning/20260930-route-model128-budget-v4`. LAUNCH_719750.json;
+  ROUTE_MODEL128_BUDGET_V4_PROTOCOL/CHECKS/REVIEW. Same128 pool SHA
+  d9aad5b5ea62fd82a8b4f6a3c20a95c57953ba12c7bf0949fa06004aa511c40d.
+  Only MLP cap300→1200 and tree candidates100/200/400/800 change; existing features,
+  architecture, regularization, folds/seeds and inner-only selection stay fixed.
+  Motivation is all12 prior INNER curves improving through caps, not outer ranking.
+  Pool loader materializes all rows; outer x/y are excluded from fitting/selection.
+  Each checkpoint/progress survives partial failure;300/200 anchors retained.
+  Twelve tasks%4,1CPU/8GB/30min/native1,1700s child cap,total6requestedCPUh,no retry,
+  no requeue,exclude scaglione-compute-01. Global ceiling12requestedCPUs/96GB remains.
+- Original Google Doc appended with verified model/decoder/matched-source findings,
+  scope limits and longer-training protocol. Five links and all7 prior native figures
+  verified; DOC_MODEL128_DECODER_RESULTS_RECEIPT.json. No manuscript revision.
+- Next: one scoped719750 queue check; collect complete progress/models/logs/accounting
+  when terminal, preserve failures, no retry. First compare actual-bank300/200 anchors
+  against frozen v3 inputs/preprocessing/predictions, then replay only inner-selected
+  models and report grouped full128/common32 comparisons without outer selection.
+  Next bounded local package: saved-evidence diagnosis of10039 cover failure and why
+  novel10037/10038 routes lose to matched source charging. Gate decoder changes on a
+  specific mechanism. Version new data to deconfound stride and diversify charging/
+  route structure; do not expand model size blindly, open dev/test, or stop at128.
+
+## Previous checkpoint — 64-group gains verified; 128 training complete; route test submitted
 
 - User direction unchanged: sustained parallel ML/data work, manuscript deferred,
   hourly automation ACTIVE. Root managed Sol implementation/analysis and Luna review;
