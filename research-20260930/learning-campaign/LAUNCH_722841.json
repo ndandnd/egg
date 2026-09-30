@@ -1,0 +1,99 @@
+{
+  "array_job_id": "722841",
+  "submitted_at_utc": "2026-09-30T23:03:52Z",
+  "source_commit": "ca9c3dbbfd22a83c42a8e18465f8524f7f11c98f",
+  "source_branch": "codex/journal-research-20260927",
+  "remote_checkout": "/home/nc437/egg-route-graph-20260930-v6",
+  "attempt_relative": "result/physical_learning/20260930-route-model128-graph-v6",
+  "pool_manifest_sha256": "d9aad5b5ea62fd82a8b4f6a3c20a95c57953ba12c7bf0949fa06004aa511c40d",
+  "protocol": "ROUTE_MODEL_GRAPH_V6_PROTOCOL.md",
+  "review": "ROUTE_MODEL_GRAPH_V6_REVIEW.md",
+  "checks": "ROUTE_MODEL_GRAPH_V6_CHECKS.md",
+  "environment_receipt": "ROUTE_GRAPH_ENVIRONMENT.json",
+  "task_ids": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11
+  ],
+  "seeds": [
+    17,
+    29,
+    43
+  ],
+  "independent_training_groups": 128,
+  "observed_source_fleets": 255,
+  "fit_inner_outer_groups": [
+    80,
+    16,
+    32
+  ],
+  "models": [
+    "mean_message",
+    "graph_attention",
+    "inner_promoted"
+  ],
+  "parameter_counts": {
+    "mean_message": 17857,
+    "graph_attention": 17985
+  },
+  "max_epochs": 300,
+  "inner_patience_epochs": 30,
+  "candidate_soft_seconds": 750,
+  "fold_soft_seconds": 1650,
+  "requested_per_task": {
+    "cpus": 1,
+    "memory_gb": 8,
+    "wall_seconds": 1800,
+    "native_threads": 1
+  },
+  "concurrent_task_limit": 4,
+  "total_requested_cpu_hour_cap": 6,
+  "shell_cap_seconds": 1700,
+  "node_list": [
+    "unicorn-cpu-75"
+  ],
+  "excluded_nodes": [
+    "scaglione-compute-01"
+  ],
+  "requeue": false,
+  "automatic_retry": false,
+  "dependency": "afterany:722702",
+  "submission_guard_allowed_only_recovery_array": "722702",
+  "runtime_probe_required_before_bank": true,
+  "selection": "Stable inner BCE only for epochs and promoted architecture; frozen tie order; outer never selects",
+  "launch_script_sha256": "21c8cb09f88b77f665e0e643cbde91cf0cc6497642e29a7309d4ef0c5d8fc514",
+  "observed_state": "SUBMITTED",
+  "postsubmission_queue_or_outcome_read": false,
+  "actual_allocation": "Collect separately from Slurm accounting.",
+  "submission_guard_files": {
+    "array_jobid.txt": {
+      "sha256": "3192d384bf8e8e122c048ce0f83d660cfde6c4a08025bb43114ab43800aa5014",
+      "bytes": 7
+    },
+    "commit.txt": {
+      "sha256": "3e369ee3d0491ee942983af55f6b18165d05dd738b768be27fb7904a72b57766",
+      "bytes": 41
+    },
+    "dependency.txt": {
+      "sha256": "cecf3cf3e50588deea8febeab19c4bf24a1c3cf49d189f33e9afaa08d36748e2",
+      "bytes": 29
+    },
+    "preexisting-egg-jobs.txt": {
+      "sha256": "375e80d028c225e491dca5719b9eb602c31491fb2838bba4f3ac6328b3e37ce7",
+      "bytes": 188
+    },
+    "submitted_at_utc.txt": {
+      "sha256": "86db2509f43242db89ddc081a7a71d35472203012648cd0ce4d71f737f453162",
+      "bytes": 21
+    }
+  }
+}

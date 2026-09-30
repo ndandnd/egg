@@ -1,8 +1,9 @@
 {
-  "updated_at_utc": "2026-09-30T22:59:39.959518+00:00",
-  "phase": "model_families_recovery1_submitted_graph_implementation",
+  "updated_at_utc": "2026-09-30T23:05:13.243679+00:00",
+  "phase": "graph_v6_submitted_after_family_recovery",
   "active_job_ids": [
-    "722702"
+    "722702",
+    "722841"
   ],
   "completed_job_ids": [
     "677817",
@@ -40,10 +41,10 @@
     "718861",
     "719750"
   ],
-  "launch_receipt": "LAUNCH_722702.json",
-  "source_commit": "2df1ec9228ea3c18942ae465e73a5488acedcdd2",
-  "remote_checkout": "/home/nc437/egg-route-families-20260930-v5-recovery1",
-  "attempt_relative": "result/physical_learning/20260930-route-model128-families-v5-recovery1",
+  "launch_receipt": "LAUNCH_722841.json",
+  "source_commit": "ca9c3dbbfd22a83c42a8e18465f8524f7f11c98f",
+  "remote_checkout": "/home/nc437/egg-route-graph-20260930-v6",
+  "attempt_relative": "result/physical_learning/20260930-route-model128-graph-v6",
   "startup_observation": {
     "recorded_at_utc": "2026-09-30T19:24:42.498936+00:00",
     "label_jobs_running": [
@@ -88,7 +89,7 @@
     "notification_policy": "Substantive results, major decisions, failures or review artifacts only",
     "resource_policy": "Parallel label8 + training4; initial single-job limit superseded."
   },
-  "next_action": "Recovery722702 submitted; preserve original three successes and nine SIGILL failures. Graphv6 implementation/review in progress with isolatedCPUtorchready. Freeze before graph launch; afterany recovery dependency if still active so training concurrency remains4. Next wake collect terminal recovery and map provenance before complete family analysis.",
+  "next_action": "Next heartbeat: one scoped squeue for722702 and722841; date/user/job-name-scoped UTC sacct for vanished arrays (job IDs can be reused). Collect complete recovery and graph artifacts when terminal, preserve all failures/time. Family combined replay uses original720831 tasks2,3,10 plus nine recovery722702 tasks and never silently replaces original failures. Graph runtimeprobes must pass before TRAIN; replay portable NPZ with pinned torch and selection/weights before reporting. Do not refit or rerun failed attempts automatically. Afterwards prepare bounded structured attention/decoder study and diversified-data protocol under latest model roadmap. GPT-6.1 Sol heavy implementation, Luna Max routine review; manuscript deferred.",
   "stage1_results": "RESULTS_STAGE1.md",
   "stage1_model_analysis": "MODEL_STAGE1.md",
   "test_groups_unobserved": [
@@ -120,30 +121,15 @@
     "DOC_MODEL128_DECODER_RESULTS_RECEIPT.json",
     "DOC_MODEL_FAMILIES_V5_RECEIPT.json",
     "DOC_MODEL128_BUDGET_V4_RESULTS_RECEIPT.json",
-    "DOC_GRAPH_DIRECTION_RECEIPT.json"
+    "DOC_GRAPH_DIRECTION_RECEIPT.json",
+    "DOC_GRAPH_V6_LAUNCH_RECEIPT.json"
   ],
   "latest_observation": {
-    "array_job_id": "720831",
-    "utc_submit": "2026-09-30T22:19:24Z",
-    "completed_task_ids": [
-      2,
-      3,
-      10
-    ],
-    "failed_task_ids": [
-      0,
-      1,
-      4,
-      5,
-      6,
-      7,
-      8,
-      9,
-      11
-    ],
-    "all_artifacts_collected": true,
-    "native_crash_before_any_candidate_start": true,
-    "model_quality_failure": false
+    "source": "graph submission guard",
+    "only_preexisting_egg_array": "722702",
+    "graph_submitted": "722841",
+    "dependency": "afterany:722702",
+    "no_postsubmission_queue_or_outcome_read": true
   },
   "result_summarizer": "summarize_cost_aware_repair.py",
   "cost_aware_results": "RESULTS_COST_AWARE_REPAIR.md",
@@ -278,7 +264,8 @@
   },
   "active_label_job_ids": [],
   "active_training_array_ids": [
-    "722702"
+    "722702",
+    "722841"
   ],
   "route_model_launch_receipt": "LAUNCH_713295.json",
   "route_model_training_protocol": "ROUTE_MODEL_TRAINING_PROTOCOL.md",
@@ -290,6 +277,13 @@
       "attempt_relative": "result/physical_learning/20260930-route-model128-families-v5-recovery1",
       "source_commit": "2df1ec9228ea3c18942ae465e73a5488acedcdd2",
       "launch_receipt": "LAUNCH_722702.json"
+    },
+    {
+      "array_job_id": "722841",
+      "remote_checkout": "/home/nc437/egg-route-graph-20260930-v6",
+      "attempt_relative": "result/physical_learning/20260930-route-model128-graph-v6",
+      "source_commit": "ca9c3dbbfd22a83c42a8e18465f8524f7f11c98f",
+      "launch_receipt": "LAUNCH_722841.json"
     }
   ],
   "physical_shard01_dataset": "result/physical_learning/20260930-shard01-dataset-v1",
@@ -325,11 +319,7 @@
   },
   "route_model_review_backup_commit": "febc81543784694f1db702dbac3da9f7b8183cbe",
   "physical_shard01_review_backup_commit": "febc81543784694f1db702dbac3da9f7b8183cbe",
-  "current_work_owners": {
-    "sol61_graph_models": "Finishing graph package fixtures",
-    "sol61_runtime_repair": "Independent graph review",
-    "root": "Graph freeze/deployment after review"
-  },
+  "current_work_owners": {},
   "modern_ml_methods_note": "MODERN_ML_METHODS_AND_VALIDATION.md",
   "route_training_environment": "ROUTE_TRAINING_ENVIRONMENT.json",
   "physical_parallel_wave1_raw_backup_commit": "6b29c7286f85f33dab92dd139be6b3082be3dbd8",
@@ -368,9 +358,10 @@
   "route_model32_report_backup_commit": "ff40919b562d63166938d3eae29b75347218860c",
   "physical_shard09_report_backup_commit": "ff40919b562d63166938d3eae29b75347218860c",
   "latest_training_submission": {
-    "array_job_id": "722702",
-    "submitted_at_utc": "2026-09-30T22:58:44Z",
+    "array_job_id": "722841",
+    "submitted_at_utc": "2026-09-30T23:03:52Z",
     "state": "SUBMITTED",
+    "dependency": "afterany:722702",
     "no_postsubmission_queue_or_partial_outcome_read": true
   },
   "route_model32_conclusion": {
@@ -395,6 +386,13 @@
       "attempt_relative": "result/physical_learning/20260930-route-model128-families-v5-recovery1",
       "source_commit": "2df1ec9228ea3c18942ae465e73a5488acedcdd2",
       "launch_receipt": "LAUNCH_722702.json"
+    },
+    {
+      "array_job_id": "722841",
+      "remote_checkout": "/home/nc437/egg-route-graph-20260930-v6",
+      "attempt_relative": "result/physical_learning/20260930-route-model128-graph-v6",
+      "source_commit": "ca9c3dbbfd22a83c42a8e18465f8524f7f11c98f",
+      "launch_receipt": "LAUNCH_722841.json"
     }
   ],
   "route_model64_accounting": "ACCOUNTING_717453.json",
@@ -551,5 +549,12 @@
   "route_model_families_v5_accounting": "ACCOUNTING_720831.json",
   "route_model_families_v5_partial_manifest": "RESULT_MANIFEST_ROUTE_FAMILIES_V5_PARTIAL.json",
   "route_model_families_v5_recovery1_launch_receipt": "LAUNCH_722702.json",
-  "route_model_families_v5_raw_backup_commit": "cb35a91937efecc2b65106823906b04704d0a905"
+  "route_model_families_v5_raw_backup_commit": "cb35a91937efecc2b65106823906b04704d0a905",
+  "route_graph_v6_launch_receipt": "LAUNCH_722841.json",
+  "route_graph_v6_protocol": "ROUTE_MODEL_GRAPH_V6_PROTOCOL.md",
+  "route_graph_v6_execution_commit": "ca9c3dbbfd22a83c42a8e18465f8524f7f11c98f",
+  "route_graph_v6_environment": "ROUTE_GRAPH_ENVIRONMENT.json",
+  "route_graph_v6_review": "ROUTE_MODEL_GRAPH_V6_REVIEW.md",
+  "research_operating_preferences": "doc/RESEARCH_OPERATING_PREFERENCES.md",
+  "model_exploration_roadmap": "MODEL_EXPLORATION_ROADMAP.md"
 }

@@ -8,41 +8,58 @@ supersedes the earlier idle-monitor pause condition and blanket deferral of ML.
 Notify only substantive findings, major decisions, important failures or review
 artifacts. Continue useful local work between jobs; do not pause on an empty queue.
 
-## Latest checkpoint — graph exploration authorized; native-runtime failure recovery
+## Latest checkpoint — graph models launched; GPT-6.1 preference saved
 
-- User explicitly authorizes all promising model families, including GNNs, and
-  asks that **GPT-6.1 Sol (`gpt-6.1-sol`) handle heavy implementation**. Persisted in
-  doc/RESEARCH_OPERATING_PREFERENCES.md and the ACTIVE hourly automation. Luna Max
-  remains routine reviewer. MODEL_EXPLORATION_ROADMAP.md records tabular, graph,
-  attention, cost-aware and hybrid studies. Manuscript deferred; protections unchanged.
-- Array720831 is terminal: tasks2/3/10 COMPLETED, nine tasks0/1/4/5/6/7/8/9/11
-  FAILED with SIGILL (Slurm4:0; wrapper132), before any candidate-start checkpoint.
-  Three complete tasks and nine incomplete attempts are preserved. Exact native
-  library/CPU instruction cause has not yet been localized; successful nodes were
-  snavely-cpu-16 and unicorn-cpu-75; failures on snavely-cpu-01/09. Do not call this
-  a model-quality result or aggregate an incomplete cohort as a complete comparison.
-- Full current attempt collected locally. ACCOUNTING_720831.json filters UTC submit
-  22:19:24Z, user nc437 and job name egg-route-families128: historical reused Slurm
-  job IDs are excluded. All12 elapsed total512s, allocatedCPU701s; task2 allocated2
-  despite request1. Result manifest and stdout hash receipts preserve every failure.
-  ROUTE_FAMILIES_V5_PARTIAL_REVIEW.md independently checks completeness/accounting.
-- Recovery **array722702 submitted22:58:44Z**, source2df1ec9228ea3c18942ae465e73a5488acedcdd2.
-  LAUNCH_722702.json records9tasks%4 on observed working unicorn-cpu-75,1requestedCPU/8GB/30min,
-  total4.5requestedCPUh. New immutable namespace preserves original9failures+3successes.
-  Exact18originalsourcehashes verified beforedispatch; sixrecovery+fiveoriginaltests and
-  independent Luna review passed. No postsubmission queue/outcome read.
-  Sol6.1 `sol61_graph_models` implements PyTorch CPU message passing and graph attention
-  with a frozen grouped pilot and tiny fixtures, no bank fit yet. Luna reviews.
-  Root owns submission/state/GitHub/Google Doc. Only722702 is currently recorded active.
-  Google Doc appended with graphdirection and partialfailure;7images retained.
-  Graphisolatedruntime torch2.4.1+cpu installed separately; loginimports andpipcheck pass,
-  native execution-node probes remain prospective. See ROUTE_GRAPH_ENVIRONMENT.json.
-- Next: collect recovery722702 when terminal; preserve completed original
-  tasks without refitting, then replay all saved family models before scientific
-  comparisons. Graph package is undergoing final independent review; isolated
-  torch environment is ready and per-task compatibility probes precede TRAIN.
-  Keep four training workers total until
-  a new prospective budget is recorded. Dev/test sealed; all128 are exploratory TRAIN.
+- User authorizes exploration of all promising models, explicitly including GNNs,
+  and **GPT-6.1 Sol (`gpt-6.1-sol`) for heavy implementation**. Standing preference
+  saved in doc/RESEARCH_OPERATING_PREFERENCES.md and ACTIVE hourly automation.
+  Luna Max handles routine review. MODEL_EXPLORATION_ROADMAP.md records tabular,
+  graph, attention, cost-aware and hybrid studies. Manuscript remains deferred.
+- **Graph array722841 submitted23:03:52Z**, sourceca9c3dbbfd22a83c42a8e18465f8524f7f11c98f.
+  Remote `/home/nc437/egg-route-graph-20260930-v6`; output
+  `result/physical_learning/20260930-route-model128-graph-v6`. LAUNCH_722841.json;
+  ROUTE_MODEL_GRAPH_V6_PROTOCOL/CHECKS/REVIEW. Dependency **afterany:722702** keeps
+  total training concurrency4. No postsubmission queue/outcome read. Guard saw only722702.
+- Graph menu: two-layer32-width directed mean-message GNN and graph attention,
+ 17857/17985 parameters, CPU float64, Adam .003/weightdecay.0001,300epochs maximum,
+  inner patience30,750softseconds/arm. Same exact128 TRAIN bank/255sources,17features,
+ 80fit/16inner/32outer groups and seeds17/29/43. Both arms + inner-promoted policy
+  reported; outer cannot choose. Portable NPZ, per-epoch losses, selected predictions,
+  separate inference/fit/evaluation/persistence times and all failures retained.
+- Graph budget12tasks%4,1requestedCPU/8GB/30min/native1,6requestedCPUh total,
+ 1700s shared probe+training hardcap,no retry/requeue,exclude scaglione-compute-01.
+  First launch pins unicorn-cpu-75. Isolated `/home/nc437/egg-route-graph-env-20260930`
+  uses torch2.4.1+cpu/numpy1.26.4/scipy1.13.1/sklearn1.7.2/joblib1.5.2; pipcheck and
+  loginimports passed. Native execution-node probes precede any bank read; failure
+  stops training. Environment receipt+officialwheelSHA+lock are source-pinned.
+  Two Sol6.1 agents implemented/reviewed;10tinyfixtures independently passed,
+  shellsyntax passed. No graph campaign fit or route-benefit result yet verified.
+- **Recovery array722702 submitted22:58:44Z**, source2df1ec9228ea3c18942ae465e73a5488acedcdd2.
+  Remote `/home/nc437/egg-route-families-20260930-v5-recovery1`; output
+  `result/physical_learning/20260930-route-model128-families-v5-recovery1`.
+  LAUNCH_722702.json; nine original SIGILL tasks0/1/4/5/6/7/8/9/11 only;3successes
+  unchanged. Node75,%4,1requestedCPU/8GB/30min,4.5requestedCPUh; no automaticretry.
+  All18originalsourcepaths/hashes guarded; unchanged scientificsettings; newstdlib
+  supervisor saves import/fit signals. Sixrecovery+fiveoriginalfixtures and Luna
+  review passed before sourcefreeze. Collect/replay at next terminal observation.
+- Original720831: tasks2/3/10 COMPLETED; nine SIGILL before firstcandidate on
+  snavely-cpu-01/09. Exact offending native library/ISA remains unproven. All evidence
+  collected and backed up **cb35a91937efecc2b65106823906b04704d0a905**.
+  ACCOUNTING_720831.json:512elapsedseconds total,701allocatedCPUseconds,task2alloc2.
+  UTCsubmit22:19:24Z/usernc437/jobname filtering excludes historical reused job IDs.
+  Partial review/manifest/stdout hash receipts preserve failures. No outermodel
+  metrics read from the incomplete family comparison during recovery decisions.
+- Original Google Doc appended with graphdirection, GPT-6.1 preference and partial
+  failure and graphpilot submission,7nativeimages preserved (DOC_GRAPH_DIRECTION_RECEIPT,
+  DOC_GRAPH_V6_LAUNCH_RECEIPT). Originalv4results
+  remain independently replayed: longer MLP improves edgeclassification; extended
+  histogramboosting mixed; no learned fleet-cost or matched-speedup benefit yet.
+- No active local worker or pending agent source edits. Next: one scoped queuecheck
+  for722702/722841, collect terminalartifacts and UTCidentity-scoped accounting.
+  Replay originalfamily tasks2/3/10 + nine recoverytasks with explicit provenance;
+  retain originalfailedtime. Replay graphNPZ/innerselection/probabilities before
+  reporting; keep future attention-route and diversified-data work moving.
+  Dev/test sealed; current128bank remains exploratory TRAIN; no automaticretry.
 
 ## Previous checkpoint — XGBoost, CatBoost and ExtraTrees submitted
 
