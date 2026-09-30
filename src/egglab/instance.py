@@ -134,15 +134,27 @@ def synthetic_instance(
     )
 
 
-def load_frozen_subset(path: str) -> Instance:
-    """Loader for a frozen GIRO-derived subset (JSON produced by a future
-    freezing script; format = Instance.canonical()). Details of the subset
-    (trips, fidelity level, physics) are pending from the user — see
-    ref/context/GIRO_DATASET_HANDOFF_20260814.md for the rules any freeze
-    must follow (variant choice, deadhead fidelity disclosure, manifest)."""
-    with open(path) as f:
-        d = json.load(f)
-    d["trips"] = [Trip(**t) for t in d["trips"]]
-    d["dh_min"] = {(a, b): v for a, b, v in d["dh_min"]}
-    d["dh_kwh"] = {(a, b): v for a, b, v in d["dh_kwh"]}
-    return Instance(**d)
+def load_frozen_subset(
+    path: str,
+    manifest_path: str | None = None,
+    *,
+    expected_manifest_sha256: str | None = None,
+) -> Instance:
+    """Load a GIRO-derived subset only after manifest verification.
+
+    ``path`` may name the frozen artifact directory, its ``INSTANCE.json``,
+    or its ``MANIFEST.json``.  A separately supplied manifest must still be
+    the paired sibling of the instance.  Pin ``expected_manifest_sha256`` when
+    the caller needs an explicit trust root in addition to a tracked manifest.
+
+    The freeze contract (variant choice, trip lineage, deadhead fidelity,
+    physics, and source hashes) is implemented by
+    ``experiments/freeze_giro_subset.py``.
+    """
+    from .frozen import load_verified_frozen_subset
+
+    return load_verified_frozen_subset(
+        path,
+        manifest_path,
+        expected_manifest_sha256=expected_manifest_sha256,
+    )
