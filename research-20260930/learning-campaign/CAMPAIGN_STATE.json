@@ -1,7 +1,9 @@
 {
-  "updated_at_utc": "2026-09-30T17:31:33.820222+00:00",
-  "phase": "physical_learning_shard0_continuation_ready",
-  "active_job_ids": [],
+  "updated_at_utc": "2026-09-30T17:35:22.152308+00:00",
+  "phase": "physical_learning_shard0_continuation_submitted",
+  "active_job_ids": [
+    "709011"
+  ],
   "completed_job_ids": [
     "677817",
     "678708",
@@ -16,12 +18,12 @@
     "697180",
     "700498"
   ],
-  "launch_receipt": "LAUNCH_703461.json",
-  "source_commit": "032d02d3f8f227a0716a3e74a66e55260f5139f8",
-  "remote_checkout": "/home/nc437/egg-physical-learning-20260930",
-  "attempt_relative": "result/physical_learning/20260930-shard00-attempt1",
+  "launch_receipt": "LAUNCH_709011.json",
+  "source_commit": "2460d43d4161449aaeeda0699e2f4ac10418f739",
+  "remote_checkout": "/home/nc437/egg-physical-continuation-20260930",
+  "attempt_relative": "result/physical_learning/20260930-shard00-continuation-attempt1",
   "startup_observation": {
-    "recorded_at_utc": "2026-09-30T16:00:21.521977+00:00",
+    "recorded_at_utc": "2026-09-30T17:35:22.152308+00:00",
     "state": "SUBMITTED",
     "queue_state_not_polled_after_submission": true
   },
@@ -31,7 +33,7 @@
     "cadence": "hourly",
     "notification_policy": "Substantive results, major decisions, failures or review artifacts only"
   },
-  "next_action": "After final review and GitHub backup, submit the single guarded continuation of 23 never-launched charging cells. On completion, compile/replay the v2 composite once, then continue independent training shards toward the 32-group learning-curve checkpoint.",
+  "next_action": "Make one scoped queue check of 709011; if vanished, collect scoped accounting, full continuation attempt, sibling wrapper and Slurm logs. Compile/review the v2 composite once on completion, preserve the original censor, then continue distinct training shards toward 32 independent groups and grouped model comparisons.",
   "stage1_results": "RESULTS_STAGE1.md",
   "stage1_model_analysis": "MODEL_STAGE1.md",
   "test_groups_unobserved": [
@@ -56,38 +58,10 @@
     "DOC_PHYSICAL_PREEMPTION_RECEIPT.json"
   ],
   "latest_observation": {
-    "job_id": "703461",
-    "recorded_at_utc": "2026-09-30T17:08:06.146282+00:00",
-    "state": "PREEMPTED",
-    "exit_code": "0:0",
-    "elapsed_seconds": 713,
-    "batch_state": "CANCELLED",
-    "batch_exit_code": "0:15",
-    "batch_elapsed_seconds": 714,
-    "allocated_cpus": 1,
-    "requested_memory_gb": 8,
-    "batch_max_rss_kib": 234056,
-    "node": "snavely-cpu-01",
-    "wrapper_receipt_present": false,
-    "summary_present": false,
-    "catalog_rows": 40,
-    "source_rows": 16,
-    "target_rows": 24,
-    "feasible_catalog_rows": 40,
-    "receipted_child_seconds": 667.823461072112,
-    "launched_cells": 41,
-    "receipted_cells": 40,
-    "interrupted_unreceipted_cells": [
-      "physical_v2_s10004_n28_soc20_80_174/state0/source0_charge_late"
-    ],
-    "never_launched_cells": 23,
-    "source": "scoped squeue/sacct; local complete collection of preserved partial artifacts",
-    "sacct_raw": [
-      "703461|egg-physical-labels|PREEMPTED|0:0|713|1|8G||snavely-cpu-01",
-      "703461.batch|batch|CANCELLED|0:15|714|1||234056K|snavely-cpu-01",
-      "703461.extern|extern|COMPLETED|0:0|714|1|||snavely-cpu-01"
-    ],
-    "scientific_disposition": "No wrapper or complete summary; no training admission under v1. The 40 receipted results are preserved for separate partial review, not silently discarded or treated as a completed sample."
+    "job_id": "709011",
+    "recorded_at_utc": "2026-09-30T17:35:22.152308+00:00",
+    "state": "SUBMITTED",
+    "queue_state_not_polled_after_submission": true
   },
   "result_summarizer": "summarize_cost_aware_repair.py",
   "cost_aware_results": "RESULTS_COST_AWARE_REPAIR.md",
@@ -101,7 +75,7 @@
   "shared_interval_physical_pool_review": "SHARED_INTERVAL_PHYSICAL_POOL_REVIEW.json",
   "shared_interval_report_backup_commit": "8e17264ffc71eb9b5ed0851b429d5d3927f43ac8",
   "shared_interval_figure": "figures/shared_interval_2016_learned.png",
-  "local_follow_up": "40 parent plans independently replayed; 9/12 paired targets tie at 1e-6 in the first four ordered groups. Separate no-retry continuation and typed-censor composite implemented; 7 focused checks passed. No continuation submitted yet.",
+  "local_follow_up": "Reviewed continuation submitted once. All 40 parent plans and partial findings are backed up; original Google Doc updated. Seven focused checks passed. No new model fit; reserved tests remain sealed.",
   "shared_budget_results": "RESULTS_SHARED_BUDGET_REPAIR.md",
   "shared_budget_verification": "INDEPENDENT_REPLAY_SHARED_BUDGET.json",
   "shared_budget_physical_pool_review": "SHARED_BUDGET_PHYSICAL_POOL_REVIEW.json",
@@ -169,5 +143,40 @@
   "physical_shard00_review_backup_commit": "10ccbd75b7c401049345c4049d1b83a322aa7b15",
   "physical_continuation_protocol": "PROTOCOL_PHYSICAL_CONTINUATION.md",
   "physical_continuation_review": "PHYSICAL_CONTINUATION_REVIEW.md",
-  "physical_composite_interface": "PHYSICAL_COMPOSITE_INTERFACE.md"
+  "physical_composite_interface": "PHYSICAL_COMPOSITE_INTERFACE.md",
+  "parent_preemption_observation": {
+    "job_id": "703461",
+    "recorded_at_utc": "2026-09-30T17:08:06.146282+00:00",
+    "state": "PREEMPTED",
+    "exit_code": "0:0",
+    "elapsed_seconds": 713,
+    "batch_state": "CANCELLED",
+    "batch_exit_code": "0:15",
+    "batch_elapsed_seconds": 714,
+    "allocated_cpus": 1,
+    "requested_memory_gb": 8,
+    "batch_max_rss_kib": 234056,
+    "node": "snavely-cpu-01",
+    "wrapper_receipt_present": false,
+    "summary_present": false,
+    "catalog_rows": 40,
+    "source_rows": 16,
+    "target_rows": 24,
+    "feasible_catalog_rows": 40,
+    "receipted_child_seconds": 667.823461072112,
+    "launched_cells": 41,
+    "receipted_cells": 40,
+    "interrupted_unreceipted_cells": [
+      "physical_v2_s10004_n28_soc20_80_174/state0/source0_charge_late"
+    ],
+    "never_launched_cells": 23,
+    "source": "scoped squeue/sacct; local complete collection of preserved partial artifacts",
+    "sacct_raw": [
+      "703461|egg-physical-labels|PREEMPTED|0:0|713|1|8G||snavely-cpu-01",
+      "703461.batch|batch|CANCELLED|0:15|714|1||234056K|snavely-cpu-01",
+      "703461.extern|extern|COMPLETED|0:0|714|1|||snavely-cpu-01"
+    ],
+    "scientific_disposition": "No wrapper or complete summary; no training admission under v1. The 40 receipted results are preserved for separate partial review, not silently discarded or treated as a completed sample."
+  },
+  "physical_continuation_execution_commit": "2460d43d4161449aaeeda0699e2f4ac10418f739"
 }

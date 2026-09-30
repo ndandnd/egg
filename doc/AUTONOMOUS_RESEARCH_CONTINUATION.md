@@ -8,8 +8,14 @@ supersedes the earlier idle-monitor pause condition and blanket deferral of ML.
 Notify only substantive findings, major decisions, important failures or review
 artifacts. Continue useful local work between jobs; do not pause on an empty queue.
 
-## Latest checkpoint — partial batch reviewed; continuation ready for submission
+## Latest checkpoint — continuation submitted; partial findings preserved
 
+- **Recorded EGG job 709011**, submitted 2026-09-30T17:34:24Z. The guard found
+  no active EGG job. No post-submission queue/outcome check. Execution commit
+  `2460d43d4161449aaeeda0699e2f4ac10418f739`; fresh remote checkout
+  `/home/nc437/egg-physical-continuation-20260930`; exclusive attempt
+  `result/physical_learning/20260930-shard00-continuation-attempt1`.
+  LAUNCH_709011.json and PROTOCOL_PHYSICAL_CONTINUATION.md govern; do not duplicate.
 - Job 703461 was PREEMPTED after 713 allocation seconds. All 40 completed plans
   (16 source, 24 charging) passed independent physical/native replay and exact
   curved-cost checks. Raw evidence and both Slurm logs are preserved; no parent
@@ -20,12 +26,12 @@ artifacts. Continue useful local work between jobs; do not pause on an empty que
   and source1 one, all three separated outcomes in base10003. This ordered prefix
   does not establish registry-wide generalization. No new model fit or speedup.
   See RESULTS_PHYSICAL_SHARD00_PREEMPTED.md and its replay JSON/reproducer.
-- Sol implemented and Root reviewed a separate no-retry continuation for only the
+- Sol implemented and Root/Luna reviewed a separate no-retry continuation for only the
   23 untouched charging cells. Parent inventory and source plans are frozen and
   checked; the interrupted cell is never retried. Budget: 1 CPU, 8 GB, one thread,
   45 minutes; child/controller/shell caps 100/2500/2600 seconds; no requeue;
-  exclude scaglione-compute-01. No new job submitted yet. Root will submit once
-  after the final Luna review and GitHub backup, using a fresh remote checkout.
+  exclude scaglione-compute-01. Implementation and final review backed up before
+  the guarded submission; the complete parent tree was copied into the new checkout.
 - The separate v2 composite adapter admits parent plus continuation only after a
   successful continuation wrapper and 23 new receipts. It preserves row origins,
   the typed censor and separate spent-time totals, and replay-checks saved plans.
@@ -34,7 +40,8 @@ artifacts. Continue useful local work between jobs; do not pause on an empty que
 - Parent evidence backed up at 8803962; reviewed results at 10ccbd7. The original
   Google Doc now contains the partial findings and prospective continuation, with
   all six figures preserved (DOC_PHYSICAL_PREEMPTION_RECEIPT.json).
-- Next: collect this one continuation, compile/review the complete composite once,
+- Next: one scoped check of 709011; collect accounting and the complete new attempt,
+  sibling wrapper and Slurm logs on completion. Compile/review the composite once,
   then advance distinct eight-group training shards toward 32/64/128 independent
   groups and grouped learning curves. Compare constant/direct-bill/EdgePrior,
   ridge and a modest nonlinear baseline. Weak source-choice signal favors route
