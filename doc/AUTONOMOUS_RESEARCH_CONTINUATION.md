@@ -48,7 +48,9 @@ artifacts. Continue useful local work between jobs; do not pause on an empty que
   all raw evidence are retained; native license stdout is hashed but not public.
 - The original Google Doc has a verified appended stage2 result/launch section
   and the objective-bound figure (DOC_STAGE2_REPAIR_LAUNCH_RECEIPT.json).
-  Append the reviewed repair result next, then back up this handoff and receipts.
+  The independently replayed repair result is also appended and linked
+  (DOC_REPAIR_RESULTS_RECEIPT.json). Both result packages are backed up on the
+  existing research branch; the evidence commit is f498e28.
   The existing hourly automation is ACTIVE. No user approval is needed for the
   routine next package; notify substantive results or genuine decisions only.
 - Preserve reserved test seeds2004/2005, no protected A6/B3/confirmation data,
