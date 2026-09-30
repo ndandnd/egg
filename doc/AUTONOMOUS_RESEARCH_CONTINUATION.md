@@ -56,6 +56,8 @@ artifacts. Continue useful local work between jobs; do not pause on an empty que
   Retain cost-only/source charging controls and diagnose the failed route cover.
 - Google Doc appended with current/new families, fixed selection rule, scope and
   graph direction;2links/all7nativefigures verified (DOC_MODEL_FAMILIES_V5_RECEIPT).
+  Verified longer-training neural gain/mixed tree result appended with1report link
+  and7images preserved (DOC_MODEL128_BUDGET_V4_RESULTS_RECEIPT). Report backup2b45560.
 - Next: one scoped720831 check next wake, collect complete outputs when terminal
   and independently
   replay portable models with pinned versions, including best-round inference,
