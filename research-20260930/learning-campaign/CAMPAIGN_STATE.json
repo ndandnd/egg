@@ -1,8 +1,7 @@
 {
-  "updated_at_utc": "2026-09-30T23:05:13.243679+00:00",
-  "phase": "graph_v6_submitted_after_family_recovery",
+  "updated_at_utc": "2026-09-30T23:54:12.651497+00:00",
+  "phase": "family_v5_complete_numerically_replayed_graph_v6_running_at_last_observation",
   "active_job_ids": [
-    "722702",
     "722841"
   ],
   "completed_job_ids": [
@@ -89,7 +88,7 @@
     "notification_policy": "Substantive results, major decisions, failures or review artifacts only",
     "resource_policy": "Parallel label8 + training4; initial single-job limit superseded."
   },
-  "next_action": "Next heartbeat: one scoped squeue for722702 and722841; date/user/job-name-scoped UTC sacct for vanished arrays (job IDs can be reused). Collect complete recovery and graph artifacts when terminal, preserve all failures/time. Family combined replay uses original720831 tasks2,3,10 plus nine recovery722702 tasks and never silently replaces original failures. Graph runtimeprobes must pass before TRAIN; replay portable NPZ with pinned torch and selection/weights before reporting. Do not refit or rerun failed attempts automatically. Afterwards prepare bounded structured attention/decoder study and diversified-data protocol under latest model roadmap. GPT-6.1 Sol heavy implementation, Luna Max routine review; manuscript deferred.",
+  "next_action": "One scoped queue check for722841 at next follow-up; collect complete graph artifacts and date/user/job-name-scoped UTC sacct when terminal. Verify runtime probes, NPZ models, inner selection, probabilities and metrics before reporting; preserve failures and do not auto-retry. Then freeze a bounded matched physical decoding/charging/verification comparison of the declared baseline, v5 and graph policies, rather than selecting by these outer means. Version explicit battery/SOC/charger-context inputs and diversified synthetic designs separately. Keep DEV/final TEST sealed until their prospective evaluation rules are frozen. GPT-6.1 Sol heavy implementation; Luna Max routine review; manuscript deferred.",
   "stage1_results": "RESULTS_STAGE1.md",
   "stage1_model_analysis": "MODEL_STAGE1.md",
   "test_groups_unobserved": [
@@ -125,11 +124,10 @@
     "DOC_GRAPH_V6_LAUNCH_RECEIPT.json"
   ],
   "latest_observation": {
-    "source": "graph submission guard",
-    "only_preexisting_egg_array": "722702",
-    "graph_submitted": "722841",
-    "dependency": "afterany:722702",
-    "no_postsubmission_queue_or_outcome_read": true
+    "source": "single scoped Unicorn queue check in heartbeat 2026-09-30T23:32:03Z",
+    "family_recovery722702": "absent from queue; scoped accounting confirms all nine tasks COMPLETED 0:0; complete artifacts collected",
+    "graph722841": "tasks4-7 running,8-11 pending at check; no partial scientific outcomes read",
+    "repeated_queue_checks": false
   },
   "result_summarizer": "summarize_cost_aware_repair.py",
   "cost_aware_results": "RESULTS_COST_AWARE_REPAIR.md",
@@ -143,7 +141,7 @@
   "shared_interval_physical_pool_review": "SHARED_INTERVAL_PHYSICAL_POOL_REVIEW.json",
   "shared_interval_report_backup_commit": "8e17264ffc71eb9b5ed0851b429d5d3927f43ac8",
   "shared_interval_figure": "figures/shared_interval_2016_learned.png",
-  "local_follow_up": "XGBoost/CatBoost/ExtraTrees comparison implemented, tiny model/weighted-validation fixtures passed, independently reviewed, submitted720831. Prior longer training fully replayed: MLP benefits, tree extension mixed; anchors match; small repeated logistic drift retained. All artifacts/current directions documented; no reserved data opened.",
+  "local_follow_up": "Completed combined XGBoost/CatBoost/ExtraTrees saved-model numerical replay; modest classifier gains, no fleet benefit. Graph array722841 active at the single scoped queue observation; complete evidence to be collected next.",
   "shared_budget_results": "RESULTS_SHARED_BUDGET_REPAIR.md",
   "shared_budget_verification": "INDEPENDENT_REPLAY_SHARED_BUDGET.json",
   "shared_budget_physical_pool_review": "SHARED_BUDGET_PHYSICAL_POOL_REVIEW.json",
@@ -264,20 +262,12 @@
   },
   "active_label_job_ids": [],
   "active_training_array_ids": [
-    "722702",
     "722841"
   ],
   "route_model_launch_receipt": "LAUNCH_713295.json",
   "route_model_training_protocol": "ROUTE_MODEL_TRAINING_PROTOCOL.md",
   "physical_shard01_accounting": "ACCOUNTING_711779.json",
   "active_attempts": [
-    {
-      "array_job_id": "722702",
-      "remote_checkout": "/home/nc437/egg-route-families-20260930-v5-recovery1",
-      "attempt_relative": "result/physical_learning/20260930-route-model128-families-v5-recovery1",
-      "source_commit": "2df1ec9228ea3c18942ae465e73a5488acedcdd2",
-      "launch_receipt": "LAUNCH_722702.json"
-    },
     {
       "array_job_id": "722841",
       "remote_checkout": "/home/nc437/egg-route-graph-20260930-v6",
@@ -360,9 +350,10 @@
   "latest_training_submission": {
     "array_job_id": "722841",
     "submitted_at_utc": "2026-09-30T23:03:52Z",
-    "state": "SUBMITTED",
+    "state": "RUNNING_AT_LAST_SCOPED_OBSERVATION",
     "dependency": "afterany:722702",
-    "no_postsubmission_queue_or_partial_outcome_read": true
+    "no_postsubmission_queue_or_partial_outcome_read": false,
+    "partial_scientific_outcomes_read": false
   },
   "route_model32_conclusion": {
     "independent_groups": 32,
@@ -380,13 +371,6 @@
     "no_complete_route_feasibility_cost_or_online_speedup_claim": true
   },
   "active_training_attempts": [
-    {
-      "array_job_id": "722702",
-      "remote_checkout": "/home/nc437/egg-route-families-20260930-v5-recovery1",
-      "attempt_relative": "result/physical_learning/20260930-route-model128-families-v5-recovery1",
-      "source_commit": "2df1ec9228ea3c18942ae465e73a5488acedcdd2",
-      "launch_receipt": "LAUNCH_722702.json"
-    },
     {
       "array_job_id": "722841",
       "remote_checkout": "/home/nc437/egg-route-graph-20260930-v6",
@@ -556,5 +540,51 @@
   "route_graph_v6_environment": "ROUTE_GRAPH_ENVIRONMENT.json",
   "route_graph_v6_review": "ROUTE_MODEL_GRAPH_V6_REVIEW.md",
   "research_operating_preferences": "doc/RESEARCH_OPERATING_PREFERENCES.md",
-  "model_exploration_roadmap": "MODEL_EXPLORATION_ROADMAP.md"
+  "model_exploration_roadmap": "MODEL_EXPLORATION_ROADMAP.md",
+  "family_v5_recovery_accounting": "ACCOUNTING_722702.json",
+  "family_v5_recovery_result_manifest": "RESULT_MANIFEST_ROUTE_FAMILIES_V5_RECOVERY1.json",
+  "family_v5_recovery_raw_backup_commit": "72e429af7c256c28855bf9e1e6bebfc63b5c0fcd",
+  "family_v5_recovery_artifact_storage": "405 raw files remain local/remote; lossless per-task gzip tar archives verified byte-for-byte and committed; manifest documents restoration",
+  "family_v5_results": "ROUTE_FAMILIES_V5_RESULTS.md",
+  "family_v5_replay": "ROUTE_FAMILIES_V5_REPLAY.json",
+  "family_v5_result_review": "ROUTE_FAMILIES_V5_RESULT_REVIEW.md",
+  "family_v5_conclusion": {
+    "independent_timetables": 128,
+    "observed_source_fleets": 255,
+    "tasks": 12,
+    "saved_model_numerical_replay_passed": true,
+    "exact_all_family_probability_reproduction": false,
+    "full128_equal_timetable_scores": {
+      "catboost": {
+        "weighted_log_loss": 0.06929832457078434,
+        "average_precision": 0.8264841550521607,
+        "input_trip_count_topk_recall_mean_by_fleet": 0.6977479726093774
+      },
+      "extra_trees": {
+        "weighted_log_loss": 0.07050156067686644,
+        "average_precision": 0.8224068745757426,
+        "input_trip_count_topk_recall_mean_by_fleet": 0.6925988788381271
+      },
+      "inner_promoted": {
+        "weighted_log_loss": 0.07012720495564319,
+        "average_precision": 0.8262563676153714,
+        "input_trip_count_topk_recall_mean_by_fleet": 0.6939242628721914
+      },
+      "xgboost": {
+        "weighted_log_loss": 0.06941652958180486,
+        "average_precision": 0.8282704952887269,
+        "input_trip_count_topk_recall_mean_by_fleet": 0.696685543596134
+      }
+    },
+    "inner_promoted_family_counts": {
+      "extra_trees": 3,
+      "xgboost": 9
+    },
+    "numerical_qualification": "XGBoost cross-platform probability difference at most2 float32 ULPs; source rankings/threshold labels/inner choices unchanged; initial1e-8 probability check failure retained. CatBoost max1.11e-16, ExtraTrees0.",
+    "elapsed_task_seconds_including_failures": 1784,
+    "allocated_cpu_seconds_including_failures": 1973,
+    "original_failed_task_seconds": 79,
+    "fleet_cost_or_online_speedup_established": false
+  },
+  "family_v5_doc_update": "DOC_ROUTE_FAMILIES_V5_RESULTS_RECEIPT.json"
 }

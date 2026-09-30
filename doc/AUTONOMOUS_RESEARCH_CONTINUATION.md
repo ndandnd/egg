@@ -8,7 +8,48 @@ supersedes the earlier idle-monitor pause condition and blanket deferral of ML.
 Notify only substantive findings, major decisions, important failures or review
 artifacts. Continue useful local work between jobs; do not pause on an empty queue.
 
-## Latest checkpoint — graph models launched; GPT-6.1 preference saved
+## Latest checkpoint — tree-family comparison complete; graph study underway
+
+- Full v5 cohort is now complete: original720831 tasks2/3/10 plus recovered722702
+  tasks0/1/4/5/6/7/8/9/11. All recovery tasks COMPLETED0:0 on unicorn-cpu-75.
+  ACCOUNTING_722702.json:1272elapsed/allocatedCPUseconds. Combined original+recovery
+  totals1784taskseconds/1973allocatedCPUseconds, including79failedseconds. Original
+  SIGILL evidence remains; exact native-library/ISA cause still unproven.
+- ROUTE_FAMILIES_V5_RESULTS.md and ROUTE_FAMILIES_V5_REPLAY.json cover128TRAIN groups,
+ 255sourcefleets,72saved candidate models and36selected outermodels. No refit.
+  Full128 logloss/top-k: XGB .069417/.696686; Cat .069298/.697748; ExtraTrees
+  .070502/.692599; inner-promoted policy .070127/.693924. Existing histogram v3
+  .069894/.691360, extended v4 .070373/.696634. Gains are small and mixed across
+  metrics/subgroups; these classify observed incumbent edges, not optimal routes.
+- Inner-only family promotion remains XGB9/ExtraTrees3; outer means do not select
+  CatBoost or alter the policy. Same frozen17features/folds/weights; DEV/test sealed.
+  Local XGBoost probabilities differ from Linux by at most2float32ULPs (1.19e-7),
+  so replay is numerical, not bitwise. Complete source rankings, threshold labels,
+  inner choices unchanged. Saved-prediction metrics recomputed within1e-12. Initial
+  failed1e-8 probability check retained; Catmax1.11e-16/ExtraTrees0. Review is
+  ROUTE_FAMILIES_V5_RESULT_REVIEW.md. No fleet-cost or online-speedup benefit yet.
+- Complete405recoveryfiles are preserved local/remote and in9lossless Git archives
+  (1.148GB raw /455MB archive), every archived member byte/hash verified.
+  RESULT_MANIFEST_ROUTE_FAMILIES_V5_RECOVERY1.json provides exact restoration;
+  backup72e429af7c256c28855bf9e1e6bebfc63b5c0fcd is pushed. External Slurm log hashes
+  preserve omitted routine license stdout; scientific child stdout is archived.
+- The single scoped queue check this follow-up found graph722841 tasks4–7 running
+  and8–11 pending; graph outcomes were not opened. This is the only active recorded
+  EGG array. LAUNCH_722841.json / graph v6 protocol remain authoritative:12tasks%4,
+  1CPU/8GB/30min/native1,6CPUhcap,node75,no retry/requeue,exclude scaglione-compute-01.
+- Original Google Doc has the consolidated family result appended, preserving all
+  history and7nativeimages; final source-link/readback receipt recorded with this
+  milestone. Manuscript stays deferred. GPT-6.1Sol heavy implementation/analysis,
+  LunaMax review; ACTIVE heartbeat and model-family exploration direction persist.
+- Next: collect/replay complete graph722841 evidence after one scoped check; then
+  freeze a bounded matched physical decoder/charging/verification comparison of
+  the declared baseline/v5/graph policies. Do not promote a model by outer scores.
+  Explicit battery/SOC/charger-context features and diversified timetable designs
+  need a new version; keep current17feature studies unchanged. No reserved data
+  opened, no automatic retry, no other-project changes. Current agents finish this
+  review; no uncommitted implementation work is planned after the handoff.
+
+## Previous checkpoint — graph models launched; GPT-6.1 preference saved
 
 - User authorizes exploration of all promising models, explicitly including GNNs,
   and **GPT-6.1 Sol (`gpt-6.1-sol`) for heavy implementation**. Standing preference
