@@ -6,19 +6,13 @@ import argparse
 import csv
 import json
 from pathlib import Path
+import re
 from typing import Any
 
 
 ROOT = Path(__file__).resolve().parents[2]
 ATTEMPT = ROOT / "result/learning_repair/20260930-cost-aware-attempt1"
 OUTPUT = ROOT / "research-20260930/learning-campaign/COST_AWARE_REPAIR_CELLS.csv"
-CELLS = (
-    (1, "learning_s2016_n20", 20, "cost_only"),
-    (2, "learning_s2016_n20", 20, "cost_learned"),
-    (3, "learning_s2017_n28", 28, "cost_learned"),
-    (4, "learning_s2017_n28", 28, "cost_only"),
-)
-
 FIELDS = (
     "cell_order", "case", "services", "mode",
     "child_outcome", "child_return_code", "child_elapsed_seconds", "child_hard_timeout",
@@ -93,7 +87,7 @@ def _csv_value(value: Any) -> Any:
     return value
 
 
-def summarize_cell(attempt: Path, order: int, case: str, services: int,
+def summarize_cell(attempt: Path, order: int, case: str, services: int | None,
                    mode: str) -> dict[str, Any]:
     folder = attempt / case / "state0" / mode
     errors: list[str] = []
@@ -263,6 +257,25 @@ def summarize_cell(attempt: Path, order: int, case: str, services: int,
     return row
 
 
+def cells_for_attempt(attempt: Path) -> list[tuple[int, str, int | None, str]]:
+    """Read cell order from the frozen attempt design, not a fixed campaign list."""
+    frozen_path = attempt / "frozen.json"
+    frozen = json.loads(frozen_path.read_text(encoding="utf-8"))
+    design = frozen.get("design", {})
+    cells = design.get("cells")
+    if not isinstance(cells, list):
+        raise ValueError(f"{frozen_path} has no design.cells list")
+    rows = []
+    for order, cell in enumerate(cells, start=1):
+        if not isinstance(cell, dict) or not isinstance(cell.get("case"), str) \
+                or not isinstance(cell.get("mode"), str):
+            raise ValueError(f"Malformed frozen cell at position {order}")
+        match = re.search(r"_n(\d+)$", cell["case"])
+        services = int(match.group(1)) if match else None
+        rows.append((order, cell["case"], services, cell["mode"]))
+    return rows
+
+
 def main(argv: list[str] | None = None) -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--attempt", type=Path, default=ATTEMPT,
@@ -273,7 +286,7 @@ def main(argv: list[str] | None = None) -> None:
     attempt = args.attempt.resolve()
     output = args.output.resolve()
     output.parent.mkdir(parents=True, exist_ok=True)
-    rows = [summarize_cell(attempt, *cell) for cell in CELLS]
+    rows = [summarize_cell(attempt, *cell) for cell in cells_for_attempt(attempt)]
     temporary = output.with_suffix(output.suffix + ".tmp")
     with temporary.open("w", encoding="utf-8", newline="") as stream:
         writer = csv.DictWriter(stream, fieldnames=FIELDS, extrasaction="raise",
