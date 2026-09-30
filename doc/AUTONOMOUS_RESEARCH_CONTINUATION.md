@@ -8,7 +8,64 @@ supersedes the earlier idle-monitor pause condition and blanket deferral of ML.
 Notify only substantive findings, major decisions, important failures or review
 artifacts. Continue useful local work between jobs; do not pause on an empty queue.
 
-## Latest checkpoint — verified learning gains; 64-group training submitted
+## Latest checkpoint — 64-group gains verified; 128 training complete; route test submitted
+
+- User direction unchanged: sustained parallel ML/data work, manuscript deferred,
+  hourly automation ACTIVE. Root managed Sol implementation/analysis and Luna review;
+  all workers finished, no pending agent edits. Report substantive results only.
+- **64-group array717453 completed all12 tasks.** Saved models/predictions replayed
+  without refit under matching sklearn1.7.2. Equal-timetable boosted-tree recall is
+  69.6%; on the same original32 timetables, 68.8%→69.9%, log loss0.07378→0.07157
+  (23/32 improved), AP0.8152→0.8265. MLP common32 results nearly flat, AP/recall slightly
+  worse. These are modest, heterogeneous source-edge gains, not complete-route or
+  online-speedup evidence. Inner validation selected100 trees in3 tasks,200 in9;
+  MLP selected300-epoch cap throughout. See ROUTE_MODEL64_RESULTS.md, replay JSON,
+  ROUTE_MODEL64_REVIEW.md and figures/route_model32_to64_common32.{png,pdf}.
+  Replay pins both manifests and old32 replay plus common-shard input hashes.
+- All final label shards10–15 admitted once:48 groups,96 source fleets,288 target
+  plans, no new censors. Total **128 TRAIN timetables /1,019 replayed plans /five
+  preserved censors**. Source labels remain provisional when native budgets ended;
+  target OPTIMAL means fixed-route linear charging, not global curved-cost optimum.
+  Exact128 pool retains255/256 source fleets, all128 groups; only10037/source0 is
+  missing, with its known dependent target censors. See PHYSICAL_WAVE2_FINAL_ADMISSION.
+  Raw backup0794ec8; admitted pool backupb0cc428; verified64 report/figure backup4e218ef.
+- **128-group array718744 submitted20:37:04Z and all12 tasks subsequently confirmed
+  COMPLETED0:0 by the decoder dispatch guard. Its artifacts remain UNCOLLECTED.**
+  LAUNCH_718744.json; executionb0cc428; remote
+  `/home/nc437/egg-route-model128-20260930-v3`; attempt
+  `result/physical_learning/20260930-route-model128-v3`. PoolSHA
+  `d9aad5b5ea62fd82a8b4f6a3c20a95c57953ba12c7bf0949fa06004aa511c40d`.
+  Same frozen models/features/seeds;80fit/16inner/32outer per task. Next collect
+  complete model/wrapper/log/accounting artifacts and replay saved models, no refit.
+- **Route-decoder array718861 submitted20:48:25Z**, after confirming718744 finished.
+  Execution35f00cf; remote `/home/nc437/egg-route-decoder-train-20260930-v1`;
+  attempt `result/physical_learning/20260930-route-decoder-train-v1`.
+  LAUNCH_718861.json and ROUTE_DECODER_TRAIN_PILOT_V1_PROTOCOL.md govern. Four tasks,
+  at most4 concurrently,1CPU/8GB/30min/native1 each, total2requested CPUh, no retry or
+  requeue, excluded scaglione-compute-01. No postsubmission decoder queue/outcome read.
+  All prior label jobs are complete. Global ceiling remains12requested CPUs/96GB.
+- Decoder evaluates fixed TRAIN groups10036–10039, day tariff, seed17 logistic and
+  boosted models from32/64 banks. The four groups are out of bank for32 and outer
+  held out for64. Compare learned covers to cost-only cover, first/nearest/cheapest
+  exact-rescored source plans, cold native solving and retained-source solving.
+  Charge repair, independent physical replay and global hull verification remain
+  separate timed stages; source-topology matches count as reuse. Acquisition costs
+  joined only after all choices. Failed arms receive no fallback-success credit.
+  Five fixtures passed and bounded independent review found no launch blocker.
+- Submission guard initially mistook child718830 for an unrecorded job. Scoped
+  scontrol proved it belonged to718744; guard switched from child ID %A to parent %F.
+  Initial guard stopped before checkout/sbatch, so no decoder compute was duplicated.
+  DECODER_SUBMISSION_GUARD_RECEIPT.json preserves this infrastructure correction.
+- Original Google Doc appended with verified64/common32 findings, stopping behavior,
+  bank completeness and128 launch; two report/figure links verified, all7 prior native
+  figures preserved (DOC_MODEL64_RESULTS_RECEIPT.json). No manuscript revisions.
+- Next: collect128 first; one scoped decoder718861 check, collect if terminal and
+  review complete arm/score/failure receipts. Assess replayed feasibility, novelty,
+  exact target bill and matched stage timings before claiming benefit. Preserve all
+  failures and spent time; no retries. Advance the next versioned dataset/model/decoder
+  step from those findings. Keep dev/sealed tests and protected historical cases untouched.
+
+## Prior checkpoint — verified learning gains; 64-group training submitted
 
 - **32-group array716152 completed all 12 tasks.** Saved-model hashes, splits,
   preprocessing, predictions and metrics independently replayed without refitting.

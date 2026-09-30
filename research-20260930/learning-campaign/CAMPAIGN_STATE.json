@@ -1,14 +1,8 @@
 {
-  "updated_at_utc": "2026-09-30T19:46:30.173286+00:00",
-  "phase": "grouped32_verified_grouped64_submitted",
+  "updated_at_utc": "2026-09-30T20:50:12.891956+00:00",
+  "phase": "grouped128_completed_uncollected_route_decoder_submitted",
   "active_job_ids": [
-    "715491",
-    "715492",
-    "715493",
-    "715494",
-    "715495",
-    "715496",
-    "717453"
+    "718861"
   ],
   "completed_job_ids": [
     "677817",
@@ -34,12 +28,20 @@
     "712951",
     "712952",
     "715490",
-    "716152"
+    "716152",
+    "717453",
+    "715491",
+    "715492",
+    "715493",
+    "715494",
+    "715495",
+    "715496",
+    "718744"
   ],
-  "launch_receipt": "LAUNCH_PARALLEL_LABEL_WAVE2.json",
-  "source_commit": "6b29c7286f85f33dab92dd139be6b3082be3dbd8",
-  "remote_checkout": "/home/nc437/egg-physical-parallel-labels-20260930-wave2",
-  "attempt_relative": null,
+  "launch_receipt": "LAUNCH_718861.json",
+  "source_commit": "35f00cf7bd48a47ea3f6953399ecca4fdf4244e9",
+  "remote_checkout": "/home/nc437/egg-route-decoder-train-20260930-v1",
+  "attempt_relative": "result/physical_learning/20260930-route-decoder-train-v1",
   "startup_observation": {
     "recorded_at_utc": "2026-09-30T19:24:42.498936+00:00",
     "label_jobs_running": [
@@ -84,7 +86,7 @@
     "notification_policy": "Substantive results, major decisions, failures or review artifacts only",
     "resource_policy": "Parallel label8 + training4; initial single-job limit superseded."
   },
-  "next_action": "One scoped check of array717453 and label jobs715491\u2013715496. Collect complete outputs with accounting and all failures; admit each new label shard once. Replay saved64 models without refit and compare equal-timetable metrics plus the prespecified common32 groups. Once all shards0\u201315 are admitted, freeze the exact128 pool and launch under the recorded protocol/budget. Continue structured decoding and independent charging/global verification with matched classical baselines; dev and sealed tests stay untouched.",
+  "next_action": "Collect complete model128 artifacts/accounting from recorded checkout (all12tasks confirmed terminal at decoder dispatch); replay without refit and compare full128 plus common32 timetables. One scoped check of decoder718861; if complete collect all arm/score/failure/wrapper artifacts and accounting, independently review physical replay, topology novelty, target costs and matched stage times versus classical controls. Preserve failures, do not retry. Use findings for next versioned data/model/decoder step; do not stop at the128 checkpoint.",
   "stage1_results": "RESULTS_STAGE1.md",
   "stage1_model_analysis": "MODEL_STAGE1.md",
   "test_groups_unobserved": [
@@ -111,24 +113,18 @@
     "DOC_PARALLEL_LEARNING_RECEIPT.json",
     "DOC_ROUTE_MODEL_PILOT_RESULTS_RECEIPT.json",
     "DOC_GROUPED32_LAUNCH_RECEIPT.json",
-    "DOC_MODEL32_RESULTS_RECEIPT.json"
+    "DOC_MODEL32_RESULTS_RECEIPT.json",
+    "DOC_MODEL64_RESULTS_RECEIPT.json"
   ],
   "latest_observation": {
-    "recorded_at_utc": "2026-09-30T19:31:52.105825+00:00",
-    "source": "single scoped queue/accounting check at heartbeat19:27",
-    "label_jobs_running_last_check": [
-      "715491",
-      "715492",
-      "715493",
-      "715494",
-      "715495",
-      "715496"
-    ],
-    "completed_model_array": "716152",
-    "all12tasks_completed": true,
-    "completed_label_job": "715490",
-    "model_allocated_cpu_seconds": 784,
-    "model_receipted_seconds": 351.7863633460365
+    "recorded_at_utc": "2026-09-30T20:50:12.891956+00:00",
+    "source": "Decoder dispatch guard: scoped prior128 sacct terminal check, no scientific output read",
+    "model128_array": "718744",
+    "all12tasks_completed_exit_zero": true,
+    "model128_outputs_collected": false,
+    "decoder_array": "718861",
+    "decoder_state": "SUBMITTED",
+    "no_decoder_postsubmission_observation": true
   },
   "result_summarizer": "summarize_cost_aware_repair.py",
   "cost_aware_results": "RESULTS_COST_AWARE_REPAIR.md",
@@ -142,7 +138,7 @@
   "shared_interval_physical_pool_review": "SHARED_INTERVAL_PHYSICAL_POOL_REVIEW.json",
   "shared_interval_report_backup_commit": "8e17264ffc71eb9b5ed0851b429d5d3927f43ac8",
   "shared_interval_figure": "figures/shared_interval_2016_learned.png",
-  "local_follow_up": "32-group saved-model predictions independently replayed; boosted trees improve held-timetable ranking over simple controls. Fresh censor-aware64/128 pooling reviewed. Exact64 prefix submitted with unchanged models/configs and original32 comparison fixed prospectively. No route-feasibility or speedup claim.",
+  "local_follow_up": "64-group models strictly replayed and reviewed; common32 gains modest, MLP nearly flat. All128 TRAIN groups admitted. Four-group route decoder implemented, five fixtures passed, reviewed and submitted after model128 completion. Documentation and GitHub updated; manuscript deferred.",
   "shared_budget_results": "RESULTS_SHARED_BUDGET_REPAIR.md",
   "shared_budget_verification": "INDEPENDENT_REPLAY_SHARED_BUDGET.json",
   "shared_budget_physical_pool_review": "SHARED_BUDGET_PHYSICAL_POOL_REVIEW.json",
@@ -261,50 +257,17 @@
     "requested_cpus": 12,
     "requested_memory_gb": 96
   },
-  "active_label_job_ids": [
-    "715491",
-    "715492",
-    "715493",
-    "715494",
-    "715495",
-    "715496"
-  ],
-  "active_training_array_ids": [
-    "717453"
-  ],
+  "active_label_job_ids": [],
+  "active_training_array_ids": [],
   "route_model_launch_receipt": "LAUNCH_713295.json",
   "route_model_training_protocol": "ROUTE_MODEL_TRAINING_PROTOCOL.md",
   "physical_shard01_accounting": "ACCOUNTING_711779.json",
   "active_attempts": [
     {
-      "shard": 10,
-      "job_id": "715491",
-      "attempt_relative": "result/physical_learning/20260930-shard10-attempt1"
-    },
-    {
-      "shard": 11,
-      "job_id": "715492",
-      "attempt_relative": "result/physical_learning/20260930-shard11-attempt1"
-    },
-    {
-      "shard": 12,
-      "job_id": "715493",
-      "attempt_relative": "result/physical_learning/20260930-shard12-attempt1"
-    },
-    {
-      "shard": 13,
-      "job_id": "715494",
-      "attempt_relative": "result/physical_learning/20260930-shard13-attempt1"
-    },
-    {
-      "shard": 14,
-      "job_id": "715495",
-      "attempt_relative": "result/physical_learning/20260930-shard14-attempt1"
-    },
-    {
-      "shard": 15,
-      "job_id": "715496",
-      "attempt_relative": "result/physical_learning/20260930-shard15-attempt1"
+      "kind": "route_decoder",
+      "array_job_id": "718861",
+      "attempt_relative": "result/physical_learning/20260930-route-decoder-train-v1",
+      "remote_checkout": "/home/nc437/egg-route-decoder-train-20260930-v1"
     }
   ],
   "physical_shard01_dataset": "result/physical_learning/20260930-shard01-dataset-v1",
@@ -314,8 +277,8 @@
   "route_model_raw_backup_commit": "9c275ae",
   "route_model_accounting": "ACCOUNTING_713295.json",
   "route_model_result_manifest": "RESULT_MANIFEST_ROUTE_MODEL_PILOT.json",
-  "physical_admitted_training_groups": 80,
-  "physical_replayed_plans": 635,
+  "physical_admitted_training_groups": 128,
+  "physical_replayed_plans": 1019,
   "physical_explicit_censors": 5,
   "route_model_results": "RESULTS_ROUTE_MODEL_PILOT.md",
   "route_model_review": "ROUTE_MODEL_PILOT_REVIEW.json",
@@ -371,7 +334,7 @@
   "physical_shard09_admission": "PHYSICAL_SHARD09_ADMISSION.md",
   "route_model64_launch_receipt": "LAUNCH_717453.json",
   "route_model64_protocol": "ROUTE_MODEL64_128_V3_PROTOCOL.md",
-  "route_model64_review": "ROUTE_MODEL64_V3_REVIEW.md",
+  "route_model64_review": "ROUTE_MODEL64_REVIEW.md",
   "route_model64_pool_manifest": "result/physical_learning/20260930-route-pool64-v3/pool_manifest.json",
   "route_model64_pool_sha256": "64791ec33307612bd8ad7f3c2396c42e0ffdc44717d2c865fe268f61bdab5eb0",
   "route_model64_execution_commit": "8da9d59e17f8087aed9790be85fa075431217823",
@@ -379,8 +342,8 @@
   "route_model32_report_backup_commit": "ff40919b562d63166938d3eae29b75347218860c",
   "physical_shard09_report_backup_commit": "ff40919b562d63166938d3eae29b75347218860c",
   "latest_training_submission": {
-    "array_job_id": "717453",
-    "submitted_at_utc": "2026-09-30T19:41:59Z",
+    "array_job_id": "718744",
+    "submitted_at_utc": "2026-09-30T20:37:04Z",
     "state": "SUBMITTED",
     "no_postsubmission_queue_or_partial_outcome_read": true
   },
@@ -399,12 +362,49 @@
     "all_mlp_and_boosted_runs_selected_maximum_inner_checkpoint": true,
     "no_complete_route_feasibility_cost_or_online_speedup_claim": true
   },
-  "active_training_attempts": [
-    {
-      "array_job_id": "717453",
-      "attempt_relative": "result/physical_learning/20260930-route-model64-v3",
-      "remote_checkout": "/home/nc437/egg-route-model64-20260930-v3",
-      "source_commit": "8da9d59e17f8087aed9790be85fa075431217823"
-    }
+  "active_training_attempts": [],
+  "route_model64_accounting": "ACCOUNTING_717453.json",
+  "route_model64_result_manifest": "RESULT_MANIFEST_ROUTE_MODEL64.json",
+  "route_model64_results": "ROUTE_MODEL64_RESULTS.md",
+  "route_model64_replay": "ROUTE_MODEL64_REPLAY.json",
+  "route_model64_raw_backup_commit": "0794ec8",
+  "physical_wave2_final_admission": "PHYSICAL_WAVE2_FINAL_ADMISSION.md",
+  "physical_wave2_final_admitted_backup_commit": "b0cc428cd13d3b47fb9b2622bc6b41f102542703",
+  "route_model128_launch_receipt": "LAUNCH_718744.json",
+  "route_model128_execution_commit": "b0cc428cd13d3b47fb9b2622bc6b41f102542703",
+  "route_model128_pool_manifest": "result/physical_learning/20260930-route-pool128-v3/pool_manifest.json",
+  "route_model128_pool_sha256": "d9aad5b5ea62fd82a8b4f6a3c20a95c57953ba12c7bf0949fa06004aa511c40d",
+  "route_decoder_protocol": "ROUTE_DECODER_TRAIN_PILOT_V1_PROTOCOL.md",
+  "route_model64_conclusion": {
+    "held_out_groups": 64,
+    "observed_source_fleets": 127,
+    "tasks_completed": 12,
+    "strict_saved_model_replay": true,
+    "hist_boosted_common32_log_loss_32_to64": [
+      0.07378,
+      0.07157
+    ],
+    "hist_boosted_common32_topk_recall_32_to64": [
+      0.68792,
+      0.69867
+    ],
+    "hist_boosted_common32_log_loss_groups_improved": 23,
+    "mlp_common32_gain": "nearly flat; AP and top-k slightly worse",
+    "hist_boosted_inner_selected_iterations": {
+      "100": 3,
+      "200": 9
+    },
+    "complete_route_feasibility_or_speedup_established": false
+  },
+  "route_model64_report_backup_commit": "4e218ef081ec4a3c27a6603c969e7e9134c9cb9a",
+  "route_decoder_source_commit": "35f00cf7bd48a47ea3f6953399ecca4fdf4244e9",
+  "route_decoder_review": "ROUTE_DECODER_TRAIN_PILOT_V1_REVIEW.md",
+  "route_decoder_prior_array_guard_receipt": "DECODER_SUBMISSION_GUARD_RECEIPT.json",
+  "active_decoder_array_ids": [
+    "718861"
+  ],
+  "route_decoder_launch_receipt": "LAUNCH_718861.json",
+  "completed_uncollected_array_ids": [
+    "718744"
   ]
 }
