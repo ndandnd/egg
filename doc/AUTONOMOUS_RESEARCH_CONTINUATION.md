@@ -8,7 +8,70 @@ supersedes the earlier idle-monitor pause condition and blanket deferral of ML.
 Notify only substantive findings, major decisions, important failures or review
 artifacts. Continue useful local work between jobs; do not pause on an empty queue.
 
-## Latest checkpoint — fixed-source charging comparison submitted
+## Latest checkpoint — grouped charge-response learning ready for one launch
+
+- No active EGG job: 696684 completed, all eight direct and eight recharged
+  plans independently verified. Best recharged costs 516.150310 /684.511264 /
+  522.238860 /683.304406 for seeds 2016–2019. Both 28-service cases improve
+  their archived native controls; nonlinear/global optimality remains unknown.
+  Source acquisition separately paid. Slurm84s/wrapper78s, requested1CPU but
+  allocated2, native thread1, 8GB, MaxRSS154000KiB; all actual usage preserved.
+- Raw evidence e8fb362; independent replay2bdaaef; report/CSV/figure55e3e16
+  backed up to GitHub. Original Google Doc append, report link and fifth figure
+  verified, with all four previous images preserved. Receipt:
+  DOC_FIXED_SOURCE_CHARGE_RESULTS_RECEIPT.json. Result workers finished.
+- New charge-response learning runner/model/protocol/wrapper/tests are ready.
+  Fresh train2022–27 (12/20/28 services twice), dev2028–31 (20/28 twice).
+  Twenty source cells, twelve training charging labels, then all four frozen
+  predictions before eight dev charging and four dev cold cells:44 total.
+  Fixed ridge1 predicts per-trip post-charge cost change; train-only scaling,
+  no tuning. All six pairs must replay; otherwise model failure is preserved
+  and independent controls continue. Old EdgePrior retains exact projection rule.
+- Labels describe the pinned linear-tariff charging procedure's nonlinear cost,
+  not minimum nonlinear route cost. Compare cheapest-direct, nearest-price,
+  old EdgePrior and ridge one-LP choices against paid two-LP best and cold.
+  Account for source acquisition/model preparation/inference/LP/replay separately.
+  Report candidate-pool excess, not global regret or premature speedup claims.
+- Eight focused tests, wrapper syntax, design and diff checks passed. Independent
+  bounded reviews checked leakage/order/failure continuation/baseline semantics;
+  root verified final fixes.23sourcepins/3old-model-inputpins. Budget44×100s
+  children +60sfit, controller5400/shell5700/Slurm6000s;1CPU8GBthread1,
+  no retry/requeue, exclude scaglione-compute-01. Reserved2004/05/2020/21untouched.
+- Root next: commit/push and submit once from fresh
+  /home/nc437/egg-charge-response-learning-20260930, exclusive attempt
+  result/learning_campaign/20260930-charge-response-attempt1. Launch guard must
+  reject any active EGG job/existing checkout. Record job/receipt before ending.
+  Existing hourly automation ACTIVE. Read newest state before acting.
+
+## Prior checkpoint — charging comparison collected; training-label follow-up being scoped
+
+- Job 696684 COMPLETED exit 0 in 84 Slurm seconds (78 wrapper seconds).
+  Requested one CPU; Slurm allocated two, while native threads remained one.
+  8 GB, MaxRSS 154000 KiB, node snavely-cpu-16. Eight cells completed; complete
+  raw attempt/wrapper/logs collected and 77 files hashed (68 Git-included).
+  ACCOUNTING_696684.json / RESULT_MANIFEST_FIXED_SOURCE_CHARGE.json preserve it.
+  No active EGG job as of collection. Existing hourly automation ACTIVE.
+- All eight fixed-source charging LPs returned replayed plans with linear-LP
+  status OPTIMAL; full nonlinear/global optimality remains unknown. Best of two
+  nonlinear costs: 2016 516.150310, 2017 684.511264, 2018 522.238860,
+  2019 683.304406. Both 28-service cases improve their archived native target
+  controls. Child times about 5–6 seconds; source acquisition is separately paid.
+  No matched-runtime speedup claim. Independent replay now verifies all costs,
+  topology, identities and hashes; nonlinear/global optimality still unknown.
+- Root manages: Energy verifies eight plans/topologies/costs and scoped bounds;
+  Luna writes reproducible CSV/report/figure; Sol implements fresh grouped training
+  with route quality judged after charging rather than inherited schedules.
+  Approved44cellprofile: train2022–27 (12/20/28 twice), dev2028–31 (20/28 twice);
+  20source →12trainLP →fixedridgefit/inference →8devLP+4devcold. Training-only
+  scaling, fixed hyperparameters, no tuning; six trainpairs exploratory. Perchild100s,
+  trainer60s, controller5400/shell5700/Slurm6000s (100min),1CPU8GBthread1.
+  Failures preserved; failed learning must not stop independent dev controls.
+  No new launch before specific protocol/code/resource budget review.
+- Next: finish current evidence review, GitHub backup and original Google Doc
+  append, then implement/launch the next bounded data/training package. Keep
+  reserved seeds 2004/2005/2020/2021 untouched; no duplicate submissions.
+
+## Prior checkpoint — fixed-source charging comparison submitted
 
 - **Recorded EGG job 696684**, submitted 2026-09-30T13:09:07Z after a guard
   found no active EGG job. No post-submission queue/outcome inspection yet.
