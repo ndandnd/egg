@@ -34,6 +34,14 @@ target-hull lower bound of 585.913858, giving a same-market physical-optimum
 enclosure of [597.829694, 685.695043] from the new lower and feasible hull
 column.
 
+A [review of 21 saved physical plans](SHARED_BUDGET_PHYSICAL_POOL_REVIEW.md)
+independently replays that upper-bound fleet. At its own-load marginal prices,
+another replayed plan lowers the price-taking objective by at least 5.092135
+cost units while increasing true system cost. This is a witness at the saved
+incumbent only: the wide physical bound prevents a conclusion about support of
+the unknown exact optimum. The [candidate replay receipt](INDEPENDENT_REPLAY_SHARED_BUDGET.json)
+also verifies both direct repairs, their hashes and shared charging constraints.
+
 | Arm | Inference (s) | Cover (s) | Charging + native replay (s) | Repair total (s) | Independent replay (s) | Pool preparation (s) | Hull (s) | Result / child wall (s) |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|
 | Learned | 0.075 | 32.732 | 0.792 | 33.600 | 0.105 | 0.296 | 61.193 | 97.892 / 98.388 |
