@@ -10,6 +10,18 @@ artifacts. Continue useful local work between jobs; do not pause on an empty que
 
 ## Latest checkpoint — frozen-model tariff transfer submitted
 
+- New user steering: broaden battery capacity and synthetic-route regimes;
+  current 80-kWh usable span is a synthetic setting. Hyundai confirms 290.4-kWh
+  nameplate; Son et al. use 20–80% SOC, giving 174.24 kWh at that pack size.
+  Proposed 10–90% sensitivity gives 232.32 kWh. See the sourced next-dataset
+  design BATTERY_REGIMES_AND_TRAINING_DIRECTION.md. No frozen attempt changed.
+  Current ridge used only six training groups/twelve labels and a one-shot fit;
+  next data work should expand independent physical/tariff regimes, not epochs.
+  First collect 700498, then freeze a bounded implementation/labeling protocol.
+- Latest scoped observation during this user question: 700498 RUNNING after
+  17 minutes, one allocated CPU, 8 GB requested, on snavely-cpu-01. No partial
+  scientific outcome inspected. This supersedes the unpolled launch observation
+  below; no second job was submitted.
 - **Recorded EGG job 700498**, submitted 2026-09-30T15:08:01Z after the guard
   found no active EGG job. No subsequent queue/outcome inspection yet.
   Do not duplicate. Hourly automation ACTIVE; all workers finished.
