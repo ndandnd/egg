@@ -26,11 +26,17 @@ artifacts. Continue useful local work between jobs; do not pause on an empty que
   job IDs are excluded. All12 elapsed total512s, allocatedCPU701s; task2 allocated2
   despite request1. Result manifest and stdout hash receipts preserve every failure.
   ROUTE_FAMILIES_V5_PARTIAL_REVIEW.md independently checks completeness/accounting.
-- Work in progress: Sol6.1 `sol61_runtime_repair` prepares an isolated, explicitly
-  diagnosed recovery for the nine failed tasks; no automatic retry or launch yet.
+- Recovery **array722702 submitted22:58:44Z**, source2df1ec9228ea3c18942ae465e73a5488acedcdd2.
+  LAUNCH_722702.json records9tasks%4 on observed working unicorn-cpu-75,1requestedCPU/8GB/30min,
+  total4.5requestedCPUh. New immutable namespace preserves original9failures+3successes.
+  Exact18originalsourcehashes verified beforedispatch; sixrecovery+fiveoriginaltests and
+  independent Luna review passed. No postsubmission queue/outcome read.
   Sol6.1 `sol61_graph_models` implements PyTorch CPU message passing and graph attention
   with a frozen grouped pilot and tiny fixtures, no bank fit yet. Luna reviews.
-  Root owns submission/state/GitHub/Google Doc. No active EGG job after720831.
+  Root owns submission/state/GitHub/Google Doc. Only722702 is currently recorded active.
+  Google Doc appended with graphdirection and partialfailure;7images retained.
+  Graphisolatedruntime torch2.4.1+cpu installed separately; loginimports andpipcheck pass,
+  native execution-node probes remain prospective. See ROUTE_GRAPH_ENVIRONMENT.json.
 - Next: review and freeze recovery protocol/source before launch; preserve completed
   tasks without refitting. Then replay all saved family models before scientific
   comparisons. Graph package needs isolated torch runtime/compatibility evidence

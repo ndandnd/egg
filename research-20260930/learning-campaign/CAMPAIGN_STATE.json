@@ -1,7 +1,9 @@
 {
-  "updated_at_utc": "2026-09-30T22:49:06.187735+00:00",
-  "phase": "family_native_failure_diagnosis_and_graph_implementation",
-  "active_job_ids": [],
+  "updated_at_utc": "2026-09-30T22:59:39.959518+00:00",
+  "phase": "model_families_recovery1_submitted_graph_implementation",
+  "active_job_ids": [
+    "722702"
+  ],
   "completed_job_ids": [
     "677817",
     "678708",
@@ -38,10 +40,10 @@
     "718861",
     "719750"
   ],
-  "launch_receipt": "LAUNCH_720831.json",
-  "source_commit": "75dd4cf19f1f735cc3dea559567da3b2bd32013e",
-  "remote_checkout": "/home/nc437/egg-route-families-20260930-v5",
-  "attempt_relative": "result/physical_learning/20260930-route-model128-families-v5",
+  "launch_receipt": "LAUNCH_722702.json",
+  "source_commit": "2df1ec9228ea3c18942ae465e73a5488acedcdd2",
+  "remote_checkout": "/home/nc437/egg-route-families-20260930-v5-recovery1",
+  "attempt_relative": "result/physical_learning/20260930-route-model128-families-v5-recovery1",
   "startup_observation": {
     "recorded_at_utc": "2026-09-30T19:24:42.498936+00:00",
     "label_jobs_running": [
@@ -86,7 +88,7 @@
     "notification_policy": "Substantive results, major decisions, failures or review artifacts only",
     "resource_policy": "Parallel label8 + training4; initial single-job limit superseded."
   },
-  "next_action": "Freeze independently reviewed infrastructure recovery for nine SIGILL tasks before submitting a new immutable attempt. Preserve three successes. Graph package in implementation; no bankfit until protocol/runtime/review. Do not poll empty queue. GPT-6.1 Sol heavy implementation preference persisted in project memory and automation.",
+  "next_action": "Recovery722702 submitted; preserve original three successes and nine SIGILL failures. Graphv6 implementation/review in progress with isolatedCPUtorchready. Freeze before graph launch; afterany recovery dependency if still active so training concurrency remains4. Next wake collect terminal recovery and map provenance before complete family analysis.",
   "stage1_results": "RESULTS_STAGE1.md",
   "stage1_model_analysis": "MODEL_STAGE1.md",
   "test_groups_unobserved": [
@@ -117,7 +119,8 @@
     "DOC_MODEL64_RESULTS_RECEIPT.json",
     "DOC_MODEL128_DECODER_RESULTS_RECEIPT.json",
     "DOC_MODEL_FAMILIES_V5_RECEIPT.json",
-    "DOC_MODEL128_BUDGET_V4_RESULTS_RECEIPT.json"
+    "DOC_MODEL128_BUDGET_V4_RESULTS_RECEIPT.json",
+    "DOC_GRAPH_DIRECTION_RECEIPT.json"
   ],
   "latest_observation": {
     "array_job_id": "720831",
@@ -274,11 +277,21 @@
     "requested_memory_gb": 96
   },
   "active_label_job_ids": [],
-  "active_training_array_ids": [],
+  "active_training_array_ids": [
+    "722702"
+  ],
   "route_model_launch_receipt": "LAUNCH_713295.json",
   "route_model_training_protocol": "ROUTE_MODEL_TRAINING_PROTOCOL.md",
   "physical_shard01_accounting": "ACCOUNTING_711779.json",
-  "active_attempts": [],
+  "active_attempts": [
+    {
+      "array_job_id": "722702",
+      "remote_checkout": "/home/nc437/egg-route-families-20260930-v5-recovery1",
+      "attempt_relative": "result/physical_learning/20260930-route-model128-families-v5-recovery1",
+      "source_commit": "2df1ec9228ea3c18942ae465e73a5488acedcdd2",
+      "launch_receipt": "LAUNCH_722702.json"
+    }
+  ],
   "physical_shard01_dataset": "result/physical_learning/20260930-shard01-dataset-v1",
   "physical_shard01_results": "RESULTS_PHYSICAL_SHARD01.md",
   "physical_shard01_derived": "PHYSICAL_SHARD01_DERIVED.json",
@@ -313,9 +326,9 @@
   "route_model_review_backup_commit": "febc81543784694f1db702dbac3da9f7b8183cbe",
   "physical_shard01_review_backup_commit": "febc81543784694f1db702dbac3da9f7b8183cbe",
   "current_work_owners": {
-    "sol61_runtime_repair": "Infrastructure recovery source/protocol; no submission",
-    "sol61_graph_models": "New graph package; no bank fit",
-    "luna_family_review": "Accounting and recovery review"
+    "sol61_graph_models": "Finishing graph package fixtures",
+    "sol61_runtime_repair": "Independent graph review",
+    "root": "Graph freeze/deployment after review"
   },
   "modern_ml_methods_note": "MODERN_ML_METHODS_AND_VALIDATION.md",
   "route_training_environment": "ROUTE_TRAINING_ENVIRONMENT.json",
@@ -355,9 +368,9 @@
   "route_model32_report_backup_commit": "ff40919b562d63166938d3eae29b75347218860c",
   "physical_shard09_report_backup_commit": "ff40919b562d63166938d3eae29b75347218860c",
   "latest_training_submission": {
-    "array_job_id": "720831",
-    "submitted_at_utc": "2026-09-30T22:19:24Z",
-    "state": "TERMINAL_PARTIAL_SIGILL",
+    "array_job_id": "722702",
+    "submitted_at_utc": "2026-09-30T22:58:44Z",
+    "state": "SUBMITTED",
     "no_postsubmission_queue_or_partial_outcome_read": true
   },
   "route_model32_conclusion": {
@@ -375,7 +388,15 @@
     "all_mlp_and_boosted_runs_selected_maximum_inner_checkpoint": true,
     "no_complete_route_feasibility_cost_or_online_speedup_claim": true
   },
-  "active_training_attempts": [],
+  "active_training_attempts": [
+    {
+      "array_job_id": "722702",
+      "remote_checkout": "/home/nc437/egg-route-families-20260930-v5-recovery1",
+      "attempt_relative": "result/physical_learning/20260930-route-model128-families-v5-recovery1",
+      "source_commit": "2df1ec9228ea3c18942ae465e73a5488acedcdd2",
+      "launch_receipt": "LAUNCH_722702.json"
+    }
+  ],
   "route_model64_accounting": "ACCOUNTING_717453.json",
   "route_model64_result_manifest": "RESULT_MANIFEST_ROUTE_MODEL64.json",
   "route_model64_results": "ROUTE_MODEL64_RESULTS.md",
@@ -528,5 +549,7 @@
     "720831"
   ],
   "route_model_families_v5_accounting": "ACCOUNTING_720831.json",
-  "route_model_families_v5_partial_manifest": "RESULT_MANIFEST_ROUTE_FAMILIES_V5_PARTIAL.json"
+  "route_model_families_v5_partial_manifest": "RESULT_MANIFEST_ROUTE_FAMILIES_V5_PARTIAL.json",
+  "route_model_families_v5_recovery1_launch_receipt": "LAUNCH_722702.json",
+  "route_model_families_v5_raw_backup_commit": "cb35a91937efecc2b65106823906b04704d0a905"
 }
