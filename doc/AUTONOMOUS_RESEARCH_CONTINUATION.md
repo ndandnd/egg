@@ -8,7 +8,37 @@ supersedes the earlier idle-monitor pause condition and blanket deferral of ML.
 Notify only substantive findings, major decisions, important failures or review
 artifacts. Continue useful local work between jobs; do not pause on an empty queue.
 
-## Latest checkpoint — frozen-model tariff transfer submitted
+## Latest checkpoint — first physical-learning shard ready for launch
+
+- User priority is extensive ML work; manuscript drafting is set aside. The
+  hourly automation was updated and remains ACTIVE. Continue dataset collection,
+  grouped learning curves and route-proposal development beyond smoke tests.
+- Job 700498 completed: 1104 Slurm / 1099 wrapper seconds, one CPU, 8 GB,
+  285268 KiB MaxRSS. All 44 physical plans/costs independently replayed and all
+  paired summary metrics checked. Ridge switches under tariffs but performs
+  worse than the simple controls: mean excess 0.5342 vs EdgePrior 0.0670 and
+  nearest-price 0.1540. Four independent groups, twelve variants. Raw backup
+  ff682c1a, report/replay eb6bde5. Google Doc learning-priority append and two
+  links verified with all six figures preserved: DOC_LEARNING_PRIORITY_RECEIPT.json.
+- New generator and shard runner are ready: registry 128 train / 32 dev / 32
+  sealed test, first eight training groups and 64 cells (16 source + 48 charging).
+  Three explicit battery spans, consistent drive/idle energy, depot opportunities
+  and a corrected full 54-combination physical factorial. All 128 training
+  constructive fleets replayed once; no development/test case materialized.
+  Eight focused tests, shell/design checks and independent physical review passed.
+- Eighteen source pins; exclusive attempt
+  result/physical_learning/20260930-shard00-attempt1. First allocation one CPU,
+  8 GB, one native/BLAS thread, two hours; child100/controller6600/shell6900,
+  no retry/requeue, exclude scaglione-compute-01. No active job yet. Root publishes
+  and makes one guarded launch from /home/nc437/egg-physical-learning-20260930.
+  PROTOCOL_PHYSICAL_LEARNING.md and PHYSICAL_LEARNING_LAUNCH_REVIEW.md govern.
+- After collection, perform compact data-health/replay checks and advance new
+  training shards toward 32/64/128 groups, with stronger models and route proposals.
+  LEARNING_SCALE_PLAN.md records grouped validation, learning curves, baseline
+  comparisons and a subsequent modest parallel-worker option. Freeze any later
+  resource expansion before launch. No repeated broad qualification campaigns.
+
+## Prior checkpoint — frozen-model tariff transfer submitted
 
 - New user steering: broaden battery capacity and synthetic-route regimes;
   current 80-kWh usable span is a synthetic setting. Hyundai confirms 290.4-kWh

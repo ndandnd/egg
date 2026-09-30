@@ -1,9 +1,7 @@
 {
-  "updated_at_utc": "2026-09-30T15:27:58.629734+00:00",
-  "phase": "tariff_response_transfer_submitted",
-  "active_job_ids": [
-    "700498"
-  ],
+  "updated_at_utc": "2026-09-30T15:57:41.308696+00:00",
+  "phase": "physical_learning_shard0_ready_for_launch",
+  "active_job_ids": [],
   "completed_job_ids": [
     "677817",
     "678708",
@@ -15,7 +13,8 @@
     "696067",
     "696441",
     "696684",
-    "697180"
+    "697180",
+    "700498"
   ],
   "launch_receipt": "LAUNCH_700498.json",
   "source_commit": "15b0053aa2aaaea3d9ffbaafdc84dbf9c803af92",
@@ -32,7 +31,7 @@
     "cadence": "hourly",
     "notification_policy": "Substantive results, major decisions, failures or review artifacts only"
   },
-  "next_action": "Make one scoped queue check of 700498. If vanished, collect scoped accounting and the complete tariff-transfer attempt. Verify immutable choices, variant/source identities, paired exact costs and all spent time; analyze by four timetable groups. No outcome-tuned refit or reserve access.",
+  "next_action": "Complete reviewed physical-learning generator and first 8-train-group/64-cell shard, publish protocol and submit once. Registry128train/32dev/32sealedtest. Audit shard then advance sample sizes32/64/128 and route-proposal training.",
   "stage1_results": "RESULTS_STAGE1.md",
   "stage1_model_analysis": "MODEL_STAGE1.md",
   "test_groups_unobserved": [
@@ -52,17 +51,20 @@
     "DOC_SHARED_BUDGET_RESULTS_RECEIPT.json",
     "DOC_TRANSFER_RESULTS_RECEIPT.json",
     "DOC_FIXED_SOURCE_CHARGE_RESULTS_RECEIPT.json",
-    "DOC_CHARGE_RESPONSE_RESULTS_RECEIPT.json"
+    "DOC_CHARGE_RESPONSE_RESULTS_RECEIPT.json",
+    "DOC_LEARNING_PRIORITY_RECEIPT.json"
   ],
   "latest_observation": {
     "job_id": "700498",
-    "state": "RUNNING",
-    "elapsed_seconds": 1020,
+    "state": "COMPLETED",
+    "exit_code": "0:0",
+    "elapsed_seconds": 1104,
+    "wrapper_elapsed_seconds": 1099,
     "allocated_cpus": 1,
     "requested_memory_gb": 8,
+    "batch_max_rss_kib": 285268,
     "node": "snavely-cpu-01",
-    "source": "single scoped squeue and sacct check during user research-status question",
-    "scientific_outcomes_inspected": false
+    "source": "scoped sacct plus collected wrapper receipt"
   },
   "result_summarizer": "summarize_cost_aware_repair.py",
   "cost_aware_results": "RESULTS_COST_AWARE_REPAIR.md",
@@ -76,7 +78,7 @@
   "shared_interval_physical_pool_review": "SHARED_INTERVAL_PHYSICAL_POOL_REVIEW.json",
   "shared_interval_report_backup_commit": "8e17264ffc71eb9b5ed0851b429d5d3927f43ac8",
   "shared_interval_figure": "figures/shared_interval_2016_learned.png",
-  "local_follow_up": "User requests larger battery settings and varied synthetic routes. New direction records Elec City sized SOC profiles and several dozen independent training groups; this is a next-dataset design, not a launched protocol. Collect current tariff transfer before choosing the next bounded launch.",
+  "local_follow_up": "All128 training witnesses replayed, eight focused tests and bounded independent reviews passed. Eighteen source pins. Root publishes reviewed source and submits shard0 once; no active job yet. All workers finished.",
   "shared_budget_results": "RESULTS_SHARED_BUDGET_REPAIR.md",
   "shared_budget_verification": "INDEPENDENT_REPLAY_SHARED_BUDGET.json",
   "shared_budget_physical_pool_review": "SHARED_BUDGET_PHYSICAL_POOL_REVIEW.json",
@@ -103,5 +105,31 @@
   "tariff_response_protocol": "PROTOCOL_TARIFF_RESPONSE_TRANSFER.md",
   "tariff_response_launch_review": "TARIFF_RESPONSE_LAUNCH_REVIEW.md",
   "tariff_response_execution_commit": "15b0053aa2aaaea3d9ffbaafdc84dbf9c803af92",
-  "battery_training_direction": "BATTERY_REGIMES_AND_TRAINING_DIRECTION.md"
+  "battery_training_direction": "BATTERY_REGIMES_AND_TRAINING_DIRECTION.md",
+  "tariff_response_raw_backup_commit": "ff682c1a9683e3f989e01f142878bb1694e5b45f",
+  "learning_scale_plan": "LEARNING_SCALE_PLAN.md",
+  "manuscript_work": "Paused at user direction; prioritize sustained dataset collection and ML training/evaluation.",
+  "tariff_response_results": "RESULTS_TARIFF_RESPONSE.md",
+  "tariff_response_verification": "INDEPENDENT_REPLAY_TARIFF_RESPONSE.json",
+  "tariff_response_result_backup_commit": "eb6bde5cf0a65446e5c7ee253432181c44baa9df",
+  "physical_learning_protocol": "PROTOCOL_PHYSICAL_LEARNING.md",
+  "physical_learning_launch_review": "PHYSICAL_LEARNING_LAUNCH_REVIEW.md",
+  "physical_learning_registry": {
+    "train": [
+      10000,
+      10127,
+      128
+    ],
+    "dev": [
+      20000,
+      20031,
+      32
+    ],
+    "sealed_test": [
+      30000,
+      30031,
+      32
+    ]
+  },
+  "physical_learning_first_shard": 0
 }
