@@ -1,0 +1,4249 @@
+{
+  "design": {
+    "budget": {
+      "backend": "GRB",
+      "epsilon": 0.0001,
+      "master_calls": 6,
+      "phase_seconds": 55,
+      "polish_seconds": 15,
+      "polish_steps": 64,
+      "pool_cap": 32,
+      "pool_tolerance": 1e-06,
+      "pricing_calls": 4,
+      "rational_bits": 4096,
+      "threads": 1,
+      "wall_seconds": 70
+    },
+    "child_hard_seconds": 100,
+    "controller_hard_seconds": 2100,
+    "declared_cells": 17,
+    "generator": "independent-paired-duty-timetable-v1",
+    "groups": {
+      "learning_s2001_n08": {
+        "base_group": "learning_s2001",
+        "case": {
+          "battery_kwh": 100.0,
+          "deadhead_cost_per_min": 0.0,
+          "depot": "D",
+          "efficiency": 0.9,
+          "graph_scope": "declared-movement-modes-only",
+          "market_edges_min": [
+            0,
+            60,
+            120,
+            180,
+            240,
+            300,
+            360,
+            420,
+            480,
+            540,
+            600,
+            660,
+            720,
+            780,
+            840,
+            900,
+            960,
+            1020,
+            1080,
+            1140,
+            1200,
+            1260,
+            1320,
+            1380,
+            1440,
+            1500,
+            1560,
+            1620,
+            1680,
+            1740,
+            1800
+          ],
+          "max_vehicles": 8,
+          "movements": [
+            {
+              "after": "T01",
+              "before": null,
+              "depot_split": null,
+              "id": "out_T01",
+              "kind": "pullout",
+              "legs": [
+                {
+                  "arrive_min": 363,
+                  "depart_min": 359,
+                  "destination": "A",
+                  "energy_kwh": 1.0,
+                  "origin": "D"
+                }
+              ]
+            },
+            {
+              "after": null,
+              "before": "T01",
+              "depot_split": null,
+              "id": "in_T01",
+              "kind": "pullin",
+              "legs": [
+                {
+                  "arrive_min": 397,
+                  "depart_min": 391,
+                  "destination": "D",
+                  "energy_kwh": 1.5,
+                  "origin": "B"
+                }
+              ]
+            },
+            {
+              "after": "T02",
+              "before": null,
+              "depot_split": null,
+              "id": "out_T02",
+              "kind": "pullout",
+              "legs": [
+                {
+                  "arrive_min": 413,
+                  "depart_min": 407,
+                  "destination": "B",
+                  "energy_kwh": 1.5,
+                  "origin": "D"
+                }
+              ]
+            },
+            {
+              "after": null,
+              "before": "T02",
+              "depot_split": null,
+              "id": "in_T02",
+              "kind": "pullin",
+              "legs": [
+                {
+                  "arrive_min": 448,
+                  "depart_min": 444,
+                  "destination": "D",
+                  "energy_kwh": 1.0,
+                  "origin": "A"
+                }
+              ]
+            },
+            {
+              "after": "T03",
+              "before": null,
+              "depot_split": null,
+              "id": "out_T03",
+              "kind": "pullout",
+              "legs": [
+                {
+                  "arrive_min": 393,
+                  "depart_min": 389,
+                  "destination": "A",
+                  "energy_kwh": 1.0,
+                  "origin": "D"
+                }
+              ]
+            },
+            {
+              "after": null,
+              "before": "T03",
+              "depot_split": null,
+              "id": "in_T03",
+              "kind": "pullin",
+              "legs": [
+                {
+                  "arrive_min": 426,
+                  "depart_min": 420,
+                  "destination": "D",
+                  "energy_kwh": 1.5,
+                  "origin": "B"
+                }
+              ]
+            },
+            {
+              "after": "T04",
+              "before": null,
+              "depot_split": null,
+              "id": "out_T04",
+              "kind": "pullout",
+              "legs": [
+                {
+                  "arrive_min": 448,
+                  "depart_min": 442,
+                  "destination": "B",
+                  "energy_kwh": 1.5,
+                  "origin": "D"
+                }
+              ]
+            },
+            {
+              "after": null,
+              "before": "T04",
+              "depot_split": null,
+              "id": "in_T04",
+              "kind": "pullin",
+              "legs": [
+                {
+                  "arrive_min": 470,
+                  "depart_min": 466,
+                  "destination": "D",
+                  "energy_kwh": 1.0,
+                  "origin": "A"
+                }
+              ]
+            },
+            {
+              "after": "T05",
+              "before": null,
+              "depot_split": null,
+              "id": "out_T05",
+              "kind": "pullout",
+              "legs": [
+                {
+                  "arrive_min": 410,
+                  "depart_min": 406,
+                  "destination": "A",
+                  "energy_kwh": 1.0,
+                  "origin": "D"
+                }
+              ]
+            },
+            {
+              "after": null,
+              "before": "T05",
+              "depot_split": null,
+              "id": "in_T05",
+              "kind": "pullin",
+              "legs": [
+                {
+                  "arrive_min": 442,
+                  "depart_min": 436,
+                  "destination": "D",
+                  "energy_kwh": 1.5,
+                  "origin": "B"
+                }
+              ]
+            },
+            {
+              "after": "T06",
+              "before": null,
+              "depot_split": null,
+              "id": "out_T06",
+              "kind": "pullout",
+              "legs": [
+                {
+                  "arrive_min": 448,
+                  "depart_min": 442,
+                  "destination": "B",
+                  "energy_kwh": 1.5,
+                  "origin": "D"
+                }
+              ]
+            },
+            {
+              "after": null,
+              "before": "T06",
+              "depot_split": null,
+              "id": "in_T06",
+              "kind": "pullin",
+              "legs": [
+                {
+                  "arrive_min": 475,
+                  "depart_min": 471,
+                  "destination": "D",
+                  "energy_kwh": 1.0,
+                  "origin": "A"
+                }
+              ]
+            },
+            {
+              "after": "T07",
+              "before": null,
+              "depot_split": null,
+              "id": "out_T07",
+              "kind": "pullout",
+              "legs": [
+                {
+                  "arrive_min": 437,
+                  "depart_min": 433,
+                  "destination": "A",
+                  "energy_kwh": 1.0,
+                  "origin": "D"
+                }
+              ]
+            },
+            {
+              "after": null,
+              "before": "T07",
+              "depot_split": null,
+              "id": "in_T07",
+              "kind": "pullin",
+              "legs": [
+                {
+                  "arrive_min": 470,
+                  "depart_min": 464,
+                  "destination": "D",
+                  "energy_kwh": 1.5,
+                  "origin": "B"
+                }
+              ]
+            },
+            {
+              "after": "T08",
+              "before": null,
+              "depot_split": null,
+              "id": "out_T08",
+              "kind": "pullout",
+              "legs": [
+                {
+                  "arrive_min": 494,
+                  "depart_min": 488,
+                  "destination": "B",
+                  "energy_kwh": 1.5,
+                  "origin": "D"
+                }
+              ]
+            },
+            {
+              "after": null,
+              "before": "T08",
+              "depot_split": null,
+              "id": "in_T08",
+              "kind": "pullin",
+              "legs": [
+                {
+                  "arrive_min": 516,
+                  "depart_min": 512,
+                  "destination": "D",
+                  "energy_kwh": 1.0,
+                  "origin": "A"
+                }
+              ]
+            },
+            {
+              "after": "T02",
+              "before": "T01",
+              "depot_split": null,
+              "id": "direct_T01_T02",
+              "kind": "direct",
+              "legs": [
+                {
+                  "arrive_min": 391,
+                  "depart_min": 391,
+                  "destination": "B",
+                  "energy_kwh": 0.0,
+                  "origin": "B"
+                },
+                {
+                  "arrive_min": 413,
+                  "depart_min": 391,
+                  "destination": "B",
+                  "energy_kwh": 0.22,
+                  "origin": "B"
+                }
+              ]
+            },
+            {
+              "after": "T02",
+              "before": "T01",
+              "depot_split": 1,
+              "id": "depot_T01_T02",
+              "kind": "depot",
+              "legs": [
+                {
+                  "arrive_min": 397,
+                  "depart_min": 391,
+                  "destination": "D",
+                  "energy_kwh": 1.5,
+                  "origin": "B"
+                },
+                {
+                  "arrive_min": 413,
+                  "depart_min": 407,
+                  "destination": "B",
+                  "energy_kwh": 1.5,
+                  "origin": "D"
+                }
+              ]
+            },
+            {
+              "after": "T04",
+              "before": "T01",
+              "depot_split": null,
+              "id": "direct_T01_T04",
+              "kind": "direct",
+              "legs": [
+                {
+                  "arrive_min": 391,
+                  "depart_min": 391,
+                  "destination": "B",
+                  "energy_kwh": 0.0,
+                  "origin": "B"
+                },
+                {
+                  "arrive_min": 448,
+                  "depart_min": 391,
+                  "destination": "B",
+                  "energy_kwh": 0.5700000000000001,
+                  "origin": "B"
+                }
+              ]
+            },
+            {
+              "after": "T04",
+              "before": "T01",
+              "depot_split": 1,
+              "id": "depot_T01_T04",
+              "kind": "depot",
+              "legs": [
+                {
+                  "arrive_min": 397,
+                  "depart_min": 391,
+                  "destination": "D",
+                  "energy_kwh": 1.5,
+                  "origin": "B"
+                },
+                {
+                  "arrive_min": 448,
+                  "depart_min": 442,
+                  "destination": "B",
+                  "energy_kwh": 1.5,
+                  "origin": "D"
+                }
+              ]
+            },
+            {
+              "after": "T05",
+              "before": "T01",
+              "depot_split": null,
+              "id": "direct_T01_T05",
+              "kind": "direct",
+              "legs": [
+                {
+                  "arrive_min": 399,
+                  "depart_min": 391,
+                  "destination": "A",
+                  "energy_kwh": 2.0,
+                  "origin": "B"
+                },
+                {
+                  "arrive_min": 410,
+                  "depart_min": 399,
+                  "destination": "A",
+                  "energy_kwh": 0.11,
+                  "origin": "A"
+                }
+              ]
+            },
+            {
+              "after": "T05",
+              "before": "T01",
+              "depot_split": 1,
+              "id": "depot_T01_T05",
+              "kind": "depot",
+              "legs": [
+                {
+                  "arrive_min": 397,
+                  "depart_min": 391,
+                  "destination": "D",
+                  "energy_kwh": 1.5,
+                  "origin": "B"
+                },
+                {
+                  "arrive_min": 410,
+                  "depart_min": 406,
+                  "destination": "A",
+                  "energy_kwh": 1.0,
+                  "origin": "D"
+                }
+              ]
+            },
+            {
+              "after": "T06",
+              "before": "T01",
+              "depot_split": null,
+              "id": "direct_T01_T06",
+              "kind": "direct",
+              "legs": [
+                {
+                  "arrive_min": 391,
+                  "depart_min": 391,
+                  "destination": "B",
+                  "energy_kwh": 0.0,
+                  "origin": "B"
+                },
+                {
+                  "arrive_min": 448,
+                  "depart_min": 391,
+                  "destination": "B",
+                  "energy_kwh": 0.5700000000000001,
+                  "origin": "B"
+                }
+              ]
+            },
+            {
+              "after": "T06",
+              "before": "T01",
+              "depot_split": 1,
+              "id": "depot_T01_T06",
+              "kind": "depot",
+              "legs": [
+                {
+                  "arrive_min": 397,
+                  "depart_min": 391,
+                  "destination": "D",
+                  "energy_kwh": 1.5,
+                  "origin": "B"
+                },
+                {
+                  "arrive_min": 448,
+                  "depart_min": 442,
+                  "destination": "B",
+                  "energy_kwh": 1.5,
+                  "origin": "D"
+                }
+              ]
+            },
+            {
+              "after": "T07",
+              "before": "T01",
+              "depot_split": null,
+              "id": "direct_T01_T07",
+              "kind": "direct",
+              "legs": [
+                {
+                  "arrive_min": 399,
+                  "depart_min": 391,
+                  "destination": "A",
+                  "energy_kwh": 2.0,
+                  "origin": "B"
+                },
+                {
+                  "arrive_min": 437,
+                  "depart_min": 399,
+                  "destination": "A",
+                  "energy_kwh": 0.38,
+                  "origin": "A"
+                }
+              ]
+            },
+            {
+              "after": "T07",
+              "before": "T01",
+              "depot_split": 1,
+              "id": "depot_T01_T07",
+              "kind": "depot",
+              "legs": [
+                {
+                  "arrive_min": 397,
+                  "depart_min": 391,
+                  "destination": "D",
+                  "energy_kwh": 1.5,
+                  "origin": "B"
+                },
+                {
+                  "arrive_min": 437,
+                  "depart_min": 433,
+                  "destination": "A",
+                  "energy_kwh": 1.0,
+                  "origin": "D"
+                }
+              ]
+            },
+            {
+              "after": "T08",
+              "before": "T01",
+              "depot_split": null,
+              "id": "direct_T01_T08",
+              "kind": "direct",
+              "legs": [
+                {
+                  "arrive_min": 391,
+                  "depart_min": 391,
+                  "destination": "B",
+                  "energy_kwh": 0.0,
+                  "origin": "B"
+                },
+                {
+                  "arrive_min": 494,
+                  "depart_min": 391,
+                  "destination": "B",
+                  "energy_kwh": 1.03,
+                  "origin": "B"
+                }
+              ]
+            },
+            {
+              "after": "T08",
+              "before": "T01",
+              "depot_split": 1,
+              "id": "depot_T01_T08",
+              "kind": "depot",
+              "legs": [
+                {
+                  "arrive_min": 397,
+                  "depart_min": 391,
+                  "destination": "D",
+                  "energy_kwh": 1.5,
+                  "origin": "B"
+                },
+                {
+                  "arrive_min": 494,
+                  "depart_min": 488,
+                  "destination": "B",
+                  "energy_kwh": 1.5,
+                  "origin": "D"
+                }
+              ]
+            },
+            {
+              "after": "T08",
+              "before": "T02",
+              "depot_split": null,
+              "id": "direct_T02_T08",
+              "kind": "direct",
+              "legs": [
+                {
+                  "arrive_min": 452,
+                  "depart_min": 444,
+                  "destination": "B",
+                  "energy_kwh": 2.0,
+                  "origin": "A"
+                },
+                {
+                  "arrive_min": 494,
+                  "depart_min": 452,
+                  "destination": "B",
+                  "energy_kwh": 0.42,
+                  "origin": "B"
+                }
+              ]
+            },
+            {
+              "after": "T08",
+              "before": "T02",
+              "depot_split": 1,
+              "id": "depot_T02_T08",
+              "kind": "depot",
+              "legs": [
+                {
+                  "arrive_min": 448,
+                  "depart_min": 444,
+                  "destination": "D",
+                  "energy_kwh": 1.0,
+                  "origin": "A"
+                },
+                {
+                  "arrive_min": 494,
+                  "depart_min": 488,
+                  "destination": "B",
+                  "energy_kwh": 1.5,
+                  "origin": "D"
+                }
+              ]
+            },
+            {
+              "after": "T04",
+              "before": "T03",
+              "depot_split": null,
+              "id": "direct_T03_T04",
+              "kind": "direct",
+              "legs": [
+                {
+                  "arrive_min": 420,
+                  "depart_min": 420,
+                  "destination": "B",
+                  "energy_kwh": 0.0,
+                  "origin": "B"
+                },
+                {
+                  "arrive_min": 448,
+                  "depart_min": 420,
+                  "destination": "B",
+                  "energy_kwh": 0.28,
+                  "origin": "B"
+                }
+              ]
+            },
+            {
+              "after": "T04",
+              "before": "T03",
+              "depot_split": 1,
+              "id": "depot_T03_T04",
+              "kind": "depot",
+              "legs": [
+                {
+                  "arrive_min": 426,
+                  "depart_min": 420,
+                  "destination": "D",
+                  "energy_kwh": 1.5,
+                  "origin": "B"
+                },
+                {
+                  "arrive_min": 448,
+                  "depart_min": 442,
+                  "destination": "B",
+                  "energy_kwh": 1.5,
+                  "origin": "D"
+                }
+              ]
+            },
+            {
+              "after": "T06",
+              "before": "T03",
+              "depot_split": null,
+              "id": "direct_T03_T06",
+              "kind": "direct",
+              "legs": [
+                {
+                  "arrive_min": 420,
+                  "depart_min": 420,
+                  "destination": "B",
+                  "energy_kwh": 0.0,
+                  "origin": "B"
+                },
+                {
+                  "arrive_min": 448,
+                  "depart_min": 420,
+                  "destination": "B",
+                  "energy_kwh": 0.28,
+                  "origin": "B"
+                }
+              ]
+            },
+            {
+              "after": "T06",
+              "before": "T03",
+              "depot_split": 1,
+              "id": "depot_T03_T06",
+              "kind": "depot",
+              "legs": [
+                {
+                  "arrive_min": 426,
+                  "depart_min": 420,
+                  "destination": "D",
+                  "energy_kwh": 1.5,
+                  "origin": "B"
+                },
+                {
+                  "arrive_min": 448,
+                  "depart_min": 442,
+                  "destination": "B",
+                  "energy_kwh": 1.5,
+                  "origin": "D"
+                }
+              ]
+            },
+            {
+              "after": "T07",
+              "before": "T03",
+              "depot_split": null,
+              "id": "direct_T03_T07",
+              "kind": "direct",
+              "legs": [
+                {
+                  "arrive_min": 428,
+                  "depart_min": 420,
+                  "destination": "A",
+                  "energy_kwh": 2.0,
+                  "origin": "B"
+                },
+                {
+                  "arrive_min": 437,
+                  "depart_min": 428,
+                  "destination": "A",
+                  "energy_kwh": 0.09,
+                  "origin": "A"
+                }
+              ]
+            },
+            {
+              "after": "T07",
+              "before": "T03",
+              "depot_split": 1,
+              "id": "depot_T03_T07",
+              "kind": "depot",
+              "legs": [
+                {
+                  "arrive_min": 426,
+                  "depart_min": 420,
+                  "destination": "D",
+                  "energy_kwh": 1.5,
+                  "origin": "B"
+                },
+                {
+                  "arrive_min": 437,
+                  "depart_min": 433,
+                  "destination": "A",
+                  "energy_kwh": 1.0,
+                  "origin": "D"
+                }
+              ]
+            },
+            {
+              "after": "T08",
+              "before": "T03",
+              "depot_split": null,
+              "id": "direct_T03_T08",
+              "kind": "direct",
+              "legs": [
+                {
+                  "arrive_min": 420,
+                  "depart_min": 420,
+                  "destination": "B",
+                  "energy_kwh": 0.0,
+                  "origin": "B"
+                },
+                {
+                  "arrive_min": 494,
+                  "depart_min": 420,
+                  "destination": "B",
+                  "energy_kwh": 0.74,
+                  "origin": "B"
+                }
+              ]
+            },
+            {
+              "after": "T08",
+              "before": "T03",
+              "depot_split": 1,
+              "id": "depot_T03_T08",
+              "kind": "depot",
+              "legs": [
+                {
+                  "arrive_min": 426,
+                  "depart_min": 420,
+                  "destination": "D",
+                  "energy_kwh": 1.5,
+                  "origin": "B"
+                },
+                {
+                  "arrive_min": 494,
+                  "depart_min": 488,
+                  "destination": "B",
+                  "energy_kwh": 1.5,
+                  "origin": "D"
+                }
+              ]
+            },
+            {
+              "after": "T08",
+              "before": "T04",
+              "depot_split": null,
+              "id": "direct_T04_T08",
+              "kind": "direct",
+              "legs": [
+                {
+                  "arrive_min": 474,
+                  "depart_min": 466,
+                  "destination": "B",
+                  "energy_kwh": 2.0,
+                  "origin": "A"
+                },
+                {
+                  "arrive_min": 494,
+                  "depart_min": 474,
+                  "destination": "B",
+                  "energy_kwh": 0.2,
+                  "origin": "B"
+                }
+              ]
+            },
+            {
+              "after": "T08",
+              "before": "T04",
+              "depot_split": 1,
+              "id": "depot_T04_T08",
+              "kind": "depot",
+              "legs": [
+                {
+                  "arrive_min": 470,
+                  "depart_min": 466,
+                  "destination": "D",
+                  "energy_kwh": 1.0,
+                  "origin": "A"
+                },
+                {
+                  "arrive_min": 494,
+                  "depart_min": 488,
+                  "destination": "B",
+                  "energy_kwh": 1.5,
+                  "origin": "D"
+                }
+              ]
+            },
+            {
+              "after": "T04",
+              "before": "T05",
+              "depot_split": null,
+              "id": "direct_T05_T04",
+              "kind": "direct",
+              "legs": [
+                {
+                  "arrive_min": 436,
+                  "depart_min": 436,
+                  "destination": "B",
+                  "energy_kwh": 0.0,
+                  "origin": "B"
+                },
+                {
+                  "arrive_min": 448,
+                  "depart_min": 436,
+                  "destination": "B",
+                  "energy_kwh": 0.12,
+                  "origin": "B"
+                }
+              ]
+            },
+            {
+              "after": "T04",
+              "before": "T05",
+              "depot_split": 1,
+              "id": "depot_T05_T04",
+              "kind": "depot",
+              "legs": [
+                {
+                  "arrive_min": 442,
+                  "depart_min": 436,
+                  "destination": "D",
+                  "energy_kwh": 1.5,
+                  "origin": "B"
+                },
+                {
+                  "arrive_min": 448,
+                  "depart_min": 442,
+                  "destination": "B",
+                  "energy_kwh": 1.5,
+                  "origin": "D"
+                }
+              ]
+            },
+            {
+              "after": "T06",
+              "before": "T05",
+              "depot_split": null,
+              "id": "direct_T05_T06",
+              "kind": "direct",
+              "legs": [
+                {
+                  "arrive_min": 436,
+                  "depart_min": 436,
+                  "destination": "B",
+                  "energy_kwh": 0.0,
+                  "origin": "B"
+                },
+                {
+                  "arrive_min": 448,
+                  "depart_min": 436,
+                  "destination": "B",
+                  "energy_kwh": 0.12,
+                  "origin": "B"
+                }
+              ]
+            },
+            {
+              "after": "T06",
+              "before": "T05",
+              "depot_split": 1,
+              "id": "depot_T05_T06",
+              "kind": "depot",
+              "legs": [
+                {
+                  "arrive_min": 442,
+                  "depart_min": 436,
+                  "destination": "D",
+                  "energy_kwh": 1.5,
+                  "origin": "B"
+                },
+                {
+                  "arrive_min": 448,
+                  "depart_min": 442,
+                  "destination": "B",
+                  "energy_kwh": 1.5,
+                  "origin": "D"
+                }
+              ]
+            },
+            {
+              "after": "T08",
+              "before": "T05",
+              "depot_split": null,
+              "id": "direct_T05_T08",
+              "kind": "direct",
+              "legs": [
+                {
+                  "arrive_min": 436,
+                  "depart_min": 436,
+                  "destination": "B",
+                  "energy_kwh": 0.0,
+                  "origin": "B"
+                },
+                {
+                  "arrive_min": 494,
+                  "depart_min": 436,
+                  "destination": "B",
+                  "energy_kwh": 0.58,
+                  "origin": "B"
+                }
+              ]
+            },
+            {
+              "after": "T08",
+              "before": "T05",
+              "depot_split": 1,
+              "id": "depot_T05_T08",
+              "kind": "depot",
+              "legs": [
+                {
+                  "arrive_min": 442,
+                  "depart_min": 436,
+                  "destination": "D",
+                  "energy_kwh": 1.5,
+                  "origin": "B"
+                },
+                {
+                  "arrive_min": 494,
+                  "depart_min": 488,
+                  "destination": "B",
+                  "energy_kwh": 1.5,
+                  "origin": "D"
+                }
+              ]
+            },
+            {
+              "after": "T08",
+              "before": "T06",
+              "depot_split": null,
+              "id": "direct_T06_T08",
+              "kind": "direct",
+              "legs": [
+                {
+                  "arrive_min": 479,
+                  "depart_min": 471,
+                  "destination": "B",
+                  "energy_kwh": 2.0,
+                  "origin": "A"
+                },
+                {
+                  "arrive_min": 494,
+                  "depart_min": 479,
+                  "destination": "B",
+                  "energy_kwh": 0.15,
+                  "origin": "B"
+                }
+              ]
+            },
+            {
+              "after": "T08",
+              "before": "T06",
+              "depot_split": 1,
+              "id": "depot_T06_T08",
+              "kind": "depot",
+              "legs": [
+                {
+                  "arrive_min": 475,
+                  "depart_min": 471,
+                  "destination": "D",
+                  "energy_kwh": 1.0,
+                  "origin": "A"
+                },
+                {
+                  "arrive_min": 494,
+                  "depart_min": 488,
+                  "destination": "B",
+                  "energy_kwh": 1.5,
+                  "origin": "D"
+                }
+              ]
+            },
+            {
+              "after": "T08",
+              "before": "T07",
+              "depot_split": null,
+              "id": "direct_T07_T08",
+              "kind": "direct",
+              "legs": [
+                {
+                  "arrive_min": 464,
+                  "depart_min": 464,
+                  "destination": "B",
+                  "energy_kwh": 0.0,
+                  "origin": "B"
+                },
+                {
+                  "arrive_min": 494,
+                  "depart_min": 464,
+                  "destination": "B",
+                  "energy_kwh": 0.3,
+                  "origin": "B"
+                }
+              ]
+            },
+            {
+              "after": "T08",
+              "before": "T07",
+              "depot_split": 1,
+              "id": "depot_T07_T08",
+              "kind": "depot",
+              "legs": [
+                {
+                  "arrive_min": 470,
+                  "depart_min": 464,
+                  "destination": "D",
+                  "energy_kwh": 1.5,
+                  "origin": "B"
+                },
+                {
+                  "arrive_min": 494,
+                  "depart_min": 488,
+                  "destination": "B",
+                  "energy_kwh": 1.5,
+                  "origin": "D"
+                }
+              ]
+            }
+          ],
+          "name": "learning_s2001_n08",
+          "recharge_deadline_min": 1800,
+          "reserve_kwh": 20.0,
+          "resources": [
+            {
+              "connectors": 1,
+              "end_min": 1800,
+              "grid_kw": 90.0,
+              "per_bus_kw": 90.0,
+              "start_min": 0
+            }
+          ],
+          "terminal_open_min": 1080,
+          "trips": [
+            {
+              "end_min": 391,
+              "end_place": "B",
+              "energy_kwh": 22.86,
+              "id": "T01",
+              "start_min": 363,
+              "start_place": "A"
+            },
+            {
+              "end_min": 444,
+              "end_place": "A",
+              "energy_kwh": 18.51,
+              "id": "T02",
+              "start_min": 413,
+              "start_place": "B"
+            },
+            {
+              "end_min": 420,
+              "end_place": "B",
+              "energy_kwh": 20.29,
+              "id": "T03",
+              "start_min": 393,
+              "start_place": "A"
+            },
+            {
+              "end_min": 466,
+              "end_place": "A",
+              "energy_kwh": 18.78,
+              "id": "T04",
+              "start_min": 448,
+              "start_place": "B"
+            },
+            {
+              "end_min": 436,
+              "end_place": "B",
+              "energy_kwh": 24.11,
+              "id": "T05",
+              "start_min": 410,
+              "start_place": "A"
+            },
+            {
+              "end_min": 471,
+              "end_place": "A",
+              "energy_kwh": 26.68,
+              "id": "T06",
+              "start_min": 448,
+              "start_place": "B"
+            },
+            {
+              "end_min": 464,
+              "end_place": "B",
+              "energy_kwh": 25.740000000000002,
+              "id": "T07",
+              "start_min": 437,
+              "start_place": "A"
+            },
+            {
+              "end_min": 512,
+              "end_place": "A",
+              "energy_kwh": 19.34,
+              "id": "T08",
+              "start_min": 494,
+              "start_place": "B"
+            }
+          ],
+          "vehicle_cost": 100.0
+        },
+        "case_identity": "25ead1b99bb5494dab05e99775bcf8347d0289470422abc47978f723c3513e98",
+        "market_identities": {
+          "source0": "a39f47a4aa4fcf200b223beab85327e108c314901a9727f240e7d514b4a3e333",
+          "source1": "6c2358c52753e03388a960e6e7e1ba7adc1ab1bd57f2fd2eafeb7fe9a7085ba3",
+          "target": "07f97fe35567f16d93f5fc086dcbdaf0a7cab12d51b81dce5b9fe939285b5414"
+        },
+        "markets": {
+          "source0": {
+            "a": [
+              0.2,
+              0.2,
+              0.2,
+              0.2,
+              0.2,
+              0.2,
+              0.2,
+              0.2,
+              0.2,
+              0.2,
+              0.2,
+              0.2,
+              0.2,
+              0.2,
+              0.2,
+              0.2,
+              0.2,
+              0.2,
+              0.2,
+              0.2,
+              0.2,
+              0.2,
+              0.2,
+              0.2,
+              0.2,
+              0.2,
+              0.2,
+              0.2,
+              0.2,
+              0.2
+            ],
+            "b": [
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111
+            ],
+            "name": "learning_s2001_n08-source0"
+          },
+          "source1": {
+            "a": [
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.1,
+              0.1,
+              0.1,
+              0.1,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3
+            ],
+            "b": [
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111
+            ],
+            "name": "learning_s2001_n08-source1"
+          },
+          "target": {
+            "a": [
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.1,
+              0.1,
+              0.1,
+              0.1,
+              0.3,
+              0.3,
+              0.3,
+              0.3
+            ],
+            "b": [
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111
+            ],
+            "name": "learning_s2001_n08-target"
+          }
+        },
+        "split": "train"
+      },
+      "learning_s2002_n08": {
+        "base_group": "learning_s2002",
+        "case": {
+          "battery_kwh": 100.0,
+          "deadhead_cost_per_min": 0.0,
+          "depot": "D",
+          "efficiency": 0.9,
+          "graph_scope": "declared-movement-modes-only",
+          "market_edges_min": [
+            0,
+            60,
+            120,
+            180,
+            240,
+            300,
+            360,
+            420,
+            480,
+            540,
+            600,
+            660,
+            720,
+            780,
+            840,
+            900,
+            960,
+            1020,
+            1080,
+            1140,
+            1200,
+            1260,
+            1320,
+            1380,
+            1440,
+            1500,
+            1560,
+            1620,
+            1680,
+            1740,
+            1800
+          ],
+          "max_vehicles": 8,
+          "movements": [
+            {
+              "after": "T01",
+              "before": null,
+              "depot_split": null,
+              "id": "out_T01",
+              "kind": "pullout",
+              "legs": [
+                {
+                  "arrive_min": 361,
+                  "depart_min": 357,
+                  "destination": "A",
+                  "energy_kwh": 1.0,
+                  "origin": "D"
+                }
+              ]
+            },
+            {
+              "after": null,
+              "before": "T01",
+              "depot_split": null,
+              "id": "in_T01",
+              "kind": "pullin",
+              "legs": [
+                {
+                  "arrive_min": 396,
+                  "depart_min": 390,
+                  "destination": "D",
+                  "energy_kwh": 1.5,
+                  "origin": "B"
+                }
+              ]
+            },
+            {
+              "after": "T02",
+              "before": null,
+              "depot_split": null,
+              "id": "out_T02",
+              "kind": "pullout",
+              "legs": [
+                {
+                  "arrive_min": 413,
+                  "depart_min": 407,
+                  "destination": "B",
+                  "energy_kwh": 1.5,
+                  "origin": "D"
+                }
+              ]
+            },
+            {
+              "after": null,
+              "before": "T02",
+              "depot_split": null,
+              "id": "in_T02",
+              "kind": "pullin",
+              "legs": [
+                {
+                  "arrive_min": 438,
+                  "depart_min": 434,
+                  "destination": "D",
+                  "energy_kwh": 1.0,
+                  "origin": "A"
+                }
+              ]
+            },
+            {
+              "after": "T03",
+              "before": null,
+              "depot_split": null,
+              "id": "out_T03",
+              "kind": "pullout",
+              "legs": [
+                {
+                  "arrive_min": 389,
+                  "depart_min": 385,
+                  "destination": "A",
+                  "energy_kwh": 1.0,
+                  "origin": "D"
+                }
+              ]
+            },
+            {
+              "after": null,
+              "before": "T03",
+              "depot_split": null,
+              "id": "in_T03",
+              "kind": "pullin",
+              "legs": [
+                {
+                  "arrive_min": 423,
+                  "depart_min": 417,
+                  "destination": "D",
+                  "energy_kwh": 1.5,
+                  "origin": "B"
+                }
+              ]
+            },
+            {
+              "after": "T04",
+              "before": null,
+              "depot_split": null,
+              "id": "out_T04",
+              "kind": "pullout",
+              "legs": [
+                {
+                  "arrive_min": 430,
+                  "depart_min": 424,
+                  "destination": "B",
+                  "energy_kwh": 1.5,
+                  "origin": "D"
+                }
+              ]
+            },
+            {
+              "after": null,
+              "before": "T04",
+              "depot_split": null,
+              "id": "in_T04",
+              "kind": "pullin",
+              "legs": [
+                {
+                  "arrive_min": 453,
+                  "depart_min": 449,
+                  "destination": "D",
+                  "energy_kwh": 1.0,
+                  "origin": "A"
+                }
+              ]
+            },
+            {
+              "after": "T05",
+              "before": null,
+              "depot_split": null,
+              "id": "out_T05",
+              "kind": "pullout",
+              "legs": [
+                {
+                  "arrive_min": 418,
+                  "depart_min": 414,
+                  "destination": "A",
+                  "energy_kwh": 1.0,
+                  "origin": "D"
+                }
+              ]
+            },
+            {
+              "after": null,
+              "before": "T05",
+              "depot_split": null,
+              "id": "in_T05",
+              "kind": "pullin",
+              "legs": [
+                {
+                  "arrive_min": 443,
+                  "depart_min": 437,
+                  "destination": "D",
+                  "energy_kwh": 1.5,
+                  "origin": "B"
+                }
+              ]
+            },
+            {
+              "after": "T06",
+              "before": null,
+              "depot_split": null,
+              "id": "out_T06",
+              "kind": "pullout",
+              "legs": [
+                {
+                  "arrive_min": 455,
+                  "depart_min": 449,
+                  "destination": "B",
+                  "energy_kwh": 1.5,
+                  "origin": "D"
+                }
+              ]
+            },
+            {
+              "after": null,
+              "before": "T06",
+              "depot_split": null,
+              "id": "in_T06",
+              "kind": "pullin",
+              "legs": [
+                {
+                  "arrive_min": 486,
+                  "depart_min": 482,
+                  "destination": "D",
+                  "energy_kwh": 1.0,
+                  "origin": "A"
+                }
+              ]
+            },
+            {
+              "after": "T07",
+              "before": null,
+              "depot_split": null,
+              "id": "out_T07",
+              "kind": "pullout",
+              "legs": [
+                {
+                  "arrive_min": 435,
+                  "depart_min": 431,
+                  "destination": "A",
+                  "energy_kwh": 1.0,
+                  "origin": "D"
+                }
+              ]
+            },
+            {
+              "after": null,
+              "before": "T07",
+              "depot_split": null,
+              "id": "in_T07",
+              "kind": "pullin",
+              "legs": [
+                {
+                  "arrive_min": 467,
+                  "depart_min": 461,
+                  "destination": "D",
+                  "energy_kwh": 1.5,
+                  "origin": "B"
+                }
+              ]
+            },
+            {
+              "after": "T08",
+              "before": null,
+              "depot_split": null,
+              "id": "out_T08",
+              "kind": "pullout",
+              "legs": [
+                {
+                  "arrive_min": 491,
+                  "depart_min": 485,
+                  "destination": "B",
+                  "energy_kwh": 1.5,
+                  "origin": "D"
+                }
+              ]
+            },
+            {
+              "after": null,
+              "before": "T08",
+              "depot_split": null,
+              "id": "in_T08",
+              "kind": "pullin",
+              "legs": [
+                {
+                  "arrive_min": 516,
+                  "depart_min": 512,
+                  "destination": "D",
+                  "energy_kwh": 1.0,
+                  "origin": "A"
+                }
+              ]
+            },
+            {
+              "after": "T02",
+              "before": "T01",
+              "depot_split": null,
+              "id": "direct_T01_T02",
+              "kind": "direct",
+              "legs": [
+                {
+                  "arrive_min": 390,
+                  "depart_min": 390,
+                  "destination": "B",
+                  "energy_kwh": 0.0,
+                  "origin": "B"
+                },
+                {
+                  "arrive_min": 413,
+                  "depart_min": 390,
+                  "destination": "B",
+                  "energy_kwh": 0.23,
+                  "origin": "B"
+                }
+              ]
+            },
+            {
+              "after": "T02",
+              "before": "T01",
+              "depot_split": 1,
+              "id": "depot_T01_T02",
+              "kind": "depot",
+              "legs": [
+                {
+                  "arrive_min": 396,
+                  "depart_min": 390,
+                  "destination": "D",
+                  "energy_kwh": 1.5,
+                  "origin": "B"
+                },
+                {
+                  "arrive_min": 413,
+                  "depart_min": 407,
+                  "destination": "B",
+                  "energy_kwh": 1.5,
+                  "origin": "D"
+                }
+              ]
+            },
+            {
+              "after": "T04",
+              "before": "T01",
+              "depot_split": null,
+              "id": "direct_T01_T04",
+              "kind": "direct",
+              "legs": [
+                {
+                  "arrive_min": 390,
+                  "depart_min": 390,
+                  "destination": "B",
+                  "energy_kwh": 0.0,
+                  "origin": "B"
+                },
+                {
+                  "arrive_min": 430,
+                  "depart_min": 390,
+                  "destination": "B",
+                  "energy_kwh": 0.4,
+                  "origin": "B"
+                }
+              ]
+            },
+            {
+              "after": "T04",
+              "before": "T01",
+              "depot_split": 1,
+              "id": "depot_T01_T04",
+              "kind": "depot",
+              "legs": [
+                {
+                  "arrive_min": 396,
+                  "depart_min": 390,
+                  "destination": "D",
+                  "energy_kwh": 1.5,
+                  "origin": "B"
+                },
+                {
+                  "arrive_min": 430,
+                  "depart_min": 424,
+                  "destination": "B",
+                  "energy_kwh": 1.5,
+                  "origin": "D"
+                }
+              ]
+            },
+            {
+              "after": "T05",
+              "before": "T01",
+              "depot_split": null,
+              "id": "direct_T01_T05",
+              "kind": "direct",
+              "legs": [
+                {
+                  "arrive_min": 398,
+                  "depart_min": 390,
+                  "destination": "A",
+                  "energy_kwh": 2.0,
+                  "origin": "B"
+                },
+                {
+                  "arrive_min": 418,
+                  "depart_min": 398,
+                  "destination": "A",
+                  "energy_kwh": 0.2,
+                  "origin": "A"
+                }
+              ]
+            },
+            {
+              "after": "T05",
+              "before": "T01",
+              "depot_split": 1,
+              "id": "depot_T01_T05",
+              "kind": "depot",
+              "legs": [
+                {
+                  "arrive_min": 396,
+                  "depart_min": 390,
+                  "destination": "D",
+                  "energy_kwh": 1.5,
+                  "origin": "B"
+                },
+                {
+                  "arrive_min": 418,
+                  "depart_min": 414,
+                  "destination": "A",
+                  "energy_kwh": 1.0,
+                  "origin": "D"
+                }
+              ]
+            },
+            {
+              "after": "T06",
+              "before": "T01",
+              "depot_split": null,
+              "id": "direct_T01_T06",
+              "kind": "direct",
+              "legs": [
+                {
+                  "arrive_min": 390,
+                  "depart_min": 390,
+                  "destination": "B",
+                  "energy_kwh": 0.0,
+                  "origin": "B"
+                },
+                {
+                  "arrive_min": 455,
+                  "depart_min": 390,
+                  "destination": "B",
+                  "energy_kwh": 0.65,
+                  "origin": "B"
+                }
+              ]
+            },
+            {
+              "after": "T06",
+              "before": "T01",
+              "depot_split": 1,
+              "id": "depot_T01_T06",
+              "kind": "depot",
+              "legs": [
+                {
+                  "arrive_min": 396,
+                  "depart_min": 390,
+                  "destination": "D",
+                  "energy_kwh": 1.5,
+                  "origin": "B"
+                },
+                {
+                  "arrive_min": 455,
+                  "depart_min": 449,
+                  "destination": "B",
+                  "energy_kwh": 1.5,
+                  "origin": "D"
+                }
+              ]
+            },
+            {
+              "after": "T07",
+              "before": "T01",
+              "depot_split": null,
+              "id": "direct_T01_T07",
+              "kind": "direct",
+              "legs": [
+                {
+                  "arrive_min": 398,
+                  "depart_min": 390,
+                  "destination": "A",
+                  "energy_kwh": 2.0,
+                  "origin": "B"
+                },
+                {
+                  "arrive_min": 435,
+                  "depart_min": 398,
+                  "destination": "A",
+                  "energy_kwh": 0.37,
+                  "origin": "A"
+                }
+              ]
+            },
+            {
+              "after": "T07",
+              "before": "T01",
+              "depot_split": 1,
+              "id": "depot_T01_T07",
+              "kind": "depot",
+              "legs": [
+                {
+                  "arrive_min": 396,
+                  "depart_min": 390,
+                  "destination": "D",
+                  "energy_kwh": 1.5,
+                  "origin": "B"
+                },
+                {
+                  "arrive_min": 435,
+                  "depart_min": 431,
+                  "destination": "A",
+                  "energy_kwh": 1.0,
+                  "origin": "D"
+                }
+              ]
+            },
+            {
+              "after": "T08",
+              "before": "T01",
+              "depot_split": null,
+              "id": "direct_T01_T08",
+              "kind": "direct",
+              "legs": [
+                {
+                  "arrive_min": 390,
+                  "depart_min": 390,
+                  "destination": "B",
+                  "energy_kwh": 0.0,
+                  "origin": "B"
+                },
+                {
+                  "arrive_min": 491,
+                  "depart_min": 390,
+                  "destination": "B",
+                  "energy_kwh": 1.01,
+                  "origin": "B"
+                }
+              ]
+            },
+            {
+              "after": "T08",
+              "before": "T01",
+              "depot_split": 1,
+              "id": "depot_T01_T08",
+              "kind": "depot",
+              "legs": [
+                {
+                  "arrive_min": 396,
+                  "depart_min": 390,
+                  "destination": "D",
+                  "energy_kwh": 1.5,
+                  "origin": "B"
+                },
+                {
+                  "arrive_min": 491,
+                  "depart_min": 485,
+                  "destination": "B",
+                  "energy_kwh": 1.5,
+                  "origin": "D"
+                }
+              ]
+            },
+            {
+              "after": "T06",
+              "before": "T02",
+              "depot_split": null,
+              "id": "direct_T02_T06",
+              "kind": "direct",
+              "legs": [
+                {
+                  "arrive_min": 442,
+                  "depart_min": 434,
+                  "destination": "B",
+                  "energy_kwh": 2.0,
+                  "origin": "A"
+                },
+                {
+                  "arrive_min": 455,
+                  "depart_min": 442,
+                  "destination": "B",
+                  "energy_kwh": 0.13,
+                  "origin": "B"
+                }
+              ]
+            },
+            {
+              "after": "T06",
+              "before": "T02",
+              "depot_split": 1,
+              "id": "depot_T02_T06",
+              "kind": "depot",
+              "legs": [
+                {
+                  "arrive_min": 438,
+                  "depart_min": 434,
+                  "destination": "D",
+                  "energy_kwh": 1.0,
+                  "origin": "A"
+                },
+                {
+                  "arrive_min": 455,
+                  "depart_min": 449,
+                  "destination": "B",
+                  "energy_kwh": 1.5,
+                  "origin": "D"
+                }
+              ]
+            },
+            {
+              "after": "T07",
+              "before": "T02",
+              "depot_split": null,
+              "id": "direct_T02_T07",
+              "kind": "direct",
+              "legs": [
+                {
+                  "arrive_min": 434,
+                  "depart_min": 434,
+                  "destination": "A",
+                  "energy_kwh": 0.0,
+                  "origin": "A"
+                },
+                {
+                  "arrive_min": 435,
+                  "depart_min": 434,
+                  "destination": "A",
+                  "energy_kwh": 0.01,
+                  "origin": "A"
+                }
+              ]
+            },
+            {
+              "after": "T08",
+              "before": "T02",
+              "depot_split": null,
+              "id": "direct_T02_T08",
+              "kind": "direct",
+              "legs": [
+                {
+                  "arrive_min": 442,
+                  "depart_min": 434,
+                  "destination": "B",
+                  "energy_kwh": 2.0,
+                  "origin": "A"
+                },
+                {
+                  "arrive_min": 491,
+                  "depart_min": 442,
+                  "destination": "B",
+                  "energy_kwh": 0.49,
+                  "origin": "B"
+                }
+              ]
+            },
+            {
+              "after": "T08",
+              "before": "T02",
+              "depot_split": 1,
+              "id": "depot_T02_T08",
+              "kind": "depot",
+              "legs": [
+                {
+                  "arrive_min": 438,
+                  "depart_min": 434,
+                  "destination": "D",
+                  "energy_kwh": 1.0,
+                  "origin": "A"
+                },
+                {
+                  "arrive_min": 491,
+                  "depart_min": 485,
+                  "destination": "B",
+                  "energy_kwh": 1.5,
+                  "origin": "D"
+                }
+              ]
+            },
+            {
+              "after": "T04",
+              "before": "T03",
+              "depot_split": null,
+              "id": "direct_T03_T04",
+              "kind": "direct",
+              "legs": [
+                {
+                  "arrive_min": 417,
+                  "depart_min": 417,
+                  "destination": "B",
+                  "energy_kwh": 0.0,
+                  "origin": "B"
+                },
+                {
+                  "arrive_min": 430,
+                  "depart_min": 417,
+                  "destination": "B",
+                  "energy_kwh": 0.13,
+                  "origin": "B"
+                }
+              ]
+            },
+            {
+              "after": "T04",
+              "before": "T03",
+              "depot_split": 1,
+              "id": "depot_T03_T04",
+              "kind": "depot",
+              "legs": [
+                {
+                  "arrive_min": 423,
+                  "depart_min": 417,
+                  "destination": "D",
+                  "energy_kwh": 1.5,
+                  "origin": "B"
+                },
+                {
+                  "arrive_min": 430,
+                  "depart_min": 424,
+                  "destination": "B",
+                  "energy_kwh": 1.5,
+                  "origin": "D"
+                }
+              ]
+            },
+            {
+              "after": "T06",
+              "before": "T03",
+              "depot_split": null,
+              "id": "direct_T03_T06",
+              "kind": "direct",
+              "legs": [
+                {
+                  "arrive_min": 417,
+                  "depart_min": 417,
+                  "destination": "B",
+                  "energy_kwh": 0.0,
+                  "origin": "B"
+                },
+                {
+                  "arrive_min": 455,
+                  "depart_min": 417,
+                  "destination": "B",
+                  "energy_kwh": 0.38,
+                  "origin": "B"
+                }
+              ]
+            },
+            {
+              "after": "T06",
+              "before": "T03",
+              "depot_split": 1,
+              "id": "depot_T03_T06",
+              "kind": "depot",
+              "legs": [
+                {
+                  "arrive_min": 423,
+                  "depart_min": 417,
+                  "destination": "D",
+                  "energy_kwh": 1.5,
+                  "origin": "B"
+                },
+                {
+                  "arrive_min": 455,
+                  "depart_min": 449,
+                  "destination": "B",
+                  "energy_kwh": 1.5,
+                  "origin": "D"
+                }
+              ]
+            },
+            {
+              "after": "T07",
+              "before": "T03",
+              "depot_split": null,
+              "id": "direct_T03_T07",
+              "kind": "direct",
+              "legs": [
+                {
+                  "arrive_min": 425,
+                  "depart_min": 417,
+                  "destination": "A",
+                  "energy_kwh": 2.0,
+                  "origin": "B"
+                },
+                {
+                  "arrive_min": 435,
+                  "depart_min": 425,
+                  "destination": "A",
+                  "energy_kwh": 0.1,
+                  "origin": "A"
+                }
+              ]
+            },
+            {
+              "after": "T07",
+              "before": "T03",
+              "depot_split": 1,
+              "id": "depot_T03_T07",
+              "kind": "depot",
+              "legs": [
+                {
+                  "arrive_min": 423,
+                  "depart_min": 417,
+                  "destination": "D",
+                  "energy_kwh": 1.5,
+                  "origin": "B"
+                },
+                {
+                  "arrive_min": 435,
+                  "depart_min": 431,
+                  "destination": "A",
+                  "energy_kwh": 1.0,
+                  "origin": "D"
+                }
+              ]
+            },
+            {
+              "after": "T08",
+              "before": "T03",
+              "depot_split": null,
+              "id": "direct_T03_T08",
+              "kind": "direct",
+              "legs": [
+                {
+                  "arrive_min": 417,
+                  "depart_min": 417,
+                  "destination": "B",
+                  "energy_kwh": 0.0,
+                  "origin": "B"
+                },
+                {
+                  "arrive_min": 491,
+                  "depart_min": 417,
+                  "destination": "B",
+                  "energy_kwh": 0.74,
+                  "origin": "B"
+                }
+              ]
+            },
+            {
+              "after": "T08",
+              "before": "T03",
+              "depot_split": 1,
+              "id": "depot_T03_T08",
+              "kind": "depot",
+              "legs": [
+                {
+                  "arrive_min": 423,
+                  "depart_min": 417,
+                  "destination": "D",
+                  "energy_kwh": 1.5,
+                  "origin": "B"
+                },
+                {
+                  "arrive_min": 491,
+                  "depart_min": 485,
+                  "destination": "B",
+                  "energy_kwh": 1.5,
+                  "origin": "D"
+                }
+              ]
+            },
+            {
+              "after": "T08",
+              "before": "T04",
+              "depot_split": null,
+              "id": "direct_T04_T08",
+              "kind": "direct",
+              "legs": [
+                {
+                  "arrive_min": 457,
+                  "depart_min": 449,
+                  "destination": "B",
+                  "energy_kwh": 2.0,
+                  "origin": "A"
+                },
+                {
+                  "arrive_min": 491,
+                  "depart_min": 457,
+                  "destination": "B",
+                  "energy_kwh": 0.34,
+                  "origin": "B"
+                }
+              ]
+            },
+            {
+              "after": "T08",
+              "before": "T04",
+              "depot_split": 1,
+              "id": "depot_T04_T08",
+              "kind": "depot",
+              "legs": [
+                {
+                  "arrive_min": 453,
+                  "depart_min": 449,
+                  "destination": "D",
+                  "energy_kwh": 1.0,
+                  "origin": "A"
+                },
+                {
+                  "arrive_min": 491,
+                  "depart_min": 485,
+                  "destination": "B",
+                  "energy_kwh": 1.5,
+                  "origin": "D"
+                }
+              ]
+            },
+            {
+              "after": "T06",
+              "before": "T05",
+              "depot_split": null,
+              "id": "direct_T05_T06",
+              "kind": "direct",
+              "legs": [
+                {
+                  "arrive_min": 437,
+                  "depart_min": 437,
+                  "destination": "B",
+                  "energy_kwh": 0.0,
+                  "origin": "B"
+                },
+                {
+                  "arrive_min": 455,
+                  "depart_min": 437,
+                  "destination": "B",
+                  "energy_kwh": 0.18,
+                  "origin": "B"
+                }
+              ]
+            },
+            {
+              "after": "T06",
+              "before": "T05",
+              "depot_split": 1,
+              "id": "depot_T05_T06",
+              "kind": "depot",
+              "legs": [
+                {
+                  "arrive_min": 443,
+                  "depart_min": 437,
+                  "destination": "D",
+                  "energy_kwh": 1.5,
+                  "origin": "B"
+                },
+                {
+                  "arrive_min": 455,
+                  "depart_min": 449,
+                  "destination": "B",
+                  "energy_kwh": 1.5,
+                  "origin": "D"
+                }
+              ]
+            },
+            {
+              "after": "T08",
+              "before": "T05",
+              "depot_split": null,
+              "id": "direct_T05_T08",
+              "kind": "direct",
+              "legs": [
+                {
+                  "arrive_min": 437,
+                  "depart_min": 437,
+                  "destination": "B",
+                  "energy_kwh": 0.0,
+                  "origin": "B"
+                },
+                {
+                  "arrive_min": 491,
+                  "depart_min": 437,
+                  "destination": "B",
+                  "energy_kwh": 0.54,
+                  "origin": "B"
+                }
+              ]
+            },
+            {
+              "after": "T08",
+              "before": "T05",
+              "depot_split": 1,
+              "id": "depot_T05_T08",
+              "kind": "depot",
+              "legs": [
+                {
+                  "arrive_min": 443,
+                  "depart_min": 437,
+                  "destination": "D",
+                  "energy_kwh": 1.5,
+                  "origin": "B"
+                },
+                {
+                  "arrive_min": 491,
+                  "depart_min": 485,
+                  "destination": "B",
+                  "energy_kwh": 1.5,
+                  "origin": "D"
+                }
+              ]
+            },
+            {
+              "after": "T08",
+              "before": "T06",
+              "depot_split": null,
+              "id": "direct_T06_T08",
+              "kind": "direct",
+              "legs": [
+                {
+                  "arrive_min": 490,
+                  "depart_min": 482,
+                  "destination": "B",
+                  "energy_kwh": 2.0,
+                  "origin": "A"
+                },
+                {
+                  "arrive_min": 491,
+                  "depart_min": 490,
+                  "destination": "B",
+                  "energy_kwh": 0.01,
+                  "origin": "B"
+                }
+              ]
+            },
+            {
+              "after": "T08",
+              "before": "T07",
+              "depot_split": null,
+              "id": "direct_T07_T08",
+              "kind": "direct",
+              "legs": [
+                {
+                  "arrive_min": 461,
+                  "depart_min": 461,
+                  "destination": "B",
+                  "energy_kwh": 0.0,
+                  "origin": "B"
+                },
+                {
+                  "arrive_min": 491,
+                  "depart_min": 461,
+                  "destination": "B",
+                  "energy_kwh": 0.3,
+                  "origin": "B"
+                }
+              ]
+            },
+            {
+              "after": "T08",
+              "before": "T07",
+              "depot_split": 1,
+              "id": "depot_T07_T08",
+              "kind": "depot",
+              "legs": [
+                {
+                  "arrive_min": 467,
+                  "depart_min": 461,
+                  "destination": "D",
+                  "energy_kwh": 1.5,
+                  "origin": "B"
+                },
+                {
+                  "arrive_min": 491,
+                  "depart_min": 485,
+                  "destination": "B",
+                  "energy_kwh": 1.5,
+                  "origin": "D"
+                }
+              ]
+            }
+          ],
+          "name": "learning_s2002_n08",
+          "recharge_deadline_min": 1800,
+          "reserve_kwh": 20.0,
+          "resources": [
+            {
+              "connectors": 1,
+              "end_min": 1800,
+              "grid_kw": 90.0,
+              "per_bus_kw": 90.0,
+              "start_min": 0
+            }
+          ],
+          "terminal_open_min": 1080,
+          "trips": [
+            {
+              "end_min": 390,
+              "end_place": "B",
+              "energy_kwh": 27.35,
+              "id": "T01",
+              "start_min": 361,
+              "start_place": "A"
+            },
+            {
+              "end_min": 434,
+              "end_place": "A",
+              "energy_kwh": 22.86,
+              "id": "T02",
+              "start_min": 413,
+              "start_place": "B"
+            },
+            {
+              "end_min": 417,
+              "end_place": "B",
+              "energy_kwh": 24.87,
+              "id": "T03",
+              "start_min": 389,
+              "start_place": "A"
+            },
+            {
+              "end_min": 449,
+              "end_place": "A",
+              "energy_kwh": 21.05,
+              "id": "T04",
+              "start_min": 430,
+              "start_place": "B"
+            },
+            {
+              "end_min": 437,
+              "end_place": "B",
+              "energy_kwh": 25.16,
+              "id": "T05",
+              "start_min": 418,
+              "start_place": "A"
+            },
+            {
+              "end_min": 482,
+              "end_place": "A",
+              "energy_kwh": 23.57,
+              "id": "T06",
+              "start_min": 455,
+              "start_place": "B"
+            },
+            {
+              "end_min": 461,
+              "end_place": "B",
+              "energy_kwh": 23.5,
+              "id": "T07",
+              "start_min": 435,
+              "start_place": "A"
+            },
+            {
+              "end_min": 512,
+              "end_place": "A",
+              "energy_kwh": 26.990000000000002,
+              "id": "T08",
+              "start_min": 491,
+              "start_place": "B"
+            }
+          ],
+          "vehicle_cost": 100.0
+        },
+        "case_identity": "31c7cd5d4b6d7be4aba773c8257107ec6b0ff19acbc84b79e8118e46474289c9",
+        "market_identities": {
+          "source0": "f29d2faeb87c51d7fa6013662b8c0f525022f45f8a418938a0e6bc2143a104c9",
+          "source1": "5ae32d99f389d5869aa3ea9389f805b2634d640a9a99bed7a35e9395046ff271",
+          "target": "d2a7207698ca3ae1e042fb7fecc406961a1f7fa4128a4e4ab2402ac75aa2a63d"
+        },
+        "markets": {
+          "source0": {
+            "a": [
+              0.2,
+              0.2,
+              0.2,
+              0.2,
+              0.2,
+              0.2,
+              0.2,
+              0.2,
+              0.2,
+              0.2,
+              0.2,
+              0.2,
+              0.2,
+              0.2,
+              0.2,
+              0.2,
+              0.2,
+              0.2,
+              0.2,
+              0.2,
+              0.2,
+              0.2,
+              0.2,
+              0.2,
+              0.2,
+              0.2,
+              0.2,
+              0.2,
+              0.2,
+              0.2
+            ],
+            "b": [
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111
+            ],
+            "name": "learning_s2002_n08-source0"
+          },
+          "source1": {
+            "a": [
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.1,
+              0.1,
+              0.1,
+              0.1,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3
+            ],
+            "b": [
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111
+            ],
+            "name": "learning_s2002_n08-source1"
+          },
+          "target": {
+            "a": [
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.1,
+              0.1,
+              0.1,
+              0.1,
+              0.3,
+              0.3,
+              0.3,
+              0.3
+            ],
+            "b": [
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111
+            ],
+            "name": "learning_s2002_n08-target"
+          }
+        },
+        "split": "train"
+      },
+      "learning_s2003_n08": {
+        "base_group": "learning_s2003",
+        "case": {
+          "battery_kwh": 100.0,
+          "deadhead_cost_per_min": 0.0,
+          "depot": "D",
+          "efficiency": 0.9,
+          "graph_scope": "declared-movement-modes-only",
+          "market_edges_min": [
+            0,
+            60,
+            120,
+            180,
+            240,
+            300,
+            360,
+            420,
+            480,
+            540,
+            600,
+            660,
+            720,
+            780,
+            840,
+            900,
+            960,
+            1020,
+            1080,
+            1140,
+            1200,
+            1260,
+            1320,
+            1380,
+            1440,
+            1500,
+            1560,
+            1620,
+            1680,
+            1740,
+            1800
+          ],
+          "max_vehicles": 8,
+          "movements": [
+            {
+              "after": "T01",
+              "before": null,
+              "depot_split": null,
+              "id": "out_T01",
+              "kind": "pullout",
+              "legs": [
+                {
+                  "arrive_min": 366,
+                  "depart_min": 362,
+                  "destination": "A",
+                  "energy_kwh": 1.0,
+                  "origin": "D"
+                }
+              ]
+            },
+            {
+              "after": null,
+              "before": "T01",
+              "depot_split": null,
+              "id": "in_T01",
+              "kind": "pullin",
+              "legs": [
+                {
+                  "arrive_min": 404,
+                  "depart_min": 398,
+                  "destination": "D",
+                  "energy_kwh": 1.5,
+                  "origin": "B"
+                }
+              ]
+            },
+            {
+              "after": "T02",
+              "before": null,
+              "depot_split": null,
+              "id": "out_T02",
+              "kind": "pullout",
+              "legs": [
+                {
+                  "arrive_min": 413,
+                  "depart_min": 407,
+                  "destination": "B",
+                  "energy_kwh": 1.5,
+                  "origin": "D"
+                }
+              ]
+            },
+            {
+              "after": null,
+              "before": "T02",
+              "depot_split": null,
+              "id": "in_T02",
+              "kind": "pullin",
+              "legs": [
+                {
+                  "arrive_min": 444,
+                  "depart_min": 440,
+                  "destination": "D",
+                  "energy_kwh": 1.0,
+                  "origin": "A"
+                }
+              ]
+            },
+            {
+              "after": "T03",
+              "before": null,
+              "depot_split": null,
+              "id": "out_T03",
+              "kind": "pullout",
+              "legs": [
+                {
+                  "arrive_min": 392,
+                  "depart_min": 388,
+                  "destination": "A",
+                  "energy_kwh": 1.0,
+                  "origin": "D"
+                }
+              ]
+            },
+            {
+              "after": null,
+              "before": "T03",
+              "depot_split": null,
+              "id": "in_T03",
+              "kind": "pullin",
+              "legs": [
+                {
+                  "arrive_min": 420,
+                  "depart_min": 414,
+                  "destination": "D",
+                  "energy_kwh": 1.5,
+                  "origin": "B"
+                }
+              ]
+            },
+            {
+              "after": "T04",
+              "before": null,
+              "depot_split": null,
+              "id": "out_T04",
+              "kind": "pullout",
+              "legs": [
+                {
+                  "arrive_min": 444,
+                  "depart_min": 438,
+                  "destination": "B",
+                  "energy_kwh": 1.5,
+                  "origin": "D"
+                }
+              ]
+            },
+            {
+              "after": null,
+              "before": "T04",
+              "depot_split": null,
+              "id": "in_T04",
+              "kind": "pullin",
+              "legs": [
+                {
+                  "arrive_min": 475,
+                  "depart_min": 471,
+                  "destination": "D",
+                  "energy_kwh": 1.0,
+                  "origin": "A"
+                }
+              ]
+            },
+            {
+              "after": "T05",
+              "before": null,
+              "depot_split": null,
+              "id": "out_T05",
+              "kind": "pullout",
+              "legs": [
+                {
+                  "arrive_min": 415,
+                  "depart_min": 411,
+                  "destination": "A",
+                  "energy_kwh": 1.0,
+                  "origin": "D"
+                }
+              ]
+            },
+            {
+              "after": null,
+              "before": "T05",
+              "depot_split": null,
+              "id": "in_T05",
+              "kind": "pullin",
+              "legs": [
+                {
+                  "arrive_min": 439,
+                  "depart_min": 433,
+                  "destination": "D",
+                  "energy_kwh": 1.5,
+                  "origin": "B"
+                }
+              ]
+            },
+            {
+              "after": "T06",
+              "before": null,
+              "depot_split": null,
+              "id": "out_T06",
+              "kind": "pullout",
+              "legs": [
+                {
+                  "arrive_min": 441,
+                  "depart_min": 435,
+                  "destination": "B",
+                  "energy_kwh": 1.5,
+                  "origin": "D"
+                }
+              ]
+            },
+            {
+              "after": null,
+              "before": "T06",
+              "depot_split": null,
+              "id": "in_T06",
+              "kind": "pullin",
+              "legs": [
+                {
+                  "arrive_min": 463,
+                  "depart_min": 459,
+                  "destination": "D",
+                  "energy_kwh": 1.0,
+                  "origin": "A"
+                }
+              ]
+            },
+            {
+              "after": "T07",
+              "before": null,
+              "depot_split": null,
+              "id": "out_T07",
+              "kind": "pullout",
+              "legs": [
+                {
+                  "arrive_min": 443,
+                  "depart_min": 439,
+                  "destination": "A",
+                  "energy_kwh": 1.0,
+                  "origin": "D"
+                }
+              ]
+            },
+            {
+              "after": null,
+              "before": "T07",
+              "depot_split": null,
+              "id": "in_T07",
+              "kind": "pullin",
+              "legs": [
+                {
+                  "arrive_min": 480,
+                  "depart_min": 474,
+                  "destination": "D",
+                  "energy_kwh": 1.5,
+                  "origin": "B"
+                }
+              ]
+            },
+            {
+              "after": "T08",
+              "before": null,
+              "depot_split": null,
+              "id": "out_T08",
+              "kind": "pullout",
+              "legs": [
+                {
+                  "arrive_min": 500,
+                  "depart_min": 494,
+                  "destination": "B",
+                  "energy_kwh": 1.5,
+                  "origin": "D"
+                }
+              ]
+            },
+            {
+              "after": null,
+              "before": "T08",
+              "depot_split": null,
+              "id": "in_T08",
+              "kind": "pullin",
+              "legs": [
+                {
+                  "arrive_min": 523,
+                  "depart_min": 519,
+                  "destination": "D",
+                  "energy_kwh": 1.0,
+                  "origin": "A"
+                }
+              ]
+            },
+            {
+              "after": "T02",
+              "before": "T01",
+              "depot_split": null,
+              "id": "direct_T01_T02",
+              "kind": "direct",
+              "legs": [
+                {
+                  "arrive_min": 398,
+                  "depart_min": 398,
+                  "destination": "B",
+                  "energy_kwh": 0.0,
+                  "origin": "B"
+                },
+                {
+                  "arrive_min": 413,
+                  "depart_min": 398,
+                  "destination": "B",
+                  "energy_kwh": 0.15,
+                  "origin": "B"
+                }
+              ]
+            },
+            {
+              "after": "T02",
+              "before": "T01",
+              "depot_split": 1,
+              "id": "depot_T01_T02",
+              "kind": "depot",
+              "legs": [
+                {
+                  "arrive_min": 404,
+                  "depart_min": 398,
+                  "destination": "D",
+                  "energy_kwh": 1.5,
+                  "origin": "B"
+                },
+                {
+                  "arrive_min": 413,
+                  "depart_min": 407,
+                  "destination": "B",
+                  "energy_kwh": 1.5,
+                  "origin": "D"
+                }
+              ]
+            },
+            {
+              "after": "T04",
+              "before": "T01",
+              "depot_split": null,
+              "id": "direct_T01_T04",
+              "kind": "direct",
+              "legs": [
+                {
+                  "arrive_min": 398,
+                  "depart_min": 398,
+                  "destination": "B",
+                  "energy_kwh": 0.0,
+                  "origin": "B"
+                },
+                {
+                  "arrive_min": 444,
+                  "depart_min": 398,
+                  "destination": "B",
+                  "energy_kwh": 0.46,
+                  "origin": "B"
+                }
+              ]
+            },
+            {
+              "after": "T04",
+              "before": "T01",
+              "depot_split": 1,
+              "id": "depot_T01_T04",
+              "kind": "depot",
+              "legs": [
+                {
+                  "arrive_min": 404,
+                  "depart_min": 398,
+                  "destination": "D",
+                  "energy_kwh": 1.5,
+                  "origin": "B"
+                },
+                {
+                  "arrive_min": 444,
+                  "depart_min": 438,
+                  "destination": "B",
+                  "energy_kwh": 1.5,
+                  "origin": "D"
+                }
+              ]
+            },
+            {
+              "after": "T05",
+              "before": "T01",
+              "depot_split": null,
+              "id": "direct_T01_T05",
+              "kind": "direct",
+              "legs": [
+                {
+                  "arrive_min": 406,
+                  "depart_min": 398,
+                  "destination": "A",
+                  "energy_kwh": 2.0,
+                  "origin": "B"
+                },
+                {
+                  "arrive_min": 415,
+                  "depart_min": 406,
+                  "destination": "A",
+                  "energy_kwh": 0.09,
+                  "origin": "A"
+                }
+              ]
+            },
+            {
+              "after": "T05",
+              "before": "T01",
+              "depot_split": 1,
+              "id": "depot_T01_T05",
+              "kind": "depot",
+              "legs": [
+                {
+                  "arrive_min": 404,
+                  "depart_min": 398,
+                  "destination": "D",
+                  "energy_kwh": 1.5,
+                  "origin": "B"
+                },
+                {
+                  "arrive_min": 415,
+                  "depart_min": 411,
+                  "destination": "A",
+                  "energy_kwh": 1.0,
+                  "origin": "D"
+                }
+              ]
+            },
+            {
+              "after": "T06",
+              "before": "T01",
+              "depot_split": null,
+              "id": "direct_T01_T06",
+              "kind": "direct",
+              "legs": [
+                {
+                  "arrive_min": 398,
+                  "depart_min": 398,
+                  "destination": "B",
+                  "energy_kwh": 0.0,
+                  "origin": "B"
+                },
+                {
+                  "arrive_min": 441,
+                  "depart_min": 398,
+                  "destination": "B",
+                  "energy_kwh": 0.43,
+                  "origin": "B"
+                }
+              ]
+            },
+            {
+              "after": "T06",
+              "before": "T01",
+              "depot_split": 1,
+              "id": "depot_T01_T06",
+              "kind": "depot",
+              "legs": [
+                {
+                  "arrive_min": 404,
+                  "depart_min": 398,
+                  "destination": "D",
+                  "energy_kwh": 1.5,
+                  "origin": "B"
+                },
+                {
+                  "arrive_min": 441,
+                  "depart_min": 435,
+                  "destination": "B",
+                  "energy_kwh": 1.5,
+                  "origin": "D"
+                }
+              ]
+            },
+            {
+              "after": "T07",
+              "before": "T01",
+              "depot_split": null,
+              "id": "direct_T01_T07",
+              "kind": "direct",
+              "legs": [
+                {
+                  "arrive_min": 406,
+                  "depart_min": 398,
+                  "destination": "A",
+                  "energy_kwh": 2.0,
+                  "origin": "B"
+                },
+                {
+                  "arrive_min": 443,
+                  "depart_min": 406,
+                  "destination": "A",
+                  "energy_kwh": 0.37,
+                  "origin": "A"
+                }
+              ]
+            },
+            {
+              "after": "T07",
+              "before": "T01",
+              "depot_split": 1,
+              "id": "depot_T01_T07",
+              "kind": "depot",
+              "legs": [
+                {
+                  "arrive_min": 404,
+                  "depart_min": 398,
+                  "destination": "D",
+                  "energy_kwh": 1.5,
+                  "origin": "B"
+                },
+                {
+                  "arrive_min": 443,
+                  "depart_min": 439,
+                  "destination": "A",
+                  "energy_kwh": 1.0,
+                  "origin": "D"
+                }
+              ]
+            },
+            {
+              "after": "T08",
+              "before": "T01",
+              "depot_split": null,
+              "id": "direct_T01_T08",
+              "kind": "direct",
+              "legs": [
+                {
+                  "arrive_min": 398,
+                  "depart_min": 398,
+                  "destination": "B",
+                  "energy_kwh": 0.0,
+                  "origin": "B"
+                },
+                {
+                  "arrive_min": 500,
+                  "depart_min": 398,
+                  "destination": "B",
+                  "energy_kwh": 1.02,
+                  "origin": "B"
+                }
+              ]
+            },
+            {
+              "after": "T08",
+              "before": "T01",
+              "depot_split": 1,
+              "id": "depot_T01_T08",
+              "kind": "depot",
+              "legs": [
+                {
+                  "arrive_min": 404,
+                  "depart_min": 398,
+                  "destination": "D",
+                  "energy_kwh": 1.5,
+                  "origin": "B"
+                },
+                {
+                  "arrive_min": 500,
+                  "depart_min": 494,
+                  "destination": "B",
+                  "energy_kwh": 1.5,
+                  "origin": "D"
+                }
+              ]
+            },
+            {
+              "after": "T07",
+              "before": "T02",
+              "depot_split": null,
+              "id": "direct_T02_T07",
+              "kind": "direct",
+              "legs": [
+                {
+                  "arrive_min": 440,
+                  "depart_min": 440,
+                  "destination": "A",
+                  "energy_kwh": 0.0,
+                  "origin": "A"
+                },
+                {
+                  "arrive_min": 443,
+                  "depart_min": 440,
+                  "destination": "A",
+                  "energy_kwh": 0.03,
+                  "origin": "A"
+                }
+              ]
+            },
+            {
+              "after": "T08",
+              "before": "T02",
+              "depot_split": null,
+              "id": "direct_T02_T08",
+              "kind": "direct",
+              "legs": [
+                {
+                  "arrive_min": 448,
+                  "depart_min": 440,
+                  "destination": "B",
+                  "energy_kwh": 2.0,
+                  "origin": "A"
+                },
+                {
+                  "arrive_min": 500,
+                  "depart_min": 448,
+                  "destination": "B",
+                  "energy_kwh": 0.52,
+                  "origin": "B"
+                }
+              ]
+            },
+            {
+              "after": "T08",
+              "before": "T02",
+              "depot_split": 1,
+              "id": "depot_T02_T08",
+              "kind": "depot",
+              "legs": [
+                {
+                  "arrive_min": 444,
+                  "depart_min": 440,
+                  "destination": "D",
+                  "energy_kwh": 1.0,
+                  "origin": "A"
+                },
+                {
+                  "arrive_min": 500,
+                  "depart_min": 494,
+                  "destination": "B",
+                  "energy_kwh": 1.5,
+                  "origin": "D"
+                }
+              ]
+            },
+            {
+              "after": "T04",
+              "before": "T03",
+              "depot_split": null,
+              "id": "direct_T03_T04",
+              "kind": "direct",
+              "legs": [
+                {
+                  "arrive_min": 414,
+                  "depart_min": 414,
+                  "destination": "B",
+                  "energy_kwh": 0.0,
+                  "origin": "B"
+                },
+                {
+                  "arrive_min": 444,
+                  "depart_min": 414,
+                  "destination": "B",
+                  "energy_kwh": 0.3,
+                  "origin": "B"
+                }
+              ]
+            },
+            {
+              "after": "T04",
+              "before": "T03",
+              "depot_split": 1,
+              "id": "depot_T03_T04",
+              "kind": "depot",
+              "legs": [
+                {
+                  "arrive_min": 420,
+                  "depart_min": 414,
+                  "destination": "D",
+                  "energy_kwh": 1.5,
+                  "origin": "B"
+                },
+                {
+                  "arrive_min": 444,
+                  "depart_min": 438,
+                  "destination": "B",
+                  "energy_kwh": 1.5,
+                  "origin": "D"
+                }
+              ]
+            },
+            {
+              "after": "T06",
+              "before": "T03",
+              "depot_split": null,
+              "id": "direct_T03_T06",
+              "kind": "direct",
+              "legs": [
+                {
+                  "arrive_min": 414,
+                  "depart_min": 414,
+                  "destination": "B",
+                  "energy_kwh": 0.0,
+                  "origin": "B"
+                },
+                {
+                  "arrive_min": 441,
+                  "depart_min": 414,
+                  "destination": "B",
+                  "energy_kwh": 0.27,
+                  "origin": "B"
+                }
+              ]
+            },
+            {
+              "after": "T06",
+              "before": "T03",
+              "depot_split": 1,
+              "id": "depot_T03_T06",
+              "kind": "depot",
+              "legs": [
+                {
+                  "arrive_min": 420,
+                  "depart_min": 414,
+                  "destination": "D",
+                  "energy_kwh": 1.5,
+                  "origin": "B"
+                },
+                {
+                  "arrive_min": 441,
+                  "depart_min": 435,
+                  "destination": "B",
+                  "energy_kwh": 1.5,
+                  "origin": "D"
+                }
+              ]
+            },
+            {
+              "after": "T07",
+              "before": "T03",
+              "depot_split": null,
+              "id": "direct_T03_T07",
+              "kind": "direct",
+              "legs": [
+                {
+                  "arrive_min": 422,
+                  "depart_min": 414,
+                  "destination": "A",
+                  "energy_kwh": 2.0,
+                  "origin": "B"
+                },
+                {
+                  "arrive_min": 443,
+                  "depart_min": 422,
+                  "destination": "A",
+                  "energy_kwh": 0.21,
+                  "origin": "A"
+                }
+              ]
+            },
+            {
+              "after": "T07",
+              "before": "T03",
+              "depot_split": 1,
+              "id": "depot_T03_T07",
+              "kind": "depot",
+              "legs": [
+                {
+                  "arrive_min": 420,
+                  "depart_min": 414,
+                  "destination": "D",
+                  "energy_kwh": 1.5,
+                  "origin": "B"
+                },
+                {
+                  "arrive_min": 443,
+                  "depart_min": 439,
+                  "destination": "A",
+                  "energy_kwh": 1.0,
+                  "origin": "D"
+                }
+              ]
+            },
+            {
+              "after": "T08",
+              "before": "T03",
+              "depot_split": null,
+              "id": "direct_T03_T08",
+              "kind": "direct",
+              "legs": [
+                {
+                  "arrive_min": 414,
+                  "depart_min": 414,
+                  "destination": "B",
+                  "energy_kwh": 0.0,
+                  "origin": "B"
+                },
+                {
+                  "arrive_min": 500,
+                  "depart_min": 414,
+                  "destination": "B",
+                  "energy_kwh": 0.86,
+                  "origin": "B"
+                }
+              ]
+            },
+            {
+              "after": "T08",
+              "before": "T03",
+              "depot_split": 1,
+              "id": "depot_T03_T08",
+              "kind": "depot",
+              "legs": [
+                {
+                  "arrive_min": 420,
+                  "depart_min": 414,
+                  "destination": "D",
+                  "energy_kwh": 1.5,
+                  "origin": "B"
+                },
+                {
+                  "arrive_min": 500,
+                  "depart_min": 494,
+                  "destination": "B",
+                  "energy_kwh": 1.5,
+                  "origin": "D"
+                }
+              ]
+            },
+            {
+              "after": "T08",
+              "before": "T04",
+              "depot_split": null,
+              "id": "direct_T04_T08",
+              "kind": "direct",
+              "legs": [
+                {
+                  "arrive_min": 479,
+                  "depart_min": 471,
+                  "destination": "B",
+                  "energy_kwh": 2.0,
+                  "origin": "A"
+                },
+                {
+                  "arrive_min": 500,
+                  "depart_min": 479,
+                  "destination": "B",
+                  "energy_kwh": 0.21,
+                  "origin": "B"
+                }
+              ]
+            },
+            {
+              "after": "T08",
+              "before": "T04",
+              "depot_split": 1,
+              "id": "depot_T04_T08",
+              "kind": "depot",
+              "legs": [
+                {
+                  "arrive_min": 475,
+                  "depart_min": 471,
+                  "destination": "D",
+                  "energy_kwh": 1.0,
+                  "origin": "A"
+                },
+                {
+                  "arrive_min": 500,
+                  "depart_min": 494,
+                  "destination": "B",
+                  "energy_kwh": 1.5,
+                  "origin": "D"
+                }
+              ]
+            },
+            {
+              "after": "T04",
+              "before": "T05",
+              "depot_split": null,
+              "id": "direct_T05_T04",
+              "kind": "direct",
+              "legs": [
+                {
+                  "arrive_min": 433,
+                  "depart_min": 433,
+                  "destination": "B",
+                  "energy_kwh": 0.0,
+                  "origin": "B"
+                },
+                {
+                  "arrive_min": 444,
+                  "depart_min": 433,
+                  "destination": "B",
+                  "energy_kwh": 0.11,
+                  "origin": "B"
+                }
+              ]
+            },
+            {
+              "after": "T06",
+              "before": "T05",
+              "depot_split": null,
+              "id": "direct_T05_T06",
+              "kind": "direct",
+              "legs": [
+                {
+                  "arrive_min": 433,
+                  "depart_min": 433,
+                  "destination": "B",
+                  "energy_kwh": 0.0,
+                  "origin": "B"
+                },
+                {
+                  "arrive_min": 441,
+                  "depart_min": 433,
+                  "destination": "B",
+                  "energy_kwh": 0.08,
+                  "origin": "B"
+                }
+              ]
+            },
+            {
+              "after": "T07",
+              "before": "T05",
+              "depot_split": null,
+              "id": "direct_T05_T07",
+              "kind": "direct",
+              "legs": [
+                {
+                  "arrive_min": 441,
+                  "depart_min": 433,
+                  "destination": "A",
+                  "energy_kwh": 2.0,
+                  "origin": "B"
+                },
+                {
+                  "arrive_min": 443,
+                  "depart_min": 441,
+                  "destination": "A",
+                  "energy_kwh": 0.02,
+                  "origin": "A"
+                }
+              ]
+            },
+            {
+              "after": "T07",
+              "before": "T05",
+              "depot_split": 1,
+              "id": "depot_T05_T07",
+              "kind": "depot",
+              "legs": [
+                {
+                  "arrive_min": 439,
+                  "depart_min": 433,
+                  "destination": "D",
+                  "energy_kwh": 1.5,
+                  "origin": "B"
+                },
+                {
+                  "arrive_min": 443,
+                  "depart_min": 439,
+                  "destination": "A",
+                  "energy_kwh": 1.0,
+                  "origin": "D"
+                }
+              ]
+            },
+            {
+              "after": "T08",
+              "before": "T05",
+              "depot_split": null,
+              "id": "direct_T05_T08",
+              "kind": "direct",
+              "legs": [
+                {
+                  "arrive_min": 433,
+                  "depart_min": 433,
+                  "destination": "B",
+                  "energy_kwh": 0.0,
+                  "origin": "B"
+                },
+                {
+                  "arrive_min": 500,
+                  "depart_min": 433,
+                  "destination": "B",
+                  "energy_kwh": 0.67,
+                  "origin": "B"
+                }
+              ]
+            },
+            {
+              "after": "T08",
+              "before": "T05",
+              "depot_split": 1,
+              "id": "depot_T05_T08",
+              "kind": "depot",
+              "legs": [
+                {
+                  "arrive_min": 439,
+                  "depart_min": 433,
+                  "destination": "D",
+                  "energy_kwh": 1.5,
+                  "origin": "B"
+                },
+                {
+                  "arrive_min": 500,
+                  "depart_min": 494,
+                  "destination": "B",
+                  "energy_kwh": 1.5,
+                  "origin": "D"
+                }
+              ]
+            },
+            {
+              "after": "T08",
+              "before": "T06",
+              "depot_split": null,
+              "id": "direct_T06_T08",
+              "kind": "direct",
+              "legs": [
+                {
+                  "arrive_min": 467,
+                  "depart_min": 459,
+                  "destination": "B",
+                  "energy_kwh": 2.0,
+                  "origin": "A"
+                },
+                {
+                  "arrive_min": 500,
+                  "depart_min": 467,
+                  "destination": "B",
+                  "energy_kwh": 0.33,
+                  "origin": "B"
+                }
+              ]
+            },
+            {
+              "after": "T08",
+              "before": "T06",
+              "depot_split": 1,
+              "id": "depot_T06_T08",
+              "kind": "depot",
+              "legs": [
+                {
+                  "arrive_min": 463,
+                  "depart_min": 459,
+                  "destination": "D",
+                  "energy_kwh": 1.0,
+                  "origin": "A"
+                },
+                {
+                  "arrive_min": 500,
+                  "depart_min": 494,
+                  "destination": "B",
+                  "energy_kwh": 1.5,
+                  "origin": "D"
+                }
+              ]
+            },
+            {
+              "after": "T08",
+              "before": "T07",
+              "depot_split": null,
+              "id": "direct_T07_T08",
+              "kind": "direct",
+              "legs": [
+                {
+                  "arrive_min": 474,
+                  "depart_min": 474,
+                  "destination": "B",
+                  "energy_kwh": 0.0,
+                  "origin": "B"
+                },
+                {
+                  "arrive_min": 500,
+                  "depart_min": 474,
+                  "destination": "B",
+                  "energy_kwh": 0.26,
+                  "origin": "B"
+                }
+              ]
+            },
+            {
+              "after": "T08",
+              "before": "T07",
+              "depot_split": 1,
+              "id": "depot_T07_T08",
+              "kind": "depot",
+              "legs": [
+                {
+                  "arrive_min": 480,
+                  "depart_min": 474,
+                  "destination": "D",
+                  "energy_kwh": 1.5,
+                  "origin": "B"
+                },
+                {
+                  "arrive_min": 500,
+                  "depart_min": 494,
+                  "destination": "B",
+                  "energy_kwh": 1.5,
+                  "origin": "D"
+                }
+              ]
+            }
+          ],
+          "name": "learning_s2003_n08",
+          "recharge_deadline_min": 1800,
+          "reserve_kwh": 20.0,
+          "resources": [
+            {
+              "connectors": 1,
+              "end_min": 1800,
+              "grid_kw": 90.0,
+              "per_bus_kw": 90.0,
+              "start_min": 0
+            }
+          ],
+          "terminal_open_min": 1080,
+          "trips": [
+            {
+              "end_min": 398,
+              "end_place": "B",
+              "energy_kwh": 25.96,
+              "id": "T01",
+              "start_min": 366,
+              "start_place": "A"
+            },
+            {
+              "end_min": 440,
+              "end_place": "A",
+              "energy_kwh": 25.85,
+              "id": "T02",
+              "start_min": 413,
+              "start_place": "B"
+            },
+            {
+              "end_min": 414,
+              "end_place": "B",
+              "energy_kwh": 26.0,
+              "id": "T03",
+              "start_min": 392,
+              "start_place": "A"
+            },
+            {
+              "end_min": 471,
+              "end_place": "A",
+              "energy_kwh": 26.23,
+              "id": "T04",
+              "start_min": 444,
+              "start_place": "B"
+            },
+            {
+              "end_min": 433,
+              "end_place": "B",
+              "energy_kwh": 20.07,
+              "id": "T05",
+              "start_min": 415,
+              "start_place": "A"
+            },
+            {
+              "end_min": 459,
+              "end_place": "A",
+              "energy_kwh": 21.95,
+              "id": "T06",
+              "start_min": 441,
+              "start_place": "B"
+            },
+            {
+              "end_min": 474,
+              "end_place": "B",
+              "energy_kwh": 25.57,
+              "id": "T07",
+              "start_min": 443,
+              "start_place": "A"
+            },
+            {
+              "end_min": 519,
+              "end_place": "A",
+              "energy_kwh": 25.4,
+              "id": "T08",
+              "start_min": 500,
+              "start_place": "B"
+            }
+          ],
+          "vehicle_cost": 100.0
+        },
+        "case_identity": "587c2974f77ffb9bb89d7c01a7fe64b55feeb0ec0f1f3f8f8904877b0e0cb5b6",
+        "market_identities": {
+          "source0": "5dc9aea835e0cbdbf0dab093c2b234f1054878424541d2a6f1b069794dfe5f84",
+          "source1": "f29bcba4c2e8bce766f8184f70a563a051eda420c125aee3a3f57da2c6690752",
+          "target": "4caede7a11a2e3339a9f0aab6a5b5527ddf001b847eb0fe7a8c3849250f6d02a"
+        },
+        "markets": {
+          "source0": {
+            "a": [
+              0.2,
+              0.2,
+              0.2,
+              0.2,
+              0.2,
+              0.2,
+              0.2,
+              0.2,
+              0.2,
+              0.2,
+              0.2,
+              0.2,
+              0.2,
+              0.2,
+              0.2,
+              0.2,
+              0.2,
+              0.2,
+              0.2,
+              0.2,
+              0.2,
+              0.2,
+              0.2,
+              0.2,
+              0.2,
+              0.2,
+              0.2,
+              0.2,
+              0.2,
+              0.2
+            ],
+            "b": [
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111
+            ],
+            "name": "learning_s2003_n08-source0"
+          },
+          "source1": {
+            "a": [
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.1,
+              0.1,
+              0.1,
+              0.1,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3
+            ],
+            "b": [
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111
+            ],
+            "name": "learning_s2003_n08-source1"
+          },
+          "target": {
+            "a": [
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.1,
+              0.1,
+              0.1,
+              0.1,
+              0.3,
+              0.3,
+              0.3,
+              0.3
+            ],
+            "b": [
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111,
+              0.0011111111111111111
+            ],
+            "name": "learning_s2003_n08-target"
+          }
+        },
+        "split": "dev"
+      }
+    },
+    "policy": {
+      "bound_cache_policy": "none",
+      "master_policy": "numerical_qp_proposal",
+      "pricing_reserve_seconds": 10.0,
+      "reuse_policy": "feasible_pool"
+    },
+    "reserved_test_seeds": [
+      2004,
+      2005
+    ],
+    "stages": {
+      "learning_s2001": [
+        "source0",
+        "source1",
+        "cold",
+        "retained",
+        "nearest_price"
+      ],
+      "learning_s2002": [
+        "source0",
+        "source1",
+        "cold",
+        "retained",
+        "nearest_price"
+      ],
+      "learning_s2003": [
+        "source0",
+        "source1",
+        "cold",
+        "retained",
+        "nearest_price",
+        "cheapest_bill",
+        "learned"
+      ]
+    }
+  },
+  "native_probe": {
+    "backend_identity": {
+      "model_solver_name": "GRB",
+      "native_library_path": "/home/nc437/evsp_env/lib/python3.12/site-packages/gurobipy/_attrutil.cpython-312-x86_64-linux-gnu.so",
+      "native_library_sha256": "57f87a886aa5a1fd8356494fa1b81e9f9c7d957c898d09e96145440c76c762b7",
+      "requested": "GRB",
+      "solver_class": "SolverGurobi",
+      "solver_module": "mip.gurobi"
+    },
+    "model_seed": 0
+  },
+  "protocol": "egg-learning-campaign-synthetic-20260930-v1",
+  "runtime": {
+    "gurobi_runtime": "12.0.3",
+    "gurobipy": "12.0.3",
+    "machine": "x86_64",
+    "mip": "1.17.6",
+    "python_abi": "cpython-312",
+    "python_build": "3.12.13 | packaged by Anaconda, Inc. | (main, Mar 19 2026, 20:20:58) [GCC 14.3.0]",
+    "python_implementation": "cpython",
+    "python_version": "3.12.13"
+  },
+  "scientific_admission": "pending independent review",
+  "source_commit": "79ad457765e5815c3ff6200d3941434238f3c5d7",
+  "source_hashes": {
+    "research-20260930/learning-campaign/ARCHITECTURE.md": "a6ada561f821717f449b9fe9809198dcfeba6e768b63fb4c50859507c10e5741",
+    "research-20260930/learning-campaign/LEARNING.md": "2f9cabddfcb56b66c014f51d262f0ab336feb463baab6f73b713250c65b6e1d5",
+    "research-20260930/learning-campaign/PROTOCOL.md": "24d655d1d75c6c7248df3a19a2a0bac7dcbe3271db135a8a7ac7f8d84dbcfefb",
+    "research-20260930/learning-campaign/README.md": "9ecb3ce1788b1bf1f187a10e3ab78aedbb2ce742a9c004f72509c4b735b3786d",
+    "src/cluster/learning_campaign.sbatch": "44cabd3fa442bf9b4b937313ec418abdd60bdab6cc47705c13dea607950b84c9",
+    "src/cluster/unicorn_env.sh": "1731f65b21fd9c81f5726078490aed384974ac2e4869bdc13e7259d5ab045678",
+    "src/egglab/learned_proposals.py": "bbc78a9161fe52459c5989a67d6a38b6a8307fe4f96c051a7c8a93a6f29e86f8",
+    "src/egglab/native_hull.py": "dc8f04bfeab01fb6aaa4afca61c97887993b4e6181be8cabfa76858265051ffd",
+    "src/egglab/native_pathflow.py": "cd61085c5942248e53cdfbd92056c4ba324dfd81d5d18b726f58715298003df0",
+    "src/egglab/native_pathflow_hull.py": "93177e6e712ae4c407a26202194c250a7c547801b0ee6a18ebcf5e49c90a2eb4",
+    "src/egglab/native_recharge.py": "0067123a7f71cc6e9c89e1262cdcbd612cafdcfc252e35bcfca7f1f54c45d0f3",
+    "src/egglab/restricted_qp_proposal.py": "466edb75dbd619feae37f423967cdd1068ec33abdcc70207fa01a006ba7b53dd",
+    "src/experiments/budget_sizing_diagnostic.py": "2b9da59b1699133cd7b5ffdc2465d4e5e8fe0d6a7b4e25560f189a6c4fc7ce23",
+    "src/experiments/computational_benchmark.py": "da96e4601e34dc797526703db68c2d2cbda57d78a9048c8fd7c34889ffca1c8f",
+    "src/experiments/learning_campaign.py": "a55c786e011fb76e6b66eb84a25cd4c652ff9b7de4cafb72394f09cf769c6f37",
+    "src/experiments/retrieval_comparison.py": "74d2b1f634196ef6450620c9ebdda6421dde29ff03b92c0800afbf158689ed77",
+    "src/experiments/train_fleet_proposals.py": "badad6b00503bf4189f6ab29a65e2dac3695eb5beb3d4e8f98ae019a5406a56e",
+    "src/tests/test_learned_proposals.py": "a6d9abf88301ceb0548633dd93a59327292df050b2dafa08389672be8c68ff80",
+    "src/tests/test_learning_campaign.py": "074b7276c8bdfced96e66db92c771394bdf62be885fae7da6bba75e9cb131b94"
+  }
+}

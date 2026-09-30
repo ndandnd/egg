@@ -89,7 +89,7 @@ def _summary(proposal):
         "direct_bill":chosen["direct_bill"], "controls":proposal["controls"],
         "candidates":[{k:v for k,v in c.items() if k != "plan"}
             for c in proposal["candidates"]],
-        "interpretation":"Physical fleet MIP-start proposal; solver acceptance and savings unverified"}
+        "interpretation":"Replayed full-fleet feasible-pool proposal; target solver benefit pending measurement"}
 
 
 def _evaluate(rows, split, model):

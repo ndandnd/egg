@@ -52,7 +52,7 @@ stored-float rational comparison and a particularly important diagnostic:
 outperforming a weaker control alone would not establish value from learning.
 Leave-one-base-group-out outputs from the training groups are descriptive
 development checks. A solve-time or best-feasible-objective gain requires
-running the learned warm start and all controls under equal online budgets,
+running the learned feasible-pool proposal and all controls under equal online budgets,
 with source acquisition and replay costs counted. The first pipeline also evaluates the projected fleet in a bounded native target
 solve, using the same candidate pool as nearest-price and cheapest-bill controls.
 No solve-time savings are assumed before those results are reviewed.

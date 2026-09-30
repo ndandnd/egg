@@ -1,4 +1,4 @@
-"""Developmental, CPU-light ranking of complete native fleet MIP starts.
+"""Developmental, CPU-light topology prediction with full-fleet pool proposals.
 
 The learned movement prior ranks *saved physical plans*. It never synthesizes a
 plan, changes charging, or claims native matrix feasibility. Every returned

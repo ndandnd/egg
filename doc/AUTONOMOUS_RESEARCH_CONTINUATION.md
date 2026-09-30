@@ -17,9 +17,28 @@ queue. Check current workers and launch receipts before submitting anything.
 
 - Live Unicorn check found no active EGG job and available default-partition
   capacity. Other held jobs are unrelated and must not be changed.
-- Sol workers are implementing the first synthetic campaign runner and CPU route
-  proposal model; Luna is reviewing launch-critical scientific/resource controls.
-  Root alone submits. No new job has been submitted at this checkpoint.
+- Cluster job **677817** completed with exit 0 in 91 seconds. All 17 native cells
+  yielded feasible fleets; 15 hull results certified and 2 source solves exhausted
+  their budget. The model trained successfully before the dev cold solve. Request
+  was one CPU, 8 GB and 45 minutes; Slurm allocated two logical CPUs, native threads stayed at one.
+  Complete result copies are local and remote; see ACCOUNTING_677817.json and
+  RESULT_MANIFEST_STAGE1.json. Comparative analysis is underway. Execution commit
+  `79ad457765e5815c3ff6200d3941434238f3c5d7` is pushed to GitHub and checked out
+  separately at `/home/nc437/egg-learning-campaign-20260930`. Do not rerun it.
+  Stage2 is under Sol implementation: six train and two dev independent groups,
+  service counts 12/20/28, 44 bounded native cells plus prospective model training,
+  one CPU, 8 GB and 100 minutes. All development source cells precede the single training call and all
+  development target cold solves. Root alone reviews and submits under a new frozen identity.
+  See `research-20260930/learning-campaign/LAUNCH_677817.json` and
+  `CAMPAIGN_STATE.json` for authoritative launch/state receipts.
+- The 17-cell batch has two training timetables and one development timetable,
+  eight services each, with grouped tariff variants. The CPU model is trained
+  before the development target cold solve. Learned and nonlinear cheapest-cost
+  selections enter the same bounded native hull solver as the reuse baselines.
+  Source-pool coverage limits the proposal; no learning benefit is claimed yet.
+- Sol implementation and Luna independent review are complete; ten focused tests
+  passed. Root fixed two review issues before launch: nonlinear cheapest-cost
+  selection and withholding native bounds when their assessment did not replay.
 - First launch ceiling: one serial job, one CPU/8GB, one native thread, at most
   two hours, no retry/requeue, exclude scaglione-compute-01. The frozen protocol
   in `research-20260930/learning-campaign/` sets the tighter actual budget.
@@ -31,7 +50,9 @@ queue. Check current workers and launch receipts before submitting anything.
 - Reserved test seeds stay unmaterialized. No protected A6/B3/confirmation data,
   private GIRO publication, PR merge, journal submission or reset-credit use.
 - Preserve failures/time, GitHub backups and consolidated Google Doc milestones.
-  See campaign protocol, architecture and current receipts for the next action.
+  See campaign protocol, architecture, `CONTINUATION_PLAN.md` and current receipts
+  for the next action. Collect complete results, review failures and timings, then
+  advance the next bounded batch or necessary correction without routine approval.
 
 ## Prior checkpoint — draft 0.10 ready for coauthor discussion
 
@@ -1891,7 +1912,7 @@ preflight reproducer and repair are documented. No operational solve is active.
 
 The8-cell native hull attempt at `f549100587cdf561c978e145e73e86dbadc9f27e`
 is complete, not active:2 cells certified,4 exhausted the64-master-call cap,
-and2 retained successor states correctly blocked after their predecessor failed.
+and 2 retained successor states correctly blocked after their predecessor failed.
 Supervisor exit1, no outer timeout,14.2354s. Raw evidence and all failure work
 are manifested in `result/native_hull/20260927-attempt1`; do not rerun or rewrite.
 The physical timing gate independently passed all19 controls; this new failure
@@ -1903,7 +1924,7 @@ controls;22 corruption checks). Final derived review is packaged. The hull V1
 failure is a diagnosed repeated-tangent/master precision stall; author is
 preparing V2 with bounded exact pairwise simplex polishing and streamed bestUB,
 while a separate reviewer audits V1. No rerun before new review/freeze.
-Root compact path-flow module and20-control gate are ready for independent
+Root compact path-flow module and 20-control gate are ready for independent
 preflight, including a three-service/two-depot-visit control. No compact solve.
 The public-case figure is being generated; manuscript0.3 remains unrendered.
 
@@ -2027,7 +2048,7 @@ Both full37-service cells are independently audited bounded/FEASIBLE results:
 depot15 [237.14148764071234,408.5331368838794], depot16
 [232.14633164554616,433.74608621721006]. Both have two-bus physical witnesses,
 with1042.665679419397/1168.73042608605 gridkWh. Neither proves optimality.
-The audit reconstructed42,297 raw values,41 charging sessions and231 SOC events;
+The audit reconstructed42,297 raw values,41 charging sessions and 231 SOC events;
 16 corruption controls were rejected. Complete17-file external archive verified.
 The public copy retains15 original scientific files byte-for-byte, the unchanged
 raw manifest and explicit omission hashes for two license-bearing whole stdout
