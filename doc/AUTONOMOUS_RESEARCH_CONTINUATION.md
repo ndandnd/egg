@@ -38,8 +38,9 @@ artifacts. Continue useful local work between jobs; do not pause on an empty que
   EGG array. LAUNCH_722841.json / graph v6 protocol remain authoritative:12tasks%4,
   1CPU/8GB/30min/native1,6CPUhcap,node75,no retry/requeue,exclude scaglione-compute-01.
 - Original Google Doc has the consolidated family result appended, preserving all
-  history and7nativeimages; final source-link/readback receipt recorded with this
-  milestone. Manuscript stays deferred. GPT-6.1Sol heavy implementation/analysis,
+  history and7nativeimages; DOC_ROUTE_FAMILIES_V5_RESULTS_RECEIPT.json verifies
+  the source link/readback. Reviewed result backup469cb8cda4c03b5065a816c4b7a70380027c81e7
+  is pushed. Manuscript stays deferred. GPT-6.1Sol heavy implementation/analysis,
   LunaMax review; ACTIVE heartbeat and model-family exploration direction persist.
 - Next: collect/replay complete graph722841 evidence after one scoped check; then
   freeze a bounded matched physical decoder/charging/verification comparison of
