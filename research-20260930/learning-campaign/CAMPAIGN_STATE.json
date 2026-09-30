@@ -1,24 +1,39 @@
 {
-  "updated_at_utc": "2026-09-30T04:47:49.361905+00:00",
-  "phase": "stage1_complete_stage2_implementation",
-  "active_job_ids": [],
-  "launch_receipt": "LAUNCH_677817.json",
-  "source_commit": "79ad457765e5815c3ff6200d3941434238f3c5d7",
-  "remote_checkout": "/home/nc437/egg-learning-campaign-20260930",
-  "attempt_relative": "result/learning_campaign/20260930-attempt1",
+  "updated_at_utc": "2026-09-30T04:59:32.790941+00:00",
+  "phase": "stage2_running",
+  "active_job_ids": [
+    "678708"
+  ],
+  "completed_job_ids": [
+    "677817"
+  ],
+  "launch_receipt": "LAUNCH_678708.json",
+  "source_commit": "822be2c7bdc2bef9ab6364c2e97d9747c048898b",
+  "remote_checkout": "/home/nc437/egg-learning-stage2-20260930",
+  "attempt_relative": "result/learning_campaign/20260930-stage2-attempt1",
+  "startup_observation": {
+    "at_utc": "2026-09-30T04:59:32.790941+00:00",
+    "squeue_state": "RUNNING",
+    "elapsed": "1:55",
+    "node": "snavely-cpu-04",
+    "frozen": true,
+    "completed_cells": 10,
+    "exception_files": 0,
+    "training_receipt": false,
+    "summary": false,
+    "source_commit_verified": true
+  },
   "automation": {
     "id": "advance-egg-journal-research",
     "status": "ACTIVE",
     "cadence": "hourly",
     "notification_policy": "Substantive results, major decisions, failures or review artifacts only"
   },
-  "next_action": "Stage2 fixed profile under Sol implementation:6 train+2 dev independent groups,12/20/28services,44 nativecells plus prospective training,1CPU8GB100min request. Root reviews and submits once. Collect/compare complete stage1 evidence; keep automation active.",
+  "next_action": "One scoped Unicorn check; collect complete stage2 evidence when terminal, analyze larger-case comparisons, then implement bounded route-fixed charging repair for learned topologies. Follow CONTINUATION_PLAN.md; do not pause just because the queue empties.",
+  "stage1_results": "RESULTS_STAGE1.md",
+  "stage1_model_analysis": "MODEL_STAGE1.md",
   "test_groups_unobserved": [
     2004,
     2005
-  ],
-  "scientific_result": "17/17 feasible cell labels;15 hull-certified;2 source budget_exhausted. Trainer succeeded; comparative analysis pending.",
-  "completed_job_ids": [
-    "677817"
   ]
 }

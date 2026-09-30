@@ -1,58 +1,63 @@
 # EGG journal research continuation
 
-Updated 30 September 2026 UTC. Owner: the EGG task under the user's standing
-authorization. Use GPT-6 Sol for implementation/analysis and Luna Max for review;
-root manages. Report substantive results, major decisions or artifacts ready for
-review, not routine queue states or test passes.
+Updated 30 September 2026 UTC. Root manages; GPT-6 Sol implements/analyzes and
+Luna Max reviews. The user's latest instruction is to keep experiments and model
+training moving without routine approval, even while exact solving remains slow.
+The existing hourly `advance-egg-journal-research` heartbeat is ACTIVE. This
+supersedes the earlier idle-monitor pause condition and blanket deferral of ML.
+Notify only substantive findings, major decisions, important failures or review
+artifacts. Continue useful local work between jobs; do not pause on an empty queue.
 
-## Latest checkpoint — computational and learning campaign resumed
+## Latest checkpoint — larger computational and learning batch running
 
-The user's latest instruction explicitly authorizes starting cluster experiments,
-building a persistent data/learning pipeline and training ML now, alongside exact
-solver development. This supersedes the earlier idle-monitor pause condition and
-the requirement to postpone all learning until timetable solving is fast. The
-existing hourly `advance-egg-journal-research` heartbeat is ACTIVE again; continue
-useful implementation and analysis between jobs instead of pausing on an empty
-queue. Check current workers and launch receipts before submitting anything.
+- **Active job 678708**, execution commit `822be2c7bdc2bef9ab6364c2e97d9747c048898b`,
+  runs from `/home/nc437/egg-learning-stage2-20260930`. At 04:59:32 UTC it was
+  RUNNING on snavely-cpu-04 with 10 of 44 cell receipts, no exception files,
+  and the correct frozen source. Training had not yet begun. Do not resubmit.
+- The current attempt is `result/learning_campaign/20260930-stage2-attempt1`.
+  See `research-20260930/learning-campaign/CAMPAIGN_STATE.json`,
+  `LAUNCH_678708.json`, `PROTOCOL_STAGE2.md` and `STAGE2_LAUNCH_REVIEW.md`.
+  Six training groups and two development groups have 12, 20 or 28 services.
+  All development source cells precede one trainer call and both target cold
+  solves. Seeds 2004/2005 remain unmaterialized. This is development, not testing.
+- Budget: one requested CPU, 8 GB, one native thread, 100 minutes, no requeue,
+  exclude scaglione-compute-01. Native cells get 70 seconds with a 100-second
+  hard cap; trainer 45 seconds, controller 5400, shell 5550. Record actual allocation
+  separately: the earlier job requested one CPU but Slurm allocated two logical
+  CPUs. Do not alter other projects or held jobs. Root alone submits.
+- **Completed pilot 677817** finished in 91 seconds (wrapper 85), exit 0. All 17
+  cells yielded replayed feasible fleets; 15 hull results certified, two source
+  runs stopped with nonclosing valid bounds. The CPU model trained successfully
+  on six provisional fleet labels from two training timetables before the dev
+  cold solve. Complete result copies are local and on its original cluster
+  checkout `/home/nc437/egg-learning-campaign-20260930`, frozen at 79ad457.
+  Full metadata, model and solver evidence are backed up on GitHub; native
+  stdout/license diagnostics remain local/remote with hashes by repo convention.
+- The first learned arm showed no benefit: target solve 3.08 s versus cold 2.88 s,
+  all with the same hull bracket. Source acquisition cost 6.56 s. The 0.045 s online
+  inference is contained in the 0.492 s trainer runtime (outer subprocess 1.023 s),
+  not an additional disjoint cost. Learned picked the more expensive cached
+  fleet; raw predicted edges did not form a valid path cover. See
+  `RESULTS_STAGE1.md` and `MODEL_STAGE1.md`. Do not claim learning gains or
+  physical optimality from a hull certificate alone.
+- New code passed ten focused pilot tests, three stage2 tests and independent
+  review. Two pilot review fixes were made before launch: full nonlinear
+  cheapest-cost selection, and trusted bounds gated on saved replay flags.
+  The larger batch uses a feasible-pool proposal, not a native MIP start.
+- Original Google Doc received verified launch and result entries; receipts are
+  `DOC_LAUNCH_RECEIPT.json` and `DOC_RESULTS_RECEIPT.json`. Coauthor draft 0.10
+  remains historical; no new computational result has been inserted into it.
 
-- Live Unicorn check found no active EGG job and available default-partition
-  capacity. Other held jobs are unrelated and must not be changed.
-- Cluster job **677817** completed with exit 0 in 91 seconds. All 17 native cells
-  yielded feasible fleets; 15 hull results certified and 2 source solves exhausted
-  their budget. The model trained successfully before the dev cold solve. Request
-  was one CPU, 8 GB and 45 minutes; Slurm allocated two logical CPUs, native threads stayed at one.
-  Complete result copies are local and remote; see ACCOUNTING_677817.json and
-  RESULT_MANIFEST_STAGE1.json. Comparative analysis is underway. Execution commit
-  `79ad457765e5815c3ff6200d3941434238f3c5d7` is pushed to GitHub and checked out
-  separately at `/home/nc437/egg-learning-campaign-20260930`. Do not rerun it.
-  Stage2 is under Sol implementation: six train and two dev independent groups,
-  service counts 12/20/28, 44 bounded native cells plus prospective model training,
-  one CPU, 8 GB and 100 minutes. All development source cells precede the single training call and all
-  development target cold solves. Root alone reviews and submits under a new frozen identity.
-  See `research-20260930/learning-campaign/LAUNCH_677817.json` and
-  `CAMPAIGN_STATE.json` for authoritative launch/state receipts.
-- The 17-cell batch has two training timetables and one development timetable,
-  eight services each, with grouped tariff variants. The CPU model is trained
-  before the development target cold solve. Learned and nonlinear cheapest-cost
-  selections enter the same bounded native hull solver as the reuse baselines.
-  Source-pool coverage limits the proposal; no learning benefit is claimed yet.
-- Sol implementation and Luna independent review are complete; ten focused tests
-  passed. Root fixed two review issues before launch: nonlinear cheapest-cost
-  selection and withholding native bounds when their assessment did not replay.
-- First launch ceiling: one serial job, one CPU/8GB, one native thread, at most
-  two hours, no retry/requeue, exclude scaglione-compute-01. The frozen protocol
-  in `research-20260930/learning-campaign/` sets the tighter actual budget.
-- Collect immutable solver receipts, feasible whole-fleet labels and uncertainties.
-  Train a topology proposal model with independent timetable-group splits, then
-  project onto a target timetable's replayed source pool for valid native starts.
-  Preserve source acquisition cost; compare cold, retained, nearest-price and
-  cheap objective rescoring. A fitted model alone is not evidence of speedup.
-- Reserved test seeds stay unmaterialized. No protected A6/B3/confirmation data,
-  private GIRO publication, PR merge, journal submission or reset-credit use.
-- Preserve failures/time, GitHub backups and consolidated Google Doc milestones.
-  See campaign protocol, architecture, `CONTINUATION_PLAN.md` and current receipts
-  for the next action. Collect complete results, review failures and timings, then
-  advance the next bounded batch or necessary correction without routine approval.
+Next: one compact scoped queue check via unicorn2 after sourcing
+/etc/profile.d/slurm.sh; use scoped sacct/receipts if 678708 vanished. Collect the
+complete stage2 package and compare cold/retained/nearest/cheapest/learned arms,
+including acquisition, training, prediction, replay and target verification.
+Then implement a bounded route-fixed charging repair for newly predicted routes
+under a new prospective protocol; today's model is limited to its source pool.
+Follow CONTINUATION_PLAN.md, preserve all failed attempts and spent time, and
+back up meaningful milestones. Check newer workers/state first. No protected
+A6/B3/confirmation outcomes, private GIRO publication, PR merge, journal
+submission or reset-credit use.
 
 ## Prior checkpoint — draft 0.10 ready for coauthor discussion
 

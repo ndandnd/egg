@@ -24,6 +24,13 @@ Initial concurrent budget is one job/one CPU/8GB/two hours, with a tighter first
 batch recorded in `research-20260930/learning-campaign/PROTOCOL.md` before launch.
 Scale only after examining complete receipts and recording the next budget.
 
+The first pilot is now complete: 17 feasible cell labels and a fitted route
+proposal model, with no measured advantage over cold solving on its small dev
+case. Stage 2 job 678708 is running 44 cells on eight new timetables with 12/20/28
+services under a 100-minute cap. See the current continuation checkpoint and
+`research-20260930/learning-campaign/RESULTS_STAGE1.md`; the next architecture
+step is route-fixed charging repair beyond the source-plan pool.
+
 ## Coauthor discussion draft 0.10 — 29 September 2026
 
 The review response clarifies the computational role of column generation and
