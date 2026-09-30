@@ -1,7 +1,9 @@
 {
-  "updated_at_utc": "2026-09-30T13:08:17.915058+00:00",
-  "phase": "fixed_source_charge_ready_for_reviewed_launch",
-  "active_job_ids": [],
+  "updated_at_utc": "2026-09-30T13:10:10.092360+00:00",
+  "phase": "fixed_source_charge_submitted",
+  "active_job_ids": [
+    "696684"
+  ],
   "completed_job_ids": [
     "677817",
     "678708",
@@ -13,16 +15,14 @@
     "696067",
     "696441"
   ],
-  "launch_receipt": "LAUNCH_696441.json",
-  "source_commit": "2f382902163c55d565f0964320d9e7c47cb036ae",
-  "remote_checkout": "/home/nc437/egg-transfer-campaign-20260930",
-  "attempt_relative": "result/learning_campaign/20260930-transfer-attempt1",
+  "launch_receipt": "LAUNCH_696684.json",
+  "source_commit": "c9f50bfc6a5cc916da4ea10f9e2747e6ccd4a338",
+  "remote_checkout": "/home/nc437/egg-fixed-source-charge-20260930",
+  "attempt_relative": "result/learning_repair/20260930-fixed-source-charge-attempt1",
   "startup_observation": {
-    "recorded_at_utc": "2026-09-30T12:07:55.562939+00:00",
-    "squeue_row": "696441|PENDING|0:00|1|8G|",
-    "state": "PENDING",
-    "requested_cpus": 1,
-    "node": null
+    "recorded_at_utc": "2026-09-30T13:10:10.092360+00:00",
+    "state": "SUBMITTED",
+    "queue_state_not_polled_after_submission": true
   },
   "automation": {
     "id": "advance-egg-journal-research",
@@ -30,7 +30,7 @@
     "cadence": "hourly",
     "notification_policy": "Substantive results, major decisions, failures or review artifacts only"
   },
-  "next_action": "Commit/push and submit the reviewed eight-cell fixed-source-route charging comparison once, then record job and receipt. No duplicate submission.",
+  "next_action": "Make one scoped queue check of 696684; scoped sacct/receipts if vanished. Collect all eight fixed-source charging cells and failures, independently replay plans/costs, compare single-LP selectors with two-LP best and historical native controls. Preserve all paid times and distinguish linear-LP from nonlinear/global optimality. Choose the next training or solver package from this baseline evidence.",
   "stage1_results": "RESULTS_STAGE1.md",
   "stage1_model_analysis": "MODEL_STAGE1.md",
   "test_groups_unobserved": [
@@ -41,7 +41,7 @@
   ],
   "stage2_results": "RESULTS_STAGE2.md",
   "repair_results": "RESULTS_REPAIR.md",
-  "result_backup_commit": "5a7c7b04a93c29aad491a92468346250d1b9461f",
+  "result_backup_commit": "13fe963c8a8c67f7c0784178d7a054db13262930",
   "doc_receipts": [
     "DOC_COST_AWARE_RESULTS_RECEIPT.json",
     "DOC_ENERGY_AWARE_RESULTS_RECEIPT.json",
@@ -51,11 +51,10 @@
     "DOC_TRANSFER_RESULTS_RECEIPT.json"
   ],
   "latest_observation": {
-    "job_id": "696441",
-    "state": "COMPLETED",
-    "elapsed_seconds": 941,
-    "recorded_at_utc": "2026-09-30T12:44:56.611791+00:00",
-    "source": "ACCOUNTING_696441.json"
+    "job_id": "696684",
+    "recorded_at_utc": "2026-09-30T13:10:10.092360+00:00",
+    "state": "SUBMITTED",
+    "queue_state_not_polled_after_submission": true
   },
   "result_summarizer": "summarize_cost_aware_repair.py",
   "cost_aware_results": "RESULTS_COST_AWARE_REPAIR.md",
@@ -69,7 +68,7 @@
   "shared_interval_physical_pool_review": "SHARED_INTERVAL_PHYSICAL_POOL_REVIEW.json",
   "shared_interval_report_backup_commit": "8e17264ffc71eb9b5ed0851b429d5d3927f43ac8",
   "shared_interval_figure": "figures/shared_interval_2016_learned.png",
-  "local_follow_up": "Transfer results/figure and Google Doc verified; Sol implementation and independent selection review complete. Final focused tests passed 6/6. Root owns launch.",
+  "local_follow_up": "All workers finished. Transfer results, independent incentive witness, report/figure and Google Doc append verified; reviewed charging comparator submitted once. No further pending code edits.",
   "shared_budget_results": "RESULTS_SHARED_BUDGET_REPAIR.md",
   "shared_budget_verification": "INDEPENDENT_REPLAY_SHARED_BUDGET.json",
   "shared_budget_physical_pool_review": "SHARED_BUDGET_PHYSICAL_POOL_REVIEW.json",

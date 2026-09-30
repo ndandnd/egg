@@ -8,7 +8,42 @@ supersedes the earlier idle-monitor pause condition and blanket deferral of ML.
 Notify only substantive findings, major decisions, important failures or review
 artifacts. Continue useful local work between jobs; do not pause on an empty queue.
 
-## Latest checkpoint — transfer reviewed; fixed-source charging comparison ready for launch
+## Latest checkpoint — fixed-source charging comparison submitted
+
+- **Recorded EGG job 696684**, submitted 2026-09-30T13:09:07Z after a guard
+  found no active EGG job. No post-submission queue/outcome inspection yet.
+  Do not duplicate. Existing hourly automation ACTIVE. All workers finished.
+- Reviewed execution commit c9f50bfc6a5cc916da4ea10f9e2747e6ccd4a338, fresh remote
+  /home/nc437/egg-fixed-source-charge-20260930, exclusive attempt
+  result/learning_repair/20260930-fixed-source-charge-attempt1.
+  LAUNCH_696684.json, PROTOCOL_FIXED_SOURCE_CHARGE.md and
+  FIXED_SOURCE_CHARGE_LAUNCH_REVIEW.md are authoritative. Backed up to GitHub.
+- Eight fixed-route charging cells: source0/source1 on development 2016–2019.
+  The LP optimizes the linear target tariff; independently replay and exact-score
+  the nonlinear target cost. No route MILP, refit, fresh hull or global optimum
+  claim. Best-of-two LPs pays both; cheapest-direct and frozen learned source
+  choices each pay one. Retain original schedules as candidates. Unknown time
+  remains unknown; all failed/timeout children retain provisional feasible plans.
+- Budget: 45-second phase / 55-second wall / 100-second child; controller 1200,
+  shell 1350, Slurm 1800. One CPU/8 GB/native thread, no retry/requeue, exclude
+  scaglione-compute-01. Twenty related pure tests passed; after final status/time
+  fixes six focused tests passed. Twelve source pins, 18 archived input pins;
+  bounded independent review found no remaining blocker. Reserved seeds untouched.
+- Prior transfer job 696441 completed: 18 feasible cells, 941 seconds. New
+  20-service near-optimal physical plan costs 520.892028, target lower 520.793306;
+  own-price deviation saves 0.486362 but true cost rises to 521.004698. Exact
+  optimum support unresolved. Learning did not beat cold solving overall; the
+  28-service learned repair had a costly extra bus at its time limit.
+  Evidence b26e6d9; report/CSV/figure 13fe963. Original Google Doc now includes
+  the result and fourth figure, preserving history; DOC_TRANSFER_RESULTS_RECEIPT.json.
+- Next heartbeat: one scoped queue check of 696684, scoped sacct/receipts if
+  vanished. Collect the complete eight-cell attempt and wrapper/logs, independently
+  replay and analyze single-LP, two-LP and unchanged-source controls. Include
+  source acquisition/model preparation and failed time. Historical target bounds
+  are not fresh online certification. Use the baseline findings to choose the
+  next training/solver package; do not access reserved 2004/2005/2020/2021.
+
+## Prior checkpoint — transfer reviewed; fixed-source charging comparison ready for launch
 
 - Completed job 696441: 18/18 feasible cells, 941 seconds, one CPU/8 GB,
   339384 KiB MaxRSS. Complete attempt/wrapper/accounting and 185 hashes preserved.
