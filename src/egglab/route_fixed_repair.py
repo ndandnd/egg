@@ -83,9 +83,61 @@ def _energy_relaxation_rows(case, compiled, charging_caps=False):
     return rows
 
 
+def _shared_charging_rows(case, compiled):
+    """Charge columns and conditional SOC rows for one shared interval grid."""
+    m, n = len(case.movements), len(case.trips)
+    trip_index = {trip.id:i for i,trip in enumerate(case.trips)}
+    by_mode, by_interval, caps, keys = {}, {}, [], []
+    rows = []
+
+    def add(coefficients, lo=-math.inf, hi=math.inf):
+        rows.append((coefficients, lo, hi))
+
+    for k, interval in enumerate(compiled["intervals"]):
+        cap = interval["rate_kw"]*interval["hours"]
+        if cap <= 0:
+            continue
+        for j, mode in enumerate(case.movements):
+            if mode.kind not in ("depot", "pullin") or mode.id not in interval["visits"]:
+                continue
+            col = m+n+len(caps)
+            caps.append(cap)
+            keys.append((mode.id, k))
+            by_mode.setdefault(j, []).append(col)
+            by_interval.setdefault(k, []).append(col)
+            # Unselected charging visits own no energy.
+            add({col:1.0, j:-cap}, hi=0.0)
+    for k, interval in enumerate(compiled["intervals"]):
+        if k in by_interval:
+            add({col:1.0 for col in by_interval[k]},
+                hi=interval["rate_kw"]*interval["hours"])
+    for j, mode in enumerate(case.movements):
+        if mode.kind not in ("depot", "pullin"):
+            continue
+        energy = sum(leg.energy_kwh for leg in mode.legs)
+        before = m+trip_index[mode.before]
+        service = (case.trips[trip_index[mode.after]].energy_kwh
+                   if mode.after is not None else 0.0)
+        M = case.battery_kwh+energy+service
+        if mode.kind == "depot":
+            after = m+trip_index[mode.after]
+            # Selected: s_after = s_before - movement - service + eta*q.
+            base = {after:1.0, before:-1.0}
+            base.update({col:-case.efficiency for col in by_mode.get(j, ())})
+            add({**base, j:M}, hi=M-energy-service)
+            add({**base, j:-M}, lo=-M-energy-service)
+        else:
+            # Selected: terminal arrival plus eta*q restores a full battery.
+            base = {before:1.0}
+            base.update({col:case.efficiency for col in by_mode.get(j, ())})
+            add({**base, j:M}, hi=case.battery_kwh+energy+M)
+            add({**base, j:-M}, lo=case.battery_kwh+energy-M)
+    return caps, rows, keys
+
+
 def decode_path_cover(case, logits=None, *, time_limit_seconds=5.0,
                       cover_policy="score_only", energy_relaxation=False,
-                      charging_caps=False):
+                      charging_caps=False, shared_charging=False):
     """Find a binary declared-movement path cover with a vehicle count cap.
 
     ``score_only`` preserves the original logit objective. ``cost_only``
@@ -97,6 +149,8 @@ def decode_path_cover(case, logits=None, *, time_limit_seconds=5.0,
     full only when their frozen charging window has positive available capacity.
     ``charging_caps`` additionally bounds energy from each depot and terminal
     window. Shared connector scheduling and physical replay remain unchecked.
+    ``shared_charging`` couples continuous visit energy through the compiled
+    interval grid capacity, while leaving physical replay as the admission gate.
     """
     from scipy.optimize import Bounds, LinearConstraint, milp
     from scipy.sparse import lil_matrix
@@ -107,6 +161,9 @@ def decode_path_cover(case, logits=None, *, time_limit_seconds=5.0,
         raise ValueError("energy_relaxation must be a boolean")
     if not isinstance(charging_caps, bool) or (charging_caps and not energy_relaxation):
         raise ValueError("charging_caps requires energy_relaxation=True and a boolean flag")
+    if (not isinstance(shared_charging, bool) or
+            (shared_charging and not (energy_relaxation and charging_caps))):
+        raise ValueError("shared_charging requires energy_relaxation=True and charging_caps=True")
     if not nr._finite(time_limit_seconds) or time_limit_seconds <= 0:
         raise ValueError("Invalid route time cap")
     if cover_policy in ("cost_only", "cost_learned") and (
@@ -139,9 +196,15 @@ def decode_path_cover(case, logits=None, *, time_limit_seconds=5.0,
              if movement.before == trip.id}, 1.0, 1.0)
     add({j:1.0 for j,movement in enumerate(case.movements)
          if movement.kind == "pullout"}, hi=float(case.max_vehicles))
+    charge_caps, charge_keys = [], []
     if energy_relaxation:
-        rows.extend(_energy_relaxation_rows(case, nr.compile_case(case), charging_caps))
-    matrix = lil_matrix((len(rows), m+(n if energy_relaxation else 0)), dtype=float)
+        compiled = nr.compile_case(case)
+        rows.extend(_energy_relaxation_rows(case, compiled, charging_caps))
+        if shared_charging:
+            charge_caps, charge_rows, charge_keys = _shared_charging_rows(case, compiled)
+            rows.extend(charge_rows)
+    variable_count = m+(n if energy_relaxation else 0)+len(charge_caps)
+    matrix = lil_matrix((len(rows), variable_count), dtype=float)
     lower, upper = [], []
     for row, (coefficients, lo, hi) in enumerate(rows):
         for col, coefficient in coefficients.items():
@@ -157,15 +220,19 @@ def decode_path_cover(case, logits=None, *, time_limit_seconds=5.0,
                      for m,v in zip(case.movements,values)]
     if energy_relaxation:
         objective += [0.0]*n
+    if shared_charging:
+        objective += [0.0]*len(charge_caps)
     # SciPy forwards these named options to HiGHS. Thread count and seed are
     # explicit; suppress only SciPy's forwarding notice in this scope.
     with warnings.catch_warnings():
         warnings.filterwarnings("ignore", message="Unrecognized options detected:",
                                 category=RuntimeWarning)
-        result = milp(c=objective, integrality=[1]*m+[0]*n if energy_relaxation else [1]*m,
-            bounds=Bounds([0.0]*m+[case.reserve_kwh]*n if energy_relaxation else [0.0]*m,
-                          [1.0]*m+[case.battery_kwh-trip.energy_kwh for trip in case.trips]
-                          if energy_relaxation else [1.0]*m),
+        result = milp(c=objective,
+            integrality=[1]*m+[0]*(variable_count-m) if energy_relaxation else [1]*m,
+            bounds=Bounds(([0.0]*m+[case.reserve_kwh]*n+([0.0]*len(charge_caps)))
+                          if energy_relaxation else [0.0]*m,
+                          ([1.0]*m+[case.battery_kwh-trip.energy_kwh for trip in case.trips]
+                           +charge_caps) if energy_relaxation else [1.0]*m),
             constraints=LinearConstraint(matrix.tocsr(), lower, upper),
             options={"time_limit":float(time_limit_seconds), "mip_rel_gap":0.0,
                      "threads":1, "random_seed":0})
@@ -177,7 +244,7 @@ def decode_path_cover(case, logits=None, *, time_limit_seconds=5.0,
         "wall_seconds":time.perf_counter()-started,
         "objective_policy":cover_policy, "logit_scale":scale,
         "random_seed":0, "threads":1}
-    if (result.x is None or len(result.x) != m+(n if energy_relaxation else 0)
+    if (result.x is None or len(result.x) != variable_count
             or any(not math.isfinite(float(v)) for v in result.x)
             or any(abs(v-round(v)) > 1e-6 for v in result.x[:m])
             or getattr(result, "fun", None) is None
@@ -199,14 +266,16 @@ def decode_path_cover(case, logits=None, *, time_limit_seconds=5.0,
         "cover_objective":float(result.fun),
         "native_minimum_bus_count_reported":bool(result.status == 0 and
             cover_policy in ("cost_only", "cost_learned") and not energy_relaxation),
-        "minimum_bus_count_scope":("declared energy-relaxed route covers with per-visit charging caps; shared charging omitted"
+        "minimum_bus_count_scope":("declared shared-interval charging route covers; physical replay remains required"
+            if shared_charging else "declared energy-relaxed route covers with per-visit charging caps; shared charging omitted"
             if charging_caps else "declared energy-relaxed route covers; optimistic depot resets"
             if energy_relaxation else "declared structural route covers, ignoring charging"),
         "meaning":("legal path cover satisfying necessary energy bounds; charging schedule and physical replay not yet checked"
             if energy_relaxation else "legal path cover only; battery and charging not yet checked")}
     if energy_relaxation:
         cover.update(energy_relaxation=True,
-            energy_relaxation_scope=("post-trip SOC and per-visit delivered charging upper bounds including terminal refill; shared connector competition omitted"
+            energy_relaxation_scope=("post-trip SOC with continuous depot/terminal charging energy linked to shared compiled interval grid caps; native replay still required"
+                if shared_charging else "post-trip SOC and per-visit delivered charging upper bounds including terminal refill; shared connector competition omitted"
                 if charging_caps else "post-trip SOC, no-charge propagation, reserve on depot/terminal arrival; optimistic full reset only at positive-capacity depot window; shared connector and terminal refill omitted"),
             relaxation_minimum_bus_count_reported=bool(result.status == 0 and
                 cover_policy in ("cost_only", "cost_learned")),
@@ -214,7 +283,20 @@ def decode_path_cover(case, logits=None, *, time_limit_seconds=5.0,
                                         for i,trip in enumerate(case.trips)})
     if charging_caps:
         cover.update(charging_caps=True,
-            charging_cap_scope="per-visit min(per_bus_kw, grid_kw) times available hours times efficiency; no shared connector scheduling")
+            charging_cap_scope=("per-visit min(per_bus_kw, grid_kw) times available hours times efficiency, with shared compiled interval grid rows"
+                if shared_charging else "per-visit min(per_bus_kw, grid_kw) times available hours times efficiency; no shared connector scheduling"))
+    if shared_charging:
+        positive_charge = [
+            {"movement": mid, "interval": k,
+             "start_min": compiled["intervals"][k]["start"],
+             "end_min": compiled["intervals"][k]["end"],
+             "grid_kwh": float(result.x[m+n+i])}
+            for i,(mid,k) in enumerate(charge_keys)
+            if result.x[m+n+i] > 0.0]
+        cover.update(shared_charging=True,
+            shared_charging_scope="continuous depot/pullin grid energy per compiled interval, linked to selected modes and shared interval grid capacity; native charging/replay remains final gate",
+            shared_charge_variable_count=len(charge_caps),
+            shared_charge_witness=positive_charge)
     return cover
 
 
@@ -271,7 +353,7 @@ def _solve_fixed_charge(case, market, selected, budget, record=None):
 
 def repair_target(case, market, model=None, *, budget, path_seconds=5.0,
                   cover_policy="score_only", energy_relaxation=False,
-                  charging_caps=False, record=None):
+                  charging_caps=False, shared_charging=False, record=None):
     """Return a replayed new fleet, or a typed fallback for the source pool.
 
     `market` is a native_hull.Market; `model` is a frozen EdgePrior, except that
@@ -285,7 +367,7 @@ def repair_target(case, market, model=None, *, budget, path_seconds=5.0,
     result = {"policy":POLICY, "case_identity":case.identity(),
         "market_identity":market.identity(), "repair_status":"fallback",
         "cover_policy":cover_policy, "energy_relaxation":energy_relaxation,
-        "charging_caps":charging_caps,
+        "charging_caps":charging_caps, "shared_charging":shared_charging,
         "raw_topology":None, "cover":None,
         "inference_attempted":False, "inference_performed":False,
         "charging_subproblem":"fixed-binary native linear program",
@@ -312,7 +394,7 @@ def repair_target(case, market, model=None, *, budget, path_seconds=5.0,
         stage_started = time.perf_counter()
         cover = decode_path_cover(case, logits, time_limit_seconds=path_seconds,
             cover_policy=cover_policy, energy_relaxation=energy_relaxation,
-            charging_caps=charging_caps)
+            charging_caps=charging_caps, shared_charging=shared_charging)
         result["cover"] = cover
         result["timing_seconds"]["cover"] = time.perf_counter()-started-result["timing_seconds"]["topology"]
         stage = "charging"

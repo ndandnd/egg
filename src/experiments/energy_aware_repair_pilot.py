@@ -50,6 +50,11 @@ class PilotProfile:
     source_files: tuple[str, ...]
     diagnosis_files: tuple[str, ...]
     charging_caps: bool = False
+    shared_charging: bool = False
+
+    def __post_init__(self):
+        if self.shared_charging and not self.charging_caps:
+            raise ValueError("Shared interval charging requires individual charging caps")
 
 
 ENERGY_PROFILE = PilotProfile(
@@ -90,6 +95,13 @@ def design(profile=ENERGY_PROFILE):
             "necessary route SOC with individual depot and terminal charging-window caps; "
             "shared capacity omitted")
         design["charging_caps_meaning"] = "individual compiled charging-window energy limits"
+    if profile.shared_charging:
+        design["shared_charging"] = True
+        design["charging_caps_meaning"] = (
+            "individual and shared compiled charging-interval capacity limits")
+        design["energy_relaxation_meaning"] = (
+            "necessary route SOC with depot, terminal, and shared interval charging limits; "
+            "native physical replay remains required")
     return design
 
 
@@ -145,6 +157,8 @@ def worker(path, case_name, mode, profile=ENERGY_PROFILE):
                   "skip_hull_for_fallback": True}
         if profile.charging_caps:
             kwargs["charging_caps"] = True
+        if profile.shared_charging:
+            kwargs["shared_charging"] = True
         return common.evaluate_case(dest, case_name, case, market, prior, spec,
                                     controls, started, **kwargs)
     except Exception as exc:
@@ -163,6 +177,8 @@ def result_row(path, case_name, mode, profile=ENERGY_PROFILE):
             raise ValueError("Result omitted declared energy relaxation")
         if profile.charging_caps and result.get("charging_caps") is not True:
             raise ValueError("Result omitted declared charging-window caps")
+        if profile.shared_charging and result.get("shared_charging") is not True:
+            raise ValueError("Result omitted declared shared interval charging")
     return row
 
 
