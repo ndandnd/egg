@@ -71,10 +71,11 @@ def _travel(origin, destination):
     return value, value * 0.25
 
 
-def make_case(seed):
-    if seed not in ACTIVE:
+def make_case(seed, *, profile=None):
+    profile = PROFILE if profile is None else profile
+    if seed not in profile:
         raise ValueError("Undeclared or reserved test group cannot be materialized")
-    services = PROFILE[seed][1]
+    services = profile[seed][1]
     trips = []
     for duty in range(services // 2):
         start = 360 + 25*duty + _draw(seed, duty, "offset", 9)
@@ -132,10 +133,10 @@ def make_case(seed):
     return case
 
 
-def make_witness(case):
+def make_witness(case, *, profile=None):
     """Pure paired-duty full-fleet feasibility witness for each stage-2 input."""
-    seed = seed_from_name(case.name)
-    if case.identity() != make_case(seed).identity():
+    seed = seed_from_name(case.name, profile=profile)
+    if case.identity() != make_case(seed, profile=profile).identity():
         raise ValueError("Witness physical case differs from stage-2 generator")
     trips = {trip.id: trip for trip in case.trips}
     movements = {movement.id: movement for movement in case.movements}
@@ -174,14 +175,15 @@ def make_witness(case):
     return plan
 
 
-def seed_from_name(name):
+def seed_from_name(name, *, profile=None):
+    profile = PROFILE if profile is None else profile
     if not isinstance(name, str) or not name.startswith("learning_s"):
         raise ValueError("Malformed case name")
     try:
         seed = int(name[len("learning_s"):].split("_n", 1)[0])
     except (ValueError, IndexError) as exc:
         raise ValueError("Malformed case name") from exc
-    if seed not in ACTIVE or f"learning_s{seed}_n{PROFILE[seed][1]:02d}" != name:
+    if seed not in profile or f"learning_s{seed}_n{profile[seed][1]:02d}" != name:
         raise ValueError("Undeclared case name")
     return seed
 

@@ -301,7 +301,8 @@ def worker(path, case_name):
 def evaluate_case(dest, case_name, case, market, prior, spec, controls, started, *,
                   cover_policy="score_only", energy_relaxation=False,
                   skip_hull_for_fallback=False, charging_caps=False,
-                  shared_charging=False, path_seconds=None):
+                  shared_charging=False, path_seconds=None,
+                  fallback_provider=None):
     """Evaluate one already-validated cell; caller owns attempt and input guards."""
     from egglab import route_fixed_repair as repair
     effective_path_seconds = REPAIR_PATH_SECONDS if path_seconds is None else float(path_seconds)
@@ -338,7 +339,8 @@ def evaluate_case(dest, case_name, case, market, prior, spec, controls, started,
             "repair_wall_seconds": repair_wall})
         candidate_kind = "source_fallback"
         fallback_started = time.monotonic()
-        plan, _, fallback_provenance = source_fallback(case_name, case, market)
+        provider = source_fallback if fallback_provider is None else fallback_provider
+        plan, _, fallback_provenance = provider(case_name, case, market)
         fallback_wall = time.monotonic()-fallback_started
         base.save_new(dest / "fallback.json", {"candidate_kind": candidate_kind,
             "cover_policy": cover_policy,
@@ -383,8 +385,8 @@ def evaluate_case(dest, case_name, case, market, prior, spec, controls, started,
                            "upper_exact": row.get("upper_exact"),
                            "native_status": row.get("native_status")}
                      for arm, row in controls.items()}
-        reason = ("The same archived stage-2 source candidate already had target native "
-                  "verification; this replay adds no new physical candidate.")
+        reason = ("The independently replayed source fallback adds no new physical "
+                  "candidate; no fresh target hull was run for this arm.")
         base.save_new(dest / "hull_skipped.json", {
             "cover_policy": cover_policy, "energy_relaxation": energy_relaxation,
             "charging_caps": charging_caps,

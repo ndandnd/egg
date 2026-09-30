@@ -8,7 +8,64 @@ supersedes the earlier idle-monitor pause condition and blanket deferral of ML.
 Notify only substantive findings, major decisions, important failures or review
 artifacts. Continue useful local work between jobs; do not pause on an empty queue.
 
-## Latest checkpoint — targeted 28-service cover budget study launched
+## Latest checkpoint — independent transfer campaign ready for one launch
+
+- No active EGG job: 696067 completed in 214s, full evidence collected and
+  independently reviewed. Two new five-bus direct repairs cost 689.100163
+  (learned) and 691.228570 (cost-only); both cover gaps stay about 0.20. New
+  saved hull physical plan 685.695043, best fresh target lower 597.829694;
+  physical gap 87.865349 stays wide. A 21-plan own-price comparison witnesses
+  regret >=5.092135 at this incumbent, not the unknown optimum. Candidate and
+  pool reproduction checks pass; exact fractions/hashes retained.
+- Core result backup 5a7c7b04; pool review 25fe868. Original Google Doc append
+  verified, including history/three figures, heading and result hyperlink;
+  DOC_SHARED_BUDGET_RESULTS_RECEIPT.json records it. All result workers finished.
+- New transfer runner/protocol/wrapper/tests ready: independent development
+  2018/20services and 2019/28services, existing frozen stage-2 model, no refit.
+  Reserve 2004/2005 and new 2020/20services,2021/28services without generating
+  them. Four source cells before one inference attempt; then each group's
+  cold/retained/nearest-price/cheapest-bill/learned target + two shared repairs.
+  Exactly 18 cells. Direct proposals, repair, global verification and paid
+  source acquisition are separately receipted; failures/provisional labels kept.
+- Budget: native70solver/100hard; repair30cover,45/55charge,70hull,240hard;
+  inference45hard; controller3000/shell3300/Slurm3600; oneCPU/8GB/thread,
+  no retry/requeue, exclude scaglione-compute-01. Protocol and launch review
+  recorded before outcomes. Fourteen pure tests, wrapper syntax, 31 source pins,
+  design and diff checks pass; independent review found no remaining blocker.
+- Next root action: commit/push, guarded fresh checkout and one submission;
+  record job/launch receipt before ending turn. No duplicate or old-job retry.
+  New attempt result/learning_campaign/20260930-transfer-attempt1;
+  planned remote /home/nc437/egg-transfer-campaign-20260930.
+  Existing hourly automation ACTIVE. Check latest state/receipts before acting.
+
+## Prior checkpoint — 28-service repairs collected; independent development expansion being implemented
+
+- Job 696067 completed, exit 0, 214 seconds, one CPU, max RSS 301796 KiB.
+  Full attempt and wrapper/logs collected; ACCOUNTING_696067.json and the
+  33-file RESULT_MANIFEST_SHARED_BUDGET.json preserve evidence. No active EGG job.
+  Do not repeat this attempt. Hourly automation remains ACTIVE.
+- Both 30-second covers returned new five-bus plans: learned target cost
+  689.100163, cost-only 691.228570. Both are time-limit incumbents with cover
+  gap about 0.20; no minimum-bus claim. Fresh best target lower 597.829694;
+  new saved physical hull column 685.695043 slightly improves archived retained
+  685.788696. Independent replay and complete report are being finalized.
+- Root manages this turn: energy_diagnosis writes independent two-candidate
+  and shared-row/bound review; Luna writes two-cell CSV/results; Sol implements
+  a new two-group development expansion. Avoid concurrent edits to their files.
+- Approved prospective profile: independent seeds 2018 (20 services) and 2019
+  (28 services), no refit of frozen stage-2 EdgePrior, reserved 2004/2005 untouched.
+  Four source cells first, frozen-model inference before any target solve.
+  Each group: source0/source1; cold/retained/nearest-price/cheapest-bill/learned
+  target arms; cost-only/learned shared-interval repairs at 30 seconds: 18 cells.
+  Native 70 solver/100 hard, repair 240 hard, inference 45 hard; controller
+  3000, shell 3300, Slurm 3600 seconds, one CPU/8GB/thread, no retry/requeue,
+  exclude scaglione-compute-01. No launch until code/protocol/tests reviewed
+  and execution commit pushed. Do not broaden sweep or tune previous outcomes.
+- Next: finish current evidence review, back up and update original Google Doc;
+  review and launch the independent-group runner once. Read newer state and
+  active workers first. Old source-market bounds cannot be used as target bounds.
+
+## Prior checkpoint — targeted 28-service cover budget study launched
 
 - **Recorded EGG job696067**, submitted2026-09-30T10:52:23Z. Single scoped startup
   check observed PENDING, requesting1CPU/8GB. No result inspected. Do not duplicate.
