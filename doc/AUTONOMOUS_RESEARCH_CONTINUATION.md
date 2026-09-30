@@ -48,7 +48,10 @@ artifacts. Continue useful local work between jobs; do not pause on an empty que
   with the original one preemption censor preserved. The completed pilot uses only
   the original eight groups. No dev, sealed-test or historical protected outcomes
   were read. The Google Doc already records the parallel budget and model design,
-  with all six figures preserved (DOC_PARALLEL_LEARNING_RECEIPT.json).
+  with all six figures preserved (DOC_PARALLEL_LEARNING_RECEIPT.json). The verified
+  pilot results and new shard findings are also appended, with two report links
+  and all six figures preserved (DOC_ROUTE_MODEL_PILOT_RESULTS_RECEIPT.json).
+  Reports, replay review and handoff are backed up at febc815.
 - Next: on the next follow-up use one scoped check of jobs 712946–712952, collect completed attempts and admit each once.
   Implement a versioned pooled-dataset interface for predetermined prefix learning
   curves at 32 / 64 / 128 groups, not whichever shards finish first. Preserve source
