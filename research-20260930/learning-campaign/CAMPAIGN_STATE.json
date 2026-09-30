@@ -1,14 +1,13 @@
 {
-  "updated_at_utc": "2026-09-30T08:04:03.374431+00:00",
-  "phase": "energy_aware_repair_running",
-  "active_job_ids": [
-    "688750"
-  ],
+  "updated_at_utc": "2026-09-30T08:40:57.373037+00:00",
+  "phase": "energy_aware_completed_diagnosing_charge_capacity",
+  "active_job_ids": [],
   "completed_job_ids": [
     "677817",
     "678708",
     "682689",
-    "685697"
+    "685697",
+    "688750"
   ],
   "launch_receipt": "LAUNCH_688750.json",
   "source_commit": "f45c5a99850266831c0cd257d2117226c33644e4",
@@ -27,7 +26,7 @@
     "cadence": "hourly",
     "notification_policy": "Substantive results, major decisions, failures or review artifacts only"
   },
-  "next_action": "Check existing job688750 once, no duplicate submission. Collect complete evidence and wrapper/log hashes after completion. Summarize four energy-aware cells with --attempt/--output options; independently replay new repaired plans, compare true nonlinear cost vs frozen source plans and cost-only, separate skipped-hull fallbacks from fresh certificates. Do not refit or open reserved tests. No speedup/learning benefit inferred from training or launch. Active hourly automation continues.",
+  "next_action": "All four energy-relaxed covers reached native OPTIMAL but failed fixed-route charging INFEASIBLE. Pure arithmetic diagnosis of charging energy/window limits pending. Do not rerun covers or refit. Root will select next bounded protocol based on diagnosis; hourly automation stays ACTIVE.",
   "stage1_results": "RESULTS_STAGE1.md",
   "stage1_model_analysis": "MODEL_STAGE1.md",
   "test_groups_unobserved": [
@@ -41,12 +40,17 @@
     "DOC_COST_AWARE_RESULTS_RECEIPT.json"
   ],
   "latest_observation": {
-    "recorded_at_utc": "2026-09-30T08:04:03.374431+00:00",
-    "squeue_row": "688750|RUNNING|0:04|1|8G|snavely-cpu-04",
-    "state": "RUNNING",
+    "job_id": "688750",
+    "state": "COMPLETED",
+    "exit_code": "0:0",
+    "elapsed_seconds": 35,
     "allocated_cpus": 1,
-    "node": "snavely-cpu-04"
+    "batch_max_rss_kib": 116972,
+    "node": "snavely-cpu-04",
+    "source": "scoped sacct after completion",
+    "recorded_at_utc": "2026-09-30T08:40:57.373037+00:00"
   },
   "result_summarizer": "summarize_cost_aware_repair.py",
-  "cost_aware_results": "RESULTS_COST_AWARE_REPAIR.md"
+  "cost_aware_results": "RESULTS_COST_AWARE_REPAIR.md",
+  "energy_aware_results": "RESULTS_ENERGY_AWARE_REPAIR.md"
 }

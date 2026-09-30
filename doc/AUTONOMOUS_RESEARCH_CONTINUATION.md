@@ -8,7 +8,29 @@ supersedes the earlier idle-monitor pause condition and blanket deferral of ML.
 Notify only substantive findings, major decisions, important failures or review
 artifacts. Continue useful local work between jobs; do not pause on an empty queue.
 
-## Latest checkpoint — energy-aware four-cell pilot launched
+## Latest checkpoint — energy-aware pilot completed; charging limits under diagnosis
+
+- Job **688750 completed**, exit 0 in 35 seconds on snavely-cpu-04,
+  one allocated CPU, 8 GB, MaxRSS 116972 KiB. No EGG job is active.
+  Full attempt collected at `result/learning_repair/20260930-energy-aware-attempt1`.
+  ACCOUNTING_688750.json and RESULT_MANIFEST_ENERGY_AWARE.json preserve all
+  receipts, failure evidence, timing and log hashes. Do not repeat this attempt.
+- All four energy-relaxed covers were HiGHS OPTIMAL at 3/4 buses, but full
+  fixed-route charging returned INFEASIBLE for every cover. No new repaired
+  fleet. All source fallbacks freshly replayed with exact costs 553.47/724.66;
+  no fresh hulls or bounds (correctly skipped). See RESULTS_ENERGY_AWARE_REPAIR.md,
+  ENERGY_AWARE_REPAIR_CELLS.csv and INDEPENDENT_REPLAY_ENERGY_AWARE.json.
+- Root manages one next bounded package, pending pure arithmetic diagnosis of
+  actual charging-window energy caps and cumulative route deficits. Sol
+  energy_diagnosis owns this analysis; Sol campaign_runner is preparing minimal
+  harness reuse; Luna has finished the compact results report. Check active
+  workers and newer state before edits/submission. Root alone submits after a
+  prospective protocol and reviewed source. No refit or test access.
+- Initial next ceiling remains one CPU/8GB/one native thread/at most 30 minutes,
+  no retry/requeue, exclude scaglione-compute-01. No new launch is recorded yet.
+  Keep the existing hourly automation ACTIVE under the user's current request.
+
+## Prior checkpoint — energy-aware four-cell pilot launched
 
 - **Recorded EGG job688750**, submitted2026-09-30T08:02:39Z; one initial
   scoped queue check observed RUNNING, one allocated CPU/8GB on snavely-cpu-04.
