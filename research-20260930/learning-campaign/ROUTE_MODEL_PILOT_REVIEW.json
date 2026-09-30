@@ -1,0 +1,831 @@
+{
+  "classification_cutoff_0_5_counts_including_seed_repeats": {
+    "constant": {
+      "observed_positive": 1284,
+      "predicted_positive": 0,
+      "prediction_rows_including_seed_repeats": 22680
+    },
+    "kind_frequency": {
+      "observed_positive": 1284,
+      "predicted_positive": 0,
+      "prediction_rows_including_seed_repeats": 22680
+    },
+    "linear": {
+      "observed_positive": 1284,
+      "predicted_positive": 0,
+      "prediction_rows_including_seed_repeats": 22680
+    },
+    "mlp16": {
+      "observed_positive": 1284,
+      "predicted_positive": 0,
+      "prediction_rows_including_seed_repeats": 22680
+    }
+  },
+  "dataset": {
+    "base_groups": [
+      "physical_v2_s10000",
+      "physical_v2_s10001",
+      "physical_v2_s10002",
+      "physical_v2_s10003",
+      "physical_v2_s10004",
+      "physical_v2_s10005",
+      "physical_v2_s10006",
+      "physical_v2_s10007"
+    ],
+    "candidate_movement_rows": 7560,
+    "features": [
+      "pullout",
+      "direct",
+      "depot",
+      "pullin",
+      "start_time",
+      "end_time",
+      "duration",
+      "movement_energy",
+      "before_energy",
+      "after_energy",
+      "charge_window",
+      "window_price_mean",
+      "window_price_min",
+      "market_mean",
+      "market_spread",
+      "same_place",
+      "intercept"
+    ],
+    "fleet_weighted_group_mean_positive_rate": 0.061189004086920934,
+    "group_count": 8,
+    "input_table_hashes": {
+      "cases.jsonl": "46ddb9960af59230e9d3e20b963f78acfea0e1c7245da25f9e922af7bb4fe72f",
+      "source_inputs.jsonl": "4d4d37d29a42e9e22d512d01e2afad2ccd76512ff34e3f2d01a008c0e5140826"
+    },
+    "label": "movement selected in a physically replayed observed source incumbent; non-selection is not infeasibility or suboptimality",
+    "path": "/Users/nadan/Documents/ChatGPT/egg/journal-research-work/result/physical_learning/20260930-shard00-composite-v2",
+    "raw_candidate_row_positive_rate": 0.056613756613756616,
+    "receipt_sha256": "c9ed1e67356812e60a5986153227029d8eb15e98e2799a0ef87a56284be671d7",
+    "source_fleets": 16
+  },
+  "evidence_scope": "exploratory grouped training-only movement classification; no cost/global-optimum or deployment claim",
+  "group_macro_metrics_seed_averaged_then_group_averaged": {
+    "constant": {
+      "negative_recall": {
+        "mean": 1.0,
+        "n_groups": 8,
+        "sd": 5.139333957141231e-17
+      },
+      "positive_rate": {
+        "mean": 0.061189004086920934,
+        "n_groups": 8,
+        "sd": 0.01383849740585538
+      },
+      "positive_recall": {
+        "mean": 0.0,
+        "n_groups": 8,
+        "sd": 0.0
+      },
+      "weighted_accuracy": {
+        "mean": 0.9388109959130789,
+        "n_groups": 8,
+        "sd": 0.013838497405855396
+      },
+      "weighted_brier": {
+        "mean": 0.05749411345783038,
+        "n_groups": 8,
+        "sd": 0.012162762927493034
+      },
+      "weighted_log_loss": {
+        "mean": 0.23066453360333466,
+        "n_groups": 8,
+        "sd": 0.0379649179256433
+      }
+    },
+    "kind_frequency": {
+      "negative_recall": {
+        "mean": 1.0,
+        "n_groups": 8,
+        "sd": 5.139333957141231e-17
+      },
+      "positive_rate": {
+        "mean": 0.061189004086920934,
+        "n_groups": 8,
+        "sd": 0.01383849740585538
+      },
+      "positive_recall": {
+        "mean": 0.0,
+        "n_groups": 8,
+        "sd": 0.0
+      },
+      "weighted_accuracy": {
+        "mean": 0.9388109959130789,
+        "n_groups": 8,
+        "sd": 0.013838497405855396
+      },
+      "weighted_brier": {
+        "mean": 0.055027311942554565,
+        "n_groups": 8,
+        "sd": 0.01110219599851751
+      },
+      "weighted_log_loss": {
+        "mean": 0.2078970583649043,
+        "n_groups": 8,
+        "sd": 0.03463789927539472
+      }
+    },
+    "linear": {
+      "negative_recall": {
+        "mean": 1.0,
+        "n_groups": 8,
+        "sd": 5.139333957141231e-17
+      },
+      "positive_rate": {
+        "mean": 0.061189004086920934,
+        "n_groups": 8,
+        "sd": 0.01383849740585538
+      },
+      "positive_recall": {
+        "mean": 0.0,
+        "n_groups": 8,
+        "sd": 0.0
+      },
+      "weighted_accuracy": {
+        "mean": 0.9388109959130789,
+        "n_groups": 8,
+        "sd": 0.013838497405855396
+      },
+      "weighted_brier": {
+        "mean": 0.06283760903402634,
+        "n_groups": 8,
+        "sd": 0.00908954131997861
+      },
+      "weighted_log_loss": {
+        "mean": 0.25714901150063324,
+        "n_groups": 8,
+        "sd": 0.026787252945396942
+      }
+    },
+    "mlp16": {
+      "negative_recall": {
+        "mean": 1.0,
+        "n_groups": 8,
+        "sd": 5.139333957141231e-17
+      },
+      "positive_rate": {
+        "mean": 0.061189004086920934,
+        "n_groups": 8,
+        "sd": 0.01383849740585538
+      },
+      "positive_recall": {
+        "mean": 0.0,
+        "n_groups": 8,
+        "sd": 0.0
+      },
+      "weighted_accuracy": {
+        "mean": 0.9388109959130789,
+        "n_groups": 8,
+        "sd": 0.013838497405855396
+      },
+      "weighted_brier": {
+        "mean": 0.052697131597907815,
+        "n_groups": 8,
+        "sd": 0.010205486083794346
+      },
+      "weighted_log_loss": {
+        "mean": 0.20828098680768475,
+        "n_groups": 8,
+        "sd": 0.028056231414460033
+      }
+    }
+  },
+  "group_metrics": {
+    "physical_v2_s10000": {
+      "constant": {
+        "negative_recall": 0.9999999999999999,
+        "positive_rate": 0.06936416184971099,
+        "positive_recall": 0.0,
+        "weighted_accuracy": 0.9306358381502889,
+        "weighted_brier": 0.06460403553971399,
+        "weighted_log_loss": 0.2524155938629056
+      },
+      "kind_frequency": {
+        "negative_recall": 0.9999999999999999,
+        "positive_rate": 0.06936416184971099,
+        "positive_recall": 0.0,
+        "weighted_accuracy": 0.9306358381502889,
+        "weighted_brier": 0.0620076921857729,
+        "weighted_log_loss": 0.23843663761340142
+      },
+      "linear": {
+        "negative_recall": 0.9999999999999999,
+        "positive_rate": 0.06936416184971099,
+        "positive_recall": 0.0,
+        "weighted_accuracy": 0.9306358381502889,
+        "weighted_brier": 0.06624103204210302,
+        "weighted_log_loss": 0.2633367793533507
+      },
+      "mlp16": {
+        "negative_recall": 0.9999999999999999,
+        "positive_rate": 0.06936416184971099,
+        "positive_recall": 0.0,
+        "weighted_accuracy": 0.9306358381502889,
+        "weighted_brier": 0.059111028826517344,
+        "weighted_log_loss": 0.22549556388642458
+      }
+    },
+    "physical_v2_s10001": {
+      "constant": {
+        "negative_recall": 1.0,
+        "positive_rate": 0.06371191135734071,
+        "positive_recall": 0.0,
+        "weighted_accuracy": 0.9362880886426592,
+        "weighted_brier": 0.05965271267268324,
+        "weighted_log_loss": 0.23706119243146362
+      },
+      "kind_frequency": {
+        "negative_recall": 1.0,
+        "positive_rate": 0.06371191135734071,
+        "positive_recall": 0.0,
+        "weighted_accuracy": 0.9362880886426592,
+        "weighted_brier": 0.056811642146418484,
+        "weighted_log_loss": 0.20582527473812126
+      },
+      "linear": {
+        "negative_recall": 1.0,
+        "positive_rate": 0.06371191135734071,
+        "positive_recall": 0.0,
+        "weighted_accuracy": 0.9362880886426592,
+        "weighted_brier": 0.06754645476895328,
+        "weighted_log_loss": 0.2745430696531585
+      },
+      "mlp16": {
+        "negative_recall": 1.0,
+        "positive_rate": 0.06371191135734071,
+        "positive_recall": 0.0,
+        "weighted_accuracy": 0.9362880886426592,
+        "weighted_brier": 0.05496053978585038,
+        "weighted_log_loss": 0.21690366752292614
+      }
+    },
+    "physical_v2_s10002": {
+      "constant": {
+        "negative_recall": 1.0,
+        "positive_rate": 0.06837606837606837,
+        "positive_recall": 0.0,
+        "weighted_accuracy": 0.9316239316239315,
+        "weighted_brier": 0.0638369962044969,
+        "weighted_log_loss": 0.2506166769911311
+      },
+      "kind_frequency": {
+        "negative_recall": 1.0,
+        "positive_rate": 0.06837606837606837,
+        "positive_recall": 0.0,
+        "weighted_accuracy": 0.9316239316239315,
+        "weighted_brier": 0.05978165456145937,
+        "weighted_log_loss": 0.21224551211092646
+      },
+      "linear": {
+        "negative_recall": 1.0,
+        "positive_rate": 0.06837606837606837,
+        "positive_recall": 0.0,
+        "weighted_accuracy": 0.9316239316239315,
+        "weighted_brier": 0.067886007182605,
+        "weighted_log_loss": 0.27316671336356285
+      },
+      "mlp16": {
+        "negative_recall": 1.0,
+        "positive_rate": 0.06837606837606837,
+        "positive_recall": 0.0,
+        "weighted_accuracy": 0.9316239316239315,
+        "weighted_brier": 0.058043357759865216,
+        "weighted_log_loss": 0.22349284344322276
+      }
+    },
+    "physical_v2_s10003": {
+      "constant": {
+        "negative_recall": 0.9999999999999999,
+        "positive_rate": 0.04558404558404557,
+        "positive_recall": 0.0,
+        "weighted_accuracy": 0.9544159544159542,
+        "weighted_brier": 0.04378320508803598,
+        "weighted_log_loss": 0.18790472461697258
+      },
+      "kind_frequency": {
+        "negative_recall": 0.9999999999999999,
+        "positive_rate": 0.04558404558404557,
+        "positive_recall": 0.0,
+        "weighted_accuracy": 0.9544159544159542,
+        "weighted_brier": 0.0428244199999066,
+        "weighted_log_loss": 0.17753840412901342
+      },
+      "linear": {
+        "negative_recall": 0.9999999999999999,
+        "positive_rate": 0.04558404558404557,
+        "positive_recall": 0.0,
+        "weighted_accuracy": 0.9544159544159542,
+        "weighted_brier": 0.045012477812790726,
+        "weighted_log_loss": 0.19767362331756896
+      },
+      "mlp16": {
+        "negative_recall": 0.9999999999999999,
+        "positive_rate": 0.04558404558404557,
+        "positive_recall": 0.0,
+        "weighted_accuracy": 0.9544159544159542,
+        "weighted_brier": 0.03929631037364931,
+        "weighted_log_loss": 0.1641943518863089
+      }
+    },
+    "physical_v2_s10004": {
+      "constant": {
+        "negative_recall": 1.0,
+        "positive_rate": 0.04692082111436949,
+        "positive_recall": 0.0,
+        "weighted_accuracy": 0.9530791788856305,
+        "weighted_brier": 0.04495284875396096,
+        "weighted_log_loss": 0.1915244668761459
+      },
+      "kind_frequency": {
+        "negative_recall": 1.0,
+        "positive_rate": 0.04692082111436949,
+        "positive_recall": 0.0,
+        "weighted_accuracy": 0.9530791788856305,
+        "weighted_brier": 0.04287010873228054,
+        "weighted_log_loss": 0.16485269512727874
+      },
+      "linear": {
+        "negative_recall": 1.0,
+        "positive_rate": 0.04692082111436949,
+        "positive_recall": 0.0,
+        "weighted_accuracy": 0.9530791788856305,
+        "weighted_brier": 0.05597076979655508,
+        "weighted_log_loss": 0.2444318726910696
+      },
+      "mlp16": {
+        "negative_recall": 1.0,
+        "positive_rate": 0.04692082111436949,
+        "positive_recall": 0.0,
+        "weighted_accuracy": 0.9530791788856305,
+        "weighted_brier": 0.04277888372358321,
+        "weighted_log_loss": 0.18394708187887357
+      }
+    },
+    "physical_v2_s10005": {
+      "constant": {
+        "negative_recall": 1.0,
+        "positive_rate": 0.04409672830725462,
+        "positive_recall": 0.0,
+        "weighted_accuracy": 0.9559032716927454,
+        "weighted_brier": 0.042533256930976336,
+        "weighted_log_loss": 0.18431322000356576
+      },
+      "kind_frequency": {
+        "negative_recall": 1.0,
+        "positive_rate": 0.04409672830725462,
+        "positive_recall": 0.0,
+        "weighted_accuracy": 0.9559032716927454,
+        "weighted_brier": 0.04172630067360946,
+        "weighted_log_loss": 0.1698926310332867
+      },
+      "linear": {
+        "negative_recall": 1.0,
+        "positive_rate": 0.04409672830725462,
+        "positive_recall": 0.0,
+        "weighted_accuracy": 0.9559032716927454,
+        "weighted_brier": 0.05814001498412872,
+        "weighted_log_loss": 0.2527135630346124
+      },
+      "mlp16": {
+        "negative_recall": 1.0,
+        "positive_rate": 0.04409672830725462,
+        "positive_recall": 0.0,
+        "weighted_accuracy": 0.9559032716927454,
+        "weighted_brier": 0.04119755164461703,
+        "weighted_log_loss": 0.1811676384394487
+      }
+    },
+    "physical_v2_s10006": {
+      "constant": {
+        "negative_recall": 1.0,
+        "positive_rate": 0.08090614886731393,
+        "positive_recall": 0.0,
+        "weighted_accuracy": 0.9190938511326859,
+        "weighted_brier": 0.07494604103803076,
+        "weighted_log_loss": 0.2858452144344309
+      },
+      "kind_frequency": {
+        "negative_recall": 1.0,
+        "positive_rate": 0.08090614886731393,
+        "positive_recall": 0.0,
+        "weighted_accuracy": 0.9190938511326859,
+        "weighted_brier": 0.07050814382143318,
+        "weighted_log_loss": 0.25542465568707573
+      },
+      "linear": {
+        "negative_recall": 1.0,
+        "positive_rate": 0.08090614886731393,
+        "positive_recall": 0.0,
+        "weighted_accuracy": 0.9190938511326859,
+        "weighted_brier": 0.0714267981411742,
+        "weighted_log_loss": 0.27240621580410085
+      },
+      "mlp16": {
+        "negative_recall": 1.0,
+        "positive_rate": 0.08090614886731393,
+        "positive_recall": 0.0,
+        "weighted_accuracy": 0.9190938511326859,
+        "weighted_brier": 0.06682349377119741,
+        "weighted_log_loss": 0.24426330288745232
+      }
+    },
+    "physical_v2_s10007": {
+      "constant": {
+        "negative_recall": 1.0,
+        "positive_rate": 0.07055214723926381,
+        "positive_recall": 0.0,
+        "weighted_accuracy": 0.929447852760736,
+        "weighted_brier": 0.06564381143474486,
+        "weighted_log_loss": 0.25563517961006177
+      },
+      "kind_frequency": {
+        "negative_recall": 1.0,
+        "positive_rate": 0.07055214723926381,
+        "positive_recall": 0.0,
+        "weighted_accuracy": 0.929447852760736,
+        "weighted_brier": 0.06368853341955596,
+        "weighted_log_loss": 0.23896065648013054
+      },
+      "linear": {
+        "negative_recall": 1.0,
+        "positive_rate": 0.07055214723926381,
+        "positive_recall": 0.0,
+        "weighted_accuracy": 0.929447852760736,
+        "weighted_brier": 0.07047731754390073,
+        "weighted_log_loss": 0.2789202547876419
+      },
+      "mlp16": {
+        "negative_recall": 1.0,
+        "positive_rate": 0.07055214723926381,
+        "positive_recall": 0.0,
+        "weighted_accuracy": 0.929447852760736,
+        "weighted_brier": 0.05936588689798263,
+        "weighted_log_loss": 0.22678344451682111
+      }
+    }
+  },
+  "pilot": {
+    "accounting_path": "/Users/nadan/Documents/ChatGPT/egg/journal-research-work/research-20260930/learning-campaign/ACCOUNTING_713295.json",
+    "accounting_sha256": "cca9294f92b973bd4df403aaae9c63bb72df23b9daedd8552de3f495b9dfa488",
+    "allocated_cpu_counts": {
+      "1": 12
+    },
+    "allocated_memory_counts": {
+      "8192": 12
+    },
+    "allocation_cpu_seconds": 100,
+    "attempt_path": "/Users/nadan/Documents/ChatGPT/egg/journal-research-work/result/physical_learning/20260930-route-model-pilot",
+    "completed_tasks": 12,
+    "failed_tasks": 0,
+    "folds": 4,
+    "numpy_versions": [
+      "1.26.4"
+    ],
+    "receipted_model_seconds": 26.052607364370488,
+    "rss_caveat": "Sampled batch RSS may miss the short-lived Python child peak; not a measured model peak.",
+    "seeds": [
+      17,
+      29,
+      43
+    ],
+    "source_commit": "656405c510acffb2408e358379a62ab9c3b361ad",
+    "source_hashes": {
+      "research-20260930/learning-campaign/ROUTE_MODEL_TRAINING_PROTOCOL.md": "b84f78b65cb100a4aff1752f4722c5736ce662cb1ac7543837e87622f0f9d207",
+      "src/cluster/physical_route_model.sbatch": "02eb6d403b382003a4ec003febd9c64eb3c803416003f3c68d986a8712dc4d6b",
+      "src/egglab/learned_proposals.py": "5b58b9495ccb401bf7a865ba4058a81838b575f517268e76bad40f0b7dcbd479",
+      "src/egglab/native_pathflow.py": "cd61085c5942248e53cdfbd92056c4ba324dfd81d5d18b726f58715298003df0",
+      "src/egglab/native_recharge.py": "0067123a7f71cc6e9c89e1262cdcbd612cafdcfc252e35bcfca7f1f54c45d0f3",
+      "src/egglab/physical_learning_cases.py": "85f832c80526e02a4531bd0b4a70ed398eb46ae9a6cae2834da163ef3c0c8f1b",
+      "src/egglab/physical_route_model.py": "99ada21c56aa2cf809f7ad1ea7a1eaa3d84f3577e637ffeb22891c60bf56975d",
+      "src/experiments/computational_benchmark.py": "da96e4601e34dc797526703db68c2d2cbda57d78a9048c8fd7c34889ffca1c8f",
+      "src/experiments/train_physical_route_model.py": "4053c935066ffb96fed5822aa71e719410f07b8b9c084a981d495f637e1e299b",
+      "src/tests/test_physical_route_model.py": "fa8950305f08feffa50b049ef35befbae7baf87d6b4edef53a68922803c10e44"
+    },
+    "task_count": 12,
+    "task_ids": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11
+    ],
+    "task_timing": [
+      {
+        "allocated_job_cpus": "1",
+        "allocated_memory": "8192",
+        "fold": 0,
+        "job_id": "713299",
+        "seed": 17,
+        "task_id": 0,
+        "worker_wall_seconds": 2.417409688991029,
+        "wrapper_elapsed_seconds": 3
+      },
+      {
+        "allocated_job_cpus": "1",
+        "allocated_memory": "8192",
+        "fold": 0,
+        "job_id": "713300",
+        "seed": 29,
+        "task_id": 1,
+        "worker_wall_seconds": 2.8438042663037777,
+        "wrapper_elapsed_seconds": 4
+      },
+      {
+        "allocated_job_cpus": "1",
+        "allocated_memory": "8192",
+        "fold": 0,
+        "job_id": "713301",
+        "seed": 43,
+        "task_id": 2,
+        "worker_wall_seconds": 1.3955469659995288,
+        "wrapper_elapsed_seconds": 2
+      },
+      {
+        "allocated_job_cpus": "1",
+        "allocated_memory": "8192",
+        "fold": 1,
+        "job_id": "713302",
+        "seed": 17,
+        "task_id": 3,
+        "worker_wall_seconds": 1.141772844013758,
+        "wrapper_elapsed_seconds": 2
+      },
+      {
+        "allocated_job_cpus": "1",
+        "allocated_memory": "8192",
+        "fold": 1,
+        "job_id": "713436",
+        "seed": 29,
+        "task_id": 4,
+        "worker_wall_seconds": 2.192298182984814,
+        "wrapper_elapsed_seconds": 2
+      },
+      {
+        "allocated_job_cpus": "1",
+        "allocated_memory": "8192",
+        "fold": 1,
+        "job_id": "713437",
+        "seed": 43,
+        "task_id": 5,
+        "worker_wall_seconds": 2.5664588259533048,
+        "wrapper_elapsed_seconds": 3
+      },
+      {
+        "allocated_job_cpus": "1",
+        "allocated_memory": "8192",
+        "fold": 2,
+        "job_id": "713438",
+        "seed": 17,
+        "task_id": 6,
+        "worker_wall_seconds": 2.192450408008881,
+        "wrapper_elapsed_seconds": 3
+      },
+      {
+        "allocated_job_cpus": "1",
+        "allocated_memory": "8192",
+        "fold": 2,
+        "job_id": "713439",
+        "seed": 29,
+        "task_id": 7,
+        "worker_wall_seconds": 2.1924207260017283,
+        "wrapper_elapsed_seconds": 3
+      },
+      {
+        "allocated_job_cpus": "1",
+        "allocated_memory": "8192",
+        "fold": 2,
+        "job_id": "713445",
+        "seed": 43,
+        "task_id": 8,
+        "worker_wall_seconds": 2.561560603964608,
+        "wrapper_elapsed_seconds": 3
+      },
+      {
+        "allocated_job_cpus": "1",
+        "allocated_memory": "8192",
+        "fold": 3,
+        "job_id": "713446",
+        "seed": 17,
+        "task_id": 9,
+        "worker_wall_seconds": 2.7426372221671045,
+        "wrapper_elapsed_seconds": 3
+      },
+      {
+        "allocated_job_cpus": "1",
+        "allocated_memory": "8192",
+        "fold": 3,
+        "job_id": "713447",
+        "seed": 29,
+        "task_id": 10,
+        "worker_wall_seconds": 2.0173023869865574,
+        "wrapper_elapsed_seconds": 2
+      },
+      {
+        "allocated_job_cpus": "1",
+        "allocated_memory": "8192",
+        "fold": 3,
+        "job_id": "713295",
+        "seed": 43,
+        "task_id": 11,
+        "worker_wall_seconds": 1.7889452429953963,
+        "wrapper_elapsed_seconds": 2
+      }
+    ],
+    "training_config": {
+      "epochs": 240,
+      "hidden_units": 16,
+      "learning_rate": 0.03,
+      "ridge": 0.001,
+      "weighting": "equal full-fleet weight then equal movement weight within fleet"
+    },
+    "worker_wall_seconds_max": 2.8438042663037777,
+    "worker_wall_seconds_sum_not_elapsed": 26.052607364370488,
+    "wrapper_elapsed_seconds_max": 4
+  },
+  "recomputation": {
+    "all_saved_outputs_match": true,
+    "heldout_metric_sets_checked": 48,
+    "max_abs_metric_difference": 7.416289804496046e-14,
+    "max_abs_probability_difference": 1.6653345369377348e-16,
+    "metric_tolerance": 2e-09,
+    "operation": "evaluate saved parameters/preprocessing only; no model fit or solver call",
+    "per_group_source_metric_sets_checked": 192,
+    "prediction_rows_checked": 22680,
+    "prediction_tolerance": 2e-10,
+    "review_script_sha256": "8a9e6511fd237d875bce86b162f2a9668fc8fcd4a29996315805e10a6a139217",
+    "training_curve_metric_sets_checked": 24
+  },
+  "schema": "route-model-pilot-replay-review-v1",
+  "training_fold_seedmean_metrics_descriptive": {
+    "constant": {
+      "negative_recall": {
+        "mean": 1.0,
+        "n_groups": 4,
+        "sd": 1.1102230246251565e-16
+      },
+      "positive_rate": {
+        "mean": 0.061189004086920934,
+        "n_groups": 4,
+        "sd": 0.0030613906599910503
+      },
+      "positive_recall": {
+        "mean": 0.0,
+        "n_groups": 4,
+        "sd": 0.0
+      },
+      "weighted_accuracy": {
+        "mean": 0.938810995913079,
+        "n_groups": 4,
+        "sd": 0.0030613906599911574
+      },
+      "weighted_brier": {
+        "mean": 0.05743788078119189,
+        "n_groups": 4,
+        "sd": 0.0026947680833927343
+      },
+      "weighted_log_loss": {
+        "mean": 0.23016461370487307,
+        "n_groups": 4,
+        "sd": 0.008431670738161647
+      }
+    },
+    "kind_frequency": {
+      "negative_recall": {
+        "mean": 1.0,
+        "n_groups": 4,
+        "sd": 1.1102230246251565e-16
+      },
+      "positive_rate": {
+        "mean": 0.061189004086920934,
+        "n_groups": 4,
+        "sd": 0.0030613906599910503
+      },
+      "positive_recall": {
+        "mean": 0.0,
+        "n_groups": 4,
+        "sd": 0.0
+      },
+      "weighted_accuracy": {
+        "mean": 0.938810995913079,
+        "n_groups": 4,
+        "sd": 0.0030613906599911574
+      },
+      "weighted_brier": {
+        "mean": 0.05485404504320928,
+        "n_groups": 4,
+        "sd": 0.002292847649723211
+      },
+      "weighted_log_loss": {
+        "mean": 0.2068746559547855,
+        "n_groups": 4,
+        "sd": 0.006344292599013716
+      }
+    },
+    "linear": {
+      "negative_recall": {
+        "mean": 1.0,
+        "n_groups": 4,
+        "sd": 1.1102230246251565e-16
+      },
+      "positive_rate": {
+        "mean": 0.061189004086920934,
+        "n_groups": 4,
+        "sd": 0.0030613906599910503
+      },
+      "positive_recall": {
+        "mean": 0.0,
+        "n_groups": 4,
+        "sd": 0.0
+      },
+      "weighted_accuracy": {
+        "mean": 0.938810995913079,
+        "n_groups": 4,
+        "sd": 0.0030613906599911574
+      },
+      "weighted_brier": {
+        "mean": 0.06299460924814401,
+        "n_groups": 4,
+        "sd": 0.0022172110780011465
+      },
+      "weighted_log_loss": {
+        "mean": 0.2581217239942516,
+        "n_groups": 4,
+        "sd": 0.00544436826247365
+      }
+    },
+    "mlp16": {
+      "negative_recall": {
+        "mean": 1.0,
+        "n_groups": 4,
+        "sd": 1.1102230246251565e-16
+      },
+      "positive_rate": {
+        "mean": 0.061189004086920934,
+        "n_groups": 4,
+        "sd": 0.0030613906599910503
+      },
+      "positive_recall": {
+        "mean": 0.0,
+        "n_groups": 4,
+        "sd": 0.0
+      },
+      "weighted_accuracy": {
+        "mean": 0.938810995913079,
+        "n_groups": 4,
+        "sd": 0.0030613906599911574
+      },
+      "weighted_brier": {
+        "mean": 0.05260763382038414,
+        "n_groups": 4,
+        "sd": 0.002327347615285074
+      },
+      "weighted_log_loss": {
+        "mean": 0.2080053809412088,
+        "n_groups": 4,
+        "sd": 0.006743387992448729
+      }
+    }
+  },
+  "training_vs_heldout_log_loss": {
+    "constant": {
+      "heldout_base_group_n": 8,
+      "heldout_log_loss_mean_across_eight_group_seed_means": 0.23066453360333466,
+      "heldout_minus_training_log_loss": 0.0004999198984615982,
+      "training_fold_n": 4,
+      "training_log_loss_mean_across_four_fold_seed_means": 0.23016461370487307
+    },
+    "kind_frequency": {
+      "heldout_base_group_n": 8,
+      "heldout_log_loss_mean_across_eight_group_seed_means": 0.2078970583649043,
+      "heldout_minus_training_log_loss": 0.0010224024101188056,
+      "training_fold_n": 4,
+      "training_log_loss_mean_across_four_fold_seed_means": 0.2068746559547855
+    },
+    "linear": {
+      "heldout_base_group_n": 8,
+      "heldout_log_loss_mean_across_eight_group_seed_means": 0.25714901150063324,
+      "heldout_minus_training_log_loss": -0.0009727124936183551,
+      "training_fold_n": 4,
+      "training_log_loss_mean_across_four_fold_seed_means": 0.2581217239942516
+    },
+    "mlp16": {
+      "heldout_base_group_n": 8,
+      "heldout_log_loss_mean_across_eight_group_seed_means": 0.20828098680768475,
+      "heldout_minus_training_log_loss": 0.00027560586647595864,
+      "training_fold_n": 4,
+      "training_log_loss_mean_across_four_fold_seed_means": 0.2080053809412088
+    }
+  }
+}

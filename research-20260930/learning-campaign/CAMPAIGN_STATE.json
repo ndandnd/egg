@@ -1,8 +1,7 @@
 {
-  "updated_at_utc": "2026-09-30T18:37:24.112729+00:00",
-  "phase": "parallel_labels_submitted_route_trainer_review",
+  "updated_at_utc": "2026-09-30T18:54:50.181645+00:00",
+  "phase": "parallel_labels_running_route_pilot_reviewed",
   "active_job_ids": [
-    "711779",
     "712946",
     "712947",
     "712948",
@@ -24,16 +23,28 @@
     "696684",
     "697180",
     "700498",
-    "709011"
+    "709011",
+    "711779",
+    "713295"
   ],
-  "launch_receipt": "LAUNCH_711779.json",
-  "source_commit": "b5647e78928a3b6bcdcc5448a8c5d5e8bad2f71d",
-  "remote_checkout": "/home/nc437/egg-physical-shard01-20260930",
-  "attempt_relative": "result/physical_learning/20260930-shard01-attempt1",
+  "launch_receipt": "LAUNCH_PARALLEL_LABEL_WAVE1.json",
+  "source_commit": "25aee9b6b36795f9f8c20227703602e2fba16084",
+  "remote_checkout": "/home/nc437/egg-physical-parallel-labels-20260930-wave1",
+  "attempt_relative": null,
   "startup_observation": {
-    "recorded_at_utc": "2026-09-30T18:15:45.536905+00:00",
-    "state": "SUBMITTED",
-    "queue_state_not_polled_after_submission": true
+    "recorded_at_utc": "2026-09-30T18:40:00Z",
+    "timestamp_precision": "minute",
+    "state": "RUNNING",
+    "job_ids": [
+      "712946",
+      "712947",
+      "712948",
+      "712949",
+      "712950",
+      "712951",
+      "712952"
+    ],
+    "source": "Scoped startup squeue check for submitted label wave"
   },
   "automation": {
     "id": "advance-egg-journal-research",
@@ -42,7 +53,7 @@
     "notification_policy": "Substantive results, major decisions, failures or review artifacts only",
     "resource_policy": "Parallel label8 + training4; initial single-job limit superseded."
   },
-  "next_action": "Finish targeted route-trainer review, publish and submit the twelve-task/four-concurrent CPU pilot now; keep independent label jobs moving. The eight-group pilot is exploratory; later32/64/128prefix learning curves remain.",
+  "next_action": "Use one scoped check of seven label jobs; collect complete artifacts and admit completed shards once. Build versioned pooled input manifests and prespecified 32/64/128-group learning curves. Diagnose optimizer convergence and class imbalance using training groups only; prospectively evaluate ranking and structured decoding, then physical charging repair and matched online baselines. Do not tune thresholds on this pilot held-out evidence or open reserved groups.",
   "stage1_results": "RESULTS_STAGE1.md",
   "stage1_model_analysis": "MODEL_STAGE1.md",
   "test_groups_unobserved": [
@@ -65,13 +76,25 @@
     "DOC_CHARGE_RESPONSE_RESULTS_RECEIPT.json",
     "DOC_LEARNING_PRIORITY_RECEIPT.json",
     "DOC_PHYSICAL_PREEMPTION_RECEIPT.json",
-    "DOC_PHYSICAL_SHARD00_RECEIPT.json"
+    "DOC_PHYSICAL_SHARD00_RECEIPT.json",
+    "DOC_PARALLEL_LEARNING_RECEIPT.json"
   ],
   "latest_observation": {
-    "job_id": "711779",
-    "recorded_at_utc": "2026-09-30T18:15:45.536905+00:00",
-    "state": "SUBMITTED",
-    "queue_state_not_polled_after_submission": true
+    "recorded_at_utc": "2026-09-30T18:51:09.746513+00:00",
+    "label_jobs_at_last_queue_check": [
+      "712946",
+      "712947",
+      "712948",
+      "712949",
+      "712950",
+      "712951",
+      "712952"
+    ],
+    "training_array": "713295",
+    "training_completed_tasks": 12,
+    "training_declared_tasks": 12,
+    "shard1_completed_and_admitted": true,
+    "source": "Complete local receipts plus final scoped sacct; no new label queue poll"
   },
   "result_summarizer": "summarize_cost_aware_repair.py",
   "cost_aware_results": "RESULTS_COST_AWARE_REPAIR.md",
@@ -85,7 +108,7 @@
   "shared_interval_physical_pool_review": "SHARED_INTERVAL_PHYSICAL_POOL_REVIEW.json",
   "shared_interval_report_backup_commit": "8e17264ffc71eb9b5ed0851b429d5d3927f43ac8",
   "shared_interval_figure": "figures/shared_interval_2016_learned.png",
-  "local_follow_up": "Seven distinct label shards submitted under the new user-authorized parallel budget. Route model pilot with grouped folds and seeds is implemented and under review; array not submitted yet.",
+  "local_follow_up": "All 12 saved pilot models/predictions independently replayed. MLP held-group log loss 0.2083 does not improve kind-frequency 0.2079, although Brier improves 0.0550 to 0.0527. Every method predicts no selected edges at threshold 0.5, so 93.88% accuracy is an all-negative baseline. Shard 1 is admitted; the pilot remains frozen to the original eight groups.",
   "shared_budget_results": "RESULTS_SHARED_BUDGET_REPAIR.md",
   "shared_budget_verification": "INDEPENDENT_REPLAY_SHARED_BUDGET.json",
   "shared_budget_physical_pool_review": "SHARED_BUDGET_PHYSICAL_POOL_REVIEW.json",
@@ -203,5 +226,93 @@
     "training_workers": 4,
     "requested_cpus": 12,
     "requested_memory_gb": 96
+  },
+  "active_label_job_ids": [
+    "712946",
+    "712947",
+    "712948",
+    "712949",
+    "712950",
+    "712951",
+    "712952"
+  ],
+  "active_training_array_ids": [],
+  "route_model_launch_receipt": "LAUNCH_713295.json",
+  "route_model_training_protocol": "ROUTE_MODEL_TRAINING_PROTOCOL.md",
+  "physical_shard01_accounting": "ACCOUNTING_711779.json",
+  "active_attempts": [
+    {
+      "job_id": "712946",
+      "shard_index": 2,
+      "attempt_relative": "result/physical_learning/20260930-shard02-attempt1",
+      "launch_receipt": "LAUNCH_712946.json"
+    },
+    {
+      "job_id": "712947",
+      "shard_index": 3,
+      "attempt_relative": "result/physical_learning/20260930-shard03-attempt1",
+      "launch_receipt": "LAUNCH_712947.json"
+    },
+    {
+      "job_id": "712948",
+      "shard_index": 4,
+      "attempt_relative": "result/physical_learning/20260930-shard04-attempt1",
+      "launch_receipt": "LAUNCH_712948.json"
+    },
+    {
+      "job_id": "712949",
+      "shard_index": 5,
+      "attempt_relative": "result/physical_learning/20260930-shard05-attempt1",
+      "launch_receipt": "LAUNCH_712949.json"
+    },
+    {
+      "job_id": "712950",
+      "shard_index": 6,
+      "attempt_relative": "result/physical_learning/20260930-shard06-attempt1",
+      "launch_receipt": "LAUNCH_712950.json"
+    },
+    {
+      "job_id": "712951",
+      "shard_index": 7,
+      "attempt_relative": "result/physical_learning/20260930-shard07-attempt1",
+      "launch_receipt": "LAUNCH_712951.json"
+    },
+    {
+      "job_id": "712952",
+      "shard_index": 8,
+      "attempt_relative": "result/physical_learning/20260930-shard08-attempt1",
+      "launch_receipt": "LAUNCH_712952.json"
+    }
+  ],
+  "physical_shard01_dataset": "result/physical_learning/20260930-shard01-dataset-v1",
+  "physical_shard01_results": "RESULTS_PHYSICAL_SHARD01.md",
+  "physical_shard01_derived": "PHYSICAL_SHARD01_DERIVED.json",
+  "physical_shard01_raw_backup_commit": "9c275ae",
+  "route_model_raw_backup_commit": "9c275ae",
+  "route_model_accounting": "ACCOUNTING_713295.json",
+  "route_model_result_manifest": "RESULT_MANIFEST_ROUTE_MODEL_PILOT.json",
+  "physical_admitted_training_groups": 16,
+  "physical_replayed_plans": 127,
+  "physical_explicit_censors": 1,
+  "route_model_results": "RESULTS_ROUTE_MODEL_PILOT.md",
+  "route_model_review": "ROUTE_MODEL_PILOT_REVIEW.json",
+  "route_model_summarizer": "summarize_route_model_pilot.py",
+  "route_model_conclusion": {
+    "independent_groups": 8,
+    "tasks_completed": 12,
+    "probability_replay_max_abs_error": 1.67e-16,
+    "metric_replay_max_abs_error": 7.42e-14,
+    "held_group_log_loss": {
+      "kind_frequency": 0.207897,
+      "linear": 0.257149,
+      "mlp16": 0.208281
+    },
+    "held_group_brier": {
+      "kind_frequency": 0.055027,
+      "linear": 0.062838,
+      "mlp16": 0.052697
+    },
+    "positive_recall_at_0_5": 0.0,
+    "no_route_feasibility_or_speedup_claim": true
   }
 }

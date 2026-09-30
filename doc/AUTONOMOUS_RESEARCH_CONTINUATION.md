@@ -8,7 +8,59 @@ supersedes the earlier idle-monitor pause condition and blanket deferral of ML.
 Notify only substantive findings, major decisions, important failures or review
 artifacts. Continue useful local work between jobs; do not pause on an empty queue.
 
-## Latest checkpoint — next eight-group training shard submitted
+## Latest checkpoint — parallel labels and completed route-model pilot
+
+- The human requested parallel use of the cluster. The previous one-job bootstrap
+  rule is superseded by PARALLEL_LEARNING_RESOURCE_PROTOCOL.md: up to eight label
+  workers plus four training workers, each one requested CPU / 8 GB / one native
+  thread. Label jobs have two-hour caps; training tasks 30-minute caps; no requeue
+  or retries, exclude scaglione-compute-01. The hourly automation was updated and
+  remains ACTIVE. Manuscript work stays deferred.
+- Seven additional label shards, indices 2–8, were submitted as jobs **712946–712952**
+  and all seven were observed RUNNING in the scoped startup check. They cover TRAIN
+  groups 10016–10071. Execution commit 25aee9b; remote checkout
+  `/home/nc437/egg-physical-parallel-labels-20260930-wave1`; independent attempts
+  `result/physical_learning/20260930-shardNN-attempt1`. Individual LAUNCH receipts
+  and LAUNCH_PARALLEL_LABEL_WAVE1.json govern. Do not duplicate their submissions.
+- **Training array 713295 completed all 12 tasks**, exit zero. This is four grouped
+  folds by three declared seeds on the immutable first eight groups, comparing
+  constant, movement-kind, linear-logistic and 16-unit MLP scorers. Each learned
+  model ran 240 fixed epochs. Saved probabilities and metrics replayed with maximum
+  discrepancies 1.67e-16 / 7.42e-14. MLP held-group log loss 0.2083 does not beat
+  movement-kind frequency 0.2079; Brier improves 0.0550 to 0.0527. Linear is worse.
+  All methods have zero selected-edge recall at threshold 0.5, so 93.88% accuracy
+  is an all-negative result. See RESULTS_ROUTE_MODEL_PILOT.md and its replay JSON. The
+  pilot is movement classification from observed feasible source-fleet labels;
+  it is not a route feasibility, global optimality or online speedup claim.
+  All raw model outputs, preprocessing, curves, predictions, receipts and logs
+  were collected. Total allocation CPU time was 100 seconds; model task receipts
+  total 26.05 seconds. ACCOUNTING_713295.json and RESULT_MANIFEST_ROUTE_MODEL_PILOT.json
+  preserve denominators and timing. Execution commit 656405c; raw backup 9c275ae.
+- **Physical shard 1 / job 711779 completed and was admitted once**: eight new TRAIN
+  groups, 16 source fleets and 48 fixed-route charging plans all replayed. All 24
+  tariff comparisons are paired: nine ties, 15 non-ties across five groups, with
+  two groups switching the winning source under different tariffs. Fourteen source
+  topologies occur across 16 fleets. Eleven source solves ended budget_exhausted;
+  the target LP optima are linear-tariff results, not global curved-cost optima.
+  Slurm time 881 seconds; child time 791.66 seconds. See RESULTS_PHYSICAL_SHARD01.md,
+  PHYSICAL_SHARD01_DERIVED.json and ACCOUNTING_711779.json. Raw/admitted backup 9c275ae.
+- The admitted bank now has **16 independent TRAIN groups and 127 replayed plans**,
+  with the original one preemption censor preserved. The completed pilot uses only
+  the original eight groups. No dev, sealed-test or historical protected outcomes
+  were read. The Google Doc already records the parallel budget and model design,
+  with all six figures preserved (DOC_PARALLEL_LEARNING_RECEIPT.json).
+- Next: on the next follow-up use one scoped check of jobs 712946–712952, collect completed attempts and admit each once.
+  Implement a versioned pooled-dataset interface for predetermined prefix learning
+  curves at 32 / 64 / 128 groups, not whichever shards finish first. Preserve source
+  bounds/status and all censors. Diagnose optimizer convergence and class imbalance
+  using training groups only; define ranking and structured decoding prospectively.
+  Develop route decoding and charging repair, then
+  compare with cold solving, retained plans, retrieval and cheap exact rescoring;
+  keep global verification separate. Small model fits take seconds, so independent
+  solver-label generation currently deserves most parallel compute. Do not keep
+  refitting a tiny dataset just to use allocation time.
+
+## Prior checkpoint — next eight-group training shard submitted
 
 - **Recorded EGG job 711779**, submitted 2026-09-30T18:14:02Z. The guard found
   no active EGG job; no post-submission polling. Execution commit
