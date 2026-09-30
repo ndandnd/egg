@@ -8,7 +8,41 @@ supersedes the earlier idle-monitor pause condition and blanket deferral of ML.
 Notify only substantive findings, major decisions, important failures or review
 artifacts. Continue useful local work between jobs; do not pause on an empty queue.
 
-## Latest checkpoint — charge-response result reviewed; tariff transfer ready
+## Latest checkpoint — frozen-model tariff transfer submitted
+
+- **Recorded EGG job 700498**, submitted 2026-09-30T15:08:01Z after the guard
+  found no active EGG job. No subsequent queue/outcome inspection yet.
+  Do not duplicate. Hourly automation ACTIVE; all workers finished.
+- Execution commit `15b0053aa2aaaea3d9ffbaafdc84dbf9c803af92`, backed up to the
+  existing research branch. Fresh remote `/home/nc437/egg-tariff-response-20260930`;
+  exclusive attempt `result/learning_campaign/20260930-tariff-response-attempt1`.
+  `LAUNCH_700498.json`, `PROTOCOL_TARIFF_RESPONSE_TRANSFER.md` and
+  `TARIFF_RESPONSE_LAUNCH_REVIEW.md` record the prospective design and resources.
+- Four new development timetables, seeds 2032–2035 (20/28 services twice), each
+  receive late-cheap, day-cheap and flat tariffs. Four independent groups,
+  twelve tariff variants. Eight source acquisitions, then all twelve frozen
+  model/control choices before 24 charging LPs and twelve cold controls.
+  Always-0, always-1 and training-majority are prospective controls. No model
+  refit; archived training-majority uses only the six original training groups.
+- One requested CPU, 8 GB, one native/BLAS thread, 100-minute Slurm allocation;
+  no retry/requeue, exclude scaglione-compute-01. Child 100 seconds, inference
+  60, controller 5400 and shell 5700. Seven focused tests, pure design, wrapper
+  syntax and bounded independent reviews passed. 27 source and seven input
+  hashes frozen. Reserved seeds 2004/2005/2020/2021 remain untouched.
+- Completed 697180: all 44 cells independently verified. Ridge beat cheapest
+  direct selection on three of four cases, but chose source 1 everywhere.
+  Always-source-1 and training-majority match it exactly; no adaptive advantage
+  established. Report/CSV/figure at 433ca1c, raw evidence 59b3acab, independent
+  replay c7d6bc5. Original Google Doc updated with a sixth figure and verified
+  preservation of all previous content/images: DOC_CHARGE_RESPONSE_RESULTS_RECEIPT.json.
+- Next: one scoped queue check of 700498; scoped sacct/receipts if vanished.
+  Collect complete source/LP/cold labels, frozen choices, inference and timing.
+  Verify paired exact costs and source lineage; compare tariff switching and
+  excess by timetable, with source acquisition charged once per group. Keep
+  one-LP, two-LP, shared inference and cold times distinct. No outcome-tuned
+  refit or reserved-test access. Choose the next package from complete evidence.
+
+## Prior checkpoint — charge-response result reviewed; tariff transfer ready
 
 - Job 697180 completed successfully: 1427 Slurm seconds, 1421 wrapper seconds,
   one requested/allocated CPU, one native thread, 8 GB, 246832 KiB MaxRSS.
