@@ -37,10 +37,11 @@ artifacts. Continue useful local work between jobs; do not pause on an empty que
   Google Doc appended with graphdirection and partialfailure;7images retained.
   Graphisolatedruntime torch2.4.1+cpu installed separately; loginimports andpipcheck pass,
   native execution-node probes remain prospective. See ROUTE_GRAPH_ENVIRONMENT.json.
-- Next: review and freeze recovery protocol/source before launch; preserve completed
-  tasks without refitting. Then replay all saved family models before scientific
-  comparisons. Graph package needs isolated torch runtime/compatibility evidence
-  and independent review before deployment. Keep four training workers total until
+- Next: collect recovery722702 when terminal; preserve completed original
+  tasks without refitting, then replay all saved family models before scientific
+  comparisons. Graph package is undergoing final independent review; isolated
+  torch environment is ready and per-task compatibility probes precede TRAIN.
+  Keep four training workers total until
   a new prospective budget is recorded. Dev/test sealed; all128 are exploratory TRAIN.
 
 ## Previous checkpoint — XGBoost, CatBoost and ExtraTrees submitted
