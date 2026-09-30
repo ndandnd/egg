@@ -8,7 +8,37 @@ supersedes the earlier idle-monitor pause condition and blanket deferral of ML.
 Notify only substantive findings, major decisions, important failures or review
 artifacts. Continue useful local work between jobs; do not pause on an empty queue.
 
-## Latest checkpoint — continuation submitted; partial findings preserved
+## Latest checkpoint — first eight-group dataset admitted; next shard ready
+
+- Job709011 COMPLETED:155 Slurm seconds,149 wrapper seconds,107.67 receipted
+  child seconds. All23 new charging cells replayed. Requested1 CPU; Slurm
+  allocated2 logical CPUs; native/library threads requested1; peak RSS184868KiB.
+  Raw continuation, wrapper, logs and accounting collected and preserved.
+- Composite v2 admitted once in6.74s:8 independent TRAIN groups,16 source plans,
+  47 target charging plans and1 explicit preemption censor. Seven groups have
+  all three tariff pairs;23/24 comparisons eligible. Parent713 allocation seconds
+  and667.82 child seconds remain separate. No incomplete cell was retried.
+- At the preset1e-6 tolerance,20/23 pairs tie; all three non-ties are in base10003.
+  Five of8 source pairs share topology; none share full plans;11 source topologies
+  across16 fleets. Source status13 budget_exhausted/3 certified;47 linear LPs
+  OPTIMAL does not certify curved/global optimality. No new model fit.
+- Raw/admitted dataset backup1aa42d4; report, derived counts and Luna admission
+  review f694d48. Read RESULTS_PHYSICAL_SHARD00.md / PHYSICAL_SHARD00_DERIVED.json
+  rather than re-audit raw parents. Composite output is immutable at
+  result/physical_learning/20260930-shard00-composite-v2.
+- NEXT_PHYSICAL_SHARD01_PROTOCOL.md freezes unchanged shard1, IDs10008–10015,
+  64 cells:16 source route solves +48 charging labels. One requested CPU/8GB,
+  one native thread,2h,100/6600/6900-second child/controller/shell caps,
+  no requeue, exclude scaglione-compute-01. No new job submitted yet; Root will
+  back up and make one guarded submission using EGG_SHARD_INDEX=1.
+- Then continue independent shards toward32/64/128 groups and implement pooled
+  route/edge training from saved source fleets ahead of the32-group fit checkpoint.
+  More tuning of the current two-source selector has little signal. Keep grouped
+  baselines, direct prediction, charging repair and global verification separate.
+  Dev/test and historical protected IDs remain untouched; manuscript deferred;
+  hourly learning automation ACTIVE. No additional source/physics audit needed.
+
+## Prior checkpoint — continuation submitted; partial findings preserved
 
 - **Recorded EGG job 709011**, submitted 2026-09-30T17:34:24Z. The guard found
   no active EGG job. No post-submission queue/outcome check. Execution commit
