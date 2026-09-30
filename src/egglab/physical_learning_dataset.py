@@ -208,7 +208,7 @@ def ingest_attempt(attempt):
                 "curved_optimality_uncertified": bool(label.get("feasible")),
                 "provisional_after_native_limit": bool(label.get("feasible") and (
                     label.get("status") != "returned" or
-                    label.get("native_status") not in ("OPTIMAL", "optimal", "hull_certified"))),
+                    label.get("native_status") not in ("OPTIMAL", "optimal", "certified", "hull_certified"))),
                 "reported_objective_scope": ("source-market physical incumbent; open physical gap possible"
                     if is_source else "curved cost of returned linear-tariff fixed-route LP plan"),
                 "optimality_label": label.get("optimality"),

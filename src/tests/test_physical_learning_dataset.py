@@ -117,6 +117,23 @@ def test_incomplete_or_cross_shard_catalog_rejected(completed_shard):
         adapter.ingest_attempt(completed_shard)
 
 
+def test_native_hull_certificate_is_not_a_limit_or_physical_certificate(completed_shard):
+    catalog = completed_shard / "catalog.jsonl"
+    rows = [json.loads(line) for line in catalog.read_text().splitlines()]
+    source = rows[0]
+    source["label"]["native_status"] = "certified"
+    raw_file = completed_shard / source["case"]["name"] / "state0/source0/raw_result.json"
+    raw = json.loads(raw_file.read_text())
+    raw["result"]["status"] = "certified"
+    raw_file.write_text(json.dumps(raw))
+    catalog.write_text("".join(json.dumps(row) + "\n" for row in rows))
+    data = adapter.ingest_attempt(completed_shard)
+    outcome = next(row for row in data["source_outcomes"] if row["key"] == source["row_id"])
+    assert not outcome["provisional_after_native_limit"]
+    assert outcome["curved_optimality_uncertified"]
+    assert not outcome["certified_for_reported_objective"]
+
+
 def test_source_lineage_and_wrapper_phases_rejected(completed_shard):
     wrapper = next(completed_shard.parent.glob(completed_shard.name + ".slurm_wrapper_receipt.*.json"))
     data = json.loads(wrapper.read_text())
