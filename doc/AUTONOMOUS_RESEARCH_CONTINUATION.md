@@ -8,7 +8,46 @@ supersedes the earlier idle-monitor pause condition and blanket deferral of ML.
 Notify only substantive findings, major decisions, important failures or review
 artifacts. Continue useful local work between jobs; do not pause on an empty queue.
 
-## Latest checkpoint — first physical-learning shard ready for launch
+## Latest checkpoint — first expanded physical-training batch submitted
+
+- **Recorded EGG job 703461**, submitted 2026-09-30T15:58:56Z. The guard found
+  no active EGG job. No post-submission queue or scientific outcome inspection.
+  Do not duplicate. Hourly learning automation ACTIVE; all workers finished.
+- Execution commit `032d02d3f8f227a0716a3e74a66e55260f5139f8`; fresh remote
+  `/home/nc437/egg-physical-learning-20260930`; exclusive attempt
+  `result/physical_learning/20260930-shard00-attempt1` (note new result root).
+  LAUNCH_703461.json, PROTOCOL_PHYSICAL_LEARNING.md and
+  PHYSICAL_LEARNING_LAUNCH_REVIEW.md govern. Source/protocol backed up.
+- User explicitly prioritizes extensive ML and puts manuscript drafting aside.
+  Registry: 128 train / 32 development / 32 sealed test base timetables. This
+  first shard materializes only eight train IDs 10000–10007 and 64 cells:
+  16 source solves + 48 tariff-specific fixed-route charging labels. It fits no
+  model. Full graph/route/charging outcomes and provisional bounds/status/time
+  are retained for larger pooled fits and later route/whole-fleet proposals.
+- New physical generator has battery spans 80/174.24/232.32 kWh, consistent drive
+  and idle energy, explicit engines-off depot dwell, and independent 54-way
+  factorial assignment of battery, size, consumption and depot access. All 128
+  training constructive fleets replayed once. No development/test materialized;
+  historical reserved 2004/05/2020/21 untouched. Eight focused tests and bounded
+  independent reviews passed; 18 source hashes frozen.
+- One requested CPU, 8 GB, one native/BLAS thread, 2 h; child 100/controller 6600/
+  shell 6900 seconds; no retry/requeue; exclude scaglione-compute-01. No array.
+  Later modest parallel workers require a prospective budget after label-yield
+  review, as described in LEARNING_SCALE_PLAN.md. Do not block routine work on
+  another user approval; current standing authorization covers continued training.
+- Completed 700498: 1104 Slurm / 1099 wrapper seconds; all 44 plans and exact costs
+  replayed. Ridge switches with tariffs but mean excess 0.5342 is worse than
+  EdgePrior 0.0670 and nearest-price 0.1540 on four grouped timetables. Raw ff682c1a,
+  reviewed report/replay eb6bde5. Original Google Doc append and two links verified,
+  preserving all six figures: DOC_LEARNING_PRIORITY_RECEIPT.json. No draft edits.
+- Next: one scoped check of 703461; accounting/receipts if vanished; collect full
+  shard 00 evidence from the NEW physical_learning root. Check completeness,
+  physical/cost replay, source-plan diversity, ties and margins, and actual time.
+  Then continue justified training shards toward 32/64/128 groups, grouped model
+  comparisons and route proposals. Keep tests sealed, preserve every failure,
+  and avoid repeated broad audits or tuning only the old tiny development set.
+
+## Prior checkpoint — first physical-learning shard ready for launch
 
 - User priority is extensive ML work; manuscript drafting is set aside. The
   hourly automation was updated and remains ACTIVE. Continue dataset collection,
