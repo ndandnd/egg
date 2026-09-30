@@ -73,7 +73,8 @@ shell a 1,650-second external cap. An interrupted unreceipted cell is
 preserved and halts automatic resume. Requested and allocated CPUs are
 receipted separately.
 
-Pure checks, without local native optimization:
+Local checks use small SciPy/HiGHS cover fixtures, mocked pipeline calls and
+physical replay of archived plans. No local GRB fleet optimization is run:
 
 ```sh
 PYTHONPATH=src python3 -m unittest src.tests.test_energy_aware_repair_pilot

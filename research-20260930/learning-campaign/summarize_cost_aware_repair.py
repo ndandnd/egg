@@ -2,8 +2,8 @@
 """Summarize saved cost-aware repair receipts without invoking solvers."""
 from __future__ import annotations
 
-import csv
 import argparse
+import csv
 import json
 from pathlib import Path
 from typing import Any
@@ -104,7 +104,7 @@ def summarize_cell(attempt: Path, order: int, case: str, services: int,
     failure_receipt = _read_json(folder / "failure.json", errors)
     exception = _read_json(folder / "exception.json", errors)
     pool = _read_json(folder / "pool_preparation.json", errors)
-    hull_skip = _read_json(folder / "hull_skip.json", errors)
+    hull_skip = _read_json(folder / "hull_skipped.json", errors)
     result = _read_json(folder / "result.json", errors)
 
     proposed = repair_file.get("result", {}) if repair_file else {}
