@@ -9,7 +9,9 @@ and the best replayed feasible **whole-fleet** column, if one exists. A fleet
 label has `plan`, `plan_hash`, `load`, `ops_cost`, and `objective_exact`.
 `optimality` is `unknown` even when a hull mixture receives a certified lower
 bound: the selected single fleet is only a feasible incumbent. The hull
-mixture upper bound is separately named `native_mixture_upper_exact`.
+mixture upper bound is separately named `native_mixture_upper_exact`. Trusted
+bound fields require the saved assessment replay flags; raw bounds from a failed
+assessment remain explicitly `unverified_native_*` and are not certificates.
 
 The learner may consume source and training cold rows. It must partition on
 `base_group`, so tariff variants never cross train/development/test. Its

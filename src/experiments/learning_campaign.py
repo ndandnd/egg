@@ -430,10 +430,20 @@ def label(path, case, stage):
     m = market(case, stage if stage in ("source0", "source1") else "target")
     row["native_status"] = raw.get("status")
     cert, mix = raw.get("lower_certificate"), raw.get("mixture")
+    assessment_path = dest / "result.json"
+    assessment = (json.loads(assessment_path.read_text()).get("assessment", {})
+                  if assessment_path.is_file() else {})
+    row["bounds_replay"] = {
+        "global_certificate_replayed": assessment.get("global_certificate_replayed") is True,
+        "mixture_replayed": assessment.get("mixture_replayed") is True}
     if cert is not None and cert.get("lower_exact") is not None:
-        row["lower_exact"] = cert["lower_exact"]
+        key = ("lower_exact" if row["bounds_replay"]["global_certificate_replayed"]
+               else "unverified_native_lower_exact")
+        row[key] = cert["lower_exact"]
     if mix is not None and mix.get("objective_exact") is not None:
-        row["native_mixture_upper_exact"] = mix["objective_exact"]
+        key = ("native_mixture_upper_exact" if row["bounds_replay"]["mixture_replayed"]
+               else "unverified_native_mixture_upper_exact")
+        row[key] = mix["objective_exact"]
     eligible = []
     for column in raw.get("columns", []):
         replay = nh.replay_column(case, column, compact.EXTRACTION_POLICY)

@@ -67,6 +67,25 @@ class LearningCampaignTests(unittest.TestCase):
             self.assertEqual(label["elapsed_seconds"], 100.2)
             self.assertIsNone(label["objective_exact"])
 
+    def test_failed_assessment_does_not_promote_raw_bounds(self):
+        case = campaign.make_case(2001)
+        with tempfile.TemporaryDirectory() as temporary:
+            dest = campaign.folder(temporary, case.name, "cold")
+            dest.mkdir(parents=True)
+            (dest / "receipt.json").write_text(json.dumps({"returncode": 2,
+                "hard_timeout": False, "elapsed_seconds": 1.2}))
+            (dest / "raw_result.json").write_text(json.dumps({"result": {
+                "status": "certified", "columns": [],
+                "lower_certificate": {"lower_exact": "123"},
+                "mixture": {"objective_exact": "124"}}}))
+            row = campaign.label(temporary, case, "cold")
+            self.assertIsNone(row["lower_exact"])
+            self.assertNotIn("native_mixture_upper_exact", row)
+            self.assertEqual(row["unverified_native_lower_exact"], "123")
+            self.assertEqual(row["unverified_native_mixture_upper_exact"], "124")
+            self.assertEqual(row["status"], "failed")
+            self.assertFalse(row["feasible"])
+
     def test_cheapest_control_uses_nonlinear_target_cost(self):
         market = campaign.nh.Market("synthetic", (0.0, 0.0), (1.0, 1.0))
         pool = {"candidates": [
