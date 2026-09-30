@@ -8,7 +8,26 @@ supersedes the earlier idle-monitor pause condition and blanket deferral of ML.
 Notify only substantive findings, major decisions, important failures or review
 artifacts. Continue useful local work between jobs; do not pause on an empty queue.
 
-## Latest checkpoint — charging-cap repair pilot launched
+## Latest checkpoint — charging-cap result collected; shared capacity diagnosis underway
+
+- Job691594 COMPLETED exit0 in109seconds, one allocated CPU/8GB, MaxRSS230152KiB,
+  snavely-cpu-04. Complete attempt and native logs collected; ACCOUNTING_691594.json
+  and RESULT_MANIFEST_CHARGING_CAP.json preserve accounting and57 artifact hashes.
+  No EGG job is active. Do not repeat this attempt; automation remains ACTIVE.
+- One new physical plan:2017 learned8bus, exact target cost980.998586. This is
+  worse than the historical target-verified control689.474312 and source724.660042.
+  It arose from a5sec cover timeout with0.5003 gap. The other3 proposals failed
+  fixed-route charging and replayed source fallbacks. Fresh hull for the new plan
+  remained open at588.165909–688.761949; upper is a mixture, not a physical plan.
+- Root manages review: energy_diagnosis independently replays all4 saved outcomes
+  and diagnoses shared-capacity failure; luna_campaign_review prepares the report;
+  sol6_campaign_runner prepares a conditional shared-interval harness/protocol.
+  No new source approved or launch recorded yet. Inspect worker/newer state first.
+- Next bounded ceiling stays1CPU/8GB/30min/one native thread/no retry/exclude01.
+  Shared-charging work is conditional on verified diagnosis; no refit/test access.
+  Do not claim learning benefit, speedup or optimality from the sole8bus candidate.
+
+## Prior checkpoint — charging-cap repair pilot launched
 
 - **Recorded EGG job 691594**, submitted 2026-09-30T08:55:45Z. One scoped
   startup check observed PENDING, requesting one CPU/8GB. No result inspected.
