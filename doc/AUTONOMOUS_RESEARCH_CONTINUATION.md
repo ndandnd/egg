@@ -36,7 +36,8 @@ artifacts. Continue useful local work between jobs; do not pause on an empty que
   2026-09-30T19:15:33Z and all seven observed RUNNING. Execution commit6b29c72;
   remote `/home/nc437/egg-physical-parallel-labels-20260930-wave2`;
   individual attempts `result/physical_learning/20260930-shardNN-attempt1`.
-  Seven jobs ×1requested CPU/8GB/2h/native1, no retry/requeue, exclude01;14CPUh cap.
+  Seven jobs ×1requested CPU/8GB/2h/native1, no retry/requeue; exclude
+  scaglione-compute-01;14CPUh cap.
   NEXT_PARALLEL_LABEL_WAVE2_PROTOCOL.md and individual LAUNCH receipts govern.
   Combined ceiling remains8label+4training workers /12requested CPUs /96GB.
 - Previous wave1 jobs712946–712952 all completed; every shard02–08 admitted once.
@@ -48,6 +49,9 @@ artifacts. Continue useful local work between jobs; do not pause on an empty que
   remain provisional where native budgets ended; target OPTIMAL is only linear-LP.
   See RESULTS_PHYSICAL_PARALLEL_WAVE1.md / PHYSICAL_PARALLEL_WAVE1_DERIVED.json / accounting.
   Raw/admitted backup6b29c72; source/protocol/review/pool backup8fc64fb.
+  Launch/handoff backup81c9ded. The original Google Doc now records the new grouped
+  comparison, methods plan and failure counts; all text/three links and six existing
+  figures verified (DOC_GROUPED32_LAUNCH_RECEIPT.json).
 - MODERN_ML_METHODS_AND_VALIDATION.md links established tabular and recent RouteFinder/
   RRNCO graph-attention approaches, with explicit EV timetable transfer limits. No
   current-SOTA claim or route-quality claim. Preserve base-group splits, small fixed
