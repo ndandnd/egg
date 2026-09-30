@@ -2,6 +2,10 @@
 
 30 September 2026. This is a design for a **new, versioned dataset and model campaign**, not an executed experiment or a change to any archived result. The [battery-regime note](BATTERY_REGIMES_AND_TRAINING_DIRECTION.md) defines the physical motivation. No manuscript work is part of this plan.
 
+## Current parallel execution update
+
+The user's explicit request for parallel training supersedes the initial single-job ceiling and deferral of every fit until 32 groups. `PARALLEL_LEARNING_RESOURCE_PROTOCOL.md` now records up to eight simultaneous label workers and four simultaneous CPU training workers (12 requested CPUs / 96 GB). Seven new label shards are capped at 14 requested CPU-hours; a 12-task grouped fold/seed pilot is capped at six requested CPU-hours. Each task exits when its planned work completes. The initial eight-group route/edge pilot is exploratory; later 32/64/128 learning-curve checkpoints use fixed registry prefixes. Development and sealed tests remain unopened. Earlier resource paragraphs below document the original staged plan, not the current concurrency limit.
+
 ## What the existing evidence says
 
 The current charging-response model has eight ridge coefficients and 12 labels from six independent training timetables. Its original four development choices all selected source 1; an always-source-1 rule made the same choices. The independently checked tariff-variant run shows tariff-dependent switches, but its flat-tariff switches are worse in three groups and tied in one; mean paired excess is 0.5342 versus 0.0670 for the older EdgePrior. This is evidence to improve feature and physical-regime coverage, not evidence that adaptation already works. More epochs on that fitted ridge cannot help. The older EdgePrior scores movement edges, but its actual usable output is projected onto already solved source fleets. Neither model learns a new complete route plan. The next investment is independent physical timetables and better labels, followed by route generation; repeated two-source selector variants alone will not answer the user's ML question.
