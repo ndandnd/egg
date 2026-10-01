@@ -41,7 +41,9 @@ def task_for(case_key, groups):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--v8-root", type=Path, required=True)
+    ap.add_argument("--v8-root", type=Path)
+    ap.add_argument("--e4-runs", type=Path, help="score with E4 models: <dir>/<arm>-f<fold>/{model.npz,result.json}")
+    ap.add_argument("--e4-arm", default="multi8")
     ap.add_argument("--tariff", default="day")
     ap.add_argument("--case", action="append", required=True)
     ap.add_argument("--output", type=Path, required=True)
@@ -53,10 +55,16 @@ def main():
         t0 = time.monotonic()
         task = task_for(key, groups)
         if task not in cache:
-            folder = args.v8_root / f"task{task:02d}" / "inner_progress"
-            pre = json.loads((folder / "fit_only_preprocessing_and_groups.json").read_text())
-            cache[task] = (graph.restore_model(folder / "graph_attention_selected.npz"),
-                           np.asarray(pre["mean_fit_only"]), np.asarray(pre["scale_fit_only"]))
+            if args.e4_runs is not None:  # E4 trainer output; fold = task // 3 (seed 17 only)
+                folder = args.e4_runs / f"{args.e4_arm}-f{task // 3}"
+                pre = json.loads((folder / "result.json").read_text())
+                cache[task] = (graph.restore_model(folder / "model.npz"),
+                               np.asarray(pre["mean_fit_only"]), np.asarray(pre["scale_fit_only"]))
+            else:
+                folder = args.v8_root / f"task{task:02d}" / "inner_progress"
+                pre = json.loads((folder / "fit_only_preprocessing_and_groups.json").read_text())
+                cache[task] = (graph.restore_model(folder / "graph_attention_selected.npz"),
+                               np.asarray(pre["mean_fit_only"]), np.asarray(pre["scale_fit_only"]))
         model, mean, sc = cache[task]
         case = claude_cases.make(key)
         prices = bank.market(case, args.tariff).a
@@ -65,6 +73,7 @@ def main():
         with torch.no_grad():
             z = model(graph.batches([sample], mean, sc, labelled=False)[0]).numpy()
         out[key] = {"case_identity": case.identity(), "v8_task": task, "tariff": args.tariff,
+                    "model_source": (f"e4:{args.e4_arm}" if args.e4_runs else "v8"),
                     "movement_ids": [m.id for m in case.movements], "logits": z.tolist(),
                     "score_seconds": time.monotonic()-t0}
         print(key, task, len(z), round(out[key]["score_seconds"], 2), flush=True)
