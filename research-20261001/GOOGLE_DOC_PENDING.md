@@ -28,3 +28,24 @@ changes with the tariff, but the route topology changes in 14/16: under the midd
 cheap tariff the solver adds depot visits and doubles midday charging. This explains
 the v7 learned-route loss: training labels come from only two (flat and evening-cheap)
 tariffs.
+
+## Takeover update 2 — 1 October 2026, 08:25 UTC
+
+**Price support on the 16 v7 timetables (E0, hull typo fixed).** 14/16 hulls certify
+in 3-75 s. 4/16 timetables have a certified strictly positive physical-minus-hull gap
+(no fleet is supported by its own marginal prices); gaps are <= 0.1% of the bill.
+
+**Cold solving vs size (E2, 18 cells).** The fleet MIP is solved in seconds at the
+bank's 20-28 trips but leaves 2-79% gaps after 600 s at 60-80 trips; one 80-trip best
+plan uses 30 buses. ML acceleration has a real target beyond ~40 trips.
+
+**Learned pruning (E3).** Keep the 30% of connections the v8 graph model scores
+highest, then solve. On the 16 bank timetables: beats random pruning on 15/16
+(~28% cheaper), beats LP-relaxation ranking 8/7/1, small wins over cold (concentrated
+on the two hard timetables). At 40-80 trips with a 60 s budget (interim, 12 cases):
+learned beats cold 10/12 and LP and random 12/12; at 80 trips cold returns 25-32-bus
+plans while learned pruning returns 4-6-bus plans 3-4x cheaper. Part of that gain is
+pruning itself (random pruning also beats cold at 80 trips); learned beats random by a
+median 24%. 300 s results and a four-round-policy comparison are running. A harness
+bug that discarded plans when a late solver round had no time left was found and
+fixed; affected cells are rerun once and reported separately.

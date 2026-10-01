@@ -44,3 +44,4 @@ Updated: 2026-10-01 05:48 UTC. Branch claude/research-20261001. Assessment: doc/
 - 06:25 heartbeat: E2 interim written; E3 phase 2 submitted (761781); E4 labels throttle back to 2 (10/128 done).
 - 06:35 E5 first rows: single-budget cold stalls in round 1 (H15: 548.04 at 180 and 600 s), cold4 507.49, learned 509.35 -> added learned4 arm + dependent supplements.
 - 07:30 heartbeat: E2 final; E3 bank results; harness fix (TimeoutError lost plans) + 6-cell rerun; scale/public learned4 resubmitted on fixed code. Scale main array 761781 runs on pre-fix code: rerun its TimeoutError cells with -hfix when it finishes.
+- 08:25 heartbeat: E5 Hildenbrand done (learned beats cold 3/4; cold4 best at 600 s; learned4 pending 765341); hfix bank reruns done (all produced plans); E3 scale interim at 60 s: learned >> cold at 60-80 trips; GOOGLE_DOC_PENDING update 2 written. Throttles raised: E3 scale %2, E4 labels %3.
