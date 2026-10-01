@@ -18,3 +18,11 @@ Declared 2026-10-01 at launch of the bank phase (job 759091). Driver
 - Primary metric: bill relative to the best bill found by any arm/budget for that case.
   Go (learned pruning useful): learned beats both lp and cold at the same T on >= 70%
   of phase-2 cases. A failed/infeasible pruned arm counts as a loss.
+
+## Phase 2 launch, 06:25 UTC
+
+Launched on 12/18 E2 cells (cold at 600 s leaves 2-79% gaps at 60-80 trips; go).
+Cases scale:50000-50003 x {40, 60, 80} trips, arms cold / cold4 / learned / lp /
+random (cold4 added after the bank launch to separate route quality from extra
+tangent rounds), T in {60, 300} s, keep 30%, 16 GB. 120 runs, throttled to fit the
+Gurobi concurrency cap. Primary metric and go criterion unchanged.
