@@ -96,7 +96,6 @@ def main():
     if args.arm == "multi8":
         extra, e4_missing = label_samples(args.labels, "training")
         train_samples += extra
-    day_samples, day_missing = label_samples(args.labels, "evaluation_only")
     fit_groups, inner_groups, outer_groups = previous.grouped_split(data["groups"], args.fold)
     fit = [s for s in train_samples if s["group"] in fit_groups]
     inner = [s for s in train_samples if s["group"] in inner_groups]
@@ -107,10 +106,9 @@ def main():
     model, row = graph.fit_candidate("graph_attention", fit_batches, inner_batches, args.seed)
     curves = row.pop("train_curves")
     graph.save_model(model, args.output / "model.npz")
-    outer_day = [s for s in day_samples if s["group"] in outer_groups]
     outer_pool = [s for s in pool_samples if s["group"] in outer_groups]
-    day_metrics, day_p = evaluate(model, outer_day, mean, scale) or (None, None)
     pool_metrics, _ = evaluate(model, outer_pool, mean, scale) or (None, None)
+    # Held-out `day` labels are scored separately (claude_e4_eval.py) once labelled.
     # Day-tariff logits for every OUTER group (physical decode evaluation).
     logits = {}
     for gname in outer_groups:
@@ -124,8 +122,7 @@ def main():
     result = {"arm": args.arm, "fold": args.fold, "seed": args.seed,
               "fit_groups": fit_groups, "inner_groups": inner_groups, "outer_groups": outer_groups,
               "train_samples": {"fit": len(fit), "inner": len(inner)}, "e4_missing": e4_missing,
-              "day_eval_missing": day_missing, "candidate": row,
-              "outer_day_heldout_tariff_metrics": day_metrics,
+              "candidate": row,
               "outer_source_tariff_metrics": pool_metrics,
               "mean_fit_only": mean.tolist(), "scale_fit_only": scale.tolist(),
               "wall_seconds": time.monotonic()-started}
@@ -133,7 +130,7 @@ def main():
     (args.output / "curves.json").write_text(json.dumps(curves))
     (args.output / "day_logits.json").write_text(json.dumps(logits))
     print(json.dumps({"arm": args.arm, "fold": args.fold, "selected_epoch": row["selected_epoch"],
-                      "completed": row["completed_epochs"], "day": day_metrics}, default=str))
+                      "completed": row["completed_epochs"], "source_tariffs": pool_metrics}, default=str))
 
 
 if __name__ == "__main__":
