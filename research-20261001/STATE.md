@@ -8,7 +8,8 @@ Updated: 2026-10-01 05:48 UTC. Branch claude/research-20261001. Assessment: doc/
   - E2 scale profile 758967 (18 cells, %2; 12 done, interim results written) -> runs/e2-scale-20261001/out/*/e2.json
   - E3 phase 2 (scale 40-80 trips, 120 runs incl cold4, %1) 761781
   - learned4 supplements: bank 761834 DONE; scale 765340 (after 761781), public 765341 (after 759670+759671) [resubmitted on harness-fixed code 0cd5da5; 761835/761836 cancelled while pending]
-  - E3 bank harness-fix rerun 765335 (6 cells)
+  - E3 bank harness-fix rerun 765335 (6 cells) DONE
+  - E3 scale hfix 781391 (2 cold4 cells); E4 multi8 eval+decode 781389; E6 keep sweep 781395 (48 runs, %2)
   - E3 bank prune 759091 (128 runs, %2) -> runs/e3-prune-20261001/out/*/e3.json
   - E4 labels 759102 (g10001-10127, %2; g10000 done by 759065) -> runs/e4-labels-20261001/out/g*/labels.jsonl
   - E4 train bank2 759111 (4 folds, graph env, no Gurobi) -> runs/e4-train-20261001/runs/bank2-f*
@@ -48,3 +49,5 @@ Updated: 2026-10-01 05:48 UTC. Branch claude/research-20261001. Assessment: doc/
 - 09:25 heartbeat: E5 Eberbach done -> E5_RESULTS.md interim; multi8 training queued (775356) after labels.
 - 10:25 heartbeat: E4 labels done (879/896 replayed plans, 6.9 CPU-h); multi8 training running (775356); bank2 day-eval + decode submitted (779104); E5 final (learned4 best 6/6).
 - 11:25 heartbeat: E3 scale written up; 2 cold4 artifact cells rerun (781391); multi8 trained (4 folds); bank2 day-eval+decode done; multi8 eval+decode submitted (781389).
+9. E6 analysis: summarize.py keys by (case,T,arm) — add keep to the key (k15/k30/k50 in dir names) before analyzing E6.
+10. E4 final: compare eval_bank2.json vs eval_multi8.json (outer day AP/logloss per fold; go if multi8 wins >=3/4 folds) and decode_bank2.json vs decode_multi8.json (bills vs v7 cold/source policy; cheap_kwh).
