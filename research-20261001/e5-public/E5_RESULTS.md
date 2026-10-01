@@ -44,15 +44,14 @@ lp vs cold @ 1800s: 0/0/1  mean diff +5.409%  median +5.409%
 
 | Case | T s | cold | cold4 | learned | **learned4** |
 |---|---:|---:|---:|---:|---:|
-| Hildenbrand 15 (37 svc) | 180 | 548.04 | 507.49 | 509.35 | **490.72** |
-| Hildenbrand 15 | 600 | 548.04 | 493.29 | 509.35 | **488.71** |
-| Hildenbrand 16 (37 svc) | 180 | 551.10 | 550.40 | 545.07 | **528.06** |
-| Hildenbrand 16 | 600 | 541.18 | 533.02 | 545.07 | **528.06** |
-| Eberbach (105 svc) | 600 | 1300.6 | 5189.1 | 1264.9 | **1252.17** |
-| Eberbach | 1800 | 1271.0 | 1291.2 | 1264.9 | **1251.77** |
+| Hildenbrand 15 (37 svc) | 180 | 548.04 (2) | 507.49 (2) | 509.35 (2) | **490.72 (2)** |
+| Hildenbrand 15 (37 svc) | 600 | 548.04 (2) | 493.32 (2) | 509.35 (2) | **488.71 (2)** |
+| Hildenbrand 16 (37 svc) | 180 | 551.11 (2) | 550.37 (2) | 545.06 (2) | **528.06 (2)** |
+| Hildenbrand 16 (37 svc) | 600 | 541.17 (2) | 533.01 (2) | 545.06 (2) | **528.06 (2)** |
+| Eberbach (105 svc) | 600 | 1300.61 (7) | 5189.14 (44) | 1264.92 (7) | **1252.17 (7)** |
+| Eberbach (105 svc) | 1800 | 1271.00 (7) | 1291.24 (7) | 1264.92 (7) | **1251.77 (7)** |
 
-(Absolute bills from the per-run files; relative cells in the table above are the
-authoritative computed values.)
+Buses in parentheses. Generated from the per-run e3.json files.
 
 ## Findings
 
