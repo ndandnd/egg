@@ -61,3 +61,4 @@ Updated: 2026-10-01 05:48 UTC. Branch claude/research-20261001. Assessment: doc/
 13. E8 analysis: combine e8 outs with e3-prune scale outs (summarize_keep.py needs the extra dir + k5/k10 columns) and e5-public outs (learned4 k30) for public.
 - 14:25 heartbeat: E7 final (mixed); E8 18/66.
 14. E9 analysis: per case cold vs seeded hull status/bounds, gap, regret -> e9-seeded-hull/E9_RESULTS.md. If seeded hulls certify where cold cannot, that is a paper-relevant milestone (Google Doc).
+- 15:25 heartbeat: E9 4/10 (40-trip): seeded hull much tighter than cold on all 4 (widths 8.5->0.7, 38->10.8, 41->26; 50002/40 certified only when seeded). E8 62/66. Write E9_RESULTS when 10/10.
