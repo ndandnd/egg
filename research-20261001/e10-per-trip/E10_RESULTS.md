@@ -65,10 +65,12 @@ risk for deploying pruning on large real networks.
 
 ## Reading
 
-- **m=8 is the most robust rule on synthetic + Hildenbrand**: it beats unpruned cold
-  and the four-round cold4 on 28/30 cells each (median -4.4% / -3.4%), stays within
-  0.8% of the best on Hildenbrand and within 3.6% on every synthetic cell, with no
-  regime-specific tuning. m=5 is similar (27/30 vs cold; within 1.8% on Hildenbrand).
+- **m=5 and m=8 are the most robust rules.** m=5 beats unpruned cold on 27/30 cells
+  and cold4 on 25/30 (median -5.0% / -3.0%), stays within 2.3% of the best on every
+  synthetic cell and within 1.8% on Hildenbrand, but fails replay on two Eberbach runs.
+  m=8 beats cold and cold4 on 28/30 each (median -4.4% / -3.4%) and is within 0.8% on
+  Hildenbrand, but is +11.2% / +11.4% on two 80-trip cells at 60 s (the larger pruned
+  model is too slow at the shortest budget). Neither needs regime-specific tuning.
 - A global fraction must be tuned per regime (E8: ~5% at 80 synthetic trips, 30% on
   public); the per-trip rule adapts automatically (kept count ~7.5 x trips at m=5,
   incl. pullouts/pullins).
