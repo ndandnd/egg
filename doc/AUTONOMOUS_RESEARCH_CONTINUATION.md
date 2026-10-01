@@ -8,7 +8,55 @@ supersedes the earlier idle-monitor pause condition and blanket deferral of ML.
 Notify only substantive findings, major decisions, important failures or review
 artifacts. Continue useful local work between jobs; do not pause on an empty queue.
 
-## Latest checkpoint — studies queued; physical-context inputs prepared
+## Latest checkpoint — physical comparison reviewed; graph startup recovery submitted
+
+- One scoped queue check found arrays728823/729522 absent. Identity-scoped Slurm
+  accounting and complete receipts were collected. V7 has16completed parents but
+  32hull child TypeErrors before optimization (`pool_tol` instead of
+  `pool_tolerance`) plus3cover timeouts on TRAIN10069. No hull bound exists.
+  V8 has12failed parents before native probe or fit: site Slurm profile read
+  optional unset INCLUDE under nounset. Preserve both failures; do not retry in place.
+- V7 raw2918files/57,304,988bytes have17verified lossless archives; all original
+  wrapper/child/log/accounting evidence is preserved. Evidence backup89ed66d is
+  pushed. Allocated cost: v7=1484CPU-seconds; failedv8=12CPU-seconds. Both had actual
+  maximum concurrency3, distinct from requested4. Original source remains immutable.
+- Sol61's v7 deterministic replay verifies143saved plan bills exactly, all48scoring
+  stage identities/partitions and all source recharges. Root independently reran
+  the replay: ledger differs only in replay elapsed time, report byte-identical.
+  This does not rerun estimator probabilities. ROUTE_PROPOSAL_TRAIN_V7_RESULTS,
+  REPLAY, REVIEW and ROOT_CHECK are the concise result package.
+- Primary physically replayed fleets: tabular16/16, tree-family15/16, graph15/16,
+  cost-only15/16. On the15common complete groups, mean bill differences versus
+  the predeclared reused-and-recharged source policy are +0.480,+2.832,+4.600,
+  +21.617cost units respectively. Tabular's all16mean is+7.570 because10069 adds
+  +113.915. Retain this failure/outlier; do not select only successful groups.
+  Raw argmax topology is valid in2/48diagnostics. Better edge ranking has not yet
+  established cheaper physical schedules. No model promotion or speedup claim.
+- Exact sign counts include ~1e-14charging differences; report explicitly adds
+  descriptive post-hoc±0.01counts without changing exact ledgers/source policy.
+  Material lower/within/higher: tabular5/4/7, families4/3/8, graph1/6/8,
+  cost-only0/1/14. All16are exploratory TRAIN, with held-out source-model folds;
+  DEV/finalTEST remain sealed. Cold physical incumbents have a different budget.
+- Sol61 implemented a startup-only v8recovery wrapper; Luna approved and root
+  passed9Bash fixtures. Source a19f0acc08adf4743cf24c9c82d0f4951f2f0bf3 pushed.
+  LAUNCH_738226.json records a single02:49:01Z submission after exact150inputhash
+  verification and an empty EGG-only dispatch guard. Fresh checkout:
+  /home/nc437/egg-route-graph-budget-20261001-v8-recovery1; fresh result:
+  result/physical_learning/20261001-route-model128-graph-budget-v8-recovery1.
+  Twelve tasks%4,1CPU8GB1hour/native1/node75/exclude01/no requeue,12newCPUhcap.
+  No scientific training code/feature/fold/selection change. Allocation unobserved.
+- Current only active recorded array is738226. Next follow-up: one scoped check,
+  accounting if vanished, collect complete artifacts once, retain failures/time,
+  verify all300epoch anchors and independently replay saved models before admitting
+  900epoch results. No inference from Slurm completion alone. No duplicate launch.
+- Next useful local research should address the gap between edge imitation and
+  physical cost. The already-reviewed input-only v9feature package is ready for
+  fit-fold input-variance inventory and a separately frozen38-input padded-control
+  ablation. The v7hull interface repair remains a distinct future bounded package;
+  do not silently rerun it or claim global optimality. No new source-policy or
+  architecture selection from this TRAIN pilot. Manuscript drafting stays deferred.
+
+## Previous checkpoint — studies queued; physical-context inputs prepared
 
 - The single Unicorn queue check during the 01:33 UTC follow-up found both arrays
   pending: 728823 for resources, and 729522 because its requested node was not
