@@ -68,9 +68,10 @@ lp vs cold @ 300s: 3/0/9  mean diff +4.029%  median +6.486%
 ## Findings
 
 1. **Learned pruning beats cold** 10/0/2 at 60 s (median -3.4%, mean -29%) and 9/1/2 at
-   300 s (median -3.0%, mean -16%). At 80 trips cold returns 25-35-bus plans (bills
-   3200-4500) even after 300 s on three of four instances; learned pruning returns 4-7
-   buses within ~2% of the best plan found.
+   300 s (median -3.0%, mean -16%). At 80 trips cold returns 25-32-bus plans (bills
+   3271-4499) on all four instances at 60 s and still on two of four at 300 s; learned
+   pruning returns 4-6-bus plans, within 0-10% of the best plan found at 60 s and 0-2%
+   at 300 s.
 2. **The learned scores matter beyond pruning itself**: learned beats random pruning
    12/12 at both budgets (median -24%) and LP-relaxation pruning 12/12 (median -13%).
 3. **Ceiling effect of a fixed 30% keep rule**: where learned loses (50002/60 trips:
