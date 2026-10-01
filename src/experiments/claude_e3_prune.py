@@ -39,6 +39,23 @@ from egglab import physical_learning_cases as bank
 
 
 
+_native_optimize_once = pf._optimize_once
+
+
+def _optimize_or_stop(built, budget, deadline):
+    """Harness fix (06:20 run analysis): when a new tangent round would start with no
+    time left, ``nr._optimize_once`` raises TimeoutError and ``solve_planner`` loses the
+    replayed plan of earlier rounds. Report a non-solution status instead so the
+    planner's own loop stops and returns its best plan. Solver math is unchanged."""
+    if deadline - time.monotonic() <= 0:
+        return {"status": "HARNESS_NO_TIME_LEFT", "incumbent": None, "lower_bound": None,
+                "wall_s": 0.0, "seconds_cap": 0.0}
+    return _native_optimize_once(built, budget, deadline)
+
+
+pf._optimize_once = _optimize_or_stop
+
+
 def lp_scores(case, prices, deadline):
     built = pf.build_feasible_model(case, "GRB")
     pf.attach_objective(built, "linear", prices)

@@ -36,3 +36,16 @@ reaches 507.49, so the round split matters as much as pruning. Added arm `learne
 after the main arrays: bank (32 runs), scale (24 runs), public (6 runs). Reported
 comparisons: learned vs cold (same single-budget policy) and learned4 vs cold4 (same
 four-round policy). No earlier result is discarded or re-labelled.
+
+## Harness correction, 07:30 UTC (after reading bank results)
+
+Bank analysis found 6 cells failing with `TimeoutError: Native remaining-time budget
+exhausted`: `solve_planner` started a further tangent round with no time left and the
+exception discarded the plan already found in earlier rounds. This is a measurement
+artifact of the harness, not a solver outcome. From code 7a1... onward the driver
+replaces a no-time round with a `HARNESS_NO_TIME_LEFT` status so the planner returns
+its best plan (solver math unchanged). The 6 affected bank cells are rerun once under
+`-hfix` output names; the original failed rows are kept and reported. The same rule
+applies to any later artifact failures in the scale/public phases. Extraction
+refusals ("charge projection exceeds roundoff budget") are genuine failures and are
+not rerun.
