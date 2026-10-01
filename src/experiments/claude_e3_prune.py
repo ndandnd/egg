@@ -141,7 +141,7 @@ def main():
             plan = {**plan, "case_identity": case.identity()}
             replay = nr.replay_native(case, plan)  # FULL case, independent replay
             bill = Fraction(replay["ops_cost"]) + nh.supply(market, replay["load"])
-            row.update(bill_exact=str(bill), bill=float(bill), vehicles=len(plan["vehicles"]),
+            row.update(bill_exact=str(bill), bill=float(bill), vehicles=len(plan["vehicles"]), plan=plan,
                        movements=sorted({m for v in plan["vehicles"] for m in v["movements"]}))
     except Exception as exc:
         row["failure"] = {"type": type(exc).__name__, "message": str(exc),
