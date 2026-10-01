@@ -20,3 +20,16 @@ planner upper bounds. Reported per case: bill, buses, status, all failures (prun
 can make a case infeasible; that counts as a loss). Not a held-out statistical test:
 three cases, one run each.
 Resources: 24 runs, <= 2 concurrent, 1 CPU, 16 GB (32 GB Eberbach).
+
+## Amendment, 05:51 UTC (before any E5 result was read)
+
+The first submission (759411 Hildenbrand, 759412 Eberbach; code 803cded) lacked a
+`cold4` control (four tangent rounds of T/4, the v7 cold shape) and per-round logging,
+which are needed to separate better routes from more outer-approximation rounds. It
+was cancelled and resubmitted as 759670 (Hildenbrand, 20 runs incl. cold4) and
+759671 (Eberbach, 10 runs) on code 4a4263e. **Two tasks had already started and were
+cancelled after 2 min 33 s each** (759411_0 = hildenbrand15 cold T=180 on
+unicorn-cpu-01; 759412_16 = eberbach cold T=600 on unicorn-cpu-75); their partial
+outputs were deleted by mistake during the resubmission and were never read. That
+0.085 CPU-hours is counted as spent. Bank-phase E3 also gets a cold4 supplement
+(759672, 32 runs).

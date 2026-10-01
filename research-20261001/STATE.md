@@ -9,7 +9,8 @@ Updated: 2026-10-01 05:48 UTC. Branch claude/research-20261001. Assessment: doc/
   - E3 bank prune 759091 (128 runs, %2) -> runs/e3-prune-20261001/out/*/e3.json
   - E4 labels 759102 (g10001-10127, %2; g10000 done by 759065) -> runs/e4-labels-20261001/out/g*/labels.jsonl
   - E4 train bank2 759111 (4 folds, graph env, no Gurobi) -> runs/e4-train-20261001/runs/bank2-f*
-  - E5 public 759411 (Hildenbrand 16 runs, throttled %1) and 759412 (Eberbach 8 runs, %1, 32G)
+  - E5 public 759670 (Hildenbrand 20 runs incl. cold4, %1) and 759671 (Eberbach 10 runs, %1, 32G); first submission cancelled (see e5-public/PROTOCOL.md amendment)
+  - E3 bank cold4 supplement 759672 (32 runs, %1)
 - Gurobi rule: <= 8 of my Gurobi processes at once; exclude scaglione-compute-01; never touch other users'/projects' jobs.
 - Deploy new code with scratchpad deploy.sh (ships src/ at HEAD; data/public already at ~/egg-claude-20261001/data).
 
@@ -29,8 +30,10 @@ Updated: 2026-10-01 05:48 UTC. Branch claude/research-20261001. Assessment: doc/
 - 05:30 v8 collected (anchors verified, big held-out gain). E0 launched (758495). E1 computed from saved v7 data (see research-20261001/e1-topology).
 - 05:48 E0 written up; E2/E3/E4/E5 running.
 ## Next actions for the heartbeat
-1. When 759111 (bank2) finishes AND 759102 labels finish: submit E4 multi8 training (same cmd file pattern, --arm multi8, time 4h), then claude_e4_eval.py for bank2+multi8 (graph env), then claude_decode.py on v7 groups 10064-10079 with each arm's day_logits.json.
+1. As soon as 759102 labels finish (independent of bank2 759111): submit E4 multi8 training (same cmd file pattern, --arm multi8, time 4h), then claude_e4_eval.py for bank2+multi8 (graph env), then claude_decode.py on v7 groups 10064-10079 with each arm's day_logits.json.
 2. When 759091 finishes: summarize E3 bank (per case/T: bill per arm; wins vs cold/lp/random) -> research-20261001/e3-prune/E3_BANK_RESULTS.md.
 3. When 758967 finishes: summarize E2 (time to first incumbent, to 0.5%/0.1% of own best, final gap, by size) -> research-20261001/e2-scale/E2_RESULTS.md; then submit E3 phase 2 on scale cases 50000-50003 x {40,60,80}, T {60,300}, %2 (scores already in runs/e3-prune-20261001/scores_v8_day.json).
 4. When E5 finishes: summarize -> research-20261001/e5-public/E5_RESULTS.md (compare to paper bounds: depot15 D<=512.77 exact witness at flat a=0.2 — note E5 uses day tariff, so compare arms to each other).
 5. Keep GOOGLE_DOC_PENDING.md updated at milestones.
+6. E4: check bank2 reproduces v8 seed-17 attention selected epochs (v8 tasks 0/3/6/9: 896/896/897/899).
+7. E5/E2: report build_seconds; on Eberbach the per-round model rebuild may dominate cold time.
