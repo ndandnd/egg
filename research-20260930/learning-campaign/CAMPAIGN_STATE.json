@@ -1,5 +1,5 @@
 {
-  "updated_at_utc": "2026-10-01T01:22:37.196914+00:00",
+  "updated_at_utc": "2026-10-01T01:47:39.747509+00:00",
   "phase": "graph_v6_collected_replay_and_matched_decoder_implementation",
   "active_job_ids": [
     728823,
@@ -89,7 +89,7 @@
     "notification_policy": "Substantive results, major decisions, failures or review artifacts only",
     "resource_policy": "Parallel label8 + training4; initial single-job limit superseded."
   },
-  "next_action": "Make one scoped Unicorn check for728823 and729522. For completed arrays collect complete evidence, exact accounting, failures and saved artifacts. V7: separately assess direct/repair/charge/physical replay and matched source policy; do not infer success from wrapper rc alone. V8: both300epoch anchors must pass before outcome interpretation; preserve failures and replay saved models before comparison. No automatic retry. Keep useful model/data design work moving, but freeze any next study separately and reconcile existing resource use; DEV/finalTEST remainsealed.",
+  "next_action": "One scoped queue check for728823 and729522; collect complete new evidence only when available, preserve accounting/failures, and require v7inner/stage receipts+physical replay and v8both300anchors+independent model replay. No automaticretry. While queued, next bounded local work can freeze a fit-fold-only input variance/range inventory for v9 (no labels/outcomes/DEV/TEST) before budgeting a new matched padded38/context38 study, or specify a separate physically valid generator extension. Existing queued execution sources remain immutable; do not launch a duplicate or exceed resource ceiling.",
   "stage1_results": "RESULTS_STAGE1.md",
   "stage1_model_analysis": "MODEL_STAGE1.md",
   "test_groups_unobserved": [
@@ -143,7 +143,7 @@
   "shared_interval_physical_pool_review": "SHARED_INTERVAL_PHYSICAL_POOL_REVIEW.json",
   "shared_interval_report_backup_commit": "8e17264ffc71eb9b5ed0851b429d5d3927f43ac8",
   "shared_interval_figure": "figures/shared_interval_2016_learned.png",
-  "local_follow_up": "Verified graph ranking gain, completed reviewed v7/v8 implementations and submitted both arrays. No active implementation owner remains. Preserve v7 guard-only wrapper caveat; inner/task/stage evidence required for admission.",
+  "local_follow_up": "Input-only physical-context v9 module,14tinyfixtures, prospective controlled-ablation design and Luna review completed. No bank read, fit, deployment or new submission. Both recorded arrays remain pending at the sole scoped queue observation; no newer status inferred.",
   "shared_budget_results": "RESULTS_SHARED_BUDGET_REPAIR.md",
   "shared_budget_verification": "INDEPENDENT_REPLAY_SHARED_BUDGET.json",
   "shared_budget_physical_pool_review": "SHARED_BUDGET_PHYSICAL_POOL_REVIEW.json",
@@ -647,5 +647,57 @@
       "array_job_id": 729522,
       "launch_receipt": "LAUNCH_729522.json"
     }
+  },
+  "last_queue_observation": {
+    "heartbeat_at_utc": "2026-10-01T01:33:33.984Z",
+    "recorded_at_utc": "2026-10-01T01:34:51Z",
+    "single_scoped_queue_check": true,
+    "rows": [
+      {
+        "array_job_id": 728823,
+        "tasks": "0-15%4",
+        "state": "PENDING",
+        "reason": "Resources",
+        "requested_cpus_per_task": 1,
+        "requested_memory": "8G",
+        "elapsed": "0:00"
+      },
+      {
+        "array_job_id": 729522,
+        "tasks": "0-11%4",
+        "state": "PENDING",
+        "reason": "ReqNodeNotAvail, May be reserved for other job",
+        "requested_cpus_per_task": 1,
+        "requested_memory": "8G",
+        "elapsed": "0:00"
+      }
+    ],
+    "actual_allocation_observed": false
+  },
+  "physical_context_feature_v9": {
+    "module": "src/egglab/physical_context_features_v9.py",
+    "tests": "src/tests/test_physical_context_features_v9.py",
+    "protocol": "PHYSICAL_CONTEXT_FEATURE_V9_PROTOCOL.md",
+    "review": "PHYSICAL_CONTEXT_FEATURE_V9_REVIEW.md",
+    "exact_historical_prefix_columns": 17,
+    "appended_columns": 21,
+    "total_columns": 38,
+    "root_test_result": "14 passed in0.14s",
+    "fit_or_solve_run": false,
+    "training_budget_adopted": false,
+    "review_complete": true,
+    "new_fit_inventory_required": true,
+    "source_hashes": {
+      "src/egglab/physical_context_features_v9.py": "a83c629902a6e704010b02c0c3b22e0ebbdb99351126af20fa78055ee208c33f",
+      "src/tests/test_physical_context_features_v9.py": "216d94a13682d8ef101cd45cd6f8b249e85492447c83e657a6867e3d80db1e1d"
+    },
+    "generator_constants_from_code_only": {
+      "efficiency": 0.9,
+      "per_bus_kw": 90,
+      "grid_kw": 90,
+      "connectors": 1,
+      "curvature_b": "1/900"
+    },
+    "scope_limit": "Constant generator inputs cannot teach responses to their changes. No actual bank/range claim; fit-only input inventory before ablation or separate prospective generator extension."
   }
 }

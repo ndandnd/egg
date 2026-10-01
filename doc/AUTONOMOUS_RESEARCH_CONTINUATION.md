@@ -8,7 +8,45 @@ supersedes the earlier idle-monitor pause condition and blanket deferral of ML.
 Notify only substantive findings, major decisions, important failures or review
 artifacts. Continue useful local work between jobs; do not pause on an empty queue.
 
-## Latest checkpoint — graph ranking gain verified; physical and training follow-ups submitted
+## Latest checkpoint — studies queued; physical-context inputs prepared
+
+- The single Unicorn queue check during the 01:33 UTC follow-up found both arrays
+  pending: 728823 for resources, and 729522 because its requested node was not
+  available. Neither had elapsed task time. No allocation or result is inferred.
+  Both remain active in CAMPAIGN_STATE.json; no retry or new submission occurred.
+- LAUNCH_728823.json and LAUNCH_729522.json remain authoritative. At most four
+  proposal workers and four training workers may overlap: eight requested CPUs
+  and 64 GB, on node75, excluding node01, with one native thread and no retries.
+  Their execution sources stay immutable. V7 needs inner task/stage evidence and
+  physical replay, never only its guard-sensitive wrapper status. V8 must pass
+  both 300-epoch anchors, then independent saved-model replay before admission.
+- GPT-6.1 Sol implemented physical_context_features_v9.py; Luna reviewed its
+  physics and leakage boundaries. It preserves the original 17 features exactly
+  and adds 21 physical inputs. The 38 columns include battery/reserve, local energy
+  bursts, isolated charging capacity, candidate-window overlap and known market
+  curvature. Only NativeCase and Market enter the API. Charging summaries remain
+  optimistic local context, not full-fleet feasibility or actual SOC.
+  PHYSICAL_CONTEXT_FEATURE_V9_PROTOCOL.md and its REVIEW document the package;
+  root independently passed all 14 tiny fixtures in 0.14 seconds. No bank was read,
+  no model was fitted and no production solve ran.
+- A future ablation needs a new zero-padded 38-input baseline against the physical
+  38-input model. Historical 17-input models cannot serve as its comparator or
+  anchor because fan-in initialization changes. Width32 models would have
+  20,545/20,673 parameters; 2,688 baseline input weights would be inactive. This
+  package adopts neither a training implementation nor a training resource budget.
+- Generator definitions fix efficiency at 0.9, charger powers at 90 kW, one
+  connector and curvature b=1/900. The current generator cannot teach responses
+  to changing these inputs. Battery profiles and window structure vary. This is
+  code inspection, not a measured bank-range result. Next bounded local work:
+  inventory input variance/ranges using fit folds only, without outcomes, before
+  an ablation; or freeze a separate generator extension for the constant inputs.
+- All local workers completed. No new performance result or user decision arose.
+  The original Google Doc's verified graph result and submission updates remain
+  current. Manuscript drafting stays deferred and DEV/final TEST stay sealed.
+  Continue one scoped queue check per follow-up, collect complete new evidence
+  once, and keep useful local work moving without duplicate training or approvals.
+
+## Previous checkpoint — graph ranking gain verified; physical and training follow-ups submitted
 
 - Graph722841 completed all12tasks0:0 on unicorn-cpu-75. The single scoped queue
   check found no job; date/user/job-name-scoped accounting gives10335elapsed and
