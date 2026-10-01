@@ -9,7 +9,8 @@ Updated: 2026-10-01 05:48 UTC. Branch claude/research-20261001. Assessment: doc/
   - E3 phase 2 (scale 40-80 trips, 120 runs incl cold4, %1) 761781
   - learned4 supplements: bank 761834 DONE; scale 765340 (after 761781), public 765341 (after 759670+759671) [resubmitted on harness-fixed code 0cd5da5; 761835/761836 cancelled while pending]
   - E3 bank harness-fix rerun 765335 (6 cells) DONE
-  - E3 scale hfix 781391 (2 cold4 cells); E4 multi8 eval+decode 781389; E6 keep sweep 781395 (48 runs, %2)
+  - E3 scale hfix 781391 DONE; E4 multi8 eval+decode 781389 DONE; E6 keep sweep 781395 (48 runs, %2)
+  - E7 multi8-score pruning: scoring 781865 -> prune array 781866 (30 runs, %2, after scoring) -> runs/e7-multi8-20261001
   - E3 bank prune 759091 (128 runs, %2) -> runs/e3-prune-20261001/out/*/e3.json
   - E4 labels 759102 (g10001-10127, %2; g10000 done by 759065) -> runs/e4-labels-20261001/out/g*/labels.jsonl
   - E4 train bank2 759111 (4 folds, graph env, no Gurobi) -> runs/e4-train-20261001/runs/bank2-f*
@@ -52,3 +53,5 @@ Updated: 2026-10-01 05:48 UTC. Branch claude/research-20261001. Assessment: doc/
 9. E6 analysis: summarize.py keys by (case,T,arm) — add keep to the key (k15/k30/k50 in dir names) before analyzing E6.
 10. E4 final: compare eval_bank2.json vs eval_multi8.json (outer day AP/logloss per fold; go if multi8 wins >=3/4 folds) and decode_bank2.json vs decode_multi8.json (bills vs v7 cold/source policy; cheap_kwh).
 - 12:25 heartbeat: E4 final (go). learned4 scale (765340) and hfix (781391) done; E6 42/48.
+11. E7 analysis: pair each -m8 run with the v8 learned4 k30 run (e3-prune out/ or e5-public out/), same case/T.
+12. Update E3_SCALE_RESULTS with learned4 @300 s (765340 now complete) when doing the E6 analysis.

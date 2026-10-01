@@ -65,3 +65,16 @@ One run per cell, synthetic midday-cheap tariff; no plan is certified optimal.
 
 E4 relabelling finished (879/896 cold solves under 7 tariffs per timetable, 6.9 CPU-h;
 median 4 distinct route topologies per timetable). Tariff-diverse training is running.
+
+## Takeover update 4 — 1 October 2026, 12:30 UTC: tariff-diverse training works
+
+E4 retrained the graph-attention route scorer with labels under 7 tariffs per
+timetable (6 training tariffs + the original two source fleets) instead of two, holding
+out the midday-cheap `day` tariff entirely. On held-out `day` labels it improves average
+precision and log loss in 4/4 folds (AP 0.850-0.866 vs 0.828-0.852). Decoded into
+physical fleets on the 16 v7 timetables, it halves the mean bill gap to the cold
+solver (+18.2 -> +8.6), buys 12 kWh more in cheap midday hours, and on average beats the
+v7 source-reuse policy (-0.8), which no earlier learned arm beat. The 40-80-trip learned
+pruning results are final: learned beats cold 10/2 (60 s) and 9/1/2 (300 s) and beats
+LP and random pruning 12/12. Next: keep-fraction sweep (E6) and pruning with the
+tariff-aware model (E7).
