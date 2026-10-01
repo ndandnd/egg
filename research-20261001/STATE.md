@@ -22,6 +22,7 @@ Updated: 2026-10-01 05:48 UTC. Branch claude/research-20261001. Assessment: doc/
   - E4 train bank2 759111 (4 folds, graph env, no Gurobi) -> runs/e4-train-20261001/runs/bank2-f*
   - E5 public 759670 (Hildenbrand 20 runs incl. cold4, %1) and 759671 (Eberbach 10 runs, %1, 32G); first submission cancelled (see e5-public/PROTOCOL.md amendment)
   - E3 bank cold4 supplement 759672 (32 runs, %1)
+- **USER PRIORITY (20:30 UTC): the evspv2g stochastic project has priority on the cluster.** Submit every new EGG array with `--nice=10000` and throttle `%1` (at most `%2` only when the queue has no pending non-EGG jobs of nc437). Never cancel or alter the other project's jobs.
 - Gurobi rule: <= 8 of my Gurobi processes at once; exclude scaglione-compute-01; never touch other users'/projects' jobs.
 - Deploy new code with scratchpad deploy.sh (ships src/ at HEAD; data/public already at ~/egg-claude-20261001/data).
 
@@ -70,3 +71,4 @@ Updated: 2026-10-01 05:48 UTC. Branch claude/research-20261001. Assessment: doc/
 15. E10 analysis: dir names end -m3/-m5/-m8 (keep 0). Compare per cell to best global-fraction learned4 (e3-prune, e8 outs) and cold/cold4.
 - 17:25 heartbeat: E10 55/90; E11 seed-robustness submitted (798833).
 - 20:25 heartbeat: E10 interim written (87/90; m5/m8 most robust rules; Eberbach replay refusals). E10/E11 waiting behind user's evspOSLO jobs (JobArrayTaskLimit with 0 running).
+- 20:30 user: give evspv2g stoch project priority when parallel space is short -> my pending arrays set Nice=10000, throttle 1; rule recorded above.
