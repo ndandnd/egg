@@ -22,10 +22,11 @@ Findings:
    midday-cheap tariff the cold solver re-routes buses through extra depot visits and
    roughly doubles midday charging. The indivisible choice that matters on this
    generator is the depot-visit/connection structure, not the number of buses.
-2. This explains v7: edge models trained on `source0`/`source1` incumbents, without
-   tariff inputs, reproduce those topologies and forgo the midday discount (graph arm:
-   -17.1 kWh in cheap periods). Route learning for price response has a real target,
-   but it needs tariff-aware inputs **and** labels that span tariffs.
+2. This explains v7: edge models trained on `source0`/`source1` incumbents (they do get
+   window-price features, but see only those two tariffs per timetable) reproduce those
+   topologies and forgo the midday discount (graph arm: -17.1 kWh in cheap periods).
+   Route learning for price response has a real target, but needs labels that span
+   many tariffs per timetable.
 3. Cold solving is already fast and near-optimal at 20-28 trips. ML-for-speed has
    little room here except on hard groups like 10069/10075. E2 measures larger sizes.
 

@@ -34,15 +34,19 @@ Training labels are incumbents solved under `source0` (flat 0.20) and `source1`
 (cheap 18:00–22:00). The target `day` tariff is cheap 10:00–14:00. Charging is
 only possible at the depot (one 90-kW connector) during depot movements or after
 18:00. Exploiting the day tariff therefore requires **midday depot visits — a
-different route topology** from those the labels reward. The v5–v7 models see no
-tariff features, so they reproduce evening/flat-tariff topologies. The v7 loss is
-what this distribution shift predicts. Two consequences:
+different route topology** from those the labels reward. The models do receive
+price features (window price mean/min, market mean/spread; `learned_proposals.FEATURES`),
+but every timetable has labels under only two tariffs (flat and evening-cheap), so the
+midday-price response is barely identifiable and the models reproduce evening/flat
+topologies. The v7 loss is what this distribution shift predicts. Two consequences:
+(Correction, 06:30 UTC: an earlier version of this paragraph said the models saw no
+tariff features; they do.)
 
 - it is a strong signal *for* the paper: discrete routing responds to price, so the
   fleet's indivisible choice is economically live on this generator;
-- edge imitation of incumbents from other tariffs cannot be price-responsive by
-  construction. Tariff-conditioned inputs (v9) address the input side; labels
-  must also span tariffs.
+- edge imitation of incumbents from two other tariffs gives almost no information
+  about the midday response. v9's battery/charger context helps the input side, but
+  the decisive change is labels that span many tariffs per timetable.
 
 ## Weaknesses and biases
 
