@@ -59,6 +59,11 @@ artifacts. Continue useful local work between jobs; do not pause on an empty que
 - Luna's two compact review notes found no material issue. Root verification is
   recorded in V7_COST_V9_INVENTORY_ROOT_CHECK.json. All bounded agents finished.
 
+- Diagnosis, figure, inventory, reviews and current state were backed up at
+  e72c03ee0ad91885c54b5e2f72e746db9bbb958e. The original Google Doc now includes
+  their consolidated scientific implications. Exact text,3source links,styles
+  and all7native images are verified in DOC_V7_COST_V9_INVENTORY_RECEIPT.json.
+
 ## Previous checkpoint — physical comparison reviewed; graph startup recovery submitted
 
 - One scoped queue check found arrays728823/729522 absent. Identity-scoped Slurm

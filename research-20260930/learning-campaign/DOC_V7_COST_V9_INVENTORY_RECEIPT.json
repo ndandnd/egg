@@ -1,0 +1,44 @@
+{
+  "document_id": "1NmPC_qo_uOnA48dV6Ibhs3Pj9EgOD-oJTBuVi41p6bg",
+  "tab_id": "t.0",
+  "revision_before": "ANLCKQnKspB1ZY57ZDayVtraGIMKmVZ48RzU5heQ7XN21YhS8623XWtCGWadT7j90KRDPBBUeJI_RCIsACyb6O19MfZK5cOCKLDR-mjrOkk",
+  "revision_after": "ANLCKQnTRkOJYggHBEfAFe68RY4qxk-W7han5vfOvoh173khCuvzgj7UEEZHVnbSCEXuggvh11pU-LfofONPHQ_ALFekLVQ23MUz-4EHO1k",
+  "append_start": 199092,
+  "append_end": 201452,
+  "appended_text": "\nWhat the models miss: cheap charging opportunities\n1 October 2026 UTC\n\nThe graph proposals’ higher cost has a specific accounting explanation. Across the same 15 complete exploratory TRAIN cases, every learned method used the same number of buses and incurred the same operating cost as its selected reuse baseline. The graph policy’s extra 4.60 cost units came entirely from charging: 3.92 in linear electricity charges and 0.68 in the quadratic supply-cost term.\n\nGraph plans used only 1.66 kWh more electricity overall, but charged 17.10 kWh less during the cheap periods. At this fixed tariff, the lost cheap-period discount accounts for 3.42 cost units—about 74% of the total gap. The remaining components are 0.50 from extra energy at the high-tariff reference and 0.68 from the quadratic term. This decomposition reproduces the saved bills exactly; it does not prove whether route availability, charging optimization or another mechanism caused the different schedules.\n\nThe omitted case remains explicit: the graph and tree-family repairs failed on timetable 10069. The tabular proposal there used one extra bus, and its mean cost gap across all 16 cases remains +7.57. These exploratory observations do not justify selecting a winning architecture or claiming faster or optimal routing.\n\nA separate input-only inventory checked the physical-context features within the predefined fitting folds at 32, 64 and 128 timetable groups. Battery capacity and charging-window structure vary, and all 38 input columns are finite. Charger power, efficiency and cost curvature are physically fixed. Apparent zero-versus-nonzero variation on some features simply marks whether an edge has a charging window. No labels, outcomes or reserved-test features entered these statistics, and no model was trained for this inventory.\n\nThe next controlled comparison will test whether battery and charging-window context helps the graph models preserve economical charging opportunities. It needs a newly trained matched control, identical preprocessing for shared inputs and selection confined to the inner validation groups. Generalization to different charger ratings, efficiencies or supply curvature requires a separately versioned dataset with those quantities varied.\n\nExact cost decomposition and limitations\nCost-component figure\nFit-only physical-input inventory\n",
+  "exact_text_verified": true,
+  "images_preserved": [
+    "kix.14qgnlc7qzhp",
+    "kix.1g4t8u3qmu8n",
+    "kix.4yuqnp8k08fl",
+    "kix.fe5jxkrgnniq",
+    "kix.shpddc4n4xg",
+    "kix.uffmv89uhby0",
+    "kix.xjlr68pn1mfz"
+  ],
+  "verified_links": [
+    {
+      "start": 201355,
+      "end": 201395,
+      "url": "https://github.com/ndandnd/egg/blob/e72c03ee0ad91885c54b5e2f72e746db9bbb958e/research-20260930/learning-campaign/V7_COST_COMPONENT_DIAGNOSIS.md"
+    },
+    {
+      "start": 201396,
+      "end": 201417,
+      "url": "https://github.com/ndandnd/egg/blob/e72c03ee0ad91885c54b5e2f72e746db9bbb958e/research-20260930/learning-campaign/figures/v7_cost_component_diagnosis.png"
+    },
+    {
+      "start": 201418,
+      "end": 201451,
+      "url": "https://github.com/ndandnd/egg/blob/e72c03ee0ad91885c54b5e2f72e746db9bbb958e/research-20260930/learning-campaign/PHYSICAL_CONTEXT_FEATURE_V9_FIT_INVENTORY_REPORT.md"
+    }
+  ],
+  "resolved_text_sizes_verified": true,
+  "checked_text_runs": 20,
+  "trusted_read_receipt": {
+    "path": "/Users/nadan/Documents/ChatGPT/egg/journal-research-work/tmp/docs-v7-cost-v9-inventory-20261001/receipt.json",
+    "bytes": 976,
+    "sha256": "a773800929ec850956e17120cd3a85fda6e1b13c47b8df005ef8d1a6b00ab80b"
+  },
+  "result_backup_commit": "e72c03ee0ad91885c54b5e2f72e746db9bbb958e"
+}
