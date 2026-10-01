@@ -39,7 +39,7 @@ price features (window price mean/min, market mean/spread; `learned_proposals.FE
 but every timetable has labels under only two tariffs (flat and evening-cheap), so the
 midday-price response is barely identifiable and the models reproduce evening/flat
 topologies. The v7 loss is what this distribution shift predicts. Two consequences:
-(Correction, 06:30 UTC: an earlier version of this paragraph said the models saw no
+(Correction, 05:35 UTC: an earlier version of this paragraph said the models saw no
 tariff features; they do.)
 
 - it is a strong signal *for* the paper: discrete routing responds to price, so the

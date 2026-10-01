@@ -1,6 +1,6 @@
 # Claude takeover state (read this first on every wake-up)
 
-Updated: 2026-10-01 ~05:45 UTC. Branch claude/research-20261001. Assessment: doc/CLAUDE_ASSESSMENT_20261001.md
+Updated: 2026-10-01 05:48 UTC. Branch claude/research-20261001. Assessment: doc/CLAUDE_ASSESSMENT_20261001.md
 
 ## Cluster (unicorn2; runs under ~/egg-claude-20261001/runs; code ~/egg-claude-20261001/current)
 - DONE: v8 738226 (collected); E0 758455+758495 (written up); scoring 759080 (bank+scale), 759399 (public).
@@ -26,8 +26,8 @@ Updated: 2026-10-01 ~05:45 UTC. Branch claude/research-20261001. Assessment: doc
 
 ## Log
 - 05:45 assessment committed.
-- 06:10 v8 collected (anchors verified, big held-out gain). E0 launched (758495). E1 computed from saved v7 data (see research-20261001/e1-topology).
-- 08:15 E0 written up; E2/E3/E4/E5 running.
+- 05:30 v8 collected (anchors verified, big held-out gain). E0 launched (758495). E1 computed from saved v7 data (see research-20261001/e1-topology).
+- 05:48 E0 written up; E2/E3/E4/E5 running.
 ## Next actions for the heartbeat
 1. When 759111 (bank2) finishes AND 759102 labels finish: submit E4 multi8 training (same cmd file pattern, --arm multi8, time 4h), then claude_e4_eval.py for bank2+multi8 (graph env), then claude_decode.py on v7 groups 10064-10079 with each arm's day_logits.json.
 2. When 759091 finishes: summarize E3 bank (per case/T: bill per arm; wins vs cold/lp/random) -> research-20261001/e3-prune/E3_BANK_RESULTS.md.
