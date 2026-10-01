@@ -10,7 +10,7 @@ for p in sorted(root.glob("scale*/e3.json")):
     slot = (r["case"], r["seconds"])
     if name.endswith("-hfix") or key not in cells[slot]:
         cells[slot][key] = r
-cols = ("cold", "cold4", "learned4_k15", "learned4_k30", "learned4_k50")
+cols = tuple(sys.argv[2].split(",")) if len(sys.argv) > 2 else ("cold", "cold4", "learned4_k15", "learned4_k30", "learned4_k50")
 best = collections.defaultdict(lambda: float("inf"))
 for (c, T), d in cells.items():
     for r in d.values():
@@ -23,7 +23,7 @@ for (c, T) in sorted(cells, key=lambda k: (k[1], int(k[0].split(":")[2]), k[0]))
         r = d.get(k); b = r.get("bill") if r else None
         row.append("" if r is None else ("fail" if b is None else f"{100*(b/best[c]-1):.2f}%"))
     print(f"| {c} | {T:g} | " + " | ".join(row) + " |")
-    for k in ("learned4_k15", "learned4_k30", "learned4_k50"):
+    for k in [c for c in cols if c.startswith("learned4")]:
         for ref in ("cold", "cold4"):
             a, b = d.get(k), d.get(ref)
             if a is None or b is None: continue
@@ -33,7 +33,7 @@ for (c, T) in sorted(cells, key=lambda k: (k[1], int(k[0].split(":")[2]), k[0]))
             wins[(k, ref, T, res)] += 1
             if va is not None and vb is not None: diffs[(k, ref, T)].append(100*(va/vb-1))
 print()
-for k in ("learned4_k15", "learned4_k30", "learned4_k50"):
+for k in [c for c in cols if c.startswith("learned4")]:
     for ref in ("cold", "cold4"):
         for T in (60, 300):
             w = [wins[(k, ref, T, x)] for x in ("win", "tie", "loss")]

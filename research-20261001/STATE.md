@@ -11,7 +11,9 @@ Updated: 2026-10-01 05:48 UTC. Branch claude/research-20261001. Assessment: doc/
   - E3 bank harness-fix rerun 765335 (6 cells) DONE
   - E3 scale hfix 781391 DONE; E4 multi8 eval+decode 781389 DONE; E6 keep sweep 781395 DONE -> e6-keep-sweep/E6_RESULTS.md (keep 15% best: 12/12 vs cold)
   - E8 aggressive keep (public k5/10/15, scale k5/10): 782210 (66 runs, %2) -> runs/e8-keep-20261001
-  - E9 seeded hull at scale: 785526 (10 cases, %2) -> runs/e9-hull-20261001/out/*/e9.json
+  - E9 DONE -> e9-seeded-hull/E9_RESULTS.md (seeded tighter 10/10; 1 certified)
+  - E8 DONE -> e8-aggressive-keep/E8_RESULTS.md (synthetic: smaller keep at larger size; public: keep 30% best)
+  - (old) E9 seeded hull at scale: 785526 (10 cases, %2) -> runs/e9-hull-20261001/out/*/e9.json
   - E7 DONE -> e7-multi8-prune/E7_RESULTS.md (mixed: helps scaled 60 s large cases, worse on all 6 public)
   - E3 bank prune 759091 (128 runs, %2) -> runs/e3-prune-20261001/out/*/e3.json
   - E4 labels 759102 (g10001-10127, %2; g10000 done by 759065) -> runs/e4-labels-20261001/out/g*/labels.jsonl
@@ -62,3 +64,4 @@ Updated: 2026-10-01 05:48 UTC. Branch claude/research-20261001. Assessment: doc/
 - 14:25 heartbeat: E7 final (mixed); E8 18/66.
 14. E9 analysis: per case cold vs seeded hull status/bounds, gap, regret -> e9-seeded-hull/E9_RESULTS.md. If seeded hulls certify where cold cannot, that is a paper-relevant milestone (Google Doc).
 - 15:25 heartbeat: E9 4/10 (40-trip): seeded hull much tighter than cold on all 4 (widths 8.5->0.7, 38->10.8, 41->26; 50002/40 certified only when seeded). E8 62/66. Write E9_RESULTS when 10/10.
+- 16:25 heartbeat: E8 and E9 final.
