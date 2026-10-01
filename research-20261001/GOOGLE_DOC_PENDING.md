@@ -49,3 +49,19 @@ pruning itself (random pruning also beats cold at 80 trips); learned beats rando
 median 24%. 300 s results and a four-round-policy comparison are running. A harness
 bug that discarded plans when a late solver round had no time left was found and
 fixed; affected cells are rerun once and reported separately.
+
+## Takeover update 3 — 1 October 2026, 10:30 UTC: learned pruning on public timetables
+
+On the two public Hildenbrand depots (37 services) and the 105-service Eberbach network
+(10,359 movements; never solved before), keeping the 30% of connections the synthetic-
+trained v8 graph model scores highest and then solving with a four-round
+outer-approximation split (`learned4`) gives the best bill of every arm in all 6 cells
+(180/600 s Hildenbrand, 600/1800 s Eberbach). It beats the same solver without pruning
+6/6: 0.9-4.2% cheaper on Hildenbrand; on Eberbach 76% cheaper at 600 s (the unpruned
+solver finds only a 44-bus plan) and 3.1% at 1800 s. Learned pruning at 600 s beats
+unpruned solving at 1800 s. The model never saw a public network, so this is a real
+transfer result. LP-relaxation ranking is 6-25% worse; random pruning loses buses.
+One run per cell, synthetic midday-cheap tariff; no plan is certified optimal.
+
+E4 relabelling finished (879/896 cold solves under 7 tariffs per timetable, 6.9 CPU-h;
+median 4 distinct route topologies per timetable). Tariff-diverse training is running.
