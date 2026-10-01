@@ -14,7 +14,7 @@ Updated: 2026-10-01 ~05:45 UTC. Branch claude/research-20261001. Assessment: doc
 
 ## Queue of work (in order)
 1. [x] Collect v8 -> research-20261001/v8-collection/V8_RESULTS.md (anchors pass; attention logloss 0.0543 vs v6 0.0719)
-2. [ ] E0 hull-control rerun (typo fix) on v7 groups 10064-10079
+2. [x] E0 -> research-20261001/e0-support/E0_RESULTS.md (14/16 hulls certified; 4/16 certified positive gap, <=0.1% of bill)
 3. [x] E1 -> research-20261001/e1-topology/E1_RESULTS.md (topology changes 14/16, bus count 16/16 fixed; cold fast)
 4. [~] E2 cold time-to-quality profile (running 758967). Smoke: n=40 at 60 s -> 2.4% gap.
 5. [ ] E3 predict-and-prune (driver claude_e3_prune.py; arms cold/learned/lp/random; keep 0.3; T=10,30 s bank; 60,300 s scale) after scores + E2
