@@ -69,3 +69,4 @@ Updated: 2026-10-01 05:48 UTC. Branch claude/research-20261001. Assessment: doc/
 - 16:25 heartbeat: E8 and E9 final.
 15. E10 analysis: dir names end -m3/-m5/-m8 (keep 0). Compare per cell to best global-fraction learned4 (e3-prune, e8 outs) and cold/cold4.
 - 17:25 heartbeat: E10 55/90; E11 seed-robustness submitted (798833).
+- 20:25 heartbeat: E10 interim written (87/90; m5/m8 most robust rules; Eberbach replay refusals). E10/E11 waiting behind user's evspOSLO jobs (JobArrayTaskLimit with 0 running).
