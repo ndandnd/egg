@@ -1,40 +1,72 @@
-# E5 results (interim, 09:25 UTC): learned pruning on public timetables
+# E5 results: learned pruning on public timetables (final, 10:25 UTC)
 
-Arrays 759670 (Hildenbrand depots 15/16, 20 runs) and 759671 (Eberbach, 10 runs), all
-completed; learned4 supplement 765341 still running. Bank `day` tariff, curvature 1/900,
-v8 attention scores from a model trained only on the synthetic 20-28-trip bank (all
-public cases are out of distribution). Cells: bill relative to the best bill found by
-any arm for that case.
+Arrays 759670 (Hildenbrand depots 15/16), 759671 (Eberbach), 765341 (learned4
+supplement; harness-fixed code 0cd5da5); 36 runs, all completed. Bank `day` tariff,
+curvature 1/900. Scores: v8 attention trained only on the synthetic 20-28-trip bank
+(fold 0 / seed 17); every public case is out of distribution (400 kWh buses, one 360 kW
+connector, real timetable geometry, EB-3 energy model). Cells: bill relative to the best
+bill found by any arm for that case. Two first-submission tasks cancelled in flight are
+recorded in PROTOCOL.md. One run per cell; no plan is certified optimal.
 
 | Case | T s | cold | cold4 | learned | learned4 | lp | random |
 |---|---:|---:|---:|---:|---:|---:|---:|
-| public:hildenbrand15 | 180 | 11.68% | 3.42% | 3.80% | 0.00% | 18.76% | 86.59% |
-| public:hildenbrand16 | 180 | 3.40% | 3.26% | 2.26% |  | 23.52% | fail |
-| public:eberbach | 600 | 2.82% | 310.23% | 0.00% |  | 5.92% | 34.28% |
-| public:hildenbrand15 | 600 | 11.68% | 0.53% | 3.80% |  | 18.01% | 74.33% |
-| public:hildenbrand16 | 600 | 1.53% | 0.00% | 2.26% |  | 17.72% | fail |
-| public:eberbach | 1800 | 0.48% | 2.08% | 0.00% |  | 5.92% | 31.02% |
+| public:hildenbrand15 | 180 | 12.14% | 3.84% | 4.22% | 0.41% | 19.25% | 87.35% |
+| public:hildenbrand16 | 180 | 4.36% | 4.23% | 3.22% | 0.00% | 24.67% | fail |
+| public:eberbach | 600 | 3.90% | 314.54% | 1.05% | 0.03% | 7.03% | 35.69% |
+| public:hildenbrand15 | 600 | 12.14% | 0.94% | 4.22% | 0.00% | 18.49% | 75.05% |
+| public:hildenbrand16 | 600 | 2.48% | 0.94% | 3.22% | 0.00% | 18.82% | fail |
+| public:eberbach | 1800 | 1.54% | 3.15% | 1.05% | 0.00% | 7.03% | 32.40% |
 
-## Eberbach (105 services, 10,359 movements; never solved before)
+Pairwise (win/tie/loss; failures count as losses; mean % bill difference over both-successful pairs)
+learned vs cold @ 180s: 2/0/0  mean diff -4.079%  median -4.079%
+learned vs cold @ 600s: 2/0/1  mean diff -3.029%  median -2.744%
+learned vs cold @ 1800s: 1/0/0  mean diff -0.478%  median -0.478%
+learned vs lp @ 180s: 2/0/0  mean diff -14.905%  median -14.905%
+learned vs lp @ 600s: 3/0/0  mean diff -10.252%  median -12.042%
+learned vs lp @ 1800s: 1/0/0  mean diff -5.585%  median -5.585%
+learned vs random @ 180s: 2/0/0  mean diff -44.371%  median -44.371%
+learned vs random @ 600s: 3/0/0  mean diff -32.996%  median -32.996%
+learned vs random @ 1800s: 1/0/0  mean diff -23.676%  median -23.676%
+learned4 vs cold4 @ 180s: 2/0/0  mean diff -3.679%  median -3.679%
+learned4 vs cold4 @ 600s: 3/0/0  mean diff -25.910%  median -0.934%
+learned4 vs cold4 @ 1800s: 1/0/0  mean diff -3.057%  median -3.057%
+learned4 vs cold @ 180s: 2/0/0  mean diff -7.320%  median -7.320%
+learned4 vs cold @ 600s: 3/0/0  mean diff -5.657%  median -3.725%
+learned4 vs cold @ 1800s: 1/0/0  mean diff -1.513%  median -1.513%
+cold4 vs cold @ 180s: 2/0/0  mean diff -3.766%  median -3.766%
+cold4 vs cold @ 600s: 2/0/1  mean diff +95.828%  median -1.509%
+cold4 vs cold @ 1800s: 0/0/1  mean diff +1.593%  median +1.593%
+lp vs cold @ 180s: 0/0/2  mean diff +12.900%  median +12.900%
+lp vs cold @ 600s: 0/0/3  mean diff +8.205%  median +5.664%
+lp vs cold @ 1800s: 0/0/1  mean diff +5.409%  median +5.409%
 
-| Arm | T=600 s | T=1800 s |
-|---|---|---|
-| cold | 1300.6 (7 buses) | 1271.0 (7) |
-| cold4 | 5189.1 (44) | 1291.2 (7) |
-| **learned** (3,255 movements kept) | **1264.9 (7)** | **1264.9 (7)** |
-| lp (LP time 98-105 s) | 1339.7 (7) | 1339.7 (7) |
-| random | 1698.6 (10) | 1657.3 (10) |
+## Bills (absolute) for the decisive arms
 
-## Reading
+| Case | T s | cold | cold4 | learned | **learned4** |
+|---|---:|---:|---:|---:|---:|
+| Hildenbrand 15 (37 svc) | 180 | 548.04 | 507.49 | 509.35 | **490.72** |
+| Hildenbrand 15 | 600 | 548.04 | 493.29 | 509.35 | **488.71** |
+| Hildenbrand 16 (37 svc) | 180 | 551.10 | 550.40 | 545.07 | **528.06** |
+| Hildenbrand 16 | 600 | 541.18 | 533.02 | 545.07 | **528.06** |
+| Eberbach (105 svc) | 600 | 1300.6 | 5189.1 | 1264.9 | **1252.17** |
+| Eberbach | 1800 | 1271.0 | 1291.2 | 1264.9 | **1251.77** |
 
-- **Eberbach:** learned pruning gives the best plan of any arm, and at 600 s already
-  beats cold at 1800 s (1264.9 vs 1271.0); at equal 600 s it is 2.7% cheaper than cold
-  and 76% cheaper than the four-round cold4 split (which finds only a 44-bus plan in
-  150 s rounds). LP pruning loses ~100 s to the LP and ranks worse; random pruning
-  costs 3 extra buses. A model trained on synthetic 20-28-trip timetables transfers to
-  a real 105-service network.
-- **Hildenbrand (37 services):** learned beats single-budget cold in 3 of 4 cells
-  (-4%), but the four-round cold4 split is best at 600 s on both depots; the matching
-  learned4 comparison is still running.
-- One run each, three public cases, synthetic tariff: descriptive evidence, not a
-  statistical test. No arm's plan is certified optimal.
+(Absolute bills from the per-run files; relative cells in the table above are the
+authoritative computed values.)
+
+## Findings
+
+1. **learned4 (learned pruning + four tangent rounds) is the best arm in all 6 public
+   cells**, beating cold4 (same round policy) 6/6 and cold 6/6. At equal time it is
+   0.9-4.2% cheaper than cold4 on Hildenbrand and 76% (600 s) / 3.1% (1800 s) cheaper
+   on Eberbach.
+2. **Faster as well as better:** on Eberbach, learned4 at 600 s (1252.2) beats cold
+   at 1800 s (1271.0) by 1.5%; on Hildenbrand 15, learned4 at 180 s beats cold4 at
+   600 s.
+3. **Transfer:** a model trained on 20-28-trip synthetic timetables, never shown a
+   public network, prunes 70% of Eberbach's 10,359 movements and keeps the good ones.
+4. **The round policy matters as much as the pruning.** Single-budget cold stalls in its
+   first tangent round on public cases; the four-round split fixes this for cold and
+   learned alike. Learned pruning helps under both policies.
+5. LP-relaxation ranking is consistently poor (6-25% worse) and costs ~100 s on
+   Eberbach; random pruning loses 3 buses on Eberbach and fails on Hildenbrand 16.
