@@ -1,6 +1,6 @@
 # EGG journal research continuation
 
-Updated 30 September 2026 UTC. Root manages; GPT-6.1 Sol implements/analyzes and
+Updated 1 October 2026 UTC. Root manages; GPT-6.1 Sol implements/analyzes and
 Luna Max reviews. The user's latest instruction is to keep experiments and model
 training moving without routine approval, even while exact solving remains slow.
 The existing hourly `advance-egg-journal-research` heartbeat is ACTIVE. This
@@ -8,7 +8,47 @@ supersedes the earlier idle-monitor pause condition and blanket deferral of ML.
 Notify only substantive findings, major decisions, important failures or review
 artifacts. Continue useful local work between jobs; do not pause on an empty queue.
 
-## Latest checkpoint — tree-family comparison complete; graph study underway
+## Latest checkpoint — graph ranking gain verified; next studies being implemented
+
+- Graph722841 completed all12tasks0:0 on unicorn-cpu-75. The single scoped queue
+  check found no job; date/user/job-name-scoped accounting gives10335elapsed and
+  allocatedCPUseconds (2.87CPUh),543344KiBpeakbatchRSS, maximumconcurrency4.
+  ACCOUNTING_722841.json includes36parent/step rows with explicit identity rules.
+- Independent v6 numerical replay passed bothmodels in all12tasks without fitting:
+  maximumprobabilitydifference2.66e-15,metricdifference1.71e-14,rankings/decisions
+  unchanged. Ownforward/metricformulas distinguish MacARM torch from pinnedLinux
+  trainingruntime; no sklearn/joblib fit/predict/metric API used. Initial accounting
+  verifier assumption failed and is preserved with originalscript; unchanged
+  numericaltolerances pass after correcting parent/step association.
+- Full128 logloss/AP/top-k: graphmean .073002/.833817/.733234; attention
+  .071866/.843094/.739890; innerpolicy .071888/.842573/.739570. Innerpolicy selects
+  attention11/mean1. Versus v5innerpolicy, top-k rises4.56percentagepoints but logloss
+  worsens. All24arms completed300epochs; selected297–300. Ranking benefit is real
+  within exploratoryTRAIN; physicalfleetcost/speedup benefit remains unproven.
+  ROUTE_GRAPH_V6_RESULTS/REPLAY/RESULT_REVIEW and pairedPNG/PDF explain the limits.
+- All12770rawfiles remain local/remote, with36lossless task/arm archives and every
+  memberhash verified (1.349GBraw/805MBcompressed). RESULT_MANIFEST_ROUTE_GRAPH_V6;
+  raw/accounting backup531a70e31f7f4510b841ca47abaae800c7961715 pushed. Result/figure
+  backup615d1d4dcb6b4ec7e68c0d82cb0ca69989aa3e89 pushed. OriginalGoogleDoc append
+  verified in DOC_ROUTE_GRAPH_V6_RESULTS_RECEIPT.json;7nativeimages preserved.
+- No EGG array currently recorded active. Root is implementing two concrete next
+  studies with GPT-6.1Sol agents, then Luna review before source freeze/submission:
+  (a) v7 matched physical proposals on fixedTRAIN10064–10079/day, seed17heldoutfold
+  models: v3Hist, v5innerpolicy, v6innerpolicy; direct/repaired/charge/replay measured
+  separately, cost-only and matchedsourcecharging, coldphysical/cold+retainedhull
+  separate. Proposed16tasks%4,1CPU8GB30min,8CPUhcap. No inference from outermeans.
+  (b) v8 graph optimizationbudget: samepool/features/folds/seeds/architectures and
+  optimizer/patience,900epochs, fresh fits and300epochanchorchecks. Proposed12tasks%4,
+  1CPU8GB1hour,12CPUhcap. Scalarcurvesall epochs, periodicweights/anchors/finalbest
+  retained; changedpersistence cadence explicit. No v6 edits or optimizerresume.
+- Both prospective budgets exclude scaglione-compute-01, pin node75/native1, no
+  retries/requeue. If overlapping, atmost4training +4proposalworkers=8CPUs64GB,
+  within12CPU96GB ceiling. No newsubmission yet; inspect current owners/state and
+  concrete launch receipts before acting. DEV/test sealed; manuscript deferred.
+  Broader physical-context features/diversifieddata and routeattention remain
+  separate studies, not quietly mixed into these comparisons.
+
+## Previous checkpoint — tree-family comparison complete; graph study underway
 
 - Full v5 cohort is now complete: original720831 tasks2/3/10 plus recovered722702
   tasks0/1/4/5/6/7/8/9/11. All recovery tasks COMPLETED0:0 on unicorn-cpu-75.

@@ -1,9 +1,7 @@
 {
-  "updated_at_utc": "2026-09-30T23:54:12.651497+00:00",
-  "phase": "family_v5_complete_numerically_replayed_graph_v6_running_at_last_observation",
-  "active_job_ids": [
-    "722841"
-  ],
+  "updated_at_utc": "2026-10-01T00:57:11.629603+00:00",
+  "phase": "graph_v6_collected_replay_and_matched_decoder_implementation",
+  "active_job_ids": [],
   "completed_job_ids": [
     "677817",
     "678708",
@@ -88,7 +86,7 @@
     "notification_policy": "Substantive results, major decisions, failures or review artifacts only",
     "resource_policy": "Parallel label8 + training4; initial single-job limit superseded."
   },
-  "next_action": "One scoped queue check for722841 at next follow-up; collect complete graph artifacts and date/user/job-name-scoped UTC sacct when terminal. Verify runtime probes, NPZ models, inner selection, probabilities and metrics before reporting; preserve failures and do not auto-retry. Then freeze a bounded matched physical decoding/charging/verification comparison of the declared baseline, v5 and graph policies, rather than selecting by these outer means. Version explicit battery/SOC/charger-context inputs and diversified synthetic designs separately. Keep DEV/final TEST sealed until their prospective evaluation rules are frozen. GPT-6.1 Sol heavy implementation; Luna Max routine review; manuscript deferred.",
+  "next_action": "Finish v7 physical-proposal and v8 graph-budget implementations, meaningful tiny fixtures, manifest freeze and independent review; only then root pins/pushes source and launches under recorded prospective budgets. Existing graph722841 fully complete and verified. v7 proposed16tasks%4 at30min (8CPUh); v8 proposed12tasks%4 at1hour (12CPUh), combined at most8CPUs64GB within12/96 campaign ceiling. Do not duplicate submissions, auto-retry, read DEV/final TEST or alter other projects.",
   "stage1_results": "RESULTS_STAGE1.md",
   "stage1_model_analysis": "MODEL_STAGE1.md",
   "test_groups_unobserved": [
@@ -124,9 +122,10 @@
     "DOC_GRAPH_V6_LAUNCH_RECEIPT.json"
   ],
   "latest_observation": {
-    "source": "single scoped Unicorn queue check in heartbeat 2026-09-30T23:32:03Z",
-    "family_recovery722702": "absent from queue; scoped accounting confirms all nine tasks COMPLETED 0:0; complete artifacts collected",
-    "graph722841": "tasks4-7 running,8-11 pending at check; no partial scientific outcomes read",
+    "source": "one scoped queue check in heartbeat2026-10-01T00:32:33Z, then identity-scoped sacct",
+    "graph722841": "absent; all12 tasks COMPLETED0:0, latest end2026-10-01T00:02:33UTC, nodeunicorn-cpu-75",
+    "complete_artifacts_collected": true,
+    "elapsed_and_allocated_cpu_seconds": 10335,
     "repeated_queue_checks": false
   },
   "result_summarizer": "summarize_cost_aware_repair.py",
@@ -261,21 +260,11 @@
     "requested_memory_gb": 96
   },
   "active_label_job_ids": [],
-  "active_training_array_ids": [
-    "722841"
-  ],
+  "active_training_array_ids": [],
   "route_model_launch_receipt": "LAUNCH_713295.json",
   "route_model_training_protocol": "ROUTE_MODEL_TRAINING_PROTOCOL.md",
   "physical_shard01_accounting": "ACCOUNTING_711779.json",
-  "active_attempts": [
-    {
-      "array_job_id": "722841",
-      "remote_checkout": "/home/nc437/egg-route-graph-20260930-v6",
-      "attempt_relative": "result/physical_learning/20260930-route-model128-graph-v6",
-      "source_commit": "ca9c3dbbfd22a83c42a8e18465f8524f7f11c98f",
-      "launch_receipt": "LAUNCH_722841.json"
-    }
-  ],
+  "active_attempts": [],
   "physical_shard01_dataset": "result/physical_learning/20260930-shard01-dataset-v1",
   "physical_shard01_results": "RESULTS_PHYSICAL_SHARD01.md",
   "physical_shard01_derived": "PHYSICAL_SHARD01_DERIVED.json",
@@ -309,7 +298,12 @@
   },
   "route_model_review_backup_commit": "febc81543784694f1db702dbac3da9f7b8183cbe",
   "physical_shard01_review_backup_commit": "febc81543784694f1db702dbac3da9f7b8183cbe",
-  "current_work_owners": {},
+  "current_work_owners": {
+    "sol61_graph_models": "new graph budget v8 implementation/protocol/fixtures:900epochs,300epochanchors,frozenmathematicalcontrols,12CPUhcap proposed",
+    "sol61_runtime_repair": "bounded matched physical decoder prospective design and implementation",
+    "luna_family_review": "new v7 and v8 protocol/code review after release; graph result review complete",
+    "root": "accounting, full archival, publication and launch management"
+  },
   "modern_ml_methods_note": "MODERN_ML_METHODS_AND_VALIDATION.md",
   "route_training_environment": "ROUTE_TRAINING_ENVIRONMENT.json",
   "physical_parallel_wave1_raw_backup_commit": "6b29c7286f85f33dab92dd139be6b3082be3dbd8",
@@ -370,15 +364,7 @@
     "all_mlp_and_boosted_runs_selected_maximum_inner_checkpoint": true,
     "no_complete_route_feasibility_cost_or_online_speedup_claim": true
   },
-  "active_training_attempts": [
-    {
-      "array_job_id": "722841",
-      "remote_checkout": "/home/nc437/egg-route-graph-20260930-v6",
-      "attempt_relative": "result/physical_learning/20260930-route-model128-graph-v6",
-      "source_commit": "ca9c3dbbfd22a83c42a8e18465f8524f7f11c98f",
-      "launch_receipt": "LAUNCH_722841.json"
-    }
-  ],
+  "active_training_attempts": [],
   "route_model64_accounting": "ACCOUNTING_717453.json",
   "route_model64_result_manifest": "RESULT_MANIFEST_ROUTE_MODEL64.json",
   "route_model64_results": "ROUTE_MODEL64_RESULTS.md",
@@ -587,5 +573,48 @@
     "fleet_cost_or_online_speedup_established": false
   },
   "family_v5_doc_update": "DOC_ROUTE_FAMILIES_V5_RESULTS_RECEIPT.json",
-  "family_v5_report_backup_commit": "469cb8cda4c03b5065a816c4b7a70380027c81e7"
+  "family_v5_report_backup_commit": "469cb8cda4c03b5065a816c4b7a70380027c81e7",
+  "graph_v6_accounting": "ACCOUNTING_722841.json",
+  "graph_v6_results": "ROUTE_GRAPH_V6_RESULTS.md",
+  "graph_v6_replay": "ROUTE_GRAPH_V6_REPLAY.json",
+  "graph_v6_review": "ROUTE_GRAPH_V6_RESULT_REVIEW.md",
+  "graph_v6_doc_receipt": "DOC_ROUTE_GRAPH_V6_RESULTS_RECEIPT.json",
+  "graph_v6_archive_backup_commit": "531a70e31f7f4510b841ca47abaae800c7961715",
+  "graph_v6_result_backup_commit": "615d1d4dcb6b4ec7e68c0d82cb0ca69989aa3e89",
+  "graph_v6_conclusion": {
+    "numerical_replay_passed": true,
+    "independent_timetables": 128,
+    "source_fleets": 255,
+    "full128_scores": {
+      "graph_attention": {
+        "weighted_log_loss": 0.07186638307201834,
+        "average_precision": 0.8430942488580508,
+        "input_trip_count_topk_recall_mean_by_fleet": 0.7398903247001485
+      },
+      "inner_promoted": {
+        "weighted_log_loss": 0.0718877663739163,
+        "average_precision": 0.8425725402738911,
+        "input_trip_count_topk_recall_mean_by_fleet": 0.7395697360006535
+      },
+      "mean_message": {
+        "weighted_log_loss": 0.07300218735266742,
+        "average_precision": 0.8338170152331527,
+        "input_trip_count_topk_recall_mean_by_fleet": 0.7332342134224654
+      }
+    },
+    "inner_promotion_counts": {
+      "graph_attention": 11,
+      "mean_message": 1
+    },
+    "stop_reason_counts": {
+      "graph_attention": {
+        "epoch_cap": 12
+      },
+      "mean_message": {
+        "epoch_cap": 12
+      }
+    },
+    "allocated_cpu_seconds": 10335,
+    "physical_fleet_benefit_established": false
+  }
 }
