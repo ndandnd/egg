@@ -7,7 +7,8 @@ Updated: 2026-10-01 05:48 UTC. Branch claude/research-20261001. Assessment: doc/
 - RUNNING/QUEUED (check with: sacct -j <id> -X -o JobID,State,Elapsed):
   - E2 scale profile 758967 (18 cells, %2; 12 done, interim results written) -> runs/e2-scale-20261001/out/*/e2.json
   - E3 phase 2 (scale 40-80 trips, 120 runs incl cold4, %1) 761781
-  - learned4 supplements (dependent): bank 761834 (after 759672), scale 761835 (after 761781), public 761836 (after 759670+759671)
+  - learned4 supplements: bank 761834 DONE; scale 765340 (after 761781), public 765341 (after 759670+759671) [resubmitted on harness-fixed code 0cd5da5; 761835/761836 cancelled while pending]
+  - E3 bank harness-fix rerun 765335 (6 cells)
   - E3 bank prune 759091 (128 runs, %2) -> runs/e3-prune-20261001/out/*/e3.json
   - E4 labels 759102 (g10001-10127, %2; g10000 done by 759065) -> runs/e4-labels-20261001/out/g*/labels.jsonl
   - E4 train bank2 759111 (4 folds, graph env, no Gurobi) -> runs/e4-train-20261001/runs/bank2-f*
@@ -21,7 +22,7 @@ Updated: 2026-10-01 05:48 UTC. Branch claude/research-20261001. Assessment: doc/
 2. [x] E0 -> research-20261001/e0-support/E0_RESULTS.md (14/16 hulls certified; 4/16 certified positive gap, <=0.1% of bill)
 3. [x] E1 -> research-20261001/e1-topology/E1_RESULTS.md (topology changes 14/16, bus count 16/16 fixed; cold fast)
 4. [x] E2 final (18/18) -> research-20261001/e2-scale/E2_RESULTS.md: GO; cold MIP gaps 2-79% at 60-80 trips
-5. [~] E3 predict-and-prune (bank phase running 759091; early: learned < cold on 3/3 at 10 s, random far worse) (driver claude_e3_prune.py; arms cold/learned/lp/random; keep 0.3; T=10,30 s bank; 60,300 s scale) after scores + E2
+5. [~] E3: bank DONE -> e3-prune/E3_BANK_RESULTS.md (learned >> random, > lp; vs cold small wins, big on hard 10069/10075); hfix rerun 765335; scale phase 761781 running (36/120) (driver claude_e3_prune.py; arms cold/learned/lp/random; keep 0.3; T=10,30 s bank; 60,300 s scale) after scores + E2
 6. [ ] E4 tariff-diverse labels -> retrain (claude_e4_train.py, bank2 vs multi8, 4 folds) -> day eval + physical decode
 6b. [ ] E5 learned pruning on public Hildenbrand 15/16 + Eberbach (scores 759399; protocol research-20261001/e5-public)
 7. [ ] v9 (Codex-prepared physical-context training) — optional; v8 showed epoch budget matters more; decide after E4
@@ -42,3 +43,4 @@ Updated: 2026-10-01 05:48 UTC. Branch claude/research-20261001. Assessment: doc/
 8. When E2 (758967) finishes: raise E4 labels throttle back: scontrol update JobId=759102 ArrayTaskThrottle=2
 - 06:25 heartbeat: E2 interim written; E3 phase 2 submitted (761781); E4 labels throttle back to 2 (10/128 done).
 - 06:35 E5 first rows: single-budget cold stalls in round 1 (H15: 548.04 at 180 and 600 s), cold4 507.49, learned 509.35 -> added learned4 arm + dependent supplements.
+- 07:30 heartbeat: E2 final; E3 bank results; harness fix (TimeoutError lost plans) + 6-cell rerun; scale/public learned4 resubmitted on fixed code. Scale main array 761781 runs on pre-fix code: rerun its TimeoutError cells with -hfix when it finishes.
