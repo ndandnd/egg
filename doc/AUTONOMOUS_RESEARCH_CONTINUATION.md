@@ -55,6 +55,12 @@ artifacts. Continue useful local work between jobs; do not pause on an empty que
   failures/time. V7hull32API failures remain unresolved, DEV/finalTEST sealed,
   manuscript deferred. All bounded implementation/review agents are finished.
 
+- Reviewed v9 execution candidate is987cff55253477ca532c2832187f483c76f6ba2e,
+  pushed to the research branch. No scientific source changed after its checks.
+  Original Google Doc now records the prospective design and explicitly unlaunched
+  status; exact text,protocol link,styles and7native images verified in
+  DOC_V9_PREPARED_RECEIPT.json. No user decision or new scientific result this turn.
+
 ## Previous checkpoint — charging-cost diagnosis and fit-only feature inventory
 
 - One scoped queue check at the 03:34 UTC heartbeat found recovery array738226
