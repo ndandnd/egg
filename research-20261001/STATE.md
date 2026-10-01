@@ -75,3 +75,4 @@ Updated: 2026-10-01 05:48 UTC. Branch claude/research-20261001. Assessment: doc/
 - 20:25 heartbeat: E10 interim written (87/90; m5/m8 most robust rules; Eberbach replay refusals). E10/E11 waiting behind user's evspOSLO jobs (JobArrayTaskLimit with 0 running).
 - 20:30 user: give evspv2g stoch project priority when parallel space is short -> my pending arrays set Nice=10000, throttle 1; rule recorded above.
 - 21:00 user refined the yield rule (v2g prefix / evspv2g-stochastic comment only). yield_check.sh installed; E11 restored to Nice=0, throttle 3 (no v2g jobs queued).
+- 21:05 local background loop runs yield_check.sh every 5 min for 20 h (log: scratchpad/yield_loop.log; task bbjo5412j). If the session restarts, restart it.
