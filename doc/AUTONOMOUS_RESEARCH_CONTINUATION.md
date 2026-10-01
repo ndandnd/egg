@@ -8,7 +8,58 @@ supersedes the earlier idle-monitor pause condition and blanket deferral of ML.
 Notify only substantive findings, major decisions, important failures or review
 artifacts. Continue useful local work between jobs; do not pause on an empty queue.
 
-## Latest checkpoint — physical comparison reviewed; graph startup recovery submitted
+## Latest checkpoint — charging-cost diagnosis and fit-only feature inventory
+
+- One scoped queue check at the 03:34 UTC heartbeat found recovery array738226
+  active: tasks0,1,3 RUNNING (one CPU/8GB each), tasks4–11 PENDING for resources.
+  Task2 alone had vanished; scoped accounting and its wrapper confirm COMPLETED0:0,
+  2029 allocated CPU-seconds, one CPU/8GB, node75, clean reviewed sourcea19f0ac.
+  Full scientific results and partial model scores were not inspected. Preserve
+  OBSERVATION_738226_20261001T0334.json; no duplicate submission or new queue poll.
+- A new exact decomposition of the reviewed v7 results explains the graph's
+  +4.599760 mean bill on the15common complete TRAIN cases. Fleet count and
+  operations cost differences are zero for every learned method on every common
+  case. Graph linear tariff cost adds3.919111 and quadratic supply cost0.680649.
+  At the fixed day tariff, total energy adds0.499111 at the high-tariff reference,
+  while17.1kWh less cheap-period charging loses3.42 in discount. These are saved-load
+  identities, not causal effects or proof that route availability caused the loss.
+- V7_COST_COMPONENT_DIAGNOSIS.json/.md and diagnose_v7_cost_components.py bind62
+  saved replay outputs and preserve failures/source choices. Root's independent
+  execution produced byte-identical report and ledger. A checked PNG/PDF figure
+  shows the three learned policies' components. Timetable10069 stays missing for
+  graph/family; tabular's extra bus there and all16mean+7.570038 remain explicit.
+  No source/architecture promotion, optimum, speedup or final-test claim follows.
+- The v9 input inventory ran once locally in44.108s; root passed14tinyfixtures.
+  All4folds of each32/64/128registered TRAIN prefix were inventoried using only
+  that fold's FIT groups:20/40/80 respectively. Case and source-market objects
+  were regenerated after the FIT gate and exact identities checked. Registry
+  projections never decode embedded source plans, labels or outcome values.
+  INNER/OUTER are excluded per fold; overlap across different folds is explicit.
+- PHYSICAL_CONTEXT_FEATURE_V9_FIT_INVENTORY.json and its REPORT show no missing
+  or nonfinite inputs. Battery ceiling100–261.36kWh, usable span80–232.32kWh and
+  movement/window context vary. Efficiency0.9, charger powers90kW and curvature
+  1/900 remain physically constant; apparent window0/90 or0/b variation reflects
+  structural zero rows. Conditional window curvature variation is only roundoff.
+  Isolated charging capacity1.35–972kWh is an optimistic local input, not SOC or
+  shared-resource feasibility. These are envelopes across overlapping FIT
+  inventories, not additional independent samples or new generalization evidence.
+- Next local implementation: a separately frozen matched38-input control/context
+  training comparison with the existing two graph architectures. Preserve exact
+  first17features/preprocessing, resolve intercept handling, fit transformations
+  only within FIT, select only within INNER, and record the four-arm parameter/time
+  budget before any launch. Historical17-input models are contextual references,
+  not matched ablation controls. Added constant inputs cannot teach transfer to
+  new charger/efficiency/curvature settings; that needs a versioned generator.
+- Active job remains738226. Next heartbeat checks it once and collects complete
+  evidence before interpreting900epoch results. Original300epoch anchors and
+  saved-model replay are still required. V7's32hull-interface failures remain
+  unresolved; a future repair must be separate and preserve failed cost/time.
+  Manuscript stays deferred; DEV/finalTEST sealed. No other-project changes.
+
+- Luna's two compact review notes found no material issue. Root verification is
+  recorded in V7_COST_V9_INVENTORY_ROOT_CHECK.json. All bounded agents finished.
+
+## Previous checkpoint — physical comparison reviewed; graph startup recovery submitted
 
 - One scoped queue check found arrays728823/729522 absent. Identity-scoped Slurm
   accounting and complete receipts were collected. V7 has16completed parents but

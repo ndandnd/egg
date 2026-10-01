@@ -1,6 +1,6 @@
 {
-  "updated_at_utc": "2026-10-01T02:54:28.661186+00:00",
-  "phase": "physical_v7_analyzed_graph_budget_v8_recovery1_submitted",
+  "updated_at_utc": "2026-10-01T03:51:55.454531+00:00",
+  "phase": "graph_budget_v8_recovery1_active_physical_input_inventory",
   "active_job_ids": [
     738226
   ],
@@ -89,7 +89,7 @@
     "notification_policy": "Substantive results, major decisions, failures or review artifacts only",
     "resource_policy": "Parallel label8 + training4; initial single-job limit superseded."
   },
-  "next_action": "One scoped queue check for738226 next heartbeat; if complete collect full recovery artifacts/accounting, verify original300epoch anchors and replay saved models before interpreting900epoch results. Preserve original729522 failure12CPU seconds. V7physical replay/report reviewed this heartbeat; global hull32API failures remain unresolved, never claim certification from parentCOMPLETED. Next local design should address physical-context/objective-aware decoding; no outer-based model promotion.",
+  "next_action": "Next heartbeat: one scoped queue check for active array738226; collect complete batch once, preserve all failures and runtime, check 300-epoch anchors and independently replay saved models before interpreting extended training. Prepare a separately frozen four-arm physical-context comparison (zero-padded38 vs physical38, mean-message vs attention), using fit-only preprocessing and INNER-only selection; settle intercept handling and prospectively record actual parameter/time budget before launch. The reviewed fit-only inventory supports input variation only within existing battery/window regimes; charger/efficiency/curvature transfer needs a separately versioned generator. V7 hull interface remains a separate unresolved bounded repair; do not imply certification. Do not choose a promoted model from exploratory V7 outcomes.",
   "stage1_results": "RESULTS_STAGE1.md",
   "stage1_model_analysis": "MODEL_STAGE1.md",
   "test_groups_unobserved": [
@@ -144,7 +144,7 @@
   "shared_interval_physical_pool_review": "SHARED_INTERVAL_PHYSICAL_POOL_REVIEW.json",
   "shared_interval_report_backup_commit": "8e17264ffc71eb9b5ed0851b429d5d3927f43ac8",
   "shared_interval_figure": "figures/shared_interval_2016_learned.png",
-  "local_follow_up": "V7physical result package reviewed by Luna and independently executed by root; all143savedbills reproduced, ledgers differ only in replay wall time. Result/recoverylaunch backup095dd94 pushed. GoogleDoc consolidated result/failure/recovery append verified, all7nativeimages preserved. No active implementation workers. Current only recorded activearray738226, allocation not yet observed.",
+  "local_follow_up": "Luna approved the fit-only v9 inventory and v7 component diagnosis. Root passed14tinyfixtures, checked frozen source hashes, exactly reproduced component ledger/report and visually checked the plotted components. No new fit/solve or cluster submission; array738226 remains active at last observation, with partial scientific results unread.",
   "shared_budget_results": "RESULTS_SHARED_BUDGET_REPAIR.md",
   "shared_budget_verification": "INDEPENDENT_REPLAY_SHARED_BUDGET.json",
   "shared_budget_physical_pool_review": "SHARED_BUDGET_PHYSICAL_POOL_REVIEW.json",
@@ -639,13 +639,17 @@
     }
   },
   "last_queue_observation": {
-    "heartbeat_at_utc": "2026-10-01T02:33:34.190Z",
+    "heartbeat_at_utc": "2026-10-01T03:34:34.300Z",
+    "receipt": "OBSERVATION_738226_20261001T0334.json",
     "single_scoped_queue_check": true,
-    "rows": [],
-    "accounting_followup": [
-      "ACCOUNTING_728823.json",
-      "ACCOUNTING_729522.json"
-    ]
+    "running_tasks": [
+      0,
+      1,
+      3
+    ],
+    "pending_tasks": "4-11",
+    "task2": "COMPLETED0:0;2029allocatedCPU seconds;wrappercompleted;scientificresultsunread",
+    "active_array": 738226
   },
   "physical_context_feature_v9": {
     "module": "src/egglab/physical_context_features_v9.py",
@@ -730,5 +734,49 @@
     "729522"
   ],
   "route_proposal_train_v7_result_backup_commit": "095dd94d6cfc0bd89aa507da329234aa2d503ec0",
-  "v7_results_v8_recovery_doc_receipt": "DOC_V7_RESULTS_V8_RECOVERY_RECEIPT.json"
+  "v7_results_v8_recovery_doc_receipt": "DOC_V7_RESULTS_V8_RECOVERY_RECEIPT.json",
+  "physical_context_v9_fit_inventory": {
+    "script": "inventory_physical_context_v9.py",
+    "machine": "PHYSICAL_CONTEXT_FEATURE_V9_FIT_INVENTORY.json",
+    "report": "PHYSICAL_CONTEXT_FEATURE_V9_FIT_INVENTORY_REPORT.md",
+    "review": "PHYSICAL_CONTEXT_FEATURE_V9_FIT_INVENTORY_REVIEW.md",
+    "registry_prefixes": [
+      32,
+      64,
+      128
+    ],
+    "folds_per_prefix": 4,
+    "full_run_seconds": 44.108125041238964,
+    "root_tests": "14 passed in 0.27s",
+    "missing_or_nonfinite_features": 0,
+    "source_plans_labels_outcomes_decoded": false,
+    "case_market_regeneration_after_fit_gate": true,
+    "fit_or_solve": false,
+    "training_protocol_or_budget_adopted": false,
+    "fixed_physical_inputs": {
+      "efficiency": 0.9,
+      "per_bus_kw": 90,
+      "grid_kw": 90,
+      "curvature_b": "1/900"
+    },
+    "range_scope": "Envelopes across overlapping FIT inventories; no additional independent groups."
+  },
+  "v7_cost_component_diagnosis": {
+    "script": "diagnose_v7_cost_components.py",
+    "machine": "V7_COST_COMPONENT_DIAGNOSIS.json",
+    "report": "V7_COST_COMPONENT_DIAGNOSIS.md",
+    "review": "V7_COST_COMPONENT_DIAGNOSIS_REVIEW.md",
+    "figure": "figures/v7_cost_component_diagnosis.png",
+    "common_groups": 15,
+    "graph_mean_bill_delta": 4.599759922648975,
+    "graph_mean_operations_delta": 0,
+    "graph_mean_linear_delta": 3.9191111111111026,
+    "graph_mean_quadratic_delta": 0.6806488115378717,
+    "graph_mean_grid_kwh_delta": 1.6637037037036635,
+    "graph_mean_cheap_period_kwh_delta": -17.1,
+    "graph_mean_lost_cheap_discount_cost": 3.42,
+    "causal_effect_claim": false,
+    "new_fit_or_solve": false,
+    "root_reproduction": "Script rerun produced byte-identical JSON and report."
+  }
 }
