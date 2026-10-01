@@ -24,7 +24,7 @@ Updated: 2026-10-01 05:48 UTC. Branch claude/research-20261001. Assessment: doc/
 4. [x] E2 final (18/18) -> research-20261001/e2-scale/E2_RESULTS.md: GO; cold MIP gaps 2-79% at 60-80 trips
 5. [~] E3: bank DONE -> e3-prune/E3_BANK_RESULTS.md (learned >> random, > lp; vs cold small wins, big on hard 10069/10075); hfix rerun 765335; scale phase 761781 running (36/120) (driver claude_e3_prune.py; arms cold/learned/lp/random; keep 0.3; T=10,30 s bank; 60,300 s scale) after scores + E2
 6. [ ] E4 tariff-diverse labels -> retrain (claude_e4_train.py, bank2 vs multi8, 4 folds) -> day eval + physical decode
-6b. [ ] E5 learned pruning on public Hildenbrand 15/16 + Eberbach (scores 759399; protocol research-20261001/e5-public)
+6b. [~] E5 interim -> e5-public/E5_RESULTS.md (Eberbach: learned best; 600 s learned beats 1800 s cold). learned4 765341 running. E5 on public Hildenbrand 15/16 + Eberbach (scores 759399; protocol research-20261001/e5-public)
 7. [ ] v9 (Codex-prepared physical-context training) — optional; v8 showed epoch budget matters more; decide after E4
 8. [ ] Google Doc: no Google Docs editor connector in this session; pending text in research-20261001/GOOGLE_DOC_PENDING.md
 
@@ -33,7 +33,7 @@ Updated: 2026-10-01 05:48 UTC. Branch claude/research-20261001. Assessment: doc/
 - 05:30 v8 collected (anchors verified, big held-out gain). E0 launched (758495). E1 computed from saved v7 data (see research-20261001/e1-topology).
 - 05:48 E0 written up; E2/E3/E4/E5 running.
 ## Next actions for the heartbeat
-1. As soon as 759102 labels finish (independent of bank2 759111): submit E4 multi8 training (same cmd file pattern, --arm multi8, time 4h), then claude_e4_eval.py for bank2+multi8 (graph env), then claude_decode.py on v7 groups 10064-10079 with each arm's day_logits.json.
+1. [submitted 775356, dependency afterany:759102] E4 multi8 training (same cmd file pattern, --arm multi8, time 4h), then claude_e4_eval.py for bank2+multi8 (graph env), then claude_decode.py on v7 groups 10064-10079 with each arm's day_logits.json.
 2. When 759091 finishes: summarize E3 bank (per case/T: bill per arm; wins vs cold/lp/random) -> research-20261001/e3-prune/E3_BANK_RESULTS.md.
 3. When 758967 finishes: summarize E2 (time to first incumbent, to 0.5%/0.1% of own best, final gap, by size) -> research-20261001/e2-scale/E2_RESULTS.md; then submit E3 phase 2 on scale cases 50000-50003 x {40,60,80}, T {60,300}, %2 (scores already in runs/e3-prune-20261001/scores_v8_day.json).
 4. When E5 finishes: summarize -> research-20261001/e5-public/E5_RESULTS.md (compare to paper bounds: depot15 D<=512.77 exact witness at flat a=0.2 — note E5 uses day tariff, so compare arms to each other).
@@ -45,3 +45,4 @@ Updated: 2026-10-01 05:48 UTC. Branch claude/research-20261001. Assessment: doc/
 - 06:35 E5 first rows: single-budget cold stalls in round 1 (H15: 548.04 at 180 and 600 s), cold4 507.49, learned 509.35 -> added learned4 arm + dependent supplements.
 - 07:30 heartbeat: E2 final; E3 bank results; harness fix (TimeoutError lost plans) + 6-cell rerun; scale/public learned4 resubmitted on fixed code. Scale main array 761781 runs on pre-fix code: rerun its TimeoutError cells with -hfix when it finishes.
 - 08:25 heartbeat: E5 Hildenbrand done (learned beats cold 3/4; cold4 best at 600 s; learned4 pending 765341); hfix bank reruns done (all produced plans); E3 scale interim at 60 s: learned >> cold at 60-80 trips; GOOGLE_DOC_PENDING update 2 written. Throttles raised: E3 scale %2, E4 labels %3.
+- 09:25 heartbeat: E5 Eberbach done -> E5_RESULTS.md interim; multi8 training queued (775356) after labels.
