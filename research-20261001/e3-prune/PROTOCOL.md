@@ -26,3 +26,13 @@ Cases scale:50000-50003 x {40, 60, 80} trips, arms cold / cold4 / learned / lp /
 random (cold4 added after the bank launch to separate route quality from extra
 tangent rounds), T in {60, 300} s, keep 30%, 16 GB. 120 runs, throttled to fit the
 Gurobi concurrency cap. Primary metric and go criterion unchanged.
+
+## learned4 supplement, 06:35 UTC
+
+First E5 rows showed the single-budget `cold` arm stalls in its first tangent round
+on public-scale cases (Hildenbrand 15: 548.04 at both 180 and 600 s) while `cold4`
+reaches 507.49, so the round split matters as much as pruning. Added arm `learned4`
+(learned pruning + the cold4 four-round split) as dependent supplements that start
+after the main arrays: bank (32 runs), scale (24 runs), public (6 runs). Reported
+comparisons: learned vs cold (same single-budget policy) and learned4 vs cold4 (same
+four-round policy). No earlier result is discarded or re-labelled.

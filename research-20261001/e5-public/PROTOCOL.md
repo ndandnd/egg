@@ -33,3 +33,13 @@ unicorn-cpu-01; 759412_16 = eberbach cold T=600 on unicorn-cpu-75); their partia
 outputs were deleted by mistake during the resubmission and were never read. That
 0.085 CPU-hours is counted as spent. Bank-phase E3 also gets a cold4 supplement
 (759672, 32 runs).
+
+## learned4 supplement, 06:35 UTC
+
+First E5 rows showed the single-budget `cold` arm stalls in its first tangent round
+on public-scale cases (Hildenbrand 15: 548.04 at both 180 and 600 s) while `cold4`
+reaches 507.49, so the round split matters as much as pruning. Added arm `learned4`
+(learned pruning + the cold4 four-round split) as dependent supplements that start
+after the main arrays: bank (32 runs), scale (24 runs), public (6 runs). Reported
+comparisons: learned vs cold (same single-budget policy) and learned4 vs cold4 (same
+four-round policy). No earlier result is discarded or re-labelled.
