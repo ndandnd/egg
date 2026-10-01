@@ -38,7 +38,7 @@ Updated: 2026-10-01 05:48 UTC. Branch claude/research-20261001. Assessment: doc/
 3. When 758967 finishes: summarize E2 (time to first incumbent, to 0.5%/0.1% of own best, final gap, by size) -> research-20261001/e2-scale/E2_RESULTS.md; then submit E3 phase 2 on scale cases 50000-50003 x {40,60,80}, T {60,300}, %2 (scores already in runs/e3-prune-20261001/scores_v8_day.json).
 4. When E5 finishes: summarize -> research-20261001/e5-public/E5_RESULTS.md (compare to paper bounds: depot15 D<=512.77 exact witness at flat a=0.2 — note E5 uses day tariff, so compare arms to each other).
 5. Keep GOOGLE_DOC_PENDING.md updated at milestones.
-6. E4: check bank2 reproduces v8 seed-17 attention selected epochs (v8 tasks 0/3/6/9: 896/896/897/899).
+6. [x] E4 bank2 reproduces v8 seed-17 (folds 1-3 within 1e-5; see e4 PROTOCOL note). multi8 waits for labels (43/128 at 07:20).
 7. E5/E2: report build_seconds; on Eberbach the per-round model rebuild may dominate cold time.
 8. When E2 (758967) finishes: raise E4 labels throttle back: scontrol update JobId=759102 ArrayTaskThrottle=2
 - 06:25 heartbeat: E2 interim written; E3 phase 2 submitted (761781); E4 labels throttle back to 2 (10/128 done).

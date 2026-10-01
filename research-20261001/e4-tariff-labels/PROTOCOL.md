@@ -27,3 +27,11 @@ Evaluation (decided now, before any result):
 Go criterion for "price-responsive learning works": multi8 beats bank2 on day AP in
 >= 3 of 4 folds AND lowers the mean physical bill gap to the cold incumbent.
 DEV/TEST timetables remain sealed; everything here is TRAIN cross-validation.
+
+## Trainer validation note, 07:35 UTC
+
+bank2 (my trainer, attention, seed 17) vs the Codex v8 seed-17 attention runs:
+fold 2 identical (selected epoch 897, inner 0.048746, outer 0.063661); fold 1 same
+epoch 896, inner 0.050167 vs 0.050166, outer 0.041714 vs 0.041709; fold 3 epoch 893 vs
+899, inner 0.056476 vs 0.056450. Differences are at the 1e-5 level and consistent with
+different CPU nodes (v8 ran pinned to unicorn-cpu-75). The trainer reproduces v8.
