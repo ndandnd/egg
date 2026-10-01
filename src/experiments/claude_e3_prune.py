@@ -27,6 +27,7 @@ import random
 import time
 import traceback
 
+from egglab import claude_cases
 from egglab import claude_scale_cases as scale
 from egglab import native_hull as nh
 from egglab import native_pathflow as pf
@@ -34,9 +35,6 @@ from egglab import native_recharge as nr
 from egglab import physical_learning_cases as bank
 
 
-def make(case_key):
-    kind, *rest = case_key.split(":")
-    return bank.make_case(int(rest[0])) if kind == "bank" else scale.make_case(int(rest[0]), int(rest[1]))
 
 
 def lp_scores(case, prices, deadline):
@@ -82,7 +80,7 @@ def main():
     ap.add_argument("--output", type=Path, required=True)
     args = ap.parse_args()
     args.output.mkdir(parents=True, exist_ok=False)
-    case = make(args.case)
+    case = claude_cases.make(args.case)
     market = bank.market(case, args.tariff)
     row = {"case": args.case, "case_identity": case.identity(), "arm": args.arm, "tariff": args.tariff,
            "keep": args.keep, "min_options": args.min_options, "seconds": args.seconds,

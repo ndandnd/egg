@@ -18,6 +18,7 @@ import time
 import numpy as np
 import torch
 
+from egglab import claude_cases
 from egglab import claude_scale_cases as scale
 from egglab import learned_proposals as edge
 from egglab import physical_learning_cases as bank
@@ -27,8 +28,8 @@ from egglab import physical_route_model_v3 as previous
 
 def task_for(case_key, groups):
     kind, *rest = case_key.split(":")
-    if kind == "scale":
-        return 0
+    if kind in ("scale", "public"):
+        return 0  # outside the TRAIN bank: every fold's model is held out
     gname = f"physical_v2_s{int(rest[0])}"
     for fold in range(previous.FOLDS):
         if gname in previous.grouped_split(groups, fold)[2]:
@@ -36,11 +37,6 @@ def task_for(case_key, groups):
     raise ValueError("group not in any OUTER fold")
 
 
-def make(case_key):
-    kind, *rest = case_key.split(":")
-    if kind == "bank":
-        return bank.make_case(int(rest[0]))
-    return scale.make_case(int(rest[0]), int(rest[1]))
 
 
 def main():
@@ -62,7 +58,7 @@ def main():
             cache[task] = (graph.restore_model(folder / "graph_attention_selected.npz"),
                            np.asarray(pre["mean_fit_only"]), np.asarray(pre["scale_fit_only"]))
         model, mean, sc = cache[task]
-        case = make(key)
+        case = claude_cases.make(key)
         prices = bank.market(case, args.tariff).a
         sample = {"x": edge.edge_features(case, prices), "graph": graph.topology(case),
                   "group": key, "source": "scoring", "trip_count": len(case.trips)}
