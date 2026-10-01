@@ -37,3 +37,4 @@ Updated: 2026-10-01 05:48 UTC. Branch claude/research-20261001. Assessment: doc/
 5. Keep GOOGLE_DOC_PENDING.md updated at milestones.
 6. E4: check bank2 reproduces v8 seed-17 attention selected epochs (v8 tasks 0/3/6/9: 896/896/897/899).
 7. E5/E2: report build_seconds; on Eberbach the per-round model rebuild may dominate cold time.
+8. When E2 (758967) finishes: raise E4 labels throttle back: scontrol update JobId=759102 ArrayTaskThrottle=2
