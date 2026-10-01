@@ -78,3 +78,12 @@ v7 source-reuse policy (-0.8), which no earlier learned arm beat. The 40-80-trip
 pruning results are final: learned beats cold 10/2 (60 s) and 9/1/2 (300 s) and beats
 LP and random pruning 12/12. Next: keep-fraction sweep (E6) and pruning with the
 tariff-aware model (E7).
+
+## Takeover update 5 — 1 October 2026, 13:30 UTC: more aggressive pruning is better
+
+E6 swept the fraction of connections kept by learned pruning (15%, 30%, 50%) on the 12
+scaled 40-80-trip cases. Keeping only 15% is best: it beats unpruned solving on 12/12
+cases at both 60 s and 300 s (median -6%), and at 80 trips at 300 s it produces the best
+plan on all four instances. The earlier plateau at 30% came from the pruned problem
+still being too large to solve, not from discarding needed connections. E8 now tests 5%
+and 10% and applies aggressive pruning to the public Hildenbrand and Eberbach cases.

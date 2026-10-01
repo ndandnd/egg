@@ -10,6 +10,7 @@ Updated: 2026-10-01 05:48 UTC. Branch claude/research-20261001. Assessment: doc/
   - learned4 supplements: bank 761834 DONE; scale 765340 (after 761781), public 765341 (after 759670+759671) [resubmitted on harness-fixed code 0cd5da5; 761835/761836 cancelled while pending]
   - E3 bank harness-fix rerun 765335 (6 cells) DONE
   - E3 scale hfix 781391 DONE; E4 multi8 eval+decode 781389 DONE; E6 keep sweep 781395 DONE -> e6-keep-sweep/E6_RESULTS.md (keep 15% best: 12/12 vs cold)
+  - E8 aggressive keep (public k5/10/15, scale k5/10): 782210 (66 runs, %2) -> runs/e8-keep-20261001
   - E7 multi8-score pruning: scoring 781865 -> prune array 781866 (30 runs, %2, after scoring) -> runs/e7-multi8-20261001
   - E3 bank prune 759091 (128 runs, %2) -> runs/e3-prune-20261001/out/*/e3.json
   - E4 labels 759102 (g10001-10127, %2; g10000 done by 759065) -> runs/e4-labels-20261001/out/g*/labels.jsonl
@@ -56,3 +57,4 @@ Updated: 2026-10-01 05:48 UTC. Branch claude/research-20261001. Assessment: doc/
 11. E7 analysis: pair each -m8 run with the v8 learned4 k30 run (e3-prune out/ or e5-public out/), same case/T.
 12. Update E3_SCALE_RESULTS with learned4 @300 s (765340 now complete) when doing the E6 analysis.
 - 13:25 heartbeat: E6 final (keep 15% best). E7 28/30.
+13. E8 analysis: combine e8 outs with e3-prune scale outs (summarize_keep.py needs the extra dir + k5/k10 columns) and e5-public outs (learned4 k30) for public.
