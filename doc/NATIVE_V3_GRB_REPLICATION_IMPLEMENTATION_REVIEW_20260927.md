@@ -1,0 +1,26 @@
+# Independent GRB replication preflight
+
+**PASS for source freeze and later supervised execution, subject to pinning this review in `COMMON_SOURCES`.** This is a solver-free implementation preflight; no GRB or CBC optimizer and no cluster or SSH command was run.
+
+I independently compared the current controller-generated definitions to the sealed CBC archives. All 20 physical controls match `result/native_pathflow/20260927-attempt3/frozen.json` exactly after JSON normalization; the target tolerance and every budget field match, with only `backend` changing from CBC to GRB. All eight hull control definitions match `result/native_pathflow_hull/20260927-attempt2/frozen.json`; their state identities are recomputed for the GRB budget, while all scientific fields and limits remain the same. The GRB output paths are separate and exclusive. The hull path guard rejects the CBC attempt2 path, and the wrapper requires the separate GRB physical path.
+
+The wrapper requires the current full Git commit and checks each listed file against its published Git blob before launch. Its source list covers the stage runner, adapter, protocol, cluster scripts, tests, child implementation, and imported native modules. The physical and hull Slurm scripts request one CPU and 8 GB, disable requeue, exclude `scaglione-compute-01`, require a clean tracked checkout and full commit, and source the shared GRB environment. That environment requires a readable license, sets `EGGLAB_REQUIRE_GRB=1`, and fails if Gurobi cannot initialize. The native model builder also binds the requested backend explicitly and checks the returned solver name and `mip.gurobi` module, so CBC fallback fails closed. The GRB runtime library fingerprint is recorded in each native call for the later result audit.
+
+The stages are separated by a real admission gate. Hull launch requires a pinned `PASS` physical audit plus hashes for the frozen inputs, summary, wrapper receipt, and raw manifest. It checks the raw attempt’s complete file set and hashes against that manifest, then verifies the launch sentinel’s completion hashes. The hull controller independently checks its GRB oracle and extraction-policy identities and supervisor receipt. CBC and GRB outputs cannot share paths.
+
+Failure evidence is retained. The adapter claims an exclusive sibling `.launch` sentinel before starting, launches the child in a new process group, records command, commit, source hashes, stdout/stderr, elapsed time, child exit, timeout and post-run source/evidence checks, copies captured wrapper stdout/stderr into the attempt before sealing, and seals whatever attempt files exist into a manifest. A timeout sends TERM, waits the grace period, then sends KILL to the group; source drift, launch errors, incomplete stage evidence, and timeouts produce nonzero receipts. The sentinel remains and prevents retry or resume. The outer caps are 1,320 seconds for physical and 720 seconds for hull; the Slurm allocations are 30 and 15 minutes, respectively. The batch-level timeout leaves time to write the external Slurm receipt.
+
+Pure regression checks passed: 78 tests across the GRB adapter, physical path-flow, energy-band, hull and hull-policy suites. These tests use fake child processes and fake solver responses; they do not establish GRB runtime availability or solve any model. The sealed CBC parity comparison is separate read-only JSON inspection.
+
+Keep the independent result-review package outside the raw physical attempt, for example under `research-20260927/agent-notes/grb-physical-result-review/`. The admission check deliberately requires the raw attempt’s files to equal its manifest exactly, so adding a `review/` directory or public-copy files inside that attempt would invalidate the gate. Keep the required human audit at `doc/NATIVE_V3_GRB_PHYSICAL_RESULT_AUDIT_20260927.md`, the admission record at `doc/NATIVE_V3_GRB_PHYSICAL_ADMISSION_20260927.json`, and pin their hashes as specified. The Slurm receipt and scheduler stdout/stderr remain in the sibling launch area or submit directory outside the raw manifest; the independent result audit should preserve and identify them alongside the wrapper receipt.
+
+Before freezing, add this review file to the adapter’s `COMMON_SOURCES` so the preflight itself is included in published-source provenance. I did not change implementation files. This preflight does not qualify solver results, approve a nonlinear pilot, or audit the separate nonlinear runner.
+
+Reviewed source SHA-256 values:
+
+- `src/experiments/native_v3_grb_replication.py`: `fd1e0455171c26d4a424ab699fef24ee78784f7d7c3741ced5de0eecfd0ab3fe`
+- `src/experiments/native_pathflow_hull_qualification.py`: `81171eceb77d9864baa0b00299a69a803d1e0dd6e6becb29786cf176fa766ecd`
+- `src/tests/test_native_v3_grb_replication.py`: `534bdb4636bf147b6e3fcba04f85f657df4a65a1d0eeba29057748b2be1900cb`
+- `doc/NATIVE_V3_GRB_REPLICATION_PROTOCOL_20260927.md`: `787e55c4c06c53aff67fea8ba0fd5d749336d2e6e58be6d07ca595ec071f86c7`
+- `src/cluster/native_v3_grb_physical.sbatch`: `49219c8b290e71de1b147cfdfc180d0f6a7e664bd4b2027bb669cf18155a5f08`
+- `src/cluster/native_v3_grb_hull.sbatch`: `ac316ffdf740bd280d5074c199b8056322d23281727dca4deac1d658a8041e6a`

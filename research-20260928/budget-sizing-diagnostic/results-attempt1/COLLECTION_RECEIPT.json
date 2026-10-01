@@ -1,0 +1,40 @@
+{
+  "accounting_capture": {
+    "complete_ssh_seconds": 0.10061787487939,
+    "job_id": "591255",
+    "returncode": 0,
+    "utc": "2026-09-29T00:12:55.091531+00:00"
+  },
+  "archive_sha256": "5aba61eda7757f99f1aa96a85e35f8d0938d05eee96ebf0fe36a8c9d59222fa0",
+  "collection": {
+    "archive_sha256": "5aba61eda7757f99f1aa96a85e35f8d0938d05eee96ebf0fe36a8c9d59222fa0",
+    "bytes": 1733788,
+    "command": [
+      "ssh",
+      "-o",
+      "BatchMode=yes",
+      "-o",
+      "ConnectTimeout=15",
+      "unicorn2",
+      "tar -czf - -C /home/nc437/egg-budget-sizing-20260928 result/budget_sizing_diagnostic/20260928-attempt1 result/budget_sizing_diagnostic/20260928-attempt1.launch result/budget_sizing_diagnostic/20260928-attempt1.slurm_wrapper_receipt.json egg-budget-sizing-591255.out egg-budget-sizing-591255.err"
+    ],
+    "complete_ssh_seconds": 4.729565375018865,
+    "returncode": 0
+  },
+  "exit_code": "0:0",
+  "freeze_sha256": "25131ec063005508a182b177ac69f97f3c941401e3f96e15cc41c2609da0e66a",
+  "job_id": "591255",
+  "manifest_sha256": "2a3c85ae5d6c780ee8be4664b49807ec8c04dff28ef79aa56f6447f49d0daeee",
+  "note": "MANIFEST.json inventories the private complete raw result tree, not this curated subset; immutable launch receipt remains separate.",
+  "raw_result_relative_to_workspace": "research-20260928/cluster/budget-sizing-attempt1/collected/result/budget_sizing_diagnostic/20260928-attempt1",
+  "receipt_backup_ci": 36498838834,
+  "receipt_backup_ci_conclusion": "success",
+  "receipt_backup_commit": "601102a1aa0fae0fecdca91db436597de628be1f",
+  "slurm_elapsed_seconds": 51,
+  "slurm_end_local": "2026-09-28T19:33:54",
+  "slurm_start_local": "2026-09-28T19:33:03",
+  "slurm_timezone": "America/New_York",
+  "source_ci": 36498066050,
+  "source_commit": "1dba007ee4868f0d29373a84b7880171ab3c358c",
+  "status": "COMPLETED"
+}

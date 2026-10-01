@@ -1,0 +1,2936 @@
+{
+  "audit_elapsed_s": 0.5063954591751099,
+  "audit_status": "PASS: independent GRB physical result audit; 20/20 controls admitted",
+  "cells": [
+    {
+      "actual_native_calls": 1,
+      "cell": "single_linear",
+      "certified_interval": [
+        21.999999,
+        22.000001
+      ],
+      "environment": {
+        "gurobipy_version": "12.0.3",
+        "mip_version": "1.17.6",
+        "platform": "Linux-6.8.0-138-generic-x86_64-with-glibc2.39",
+        "python": "3.12.13 | packaged by Anaconda, Inc. | (main, Mar 19 2026, 20:20:58) [GCC 14.3.0]"
+      },
+      "independent_true_optimum": {
+        "exact_binary_rational": "22",
+        "value": 22.0
+      },
+      "independently_reconstructed_rounds": [
+        {
+          "interval_capacity_excess": "0",
+          "materialized_plan_l1": "0",
+          "max_raw_constraint_residual": 0.0,
+          "max_replay_soc_residual_kwh": 0.0,
+          "native_load_l1_residual": "0",
+          "negative_correction": "0",
+          "physical_paths": [
+            {
+              "movements": [
+                "out_A",
+                "in_A"
+              ],
+              "trips": [
+                "A"
+              ],
+              "vehicle": 0
+            }
+          ],
+          "physical_sessions": 1,
+          "positive_orphan_correction": "0",
+          "projection_l1": "0",
+          "raw_objective": "22",
+          "raw_to_replay_objective_delta": "0",
+          "raw_variable_count": 7,
+          "replay_load_l1": "0",
+          "replay_soc_events": 4,
+          "round": 0,
+          "session_capacity_excess": "0",
+          "whole_incumbent_correction": "0"
+        }
+      ],
+      "native_rounds": [
+        {
+          "native_incumbent": 22.0,
+          "native_lower_bound": 22.0,
+          "native_status": "OPTIMAL",
+          "physical_witness_saved": true,
+          "reference": {
+            "exact_binary_rational": "22",
+            "value": 22.0
+          },
+          "round": 0
+        }
+      ],
+      "pass": true,
+      "physical_witnesses": [
+        {
+          "load": [
+            0.0,
+            15.0
+          ],
+          "ops": 7.0,
+          "peak_kw": 15.0,
+          "sessions": 1,
+          "soc_events": 4,
+          "worst_soc_residual_kwh": 0.0
+        }
+      ],
+      "runtime_identity": {
+        "model_solver_name": "GRB",
+        "native_library_sha256": "57f87a886aa5a1fd8356494fa1b81e9f9c7d957c898d09e96145440c76c762b7",
+        "requested": "GRB",
+        "solver_class": "SolverGurobi",
+        "solver_module": "mip.gurobi"
+      },
+      "status": "certified"
+    },
+    {
+      "actual_native_calls": 1,
+      "cell": "efficiency_linear",
+      "certified_interval": [
+        22.789472684210526,
+        22.78947468421053
+      ],
+      "environment": {
+        "gurobipy_version": "12.0.3",
+        "mip_version": "1.17.6",
+        "platform": "Linux-6.8.0-138-generic-x86_64-with-glibc2.39",
+        "python": "3.12.13 | packaged by Anaconda, Inc. | (main, Mar 19 2026, 20:20:58) [GCC 14.3.0]"
+      },
+      "independent_true_optimum": {
+        "exact_binary_rational": "32500977310857079/1426139882000657",
+        "value": 22.789473684210527
+      },
+      "independently_reconstructed_rounds": [
+        {
+          "interval_capacity_excess": "0",
+          "materialized_plan_l1": "0",
+          "max_raw_constraint_residual": 3.6462061440320926e-16,
+          "max_replay_soc_residual_kwh": 0.0,
+          "native_load_l1_residual": "0",
+          "negative_correction": "0",
+          "physical_paths": [
+            {
+              "movements": [
+                "out_A",
+                "in_A"
+              ],
+              "trips": [
+                "A"
+              ],
+              "vehicle": 0
+            }
+          ],
+          "physical_sessions": 1,
+          "positive_orphan_correction": "0",
+          "projection_l1": "0",
+          "raw_objective": "3207333287255633/140737488355328",
+          "raw_to_replay_objective_delta": "0",
+          "raw_variable_count": 7,
+          "replay_load_l1": "0",
+          "replay_soc_events": 4,
+          "round": 0,
+          "session_capacity_excess": "0",
+          "whole_incumbent_correction": "0"
+        }
+      ],
+      "native_rounds": [
+        {
+          "native_incumbent": 22.789473684210527,
+          "native_lower_bound": 22.789473684210527,
+          "native_status": "OPTIMAL",
+          "physical_witness_saved": true,
+          "reference": {
+            "exact_binary_rational": "32500977310857079/1426139882000657",
+            "value": 22.789473684210527
+          },
+          "round": 0
+        }
+      ],
+      "pass": true,
+      "physical_witnesses": [
+        {
+          "load": [
+            0.0,
+            15.789473684210527
+          ],
+          "ops": 7.0,
+          "peak_kw": 15.789473684210527,
+          "sessions": 1,
+          "soc_events": 4,
+          "worst_soc_residual_kwh": 0.0
+        }
+      ],
+      "runtime_identity": {
+        "model_solver_name": "GRB",
+        "native_library_sha256": "57f87a886aa5a1fd8356494fa1b81e9f9c7d957c898d09e96145440c76c762b7",
+        "requested": "GRB",
+        "solver_class": "SolverGurobi",
+        "solver_module": "mip.gurobi"
+      },
+      "status": "certified"
+    },
+    {
+      "actual_native_calls": 1,
+      "cell": "cyclic_flat",
+      "certified_interval": [
+        36.999999,
+        37.000001
+      ],
+      "environment": {
+        "gurobipy_version": "12.0.3",
+        "mip_version": "1.17.6",
+        "platform": "Linux-6.8.0-138-generic-x86_64-with-glibc2.39",
+        "python": "3.12.13 | packaged by Anaconda, Inc. | (main, Mar 19 2026, 20:20:58) [GCC 14.3.0]"
+      },
+      "independent_true_optimum": {
+        "exact_binary_rational": "37",
+        "value": 37.0
+      },
+      "independently_reconstructed_rounds": [
+        {
+          "interval_capacity_excess": "0",
+          "materialized_plan_l1": "0",
+          "max_raw_constraint_residual": 0.0,
+          "max_replay_soc_residual_kwh": 0.0,
+          "native_load_l1_residual": "0",
+          "negative_correction": "0",
+          "physical_paths": [
+            {
+              "movements": [
+                "out_A",
+                "depot_AB",
+                "in_B"
+              ],
+              "trips": [
+                "A",
+                "B"
+              ],
+              "vehicle": 0
+            }
+          ],
+          "physical_sessions": 2,
+          "positive_orphan_correction": "0",
+          "projection_l1": "0",
+          "raw_objective": "37",
+          "raw_to_replay_objective_delta": "0",
+          "raw_variable_count": 18,
+          "replay_load_l1": "0",
+          "replay_soc_events": 8,
+          "round": 0,
+          "session_capacity_excess": "0",
+          "whole_incumbent_correction": "0"
+        }
+      ],
+      "native_rounds": [
+        {
+          "native_incumbent": 37.0,
+          "native_lower_bound": 37.0,
+          "native_status": "OPTIMAL",
+          "physical_witness_saved": true,
+          "reference": {
+            "exact_binary_rational": "37",
+            "value": 37.0
+          },
+          "round": 0
+        }
+      ],
+      "pass": true,
+      "physical_witnesses": [
+        {
+          "load": [
+            0.0,
+            10.0,
+            0.0,
+            20.0
+          ],
+          "ops": 7.0,
+          "peak_kw": 20.0,
+          "sessions": 2,
+          "soc_events": 8,
+          "worst_soc_residual_kwh": 0.0
+        }
+      ],
+      "runtime_identity": {
+        "model_solver_name": "GRB",
+        "native_library_sha256": "57f87a886aa5a1fd8356494fa1b81e9f9c7d957c898d09e96145440c76c762b7",
+        "requested": "GRB",
+        "solver_class": "SolverGurobi",
+        "solver_module": "mip.gurobi"
+      },
+      "status": "certified"
+    },
+    {
+      "actual_native_calls": 1,
+      "cell": "cyclic_own_price",
+      "certified_interval": [
+        133.999999,
+        134.000001
+      ],
+      "environment": {
+        "gurobipy_version": "12.0.3",
+        "mip_version": "1.17.6",
+        "platform": "Linux-6.8.0-138-generic-x86_64-with-glibc2.39",
+        "python": "3.12.13 | packaged by Anaconda, Inc. | (main, Mar 19 2026, 20:20:58) [GCC 14.3.0]"
+      },
+      "independent_true_optimum": {
+        "exact_binary_rational": "134",
+        "value": 134.0
+      },
+      "independently_reconstructed_rounds": [
+        {
+          "interval_capacity_excess": "0",
+          "materialized_plan_l1": "0",
+          "max_raw_constraint_residual": 0.0,
+          "max_replay_soc_residual_kwh": 0.0,
+          "native_load_l1_residual": "0",
+          "negative_correction": "0",
+          "physical_paths": [
+            {
+              "movements": [
+                "out_A",
+                "in_A"
+              ],
+              "trips": [
+                "A"
+              ],
+              "vehicle": 0
+            },
+            {
+              "movements": [
+                "out_B",
+                "in_B"
+              ],
+              "trips": [
+                "B"
+              ],
+              "vehicle": 1
+            }
+          ],
+          "physical_sessions": 2,
+          "positive_orphan_correction": "0",
+          "projection_l1": "0",
+          "raw_objective": "134",
+          "raw_to_replay_objective_delta": "0",
+          "raw_variable_count": 18,
+          "replay_load_l1": "0",
+          "replay_soc_events": 8,
+          "round": 0,
+          "session_capacity_excess": "0",
+          "whole_incumbent_correction": "0"
+        }
+      ],
+      "native_rounds": [
+        {
+          "native_incumbent": 134.0,
+          "native_lower_bound": 134.0,
+          "native_status": "OPTIMAL",
+          "physical_witness_saved": true,
+          "reference": {
+            "exact_binary_rational": "134",
+            "value": 134.0
+          },
+          "round": 0
+        }
+      ],
+      "pass": true,
+      "physical_witnesses": [
+        {
+          "load": [
+            0.0,
+            0.0,
+            0.0,
+            30.0
+          ],
+          "ops": 14.0,
+          "peak_kw": 30.0,
+          "sessions": 2,
+          "soc_events": 8,
+          "worst_soc_residual_kwh": 0.0
+        }
+      ],
+      "runtime_identity": {
+        "model_solver_name": "GRB",
+        "native_library_sha256": "57f87a886aa5a1fd8356494fa1b81e9f9c7d957c898d09e96145440c76c762b7",
+        "requested": "GRB",
+        "solver_class": "SolverGurobi",
+        "solver_module": "mip.gurobi"
+      },
+      "status": "certified"
+    },
+    {
+      "actual_native_calls": 1,
+      "cell": "cyclic_hull_price",
+      "certified_interval": [
+        153.499999,
+        153.500001
+      ],
+      "environment": {
+        "gurobipy_version": "12.0.3",
+        "mip_version": "1.17.6",
+        "platform": "Linux-6.8.0-138-generic-x86_64-with-glibc2.39",
+        "python": "3.12.13 | packaged by Anaconda, Inc. | (main, Mar 19 2026, 20:20:58) [GCC 14.3.0]"
+      },
+      "independent_true_optimum": {
+        "exact_binary_rational": "43206408925085697/281474976710656",
+        "value": 153.5
+      },
+      "independently_reconstructed_rounds": [
+        {
+          "interval_capacity_excess": "0",
+          "materialized_plan_l1": "0",
+          "max_raw_constraint_residual": 0.0,
+          "max_replay_soc_residual_kwh": 0.0,
+          "native_load_l1_residual": "0",
+          "negative_correction": "0",
+          "physical_paths": [
+            {
+              "movements": [
+                "out_A",
+                "in_A"
+              ],
+              "trips": [
+                "A"
+              ],
+              "vehicle": 0
+            },
+            {
+              "movements": [
+                "out_B",
+                "in_B"
+              ],
+              "trips": [
+                "B"
+              ],
+              "vehicle": 1
+            }
+          ],
+          "physical_sessions": 2,
+          "positive_orphan_correction": "0",
+          "projection_l1": "0",
+          "raw_objective": "43206408925085699/281474976710656",
+          "raw_to_replay_objective_delta": "0",
+          "raw_variable_count": 18,
+          "replay_load_l1": "0",
+          "replay_soc_events": 8,
+          "round": 0,
+          "session_capacity_excess": "0",
+          "whole_incumbent_correction": "0"
+        }
+      ],
+      "native_rounds": [
+        {
+          "native_incumbent": 153.5,
+          "native_lower_bound": 153.5,
+          "native_status": "OPTIMAL",
+          "physical_witness_saved": true,
+          "reference": {
+            "exact_binary_rational": "43206408925085697/281474976710656",
+            "value": 153.5
+          },
+          "round": 0
+        }
+      ],
+      "pass": true,
+      "physical_witnesses": [
+        {
+          "load": [
+            0.0,
+            0.0,
+            0.0,
+            30.0
+          ],
+          "ops": 14.0,
+          "peak_kw": 30.0,
+          "sessions": 2,
+          "soc_events": 8,
+          "worst_soc_residual_kwh": 0.0
+        }
+      ],
+      "runtime_identity": {
+        "model_solver_name": "GRB",
+        "native_library_sha256": "57f87a886aa5a1fd8356494fa1b81e9f9c7d957c898d09e96145440c76c762b7",
+        "requested": "GRB",
+        "solver_class": "SolverGurobi",
+        "solver_module": "mip.gurobi"
+      },
+      "status": "certified"
+    },
+    {
+      "actual_native_calls": 4,
+      "cell": "cyclic_planner",
+      "certified_interval": [
+        96.999999,
+        97.000001
+      ],
+      "environment": {
+        "gurobipy_version": "12.0.3",
+        "mip_version": "1.17.6",
+        "platform": "Linux-6.8.0-138-generic-x86_64-with-glibc2.39",
+        "python": "3.12.13 | packaged by Anaconda, Inc. | (main, Mar 19 2026, 20:20:58) [GCC 14.3.0]"
+      },
+      "independent_true_optimum": {
+        "exact_binary_rational": "873698327709876249/9007199254740992",
+        "value": 97.0
+      },
+      "independently_reconstructed_rounds": [
+        {
+          "interval_capacity_excess": "0",
+          "materialized_plan_l1": "0",
+          "max_raw_constraint_residual": 0.0,
+          "max_replay_soc_residual_kwh": 0.0,
+          "native_load_l1_residual": "0",
+          "negative_correction": "0",
+          "physical_paths": [
+            {
+              "movements": [
+                "out_A",
+                "in_A"
+              ],
+              "trips": [
+                "A"
+              ],
+              "vehicle": 0
+            },
+            {
+              "movements": [
+                "out_B",
+                "in_B"
+              ],
+              "trips": [
+                "B"
+              ],
+              "vehicle": 1
+            }
+          ],
+          "physical_sessions": 2,
+          "positive_orphan_correction": "0",
+          "projection_l1": "0",
+          "raw_objective": "14",
+          "raw_to_replay_objective_delta": {
+            "pwl": "0",
+            "true": "0"
+          },
+          "raw_variable_count": 22,
+          "replay_load_l1": "0",
+          "replay_soc_events": 8,
+          "round": 0,
+          "session_capacity_excess": "0",
+          "whole_incumbent_correction": "0"
+        },
+        {
+          "interval_capacity_excess": "0",
+          "materialized_plan_l1": "0",
+          "max_raw_constraint_residual": 0.0,
+          "max_replay_soc_residual_kwh": 0.0,
+          "native_load_l1_residual": "0",
+          "negative_correction": "0",
+          "physical_paths": [
+            {
+              "movements": [
+                "out_A",
+                "depot_AB",
+                "in_B"
+              ],
+              "trips": [
+                "A",
+                "B"
+              ],
+              "vehicle": 0
+            }
+          ],
+          "physical_sessions": 2,
+          "positive_orphan_correction": "0",
+          "projection_l1": "0",
+          "raw_objective": "77",
+          "raw_to_replay_objective_delta": {
+            "pwl": "0",
+            "true": "0"
+          },
+          "raw_variable_count": 22,
+          "replay_load_l1": "0",
+          "replay_soc_events": 8,
+          "round": 1,
+          "session_capacity_excess": "0",
+          "whole_incumbent_correction": "0"
+        },
+        {
+          "interval_capacity_excess": "0",
+          "materialized_plan_l1": "0",
+          "max_raw_constraint_residual": 0.0,
+          "max_replay_soc_residual_kwh": 0.0,
+          "native_load_l1_residual": "0",
+          "negative_correction": "0",
+          "physical_paths": [
+            {
+              "movements": [
+                "out_A",
+                "in_A"
+              ],
+              "trips": [
+                "A"
+              ],
+              "vehicle": 0
+            },
+            {
+              "movements": [
+                "out_B",
+                "in_B"
+              ],
+              "trips": [
+                "B"
+              ],
+              "vehicle": 1
+            }
+          ],
+          "physical_sessions": 3,
+          "positive_orphan_correction": "0",
+          "projection_l1": "0",
+          "raw_objective": "94",
+          "raw_to_replay_objective_delta": {
+            "pwl": "0",
+            "true": "0"
+          },
+          "raw_variable_count": 22,
+          "replay_load_l1": "0",
+          "replay_soc_events": 9,
+          "round": 2,
+          "session_capacity_excess": "0",
+          "whole_incumbent_correction": "0"
+        },
+        {
+          "interval_capacity_excess": "0",
+          "materialized_plan_l1": "0",
+          "max_raw_constraint_residual": 0.0,
+          "max_replay_soc_residual_kwh": 0.0,
+          "native_load_l1_residual": "0",
+          "negative_correction": "0",
+          "physical_paths": [
+            {
+              "movements": [
+                "out_A",
+                "depot_AB",
+                "in_B"
+              ],
+              "trips": [
+                "A",
+                "B"
+              ],
+              "vehicle": 0
+            }
+          ],
+          "physical_sessions": 2,
+          "positive_orphan_correction": "0",
+          "projection_l1": "0",
+          "raw_objective": "97",
+          "raw_to_replay_objective_delta": {
+            "pwl": "0",
+            "true": "0"
+          },
+          "raw_variable_count": 22,
+          "replay_load_l1": "0",
+          "replay_soc_events": 8,
+          "round": 3,
+          "session_capacity_excess": "0",
+          "whole_incumbent_correction": "0"
+        }
+      ],
+      "native_rounds": [
+        {
+          "native_incumbent": 14.0,
+          "native_lower_bound": 14.0,
+          "native_status": "OPTIMAL",
+          "physical_witness_saved": true,
+          "reference": {
+            "exact_binary_rational": "14",
+            "value": 14.0
+          },
+          "round": 0
+        },
+        {
+          "native_incumbent": 77.0,
+          "native_lower_bound": 77.0,
+          "native_status": "OPTIMAL",
+          "physical_witness_saved": true,
+          "reference": {
+            "exact_binary_rational": "77",
+            "value": 77.0
+          },
+          "round": 1
+        },
+        {
+          "native_incumbent": 94.0,
+          "native_lower_bound": 94.0,
+          "native_status": "OPTIMAL",
+          "physical_witness_saved": true,
+          "reference": {
+            "exact_binary_rational": "94",
+            "value": 94.0
+          },
+          "round": 2
+        },
+        {
+          "native_incumbent": 97.0,
+          "native_lower_bound": 97.0,
+          "native_status": "OPTIMAL",
+          "physical_witness_saved": true,
+          "reference": {
+            "exact_binary_rational": "97",
+            "value": 97.0
+          },
+          "round": 3
+        }
+      ],
+      "pass": true,
+      "physical_witnesses": [
+        {
+          "load": [
+            0.0,
+            0.0,
+            0.0,
+            30.0
+          ],
+          "ops": 14.0,
+          "peak_kw": 30.0,
+          "sessions": 2,
+          "soc_events": 8,
+          "worst_soc_residual_kwh": 0.0
+        },
+        {
+          "load": [
+            0.0,
+            10.0,
+            0.0,
+            20.0
+          ],
+          "ops": 7.0,
+          "peak_kw": 20.0,
+          "sessions": 2,
+          "soc_events": 8,
+          "worst_soc_residual_kwh": 0.0
+        },
+        {
+          "load": [
+            0.0,
+            5.0,
+            0.0,
+            25.0
+          ],
+          "ops": 14.0,
+          "peak_kw": 25.0,
+          "sessions": 3,
+          "soc_events": 9,
+          "worst_soc_residual_kwh": 0.0
+        },
+        {
+          "load": [
+            0.0,
+            10.0,
+            0.0,
+            20.0
+          ],
+          "ops": 7.0,
+          "peak_kw": 20.0,
+          "sessions": 2,
+          "soc_events": 8,
+          "worst_soc_residual_kwh": 0.0
+        }
+      ],
+      "runtime_identity": {
+        "model_solver_name": "GRB",
+        "native_library_sha256": "57f87a886aa5a1fd8356494fa1b81e9f9c7d957c898d09e96145440c76c762b7",
+        "requested": "GRB",
+        "solver_class": "SolverGurobi",
+        "solver_module": "mip.gurobi"
+      },
+      "status": "certified"
+    },
+    {
+      "actual_native_calls": 4,
+      "cell": "preserved_reserve_planner",
+      "certified_interval": [
+        96.999999,
+        97.000001
+      ],
+      "environment": {
+        "gurobipy_version": "12.0.3",
+        "mip_version": "1.17.6",
+        "platform": "Linux-6.8.0-138-generic-x86_64-with-glibc2.39",
+        "python": "3.12.13 | packaged by Anaconda, Inc. | (main, Mar 19 2026, 20:20:58) [GCC 14.3.0]"
+      },
+      "independent_true_optimum": {
+        "exact_binary_rational": "873698327709876249/9007199254740992",
+        "value": 97.0
+      },
+      "independently_reconstructed_rounds": [
+        {
+          "interval_capacity_excess": "0",
+          "materialized_plan_l1": "0",
+          "max_raw_constraint_residual": 0.0,
+          "max_replay_soc_residual_kwh": 0.0,
+          "native_load_l1_residual": "0",
+          "negative_correction": "0",
+          "physical_paths": [
+            {
+              "movements": [
+                "out_A",
+                "in_A"
+              ],
+              "trips": [
+                "A"
+              ],
+              "vehicle": 0
+            },
+            {
+              "movements": [
+                "out_B",
+                "in_B"
+              ],
+              "trips": [
+                "B"
+              ],
+              "vehicle": 1
+            }
+          ],
+          "physical_sessions": 2,
+          "positive_orphan_correction": "0",
+          "projection_l1": "0",
+          "raw_objective": "14",
+          "raw_to_replay_objective_delta": {
+            "pwl": "0",
+            "true": "0"
+          },
+          "raw_variable_count": 22,
+          "replay_load_l1": "0",
+          "replay_soc_events": 8,
+          "round": 0,
+          "session_capacity_excess": "0",
+          "whole_incumbent_correction": "0"
+        },
+        {
+          "interval_capacity_excess": "0",
+          "materialized_plan_l1": "0",
+          "max_raw_constraint_residual": 0.0,
+          "max_replay_soc_residual_kwh": 0.0,
+          "native_load_l1_residual": "0",
+          "negative_correction": "0",
+          "physical_paths": [
+            {
+              "movements": [
+                "out_A",
+                "depot_AB",
+                "in_B"
+              ],
+              "trips": [
+                "A",
+                "B"
+              ],
+              "vehicle": 0
+            }
+          ],
+          "physical_sessions": 2,
+          "positive_orphan_correction": "0",
+          "projection_l1": "0",
+          "raw_objective": "77",
+          "raw_to_replay_objective_delta": {
+            "pwl": "0",
+            "true": "0"
+          },
+          "raw_variable_count": 22,
+          "replay_load_l1": "0",
+          "replay_soc_events": 8,
+          "round": 1,
+          "session_capacity_excess": "0",
+          "whole_incumbent_correction": "0"
+        },
+        {
+          "interval_capacity_excess": "0",
+          "materialized_plan_l1": "0",
+          "max_raw_constraint_residual": 0.0,
+          "max_replay_soc_residual_kwh": 0.0,
+          "native_load_l1_residual": "0",
+          "negative_correction": "0",
+          "physical_paths": [
+            {
+              "movements": [
+                "out_A",
+                "in_A"
+              ],
+              "trips": [
+                "A"
+              ],
+              "vehicle": 0
+            },
+            {
+              "movements": [
+                "out_B",
+                "in_B"
+              ],
+              "trips": [
+                "B"
+              ],
+              "vehicle": 1
+            }
+          ],
+          "physical_sessions": 3,
+          "positive_orphan_correction": "0",
+          "projection_l1": "0",
+          "raw_objective": "94",
+          "raw_to_replay_objective_delta": {
+            "pwl": "0",
+            "true": "0"
+          },
+          "raw_variable_count": 22,
+          "replay_load_l1": "0",
+          "replay_soc_events": 9,
+          "round": 2,
+          "session_capacity_excess": "0",
+          "whole_incumbent_correction": "0"
+        },
+        {
+          "interval_capacity_excess": "0",
+          "materialized_plan_l1": "0",
+          "max_raw_constraint_residual": 0.0,
+          "max_replay_soc_residual_kwh": 0.0,
+          "native_load_l1_residual": "0",
+          "negative_correction": "0",
+          "physical_paths": [
+            {
+              "movements": [
+                "out_A",
+                "depot_AB",
+                "in_B"
+              ],
+              "trips": [
+                "A",
+                "B"
+              ],
+              "vehicle": 0
+            }
+          ],
+          "physical_sessions": 2,
+          "positive_orphan_correction": "0",
+          "projection_l1": "0",
+          "raw_objective": "97",
+          "raw_to_replay_objective_delta": {
+            "pwl": "0",
+            "true": "0"
+          },
+          "raw_variable_count": 22,
+          "replay_load_l1": "0",
+          "replay_soc_events": 8,
+          "round": 3,
+          "session_capacity_excess": "0",
+          "whole_incumbent_correction": "0"
+        }
+      ],
+      "native_rounds": [
+        {
+          "native_incumbent": 14.0,
+          "native_lower_bound": 14.0,
+          "native_status": "OPTIMAL",
+          "physical_witness_saved": true,
+          "reference": {
+            "exact_binary_rational": "14",
+            "value": 14.0
+          },
+          "round": 0
+        },
+        {
+          "native_incumbent": 77.0,
+          "native_lower_bound": 77.0,
+          "native_status": "OPTIMAL",
+          "physical_witness_saved": true,
+          "reference": {
+            "exact_binary_rational": "77",
+            "value": 77.0
+          },
+          "round": 1
+        },
+        {
+          "native_incumbent": 94.0,
+          "native_lower_bound": 94.0,
+          "native_status": "OPTIMAL",
+          "physical_witness_saved": true,
+          "reference": {
+            "exact_binary_rational": "94",
+            "value": 94.0
+          },
+          "round": 2
+        },
+        {
+          "native_incumbent": 97.0,
+          "native_lower_bound": 97.0,
+          "native_status": "OPTIMAL",
+          "physical_witness_saved": true,
+          "reference": {
+            "exact_binary_rational": "97",
+            "value": 97.0
+          },
+          "round": 3
+        }
+      ],
+      "pass": true,
+      "physical_witnesses": [
+        {
+          "load": [
+            0.0,
+            0.0,
+            0.0,
+            30.0
+          ],
+          "ops": 14.0,
+          "peak_kw": 30.0,
+          "sessions": 2,
+          "soc_events": 8,
+          "worst_soc_residual_kwh": 0.0
+        },
+        {
+          "load": [
+            0.0,
+            10.0,
+            0.0,
+            20.0
+          ],
+          "ops": 7.0,
+          "peak_kw": 20.0,
+          "sessions": 2,
+          "soc_events": 8,
+          "worst_soc_residual_kwh": 0.0
+        },
+        {
+          "load": [
+            0.0,
+            5.0,
+            0.0,
+            25.0
+          ],
+          "ops": 14.0,
+          "peak_kw": 25.0,
+          "sessions": 3,
+          "soc_events": 9,
+          "worst_soc_residual_kwh": 0.0
+        },
+        {
+          "load": [
+            0.0,
+            10.0,
+            0.0,
+            20.0
+          ],
+          "ops": 7.0,
+          "peak_kw": 20.0,
+          "sessions": 2,
+          "soc_events": 8,
+          "worst_soc_residual_kwh": 0.0
+        }
+      ],
+      "runtime_identity": {
+        "model_solver_name": "GRB",
+        "native_library_sha256": "57f87a886aa5a1fd8356494fa1b81e9f9c7d957c898d09e96145440c76c762b7",
+        "requested": "GRB",
+        "solver_class": "SolverGurobi",
+        "solver_module": "mip.gurobi"
+      },
+      "status": "certified"
+    },
+    {
+      "actual_native_calls": 1,
+      "cell": "joint_flat",
+      "certified_interval": [
+        38.57894636842106,
+        38.57894836842105
+      ],
+      "environment": {
+        "gurobipy_version": "12.0.3",
+        "mip_version": "1.17.6",
+        "platform": "Linux-6.8.0-138-generic-x86_64-with-glibc2.39",
+        "python": "3.12.13 | packaged by Anaconda, Inc. | (main, Mar 19 2026, 20:20:58) [GCC 14.3.0]"
+      },
+      "independent_true_optimum": {
+        "exact_binary_rational": "55018975447709559/1426139882000657",
+        "value": 38.578947368421055
+      },
+      "independently_reconstructed_rounds": [
+        {
+          "interval_capacity_excess": "0",
+          "materialized_plan_l1": "0",
+          "max_raw_constraint_residual": 1.6174196485065437e-15,
+          "max_replay_soc_residual_kwh": 0.0,
+          "native_load_l1_residual": "0",
+          "negative_correction": "0",
+          "physical_paths": [
+            {
+              "movements": [
+                "out_A",
+                "depot_AB",
+                "in_B"
+              ],
+              "trips": [
+                "A",
+                "B"
+              ],
+              "vehicle": 0
+            }
+          ],
+          "physical_sessions": 2,
+          "positive_orphan_correction": "0",
+          "projection_l1": "0",
+          "raw_objective": "2714752078011985/70368744177664",
+          "raw_to_replay_objective_delta": "1/562949953421312",
+          "raw_variable_count": 18,
+          "replay_load_l1": "1/562949953421312",
+          "replay_soc_events": 8,
+          "round": 0,
+          "session_capacity_excess": "0",
+          "whole_incumbent_correction": "1/562949953421312"
+        }
+      ],
+      "native_rounds": [
+        {
+          "native_incumbent": 38.578947368421055,
+          "native_lower_bound": 38.578947368421055,
+          "native_status": "OPTIMAL",
+          "physical_witness_saved": true,
+          "reference": {
+            "exact_binary_rational": "55018975447709559/1426139882000657",
+            "value": 38.578947368421055
+          },
+          "round": 0
+        }
+      ],
+      "pass": true,
+      "physical_witnesses": [
+        {
+          "load": [
+            0.0,
+            11.578947368421057,
+            0.0,
+            20.0
+          ],
+          "ops": 7.0,
+          "peak_kw": 20.0,
+          "sessions": 2,
+          "soc_events": 8,
+          "worst_soc_residual_kwh": 0.0
+        }
+      ],
+      "runtime_identity": {
+        "model_solver_name": "GRB",
+        "native_library_sha256": "57f87a886aa5a1fd8356494fa1b81e9f9c7d957c898d09e96145440c76c762b7",
+        "requested": "GRB",
+        "solver_class": "SolverGurobi",
+        "solver_module": "mip.gurobi"
+      },
+      "status": "certified"
+    },
+    {
+      "actual_native_calls": 7,
+      "cell": "joint_planner",
+      "certified_interval": [
+        106.72299068975069,
+        106.7229926897507
+      ],
+      "environment": {
+        "gurobipy_version": "12.0.3",
+        "mip_version": "1.17.6",
+        "platform": "Linux-6.8.0-138-generic-x86_64-with-glibc2.39",
+        "python": "3.12.13 | packaged by Anaconda, Inc. | (main, Mar 19 2026, 20:20:58) [GCC 14.3.0]"
+      },
+      "independent_true_optimum": {
+        "exact_binary_rational": "1953550986999719768715663155889439/18304874667295630846244535884841",
+        "value": 106.7229916897507
+      },
+      "independently_reconstructed_rounds": [
+        {
+          "interval_capacity_excess": "3/562949953421312",
+          "materialized_plan_l1": "1/562949953421312",
+          "max_raw_constraint_residual": 5.329070518200751e-15,
+          "max_replay_soc_residual_kwh": 3.552713678800501e-15,
+          "native_load_l1_residual": "3/562949953421312",
+          "negative_correction": "0",
+          "physical_paths": [
+            {
+              "movements": [
+                "out_A",
+                "in_A"
+              ],
+              "trips": [
+                "A"
+              ],
+              "vehicle": 0
+            },
+            {
+              "movements": [
+                "out_B",
+                "in_B"
+              ],
+              "trips": [
+                "B"
+              ],
+              "vehicle": 1
+            }
+          ],
+          "physical_sessions": 3,
+          "positive_orphan_correction": "0",
+          "projection_l1": "0",
+          "raw_objective": "2859193184481927/140737488355328",
+          "raw_to_replay_objective_delta": {
+            "pwl": "-1/1125899906842624",
+            "true": "30453504272261839817707299407093533/730750818665451459101842416358141509827966271488"
+          },
+          "raw_variable_count": 22,
+          "replay_load_l1": "1/4503599627370496",
+          "replay_soc_events": 9,
+          "round": 0,
+          "session_capacity_excess": "5/562949953421312",
+          "whole_incumbent_correction": "97/4503599627370496"
+        },
+        {
+          "interval_capacity_excess": "0",
+          "materialized_plan_l1": "0",
+          "max_raw_constraint_residual": 7.716050021144838e-15,
+          "max_replay_soc_residual_kwh": 3.552713678800501e-15,
+          "native_load_l1_residual": "0",
+          "negative_correction": "0",
+          "physical_paths": [
+            {
+              "movements": [
+                "out_A",
+                "depot_AB",
+                "in_B"
+              ],
+              "trips": [
+                "A",
+                "B"
+              ],
+              "vehicle": 0
+            }
+          ],
+          "physical_sessions": 2,
+          "positive_orphan_correction": "0",
+          "projection_l1": "0",
+          "raw_objective": "12105373271250113/140737488355328",
+          "raw_to_replay_objective_delta": {
+            "pwl": "0",
+            "true": "0"
+          },
+          "raw_variable_count": 22,
+          "replay_load_l1": "0",
+          "replay_soc_events": 8,
+          "round": 1,
+          "session_capacity_excess": "0",
+          "whole_incumbent_correction": "0"
+        },
+        {
+          "interval_capacity_excess": "0",
+          "materialized_plan_l1": "0",
+          "max_raw_constraint_residual": 9.049086503205161e-15,
+          "max_replay_soc_residual_kwh": 3.552713678800501e-15,
+          "native_load_l1_residual": "0",
+          "negative_correction": "0",
+          "physical_paths": [
+            {
+              "movements": [
+                "out_A",
+                "in_A"
+              ],
+              "trips": [
+                "A"
+              ],
+              "vehicle": 0
+            },
+            {
+              "movements": [
+                "out_B",
+                "in_B"
+              ],
+              "trips": [
+                "B"
+              ],
+              "vehicle": 1
+            }
+          ],
+          "physical_sessions": 3,
+          "positive_orphan_correction": "0",
+          "projection_l1": "0",
+          "raw_objective": "3581398716831637/35184372088832",
+          "raw_to_replay_objective_delta": {
+            "pwl": "0",
+            "true": "0"
+          },
+          "raw_variable_count": 22,
+          "replay_load_l1": "0",
+          "replay_soc_events": 9,
+          "round": 2,
+          "session_capacity_excess": "0",
+          "whole_incumbent_correction": "0"
+        },
+        {
+          "interval_capacity_excess": "0",
+          "materialized_plan_l1": "0",
+          "max_raw_constraint_residual": 1.1419858595235744e-14,
+          "max_replay_soc_residual_kwh": 3.552713678800501e-15,
+          "native_load_l1_residual": "0",
+          "negative_correction": "0",
+          "physical_paths": [
+            {
+              "movements": [
+                "out_A",
+                "in_A"
+              ],
+              "trips": [
+                "A"
+              ],
+              "vehicle": 0
+            },
+            {
+              "movements": [
+                "out_B",
+                "in_B"
+              ],
+              "trips": [
+                "B"
+              ],
+              "vehicle": 1
+            }
+          ],
+          "physical_sessions": 3,
+          "positive_orphan_correction": "0",
+          "projection_l1": "0",
+          "raw_objective": "7471562228060559/70368744177664",
+          "raw_to_replay_objective_delta": {
+            "pwl": "0",
+            "true": "0"
+          },
+          "raw_variable_count": 22,
+          "replay_load_l1": "0",
+          "replay_soc_events": 9,
+          "round": 3,
+          "session_capacity_excess": "0",
+          "whole_incumbent_correction": "0"
+        },
+        {
+          "interval_capacity_excess": "0",
+          "materialized_plan_l1": "0",
+          "max_raw_constraint_residual": 1.0508553092030955e-14,
+          "max_replay_soc_residual_kwh": 0.0,
+          "native_load_l1_residual": "1/562949953421312",
+          "negative_correction": "0",
+          "physical_paths": [
+            {
+              "movements": [
+                "out_A",
+                "depot_AB",
+                "in_B"
+              ],
+              "trips": [
+                "A",
+                "B"
+              ],
+              "vehicle": 0
+            }
+          ],
+          "physical_sessions": 2,
+          "positive_orphan_correction": "0",
+          "projection_l1": "0",
+          "raw_objective": "15014935662090785/140737488355328",
+          "raw_to_replay_objective_delta": {
+            "pwl": "3602879701896397/316912650057057350374175801344",
+            "true": "128099429075694761473018354648937/11417981541647679048466287755595961091061972992"
+          },
+          "raw_variable_count": 22,
+          "replay_load_l1": "0",
+          "replay_soc_events": 8,
+          "round": 4,
+          "session_capacity_excess": "0",
+          "whole_incumbent_correction": "1/562949953421312"
+        },
+        {
+          "interval_capacity_excess": "0",
+          "materialized_plan_l1": "0",
+          "max_raw_constraint_residual": 4.104319223666894e-15,
+          "max_replay_soc_residual_kwh": 3.552713678800501e-15,
+          "native_load_l1_residual": "0",
+          "negative_correction": "0",
+          "physical_paths": [
+            {
+              "movements": [
+                "out_A",
+                "in_A"
+              ],
+              "trips": [
+                "A"
+              ],
+              "vehicle": 0
+            },
+            {
+              "movements": [
+                "out_B",
+                "in_B"
+              ],
+              "trips": [
+                "B"
+              ],
+              "vehicle": 1
+            }
+          ],
+          "physical_sessions": 3,
+          "positive_orphan_correction": "0",
+          "projection_l1": "0",
+          "raw_objective": "30032912189580955/281474976710656",
+          "raw_to_replay_objective_delta": {
+            "pwl": "370849129634365/79228162514264337593543950336",
+            "true": "206773828433017295730381462901469/45671926166590716193865151022383844364247891968"
+          },
+          "raw_variable_count": 22,
+          "replay_load_l1": "1/1125899906842624",
+          "replay_soc_events": 9,
+          "round": 5,
+          "session_capacity_excess": "0",
+          "whole_incumbent_correction": "1/1125899906842624"
+        },
+        {
+          "interval_capacity_excess": "0",
+          "materialized_plan_l1": "0",
+          "max_raw_constraint_residual": 1.7763568394002505e-15,
+          "max_replay_soc_residual_kwh": 0.0,
+          "native_load_l1_residual": "1/562949953421312",
+          "negative_correction": "0",
+          "physical_paths": [
+            {
+              "movements": [
+                "out_A",
+                "depot_AB",
+                "in_B"
+              ],
+              "trips": [
+                "A",
+                "B"
+              ],
+              "vehicle": 0
+            }
+          ],
+          "physical_sessions": 2,
+          "positive_orphan_correction": "0",
+          "projection_l1": "0",
+          "raw_objective": "7509962900091027/70368744177664",
+          "raw_to_replay_objective_delta": {
+            "pwl": "3555473390029339/316912650057057350374175801344",
+            "true": "128099429075694761473018354648937/11417981541647679048466287755595961091061972992"
+          },
+          "raw_variable_count": 22,
+          "replay_load_l1": "0",
+          "replay_soc_events": 8,
+          "round": 6,
+          "session_capacity_excess": "0",
+          "whole_incumbent_correction": "1/562949953421312"
+        }
+      ],
+      "native_rounds": [
+        {
+          "native_incumbent": 20.315789473684212,
+          "native_lower_bound": 20.315789473684212,
+          "native_status": "OPTIMAL",
+          "physical_witness_saved": true,
+          "reference": {
+            "exact_binary_rational": "28973157602750198/1426139882000657",
+            "value": 20.315789473684216
+          },
+          "round": 0
+        },
+        {
+          "native_incumbent": 86.01385041551248,
+          "native_lower_bound": 86.01385041551248,
+          "native_status": "OPTIMAL",
+          "physical_witness_saved": true,
+          "reference": {
+            "exact_binary_rational": "2209786317905221065252088377051451/25691052164625448002706617663488",
+            "value": 86.01385041551247
+          },
+          "round": 1
+        },
+        {
+          "native_incumbent": 101.78947368421055,
+          "native_lower_bound": 101.78947368421053,
+          "native_status": "OPTIMAL",
+          "physical_witness_saved": true,
+          "reference": {
+            "exact_binary_rational": "1534144037791659681139582751389221536018127419139/15071735634974937532453536261887969902521745408",
+            "value": 101.78947368421055
+          },
+          "round": 2
+        },
+        {
+          "native_incumbent": 106.17728531855958,
+          "native_lower_bound": 106.17728531855956,
+          "native_status": "OPTIMAL",
+          "physical_witness_saved": true,
+          "reference": {
+            "exact_binary_rational": "400068993690158920554186372910982669922804420677/3767933908743734383113384065471992475630436352",
+            "value": 106.17728531855958
+          },
+          "round": 3
+        },
+        {
+          "native_incumbent": 106.68753462603877,
+          "native_lower_bound": 106.68753462603877,
+          "native_status": "OPTIMAL",
+          "physical_witness_saved": true,
+          "reference": {
+            "exact_binary_rational": "128480391440289675602385456029005/1204268070216817875126872702976",
+            "value": 106.6875346260388
+          },
+          "round": 4
+        },
+        {
+          "native_incumbent": 106.69833795013857,
+          "native_lower_bound": 106.69833795013857,
+          "native_status": "OPTIMAL",
+          "physical_witness_saved": true,
+          "reference": {
+            "exact_binary_rational": "100508071392231346222397150006673028632767287931/941983477185933595778346016367998118907609088",
+            "value": 106.69833795013852
+          },
+          "round": 5
+        },
+        {
+          "native_incumbent": 106.72299168975069,
+          "native_lower_bound": 106.72299168975069,
+          "native_status": "OPTIMAL",
+          "physical_witness_saved": true,
+          "reference": {
+            "exact_binary_rational": "128523091249981565469732986222861/1204268070216817875126872702976",
+            "value": 106.7229916897507
+          },
+          "round": 6
+        }
+      ],
+      "pass": true,
+      "physical_witnesses": [
+        {
+          "load": [
+            0.0,
+            1.5789473684210529,
+            0.0,
+            30.000000000000007
+          ],
+          "ops": 14.0,
+          "peak_kw": 30.000000000000018,
+          "sessions": 3,
+          "soc_events": 9,
+          "worst_soc_residual_kwh": 3.552713678800501e-15
+        },
+        {
+          "load": [
+            0.0,
+            12.0,
+            0.0,
+            19.57894736842106
+          ],
+          "ops": 7.0,
+          "peak_kw": 19.57894736842106,
+          "sessions": 2,
+          "soc_events": 8,
+          "worst_soc_residual_kwh": 3.552713678800501e-15
+        },
+        {
+          "load": [
+            0.0,
+            6.7894736842105265,
+            0.0,
+            24.78947368421053
+          ],
+          "ops": 14.0,
+          "peak_kw": 24.789473684210535,
+          "sessions": 3,
+          "soc_events": 9,
+          "worst_soc_residual_kwh": 3.552713678800501e-15
+        },
+        {
+          "load": [
+            0.0,
+            4.18421052631579,
+            0.0,
+            27.394736842105267
+          ],
+          "ops": 14.0,
+          "peak_kw": 27.394736842105278,
+          "sessions": 3,
+          "soc_events": 9,
+          "worst_soc_residual_kwh": 3.552713678800501e-15
+        },
+        {
+          "load": [
+            0.0,
+            11.578947368421053,
+            0.0,
+            20.0
+          ],
+          "ops": 7.0,
+          "peak_kw": 20.0,
+          "sessions": 2,
+          "soc_events": 8,
+          "worst_soc_residual_kwh": 0.0
+        },
+        {
+          "load": [
+            0.0,
+            5.486842105263158,
+            0.0,
+            26.092105263157897
+          ],
+          "ops": 14.0,
+          "peak_kw": 26.092105263157915,
+          "sessions": 3,
+          "soc_events": 9,
+          "worst_soc_residual_kwh": 3.552713678800501e-15
+        },
+        {
+          "load": [
+            0.0,
+            11.578947368421053,
+            0.0,
+            20.0
+          ],
+          "ops": 7.0,
+          "peak_kw": 20.0,
+          "sessions": 2,
+          "soc_events": 8,
+          "worst_soc_residual_kwh": 0.0
+        }
+      ],
+      "runtime_identity": {
+        "model_solver_name": "GRB",
+        "native_library_sha256": "57f87a886aa5a1fd8356494fa1b81e9f9c7d957c898d09e96145440c76c762b7",
+        "requested": "GRB",
+        "solver_class": "SolverGurobi",
+        "solver_module": "mip.gurobi"
+      },
+      "status": "certified"
+    },
+    {
+      "actual_native_calls": 4,
+      "cell": "fixed_reserve_planner",
+      "certified_interval": [
+        98.999999,
+        99.000001
+      ],
+      "environment": {
+        "gurobipy_version": "12.0.3",
+        "mip_version": "1.17.6",
+        "platform": "Linux-6.8.0-138-generic-x86_64-with-glibc2.39",
+        "python": "3.12.13 | packaged by Anaconda, Inc. | (main, Mar 19 2026, 20:20:58) [GCC 14.3.0]"
+      },
+      "independent_true_optimum": {
+        "exact_binary_rational": "6425467362436849781178760318418953/64903710731685348959510906011648",
+        "value": 99.0
+      },
+      "independently_reconstructed_rounds": [
+        {
+          "interval_capacity_excess": "0",
+          "materialized_plan_l1": "0",
+          "max_raw_constraint_residual": 0.0,
+          "max_replay_soc_residual_kwh": 0.0,
+          "native_load_l1_residual": "0",
+          "negative_correction": "0",
+          "physical_paths": [
+            {
+              "movements": [
+                "out_A",
+                "in_A"
+              ],
+              "trips": [
+                "A"
+              ],
+              "vehicle": 0
+            },
+            {
+              "movements": [
+                "out_B",
+                "in_B"
+              ],
+              "trips": [
+                "B"
+              ],
+              "vehicle": 1
+            }
+          ],
+          "physical_sessions": 2,
+          "positive_orphan_correction": "0",
+          "projection_l1": "0",
+          "raw_objective": "14",
+          "raw_to_replay_objective_delta": {
+            "pwl": "0",
+            "true": "0"
+          },
+          "raw_variable_count": 22,
+          "replay_load_l1": "0",
+          "replay_soc_events": 8,
+          "round": 0,
+          "session_capacity_excess": "0",
+          "whole_incumbent_correction": "0"
+        },
+        {
+          "interval_capacity_excess": "0",
+          "materialized_plan_l1": "0",
+          "max_raw_constraint_residual": 0.0,
+          "max_replay_soc_residual_kwh": 0.0,
+          "native_load_l1_residual": "0",
+          "negative_correction": "0",
+          "physical_paths": [
+            {
+              "movements": [
+                "out_A",
+                "in_A"
+              ],
+              "trips": [
+                "A"
+              ],
+              "vehicle": 0
+            },
+            {
+              "movements": [
+                "out_B",
+                "in_B"
+              ],
+              "trips": [
+                "B"
+              ],
+              "vehicle": 1
+            }
+          ],
+          "physical_sessions": 3,
+          "positive_orphan_correction": "0",
+          "projection_l1": "0",
+          "raw_objective": "84",
+          "raw_to_replay_objective_delta": {
+            "pwl": "0",
+            "true": "0"
+          },
+          "raw_variable_count": 22,
+          "replay_load_l1": "0",
+          "replay_soc_events": 9,
+          "round": 1,
+          "session_capacity_excess": "0",
+          "whole_incumbent_correction": "0"
+        },
+        {
+          "interval_capacity_excess": "0",
+          "materialized_plan_l1": "0",
+          "max_raw_constraint_residual": 0.0,
+          "max_replay_soc_residual_kwh": 0.0,
+          "native_load_l1_residual": "0",
+          "negative_correction": "0",
+          "physical_paths": [
+            {
+              "movements": [
+                "out_A",
+                "in_A"
+              ],
+              "trips": [
+                "A"
+              ],
+              "vehicle": 0
+            },
+            {
+              "movements": [
+                "out_B",
+                "in_B"
+              ],
+              "trips": [
+                "B"
+              ],
+              "vehicle": 1
+            }
+          ],
+          "physical_sessions": 3,
+          "positive_orphan_correction": "0",
+          "projection_l1": "0",
+          "raw_objective": "94",
+          "raw_to_replay_objective_delta": {
+            "pwl": "0",
+            "true": "0"
+          },
+          "raw_variable_count": 22,
+          "replay_load_l1": "0",
+          "replay_soc_events": 9,
+          "round": 2,
+          "session_capacity_excess": "0",
+          "whole_incumbent_correction": "0"
+        },
+        {
+          "interval_capacity_excess": "0",
+          "materialized_plan_l1": "0",
+          "max_raw_constraint_residual": 0.0,
+          "max_replay_soc_residual_kwh": 0.0,
+          "native_load_l1_residual": "0",
+          "negative_correction": "0",
+          "physical_paths": [
+            {
+              "movements": [
+                "out_A",
+                "in_A"
+              ],
+              "trips": [
+                "A"
+              ],
+              "vehicle": 0
+            },
+            {
+              "movements": [
+                "out_B",
+                "in_B"
+              ],
+              "trips": [
+                "B"
+              ],
+              "vehicle": 1
+            }
+          ],
+          "physical_sessions": 3,
+          "positive_orphan_correction": "0",
+          "projection_l1": "0",
+          "raw_objective": "99",
+          "raw_to_replay_objective_delta": {
+            "pwl": "0",
+            "true": "0"
+          },
+          "raw_variable_count": 22,
+          "replay_load_l1": "0",
+          "replay_soc_events": 9,
+          "round": 3,
+          "session_capacity_excess": "0",
+          "whole_incumbent_correction": "0"
+        }
+      ],
+      "native_rounds": [
+        {
+          "native_incumbent": 14.0,
+          "native_lower_bound": 14.0,
+          "native_status": "OPTIMAL",
+          "physical_witness_saved": true,
+          "reference": {
+            "exact_binary_rational": "14",
+            "value": 14.0
+          },
+          "round": 0
+        },
+        {
+          "native_incumbent": 84.0,
+          "native_lower_bound": 84.0,
+          "native_status": "OPTIMAL",
+          "physical_witness_saved": true,
+          "reference": {
+            "exact_binary_rational": "84",
+            "value": 84.0
+          },
+          "round": 1
+        },
+        {
+          "native_incumbent": 94.0,
+          "native_lower_bound": 94.0,
+          "native_status": "OPTIMAL",
+          "physical_witness_saved": true,
+          "reference": {
+            "exact_binary_rational": "94",
+            "value": 94.0
+          },
+          "round": 2
+        },
+        {
+          "native_incumbent": 99.0,
+          "native_lower_bound": 99.0,
+          "native_status": "OPTIMAL",
+          "physical_witness_saved": true,
+          "reference": {
+            "exact_binary_rational": "99",
+            "value": 99.0
+          },
+          "round": 3
+        }
+      ],
+      "pass": true,
+      "physical_witnesses": [
+        {
+          "load": [
+            0.0,
+            0.0,
+            0.0,
+            30.0
+          ],
+          "ops": 14.0,
+          "peak_kw": 30.0,
+          "sessions": 2,
+          "soc_events": 8,
+          "worst_soc_residual_kwh": 0.0
+        },
+        {
+          "load": [
+            0.0,
+            10.0,
+            0.0,
+            20.0
+          ],
+          "ops": 14.0,
+          "peak_kw": 20.0,
+          "sessions": 3,
+          "soc_events": 9,
+          "worst_soc_residual_kwh": 0.0
+        },
+        {
+          "load": [
+            0.0,
+            5.0,
+            0.0,
+            25.0
+          ],
+          "ops": 14.0,
+          "peak_kw": 25.0,
+          "sessions": 3,
+          "soc_events": 9,
+          "worst_soc_residual_kwh": 0.0
+        },
+        {
+          "load": [
+            0.0,
+            2.5,
+            0.0,
+            27.5
+          ],
+          "ops": 14.0,
+          "peak_kw": 27.500000000000007,
+          "sessions": 3,
+          "soc_events": 9,
+          "worst_soc_residual_kwh": 0.0
+        }
+      ],
+      "runtime_identity": {
+        "model_solver_name": "GRB",
+        "native_library_sha256": "57f87a886aa5a1fd8356494fa1b81e9f9c7d957c898d09e96145440c76c762b7",
+        "requested": "GRB",
+        "solver_class": "SolverGurobi",
+        "solver_module": "mip.gurobi"
+      },
+      "status": "certified"
+    },
+    {
+      "actual_native_calls": 1,
+      "cell": "fixed_reserve_one_bus",
+      "certified_interval": null,
+      "environment": {
+        "gurobipy_version": "12.0.3",
+        "mip_version": "1.17.6",
+        "platform": "Linux-6.8.0-138-generic-x86_64-with-glibc2.39",
+        "python": "3.12.13 | packaged by Anaconda, Inc. | (main, Mar 19 2026, 20:20:58) [GCC 14.3.0]"
+      },
+      "independent_true_optimum": null,
+      "independently_reconstructed_rounds": [],
+      "native_rounds": [
+        {
+          "native_incumbent": null,
+          "native_lower_bound": null,
+          "native_status": "INFEASIBLE",
+          "physical_witness_saved": false,
+          "reference": null,
+          "round": 0
+        }
+      ],
+      "pass": true,
+      "physical_witnesses": [],
+      "runtime_identity": {
+        "model_solver_name": "GRB",
+        "native_library_sha256": "57f87a886aa5a1fd8356494fa1b81e9f9c7d957c898d09e96145440c76c762b7",
+        "requested": "GRB",
+        "solver_class": "SolverGurobi",
+        "solver_module": "mip.gurobi"
+      },
+      "status": "infeasible"
+    },
+    {
+      "actual_native_calls": 1,
+      "cell": "terminal_capacity_failure",
+      "certified_interval": null,
+      "environment": {
+        "gurobipy_version": "12.0.3",
+        "mip_version": "1.17.6",
+        "platform": "Linux-6.8.0-138-generic-x86_64-with-glibc2.39",
+        "python": "3.12.13 | packaged by Anaconda, Inc. | (main, Mar 19 2026, 20:20:58) [GCC 14.3.0]"
+      },
+      "independent_true_optimum": null,
+      "independently_reconstructed_rounds": [],
+      "native_rounds": [
+        {
+          "native_incumbent": null,
+          "native_lower_bound": null,
+          "native_status": "INFEASIBLE",
+          "physical_witness_saved": false,
+          "reference": null,
+          "round": 0
+        }
+      ],
+      "pass": true,
+      "physical_witnesses": [],
+      "runtime_identity": {
+        "model_solver_name": "GRB",
+        "native_library_sha256": "57f87a886aa5a1fd8356494fa1b81e9f9c7d957c898d09e96145440c76c762b7",
+        "requested": "GRB",
+        "solver_class": "SolverGurobi",
+        "solver_module": "mip.gurobi"
+      },
+      "status": "infeasible"
+    },
+    {
+      "actual_native_calls": 1,
+      "cell": "partial_overlap_failure",
+      "certified_interval": null,
+      "environment": {
+        "gurobipy_version": "12.0.3",
+        "mip_version": "1.17.6",
+        "platform": "Linux-6.8.0-138-generic-x86_64-with-glibc2.39",
+        "python": "3.12.13 | packaged by Anaconda, Inc. | (main, Mar 19 2026, 20:20:58) [GCC 14.3.0]"
+      },
+      "independent_true_optimum": null,
+      "independently_reconstructed_rounds": [],
+      "native_rounds": [
+        {
+          "native_incumbent": null,
+          "native_lower_bound": null,
+          "native_status": "INFEASIBLE",
+          "physical_witness_saved": false,
+          "reference": null,
+          "round": 0
+        }
+      ],
+      "pass": true,
+      "physical_witnesses": [],
+      "runtime_identity": {
+        "model_solver_name": "GRB",
+        "native_library_sha256": "57f87a886aa5a1fd8356494fa1b81e9f9c7d957c898d09e96145440c76c762b7",
+        "requested": "GRB",
+        "solver_class": "SolverGurobi",
+        "solver_module": "mip.gurobi"
+      },
+      "status": "infeasible"
+    },
+    {
+      "actual_native_calls": 1,
+      "cell": "serial_connector",
+      "certified_interval": [
+        23.999999,
+        24.000001
+      ],
+      "environment": {
+        "gurobipy_version": "12.0.3",
+        "mip_version": "1.17.6",
+        "platform": "Linux-6.8.0-138-generic-x86_64-with-glibc2.39",
+        "python": "3.12.13 | packaged by Anaconda, Inc. | (main, Mar 19 2026, 20:20:58) [GCC 14.3.0]"
+      },
+      "independent_true_optimum": {
+        "exact_binary_rational": "24",
+        "value": 24.0
+      },
+      "independently_reconstructed_rounds": [
+        {
+          "interval_capacity_excess": "0",
+          "materialized_plan_l1": "0",
+          "max_raw_constraint_residual": 0.0,
+          "max_replay_soc_residual_kwh": 0.0,
+          "native_load_l1_residual": "0",
+          "negative_correction": "0",
+          "physical_paths": [
+            {
+              "movements": [
+                "out_A",
+                "in_A"
+              ],
+              "trips": [
+                "A"
+              ],
+              "vehicle": 0
+            },
+            {
+              "movements": [
+                "out_B",
+                "in_B"
+              ],
+              "trips": [
+                "B"
+              ],
+              "vehicle": 1
+            }
+          ],
+          "physical_sessions": 2,
+          "positive_orphan_correction": "0",
+          "projection_l1": "0",
+          "raw_objective": "24",
+          "raw_to_replay_objective_delta": "0",
+          "raw_variable_count": 14,
+          "replay_load_l1": "0",
+          "replay_soc_events": 8,
+          "round": 0,
+          "session_capacity_excess": "0",
+          "whole_incumbent_correction": "0"
+        }
+      ],
+      "native_rounds": [
+        {
+          "native_incumbent": 24.0,
+          "native_lower_bound": 24.0,
+          "native_status": "OPTIMAL",
+          "physical_witness_saved": true,
+          "reference": {
+            "exact_binary_rational": "24",
+            "value": 24.0
+          },
+          "round": 0
+        }
+      ],
+      "pass": true,
+      "physical_witnesses": [
+        {
+          "load": [
+            5.0,
+            5.0
+          ],
+          "ops": 14.0,
+          "peak_kw": 10.0,
+          "sessions": 2,
+          "soc_events": 8,
+          "worst_soc_residual_kwh": 0.0
+        }
+      ],
+      "runtime_identity": {
+        "model_solver_name": "GRB",
+        "native_library_sha256": "57f87a886aa5a1fd8356494fa1b81e9f9c7d957c898d09e96145440c76c762b7",
+        "requested": "GRB",
+        "solver_class": "SolverGurobi",
+        "solver_module": "mip.gurobi"
+      },
+      "status": "certified"
+    },
+    {
+      "actual_native_calls": 1,
+      "cell": "directed_multileg",
+      "certified_interval": [
+        35.999999,
+        36.000001
+      ],
+      "environment": {
+        "gurobipy_version": "12.0.3",
+        "mip_version": "1.17.6",
+        "platform": "Linux-6.8.0-138-generic-x86_64-with-glibc2.39",
+        "python": "3.12.13 | packaged by Anaconda, Inc. | (main, Mar 19 2026, 20:20:58) [GCC 14.3.0]"
+      },
+      "independent_true_optimum": {
+        "exact_binary_rational": "36",
+        "value": 36.0
+      },
+      "independently_reconstructed_rounds": [
+        {
+          "interval_capacity_excess": "0",
+          "materialized_plan_l1": "0",
+          "max_raw_constraint_residual": 0.0,
+          "max_replay_soc_residual_kwh": 0.0,
+          "native_load_l1_residual": "0",
+          "negative_correction": "0",
+          "physical_paths": [
+            {
+              "movements": [
+                "out_A",
+                "in_A"
+              ],
+              "trips": [
+                "A"
+              ],
+              "vehicle": 0
+            }
+          ],
+          "physical_sessions": 1,
+          "positive_orphan_correction": "0",
+          "projection_l1": "0",
+          "raw_objective": "36",
+          "raw_to_replay_objective_delta": "0",
+          "raw_variable_count": 7,
+          "replay_load_l1": "0",
+          "replay_soc_events": 6,
+          "round": 0,
+          "session_capacity_excess": "0",
+          "whole_incumbent_correction": "0"
+        }
+      ],
+      "native_rounds": [
+        {
+          "native_incumbent": 36.0,
+          "native_lower_bound": 36.0,
+          "native_status": "OPTIMAL",
+          "physical_witness_saved": true,
+          "reference": {
+            "exact_binary_rational": "36",
+            "value": 36.0
+          },
+          "round": 0
+        }
+      ],
+      "pass": true,
+      "physical_witnesses": [
+        {
+          "load": [
+            0.0,
+            14.0
+          ],
+          "ops": 22.0,
+          "peak_kw": 18.666666666666668,
+          "sessions": 1,
+          "soc_events": 6,
+          "worst_soc_residual_kwh": 0.0
+        }
+      ],
+      "runtime_identity": {
+        "model_solver_name": "GRB",
+        "native_library_sha256": "57f87a886aa5a1fd8356494fa1b81e9f9c7d957c898d09e96145440c76c762b7",
+        "requested": "GRB",
+        "solver_class": "SolverGurobi",
+        "solver_module": "mip.gurobi"
+      },
+      "status": "certified"
+    },
+    {
+      "actual_native_calls": 1,
+      "cell": "halfminute_multileg",
+      "certified_interval": [
+        35.999999,
+        36.000001
+      ],
+      "environment": {
+        "gurobipy_version": "12.0.3",
+        "mip_version": "1.17.6",
+        "platform": "Linux-6.8.0-138-generic-x86_64-with-glibc2.39",
+        "python": "3.12.13 | packaged by Anaconda, Inc. | (main, Mar 19 2026, 20:20:58) [GCC 14.3.0]"
+      },
+      "independent_true_optimum": {
+        "exact_binary_rational": "36",
+        "value": 36.0
+      },
+      "independently_reconstructed_rounds": [
+        {
+          "interval_capacity_excess": "0",
+          "materialized_plan_l1": "0",
+          "max_raw_constraint_residual": 0.0,
+          "max_replay_soc_residual_kwh": 0.0,
+          "native_load_l1_residual": "0",
+          "negative_correction": "0",
+          "physical_paths": [
+            {
+              "movements": [
+                "out_A",
+                "in_A"
+              ],
+              "trips": [
+                "A"
+              ],
+              "vehicle": 0
+            }
+          ],
+          "physical_sessions": 1,
+          "positive_orphan_correction": "0",
+          "projection_l1": "0",
+          "raw_objective": "36",
+          "raw_to_replay_objective_delta": "0",
+          "raw_variable_count": 7,
+          "replay_load_l1": "0",
+          "replay_soc_events": 6,
+          "round": 0,
+          "session_capacity_excess": "0",
+          "whole_incumbent_correction": "0"
+        }
+      ],
+      "native_rounds": [
+        {
+          "native_incumbent": 36.0,
+          "native_lower_bound": 36.0,
+          "native_status": "OPTIMAL",
+          "physical_witness_saved": true,
+          "reference": {
+            "exact_binary_rational": "36",
+            "value": 36.0
+          },
+          "round": 0
+        }
+      ],
+      "pass": true,
+      "physical_witnesses": [
+        {
+          "load": [
+            0.0,
+            14.0
+          ],
+          "ops": 22.0,
+          "peak_kw": 37.333333333333336,
+          "sessions": 1,
+          "soc_events": 6,
+          "worst_soc_residual_kwh": 0.0
+        }
+      ],
+      "runtime_identity": {
+        "model_solver_name": "GRB",
+        "native_library_sha256": "57f87a886aa5a1fd8356494fa1b81e9f9c7d957c898d09e96145440c76c762b7",
+        "requested": "GRB",
+        "solver_class": "SolverGurobi",
+        "solver_module": "mip.gurobi"
+      },
+      "status": "certified"
+    },
+    {
+      "actual_native_calls": 1,
+      "cell": "halfminute_capacity",
+      "certified_interval": [
+        7.499999,
+        7.500001
+      ],
+      "environment": {
+        "gurobipy_version": "12.0.3",
+        "mip_version": "1.17.6",
+        "platform": "Linux-6.8.0-138-generic-x86_64-with-glibc2.39",
+        "python": "3.12.13 | packaged by Anaconda, Inc. | (main, Mar 19 2026, 20:20:58) [GCC 14.3.0]"
+      },
+      "independent_true_optimum": {
+        "exact_binary_rational": "15/2",
+        "value": 7.5
+      },
+      "independently_reconstructed_rounds": [
+        {
+          "interval_capacity_excess": "0",
+          "materialized_plan_l1": "0",
+          "max_raw_constraint_residual": 0.0,
+          "max_replay_soc_residual_kwh": 0.0,
+          "native_load_l1_residual": "0",
+          "negative_correction": "0",
+          "physical_paths": [
+            {
+              "movements": [
+                "out_A",
+                "in_A"
+              ],
+              "trips": [
+                "A"
+              ],
+              "vehicle": 0
+            }
+          ],
+          "physical_sessions": 1,
+          "positive_orphan_correction": "0",
+          "projection_l1": "0",
+          "raw_objective": "15/2",
+          "raw_to_replay_objective_delta": "0",
+          "raw_variable_count": 7,
+          "replay_load_l1": "0",
+          "replay_soc_events": 4,
+          "round": 0,
+          "session_capacity_excess": "0",
+          "whole_incumbent_correction": "0"
+        }
+      ],
+      "native_rounds": [
+        {
+          "native_incumbent": 7.5,
+          "native_lower_bound": 7.5,
+          "native_status": "OPTIMAL",
+          "physical_witness_saved": true,
+          "reference": {
+            "exact_binary_rational": "15/2",
+            "value": 7.5
+          },
+          "round": 0
+        }
+      ],
+      "pass": true,
+      "physical_witnesses": [
+        {
+          "load": [
+            0.0,
+            0.5
+          ],
+          "ops": 7.0,
+          "peak_kw": 60.0,
+          "sessions": 1,
+          "soc_events": 4,
+          "worst_soc_residual_kwh": 0.0
+        }
+      ],
+      "runtime_identity": {
+        "model_solver_name": "GRB",
+        "native_library_sha256": "57f87a886aa5a1fd8356494fa1b81e9f9c7d957c898d09e96145440c76c762b7",
+        "requested": "GRB",
+        "solver_class": "SolverGurobi",
+        "solver_module": "mip.gurobi"
+      },
+      "status": "certified"
+    },
+    {
+      "actual_native_calls": 1,
+      "cell": "halfminute_capacity_failure",
+      "certified_interval": null,
+      "environment": {
+        "gurobipy_version": "12.0.3",
+        "mip_version": "1.17.6",
+        "platform": "Linux-6.8.0-138-generic-x86_64-with-glibc2.39",
+        "python": "3.12.13 | packaged by Anaconda, Inc. | (main, Mar 19 2026, 20:20:58) [GCC 14.3.0]"
+      },
+      "independent_true_optimum": null,
+      "independently_reconstructed_rounds": [],
+      "native_rounds": [
+        {
+          "native_incumbent": null,
+          "native_lower_bound": null,
+          "native_status": "INFEASIBLE",
+          "physical_witness_saved": false,
+          "reference": null,
+          "round": 0
+        }
+      ],
+      "pass": true,
+      "physical_witnesses": [],
+      "runtime_identity": {
+        "model_solver_name": "GRB",
+        "native_library_sha256": "57f87a886aa5a1fd8356494fa1b81e9f9c7d957c898d09e96145440c76c762b7",
+        "requested": "GRB",
+        "solver_class": "SolverGurobi",
+        "solver_module": "mip.gurobi"
+      },
+      "status": "infeasible"
+    },
+    {
+      "actual_native_calls": 1,
+      "cell": "halfminute_coincidence",
+      "certified_interval": [
+        8.999999,
+        9.000001
+      ],
+      "environment": {
+        "gurobipy_version": "12.0.3",
+        "mip_version": "1.17.6",
+        "platform": "Linux-6.8.0-138-generic-x86_64-with-glibc2.39",
+        "python": "3.12.13 | packaged by Anaconda, Inc. | (main, Mar 19 2026, 20:20:58) [GCC 14.3.0]"
+      },
+      "independent_true_optimum": {
+        "exact_binary_rational": "9",
+        "value": 9.0
+      },
+      "independently_reconstructed_rounds": [
+        {
+          "interval_capacity_excess": "0",
+          "materialized_plan_l1": "0",
+          "max_raw_constraint_residual": 0.0,
+          "max_replay_soc_residual_kwh": 0.0,
+          "native_load_l1_residual": "0",
+          "negative_correction": "0",
+          "physical_paths": [
+            {
+              "movements": [
+                "out_A",
+                "depot_AB",
+                "in_B"
+              ],
+              "trips": [
+                "A",
+                "B"
+              ],
+              "vehicle": 0
+            }
+          ],
+          "physical_sessions": 2,
+          "positive_orphan_correction": "0",
+          "projection_l1": "0",
+          "raw_objective": "9",
+          "raw_to_replay_objective_delta": "0",
+          "raw_variable_count": 17,
+          "replay_load_l1": "0",
+          "replay_soc_events": 8,
+          "round": 0,
+          "session_capacity_excess": "0",
+          "whole_incumbent_correction": "0"
+        }
+      ],
+      "native_rounds": [
+        {
+          "native_incumbent": 9.0,
+          "native_lower_bound": 9.0,
+          "native_status": "OPTIMAL",
+          "physical_witness_saved": true,
+          "reference": {
+            "exact_binary_rational": "9",
+            "value": 9.0
+          },
+          "round": 0
+        }
+      ],
+      "pass": true,
+      "physical_witnesses": [
+        {
+          "load": [
+            0.0,
+            1.0,
+            0.0,
+            1.0
+          ],
+          "ops": 7.0,
+          "peak_kw": 120.0,
+          "sessions": 2,
+          "soc_events": 8,
+          "worst_soc_residual_kwh": 0.0
+        }
+      ],
+      "runtime_identity": {
+        "model_solver_name": "GRB",
+        "native_library_sha256": "57f87a886aa5a1fd8356494fa1b81e9f9c7d957c898d09e96145440c76c762b7",
+        "requested": "GRB",
+        "solver_class": "SolverGurobi",
+        "solver_module": "mip.gurobi"
+      },
+      "status": "certified"
+    },
+    {
+      "actual_native_calls": 1,
+      "cell": "three_service_multivisit",
+      "certified_interval": [
+        74.89473584210526,
+        74.89473784210526
+      ],
+      "environment": {
+        "gurobipy_version": "12.0.3",
+        "mip_version": "1.17.6",
+        "platform": "Linux-6.8.0-138-generic-x86_64-with-glibc2.39",
+        "python": "3.12.13 | packaged by Anaconda, Inc. | (main, Mar 19 2026, 20:20:58) [GCC 14.3.0]"
+      },
+      "independent_true_optimum": {
+        "exact_binary_rational": "106810371162470261/1426139882000657",
+        "value": 74.89473684210526
+      },
+      "independently_reconstructed_rounds": [
+        {
+          "interval_capacity_excess": "0",
+          "materialized_plan_l1": "0",
+          "max_raw_constraint_residual": 2.991758887410948e-15,
+          "max_replay_soc_residual_kwh": 3.552713678800501e-15,
+          "native_load_l1_residual": "0",
+          "negative_correction": "0",
+          "physical_paths": [
+            {
+              "movements": [
+                "out_A",
+                "depot_AB",
+                "depot_BC",
+                "in_C"
+              ],
+              "trips": [
+                "A",
+                "B",
+                "C"
+              ],
+              "vehicle": 0
+            }
+          ],
+          "physical_sessions": 3,
+          "positive_orphan_correction": "0",
+          "projection_l1": "0",
+          "raw_objective": "84323977233529159/1125899906842624",
+          "raw_to_replay_objective_delta": "-1/562949953421312",
+          "raw_variable_count": 33,
+          "replay_load_l1": "1/562949953421312",
+          "replay_soc_events": 18,
+          "round": 0,
+          "session_capacity_excess": "0",
+          "whole_incumbent_correction": "1/562949953421312"
+        }
+      ],
+      "native_rounds": [
+        {
+          "native_incumbent": 74.89473684210526,
+          "native_lower_bound": 74.89473684210526,
+          "native_status": "OPTIMAL",
+          "physical_witness_saved": true,
+          "reference": {
+            "exact_binary_rational": "106810371162470261/1426139882000657",
+            "value": 74.89473684210526
+          },
+          "round": 0
+        }
+      ],
+      "pass": true,
+      "physical_witnesses": [
+        {
+          "load": [
+            0.0,
+            5.263157894736842,
+            12.631578947368425,
+            20.0
+          ],
+          "ops": 37.0,
+          "peak_kw": 30.0,
+          "sessions": 3,
+          "soc_events": 18,
+          "worst_soc_residual_kwh": 3.552713678800501e-15
+        }
+      ],
+      "runtime_identity": {
+        "model_solver_name": "GRB",
+        "native_library_sha256": "57f87a886aa5a1fd8356494fa1b81e9f9c7d957c898d09e96145440c76c762b7",
+        "requested": "GRB",
+        "solver_class": "SolverGurobi",
+        "solver_module": "mip.gurobi"
+      },
+      "status": "certified"
+    }
+  ],
+  "corruption_controls": [
+    {
+      "control": "raw SOC equality",
+      "reason": "compact service SOC residual 2.0",
+      "rejected": true
+    },
+    {
+      "control": "raw selected coverage",
+      "reason": "binary integrality",
+      "rejected": true
+    },
+    {
+      "control": "raw variable representation",
+      "reason": "raw numeric representation",
+      "rejected": true
+    },
+    {
+      "control": "duplicate raw variable mapping",
+      "reason": "complete unique flat variable mapping",
+      "rejected": true
+    },
+    {
+      "control": "shared interval capacity",
+      "reason": "independent elementary intervals",
+      "rejected": true
+    },
+    {
+      "control": "native aggregate energy row",
+      "reason": "complete independent aggregate-energy profile and row positions",
+      "rejected": true
+    },
+    {
+      "control": "missing charge projection stage",
+      "reason": "complete ordered raw/projection/decode/replay evidence",
+      "rejected": true
+    },
+    {
+      "control": "projection policy identity",
+      "reason": "projection policy identities",
+      "rejected": true
+    },
+    {
+      "control": "forged change-key added to zero-correction ledger",
+      "reason": "before_budget full changed-key ledger",
+      "rejected": true
+    },
+    {
+      "control": "raw grid-energy variable altered",
+      "reason": "compact movement SOC upper residual 0.9500000000000003",
+      "rejected": true
+    },
+    {
+      "control": "orphan projection amount altered",
+      "reason": "before_budget projection: exact orphan_positive_l1_exact",
+      "rejected": true
+    },
+    {
+      "control": "period native/raw residual altered",
+      "reason": "period native/raw residual: exact native_minus_raw_charge_exact",
+      "rejected": true
+    },
+    {
+      "control": "materialized load residual altered",
+      "reason": "before_decoding plan sum: exact plan_sum_residual_l1_exact",
+      "rejected": true
+    },
+    {
+      "control": "interval capacity correction altered",
+      "reason": "before_replay interval capacity: exact interval_capacity_excess_exact",
+      "rejected": true
+    },
+    {
+      "control": "session capacity correction altered",
+      "reason": "decoder materialized_session_excess: exact materialized_session_excess_exact",
+      "rejected": true
+    },
+    {
+      "control": "whole incumbent budget altered",
+      "reason": "whole-incumbent budget: exact whole_incumbent_total_exact",
+      "rejected": true
+    },
+    {
+      "control": "projected positive selected charge removed",
+      "reason": "all retained projected energies and serial endpoints",
+      "rejected": true
+    },
+    {
+      "control": "objective correction delta altered",
+      "reason": "planner true objective delta: exact true_charge_correction_delta_exact",
+      "rejected": true
+    },
+    {
+      "control": "physical replay SOC altered",
+      "reason": "saved SOC value: 19 versus 20.0",
+      "rejected": true
+    },
+    {
+      "control": "native lower bound altered",
+      "reason": "independent global GRB lower bound: 23 versus 22.0",
+      "rejected": true
+    },
+    {
+      "control": "certified interval altered",
+      "reason": "final upper: 21 versus 22.000001",
+      "rejected": true
+    },
+    {
+      "control": "tangent history altered",
+      "reason": "immutable round snapshot",
+      "rejected": true
+    },
+    {
+      "control": "rounded tangent formula drift above 1e-12 allowance",
+      "reason": "immutable round snapshot",
+      "rejected": true
+    },
+    {
+      "control": "expected infeasibility relabelled",
+      "reason": "expected infeasible result retained",
+      "rejected": true
+    },
+    {
+      "control": "infeasible cell fabricated incumbent",
+      "reason": "infeasible call has no fabricated incumbent/projection",
+      "rejected": true
+    },
+    {
+      "control": "infeasible input feasibility target altered",
+      "reason": "input identity digest",
+      "rejected": true
+    }
+  ],
+  "counts": {
+    "certified": 16,
+    "controls": 20,
+    "corruption_controls_rejected": 26,
+    "expected_infeasible": 4,
+    "native_calls_actual": 35,
+    "native_calls_by_cell": {
+      "cyclic_flat": 1,
+      "cyclic_hull_price": 1,
+      "cyclic_own_price": 1,
+      "cyclic_planner": 4,
+      "directed_multileg": 1,
+      "efficiency_linear": 1,
+      "fixed_reserve_one_bus": 1,
+      "fixed_reserve_planner": 4,
+      "halfminute_capacity": 1,
+      "halfminute_capacity_failure": 1,
+      "halfminute_coincidence": 1,
+      "halfminute_multileg": 1,
+      "joint_flat": 1,
+      "joint_planner": 7,
+      "partial_overlap_failure": 1,
+      "preserved_reserve_planner": 4,
+      "serial_connector": 1,
+      "single_linear": 1,
+      "terminal_capacity_failure": 1,
+      "three_service_multivisit": 1
+    },
+    "native_status_counts": {
+      "INFEASIBLE": 4,
+      "OPTIMAL": 31
+    },
+    "physical_witnesses": 31,
+    "raw_incumbents": 31
+  },
+  "downstream_scope": "Physical GRB stage only; hull qualification remains unaudited.",
+  "frozen_commit": "227da22074201c583dbcfa971863c8f3c41d7391",
+  "frozen_source_count": 15,
+  "frozen_source_hashes_verified_against_git_blobs": {
+    "doc/NATIVE_PATHFLOW_ENERGY_BAND_DESIGN_20260927.md": "b14913957f199662808483d052ad2fec778f69f71b14363667c40623c6f8276d",
+    "doc/NATIVE_PATHFLOW_EQUIVALENCE_REVIEW_20260927.md": "3592c5331540502269a782d99957dcc0819596c9e5c02e65a01e2342869f2336",
+    "doc/NATIVE_PATHFLOW_ORPHAN_CHARGE_IMPLEMENTATION_REVIEW_20260927.md": "f3bbe28018ecc64333dec038fb81fbde6ed62cf457d5982733f11981a5fcf433",
+    "doc/NATIVE_PATHFLOW_ORPHAN_CHARGE_QUALIFICATION_PROTOCOL_20260927.md": "7c1e33bae849dbde8ae0f2236708ec52e5d6f8ae8b6df2ebdf57c71b083133c9",
+    "doc/NATIVE_PATHFLOW_ORPHAN_CHARGE_REPAIR_DESIGN_20260927.md": "7979ad3f805a60a36b8bb38740b219238b73867b2cf8e398f05a055a515311de",
+    "doc/NATIVE_PATHFLOW_ORPHAN_CHARGE_REPAIR_REVIEW_20260927.md": "6cd0069b74c2006b138727a7c3817d7ba172539c7163a3d2b08dd68a1684693c",
+    "doc/NATIVE_PATHFLOW_QUALIFICATION_PROTOCOL_20260927.md": "4e7721233e42fe83d85d36ea18abb719bd1d57591dbb870a3019e8341e2fb84d",
+    "src/egglab/native_pathflow.py": "9b8f5017b5a5cded27ff3d23b047ecb40b5994dc83b75df7d50add96d4dc9682",
+    "src/egglab/native_recharge.py": "0067123a7f71cc6e9c89e1262cdcbd612cafdcfc252e35bcfca7f1f54c45d0f3",
+    "src/experiments/native_halfminute_qualification.py": "1ca683c897828c7033d7d21862aae49aa25f0244c10e12abbd2c19065aa90c63",
+    "src/experiments/native_pathflow_qualification.py": "09bf4effcd31adab056ecd9d935436e0e26307bbdb129533d0fedc28b892c9ec",
+    "src/experiments/native_recharge_qualification.py": "200c5bec8e6f8c7f7e466ef045b439dceae9fa2b35984cc452d4d29471dfde1e",
+    "src/tests/test_native_pathflow.py": "224fdfa4edc0c3293ce9eabf45609c99be0794062b339838e8039d74125cdf33",
+    "src/tests/test_native_pathflow_energy_band.py": "9ea7ca10c6924669b75f500ce7cb83764b68cb28c684ec96c0d3e5fc05710db8",
+    "src/tests/test_native_pathflow_hull.py": "354c518e394302c46dee7aead98b20e9b35244caa4c503f2912a3781c190f891"
+  },
+  "grb_runtime": {
+    "backend": "GRB",
+    "library_bytes_reverified_locally": false,
+    "mip_and_gurobipy_versions": [
+      [
+        "1.17.6",
+        "12.0.3"
+      ]
+    ],
+    "native_library_fingerprints": [
+      "57f87a886aa5a1fd8356494fa1b81e9f9c7d957c898d09e96145440c76c762b7"
+    ],
+    "solver_module": "mip.gurobi"
+  },
+  "independence": "Uses copied standard-library exact-arithmetic fixture, V3 compact-matrix, energy-band and projection/replay auditors. No project implementation module, solver package, optimizer, SSH or web access is imported or called.",
+  "original_bytes": 1251050,
+  "original_files": 146,
+  "original_manifest_sha256": "14ce0b4c04eeaeb6b8bafe72f252a9de7f92a723023b11f2c4a82dab83f06adf",
+  "scope": "Solver-free reconstruction of the frozen GRB physical attempt: published source blobs, CBC-parity inputs/budgets, GRB wrapper/sentinel/Slurm receipts, raw native rows, V3 charge corrections, physical replay, global bounds, exact analytical targets, and expected infeasibilities. This does not qualify the hull stage or nonlinear pilot.",
+  "source_unchanged_receipts": {
+    "controller": true,
+    "wrapper": true
+  },
+  "stdout_policy": "Full wrapper and scheduler logs are preserved and hashed; log content is not embedded in this report because it may contain license details. Any public package must record any authorized omission by hash and retain the complete local archive.",
+  "unchanged_from_cbc_attempt3": {
+    "budget_fields_except_backend": true,
+    "control_count": 20,
+    "controls_exact": true,
+    "target_tolerance": true
+  },
+  "wrapper_and_slurm": {
+    "launch_sentinel": "/Users/nadan/Documents/ChatGPT/egg/journal-research-work/result/native_pathflow_grb/20260927-attempt1.launch",
+    "outer_submission_receipts": {
+      "intent": {
+        "bytes": 350,
+        "sha256": "91d006250232d3cc194532c963fe053fa4db65b7e1007b9c9aa9b63ad188c46c"
+      },
+      "sacct": {
+        "bytes": 352,
+        "sha256": "70a65b381f2bb32fa668c8a2130f06b7780c1ca061a8efaf8540e14c9bdb0095"
+      },
+      "scontrol": {
+        "bytes": 1330,
+        "sha256": "31e0a9f38256ca944f161f24c66ce448b2e3205c846883ec0ed68fd7b6cb2974"
+      },
+      "submitted": {
+        "bytes": 7,
+        "sha256": "f3c3f9c1e3d3bb110040aa36f72d12978ce1e6a4abe07957eab0ab0afe2056c3"
+      }
+    },
+    "raw_manifest_files": 146,
+    "sacct_rows": [
+      {
+        "AllocCPUS": "1",
+        "Elapsed": "00:00:49",
+        "ExitCode": "0:0",
+        "JobIDRaw": "559429",
+        "MaxRSS": "",
+        "NodeList": "snavely-cpu-02",
+        "State": "COMPLETED"
+      },
+      {
+        "AllocCPUS": "1",
+        "Elapsed": "00:00:49",
+        "ExitCode": "0:0",
+        "JobIDRaw": "559429.batch",
+        "MaxRSS": "101884K",
+        "NodeList": "snavely-cpu-02",
+        "State": "COMPLETED"
+      },
+      {
+        "AllocCPUS": "1",
+        "Elapsed": "00:00:49",
+        "ExitCode": "0:0",
+        "JobIDRaw": "559429.extern",
+        "MaxRSS": "",
+        "NodeList": "snavely-cpu-02",
+        "State": "COMPLETED"
+      }
+    ],
+    "scheduler_logs": {
+      "egg-v3-grb-physical-559429.err": {
+        "bytes": 0,
+        "content_embedded": false,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "egg-v3-grb-physical-559429.out": {
+        "bytes": 173,
+        "content_embedded": false,
+        "sha256": "23fb4d39e267b418eb4b45c9cb3ed017bcd0eb6f2f7ed7454fa63313e98399d4"
+      }
+    },
+    "scontrol_snapshot": "initial submission snapshot (captured while PENDING); execution completion is verified from later sacct and wrapper receipts",
+    "slurm_receipt": {
+      "elapsed_whole_seconds": 39,
+      "job_id": "559429",
+      "returncode": 0,
+      "shell_cap_seconds": 1370,
+      "start_utc": "2026-09-27T20:17:33Z",
+      "timeout_exit": false
+    },
+    "wrapper_launch": {
+      "backend": "GRB",
+      "command": [
+        "/home/nc437/evsp_env/bin/python",
+        "-m",
+        "experiments.native_pathflow_qualification",
+        "--output",
+        "/home/nc437/egg-grb-physical-v3-20260927/result/native_pathflow_grb/20260927-attempt1",
+        "--freeze-label",
+        "227da22074201c583dbcfa971863c8f3c41d7391",
+        "--backend",
+        "GRB"
+      ],
+      "outer_cap_seconds": 1320,
+      "physical_admission_sha256": null,
+      "protocol": "native-v3-grb-replication-20260927-v1",
+      "source_commit": "227da22074201c583dbcfa971863c8f3c41d7391",
+      "source_hashes": {
+        "doc/NATIVE_PATHFLOW_ENERGY_BAND_DESIGN_20260927.md": "b14913957f199662808483d052ad2fec778f69f71b14363667c40623c6f8276d",
+        "doc/NATIVE_PATHFLOW_EQUIVALENCE_REVIEW_20260927.md": "3592c5331540502269a782d99957dcc0819596c9e5c02e65a01e2342869f2336",
+        "doc/NATIVE_PATHFLOW_ORPHAN_CHARGE_IMPLEMENTATION_REVIEW_20260927.md": "f3bbe28018ecc64333dec038fb81fbde6ed62cf457d5982733f11981a5fcf433",
+        "doc/NATIVE_PATHFLOW_ORPHAN_CHARGE_QUALIFICATION_PROTOCOL_20260927.md": "7c1e33bae849dbde8ae0f2236708ec52e5d6f8ae8b6df2ebdf57c71b083133c9",
+        "doc/NATIVE_PATHFLOW_ORPHAN_CHARGE_REPAIR_DESIGN_20260927.md": "7979ad3f805a60a36b8bb38740b219238b73867b2cf8e398f05a055a515311de",
+        "doc/NATIVE_PATHFLOW_ORPHAN_CHARGE_REPAIR_REVIEW_20260927.md": "6cd0069b74c2006b138727a7c3817d7ba172539c7163a3d2b08dd68a1684693c",
+        "doc/NATIVE_PATHFLOW_QUALIFICATION_PROTOCOL_20260927.md": "4e7721233e42fe83d85d36ea18abb719bd1d57591dbb870a3019e8341e2fb84d",
+        "doc/NATIVE_V3_GRB_REPLICATION_IMPLEMENTATION_REVIEW_20260927.md": "8e302bb50e0f995f7b3affb06ec9aafd1d7fd71e51b3b89c861f0756a41c14b2",
+        "doc/NATIVE_V3_GRB_REPLICATION_PROTOCOL_20260927.md": "787e55c4c06c53aff67fea8ba0fd5d749336d2e6e58be6d07ca595ec071f86c7",
+        "src/cluster/native_v3_grb_hull.sbatch": "ac316ffdf740bd280d5074c199b8056322d23281727dca4deac1d658a8041e6a",
+        "src/cluster/native_v3_grb_physical.sbatch": "49219c8b290e71de1b147cfdfc180d0f6a7e664bd4b2027bb669cf18155a5f08",
+        "src/cluster/unicorn_env.sh": "1731f65b21fd9c81f5726078490aed384974ac2e4869bdc13e7259d5ab045678",
+        "src/egglab/native_pathflow.py": "9b8f5017b5a5cded27ff3d23b047ecb40b5994dc83b75df7d50add96d4dc9682",
+        "src/egglab/native_recharge.py": "0067123a7f71cc6e9c89e1262cdcbd612cafdcfc252e35bcfca7f1f54c45d0f3",
+        "src/experiments/native_halfminute_qualification.py": "1ca683c897828c7033d7d21862aae49aa25f0244c10e12abbd2c19065aa90c63",
+        "src/experiments/native_pathflow_qualification.py": "09bf4effcd31adab056ecd9d935436e0e26307bbdb129533d0fedc28b892c9ec",
+        "src/experiments/native_recharge_qualification.py": "200c5bec8e6f8c7f7e466ef045b439dceae9fa2b35984cc452d4d29471dfde1e",
+        "src/experiments/native_v3_grb_replication.py": "fd1e0455171c26d4a424ab699fef24ee78784f7d7c3741ced5de0eecfd0ab3fe",
+        "src/tests/test_native_pathflow.py": "224fdfa4edc0c3293ce9eabf45609c99be0794062b339838e8039d74125cdf33",
+        "src/tests/test_native_pathflow_energy_band.py": "9ea7ca10c6924669b75f500ce7cb83764b68cb28c684ec96c0d3e5fc05710db8",
+        "src/tests/test_native_pathflow_hull.py": "354c518e394302c46dee7aead98b20e9b35244caa4c503f2912a3781c190f891",
+        "src/tests/test_native_v3_grb_replication.py": "534bdb4636bf147b6e3fcba04f85f657df4a65a1d0eeba29057748b2be1900cb"
+      },
+      "stage": "physical",
+      "start_utc": "2026-09-27T20:17:35Z"
+    },
+    "wrapper_receipt": {
+      "child_returncode": 0,
+      "elapsed_seconds": 36.5027587749064,
+      "launch_error": null,
+      "launch_sentinel": "result/native_pathflow_grb/20260927-attempt1.launch",
+      "outer_timeout": false,
+      "protocol": "native-v3-grb-replication-20260927-v1",
+      "returncode": 0,
+      "source_check_error": null,
+      "source_hashes_unchanged": true,
+      "stage": "physical",
+      "stage_evidence_error": null
+    }
+  }
+}

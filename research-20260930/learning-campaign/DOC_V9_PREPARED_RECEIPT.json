@@ -1,0 +1,35 @@
+{
+  "document_id": "1NmPC_qo_uOnA48dV6Ibhs3Pj9EgOD-oJTBuVi41p6bg",
+  "tab_id": "t.0",
+  "revision_before": "ANLCKQnTRkOJYggHBEfAFe68RY4qxk-W7han5vfOvoh173khCuvzgj7UEEZHVnbSCEXuggvh11pU-LfofONPHQ_ALFekLVQ23MUz-4EHO1k",
+  "revision_after": "ANLCKQkP8jovMRsl5amHS2CLy8fDd56Cxup3EltnIoB2dZYDl15kBPU2eRvvAV3vT9T-JFjyse3wP6UZGyVtpYru7ENxY4XXD1c5WgIdPFA",
+  "append_start": 201452,
+  "append_end": 202870,
+  "appended_text": "\nNext controlled experiment: physical-context graph inputs\n1 October 2026 UTC\n\nThe implementation and prospective protocol are now reviewed for the next comparison. On the same 128 training timetables, each graph architecture will receive either the original inputs padded with zeros or the added battery and charging-window inputs. Both feature versions use identical model shapes, paired initial weights and identical preprocessing of the shared inputs. This separates the contribution of physical context from a change in initialization or model dimensions.\n\nThe study keeps four timetable folds and three seeds, with fitting, inner validation and outer evaluation separate. All four combinations of feature set and graph architecture will be retained; inner validation alone selects checkpoints and policies. Models cut short by the overall fold deadline are preserved but cannot enter the matched comparison or outer evaluation.\n\nNo campaign training or deployment has started for this study. It will follow the active longer-training batch without overlapping its training workers. The prospective ceiling is 12 tasks, up to four at once, each requesting one CPU and 8 GB for at most two hours: 24 CPU-hours maximum. These are requested limits, not time already spent. The completed checks cover implementation behavior; physical fleet-cost benefits remain to be tested separately.\n\nReviewed experiment protocol\n",
+  "exact_text_verified": true,
+  "images_preserved": [
+    "kix.14qgnlc7qzhp",
+    "kix.1g4t8u3qmu8n",
+    "kix.4yuqnp8k08fl",
+    "kix.fe5jxkrgnniq",
+    "kix.shpddc4n4xg",
+    "kix.uffmv89uhby0",
+    "kix.xjlr68pn1mfz"
+  ],
+  "verified_links": [
+    {
+      "start": 202841,
+      "end": 202869,
+      "url": "https://github.com/ndandnd/egg/blob/987cff55253477ca532c2832187f483c76f6ba2e/research-20260930/learning-campaign/ROUTE_MODEL_GRAPH_CONTEXT_V9_PROTOCOL.md"
+    }
+  ],
+  "resolved_text_sizes_verified": true,
+  "checked_text_runs": 12,
+  "trusted_read_receipt": {
+    "path": "/Users/nadan/Documents/ChatGPT/egg/journal-research-work/tmp/docs-v9-prospective-20261001/receipt.json",
+    "bytes": 976,
+    "sha256": "8a940739298a53aed87dc576e93c7cade5db98291cfb3585b543bd77cfaea291"
+  },
+  "reviewed_source_commit": "987cff55253477ca532c2832187f483c76f6ba2e",
+  "deployment_or_launch_claimed": false
+}

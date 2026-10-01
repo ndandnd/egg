@@ -1,0 +1,7 @@
+# Physical dataset adapter review
+
+The train-only adapter is ready for the bounded dataset compile. It reconstructs the expected 64-cell shard from the frozen manifest, rejects duplicate or missing groups/cells, checks case and market identity against the declared generator, and requires one successful wrapper receipt plus matching per-cell receipts. Replayed source plans are linked to saved native columns; fixed-charge rows are linked to the exact source-plan hash, movement set, saved plan, replay, and target market. Contradictory censored-cell evidence is rejected. The adapter keeps pre-charge inputs separate from outcomes and makes direct target reprice an explicit prospective baseline; it does not fit a model or create numeric features.
+
+Health summaries use base timetables as groups and include source-pair and target-pair denominators, replay/censoring and wrapper/native statuses, paired winners, exact margins, ties, and descriptive entropy. Feasibility, provisional-after-native-limit, and curved/global uncertified status are separate. The interface marks IDs and outcomes as nonfeatures and requires a future training protocol to define a train-only numeric projection and grouped split. Bounds remain imported source-market metadata, not newly certified target bounds.
+
+Root reports four focused synthetic-fixture tests passed; after the strict single-wrapper guard was added, its duplicate-wrapper regression assertion also passed. These tests exercise fixtures only. This review did not ingest job outputs, run an optimizer, or fit a model.

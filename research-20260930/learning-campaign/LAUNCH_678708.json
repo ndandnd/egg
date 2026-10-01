@@ -1,0 +1,53 @@
+{
+  "job_id": "678708",
+  "submitted_at_utc": "2026-09-30T04:57:34Z",
+  "source_commit": "822be2c7bdc2bef9ab6364c2e97d9747c048898b",
+  "source_branch": "codex/journal-research-20260927",
+  "remote_checkout": "/home/nc437/egg-learning-stage2-20260930",
+  "remote_attempt": "/home/nc437/egg-learning-stage2-20260930/result/learning_campaign/20260930-stage2-attempt1",
+  "wrapper": "src/cluster/learning_campaign_stage2.sbatch",
+  "requested": {
+    "partition": "default_partition",
+    "cpus_per_task": 1,
+    "memory_gb": 8,
+    "wall_seconds": 6000,
+    "native_threads": 1,
+    "requeue": false,
+    "excluded_nodes": [
+      "scaglione-compute-01"
+    ]
+  },
+  "design": {
+    "native_cells": 44,
+    "train_groups": 6,
+    "dev_groups": 2,
+    "services": [
+      12,
+      20,
+      28
+    ],
+    "reserved_test_seeds": [
+      2004,
+      2005
+    ],
+    "trainer_hard_seconds": 45,
+    "native_wall_seconds": 70,
+    "child_hard_seconds": 100,
+    "controller_seconds": 5400,
+    "outer_shell_seconds": 5550
+  },
+  "startup_observation": {
+    "at_utc": "2026-09-30T04:59:32.790941+00:00",
+    "squeue_state": "RUNNING",
+    "elapsed": "1:55",
+    "node": "snavely-cpu-04",
+    "frozen": true,
+    "completed_cells": 10,
+    "exception_files": 0,
+    "training_receipt": false,
+    "summary": false,
+    "source_commit_verified": true
+  },
+  "submission_guard": ".submission-learning-stage2-attempt1/jobid.txt",
+  "scientific_result": "pending; startup verified only"
+}

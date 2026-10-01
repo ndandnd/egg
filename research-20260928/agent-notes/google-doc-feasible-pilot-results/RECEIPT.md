@@ -1,0 +1,7 @@
+# Google Doc milestone receipt — 28 September 2026
+
+The supplied pilot-results update was appended once at the end of the existing “egg” Google Doc. The new heading is **Matched pilot results and next baseline — 28 September 2026**. The Google Docs status showed **Saved to Drive** after the edit. The document outline showed the new Heading 2 as item 37 of 37, and the editor accessibility text contained the full supplied body and the README URL as a link.
+
+The update source is `research-20260928/feasible-pool-pilot/results-attempt1/GOOGLE_DOC_UPDATE.md` (2704 bytes; SHA-256 `da2cc7f1f88dc0113eb9454f6a8a9e00ab1ffcfd7343916e4a82c29d5853c5ff`). The private before exports are `../research-20260928/google-doc-feasible-pilot-results/before.md` (104024 bytes; SHA-256 `2cf19c451c2edef6677f8e3090000ec05093b54a9990905f801af0c449291625`) and `../research-20260928/google-doc-feasible-pilot-results/before.pdf` (710776 bytes; SHA-256 `23d4bd90561418d32779a6ad8008d6bc0c5f6c933898999ab1d77d48405936ad`).
+
+After-export verification is incomplete. Google Docs File → Download was attempted for Markdown and PDF, but Chrome blocked the generated `googleusercontent.com/export` page with `ERR_BLOCKED_BY_CLIENT`; no post-edit export files were produced. Therefore an export-based byte-prefix and full-content comparison could not be completed here. The UI did show the saved heading, full appended body, and link. No other document edits were made.

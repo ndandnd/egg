@@ -1,0 +1,121 @@
+{
+  "budget": {
+    "backend": "CBC",
+    "epsilon": 0.0001,
+    "max_rounds": 48,
+    "phase_seconds": 10,
+    "threads": 1,
+    "wall_seconds": 45
+  },
+  "case": {
+    "battery_kwh": 20,
+    "deadhead_cost_per_min": 0.5,
+    "depot": "D",
+    "efficiency": 1.0,
+    "graph_scope": "declared-movement-modes-only",
+    "market_edges_min": [
+      0,
+      60,
+      120
+    ],
+    "max_vehicles": 2,
+    "movements": [
+      {
+        "after": "A",
+        "before": null,
+        "depot_split": null,
+        "id": "out_A",
+        "kind": "pullout",
+        "legs": [
+          {
+            "arrive_min": 5,
+            "depart_min": 0,
+            "destination": "X",
+            "energy_kwh": 1,
+            "origin": "D"
+          },
+          {
+            "arrive_min": 15,
+            "depart_min": 5,
+            "destination": "P",
+            "energy_kwh": 2,
+            "origin": "X"
+          }
+        ]
+      },
+      {
+        "after": null,
+        "before": "A",
+        "depot_split": null,
+        "id": "in_A",
+        "kind": "pullin",
+        "legs": [
+          {
+            "arrive_min": 65,
+            "depart_min": 60,
+            "destination": "Y",
+            "energy_kwh": 1,
+            "origin": "Q"
+          },
+          {
+            "arrive_min": 75,
+            "depart_min": 65,
+            "destination": "D",
+            "energy_kwh": 2,
+            "origin": "Y"
+          }
+        ]
+      }
+    ],
+    "name": "multileg",
+    "recharge_deadline_min": 120,
+    "reserve_kwh": 2,
+    "resources": [
+      {
+        "connectors": 0,
+        "end_min": 75,
+        "grid_kw": 0,
+        "per_bus_kw": 0,
+        "start_min": 0
+      },
+      {
+        "connectors": 1,
+        "end_min": 120,
+        "grid_kw": 30,
+        "per_bus_kw": 30,
+        "start_min": 75
+      }
+    ],
+    "terminal_open_min": 0,
+    "trips": [
+      {
+        "end_min": 60,
+        "end_place": "Q",
+        "energy_kwh": 8,
+        "id": "A",
+        "start_min": 30,
+        "start_place": "P"
+      }
+    ],
+    "vehicle_cost": 7
+  },
+  "case_identity": "aa578a2b9fb9504cb1a70d44bf75d6d00032654e60d972f663910980107f3d01",
+  "expected_status": "certified",
+  "id": "directed_multileg",
+  "objective": "pricing",
+  "prices": [
+    1,
+    1
+  ],
+  "source_hashes": {
+    "doc/NATIVE_PATHFLOW_EQUIVALENCE_REVIEW_20260927.md": "3592c5331540502269a782d99957dcc0819596c9e5c02e65a01e2342869f2336",
+    "doc/NATIVE_PATHFLOW_QUALIFICATION_PROTOCOL_20260927.md": "924e85c5fad45ba1c880a61393e98e07db8943967dad5c400ee3149acad48d22",
+    "src/egglab/native_pathflow.py": "45864e08bffb81dc29b27774449f944fd074cb6654a593ab0d482abdad935c7d",
+    "src/egglab/native_recharge.py": "0067123a7f71cc6e9c89e1262cdcbd612cafdcfc252e35bcfca7f1f54c45d0f3",
+    "src/experiments/native_halfminute_qualification.py": "1ca683c897828c7033d7d21862aae49aa25f0244c10e12abbd2c19065aa90c63",
+    "src/experiments/native_pathflow_qualification.py": "641773c79ef7bde14c427502fc16fb81d8b54a8db019025a7fe40a627634036a",
+    "src/experiments/native_recharge_qualification.py": "200c5bec8e6f8c7f7e466ef045b439dceae9fa2b35984cc452d4d29471dfde1e",
+    "src/tests/test_native_pathflow.py": "203bef274806123a9991b4b13c7b0a8b24be9e9b4793b5dc4a2fb5e35b81531b"
+  },
+  "target": 36
+}

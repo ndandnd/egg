@@ -1,0 +1,220 @@
+\section{Proofs for the complete-fleet statements}\label{app:theory-proofs}
+
+\begin{proof}[Proof of Proposition~\ref{prop:theory-support}]
+For physical $x$, $p\in\partial F(e(x))$, and any hull point $(e,c)$,
+linear minimization over the convex hull gives
+$c+p^\top e\geq V(p)$.  The subgradient inequality gives
+$F(e)\geq F(e(x))+p^\top(e-e(x))$.  Adding and minimizing over the hull
+yields $CH\geq c(x)+F(e(x))-r(x;p)$, proving the first inequality;
+$c(x)+F(e(x))\geq D\geq CH$ proves the second.  If $r(x;p)=0$, all
+inequalities collapse to $CH=D=c(x)+F(e(x))$.  Conversely, compactness
+supplies a physical minimizer when $D=CH$.  Under the relative-interior
+condition, Fenchel--Rockafellar duality gives an attained maximum
+$CH=V(p^*)-F^*(p^*)$.  Under the alternative minorant condition, apply
+the same duality theorem to that finite minorant.  It agrees with $F$
+on all hull loads, while its conjugate bounds $F^*$ from above; weak
+duality for $F$ then makes the same $p^*$ optimal for $F$.  For any
+physical minimizer $x^*$, the two
+nonnegative Fenchel terms satisfy
+\[
+r(x^*;p^*)+
+F(e(x^*))-(p^*)^\top e(x^*)+F^*(p^*)
+=D-CH=0.
+\]
+Each term is therefore zero.  Fenchel equality gives
+$p^*\in\partial F(e(x^*))$ and the first equality gives
+$r(x^*;p^*)=0$.  This holds for every physical minimizer and every
+attained hull-dual maximizer.
+\end{proof}
+
+\begin{proof}[Proof of Corollary~\ref{cor:best-price}]
+Let $(e^*,c^*)$ be a hull minimizer with $e^*=e(x)$, and let $p^*$ be an
+attained hull-dual maximizer. The nonnegative terms
+$c^*+(p^*)^\top e^*-V(p^*)$ and
+$F(e^*)-(p^*)^\top e^*+F^*(p^*)$ sum to zero by strong duality.
+Hence $p^*\in\partial F(e^*)$ and
+$r(x;p^*)=c(x)-c^*=c(x)+F(e(x))-CH=H(x)$.
+Proposition~\ref{prop:theory-support} supplies the matching lower bound
+for every price in $\partial F(e(x))$.
+\end{proof}
+
+For the accounting identity, $F^*(p)\geq p^\top e(x)-F(e(x))$ by
+definition, so supplier LOC is nonnegative.  Substitution in
+\eqref{eq:theory-loc} gives the claimed sum.  The same
+qualification above yields an attained hull-dual price
+$p^*$ and $V(p^*)-F^*(p^*)=CH$.  At a physical planner optimizer the
+LOC sum is $D-CH$.  At any price in the plan's subdifferential, Fenchel
+equality makes supplier LOC zero.
+
+\begin{proof}[Proof of \eqref{eq:theory-upper}]
+Let $(e^*,c^*)$ be a hull minimizer, $p^*=a+Qe^*$,
+$d=\|e(x)-e^*\|_Q$, and $H=H(x)$.  First-order hull optimality makes
+$(e^*,c^*)$ a minimizer of $c+(p^*)^\top e$, so
+\[
+ \mathrm{LOC}_{\rm fleet}(x;p^*)=H-\tfrac12d^2\geq0.
+\]
+In particular $d\leq\sqrt{2H}$.  For each physical alternative $y$,
+the change in its linear advantage when the price moves from $p^*$ to
+$p_x=p^*+Q(e(x)-e^*)$ is
+$(e(x)-e^*)^\top Q(e(x)-e(y))$, at most $dR_Q$ by
+the seminorm Cauchy--Schwarz inequality.  Maximizing over $y$ gives
+$r(x)\leq H-d^2/2+dR_Q\leq H+R_Q\sqrt{2H}$.
+The lower inequality is Proposition~\ref{prop:theory-support}.
+\end{proof}
+
+\begin{proof}[Proof of Proposition~\ref{prop:exact-nominal}]
+Let $\lambda$ be the one-bus mixture weight and $x$ the mean early load.
+Complete-plan mixtures have $0\leq\lambda\leq1$,
+$10\lambda\leq x\leq10$, and intrinsic cost $14-7\lambda$.
+These conditions are sufficient: for $\lambda<1$ the two-bus component
+buys $(x-10\lambda)/(1-\lambda)\in[0,10]$ early; at $\lambda=1$,
+$x=10$.  For fixed $x$, cheapest intrinsic cost uses
+$\lambda=x/10$.  Substituting $z=30-x$ into \eqref{eq:exact-supply}
+gives hull objective
+\[
+ 14-\frac{7x}{10}+F(x,30-x)
+ =104-2.7x+0.2x^2
+ =\frac{7591}{80}+\frac{(x-27/4)^2}{5}.
+\]
+Its minimizer is $x=27/4$, $\lambda=27/40$.  Direct minimization of
+the one- and two-bus physical branches gives respectively 97 and 99.
+At $(10,20)$ the gradient of $F$ is $(6,4)$; its private objective is
+$7+6(10)+4(20)=147$, while the two-bus $x=0$ plan has
+$14+4(30)=134$.  At hull load $(27/4,93/4)$ the gradient is
+$(107/20,93/20)=(5.35,4.65)$.  Both supporting plans have private
+objective 153.5, and $F^*(p)=58.6125$ on $\R_+^2$.
+The hull dual value is therefore 94.8875.  The physical one-bus plan is
+a price minimizer, so fleet LOC is zero; supplier LOC is $97-94.8875$.
+\end{proof}
+
+\begin{proof}[Proof of Proposition~\ref{prop:exact-robust}]
+For reserve $0\leq r\leq5$, efficiency $\eta$, one-hour early limit
+$P$, and one-hour single terminal connector $K$, write
+\[
+ T=30/\eta,\quad \ell=\max\{0,T-K\},\quad
+ u=\min\{P,15/\eta\},\quad
+ h=\max\{\ell,(10+r)/\eta\}.
+\]
+The two-bus physical early-energy interval is $[\ell,u]$, and the
+one-bus interval is $[h,u]$ when nonempty.  The lower limit $\ell$
+enforces terminal connector capacity, while $(10+r)/\eta$ ensures the
+one bus can begin B above reserve.  For every point in these intervals,
+charge only A's bus early; terminal demands total $T-x\leq K$ and can be
+served serially in the one-hour terminal window.  Individual inventories
+and acceptance limits hold, and all used buses finish at capacity.
+
+Write $G_T(x)=F(x,T-x)$, $k=1/5$, and
+$m=T/2-5a/2$ for early linear coefficient $a=4$.  Then
+$G_T(x)=G_T(m)+k(x-m)^2$.  Suppose
+$\ell<m<h<u$, $f>0$, and
+$f<2k(h-\ell)(h-m)$.  The cheapest hull operating-cost boundary over
+$[\ell,h]$ is $2f-f(x-\ell)/(h-\ell)$, obtained by mixing the
+two-bus endpoint $\ell$ and one-bus endpoint $h$; over $[h,u]$ it is
+$f$.  Put $d=h-\ell$.  The strict inequality places the hull minimum
+$x^*=m+f/(2kd)$ inside $(m,h)$.  Physical branch minimization gives
+\[
+ D=G_T(m)+\min\{f+k(h-m)^2,2f\},\quad
+ CH=G_T(m)+2f-\frac{f(m-\ell)}d-\frac{f^2}{4kd^2}.
+\]
+Consequently
+\[
+ \Delta=\min\left\{k(h-x^*)^2,
+       \frac{f(m-\ell)}d+\frac{f^2}{4kd^2}\right\}>0.
+\]
+At $(r,\eta,P,K,f,a)=(1,19/20,12,30,7,4)$,
+$(\ell,m,h,u,d)=(30/19,110/19,220/19,12,10)$.
+The inequalities are strict: $u-h=8/19$ and
+$2kd(h-m)=440/19>7$.  Rational substitution yields
+\eqref{eq:exact-robust}.  All strict inequalities persist under small
+changes in $(r,\eta,P)$ with $K=30$ fixed.
+\end{proof}
+
+\begin{proof}[Proof of Proposition~\ref{prop:exact-replication}]
+For $m$ paired buses, total early energy $E$ ranges over
+$[10m,10n]$, with intrinsic cost $14n-7m$ and terminal energy
+$30n-E$.  Convexifying complete plans gives a triangular projected set;
+its cheapest operating cost at each $E$ is $14n-0.7E$.  Substitution in
+\eqref{eq:exact-scaled-supply} gives a quadratic minimized at
+$E=27n/4$ with value $7591n/80$.
+
+For fixed integer $m\geq n/2$, physical supply cost is minimized at
+$E=10m$, and the total objective is
+$104n-27m+20m^2/n=7591n/80+20(m-27n/40)^2/n$.
+For $m\leq n/2$, the best early load is $E=5n$ when feasible and the
+branch objective is $99n-7m$, decreasing toward $n/2$.  For odd $n$, moving from $m=\lfloor n/2\rfloor$ to
+$m=\lceil n/2\rceil$ changes the minimized objective by $-7+5/n<0$.
+For even $n$, the two formulas agree at $m=n/2$, and an integer nearest
+to $27n/40$ lies in the upper regime.  Thus the nearest integer to
+$27n/40$ is optimal,
+with both integers at a half-integer tie and $|\delta|\leq1/2$.
+
+At a physical optimum, the price is
+$p=(4+2m/n,6-2m/n)$.  The one-bus private objective minus the best
+two-bus private objective is $40\delta/n$; the latter buys zero early
+energy when $m/n\geq1/2$.  Hence whole-operator regret is
+\[
+ r_n=\begin{cases}
+ m\,40\delta/n,&\delta\geq0,\\
+ (n-m)(-40\delta/n),&\delta<0.
+ \end{cases}
+\]
+For $n=40k+1$, $m=27k+1$ and $\delta=13/40$, giving
+\eqref{eq:exact-replication-regret}.  The same difference is a
+reserved pair's individual regret when its current choice is worse;
+$|40\delta/n|\leq20/n$.  Summing the disadvantaged pairs reproduces
+the whole-operator expression because each pair has its own reserved
+connector rights.
+\end{proof}
+
+\subsection{Averaged responses in the quadratic example}\label{app:averaged-responses}
+
+Consider the exact recurrence in Section~\ref{sec:generation}, with
+$\alpha_k=0.5/\sqrt{k}$ and projection onto $\R_+^2$. Put
+$e_k=e(x_k)$, $c_k=c(x_k)$, $s_k=(5[p_{1,k}-4]_+,5p_{2,k})$,
+$d_k=e_k-s_k$, and $A_K=\sum_{k=1}^K\alpha_k$.
+The fleet loads satisfy $0\le e_{1,k}\le10$ and $20\le e_{2,k}\le30$.
+For $k\ge7$, $5\alpha_k<1$. If $p_{1,k}\ge4$, its unprojected successor
+is a convex combination of $p_{1,k}$ and $4+e_{1,k}/5\in[4,6]$.
+If $p_{1,k}<4$, that successor is $p_{1,k}+\alpha_ke_{1,k}\in[0,6)$.
+The second coordinate is a convex combination of $p_{2,k}$ and
+$e_{2,k}/5\in[4,6]$. Thus projection is inactive from $k=7$ onward,
+and prices, supply responses and $d_k$ remain bounded.
+
+Summing $\alpha_kd_k=p_{k+1}-p_k$ from $k=7$ shows that
+$\bar e_K-\bar s_K\to0$, where bars denote step-weighted averages.
+The finite prefix has vanishing weight. Also,
+\[
+ \sum_{k=7}^K\alpha_kp_k^\top d_k
+ =\frac12\left(\|p_{K+1}\|^2-\|p_7\|^2
+                  -\sum_{k=7}^K\alpha_k^2\|d_k\|^2\right).
+\]
+Dividing by $A_K$ gives zero in the limit, since
+$A_K\asymp\sqrt K$ and $\sum_{k=1}^K\alpha_k^2=O(\log K)$.
+The projection inequality underlying \eqref{eq:dispatch-rate} gives the
+stronger weighted statement
+\[
+ 0\le\frac1{A_K}\sum_{k=1}^K\alpha_k[CH-Q(p_k)]
+ \le\frac{\|p_1-p^*\|^2+M^2\sum_{k=1}^K\alpha_k^2}{2A_K}
+ \longrightarrow0,
+\]
+with the attained price $p^*=(107/20,93/20)$ and a bound $M$ on
+$\|d_k\|$. Exact oracle solutions satisfy
+$c_k+F(s_k)=Q(p_k)-p_k^\top d_k$, so their step-weighted mean tends
+to $CH$. Jensen's inequality, the vanishing load mismatch, and uniform
+continuity of the quadratic on bounded loads now imply
+\[
+ CH\le\bar c_K+F(\bar e_K)
+ \le\frac1{A_K}\sum_{k=1}^K\alpha_k[c_k+F(s_k)]+o(1)
+ \longrightarrow CH.
+\]
+The averaged fleet point belongs to the compact complete-fleet hull.
+Its unique optimizer therefore gives
+$(\bar e_K,\bar c_K)\to((27/4,93/4),371/40)$.
+Since $c_k$ equals 7 for one bus and 14 for two,
+$\bar c_K=14-7\bar w_K$, where $\bar w_K$ is the step-weighted one-bus
+frequency. Hence $\bar w_K\to27/40$. An eventually constant bus count
+would instead give zero or one, so both counts occur infinitely often.
+
+This proof concerns the stated quadratic recurrence and exact responses.
+It does not apply a square-summable-step theorem to $1/\sqrt{k}$ steps,
+or assert recovery of a physical fleet from its convexified average.

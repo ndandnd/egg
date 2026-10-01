@@ -1,0 +1,156 @@
+{
+  "design": {
+    "cells": [
+      {
+        "case": "learning_s2016_n20",
+        "case_identity": "1a67e5991dca59a6dbd5d0390a2b02647d86a4b7cf2585f9af9f02da9981438e",
+        "market_identity": "ada81cf6f2636179a8133ba394597c874a500453679c4a9cdc40c997bf78a192",
+        "mode": "cost_only"
+      },
+      {
+        "case": "learning_s2016_n20",
+        "case_identity": "1a67e5991dca59a6dbd5d0390a2b02647d86a4b7cf2585f9af9f02da9981438e",
+        "market_identity": "ada81cf6f2636179a8133ba394597c874a500453679c4a9cdc40c997bf78a192",
+        "mode": "cost_learned"
+      },
+      {
+        "case": "learning_s2017_n28",
+        "case_identity": "d90b4d889fae5f3df4d9b254b87053333f00da48bbe71e258445840fcc4eb8d0",
+        "market_identity": "4b9d8b8654d56985e2be9a131308d0adac10433e24f0c7f2deadf9465ab61a5c",
+        "mode": "cost_learned"
+      },
+      {
+        "case": "learning_s2017_n28",
+        "case_identity": "d90b4d889fae5f3df4d9b254b87053333f00da48bbe71e258445840fcc4eb8d0",
+        "market_identity": "4b9d8b8654d56985e2be9a131308d0adac10433e24f0c7f2deadf9465ab61a5c",
+        "mode": "cost_only"
+      }
+    ],
+    "charging_caps": true,
+    "charging_caps_meaning": "individual compiled charging-window energy limits",
+    "child_hard_seconds": 240,
+    "controller_cap_seconds": 1500,
+    "diagnosis_hashes": {
+      "research-20260930/learning-campaign/CHARGING_WINDOW_DIAGNOSIS.json": "1f2dd24c4065b78934adcbdae523fb6d579a392bb80da6b17445b656da1b9746",
+      "research-20260930/learning-campaign/CHARGING_WINDOW_DIAGNOSIS.md": "c97750fbaeb9ee4683bbe7663803e6190c525acef0778b7673dd500069e3be2d",
+      "research-20260930/learning-campaign/ENERGY_FEASIBILITY_DIAGNOSIS.json": "773de218af4fab936378bf86cafca093605b709db5db690faf327f8de6174cc0",
+      "research-20260930/learning-campaign/ENERGY_FEASIBILITY_DIAGNOSIS.md": "1c148e99fc6fcd71061bc8db82910d9cb1263627f04bcf71d9591d82b60720d6",
+      "research-20260930/learning-campaign/RESULTS_COST_AWARE_REPAIR.md": "20f52c6f6a8ba877a0c3529722368592010cbcbaf575d35f242899ec7b2bdf2d",
+      "research-20260930/learning-campaign/RESULT_MANIFEST_COST_AWARE.json": "59cd0cd3f6bd43b11c3bd74af8e7149425563fe9090761d8d39aadf9d69628ef",
+      "research-20260930/learning-campaign/diagnose_charging_windows.py": "65754a29435373c1fccf2f00a078679c7b1ad82c22e72739a582ccef31f4394e",
+      "research-20260930/learning-campaign/diagnose_energy_feasibility.py": "6b835d6cb3826d1030b8f0da732087d68d74b360ceab18894601ec1ed2c1463f"
+    },
+    "energy_relaxation": true,
+    "energy_relaxation_meaning": "necessary route SOC with individual depot and terminal charging-window caps; shared capacity omitted",
+    "hull_budget": {
+      "backend": "GRB",
+      "epsilon": 0.0001,
+      "master_calls": 6,
+      "phase_seconds": 55,
+      "polish_seconds": 15,
+      "polish_steps": 64,
+      "pool_cap": 32,
+      "pool_tolerance": 1e-06,
+      "pricing_calls": 4,
+      "rational_bits": 4096,
+      "threads": 1,
+      "wall_seconds": 70
+    },
+    "hull_policy": {
+      "bound_cache_policy": "none",
+      "master_policy": "numerical_qp_proposal",
+      "pricing_reserve_seconds": 10.0,
+      "reuse_policy": "feasible_pool"
+    },
+    "no_refit": true,
+    "order_policy": "crossed case/mode order; no replication",
+    "path_seconds": 5.0,
+    "repair_budget": {
+      "backend": "GRB",
+      "epsilon": 0.0001,
+      "max_rounds": 1,
+      "phase_seconds": 45,
+      "threads": 1,
+      "wall_seconds": 55
+    },
+    "reserved_test_groups_unobserved": true,
+    "skip_hull_for_replayed_source_fallback": true,
+    "stage2_input_hashes": {
+      "catalog.jsonl": "f40d71f82f25cf397e24fe000ad4795fc9fb8f67a8983288192698e6069bd041",
+      "frozen.json": "6de8846d024f3a7bc59e6c19e7c30086061b967b8e9fcdcc7a62496dd6b24cb6",
+      "learned/model.json": "e7ecb4781f8f825576b6fdd8c19bd192f1ffd3e137a0ddb36411c4b92626ed42",
+      "learned/proposals.jsonl": "257f8bfa544e1f716ac81d6dc4f345aa38e74e83ffc93122006877c948f5a49a",
+      "learned/training_receipt.json": "21a18dfbe37f6617b3aab6be9393839a390f17ac314983160e58fed0355f050a",
+      "learning_receipt.json": "a9b9370304b90c1042546b583fd34743b6ccc1dc026d1679b3b98b856e1549e4",
+      "learning_s2016_n20/state0/cheapest_bill/selection.json": "eb8d48c47314ed8ef28f8434af748a3ba840446884debfb8eb598a3699418805",
+      "learning_s2017_n28/state0/cheapest_bill/selection.json": "3d77959860cf9e53da1f219208816146c7db2f7a00f471693f6933390dab19fc",
+      "summary.json": "3688d16a98f08b65321d82acaabb93a8dea4b4d4218dda7a06f05a2da26ab5f6"
+    },
+    "stage2_source_commit": "822be2c7bdc2bef9ab6364c2e97d9747c048898b"
+  },
+  "native_probe": {
+    "backend_identity": {
+      "model_solver_name": "GRB",
+      "native_library_path": "/home/nc437/evsp_env/lib/python3.12/site-packages/gurobipy/_attrutil.cpython-312-x86_64-linux-gnu.so",
+      "native_library_sha256": "57f87a886aa5a1fd8356494fa1b81e9f9c7d957c898d09e96145440c76c762b7",
+      "requested": "GRB",
+      "solver_class": "SolverGurobi",
+      "solver_module": "mip.gurobi"
+    },
+    "model_seed": 0
+  },
+  "protocol": "egg-charging-cap-route-repair-development-20260930-v1",
+  "runtime": {
+    "gurobi_runtime": "12.0.3",
+    "gurobipy": "12.0.3",
+    "machine": "x86_64",
+    "mip": "1.17.6",
+    "python_abi": "cpython-312",
+    "python_build": "3.12.13 | packaged by Anaconda, Inc. | (main, Mar 19 2026, 20:20:58) [GCC 14.3.0]",
+    "python_implementation": "cpython",
+    "python_version": "3.12.13"
+  },
+  "scientific_admission": "pending independent result review",
+  "source_commit": "77122c800bbc04fec35dffd43a1f4030bf1699b1",
+  "source_hashes": {
+    "research-20260930/learning-campaign/CHARGING_WINDOW_DIAGNOSIS.json": "1f2dd24c4065b78934adcbdae523fb6d579a392bb80da6b17445b656da1b9746",
+    "research-20260930/learning-campaign/CHARGING_WINDOW_DIAGNOSIS.md": "c97750fbaeb9ee4683bbe7663803e6190c525acef0778b7673dd500069e3be2d",
+    "research-20260930/learning-campaign/ENERGY_FEASIBILITY_DIAGNOSIS.json": "773de218af4fab936378bf86cafca093605b709db5db690faf327f8de6174cc0",
+    "research-20260930/learning-campaign/ENERGY_FEASIBILITY_DIAGNOSIS.md": "1c148e99fc6fcd71061bc8db82910d9cb1263627f04bcf71d9591d82b60720d6",
+    "research-20260930/learning-campaign/PROTOCOL_CHARGING_CAP_REPAIR.md": "c29539e7b598fa0a2ad07c47d7a57f50c544cb7a37bcf4e1091277afd47e30b8",
+    "research-20260930/learning-campaign/PROTOCOL_COST_AWARE_REPAIR.md": "73e07b7d9e708f2ac2ffe639f560d5a41c6ea61115d220d3f1ed88bfc2943c98",
+    "research-20260930/learning-campaign/PROTOCOL_ENERGY_AWARE_REPAIR.md": "ccd213f73c9743c0b727caaab6b320ff0398215e8e67ce00ebb26a268d1e99c3",
+    "research-20260930/learning-campaign/PROTOCOL_REPAIR.md": "e7266649aeccee9a9272822cfb1ac459e5221a565052fac93dc0c3b09691a380",
+    "research-20260930/learning-campaign/REPAIR_DESIGN.md": "614d76b8bc63b1ace53165acfc14cb9b83e725c307ad905f778fd86749d53943",
+    "research-20260930/learning-campaign/RESULTS_COST_AWARE_REPAIR.md": "20f52c6f6a8ba877a0c3529722368592010cbcbaf575d35f242899ec7b2bdf2d",
+    "research-20260930/learning-campaign/RESULT_MANIFEST_COST_AWARE.json": "59cd0cd3f6bd43b11c3bd74af8e7149425563fe9090761d8d39aadf9d69628ef",
+    "research-20260930/learning-campaign/diagnose_charging_windows.py": "65754a29435373c1fccf2f00a078679c7b1ad82c22e72739a582ccef31f4394e",
+    "research-20260930/learning-campaign/diagnose_energy_feasibility.py": "6b835d6cb3826d1030b8f0da732087d68d74b360ceab18894601ec1ed2c1463f",
+    "src/cluster/charging_cap_repair.sbatch": "c786212d71607fd47aa6f85786ef927392b75592203cd681e2abd5831a054d76",
+    "src/cluster/cost_aware_repair.sbatch": "6d9b5f456d717a1a6239d16b131746374a207279c06ec8bd5811da032f47136a",
+    "src/cluster/energy_aware_repair.sbatch": "423c18cda9ffab0633d5bbd1e522238d5e8df0f1199ebb90a4f28cb753816439",
+    "src/cluster/route_repair_pilot.sbatch": "dbd6f5be294a08c3ad68ac8240c94997d5938bb3ecee0f9137196fc38c88f5b1",
+    "src/cluster/unicorn_env.sh": "1731f65b21fd9c81f5726078490aed384974ac2e4869bdc13e7259d5ab045678",
+    "src/egglab/learned_proposals.py": "5b58b9495ccb401bf7a865ba4058a81838b575f517268e76bad40f0b7dcbd479",
+    "src/egglab/native_hull.py": "dc8f04bfeab01fb6aaa4afca61c97887993b4e6181be8cabfa76858265051ffd",
+    "src/egglab/native_pathflow.py": "cd61085c5942248e53cdfbd92056c4ba324dfd81d5d18b726f58715298003df0",
+    "src/egglab/native_pathflow_hull.py": "93177e6e712ae4c407a26202194c250a7c547801b0ee6a18ebcf5e49c90a2eb4",
+    "src/egglab/native_recharge.py": "0067123a7f71cc6e9c89e1262cdcbd612cafdcfc252e35bcfca7f1f54c45d0f3",
+    "src/egglab/restricted_qp_proposal.py": "466edb75dbd619feae37f423967cdd1068ec33abdcc70207fa01a006ba7b53dd",
+    "src/egglab/route_fixed_repair.py": "a76dc414f5cba6755b063c0804a9f5a7b7afbfa67d86c3fbfdc647215c79402b",
+    "src/experiments/budget_sizing_diagnostic.py": "2b9da59b1699133cd7b5ffdc2465d4e5e8fe0d6a7b4e25560f189a6c4fc7ce23",
+    "src/experiments/charging_cap_repair_pilot.py": "349aff9830cba9d4c9db812e1fa025e050526db45b677403e7ef4b84e38df094",
+    "src/experiments/computational_benchmark.py": "da96e4601e34dc797526703db68c2d2cbda57d78a9048c8fd7c34889ffca1c8f",
+    "src/experiments/cost_aware_repair_pilot.py": "f55139e0c3a39de7def072ae0838abb6c51aef2fb94ba06da6b895cc101c19ff",
+    "src/experiments/energy_aware_repair_pilot.py": "58da90c1d27776c6f7ee4c4d59b966582d6a1af5b3ddf58b710f62a3c2e7de0b",
+    "src/experiments/retrieval_comparison.py": "74d2b1f634196ef6450620c9ebdda6421dde29ff03b92c0800afbf158689ed77",
+    "src/experiments/route_repair_pilot.py": "f51c55c2fcb915303a75466c97265fbbc804bb837645167f9fdb0306e11b1ffc",
+    "src/tests/test_charging_cap_cover.py": "ea7ff873ff9ce399fc7bd888593bee1cf378c12542255a36fb2564884c02cd40",
+    "src/tests/test_charging_cap_repair_pilot.py": "34f557b8e4906212ed2ef5adc93cf454b51211423bd9ce20e52e4ae28d4531d4",
+    "src/tests/test_cost_aware_repair_pilot.py": "5c1d481dfc143495659994c7057c3f88b0a76cb3dc911d282a38e097dec1fa10",
+    "src/tests/test_energy_aware_repair_pilot.py": "105f2e8fd0818d74dddf56ba08fa87ab88213f5791da4163dd662fa491702dba",
+    "src/tests/test_energy_cover.py": "47c43223877790cb9bfb7bd4a18f91bd5a5d08172093b38bb528e3261e52e3d8",
+    "src/tests/test_route_fixed_repair.py": "b5210c85121165711b1a9a3ec096b33486d2fedf1dc2b21d0e1c186ff5e8e6de",
+    "src/tests/test_route_repair_pilot.py": "5705745d3cc7dca42fe287a575c359933d54fe725c2f54b8a092d9d341e90f2a"
+  }
+}

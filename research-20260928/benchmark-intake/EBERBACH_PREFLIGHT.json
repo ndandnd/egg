@@ -1,0 +1,114 @@
+{
+  "classification": "pure public-source Eberbach intake and modeled EGG feasibility preflight; no optimizer or native model allocation",
+  "dataset_doi": "10.6084/m9.figshare.26088190.v1",
+  "source_archive_sha256": "3c6c2ed7c45fc441f4cb6108d830769b60c0de5e44e1a3a6fc72bed4f5f07317",
+  "source_archive_bytes": 267312231,
+  "source_members_used_or_fingerprinted": [
+    {
+      "member_path": "10__data/20__Selected_transport_operators/003__Stadtwerke Eberbach/bus_route_info.xlsx",
+      "uncompressed_bytes": 3235,
+      "sha256": "ffc981d98a9a50b5c5796fd8516b16c662e67bc8cdc974987181534b5140af50"
+    },
+    {
+      "member_path": "10__data/20__Selected_transport_operators/003__Stadtwerke Eberbach/bus_stops.xlsx",
+      "uncompressed_bytes": 3845,
+      "sha256": "01c642c894dab75b0640299129975bb05487e963bed2996d6cd0ec8692f602e8"
+    },
+    {
+      "member_path": "10__data/20__Selected_transport_operators/003__Stadtwerke Eberbach/deadhead_trip_matrix.mat",
+      "uncompressed_bytes": 2409,
+      "sha256": "de6c79a361f6d85deabda294e9acad62db8efde685b4f82385577300cabfb054"
+    },
+    {
+      "member_path": "10__data/20__Selected_transport_operators/003__Stadtwerke Eberbach/itineraries.xlsx",
+      "uncompressed_bytes": 13376,
+      "sha256": "9fcce891904cdcc00b612afbf8b846336b62967cd26c0e1164a51285b99eebf2"
+    },
+    {
+      "member_path": "10__data/20__Selected_transport_operators/003__Stadtwerke Eberbach/itineraries_course.mat",
+      "uncompressed_bytes": 31326,
+      "sha256": "6a34368828fb7577203fba24feec8546771f74dc18fd65b4ecd5d1c09de14601"
+    },
+    {
+      "member_path": "10__data/20__Selected_transport_operators/003__Stadtwerke Eberbach/trip_set.xlsx",
+      "uncompressed_bytes": 12794,
+      "sha256": "7e0f7b144637e184b4983d447233fb8c28d174f612ecaae48f41d2f8cc256f48"
+    }
+  ],
+  "artifact_path": "data/public/sistig_26088190_v1/eberbach_native_case.json",
+  "artifact_sha256": "5ffb2f3a322b40c9c6c56972607fd0c4b21130cd35cd08e0a465f34fba67dc19",
+  "artifact_bytes": 31160121,
+  "case_name": "sistig_eberbach_single_depot_36_eb3",
+  "case_identity": "9dc30e1034953808e0c98cd467ae02272eaf6ddde2428a326d26b08b6db94c48",
+  "source_observations": {
+    "operator": "Stadtwerke Eberbach",
+    "services": 105,
+    "stops": 14,
+    "directed_deadhead_arcs": 196,
+    "flagged_depot_ids": [
+      36
+    ],
+    "calendar_date_present": false,
+    "source_service_or_deadhead_energy_present": false
+  },
+  "modeled_egg_assumptions": {
+    "vehicle_concept": "EB-3 Table 2",
+    "usable_battery_kwh": 400,
+    "per_bus_charge_kw": 360,
+    "shared_grid_kw": 360,
+    "connectors": 1,
+    "max_vehicles": 105,
+    "terminal_full_charge_deadline_min": 1800,
+    "vehicle_cost_synthetic": 100,
+    "deadhead_cost_per_min_synthetic": 0
+  },
+  "pure_results": {
+    "max_modeled_single_service_energy_kwh": 35.36487083342257,
+    "movement_counts": {
+      "direct": 5189,
+      "depot": 4960,
+      "pullout": 105,
+      "pullin": 105
+    },
+    "compact_formulation_dimensions": {
+      "formulation": "egg-native-pathflow-v3-energy-band-orphan-projection",
+      "basis": "combinatorial count of native_pathflow.build_feasible_model; no model allocated",
+      "movement_binary_variables": 10359,
+      "service_soc_continuous_variables": 210,
+      "charge_interval_continuous_variables": 281038,
+      "market_load_continuous_variables": 30,
+      "total_variables_before_objective": 291637,
+      "estimated_constraints_before_objective": 312316,
+      "compiled_resource_intervals": 186,
+      "ordered_service_pairs": 10920,
+      "solver_invoked": false,
+      "model_allocated": false
+    },
+    "one_trip_per_bus_witness": {
+      "classification": "constructed one-trip-per-bus feasible witness; not optimized",
+      "replay_ok": true,
+      "used_vehicle_count": 105,
+      "service_energy_total_kwh": 1458.7465339943376,
+      "one_trip_per_bus_pullout_pullin_energy_total_kwh": 939.447688188047,
+      "one_trip_per_bus_total_battery_energy_kwh": 2398.1942221823847,
+      "maximum_one_trip_bus_energy_kwh": 70.28913750008924,
+      "latest_pullin_arrival_min": 1183,
+      "last_terminal_charge_end_min": 1189.2665231679064,
+      "total_terminal_charge_kwh": 2398.1942221823847,
+      "maximum_shared_grid_kw": 360.0000000000103,
+      "compiled_resource_interval_count": 186,
+      "eligible_mode_interval_pairs_per_vehicle": 281038,
+      "candidate_charge_variables_at_max_vehicles": 29508990,
+      "solver_invoked": false
+    }
+  },
+  "preparation_wall_s": 7.417,
+  "preparation_timing_scope": "one local Python regeneration of build_document(validate_native=True), including archive checksums, source parsing, case construction, pure validation/interval compilation, witness replay, and JSON serialization; excludes native model build and solver",
+  "limitations": [
+    "The 105-bus replay is a feasible upper-bound construction under EGG assumptions, not an optimal fleet count.",
+    "Source contains no observed bus energy, charger deployment, calendar date, or publisher schedule used here.",
+    "Compact formulation variables and constraints are combinatorial estimates from current code; no MIP was allocated or solved. Future bounded solve must include measured model-build time."
+  ],
+  "solver_invoked": false,
+  "model_allocated": false
+}

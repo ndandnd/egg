@@ -1,0 +1,128 @@
+{
+  "schema": "egg-charging-cap-bound-comparison-v1",
+  "comparison_scope": "Only the 2017 cost-aware and charging-cap cells compared here; this does not claim strongest bounds over uninspected older runs.",
+  "case": "learning_s2017_n28",
+  "services": 28,
+  "same_domain_check": {
+    "compatible": true,
+    "case_identity": "d90b4d889fae5f3df4d9b254b87053333f00da48bbe71e258445840fcc4eb8d0",
+    "market_identity": "4b9d8b8654d56985e2be9a131308d0adac10433e24f0c7f2deadf9465ab61a5c",
+    "basis": "case and market identities match in both repair.result and independent_replay.json; saved target-control records also match exactly"
+  },
+  "shared_target_controls": {
+    "source": "result.json controls.cheapest_bill and controls.learned in both attempts",
+    "same_feasible_plan_hash": "91a7401da7eacbf8adec3b32c007b0f03bc63ffb03071540631d75960fdc15ac",
+    "same_objective_exact": "8061342690782785432003472120345167765896047553700993/11692013098647223345629478661730264157247460343808",
+    "same_objective_cost_units": 689.474312316285,
+    "same_global_lower_exact": "52241981200036353077139480697495/90144042682896312917133623296",
+    "same_global_lower_cost_units": 579.538920656247,
+    "native_status": "budget_exhausted",
+    "feasible": true
+  },
+  "runs": {
+    "cost_aware": {
+      "attempt": "result/learning_repair/20260930-cost-aware-attempt1",
+      "mode": "cost_learned",
+      "candidate_kind": "source_fallback",
+      "candidate_plan_hash": "36edbf85bbb7b2e1354cc8db4e2c166afe4c861002fff5264f725f9603be97c2",
+      "candidate_objective_exact": "529545918777236997881014781986640753009965041281591/730750818665451459101842416358141509827966271488",
+      "candidate_cost_units": 724.660041769547,
+      "target_hull": {
+        "status": "budget_exhausted",
+        "global_certificate_replayed": true,
+        "mixture_replayed": true,
+        "global_lower_exact": "2548839128041183/4398046511104",
+        "global_lower_cost_units": 579.538920656247,
+        "mixture_upper_exact": "6039868351564897/8796093022208",
+        "mixture_upper_cost_units": 686.653533144283,
+        "columns": 3,
+        "master_calls": 3,
+        "pricing_requests": 2
+      },
+      "sources": [
+        {
+          "path": "research-20260930/learning-campaign/COST_AWARE_REPAIR_CELLS.csv",
+          "sha256": "58ad8ea021fd587e880603310d5809961f6672f80b1a7cce4d3e39d7f0e59644"
+        },
+        {
+          "path": "result/learning_repair/20260930-cost-aware-attempt1/learning_s2017_n28/state0/cost_learned/result.json",
+          "sha256": "e617597faed8a4aff23f80b49f824cad33ccffb702606466b2276a816beaa734"
+        },
+        {
+          "path": "result/learning_repair/20260930-cost-aware-attempt1/learning_s2017_n28/state0/cost_learned/repair.json",
+          "sha256": "ee3d96193e49e6912518a7d05393e39608abf74b0f8828624fd836b3bae2bca1"
+        },
+        {
+          "path": "result/learning_repair/20260930-cost-aware-attempt1/learning_s2017_n28/state0/cost_learned/independent_replay.json",
+          "sha256": "074f9197369846aecd33c2570cf5564100243d4b72628403334b01feb65a1c62"
+        }
+      ],
+      "csv_row_order": 3,
+      "csv_cell_kind": "source_fallback"
+    },
+    "charging_cap": {
+      "attempt": "result/learning_repair/20260930-charging-cap-attempt1",
+      "mode": "cost_learned",
+      "candidate_kind": "repaired",
+      "candidate_plan_hash": "a7898c198e1881abaf8440e1426998bb0081085a490efca6543546a4031e76f0",
+      "candidate_objective_exact": "716865519960464901688215121666696722010927766037947/730750818665451459101842416358141509827966271488",
+      "candidate_cost_units": 980.998586179698,
+      "target_hull": {
+        "status": "budget_exhausted",
+        "global_certificate_replayed": true,
+        "mixture_replayed": true,
+        "global_lower_exact": "5173562050373365/8796093022208",
+        "global_lower_cost_units": 588.165909263508,
+        "mixture_upper_exact": "3029207085749001/4398046511104",
+        "mixture_upper_cost_units": 688.761948765432,
+        "columns": 3,
+        "master_calls": 3,
+        "pricing_requests": 2
+      },
+      "sources": [
+        {
+          "path": "research-20260930/learning-campaign/CHARGING_CAP_REPAIR_CELLS.csv",
+          "sha256": "9438ac55d2a92f9db830283509f70353ab09077ac4790d67441f24ee1d0c5917"
+        },
+        {
+          "path": "result/learning_repair/20260930-charging-cap-attempt1/learning_s2017_n28/state0/cost_learned/result.json",
+          "sha256": "9ce17abf7294824d93246dd460fdc9fd87cfc9306bffbdaff194cf3d571ffbc3"
+        },
+        {
+          "path": "result/learning_repair/20260930-charging-cap-attempt1/learning_s2017_n28/state0/cost_learned/repair.json",
+          "sha256": "3145dcb7683d75c8a80010d81aa61890d57ffd8c185ad6d248d5af65507062ef"
+        },
+        {
+          "path": "result/learning_repair/20260930-charging-cap-attempt1/learning_s2017_n28/state0/cost_learned/independent_replay.json",
+          "sha256": "1a5933779219d136b01616237362e141a91d70d2da1f6c431db12d47a0d2cab8"
+        }
+      ],
+      "csv_row_order": 3,
+      "csv_cell_kind": "repaired"
+    }
+  },
+  "comparison": {
+    "charging_cap_global_lower_improvement_cost_units": 8.626988607261,
+    "charging_cap_mixture_upper_minus_cost_aware_cost_units": 2.108415621149,
+    "combined_target_hull_interval_from_these_two_runs_cost_units": {
+      "lower": 588.165909263508,
+      "lower_source": "charging_cap global lower",
+      "upper": 686.653533144283,
+      "upper_source": "cost_aware mixture upper",
+      "lower_exact": "5173562050373365/8796093022208",
+      "upper_exact": "6039868351564897/8796093022208"
+    },
+    "physical_optimum_enclosure_cost_units": {
+      "lower": 588.165909263508,
+      "lower_source": "charging_cap global lower",
+      "upper": 689.474312316285,
+      "upper_source": "shared archived target-verified feasible control",
+      "lower_exact": "5173562050373365/8796093022208",
+      "upper_exact": "8061342690782785432003472120345167765896047553700993/11692013098647223345629478661730264157247460343808",
+      "gap_cost_units": 101.308403052777
+    },
+    "mixture_upper_is_physical_feasible_plan_bound": false,
+    "optimality_gap_closed": false,
+    "scope_note": "Combine only the two compared same-market runs; no claim is made about stronger bounds in other runs."
+  }
+}

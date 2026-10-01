@@ -1,3 +1,36 @@
+# Research status — journal research branch
+
+Updated 27 September 2026. Current work is on
+`codex/journal-research-20260927`, draft PR56; nothing is merged or submitted.
+This opening snapshot supersedes the older operational handoff below for the
+journal research effort. Historical claims below are preserved, not newly audited.
+
+| Research question | Evidence now | Remaining work |
+|---|---|---|
+| Can complete, replenished fleet schedules lack marginal-price support? | Exact audited construction; reserve/loss robustness and 86-size replication | Establish scope on real timetables under explicit assumptions |
+| Does a small planning gap settle incentive quality? | Exact scaling example and reviewed participant normalization; two reviewers passed a quadratic load-radius bound | Integrate the new bound into source draft0.4 and review the full scientific narrative |
+| Is the native physical oracle qualified? | CBC+GRB small controls, half-minute extension, compact20-cell gate and separate raw/physical audits | Full public-case result audit |
+| Does the native hull controller work? | First failure preserved; corrected eight-cell execution passed, independent audit being packaged | Qualify explicit compact-oracle integration before public hull work |
+| Is a complete public timetable admitted? | All37 Hildenbrand services, directed source data, declared energy model, independently checked two-depot-variant intake | Job557543 is running the first two-cell flat-price pilot; no result claim yet |
+| Is a paper available? | Reviewed PDF0.3:17pages,sixfigures, backed up and linked in GoogleDoc | Public economic evidence and final independent scientific review before calling it an excellent first draft |
+
+Immediate next actions are automatic: collect and independently audit job557543,
+complete compact-hull integration qualification, then freeze a modest matched
+planner/hull/regret study. Keep all failures and unresolved intervals. Costs,
+energy rates and hardware restrictions remain declared modeling assumptions;
+no operational benefit, general speed advantage or new general welfare theorem
+is claimed. Major scientific-claim changes, private-data release or materially
+larger compute commitments are flagged to the user. No such decision is pending.
+
+Detailed continuation: `AUTONOMOUS_RESEARCH_CONTINUATION.md`; chronological
+research record: `JOURNAL_RESEARCH_LOG.md`; publication claims:
+`../paper/CLAIM_EVIDENCE_LEDGER.md`. The GoogleDoc is an updated narrative record;
+Git manifests and source freezes identify reproducible evidence.
+
+---
+
+## Earlier rolling handoff (preserved)
+
 # Research status (rolling handoff)
 
 Last updated: 2026-08-18. This is the single entry point for "where the

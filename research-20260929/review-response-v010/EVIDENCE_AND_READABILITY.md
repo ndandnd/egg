@@ -1,0 +1,33 @@
+# Evidence and readability review
+
+The readability comments below refer to the v0.9 working-tree text I read before concurrent v0.10 edits began. They cover the abstract and introduction in `paper/latex/main.tex`, `paper/latex/generation_dispatch.tex`, and the replication subsection in `paper/latex/exact_results.tex`. The later v0.10 edits were not treated as a reviewed final copy. This is a specialist readability review; no “humanizer,” detector, or prose certification was attempted.
+
+## Evidence check
+
+The archived development screen contains the exact physical two-service quadratic toy used in the analytical construction. In `research-20260928/computational-results/attempt1/scientific_evidence.zip` (SHA-256 `0dfc8513ededb5e42fa4bbe2d5b42121a3bc0e69c7f6ac19518d294a570e4c87`), `frozen.json` records the synthetic cyclic case identity `f24ed85ecec207ad543878c4cb247575629026fe1259ba3226155e439905b140`: two 15-kWh trips, a 20-kWh battery, at most two buses, a 10-kW early charge window, a 30-kW terminal window, and a 7-unit vehicle cost. Its initial market has `a=(0,4,0,0)` and `b=(0,0.2,0,0.2)`. With the repository's `0.5*b*L^2` supply-cost convention and zero load in the intervening slots, this is exactly `F(x,z)=4x+(x^2+z^2)/10`. The case fixture and cost convention are visible in `src/experiments/native_recharge_qualification.py` and `src/egglab/market.py`; the matching analytical specification is in `paper/latex/exact_results.tex`.
+
+The archived cold-hull result is `synthetic_cyclic/state0/cold_hull/result.json`, with its runtime receipt beside it in the ZIP. It reports a certified result from three pricing requests and three timed pricing calls (including one seed request), plus two master calls. The frozen hull budget sets `epsilon=1e-4` and `pool_tolerance=1e-6`. The exact hull value is `CH=7591/80=94.8875`; the saved interval is approximately `[94.88749899999999, 94.88750000000002]`, with width `1.00000002590e-6`. Thus the run is certified at its configured `1e-4` target and its pool tolerance is `1e-6`, but its overall interval is just wider than `1e-6`; the lower endpoint is about `1.00000000884e-6` below `CH`. Do not describe this as a strict global certificate within `1e-6`.
+
+Parsing the 20,000 rows of `research-20260929/nonsmooth-coordination/results/quadratic_trace.csv` against the exact `CH` finds no recorded best-so-far dual bound within `1e-6`. The best value first appears at call 10,356 and remains `94.88749878122395`; after all 20,000 analytic oracle calls its shortfall is `1.21877605e-6`. The fair description is three pricing calls for a tolerance-qualified column-generation hull enclosure versus 20,000 cheap analytic dual-oracle calls whose best bound approaches, but does not reach, the strict `1e-6` threshold. These are different call types and different stopping criteria.
+
+The saved ramp result in `research-20260929/generation-dispatch-pilot/RESULT.json` records hull mean early load 5 and a valid price sample `(6,5,5)` at load 5. Its first coordinate lies within the saved admissible range, approximately `[3,6]`; the terminal coordinates are 5. This verifies the saved dual selection without another solve.
+
+## Five concrete plain-language edits
+
+1. In the abstract, replace “A subgradient support criterion accommodates multiple dispatch prices” with: “Some dispatch problems have several valid marginal-price vectors. Our support test considers that whole set, so its answer does not depend on a solver’s arbitrary choice.”
+
+2. In the introduction, replace the convexification explanation with: “The convex hull of complete fleet plans gives a lower bound on planning cost, but a point inside that hull is usually not an executable daily schedule. Also, supply cost at the average load is generally different from average supply cost across physical schedules.”
+
+3. In `generation_dispatch.tex`, replace “Balance multipliers are marginal prices; ramps couple their determination across time” with: “The value of each hourly balance constraint is that hour’s marginal price. Generator ramp limits link those prices across hours.”
+
+4. Before the dual update equation in `generation_dispatch.tex`, say: “At each posted price, the fleet chooses its cheapest complete plan and the supplier chooses its most profitable output. Their load mismatch determines the direction of the next price adjustment.” Keep the mathematical definition immediately after this explanation.
+
+5. In the replication discussion in `exact_results.tex`, replace the opening participant-scale explanation with: “In the whole-fleet calculation, one operator may change every bus assignment while treating the posted price as fixed. Under reserved rights, each of the `n` operators may change only its own A/B pair and its assigned chargers.” This makes the two institutions easier to compare before introducing their regret formulas.
+
+## Readiness
+
+The v0.9 prose is careful about separating the exact synthetic mechanism from unresolved public bounds, but several sentences assume that readers already know “support,” “hull,” and “regret.” The five edits above make those transitions easier to follow without removing the mathematical distinctions. The central evidence is suitable for coauthor discussion after the dual-ascent sentence uses the full best value and its `1.2188e-6` shortfall, and after the column-generation result is described with its `1e-4` certificate target and separate `1e-6` pool tolerance. Neither method should be summarized as meeting a strict `1e-6` global bound criterion.
+
+## Final edited-text check
+
+Read-only check of the requested v0.10 diffs only: the abstract and introduction in `main.tex`; the method-role explanation, oracle description, comparison footnote, two-institution table, and averaging paragraph in `generation_dispatch.tex`; the economic story and HiGHS price paragraph in `dispatch_example.tex`; and the revised replication paragraphs in `exact_results.tex`. The supplier's profit-maximizing response is described correctly. The call-count comparison distinguishes the methods and disclaims runtime equivalence; its footnote reports the achieved interval width and both tolerances. The averaging paragraph identifies the mean as a convexified solution rather than an executable schedule. The dispatch example makes the ramp mechanism and the selected price's failure to support the mixture understandable. The replication text distinguishes whole-fleet ownership from reserved-pair ownership and limits its literature analogy. No critical readability or factual-coherence issue surfaced in these portions. No manuscript files were edited; the mathematical appendix was outside this check.

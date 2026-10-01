@@ -1,0 +1,43 @@
+{
+  "status": "PASS",
+  "scientific_report_unchanged_except_auditor_hash_and_runtime": true,
+  "new_external_output_passed": true,
+  "controls": [
+    {
+      "control": "raw_result",
+      "rejected": true,
+      "returncode": 1,
+      "reason": "AssertionError: audit output cannot replace raw result"
+    },
+    {
+      "control": "frozen_protocol",
+      "rejected": true,
+      "returncode": 1,
+      "reason": "AssertionError: audit output must be outside the source repository"
+    },
+    {
+      "control": "new_repo_file",
+      "rejected": true,
+      "returncode": 1,
+      "reason": "AssertionError: audit output must be outside the source repository"
+    },
+    {
+      "control": "existing_external_file",
+      "rejected": true,
+      "returncode": 1,
+      "reason": "AssertionError: audit output must be a new file; existing files and symlinks are refused"
+    },
+    {
+      "control": "broken_external_symlink",
+      "rejected": true,
+      "returncode": 1,
+      "reason": "AssertionError: audit output must be a new file; existing files and symlinks are refused"
+    },
+    {
+      "control": "external_symlink_into_repo",
+      "rejected": true,
+      "returncode": 1,
+      "reason": "AssertionError: audit output must be outside the source repository"
+    }
+  ]
+}

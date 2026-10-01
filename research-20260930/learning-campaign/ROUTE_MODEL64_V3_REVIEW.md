@@ -1,0 +1,9 @@
+# Bounded v3 source review
+
+Reviewed the exact-prefix pool builder, v3 model, training worker, wrapper, protocol, and focused tests for censor handling, split preservation, weighting, inner selection, and metric aggregation. I did not rerun tests, inspect raw shard outputs, fit a model, or read development/test data.
+
+The pool keeps the full registry prefix as case/group rows and admits shards in exact order. It computes separate intended, observed-source, and full-pair counts. Missing source labels remain explicit; there is no imputation or removal of the timetable. The registered shard-04/base-10037 source0 censor is preserved with source1 eligible only for observed-source supervision, while the group remains in its fixed fold and the three dependent target censors are recorded. The loader cross-checks eligibility against actual source-input rows and fails if any fit, inner, or outer partition has no supervised source rows.
+
+The model keeps the v2 outer-fold modulo assignments for the original 32 groups and extends the same index rule to exact 64/128 prefixes. It fits shared fold models using fit-only preprocessing, controls, and weights; MLP/tree stopping uses only whole inner groups; outer rows are scored only after those choices. Weights give each eligible timetable equal mass, divide that mass among its observed fleets, then among its movement rows. Primary metrics average sources within each timetable and timetables equally, including average precision; pooled-row metrics are explicitly secondary. Intended and eligible denominators and zero-source groups remain in the saved accounting.
+
+The protocol matches the reviewed code: no target outcomes enter features, no refit or outer tuning occurs, and the 128-group prefix is refused unless every earlier registry shard is admitted. The implementation owner reports six focused fixtures passed; I did not rerun them. **Disposition: no blocker found in the reviewed scope.**

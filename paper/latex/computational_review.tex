@@ -1,0 +1,44 @@
+\documentclass[11pt]{article}
+\usepackage[letterpaper,margin=1in]{geometry}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{graphicx,booktabs,array,tabularx}
+\usepackage{microtype}
+\usepackage[hidelinks]{hyperref}
+\usepackage{placeins}
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf}
+\setlength{\parskip}{0.28em}
+\setlength{\emergencystretch}{1em}
+\renewcommand{\arraystretch}{1.15}
+\clubpenalty=10000
+\widowpenalty=10000
+\displaywidowpenalty=10000
+\brokenpenalty=10000
+\let\originalsubsection\subsection
+\renewcommand{\subsection}{\FloatBarrier\originalsubsection}
+\title{Repeated optimization of electric-bus fleets\\[0.35em]
+\large Computational chapter for the journal draft}
+\author{}
+\date{28 September 2026}
+\begin{document}
+\begin{center}
+{\LARGE Repeated optimization of electric-bus fleets\par}
+\vspace{0.5em}
+{\large Computational chapter for the journal draft\par}
+\vspace{0.5em}
+28 September 2026
+\end{center}
+\vspace{0.75em}
+\noindent\textit{Working manuscript section.} This chapter consolidates completed,
+reviewed development experiments. It is a component of the expanded paper;
+the exact theory, literature synthesis and full manuscript remain separate.
+\input{computational_results}
+\FloatBarrier
+\subsection*{Data and reproduction}
+The figures and tables use the published scalar summaries from the feasible-pool
+pilot, ordered solver-baseline comparison and fixed-price pricing-start pilot
+in the \href{https://github.com/ndandnd/egg}{EGG research repository}.
+The companion source map records the input tables and figure-generation script.
+Underlying solver bounds remain numerical and tolerance-qualified. No new
+optimization was performed to assemble this chapter.
+\end{document}

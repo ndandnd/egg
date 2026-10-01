@@ -1,0 +1,197 @@
+{
+  "charging_caps": true,
+  "energy_relaxation": true,
+  "repair_wall_seconds": 2.4563347329967655,
+  "result": {
+    "case_identity": "1a67e5991dca59a6dbd5d0390a2b02647d86a4b7cf2585f9af9f02da9981438e",
+    "charging_caps": true,
+    "charging_subproblem": "fixed-binary native linear program",
+    "cover": {
+      "charging_cap_scope": "per-visit min(per_bus_kw, grid_kw) times available hours times efficiency; no shared connector scheduling",
+      "charging_caps": true,
+      "cover_objective": 4.0,
+      "energy_relaxation": true,
+      "energy_relaxation_scope": "post-trip SOC and per-visit delivered charging upper bounds including terminal refill; shared connector competition omitted",
+      "logit_scale": 0.0,
+      "meaning": "legal path cover satisfying necessary energy bounds; charging schedule and physical replay not yet checked",
+      "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+      "minimum_bus_count_scope": "declared energy-relaxed route covers with per-visit charging caps; shared charging omitted",
+      "mip_gap": 0.0,
+      "mip_gap_raw": "0.0",
+      "mip_node_count": 1,
+      "native_minimum_bus_count_reported": false,
+      "objective_policy": "cost_only",
+      "pullout_count": 4,
+      "random_seed": 0,
+      "relaxation_minimum_bus_count_reported": true,
+      "score": null,
+      "selected_movements": [
+        "out_T01",
+        "out_T02",
+        "out_T03",
+        "out_T05",
+        "in_T14",
+        "in_T18",
+        "in_T19",
+        "in_T20",
+        "direct_T01_T04",
+        "direct_T02_T07",
+        "depot_T03_T06",
+        "depot_T04_T09",
+        "depot_T05_T11",
+        "direct_T06_T10",
+        "direct_T07_T08",
+        "depot_T08_T12",
+        "depot_T09_T13",
+        "depot_T10_T14",
+        "depot_T11_T15",
+        "depot_T12_T16",
+        "depot_T13_T17",
+        "depot_T15_T19",
+        "depot_T16_T20",
+        "depot_T17_T18"
+      ],
+      "soc_after_trip_witness_kwh": {
+        "T01": 80.84,
+        "T02": 77.28000000000003,
+        "T03": 76.74000000000001,
+        "T04": 58.03999999999978,
+        "T05": 21.499999999999996,
+        "T06": 71.93,
+        "T07": 55.21000000000004,
+        "T08": 31.210000000000043,
+        "T09": 52.48999999999978,
+        "T10": 24.090000000000003,
+        "T11": 34.93000000000023,
+        "T12": 21.0,
+        "T13": 58.95999999999998,
+        "T14": 21.0,
+        "T15": 25.999999999999975,
+        "T16": 21.0,
+        "T17": 48.03999999999998,
+        "T18": 21.0,
+        "T19": 21.500000000000004,
+        "T20": 21.0
+      },
+      "status": 0,
+      "threads": 1,
+      "vehicles": [
+        {
+          "movements": [
+            "out_T01",
+            "direct_T01_T04",
+            "depot_T04_T09",
+            "depot_T09_T13",
+            "depot_T13_T17",
+            "depot_T17_T18",
+            "in_T18"
+          ],
+          "trips": [
+            "T01",
+            "T04",
+            "T09",
+            "T13",
+            "T17",
+            "T18"
+          ],
+          "vehicle": 0
+        },
+        {
+          "movements": [
+            "out_T02",
+            "direct_T02_T07",
+            "direct_T07_T08",
+            "depot_T08_T12",
+            "depot_T12_T16",
+            "depot_T16_T20",
+            "in_T20"
+          ],
+          "trips": [
+            "T02",
+            "T07",
+            "T08",
+            "T12",
+            "T16",
+            "T20"
+          ],
+          "vehicle": 1
+        },
+        {
+          "movements": [
+            "out_T03",
+            "depot_T03_T06",
+            "direct_T06_T10",
+            "depot_T10_T14",
+            "in_T14"
+          ],
+          "trips": [
+            "T03",
+            "T06",
+            "T10",
+            "T14"
+          ],
+          "vehicle": 2
+        },
+        {
+          "movements": [
+            "out_T05",
+            "depot_T05_T11",
+            "depot_T11_T15",
+            "depot_T15_T19",
+            "in_T19"
+          ],
+          "trips": [
+            "T05",
+            "T11",
+            "T15",
+            "T19"
+          ],
+          "vehicle": 3
+        }
+      ],
+      "wall_seconds": 0.21318560896907002
+    },
+    "cover_policy": "cost_only",
+    "energy_relaxation": true,
+    "failure": {
+      "message": "Fixed-route charging has no native incumbent: INFEASIBLE",
+      "stage": "charging",
+      "type": "RepairStageFailure"
+    },
+    "inference_attempted": false,
+    "inference_performed": false,
+    "market_identity": "ada81cf6f2636179a8133ba394597c874a500453679c4a9cdc40c997bf78a192",
+    "native_stats": {
+      "backend": "GRB",
+      "backend_runtime": {
+        "model_solver_name": "GRB",
+        "native_library_path": "/home/nc437/evsp_env/lib/python3.12/site-packages/gurobipy/_attrutil.cpython-312-x86_64-linux-gnu.so",
+        "native_library_sha256": "57f87a886aa5a1fd8356494fa1b81e9f9c7d957c898d09e96145440c76c762b7",
+        "requested": "GRB",
+        "solver_class": "SolverGurobi",
+        "solver_module": "mip.gurobi"
+      },
+      "incumbent": null,
+      "lower_bound": null,
+      "n_constraints": 3224,
+      "n_int": 353,
+      "n_vars": 2457,
+      "physical_constraints": 3224,
+      "raw_incumbent_repr": "None",
+      "raw_lower_bound_repr": "None",
+      "seconds_cap": 45.0,
+      "status": "INFEASIBLE",
+      "threads": 1,
+      "wall_s": 0.007345674966927618
+    },
+    "policy": "route-cover-fixed-charge-repair-v1",
+    "raw_topology": null,
+    "repair_status": "fallback",
+    "timing_seconds": {
+      "charging_and_replay": 0.24265252298209816,
+      "cover": 2.2129874860402197,
+      "topology": 0.0,
+      "total": 2.4563064880203456
+    }
+  }
+}

@@ -1,0 +1,77 @@
+{
+  "attempt": "result/sistig_nonlinear/20260927-attempt2",
+  "canonical_local_attempt": "/Users/nadan/Documents/ChatGPT/egg/journal-research-work/result/sistig_nonlinear/20260927-attempt2",
+  "fresh_scheduler_records": {
+    "initial_scontrol_receipt": "submission/SCONTROL-initial.txt; captured PENDING before start with node exclusion and request",
+    "observed_utc": "2026-09-27T22:19:47Z",
+    "sacct": "COMPLETED 0:0; elapsed 00:09:36; node snavely-cpu-16; requested 1 CPU/8G; allocated 2 CPU/8G; batch MaxRSS 379376K",
+    "sacct_file_sha256": "02d191ed4b57f73476a14f49b5a169bf8aada77300904b9c2d8c388449cfd905",
+    "scontrol_file_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "scontrol_result": "completed job record no longer queryable; error output preserved",
+    "squeue_file_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "squeue_result": "job no longer in active queue; Slurm reported invalid job id"
+  },
+  "frozen_sha256": "eb1d9f5dc8b8f7f1561c21dd8f8cad6105f8cfbc272c23b8c8a334e6a626f352",
+  "job_id": "559907",
+  "raw_attempt_exact_file_set": "PASS: entries plus MANIFEST.json and later slurm_wrapper_receipt.json",
+  "raw_attempt_manifest_bytes": 39458457,
+  "raw_attempt_manifest_entries": 31,
+  "raw_attempt_manifest_sha256": "68032692ea5c5b349115bd6bd64740f0bd799fac9a8a4dcdf09462a844901cf9",
+  "raw_or_job_logs_modified": "false",
+  "remote_local_transport_tar": {
+    "bytes": 39495680,
+    "remote_path": "/tmp/nonlinear-v2-559907-transport.tar",
+    "remote_sha256_matches_local": true,
+    "sha256": "29ea3149ad95bb86a5de20bc882e6c3b5e4ec86a8ae54910ae5e83f32b7b67f2"
+  },
+  "remote_sentinel": "nonlinear-v2-submission-20260927",
+  "remote_worktree": "/home/nc437/egg-sistig-nonlinear-v2-20260927",
+  "schema": "sistig-nonlinear-v2-job-559907-transport-v1",
+  "scientific_admission": "NOT PERFORMED; independent result audit remains a separate task",
+  "slurm_job_logs": {
+    "stderr": {
+      "bytes": 0,
+      "content_displayed_or_reviewed": false,
+      "path": "transport-extracted/egg-sistig-nonlinear-559907.err",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stdout": {
+      "bytes": 173,
+      "content_displayed_or_reviewed": false,
+      "path": "transport-extracted/egg-sistig-nonlinear-559907.out",
+      "sha256": "23fb4d39e267b418eb4b45c9cb3ed017bcd0eb6f2f7ed7454fa63313e98399d4"
+    }
+  },
+  "source_commit": "e23a653dcd77b6ce02eb0af5e544fea7edab9eca",
+  "stage_status_only": {
+    "complete": true,
+    "elapsed_seconds": 559.0939701320603,
+    "stages": [
+      {
+        "hard_timeout": false,
+        "pass": true,
+        "stage": "planner",
+        "status": "bounded"
+      },
+      {
+        "hard_timeout": false,
+        "pass": true,
+        "stage": "hull",
+        "status": "budget_exhausted"
+      },
+      {
+        "hard_timeout": false,
+        "pass": true,
+        "stage": "own_price",
+        "status": "certified"
+      }
+    ],
+    "unstarted_stages": []
+  },
+  "submission_receipts": {
+    "exact_file_set": "PASS",
+    "files_verified": 9,
+    "manifest_sha256": "76e8a571d2ae8de42f2828a5aafcfd5a9ffe2f23fdc9fc88e2aff051a6aaed7d",
+    "path": "submission"
+  }
+}

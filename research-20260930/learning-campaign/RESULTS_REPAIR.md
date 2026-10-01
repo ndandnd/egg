@@ -1,0 +1,23 @@
+# Route-fixed repair pilot results
+
+Both frozen development cells completed with `repair_status=replayed`; neither used the source fallback. I independently replayed each saved repaired plan: physical replay passed, plan hashes matched, and exact nonlinear target objectives matched the saved receipt. The candidate plans are feasible incumbents, not proven physical optima. Both path-cover MILPs returned optimal status with zero reported gap, and both fixed-route charge LPs returned `OPTIMAL`. Cached source costs below are target revaluations of replayed source fleets whose physical optimality remains unknown. The run finished in 2:28 on one allocated CPU with 214,948 KiB maximum RSS, per Slurm accounting.
+
+| Case | Repaired fleet | Cached source fleets: direct target cost | Stage 2 learned / cheapest target incumbent |
+|---|---|---|---|
+| 20 services (2016) | 1,919.931 (ops 1,800); 18 buses: 16 single-trip routes and two pairs, T03→T02 and T17→T16 | source0 553.475 (4 buses); source1 586.760 (4 buses) | 515.516; both arms used the same plan, status budget_exhausted |
+| 28 services (2017) | 2,999.525 (ops 2,800); 28 buses, each with one trip | source0 724.660 (5 buses); source1 749.310 (5 buses) | 689.474; both arms used the same plan, status budget_exhausted |
+
+The repair candidates are much more expensive than either cached source fleet: 3.47× the cheapest source plan in 2016 and 4.14× in 2017. Their fixed vehicle costs alone are 1,800 and 2,800 objective units, versus 400 and 500 for the cached source0 plans. The route-cover MILP maximizes learned edge log-odds subject to a vehicle-count ceiling; it has no vehicle-cost term. That matches the observed results: the 28-service cover uses one bus per trip, while the 20-service cover pairs only two trip pairs.
+
+All 104 charge sessions in the 2016 repair and all 180 in the 2017 repair are attached to pull-in (`in_*`) movements on connector 0. They run between minutes 1080 and 1800; aggregate grid energy is 569.600 and 800.222 kWh. The shared load reaches 90 kW for four intervals in each case. This terminal concentration is consistent with the nearly all-single-trip covers and the terminal full-recharge deadline; the receipts do not establish that this is the only feasible or cost-minimizing charge pattern. The fixed-route LP optimizes the linear `market.a` tariff, while the reported direct candidate costs include the full nonlinear target supply cost.
+
+| Case | Repair: topology / cover / charge+replay | Independent replay / pool prep | Fresh target hull: status, lower–mixture upper, pricing / master calls | Result / child receipt |
+|---|---:|---:|---|---:|
+| 2016 | 0.036 / 0.601 / 0.368 s | 0.068 / 0.198 s | budget_exhausted; 514.801–515.435; 4 / 5 | 64.604 / 65.061 s |
+| 2017 | 0.077 / 0.440 / 0.877 s | 0.153 / 0.422 s | budget_exhausted; 569.583–687.574; 2 / 3 | 66.103 / 66.775 s |
+
+Both saved global lower certificates and feasible-mixture uppers replayed successfully, but neither target hull closed. These bounds describe the newly priced target hull; they are separate from the repaired fleet costs. Against Stage 2's learned/cheapest target hull intervals, the 2016 repair changed the mixture upper by only −0.004 and lowered the lower bound by 0.484. In 2017 it raised the mixture upper by 0.921 and lowered the lower bound by 9.956. The historical arms ran in a different allocation, so no speedup claim follows; the repair phase itself took 1.006 and 1.395 seconds, while target-hull verification took about 61 seconds per case.
+
+The next bounded correction should account for vehicle cost in the decoder and include a matched cost-only decoder without learned scores. Use these same two frozen cases, with the model and solver caps unchanged, and record the objective and tie-breaking rule prospectively. This directly tests the dominant observed failure—too many pullouts—without refitting or opening the reserved test groups. Charging feasibility and replay must still be checked after either decoder.
+
+The underlying cells are in [the repair attempt](../../result/learning_repair/20260930-attempt1), with a representative [repaired replay](../../result/learning_repair/20260930-attempt1/learning_s2016_n20/state0/route_repair/independent_replay.json) and [saved target-hull result](../../result/learning_repair/20260930-attempt1/learning_s2016_n20/state0/route_repair/result.json). Cached development comparisons are summarized in [Stage 2 results](RESULTS_STAGE2.md); source-plan target bills are recorded in its [proposal receipt](../../result/learning_campaign/20260930-stage2-attempt1/learned/proposals.jsonl).

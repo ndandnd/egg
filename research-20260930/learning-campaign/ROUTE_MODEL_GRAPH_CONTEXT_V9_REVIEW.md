@@ -1,0 +1,13 @@
+# Matched graph context v9 source review
+
+**Review result: no source or protocol blocker found for the frozen design.** This is a read-only source review; no pool records, outcomes, fits, queue state, or remote runtime were accessed.
+
+The comparison is properly paired. The padded17 and physical38 arms use identical 38-column model shapes, exact cloned initial tensors within each architecture, and the same scaled17 prefix, including intercept column16. Only the appended 21 input columns differ; the control zeros those columns. The expected parameter counts, 20,545 for mean message and 20,673 for graph attention, match the constructors and remain below the 20,700 ceiling. The fixed task order balances each arm across all four execution positions.
+
+Partition handling keeps preprocessing and training within FIT, selects checkpoints and policies on INNER, and does not materialize OUTER records until all four selected models, their FIT/INNER predictions, and the INNER promotion receipt are saved. A fold-global time censor preserves scored checkpoints and failure evidence while blocking pair qualification, promotion, and OUTER admission. The separate per-arm cap can preserve a scored model as qualified. Generic failures retain the failure receipt and progress hashes; missing arms cannot produce a completed task.
+
+The runtime package pins the exact pool and fit-only feature inventory, records executed source hashes and resource use, and installs the wrapper receipt trap before site-profile loading. Its 12-task, four-worker array matches the stated CPU, memory, node, and time ceilings. The overlap check queries the current user's queue and filters the exact prior array base ID, so expired IDs and unrelated rows do not cause false blocks while genuine query errors remain fatal. The protocol correctly leaves confirmation that v8 array 738226 is inactive and the campaign-wide four-worker limit is available as pre-submission gates.
+
+The owners report 15 scientific fixtures and 20 wrapper fixtures passing; the root independently reports 15 scientific fixtures and the changed-guard subset passing. The initial synthetic loader-alias fixture failure and its correction remain documented in `ROUTE_MODEL_GRAPH_CONTEXT_V9_SCIENTIFIC_CHECKS.md`. I verified that the released scientific, CLI, fixture, wrapper, protocol, and input-manifest SHA256 values match the values recorded by their owners. I did not rerun tests.
+
+These checks establish source behavior only. The Linux CPU probe still has to pass on the selected node before data admission. The comparison is incumbent-edge imitation; physical-context inputs and a better imitation score do not establish feasible schedules, better fleet cost, or route optimality.

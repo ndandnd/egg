@@ -1,0 +1,21 @@
+# Generated PDFs and raster figures are binary artifacts, even if their header
+# happens to look textual to Git's content heuristic.
+*.pdf binary
+*.png binary
+
+# These archived review helpers retain their independently manifested bytes.
+# Ignore only their existing final blank line; retain other whitespace checks.
+result/native_pathflow_hull/20260927-attempt1/review/independent_native_raw.py whitespace=-blank-at-eof
+result/sistig_pricing/20260927-grb-job557543-attempt1/review/independent_compact_core.py whitespace=-blank-at-eof
+result/sistig_pricing/20260927-grb-job557543-attempt1/review/independent_physical_core.py whitespace=-blank-at-eof
+result/sistig_matching/20260927-attempt1/review/REVIEW.md whitespace=-blank-at-eof
+result/native_pathflow/20260927-attempt2/review/independent_compact_core.py whitespace=-blank-at-eof
+result/native_pathflow/20260927-attempt3/review/independent_compact_core.py whitespace=-blank-at-eof
+result/native_pathflow_hull/20260927-attempt2/review/independent_compact_core.py whitespace=-blank-at-eof
+research-20260927/agent-notes/grb-physical-result-review/independent_compact_core.py whitespace=-blank-at-eof
+research-20260927/agent-notes/grb-hull-result-review/independent_compact_core.py whitespace=-blank-at-eof
+research-20260927/agent-notes/nonlinear-pilot-result-review/independent_compact_core.py whitespace=-blank-at-eof
+# Preserve the scheduler's verbatim receipt bytes covered by its manifest.
+research-20260927/launches/nonlinear-v2-job559907/SCONTROL-initial.txt whitespace=-blank-at-eof,-blank-at-eol
+research-20260927/agent-notes/nonlinear-v2-result-review/independent_compact_core.py whitespace=-blank-at-eof
+research-20260927/agent-notes/google-doc-v05-final-release/append-text.md whitespace=-blank-at-eol
