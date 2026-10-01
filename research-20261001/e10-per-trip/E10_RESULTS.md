@@ -1,19 +1,19 @@
-# E10 results (interim, 87/90 runs; 20:25 UTC): per-trip top-m pruning
+# E10 results (final, 90/90; 21:25 UTC): per-trip top-m pruning
 
-Array 795026 (harness-fixed code, v8 scores fold 0 / seed 17, learned4 policy). Three
-m=8 runs (Hildenbrand 16 at 600 s, Eberbach at 600/1800 s) were still queued behind the
-user's other cluster jobs. Rule: keep each trip's m best incoming and m best outgoing
-direct/depot movements, no global fraction. Columns kN = global keep N% (E3/E5/E6/E8);
-mN = per-trip top-N. Cells: bill relative to the best of any listed arm for that case.
+Array 795026 (harness-fixed code, v8 scores fold 0 / seed 17, learned4 policy), all 90
+runs completed. Rule: keep each trip's m best incoming and m best outgoing direct/depot
+movements, no global fraction. Columns kN = global keep N% (E3/E5/E6/E8); mN = per-trip
+top-N. Cells: bill relative to the best of any listed arm for that case. Script
+`summarize.py`.
 
 | Case | T s | cold | cold4 | k5 | k15 | k30 | m3 | m5 | m8 | kept m3/m5/m8 |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---|
 | public:hildenbrand15 | 180 | 12.14% | 3.84% | 3.33% | 2.56% | 0.41% | 3.38% | 0.05% | 0.31% | 200/293/370 |
 | public:hildenbrand16 | 180 | 4.36% | 4.23% | 18.50% | 3.96% | 0.00% | 18.50% | 1.78% | 0.76% | 179/275/369 |
-| public:eberbach | 600 | 3.90% | 314.54% | 17.58% | 0.18% | 0.03% | 24.64% | fail |  | 585/838/- |
+| public:eberbach | 600 | 3.90% | 314.54% | 17.58% | 0.18% | 0.03% | 24.64% | fail | 1.76% | 585/838/1227 |
 | public:hildenbrand15 | 600 | 12.14% | 0.94% | 3.33% | 2.56% | 0.00% | 3.38% | 0.05% | 0.31% | 200/293/370 |
-| public:hildenbrand16 | 600 | 2.48% | 0.94% | 18.50% | 3.96% | 0.00% | 18.50% | 1.78% |  | 179/275/- |
-| public:eberbach | 1800 | 1.54% | 3.15% | 17.86% | 0.27% | 0.00% | fail | fail |  | 585/838/- |
+| public:hildenbrand16 | 600 | 2.48% | 0.94% | 18.50% | 3.96% | 0.00% | 18.50% | 1.78% | 0.76% | 179/275/369 |
+| public:eberbach | 1800 | 1.54% | 3.15% | 17.86% | 0.27% | 0.00% | fail | fail | fail | 585/838/1227 |
 | scale:50000:40 | 60 | 1.12% | 0.89% | 0.91% | 0.04% | 0.55% | 0.91% | 0.17% | 0.12% | 210/291/396 |
 | scale:50001:40 | 60 | 0.81% | 0.52% | 0.41% | 0.64% | 1.31% | 0.41% | 0.22% | 0.49% | 217/298/397 |
 | scale:50002:40 | 60 | 0.78% | 0.49% | 0.82% | 0.08% | 0.10% | 0.82% | 0.23% | 0.26% | 211/300/408 |
@@ -48,25 +48,31 @@ Paired (wins/ties/losses; a failure counts as a loss; median % over both-success
 - m5 vs cold4: 25/0/5, median -3.00%
 - m5 vs k15: 20/0/10, median -0.23%
 - m5 vs k30: 19/0/11, median -0.43%
-- m8 vs cold: 26/0/1, median -6.10%
-- m8 vs cold4: 26/0/1, median -3.40%
-- m8 vs k15: 15/0/12, median -0.15%
-- m8 vs k30: 20/0/7, median -0.39%
+- m8 vs cold: 28/0/2, median -4.41%
+- m8 vs cold4: 28/0/2, median -3.40%
+- m8 vs k15: 16/0/14, median -0.15%
+- m8 vs k30: 20/0/10, median -0.33%
 
-Failures: Eberbach m3 at 1800 s ("Replayed SOC violates reserve or battery capacity")
-and m5 at 600 and 1800 s ("Used bus did not finish fully replenished") - the native
-solver returned a plan that the independent exact replay rejects. Counted as losses;
-the same replay refusals occur elsewhere in the campaign (E4 labels, E2) and look more
-frequent on pruned Eberbach models; a numerical-tolerance investigation is warranted.
+## Failures
+
+Eberbach: m3 at 1800 s ("Replayed SOC violates reserve or battery capacity"), m5 at 600
+and 1800 s and m8 at 1800 s ("Used bus did not finish fully replenished"): the native
+solver returned plans that the independent exact replay rejects. 4 of 6 per-trip
+Eberbach runs, including every 1800 s run, versus 0 of 10 global-fraction Eberbach runs.
+These count as losses. The same kind of replay refusal occurs elsewhere (E2, E4 labels,
+10068/10069) and needs a numerical-tolerance investigation; it is the main reliability
+risk for deploying pruning on large real networks.
 
 ## Reading
 
-- **m=5 and m=8 are the most robust rules so far**: they beat unpruned cold on 27/30
-  and 26/27 cells (median -5.0% / -6.1%) and the four-round cold4 on 25/30 and 26/27.
-  Unlike any single global fraction, m=5 stays within 0.05-1.8% of the best on
-  Hildenbrand (where k5/k15 lose 2.6-18.5%) and within 2.3% on every synthetic cell.
-- The kept count grows with the number of trips (~7.5 x trips for m=5, incl. pullouts/pullins), which is the
-  size-adaptive behaviour the E8 analysis suggested.
-- m=3 is too tight on Hildenbrand 16 (+18.5%, same as k5) and on Eberbach.
+- **m=8 is the most robust rule on synthetic + Hildenbrand**: it beats unpruned cold
+  and the four-round cold4 on 28/30 cells each (median -4.4% / -3.4%), stays within
+  0.8% of the best on Hildenbrand and within 3.6% on every synthetic cell, with no
+  regime-specific tuning. m=5 is similar (27/30 vs cold; within 1.8% on Hildenbrand).
+- A global fraction must be tuned per regime (E8: ~5% at 80 synthetic trips, 30% on
+  public); the per-trip rule adapts automatically (kept count ~7.5 x trips at m=5,
+  incl. pullouts/pullins).
+- m=3 is too tight on Hildenbrand 16 (+18.5%) and Eberbach (+24.6%).
 - Against the best global fraction per regime, m5/m8 are roughly even (vs k15: 20/10,
-  15/12; vs k30: 19/11, 20/7) without needing regime-specific tuning.
+  16/14; vs k30: 19/11, 20/10).
+- Open: the Eberbach replay refusals under per-trip pruning.

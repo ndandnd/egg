@@ -12,7 +12,7 @@ Updated: 2026-10-01 05:48 UTC. Branch claude/research-20261001. Assessment: doc/
   - E3 scale hfix 781391 DONE; E4 multi8 eval+decode 781389 DONE; E6 keep sweep 781395 DONE -> e6-keep-sweep/E6_RESULTS.md (keep 15% best: 12/12 vs cold)
   - E8 aggressive keep (public k5/10/15, scale k5/10): 782210 (66 runs, %2) -> runs/e8-keep-20261001
   - E11 seed robustness: 798833 (96 runs, %3) -> runs/e11-seeds-20261001 (check first rows differ across seeds = seed actually applied)
-  - E10 per-trip top-m pruning: 795026 (90 runs, %3) -> runs/e10-pertrip-20261001
+  - E10 DONE -> e10-per-trip/E10_RESULTS.md (m8 beats cold & cold4 28/30; Eberbach replay refusals 4/6)
   - E9 DONE -> e9-seeded-hull/E9_RESULTS.md (seeded tighter 10/10; 1 certified)
   - E8 DONE -> e8-aggressive-keep/E8_RESULTS.md (synthetic: smaller keep at larger size; public: keep 30% best)
   - (old) E9 seeded hull at scale: 785526 (10 cases, %2) -> runs/e9-hull-20261001/out/*/e9.json
@@ -76,3 +76,4 @@ Updated: 2026-10-01 05:48 UTC. Branch claude/research-20261001. Assessment: doc/
 - 20:30 user: give evspv2g stoch project priority when parallel space is short -> my pending arrays set Nice=10000, throttle 1; rule recorded above.
 - 21:00 user refined the yield rule (v2g prefix / evspv2g-stochastic comment only). yield_check.sh installed; E11 restored to Nice=0, throttle 3 (no v2g jobs queued).
 - 21:05 local background loop runs yield_check.sh every 5 min for 20 h (log: scratchpad/yield_loop.log; task bbjo5412j). If the session restarts, restart it.
+- 21:25 heartbeat: E10 final. E11 72/96.
