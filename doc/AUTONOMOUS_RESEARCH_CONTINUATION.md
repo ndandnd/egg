@@ -8,7 +8,54 @@ supersedes the earlier idle-monitor pause condition and blanket deferral of ML.
 Notify only substantive findings, major decisions, important failures or review
 artifacts. Continue useful local work between jobs; do not pause on an empty queue.
 
-## Latest checkpoint — charging-cost diagnosis and fit-only feature inventory
+## Latest checkpoint — matched physical-context training source reviewed
+
+- The one 04:35 UTC queue check found v8 recovery738226 active: tasks6–8 running
+  with one CPU/8GB each,9–11 pending for priority. Tasks0–5 have now completed0:0;
+  new scoped accounting/wrappers cover0,1,3,4,5, with task2 from the prior receipt.
+  Their combined allocated time is12856CPU-seconds, excluding still-active tasks
+  and the original729522 failed12CPU-seconds. No partial scientific results read.
+  OBSERVATION_738226_20261001T0435.json preserves the status and allocation evidence.
+- GPT-6.1 Sol implemented a NEW v9 matched feature study; Luna found no source or
+  protocol blocker. No production fit, real-pool feature extraction, native probe,
+  deployment or submission occurred. Frozen v3/v6/v8 and v9feature/inventory sources
+  are unchanged. Only recorded active array remains738226.
+- ROUTE_MODEL_GRAPH_CONTEXT_V9_PROTOCOL/REVIEW/INPUTS/SCIENTIFIC_CHECKS/ROOT_CHECKS
+  are authoritative. New module physical_route_graph_context_v9.py, CLI
+  experiments.train_physical_route_graph_context_v9 and matching cluster wrapper
+  compare padded17+21zeros versus physical38, each with mean-message and attention.
+  All4arms share38shapes, paired initial tensors, common17 FIT transforms and
+  explicit intercept column16. Parameters20545/20673, ceiling20700. Historical
+  17-input models are references, not anchors. Same128TRAIN255sources,80/16/32
+  FIT/INNER/OUTER folds and seeds17/29/43. No outer-driven model selection.
+- Four arms per task, fixed900epochs/patience30/unchanged optimizer controls;
+  hash-balanced arm positions. Full1600second arm caps may retain qualified scored
+  checkpoints; global fold-censored models remain saved but block pair admission,
+  promotion and OUTER loading. Four saved qualified arms and INNER policy selection
+  precede OUTER materialization. Timetables, not edges or seeds, are independent units.
+- Prospective budget:12tasks%4,1CPU/8GB/2hours each,24CPUh maximum, native1,node75,
+  exclude01,no retry/requeue. Fold6900s/wrapper7000s include bounded startup/probe;
+  no overlap with active738226. Wrapper filters a successful user-scoped queue
+  listing for exact prior parentID, retaining only matching rows; actual query
+  errors or a matching COMPLETING row block startup. This avoids relying on
+  single-ID lookup behavior after old jobs disappear. No other-project mutation.
+- Minimal data manifest:3poolfiles/31,758,790bytes, SHA256
+  7dcb128b0af76068170dfd46f707d6f693be8fc1117fa0d2dc2ddb8be8cbf670.
+  Reviewed inventory and all dependencies are tracked; no old model archive
+  needed. Owner final scientific15tests and wrapper20tests passed; root scientific
+  15passed4.26s, changed queue guard5passed2.60s, initial wrapper17passed6.59s.
+  The initial synthetic loader-alias fixture failure and6.66s are preserved;
+  no production attempt or tolerance change was involved.
+- Next follow-up: check738226 once, collect its complete batch/accounting only
+  when finished, verify original300epoch anchors and independently replay saved
+  models before scientific admission. Then deploy and hash-verify the reviewed v9
+  source/inputs in a fresh checkout and submit once under the recorded budget,
+  after confirming v8 inactive and no conflicting training workers. Do not repeat
+  completed qualification without a source change or new concern. Preserve all
+  failures/time. V7hull32API failures remain unresolved, DEV/finalTEST sealed,
+  manuscript deferred. All bounded implementation/review agents are finished.
+
+## Previous checkpoint — charging-cost diagnosis and fit-only feature inventory
 
 - One scoped queue check at the 03:34 UTC heartbeat found recovery array738226
   active: tasks0,1,3 RUNNING (one CPU/8GB each), tasks4–11 PENDING for resources.
