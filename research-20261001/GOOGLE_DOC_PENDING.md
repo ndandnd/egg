@@ -87,3 +87,19 @@ cases at both 60 s and 300 s (median -6%), and at 80 trips at 300 s it produces 
 plan on all four instances. The earlier plateau at 30% came from the pruned problem
 still being too large to solve, not from discarding needed connections. E8 now tests 5%
 and 10% and applies aggressive pruning to the public Hildenbrand and Eberbach cases.
+
+## Takeover update 6 — 1 October 2026, 16:35 UTC
+
+**Learned plans make price-support computation cheaper (E9).** Seeding the complete-
+fleet convex-hull computation with the learned pruned plans tightens its enclosure on
+10/10 scaled cases in the same 600 s (width ratio 0.08-0.63 at 40 trips, 0.31-0.58 at
+60, 0.38-0.55 at 80) and certifies one case that the unseeded hull cannot. Gaps still
+contain zero at 40-80 trips; certifying them needs a stronger pricing oracle.
+
+**How hard to prune depends on distribution shift (E8).** On synthetic cases the best
+fraction shrinks with size (5% at 80 trips); on the public networks the model is less
+reliable and 30% is best in every cell (5% is 17-19% worse). E10 tests a per-trip rule
+(keep each trip's top-m options) that should scale without a global fraction.
+
+**Tariff-aware scores (E7)** help large synthetic cases at short budgets but are worse
+on all six public cells; the v8 model stays the default for public networks.
