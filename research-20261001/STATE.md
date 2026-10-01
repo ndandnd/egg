@@ -22,7 +22,7 @@ Updated: 2026-10-01 05:48 UTC. Branch claude/research-20261001. Assessment: doc/
 2. [x] E0 -> research-20261001/e0-support/E0_RESULTS.md (14/16 hulls certified; 4/16 certified positive gap, <=0.1% of bill)
 3. [x] E1 -> research-20261001/e1-topology/E1_RESULTS.md (topology changes 14/16, bus count 16/16 fixed; cold fast)
 4. [x] E2 final (18/18) -> research-20261001/e2-scale/E2_RESULTS.md: GO; cold MIP gaps 2-79% at 60-80 trips
-5. [~] E3: bank DONE -> e3-prune/E3_BANK_RESULTS.md (learned >> random, > lp; vs cold small wins, big on hard 10069/10075); hfix rerun 765335; scale phase 761781 running (36/120) (driver claude_e3_prune.py; arms cold/learned/lp/random; keep 0.3; T=10,30 s bank; 60,300 s scale) after scores + E2
+5. [x] E3: bank DONE; scale DONE -> e3-prune/E3_SCALE_RESULTS.md (learned beats cold 10/2 @60s, 9/1/2 @300s; beats lp/random 12/12; ceiling effect at keep 30%); -> e3-prune/E3_BANK_RESULTS.md (learned >> random, > lp; vs cold small wins, big on hard 10069/10075); hfix rerun 765335; scale phase 761781 running (36/120) (driver claude_e3_prune.py; arms cold/learned/lp/random; keep 0.3; T=10,30 s bank; 60,300 s scale) after scores + E2
 6. [ ] E4 tariff-diverse labels -> retrain (claude_e4_train.py, bank2 vs multi8, 4 folds) -> day eval + physical decode
 6b. [x] E5 FINAL -> e5-public/E5_RESULTS.md: learned4 best in 6/6 public cells (beats cold4 6/6). E5 on public Hildenbrand 15/16 + Eberbach (scores 759399; protocol research-20261001/e5-public)
 7. [ ] v9 (Codex-prepared physical-context training) — optional; v8 showed epoch budget matters more; decide after E4
@@ -47,3 +47,4 @@ Updated: 2026-10-01 05:48 UTC. Branch claude/research-20261001. Assessment: doc/
 - 08:25 heartbeat: E5 Hildenbrand done (learned beats cold 3/4; cold4 best at 600 s; learned4 pending 765341); hfix bank reruns done (all produced plans); E3 scale interim at 60 s: learned >> cold at 60-80 trips; GOOGLE_DOC_PENDING update 2 written. Throttles raised: E3 scale %2, E4 labels %3.
 - 09:25 heartbeat: E5 Eberbach done -> E5_RESULTS.md interim; multi8 training queued (775356) after labels.
 - 10:25 heartbeat: E4 labels done (879/896 replayed plans, 6.9 CPU-h); multi8 training running (775356); bank2 day-eval + decode submitted (779104); E5 final (learned4 best 6/6).
+- 11:25 heartbeat: E3 scale written up; 2 cold4 artifact cells rerun (781391); multi8 trained (4 folds); bank2 day-eval+decode done; multi8 eval+decode submitted (781389).
