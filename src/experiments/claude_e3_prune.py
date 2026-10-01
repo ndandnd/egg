@@ -1,7 +1,8 @@
 """E3: predict-and-prune versus cold solving at equal total wall time.
 
 Arms (all GRB, 1 thread, curved planner with tangent rounds, same total budget T):
-  cold     - full case;
+  cold     - full case, one budget (later tangent rounds only if time remains);
+  cold4    - full case, four tangent rounds of T/4 each (the v7 cold-planner shape);
   learned  - keep the top fraction of direct/depot movements by v8 logits;
   lp       - same, ranked by the LP-relaxation x-values of the full pricing MIP at
              the tariff's linear prices (LP time is charged to the budget);
@@ -70,7 +71,7 @@ def prune(case, scores, keep, min_options):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--case", required=True)
-    ap.add_argument("--arm", choices=("cold", "learned", "lp", "random"), required=True)
+    ap.add_argument("--arm", choices=("cold", "cold4", "learned", "lp", "random"), required=True)
     ap.add_argument("--tariff", default="day")
     ap.add_argument("--keep", type=float, default=0.3)
     ap.add_argument("--min-options", type=int, default=3)
@@ -89,7 +90,7 @@ def main():
     charged = 0.0
     try:
         target = case
-        if args.arm != "cold":
+        if args.arm not in ("cold", "cold4"):
             if args.arm == "learned":
                 scored = json.loads(args.scores.read_text())[args.case]
                 if scored["case_identity"] != case.identity() or scored["movement_ids"] != [m.id for m in case.movements]:
@@ -106,11 +107,17 @@ def main():
         remaining = args.seconds - row["preparation_seconds"]
         if remaining <= 1.0:
             raise TimeoutError("No solver time left after preparation")
-        budget = nr.Budget(backend="GRB", threads=1, phase_seconds=remaining, wall_seconds=remaining,
-                           max_rounds=8, epsilon=1e-4)
+        if args.arm == "cold4":  # v7 cold shape: four tangent rounds of equal share
+            budget = nr.Budget(backend="GRB", threads=1, phase_seconds=remaining/4, wall_seconds=remaining,
+                               max_rounds=4, epsilon=1e-4)
+        else:
+            budget = nr.Budget(backend="GRB", threads=1, phase_seconds=remaining, wall_seconds=remaining,
+                               max_rounds=8, epsilon=1e-4)
         result = pf.solve_planner(target, market.a, market.b, budget)
         row.update(status=result.get("status"), solver_lower_on_target=result.get("lower"),
-                   solver_upper_on_target=result.get("upper"))
+                   solver_upper_on_target=result.get("upper"),
+                   rounds=[{k: r.get("stats", {}).get(k) for k in ("status", "incumbent", "lower_bound", "wall_s")}
+                           for r in result.get("rounds", [])])
         plan = result.get("plan")
         if plan:
             plan = {**plan, "case_identity": case.identity()}
