@@ -65,7 +65,7 @@ frequent on pruned Eberbach models; a numerical-tolerance investigation is warra
   and 26/27 cells (median -5.0% / -6.1%) and the four-round cold4 on 25/30 and 26/27.
   Unlike any single global fraction, m=5 stays within 0.05-1.8% of the best on
   Hildenbrand (where k5/k15 lose 2.6-18.5%) and within 2.3% on every synthetic cell.
-- The kept count grows with the number of trips (~5 x trips for m=5), which is the
+- The kept count grows with the number of trips (~7.5 x trips for m=5, incl. pullouts/pullins), which is the
   size-adaptive behaviour the E8 analysis suggested.
 - m=3 is too tight on Hildenbrand 16 (+18.5%, same as k5) and on Eberbach.
 - Against the best global fraction per regime, m5/m8 are roughly even (vs k15: 20/10,
