@@ -1,14 +1,32 @@
 # EGG journal research continuation
 
-Updated 1 October 2026 UTC. Root manages; GPT-6.1 Sol implements/analyzes and
-Luna Max reviews. The user's latest instruction is to keep experiments and model
-training moving without routine approval, even while exact solving remains slow.
-The existing hourly `advance-egg-journal-research` heartbeat is ACTIVE. This
-supersedes the earlier idle-monitor pause condition and blanket deferral of ML.
-Notify only substantive findings, major decisions, important failures or review
-artifacts. Continue useful local work between jobs; do not pause on an empty queue.
+## Current override — paused for Claude review, 1 October 2026
 
-## Latest checkpoint — matched physical-context training source reviewed
+The user explicitly requested stopping all scheduled tasks and handing research
+conclusions to Claude for a fresh perspective and token conservation. All three
+local schedules are verified PAUSED. This overrides older automatic-continuation
+and next-launch instructions below. Do not resume monitoring, start new work or
+submit v9 without a new user direction to resume or take over the campaign.
+
+Read `doc/CLAUDE_RESEARCH_HANDOFF_20261001.md` first. The portable evidence bundle
+is `output/claude-handoff-20261001.zip`; its tracked manifest records contents and
+hashes. `research-20260930/learning-campaign/PAUSE_AND_CLAUDE_HANDOFF_20261001.json`
+records the schedule pause and final cluster snapshot. Existing jobs were left
+intact: approximately05:06UTC, array738226 tasks0–8 were COMPLETED0:0 and9–11
+RUNNING on unicorn-cpu-75, one CPU/8GB each. No pending tasks. Full scientific
+batch results remain uncollected/unreviewed. No new jobs were submitted.
+
+On an explicitly authorized takeover/resume, collect complete v8 evidence and
+accounting, preserve original failure/time, verify300epoch anchors and independently
+replay saved models before interpretation. V9 source is prepared but unlaunched;
+Claude should assess whether it or a different intervention is the better next step.
+V7 graph ranking gains have not translated into cheaper physical fleets on average;
+all32hull controls failed before optimization. Keep DEV/finalTEST sealed and
+manuscript drafting deferred. No implementation agents remain active.
+
+## Historical checkpoints (superseded operational instructions)
+
+## Previous checkpoint — matched physical-context training source reviewed
 
 - The one 04:35 UTC queue check found v8 recovery738226 active: tasks6–8 running
   with one CPU/8GB each,9–11 pending for priority. Tasks0–5 have now completed0:0;

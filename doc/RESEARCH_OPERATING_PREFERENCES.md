@@ -1,6 +1,14 @@
 # Research operating preferences
 
-Standing user instructions, most recently updated 30 September 2026.
+Most recent operating change: **1 October 2026 — paused for Claude handoff.**
+
+The user requested stopping all scheduled tasks, obtaining Claude's independent
+perspective, conserving Codex tokens and resuming later. All schedules are PAUSED.
+Existing submitted jobs are left intact. Do not start new work, resume monitoring
+or launch prepared studies until the user directs a resume or takeover. See
+`CLAUDE_RESEARCH_HANDOFF_20261001.md`. This overrides automatic continuation below.
+
+Historical standing preferences (retained for a future authorized resume):
 
 - Use **GPT-6.1 Sol (`gpt-6.1-sol`) for heavy implementation and substantive analysis**. The user explicitly requested this model and asked that the preference be remembered. Use Luna Max for routine checks, inventory and documentation; root coordinates and reviews.
 - Explore the promising model families systematically: classical logistic and retrieval baselines, MLPs, histogram boosting, XGBoost, CatBoost, ExtraTrees, message-passing graph networks, graph attention, and attention-based route proposals. A family merits a bounded study, not an assumption of superiority.

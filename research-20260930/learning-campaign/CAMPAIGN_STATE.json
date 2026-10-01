@@ -1,6 +1,6 @@
 {
-  "updated_at_utc": "2026-10-01T05:04:22.130898+00:00",
-  "phase": "graph_budget_v8_recovery1_active_v9_matched_source_reviewed",
+  "updated_at_utc": "2026-10-01T05:12:59.833202+00:00",
+  "phase": "paused_by_user_for_claude_review_existing_v8_jobs_left_intact",
   "active_job_ids": [
     738226
   ],
@@ -84,12 +84,12 @@
   },
   "automation": {
     "id": "advance-egg-journal-research",
-    "status": "ACTIVE",
-    "cadence": "hourly",
+    "status": "PAUSED",
+    "cadence": "disabled while paused; historical cadence hourly",
     "notification_policy": "Substantive results, major decisions, failures or review artifacts only",
     "resource_policy": "Parallel label8 + training4; initial single-job limit superseded."
   },
-  "next_action": "At next heartbeat make one scoped check for738226 and complete accounting/receipts for vanished tasks. Once fullbatch complete, collect complete evidence once, preserveoriginal12failedCPU seconds andalltime, verify300epochanchors andindependently replay selectedmodels before reporting900epoch results. V9source nowreviewed: after v8inactive and nootherconflictingtrainingworkers, freeze executioncommit, deploy exact3poolfiles plus trackedinventory/dependencies to freshcheckout, hashverify, nativeprobe perjob, submitonce12tasks%4 under recorded24CPUh budget with launchreceipt. No v8/v9 overlap. Do not repeat completed qualification suites without codechange. V7hull32API failures remainunresolved; DEV/TESTsealed and manuscriptdeferred.",
+  "next_action": "No automatic work or new launch. User requested a Claude handoff and pause. For an explicitly authorized takeover/resume, collect the complete 738226 batch and accounting, verify 300-epoch anchors and independently replay saved models before interpretation. Assess alternatives independently before deciding whether to launch prepared v9. Preserve failures and all time; DEV/TEST remain sealed.",
   "stage1_results": "RESULTS_STAGE1.md",
   "stage1_model_analysis": "MODEL_STAGE1.md",
   "test_groups_unobserved": [
@@ -128,11 +128,9 @@
     "DOC_V9_PREPARED_RECEIPT.json"
   ],
   "latest_observation": {
-    "source": "single scoped queue check for728823/729522 followed by identity-scoped accounting on2026-10-01T02:33 heartbeat",
-    "proposal728823": "16 SlurmparentsCOMPLETED0:0;32hullchildrenfailed beforeoptimization and3covercaps; all143savedphysicalplanbillsreplayed",
-    "graph729522": "12failed1:0 beforeprobe/fit due optionalINCLUDE undernounset",
-    "recovery738226": "submitted02:49:01Z; allocation not yet observed",
-    "raw_evidence_backup_commit": "89ed66db9e2188df2ec3282d0d80e435b367dcdf"
+    "source": "final read-only handoff snapshot; see PAUSE_AND_CLAUDE_HANDOFF_20261001.json",
+    "array738226": "tasks0-8 COMPLETED0:0; tasks9-11 RUNNING at approximately05:06UTC; no pending tasks",
+    "scientific_disposition": "full batch not collected or reviewed; automation paused, jobs untouched"
   },
   "result_summarizer": "summarize_cost_aware_repair.py",
   "cost_aware_results": "RESULTS_COST_AWARE_REPAIR.md",
@@ -146,7 +144,7 @@
   "shared_interval_physical_pool_review": "SHARED_INTERVAL_PHYSICAL_POOL_REVIEW.json",
   "shared_interval_report_backup_commit": "8e17264ffc71eb9b5ed0851b429d5d3927f43ac8",
   "shared_interval_figure": "figures/shared_interval_2016_learned.png",
-  "local_follow_up": "Reviewed v9 source and prospective24CPUh budget backed up at987cff5. Original Google Doc appended with experimentdesign and explicit unlaunched status; exacttext/protocollink/styles and7nativeimages verified. All bounded agents complete. No newscientific result, productionfit, deployment orsubmission. Currentonlyrecordedactivearray738226; six status-confirmedcompletions, remainingtasksactive/pending at04:35snapshot; partialscoresunread.",
+  "local_follow_up": "All local schedules verified PAUSED. Handoff and portable evidence bundle prepared for independent Claude review. Existing 738226 jobs left intact; no new submission or scientific outcome analysis.",
   "shared_budget_results": "RESULTS_SHARED_BUDGET_REPAIR.md",
   "shared_budget_verification": "INDEPENDENT_REPLAY_SHARED_BUDGET.json",
   "shared_budget_physical_pool_review": "SHARED_BUDGET_PHYSICAL_POOL_REVIEW.json",
@@ -641,28 +639,26 @@
     }
   },
   "last_queue_observation": {
-    "heartbeat_at_utc": "2026-10-01T04:35:04.613Z",
-    "receipt": "OBSERVATION_738226_20261001T0435.json",
+    "observed_at_utc_approximate": "2026-10-01T05:06:00Z",
+    "receipt": "PAUSE_AND_CLAUDE_HANDOFF_20261001.json",
     "single_scoped_queue_check": true,
     "running_tasks": [
-      6,
-      7,
-      8
-    ],
-    "pending_tasks": [
       9,
       10,
       11
     ],
+    "pending_tasks": [],
     "completed_tasks": [
       0,
       1,
       2,
       3,
       4,
-      5
+      5,
+      6,
+      7,
+      8
     ],
-    "completed_allocated_cpu_seconds_so_far": 12856,
     "scientific_results_read": false
   },
   "physical_context_feature_v9": {
@@ -821,6 +817,10 @@
     "input_manifest_sha256": "7dcb128b0af76068170dfd46f707d6f693be8fc1117fa0d2dc2ddb8be8cbf670",
     "fold_censor_admitted": false,
     "reviewed_source_commit": "987cff55253477ca532c2832187f483c76f6ba2e",
-    "doc_receipt": "DOC_V9_PREPARED_RECEIPT.json"
-  }
+    "doc_receipt": "DOC_V9_PREPARED_RECEIPT.json",
+    "launch_suspended_by_user": true
+  },
+  "research_execution_paused_by_user": true,
+  "pause_receipt": "PAUSE_AND_CLAUDE_HANDOFF_20261001.json",
+  "claude_handoff": "doc/CLAUDE_RESEARCH_HANDOFF_20261001.md"
 }
