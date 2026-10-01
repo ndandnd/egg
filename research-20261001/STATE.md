@@ -5,7 +5,8 @@ Updated: 2026-10-01 05:48 UTC. Branch claude/research-20261001. Assessment: doc/
 ## Cluster (unicorn2; runs under ~/egg-claude-20261001/runs; code ~/egg-claude-20261001/current)
 - DONE: v8 738226 (collected); E0 758455+758495 (written up); scoring 759080 (bank+scale), 759399 (public).
 - RUNNING/QUEUED (check with: sacct -j <id> -X -o JobID,State,Elapsed):
-  - E2 scale profile 758967 (18 cells, %2) -> runs/e2-scale-20261001/out/*/e2.json
+  - E2 scale profile 758967 (18 cells, %2; 12 done, interim results written) -> runs/e2-scale-20261001/out/*/e2.json
+  - E3 phase 2 (scale 40-80 trips, 120 runs incl cold4, %1) 761781
   - E3 bank prune 759091 (128 runs, %2) -> runs/e3-prune-20261001/out/*/e3.json
   - E4 labels 759102 (g10001-10127, %2; g10000 done by 759065) -> runs/e4-labels-20261001/out/g*/labels.jsonl
   - E4 train bank2 759111 (4 folds, graph env, no Gurobi) -> runs/e4-train-20261001/runs/bank2-f*
@@ -18,7 +19,7 @@ Updated: 2026-10-01 05:48 UTC. Branch claude/research-20261001. Assessment: doc/
 1. [x] Collect v8 -> research-20261001/v8-collection/V8_RESULTS.md (anchors pass; attention logloss 0.0543 vs v6 0.0719)
 2. [x] E0 -> research-20261001/e0-support/E0_RESULTS.md (14/16 hulls certified; 4/16 certified positive gap, <=0.1% of bill)
 3. [x] E1 -> research-20261001/e1-topology/E1_RESULTS.md (topology changes 14/16, bus count 16/16 fixed; cold fast)
-4. [~] E2 cold time-to-quality profile (running 758967). Smoke: n=40 at 60 s -> 2.4% gap.
+4. [~] E2 (12/18): GO — 60-80 trips leave 3-79% gaps at 600 s; research-20261001/e2-scale/E2_RESULTS.md (interim)
 5. [~] E3 predict-and-prune (bank phase running 759091; early: learned < cold on 3/3 at 10 s, random far worse) (driver claude_e3_prune.py; arms cold/learned/lp/random; keep 0.3; T=10,30 s bank; 60,300 s scale) after scores + E2
 6. [ ] E4 tariff-diverse labels -> retrain (claude_e4_train.py, bank2 vs multi8, 4 folds) -> day eval + physical decode
 6b. [ ] E5 learned pruning on public Hildenbrand 15/16 + Eberbach (scores 759399; protocol research-20261001/e5-public)
@@ -38,3 +39,4 @@ Updated: 2026-10-01 05:48 UTC. Branch claude/research-20261001. Assessment: doc/
 6. E4: check bank2 reproduces v8 seed-17 attention selected epochs (v8 tasks 0/3/6/9: 896/896/897/899).
 7. E5/E2: report build_seconds; on Eberbach the per-round model rebuild may dominate cold time.
 8. When E2 (758967) finishes: raise E4 labels throttle back: scontrol update JobId=759102 ArrayTaskThrottle=2
+- 06:25 heartbeat: E2 interim written; E3 phase 2 submitted (761781); E4 labels throttle back to 2 (10/128 done).
