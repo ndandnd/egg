@@ -22,7 +22,9 @@ Updated: 2026-10-01 05:48 UTC. Branch claude/research-20261001. Assessment: doc/
   - E4 train bank2 759111 (4 folds, graph env, no Gurobi) -> runs/e4-train-20261001/runs/bank2-f*
   - E5 public 759670 (Hildenbrand 20 runs incl. cold4, %1) and 759671 (Eberbach 10 runs, %1, 32G); first submission cancelled (see e5-public/PROTOCOL.md amendment)
   - E3 bank cold4 supplement 759672 (32 runs, %1)
-- **USER PRIORITY (20:30 UTC): the evspv2g stochastic project has priority on the cluster.** Submit every new EGG array with `--nice=10000` and throttle `%1` (at most `%2` only when the queue has no pending non-EGG jobs of nc437). Never cancel or alter the other project's jobs.
+- **USER PRIORITY (refined 21:00 UTC): EGG yields ONLY to the evspv2g stochastic project** = nc437 jobs whose name starts with `v2g` (e.g. `v2g34_*`) or that carry `--comment=evspv2g-stochastic` (see `squeue -u nc437 -o "%.18i %.20j %.8T %k"`; they run from ~/projects/evspv2g-stochastic-worktrees/, write ~/projects/evspv2g-stochastic-runs/). evspOSLO, rvS*, tpmR* are other projects: no yielding needed (still never touch them).
+  - **First action every heartbeat, and right after every EGG submission:** `ssh unicorn2 '~/egg-claude-20261001/yield_check.sh 3'` — sets pending egg-claude-* arrays to Nice=10000/throttle 1 while any v2g job is pending or running, else Nice=0/throttle 3.
+  - Wave-34 v2g arrays (~48 eval tasks, then 40-100 planner tasks) expected from ~21:00-23:00 UTC 1 Oct.
 - Gurobi rule: <= 8 of my Gurobi processes at once; exclude scaglione-compute-01; never touch other users'/projects' jobs.
 - Deploy new code with scratchpad deploy.sh (ships src/ at HEAD; data/public already at ~/egg-claude-20261001/data).
 
@@ -72,3 +74,4 @@ Updated: 2026-10-01 05:48 UTC. Branch claude/research-20261001. Assessment: doc/
 - 17:25 heartbeat: E10 55/90; E11 seed-robustness submitted (798833).
 - 20:25 heartbeat: E10 interim written (87/90; m5/m8 most robust rules; Eberbach replay refusals). E10/E11 waiting behind user's evspOSLO jobs (JobArrayTaskLimit with 0 running).
 - 20:30 user: give evspv2g stoch project priority when parallel space is short -> my pending arrays set Nice=10000, throttle 1; rule recorded above.
+- 21:00 user refined the yield rule (v2g prefix / evspv2g-stochastic comment only). yield_check.sh installed; E11 restored to Nice=0, throttle 3 (no v2g jobs queued).
