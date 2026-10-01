@@ -24,7 +24,7 @@ Updated: 2026-10-01 05:48 UTC. Branch claude/research-20261001. Assessment: doc/
 3. [x] E1 -> research-20261001/e1-topology/E1_RESULTS.md (topology changes 14/16, bus count 16/16 fixed; cold fast)
 4. [x] E2 final (18/18) -> research-20261001/e2-scale/E2_RESULTS.md: GO; cold MIP gaps 2-79% at 60-80 trips
 5. [x] E3: bank DONE; scale DONE -> e3-prune/E3_SCALE_RESULTS.md (learned beats cold 10/2 @60s, 9/1/2 @300s; beats lp/random 12/12; ceiling effect at keep 30%); -> e3-prune/E3_BANK_RESULTS.md (learned >> random, > lp; vs cold small wins, big on hard 10069/10075); hfix rerun 765335; scale phase 761781 running (36/120) (driver claude_e3_prune.py; arms cold/learned/lp/random; keep 0.3; T=10,30 s bank; 60,300 s scale) after scores + E2
-6. [ ] E4 tariff-diverse labels -> retrain (claude_e4_train.py, bank2 vs multi8, 4 folds) -> day eval + physical decode
+6. [x] E4 DONE -> e4-tariff-labels/E4_RESULTS.md: GO (multi8 AP 4/4 folds; physical gap to cold 18.2->8.6; beats v7 source policy on avg). E4 tariff-diverse labels -> retrain (claude_e4_train.py, bank2 vs multi8, 4 folds) -> day eval + physical decode
 6b. [x] E5 FINAL -> e5-public/E5_RESULTS.md: learned4 best in 6/6 public cells (beats cold4 6/6). E5 on public Hildenbrand 15/16 + Eberbach (scores 759399; protocol research-20261001/e5-public)
 7. [ ] v9 (Codex-prepared physical-context training) — optional; v8 showed epoch budget matters more; decide after E4
 8. [ ] Google Doc: no Google Docs editor connector in this session; pending text in research-20261001/GOOGLE_DOC_PENDING.md
@@ -51,3 +51,4 @@ Updated: 2026-10-01 05:48 UTC. Branch claude/research-20261001. Assessment: doc/
 - 11:25 heartbeat: E3 scale written up; 2 cold4 artifact cells rerun (781391); multi8 trained (4 folds); bank2 day-eval+decode done; multi8 eval+decode submitted (781389).
 9. E6 analysis: summarize.py keys by (case,T,arm) — add keep to the key (k15/k30/k50 in dir names) before analyzing E6.
 10. E4 final: compare eval_bank2.json vs eval_multi8.json (outer day AP/logloss per fold; go if multi8 wins >=3/4 folds) and decode_bank2.json vs decode_multi8.json (bills vs v7 cold/source policy; cheap_kwh).
+- 12:25 heartbeat: E4 final (go). learned4 scale (765340) and hfix (781391) done; E6 42/48.
