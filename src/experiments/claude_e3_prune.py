@@ -4,6 +4,7 @@ Arms (all GRB, 1 thread, curved planner with tangent rounds, same total budget T
   cold     - full case, one budget (later tangent rounds only if time remains);
   cold4    - full case, four tangent rounds of T/4 each (the v7 cold-planner shape);
   learned  - keep the top fraction of direct/depot movements by v8 logits;
+  learned4 - learned pruning with the cold4 four-round budget split;
   lp       - same, ranked by the LP-relaxation x-values of the full pricing MIP at
              the tariff's linear prices (LP time is charged to the budget);
   random   - same, ranked by a seeded random permutation (pruning-only control).
@@ -71,7 +72,7 @@ def prune(case, scores, keep, min_options):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--case", required=True)
-    ap.add_argument("--arm", choices=("cold", "cold4", "learned", "lp", "random"), required=True)
+    ap.add_argument("--arm", choices=("cold", "cold4", "learned", "learned4", "lp", "random"), required=True)
     ap.add_argument("--tariff", default="day")
     ap.add_argument("--keep", type=float, default=0.3)
     ap.add_argument("--min-options", type=int, default=3)
@@ -91,7 +92,7 @@ def main():
     try:
         target = case
         if args.arm not in ("cold", "cold4"):
-            if args.arm == "learned":
+            if args.arm in ("learned", "learned4"):
                 scored = json.loads(args.scores.read_text())[args.case]
                 if scored["case_identity"] != case.identity() or scored["movement_ids"] != [m.id for m in case.movements]:
                     raise ValueError("Score file does not match the case")
@@ -107,7 +108,7 @@ def main():
         remaining = args.seconds - row["preparation_seconds"]
         if remaining <= 1.0:
             raise TimeoutError("No solver time left after preparation")
-        if args.arm == "cold4":  # v7 cold shape: four tangent rounds of equal share
+        if args.arm in ("cold4", "learned4"):  # v7 cold shape: four tangent rounds of equal share
             budget = nr.Budget(backend="GRB", threads=1, phase_seconds=remaining/4, wall_seconds=remaining,
                                max_rounds=4, epsilon=1e-4)
         else:
