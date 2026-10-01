@@ -55,6 +55,20 @@ def _optimize_or_stop(built, budget, deadline):
 
 pf._optimize_once = _optimize_or_stop
 
+_native_build = pf.build_feasible_model
+GRB_SEED = None
+
+
+def _build_with_seed(case, backend="CBC"):
+    """Set the solver's random seed on every model the planner builds (E11)."""
+    built = _native_build(case, backend)
+    if GRB_SEED is not None:
+        built["model"].seed = GRB_SEED
+    return built
+
+
+pf.build_feasible_model = _build_with_seed
+
 
 def lp_scores(case, prices, deadline):
     built = pf.build_feasible_model(case, "GRB")
@@ -96,14 +110,17 @@ def main():
     ap.add_argument("--seconds", type=float, required=True)
     ap.add_argument("--scores", type=Path)
     ap.add_argument("--seed", type=int, default=0)
+    ap.add_argument("--grb-seed", type=int, help="Gurobi random seed for every planner/LP model")
     ap.add_argument("--output", type=Path, required=True)
     args = ap.parse_args()
+    global GRB_SEED
+    GRB_SEED = args.grb_seed
     args.output.mkdir(parents=True, exist_ok=False)
     case = claude_cases.make(args.case)
     market = bank.market(case, args.tariff)
     row = {"case": args.case, "case_identity": case.identity(), "arm": args.arm, "tariff": args.tariff,
            "keep": args.keep, "min_options": args.min_options, "seconds": args.seconds,
-           "movements_full": len(case.movements)}
+           "movements_full": len(case.movements), "grb_seed": args.grb_seed}
     started = time.monotonic()
     charged = 0.0
     try:
