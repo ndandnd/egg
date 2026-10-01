@@ -1,8 +1,9 @@
 {
-  "updated_at_utc": "2026-10-01T01:10:39.258809+00:00",
+  "updated_at_utc": "2026-10-01T01:22:37.196914+00:00",
   "phase": "graph_v6_collected_replay_and_matched_decoder_implementation",
   "active_job_ids": [
-    728823
+    728823,
+    729522
   ],
   "completed_job_ids": [
     "677817",
@@ -88,7 +89,7 @@
     "notification_policy": "Substantive results, major decisions, failures or review artifacts only",
     "resource_policy": "Parallel label8 + training4; initial single-job limit superseded."
   },
-  "next_action": "Do not resubmit v7 array728823. Finish v8 anchor/guard receipt review and freeze; then launch no more than4training workers alongside4v7 workers, total8CPU64GB. Record v8 launch before final handoff. No production outcomes opened after v7 submission.",
+  "next_action": "Make one scoped Unicorn check for728823 and729522. For completed arrays collect complete evidence, exact accounting, failures and saved artifacts. V7: separately assess direct/repair/charge/physical replay and matched source policy; do not infer success from wrapper rc alone. V8: both300epoch anchors must pass before outcome interpretation; preserve failures and replay saved models before comparison. No automatic retry. Keep useful model/data design work moving, but freeze any next study separately and reconcile existing resource use; DEV/finalTEST remainsealed.",
   "stage1_results": "RESULTS_STAGE1.md",
   "stage1_model_analysis": "MODEL_STAGE1.md",
   "test_groups_unobserved": [
@@ -142,7 +143,7 @@
   "shared_interval_physical_pool_review": "SHARED_INTERVAL_PHYSICAL_POOL_REVIEW.json",
   "shared_interval_report_backup_commit": "8e17264ffc71eb9b5ed0851b429d5d3927f43ac8",
   "shared_interval_figure": "figures/shared_interval_2016_learned.png",
-  "local_follow_up": "Graph v6 completed/replayed; v7 matched physical proposal array728823 submitted. V8 budget extension implementation/review in progress; no v8 submission yet.",
+  "local_follow_up": "Verified graph ranking gain, completed reviewed v7/v8 implementations and submitted both arrays. No active implementation owner remains. Preserve v7 guard-only wrapper caveat; inner/task/stage evidence required for admission.",
   "shared_budget_results": "RESULTS_SHARED_BUDGET_REPAIR.md",
   "shared_budget_verification": "INDEPENDENT_REPLAY_SHARED_BUDGET.json",
   "shared_budget_physical_pool_review": "SHARED_BUDGET_PHYSICAL_POOL_REVIEW.json",
@@ -262,7 +263,9 @@
     "requested_memory_gb": 96
   },
   "active_label_job_ids": [],
-  "active_training_array_ids": [],
+  "active_training_array_ids": [
+    729522
+  ],
   "route_model_launch_receipt": "LAUNCH_713295.json",
   "route_model_training_protocol": "ROUTE_MODEL_TRAINING_PROTOCOL.md",
   "physical_shard01_accounting": "ACCOUNTING_711779.json",
@@ -366,7 +369,14 @@
     "all_mlp_and_boosted_runs_selected_maximum_inner_checkpoint": true,
     "no_complete_route_feasibility_cost_or_online_speedup_claim": true
   },
-  "active_training_attempts": [],
+  "active_training_attempts": [
+    {
+      "array_job_id": 729522,
+      "launch_receipt": "LAUNCH_729522.json",
+      "remote_root": "/home/nc437/egg-route-graph-budget-20261001-v8",
+      "result_path": "result/physical_learning/20261001-route-model128-graph-budget-v8"
+    }
+  ],
   "route_model64_accounting": "ACCOUNTING_717453.json",
   "route_model64_result_manifest": "RESULT_MANIFEST_ROUTE_MODEL64.json",
   "route_model64_results": "ROUTE_MODEL64_RESULTS.md",
@@ -623,5 +633,19 @@
   },
   "route_proposal_train_v7_launch_receipt": "LAUNCH_728823.json",
   "route_proposal_train_v7_protocol": "ROUTE_PROPOSAL_TRAIN_V7_PROTOCOL.md",
-  "route_proposal_train_v7_execution_commit": "ffcb93c7982b5bb74082b41da05704784e5d551a"
+  "route_proposal_train_v7_execution_commit": "ffcb93c7982b5bb74082b41da05704784e5d551a",
+  "route_graph_budget_v8_launch_receipt": "LAUNCH_729522.json",
+  "route_graph_budget_v8_protocol": "ROUTE_MODEL_GRAPH_BUDGET_V8_PROTOCOL.md",
+  "route_graph_budget_v8_execution_commit": "5ed3da7e7cd41dc319de9a35fe2f3f9f23035c01",
+  "v7_v8_doc_launch_receipt": "DOC_V7_V8_LAUNCH_RECEIPT.json",
+  "next_implemented_studies": {
+    "v7": {
+      "array_job_id": 728823,
+      "launch_receipt": "LAUNCH_728823.json"
+    },
+    "v8": {
+      "array_job_id": 729522,
+      "launch_receipt": "LAUNCH_729522.json"
+    }
+  }
 }

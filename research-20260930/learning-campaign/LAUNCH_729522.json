@@ -1,0 +1,51 @@
+{
+  "actual_allocation": null,
+  "anchor_epoch": 300,
+  "array_job_id": 729522,
+  "fixed_training_groups": 128,
+  "input_manifest": "ROUTE_MODEL_GRAPH_BUDGET_V8_INPUTS.json",
+  "input_manifest_sha256": "a311eea9c81f9dcfaa36a41112d9a8a851482bbbb5664ac2dc9143ad928ee642",
+  "launch_helper_sha256": "a759a14a569b1fddd391d57a258355bd2c3be8addd2a514970c62b11e6c70206",
+  "max_epochs": 900,
+  "models": [
+    "mean_message",
+    "graph_attention"
+  ],
+  "pool_manifest_sha256": "d9aad5b5ea62fd82a8b4f6a3c20a95c57953ba12c7bf0949fa06004aa511c40d",
+  "preexisting_active_egg_jobs": [
+    "728823|egg-route-proposal-v7|PENDING"
+  ],
+  "protocol": "ROUTE_MODEL_GRAPH_BUDGET_V8_PROTOCOL.md",
+  "remote_hash_verification": {
+    "all_hashes_verified": true,
+    "bytes": 469546258,
+    "files": 150,
+    "tracked_source_clean": true,
+    "verified_at_utc": "2026-10-01T01:18:13.415719+00:00"
+  },
+  "remote_root": "/home/nc437/egg-route-graph-budget-20261001-v8",
+  "resource_budget": {
+    "allowed_concurrent_other_array": 728823,
+    "array": "0-11%4",
+    "automatic_retries": false,
+    "combined_requested_ceiling_cpus": 8,
+    "combined_requested_ceiling_memory_gb": 64,
+    "cpus_per_task": 1,
+    "excluded_node": "scaglione-compute-01",
+    "max_concurrent": 4,
+    "maximum_requested_cpu_hours": 12,
+    "memory_gb_per_task": 8,
+    "minutes_per_task": 60,
+    "native_threads": 1,
+    "no_requeue": true,
+    "node": "unicorn-cpu-75",
+    "tasks": 12
+  },
+  "result_path": "result/physical_learning/20261001-route-model128-graph-budget-v8",
+  "review": "ROUTE_MODEL_GRAPH_BUDGET_V8_REVIEW.md",
+  "root_focused_tests": "9 passed in2.63s",
+  "source_commit": "5ed3da7e7cd41dc319de9a35fe2f3f9f23035c01",
+  "submission_guard": "Only known v7 array was active; exclusive submission receipt directory created before single sbatch call. No dependency required under prospective8CPU64GB budget. No postsubmission queue/outcome check.",
+  "submitted_at_utc": "2026-10-01T01:18:31Z",
+  "verified_v6_replay_sha256": "f2034510ef424b70200a075ac9e8d23bbefa51e54f1a21bf0563165fc458e9aa"
+}

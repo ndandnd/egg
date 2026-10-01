@@ -8,7 +8,7 @@ supersedes the earlier idle-monitor pause condition and blanket deferral of ML.
 Notify only substantive findings, major decisions, important failures or review
 artifacts. Continue useful local work between jobs; do not pause on an empty queue.
 
-## Latest checkpoint — graph ranking gain verified; physical comparison launched
+## Latest checkpoint — graph ranking gain verified; physical and training follow-ups submitted
 
 - Graph722841 completed all12tasks0:0 on unicorn-cpu-75. The single scoped queue
   check found no job; date/user/job-name-scoped accounting gives10335elapsed and
@@ -40,18 +40,39 @@ artifacts. Continue useful local work between jobs; do not pause on an empty que
   repaired, charging, independent replay and global bounds remain separate.
   Exact122files/188599425bytes matched locally/remotely;13focusedfixturespassed.
   Submission guard saw no other EGG job. No postsubmission outcomes inspected.
-- V8 graph optimization-budget implementation is under Luna review. Same frozen
-  pool/features/folds/seeds/architectures/optimizer/patience; fresh900epoch fits,
-  300epoch anchorchecks before outer evaluation. Prospective12tasks%4,
-  1CPU8GB1hour,12CPUhcap. Scalarcurvesall epochs, periodicweights/anchors/finalbest
-  retained. Agent is repairing anchor-state ordering and early wrapper receipts;
-  no v8 submission yet. Do not bypass review or mutate v6.
-- Both prospective budgets exclude scaglione-compute-01, pin node75/native1, no
-  retries/requeue. If overlapping, atmost4training +4proposalworkers=8CPUs64GB,
-  within12CPU96GB ceiling. Inspect current owners/state and
-  concrete launch receipts before acting. DEV/test sealed; manuscript deferred.
-  Broader physical-context features/diversifieddata and routeattention remain
-  separate studies, not quietly mixed into these comparisons.
+- Graph training-budget array729522 submitted01:18:31Z, source
+  5ed3da7e7cd41dc319de9a35fe2f3f9f23035c01, remote
+  /home/nc437/egg-route-graph-budget-20261001-v8, result
+  result/physical_learning/20261001-route-model128-graph-budget-v8.
+  LAUNCH_729522.json and ROUTE_MODEL_GRAPH_BUDGET_V8_PROTOCOL/INPUTS/REVIEW/CHECKS
+  are authoritative. Same128TRAIN/255sources/features/folds/seeds/architectures,
+  optimizer and patience; fresh fits up to900epochs. All300shared losses and the
+  saved prefix-best model must match before outer evaluation. Scalarcurvesall
+  epochs; periodicweights/anchors/stop/failure/finalbest retained. Nine optional
+  v6current300 snapshots were absent historically; explicit, no invented state.
+  Exact150files/469546258bytes verified locally/remotely;9rootfixturespassed.
+- V8 review fixed anchor-state persistence before scalar checks and early wrapper
+  failures. The v7 submitted source remains immutable: its guard-only Bash EXIT
+  receipt may reportzero, so admission MUST require inner task/stage receipts plus
+  Slurm/stderr, never wrapper status alone. No observed v7 guard failure is claimed;
+  all required launch variables/source were verified. Do not retry missing attempts.
+- V7 requests16tasks%4 at1CPU8GB30min (8CPUhcap); v8 requests12tasks%4 at1CPU8GB1hour
+  (12CPUhcap). Both pin node75/exclude01/native1/no retry or requeue. Combined
+  atmost4proposal+4training workers=8requestedCPUs64GB within12/96 ceiling; actual
+  allocation not yet observed. V8's submission guard saw only v7PENDING; no
+  postsubmission queue/outcome polling. Never claim both are running from submission.
+- Both arrays and source/protocols are backed by launch receipts; original GoogleDoc
+  now includes graph results and the two submitted follow-ups, preserving7images:
+  DOC_ROUTE_GRAPH_V6_RESULTS_RECEIPT.json and DOC_V7_V8_LAUNCH_RECEIPT.json.
+  All agents finished their bounded packages. No implementation remains active.
+- Next heartbeat: one compact scoped queue check for728823,729522 throughunicorn2
+  after sourcingSlurm; scopedaccounting for vanished arrays. Collect each complete
+  result once, preserve costs/failures, admit v7physical fleets only through replay
+  and matched source policy; verify v8anchors and independently replay saved models.
+  No speedup/feasibility claim from classification or completion. No automaticretry.
+  Continue justified model/data work; broader physical-context features/diversified
+  timetables and routeattention need separate versioned protocols, informed by these
+  results. DEV/finalTEST sealed; manuscript deferred; no other-project changes.
 
 ## Previous checkpoint — tree-family comparison complete; graph study underway
 
