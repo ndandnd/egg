@@ -1,0 +1,7 @@
+# v7 route proposal launch review
+
+The reviewed v7 package is ready for input freeze and launch. The earlier source-hash gap for the lazy numerical-QP import and native backend was fixed by adding `src/egglab/restricted_qp_proposal.py` and `src/egglab/solver.py` to the manifest source set, with a focused fixture guarding both dependencies. The recovery package keeps its declared 16 TRAIN groups, outer-fold model mapping, source policy, stage ordering, failure receipts, no-retry behavior, and 1-CPU/8-GB/30-minute task limits.
+
+The protocol holds each group out of the matching model's fit and inner-selection partitions, uses saved inner promotions for the family and graph models, and gives physical credit only after fixed-route charging and a separate exact replay. Direct and replay-valid recharged sources enter the predeclared exact curved-bill policy; raw decoding, hull checks, and acquisition accounting follow the persisted primary/source choice. The bounded TRAIN comparison does not support a generalization, fleet-optimality, or speed claim.
+
+Focused validation passed: 13 tests, Python compilation of all three new Python modules, and `bash -n` for the array wrapper. This review covered protocol and implementation only; it did not create the manifest or run a production case. Graph replay evidence is used only through its reviewed attestation gate; graph outer outcome metrics were not inspected or aggregated for this review.

@@ -1,5 +1,33 @@
 # Parallel label collection and exploratory route-learning pilot
 
+## 1 October 2026 prospective extension
+
+The original label and training pilots below are historical. The 128-group TRAIN
+pool and v6 graph study are complete. Two versioned follow-ups are authorized
+under the standing campaign budget, with source review and input freezing before
+submission:
+
+- v7 physical proposal comparison: 16 independent timetable tasks, at most four
+  concurrent, one requested CPU and 8 GB each, 30 minutes each; eight requested
+  CPU-hours maximum.
+- v8 graph training-budget extension: 12 fold/seed tasks, at most four concurrent,
+  one requested CPU and 8 GB each, one hour each; 12 requested CPU-hours maximum.
+
+They may overlap, using at most eight requested CPUs and 64 GB, with at most four
+training tasks. This fits the standing 12-CPU/96-GB ceiling. Both pin
+`unicorn-cpu-75`, exclude `scaglione-compute-01`, use one native thread, preserve
+failed work, and prohibit automatic retries or requeue. Their own protocols
+define stricter stage and task caps. No new label shard is part of this extension.
+Requested ceilings are not actual allocations or measurements; report those from
+accounting after execution. A launch guard must reconcile any other active EGG
+array before submitting either study.
+
+These are exploratory TRAIN follow-ups. v7 tests whether saved held-out model
+scores yield useful physical fleets after measured decoding, charging and replay.
+v8 changes the optimization budget while holding graph mathematics and grouped
+selection fixed; its 300-epoch anchor must reproduce v6 before later results can
+be interpreted. Neither protocol opens development or sealed-test outcomes.
+
 This protocol records the user's authorization for a bounded increase in compute for physical route labels and an exploratory model pilot. It supersedes the earlier wait-for-32-groups-before-any-fit rule. It does not open development or sealed-test cases, fit on their outcomes, or treat observed incumbents as optimal edge labels.
 
 ## Training-only label shards
