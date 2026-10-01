@@ -8,7 +8,7 @@ supersedes the earlier idle-monitor pause condition and blanket deferral of ML.
 Notify only substantive findings, major decisions, important failures or review
 artifacts. Continue useful local work between jobs; do not pause on an empty queue.
 
-## Latest checkpoint — graph ranking gain verified; next studies being implemented
+## Latest checkpoint — graph ranking gain verified; physical comparison launched
 
 - Graph722841 completed all12tasks0:0 on unicorn-cpu-75. The single scoped queue
   check found no job; date/user/job-name-scoped accounting gives10335elapsed and
@@ -31,19 +31,24 @@ artifacts. Continue useful local work between jobs; do not pause on an empty que
   raw/accounting backup531a70e31f7f4510b841ca47abaae800c7961715 pushed. Result/figure
   backup615d1d4dcb6b4ec7e68c0d82cb0ca69989aa3e89 pushed. OriginalGoogleDoc append
   verified in DOC_ROUTE_GRAPH_V6_RESULTS_RECEIPT.json;7nativeimages preserved.
-- No EGG array currently recorded active. Root is implementing two concrete next
-  studies with GPT-6.1Sol agents, then Luna review before source freeze/submission:
-  (a) v7 matched physical proposals on fixedTRAIN10064–10079/day, seed17heldoutfold
-  models: v3Hist, v5innerpolicy, v6innerpolicy; direct/repaired/charge/replay measured
-  separately, cost-only and matchedsourcecharging, coldphysical/cold+retainedhull
-  separate. Proposed16tasks%4,1CPU8GB30min,8CPUhcap. No inference from outermeans.
-  (b) v8 graph optimizationbudget: samepool/features/folds/seeds/architectures and
-  optimizer/patience,900epochs, fresh fits and300epochanchorchecks. Proposed12tasks%4,
+- Physical proposal array728823 submitted01:09:53Z, execution source
+  ffcb93c7982b5bb74082b41da05704784e5d551a, remote
+  /home/nc437/egg-route-proposal-20261001-v7. LAUNCH_728823.json and
+  ROUTE_PROPOSAL_TRAIN_V7_PROTOCOL/INPUTS/DEPLOYMENT/REVIEW are authoritative.
+  SixteenTRAIN10064–10079/day tasks, seed17 outer-fold saved Hist/v5/v6 policies,
+  16tasks%4,1CPU8GB30min,8CPUhcap. Source controls get matched charging; raw,
+  repaired, charging, independent replay and global bounds remain separate.
+  Exact122files/188599425bytes matched locally/remotely;13focusedfixturespassed.
+  Submission guard saw no other EGG job. No postsubmission outcomes inspected.
+- V8 graph optimization-budget implementation is under Luna review. Same frozen
+  pool/features/folds/seeds/architectures/optimizer/patience; fresh900epoch fits,
+  300epoch anchorchecks before outer evaluation. Prospective12tasks%4,
   1CPU8GB1hour,12CPUhcap. Scalarcurvesall epochs, periodicweights/anchors/finalbest
-  retained; changedpersistence cadence explicit. No v6 edits or optimizerresume.
+  retained. Agent is repairing anchor-state ordering and early wrapper receipts;
+  no v8 submission yet. Do not bypass review or mutate v6.
 - Both prospective budgets exclude scaglione-compute-01, pin node75/native1, no
   retries/requeue. If overlapping, atmost4training +4proposalworkers=8CPUs64GB,
-  within12CPU96GB ceiling. No newsubmission yet; inspect current owners/state and
+  within12CPU96GB ceiling. Inspect current owners/state and
   concrete launch receipts before acting. DEV/test sealed; manuscript deferred.
   Broader physical-context features/diversifieddata and routeattention remain
   separate studies, not quietly mixed into these comparisons.
