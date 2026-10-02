@@ -136,6 +136,8 @@ These thresholds are exploratory advancement screens. In particular, improvement
 
 For each pilot, first run a tiny implementation check after compute is separately resumed, then freeze the full protocol. Use original physical acceptance rules throughout. A fallback returned after failed search counts as a valid final plan, but its search and repair failures remain visible. A pipeline without a fallback returns failure, not a missing row silently omitted from averages.
 
+Concrete prospective protocols now accompany ranks 1 and 3: [numerical reliability](protocols/NUMERICAL_RELIABILITY_PROTOCOL.md) and [matched oracle allocation](protocols/MATCHED_ORACLE_PROTOCOL.md). They specify comparison arms, artifact fields, failure classification, unchanged physical acceptance, timing and promotion rules. The oracle-stage allowances include cumulative one-thread CPU across every solver call, including completion, master and optimization-based verification; native per-call time limits alone do not enforce the budget. Missing case identities, allocation parameters and numerical enclosure conventions must be frozen before any launch. These documents are designs, not executed experiments.
+
 ## 5. A credible Operations Research contribution
 
 A useful working title is **“Learning-assisted fleet scheduling with certified price-support bounds.”** It states an objective, not a result already achieved.
