@@ -1,0 +1,53 @@
+# Prospective recoverable-pruning comparison
+
+2 October 2026. **Bounded design; unresolved launch prerequisites remain.** No execution authorized. Implements rank 2 and Sections 3.1/3.3 of [SOTA_REVIEW.md](../SOTA_REVIEW.md), using the verified predict-and-search/Apollo and LP qualifications in [ADAPTIVE_PRUNING_AND_NUMERICS.md](../notes/ADAPTIVE_PRUNING_AND_NUMERICS.md). Acceptance follows [NUMERICAL_RELIABILITY_PROTOCOL.md](NUMERICAL_RELIABILITY_PROTOCOL.md); accounting follows [MATCHED_ORACLE_PROTOCOL.md](MATCHED_ORACLE_PROTOCOL.md). No data/model inspection, training, cluster activity, solver runs or new source search accompanies this document.
+
+## Question and frozen information
+
+Can recoverable restrictions improve replay-valid physical bills and time-to-quality beyond simple widening, after construction and completion costs? Use the inherited **30 case/budget cells × three paired seeds × five arms = 450 runs**. Exact cells, timetable groups and budget vector remain unspecified. Only permitted TRAIN/development-generation and already explored public stress cases are eligible; sealed DEV/TEST/A6/B3/confirmation/GIRO remain closed. Public outcomes cannot tune scores, keep sets, triggers or stage allocations.
+
+Freeze scorer/checkpoint and provenance, scores, preprocessing, candidate universe, initial static rule, fallback exceptions, solver/version/thread/hardware, physical objective/constraints, tangent-round allocation and numerical/completion settings. Tune schedules on grouped TRAIN only, with timetable relatives and tariff copies kept together. Freeze input/model/manifest hashes, seeds, run order, finite stage limits, triggers, reinsertion ranks, wall-clock/CPU caps, verification reserve, target/reference/failure rules and reporting before launch. No new fitting is included. A small permitted implementation check precedes final lock and consumes the envelope; unknown fields cannot be inferred from screen outcomes.
+
+## Exactly five arms
+
+All arms receive the same initialization and fallback information; all arms that use movement scores use the same frozen scores. The starting keep set K0 is the registered current static policy, augmented by identical reference-preserving exceptions and required depot/charging alternatives.
+
+1. **Full/unpruned, same initialization:** build the entire original candidate model and continue the frozen solver policy.
+2. **Current static pruning:** keep K0 throughout; common numerical completion applies even though movement selection stays static.
+3. **Simple widening:** follow a TRAIN-frozen score-based sequence, for example per-trip m5 → m8 → a specified global fraction → full. Actual levels and cumulative deadlines must be registered; these examples are not frozen values.
+4. **Full-model Hamming/predict-and-search:** retain all original movement/charging variables and constraints. For omitted movement binaries D outside K0, impose \(\sum_{j\in D}x_j\le r\), allowing bounded disagreements with predicted zeros. Increase r on the registered schedule, eventually removing the restriction if its stage is reached.
+5. **Compact reinsertion:** start from K0; restore finite, trip/route-coherent batches ranked by frozen connectivity/depot/charging-access deficits and scores. Register batch sizes, tie-breaking and triggers. A final full-domain rebuild is permitted only within its allotted stage. This targeted policy differs from uniform score widening without adding another arm.
+
+Use the same initial K0 and exception rule wherever applicable. Radius zero matches hard zero fixing only for the same D, assignments and exceptions. Equivalence to the compact static model additionally requires a validated elimination/embedding map; it is not assumed from matching graph edges.
+
+## Fallback and feasibility restoration
+
+Register one identical replay-valid complete fallback per case, or a common acquisition policy and explicit unavailable-fallback disposition. Availability is unverified. Preserve the best accepted fleet outside the solver, and separately verify that its route, bus, charging-access decisions and continuous completion remain feasible inside every intended restricted stage. A stored fallback alone proves no model feasibility. Reference edges are exempt from omission/Hamming counting; do not add strict improvement cutoffs that exclude the reference.
+
+Trigger restoration on registered no-new-accepted-candidate deadlines, infeasibility, or physical-bill stagnation. Local per-trip floors do not prove global route feasibility. Connectivity/depot-access restoration precedes optimization-based ranking when a stage is infeasible; ordinary optimal-LP reduced costs are undefined or inappropriate there. Feasibility slacks may diagnose deficits but never yield an accepted plan.
+
+Restoring a movement means restoring its **entire associated block**: discrete routing/access decisions, continuous charge/SOC/time variables, linking and flow constraints, charging windows, reserve/terminal conditions and shared site/power coupling. Keep all applicable original constraints; deleting coupling to obtain feasibility is forbidden. Validate compact/full mappings and fallback embedding on permitted small instances before launch. Omitted-block reconstruction failure is an integrity failure, not a valid speedup.
+
+Each arm has finitely many stages and fixed cumulative deadlines across all tangent rounds. A trigger cannot create extra time or unlimited rebuilds. If restoration cannot finish, retain the earlier accepted fleet and record the incomplete stage. Timeout/error/failed repair returns the best independently accepted plan, or explicit failure if none exists. Intermediate failures remain logged. Full restoration does not guarantee reaching the full stage or globally optimizing before timeout; nested feasible sets imply no finite-time improvement theorem.
+
+## Bounds and physical acceptance
+
+Restricted-LP information, if used, is a predeclared, metered ranking feature. Recovering the full LP through omitted-column checks does not recover the integer optimum; nonnegative omitted reduced costs cannot certify this MILP. Cutoff screening would require a full-model valid dual lower bound L, applicable reduced-cost inequality L+r>U and conservative numerical enclosure. Ordinary restricted duals do not suffice. Such certification audits are outside this five-arm pilot, not hidden extra work.
+
+Use one frozen qualified-integer extraction and fixed-topology charging-completion pipeline across arms. Repair shares the budget, preserves all physical rules and is independently replayed in original units. Only complete accepted fleets with consistently recomputed physical bills replace incumbents. Solver status, tangent objective and restricted gap cannot certify execution or global pricing bounds.
+
+## Matched time and prospective compute
+
+For each cell, start the common end-to-end clock before acquisition/loading/scoring and include construction, presolve, every stage/round, any LP ranking, repair, replay and finalization. Reserve verification time before launching another stage. Stop at the common wall-clock cap and cumulative solver CPU allowance, whichever binds; unused allowance is reported. Rebuilds and parallel starts consume allowance separately. Use one solver thread and log actual process CPU plus native elapsed runtime.
+
+Common fallback acquisition and scores may be produced once experimentally. Charge fallback acquisition to **every algorithm's per-cell allowance**; charge scoring used only for pruning to score-using arms, not to the unpruned baseline. If scoring is already part of the common fallback recipe, count that portion once per algorithm, without double charging a reused cache. Count shared experimental spend once and reconstruct each algorithm's serial clock. No incumbent/bound from one competing arm enters another. This compares equally initialized policies; it cannot claim superiority over a separate cold unseeded algorithm. Historical training costs and any amortized reuse scenario require separate accounting.
+
+The inherited estimate is approximately **2.3 solver CPUh per arm/seed**, hence \(2.3\times5\times3=34.5\) solver CPUh. The 30-cell count alone does not verify it: freeze the budget vector and verify its per-arm/seed sum before launch. Reserve **40–50 CPUh total**, with a prospective 50 CPUh ceiling: 34.5 grid solver, 3 implementation/mapping checks, 6 scoring/build/replay, and 6.5 orchestration/diagnostics. Failed attempts consume buckets; no free retries, extra full-LP audits or fitting. If acquisition cannot fit the allowances, revise the design before launch.
+
+## Outcomes and decision
+
+Log retained movements, continuous charging dimensions, rows/nonzeros, presolved size, root time/bound, nodes, peak memory, stage additions, acquisition/build/repair/replay times, raw candidates, rejection causes, fallback frequency and accepted bill/bus trajectories. Compare structural-size savings against Hamming's unchanged full dimensions and search effort; this is a mechanism diagnosis, not a perfectly isolated causal decomposition.
+
+Freeze replay-valid best-known references, normalized bill losses, no-plan penalties and quality targets; update improved references consistently. Joint failures cannot count as wins; missing comparators cannot justify group deletion. Unreached targets are censored. Average seeds within cells and frozen tariff/budget weights within timetable groups, then weight groups equally; public transfer stays separate.
+
+Advance a recovery arm if it achieves **≥10% median time-to-quality reduction or ≥1% median paired bill improvement versus simple widening**, without increased failure rate, with substantive public benefit and no public regression >2% against widening at the same cell/seed/budget. Define substantive benefit and censoring/zero-denominator handling before launch. Stop for replay-integrity failure, invalid restoration, overhead-erased gains or charging-block runtime/memory dominance. Passing is exploratory evidence, not optimality retention or a population safety guarantee.
