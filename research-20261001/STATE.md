@@ -77,3 +77,4 @@ Updated: 2026-10-01 05:48 UTC. Branch claude/research-20261001. Assessment: doc/
 - 21:00 user refined the yield rule (v2g prefix / evspv2g-stochastic comment only). yield_check.sh installed; E11 restored to Nice=0, throttle 3 (no v2g jobs queued).
 - 21:05 local background loop runs yield_check.sh every 5 min for 20 h (log: scratchpad/yield_loop.log; task bbjo5412j). If the session restarts, restart it.
 - 21:25 heartbeat: E10 final. E11 72/96.
+- 00:25 heartbeat: yielding to 110 v2g jobs (E11 paused at 72/96). E11 interim written: learned beats cold 17-18/18 seed-paired.
