@@ -100,6 +100,8 @@ A replayed fleet generated on a reduced graph is a candidate column and pricing 
 \]
 where \(v(p)\) is any feasible response objective. Finding a profitable deviation and proving that no important deviation exists require different oracle performance. See [derivations and a candidate cached-price bound](notes/ECONOMIC_CERTIFICATES_AND_NOVELTY.md). These standard inequalities are implementation requirements, not our novelty claim.
 
+A further mathematical check gives a stronger way to reuse previous certificates. If \(\ell_k\le V(p_k)\) and a proven load set \(\mathcal E\) contains all fleet loads, combine the inequalities \(c+p_k^Te\ge\ell_k\) in one outer cost/load model. Its price-query lower bound dominates using each cached certificate separately; a hand-derived example improves the bound from 0 to 0.5 with no new oracle value. With a convex load set this also gives a valid outer relaxation for the hull cost. These are mathematical examples, not measured fleet improvements. Concavity-based combination has direct prior art in Geoffrion and Nauss (1977), so the possible research contribution lies in inexpensive, stronger fleet-specific load constraints and useful computational savings. See [joint-bound proofs, limitations and primary references](notes/JOINT_PRICE_BOUND_REVIEW.md).
+
 ### 3.6 Numerical reliability comes before faster reported schedules
 
 Gurobi's tolerances are absolute. Their physical meaning depends on units and coefficient scaling; tightening them is a diagnostic, not a proof. Integer rounding can destroy continuous feasibility, especially through large linking coefficients. Preserve raw values and original-unit residuals, round only qualified integer decisions, fix the resulting topology, and solve charging feasibility again under the original limits. Then replay and recompute the true bill. Keep earlier accepted incumbents when a later round or repair fails. [Official numerical guide](https://docs.gurobi.com/projects/optimizer/en/current/concepts/numericguide/tolerances_scaling.html); [official integrality guidance](https://support.gurobi.com/hc/en-us/articles/360012237872-Why-does-Gurobi-sometimes-return-non-integral-values-for-integer-variables).
@@ -186,6 +188,7 @@ Detailed titles, authors, venues, DOIs where verified, methods, evidence limitat
 - [Economic certificates and candidate bound reuse](notes/ECONOMIC_CERTIFICATES_AND_NOVELTY.md)
 - [Independent mathematical challenge](notes/CERTIFICATE_REVIEW.md)
 - [Adversarial novelty and OR positioning review](notes/OR_POSITIONING_REVIEW.md)
+- [Joint price-bound reuse and direct parametric-optimization prior art](notes/JOINT_PRICE_BOUND_REVIEW.md)
 
 Full-text review means the relevant method/theorem/experiment sections were inspected; it does not mean results were reproduced. An abstract-only source is usable for identifying a direction, not for borrowing a theorem's hypotheses or a detailed implementation. No DOI was guessed. Newer preprints are distinguished from published papers. This is a targeted primary-literature review, not a claim of exhaustive coverage or a universal ranking of algorithms across all MILPs.
 
