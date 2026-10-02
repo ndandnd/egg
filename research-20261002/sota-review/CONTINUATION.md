@@ -1,6 +1,6 @@
-# EGG review continuation — ends 2 October 2026 at 1 p.m. New York
+# EGG final review handoff — 2 October 2026
 
-Updated during the 15:01 UTC follow-up. Deadline: **2026-10-02T17:00:00Z**. Read this compact checkpoint first; the report and linked notes hold completed findings. Git history preserves earlier detailed checkpoints.
+Finalized after **2026-10-02T17:00:00Z**, the requested 1 p.m. New York cutoff. The bounded review is complete and its scoped automation was deleted through the app. All subagents are complete; no new research or cluster check started after the cutoff. Read this handoff first; the report and linked notes hold completed findings. Git history preserves earlier checkpoints.
 
 ## Scope and ownership
 
@@ -18,7 +18,8 @@ At **15:02:19 UTC**, the E11 queue and priority-project entries were empty. Scop
 Exact-source checks at logged commit `711c3d7` establish **four progenitor groups**, with same-ID 60-trip cases prefixes of 80-trip cases. Seeds and sizes are correlated repeats. Case creation is outside the timer; extraction/replay can overrun; a later extraction exception can discard an earlier internal incumbent. `notes/E11_INTERPRETATION_REVIEW.md` preserves these limitations. No independent physical replay was done. The main review incorporates this completed cohort and retains the reliability-first, classical-comparator-first recommendation.
 
 E11 is complete and fully collected: do not recheck its queue or recollect artifacts on later wakes. No new EGG job is authorized during this review.
-EGG yields to nc437 jobs named `v2g*` or commented `evspv2g-stochastic`. Never change other projects' jobs, release explicit holds or duplicate/resubmit work. One compact queue check per wake through `unicorn2`, after sourcing `/etc/profile.d/slurm.sh`, is sufficient; use scoped accounting if 798833 disappears. Collect newly completed E11 evidence only if available. Exclude `scaglione-compute-01`; inherited ceiling is 6–8 Gurobi processes. The existing `~/egg-claude-20261001/yield_check.sh` was inspected at takeover: pending EGG arrays get Nice10000/throttle1 while v2g has work. No background loop restarted.
+
+For any later authorized cluster phase, EGG yields to nc437 jobs named `v2g*` or commented `evspv2g-stochastic`. Never change other projects' jobs, release explicit holds or duplicate/resubmit work. Exclude `scaglione-compute-01`; the inherited ceiling was 6–8 Gurobi processes. The existing `~/egg-claude-20261001/yield_check.sh` was inspected at takeover: pending EGG arrays get Nice10000/throttle1 while v2g has work. No background loop restarted.
 
 ## Completed — do not repeat
 
@@ -28,6 +29,7 @@ EGG yields to nc437 jobs named `v2g*` or commented `evspv2g-stochastic`. Never c
 - Rank2's final amendment: **six arms, 540 runs, 41.4 estimated solver CPUh, hard 60 CPUh ceiling**, adding matched nonlearned greedy widening. This supersedes the unexecuted five-arm/50 CPUh design. No concurrency change. All arms pay for common fallback acquisition; unused learned scoring is not charged to full/classical arms.
 - `notes/FINAL_CONTRIBUTION_CHALLENGE.md` is integrated: repaired classical comparator before expanded training; allocation versus stronger pricing chosen from measured bottlenecks; meaningful economic endpoints; promotion screens are not originality gates.
 - The 10:01 UTC consolidation is complete and parent-reviewed. Sol6.1 edited only opening/status/closing; the parent tightened the comparator claim and bottleneck wording. No new scientific claim was introduced. All workers in this package have completed.
+- At 16:01 UTC, Sol6.1 checked the new E11 extraction-failure finding against the numerical reliability design. The existing protocol already covers earlier-incumbent retention, explicit failure without an accepted candidate, no-time termination and complete pipeline timing. No amendment was needed; the later prelaunch implementation check must verify those requirements. No cluster check or new investigation was repeated.
 
 ## Scientific boundaries already reviewed
 
@@ -37,10 +39,10 @@ EGG yields to nc437 jobs named `v2g*` or commented `evspv2g-stochastic`. Never c
 - Route relaxation requires physical mapping with nonincreasing price objective, including signed prices/shared charging. Incomplete-CG correction needs global reduced-cost coverage and justified route mass. Exact route LP need not equal full-fleet hull. Small-case comparison uses an early checkpoint, retains zero-error ties and treats missing references as inconclusive.
 - Kiwiel–Lemaréchal institutional full text was inspected with OCR/version limits; ConPaS final text retrieved. De Oliveira–Sagastizábal remains abstract-only after three bounded access routes; do not repeat them. Other access limits are in the report/notes.
 
-## Next and deadline
+## Next implementation and final status
 
-The requested review is substantively complete. Address another gap **only if new evidence can change a recommendation**. Do not invent work or repeat reviews to fill the window; no more subagent/editorial campaigns are needed for unchanged state. E11 collection is complete; keep unchanged state quiet and do not repeat its queue check. The first later implementation action is common replay reliability, followed by a meaningful learned-versus-classical comparison; the five studies are conditional options, not an automatic queue.
+The requested review is complete. E11 collection is complete; do not repeat its queue check or artifact analysis. The first later implementation action is common replay reliability, followed by the six-arm learned-versus-classical comparison. Freeze missing manifests, mappings, acceptance thresholds and resource accounting before any launch. The five studies are conditional options, not an automatic queue. The promising seed result does not remove the classical comparator or independent evaluation requirement.
 
-Consolidated review commit `e22420e1` and the initial two-task collection `ee0e90bc` are pushed to `origin/codex/sota-review-20261002`. The 15:01 UTC milestone adds full-cohort evidence, reproducible analysis, interpretation checks and report updates; back these up with this checkpoint. Routine queue-only edits can be included in the final handoff backup rather than separate hourly commits. Commit only review deliverables; `tmp/` is scratch and stays untracked. Never reset/overwrite Claude's branch.
+Consolidated review commit `e22420e1`, initial two-task collection `ee0e90bc`, and full-cohort milestone **`ae5d6181`** are pushed to `origin/codex/sota-review-20261002`. The full cohort, reproducible analysis, interpretation checks and report updates are backed up. Final report status and this handoff are included in the closing backup. Commit only review deliverables; `tmp/` is scratch and stays untracked. Never reset/overwrite Claude's branch.
 
-Scoped automation: `egg-literature-review-until-1-p-m`, hourly through 17:00 UTC. At/after 17:00 UTC start no new research; record final review/cluster state, back up artifacts, **delete this scoped automation**, and report the final deliverable. Keep older schedules paused. Ending this bounded review does not revoke project ownership.
+Scoped automation **`egg-literature-review-until-1-p-m` was deleted**, confirmed by the app after the cutoff. Older schedules remain paused. The six Google Doc entries are already done and must not be reposted. Latest cluster evidence remains the completed/reconciled E11 cohort observed at 15:02 UTC; no fresh queue inspection was necessary. Ending this bounded review does not revoke project ownership or change standing data/priority restrictions. No new schedule was created.
