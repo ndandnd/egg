@@ -1,6 +1,6 @@
 # EGG review continuation — ends 2 October 2026 at 1 p.m. New York
 
-Updated during the 14:02 UTC follow-up. Deadline: **2026-10-02T17:00:00Z**. Read this compact checkpoint first; the report and linked notes hold completed findings. Git history preserves earlier detailed checkpoints.
+Updated during the 15:01 UTC follow-up. Deadline: **2026-10-02T17:00:00Z**. Read this compact checkpoint first; the report and linked notes hold completed findings. Git history preserves earlier detailed checkpoints.
 
 ## Scope and ownership
 
@@ -11,10 +11,13 @@ Updated during the 14:02 UTC follow-up. Deadline: **2026-10-02T17:00:00Z**. Read
 
 ## Live cluster state
 
-At **14:03:05 UTC**, E11 `798833_[74-95%1]` was pending for JobArrayTaskLimit; no priority-project entries appeared. Subsequent scoped accounting (before 14:08:26 UTC) showed **74/96 completed**. No jobs/priorities changed. Newly completed tasks 72/73 (scale50001:60, seed 3, cold/cold4) were collected with their command manifest and complete logs into `evidence/e11-tasks-72-73-20261002.tar.gz`; hashes, source commit and scalar receipts are in `evidence/E11_COLLECTION_20261002.json`. Both report bounded status, bill 3207.58 and 26 buses. These are stored outputs, not independently replayed plans. No learned arm was newly collected; historical 72-run seed comparisons remain interim.
+At **15:02:19 UTC**, the E11 queue and priority-project entries were empty. Scoped accounting at **15:02:49 UTC** showed all **96 tasks COMPLETED/0:0**. No jobs or priorities changed. Newly completed tasks 74–95 and previously unavailable historical raw tasks 0–71 were collected once; combined with the earlier 72/73 archive, all 96 command/result keys and source versions reconcile without duplicates or missing outputs. Archives, member hashes, failures and accounting are preserved in `evidence/E11_FINAL_COLLECTION_20261002.json`; `evidence/analyze_e11_archives.py` reproduces the local summaries without extraction, code execution from archives or solver/replay calls.
 
-`notes/E11_COLLECTION_STATUS.md` records the bounded collection. Final analysis must reconcile all 96 unique case/arm/seed keys, preserve failures and detect duplicates: the historical summarizer overwrites duplicate keys and drops joint failures. Collect only newly available artifacts on later wakes; do not recollect tasks 72/73 or rerun them. The remaining 22 task statuses after the observation window are unknown here.
+**New substantive finding:** learned keep .15 wins 23/24 pairs against each baseline; keep .30 wins 24/24. These descriptive counts rank finite reported bills above failures. Both-finite comparisons also favor learned arms. Finite-bill counts are cold 21/24, cold4 9/24, keep .15 23/24 and keep .30 24/24. All failures remain visible. This strengthens conditional solver-seed repeatability, not learned-specific superiority or public transfer. `notes/E11_FULL_COHORT_ANALYSIS.md` contains the full denominators and per-cell summaries.
 
+Exact-source checks at logged commit `711c3d7` establish **four progenitor groups**, with same-ID 60-trip cases prefixes of 80-trip cases. Seeds and sizes are correlated repeats. Case creation is outside the timer; extraction/replay can overrun; a later extraction exception can discard an earlier internal incumbent. `notes/E11_INTERPRETATION_REVIEW.md` preserves these limitations. No independent physical replay was done. The main review incorporates this completed cohort and retains the reliability-first, classical-comparator-first recommendation.
+
+E11 is complete and fully collected: do not recheck its queue or recollect artifacts on later wakes. No new EGG job is authorized during this review.
 EGG yields to nc437 jobs named `v2g*` or commented `evspv2g-stochastic`. Never change other projects' jobs, release explicit holds or duplicate/resubmit work. One compact queue check per wake through `unicorn2`, after sourcing `/etc/profile.d/slurm.sh`, is sufficient; use scoped accounting if 798833 disappears. Collect newly completed E11 evidence only if available. Exclude `scaglione-compute-01`; inherited ceiling is 6–8 Gurobi processes. The existing `~/egg-claude-20261001/yield_check.sh` was inspected at takeover: pending EGG arrays get Nice10000/throttle1 while v2g has work. No background loop restarted.
 
 ## Completed — do not repeat
@@ -36,8 +39,8 @@ EGG yields to nc437 jobs named `v2g*` or commented `evspv2g-stochastic`. Never c
 
 ## Next and deadline
 
-The requested review is substantively complete. Address another gap **only if new evidence can change a recommendation**. Do not invent work or repeat reviews to fill the window; no more subagent/editorial campaigns are needed for unchanged state. Preserve the compact E11 check and keep unchanged state quiet. The first later implementation action is common replay reliability, followed by a meaningful learned-versus-classical comparison; the five studies are conditional options, not an automatic queue.
+The requested review is substantively complete. Address another gap **only if new evidence can change a recommendation**. Do not invent work or repeat reviews to fill the window; no more subagent/editorial campaigns are needed for unchanged state. E11 collection is complete; keep unchanged state quiet and do not repeat its queue check. The first later implementation action is common replay reliability, followed by a meaningful learned-versus-classical comparison; the five studies are conditional options, not an automatic queue.
 
-Consolidated review commit `e22420e1` is pushed to `origin/codex/sota-review-20261002`. The 14:02 UTC collection adds the two-task archive, receipt and note; back these up with this checkpoint. Routine queue-only edits can be included in the final handoff backup rather than separate hourly commits. Commit only review deliverables; `tmp/` is scratch and stays untracked. Never reset/overwrite Claude's branch.
+Consolidated review commit `e22420e1` and the initial two-task collection `ee0e90bc` are pushed to `origin/codex/sota-review-20261002`. The 15:01 UTC milestone adds full-cohort evidence, reproducible analysis, interpretation checks and report updates; back these up with this checkpoint. Routine queue-only edits can be included in the final handoff backup rather than separate hourly commits. Commit only review deliverables; `tmp/` is scratch and stays untracked. Never reset/overwrite Claude's branch.
 
 Scoped automation: `egg-literature-review-until-1-p-m`, hourly through 17:00 UTC. At/after 17:00 UTC start no new research; record final review/cluster state, back up artifacts, **delete this scoped automation**, and report the final deliverable. Keep older schedules paused. Ending this bounded review does not revoke project ownership.
