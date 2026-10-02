@@ -1,0 +1,141 @@
+{
+  "date": "2026-10-02",
+  "scope": "in-memory archive inspection only; no extraction or archived code execution",
+  "archive": {
+    "path": "research-20261002/sota-review/evidence/e11-tasks-72-73-20261002.tar.gz",
+    "bytes": 22123,
+    "sha256": "79d53406bb2d2a0ee6495a98145ba0c1351d192ab5f665d571caee4ddcd376f9",
+    "preserved": true
+  },
+  "members": [
+    {
+      "name": "cmds.txt",
+      "bytes": 28008,
+      "sha256": "33f2a415db71b6a92ecc4c61fa0720676419de48c622677197fc832cf59ef4ce"
+    },
+    {
+      "name": "out/scale50001-n60-cold-k30-s3/e3.json",
+      "bytes": 112838,
+      "sha256": "65e5fd30a564c9f764c6154eeb63eb9091f51cf37dc9f6f6a1f019e811e7be6a"
+    },
+    {
+      "name": "out/scale50001-n60-cold4-k30-s3/e3.json",
+      "bytes": 113217,
+      "sha256": "3cb497d9b8b9561abad66a10fded66c380531a612009a02623a674a2f1fbd354"
+    },
+    {
+      "name": "logs/egg-claude-e11-798833_72.out",
+      "bytes": 947,
+      "sha256": "b6d7cdd74bfbbabf9d1597c1364880f18cdcf5a047c8a0d8922f06b94d358b9c"
+    },
+    {
+      "name": "logs/egg-claude-e11-798833_72.err",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "logs/egg-claude-e11-798833_73.out",
+      "bytes": 1413,
+      "sha256": "c906f1d4098d2a9c963bb75f64497b0e49953e4421520d5bc7e6ec7794145c36"
+    },
+    {
+      "name": "logs/egg-claude-e11-798833_73.err",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "manifest": {
+    "member": "cmds.txt",
+    "rows": 96,
+    "ordering": "zero-based task=32*(seed-1)+8*(case_id-50000)+4*size_index+arm_index; sizes 60,80; arms cold,cold4,learned4_k15,learned4_k30"
+  },
+  "expected_source_prefix": "711c3d7",
+  "tasks": [
+    {
+      "array_job_id": 798833,
+      "task_id": 72,
+      "manifest_line_one_based": 73,
+      "exact_command": "python -m experiments.claude_e3_prune --case scale:50001:60 --arm cold --keep 0.3 --seconds 60 --grb-seed 3 --scores /home/nc437/egg-claude-20261001/runs/e3-prune-20261001/scores_v8_day.json --output /home/nc437/egg-claude-20261001/runs/e11-seeds-20261001/out/scale50001-n60-cold-k30-s3",
+      "result_member": "out/scale50001-n60-cold-k30-s3/e3.json",
+      "case": "scale:50001:60",
+      "arm": "cold",
+      "keep": 0.3,
+      "tariff": "day",
+      "grb_seed": 3,
+      "seconds_allowance": 60.0,
+      "source_commit_from_log": "711c3d7120f7ebdc832f809b1154defcf9614b63",
+      "source_matches_expected_prefix": true,
+      "status": "bounded",
+      "bill": 3207.57997026749,
+      "buses": 26,
+      "result_total_seconds": 62.59124230500311,
+      "wrapper_elapsed_seconds": 63,
+      "wrapper_exit_code": 0,
+      "log_start_utc": "2026-10-02T13:40:17Z",
+      "log_end_utc": "2026-10-02T13:41:20Z",
+      "parent_observed_accounting": {
+        "state": "COMPLETED",
+        "exit_code": "0:0",
+        "elapsed_seconds": 77,
+        "allocated_cpus": 1,
+        "actual_cpu": null,
+        "actual_cpu_read": false
+      },
+      "runtime_caution": "result runtime, wrapper elapsed and scheduler elapsed differ; allocated CPUs is reservation, not measured CPU consumption"
+    },
+    {
+      "array_job_id": 798833,
+      "task_id": 73,
+      "manifest_line_one_based": 74,
+      "exact_command": "python -m experiments.claude_e3_prune --case scale:50001:60 --arm cold4 --keep 0.3 --seconds 60 --grb-seed 3 --scores /home/nc437/egg-claude-20261001/runs/e3-prune-20261001/scores_v8_day.json --output /home/nc437/egg-claude-20261001/runs/e11-seeds-20261001/out/scale50001-n60-cold4-k30-s3",
+      "result_member": "out/scale50001-n60-cold4-k30-s3/e3.json",
+      "case": "scale:50001:60",
+      "arm": "cold4",
+      "keep": 0.3,
+      "tariff": "day",
+      "grb_seed": 3,
+      "seconds_allowance": 60.0,
+      "source_commit_from_log": "711c3d7120f7ebdc832f809b1154defcf9614b63",
+      "source_matches_expected_prefix": true,
+      "status": "bounded",
+      "bill": 3207.57997026749,
+      "buses": 26,
+      "result_total_seconds": 60.140479535009945,
+      "wrapper_elapsed_seconds": 61,
+      "wrapper_exit_code": 0,
+      "log_start_utc": "2026-10-02T14:01:59Z",
+      "log_end_utc": "2026-10-02T14:03:00Z",
+      "parent_observed_accounting": {
+        "state": "COMPLETED",
+        "exit_code": "0:0",
+        "elapsed_seconds": 77,
+        "allocated_cpus": 2,
+        "actual_cpu": null,
+        "actual_cpu_read": false
+      },
+      "runtime_caution": "result runtime, wrapper elapsed and scheduler elapsed differ; allocated CPUs is reservation, not measured CPU consumption"
+    }
+  ],
+  "source_version_inconsistency": null,
+  "rerun_or_independent_replay": false,
+  "duplicate_submission": false,
+  "cohort_status": {
+    "completed_parent_reported": 74,
+    "expected": 96,
+    "remaining_not_collected": 22,
+    "remaining_terminal_status": "unknown in this receipt",
+    "full_cohort_complete": false,
+    "historical_completed_records_reconciled_here": false,
+    "queue_snapshot_utc": "2026-10-02T14:03:05.020464Z",
+    "scoped_accounting_observation_window_utc": {
+      "after": "2026-10-02T14:03:05.020464Z",
+      "before": "2026-10-02T14:08:26Z",
+      "exact_timestamp_emitted": false
+    }
+  },
+  "final_analysis_cautions": [
+    "Reconcile all 96 unique case/arm/seed keys with manifest and terminal records, including failures.",
+    "Historical summarizer silently overwrites duplicate keys and skips joint failures.",
+    "These two baseline receipts do not update learned robustness conclusions."
+  ]
+}

@@ -1,6 +1,6 @@
 # EGG review continuation — ends 2 October 2026 at 1 p.m. New York
 
-Updated during the 10:01 UTC follow-up. Deadline: **2026-10-02T17:00:00Z**. Read this compact checkpoint first; the report and linked notes hold completed findings. Git history preserves earlier detailed checkpoints.
+Updated during the 14:02 UTC follow-up. Deadline: **2026-10-02T17:00:00Z**. Read this compact checkpoint first; the report and linked notes hold completed findings. Git history preserves earlier detailed checkpoints.
 
 ## Scope and ownership
 
@@ -11,7 +11,9 @@ Updated during the 10:01 UTC follow-up. Deadline: **2026-10-02T17:00:00Z**. Read
 
 ## Live cluster state
 
-At **10:02:50 UTC**, E11 `798833_[72-95%1]` was pending for Priority, still 24 tasks remaining. Priority project had 126 running and 9 pending job entries. No EGG work ran; no jobs/priorities changed. E11's 72/96-run conclusions remain interim.
+At **14:03:05 UTC**, E11 `798833_[74-95%1]` was pending for JobArrayTaskLimit; no priority-project entries appeared. Subsequent scoped accounting (before 14:08:26 UTC) showed **74/96 completed**. No jobs/priorities changed. Newly completed tasks 72/73 (scale50001:60, seed 3, cold/cold4) were collected with their command manifest and complete logs into `evidence/e11-tasks-72-73-20261002.tar.gz`; hashes, source commit and scalar receipts are in `evidence/E11_COLLECTION_20261002.json`. Both report bounded status, bill 3207.58 and 26 buses. These are stored outputs, not independently replayed plans. No learned arm was newly collected; historical 72-run seed comparisons remain interim.
+
+`notes/E11_COLLECTION_STATUS.md` records the bounded collection. Final analysis must reconcile all 96 unique case/arm/seed keys, preserve failures and detect duplicates: the historical summarizer overwrites duplicate keys and drops joint failures. Collect only newly available artifacts on later wakes; do not recollect tasks 72/73 or rerun them. The remaining 22 task statuses after the observation window are unknown here.
 
 EGG yields to nc437 jobs named `v2g*` or commented `evspv2g-stochastic`. Never change other projects' jobs, release explicit holds or duplicate/resubmit work. One compact queue check per wake through `unicorn2`, after sourcing `/etc/profile.d/slurm.sh`, is sufficient; use scoped accounting if 798833 disappears. Collect newly completed E11 evidence only if available. Exclude `scaglione-compute-01`; inherited ceiling is 6–8 Gurobi processes. The existing `~/egg-claude-20261001/yield_check.sh` was inspected at takeover: pending EGG arrays get Nice10000/throttle1 while v2g has work. No background loop restarted.
 
@@ -36,6 +38,6 @@ EGG yields to nc437 jobs named `v2g*` or commented `evspv2g-stochastic`. Never c
 
 The requested review is substantively complete. Address another gap **only if new evidence can change a recommendation**. Do not invent work or repeat reviews to fill the window; no more subagent/editorial campaigns are needed for unchanged state. Preserve the compact E11 check and keep unchanged state quiet. The first later implementation action is common replay reliability, followed by a meaningful learned-versus-classical comparison; the five studies are conditional options, not an automatic queue.
 
-All meaningful milestones are pushed to `origin/codex/sota-review-20261002`; latest prior package `7b4be468`. Commit only review deliverables; `tmp/` is scratch and stays untracked. Never reset/overwrite Claude's branch.
+Consolidated review commit `e22420e1` is pushed to `origin/codex/sota-review-20261002`. The 14:02 UTC collection adds the two-task archive, receipt and note; back these up with this checkpoint. Routine queue-only edits can be included in the final handoff backup rather than separate hourly commits. Commit only review deliverables; `tmp/` is scratch and stays untracked. Never reset/overwrite Claude's branch.
 
 Scoped automation: `egg-literature-review-until-1-p-m`, hourly through 17:00 UTC. At/after 17:00 UTC start no new research; record final review/cluster state, back up artifacts, **delete this scoped automation**, and report the final deliverable. Keep older schedules paused. Ending this bounded review does not revoke project ownership.
