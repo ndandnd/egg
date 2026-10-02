@@ -4,13 +4,13 @@
 
 > Read `doc/GPT_HANDOFF_20261002.md` on branch `claude/research-20261001` of
 > https://github.com/ndandnd/egg (or the bundle `output/gpt-handoff-20261002.zip`).
-> Claude is still running the cluster side until ~17:45 UTC 2 October. Please do two
-> things that need no cluster compute: (1) post the six pending research-log updates in
+> Claude has paused (2 Oct ~05:30 UTC) and you now own the project, including the
+> cluster; read `research-20261001/TAKEOVER_SUMMARY.md` first. Start with: (1) post the six pending research-log updates in
 > `research-20261001/GOOGLE_DOC_PENDING.md` to the existing Google Doc, verbatim and in
 > order, if you have Docs write access; (2) run the deep research brief in Section 5 and
 > write the report to `research-20261002/sota-review/SOTA_REVIEW.md` on a new branch
-> `codex/sota-review-20261002`. Do not submit cluster jobs, modify
-> `claude/research-20261001`, or open sealed DEV/TEST/A6/B3/GIRO data.
+> `codex/sota-review-20261002`. Follow the cluster priority rule (EGG yields to v2g /
+> evspv2g-stochastic jobs) and do not open sealed DEV/TEST/A6/B3/GIRO data.
 
 ## 1. Where things stand
 
@@ -69,15 +69,16 @@ every comparison is paired within the same policy (cold vs learned, cold4 vs lea
 
 - **Cluster priority:** EGG yields to the evspv2g stochastic project (jobs named `v2g*` or
   `--comment=evspv2g-stochastic`). `~/egg-claude-20261001/yield_check.sh` enforces this;
-  Claude runs it every 5 minutes. As of 04:20 UTC ~109 v2g jobs are queued, so EGG work
+  It is no longer run automatically. As of 05:20 UTC ~451 v2g jobs were queued and ~109 v2g jobs are queued, so EGG work
   is paused (E11 at 72/96). Never cancel or alter other projects' jobs; exclude
   `scaglione-compute-01`; at most 6-8 concurrent EGG Gurobi processes.
 - Sealed: DEV/TEST physical groups, A6/B3/confirmation, private GIRO data.
 - No PR merge, no paper submission, no reset-credit redemption.
-- **Coordination:** until Claude's wrap-up (~17:45 UTC 2 Oct) Claude owns the cluster and
-  branch `claude/research-20261001`. GPT should work on its own branch and not submit
-  jobs. After the wrap-up, `research-20261001/TAKEOVER_SUMMARY.md` will list what is
-  running and the recommended next steps.
+- **Coordination (updated 2 Oct ~05:30 UTC):** Claude has paused all monitoring at the
+  user's request; GPT now owns the project and the cluster. `research-20261001/TAKEOVER_SUMMARY.md`
+  lists what is still queued (E11 remainder, job 798833, held at Nice=10000) and the
+  recommended next steps. The 5-minute yield loop is no longer running; run
+  `yield_check.sh` yourself when submitting EGG work.
 
 ## 5. Deep research brief for GPT (no compute needed)
 
