@@ -23,7 +23,7 @@ Paired by seed (wins/ties/losses; failure = loss):
 - learned4_k30 vs cold4: 18/0/0
 
 Failures (genuine, not harness): cold4 found no plan within its four 15 s rounds in 12
-runs (all 80-trip cells and 50003/60) and cold in 2; one cold and one learned4 run hit
+runs (every 80-trip and 50003/60 run, plus one 50001/60 seed) and cold in 2; one cold and one learned4 run hit
 the native charge-projection roundoff refusal.
 
 ## Reading (interim)
