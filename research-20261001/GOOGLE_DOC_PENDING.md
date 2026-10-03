@@ -1,4 +1,10 @@
-# Pending Google Doc updates (append in order to the research log)
+# Google Doc updates for the research log — POSTED
+
+All six entries below were appended verbatim and in order by GPT on 2 Oct 2026 04:55 UTC
+(receipt: `research-20261002/sota-review/GOOGLE_DOC_APPEND_RECEIPT.json` on branch
+`codex/sota-review-20261002`). Do not repost. Verified present by Drive full-text search
+on 3 Oct 02:45 UTC.
+
 
 The research log is https://docs.google.com/document/d/1NmPC_qo_uOnA48dV6Ibhs3Pj9EgOD-oJTBuVi41p6bg/edit.
 This session has only the Google Drive connector (read/create), not the Google Docs
