@@ -25,4 +25,4 @@ At this checkpoint, **no benchmark worker is running**. CatBoost/logistic traini
 
 ## Monitoring and backups
 
-Existing `advance-egg-journal-research` automation is paused at initial takeover; parent will reactivate it for this local campaign with an updated prompt and record confirmation here. The October 2 scoped review schedule was deleted and must remain absent. Preserve old research and Google Doc history. Append consolidated verified milestones to the original Doc when useful; the six old entries are already posted, never repost them.
+Existing `advance-egg-journal-research` was reactivated for this local campaign, hourly, with updated local-compute limits and this checkpoint. The app confirmed ACTIVE; no other paused automation was restarted. First milestone `b05cc056` is pushed with author Nathan Cho <nathan.cho2013@gmail.com>. The October 2 scoped review schedule was deleted and must remain absent. Preserve old research and Google Doc history. Append consolidated verified milestones to the original Doc when useful; the six old entries are already posted, never repost them.
