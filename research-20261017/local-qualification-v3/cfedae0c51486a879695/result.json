@@ -1,0 +1,104 @@
+{
+  "task": {
+    "case_key": "scale:50641:80",
+    "seed": 17,
+    "arm": "catboost_v5",
+    "block": 1,
+    "seconds": 30
+  },
+  "started_utc": "2026-10-17T18:20:12Z",
+  "lock_sha256": "2976ef7fcb9d1c577e11e84757995e90f665faae9fd4ee071911ba5a5138ff87",
+  "events_file": "native.jsonl",
+  "host": {
+    "system": "Darwin",
+    "node": "Nathans-MacBook-Pro-2.local",
+    "release": "25.5.0",
+    "version": "Darwin Kernel Version 25.5.0: Tue Jun  9 22:28:29 PDT 2026; root:xnu-12377.121.10~1/RELEASE_ARM64_T6030",
+    "machine": "arm64",
+    "processor": "arm"
+  },
+  "case_identity": "7cd962d6af1b5e6cf4a34d75416f77afd52671f266abd00620c6053337dd0fc7",
+  "movement_ids_sha256": "8be68e236be78677ac716690b449f2f258b05a948d5336756276852c9f0b152d",
+  "model_metadata": {
+    "arm": "catboost",
+    "seed": 17,
+    "selection": {
+      "candidate_index": 1,
+      "config": {
+        "depth": 6
+      },
+      "inner_weighted_log_loss": 0.06003403233166861
+    },
+    "qualification": "Exploratory historical TRAIN-bank grouped CV; single feasible-incumbent labels, not optimum; no independent benchmark.",
+    "model_sha256": "1b3d6e00149aa4f712d84b8ba0e859496b295f9f266c593cf62164f92bbac237",
+    "training_source_hashes": {
+      "/Users/nadan/Documents/ChatGPT/egg/claude-local/20260930-route-pool128-v3/pool_manifest.json": "d9aad5b5ea62fd82a8b4f6a3c20a95c57953ba12c7bf0949fa06004aa511c40d",
+      "/Users/nadan/Documents/ChatGPT/egg/claude-local/v8/task00/inner_progress/fit_only_preprocessing_and_groups.json": "f4a5145f9b89ca487f52905d2cda153dd6bc1d1a930d441b577ec9357eae8095",
+      "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/src/experiments/codex_train_classical.py": "bcfeeb5333cb0db1fec9e0ae2dc1103270e12f2a73a1d6fb08d76906072a1193",
+      "src/egglab/learned_proposals.py": "5b58b9495ccb401bf7a865ba4058a81838b575f517268e76bad40f0b7dcbd479",
+      "src/egglab/physical_route_model_v2.py": "07788c1bd991a5309371fc83adc8fae5599bfc7ae0c731b6e498263784d87e27",
+      "src/egglab/physical_route_model_v3.py": "c500e4ddb88079842e8faefa5e8128f07c1ce82bad3fbfe1c0b5f9aee969cda8",
+      "src/egglab/physical_route_model_families_v5.py": "c9a245c7ab8bcb817fc07b2e78562fd6822bfd1b29f593d4941462a7fa5f4469",
+      "research-20261017/classical-training/PROTOCOL.md": "8a834a7c78a52061b4f40aaba5286d85d5a07076bacb66d8cb0f575c1773d34d"
+    },
+    "pool_table_hashes": {
+      "cases.jsonl": "faf0428f79744a9e26fa04e80baec4734443e3cfe538e404d74f41f626a294d6",
+      "source_inputs.jsonl": "7c5fab4c648b27fda5e9ecc55cd418f0a066c8e46196bc31d5f9405e5a6409d5"
+    },
+    "features": [
+      "pullout",
+      "direct",
+      "depot",
+      "pullin",
+      "start_time",
+      "end_time",
+      "duration",
+      "movement_energy",
+      "before_energy",
+      "after_energy",
+      "charge_window",
+      "window_price_mean",
+      "window_price_min",
+      "market_mean",
+      "market_spread",
+      "same_place",
+      "intercept"
+    ]
+  },
+  "classical_timings": {
+    "score_seconds": 0.5878571672365069,
+    "cold_load_seconds": 0.42572841607034206,
+    "inference_seconds": 0.16164945904165506
+  },
+  "score_sha256": "dfc99754719708fe9a057a47bf7906c63ac617804a6e00f2c04a78274fabeb6e",
+  "preparation_total_s": 2.882513458840549,
+  "score_prune_s": 2.6238296246156096,
+  "movements_full": 6131,
+  "movements_kept": 1955,
+  "retained_ids_sha256": "d494aea28dbc70c43210f70a9991e8e6a23d13b88371810a9f2d3549d087052c",
+  "search_phase_cap_s": 5.27929808315821,
+  "completion_reserve_s": 3.0,
+  "finalization_reserve_s": 3.0,
+  "planner_return_elapsed_s": 27.93164470884949,
+  "planner_file_s": 0.02027833368629217,
+  "status": "bounded",
+  "source_bound": 597.7199989999998,
+  "source_bound_scope": "restricted_model_only",
+  "global_certificate_claim": false,
+  "accepted_valid": true,
+  "final_replay_s": 0.0715541671961546,
+  "final_plan_replay_files_s": 0.005383457988500595,
+  "bill_exact": "2453941956613847744926888434076933977029349062074991/730750818665451459101842416358141509827966271488",
+  "bill": 3358.1104446730683,
+  "vehicles": 24,
+  "wall_s": 28.06522725056857,
+  "cpu_s": 25.561785,
+  "peak_rss_bytes": 457048064,
+  "versions": {
+    "mip": "1.17.6",
+    "gurobipy": "12.0.1",
+    "torch": "2.4.1",
+    "numpy": "1.26.4",
+    "catboost": "1.2.8"
+  }
+}
