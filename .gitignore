@@ -2,6 +2,10 @@
 __pycache__/
 *.pyc
 .venv/
+.venv-local/
+# Keep complete local run logs for diagnostics; publish hashes and distilled receipts.
+research-20261017/**/stdout.txt
+research-20261017/**/stderr.txt
 # experiment artifacts (raw runs stay local/cluster; distilled results go in result/)
 src/runs/
 slurm-*.out

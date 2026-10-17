@@ -870,7 +870,7 @@ def certify(case, market, budget=Budget(), *, arm="cold", state_index=0,
         result = oracle(case, prices,
             nr.Budget(backend=budget.backend, threads=1, phase_seconds=budget.phase_seconds,
                       wall_seconds=remaining, max_rounds=1), record=oracle_record)
-        if (result.get("status") == "unresolved" and "plan" not in result
+        if (result.get("status") in ("unresolved", "extraction_failed") and "plan" not in result
                 and result.get("case_identity") == case.identity()
                 and result.get("prices") == list(prices)
                 and (oracle_id is None or result.get("formulation") == oracle_id)

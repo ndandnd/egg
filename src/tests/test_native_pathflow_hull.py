@@ -187,14 +187,15 @@ def no_plan(case, prices, record=None):
             'stats': stats, 'status': 'unresolved'}
 
 
-def test_late_compact_no_plan_keeps_prior_bound_and_feasible_mixture(monkeypatch, tmp_path):
+@pytest.mark.parametrize('failure_status', ['unresolved', 'extraction_failed'])
+def test_late_compact_no_plan_keeps_prior_bound_and_feasible_mixture(monkeypatch, tmp_path, failure_status):
     fakes(monkeypatch)
     original = compact.pathflow.solve_pricing
     calls = []
     def pricing(case, prices, budget, record=None):
         calls.append(1)
         if len(calls) == 2:
-            return no_plan(case, prices, record)
+            return {**no_plan(case, prices, record), 'status': failure_status}
         return original(case, prices, budget, record)
     monkeypatch.setattr(compact.pathflow, 'solve_pricing', pricing)
     cell = cq.controls()[0]
@@ -219,10 +220,11 @@ def test_late_compact_no_plan_keeps_prior_bound_and_feasible_mixture(monkeypatch
     assert admitted == events and not issues
 
 
-def test_first_compact_no_plan_finishes_unresolved_without_bounds(monkeypatch):
+@pytest.mark.parametrize('failure_status', ['unresolved', 'extraction_failed'])
+def test_first_compact_no_plan_finishes_unresolved_without_bounds(monkeypatch, failure_status):
     fakes(monkeypatch)
     monkeypatch.setattr(compact.pathflow, 'solve_pricing',
-                        lambda case, prices, budget, record=None: no_plan(case, prices, record))
+                        lambda case, prices, budget, record=None: {**no_plan(case, prices, record), 'status': failure_status})
     cell = cq.controls()[0]
     events = []
     result = compact.certify(cell['case'], cell['market'], record=events.append)

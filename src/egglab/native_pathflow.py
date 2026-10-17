@@ -15,6 +15,7 @@ from egglab import native_recharge as nr
 FORMULATION = 'egg-native-pathflow-v3-energy-band-orphan-projection'
 NATIVE_MATRIX = 'egg-native-pathflow-v2-energy-band'
 EXTRACTION_POLICY = 'native-pathflow-orphan-projection-v1'
+COMPLETION_POLICY = 'native-pathflow-fixed-topology-completion-v1'
 ENERGY_BALANCE_POLICY = 'stored-row-and-physical-conservation-band-v1'
 Budget = nr.Budget
 BOUND_GUARD = nr.BOUND_GUARD
@@ -465,7 +466,129 @@ def _attach_pricing_start(case, built, selected):
 
 # The native matrix and bound guards stay unchanged; compact extraction has a
 # separate prospective identity and objective-correction ledger.
-def solve_pricing(case, prices, budget=Budget(), record=None, start_plan=None):
+
+
+def _complete_topology(case, built, budget, deadline, record=None, round_index=0):
+    """Fix qualified routing decisions; preserve every original physical row."""
+    started = time.perf_counter()
+    stages = []
+    try:
+        if time.monotonic() >= deadline:
+            raise TimeoutError('No time for fixed-topology completion')
+        model = built['model']
+        tolerance = model.integer_tol
+        values = [var.x for var in built['x']]
+        if any(value is None or not math.isfinite(value) for value in values):
+            raise ValueError('Unqualified nonfinite integrality')
+        distance = max((abs(value-round(value)) for value in values), default=0.)
+        if distance > tolerance or any(round(value) not in (0,1) for value in values):
+            raise ValueError('Unqualified integrality for fixed topology')
+        selected = [movement.id for movement,value in zip(case.movements,values) if round(value)]
+        if record:
+            record({'event':'topology_qualification','round':round_index,
+                    'integer_tolerance':tolerance,'max_integer_distance':distance,
+                    'qualified_values':[int(round(value)) for value in values]})
+        recover_paths(case, selected)
+        objective = model.objective
+        for var,value in zip(built['x'],values):
+            var.lb = var.ub = int(round(value))
+        # Feasibility and objective phases share the caller's original deadline.
+        model.objective = 0.
+        try:
+            feasibility = _optimize_once(built, budget, deadline)
+            stages.append({'stage':'feasibility','stats':feasibility})
+        finally:
+            model.objective = objective
+        if feasibility['status'] not in ('OPTIMAL','FEASIBLE') or feasibility.get('incumbent') is None:
+            raise ValueError('Fixed-topology charging infeasible or unresolved')
+        stats = _optimize_once(built, budget, deadline)
+        stages.append({'stage':'objective','stats':stats})
+        if stats['status'] not in ('OPTIMAL','FEASIBLE') or stats.get('incumbent') is None:
+            raise ValueError('Fixed-topology objective has no incumbent')
+        plan = _extract(case, built, record=record, round_index=round_index)
+        replay_native(case, plan)
+        return plan, stats
+    finally:
+        if record:
+            record({'event':'fixed_topology_completion','round':round_index,
+                    'policy':COMPLETION_POLICY,'wall_s':time.perf_counter()-started,
+                    'stages':stages})
+
+
+def _candidate_score(case, plan, stats, objective):
+    """Independent physical admission before any candidate can become fallback."""
+    if objective is None:  # Internal fixture compatibility; production supplies objective.
+        replay_native(case, plan)
+        return 0.
+    kind, payload = objective
+    if kind == 'linear':
+        replay = replay_native(case, plan, payload)
+        raw = plan['ops_cost']+sum(p*l for p,l in zip(payload,plan['raw_solver_load']))
+        if not math.isfinite(raw) or abs(stats['incumbent']-raw)>nr.OBJECTIVE_TOL:
+            raise ValueError('Native linear incumbent differs from saved solver-load objective')
+        admit_bound(stats,replay['pricing_objective'])
+        return replay['pricing_objective']
+    a,b,snapshot = payload
+    replay = replay_native(case,plan)
+    plan['replay'] = replay
+    true = plan['ops_cost']+true_cost(a,b,replay['load'])
+    envelope = lambda load: plan['ops_cost']+sum(max(slope*l+intercept for slope,intercept in rows)
+        for l,rows in zip(load,snapshot))
+    raw = envelope(plan['raw_solver_load'])
+    if not math.isfinite(raw) or stats['incumbent'] < raw-nr.OBJECTIVE_TOL:
+        raise ValueError('Native tangent incumbent differs from saved solver-load envelope')
+    admit_bound(stats,true,envelope(replay['load']),allow_epigraph_slack=True)
+    return true
+
+
+def _candidate_impl(case, built, budget, deadline, stats, completion, record, round_index,
+                    objective=None):
+    if not completion:
+        return _extract(case,built,record=record,round_index=round_index), stats
+    candidates, failures = [], []
+    # Save an admitted physical witness BEFORE fixed-bound mutation or LP calls.
+    try:
+        raw = _extract(case,built,record=record,round_index=round_index)
+        score = _candidate_score(case,raw,stats,objective)
+        candidates.append((score,raw,stats))
+    except Exception as exc:
+        failures.append({'stage':'raw_admission','error_type':type(exc).__name__,'error':str(exc)})
+    try:
+        if (not nr._finite(stats.get('lower_bound'), -math.inf)
+                or not nr._finite(stats.get('incumbent'), -math.inf)
+                or stats['lower_bound'] > stats['incumbent']+BOUND_GUARD):
+            raise ValueError('Raw MIP bound/incumbent absent/nonfinite/reversed')
+        plan, completed = _complete_topology(case,built,budget,deadline,record,round_index)
+        admission = {**stats, 'incumbent':completed['incumbent']}
+        score = _candidate_score(case,plan,admission,objective)
+        plan['completion_stats'] = completed
+        candidates.append((score,plan,admission))
+    except Exception as exc:
+        failures.append({'stage':'completion_admission','error_type':type(exc).__name__,'error':str(exc)})
+    if record:
+        for failure in failures:
+            record({'event':'candidate_rejected','round':round_index,**failure})
+    if not candidates:
+        raise ValueError('No admitted raw or completed candidate: '+repr(failures))
+    _,plan,admission = min(candidates,key=lambda candidate:candidate[0])
+    plan['raw_mip_stats'] = dict(stats)
+    plan['extraction_policy'] = COMPLETION_POLICY
+    plan['candidate_failures'] = failures
+    return plan,admission
+
+
+def _candidate(case, built, budget, deadline, stats, completion, record, round_index, objective=None):
+    started = time.perf_counter()
+    try:
+        return _candidate_impl(case,built,budget,deadline,stats,completion,record,round_index,objective)
+    finally:
+        if record:
+            record({'event':'candidate_processing_timing','round':round_index,
+                    'completion':completion,'wall_s':time.perf_counter()-started,
+                    'wall_remaining_s':deadline-time.monotonic()})
+
+
+def solve_pricing(case, prices, budget=Budget(), record=None, start_plan=None, *, completion=False):
     _check_prices(case, prices)
     _check_budget(budget)
     deadline = time.monotonic()+budget.wall_seconds
@@ -525,7 +648,7 @@ def solve_pricing(case, prices, budget=Budget(), record=None, start_plan=None):
     if record:
         record({"event": "native_status", "round": 0, "stats": stats})
     result = {"case_identity": case.identity(), "formulation": FORMULATION,
-              "native_matrix": NATIVE_MATRIX,"extraction_policy":EXTRACTION_POLICY,
+              "native_matrix": NATIVE_MATRIX,"extraction_policy":COMPLETION_POLICY if completion else EXTRACTION_POLICY,
               "objective": "complete-fleet-linear",
               "prices": list(prices), "stats": stats, "status": "unresolved"}
     if stats["status"] == "INFEASIBLE":
@@ -534,32 +657,38 @@ def solve_pricing(case, prices, budget=Budget(), record=None, start_plan=None):
         return result
     if record:
         record({"event": "native_incumbent", "round": 0, **capture_incumbent(case, built)})
-    plan = _extract(case, built, record=record, round_index=0)
-    replay = replay_native(case, plan, prices)
-    raw_load = plan['raw_solver_load']
-    physical_load = replay['load']
-    raw_objective = plan['ops_cost']+sum(p*l for p,l in zip(prices,raw_load))
-    delta_exact = sum((Fraction(p)*(Fraction(h)-Fraction(l))
-        for p,h,l in zip(prices,physical_load,raw_load)),Fraction(0))
-    delta = replay['pricing_objective']-raw_objective
-    if not math.isfinite(raw_objective) or abs(stats['incumbent']-raw_objective)>nr.OBJECTIVE_TOL:
-        raise ValueError('Native linear incumbent differs from saved solver-load objective')
-    if record:
-        record({"event": "objective_reconstruction", "round": 0,
-                "linear_objective": replay["pricing_objective"],
-                "raw_solver_load_objective":raw_objective,
-                "charge_correction_objective_delta": delta,
-                "charge_correction_objective_delta_exact":str(delta_exact),
-                "native_incumbent": stats["incumbent"]})
-    lower, upper = admit_bound(stats, replay["pricing_objective"])
-    result.update(plan=plan, lower=lower, upper=upper, gap=upper-lower,
+    try:
+        plan, admission_stats = _candidate(case,built,budget,deadline,stats,completion,record,0, ("linear",prices))
+        replay = replay_native(case, plan, prices)
+        raw_load = plan['raw_solver_load']
+        physical_load = replay['load']
+        raw_objective = plan['ops_cost']+sum(p*l for p,l in zip(prices,raw_load))
+        delta_exact = sum((Fraction(p)*(Fraction(h)-Fraction(l))
+            for p,h,l in zip(prices,physical_load,raw_load)),Fraction(0))
+        delta = replay['pricing_objective']-raw_objective
+        if not math.isfinite(raw_objective) or abs(admission_stats['incumbent']-raw_objective)>nr.OBJECTIVE_TOL:
+            raise ValueError('Native linear incumbent differs from saved solver-load objective')
+        if record:
+            record({"event": "objective_reconstruction", "round": 0,
+                    "linear_objective": replay["pricing_objective"],
+                    "raw_solver_load_objective":raw_objective,
+                    "charge_correction_objective_delta": delta,
+                    "charge_correction_objective_delta_exact":str(delta_exact),
+                    "native_incumbent": stats["incumbent"]})
+        lower, upper = admit_bound(admission_stats, replay["pricing_objective"])
+    except Exception as exc:
+        failure = {'error_type':type(exc).__name__, 'error':str(exc)}
+        if record:
+            record({'event':'candidate_rejected','round':0,**failure})
+        return {**result,'status':'extraction_failed','extraction_failure':failure}
+    result.update(plan=plan, stats=admission_stats, raw_mip_stats=stats, lower=lower, upper=upper, gap=upper-lower,
                   charge_correction_objective_delta=delta,
                   charge_correction_objective_delta_exact=str(delta_exact),
                   status="certified" if upper-lower <= budget.epsilon else "bounded")
     return result
 
 
-def solve_planner(case, a, b, budget=Budget(), record=None):
+def solve_planner(case, a, b, budget=Budget(), record=None, *, completion=False):
     _check_market(case, a, b)
     _check_budget(budget)
     deadline = time.monotonic()+budget.wall_seconds
@@ -569,58 +698,89 @@ def solve_planner(case, a, b, budget=Budget(), record=None):
     for _ in range(budget.max_rounds):
         if time.monotonic() >= deadline:
             break
-        built = build_feasible_model(case, budget.backend)
-        attach_objective(built, "tangents", tangents)
+        stage = 'model_build'
+        search_started = time.perf_counter()
         snapshot = [[list(p) for p in rows] for rows in tangents]
-        if record:
-            record({"event": "native_start", "round": len(records), "tangents": snapshot})
-        stats = _optimize_once(built, budget, deadline)
+        try:
+            built = build_feasible_model(case, budget.backend)
+            stage = 'objective_attach'
+            attach_objective(built, "tangents", tangents)
+            if record:
+                record({"event": "native_start", "round": len(records), "tangents": snapshot})
+            stage = 'optimization'
+            stats = _optimize_once(built, budget, deadline)
+        except Exception as exc:
+            failure = {'stage':stage,'error_type':type(exc).__name__,'error':str(exc),
+                       'wall_s':time.perf_counter()-search_started,
+                       'wall_remaining_s':deadline-time.monotonic()}
+            iteration = {'tangents':snapshot,'search_failure':failure}
+            records.append(iteration)
+            if record:
+                record({'event':'native_search_failed','round':len(records)-1,**failure})
+            status = 'bounded' if best is not None else 'search_failed'
+            break
         if record:
             record({"event": "native_status", "round": len(records), "stats": stats})
         iteration = {"stats": stats, "tangents": snapshot}
         records.append(iteration)
         if stats["status"] == "INFEASIBLE":
             if best is not None:
-                raise ValueError("Tangent model infeasible after a replay-valid native plan")
+                iteration['extraction_failure'] = {'error_type':'ValueError',
+                    'error':'Tangent model infeasible after a replay-valid native plan'}
+                if record:
+                    record({'event':'candidate_rejected','round':len(records)-1,
+                            **iteration['extraction_failure']})
+                status = 'bounded'
+                break
             return {"case_identity": case.identity(), "formulation":FORMULATION,
-                    "native_matrix":NATIVE_MATRIX,"extraction_policy":EXTRACTION_POLICY,
+                    "native_matrix":NATIVE_MATRIX,"extraction_policy":COMPLETION_POLICY if completion else EXTRACTION_POLICY,
                     "status": "infeasible", "rounds": records}
         if stats["status"] not in ("OPTIMAL", "FEASIBLE") or stats.get("incumbent") is None:
             break
         if record:
             record({"event": "native_incumbent", "round": len(records)-1, **capture_incumbent(case, built)})
-        plan = _extract(case, built, record=record, round_index=len(records)-1)
-        physical_load = plan['replay']['load']
-        true = plan["ops_cost"]+true_cost(a, b, physical_load)
-        envelope = plan["ops_cost"]+sum(max(slope*load+intercept for slope, intercept in rows)
-                                        for load, rows in zip(physical_load, snapshot))
-        raw_charge_load = plan['raw_solver_load']
-        raw_envelope = plan["ops_cost"]+sum(max(slope*load+intercept for slope, intercept in rows)
-                                            for load, rows in zip(raw_charge_load, snapshot))
-        raw_true = plan['ops_cost']+true_cost(a,b,raw_charge_load)
-        Q = Fraction
-        raw_q, physical_q = [Q(v) for v in raw_charge_load], [Q(v) for v in physical_load]
-        exact_envelope = lambda loads: sum((max(Q(slope)*load+Q(intercept) for slope,intercept in rows)
-            for load,rows in zip(loads,snapshot)),Q(0))
-        exact_true = lambda loads: sum((Q(aa)*load+Q(bb)*load*load/2
-            for aa,bb,load in zip(a,b,loads)),Q(0))
-        objective_deltas = {"pwl_charge_correction_delta": envelope-raw_envelope,
-            "pwl_charge_correction_delta_exact":str(exact_envelope(physical_q)-exact_envelope(raw_q)),
-            "true_charge_correction_delta": true-raw_true,
-            "true_charge_correction_delta_exact":str(exact_true(physical_q)-exact_true(raw_q))}
-        if not math.isfinite(raw_envelope) or stats['incumbent'] < raw_envelope-nr.OBJECTIVE_TOL:
-            raise ValueError('Native tangent incumbent differs from saved solver-load envelope')
-        if record:
-            record({"event": "objective_reconstruction", "round": len(records)-1,
-                    "true_cost": true, "pwl_objective": envelope,
-                    "raw_solver_load_true_cost":raw_true,
-                    "raw_solver_load_pwl_objective":raw_envelope,
-                    "native_incumbent": stats["incumbent"], **objective_deltas})
-        lo, hi = admit_bound(stats, true, envelope, allow_epigraph_slack=True)
-        iteration.update(objective_deltas)
-        iteration["replayed_tangent_objective"] = envelope
-        iteration["native_epigraph_slack"] = stats["incumbent"]-envelope
-        iteration.update(plan=plan, lower=lo, upper=hi)
+        try:
+            plan, admission_stats = _candidate(case,built,budget,deadline,stats,completion,record,len(records)-1, ("tangents",(a,b,snapshot)))
+            physical_load = plan['replay']['load']
+            true = plan["ops_cost"]+true_cost(a, b, physical_load)
+            envelope = plan["ops_cost"]+sum(max(slope*load+intercept for slope, intercept in rows)
+                                            for load, rows in zip(physical_load, snapshot))
+            raw_charge_load = plan['raw_solver_load']
+            raw_envelope = plan["ops_cost"]+sum(max(slope*load+intercept for slope, intercept in rows)
+                                                for load, rows in zip(raw_charge_load, snapshot))
+            raw_true = plan['ops_cost']+true_cost(a,b,raw_charge_load)
+            Q = Fraction
+            raw_q, physical_q = [Q(v) for v in raw_charge_load], [Q(v) for v in physical_load]
+            exact_envelope = lambda loads: sum((max(Q(slope)*load+Q(intercept) for slope,intercept in rows)
+                for load,rows in zip(loads,snapshot)),Q(0))
+            exact_true = lambda loads: sum((Q(aa)*load+Q(bb)*load*load/2
+                for aa,bb,load in zip(a,b,loads)),Q(0))
+            objective_deltas = {"pwl_charge_correction_delta": envelope-raw_envelope,
+                "pwl_charge_correction_delta_exact":str(exact_envelope(physical_q)-exact_envelope(raw_q)),
+                "true_charge_correction_delta": true-raw_true,
+                "true_charge_correction_delta_exact":str(exact_true(physical_q)-exact_true(raw_q))}
+            if not math.isfinite(raw_envelope) or admission_stats['incumbent'] < raw_envelope-nr.OBJECTIVE_TOL:
+                raise ValueError('Native tangent incumbent differs from saved solver-load envelope')
+            if record:
+                record({"event": "objective_reconstruction", "round": len(records)-1,
+                        "true_cost": true, "pwl_objective": envelope,
+                        "raw_solver_load_true_cost":raw_true,
+                        "raw_solver_load_pwl_objective":raw_envelope,
+                        "native_incumbent": stats["incumbent"], **objective_deltas})
+            lo, hi = admit_bound(admission_stats, true, envelope, allow_epigraph_slack=True)
+            iteration.update(objective_deltas)
+            iteration["replayed_tangent_objective"] = envelope
+            iteration["native_epigraph_slack"] = admission_stats["incumbent"]-envelope
+            if max(lower,lo) > min(upper,hi)+BOUND_GUARD:
+                raise ValueError('Planner enclosure reversed')
+            iteration.update(plan=plan, lower=lo, upper=hi)
+        except Exception as exc:
+            iteration['extraction_failure'] = {'error_type':type(exc).__name__, 'error':str(exc)}
+            if record:
+                record({'event':'candidate_rejected','round':len(records)-1,
+                        **iteration['extraction_failure']})
+            status = 'bounded' if best is not None else 'extraction_failed'
+            break
         if record:
             record({"event": "replayed_iteration", "round": len(records)-1, **iteration})
         lower = max(lower, lo)
@@ -635,7 +795,7 @@ def solve_planner(case, a, b, budget=Budget(), record=None):
         for t, load in enumerate(physical_load):
             tangents[t].append((float(a[t]+b[t]*load), float(-0.5*b[t]*load*load)))
     result = {"case_identity": case.identity(), "formulation":FORMULATION,
-              "native_matrix":NATIVE_MATRIX,"extraction_policy":EXTRACTION_POLICY,
+              "native_matrix":NATIVE_MATRIX,"extraction_policy":COMPLETION_POLICY if completion else EXTRACTION_POLICY,
               "status": status, "a": list(a), "b": list(b), "rounds": records}
     if best is not None:
         result.update(plan=best, lower=lower, upper=upper, gap=upper-lower)

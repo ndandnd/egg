@@ -38,7 +38,7 @@ def _pricing(case, prices, budget, record=None):
             raise ValueError('Compact oracle extraction policy mismatch')
     elif result.get('status') in ('certified', 'bounded'):
         raise ValueError('Compact oracle bounded result has no witness')
-    elif result.get('status') != 'unresolved':
+    elif result.get('status') not in ('unresolved', 'extraction_failed'):
         raise ValueError('Compact oracle result has no witness')
     # The qualified compact driver tags raw snapshots and plans, but its V1
     # top-level result has no formulation field. Tag this explicit dispatch
