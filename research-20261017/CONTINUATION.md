@@ -1,44 +1,31 @@
-# EGG local prediction research — current checkpoint
+# EGG — paused for independent review
 
-Updated 17 October 2026, 20:01 UTC follow-up. Worktree `/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017`, branch `codex/ml-prediction-20261017`. User authorizes sustained rigorous ML research; manuscript drafting remains secondary. Use GPT-6.1 Sol for bounded implementation/review. Preserve history; do not modify Claude's or completed SOTA branches.
+17 October 2026. The user requested a graceful stop at an independent-review-ready state. **The experiment is complete, no EGG campaign worker remains, and `advance-egg-journal-research` is PAUSED. Do not resume or launch follow-up experiments until the user asks.** Other paused schedules stay paused. `STOP_RECEIPT_20261017.json` records process/owner/schedule checks.
 
-## Active experiment and next action
+Worktree `/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017`, branch `codex/ml-prediction-20261017`. Start with `REVIEWER_HANDOFF_20261017.md`; the compact `REVIEW_BUNDLE_20261017.zip` contains the reviewer evidence. Do not reread Claude's large state map or restart unrelated old work.
 
-**The 360-cell local screen is still running.** Detached supervisor PID **93913** was verified alive on its recorded `experiments.codex_local_campaign run` command. Snapshot: 260 terminal receipts, two active attempts, no supervisor/resource failures; 2.58 charged worker CPUh, peak worker RSS 0.73 GiB. No partial comparative bills were inspected or used for selection.
+## Completed results
 
-Authoritative files:
-- `local-screen-v3-control/LAUNCH.json` — exact command, PID, launch time.
-- `local-assets-v3.json` — immutable source/model/case lock; runtime source commit `1ede7e0f`.
-- `local-screen-v3/ledger.jsonl`, per-cell attempt/result/completion/supervisor receipts.
-- `LOCAL_CAMPAIGN_PROTOCOL.md` and `LOCAL_CAMPAIGN_MANIFEST_V3.json` — prospective design and budgets.
+All 360 registered decisions completed: twenty distinct synthetic development timetables (ten at 40/80 trips), three paired solver seeds, six methods, 60 seconds end-to-end each. Counts of valid endpoints /60: graph attention60, newCatBoost60, nonlearned60, random59, full4 44, cold8 59. Random has one extraction/replay-related unresolved run, full4 has sixteen no-plan outcomes, and cold has one censored endpoint. Failures remain preserved.
 
-Do not edit frozen `src/egglab`, `src/experiments` or model assets while workers run. Do not duplicate or automatically retry any attempted/interrupted cell. The owner file alone is not proof of liveness. Leave Unicorn to v2g; no cluster monitoring or submissions. Current screen: 20 distinct synthetic development timetable groups, 40/80 trips, three paired solver seeds, six arms (v8, new CatBoost, nonlearned, random, full4, cold8). At most two single-thread local workers, 5 GiB each / 10 GiB combined, 60 seconds per decision, eight CPU-hour hard ceiling. Use `.venv-local`.
+Graph-attention median group bill gains versus nonlearned: **0.47% at40 trips;68.36% at80**. Versus random:29.76%/19.37%; versus CatBoost:approximately0%/44.37%. The pooled33.03% statistic masks strong size dependence. These are feasible-bill differences in this synthetic development population, not optimality gaps or final generalization evidence.
 
-Next wake: one compact local operational check. On terminal completion, run:
+`screen-analysis-v3-final/summary.json` is the successful formal analysis: all15 prespecified gates pass, decision eligibility for a separately frozen recovery study. **No recovery launch occurred because the user requested review first.** `INDEPENDENT_SCREEN_CHECK.md` recomputes key statistics with no numerical disagreement. Figures/CSVs are in `screen-analysis-v3/figures`.
 
-```
-python3 research-20261017/analyze_local_campaign.py --lock research-20261017/local-assets-v3.json --runs research-20261017/local-screen-v3 --stage screen --output research-20261017/screen-analysis-v3
-```
+`FINAL_REPLAY_VERIFICATION.{json,md}` independently replayed all342 supervisor-valid final plans on their original full cases and recomputed exact bills. All342 pass; zero mapping/replay/bill/stored-projection mismatches. The audit used51.50CPU seconds and no optimization/training. `VERIFY_REVIEW_EVIDENCE.py` preserves the audit procedure.
 
-Analyze the complete cohort before choosing models or follow-ups. Preserve missingness, failures, censoring, all spent time, and group/seed dependence. The analyzer implements frozen gates and group-bootstrap uncertainty; it rejects invalid resource accounting and nonpositive-bill applicability. Review its conclusions independently. A failed gate requires diagnosis and a new justified prospective design; it does not end the user's research or justify blind expansion. This screen is development evidence, never final generalization.
+Algorithm screen CPU was13,408.97s=3.72CPUh including supervisor, within8CPUh. `CLOSEOUT_ACCOUNTING.json` records conservative additional analysis/packaging charges separately. A first postprocessing attempt had an output-folder collision; its failure is preserved in `screen-analysis-v3/ANALYSIS_ATTEMPT_FAILURE.json`. No experiment was rerun or data changed. Corrected qualification cost<=420.06CPU seconds including conservative allowances, below its0.5CPUh ceiling; failed qualificationv2 is preserved.
 
-## Verified completed work
+## Other completed work and limitations
 
-- `offline-ranking/RESULTS.md`: two public saved plans replay, but learned-generated references bias ranking recall; no independent superiority claim.
-- `classical-training/RESULTS.md`: logistic/CatBoost fitted to admitted TRAIN128 (80 fit / 16 inner / 32 historical outer groups), selected using inner groups only. CatBoost depth6/266 trees; source labels are observed feasible incumbents, not optimal routes. Training 20.69 s wall / 19.40 s CPU. Historical outer diagnostics are exploratory.
-- Common replay completion/retention fixes: preserve independently admitted raw plans when completion fails; select by physical bill; keep original MIP bounds separate from fixed-route LP objectives. Independent review plus 58 focused tests. See `replay-fix/IMPLEMENTATION_PROTOCOL.md`.
-- Qualification v2 failed timing checks; preserved completely. V3 corrected shared clock/materialization timing and finalization reserve. All 12 v3 cells passed engineering checks: ten valid plans, two recorded no-plan outcomes, no failures/censoring. Cumulative qualification charge including conservative postprocessing allowance <=420.06 CPU seconds, within 1,800-second ceiling. See `qualification-analysis-v3`; no ranking conclusions drawn from qualification.
+Replay completion preserves independently admitted raw plans when repair fails; true-bill retention and original-vs-restricted bound provenance were fixed and independently reviewed, with58 focused tests. See `replay-fix/IMPLEMENTATION_PROTOCOL.md`.
 
-## Work prepared while the screen runs
+`classical-training/RESULTS.md`: logistic/CatBoost trained on admitted TRAIN128 with80fit/16inner/32historicalouter groups. Inner-only selection; labels imitate feasible source incumbents, not optimal routes. CatBoost depth6/266trees;20.69s training wall. Graph arm is one fixed v8task00 model, not an ensemble. Shared generator/physical-profile overlap, one tariff, finite budgets, slightly differing retained counts and a single inexpensive nonlearned rule remain important limitations. Generic GNN arc pruning is existing prior art. Sealed DEV/TEST/A6/B3/confirmation/GIRO remained closed.
 
-`RECOVERY_IMPLEMENTATION_CONTRACT.md` specifies full-case replay, movement-ID binary starts, independent physical fallback, unrestricted-bound provenance and one shared clock. Restored edges can split charging intervals; never copy source positional charge variables. Retention cannot worsen the SAME acquired prefix witness but can lose to spending the whole allowance on static solving.
+Recovery exists only as `RECOVERY_IMPLEMENTATION_CONTRACT.md` plus pure `recovery-prototype/` (eleven tests, exact billing). No optimizer integration or recovery experiment. Future work should follow external review, then a new prospective protocol/budget and cohort. Act as manager using GPT-6.1 Sol if resumed. Initial local limits were two one-thread workers,5GiB each/10GiB aggregate; leave Unicorn to v2g.
 
-`recovery-prototype/` is a pure candidate implementation outside frozen sources: subset/physics validation, independent physical replay, ID-based binary specification and provenance. It is not imported by running workers and performs no model build, optimization or start submission. Handcrafted tests only; no dataset or screen-bill reads. Independent review caught and confirmed a billing-convention correction: the canonical exact rational bill is authoritative; the float is display-only. Eleven handcrafted tests pass in `.venv-local`, including a fractional-price/load regression. This is preparation, not a promoted recovery experiment. Integration, native start acceptance, common deadline and certification remain future work after complete-screen analysis and a new frozen protocol.
+## Backups and communication
 
-## Data, backups and communication
+Commit as `Nathan Cho <nathan.cho2013@gmail.com>` (verified connected GitHub login ndandnd), using explicit per-command identity. Push only origin/codex/ml-prediction-20261017; no history rewrite, PR merge or journal submission. Preserve old branches. Source/model/case identities remain in `local-assets-v3.json` (runtime source commit1ede7e0f). Original12GB native traces and raw solver diagnostics remain local; final hash manifest identifies them. Public bundle excludes raw stdout/stderr and native variable traces.
 
-Keep sealed DEV/TEST/A6/B3/confirmation/GIRO closed. All timetable variants stay in one split; use grouped inner-only selection. No generic learned-pruning novelty claim. No PR merge, journal submission or reset-credit redemption.
-
-Commit with `git -c user.name='Nathan Cho' -c user.email='nathan.cho2013@gmail.com' commit ...`; this email is verified for connected GitHub login `ndandnd`. Push only `origin/codex/ml-prediction-20261017`, without rewriting history. Last pushed milestone before this follow-up: `117ba3f9`. Raw solver stdout/stderr stay local (license details); hash them. Preserve native traces locally and back up practical verified lossless archives plus compact evidence; do not stage live partial outputs. See `LOCAL_MONITORING.md`.
-
-Hourly `advance-egg-journal-research` is ACTIVE for this worktree. Other paused schedules remain paused; the October 2 scoped review schedule stays deleted. Notify only substantive findings, important failures/decisions or review-ready results. Original Google Doc received one verified 17 October milestone (`GOOGLE_DOC_UPDATE_20261017.md`); append consolidated verified findings when useful, never repeat the six historical entries.
+The original Google Doc received the verified17October training milestone and final review checkpoint with figure, preserving earlier content/images. `GOOGLE_DOC_REVIEW_CHECKPOINT_20261017.md` records the latter. Never repeat the six October1 historical entries. No external reviewer has been messaged; the user can share the handoff or bundle.
