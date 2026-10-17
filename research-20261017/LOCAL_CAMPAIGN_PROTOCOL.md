@@ -272,3 +272,68 @@ also caps cumulative optimizer wall consumption across all rounds, so cold8 cann
 consume the reserved completion allowance merely by starting another round. Supervisor
 receipts expose `endpoint_valid` and `endpoint_censored`; analysis must use the parent
 receipt together with the worker result, never worker acceptance alone.
+
+## Prospective v3 engineering amendment (after terminal v2 qualification)
+
+V2 qualification is terminal: twelve supervisor receipts, no automatic retries.
+Its lock, results and source commit 728ae96a remain preserved, and its recorded
+supervisor censoring is not reinterpreted. Qualification supplies no model-selection
+signal. The following v3 timing corrections supersede v2 timing only for a new,
+explicitly frozen qualification revision; all cases, arms, models, keep rules,
+seeds, economic gates, and screen budgets remain unchanged. The separate manifest is
+`LOCAL_CAMPAIGN_MANIFEST_V3.json`; v2's manifest is preserved.
+
+The parent records `parent_monotonic` in the immutable attempt receipt immediately
+before subprocess launch. Worker deadlines use that same machine-wide monotonic
+anchor, including interpreter startup/imports. Every arm reserves `max(3 s, .10*T)`
+for final full-case replay and artifact/result materialization. This replaces the
+v2 1 s finalization reserve. The existing `max(2 s, .10*T)` common completion reserve
+inside the planner allowance remains unchanged, including cold8.
+
+After `result.json` is completely written, flushed and fsynced, the worker captures
+`finished_monotonic` and writes immutable `completion.json` with task, lock and result
+hashes plus the shared anchor. Marker creation is accounting only; the decision
+endpoint is finished result materialization. The supervisor validates all marker
+identities/hash/timestamps and uses finished minus anchor for endpoint validity.
+Missing/malformed markers are conservatively censored. Endpoint `wall_s` is this
+materialization duration; `supervisor_elapsed_s` and `cleanup_wall_s` record monitoring
+and owned process-group teardown separately. Cleanup/detection delays cannot change
+a timely materialized endpoint. A worker result accepted before serialization can
+still be censored when its finished result materialization exceeds T.
+
+Additional diagnostics include planner-return elapsed time, planner JSON write time,
+independent final replay time, final plan/replay artifact writes, and final result
+materialization time. No deadline reserve is chosen from bill outcomes; this uniform
+engineering revision addresses observed timing/admission bookkeeping failures only.
+
+The 0.5 CPUh qualification ceiling is cumulative across revisions. Freeze v3 requires
+`--prior-qualification-output` for the terminal v2 output. It validates the terminal
+summary/receipt structure, derives prior cumulative charged CPU from the last complete
+summary plus its final supervisor CPU, and locks hashes of prior campaign binding,
+ledger and every attempt/supervisor receipt. Verification rejects later changes to
+these evidence files. The prior charged amount is carried into the v3 asset lock,
+initial ledger and supervisor spend before dispatch, together with v3 freeze cost;
+there is no reset or manual floating-point override. Unused qualification capacity
+is not used for model tuning. Any further engineering revision would need another
+prospective amendment and cumulative carry-forward.
+
+From the worktree's `src` directory, after parent review (commands not run here):
+
+```sh
+PYTHONPATH=. ../.venv-local/bin/python -m experiments.codex_local_campaign freeze --manifest ../research-20261017/LOCAL_CAMPAIGN_MANIFEST_V3.json --lock ../research-20261017/local-assets-v3.json --v8-root /Users/nadan/Documents/ChatGPT/egg/claude-local/v8 --classical-root ../research-20261017/classical-training/attempt1 --prior-qualification-output ../research-20261017/local-qualification-v2
+PYTHONPATH=. ../.venv-local/bin/python -m experiments.codex_local_campaign run --lock ../research-20261017/local-assets-v3.json --stage qualification --output ../research-20261017/local-qualification-v3
+PYTHONPATH=. ../.venv-local/bin/python -m experiments.codex_local_campaign run --lock ../research-20261017/local-assets-v3.json --stage screen --qualification-output ../research-20261017/local-qualification-v3 --output ../research-20261017/local-screen-v3
+```
+
+Solver-free fixtures now additionally verify timely versus late result materialization,
+missing/malformed completion markers, cleanup-independent endpoints, and prior receipt
+CPU/hash carry-forward, while retaining shutdown/descendant and no-retry coverage.
+
+
+V3 carry-forward additionally charges a frozen conservative 10 CPU-seconds for v2
+analysis, archiving and readback, because analysis CPU was not separately timed. This
+10-second allowance includes (does not add again) the measured archive CPU recorded
+in `qualification-v2-archive-manifest.json` (about 0.471 s). The v3 manifest freezes
+that evidence path and allowance; freeze includes its hash and measured archive CPU
+in the prior accounting lock. Thus prior qualification charge is the terminal v2
+summary-derived amount plus 10 s (about 174.984 s total), before new v3 freeze/attempts.

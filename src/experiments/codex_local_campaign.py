@@ -59,13 +59,53 @@ def sources():
             for p in sorted((ROOT/folder).rglob('*.py'))}
 
 def verify(lock):
-    for path, sha in {**lock['sources'], **lock['assets']}.items():
+    for path, sha in {**lock['sources'], **lock['assets'], **lock.get('prior_qualification',{}).get('artifact_hashes',{})}.items():
         if digest(path) != sha: raise ValueError(f'Frozen file changed: {path}')
+
+def prior_qualification(path):
+    root=Path(path).resolve()
+    binding=json.loads((root/'campaign.json').read_text())
+    if binding.get('stage')!='qualification' or binding.get('mock') is not False:
+        raise ValueError('Prior qualification must be a real qualification output')
+    events=[json.loads(line) for line in (root/'ledger.jsonl').read_text().splitlines()]
+    summaries=[e for e in events if e.get('event')=='summary']
+    if not summaries:raise ValueError('Prior qualification has no terminal summary')
+    last=summaries[-1]
+    if last.get('planned')!=last.get('attempted') or last.get('undispatched') or last.get('halted'):
+        raise ValueError('Prior qualification is not terminal/complete')
+    attempts=list(root.glob('*/attempt.json'))
+    if len(attempts)!=last['attempted']:raise ValueError('Prior qualification attempt count mismatch')
+    files=[root/'campaign.json',root/'ledger.jsonl'];receipt_total=0.
+    for attempt in attempts:
+        receipt=attempt.parent/'supervisor.json'
+        if json.loads(attempt.read_text()).get('lock_sha256')!=binding['lock_sha256']:
+            raise ValueError('Prior receipt lock mismatch')
+        charged=json.loads(receipt.read_text())['charged_cpu_s']
+        if not isinstance(charged,(int,float)) or not math.isfinite(charged) or charged<0:
+            raise ValueError('Invalid prior qualification accounting')
+        receipt_total+=charged
+        files.extend((attempt,receipt))
+    total=last['charged_worker_cpu_s']+last['supervisor_cpu_s']
+    if not math.isfinite(total) or total<receipt_total:raise ValueError('Invalid prior summary accounting')
+    return {'output':str(root),'charged_cpu_s':total,'artifact_hashes':{str(p):digest(p) for p in files},
+            'definition':'terminal cumulative worker/freeze/prior-supervisor total plus final supervisor CPU'}
 
 def freeze(args):
     cpu0=time.process_time()
     from egglab import claude_cases
     manifest=json.loads(Path(args.manifest).read_text())
+    prior=prior_qualification(args.prior_qualification_output) if args.prior_qualification_output else {}
+    if manifest.get('execution',{}).get('qualification_revision')==3 and not prior:
+        raise ValueError('v3 requires --prior-qualification-output; budget never resets')
+    allowance=manifest.get('budgets',{}).get('prior_accounting_allowance_s',0.)
+    if allowance:
+        evidence=(ROOT/manifest['budgets']['prior_accounting_evidence']).resolve()
+        archive=json.loads(evidence.read_text())
+        prior.update(measured_prior_summary_cpu_s=prior['charged_cpu_s'],accounting_allowance_s=allowance,
+                     accounting_allowance_reason='conservative prior analysis/archive/readback; includes measured archive CPU',
+                     measured_archive_cpu_s=archive['archive_cpu_s'])
+        prior['charged_cpu_s']+=allowance
+        prior['artifact_hashes'][str(evidence)]=digest(evidence)
     modelroot=Path(args.v8_root).resolve()
     folder=modelroot/'task00'/'inner_progress'
     files=[folder/'graph_attention_selected.npz',folder/'fit_only_preprocessing_and_groups.json']
@@ -83,10 +123,10 @@ def freeze(args):
     for cell in sum(manifest['cohorts'].values(),[]):
         case=claude_cases.make(cell['case_key'])
         cases[cell['case_key']]={'identity':case.identity(),'movement_ids':[m.id for m in case.movements]}
-    lock={'version':2,'created_utc':time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime()),
+    lock={'version':3,'created_utc':time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime()),
           'manifest':manifest,'manifest_sha256':digest(args.manifest),'sources':sources(),
           'assets':assets,'cases':cases,'arms':arms,'v8_root':str(modelroot),
-          'classical_root':classical,'heuristic':'experiments.codex_offline_rank.heuristic',
+          'prior_qualification':prior,'classical_root':classical,'heuristic':'experiments.codex_offline_rank.heuristic',
           'catboost_definition':'newly trained classical comparator; fixed before campaign outcomes',
           'completion':True,'timing':'cold start, imports through final receipt preparation',
           'host':platform.uname()._asdict(),'freeze_cpu_s':time.process_time()-cpu0,
@@ -134,7 +174,8 @@ def worker(args):
                           '--parent-pid',str(args.parent_pid),'--worker-pid',str(os.getpid()),
                           '--output',str(folder.resolve())],preexec_fn=lambda:signal.signal(signal.SIGTERM,signal.SIG_IGN))
     lock=json.loads(Path(args.lock).read_text())
-    task=json.loads((folder/'attempt.json').read_text())['task']
+    attempt=json.loads((folder/'attempt.json').read_text())
+    task=attempt['task'];started=attempt['parent_monotonic']
     row={'task':task,'started_utc':time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime()),
          'lock_sha256':digest(args.lock),'events_file':'native.jsonl','host':platform.uname()._asdict()}
     try:
@@ -179,15 +220,16 @@ def worker(args):
                 built=original(*a,**kw); built['model'].seed=task['seed']; built['model'].threads=1
                 return built
             pf.build_feasible_model=seeded
-            # Reserve 2s for independent full-case replay/materialization, inside outer cap.
-            remaining=task['seconds']-(time.monotonic()-started)-1.0
+            # Same startup-inclusive clock and uniform finalization reserve for every arm.
+            final_reserve=max(3.,task['seconds']*.10)
+            remaining=task['seconds']-(time.monotonic()-started)-final_reserve
             reserve=max(2.0,task['seconds']*.10)
             search=max(0.,remaining-reserve)
             if search<=0: raise TimeoutError('Preparation consumed decision budget')
             rounds=8 if arm=='cold' else 4
             budget=nr.Budget(backend='GRB',threads=1,phase_seconds=search if arm=='cold' else search/4,
                              wall_seconds=remaining,max_rounds=rounds,epsilon=1e-4)
-            row.update(search_phase_cap_s=search if arm=='cold' else search/4,completion_reserve_s=reserve)
+            row.update(search_phase_cap_s=search if arm=='cold' else search/4,completion_reserve_s=reserve,finalization_reserve_s=final_reserve)
             native_optimize=pf._optimize_once
             search_spent=0.0
             def capped_optimize(built,inner_budget,deadline):
@@ -207,16 +249,23 @@ def worker(args):
             pf._optimize_once=capped_optimize
             result=pf.solve_planner(target,market.a,market.b,budget,
                   record=lambda event:append(folder/'native.jsonl',event),completion=True)
+            row['planner_return_elapsed_s']=time.monotonic()-started
+            file_started=time.monotonic()
             write_new(folder/'planner.json',result)
+            row['planner_file_s']=time.monotonic()-file_started
             row.update(status=result.get('status'),source_bound=result.get('lower'),
                        source_bound_scope='restricted_model_only' if scores is not None else 'full_model',
                        global_certificate_claim=False,accepted_valid=False)
             plan=result.get('plan')
             if plan:
                 plan={**plan,'case_identity':case.identity()}
+                replay_started=time.monotonic()
                 replay=nr.replay_native(case,plan)
                 bill=Fraction(replay['ops_cost'])+nh.supply(market,replay['load'])
+                row['final_replay_s']=time.monotonic()-replay_started
+                files_started=time.monotonic()
                 write_new(folder/'plan.json',plan); write_new(folder/'replay.json',replay)
+                row['final_plan_replay_files_s']=time.monotonic()-files_started
                 row.update(bill_exact=str(bill),bill=float(bill),accepted_valid=True,vehicles=len(plan['vehicles']))
             if time.monotonic()-started>task['seconds']:
                 row['accepted_valid']=False
@@ -228,7 +277,12 @@ def worker(args):
     row.update(wall_s=time.monotonic()-started,cpu_s=(usage.ru_utime+usage.ru_stime)-(usage0.ru_utime+usage0.ru_stime),
                peak_rss_bytes=usage.ru_maxrss if sys.platform=='darwin' else usage.ru_maxrss*1024,
                versions={name:version(name) for name in ('mip','gurobipy','torch','numpy','catboost')})
+    materialize=time.monotonic()
     write_new(folder/'result.json',row)
+    finished=time.monotonic()
+    write_new(folder/'completion.json',{'task':task,'lock_sha256':digest(args.lock),
+              'finished_monotonic':finished,'parent_monotonic':started,
+              'result_materialization_s':finished-materialize,'result_sha256':digest(folder/'result.json')})
 
 def version(name):
     try:return importlib.metadata.version(name)
@@ -288,6 +342,22 @@ def stop(proc):
     except ProcessLookupError:pass
     proc.wait()
 
+def completion_endpoint(folder,task,locksha,anchor,result):
+    try:
+        marker=json.loads((folder/'completion.json').read_text())
+        finished=marker['finished_monotonic']
+        if marker['task']!=task or marker['lock_sha256']!=locksha or marker['parent_monotonic']!=anchor:
+            raise ValueError('identity mismatch')
+        if not isinstance(finished,(int,float)) or not math.isfinite(finished) or finished<anchor:
+            raise ValueError('invalid finished timestamp')
+        if marker['result_sha256']!=digest(folder/'result.json'):raise ValueError('result hash mismatch')
+        elapsed=finished-anchor
+        return {'endpoint_wall_s':elapsed,'endpoint_valid':bool(result.get('accepted_valid')) and elapsed<=task['seconds'],
+                'endpoint_censored':elapsed>task['seconds'],'completion_marker_issue':None}
+    except (OSError,ValueError,KeyError,TypeError):
+        return {'endpoint_wall_s':None,'endpoint_valid':False,'endpoint_censored':True,
+                'completion_marker_issue':'missing_or_malformed_completion_marker'}
+
 def qualification_gate(lock,path):
     path=Path(path); expected=list(tasks(lock,'qualification')); issues=[]
     for task in expected:
@@ -296,6 +366,7 @@ def qualification_gate(lock,path):
         if not receipt.exists() or not result.exists():issues.append(f'incomplete:{folder.name}');continue
         sup=json.loads(receipt.read_text());row=json.loads(result.read_text())
         if sup.get('failure') or sup.get('returncode') or sup.get('missing_worker_receipt'):issues.append(f'infrastructure:{folder.name}')
+        if sup.get('completion_marker_issue'):issues.append(f'completion_marker:{folder.name}')
         if row.get('failure'):issues.append(f'worker_failure:{folder.name}')
         if sup['peak_tree_rss_bytes']>5*1024**3 or sup['wall_s']>task['seconds']+2:issues.append(f'resource:{folder.name}')
     return issues
@@ -342,17 +413,18 @@ def launch_owned(args,task,folder,locksha,ledger):
     previous_mask=signal.pthread_sigmask(signal.SIG_BLOCK,{signal.SIGTERM,signal.SIGINT})
     try:
         folder.mkdir()
-        write_new(folder/'attempt.json',{'task':task,'lock_sha256':locksha,'attempt_utc':time.time()})
-        append(ledger,{'event':'launch','task':task,'directory':str(folder),'utc':time.time()})
         env={**os.environ,**{key:'1' for key in ('OMP_NUM_THREADS','OPENBLAS_NUM_THREADS','MKL_NUM_THREADS','VECLIB_MAXIMUM_THREADS','NUMEXPR_NUM_THREADS')}}
         stdout=(folder/'stdout.log').open('x');stderr=(folder/'stderr.log').open('x')
         command=[sys.executable,'-m','experiments.codex_local_campaign','worker','--lock',str(Path(args.lock).resolve()),'--output',str(folder.resolve()),'--parent-pid',str(os.getpid())]
         if args.mock:command+=['--mock','--mock-delay',str(getattr(args,'mock_delay',0))]
+        anchor=time.monotonic()
+        write_new(folder/'attempt.json',{'task':task,'lock_sha256':locksha,'attempt_utc':time.time(),'parent_monotonic':anchor})
+        append(ledger,{'event':'launch','task':task,'directory':str(folder),'utc':time.time(),'parent_monotonic':anchor})
         try:proc=subprocess.Popen(command,env=env,stdout=stdout,stderr=stderr,start_new_session=True)
         except BaseException:
             stdout.close();stderr.close();write_new(folder/'supervisor.json',{'failure':'launch_failed','charged_cpu_s':0,'traceback':traceback.format_exc()});raise
         stdout.close();stderr.close()
-        item={'proc':proc,'folder':folder,'task':task,'start':time.monotonic(),'cpu':0.,'peak_rss':0,'reason':None}
+        item={'proc':proc,'folder':folder,'task':task,'start':anchor,'cpu':0.,'peak_rss':0,'reason':None}
         args.active_processes.append(item)
         append(ledger,{'event':'owned_worker','pid':proc.pid,'pgid':proc.pid,'task':task})
         return item
@@ -381,12 +453,13 @@ def supervise(args,lock,output):
         except (OSError,ValueError,KeyError,TypeError) as exc:
             raise RuntimeError(f'Receipt issue: incomplete/corrupt prior attempt {folder}: {exc}; never retry automatically') from exc
     spent=sum(json.loads(p.read_text()).get('charged_cpu_s',0) for p in output.glob('*/supervisor.json'))
-    if args.stage=='qualification':spent+=lock.get('freeze_cpu_s',0)
+    if args.stage=='qualification':spent+=lock.get('freeze_cpu_s',0)+lock.get('prior_qualification',{}).get('charged_cpu_s',0)
     if ledger.exists():
         try:spent+=sum(json.loads(line).get('supervisor_cpu_s',0) for line in ledger.read_text().splitlines() if json.loads(line).get('event')=='summary')
         except (ValueError,TypeError) as exc:raise RuntimeError(f'Receipt issue: corrupt launch ledger {ledger}') from exc
     ceiling=(.5 if args.stage=='qualification' else 8)*3600
     reserve=60 if args.stage=='qualification' else 1800
+    if not ledger.exists():append(ledger,{'event':'budget_carry_forward','prior_qualification_cpu_s':lock.get('prior_qualification',{}).get('charged_cpu_s',0) if args.stage=='qualification' else 0,'freeze_cpu_s':lock.get('freeze_cpu_s',0)})
     pending=[]
     for task in planned:
         ident=stable(task)[:20]; folder=output/ident
@@ -417,7 +490,7 @@ def supervise(args,lock,output):
             rss,cpu=tree_stats(x['proc'].pid,table);x['cpu']=max(cpu,x['cpu']);x['peak_rss']=max(rss,x['peak_rss']);rss_total+=rss
             append(x['folder']/'resources.jsonl',{'wall_s':time.monotonic()-x['start'],'rss_bytes':rss,'cpu_s':cpu})
             if rss>5*1024**3:x['reason']='worker_memory_limit';halted=True
-            if time.monotonic()-x['start']>x['task']['seconds']+2:x['reason']='outer_wall_deadline'
+            if x['proc'].poll() is None and time.monotonic()-x['start']>x['task']['seconds']+2:x['reason']='outer_wall_deadline'
         if rss_total>10*1024**3:
             halted=True
             for x in running:x['reason']='aggregate_memory_limit'
@@ -430,6 +503,7 @@ def supervise(args,lock,output):
             if proc.poll() is None and not x['reason']:continue
             completion_mask=signal.pthread_sigmask(signal.SIG_BLOCK,{signal.SIGTERM,signal.SIGINT})
             try:
+                cleanup_started=time.monotonic()
                 stop(proc) # remove any remaining owned watchdog/descendants
                 args.active_processes.remove(x) # retire PGID before any fallible file work
                 result_path=x['folder']/'result.json'
@@ -437,11 +511,14 @@ def supervise(args,lock,output):
                 charged=max(x['cpu'],result.get('cpu_s',0))
                 # Missing final CPU receipt conservatively charges complete elapsed allocation.
                 if not result:charged=max(charged,time.monotonic()-x['start'])
-                parent_wall=time.monotonic()-x['start']
-                receipt={'endpoint_valid':bool(result.get('accepted_valid')) and not x['reason'] and parent_wall<=x['task']['seconds'],
-                         'endpoint_censored':parent_wall>x['task']['seconds'],
-                         'returncode':proc.returncode,'failure':x['reason'], 'missing_worker_receipt':not bool(result),
-                         'charged_cpu_s':charged,'peak_tree_rss_bytes':x['peak_rss'],'wall_s':time.monotonic()-x['start']}
+                endpoint=completion_endpoint(x['folder'],x['task'],locksha,x['start'],result)
+                endpoint['endpoint_valid']=endpoint['endpoint_valid'] and not x['reason']
+                total_wall=time.monotonic()-x['start']
+                receipt={**endpoint,'returncode':proc.returncode,'failure':x['reason'],
+                         'missing_worker_receipt':not bool(result),'charged_cpu_s':charged,
+                         'peak_tree_rss_bytes':x['peak_rss'],
+                         'wall_s':endpoint['endpoint_wall_s'] if endpoint['endpoint_wall_s'] is not None else total_wall,
+                         'supervisor_elapsed_s':total_wall,'cleanup_wall_s':time.monotonic()-cleanup_started}
                 write_new(x['folder']/'supervisor.json',receipt);spent+=charged;running.remove(x)
                 append(ledger,{'event':'finish','task':x['task'],'receipt':receipt,'utc':time.time()})
             finally:
@@ -566,14 +643,39 @@ def self_test():
                 else:raise AssertionError('Owned worker survived supervisor SIGTERM')
             finally:
                 if parent.poll() is None:parent.kill();parent.wait()
+        timing=root/'timing';timing.mkdir();task={'case_key':'mock','seed':17,'arm':'full4','seconds':30}
+        write_new(timing/'result.json',{'accepted_valid':True})
+        marker={'task':task,'lock_sha256':'locked','parent_monotonic':100.,'finished_monotonic':129.9,
+                'result_sha256':digest(timing/'result.json')}
+        write_new(timing/'completion.json',marker)
+        endpoint=completion_endpoint(timing,task,'locked',100.,{'accepted_valid':True})
+        assert endpoint['endpoint_valid'] and abs(endpoint['endpoint_wall_s']-29.9)<1e-9
+        time.sleep(.03) # cleanup/detection cannot alter a materialization timestamp
+        assert completion_endpoint(timing,task,'locked',100.,{'accepted_valid':True})==endpoint
+        marker['finished_monotonic']=130.01
+        (timing/'completion.json').write_text(json.dumps(marker))
+        assert completion_endpoint(timing,task,'locked',100.,{'accepted_valid':True})['endpoint_censored']
+        (timing/'completion.json').unlink()
+        assert completion_endpoint(timing,task,'locked',100.,{'accepted_valid':True})['endpoint_censored']
+        (timing/'completion.json').write_text('{malformed')
+        assert completion_endpoint(timing,task,'locked',100.,{'accepted_valid':True})['completion_marker_issue']
+        prior=root/'prior';prior.mkdir();priorcell=prior/'cell';priorcell.mkdir()
+        write_new(prior/'campaign.json',{'stage':'qualification','mock':False,'lock_sha256':'old'})
+        write_new(priorcell/'attempt.json',{'lock_sha256':'old'})
+        write_new(priorcell/'supervisor.json',{'charged_cpu_s':20.})
+        append(prior/'ledger.jsonl',{'event':'summary','planned':1,'attempted':1,'undispatched':0,
+               'halted':False,'charged_worker_cpu_s':25.,'supervisor_cpu_s':2.})
+        carried=prior_qualification(prior)
+        assert carried['charged_cpu_s']==27. and len(carried['artifact_hashes'])==4
+        verify({'sources':{},'assets':{},'prior_qualification':carried})
         mock_group_tests(root)
         assert args.active_processes==[] # completed ownership must be retired
-        print('PASS: parent-death and TERM-resistant descendant escalation; no duplicate attempts; preserved failures; incomplete/empty/corrupt directories block resume; supervisor SIGTERM kills and receipts owned workers; no numerical imports.')
+        print('PASS: timely/late/missing/malformed materialization and cleanup independence; parent-death and TERM-resistant descendant escalation; no duplicate attempts; preserved failures; incomplete/empty/corrupt directories block resume; supervisor SIGTERM kills and receipts owned workers; no numerical imports.')
 
 def main():
     parser=argparse.ArgumentParser(description=__doc__); sub=parser.add_subparsers(dest='command',required=True)
     p=sub.add_parser('freeze');p.add_argument('--manifest',required=True);p.add_argument('--lock',required=True)
-    p.add_argument('--v8-root',required=True);p.add_argument('--classical-root')
+    p.add_argument('--v8-root',required=True);p.add_argument('--classical-root');p.add_argument('--prior-qualification-output')
     for name in ('run','worker'):
         p=sub.add_parser(name);p.add_argument('--lock',required=True);p.add_argument('--output',required=True)
         p.add_argument('--mock',action='store_true');p.add_argument('--mock-delay',type=float,default=0)

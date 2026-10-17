@@ -1,0 +1,252 @@
+{
+  "schema": "egg.local-ranking-campaign.v3",
+  "status": "design_frozen_execution_blocked_pending_artifact_lock_and_harness",
+  "study_kind": "unsealed_development_only",
+  "sampling": {
+    "salt": "egg-ranking-local-20261017-v1",
+    "candidate_ids": [
+      50600,
+      50999
+    ],
+    "method": "sort candidate IDs by SHA256(salt|id), first 22, assign disjoint slices; no case or score reads"
+  },
+  "cohorts": {
+    "qualification": [
+      {
+        "case_key": "scale:50907:40",
+        "base_id": 50907,
+        "services": 40,
+        "group_id": "claude-scale-v1:50907"
+      },
+      {
+        "case_key": "scale:50641:80",
+        "base_id": 50641,
+        "services": 80,
+        "group_id": "claude-scale-v1:50641"
+      }
+    ],
+    "screen": [
+      {
+        "case_key": "scale:50805:40",
+        "base_id": 50805,
+        "services": 40,
+        "group_id": "claude-scale-v1:50805"
+      },
+      {
+        "case_key": "scale:50759:40",
+        "base_id": 50759,
+        "services": 40,
+        "group_id": "claude-scale-v1:50759"
+      },
+      {
+        "case_key": "scale:50730:40",
+        "base_id": 50730,
+        "services": 40,
+        "group_id": "claude-scale-v1:50730"
+      },
+      {
+        "case_key": "scale:50919:40",
+        "base_id": 50919,
+        "services": 40,
+        "group_id": "claude-scale-v1:50919"
+      },
+      {
+        "case_key": "scale:50955:40",
+        "base_id": 50955,
+        "services": 40,
+        "group_id": "claude-scale-v1:50955"
+      },
+      {
+        "case_key": "scale:50717:40",
+        "base_id": 50717,
+        "services": 40,
+        "group_id": "claude-scale-v1:50717"
+      },
+      {
+        "case_key": "scale:50685:40",
+        "base_id": 50685,
+        "services": 40,
+        "group_id": "claude-scale-v1:50685"
+      },
+      {
+        "case_key": "scale:50925:40",
+        "base_id": 50925,
+        "services": 40,
+        "group_id": "claude-scale-v1:50925"
+      },
+      {
+        "case_key": "scale:50816:40",
+        "base_id": 50816,
+        "services": 40,
+        "group_id": "claude-scale-v1:50816"
+      },
+      {
+        "case_key": "scale:50991:40",
+        "base_id": 50991,
+        "services": 40,
+        "group_id": "claude-scale-v1:50991"
+      },
+      {
+        "case_key": "scale:50903:80",
+        "base_id": 50903,
+        "services": 80,
+        "group_id": "claude-scale-v1:50903"
+      },
+      {
+        "case_key": "scale:50941:80",
+        "base_id": 50941,
+        "services": 80,
+        "group_id": "claude-scale-v1:50941"
+      },
+      {
+        "case_key": "scale:50998:80",
+        "base_id": 50998,
+        "services": 80,
+        "group_id": "claude-scale-v1:50998"
+      },
+      {
+        "case_key": "scale:50877:80",
+        "base_id": 50877,
+        "services": 80,
+        "group_id": "claude-scale-v1:50877"
+      },
+      {
+        "case_key": "scale:50670:80",
+        "base_id": 50670,
+        "services": 80,
+        "group_id": "claude-scale-v1:50670"
+      },
+      {
+        "case_key": "scale:50954:80",
+        "base_id": 50954,
+        "services": 80,
+        "group_id": "claude-scale-v1:50954"
+      },
+      {
+        "case_key": "scale:50605:80",
+        "base_id": 50605,
+        "services": 80,
+        "group_id": "claude-scale-v1:50605"
+      },
+      {
+        "case_key": "scale:50743:80",
+        "base_id": 50743,
+        "services": 80,
+        "group_id": "claude-scale-v1:50743"
+      },
+      {
+        "case_key": "scale:50751:80",
+        "base_id": 50751,
+        "services": 80,
+        "group_id": "claude-scale-v1:50751"
+      },
+      {
+        "case_key": "scale:50891:80",
+        "base_id": 50891,
+        "services": 80,
+        "group_id": "claude-scale-v1:50891"
+      }
+    ]
+  },
+  "arms": [
+    {
+      "id": "v8",
+      "ranking": "graph_attention task00 seed17",
+      "rounds": 4
+    },
+    {
+      "id": "catboost_v5",
+      "ranking": "newly trained CatBoost classical comparator; legacy arm ID, not historical v5; frozen artifacts required",
+      "rounds": 4
+    },
+    {
+      "id": "nonlearned",
+      "ranking": "experiments.codex_offline_rank.heuristic: -travel_minutes - 0.1*intertrip_gap + 0.1*depot_dwell",
+      "rounds": 4
+    },
+    {
+      "id": "random",
+      "ranking": "SHA256(salt|case_key|solver_seed|movement_id) asc",
+      "rounds": 4
+    },
+    {
+      "id": "full4",
+      "ranking": null,
+      "rounds": 4
+    },
+    {
+      "id": "cold",
+      "ranking": null,
+      "rounds": 8
+    }
+  ],
+  "solver_seeds": [
+    17,
+    41,
+    73
+  ],
+  "tariff": "day",
+  "keep_rule": {
+    "global_fraction": 0.3,
+    "min_incoming_outgoing": 3,
+    "mandatory": [
+      "pullout",
+      "pullin"
+    ],
+    "tie_break": "movement_id ascending",
+    "keep_zero_semantics": "not used"
+  },
+  "budgets": {
+    "qualification_cpu_h": 0.5,
+    "screen_cpu_h": 8,
+    "qualification_end_to_end_s": 30,
+    "screen_end_to_end_s": 60,
+    "screen_runs_max": 360,
+    "screen_nominal_cpu_h": 6,
+    "workers_initial": 2,
+    "threads_per_worker": 1,
+    "memory_workers_total_gib": 10,
+    "memory_worker_limit_gib": 5,
+    "laptop_physical_gb": 18,
+    "prior_accounting_allowance_s": 10,
+    "prior_accounting_evidence": "research-20261017/qualification-v2-archive-manifest.json",
+    "prior_accounting_allowance_reason": "conservative total for prior analysis/archive/readback, includes measured archive CPU; added to locked terminal summary charge"
+  },
+  "artifact_lock_required": [
+    "generator source SHA256",
+    "driver source SHA256",
+    "repair source SHA256",
+    "checkpoint SHA256",
+    "preprocessing SHA256",
+    "optional catboost artifact SHA256",
+    "Python/library/backend identity",
+    "case identity plus movement IDs per frozen key",
+    "score timing definition"
+  ],
+  "excluded_data": [
+    "sealed DEV",
+    "sealed TEST",
+    "A6",
+    "B3",
+    "GIRO",
+    "confirmation sets"
+  ],
+  "no_runs_performed": true,
+  "amendment": "Prospective v3 engineering correction after terminal v2 qualification: shared parent clock; post-result-fsync completion marker; cleanup excluded from endpoint; larger uniform finalization reserve; cumulative qualification charge carried forward from hashed v2 receipts. No cases, arms, models, keep rules or economic gates changed.",
+  "execution": {
+    "driver": "experiments.codex_local_campaign",
+    "completion": true,
+    "completion_reserve": "max(2, 0.10*T) inside planner wall allowance",
+    "final_materialization_reserve_s": "max(3,0.10*T)",
+    "termination_grace_s": 2,
+    "memory_sampling_s": 0.25,
+    "pressure_sampling_s": 1,
+    "pressure_stop": "memory_pressure free percent <10 for >=5s",
+    "resume": "skip all attempted cells; incomplete receipt blocks resume; no retries",
+    "qualification_revision": 3,
+    "endpoint": "completion.json finished_monotonic minus attempt.json parent_monotonic; measured after result fsync, before marker write/cleanup",
+    "prior_qualification_required": true,
+    "qualification_budget": "0.5 CPUh cumulative including all v2 charges, v3 freeze, supervision and attempts",
+    "timing_unknown": "missing/malformed marker is censored; no retrospective v2 reinterpretation"
+  }
+}
