@@ -11,6 +11,9 @@ Project operations and evidence:
   evidence.
 - [`UNICORN_RUNBOOK.md`](UNICORN_RUNBOOK.md) records cluster procedures and
   recovery commands.
+- [`STRICT_TWO_CYCLE_WITNESS.md`](STRICT_TWO_CYCLE_WITNESS.md) defines the
+  bounded synthetic delta-debugger, its canonical replay, and the boundary
+  between computational evidence and the fixed-point lemma.
 
 The incident ledger is authoritative about repair status: a procedure or test
 described in the runbook is not production-ready while its incident remains
