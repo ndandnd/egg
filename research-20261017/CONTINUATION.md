@@ -1,4 +1,6 @@
-# EGG — paused for independent review
+# EGG — historical 17 October review checkpoint
+
+**Superseded on 23 October 2026:** the user resumed research with an FT50 publication aspiration. Start at `../research-20261023/CONTINUATION.md` for the current handoff. The completed results and pause below are historical and preserved.
 
 17 October 2026. The user requested a graceful stop at an independent-review-ready state. **The experiment is complete, no EGG campaign worker remains, and `advance-egg-journal-research` is PAUSED. Do not resume or launch follow-up experiments until the user asks.** Other paused schedules stay paused. `STOP_RECEIPT_20261017.json` records process/owner/schedule checks.
 

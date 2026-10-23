@@ -421,7 +421,7 @@ def _extract(case,built,record=None,round_index=0):
     return plan
 
 
-def _checked_pricing_start(case, source_plan):
+def _checked_pricing_start(case, source_plan, *, source_case=None):
     """Check a saved physical fleet before using its movement choices as a hint.
 
     Replay checks continuous-time charging, resources and SOC. It does not
@@ -429,10 +429,18 @@ def _checked_pricing_start(case, source_plan):
     """
     if not isinstance(source_plan, dict):
         raise ValueError('MIP start source must be a physical plan mapping')
+    if source_case is not None:
+        from egglab.recovery_lift import lift_plan
+        lifted = lift_plan(source_case, case, source_plan,
+                           a=[0.]*(len(case.market_edges_min)-1),
+                           b=[0.]*(len(case.market_edges_min)-1))
+        return set(lifted['provenance']['selected_movement_ids'])
     expected = {'schema':nr.SCHEMA,'case_identity':case.identity(),
         'formulation':FORMULATION,'native_matrix':NATIVE_MATRIX,
         'extraction_policy':EXTRACTION_POLICY}
     for key, value in expected.items():
+        if key == 'extraction_policy' and source_plan.get(key) == COMPLETION_POLICY:
+            continue
         if source_plan.get(key) != value:
             raise ValueError(f'MIP start source {key} mismatch')
     try:
@@ -588,10 +596,10 @@ def _candidate(case, built, budget, deadline, stats, completion, record, round_i
                     'wall_remaining_s':deadline-time.monotonic()})
 
 
-def solve_pricing(case, prices, budget=Budget(), record=None, start_plan=None, *, completion=False):
+def solve_pricing(case, prices, budget=Budget(), record=None, start_plan=None, *, completion=False, deadline=None, start_case=None):
     _check_prices(case, prices)
     _check_budget(budget)
-    deadline = time.monotonic()+budget.wall_seconds
+    deadline = _shared_deadline(budget, deadline)
     if start_plan is None:
         built = build_feasible_model(case, budget.backend)
         attach_objective(built, "linear", prices)
@@ -600,7 +608,8 @@ def solve_pricing(case, prices, budget=Budget(), record=None, start_plan=None, *
         stage = 'validation'
         timings = {}
         try:
-            selected = _checked_pricing_start(case, start_plan)
+            selected = (_checked_pricing_start(case, start_plan) if start_case is None else
+                        _checked_pricing_start(case, start_plan, source_case=start_case))
             timings['validation_s'] = time.perf_counter()-setup_started
             if time.monotonic() >= deadline:
                 raise TimeoutError('MIP start validation exhausted native wall budget')
@@ -688,13 +697,52 @@ def solve_pricing(case, prices, budget=Budget(), record=None, start_plan=None, *
     return result
 
 
-def solve_planner(case, a, b, budget=Budget(), record=None, *, completion=False):
+def _shared_deadline(budget, deadline):
+    local = time.monotonic()+budget.wall_seconds
+    if deadline is None:
+        return local
+    if not math.isfinite(deadline):
+        raise ValueError('External deadline must be finite monotonic time')
+    return min(local, deadline)
+
+
+def solve_planner(case, a, b, budget=Budget(), record=None, *, completion=False,
+                  start_plan=None, start_case=None, deadline=None):
     _check_market(case, a, b)
     _check_budget(budget)
-    deadline = time.monotonic()+budget.wall_seconds
+    instrumentation_failures = []
+    if record is not None:
+        original_record = record
+        def record(event):
+            try:
+                original_record(event)
+            except Exception as exc:
+                # Diagnostic sinks cannot invalidate a saved physical witness.
+                instrumentation_failures.append({'stage':'record',
+                    'event':event.get('event'), 'error_type':type(exc).__name__,
+                    'error':str(exc)})
+    deadline = _shared_deadline(budget, deadline)
     tangents = [[(float(aa), 0.0)] for aa in a]
     lower, upper, best, records = -math.inf, math.inf, None, []
     status = "unresolved"
+    recovery = None
+    selected = None
+    started, cpu_started = time.perf_counter(), time.process_time()
+    if start_plan is not None:
+        from egglab.recovery_lift import lift_plan
+        try:
+            recovery = lift_plan(case if start_case is None else start_case,
+                                 case, start_plan, a=a, b=b)
+            best, upper = recovery['plan'], recovery['true_bill']
+            selected = set(recovery['provenance']['selected_movement_ids'])
+            status = 'feasible'
+            if record:
+                record({'event':'recovery_fallback_admitted', **recovery})
+        except Exception as exc:
+            recovery = {'status':'rejected','stage':'physical_lift',
+                        'error_type':type(exc).__name__,'error':str(exc)}
+            if record:
+                record({'event':'recovery_fallback_rejected', **recovery})
     for _ in range(budget.max_rounds):
         if time.monotonic() >= deadline:
             break
@@ -703,8 +751,23 @@ def solve_planner(case, a, b, budget=Budget(), record=None, *, completion=False)
         snapshot = [[list(p) for p in rows] for rows in tangents]
         try:
             built = build_feasible_model(case, budget.backend)
+            if time.monotonic() >= deadline:
+                raise TimeoutError('Model construction exhausted shared deadline')
             stage = 'objective_attach'
             attach_objective(built, "tangents", tangents)
+            if time.monotonic() >= deadline:
+                raise TimeoutError('Objective attachment exhausted shared deadline')
+            if selected is not None:
+                stage = 'start_attach'
+                mapping = _attach_pricing_start(case, built, selected)
+                if recovery is not None:
+                    recovery['start_status'] = 'submitted'
+                    recovery['solver_start_status'] = 'unknown'
+                if record:
+                    record({'event':'mip_start_setup','round':len(records),
+                            'status':'submitted','solver_start_status':'unknown', **mapping})
+            if time.monotonic() >= deadline:
+                raise TimeoutError('Start setup exhausted shared deadline')
             if record:
                 record({"event": "native_start", "round": len(records), "tangents": snapshot})
             stage = 'optimization'
@@ -713,11 +776,14 @@ def solve_planner(case, a, b, budget=Budget(), record=None, *, completion=False)
             failure = {'stage':stage,'error_type':type(exc).__name__,'error':str(exc),
                        'wall_s':time.perf_counter()-search_started,
                        'wall_remaining_s':deadline-time.monotonic()}
+            if stage == 'start_attach' and recovery is not None:
+                recovery['start_status'] = 'rejected'
+                recovery['start_failure'] = failure
             iteration = {'tangents':snapshot,'search_failure':failure}
             records.append(iteration)
             if record:
                 record({'event':'native_search_failed','round':len(records)-1,**failure})
-            status = 'bounded' if best is not None else 'search_failed'
+            status = ('bounded' if math.isfinite(lower) else 'feasible') if best is not None else 'search_failed'
             break
         if record:
             record({"event": "native_status", "round": len(records), "stats": stats})
@@ -730,19 +796,29 @@ def solve_planner(case, a, b, budget=Budget(), record=None, *, completion=False)
                 if record:
                     record({'event':'candidate_rejected','round':len(records)-1,
                             **iteration['extraction_failure']})
-                status = 'bounded'
+                status = 'model_replay_contradiction'
                 break
             return {"case_identity": case.identity(), "formulation":FORMULATION,
                     "native_matrix":NATIVE_MATRIX,"extraction_policy":COMPLETION_POLICY if completion else EXTRACTION_POLICY,
                     "status": "infeasible", "rounds": records}
         if stats["status"] not in ("OPTIMAL", "FEASIBLE") or stats.get("incumbent") is None:
             break
-        if record:
-            record({"event": "native_incumbent", "round": len(records)-1, **capture_incumbent(case, built)})
+        candidate_stage = 'incumbent_capture'
         try:
+            if record:
+                record({"event": "native_incumbent", "round": len(records)-1, **capture_incumbent(case, built)})
+            candidate_stage = 'candidate_admission'
             plan, admission_stats = _candidate(case,built,budget,deadline,stats,completion,record,len(records)-1, ("tangents",(a,b,snapshot)))
             physical_load = plan['replay']['load']
             true = plan["ops_cost"]+true_cost(a, b, physical_load)
+            # Admission happens before reconstruction/logging below: a later
+            # failure must not discard an independently admitted physical bill.
+            if start_plan is not None:
+                _candidate_score(case, plan, admission_stats, ("tangents",(a,b,snapshot)))
+            if start_plan is not None and true < upper:
+                upper, best = true, plan
+                if selected is not None:
+                    selected = {mid for vehicle in plan['vehicles'] for mid in vehicle['movements']}
             envelope = plan["ops_cost"]+sum(max(slope*load+intercept for slope, intercept in rows)
                                             for load, rows in zip(physical_load, snapshot))
             raw_charge_load = plan['raw_solver_load']
@@ -772,14 +848,20 @@ def solve_planner(case, a, b, budget=Budget(), record=None, *, completion=False)
             iteration["replayed_tangent_objective"] = envelope
             iteration["native_epigraph_slack"] = admission_stats["incumbent"]-envelope
             if max(lower,lo) > min(upper,hi)+BOUND_GUARD:
-                raise ValueError('Planner enclosure reversed')
+                iteration['bound_contradiction'] = {'previous_lower':lower,
+                    'candidate_lower':lo,'retained_physical_upper':upper,
+                    'candidate_upper':hi,'action':'invalidate_global_lower'}
+                lower = -math.inf
+                raise ValueError('Planner enclosure reversed; global lower invalidated')
             iteration.update(plan=plan, lower=lo, upper=hi)
         except Exception as exc:
-            iteration['extraction_failure'] = {'error_type':type(exc).__name__, 'error':str(exc)}
+            iteration['extraction_failure'] = {'stage':candidate_stage,
+                'error_type':type(exc).__name__, 'error':str(exc)}
             if record:
                 record({'event':'candidate_rejected','round':len(records)-1,
                         **iteration['extraction_failure']})
-            status = 'bounded' if best is not None else 'extraction_failed'
+            status = ('bound_replay_contradiction' if 'bound_contradiction' in iteration else
+                      (('bounded' if math.isfinite(lower) else 'feasible') if best is not None else 'extraction_failed'))
             break
         if record:
             record({"event": "replayed_iteration", "round": len(records)-1, **iteration})
@@ -798,5 +880,18 @@ def solve_planner(case, a, b, budget=Budget(), record=None, *, completion=False)
               "native_matrix":NATIVE_MATRIX,"extraction_policy":COMPLETION_POLICY if completion else EXTRACTION_POLICY,
               "status": status, "a": list(a), "b": list(b), "rounds": records}
     if best is not None:
+        if lower > upper+BOUND_GUARD:
+            result['bound_contradiction'] = {'lower':lower,'upper':upper,
+                'action':'invalidate_global_lower'}
+            lower = -math.inf
+            result['status'] = 'bound_replay_contradiction'
         result.update(plan=best, lower=lower, upper=upper, gap=upper-lower)
+    if instrumentation_failures:
+        result['instrumentation_failures'] = instrumentation_failures
+    if recovery is not None:
+        result['recovery'] = recovery
+        result['recovery_timing'] = {'wall_s':time.perf_counter()-started,
+            'cpu_s':time.process_time()-cpu_started,
+            'wall_remaining_s':deadline-time.monotonic(),
+            'deadline_overrun_s':max(0.,time.monotonic()-deadline)}
     return result
