@@ -30,6 +30,9 @@ POLICY = 'recovery-phase1-runner-v1'
 CARRIED_MINIMUM = 88.20958837542922
 CEILING, DISPATCH_STOP, SHUTDOWN_RESERVE = 900., 720., 180.
 OUTER_ALLOCATION, RSS_LIMIT = 32.5, 5*1024**3
+MONITOR_INTERVAL_S = .05
+SUPERVISOR_STOP_S = 31.
+_monitor_child_cpu_s = 0.
 THREAD_KEYS = ('OMP_NUM_THREADS', 'OPENBLAS_NUM_THREADS', 'MKL_NUM_THREADS',
                'VECLIB_MAXIMUM_THREADS', 'NUMEXPR_NUM_THREADS', 'BLIS_NUM_THREADS')
 ARMS = ('static', 'recovery', 'cold', 'start_fault')
@@ -570,9 +573,43 @@ def completion_endpoint(folder, task, locksha, anchor, *, acknowledgment):
         return {'endpoint_wall_s':None,'endpoint_censored':True,'completion_issue':'missing_or_malformed_completion'}
 
 
-def snapshot():
-    raw = subprocess.run(['ps','-axo','pid=,ppid=,pgid=,rss=,time='],capture_output=True,
-                         text=True,check=True,timeout=.08).stdout
+class MonitorError(RuntimeError):
+    def __init__(self, diagnostic):
+        self.diagnostic = diagnostic
+        super().__init__(json.dumps(diagnostic,sort_keys=True))
+
+
+def monitor_diagnostic(exc, *, context=None, command=None, deadline=None, timeout=None):
+    if isinstance(exc,MonitorError):
+        return deepcopy(exc.diagnostic)
+    return {'error_type':type(exc).__name__,'error':str(exc),'context':context,
+            'command':getattr(exc,'cmd',command),'timeout_s':getattr(exc,'timeout',timeout),
+            'sample_deadline':deadline}
+
+
+def monitor_command(command, deadline, context):
+    global _monitor_child_cpu_s
+    remaining = deadline-time.monotonic()
+    children0 = resource.getrusage(resource.RUSAGE_CHILDREN)
+    try:
+        if remaining<=0:
+            raise TimeoutError('Shared monitor sample deadline exhausted')
+        result = subprocess.run(command,capture_output=True,text=True,check=True,timeout=remaining)
+        if time.monotonic()>deadline:
+            raise TimeoutError('Monitor command exceeded shared sample deadline')
+        return result.stdout
+    except Exception as exc:
+        raise MonitorError(monitor_diagnostic(exc,context=context,command=command,
+                           deadline=deadline,timeout=max(0.,remaining))) from exc
+    finally:
+        children = resource.getrusage(resource.RUSAGE_CHILDREN)
+        _monitor_child_cpu_s += max(0.,children.ru_utime+children.ru_stime-
+                                   children0.ru_utime-children0.ru_stime)
+
+
+def snapshot(deadline=None):
+    deadline = time.monotonic()+.24 if deadline is None else deadline
+    raw = monitor_command(['ps','-axo','pid=,ppid=,pgid=,rss=,time='],deadline,'process_snapshot')
     table = {}
     for line in raw.splitlines():
         pid, parent, group, rss, cpu = line.split()
@@ -582,10 +619,10 @@ def snapshot():
     return table
 
 
-def memory_state():
+def memory_state(deadline=None):
+    deadline = time.monotonic()+.24 if deadline is None else deadline
     if platform.system() == 'Darwin':
-        raw = subprocess.run(['/usr/bin/memory_pressure','-Q'],capture_output=True,text=True,
-                             check=True,timeout=.08).stdout
+        raw = monitor_command(['/usr/bin/memory_pressure','-Q'],deadline,'memory_pressure')
         match = re.search(r'System-wide memory free percentage:\s*(\d+)%',raw)
         if not match:
             raise RuntimeError('Unparseable memory pressure monitor')
@@ -595,33 +632,77 @@ def memory_state():
     return 100.*values['MemAvailable']/values['MemTotal']
 
 
-def group_absent(pgid):
+def monitor_sample(deadline, include_memory=True):
+    table = snapshot(deadline)
+    free = memory_state(deadline) if include_memory else None
+    if time.monotonic()>deadline:
+        raise MonitorError(monitor_diagnostic(TimeoutError('Complete monitor sample exceeded deadline'),
+                           context='complete_sample',deadline=deadline))
+    return table,free
+
+
+def monitor_deadline(tick, last_completed=None, outer_deadline=math.inf):
+    return min(tick+.24,outer_deadline,
+               last_completed+.25 if last_completed is not None else math.inf)
+
+
+def group_probe(pgid):
     try:
         os.killpg(pgid,0)
-        return False
+        return {'pgid':pgid,'state':'present'}
     except ProcessLookupError:
-        return True
+        return {'pgid':pgid,'state':'absent'}
+    except PermissionError as exc:
+        return {'pgid':pgid,'state':'unknown','error_type':type(exc).__name__,
+                'errno':exc.errno,'error':str(exc)}
 
 
-def stop_owned(proc, groups=()):
-    extra = set(groups)-{proc.pid}
-    for pgid in extra:
-        try:
-            os.killpg(pgid,signal.SIGTERM)
-        except ProcessLookupError:
-            pass
-    campaign.stop(proc)  # TERM, .5-second escalation, KILL entire owned PGID.
-    for pgid in extra:
-        try:
-            os.killpg(pgid,signal.SIGKILL)
-        except ProcessLookupError:
-            pass
-    owned = extra | {proc.pid}
-    until = time.monotonic()+.5
-    while any(not group_absent(pgid) for pgid in owned) and time.monotonic()<until:
-        time.sleep(.02)
-    return {'pgid':proc.pid,'owned_pgids':sorted(owned),
-            'group_absent':all(group_absent(pgid) for pgid in owned),'returncode':proc.returncode}
+def group_absent(pgid):
+    return group_probe(pgid)['state']=='absent'
+
+
+def stop_owned(proc, groups=(), deadline=None):
+    owned = set(groups)|{proc.pid}
+    diagnostics,errors = [],[]
+    deadline = time.monotonic()+1.5 if deadline is None else deadline
+    if not finite(deadline,-math.inf):
+        raise ValueError('Owned cleanup requires a finite absolute deadline')
+
+    def send(signum, states=None):
+        for pgid in sorted(owned):
+            if states is not None and states[pgid]['state']=='absent':
+                continue
+            try:
+                os.killpg(pgid,signum)
+            except ProcessLookupError:
+                pass
+            except OSError as exc:
+                diagnostics.append({'stage':'signal','pgid':pgid,'signal':int(signum),
+                                    'error_type':type(exc).__name__,'error':str(exc)})
+
+    def probe_until(end):
+        while True:
+            states = {pgid:group_probe(pgid) for pgid in sorted(owned)}
+            diagnostics.extend(value for value in states.values() if value['state']=='unknown')
+            if all(value['state']=='absent' for value in states.values()) or time.monotonic()>=end:
+                return states
+            time.sleep(min(.02,max(0.,end-time.monotonic())))
+
+    send(signal.SIGTERM)
+    states = probe_until(min(time.monotonic()+.5,deadline))
+    send(signal.SIGKILL,states)
+    try:
+        proc.wait(timeout=max(0.,min(.5,deadline-time.monotonic())))
+    except Exception as exc:
+        errors.append({'stage':'reap','error_type':type(exc).__name__,'error':str(exc)})
+    states = probe_until(min(time.monotonic()+.5,deadline))
+    absent = all(value['state']=='absent' for value in states.values())
+    if not absent:
+        errors.append({'stage':'absence_confirmation','error':'Owned group absence unresolved',
+                       'group_states':list(states.values())})
+    return {'pgid':proc.pid,'owned_pgids':sorted(owned),'group_absent':absent,
+            'returncode':proc.returncode,'probe_diagnostics':diagnostics,'cleanup_errors':errors,
+            'group_states':list(states.values()),'cleanup_deadline':deadline}
 
 
 def resource_step(item, table, free_percent, now):
@@ -664,6 +745,8 @@ def resume_state(output, lock, locksha):
             or events[0].get('freeze_charge_s')!=lock['freeze_charge_s']
             or sum(value['event']=='carry_forward' for value in events)!=1):
         raise ValueError('Missing/corrupt cumulative carry-forward ledger')
+    if any(value.get('event') in ('terminal_audit_error','incomplete_terminal_audit') for value in events):
+        raise ValueError('Terminal audit failure blocks resume/analyze pending audited reconciliation')
     completed, total = {}, lock['carried_charge_s']+lock['freeze_charge_s']
     finishes = {value['task_id']:value for value in events if value['event']=='finish'}
     expected = {task['id']:task for task in lock['tasks']}
@@ -767,54 +850,125 @@ def receive_ack(item):
         item['acknowledgment'] = json.loads(item['ack_bytes'])
 
 
+def preserve_stop(item, reason, diagnostic=None):
+    if reason and not item.get('primary_reason'):
+        item['primary_reason'] = reason
+    if diagnostic is not None and not item.get('monitor_failure'):
+        item['monitor_failure'] = deepcopy(diagnostic)
+
+
+def write_once_equal(path, value):
+    if Path(path).exists():
+        if read(path)!=value:
+            raise ValueError('Existing terminal artifact differs: '+str(path))
+    else:
+        write_new(path,value)
+
+
 def finish(item, locksha, output, reason):
+    """One owned-group cleanup, one acknowledgment close, resumable terminal audit."""
     proc, folder, task = item['proc'], item['folder'], item['task']
-    cleanup0 = time.monotonic()
-    termination = stop_owned(proc,item['owned_pgids'])
-    item['retired'] = termination['group_absent']
+    secondary = item.setdefault('secondary_errors',[])
+    if not item.get('primary_reason') and (folder/'STOP').exists():
+        stop = read(folder/'STOP')
+        preserve_stop(item,stop.get('reason'),stop.get('monitor_failure'))
+    preserve_stop(item,reason)
+    item.setdefault('cleanup_started',time.monotonic())
     try:
-        receive_ack(item)
-    except (OSError,ValueError,TypeError) as exc:
-        reason = reason or 'completion_ack_failure:'+type(exc).__name__
-    finally:
-        os.close(item['ack_fd'])
-        item['ack_fd'] = None
-    elapsed = time.monotonic()-item['anchor']
-    try:
-        result = read(folder/'result.json')
-        if not isinstance(result,dict):
-            raise ValueError('Worker result must be a mapping')
-    except (OSError,ValueError,TypeError):
-        result = {}
-        reason = reason or 'missing_or_malformed_worker_result'
-    endpoint = completion_endpoint(folder,task,locksha,item['anchor'],
-                                   acknowledgment=item['acknowledgment'])
-    if not termination['group_absent']:
-        reason = reason or 'owned_group_survived_cleanup'
-    # Always charge full elapsed allocation when final CPU is missing; using the
-    # same conservative maximum for successful workers also covers watchdog time.
-    charge = max(elapsed,item['cpu'],result.get('cpu_s',0.) if finite(result.get('cpu_s')) else elapsed)
-    submissions = (result.get('native_state') or {}).get('submissions',[])
-    evidence = start_evidence((folder/'stdout.log').read_bytes(), submissions)
-    write_new(folder/'start-evidence.json',evidence)
-    artifacts = {path.name:sha(path) for path in folder.iterdir() if path.is_file() and path.name!='supervisor.json'}
-    receipt = {'policy':POLICY,'terminal':True,'task':task,'lock_sha256':locksha,
-               'parent_monotonic':item['anchor'],'charged_cpu_s':charge,'sampled_tree_cpu_s':item['cpu'],
-               'peak_tree_rss_bytes':item['peak_rss'],'failure':reason,'returncode':proc.returncode,
-               'group_absent':termination['group_absent'],'artifacts':artifacts,**endpoint,
-               'owned_pgids':termination['owned_pgids'],
-               'completion_acknowledgment':item['acknowledgment'],
-               'cleanup_wall_s':time.monotonic()-cleanup0,'allocation_elapsed_s':elapsed,
-               'worker_failure':bool(result.get('failures')) or result.get('status') in
-                   ('worker_failure','storage_failed','model_replay_contradiction','bound_replay_contradiction')
-                   or bool((result.get('native_state') or {}).get('engineering_events'))}
-    write_new(folder/'supervisor.json',receipt)
-    append_ledger(Path(output)/'ledger.jsonl',{'event':'finish','task_id':task['id'],
-                 'receipt_sha256':sha(folder/'supervisor.json'),'charged_cpu_s':charge})
-    return receipt
+        path = folder/'supervisor.json'
+        if path.exists():
+            receipt = read(path)
+            if (receipt.get('task')!=task or receipt.get('lock_sha256')!=locksha
+                    or receipt.get('parent_monotonic')!=item['anchor']):
+                raise ValueError('Existing terminal receipt identity mismatch')
+            item['retired'] = receipt['group_absent']
+        else:
+            if 'termination' not in item:
+                try:
+                    item['termination'] = stop_owned(proc,item['owned_pgids'],item['anchor']+OUTER_ALLOCATION)
+                except Exception as exc:
+                    item['termination'] = {'owned_pgids':sorted(item['owned_pgids']),
+                        'group_absent':False,'cleanup_errors':[{'stage':'cleanup',
+                        'error_type':type(exc).__name__,'error':str(exc)}]}
+                secondary.extend(deepcopy(item['termination'].get('cleanup_errors',[])))
+            termination = item['termination']
+            item['retired'] = termination['group_absent']
+            if termination.get('cleanup_errors'):
+                preserve_stop(item,'owned_cleanup_error')
+            if not item.get('ack_closed'):
+                try:
+                    if item.get('ack_fd') is not None:
+                        receive_ack(item)
+                except (OSError,ValueError,TypeError) as exc:
+                    secondary.append({'stage':'completion_ack','error_type':type(exc).__name__,'error':str(exc)})
+                    preserve_stop(item,'completion_ack_failure:'+type(exc).__name__)
+                finally:
+                    fd = item.get('ack_fd')
+                    item['ack_fd'],item['ack_closed'] = None,True
+                    if fd is not None:
+                        try:
+                            os.close(fd)
+                        except OSError as exc:
+                            secondary.append({'stage':'ack_close','error_type':type(exc).__name__,'error':str(exc)})
+            elapsed = time.monotonic()-item['anchor']
+            try:
+                result = read(folder/'result.json')
+                if not isinstance(result,dict):
+                    raise ValueError('Worker result must be a mapping')
+            except (OSError,ValueError,TypeError):
+                result = {}
+                preserve_stop(item,'missing_or_malformed_worker_result')
+            endpoint = completion_endpoint(folder,task,locksha,item['anchor'],
+                                           acknowledgment=item.get('acknowledgment'))
+            if not termination['group_absent']:
+                preserve_stop(item,'owned_group_survived_cleanup')
+            charge = max(elapsed,item['cpu'],result.get('cpu_s',0.) if finite(result.get('cpu_s')) else elapsed)
+            submissions = (result.get('native_state') or {}).get('submissions',[])
+            evidence = start_evidence((folder/'stdout.log').read_bytes(),submissions)
+            write_once_equal(folder/'start-evidence.json',evidence)
+            artifacts = {value.name:sha(value) for value in folder.iterdir()
+                         if value.is_file() and value.name!='supervisor.json'}
+            receipt = {'policy':POLICY,'terminal':True,'task':task,'lock_sha256':locksha,
+                'parent_monotonic':item['anchor'],'charged_cpu_s':charge,'sampled_tree_cpu_s':item['cpu'],
+                'peak_tree_rss_bytes':item['peak_rss'],'failure':item.get('primary_reason'),
+                'monitor_failure':item.get('monitor_failure'),'secondary_errors':deepcopy(secondary),
+                'returncode':proc.returncode,'group_absent':termination['group_absent'],
+                'artifacts':artifacts,**endpoint,'owned_pgids':termination['owned_pgids'],
+                'cleanup_probe_diagnostics':termination.get('probe_diagnostics',[]),
+                'completion_acknowledgment':item.get('acknowledgment'),
+                'cleanup_wall_s':time.monotonic()-item['cleanup_started'],'allocation_elapsed_s':elapsed,
+                'worker_failure':bool(result.get('failures')) or result.get('status') in
+                    ('worker_failure','storage_failed','model_replay_contradiction','bound_replay_contradiction')
+                    or bool((result.get('native_state') or {}).get('engineering_events'))}
+            write_once_equal(path,receipt)
+        ledger = Path(output)/'ledger.jsonl'
+        events = ledger_events(ledger)
+        existing = [value for value in events if value['event']=='finish' and value['task_id']==task['id']]
+        expected = {'event':'finish','task_id':task['id'],'receipt_sha256':sha(path),
+                    'charged_cpu_s':receipt['charged_cpu_s']}
+        if existing:
+            if len(existing)!=1 or any(existing[0].get(key)!=value for key,value in expected.items()):
+                raise ValueError('Existing terminal ledger record differs')
+        else:
+            append_ledger(ledger,expected)
+        # Failures after a receipt was fsynced cannot rewrite that receipt. Bind
+        # their retained diagnostics in the append-only audit instead.
+        for index,error in enumerate(secondary[len(receipt.get('secondary_errors',[])):],
+                                     start=len(receipt.get('secondary_errors',[]))):
+            if not any(value.get('event')=='terminal_audit_error' and value.get('task_id')==task['id']
+                       and value.get('error_index')==index for value in ledger_events(ledger)):
+                append_ledger(ledger,{'event':'terminal_audit_error','task_id':task['id'],
+                                     'error_index':index,'error':error,'receipt_sha256':sha(path)})
+        item['terminalized'] = True
+        return receipt
+    except Exception as exc:
+        secondary.append({'stage':'terminal_audit','error_type':type(exc).__name__,'error':str(exc)})
+        raise
 
 
 def run(args):
+    global _monitor_child_cpu_s
+    _monitor_child_cpu_s = 0.
     cpu0 = time.process_time()
     lock, locksha = read(args.lock), sha(args.lock)
     verify_lock(lock)
@@ -846,47 +1000,62 @@ def run(args):
                 continue
             if halt:
                 break
-            current = spent+time.process_time()-cpu0
+            current = spent+time.process_time()-cpu0+_monitor_child_cpu_s
             if current+OUTER_ALLOCATION>DISPATCH_STOP or current+OUTER_ALLOCATION+SHUTDOWN_RESERVE>CEILING:
                 halt = 'cumulative_dispatch_budget'
                 break
             # Monitoring must be healthy before creating an attempt/owned worker.
-            snapshot()
-            if memory_state()<10:
+            _,free = monitor_sample(time.monotonic()+.24)
+            if not finite(free) or free>100:
+                raise ValueError('Invalid predispatch memory monitor')
+            if free<10:
                 halt = 'low_memory_before_dispatch'
                 break
             item = launch(args,task,output,locksha)
             reason, last_pressure, free = None, 0., 100.
             while item['proc'].poll() is None and reason is None:
                 tick = time.monotonic()
+                if tick>=item['anchor']+SUPERVISOR_STOP_S:
+                    reason = 'outer_wall_deadline'
+                    preserve_stop(item,reason)
+                    write_once_equal(item['folder']/'STOP',{'reason':item['primary_reason'],
+                                     'monitor_failure':item.get('monitor_failure')})
+                    break
+                sample_end = monitor_deadline(tick,item['last_sample'],item['anchor']+SUPERVISOR_STOP_S)
                 try:
-                    table = snapshot()
+                    table,pressure = monitor_sample(sample_end,include_memory=tick-last_pressure>=1.)
                     receive_ack(item)
-                    if tick-last_pressure>=1.:
-                        free, last_pressure = memory_state(),tick
+                    if pressure is not None:
+                        free,last_pressure = pressure,tick
                     reason = resource_step(item,table,free,time.monotonic())
                     campaign.append(item['folder']/'resources.jsonl',{'monotonic':time.monotonic(),
-                                    'rss_bytes':item['peak_rss'],'tree_cpu_s':item['cpu'],'free_percent':free})
+                                    'rss_bytes':item['peak_rss'],'tree_cpu_s':item['cpu'],'free_percent':free,
+                                    'sample_deadline':sample_end})
                     marker = item['folder']/'completion.json'
                     if marker.exists() and item['completion_observed'] is None:
                         item['completion_observed'] = time.monotonic()
-                    if time.monotonic()-item['anchor']>=32.:
+                    if time.monotonic()-item['anchor']>=SUPERVISOR_STOP_S:
                         reason = reason or 'outer_wall_deadline'
-                    if spent+item['cpu']+time.process_time()-cpu0>=CEILING:
+                    if spent+item['cpu']+time.process_time()-cpu0+_monitor_child_cpu_s>=CEILING:
                         reason = 'cumulative_hard_cpu_limit'
                 except Exception as exc:
-                    reason = 'monitor_failure:'+type(exc).__name__
+                    diagnostic = monitor_diagnostic(exc,context='worker_sample',deadline=sample_end)
+                    reason = 'monitor_failure:'+diagnostic['error_type']
+                    preserve_stop(item,reason,diagnostic)
                 if reason:
-                    write_new(item['folder']/'STOP',{'reason':reason})
+                    preserve_stop(item,reason)
+                    write_once_equal(item['folder']/'STOP',{'reason':item['primary_reason'],
+                                     'monitor_failure':item.get('monitor_failure')})
                     break
-                time.sleep(max(0.,.20-(time.monotonic()-tick)))
+                time.sleep(max(0.,MONITOR_INTERVAL_S-(time.monotonic()-tick)))
             # A fast worker can finish between monitor ticks: use its actual file
             # mtime in this supervisor's monotonic observation interval only if
             # completion was observed while it was alive; otherwise conservative censor.
             if item['completion_observed'] is None and (item['folder']/'completion.json').exists():
                 item['completion_observed'] = time.monotonic()
             receipt = finish(item,locksha,output,reason)
-            args.active = None
+            if receipt['group_absent']:
+                args.active = None
             spent += receipt['charged_cpu_s']
             if (receipt['failure'] or receipt['returncode'] or receipt['worker_failure']
                     or receipt['endpoint_censored']):
@@ -899,13 +1068,29 @@ def run(args):
             signal.signal(sig,signal.SIG_IGN)
         success = False
         try:
-            if args.active is not None:
-                if args.active.get('retired'):
-                    raise RuntimeError('Owned groups retired but terminal audit failed; reconcile incomplete attempt')
-                finish(args.active,locksha,output,'supervisor_interrupted')
-                args.active = None
-            append_ledger(output/'ledger.jsonl',{'event':'supervisor_cpu','charged_cpu_s':time.process_time()-cpu0})
-            success = True
+            try:
+                if args.active is not None:
+                    exc = sys.exc_info()[1]
+                    fallback = ('supervisor_interrupted' if isinstance(exc,(KeyboardInterrupt,campaign.SupervisorStop))
+                                else 'terminal_audit_failure:'+type(exc).__name__ if exc is not None
+                                else 'supervisor_shutdown')
+                    receipt = finish(args.active,locksha,output,fallback)
+                    if receipt['group_absent']:
+                        args.active = None
+            finally:
+                if args.active is not None and not args.active.get('terminalized'):
+                    active = args.active
+                    append_ledger(output/'ledger.jsonl',{'event':'incomplete_terminal_audit',
+                        'task_id':active['task']['id'],'primary_reason':active.get('primary_reason'),
+                        'monitor_failure':active.get('monitor_failure'),
+                        'secondary_errors':active.get('secondary_errors',[]),
+                        'group_absent':active.get('retired',False),
+                        'provisional_worker_charge_s':max(time.monotonic()-active['anchor'],active['cpu'])})
+                supervisor_cpu = time.process_time()-cpu0
+                append_ledger(output/'ledger.jsonl',{'event':'supervisor_cpu',
+                    'process_cpu_s':supervisor_cpu,'monitor_child_cpu_s':_monitor_child_cpu_s,
+                    'charged_cpu_s':supervisor_cpu+_monitor_child_cpu_s})
+            success = args.active is None
         finally:
             if success:
                 owner.unlink()

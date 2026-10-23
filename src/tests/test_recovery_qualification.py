@@ -288,7 +288,7 @@ def test_run_monitor_exception_prevents_dispatch(tmp_path,monkeypatch):
     dump(lockpath,{'tasks':[{'id':'never'}],'carried_charge_s':120.,'freeze_charge_s':0.})
     monkeypatch.setattr(q,'verify_lock',lambda *a,**k:None)
     monkeypatch.setattr(q,'freeze_accounting',lambda lock,*a:lock)
-    monkeypatch.setattr(q,'snapshot',lambda:(_ for _ in ()).throw(RuntimeError('monitor unavailable')))
+    monkeypatch.setattr(q,'snapshot',lambda *args,**kwargs:(_ for _ in ()).throw(RuntimeError('monitor unavailable')))
     monkeypatch.setattr(q,'launch',lambda *a:pytest.fail('unhealthy monitor dispatched worker'))
     with pytest.raises(RuntimeError,match='monitor unavailable'):
         q.run(SimpleNamespace(lock=str(lockpath),output=str(tmp_path/'output'),freeze_receipt=str(lockpath)))
