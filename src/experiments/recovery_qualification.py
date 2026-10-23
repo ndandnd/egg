@@ -307,12 +307,80 @@ def native_append(folder, event):
     campaign.append(Path(folder)/'native.jsonl', event)
 
 
+class IntegerGateClosed(TimeoutError):
+    """Guard-owned refusal issued before any underlying model build."""
+    def __init__(self, token):
+        self.token = token
+        super().__init__('integer_gate_closed:'+token)
+
+
+def integer_gate_spec(task, policy, case_identity):
+    """Resolve only the frozen case/arm's original anchored integer cutoff."""
+    if (not isinstance(policy,dict) or not isinstance(task.get('id'),str) or not task['id'] or
+            policy.get('task_id') != task['id'] or
+            policy.get('task_sha256') != stable(task) or
+            not finite(policy.get('anchor'))):
+        raise ValueError('Integer gate task/anchor mismatch')
+    full, restricted = policy['full_identity'], policy['restricted_identity']
+    if not all(isinstance(value,str) and value for value in (full,restricted,case_identity)):
+        raise ValueError('Integer gate requires frozen case identities')
+    arm = task['arm']
+    if arm in ('recovery','start_fault') and case_identity == restricted and restricted != full:
+        phase, seconds = 'prefix', 12.
+    elif arm in ('recovery','start_fault') and case_identity == full:
+        phase, seconds = 'full', 24.
+    elif arm == 'static' and case_identity == restricted:
+        phase, seconds = 'static', 24.
+    elif arm == 'cold' and case_identity == full:
+        phase, seconds = 'cold', 24.
+    else:
+        raise ValueError('Integer gate case/phase differs from immutable lock')
+    return phase, policy['anchor']+seconds
+
+
+def expected_integer_gate(task, state, event):
+    """Consume one durable pre-build token; malformed/stale evidence fails closed."""
+    pending = state.pop('integer_gate_pending', None)
+    if not isinstance(pending, dict) or state.get('sink_failure'):
+        return False
+    try:
+        evidence, policy = pending['evidence'], state['integer_gate_policy']
+        if not isinstance(evidence,dict):
+            return False
+        token = evidence['token']
+        phase, cutoff = integer_gate_spec(task, policy, evidence['case_identity'])
+        observed, anchor = evidence['observed_monotonic'], evidence['anchor']
+        matched = (pending.get('durable') is True and
+                   isinstance(token,str) and re.fullmatch('[0-9a-f]{32}',token) is not None and
+                   event.get('event') == 'native_search_failed' and
+                   event.get('stage') == 'model_build' and
+                   event.get('error_type') == IntegerGateClosed.__name__ and
+                   event.get('error') == pending['error'] == str(IntegerGateClosed(token)) and
+                   evidence.get('event') == 'integer_gate_closed' and
+                   evidence.get('task_id') == task.get('id') == policy['task_id'] and
+                   evidence.get('task_sha256') == stable(task) == policy['task_sha256'] and
+                   evidence.get('phase') == phase and
+                   evidence.get('guard_point') == 'before_model_build' and
+                   evidence.get('native_dispatched') is False and
+                   finite(anchor) and anchor == policy['anchor'] and
+                   finite(evidence.get('integer_cutoff')) and evidence['integer_cutoff'] == cutoff and
+                   finite(observed) and observed >= cutoff and
+                   finite(evidence.get('elapsed_s')) and evidence['elapsed_s'] == observed-anchor)
+    except (KeyError, TypeError, ValueError):
+        return False
+    if matched:
+        state.setdefault('expected_budget_stops', []).append(deepcopy(evidence))
+    return bool(matched)
+
+
 def native_event_is_failure(task, state, event):
     expected_fault = (task['arm']=='start_fault' and state['fault_exercised']
                       and event.get('event')=='native_search_failed'
                       and event.get('stage')=='start_attach'
                       and 'prospectively injected' in event.get('error',''))
-    return ((event.get('event')=='native_search_failed' and not expected_fault)
+    expected_cutoff = (event.get('event')=='native_search_failed'
+                       and expected_integer_gate(task,state,event))
+    return ((event.get('event')=='native_search_failed' and not expected_fault and not expected_cutoff)
             or (event.get('event')=='candidate_rejected' and
                 event.get('stage') not in ('raw_admission','completion_admission')))
 
@@ -328,7 +396,12 @@ def instrument_native(lock, task, folder, *, anchor=None):
     from egglab import native_pathflow as pf
     original_build, original_attach, original_optimize = pf.build_feasible_model, pf._attach_pricing_start, pf._optimize_once
     state = {'submission':None,'submissions':[],'fault_exercised':False,'sink_failure':None,
-             'engineering_events':[]}
+             'engineering_events':[], 'expected_budget_stops':[]}
+    if anchor is not None:
+        frozen = next(row for row in lock['cases'] if row['base_id']==task['base_id'])
+        state['integer_gate_policy'] = {'task_id':task['id'],'task_sha256':stable(task),
+            'anchor':anchor,'full_identity':frozen['identity'],
+            'restricted_identity':frozen['restricted_identity']}
 
     def emit(value):
         try:
@@ -338,15 +411,26 @@ def instrument_native(lock, task, folder, *, anchor=None):
             raise
 
     def build(*args, **kwargs):
-        def integer_cutoff():
+        if anchor is not None:
             case = args[0] if args else kwargs['case']
-            full_identity = next(row['identity'] for row in lock['cases'] if row['base_id']==task['base_id'])
-            prefix = task['arm'] in ('recovery','start_fault') and case.identity()!=full_identity
-            return anchor+(12. if prefix else 24.)
-        if anchor is not None and time.monotonic()>=integer_cutoff():
-            raise TimeoutError('No native model build after integer gate')
+            identity = case.identity()
+            phase, cutoff = integer_gate_spec(task,state['integer_gate_policy'],identity)
+            observed = time.monotonic()
+            if not finite(observed):
+                raise ValueError('Nonfinite integer gate observation')
+            if observed >= cutoff:
+                exc = IntegerGateClosed(os.urandom(16).hex())
+                evidence = {'event':'integer_gate_closed','token':exc.token,
+                    'task_id':task['id'],'task_sha256':stable(task),'case_identity':identity,
+                    'phase':phase,'anchor':anchor,'integer_cutoff':cutoff,
+                    'observed_monotonic':observed,'elapsed_s':observed-anchor,
+                    'guard_point':'before_model_build','native_dispatched':False}
+                emit(evidence)
+                state['integer_gate_pending'] = {'evidence':deepcopy(evidence),
+                    'error':str(exc),'durable':True}
+                raise exc
         built = original_build(*args, **kwargs)
-        if anchor is not None and time.monotonic()>=integer_cutoff():
+        if anchor is not None and time.monotonic()>=cutoff:
             raise TimeoutError('Native model build exhausted integer allowance')
         runtime = built['backend_runtime']
         if (runtime.get('requested') != lock['backend'] or
