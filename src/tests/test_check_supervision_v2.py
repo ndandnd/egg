@@ -8,8 +8,9 @@ import subprocess
 import pytest
 
 
-@pytest.fixture
-def supervisor(monkeypatch):
+@pytest.fixture(params=['run_admission_capture_checks_v2.py','run_admission_capture_budget_check.py'],
+                ids=['original_v2','approved_budget'])
+def supervisor(monkeypatch,request):
     original=builtins.__import__
     def guarded(name,*args,**kwargs):
         if name.split('.')[0] in {'mip','gurobipy'}:
@@ -20,8 +21,8 @@ def supervisor(monkeypatch):
     monkeypatch.syspath_prepend(str(directory))
     # Loading the module must not execute its check command or main routine.
     monkeypatch.setattr(subprocess,'Popen',lambda *a,**kw:pytest.fail('Import dispatched a child'))
-    spec=importlib.util.spec_from_file_location('check_supervision_v2_under_test',
-        directory/'run_admission_capture_checks_v2.py')
+    spec=importlib.util.spec_from_file_location('check_supervision_'+Path(request.param).stem+'_under_test',
+        directory/request.param)
     module=importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
     return module

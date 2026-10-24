@@ -1,76 +1,134 @@
 # EGG current research handoff — 23 October 2026
 
 Worktree: `/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017`.
-Branch: `codex/ml-prediction-20261017`. User resumed research toward a long-term FT50 aspiration; keep advancing useful research. Manuscript drafting remains deferred. No scientific/publication readiness claim is justified.
+Branch: `codex/ml-prediction-20261017`. User resumed research toward a long-term
+FT50 aspiration. Manuscript drafting remains deferred; no publication/model
+readiness claim is justified.
 
-## Current executable state
+## Latest executable state: approved budget, failed external freeze
 
-**Latest package: offline comparison redesign (24 October, 03:02 UTC heartbeat).**
-Read `RECOVERY_LEARNED_VALUE_STUDY_ADDENDUM.md` first for the proposed next
-scientific comparison. It supersedes the unlaunched nine-arm factorial's
-question/counts/retention/estimand/resource plan; preserves the old proposal.
-Six arms on eight independent synthetic development bases, three solver seeds,
-plus a four-base paired scoring-price intervention: 192 proposed 60-second
-decisions, 28,200-second planning envelope under the existing proposed 8 CPUh
-ceiling. Two workers do not divide CPU spend; actual overhead may force an
-incomplete study. This is not an executable manifest and no cases/IDs were
-generated or selected.
+The human explicitly selected **“Raise total to 30 CPU minutes (Recommended)”**.
+Read `RECOVERY_BUDGET_APPROVAL.json` for exact question/reply and scope. The
+1800-second TOTAL ceiling, 1620-second dispatch stop and 180-second shutdown
+reserve are approved and applied. Keep one local single-thread numerical worker,
+5 GiB, all prior spend and unchanged original eight-task cases/clocks. Do not
+ask for this approval again. Old proposal/review documents retain their historic
+pending status; this direct approval is authoritative.
 
-Three GPT-6.1 Sol agents supplied baseline specification, feature/source audit,
-design/resource review and an adversarial integration check. Most consequential
-correction: rank-dependent top-three unions do not hold graph size fixed. The
-new design uses one price-blind coverage backbone B, then each ranker fills only
-from F minus B to exactly K flexible edges. The same boundary edges stay. Zero-exposure
-cases remain; equal counts do not equalize topology or search difficulty.
-Primary is graph recovery versus candidate charging-aware CA1, with direct
-CatBoost/constructive CF1 secondaries, random recovery and full cold8 controls.
-No static arms, hence no causal restoration-effect estimate.
+Exactly one newly source-bound check passed **124 tests** in
+`admission-capture-checks-budget/attempt01`. It retains the previous 118 cases,
+with six supervisor cases exercised against both old/new launchers. Two stale
+synthetic spends now use DISPATCH_STOP-20 without weakening assertions. Parent
+and independent review verified 160 source hashes, command/output/artifact
+hashes, no drift/errors, all three owned groups absent and leader reaped. The
+passing check carried610.9167105017234s, including the SINGLE20s administration
+allowance shared across this whole approved revision. Read
+`RECOVERY_APPROVED_BUDGET_CHECK_RESULTS.md`, its protocol and source review.
 
-Source audit: both frozen learned scorers receive a, not b; the old heuristic
-is price-blind. Price-input availability is not learned responsiveness. The
-paired tariff intervention holds native target tariff fixed while changing
-only the supplied ranking prices, recomputed inside both clocks. CA1 sees a,b,
-so that primary is a deployable-method contrast, not matched-information proof
-of learning. CA1/CF1 remain unimplemented/unvalidated candidate controls; their
-fixed-route physical replay and timing need qualification before outcomes.
-Detailed companions: `RECOVERY_CLASSICAL_BASELINE_SPEC.md`,
+The subsequent **v4 external freeze failed** with an actual OS PermissionError
+in legacy `checked.cleanup`, after its guarded worker/inner fixture freeze
+returned zero. No native solver task launched. Source/resource/monitor gates
+showed no drift or monitor failure; the legacy helper threw before returning an
+ownership receipt, leaving default empty arrays. Empty arrays are not absence
+proof. Exact failing signal/probe/escalation syscall is unproved. This was not
+an automatic approval-review rejection.
+
+Parent separately reconciled the sole recorded PGID37089: signal-zero absent,
+successful self-including process snapshot, no matching group/leader. See
+`recovery-phase1-v4/freeze-attempt01/cleanup-reconciliation.json`. No signals
+were sent. This proves later absence and keeps the original freeze FAILED;
+never use its generated lock to dispatch native tasks. Stop-on-first-failure was
+honored: no repeated freeze, test retry or native launch followed.
+
+Read `RECOVERY_PHASE1_V4_FREEZE_RESULTS.md` and failure review for compact evidence.
+**Authoritative conservative carry is718.8639492101057s** from
+`recovery-phase1-v4/accounting.json`:610.9167105017234 prior, FULL32.5 freeze
+allocation replacing its nominal1.159857...,0.322777 supervisor,75.015458666
+possible single-watchdog CPU allowance to later absence,0.10900304238229991
+read-only reconciliation. The watchdog interval intentionally overlaps the full
+allocation: conservative upper reservation, not measured utilization. No double
+worker/monitor CPU charge or extra administration/audit allowance. The original
+failed receipt's nominal612.3993446267449 remains unchanged. Dispatch headroom
+is901.1360507898943s. Preserve all v1/v2/v3/v4 evidence, fixtures and failed spend.
+
+No numerical worker or unfinished subagent remains. A source-only cleanup-supervisor
+revision and eleven fake regressions passed independent static review; they have
+NOT been executed. The old
+`run_recovery_freeze.py` MUST stay immutable because historical evidence binds
+its hash. The candidate `run_recovery_freeze_v2.py` uses approved runner budget
+constants and reviewed bounded cleanup with absolute anchor+32.5 deadline,
+retained known PGIDs/reap/group states and primary/secondary failure diagnostics.
+Its new `src/tests/test_recovery_freeze_v2.py` needs source-bound execution before
+any qualification claim. Final child-CPU audit failure now preserves the terminal
+receipt, marks observations unknown/accounting incomplete and blocks passing.
+Read `RECOVERY_FREEZE_V2_IMPLEMENTATION.md` and `RECOVERY_FREEZE_V2_REVIEW.md`.
+
+## Next executable package
+
+Record ONE fresh source-bound solver-free check covering the existing124 plus
+eleven new fake freeze regressions (**135 expected**). Source review found no
+remaining blocker, but is not an executed check. New namespace/argv/protocol must carry718.8639492101057s and
+all old hashes; do not automatically add the shared20s administration again.
+No execution of this new source occurred in the current failed package. Review
+the terminal receipt, source/outputs, ownership and accounting before a deliberate
+new external freeze. Use a fresh native-v5 destination; never resume/overwrite
+v4. This is an explicitly diagnosed, reviewed new revision, not an automatic retry.
+
+Keep original cases50997/40 and50999/80, registry
+`recovery-phase1-reservations-v2.json` (50998 rejected), eight tasks, seed17/day,
+nonlearned30%+top-three and original12/15/24/27/30/32.5 clocks. Preserve fault,
+partial-start processing, independent physical replay/exact bill, fallback and
+full-vs-restricted bound scope gates. The GRB library/hash is unchanged from v4
+protocol; freeze hashes it without loading/solving. Before each dispatch reserve
+complete next allocation, monitoring and shutdown against actual approved spend.
+Do not lengthen cases or clocks to obtain a pass. Stop on first failure and
+preserve incomplete suffixes. A pass would establish this interface only, not
+learned superiority or price-support certification.
+
+Native-v3 remains failed/incomplete5/8 with four timely40-trip tasks, an accepted
+partial start and injected-fault fallback; its first80-trip task was late and
+three80 tasks undispatched. The capture repair has passed fake tests but has not
+yet been measured in another native80 task. V4's failed freeze does not change
+that. Every later comparison must use the same complete evidence policy in all
+arms.
+
+## Scientific comparison design prepared while budget was pending
+
+Read `RECOVERY_LEARNED_VALUE_STUDY_ADDENDUM.md` before any comparison. It
+supersedes the unlaunched nine-arm factorial question/counts/retention/estimand/
+resource plan. Six arms, eight fresh synthetic development bases, three seeds,
+plus four-base paired scoring-price intervention:192 proposed60s decisions,
+28200s planning envelope under the prospective8CPUh ceiling, at most two workers
+5GiB each/10GiB aggregate. This is NOT an executable manifest; no case identities
+were generated/selected. Actual monitoring overhead may force an incomplete study.
+
+A common price-blind coverage backbone B plus each ranker's filling from F minus
+B to exact K controls edge count. Rank-dependent top-three unions did not. Equal
+counts do not equalize topology/search difficulty; retain zero-exposure cases.
+Primary is graph recovery versus unvalidated charging-aware CA1, with direct
+CatBoost/constructive CF1 secondaries, random recovery and full cold8 references.
+No static arms, hence no restoration-effect estimate. CA1/CF1 need implementation
+and credibility checks, not favorable-case selection on the new cohort.
+
+Both frozen learned scorers receive linear prices a, not b; the old heuristic
+is price-blind. The paired intervention holds native target tariff fixed while
+changing only scorer price inputs, recomputed within both clocks. This can
+separate ranking response from native charging. CA1 sees a,b, so its contrast is
+between deployable methods, not matched-information proof of learning. Detailed
+notes: `RECOVERY_CLASSICAL_BASELINE_SPEC.md`,
 `RECOVERY_FEATURE_AND_OUTCOME_AUDIT.md`, `RECOVERY_COMPARISON_DESIGN_REVIEW.md`,
-`RECOVERY_STUDY_ADVERSARIAL_CHECK.md`. Integration resolved unequal density;
-receipt-based failure precedence is now explicit in the addendum. No model/data
-access, inference, training, fixture generation, source changes, numerical tests
-or solver/cluster work occurred in this package. Qualification accounting is
-unchanged. No Google Doc append for this internal prospective design package.
-No numerical worker or unfinished subagent remains.
+`RECOVERY_STUDY_ADVERSARIAL_CHECK.md`. Do not repeat the completed design audit.
+After native qualification, implement selector/CA1 and then CF1 as justified
+bounded work. No comparative launch until applicable engineering gates pass.
 
-The revised check supervisor and admission/capture repair passed **118 solver-free tests** on their one newly recorded attempt. Read `RECOVERY_CHECK_SUPERVISION_RESULTS.md`, `RECOVERY_CHECK_SUPERVISION_REVIEW.md`, `RECOVERY_CHECK_SUPERVISION_PROTOCOL.md` and `admission-capture-checks-v2/attempt01`. Current source/output/artifact hashes matched; no primary/secondary errors or source drift; leader reaped and all three owned groups absent. **No EGG worker or unfinished subagent remains. No native retry occurred.**
+The priorv3 consolidated result is already posted/verified in the original
+Google Doc (`recovery-phase1-v3/google-doc-update.json`). No routine engineering
+or prospective-design append was made for this package. Preserve history/visuals.
 
-The runtime in q and previous four test modules stayed unchanged at Gitda5a5c92 during this package. The passing suite covers pre/post-lift admission gates and anchored timing, complete durable flat captures, exact checked references through actual worker/coordinator/materialization, fault retention, cutoff recognition and supervision. It establishes engineering behavior only;80-trip latency, ML quality, tariff responsiveness and superiority remain unproved. Complete-capture policy must be common across later comparison arms.
-
-New `run_admission_capture_checks_v2.py` reuses reviewed qmonitor deadlines/early scheduling and bounded cleanup with registered detached test ownership. KnownPGIDs/reap/primary+secondary evidence survive failures; missing output hashes/unknown childCPU block success. The original failed `admission-capture-checks/attempt01` and old wrapper remain immutable, including separate process-absence reconciliation. Never resume that failed namespace or call it passing.
-
-Native-v3 remains failed/incomplete5/8: four40-trip tasks timely, recovered start accepted, injected fault preserved exact fallback; first80-trip task late30.383862s and three80 tasks undispatched. The current passing tests do not convert that failed matrix to a pass. Preserve v1/v2/v3 locks, fixtures, receipts, raw local diagnostics and all failed charges. No source repair has yet been measured in another native80 task.
-
-## Authoritative accounting and pending resource decision
-
-**Carry587.8814716266195 charged seconds** from `admission-capture-checks-v2/accounting.json`: prior565.0277991267408 +20s prospective administration +2.423311499878764 check allocation +0.43036099999999994 supervisorCPU. Observed children2.053517s includesmonitor1.5361199999999995s once; elapsed was conservatively charged. Keep current900s hard ceiling/720s dispatch stop/180s shutdown reserve, one single-thread local worker/5GiB. No limit has changed.
-
-**The one-time user budget decision from the previous followup remains pending.** Read the concrete pending `RECOVERY_BUDGET_EXTENSION_PROPOSAL.md`, review and unapplied `recovery-budget-extension-proposal.patch`. Recommendation: raise total qualification ceiling from0.25 to0.5CPUh (15additionalCPUminutes), with1,620s dispatch stop and180s reserve; carry all existing spend, same8cases/tasks/clocks/resources, no retries/newdata/training. The conservative full envelope1,462.8814716266195s fits the proposed cap. The patch is applicability-checked but NOT APPLIED. Current132.118528s dispatch headroom cannot fit the260s task allocations alone. No repeat permission question was issued in the latest package; a heartbeat is not an approving answer.
-
-**Next action if the user approves:** apply the exact two-number budget policy change; record a new source-bound check/argv/namespace and carry current accounting, review it, then prospectively freeze a fresh native revision for the original eight tasks. Retain original12/15/24/27/30 clocks and32.5s outer allocation, seed17/day, nonlearned30%+top-three, cases50997/40 and50999/80. Stop on first failure, preserve incomplete evidence, no automatic retries. Approval of the explicit new cap persists; do not ask for it again.
-
-**While no approving reply exists:** do not apply the patch, raise limits, resubmit old tasks or treat elapsed time as approval. Do not repeatedly ask the same budget question. Continue useful offline classical-baseline/comparison protocol design, proof review or source analysis without native runs/training; a separately justified small diagnostic could use the remaining original allowance only under its own prospective scope and cannot be called complete qualification. Do not invent launches to fill a queue.
-
-**Next useful offline package if still pending:** implement the common-backbone
-exact-count selector and CA1 feature/score helper from the new specification,
-source-only, with small explicit fixture contracts and an independent code
-review. No asset loads, inference, tests or solver execution merely to consume
-remaining qualification headroom. Record any later execution scope/budget first.
-Do not add another protocol layer or repeat this same design audit without a
-concrete implementation need. CF1 is a separate, heavier helper after that.
-
-Identity registry stays `recovery-phase1-reservations-v2.json`;50998 remains rejected. Existing engineering cases are development fixtures, not generalization tests. Explicit `--design` is required; GRB library/hash unchanged, no lookup solve. No executable comparison manifest exists; proposed60s8CPUh/two workers5GiB each10GiB aggregate stays conditional on applicable engineering gates. Later120s budgets require a prospective design.
-
-The priorv3 consolidated result is already posted/verified in the original Google Doc, receipt `recovery-phase1-v3/google-doc-update.json`. No routine passing-test update was appended. Preserve old entries and visuals.
+The existing hourly automation was updated through the app and read back exactly:
+approved1800/1620/180 persists; do not re-ask or repeat old primitive gates without
+a concrete source-change need. Schedule/status/thread stayed unchanged; unrelated
+paused automations untouched. Receipt: `automation-budget-approval-update.json`.
 
 ## Scientific priorities
 

@@ -272,7 +272,8 @@ def test_analyze_serializes_owner_and_accounts_failure(tmp_path,monkeypatch):
 
 def test_run_budget_gate_creates_no_attempt(tmp_path,monkeypatch):
     lockpath = tmp_path/'lock.json'
-    lock = {'tasks':[{'id':'never'}],'carried_charge_s':700.,'freeze_charge_s':0.}
+    lock = {'tasks':[{'id':'never'}],
+            'carried_charge_s':q.DISPATCH_STOP-20.,'freeze_charge_s':0.}
     dump(lockpath,lock)
     output = tmp_path/'output'
     monkeypatch.setattr(q,'verify_lock',lambda *a,**k:None)

@@ -250,7 +250,7 @@ def test_monitor_child_cpu_query_deltas_reset_and_charge_once(tmp_path,monkeypat
     assert q._monitor_child_cpu_s==pytest.approx(.6)
     lockpath=tmp_path/'lock.json'
     lockpath.write_text(json.dumps({'tasks':[{'id':'never'}],
-        'carried_charge_s':700.,'freeze_charge_s':0.}))
+        'carried_charge_s':q.DISPATCH_STOP-20.,'freeze_charge_s':0.}))
     monkeypatch.setattr(q,'verify_lock',lambda *a,**kw:None)
     monkeypatch.setattr(q,'freeze_accounting',lambda lock,*a:lock)
     monkeypatch.setattr(q,'launch',lambda *a:pytest.fail('budget gate dispatched'))

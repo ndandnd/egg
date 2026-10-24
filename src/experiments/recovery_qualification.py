@@ -28,7 +28,7 @@ from experiments import codex_local_campaign as campaign
 ROOT = Path(__file__).resolve().parents[2]
 POLICY = 'recovery-phase1-runner-v1'
 CARRIED_MINIMUM = 88.20958837542922
-CEILING, DISPATCH_STOP, SHUTDOWN_RESERVE = 900., 720., 180.
+CEILING, DISPATCH_STOP, SHUTDOWN_RESERVE = 1800., 1620., 180.
 OUTER_ALLOCATION, RSS_LIMIT = 32.5, 5*1024**3
 MONITOR_INTERVAL_S = .05
 SUPERVISOR_STOP_S = 31.
