@@ -1,8 +1,12 @@
-# EGG current handoff —24 October2026: verifier scoped; ACK timing gap identified
+# EGG current handoff —24 October2026: 32-minute approval received; v4 being prepared
 
 Worktree /Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017; branch
 codex/ml-prediction-20261017. Use bounded GPT-6.1 Sol agents with short handoffs.
-Agents done; no active numerical/test worker, owner or pending process. One bounded
+The user explicitly approved32CPUminutes TOTAL for the single prepared40-trip
+mechanism check. See CF1_SMALL_APPROVED_PROTOCOL.md and
+cf1-small-approved-v4/approval.json. Three bounded source agents are preparing/
+reviewing v4 module/tests/wrappers; no check/freeze/native attempt yet. No active
+numerical/test worker or owner. Previous bounded
 source-only verifier design/reuse/adversarial-review package completed. Manuscript
 deferred; no solver, model inference/training, new timetable, real receipt conversion
 or cluster work. No new check worker, numerical allocation or accounting receipt;
@@ -81,7 +85,7 @@ score them as research inputs. Frozen coarse research_asset_access_allowed=false
 means no research-input use, not zero historical proof-byte hashing. Final account
 and result note this explicitly. No model or sealed data loaded.
 
-## Authoritative resources and already-pending question
+## Authoritative resources and explicit approval
 
 Carry1509.9511370494984s from comparison-binding-checks/accounting.json,792 proof
 paths. All prior failures/conservative charges inherited from1508.1111370494984.
@@ -89,13 +93,14 @@ New internal1.099066; whole1.32wall/1.18CPU =>1.34 including0.02 precision,
 positive reconciliation0.240934; plus0.5 spent conservative closure =>new1.84.
 ADMIN0. Do not use raw pre-tail1509.2102030494984 as current carry.
 
-ApprovedTOTAL1800/dispatch1620/shutdown180; one single-thread local worker/5GiB.
-Dispatch headroom110.04886295050164. No new approval arrived. TOTAL32 CPU minutes
-1920 (+120), shutdown180 =>dispatch1740 was ALREADY requested for ONE small
-mechanism package. Don't repeat question or interpret heartbeat as approval.
+New human response explicitly approvedTOTAL1920/dispatch1740/shutdown180 for ONE
+small mechanism package; one single-thread local worker/5GiB. Exact question/
+answer in cf1-small-approved-v4/approval.json. Dispatch headroom230.04886295050164.
+The existing heartbeat was updated to carry the approved bounded scope. Don't
+ask again or infer broader launch authority from the increase.
 No ledger reset, retry credit, or comparison8CPUh/shutdown borrowing.
 
-Numerical priority if approved: ONE inspected50997/40 CF1 seed17/day/no-fault
+Numerical priority now authorized subject to fresh gates: ONE inspected50997/40 CF1 seed17/day/no-fault
 mechanism attempt under original60/61/62.5 endpoints. Robust provisions source15,
 freeze10, worker62.5, supervision45, analysis20, closure10 =>162.5/hard165 from
 newest carry, endpoint1674.9511370494984 inside proposed1740, not current1620.
@@ -104,7 +109,7 @@ without changing requested total or one-attempt scope. cf1_small_mechanism_prefl
 remains DISABLED via NATIVE_DISPATCH_CLEARED=False. Its115/40/5 draft was rejected
 because5s final reserve lacks evidence for successful multi-capture analysis.
 
-If approval arrives, record it and design NEW source-bound enabling revision/
+Implementing NEW source-bound enabling revision/
 namespace with explicit approved cumulative constants, exact source/task/fixture/
 environment/library/fault/clock/receipt policy. Minimal affected source checks,
 then fresh metadata freeze; inspect complete receipts before at mostONE native
@@ -114,11 +119,11 @@ c6eca9f94f1190d9736f6ac3732b6dbd395578e723b7907ff2cee179cbd10429;
 old lock lacks selection_policy, new freeze must recompute/store exact selector.
 No retry/replacement, timer tuning or cold-only retrospective qualification pass.
 
-If no approval, implement only the narrow facts-only slice now scoped in
-COMPARISON_VERIFIER_DESIGN.md, under a prospective affected-source check budget.
-Current primitives/binder cannot supply independent real-evidence facts. Don't
-touch real outcomes, manufacture repeated gates, request the same budget again
-or inspect empty queues. No numerical approval arrived during this source package.
+After this one authorized package, return to the narrow facts-only slice scoped
+in COMPARISON_VERIFIER_DESIGN.md as appropriate. Current primitives/binder cannot
+supply independent general comparison evidence. Don't touch sealed/real outcomes,
+manufacture repeated gates, request the same approved budget again or inspect
+empty queues. Approval alone is not a source-check/freeze receipt.
 
 ## Prospective comparison and preserved science
 
