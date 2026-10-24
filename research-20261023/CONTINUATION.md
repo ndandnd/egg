@@ -1,11 +1,68 @@
-# EGG current handoff —24 October2026: small mechanism ready; budget decision
+# EGG current handoff —24 October2026: analysis contract; budget decision pending
 
 Worktree /Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017, branch
 codex/ml-prediction-20261017. Bounded GPT-6.1 Sol agents done. No active numerical
-worker, owner, metadata freeze or native attempt. One SOURCE package completed.
+worker, owner, metadata freeze or native attempt. One NONNUMERICAL analysis-contract
+package completed this wake; no source/runtime changes or numerical/check execution.
 Manuscript deferred; cluster/sealed data untouched.
 
-## Latest source/protocol package
+## Newest package — prospective comparison analysis, no execution
+
+Read RECOVERY_ANALYSIS_CONTRACT.md and only relevant companion endpoint/inference/
+mechanism notes. This integrated parent contract clarifies the unlaunched192-cell
+addendum; arm/cohort/resource/retention/clock design unchanged. It adopts
+descriptive finite-cohort reporting rather than optional confirmatory p-values.
+Eight bases are not24 independent seed pairs; four tariff-mechanism bases are not
+12 independent timetables per learner. Under a justified exact two-sided sign-
+flip null, minimum p is1/128 for8 nonzero groups and1/8 for4; pairing/order alone
+doesn't justify uniform independent FAIR signs. No claim that all possible
+statistical tests are impossible. Primary pair contributions weigh1/24, mechanism
+1/12, with conservative missing completion bounds and separate validity bounds;
+these are NOT population confidence intervals. Use exact bill band1/200, keep
+all assigned cases/timeouts/undispatched suffixes. Both-valid bill/equal-fleet
+subsets descriptive, not mediation or imputed failure bills.
+
+Critical source gap: comparison_native_worker is two-task QUALIFICATION machinery,
+requiring acquired fallback and native warm processing. UnexercisedNativePath
+becomes engineering_events/worker_failure and halts suffix. Correct for gates,
+wrong as a general comparison outcome policy for cold/healthy acquisition-timeout
+fallbacks. Preserve all failed gates. Future comparison needs SEPARATE endpoint
+schema/policy, with qualification, evidence integrity and deployment as separate
+axes, linked candidate/capture/admission/fallback/start/output evidence.
+
+Current missing/malformed ACK defaults unknown. A future separately qualified
+failure-only controller certificate may establish ordinary method deadline/no
+timely deployment without worker ACK, but only with positive stage health,
+causation/full-window/clock/ownership proof, ACK drain-to-EOF after all owned
+writers terminate, no concurrent integrity/interface/resource/accounting fault,
+and complete cleanup/charges. Silence/stop-reason strings are insufficient.
+Current receipts lack that certificate; don't infer it retroactively or score
+partial/malformed transport as algorithmic failure. It can never validate a plan,
+bill, full bound or warm qualification. This nuance preserves the independent
+integration critique rather than silently relabeling cases.
+
+Mechanism audit adopts exact aligned finite values(atol=rtol=0), dtype/full values,
+hashes/change counts/max deltas; exact B/K/order/masks. No epsilon selector ties.
+Distinguish signed-zero/serialization bytes from numeric changes and roundoff
+from economic response. Track feature->score->order->mask->start->deployment;
+same mask doesn't guarantee same wall-clock outcome or prove topology mediation.
+Keep zero exposure/identical-mask negative controls at original denominators.
+All48 mechanism decisions remain, target tariff fixed within input pair, scoring
+recomputed/paid. Four bases support an exploratory input-method contrast, not
+broad tariff transfer. Context pairing/rotation doesn't eliminate interference.
+
+No new qualification charge: ledger remains1505.8511370494984s, and source-only7-
+case receipts below remain newest executed work. No models/assets/new cases were
+read; no tests or solver/cluster runs. No Google Doc append for this protocol-only
+package. Budget question was ALREADY presented last wake; no answer has arrived.
+Do not repeat it. One possible useful next bounded package while pending is a pure
+versioned endpoint-adjudication/exact-score module with handwritten receipts,
+first freeze a small source-check protocol/budget if execution is justified. Do
+not change qualification worker or pretend synthetic receipt checks establish
+native behavior. If budget approval arrives, the recorded small mechanism
+source-bound enabling revision/one-attempt plan remains the numerical priority.
+
+## Previous executed source/protocol package
 
 Read CF1_SMALL_MECHANISM_RESULTS.md, CF1_SMALL_MECHANISM_BUDGET_REQUEST.md and
 CF1_SMALL_MECHANISM_REVIEW.md plus current source-check receipts. No broad old
@@ -47,8 +104,8 @@ ApprovedTOTAL remains1800/dispatch1620/shutdown180, one single-thread local
 worker/5GiB; remaining dispatch114.1488629505016. Concrete request: TOTAL32 CPU
 minutes1920 (+120), same shutdown180 =>dispatch1740, for ONE small mechanism
 package. This is a specific additional decision, not re-asking approved30 minutes
-or resetting ledger. No comparison8CPUh/shutdown borrowing. Parent will present
-question; absent actual answer it remains pending.
+or resetting ledger. No comparison8CPUh/shutdown borrowing. The question was
+already presented last wake; absent an actual answer it remains pending.
 
 Robust next provisions: affected source15, metadata freeze10, worker62.5,
 supervision45, analysis20, finalization10; sum162.5/hard165 from newest carry.
