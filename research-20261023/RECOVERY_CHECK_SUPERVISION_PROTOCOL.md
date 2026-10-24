@@ -1,0 +1,21 @@
+# Check-supervision revision 2: prospective validation
+
+24 October 2026 UTC. This bounded package repairs only the solver-free check wrapper and adds focused fake supervision tests. The admission/capture runtime and existing four test modules at Git `da5a5c92` stay unchanged. The failed original check and its separate cleanup reconciliation remain immutable. This is a deliberate newly recorded revision after diagnosis, never automatic resume/retry. No native solver, timetable generation, training, cluster work or comparative screen is authorized.
+
+Carry **565.0277991267408 charged seconds** from `admission-capture-checks/accounting.json`. Reserve **20 seconds** for source preparation, static review, hashing, documentation and closeout, giving **585.0277991267408 seconds before execution**. Authorize exactly one exclusive `admission-capture-checks-v2/attempt01`. Keep one single-thread worker, 5 GiB aggregate owned-process-tree RSS, 30 seconds work, an absolute 32.5-second cleanup allocation, and the 900-second hard ceiling/720-second dispatch stop/180-second shutdown reserve. Preserve every failure, interruption and charge. Conservative allowance/elapsed charges are not measured native utilization.
+
+Use new `run_admission_capture_checks_v2.py` with the reviewed shared monitor deadline and early 0.05-second scheduling from `experiments.recovery_qualification`. Completed samples must still satisfy the 0.25-second policy; an overlong process query remains a failure. Use the existing source-bound registered ownership inventory for intentional detached test groups, rather than applying the native worker's blanket rejection of new groups. Record all known owned PGIDs as soon as discovered.
+
+Cleanup must use an absolute remaining deadline and preserve known groups, leader/reap status, primary failure and every secondary cleanup/audit error even if a helper raises. Permission-denied absence probes are unknown and cannot pass cleanup. A default empty success-shaped termination record is insufficient. Signal/interrupt paths must retire ownership and retain receipts. Keep original failed receipts untouched; any later absence proof remains separate reconciliation.
+
+Charge max(elapsed allocation, sampled owned-tree CPU, total observed/reaped child CPU) plus the supervisor's own CPU. Total children includes test and monitor commands; do not add the native monitor-child counter again. Startup, monitoring, cleanup, source verification and artifact finalization remain accounted. The wrapper must record current source hashes, exact argv, prior evidence hashes, resources, output hashes and a terminal receipt. Unknown/incomplete cleanup, source drift or failed output audit blocks success and further dispatch.
+
+Exact child argv:
+
+```sh
+.venv-local/bin/python -m pytest -q src/tests/test_recovery_qualification.py src/tests/test_recovery_supervision_repair.py src/tests/test_recovery_integer_cutoff.py src/tests/test_recovery_admission_capture.py src/tests/test_check_supervision_v2.py
+```
+
+The existing 86 runner/supervision/cutoff cases and 26 pending admission/capture cases are retained; the new module adds only bounded fake supervisor regressions for shared sample deadlines, fatal timeout diagnostics, cleanup failure evidence, unknown versus absent probes and accounting. Native imports are prohibited during collection/tests. Reuse the existing bounded registered-process ownership test; generate no timetable or solver labels. Source-hash the new wrapper and focused test module along with the unchanged runtime and suite before Popen, then keep them stable until the terminal receipt is reviewed.
+
+Parent review of the stable source/test/protocol precedes the single attempt. Stop on failure, preserve it and do not retry automatically. A pass validates engineering behavior only; it neither repairs the old failed native outcomes nor establishes 80-trip latency, model quality or a common-budget performance gain. Any later native qualification needs a separately frozen, feasible prospective scope and explicit cross-revision evidence limits, or resolution of a different resource budget. An unconditional eight-task repeat cannot fit the remaining original dispatch allowance.
