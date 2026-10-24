@@ -217,20 +217,32 @@ def instrument_native60(lock, task, folder, *, anchor, full_case, source_case, c
             raise ValueError('Native build phase/case/gate mismatch')
         cutoff = state['phase_deadline']
         observed = clock()
-        if observed>=cutoff:
-            if phase=='cf1':
-                raise TimeoutError('CF1 build after fixed charging window')
-            exc = IntegerGateClosed60(os.urandom(16).hex())
-            evidence = {'event':'integer_gate_closed60','token':exc.token,'task_id':task['id'],
-                'task_sha256':q.stable(task),'lock_sha256':attempt['lock_sha256'],
-                'attempt_sha256':attemptsha,
-                'case_identity':identity,'phase':phase,'anchor':anchor,'integer_cutoff':cutoff,
-                'integer_upper_cutoff':schedule.prefix_integer_end if phase=='prefix' else schedule.full_integer_end,
-                'observed_monotonic':observed,'guard_point':'before_model_build','native_dispatched':False}
-            emit(evidence)
-            state['pending_gate'] = {'evidence':evidence,'error':str(exc)}
-            raise exc
+        def guard(observed):
+            if observed>=cutoff:
+                if phase=='cf1':
+                    raise TimeoutError('CF1 build after fixed charging window')
+                exc = IntegerGateClosed60(os.urandom(16).hex())
+                evidence = {'event':'integer_gate_closed60','token':exc.token,'task_id':task['id'],
+                    'task_sha256':q.stable(task),'lock_sha256':attempt['lock_sha256'],
+                    'attempt_sha256':attemptsha,
+                    'case_identity':identity,'phase':phase,'anchor':anchor,'integer_cutoff':cutoff,
+                    'integer_upper_cutoff':schedule.prefix_integer_end if phase=='prefix' else schedule.full_integer_end,
+                    'observed_monotonic':observed,'guard_point':'before_model_build','native_dispatched':False}
+                emit(evidence)
+                state['pending_gate'] = {'evidence':evidence,'error':str(exc)}
+                raise exc
+        guard(observed)
+        emit({'event':'native_model60_build','stage':'enter','phase':phase,
+              'case_identity':identity,'at':observed,'deadline':cutoff})
+        observed = clock()
+        guard(observed)
         built = build0(case,*args,**kwargs)
+        build_finished = clock()
+        if not q.finite(build_finished,observed):
+            raise ValueError('Invalid native model build clock')
+        emit({'event':'native_model60_build','stage':'return','phase':phase,
+              'case_identity':identity,'at':build_finished,'started_monotonic':observed,
+              'elapsed_s':build_finished-observed,'deadline':cutoff})
         if clock()>=cutoff:
             raise TimeoutError('Native model build exhausted planned60s stage search')
         runtime = built['backend_runtime']
@@ -241,7 +253,9 @@ def instrument_native60(lock, task, folder, *, anchor, full_case, source_case, c
                 or built['physical_identity']!=identity or built['compiled']['identity']!=identity):
             raise ValueError('Native model/backend/library differs from locked identity')
         built['model'].seed,built['model'].threads,built['model'].verbose = 17,1,1
-        emit({'event':'native_model60','phase':phase,'case_identity':identity,'runtime':runtime,'seed':17,'threads':1})
+        emit({'event':'native_model60','phase':phase,'case_identity':identity,'runtime':runtime,'seed':17,'threads':1,
+              'at':build_finished,'build_started_monotonic':observed,'build_finished_monotonic':build_finished,
+              'build_elapsed_s':build_finished-observed,'deadline':cutoff})
         return built
 
     def attach(case,built,selected):

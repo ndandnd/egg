@@ -12,6 +12,7 @@ from egglab import native_recharge as nr
 from egglab import recovery_coordinator as rc
 
 POLICY = 'cf1-cumulative-construction-charging-provider-v1'
+_UNOBSERVED = object()
 
 
 def _finite(value):
@@ -47,9 +48,9 @@ def propose(case, a, b, *, schedule, allowance, budget, clock, allowed, events,
     last = None
     stage = 'validation'
 
-    def check(cutoff, *, completed=False):
+    def check(cutoff, *, completed=False, observed=_UNOBSERVED):
         nonlocal last
-        at = clock()
+        at = clock() if observed is _UNOBSERVED else observed
         if not _finite(at) or last is not None and at < last:
             raise ValueError('Invalid/nonmonotonic proposal clock')
         last = at
@@ -93,18 +94,27 @@ def propose(case, a, b, *, schedule, allowance, budget, clock, allowed, events,
                               allowance=allowance,clock=clock,allowed=allowed,events=events):
             for attempt in range(3):
                 stage = 'charging'+str(attempt)
-                check(completion_deadline)
+                entered = check(completion_deadline)
                 emit({'event':'cf1_charging_enter','attempt':attempt,
                       'deadline':completion_deadline},completion_deadline)
                 completed = completer(case,ledger['selected_ids'],a,b,budget,
                     deadline=completion_deadline,clock=clock,
                     record=lambda row:emit(row,completion_deadline))
-                # Explicit provider policy: even an earlier helper witness cannot
-                # rescue a helper that returns after this method's stage endpoint.
-                check(completion_deadline,completed=True)
-                result['stages'].append({'stage':stage,'result':deepcopy(completed)})
-                check(completion_deadline,completed=True)
+                # Retain compact evidence even when the following clock check
+                # rejects the whole helper return. Never copy raw captures/plans.
+                audit = {'stage':stage,'result':deepcopy({key:value for key,value in completed.items()
+                    if key not in ('plan','replay','events','failures')}),
+                    'timing':{'entered_monotonic':entered,'deadline':completion_deadline}}
+                result['stages'].append(audit)
                 result['failures'].extend(deepcopy(completed.get('failures',[])))
+                try:
+                    returned = clock()
+                    audit['timing']['returned_monotonic'] = rc._diagnostic(returned)
+                except Exception as exc:
+                    audit['timing']['clock_error'] = type(exc).__name__+': '+str(exc)
+                    raise
+                # An earlier in-memory witness still cannot rescue a late return.
+                check(completion_deadline,completed=True,observed=returned)
                 if completed.get('plan') is not None:
                     candidate = deepcopy(completed['plan'])
                     candidate_replay = deepcopy(completed.get('replay'))
