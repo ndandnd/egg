@@ -1,4 +1,4 @@
-# EGG current handoff —24 October2026: ledger initializer checked; v4 remains stopped
+# EGG current handoff —24 October2026: entry preparation checked; v4 remains stopped
 
 Worktree /Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017; branch
 codex/ml-prediction-20261017. Use bounded GPT-6.1 Sol agents with short handoffs.
@@ -7,23 +7,25 @@ work, model inference/training, new timetable or sealed data access. Manuscript 
 
 ## Newest completed package
 
-Read research-20261024/LAUNCH_PREFIX_RESULTS.md and
-research-20261024/launch-prefix-checks/{accounting.json,attempt01/result.json}.
-launch_prefix_initializer.py uses the already checked canonical accounting record,
-publishes a new campaign/two-event ledger exclusively, and checks exact zero-task
-readback through the actual recovery resume consumer. Inexact final folds reject
-before mkdir; partial publication is preserved and blocks reuse. It verifies
-metadata consistency, not provenance; the caller supplies q.run's canonical resolved
-freeze path. No CLI, timing proof or launch authority. No historical source or
-rejected ledger changed; native controller integration remains outstanding.
+Read research-20261024/LAUNCH_ENTRY_RESULTS.md and
+research-20261024/launch-entry-checks/{accounting.json,attempt01/result.json}.
+launch_entry_preparation.py binds explicit independent expected lock/receipt/account
+hashes, policy and total to the completed postfreeze account, byte closure and
+installed policy/funding checks. It calls the comparison validators, derives the
+canonical freeze component, rechecks roots and uses the checked exclusive ledger
+initializer. No CLI, context installation, timing proof, reservation or launch
+authority. Current source-check accounting is not a valid completed freeze input.
+No historical source or rejected ledger changed.
 
-One new affected check:32tests passed0.09s, sole test_launch_prefix_initializer.py.
-No old helper test/matrix or numerical import. PGID53026 absent/reaped, no source
-changes, errors or unresolved charges. Handcrafted temporary metadata only; full
-inherited proof bytes hashed without research-input load. No model/fixture/capture/
-metadata/native/cluster work or retry. Three bounded Sol6.1 agents implemented/
-reviewed. Nine immutable source snapshots added, seven identical prior snapshots
-reused; no new mutable live source proof roots. Current carry1524.0216024654942s.
+One new affected check:11tests/23subtests passed0.12s, sole
+test_launch_entry_preparation.py. The actual freeze validator, builder, initializer
+and resume consumer handle temporary metadata, including decimal cancellation.
+The FULL LOCK VERIFIER IS MOCKED to avoid fixture/environment assets; real lock
+qualification/controller execution remain unexercised. PGID59374 absent/reaped,
+no changes/errors/unresolved charges. No old matrix, model/fixture/capture, real
+freeze, native, cluster or retry. Three bounded Sol6.1 agents implemented/reviewed;
+all done. Ten immutable snapshots added, eight identical prior snapshots reused;
+no new mutable source proof roots. Current carry1527.8351450899538s.
 
 ## New scientific steering from the user's referee perspective
 
@@ -89,14 +91,14 @@ identity, edit the rejected ledger, relabel failure or rerun this namespace.
 
 ## Authoritative resources
 
-Current carry1524.0216024654942s from
-research-20261024/launch-prefix-checks/accounting.json,880 proof paths.
-Prior1521.155429840183 retained, plus source-check internal2.116172625311196 and
-conservative closure0.5 plus source preservation0.25. Whole1.46wall/1.26CPU +0.02=1.48
+Current carry1527.8351450899538s from
+research-20261024/launch-entry-checks/accounting.json,902 proof paths.
+Prior1524.0216024654942 retained, plus source-check internal3.063542624459684 and
+conservative closure0.5 plus source preservation0.25. Whole2.42wall/1.91CPU +0.02=2.44
 did not exceed internal charge; no subtraction or positive external top-up.
-Source package20/end1541.155429840183 respected. All earlier failures and
-conservative charges retained; ADMIN0. Prior pure-helper package and its15 source
-snapshots remain preserved in launch-accounting-checks, not repeated.
+Source package20/end1544.0216024654942 respected. All earlier failures and
+conservative charges retained; ADMIN0. Prior helper and initializer packages,
+snapshots and receipts remain preserved, not repeated.
 The preserved v4 account1518.4011370494984 comprises inherited1509.9511370494984
 plus source2.65, freeze3.8, failed entry/preparation/closure2.0.
 Source/account paths retain full proof closure and positive external reconciliation.
@@ -115,14 +117,15 @@ this failure/spend. Never automatically repeat interrupted/unreceipted attempts.
 
 ## Next bounded useful work
 
-Use the checked initializer through a SMALL source-bound controller adapter,
-with independently verified lock/receipt/account references and canonical resolved
-paths. The initializer itself is now exercised against the real resume consumer;
-do not repeat its or the helper's completed checks without a diagnosed source
-change. No future native attempt is cleared. Record a separate prospective
-decision/fresh namespace before any numerical work; carry the current accounting
-and failed v4 namespace unchanged. Do not hand-preseed or repair another ledger.
-No broad qualification reruns.
+The small entry preparation adapter is now checked on synthetic metadata. Next
+consider a separately justified fresh source-bound mechanism design using it with
+actual verified lock/receipt/account references, canonical paths and a recorded
+prospective resource decision. Do not repeat completed arithmetic/initializer/
+entry synthetic gates without a diagnosed source change just because native
+evidence is absent. No future native attempt is cleared by this result. Carry
+the current accounting and failed v4 namespace unchanged; never hand-preseed or
+repair its ledger. Any later freeze/controller must use a fresh namespace and
+applicable authority, not automatically retry the failed package. No broad reruns.
 
 Current approved module's controller ACK observer is source-checked but NOT runtime
 qualified. It persists a complete ACK actually read by controller; observed<=anchor+60
