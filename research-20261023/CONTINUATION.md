@@ -1,11 +1,35 @@
-# EGG current handoff —24 October2026: entry preparation checked; v4 remains stopped
+# EGG current handoff —24 October2026: fresh mechanism design; execution remains gated
 
 Worktree /Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017; branch
 codex/ml-prediction-20261017. Use bounded GPT-6.1 Sol agents with short handoffs.
 All agents done. No active check, metadata, numerical worker or owner. No cluster
 work, model inference/training, new timetable or sealed data access. Manuscript deferred.
 
-## Newest completed package
+## Newest work package: documentation only
+
+Read research-20261024/CF1_FRESH_MECHANISM_PROTOCOL.md and only relevant companion
+CF1_FRESH_DECISION_REVIEW.md, CF1_FRESH_IMPLEMENTATION_DESIGN.md and
+CF1_FRESH_RECEIPT_NOTE.md. Three bounded Sol6.1 agents reviewed resource/authority,
+scoped implementation reuse and current receipts; parent integrated and reviewed
+the design. All done, no active worker/owner. No implementation, tests, metadata
+freeze or numerical launch this wake. Current accounting carry remains unchanged.
+
+Prospective new175s package starts1527.8351450899538 and ends1702.8351450899538,
+inside global1920/dispatch1740/shutdown180, one thread/5GiB. Same still-unexercised
+50997/40 CF1 seed17/day/no-fault mechanism only. Parent's new package policy is
+within the human's32-minute total under later fresh-design steering; it is not a
+new human175s approval, comparison budget or permission from passed source tests.
+V4 and its rejected ledger remain stopped/immutable; no automatic retry or second
+worker. Fresh policy/task/source identities and namespace are proposed, not frozen.
+
+Critical unresolved implementation: adapter.run starts its timer after preparation.
+Whole entry/import/preparation must be durably charged and independently covered
+before dispatch, with a live ownership/funding gate; post-run external correction
+alone is insufficient. The proposed owning-supervisor7.5s precharge is not yet
+implemented or qualified; a reviewed measured alternative is possible. No launch
+manifest, actual lock qualification, native controller or mechanism clearance.
+
+## Most recent executed package
 
 Read research-20261024/LAUNCH_ENTRY_RESULTS.md and
 research-20261024/launch-entry-checks/{accounting.json,attempt01/result.json}.
@@ -108,24 +132,27 @@ receipt should replace the final reconciled carry. Rejected launch ledger remain
 unchanged; account root independently carries completed freeze plus failed-entry
 whole-process observations, not a claim of successful resume validation.
 
-ApprovedTOTAL1920/dispatch1740/shutdown180 for this ONE package; one thread/5GiB.
-Package165 from1509.9511370494984 =>1674.9511370494984. All limits respected, no
+ApprovedTOTAL1920/dispatch1740/shutdown180; one thread/5GiB. Historical failed v4
+package165 from1509.9511370494984 =>1674.9511370494984. All limits respected, no
 shutdown/comparison-budget borrowing, new administration credit or reset.
 No further native dispatch under this failed one-attempt package. A future numerical
 attempt needs a separately recorded prospective decision/fresh namespace carrying
 this failure/spend. Never automatically repeat interrupted/unreceipted attempts.
+The fresh175s design above is not an executed allocation or revived v4 package.
 
 ## Next bounded useful work
 
-The small entry preparation adapter is now checked on synthetic metadata. Next
-consider a separately justified fresh source-bound mechanism design using it with
-actual verified lock/receipt/account references, canonical paths and a recorded
-prospective resource decision. Do not repeat completed arithmetic/initializer/
-entry synthetic gates without a diagnosed source change just because native
-evidence is absent. No future native attempt is cleared by this result. Carry
-the current accounting and failed v4 namespace unchanged; never hand-preseed or
-repair its ledger. Any later freeze/controller must use a fresh namespace and
-applicable authority, not automatically retry the failed package. No broad reruns.
+Implement the narrow fresh wrapper and whole-entry accounting scheme from the
+reviewed design; do not spend another wake reproducing that design or old gates.
+New src/experiments/cf1_entry_repaired.py and sole new test would reuse v4 ACK/
+analysis unchanged through restored serialized bindings, with fresh worker argv.
+Review the live predispatch accounting/ownership gate before freezing one affected
+source-check command. Exact future paths are in CF1_FRESH_MECHANISM_PROTOCOL.md.
+The parent must freeze actual commands/source/task identities before each phase;
+this study design is not that manifest. No metadata/native execution is cleared
+yet. Do not repeat completed helper/initializer/entry checks without a diagnosed
+source change. Carry the current accounting and stopped v4 unchanged; never
+hand-preseed or repair its ledger. No broad qualification reruns or automatic retry.
 
 Current approved module's controller ACK observer is source-checked but NOT runtime
 qualified. It persists a complete ACK actually read by controller; observed<=anchor+60
