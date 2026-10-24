@@ -5,6 +5,43 @@ Branch: `codex/ml-prediction-20261017`. User resumed research toward a long-term
 
 ## Current executable state
 
+**Latest package: offline comparison redesign (24 October, 03:02 UTC heartbeat).**
+Read `RECOVERY_LEARNED_VALUE_STUDY_ADDENDUM.md` first for the proposed next
+scientific comparison. It supersedes the unlaunched nine-arm factorial's
+question/counts/retention/estimand/resource plan; preserves the old proposal.
+Six arms on eight independent synthetic development bases, three solver seeds,
+plus a four-base paired scoring-price intervention: 192 proposed 60-second
+decisions, 28,200-second planning envelope under the existing proposed 8 CPUh
+ceiling. Two workers do not divide CPU spend; actual overhead may force an
+incomplete study. This is not an executable manifest and no cases/IDs were
+generated or selected.
+
+Three GPT-6.1 Sol agents supplied baseline specification, feature/source audit,
+design/resource review and an adversarial integration check. Most consequential
+correction: rank-dependent top-three unions do not hold graph size fixed. The
+new design uses one price-blind coverage backbone B, then each ranker fills only
+from F minus B to exactly K flexible edges. The same boundary edges stay. Zero-exposure
+cases remain; equal counts do not equalize topology or search difficulty.
+Primary is graph recovery versus candidate charging-aware CA1, with direct
+CatBoost/constructive CF1 secondaries, random recovery and full cold8 controls.
+No static arms, hence no causal restoration-effect estimate.
+
+Source audit: both frozen learned scorers receive a, not b; the old heuristic
+is price-blind. Price-input availability is not learned responsiveness. The
+paired tariff intervention holds native target tariff fixed while changing
+only the supplied ranking prices, recomputed inside both clocks. CA1 sees a,b,
+so that primary is a deployable-method contrast, not matched-information proof
+of learning. CA1/CF1 remain unimplemented/unvalidated candidate controls; their
+fixed-route physical replay and timing need qualification before outcomes.
+Detailed companions: `RECOVERY_CLASSICAL_BASELINE_SPEC.md`,
+`RECOVERY_FEATURE_AND_OUTCOME_AUDIT.md`, `RECOVERY_COMPARISON_DESIGN_REVIEW.md`,
+`RECOVERY_STUDY_ADVERSARIAL_CHECK.md`. Integration resolved unequal density;
+receipt-based failure precedence is now explicit in the addendum. No model/data
+access, inference, training, fixture generation, source changes, numerical tests
+or solver/cluster work occurred in this package. Qualification accounting is
+unchanged. No Google Doc append for this internal prospective design package.
+No numerical worker or unfinished subagent remains.
+
 The revised check supervisor and admission/capture repair passed **118 solver-free tests** on their one newly recorded attempt. Read `RECOVERY_CHECK_SUPERVISION_RESULTS.md`, `RECOVERY_CHECK_SUPERVISION_REVIEW.md`, `RECOVERY_CHECK_SUPERVISION_PROTOCOL.md` and `admission-capture-checks-v2/attempt01`. Current source/output/artifact hashes matched; no primary/secondary errors or source drift; leader reaped and all three owned groups absent. **No EGG worker or unfinished subagent remains. No native retry occurred.**
 
 The runtime in q and previous four test modules stayed unchanged at Gitda5a5c92 during this package. The passing suite covers pre/post-lift admission gates and anchored timing, complete durable flat captures, exact checked references through actual worker/coordinator/materialization, fault retention, cutoff recognition and supervision. It establishes engineering behavior only;80-trip latency, ML quality, tariff responsiveness and superiority remain unproved. Complete-capture policy must be common across later comparison arms.
@@ -17,11 +54,19 @@ Native-v3 remains failed/incomplete5/8: four40-trip tasks timely, recovered star
 
 **Carry587.8814716266195 charged seconds** from `admission-capture-checks-v2/accounting.json`: prior565.0277991267408 +20s prospective administration +2.423311499878764 check allocation +0.43036099999999994 supervisorCPU. Observed children2.053517s includesmonitor1.5361199999999995s once; elapsed was conservatively charged. Keep current900s hard ceiling/720s dispatch stop/180s shutdown reserve, one single-thread local worker/5GiB. No limit has changed.
 
-**A one-time user budget decision accompanies this followup.** Read the concrete pending `RECOVERY_BUDGET_EXTENSION_PROPOSAL.md`, review and unapplied `recovery-budget-extension-proposal.patch`. Recommendation: raise total qualification ceiling from0.25 to0.5CPUh (15additionalCPUminutes), with1,620s dispatch stop and180s reserve; carry all existing spend, same8cases/tasks/clocks/resources, no retries/newdata/training. The conservative full envelope1,462.8814716266195s fits the proposed cap. The patch is applicability-checked but NOT APPLIED. Current132.118528s dispatch headroom cannot fit the260s task allocations alone.
+**The one-time user budget decision from the previous followup remains pending.** Read the concrete pending `RECOVERY_BUDGET_EXTENSION_PROPOSAL.md`, review and unapplied `recovery-budget-extension-proposal.patch`. Recommendation: raise total qualification ceiling from0.25 to0.5CPUh (15additionalCPUminutes), with1,620s dispatch stop and180s reserve; carry all existing spend, same8cases/tasks/clocks/resources, no retries/newdata/training. The conservative full envelope1,462.8814716266195s fits the proposed cap. The patch is applicability-checked but NOT APPLIED. Current132.118528s dispatch headroom cannot fit the260s task allocations alone. No repeat permission question was issued in the latest package; a heartbeat is not an approving answer.
 
 **Next action if the user approves:** apply the exact two-number budget policy change; record a new source-bound check/argv/namespace and carry current accounting, review it, then prospectively freeze a fresh native revision for the original eight tasks. Retain original12/15/24/27/30 clocks and32.5s outer allocation, seed17/day, nonlearned30%+top-three, cases50997/40 and50999/80. Stop on first failure, preserve incomplete evidence, no automatic retries. Approval of the explicit new cap persists; do not ask for it again.
 
 **While no approving reply exists:** do not apply the patch, raise limits, resubmit old tasks or treat elapsed time as approval. Do not repeatedly ask the same budget question. Continue useful offline classical-baseline/comparison protocol design, proof review or source analysis without native runs/training; a separately justified small diagnostic could use the remaining original allowance only under its own prospective scope and cannot be called complete qualification. Do not invent launches to fill a queue.
+
+**Next useful offline package if still pending:** implement the common-backbone
+exact-count selector and CA1 feature/score helper from the new specification,
+source-only, with small explicit fixture contracts and an independent code
+review. No asset loads, inference, tests or solver execution merely to consume
+remaining qualification headroom. Record any later execution scope/budget first.
+Do not add another protocol layer or repeat this same design audit without a
+concrete implementation need. CF1 is a separate, heavier helper after that.
 
 Identity registry stays `recovery-phase1-reservations-v2.json`;50998 remains rejected. Existing engineering cases are development fixtures, not generalization tests. Explicit `--design` is required; GRB library/hash unchanged, no lookup solve. No executable comparison manifest exists; proposed60s8CPUh/two workers5GiB each10GiB aggregate stays conditional on applicable engineering gates. Later120s budgets require a prospective design.
 
