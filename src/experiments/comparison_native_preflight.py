@@ -19,6 +19,8 @@ PACKAGE_START = 1296.29257734018
 PACKAGE_LIMIT = 230.
 PACKAGE_CAP = PACKAGE_START+PACKAGE_LIMIT
 ENDPOINT_S, STOP_S, OUTER_S = 60., 61., 62.5
+ANALYSIS_FINAL_RESERVE_S, SUPERVISION_RESERVE_S = 5., 40.
+WORKER_ARGV_PREFIX = ('-m','experiments.comparison_native_worker')
 _LOCK = threading.Lock()
 _BASE_LAUNCH = q.launch
 
@@ -128,15 +130,15 @@ def freeze(args):
     check_charge = q.read(Path(args.checks)/'result.json')['cumulative_qualification_charge_s']
     if prior['charged_cpu_s']<check_charge or prior['charged_cpu_s']<PACKAGE_START:
         raise ValueError('Prior account omits adapter check charge')
-    if prior['charged_cpu_s']+10.+5.>PACKAGE_CAP:
+    if prior['charged_cpu_s']+10.+ANALYSIS_FINAL_RESERVE_S>PACKAGE_CAP:
         raise ValueError('No package room for freeze and final analysis')
     if (manifest.get('policy')!=POLICY or manifest.get('backend')!='GRB'
             or manifest.get('tariff')!='day' or manifest.get('models')!={}):
         raise ValueError('Invalid prospective comparison design')
     budget_spec = manifest.get('package_budget',{})
     expected_budget = {'initial_charged_cpu_s':PACKAGE_START,'additional_hard_cap_s':PACKAGE_LIMIT,
-        'absolute_package_ceiling_s':PACKAGE_CAP,'analysis_reserve_s':5.,
-        'next_worker_allocation_s':OUTER_S,'next_worker_supervision_reservation_s':40.,
+        'absolute_package_ceiling_s':PACKAGE_CAP,'analysis_reserve_s':ANALYSIS_FINAL_RESERVE_S,
+        'next_worker_allocation_s':OUTER_S,'next_worker_supervision_reservation_s':SUPERVISION_RESERVE_S,
         'physical_and_ack_endpoint_s':ENDPOINT_S,'supervisor_stop_s':STOP_S,'outer_allocation_s':OUTER_S,
         'global_hard_ceiling_s':q.CEILING,'global_dispatch_stop_s':q.DISPATCH_STOP,
         'global_shutdown_reserve_s':q.SHUTDOWN_RESERVE,'threads':1,'numerical_workers':1,
@@ -217,7 +219,7 @@ def freeze_accounting(lock, lockpath, receiptpath):
             or not q.finite(receipt.get('sampled_peak_rss_bytes')) or receipt['sampled_peak_rss_bytes']>q.RSS_LIMIT
             or not q.finite(cumulative,lock['carried_charge_s']+charged)
             or cumulative!=lock['carried_charge_s']+charged
-            or cumulative+5.>PACKAGE_CAP):
+            or cumulative+ANALYSIS_FINAL_RESERVE_S>PACKAGE_CAP):
         raise ValueError('Missing/incomplete external comparison freeze receipt')
     q.verify_hashes(receipt['source_hashes'])
     folder = Path(receiptpath).resolve().parent
@@ -274,7 +276,7 @@ def launch(args, task, output, locksha):
     def popen(command,*args,**kwargs):
         if command[1:4]!=['-m','experiments.recovery_qualification','worker']:
             raise ValueError('Unexpected legacy worker command')
-        command = [command[0],'-m','experiments.comparison_native_worker',*command[4:]]
+        command = [command[0],*WORKER_ARGV_PREFIX,*command[4:]]
         return original_popen(command,*args,**kwargs)
     q.write_new,q.subprocess.Popen = write,popen
     try:
@@ -322,11 +324,11 @@ def bound60(state=None):
             return receipt
         def step(item,table,free,now):
             reason = old['resource_step'](item,table,free,now)
-            if package_charge(state,item,now)+2.5+5.>=PACKAGE_CAP:
+            if package_charge(state,item,now)+2.5+ANALYSIS_FINAL_RESERVE_S>=PACKAGE_CAP:
                 return reason or 'comparison_package_cleanup_reserve'
             return reason
         def gated_launch(*args):
-            if package_charge(state)+OUTER_S+40.+5.>PACKAGE_CAP:
+            if package_charge(state)+OUTER_S+SUPERVISION_RESERVE_S+ANALYSIS_FINAL_RESERVE_S>PACKAGE_CAP:
                 raise RuntimeError('Comparison package next-worker reserve exhausted')
             return launch(*args)
         replacements.update(resume_state=resume,finish=finish,resource_step=step,launch=gated_launch)

@@ -117,11 +117,12 @@ def verify_capture_reference(folder, lock, task, anchor, reference):
     variables = capture['variables']
     lookup = {v['index']:v for v in variables}
     mapped = capture['mapping']['movement_selection']
+    mapped_set = set(mapped)
     movements = frozen['restricted_movement_ids'] if phase=='prefix' else frozen['movement_ids']
-    if (len(lookup)!=len(variables) or len(mapped)!=len(movements) or len(set(mapped))!=len(mapped)
+    if (len(lookup)!=len(variables) or len(mapped)!=len(movements) or len(mapped_set)!=len(mapped)
             or capture['mapping']['movement_ids']!=movements
             or any(index not in lookup or lookup[index]['type']!='B' for index in mapped)
-            or any(v['type']!='C' for index,v in lookup.items() if index not in set(mapped))):
+            or any(v['type']!='C' for index,v in lookup.items() if index not in mapped_set)):
         raise ValueError('Capture variable mapping changed')
     fixed = all(lookup[index]['lower']['value']==lookup[index]['upper']['value']
                 and lookup[index]['lower']['value'] in (0.,1.) for index in mapped)

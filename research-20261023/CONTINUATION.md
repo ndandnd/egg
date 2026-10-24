@@ -1,3 +1,31 @@
+# Current singleton native preflight ready —24 October2026
+
+The repaired single-CF1 configuration is frozen in cf1-preparation-native-v2.
+ONE new source-bound check passed14 config/capture fakes in0.12s (PGID92906
+absent/reaped). ONE separate metadata-only freeze passed (PGID92992 absent/reaped).
+No native task has launched as of this checkpoint. All agents are done.
+
+Current carry **1420.3927097992353s** is in
+cf1-preparation-native-v2/freeze-accounting.json: prior1416.3727097992353 plus
+check1.4 and externally reconciled freeze2.62. ADMIN0, every old failed/conservative
+charge inherited. Raw freeze result and positive-only external consolidation are
+both preserved; use freeze-attempt01/consolidated-receipt.json for native binding.
+Package hard end1581.3727097992353; launch requires137.5 remaining, actual160.98.
+Original1800/1620/180 and one thread/5GiB remain unchanged.
+
+Next action ONLY the prospective run-command.json, after source GitHub backup:
+new task ca0fa61075b9c6d4e16c, one inspected50999/80 CF1 seed17/day/revision2,
+60endpoint/61drain/62.5cleanup, same repaired preparation/unchanged physics. No
+recovery suffix/new case/model/comparison. No auto retry. Hold all frozen source/
+fixture/library/test/protocol assets unchanged during run. Independently analyze
+complete path/replay/start/capture/bound/ownership evidence and actual spent time.
+The mapped-set hoist also applies to capture verification without dropping checks.
+Neither source nor freeze passing qualifies the native path. If failed, preserve
+and diagnose. Current active owner/attempt/ledger receipts are authoritative.
+
+The older checkpoint below is retained as history; its1416.3727097992353 carry
+and unimplemented-new-adapter statement are superseded above.
+
 # EGG current handoff —24 October2026, preparation repair source-checked
 
 Worktree /Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017; branch
