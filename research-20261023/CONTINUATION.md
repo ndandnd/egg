@@ -1,98 +1,112 @@
-# EGG current research handoff — 23 October 2026
+# EGG current research handoff — 24 October 2026
 
 Worktree: `/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017`.
 Branch: `codex/ml-prediction-20261017`. User resumed research toward a long-term
-FT50 aspiration. Manuscript drafting remains deferred; no publication/model
+FT50 aspiration. Manuscript drafting remains deferred. No model/publication
 readiness claim is justified.
 
-## Latest executable state: approved budget, failed external freeze
+## Latest result: supervision passes, native-v5 admission still fails
 
-The human explicitly selected **“Raise total to 30 CPU minutes (Recommended)”**.
-Read `RECOVERY_BUDGET_APPROVAL.json` for exact question/reply and scope. The
-1800-second TOTAL ceiling, 1620-second dispatch stop and 180-second shutdown
-reserve are approved and applied. Keep one local single-thread numerical worker,
-5 GiB, all prior spend and unchanged original eight-task cases/clocks. Do not
-ask for this approval again. Old proposal/review documents retain their historic
-pending status; this direct approval is authoritative.
+Read `RECOVERY_PHASE1_V5_RESULTS.md` first, then the compact diagnosis/review
+only if needed. **Native-v5 stopped after5/8 tasks; qualification failed.**
+All four40-trip method/fault checks completed cleanly on ONE engineering
+timetable, seed17: one partial start was processed/accepted; injected setter
+failure retained the same valid fallback. Independent replay found zero invalid
+admitted witnesses; mapping/bound-scope audits found zero violations.
 
-Exactly one newly source-bound check passed **124 tests** in
-`admission-capture-checks-budget/attempt01`. It retains the previous 118 cases,
-with six supervisor cases exercised against both old/new launchers. Two stale
-synthetic spends now use DISPATCH_STOP-20 without weakening assertions. Parent
-and independent review verified 160 source hashes, command/output/artifact
-hashes, no drift/errors, all three owned groups absent and leader reaped. The
-passing check carried610.9167105017234s, including the SINGLE20s administration
-allowance shared across this whole approved revision. Read
-`RECOVERY_APPROVED_BUDGET_CHECK_RESULTS.md`, its protocol and source review.
+The first80-trip static task failed its27-second full-case admission gate.
+Planner returned26.840382500s; outer lift entered26.840388374 with0.159611626s
+left, took0.294172584s, and returned27.134560958s. It completed verification
+normally, then the post-lift guard correctly rejected the late candidate before
+fallback admission. Final output27.349969209s was uncensored under30s; that does
+not make27s admission timely. No earlier admitted fallback existed for this task.
+This is insufficient admission headroom, not a replay exception, sink corruption,
+new integer-cutoff bug or observed physical infeasibility. The native next-round
+typed cutoff was correctly recognized. Three80-trip tasks remain undispatched.
+No late witness was admitted or failed result reclassified.
 
-The subsequent **v4 external freeze failed** with an actual OS PermissionError
-in legacy `checked.cleanup`, after its guarded worker/inner fixture freeze
-returned zero. No native solver task launched. Source/resource/monitor gates
-showed no drift or monitor failure; the legacy helper threw before returning an
-ownership receipt, leaving default empty arrays. Empty arrays are not absence
-proof. Exact failing signal/probe/escalation syscall is unproved. This was not
-an automatic approval-review rejection.
+The source-bound **135-case** suite and replacement external freeze both passed.
+Parent/independent review verified169 checked/179 external source hashes,
+output/artifact/inherited evidence, complete ownership cleanup and accounting,
+unchanged fixture bytes/identities/market/movement/task/split metadata and the
+expected GRB library hash. New cleanup successfully handled a transient native
+fault-task permission-denied probe followed by confirmed absence. The legacy
+v4 cleanup failure did not recur. V1–v4 failures remain preserved; do not use
+an old failed freeze lock to dispatch or analyze changed sources against it.
 
-Parent separately reconciled the sole recorded PGID37089: signal-zero absent,
-successful self-including process snapshot, no matching group/leader. See
-`recovery-phase1-v4/freeze-attempt01/cleanup-reconciliation.json`. No signals
-were sent. This proves later absence and keeps the original freeze FAILED;
-never use its generated lock to dispatch native tasks. Stop-on-first-failure was
-honored: no repeated freeze, test retry or native launch followed.
+No EGG numerical worker or unfinished subagent remains. The run owner marker is
+removed; all five owned groups are confirmed absent. Native and analysis CLI
+exit0 alone is not a pass: read gates.passed=false and failed/undispatched rows.
+No model training, learned ranking inference, comparison screen, cluster work
+or sealed-data access occurred. No automatic native/check/freeze retry followed.
 
-Read `RECOVERY_PHASE1_V4_FREEZE_RESULTS.md` and failure review for compact evidence.
-**Authoritative conservative carry is718.8639492101057s** from
-`recovery-phase1-v4/accounting.json`:610.9167105017234 prior, FULL32.5 freeze
-allocation replacing its nominal1.159857...,0.322777 supervisor,75.015458666
-possible single-watchdog CPU allowance to later absence,0.10900304238229991
-read-only reconciliation. The watchdog interval intentionally overlaps the full
-allocation: conservative upper reservation, not measured utilization. No double
-worker/monitor CPU charge or extra administration/audit allowance. The original
-failed receipt's nominal612.3993446267449 remains unchanged. Dispatch headroom
-is901.1360507898943s. Preserve all v1/v2/v3/v4 evidence, fixtures and failed spend.
+Detailed current receipts:
+- `freeze-v2-checks/attempt01`, its protocol/review/results:135 regressions passed.
+- `recovery-phase1-v5/freeze-attempt01`: replacement freeze passed, sources/cleanup verified.
+- `recovery-phase1-v5/parent-freeze-review.json`: exact scopes/library/fixture match.
+- `recovery-phase1-v5/gates.json`, `compact-summary.json`, `runs/ledger.jsonl`.
+- `RECOVERY_PHASE1_V5_DIAGNOSIS.md`: bounded anchored timeline, no raw-value dump.
+- `RECOVERY_PHASE1_V5_RESULT_REVIEW.md`: independent terminal-ledger/path audit.
+- `recovery-phase1-v5/raw-diagnostics-index.json`: raw native/license logs stay local, hash indexed; complete capture JSON/plans/receipts are retained for backup.
 
-No numerical worker or unfinished subagent remains. A source-only cleanup-supervisor
-revision and eleven fake regressions passed independent static review; they have
-NOT been executed. The old
-`run_recovery_freeze.py` MUST stay immutable because historical evidence binds
-its hash. The candidate `run_recovery_freeze_v2.py` uses approved runner budget
-constants and reviewed bounded cleanup with absolute anchor+32.5 deadline,
-retained known PGIDs/reap/group states and primary/secondary failure diagnostics.
-Its new `src/tests/test_recovery_freeze_v2.py` needs source-bound execution before
-any qualification claim. Final child-CPU audit failure now preserves the terminal
-receipt, marks observations unknown/accounting incomplete and blocks passing.
-Read `RECOVERY_FREEZE_V2_IMPLEMENTATION.md` and `RECOVERY_FREEZE_V2_REVIEW.md`.
+## Authoritative resource state
 
-## Next executable package
+The human approved **30 CPU minutes TOTAL**, recorded in
+`RECOVERY_BUDGET_APPROVAL.json`. Runtime and existing hourly schedule persist
+**1800s hard ceiling /1620s dispatch stop /180s shutdown reserve**, one local
+single-thread numerical worker and5GiB. Do not ask again or reset the ledger.
 
-Record ONE fresh source-bound solver-free check covering the existing124 plus
-eleven new fake freeze regressions (**135 expected**). Source review found no
-remaining blocker, but is not an executed check. New namespace/argv/protocol must carry718.8639492101057s and
-all old hashes; do not automatically add the shared20s administration again.
-No execution of this new source occurred in the current failed package. Review
-the terminal receipt, source/outputs, ownership and accounting before a deliberate
-new external freeze. Use a fresh native-v5 destination; never resume/overwrite
-v4. This is an explicitly diagnosed, reviewed new revision, not an automatic retry.
+**Carry912.8922626277902s** from `recovery-phase1-v5/accounting.json` for the next
+prospective package. It includes prior721.7986948764081, external freeze
+1.720336292723232, five worker allocations117.29974745865911, run supervisor/
+monitor71.13189399999966, final analyze.9415899999999999. The independent decimal
+sum ends.7901 (one floating-point ulp difference); use the conservative account
+field exactly. Gates912.8892966277901 precedes the final analysis tail and is not
+complete carry. Monitor CPU64.00830499999967 is already in run-supervisor charge;
+never add it again. Shared20s administration is already included, ADMIN0 here.
+Every earlier failed charge and conservative watchdog allowance remains carried.
+Remaining dispatch headroom707.1077373722098s; actual later costs remain additional.
 
-Keep original cases50997/40 and50999/80, registry
-`recovery-phase1-reservations-v2.json` (50998 rejected), eight tasks, seed17/day,
-nonlearned30%+top-three and original12/15/24/27/30/32.5 clocks. Preserve fault,
-partial-start processing, independent physical replay/exact bill, fallback and
-full-vs-restricted bound scope gates. The GRB library/hash is unchanged from v4
-protocol; freeze hashes it without loading/solving. Before each dispatch reserve
-complete next allocation, monitoring and shutdown against actual approved spend.
-Do not lengthen cases or clocks to obtain a pass. Stop on first failure and
-preserve incomplete suffixes. A pass would establish this interface only, not
-learned superiority or price-support certification.
+Complete prior0.5CPUh approval persists. No cap increase, extra worker, longer
+case solve, additional seed/case or new resource commitment was made. Old pending
+budget documents remain historical and are superseded by the direct approval.
+The schedule/status/thread were unchanged; unrelated paused automations untouched.
 
-Native-v3 remains failed/incomplete5/8 with four timely40-trip tasks, an accepted
-partial start and injected-fault fallback; its first80-trip task was late and
-three80 tasks undispatched. The capture repair has passed fake tests but has not
-yet been measured in another native80 task. V4's failed freeze does not change
-that. Every later comparison must use the same complete evidence policy in all
-arms.
+## Next bounded package
+
+Implement and statically review an **earlier planner handoff plus explicit
+independent-admission reserve**, inside the unchanged physical/output deadlines.
+If needed shorten planned native search inside its existing integer cap. Keep
+full replay/exact billing/post-lift rejection and earlier valid-fallback retention.
+Apply the same declared allocation across matched controls. Do not suppress
+TimeoutError, bypass full replay, admit v5 late results or assume0.1346s is a
+universal sufficient reserve. The existing fakes already tested correct late
+rejection; the missing evidence is actual80-trip admission timing.
+
+Before any execution, freeze exact source/clock/argv and a fresh protocol with
+remaining-budget accounting. Add focused fake tests of budget propagation and
+fallback retention, then one source-bound check. A deliberate new qualification
+should put the80-trip bottleneck first in its prospectively recorded order,
+so a repeated timing failure does not consume another successful40-trip prefix.
+Use unchanged engineering identities50997/40 and50999/80, seed17/day/nonlearned
+30%+top-three, correct registry-v2 (50998 rejected), original upper deadlines
+12/15/24/27/30/32.5. No automatic retry or outcome-chosen case replacement.
+A future reserve is an engineering allocation change, not a new ML contribution.
+
+Use a new namespace, preserve v5 and carry ALL charge. Recompute a complete
+prospective resource envelope; the old520s monitor allowance cannot simply be
+reused for a full eight-task repeat within remaining headroom. Observed v5
+supervision/worker-allocation ratio is calibration only, not guaranteed capacity.
+Stop on first failure; incomplete/censored/unknown outcomes stay visible. Do not
+repeat the entire old design/Scholar/capture audit. Keep future old-result
+analysis source-bound to its recorded hashes/Git revision.
+
+After applicable engineering gates pass, implement exact-cardinality selector,
+charging-aware CA1 and constructive CF1 before the learned-value screen. Preserve
+all timetable variants in groups, inner-only selection and sealed tests.
 
 ## Scientific comparison design prepared while budget was pending
+
 
 Read `RECOVERY_LEARNED_VALUE_STUDY_ADDENDUM.md` before any comparison. It
 supersedes the unlaunched nine-arm factorial question/counts/retention/estimand/
@@ -121,14 +135,12 @@ notes: `RECOVERY_CLASSICAL_BASELINE_SPEC.md`,
 After native qualification, implement selector/CA1 and then CF1 as justified
 bounded work. No comparative launch until applicable engineering gates pass.
 
-The priorv3 consolidated result is already posted/verified in the original
-Google Doc (`recovery-phase1-v3/google-doc-update.json`). No routine engineering
-or prospective-design append was made for this package. Preserve history/visuals.
-
-The existing hourly automation was updated through the app and read back exactly:
-approved1800/1620/180 persists; do not re-ask or repeat old primitive gates without
-a concrete source-change need. Schedule/status/thread stayed unchanged; unrelated
-paused automations untouched. Receipt: `automation-budget-approval-update.json`.
+The original Google Doc received ONE consolidated v5 milestone, with exact
+append and unchanged prior structure verified in
+`recovery-phase1-v5/google-doc-update.json`. Do not duplicate it or the six
+October1 entries. Earlier v3 result remains intact. Existing automation cap was
+already updated/read back in `automation-budget-approval-update.json`; no new
+schedule or routine notification is needed.
 
 ## Scientific priorities
 

@@ -1,0 +1,130 @@
+{
+  "attempted": 5,
+  "authoritative_charged_cpu_s": 912.8922626277902,
+  "check_count": 135,
+  "claim": "Engineering only; four paths on one 40-trip timetable, failed 80-trip admission. No learned-method comparison.",
+  "counts": {
+    "accepted": 1,
+    "bound_scope_violations": 0,
+    "censored": 0,
+    "fallback": 4,
+    "fault_exercised": 1,
+    "invalid_witnesses": 0,
+    "mapping_violations": 0,
+    "native_processing": 1,
+    "planned": 8,
+    "rejected": 0,
+    "submitted": 1,
+    "terminal": 5,
+    "unknown": 0
+  },
+  "external_freeze_passed": true,
+  "gates_report_partial_charge_s": 912.8892966277901,
+  "no_retry_after_failure": true,
+  "owned_groups_confirmed_absent": [
+    43665,
+    44340,
+    44893,
+    45542,
+    45851
+  ],
+  "owner_marker_absent": true,
+  "planned": 8,
+  "qualification_passed": false,
+  "rows": [
+    {
+      "arm": "static",
+      "base_id": 50997,
+      "censored": false,
+      "endpoint_s": 24.389852916821837,
+      "failure_list": [],
+      "fallback_retained": true,
+      "issues": [],
+      "native_starts_accepted": 0,
+      "native_starts_processed": 0,
+      "selected_bill": 658.6846914951989,
+      "selected_bill_exact": "7520849649258076462021101763908257310571759102533/11417981541647679048466287755595961091061972992",
+      "selected_equals_fallback": true,
+      "task_id": "584067521b4af0cb3da0",
+      "trips": 40,
+      "worker_failure": false
+    },
+    {
+      "arm": "recovery",
+      "base_id": 50997,
+      "censored": false,
+      "endpoint_s": 24.947448207996786,
+      "failure_list": [],
+      "fallback_retained": true,
+      "issues": [],
+      "native_starts_accepted": 1,
+      "native_starts_processed": 1,
+      "selected_bill": 658.6846914951989,
+      "selected_bill_exact": "7520849649258076462021101763908257310571759102533/11417981541647679048466287755595961091061972992",
+      "selected_equals_fallback": true,
+      "task_id": "27133bea236c6b35ac75",
+      "trips": 40,
+      "worker_failure": false
+    },
+    {
+      "arm": "cold",
+      "base_id": 50997,
+      "censored": false,
+      "endpoint_s": 24.843466500751674,
+      "failure_list": [],
+      "fallback_retained": true,
+      "issues": [],
+      "native_starts_accepted": 0,
+      "native_starts_processed": 0,
+      "selected_bill": 658.7068249657065,
+      "selected_bill_exact": "120337637901052551477281469997060855211630367001045/182687704666362864775460604089535377456991567872",
+      "selected_equals_fallback": true,
+      "task_id": "61cb90ed7e02414d15b8",
+      "trips": 40,
+      "worker_failure": false
+    },
+    {
+      "arm": "start_fault",
+      "base_id": 50997,
+      "censored": false,
+      "endpoint_s": 12.79067633394152,
+      "failure_list": [],
+      "fallback_retained": true,
+      "issues": [],
+      "native_starts_accepted": 0,
+      "native_starts_processed": 0,
+      "selected_bill": 658.6846914951989,
+      "selected_bill_exact": "7520849649258076462021101763908257310571759102533/11417981541647679048466287755595961091061972992",
+      "selected_equals_fallback": true,
+      "task_id": "27f30de636e0d9047cee",
+      "trips": 40,
+      "worker_failure": false
+    },
+    {
+      "arm": "static",
+      "base_id": 50999,
+      "censored": false,
+      "endpoint_s": 27.34996920917183,
+      "failure_list": [
+        {
+          "error": "Control physical admission exceeded shared planner cutoff",
+          "error_type": "TimeoutError",
+          "stage": "control"
+        }
+      ],
+      "fallback_retained": false,
+      "issues": [
+        "engineering_failure"
+      ],
+      "native_starts_accepted": 0,
+      "native_starts_processed": 0,
+      "selected_bill": null,
+      "selected_bill_exact": null,
+      "selected_equals_fallback": null,
+      "task_id": "de8d8da71bc8d2dd1d5d",
+      "trips": 80,
+      "worker_failure": true
+    }
+  ],
+  "undispatched": 3
+}
