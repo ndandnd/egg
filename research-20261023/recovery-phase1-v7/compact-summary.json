@@ -1,0 +1,185 @@
+{
+  "counts": {
+    "accepted": 2,
+    "bound_scope_violations": 0,
+    "censored": 0,
+    "fallback": 8,
+    "fault_exercised": 2,
+    "invalid_witnesses": 0,
+    "mapping_violations": 0,
+    "native_processing": 2,
+    "planned": 8,
+    "rejected": 0,
+    "submitted": 2,
+    "terminal": 8,
+    "unknown": 0
+  },
+  "coverage_by_size": {
+    "40": {
+      "durable_fallback_start_fault_exercised": true,
+      "normal_recovery_processed": true
+    },
+    "80": {
+      "durable_fallback_start_fault_exercised": true,
+      "normal_recovery_processed": true
+    }
+  },
+  "passed": true,
+  "rows": [
+    {
+      "bill": 3642.5298555555555,
+      "fault_exercised": false,
+      "global_lower_bound": null,
+      "issues": [],
+      "native_start_submissions": 0,
+      "output_s": 25.318092999979854,
+      "status": "feasible",
+      "task": {
+        "arm": "static",
+        "base_id": 50999,
+        "fault": null,
+        "id": "de8d8da71bc8d2dd1d5d",
+        "seconds": 30.0,
+        "seed": 17,
+        "trips": 80
+      },
+      "vehicles": 27
+    },
+    {
+      "bill": 3628.9138160493826,
+      "fault_exercised": false,
+      "global_lower_bound": -1e+100,
+      "issues": [],
+      "native_start_submissions": 1,
+      "output_s": 27.5224939994514,
+      "status": "bounded",
+      "task": {
+        "arm": "recovery",
+        "base_id": 50999,
+        "fault": null,
+        "id": "85710efee4db820ff4bc",
+        "seconds": 30.0,
+        "seed": 17,
+        "trips": 80
+      },
+      "vehicles": 27
+    },
+    {
+      "bill": 3386.2012021947876,
+      "fault_exercised": false,
+      "global_lower_bound": 199.999999,
+      "issues": [],
+      "native_start_submissions": 0,
+      "output_s": 26.91683412436396,
+      "status": "bounded",
+      "task": {
+        "arm": "cold",
+        "base_id": 50999,
+        "fault": null,
+        "id": "d3de154792c114e78483",
+        "seconds": 30.0,
+        "seed": 17,
+        "trips": 80
+      },
+      "vehicles": 24
+    },
+    {
+      "bill": 3642.5298555555555,
+      "fault_exercised": true,
+      "global_lower_bound": null,
+      "issues": [],
+      "native_start_submissions": 0,
+      "output_s": 16.10131554119289,
+      "status": "feasible",
+      "task": {
+        "arm": "start_fault",
+        "base_id": 50999,
+        "fault": "start_setter_exception",
+        "id": "00ab4af02ac326472cf4",
+        "seconds": 30.0,
+        "seed": 17,
+        "trips": 80
+      },
+      "vehicles": 27
+    },
+    {
+      "bill": 658.6846914951989,
+      "fault_exercised": false,
+      "global_lower_bound": null,
+      "issues": [],
+      "native_start_submissions": 0,
+      "output_s": 22.360252833925188,
+      "status": "feasible",
+      "task": {
+        "arm": "static",
+        "base_id": 50997,
+        "fault": null,
+        "id": "584067521b4af0cb3da0",
+        "seconds": 30.0,
+        "seed": 17,
+        "trips": 40
+      },
+      "vehicles": 4
+    },
+    {
+      "bill": 658.6846914951989,
+      "fault_exercised": false,
+      "global_lower_bound": 562.536727980148,
+      "issues": [],
+      "native_start_submissions": 1,
+      "output_s": 22.940246500074863,
+      "status": "bounded",
+      "task": {
+        "arm": "recovery",
+        "base_id": 50997,
+        "fault": null,
+        "id": "27133bea236c6b35ac75",
+        "seconds": 30.0,
+        "seed": 17,
+        "trips": 40
+      },
+      "vehicles": 4
+    },
+    {
+      "bill": 658.7068249657065,
+      "fault_exercised": false,
+      "global_lower_bound": 563.8063750961114,
+      "issues": [],
+      "native_start_submissions": 0,
+      "output_s": 22.913122125901282,
+      "status": "bounded",
+      "task": {
+        "arm": "cold",
+        "base_id": 50997,
+        "fault": null,
+        "id": "61cb90ed7e02414d15b8",
+        "seconds": 30.0,
+        "seed": 17,
+        "trips": 40
+      },
+      "vehicles": 4
+    },
+    {
+      "bill": 658.6846914951989,
+      "fault_exercised": true,
+      "global_lower_bound": null,
+      "issues": [],
+      "native_start_submissions": 0,
+      "output_s": 10.775486916303635,
+      "status": "feasible",
+      "task": {
+        "arm": "start_fault",
+        "base_id": 50997,
+        "fault": "start_setter_exception",
+        "id": "27f30de636e0d9047cee",
+        "seconds": 30.0,
+        "seed": 17,
+        "trips": 40
+      },
+      "vehicles": 4
+    }
+  ],
+  "scope": "Two engineering synthetic bases,one40 andone80,seed17/day/nonlearned. No learned inference, generalization or optimality claim.",
+  "source_commit": "d49e0b15",
+  "unresolved": []
+}
