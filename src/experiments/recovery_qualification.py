@@ -307,6 +307,136 @@ def native_append(folder, event):
     campaign.append(Path(folder)/'native.jsonl', event)
 
 
+def capture_metadata(task, policy, case_identity, round_index):
+    phase, _ = integer_gate_spec(task,policy,case_identity)
+    if type(round_index) is not int or round_index < 0:
+        raise ValueError('Invalid incumbent capture round')
+    for key in ('lock_sha256','attempt_sha256'):
+        if not isinstance(policy.get(key),str) or re.fullmatch('[0-9a-f]{64}',policy[key]) is None:
+            raise ValueError('Missing incumbent capture '+key)
+    return {'task_id':task['id'],'task_sha256':stable(task),'case_identity':case_identity,
+            'phase':phase,'round':round_index,'anchor':policy['anchor'],
+            'lock_sha256':policy['lock_sha256'],'attempt_sha256':policy['attempt_sha256']}
+
+
+def verify_capture_reference(folder, task, policy, reference):
+    """Check one immutable flat capture; no model/backend objects are involved."""
+    metadata = capture_metadata(task,policy,reference['case_identity'],reference['round'])
+    name = f"incumbent-{metadata['phase']}-round{metadata['round']}.json"
+    if (reference.get('event') != 'native_incumbent_reference' or
+            reference.get('schema') != 'recovery-native-incumbent-reference-v1' or
+            any(reference.get(key) != value for key,value in metadata.items()) or
+            reference.get('path') != name or type(reference.get('offset_bytes')) is not int or
+            reference['offset_bytes'] != 0 or type(reference.get('length_bytes')) is not int or
+            reference['length_bytes'] <= 0):
+        raise ValueError('Incumbent capture reference identity/range mismatch')
+    path = Path(folder)/name
+    if path.is_symlink():
+        raise ValueError('Incumbent capture must be an owned flat file')
+    raw = path.read_bytes()
+    if (len(raw) != reference['length_bytes'] or
+            hashlib.sha256(raw).hexdigest() != reference.get('sha256')):
+        raise ValueError('Incumbent capture bytes/hash mismatch')
+    payload = json.loads(raw)
+    if (payload.get('schema') != 'recovery-native-incumbent-capture-v1' or
+            any(payload.get(key) != value for key,value in metadata.items()) or
+            payload.get('capture',{}).get('event') != 'native_incumbent' or
+            payload['capture'].get('case_identity') != metadata['case_identity'] or
+            payload['capture'].get('round') != metadata['round']):
+        raise ValueError('Incumbent capture envelope mismatch')
+    return True
+
+
+def persist_incumbent_capture(folder, task, policy, event):
+    """Serialize the complete diagnostic once, durably, then forward only its reference."""
+    from egglab.recovery_coordinator import _diagnostic
+    if event.get('event') != 'native_incumbent':
+        raise ValueError('Expected complete native incumbent capture')
+    metadata = capture_metadata(task,policy,event['case_identity'],event['round'])
+    name = f"incumbent-{metadata['phase']}-round{metadata['round']}.json"
+    payload = {'schema':'recovery-native-incumbent-capture-v1',**metadata,'capture':_diagnostic(event)}
+    raw = (json.dumps(payload,separators=(',',':'),allow_nan=False)+'\n').encode()
+    path = Path(folder)/name
+    with path.open('xb') as stream:
+        if stream.write(raw) != len(raw):
+            raise OSError('Incomplete incumbent capture write')
+        stream.flush()
+        os.fsync(stream.fileno())
+    descriptor = os.open(path.parent,os.O_RDONLY)
+    try:
+        os.fsync(descriptor)
+    finally:
+        os.close(descriptor)
+    reference = {'event':'native_incumbent_reference','schema':'recovery-native-incumbent-reference-v1',
+                 **metadata,'path':name,'offset_bytes':0,'length_bytes':len(raw),
+                 'sha256':hashlib.sha256(raw).hexdigest()}
+    verify_capture_reference(folder,task,policy,reference)
+    return reference
+
+
+def record_planner_event(folder, task, state, event, record=None):
+    """Fail-closed planner sink, including callbacks whose exceptions the core catches."""
+    from egglab.recovery_coordinator import _diagnostic
+    try:
+        if native_event_is_failure(task,state,event):
+            state['engineering_events'].append(_diagnostic(event))
+        forwarded = event
+        if event.get('event') == 'native_incumbent':
+            forwarded = persist_incumbent_capture(folder,task,state['capture_policy'],event)
+            state.setdefault('capture_references',[]).append(deepcopy(forwarded))
+        native_append(folder,{'source':'planner',**_diagnostic(forwarded)})
+        if record:
+            record(forwarded)
+    except Exception as exc:
+        state['sink_failure'] = repr(exc)
+        raise
+
+
+def audit_capture_references(folder, task, state, events):
+    registered = state.get('capture_references',[])
+    identities = {stable(reference) for reference in registered}
+    for event in events:
+        if event.get('event') == 'native_incumbent':
+            raise ValueError('Unreferenced full incumbent reached materialization')
+        if event.get('event') == 'native_incumbent_reference':
+            # The frozen coordinator adds its prefix/full stage to callback rows.
+            reference = {key:value for key,value in event.items() if key != 'stage'}
+            if (('stage' in event and event['stage'] != event.get('phase')) or
+                    stable(reference) not in identities):
+                raise ValueError('Unregistered incumbent capture reference')
+    for reference in registered:
+        verify_capture_reference(folder,task,state['capture_policy'],reference)
+    return len(registered)
+
+
+def stage_timing(event, task, anchor, at, cutoff):
+    if not finite(anchor) or not finite(at,anchor):
+        raise ValueError('Invalid anchored admission timing')
+    return {'event':event,'task_id':task['id'],'anchor':anchor,'at':at,
+            'elapsed_s':at-anchor,'cutoff':cutoff}
+
+
+def materialization_reference(folder, task, locksha, anchor, started, receipt, *, clock=time.monotonic):
+    """Bind immutable completion after it exists; never rewrite result or completion."""
+    marker = read(Path(folder)/'completion.json')
+    if (marker['task'] != task or marker['lock_sha256'] != locksha or
+            marker['parent_monotonic'] != anchor or
+            marker['result_sha256'] != receipt['result_sha256'] or
+            marker['finished_monotonic'] != receipt['finished_monotonic']):
+        raise ValueError('Materialization completion identity mismatch')
+    value = {'schema':'recovery-materialization-reference-v1','task_id':task['id'],
+             'lock_sha256':locksha,'anchor':anchor,'started_monotonic':started,
+             'started_elapsed_s':started-anchor,
+             'completion_marker':{'path':'completion.json','sha256':sha(Path(folder)/'completion.json'),
+                 'finished_monotonic':marker['finished_monotonic'],'elapsed_s':marker['elapsed_s'],
+                 'censored':marker['censored']},
+             'post_completion_monotonic':receipt['completion_monotonic'],
+             'result_sha256':receipt['result_sha256']}
+    write_new(Path(folder)/'materialization-reference.json',value)
+    ended = clock()
+    return {**receipt,'completion_monotonic':ended,'censored':receipt['censored'] or ended>anchor+30.}
+
+
 class IntegerGateClosed(TimeoutError):
     """Guard-owned refusal issued before any underlying model build."""
     def __init__(self, token):
@@ -520,8 +650,17 @@ def control(case, target, a, b, task, anchor, storage, budget, planner, allowed)
                                   allowance=allowance, clock=time.monotonic, allowed=allowed, events=events):
                 native = planner(target,a,b,inner,record=lambda row:events.append(row), completion=True,
                                  start_plan=None,start_case=None,deadline=schedule.planner_end)
+            returned = time.monotonic()
+            events.append(stage_timing('control_planner_return',task,anchor,returned,schedule.planner_end))
             if native.get('plan') is not None:
-                selected = rc.lift_plan(target,case,native['plan'],a=a,b=b)
+                entered = time.monotonic()
+                if entered >= schedule.planner_end:
+                    raise TimeoutError('Control planner returned after physical admission cutoff')
+                events.append(stage_timing('control_lift_enter',task,anchor,entered,schedule.planner_end))
+                try:
+                    selected = rc.lift_plan(target,case,native['plan'],a=a,b=b)
+                finally:
+                    events.append(stage_timing('control_lift_exit',task,anchor,time.monotonic(),schedule.planner_end))
                 if time.monotonic() > schedule.planner_end:
                     selected = None
                     raise TimeoutError('Control physical admission exceeded shared planner cutoff')
@@ -536,6 +675,7 @@ def control(case, target, a, b, task, anchor, storage, budget, planner, allowed)
             status, lower, provenance = 'bound_replay_contradiction', None, []
         else:
             status = 'certified' if selected['true_bill']-lower <= budget.epsilon else 'bounded'
+    events.append(stage_timing('control_materialization_start',task,anchor,time.monotonic(),schedule.deadline))
     result = {'policy':POLICY,'status':status,'mode':'static_restricted' if task['arm']=='static' else 'cold_full',
               'fallback':selected,'selected':selected,'global_lower_bound':lower,'bound_provenance':provenance,
               'restricted_prefix_lower_diagnostic':rc._diagnostic(None if native is None else native.get('lower'))
@@ -565,6 +705,15 @@ def worker(args):
             return super()._write(name,value)
 
         def materialize(self, result, *, schedule, clock):
+            started = clock()
+            result.setdefault('events',[]).append(stage_timing('materialization_start',task,anchor,started,schedule.deadline))
+            if state is not None:
+                try:
+                    audit_capture_references(folder,task,state,result['events'])
+                except Exception as exc:
+                    state['sink_failure'] = repr(exc)
+                    result.setdefault('failures',[]).append({'stage':'capture_reference',
+                        'error_type':type(exc).__name__,'error':str(exc)})
             for event in result.get('events', []):
                 native_append(folder, {'source':'coordinator',**event})
             selected = result.get('selected')
@@ -576,6 +725,7 @@ def worker(args):
             if state is not None and state['sink_failure']:
                 result['failures'].append({'stage':'native_sink','error':state['sink_failure']})
             receipt = super().materialize(result,schedule=schedule,clock=clock)
+            receipt = materialization_reference(folder,task,attempt['lock_sha256'],anchor,started,receipt,clock=clock)
             ack = {'task_id':task['id'],'lock_sha256':attempt['lock_sha256'],
                    'parent_monotonic':anchor,'completion_monotonic':receipt['completion_monotonic'],
                    'completion_sha256':sha(folder/'completion.json'),
@@ -601,20 +751,15 @@ def worker(args):
             raise ValueError('Fixture, market or movement-order lock mismatch')
         budget = rc.pf.Budget(backend=lock['backend'],threads=1,phase_seconds=24.,wall_seconds=30.)
         with instrument_native(lock,task,folder,anchor=anchor) as state:
+            state['capture_policy'] = {**state['integer_gate_policy'],
+                'lock_sha256':attempt['lock_sha256'],'attempt_sha256':sha(folder/'attempt.json')}
+            state['capture_references'] = []
             def allowed():
                 return dispatch_allowed(args.parent_pid,folder,state)
 
             def planner(*a, record=None, **kw):
                 def sink(event):
-                    if native_event_is_failure(task,state,event):
-                        state['engineering_events'].append(rc._diagnostic(event))
-                    try:
-                        native_append(folder, {'source':'planner',**rc._diagnostic(event)})
-                    except Exception as exc:
-                        state['sink_failure'] = repr(exc)
-                        raise
-                    if record:
-                        record(event)
+                    record_planner_event(folder,task,state,event,record)
                 return rc.pf.solve_planner(*a, record=sink, **kw)
 
             if task['arm'] in ('recovery','start_fault'):
