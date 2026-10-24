@@ -1,3 +1,29 @@
+# Current bounded package — sixty-second native preflight ready
+
+24 October2026. New source-bound `comparison-native-adapter-checks/attempt01`
+passed61 symbolic/fake cases in0.26s. Its owned PGID83787 is absent/reaped.
+One separately supervised metadata-only freeze passed; PGID83878 absent/reaped.
+Sources, test/protocol and new worker/adapter notes are frozen and held unchanged.
+No native task has launched as of this checkpoint. All subagents are done/stopped.
+
+Authoritative current carry is **1300.06739534018s** in
+`comparison-native-preflight-v1/freeze-accounting.json`: old1296.29257734018
+plus affected-check1.432079 plus external-freeze2.342739, ADMIN0; monitor children
+already included once in their allocations. New package hard end1526.29257734018
+remains inside approved1800/1620/180. Do not reset or repeat either gate.
+
+Next action is exactly the frozen `comparison-native-preflight-v1/run-command.json`
+from its two-task source-bound lock and external freeze receipt. Serial CF1 then
+recovery, inspected50999/80 seed17/day,60 endpoint/61 drain/62.5 cleanup,
+one thread/5GiB. Stop suffix on failure; no automatic retry. Each native launch
+must fit62.5 worker+40 supervision+5 analysis inside the230s package aggregate.
+After run, analyze complete evidence independently, account ledger/analysis tail
+and preserve every failure and missing suffix. No comparison/ML job is authorized
+by these passing source/freeze gates. Native/license raw logs stay ignored/local.
+
+The older handoff below is retained as history; its former1296.29257734018 carry
+and unselected-next-package statement are superseded by this paragraph.
+
 # EGG current handoff — 24 October 2026, 60-second source integration checked
 
 Worktree `/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017`, branch

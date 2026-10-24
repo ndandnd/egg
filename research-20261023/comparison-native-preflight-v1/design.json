@@ -1,0 +1,64 @@
+{
+  "backend": "GRB",
+  "case_specs": [
+    {
+      "base_id": 50999,
+      "fixture": "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/research-20261023/recovery-phase1-v7/fixtures/base50999-n80.json",
+      "full_identity": "4fada641f78dd00c1278ff4341e88bf375dd50f9cfc3034345c4e4be2a4727d1",
+      "market_sha256": "f1da29dda920210565f103a311f47b5b5f460e3704050ae711966ca852425be2",
+      "trips": 80
+    }
+  ],
+  "models": {},
+  "native_library": {
+    "path": "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/gurobipy/_batch.cpython-312-darwin.so",
+    "sha256": "54c2ca41a9a9c80b4dd27df09e6b8a73abbb18de90e95198ae676611910dca96"
+  },
+  "package_budget": {
+    "absolute_package_ceiling_s": 1526.29257734018,
+    "additional_hard_cap_s": 230.0,
+    "analysis_planning_s": 5.0,
+    "analysis_reserve_s": 5.0,
+    "automatic_retry": false,
+    "check_planning_s": 40.0,
+    "freeze_planning_s": 10.0,
+    "global_dispatch_stop_s": 1620.0,
+    "global_hard_ceiling_s": 1800.0,
+    "global_shutdown_reserve_s": 180.0,
+    "initial_charged_cpu_s": 1296.29257734018,
+    "next_worker_allocation_s": 62.5,
+    "next_worker_supervision_reservation_s": 40.0,
+    "numerical_workers": 1,
+    "outer_allocation_s": 62.5,
+    "physical_and_ack_endpoint_s": 60.0,
+    "rss_limit_bytes": 5368709120,
+    "run_supervision_planning_s": 50.0,
+    "supervisor_stop_s": 61.0,
+    "threads": 1,
+    "worker_allocation_planning_s": 125.0
+  },
+  "policy": "comparison-native-preflight-v1",
+  "ranking": "codex_offline_rank.heuristic + classical_controls common exact30%/top3 backbone",
+  "split": "inspected engineering case only; no generalization or ML evidence",
+  "tariff": "day",
+  "tasks": [
+    {
+      "arm": "cf1",
+      "base_id": 50999,
+      "fault": null,
+      "id": "61577e6156a9296d7ae3",
+      "seconds": 60.0,
+      "seed": 17,
+      "trips": 80
+    },
+    {
+      "arm": "recovery",
+      "base_id": 50999,
+      "fault": null,
+      "id": "eb4d0da1295ea58592ff",
+      "seconds": 60.0,
+      "seed": 17,
+      "trips": 80
+    }
+  ]
+}
