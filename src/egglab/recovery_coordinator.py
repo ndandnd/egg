@@ -51,6 +51,35 @@ class Schedule:
     def planner_end(self):
         return self.deadline-3.
 
+    @property
+    def admission_reserve_s(self):
+        return 2.
+
+    @property
+    def prefix_search_end(self):
+        return self.prefix_integer_end-2.
+
+    @property
+    def full_search_end(self):
+        return self.full_integer_end-2.
+
+    @property
+    def prefix_handoff_end(self):
+        return self.prefix_end-self.admission_reserve_s
+
+    @property
+    def full_handoff_end(self):
+        return self.planner_end-self.admission_reserve_s
+
+    def as_dict(self):
+        return {'parent_monotonic':self.parent_monotonic,'deadline':self.deadline,
+                'prefix_integer_end':self.prefix_integer_end,'prefix_end':self.prefix_end,
+                'full_integer_end':self.full_integer_end,'planner_end':self.planner_end,
+                'prefix_search_end':self.prefix_search_end,'full_search_end':self.full_search_end,
+                'prefix_handoff_end':self.prefix_handoff_end,'full_handoff_end':self.full_handoff_end,
+                'admission_reserve_s':self.admission_reserve_s,
+                'finalization_reserve_s':3.,'completion_limit_s':3.}
+
 
 @dataclass
 class CompletionAllowance:
@@ -231,29 +260,53 @@ def coordinate(source_case, full_case, a, b, *, parent_monotonic, deadline, stor
             failures.append(_failure('dispatch_gate', exc))
             return False
 
-    def admit(source, plan, stage, cutoff):
-        nonlocal fallback, selected, fallback_receipt, durable_failure
-        witness = lift_plan(source, full_case, deepcopy(plan), a=a, b=b)
+    def admit(source, plan, stage, cutoff, handoff=None):
+        nonlocal fallback, selected, fallback_receipt, durable_failure, dispatch_stopped
+        entered = clock()
+        if handoff is not None and entered > handoff:
+            dispatch_stopped = True
+            raise TimeoutError('Physical admission entry exceeded planner handoff')
+        events.append({'event':'admission_lift_enter','stage':stage,'at':entered,
+                       'anchor':parent_monotonic,'elapsed_s':entered-parent_monotonic,
+                       'planner_handoff':handoff,'cutoff':cutoff})
+        try:
+            witness = lift_plan(source, full_case, deepcopy(plan), a=a, b=b)
+        finally:
+            exited = clock()
+            events.append({'event':'admission_lift_exit','stage':stage,'at':exited,
+                           'anchor':parent_monotonic,'elapsed_s':exited-parent_monotonic,
+                           'planner_handoff':handoff,'cutoff':cutoff})
         if clock() > cutoff:
             raise TimeoutError('Physical witness admission exceeded stage cutoff')
         if fallback is None:
-            fallback = deepcopy(witness)
-            selected = deepcopy(witness)
+            candidate_fallback, candidate_selected = deepcopy(witness), deepcopy(witness)
+            durable_witness = deepcopy(witness)
+            if clock() > cutoff:
+                raise TimeoutError('Physical witness copy exceeded stage cutoff')
             try:
-                fallback_receipt = storage.save_fallback(deepcopy(witness))
+                artifact = storage.save_fallback(durable_witness)
             except Exception:
                 durable_failure = True
                 raise
-            events.append({'event':'durable_fallback_admitted','stage':stage,
-                           'at':clock(),'artifact':fallback_receipt,
-                           'true_bill_exact':witness['true_bill_exact']})
-            if clock() > cutoff:
+            saved = clock()
+            if saved > cutoff:
+                events.append({'event':'rejected_durable_witness','stage':stage,
+                               'at':saved,'cutoff':cutoff,'artifact':artifact,
+                               'true_bill_exact':witness['true_bill_exact']})
                 raise TimeoutError('Durable witness save exceeded stage cutoff')
+            fallback, selected, fallback_receipt = candidate_fallback, candidate_selected, artifact
+            events.append({'event':'durable_fallback_admitted','stage':stage,
+                           'at':saved,'artifact':fallback_receipt,
+                           'true_bill_exact':witness['true_bill_exact']})
         elif Fraction(witness['true_bill_exact']) < Fraction(selected['true_bill_exact']):
-            selected = deepcopy(witness)
+            candidate = deepcopy(witness)
+            if clock() > cutoff:
+                raise TimeoutError('Physical witness copy exceeded stage cutoff')
+            selected = candidate
         return witness
 
     def solve(case, stage, integer_end, planner_end, start=None):
+        nonlocal dispatch_stopped
         # Loading/build/setup costs before this call remain charged to the anchor.
         gate_open = permitted()
         now = clock()
@@ -266,10 +319,21 @@ def coordinate(source_case, full_case, a, b, *, parent_monotonic, deadline, stor
                        'integer_end':integer_end,'planner_end':planner_end})
         with native_limits(integer_end=integer_end, planner_end=planner_end,
                            allowance=allowance, clock=clock, allowed=permitted, events=events):
-            return planner(case, a, b, inner, record=lambda row: events.append(
+            result = planner(case, a, b, inner, record=lambda row: events.append(
                 {'stage':stage, **deepcopy(row)}), completion=True,
                 start_plan=None if start is None else deepcopy(start['plan']),
                 start_case=None if start is None else full_case, deadline=planner_end)
+        returned = clock()
+        events.append({'event':'planner_return','stage':stage,'at':returned,
+                       'anchor':parent_monotonic,'elapsed_s':returned-parent_monotonic,
+                       'planner_handoff':planner_end,
+                       'admission_cutoff':schedule.prefix_end if stage=='prefix' else schedule.planner_end})
+        # Candidate processing/capture is not preemptible: all planner returns,
+        # including no-plan results, must still meet the earlier handoff.
+        if returned > planner_end:
+            dispatch_stopped = True
+            raise TimeoutError('Planner return exceeded admission handoff')
+        return result
 
     if physical_fallback is not None:
         try:
@@ -278,9 +342,11 @@ def coordinate(source_case, full_case, a, b, *, parent_monotonic, deadline, stor
             failures.append(_failure('initial_fallback', exc))
     if not durable_failure and physical_fallback is None:
         try:
-            prefix_result = solve(source_case, 'prefix', schedule.prefix_integer_end, schedule.prefix_end)
+            prefix_result = solve(source_case, 'prefix', schedule.prefix_search_end,
+                                  schedule.prefix_handoff_end)
             if prefix_result is not None and prefix_result.get('plan') is not None:
-                admit(source_case, prefix_result['plan'], 'prefix_lift', schedule.prefix_end)
+                admit(source_case, prefix_result['plan'], 'prefix_lift', schedule.prefix_end,
+                      schedule.prefix_handoff_end)
         except Exception as exc:
             failures.append(_failure('prefix', exc))
         finally:
@@ -295,11 +361,12 @@ def coordinate(source_case, full_case, a, b, *, parent_monotonic, deadline, stor
         try:
             # A warm dispatch is impossible until save_fallback returned. Expired
             # lift/save work cannot reopen either absolute cutoff.
-            full_result = solve(full_case, 'full', schedule.full_integer_end,
-                                schedule.planner_end, fallback)
+            full_result = solve(full_case, 'full', schedule.full_search_end,
+                                schedule.full_handoff_end, fallback)
             if full_result is not None:
                 if full_result.get('plan') is not None:
-                    admit(full_case, full_result['plan'], 'full_candidate', schedule.planner_end)
+                    admit(full_case, full_result['plan'], 'full_candidate', schedule.planner_end,
+                          schedule.full_handoff_end)
                 lower, bound_provenance = _full_lower(full_result, full_case, a, b,
                                                      clock, schedule.planner_end)
         except Exception as exc:
@@ -319,10 +386,7 @@ def coordinate(source_case, full_case, a, b, *, parent_monotonic, deadline, stor
     if durable_failure:
         status = 'storage_failed'
     result = {'policy':POLICY,'status':status,'mode':mode,
-              'schedule':{'parent_monotonic':parent_monotonic,'deadline':deadline,
-                          'prefix_integer_end':schedule.prefix_integer_end,'prefix_end':schedule.prefix_end,
-                          'full_integer_end':schedule.full_integer_end,'planner_end':schedule.planner_end,
-                          'finalization_reserve_s':3.,'completion_limit_s':3.},
+              'schedule':schedule.as_dict(),
               'completion_spent_s':allowance.spent,'global_lower_bound':lower,
               'dispatch_stopped':dispatch_stopped,
               'bound_provenance':bound_provenance,'fallback':fallback,

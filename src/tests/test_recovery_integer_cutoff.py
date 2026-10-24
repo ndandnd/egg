@@ -35,7 +35,7 @@ def harness(tmp_path,monkeypatch):
         lock={'backend':'FAKE','native_library':{'sha256':'library'},'cases':[{
             'base_id':50997,'identity':'full-case','restricted_identity':'prefix-case'}]}
         identity='prefix-case' if phase in ('prefix','static') else 'full-case'
-        clock=SimpleNamespace(now=(112. if phase=='prefix' else 124.) if now is None else now)
+        clock=SimpleNamespace(now=(110. if phase=='prefix' else 122.) if now is None else now)
         monkeypatch.setattr(q.time,'monotonic',lambda:clock.now)
         calls=[]
         built={'model':SimpleNamespace(),'backend_runtime':{
@@ -76,7 +76,8 @@ def test_exact_integer_boundary_is_durable_single_use_expected_stop(harness,phas
         evidence=pending['evidence']
         assert pending['durable'] is True
         assert evidence['phase']==phase
-        assert evidence['integer_cutoff']==(112. if phase=='prefix' else 124.)
+        assert evidence['integer_cutoff']==(110. if phase=='prefix' else 122.)
+        assert evidence['integer_upper_cutoff']==(112. if phase=='prefix' else 124.)
         assert evidence['observed_monotonic']==evidence['integer_cutoff']
         assert evidence['guard_point']=='before_model_build'
         assert evidence['native_dispatched'] is False
@@ -88,7 +89,7 @@ def test_exact_integer_boundary_is_durable_single_use_expected_stop(harness,phas
 
 
 def test_before_cutoff_builds_without_expected_stop(harness):
-    with harness(now=111.999) as h:
+    with harness(now=109.999) as h:
         assert pf.build_feasible_model(h.case,'FAKE') is h.built
         assert len(h.calls)==1
         assert not h.state.get('integer_gate_pending')
@@ -97,8 +98,8 @@ def test_before_cutoff_builds_without_expected_stop(harness):
 
 @pytest.mark.parametrize('field,value',[
     ('phase','full'),('case_identity','other-case'),('task_id','other-task'),
-    ('task_sha256','other-hash'),('anchor',99.),('integer_cutoff',113.),
-    ('observed_monotonic',111.999),('guard_point','after_model_build'),
+    ('task_sha256','other-hash'),('anchor',99.),('integer_cutoff',112.),('integer_upper_cutoff',110.),
+    ('observed_monotonic',109.999),('guard_point','after_model_build'),
     ('native_dispatched',True),('elapsed_s',13.),
     ('observed_monotonic',float('nan')),('observed_monotonic',float('inf')),
     ('anchor',float('-inf')),('integer_cutoff',float('nan'))])
@@ -106,7 +107,7 @@ def test_malformed_or_wrong_guard_evidence_is_fatal(harness,field,value):
     with harness() as h:
         event=planner_failure(h)
         h.state['integer_gate_pending']['evidence'][field]=value
-        if field=='observed_monotonic' and value==111.999:
+        if field=='observed_monotonic' and value==109.999:
             h.state['integer_gate_pending']['evidence']['elapsed_s']=value-100.
         assert q.native_event_is_failure(h.task,h.state,event)
         assert not h.state.get('expected_budget_stops')
@@ -134,7 +135,7 @@ def test_unmatched_guard_tokens_fail_closed(harness,damage):
 
 
 def test_generic_builder_timeout_remains_fatal(harness):
-    with harness(now=111.,builder_error=TimeoutError('No native model build after integer gate')) as h:
+    with harness(now=109.,builder_error=TimeoutError('No native model build after integer gate')) as h:
         event=planner_failure(h)
         assert len(h.calls)==1 and event['error_type']=='TimeoutError'
         assert not h.state.get('integer_gate_pending')
@@ -142,7 +143,7 @@ def test_generic_builder_timeout_remains_fatal(harness):
 
 
 def test_actual_postbuild_overrun_is_fatal(harness):
-    with harness(now=111.,build_end=112.) as h:
+    with harness(now=109.,build_end=110.) as h:
         event=planner_failure(h)
         assert len(h.calls)==1 and event['error_type']=='TimeoutError'
         assert not h.state.get('integer_gate_pending')
@@ -169,8 +170,8 @@ def test_actual_planner_catch_routes_guard_event_to_classifier(harness,monkeypat
     monkeypatch.setattr(pf,'_check_budget',lambda *args:None)
     options={
         'typed_cutoff':{},
-        'generic_timeout':{'now':111.,'builder_error':TimeoutError('ordinary native build timeout')},
-        'postbuild_overrun':{'now':111.,'build_end':112.},
+        'generic_timeout':{'now':109.,'builder_error':TimeoutError('ordinary native build timeout')},
+        'postbuild_overrun':{'now':109.,'build_end':110.},
         'sink_failure':{}}[expected]
     with harness(**options) as h:
         if expected=='sink_failure':

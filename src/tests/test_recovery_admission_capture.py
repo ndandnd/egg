@@ -63,7 +63,7 @@ def test_control_precheck_and_postlift_cutoff(monkeypatch,lift_end,admitted):
     lifted=[]
     witness={'plan':{'route':'saved'},'replay':{'valid':True},'true_bill':7.,'true_bill_exact':'7'}
     def planner(*a,**kw):
-        clock.now=126.
+        clock.now=124.
         return {'plan':{'candidate':'before-cutoff'}}
     def lift(*a,**kw):
         lifted.append(clock.now)
@@ -73,15 +73,15 @@ def test_control_precheck_and_postlift_cutoff(monkeypatch,lift_end,admitted):
     storage=Storage()
     result=q.control('full','target',[1.],[0.],{'id':'task','arm':'static'},100.,storage,
         rc.pf.Budget(),planner,lambda:True)
-    assert lifted==[126.]
+    assert lifted==[124.]
     timing=[event for event in result['events'] if event.get('event') in {
         'control_planner_return','control_lift_enter','control_lift_exit','control_materialization_start'}]
     assert [event['event'] for event in timing]==[
         'control_planner_return','control_lift_enter','control_lift_exit','control_materialization_start']
-    assert [event['at'] for event in timing]==[126.,126.,lift_end,lift_end]
+    assert [event['at'] for event in timing]==[124.,124.,lift_end,lift_end]
     assert all(event['anchor']==100. and event['task_id']=='task'
                and event['elapsed_s']==event['at']-100. for event in timing)
-    assert [event['cutoff'] for event in timing]==[127.,127.,127.,130.]
+    assert [event['cutoff'] for event in timing]==[125.,127.,127.,130.]
     assert bool(storage.fallbacks) is admitted
     assert (result['selected'] is not None) is admitted
     assert bool(result['failures']) is (not admitted)

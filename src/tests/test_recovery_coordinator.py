@@ -108,15 +108,15 @@ def test_durable_lift_before_warm_full_and_changed_tariff(physical):
         assert store.witness['true_bill_exact'] == '67'
         assert kw['start_plan'] == store.witness['plan']
         assert kw['start_case'] is full
-        assert kw['deadline'] == 27.
+        assert kw['deadline'] == 25.
         assert kw['completion'] is True
-        assert budget.wall_seconds == 15.  # save completed at 12, no reset to 30.
+        assert budget.wall_seconds == 13.  # Save completed at12; handoff remains25, not a fresh budget.
         return {'status':'search_failed'}
 
     result = coordinate(source, full, [0., 4.], [0., 0.], parent_monotonic=0., deadline=30.,
                         clock=clock, storage=store, planner=planner)['result']
-    assert calls[0][1].wall_seconds == 11.
-    assert calls[0][2]['deadline'] == 15.
+    assert calls[0][1].wall_seconds == 9.
+    assert calls[0][2]['deadline'] == 13.
     assert result['restricted_prefix_lower'] == 10**9
     assert result['global_lower_bound'] is None
     assert result['selected']['true_bill'] == 67.
@@ -136,7 +136,7 @@ def test_no_prefix_witness_cold_full_actual_remainder(physical, prefix_failure):
     def planner(case, a, b, budget, record, **kw):
         calls.append(kw)
         if case is source:
-            clock.now = 14.
+            clock.now = 12.
             if prefix_failure == 'exception':
                 raise RuntimeError('extraction/completion failed')
             if prefix_failure == 'bad_replay':
@@ -192,7 +192,8 @@ def test_lift_and_durable_save_costs_cannot_reopen_full_gate(physical, time_at_f
         return {'plan':plan}
 
     outcome = run(physical, planner, clock, store)
-    assert outcome['result']['selected']['true_bill'] == 59.5
+    assert outcome['result']['selected'] is None and outcome['result']['fallback'] is None
+    assert store.witness is not None  # Late durable evidence exists but was never admitted.
     assert outcome['result']['full_status'] is None
     assert outcome['completion']['elapsed_s'] == time_at_full_gate
     assert outcome['censored'] is (time_at_full_gate > 30.)
@@ -209,7 +210,7 @@ def test_failed_durability_blocks_full_and_is_visible(physical):
 
     result = run(physical, planner, clock, store)['result']
     assert result['status'] == 'storage_failed'
-    assert result['selected']['true_bill'] == 59.5
+    assert result['selected'] is None and result['fallback'] is None
     assert result['fallback_artifact'] is None
     assert result['full_status'] is None
 
@@ -221,7 +222,7 @@ def test_expired_import_loading_no_solver_and_initial_fallback(physical):
                   Clock(28.), physical_fallback=lifted)
     assert outcome['result']['selected']['true_bill'] == 59.5
     assert outcome['completion']['elapsed_s'] == 28.
-    assert outcome['result']['events'][1]['event'] == 'planner_gate_closed'
+    assert outcome['result']['events'][-1]['event'] == 'planner_gate_closed'
 
 
 def test_late_prefix_replay_not_admitted_and_cold_gate_remains_closed(physical):
@@ -300,7 +301,7 @@ def test_completion_exception_charges_elapsed_and_hook_restores(monkeypatch):
 
 def test_real_planner_api_uses_shared_hook_and_attempts_completion(physical, monkeypatch):
     source, full, plan = physical
-    clock = Clock(11.)
+    clock = Clock(9.)
     calls = []
 
     def build(case, backend):
@@ -328,8 +329,8 @@ def test_real_planner_api_uses_shared_hook_and_attempts_completion(physical, mon
     outcome = coordinate(source, full, [1.,2.], [0.,.2], parent_monotonic=0., deadline=30.,
                          storage=MemoryStorage(clock), clock=clock,
                          budget=replace(pf.Budget(), max_rounds=1))
-    assert calls[0] == (1., 12.)
-    assert calls[1] == (1., 15.)
+    assert calls[0] == (1., 10.)
+    assert calls[1] == (1., 13.)
     assert outcome['result']['completion_spent_s'] > 0.
     assert pf._optimize_once is native
 
@@ -467,7 +468,7 @@ def test_more_expensive_full_witness_does_not_replace_prefix_bill(physical):
     assert outcome['result']['selected']['provenance']['selected_movement_ids'] == ['out', 'home']
 
 
-def test_prefix_save_just_past_15_retains_witness_and_stops_full(physical):
+def test_prefix_save_just_past_15_retains_unadmitted_evidence_and_stops_full(physical):
     source, _, plan = physical
     clock = Clock()
     store = MemoryStorage(clock, save_seconds=5.)
@@ -479,8 +480,10 @@ def test_prefix_save_just_past_15_retains_witness_and_stops_full(physical):
 
     result = run(physical, planner, clock, store)['result']
     assert clock.now == 16.
-    assert result['selected']['true_bill_exact'] == EXPECTED_BILL_EXACT
-    assert result['fallback_artifact'] is not None
+    assert store.witness['true_bill_exact'] == EXPECTED_BILL_EXACT
+    assert result['selected'] is None and result['fallback'] is None
+    assert result['fallback_artifact'] is None
+    assert any(event['event']=='rejected_durable_witness' for event in result['events'])
     assert result['dispatch_stopped'] is True
     assert result['full_dispatched'] is False
     assert result['failures'][-1]['stage'] == 'prefix_cutoff'
@@ -492,7 +495,7 @@ def test_loading_past_prefix_gate_still_allows_cold_full(physical):
 
     def planner(case, a, b, budget, record, **kw):
         assert case is full
-        assert budget.wall_seconds == 11.
+        assert budget.wall_seconds == 9.
         assert kw['start_plan'] is None
         return {'status':'unresolved'}
 

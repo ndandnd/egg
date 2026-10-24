@@ -89,12 +89,20 @@ def task_matrix(cases):
     if sorted(case['trips'] for case in cases) != [40,80]:
         raise ValueError('Exactly the prespecified 40/80 pair is required')
     tasks = []
-    for case in sorted(cases, key=lambda row:row['trips']):
+    for case in sorted(cases, key=lambda row:row['trips'], reverse=True):
         for arm in ARMS:
             value = {'base_id':case['base_id'], 'trips':case['trips'], 'arm':arm,
                      'seed':17, 'seconds':30., 'fault':'start_setter_exception' if arm == 'start_fault' else None}
             tasks.append({**value, 'id':stable(value)[:20]})
     return tasks
+
+
+def qualification_split():
+    """Effective allocations are inside, not replacements for, the hard caps."""
+    return {'prefix_integer_s':12.,'prefix_physical_s':15.,'full_integer_s':24.,
+            'physical_s':27.,'deadline_s':30.,'completion_cumulative_s':3.,'finalization_s':3.,
+            'prefix_search_s':10.,'full_search_s':22.,'prefix_handoff_s':13.,
+            'full_handoff_s':25.,'admission_reserve_s':2.}
 
 
 def environment():
@@ -231,9 +239,7 @@ def freeze(args):
             'native_library':{'path':str(library),'sha256':sha(library)},
             'generator':'claude-scale-v1; TRAIN-derived parameter assignment; fresh identity-only bases',
             'ranking':'experiments.codex_offline_rank.heuristic', 'keep':.30, 'coverage_floor':3,
-            'tariff':'day', 'split':{'prefix_integer_s':12.,'prefix_physical_s':15.,
-                                    'full_integer_s':24.,'physical_s':27.,'deadline_s':30.,
-                                    'completion_cumulative_s':3.,'finalization_s':3.},
+            'tariff':'day', 'split':qualification_split(),
             'freeze_charge_s':max(time.monotonic()-before,time.process_time()-cpu0)+1.,
             'freeze_accounting':'conservative elapsed/CPU maximum plus one-second materialization allowance'}
     write_new(args.lock, lock)
@@ -254,8 +260,7 @@ def verify_lock(lock, *, worker=False):
     if (lock.get('backend') not in ('CBC','GRB') or lock.get('models')!={}
             or lock.get('keep')!=.30 or lock.get('coverage_floor')!=3 or lock.get('tariff')!='day'
             or lock.get('ranking')!='experiments.codex_offline_rank.heuristic'
-            or lock.get('split')!={'prefix_integer_s':12.,'prefix_physical_s':15.,'full_integer_s':24.,
-                'physical_s':27.,'deadline_s':30.,'completion_cumulative_s':3.,'finalization_s':3.}):
+            or lock.get('split')!=qualification_split()):
         raise ValueError('Qualification policy differs from prospective protocol')
     verify_hashes({lock['native_library']['path']:lock['native_library']['sha256']})
     if environment() != lock['environment']:
@@ -445,7 +450,7 @@ class IntegerGateClosed(TimeoutError):
 
 
 def integer_gate_spec(task, policy, case_identity):
-    """Resolve only the frozen case/arm's original anchored integer cutoff."""
+    """Resolve only the frozen case/arm's effective anchored search cutoff."""
     if (not isinstance(policy,dict) or not isinstance(task.get('id'),str) or not task['id'] or
             policy.get('task_id') != task['id'] or
             policy.get('task_sha256') != stable(task) or
@@ -456,16 +461,21 @@ def integer_gate_spec(task, policy, case_identity):
         raise ValueError('Integer gate requires frozen case identities')
     arm = task['arm']
     if arm in ('recovery','start_fault') and case_identity == restricted and restricted != full:
-        phase, seconds = 'prefix', 12.
+        phase, seconds = 'prefix', qualification_split()['prefix_search_s']
     elif arm in ('recovery','start_fault') and case_identity == full:
-        phase, seconds = 'full', 24.
+        phase, seconds = 'full', qualification_split()['full_search_s']
     elif arm == 'static' and case_identity == restricted:
-        phase, seconds = 'static', 24.
+        phase, seconds = 'static', qualification_split()['full_search_s']
     elif arm == 'cold' and case_identity == full:
-        phase, seconds = 'cold', 24.
+        phase, seconds = 'cold', qualification_split()['full_search_s']
     else:
         raise ValueError('Integer gate case/phase differs from immutable lock')
     return phase, policy['anchor']+seconds
+
+
+def integer_upper_cutoff(policy, phase):
+    split = qualification_split()
+    return policy['anchor']+split['prefix_integer_s' if phase=='prefix' else 'full_integer_s']
 
 
 def expected_integer_gate(task, state, event):
@@ -494,6 +504,8 @@ def expected_integer_gate(task, state, event):
                    evidence.get('native_dispatched') is False and
                    finite(anchor) and anchor == policy['anchor'] and
                    finite(evidence.get('integer_cutoff')) and evidence['integer_cutoff'] == cutoff and
+                   finite(evidence.get('integer_upper_cutoff')) and
+                   evidence['integer_upper_cutoff'] == integer_upper_cutoff(policy,phase) and
                    finite(observed) and observed >= cutoff and
                    finite(evidence.get('elapsed_s')) and evidence['elapsed_s'] == observed-anchor)
     except (KeyError, TypeError, ValueError):
@@ -553,6 +565,7 @@ def instrument_native(lock, task, folder, *, anchor=None):
                 evidence = {'event':'integer_gate_closed','token':exc.token,
                     'task_id':task['id'],'task_sha256':stable(task),'case_identity':identity,
                     'phase':phase,'anchor':anchor,'integer_cutoff':cutoff,
+                    'integer_upper_cutoff':integer_upper_cutoff(state['integer_gate_policy'],phase),
                     'observed_monotonic':observed,'elapsed_s':observed-anchor,
                     'guard_point':'before_model_build','native_dispatched':False}
                 emit(evidence)
@@ -571,8 +584,10 @@ def instrument_native(lock, task, folder, *, anchor=None):
         return built
 
     def attach(case, built, selected):
-        if anchor is not None and time.monotonic()>=anchor+24.:
-            raise TimeoutError('No start setter after full integer gate')
+        if anchor is not None:
+            _, cutoff = integer_gate_spec(task,state['integer_gate_policy'],case.identity())
+            if time.monotonic()>=cutoff:
+                raise TimeoutError('No start setter after planned integer gate')
         if task['arm'] == 'start_fault':
             if not (Path(folder)/'fallback.json').is_file():
                 raise ValueError('Fault injection attempted before durable fallback')
@@ -643,28 +658,42 @@ def control(case, target, a, b, task, anchor, storage, budget, planner, allowed)
     native = None
     try:
         now = time.monotonic()
-        if now < schedule.full_integer_end and allowed():
-            inner = replace(budget, wall_seconds=schedule.planner_end-now,
-                            phase_seconds=min(budget.phase_seconds,schedule.full_integer_end-now))
-            with rc.native_limits(integer_end=schedule.full_integer_end, planner_end=schedule.planner_end,
+        if now < schedule.full_search_end and allowed():
+            inner = replace(budget, wall_seconds=schedule.full_handoff_end-now,
+                            phase_seconds=min(budget.phase_seconds,schedule.full_search_end-now))
+            with rc.native_limits(integer_end=schedule.full_search_end, planner_end=schedule.full_handoff_end,
                                   allowance=allowance, clock=time.monotonic, allowed=allowed, events=events):
                 native = planner(target,a,b,inner,record=lambda row:events.append(row), completion=True,
-                                 start_plan=None,start_case=None,deadline=schedule.planner_end)
+                                 start_plan=None,start_case=None,deadline=schedule.full_handoff_end)
             returned = time.monotonic()
-            events.append(stage_timing('control_planner_return',task,anchor,returned,schedule.planner_end))
+            events.append({**stage_timing('control_planner_return',task,anchor,returned,schedule.full_handoff_end),
+                           'admission_cutoff':schedule.planner_end})
+            if returned > schedule.full_handoff_end:
+                raise TimeoutError('Control planner return exceeded admission handoff')
             if native.get('plan') is not None:
                 entered = time.monotonic()
-                if entered >= schedule.planner_end:
-                    raise TimeoutError('Control planner returned after physical admission cutoff')
-                events.append(stage_timing('control_lift_enter',task,anchor,entered,schedule.planner_end))
+                if entered > schedule.full_handoff_end:
+                    raise TimeoutError('Control admission entry exceeded planner handoff')
+                events.append({**stage_timing('control_lift_enter',task,anchor,entered,schedule.planner_end),
+                               'planner_handoff':schedule.full_handoff_end})
                 try:
-                    selected = rc.lift_plan(target,case,native['plan'],a=a,b=b)
+                    witness = rc.lift_plan(target,case,native['plan'],a=a,b=b)
                 finally:
-                    events.append(stage_timing('control_lift_exit',task,anchor,time.monotonic(),schedule.planner_end))
+                    events.append({**stage_timing('control_lift_exit',task,anchor,time.monotonic(),schedule.planner_end),
+                                   'planner_handoff':schedule.full_handoff_end})
                 if time.monotonic() > schedule.planner_end:
-                    selected = None
                     raise TimeoutError('Control physical admission exceeded shared planner cutoff')
-                storage.save_fallback(deepcopy(selected))
+                candidate = deepcopy(witness)
+                if time.monotonic() > schedule.planner_end:
+                    raise TimeoutError('Control witness copy exceeded physical admission cutoff')
+                artifact = storage.save_fallback(candidate)
+                saved = time.monotonic()
+                if saved > schedule.planner_end:
+                    events.append({**stage_timing('control_durable_witness_rejected',task,anchor,
+                                                 saved,schedule.planner_end),
+                                   'artifact':artifact,'true_bill_exact':witness['true_bill_exact']})
+                    raise TimeoutError('Control durable witness save exceeded physical admission cutoff')
+                selected = witness
             if task['arm'] == 'cold':
                 lower, provenance = rc._full_lower(native,case,a,b,time.monotonic,schedule.planner_end)
     except Exception as exc:
@@ -677,6 +706,7 @@ def control(case, target, a, b, task, anchor, storage, budget, planner, allowed)
             status = 'certified' if selected['true_bill']-lower <= budget.epsilon else 'bounded'
     events.append(stage_timing('control_materialization_start',task,anchor,time.monotonic(),schedule.deadline))
     result = {'policy':POLICY,'status':status,'mode':'static_restricted' if task['arm']=='static' else 'cold_full',
+              'schedule':schedule.as_dict(),
               'fallback':selected,'selected':selected,'global_lower_bound':lower,'bound_provenance':provenance,
               'restricted_prefix_lower_diagnostic':rc._diagnostic(None if native is None else native.get('lower'))
                   if task['arm']=='static' else None,
