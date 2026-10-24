@@ -1,18 +1,44 @@
-# EGG current handoff —24 October2026: fresh mechanism design; execution remains gated
+# EGG current handoff —24 October2026: v5 source check failed; no numerical work
 
 Worktree /Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017; branch
 codex/ml-prediction-20261017. Use bounded GPT-6.1 Sol agents with short handoffs.
 All agents done. No active check, metadata, numerical worker or owner. No cluster
 work, model inference/training, new timetable or sealed data access. Manuscript deferred.
 
-## Newest work package: documentation only
+## Newest work package: implementation and failed source check
+
+Read research-20261024/CF1_V5_SOURCE_RESULTS.md,
+CF1_V5_SOURCE_FAILURE_DIAGNOSIS.md and
+cf1-entry-repaired-checks/{accounting-final.json,attempt01/result.json}. New scoped v5
+wrapper and actual owner helper exist, with original v4 ACK/analyzer delegation,
+fresh worker identity, checked preparation,7.5s conservative precharge, independent
+parent/child handshake, final Popen permit and live owner/package guard. Tests
+AST-load production bodies with inert bindings/fake execution, not real native
+qualification. Three bounded Sol6.1 agents implemented/reviewed; all done.
+
+SOLE frozen source invocation FAILED:26 failures,16 passed,36 subtests passed
+in1.46s. All26 error lines have the same fake OS missing cpu_count; the fake
+root also lacks capacity_cpu_count. Harness construction fails before the owner
+paths, including fake OwnerSupervisor.run. This is a diagnosed test-double defect,
+not evidence that unreached production paths pass or that CF1/ML is poor.
+PGID71595 absent/reaped, no source changes/errors beyond pytest_exit or unresolved
+charges. No patch/retry after failure, real freeze, controller, solver/model or
+cluster work. No active numerical worker/owner; v4 remains stopped/immutable.
+
+Current carry1534.2196428390087s. Exact failed source bytes are preserved in187
+snapshot entries (174 new,13 reused);1090 proof paths. The prospective source
+review is historical, not a passing check. No native or later phase clearance.
+Read implementation/owner/source-protocol notes only when needed for the fix;
+don't repeat the full design investigation or raw logs.
+
+## Recorded fresh design
 
 Read research-20261024/CF1_FRESH_MECHANISM_PROTOCOL.md and only relevant companion
 CF1_FRESH_DECISION_REVIEW.md, CF1_FRESH_IMPLEMENTATION_DESIGN.md and
 CF1_FRESH_RECEIPT_NOTE.md. Three bounded Sol6.1 agents reviewed resource/authority,
 scoped implementation reuse and current receipts; parent integrated and reviewed
-the design. All done, no active worker/owner. No implementation, tests, metadata
-freeze or numerical launch this wake. Current accounting carry remains unchanged.
+the design in the preceding wake. The later implementation/check above updates
+its state and carry. No numerical launch or metadata freeze has occurred.
 
 Prospective new175s package starts1527.8351450899538 and ends1702.8351450899538,
 inside global1920/dispatch1740/shutdown180, one thread/5GiB. Same still-unexercised
@@ -20,16 +46,16 @@ inside global1920/dispatch1740/shutdown180, one thread/5GiB. Same still-unexerci
 within the human's32-minute total under later fresh-design steering; it is not a
 new human175s approval, comparison budget or permission from passed source tests.
 V4 and its rejected ledger remain stopped/immutable; no automatic retry or second
-worker. Fresh policy/task/source identities and namespace are proposed, not frozen.
+worker. Fresh source identities were frozen for the failed check only; no native
+task/phase manifest, actual fixture lock or controller clearance exists.
 
-Critical unresolved implementation: adapter.run starts its timer after preparation.
-Whole entry/import/preparation must be durably charged and independently covered
-before dispatch, with a live ownership/funding gate; post-run external correction
-alone is insufficient. The proposed owning-supervisor7.5s precharge is not yet
-implemented or qualified; a reviewed measured alternative is possible. No launch
-manifest, actual lock qualification, native controller or mechanism clearance.
+The implementation now includes the externally owned entry scheme; the failed
+harness prevented its intended source tests from reaching those paths. Source
+review alone does not qualify it. Post-run reconciliation alone remains
+insufficient. Live statuses older than0.25s fail closed, including slow controller
+finalization; this operational limit is not runtime-qualified. No mechanism claim.
 
-## Most recent executed package
+## Preserved preceding passed source package
 
 Read research-20261024/LAUNCH_ENTRY_RESULTS.md and
 research-20261024/launch-entry-checks/{accounting.json,attempt01/result.json}.
@@ -49,7 +75,8 @@ qualification/controller execution remain unexercised. PGID59374 absent/reaped,
 no changes/errors/unresolved charges. No old matrix, model/fixture/capture, real
 freeze, native, cluster or retry. Three bounded Sol6.1 agents implemented/reviewed;
 all done. Ten immutable snapshots added, eight identical prior snapshots reused;
-no new mutable source proof roots. Current carry1527.8351450899538s.
+no new mutable source proof roots. Its closure carry1527.8351450899538s is now
+superseded by the failed v5 source account above.
 
 ## New scientific steering from the user's referee perspective
 
@@ -115,14 +142,17 @@ identity, edit the rejected ledger, relabel failure or rerun this namespace.
 
 ## Authoritative resources
 
-Current carry1527.8351450899538s from
-research-20261024/launch-entry-checks/accounting.json,902 proof paths.
-Prior1524.0216024654942 retained, plus source-check internal3.063542624459684 and
-conservative closure0.5 plus source preservation0.25. Whole2.42wall/1.91CPU +0.02=2.44
-did not exceed internal charge; no subtraction or positive external top-up.
-Source package20/end1544.0216024654942 respected. All earlier failures and
-conservative charges retained; ADMIN0. Prior helper and initializer packages,
-snapshots and receipts remain preserved, not repeated.
+Current carry1534.2196428390087s from
+research-20261024/cf1-entry-repaired-checks/accounting-final.json,1090 proof paths;
+check_passed=false, phase failed_v5_source_check. Prior1527.8351450899538 retained,
+plus failed-check internal3.6579306243831518, measured source preservation
+1.2265671246716976 and materialization closure0.5. Whole2.91wall/3.47CPU +0.02=3.49
+did not exceed internal charge; no subtraction/positive external top-up. The
+original account1533.2196428390087 is preserved; postcheck-finalization.json adds
+conservative1s for independent verification/handoff materialization. Source phase
+spend6.38449774905485 of20, absolute end1547.8351450899538 respected.
+All earlier failures/charges retained; ADMIN0. Prior passed helper/initializer/
+entry packages and their receipts remain preserved, not repeated.
 The preserved v4 account1518.4011370494984 comprises inherited1509.9511370494984
 plus source2.65, freeze3.8, failed entry/preparation/closure2.0.
 Source/account paths retain full proof closure and positive external reconciliation.
@@ -142,17 +172,16 @@ The fresh175s design above is not an executed allocation or revived v4 package.
 
 ## Next bounded useful work
 
-Implement the narrow fresh wrapper and whole-entry accounting scheme from the
-reviewed design; do not spend another wake reproducing that design or old gates.
-New src/experiments/cf1_entry_repaired.py and sole new test would reuse v4 ACK/
-analysis unchanged through restored serialized bindings, with fresh worker argv.
-Review the live predispatch accounting/ownership gate before freezing one affected
-source-check command. Exact future paths are in CF1_FRESH_MECHANISM_PROTOCOL.md.
-The parent must freeze actual commands/source/task identities before each phase;
-this study design is not that manifest. No metadata/native execution is cleared
-yet. Do not repeat completed helper/initializer/entry checks without a diagnosed
-source change. Carry the current accounting and stopped v4 unchanged; never
-hand-preseed or repair its ledger. No broad qualification reruns or automatic retry.
+Correct the diagnosed fake OS/root capacity contract only; do not relax production
+checks. Preserve attempt01 and all its sources/receipts. A new prospective source
+decision must bind fresh attempt identity consistently in checker/test/driver;
+do not simply rerun attempt01. Proposed13s source follow-up from current carry
+would end1547.2196428390087, within the original source-phase end, but requires
+reviewed clocks/command/hashes first. No reset, automatic retry, broader source
+matrix, real freeze or native clearance. Reached tests are not evidence about
+the owner scenarios that failed during construction. No need to redesign the
+whole mechanism or repeat completed helper/initializer/entry checks. Keep source
+and cumulative accounting bindings exact; v4 and its ledger remain immutable.
 
 Current approved module's controller ACK observer is source-checked but NOT runtime
 qualified. It persists a complete ACK actually read by controller; observed<=anchor+60
