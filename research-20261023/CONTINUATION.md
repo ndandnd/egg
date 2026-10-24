@@ -1,11 +1,48 @@
-# EGG current research handoff — 24 October 2026, classical controls implemented
+# EGG current research handoff — 24 October 2026, CF1 source gate passed
 
 Worktree `/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017`, branch
 `codex/ml-prediction-20261017`. User seeks rigorous research toward a long-term
 FT50 aspiration; manuscript drafting remains deferred. Manage short bounded
 GPT-6.1 Sol subagent tasks; avoid full-history/STATE_MAP rereads and repeated audits.
 
-## Newest state: common selection and CA1 passed their unit gate
+## Newest state: CF1 construction and charging helper passed a source gate
+
+New `constructive_control.py` implements price-blind greedy routing, optimistic
+per-leg SOC/terminal screening and cumulative at-most-two LIFO undo. New
+`constructive_charging.py` accepts an uncharged topology, audits/fixes all movement
+binaries in the original full compact model, preserves physical rows, checks all
+remaining variables continuous, and retains the minimum independently replayed
+exact bill through later objective failures. Fixed-typed binaries remain binary;
+no native LP or unrestricted bound is claimed.
+
+The single source-bound `constructive-controls-checks/attempt01` check passed
+**31 symbolic/fake-native tests in 0.08 s**. Read `RECOVERY_CF1_RESULTS.md`, the
+construction/charging implementation notes, independent contract review and
+`constructive-controls-checks/{command.json,attempt01/result.json,accounting.json}`.
+No failure, source drift or cleanup/accounting issue in that check. PGID72796 is
+absent and reaped; no active numerical worker or subagent remains. A stdlib-only
+metadata-preparation NameError was corrected before command freeze/any attempt
+and retained in metadata; there was no failed/retried numerical check.
+
+**CF1 is not yet a qualified composite arm.** No native solver, timetable generator,
+learned inference/training, protected asset or comparison ran. Qualified core,
+models and historical evidence are unchanged. The source-only helper does not
+persist a fallback, submit a start or orchestrate repairs/full search.
+
+Next bounded source package: integrate CF1 with durable fallback admission,
+conditional repairs and the explicit 60-second shared clock. Only a qualified
+INITIAL fixed-topology feasibility INFEASIBLE may trigger undo, never objective
+infeasibility, timeout/no incumbent or invalid replay. The caller must compute
+ONCE, before initial setup/build,
+`completion_deadline=min(t0+0.2*T, first_completion_anchor+max(2,0.1*T))`, then
+reuse it across all phases/repairs/rebuilds. Passing only t0+0.2*T can exceed the
+allowance after fast construction; renewing now+6 is invalid. The helper has no
+T/anchor input and cannot independently enforce that absent caller policy.
+Preserve at most two repairs and common finalization/full-search budgets.
+After focused source checks, freeze an affected-path native preflight prospectively;
+do not repeat the old full matrix without a diagnosed need.
+
+## Inherited state: common selection and CA1 passed their unit gate
 
 `src/egglab/classical_controls.py` now implements the common exact-cardinality
 selector, one `restrict_case` application helper and the CA1 charging/cost proxy.
@@ -18,16 +55,12 @@ nontrivial incoming/outgoing coverage union and K-expansion regression.
 Read `RECOVERY_CLASSICAL_CONTROLS_RESULTS.md`, the implementation/review notes and
 `classical-controls-checks/{command.json,attempt01/result.json,accounting.json}`
 for this package. No failure, source drift, unknown accounting or cleanup error.
-Owned PGID68267 is absent and reaped; **no active numerical worker or subagent
-remains**. No timetable generation, model inference/training, native solve or
+Owned PGID68267 is absent and reaped. No timetable generation, model inference/training, native solve or
 comparison followed. This is a pure control-unit gate, not a replacement native
 qualification or evidence of a strong classical control or learned advantage.
 
-The next bounded source task is **CF1 and a fixed-route continuous-charging
-helper**, with independent review of route ownership, fixed binaries, all remaining
-variable types, replay and bound scope. Then freeze the explicit 60-second
-schedule and affected-path preflight before numerical dispatch. Do not repeat
-already-passed historical gates without a specific diagnosed path/source change.
+CF1 source and fake-interface checks now follow above. Its composite/native
+integration remains pending; do not infer it from either pure unit gate.
 
 ## Inherited state: original eight native paths passed
 
@@ -69,49 +102,50 @@ Current evidence:
 
 ## Authoritative qualification budget
 
-Carry **1294.1180143401803 charged seconds** from
-`classical-controls-checks/accounting.json`. Recorded-field decimal sum is
-1294.1180143401801605. It adds the single focused check's1.0055290000000001 s
-(allocation0.398421 plus supervisor0.607108) to V7's1293.1124853401802 s.
-The check's monitor-child0.206577 s is already in observed children/allocation;
-do not add it again. All earlier failures and conservative charges remain.
-V7 itself includes179.510402752086521 worker allocations,98.921835 run CPU
-(already including88.326625 monitor children), external freeze and final analysis.
-Its gates omit a final.002147 s tail; its accounting, inherited here, includes it.
+Carry **1295.1392203401801 charged seconds** from
+`constructive-controls-checks/accounting.json`. Recorded-field decimal sum is
+1295.1392203401801603. Latest check adds1.0212059999999998 s (allocation0.412408
+plus supervisor0.608798) to1294.1180143401803. Monitor-child0.207502 s is already
+in observed children/allocation; do not add it again. Previous CA1 check adds
+1.005529 s to native V7's1293.1124853401802. Every earlier failed/conservative
+charge remains inherited. V7 includes its final analysis tail; its gates alone
+omit.002147 s. The shared20s administrative provision is already inherited.
 
 Approved1800 hard /1620 dispatch /180 shutdown reserve, one local single-thread
 numerical worker and5GiB remain. **ADMIN0**: shared20s already carried. Remaining
-dispatch headroom325.88198565981975. Do not ask again for this approved cap.
+dispatch headroom324.86077965981985. Do not ask again for this approved cap.
 Any further native qualification/preflight remains charged here unless an
 explicitly applicable later budget exists; a new label cannot reset qualification
 spend. No new resource commitment was made. Do not repeat historical passed gates
 without a diagnosed affected source/path change. Preserve every failed revision.
 
-## Next bounded package: constructive classical control
+## Next bounded package: composite CF1 and 60-second clock
 
-Engineering prerequisite is cleared; advance implementation rather than another
-qualification campaign. Read `RECOVERY_CLASSICAL_BASELINE_SPEC.md` and
-`RECOVERY_LEARNED_VALUE_STUDY_ADDENDUM.md` only as needed. The common selector
-and CA1 are source-implemented and unit-checked above;
-advance **constructive CF1** next. No trained asset needs editing or inference
-for that source task.
+Advance source integration rather than another broad qualification campaign.
+Use `CF1_PACKAGE_PROTOCOL.md`, `RECOVERY_CLASSICAL_BASELINE_SPEC.md` and relevant
+study addendum only as needed. Source control helpers are implemented, not yet
+credible performance baselines. No trained asset needs editing or inference for
+the integration task. Keep model and original native/replay sources unchanged
+where possible; new wrappers must reuse the qualified start and physical lift.
 
-Use a common price-blind incoming/outgoing coverage backbone B. Each ranker
-fills flexible connections outside B to exactly
-K=min(M,max(ceil(.30*M),|B|)); preserve all boundary movements. Rank-dependent
-coverage unions did not control cardinality. Equal counts do not equalize graph
-or solver difficulty. CA1 is an unvalidated charging/capacity/price proxy using
-a,b; CF1 is an unvalidated constructive route/charging control. Neither is a
-certificate. The selector/CA1's counts, ties, units and proxy contracts passed
-symbolic checks; CF1 still requires meaningful route/charging/replay checks
-before native credibility work. Do not silently expand a failed design. Preserve the qualified core and model assets while any worker runs.
+Use the existing common price-blind top-three incoming/outgoing backbone B and
+exact flexible K=min(M,max(ceil(.30*M),|B|)); preserve boundaries, original order,
+zero exposure and identities. Equal counts do not equalize topology/search effort.
+CA1 sees a,b while current learners see a only. CF1 is price-blind construction
+followed by target-market charging, so its bill response is not learned response.
+Neither control is a feasibility/optimality certificate before physical replay.
 
-The proposed comparison is **60s**. Current `recovery_coordinator.Schedule`
-requires exactly30s: do not launch a60s study through it unchanged or claim the
-30s engineering gate establishes60s behavior. Freeze explicit allocation and
-focused source-bound preflight, using remaining qualification budget, before
-any new native work. Prefer affected-path checks to a blind full-matrix repeat.
-No60s launch manifest, new comparison IDs, inference or training run exists yet.
+The comparison is proposed at **60 s**, but `recovery_coordinator.Schedule` still
+requires exactly30 s. Freeze explicit construction/charging/prefix/full-search/
+admission/finalization allocations and affected-path tests before using60 s.
+Preserve the qualified30 s behavior rather than silently scaling constants or
+claiming its gate covers60 s. Common clock begins before imports/loading/scoring;
+all construction, rebuilds, replay, exact billing, capture and durable writes count.
+A one-time charging-window deadline must enforce cumulative completion across
+repairs as stated above. Durably admit a replay-valid fallback before warm start,
+retain it through rejection/later failures, and report actual native processing
+and full unrestricted bound certification separately. No60 s launch manifest,
+new cohort registry, inference or training run exists yet.
 
 Current unlaunched study: six arms (graph-v8/CatBoost/CA1/random recovery,
 cold full and CF1), eight fresh development bases, three seeds, plus four-base
