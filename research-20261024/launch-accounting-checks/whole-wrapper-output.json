@@ -1,0 +1,93 @@
+{
+  "attempt_id": "attempt01",
+  "revision": 1,
+  "command": [
+    "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/.venv-local/bin/python",
+    "-m",
+    "pytest",
+    "-q",
+    "src/tests/test_launch_accounting.py"
+  ],
+  "executed_tests": [
+    "test_launch_accounting.py"
+  ],
+  "hashed_qualified_test_dependencies": [],
+  "command_sha256": "5e69f270b487fff1fede23f3602d953e8368426e6d9503a57e42ad42907fd788",
+  "parent_monotonic": 6057456.620007375,
+  "carried_charge_s": 1518.4011370494984,
+  "prior_charge_s": 1518.4011370494984,
+  "administration_allowance_s": 0.0,
+  "hard_ceiling_s": 1920.0,
+  "dispatch_stop_s": 1740.0,
+  "shutdown_reserve_s": 180.0,
+  "wall_limit_s": 10.0,
+  "outer_limit_s": 12.5,
+  "inclusive_planning_s": 15.0,
+  "absolute_package_end_s": 1538.4011370494984,
+  "analysis_finalization_reserve_s": 5.0,
+  "rss_limit_bytes": 5368709120,
+  "solver_free": true,
+  "policy": "launch-accounting-source-v1",
+  "returncode": 0,
+  "failure": null,
+  "secondary_errors": [],
+  "termination": {
+    "owned_pgids": [
+      43658
+    ],
+    "leader_returncode": 0,
+    "reaped": true,
+    "group_absent": true,
+    "surviving_pgids": [],
+    "group_states": [
+      {
+        "pgid": 43658,
+        "state": "absent"
+      }
+    ],
+    "probe_diagnostics": [],
+    "cleanup_errors": [],
+    "cleanup_deadline": 6057469.120007375,
+    "helper_result": {
+      "pgid": 43658,
+      "owned_pgids": [
+        43658
+      ],
+      "group_absent": true,
+      "returncode": 0,
+      "probe_diagnostics": [],
+      "cleanup_errors": [],
+      "group_states": [
+        {
+          "pgid": 43658,
+          "state": "absent"
+        }
+      ],
+      "cleanup_deadline": 6057469.120007375
+    }
+  },
+  "source_changes": [],
+  "passed": true,
+  "sampled_peak_rss_bytes": 35356672,
+  "elapsed_allocation_s": 1.2415297906845808,
+  "sampled_process_tree_cpu_s": 0.15,
+  "observed_children_cpu_s": 0.355682,
+  "monitor_child_cpu_s": 0.197437,
+  "charged_allocation_s": 1.2415297906845808,
+  "supervisor_cpu_s": 0.762763,
+  "charged_cpu_s": 2.004292790684581,
+  "sampled_plus_monitor_cpu_s": 0.347437,
+  "accounting_observations_complete": true,
+  "stdout_sha256": "6eb2155844b8138a16de18307753f93d83fe857560c2eb702498e90a0f83c83a",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "artifact_hashes": {
+    "attempt.json": "b1ed744cc49733b7351b21441c3e5cad0fe6a0c48dfdbe8501ed59c99042245d",
+    "ownership.jsonl": "437305969080657fb37215f063029e4e4f3cd1a434eb4e0097e7c1a1a42122d9",
+    "resources.jsonl": "7c0d5660fa0322f4e08068115c99b2d450703b5a984e7839d4dc55f60a09b705",
+    "stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdout.log": "6eb2155844b8138a16de18307753f93d83fe857560c2eb702498e90a0f83c83a"
+  },
+  "cumulative_qualification_charge_s": 1520.405429840183,
+  "administration_scope": "No new administration allowance",
+  "scope": "Pure canonical launch accounting; no numerical qualification or native clearance"
+}
