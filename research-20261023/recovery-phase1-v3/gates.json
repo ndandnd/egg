@@ -1,0 +1,248 @@
+{
+  "policy": "recovery-phase1-runner-v1",
+  "passed": false,
+  "counts": {
+    "submitted": 1,
+    "accepted": 1,
+    "rejected": 0,
+    "unknown": 0,
+    "native_processing": 1,
+    "fallback": 4,
+    "fault_exercised": 1,
+    "terminal": 5,
+    "planned": 8,
+    "invalid_witnesses": 0,
+    "mapping_violations": 0,
+    "bound_scope_violations": 0,
+    "censored": 1
+  },
+  "rows": [
+    {
+      "task": {
+        "base_id": 50997,
+        "trips": 40,
+        "arm": "static",
+        "seed": 17,
+        "seconds": 30.0,
+        "fault": null,
+        "id": "584067521b4af0cb3da0"
+      },
+      "issues": [],
+      "endpoint_wall_s": 24.766397792845964,
+      "censored": false,
+      "charged_cpu_s": 25.337125500664115,
+      "rss_bytes": 233832448,
+      "prefix_bill_exact": "7520849649258076462021101763908257310571759102533/11417981541647679048466287755595961091061972992",
+      "fallback_bill_exact": "7520849649258076462021101763908257310571759102533/11417981541647679048466287755595961091061972992",
+      "final_bill_exact": "7520849649258076462021101763908257310571759102533/11417981541647679048466287755595961091061972992",
+      "selected_witness_sha256": "5646f1005c5ae01712904f44f87bfa626131a7773151135055b3a1a1c219671f",
+      "bound_provenance": [],
+      "native": {
+        "submitted": 0,
+        "classified": [],
+        "unattributed_log_matches": []
+      }
+    },
+    {
+      "task": {
+        "base_id": 50997,
+        "trips": 40,
+        "arm": "recovery",
+        "seed": 17,
+        "seconds": 30.0,
+        "fault": null,
+        "id": "27133bea236c6b35ac75"
+      },
+      "issues": [],
+      "endpoint_wall_s": 26.567754374817014,
+      "censored": false,
+      "charged_cpu_s": 27.21316875051707,
+      "rss_bytes": 307789824,
+      "prefix_bill_exact": "7520849649258076462021101763908257310571759102533/11417981541647679048466287755595961091061972992",
+      "fallback_bill_exact": "7520849649258076462021101763908257310571759102533/11417981541647679048466287755595961091061972992",
+      "final_bill_exact": "7520849649258076462021101763908257310571759102533/11417981541647679048466287755595961091061972992",
+      "selected_witness_sha256": "5646f1005c5ae01712904f44f87bfa626131a7773151135055b3a1a1c219671f",
+      "bound_provenance": [
+        {
+          "guard": 1e-06,
+          "lower": 559.0851273061679,
+          "raw_lower_bound": 559.0851283061679,
+          "round": 0,
+          "scope": "full_unrestricted_mip"
+        }
+      ],
+      "native": {
+        "submitted": 1,
+        "classified": [
+          {
+            "inventory_sha256": "9cda84b01fbae805d0f6bfa60e0f36a1d549b0f2faec301620783557322058d0",
+            "status": "accepted",
+            "processed": true,
+            "evidence": [
+              {
+                "offset_start": 13905,
+                "offset_end": 13968,
+                "text": "User MIP start produced solution with objective 582.442 (0.02s)",
+                "status": "accepted"
+              },
+              {
+                "offset_start": 13969,
+                "offset_end": 14032,
+                "text": "User MIP start produced solution with objective 582.442 (0.02s)",
+                "status": "accepted"
+              },
+              {
+                "offset_start": 14033,
+                "offset_end": 14077,
+                "text": "Loaded user MIP start with objective 582.442",
+                "status": "accepted"
+              }
+            ]
+          }
+        ],
+        "unattributed_log_matches": [
+          {
+            "offset_start": 19401,
+            "offset_end": 19458,
+            "text": "User MIP start produced solution with objective 0 (0.03s)",
+            "status": "accepted"
+          },
+          {
+            "offset_start": 19459,
+            "offset_end": 19516,
+            "text": "User MIP start produced solution with objective 0 (0.03s)",
+            "status": "accepted"
+          },
+          {
+            "offset_start": 19517,
+            "offset_end": 19555,
+            "text": "Loaded user MIP start with objective 0",
+            "status": "accepted"
+          },
+          {
+            "offset_start": 21160,
+            "offset_end": 21223,
+            "text": "User MIP start produced solution with objective 582.442 (0.02s)",
+            "status": "accepted"
+          },
+          {
+            "offset_start": 21224,
+            "offset_end": 21287,
+            "text": "User MIP start produced solution with objective 582.442 (0.02s)",
+            "status": "accepted"
+          },
+          {
+            "offset_start": 21288,
+            "offset_end": 21332,
+            "text": "Loaded user MIP start with objective 582.442",
+            "status": "accepted"
+          }
+        ]
+      }
+    },
+    {
+      "task": {
+        "base_id": 50997,
+        "trips": 40,
+        "arm": "cold",
+        "seed": 17,
+        "seconds": 30.0,
+        "fault": null,
+        "id": "61cb90ed7e02414d15b8"
+      },
+      "issues": [],
+      "endpoint_wall_s": 25.542544749565423,
+      "censored": false,
+      "charged_cpu_s": 26.12377820815891,
+      "rss_bytes": 340688896,
+      "prefix_bill_exact": "120337637901052551477281469997060855211630367001045/182687704666362864775460604089535377456991567872",
+      "fallback_bill_exact": "120337637901052551477281469997060855211630367001045/182687704666362864775460604089535377456991567872",
+      "final_bill_exact": "120337637901052551477281469997060855211630367001045/182687704666362864775460604089535377456991567872",
+      "selected_witness_sha256": "11bf1e373958787f2872dd895412a1c507946cf27e54164641ee76251cdad43c",
+      "bound_provenance": [
+        {
+          "guard": 1e-06,
+          "lower": 563.6423328967653,
+          "raw_lower_bound": 563.6423338967653,
+          "round": 0,
+          "scope": "full_unrestricted_mip"
+        }
+      ],
+      "native": {
+        "submitted": 0,
+        "classified": [],
+        "unattributed_log_matches": []
+      }
+    },
+    {
+      "task": {
+        "base_id": 50997,
+        "trips": 40,
+        "arm": "start_fault",
+        "seed": 17,
+        "seconds": 30.0,
+        "fault": "start_setter_exception",
+        "id": "27f30de636e0d9047cee"
+      },
+      "issues": [],
+      "endpoint_wall_s": 13.494762333109975,
+      "censored": false,
+      "charged_cpu_s": 14.059098625555634,
+      "rss_bytes": 203390976,
+      "prefix_bill_exact": "7520849649258076462021101763908257310571759102533/11417981541647679048466287755595961091061972992",
+      "fallback_bill_exact": "7520849649258076462021101763908257310571759102533/11417981541647679048466287755595961091061972992",
+      "final_bill_exact": "7520849649258076462021101763908257310571759102533/11417981541647679048466287755595961091061972992",
+      "selected_witness_sha256": "5646f1005c5ae01712904f44f87bfa626131a7773151135055b3a1a1c219671f",
+      "bound_provenance": [],
+      "native": {
+        "submitted": 0,
+        "classified": [],
+        "unattributed_log_matches": []
+      }
+    },
+    {
+      "task": {
+        "base_id": 50999,
+        "trips": 80,
+        "arm": "static",
+        "seed": 17,
+        "seconds": 30.0,
+        "fault": null,
+        "id": "de8d8da71bc8d2dd1d5d"
+      },
+      "issues": [
+        "engineering_failure",
+        "censored_endpoint"
+      ],
+      "endpoint_wall_s": 30.38386187516153,
+      "censored": true,
+      "charged_cpu_s": 31.039251207374036,
+      "rss_bytes": 518848512,
+      "prefix_bill_exact": null,
+      "fallback_bill_exact": null,
+      "final_bill_exact": null,
+      "selected_witness_sha256": null,
+      "bound_provenance": [],
+      "native": {
+        "submitted": 0,
+        "classified": [],
+        "unattributed_log_matches": []
+      }
+    }
+  ],
+  "unresolved": [
+    "de8d8da71bc8d2dd1d5d:engineering_failure",
+    "de8d8da71bc8d2dd1d5d:censored_endpoint",
+    "undispatched:85710efee4db820ff4bc",
+    "undispatched:d3de154792c114e78483",
+    "undispatched:00ab4af02ac326472cf4"
+  ],
+  "cumulative_charged_cpu_s": 542.9862141688247,
+  "hard_ceiling_s": 900.0,
+  "dispatch_stop_s": 720.0,
+  "check_evidence": {
+    "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/research-20261023/integer-cutoff-checks/attempt01/attempt.json": "dc1f0e2bd0ba9d86d75ef69e880ffd32e3249d2778b1332357647705a3d074f7",
+    "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/research-20261023/integer-cutoff-checks/attempt01/result.json": "f4641413489509dcbd5427289b2ca70ce98915f90b5832c8f699c63f73d6deb1"
+  },
+  "claim": "engineering qualification only; no ranking inference"
+}
