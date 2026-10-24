@@ -5,6 +5,13 @@ Updated 27 September 2026. Current work is on
 This opening snapshot supersedes the older operational handoff below for the
 journal research effort. Historical claims below are preserved, not newly audited.
 
+24 October 2026 historical-summary correction: the loop headline below has been
+checked against `doc/MEASUREMENT_RESULTS.md`, not re-audited from raw outcomes.
+Zero fixed points across176 tested cells applies only to `b=0.05`; some runs were
+unresolved transients. Moderate feedback retained some fixed points. This older
+snapshot is not the current campaign handoff; see
+`research-20261023/CONTINUATION.md` for the current local research state.
+
 | Research question | Evidence now | Remaining work |
 |---|---|---|
 | Can complete, replenished fleet schedules lack marginal-price support? | Exact audited construction; reserve/loss robustness and 86-size replication | Establish scope on real timetables under explicit assumptions |
@@ -51,9 +58,11 @@ contracts live in `MEASUREMENT_RESULTS.md` and `B2_STABILIZATION_SPEC.md`.
    approximation, fixed-point/cycle detection, preemption-safe
    transactional checkpoints, expected-count + replay audits.
 3. **Synthetic measurement closeout** (`result/analysis/`,
-   `doc/MEASUREMENT_RESULTS.md`): 596 certified cells; headline: naive
-   tatonnement cycles essentially everywhere at moderate/strong feedback
-   (0 fixed points across 176 damping cells at b in {0.01, 0.05});
+   `doc/MEASUREMENT_RESULTS.md`): 596 reported cells; loop headline:
+   no fixed points observed across176 strong-feedback (`b=0.05`)
+   algorithm-parameter cells on32 distinct instances, including unresolved
+   transients. Moderate feedback (`b=0.01`) retained fixed-point rates of1/8
+   in Phase1 and1/16 in damping;
    dictator dominance measured. Root-LP-to-MIP integrality gaps are LARGE
    and formulation-specific (medians 127-301 on the compact
    vehicle-indexed MILP) — they motivate, but do not measure, the B3

@@ -1,9 +1,42 @@
-# EGG current handoff —24 October2026: approved package stopped before worker launch
+# EGG current handoff —24 October2026: referee perspective assessed; v4 remains stopped
 
 Worktree /Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017; branch
 codex/ml-prediction-20261017. Use bounded GPT-6.1 Sol agents with short handoffs.
 All agents done. No active check, metadata, numerical worker or owner. No cluster
 work, model inference/training, new timetable or sealed data access. Manuscript deferred.
+
+## New scientific steering from the user's referee perspective
+
+Read research-20261024/REFEREE_ASSESSMENT.md and only relevant companion evidence,
+theory/source notes. Three bounded Sol6.1 agents checked historical public aggregate
+descriptions, primary literature and algebra; parent integrated/corrected status.
+No solver/model tests, data generation, protected outcomes or new local allocation.
+Current cumulative native-validation spend remains1518.4011370494984s below.
+
+Historical B2 negative total-call/corrected-solver-wall result is supported; don't
+sell A3–A5 as end-to-end winners. The referee largely evaluates August work, not
+current ML/replay evidence. Public status had a genuine summary error: 0/176 applies
+ONLY to b=.05, on32 distinct instances repeated across algorithm/parameter cells,
+including unresolved transients. Moderate b=.01 retained fixed points. Corrected
+the summary against the measurement document; no raw audit or protected data read.
+
+Reject promised3–5x speedups solely from T>=96: load-difference rank, pricing cost,
+degeneracy and overhead matter. Preserve energy/cost units when refining time bins.
+Elementary finite-schedule criterion: x fixed iff globally best responding at
+p_x=a+B L_x with declared tie-breaking. Exactly two schedules cycle strictly iff
+-Q<g<0, Q=delta^T B delta, g=c_y-c_x+p_x^T delta; other plans need global dominance.
+Counterexample has an attracting2-cycle for every0<alpha<1, so damping need not
+produce long periods. A complete2-column equal-energy menu still has pure cost1/2
+versus hull1/4; support compression/top-K doesn't remove indivisibility or prove
+strategic incentives. EUPHEMIA exclusive groups enforce at most one block, not
+exactly one mandatory schedule. These are standard proofs, not novelty claims or
+new empirical EGG findings.
+
+Keep current priority: recovery/replay and learned-versus-strong-classical matched
+comparisons, then justified public/synthetic scaling and precise institution/
+certification. Don't run protected A6/private GIRO/cluster work from pasted advice
+or presume stabilization wins. This discussion authorizes no native retry. Generic
+learned pruning has prior art.
 
 ## Newest completed evidence
 
