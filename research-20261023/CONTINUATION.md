@@ -1,145 +1,119 @@
-# Current singleton native preflight ready —24 October2026
-
-The repaired single-CF1 configuration is frozen in cf1-preparation-native-v2.
-ONE new source-bound check passed14 config/capture fakes in0.12s (PGID92906
-absent/reaped). ONE separate metadata-only freeze passed (PGID92992 absent/reaped).
-No native task has launched as of this checkpoint. All agents are done.
-
-Current carry **1420.3927097992353s** is in
-cf1-preparation-native-v2/freeze-accounting.json: prior1416.3727097992353 plus
-check1.4 and externally reconciled freeze2.62. ADMIN0, every old failed/conservative
-charge inherited. Raw freeze result and positive-only external consolidation are
-both preserved; use freeze-attempt01/consolidated-receipt.json for native binding.
-Package hard end1581.3727097992353; launch requires137.5 remaining, actual160.98.
-Original1800/1620/180 and one thread/5GiB remain unchanged.
-
-Next action ONLY the prospective run-command.json, after source GitHub backup:
-new task ca0fa61075b9c6d4e16c, one inspected50999/80 CF1 seed17/day/revision2,
-60endpoint/61drain/62.5cleanup, same repaired preparation/unchanged physics. No
-recovery suffix/new case/model/comparison. No auto retry. Hold all frozen source/
-fixture/library/test/protocol assets unchanged during run. Independently analyze
-complete path/replay/start/capture/bound/ownership evidence and actual spent time.
-The mapped-set hoist also applies to capture verification without dropping checks.
-Neither source nor freeze passing qualifies the native path. If failed, preserve
-and diagnose. Current active owner/attempt/ledger receipts are authoritative.
-
-The older checkpoint below is retained as history; its1416.3727097992353 carry
-and unimplemented-new-adapter statement are superseded above.
-
-# EGG current handoff —24 October2026, preparation repair source-checked
+# EGG current handoff —24 October2026, v2 preparation failure localized
 
 Worktree /Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017; branch
-codex/ml-prediction-20261017. Use bounded GPT-6.1 Sol agents, concise handoffs.
-All agents are done; no numerical worker or active supervisor owner remains.
-No native solve/freeze, inference, training, new case, sealed data, cluster or
-comparison ran in this package. Manuscript work remains deferred.
+codex/ml-prediction-20261017. Use bounded GPT-6.1 Sol agents, short self-contained
+handoffs. All agents are done, no numerical worker or active owner remains.
+One bounded native package completed; no further solver/training/comparison run
+was launched. Manuscript remains deferred; cluster/sealed data untouched.
 
-## Latest bounded package
+## Latest verified package
 
-Read CF1_PREPARATION_REPAIR_RESULTS.md, the three implementation/review notes,
-CF1_PREPARATION_REPAIR_PROTOCOL.md, and current
-cf1-preparation-repair-checks/{command,prospective-budget,accounting}.json and
-attempt01/{attempt,result}.json. The single source-bound check passed **10 directly
-affected symbolic/fake cases in0.16s**; old213/54/61 matrices were not selected.
-Imported historical definitions were hashed, not rerun as historical cases.
-No primary/secondary/source-change/cleanup/accounting error. Owned PGID88906
-is absent/reaped. Do not repeat this source gate absent a specific source change.
+Read CF1_PREPARATION_NATIVE_RESULTS.md and
+CF1_NEXT_MECHANISM_GATE_RECOMMENDATION.md, current cf1-preparation-native-v2/
+{design,analysis,accounting}.json and only relevant compact task receipts. Source
+commit89ac5a3b7915d3f9b5cb37fc6e7cec36ae2fe67b backed up before dispatch under
+Nathan Cho identity. New14-case config/capture gate passed0.12s; PGID92906 absent/
+reaped. Metadata freeze passed; PGID92992 absent/reaped. External consolidation
+preserves raw freeze result and positive-only actual-entry/tail reconciliation.
+Sources remained frozen during native/analysis; no clock/physics relaxation.
 
-Changes made ONLY after the old native worker stopped:
--constructive_charging.py builds mapped_set once per inventory, preserves every
- original identity/physical-row/equality/mapping/object/type/bound check and all
- inventory call sites; traversals/binary fixing check the same deadline and keep
- compact per-substage monotonic timing/failure evidence locally.
--constructive_proposal.py saves compact helper stages/timings and failures before
- rejecting late returns. No late plan, renewed window/quota or raw-capture/plan/
- replay duplication. Equality handling is unchanged.
--comparison_native_worker.py records compact native-model build entry/return
- phase/case/cutoff timings; rechecks after entry marker I/O and keeps the fresh
- post-build cutoff. No original30s core, physical parameter, tolerance, model,
- column or training asset was changed.
+**V2 native gate FAILED.** Exactly one fresh task ca0fa61075b9c6d4e16c, inspected
+synthetic50999/80 CF1 seed17/day/no fault/protocol_revision2. No retry/replacement/
+recovery suffix. Worker PGID93286 absent/reaped, supervisor93283 exited; owner
+removed. Timely exit0 did not override the explicit unexercised-path failure.
 
-These are source/fake results, NOT a measured native speedup or repaired CF1
-qualification. Individual native operations, identity computation, sorting and
-serialization are not preemptible. Actual dominant preparation cost is still
-unmeasured. Current60s CF1 and recovery native paths remain unqualified.
+Charging entry2.2548965001, deadline8.2548965001. New retained timings: validation
+0.1067072s, original model build2.1703005, inventory0total2.0026196 including
+rows1.7093449, binary fixing0.0067431. Second inventory.rows exhausted remaining
+window after1.7152868, inventory ended8.2955882503 (about0.041s rejected non-
+preemptible overshoot). No CF1 optimization/fixed capture/start ran. This proves
+preparation cost, not charging infeasibility or CF1 plan quality. Repeated full
+physical-row reconstruction, in addition to model building, is the measured
+bottleneck. Do not run another80-trip qualification just to tune a deadline.
+
+Cold full fallback:24 vehicles, true bill3386.2012021947876. Independent analysis
+re-lifted/replayed exact bills and capture/bound scope without those integrity
+issues. Output50.8885168750s and ACK timely/uncensored; required CF1 path remains
+unqualified. Source mapped-set hoisting removed repeated verification work without
+removing checks; analysis2.096943CPU vs old14.423857 on earlier engineering run is
+not a general speedup claim. Raw native/license stdout/stderr local/hash-indexed;
+one39,791,836-byte capture has lossless2,684,872-byte gzip backup+hash verification.
 
 ## Authoritative cumulative accounting
 
-Carry **1416.3727097992353 charged seconds** from
-cf1-preparation-repair-checks/accounting.json,700 immutable proof paths. Inherit
-all1414.4127097992352 prior seconds, including earlier failed revisions and
-conservative reconciliation. Current package adds1.96: internal allocation+
-supervisor1.277385; external whole-wrapper max(1.44 wall,1.35 CPU)+0.02 precision
-requires1.46 (extra spent reconciliation0.182615); plus conservative finalization
-charge0.5 within the2.5 reserve. These are spent charges, NOT admin credits.
-ADMIN0. Monitor-child0.296267 already lies inside allocation; count it once.
-Current source-only package hard endpoint1439.4127097992352 respected.
+Carry **1503.9811370494986 charged seconds** from
+cf1-preparation-native-v2/accounting.json,759 proof paths. Every old failure and
+conservative charge inherited. Package added87.60842725026328 to1416.3727097992353:
+source check1.4, freeze2.62, native worker51.551580250263214, run supervisor/monitor
+28.836847000000006, independent analysis2.096943, positive external analysis
+reconciliation0.393057, packaging0.21 and conservative finalization0.5. Whole run
+52.37wall/78.99CPU requires no extra over internal80.3884272503; analysis whole
+2.47wall/2.20CPU reconciled to2.49 including0.02 precision. Monitor children count
+once. ADMIN0; conservative finalization is spent charge, not new credit. Never
+use analysis.json pre-tail1500.7811370494985 as current carry.
 
-User-approved TOTAL hard1800/dispatch1620/shutdown180 persists, one single-thread
-local numerical worker/5GiB. Remaining dispatch headroom203.62729020076472.
-Do not reset the ledger, erase failed/conservative charges or ask again for this
-approved0.5CPUh cap. New native work needs a prospective resource/clock/source/
-fixture/receipt lock and fresh namespace. An unlaunched proposal is not a manifest.
+ApprovedTOTAL hard1800/dispatch1620/shutdown180, one single-thread local numerical
+worker/5GiB persists. Dispatch headroom116.01886295050144. V2 hard package endpoint
+1581.3727097992353 respected; unused provision is not a retry authorization. Old
+137.5 launch reserve no longer fits. New work requires a concrete prospective
+resource plan inside remaining TOTAL or a specific budget decision before launch;
+do not ask again for the already-approved0.5CPUh or borrow8CPUh comparison/shutdown
+reserves. Useful source/proof/protocol work can continue without another solve.
 
-## Next executable package: fresh single-CF1 native preflight design/adapter
+## Next bounded package — mechanism qualification versus method outcome
 
-Implement/freeze the smallest explicit NEW single-CF1 native adapter/design from
-current repaired sources; do not rerun comparison-native-preflight-v1, which is
-historically source-bound and FAILED. The existing v1 adapter/worker expects TWO
-v1 tasks and its old package constants; changing runtime config must be explicit,
-serialized/restored and source-tested only on affected bindings, never silently
-run old locks through changed sources. No broader native supervisor redesign.
+Root scientific recommendation (not a new manifest): design/freeze ONE small
+explicit engineering mechanism gate, preferably existing inspected50997/40 only
+after checking its immutable fixture/identity/market/current receipts. Must exercise
+actual fixed charging, independent replay/exact bills, durable fallback, binary-
+only full start and attributable native processing. No case generation, protected
+outcomes, silent replacement, deadline extension or free preprocessing. Success
+would qualify these mechanics ONLY, not80-trip performance/scalability. V1/V2 stay
+failed. Stop on missing path/integrity/ownership failure; no automatic retry.
 
-The prospective gate should reuse inspected50999/80 seed17/day, original fixture/
-market/library identities and common60s /61 drain/62.5 cleanup. Same construction6,
-charging stage12, once min(stage end,first+remaining6), full search44/hard54 and
-output/ACK60. Do not extend clocks, grant free preprocessing, weaken physical
-checks, alter fixtures or silently fall back to another backend. Source-check
-coverage alone does not launch it. Budget observed costs: one62.5 worker,
-run monitor/supervisor about32s, independent analysis observed14.4s, plus actual
-freeze/check/finalization and reserve within remaining TOTAL. Freeze exact task,
-source hashes, faults, ownership/capture/ACK policy and budget BEFORE dispatch.
-No automatic retry of failed/interrupted/unreceipted attempts.
+Current singleton shim and default freezer still explicitly require50999/80.
+Any small-case adaptation needs minimal explicit source-bound case/policy/task/
+namespace changes and directly affected tests; never pass a40 fixture through an80
+lock. Preserve the reviewed supervision bodies and old proofs/failed source in
+Git. Do not start a new generic qualification campaign or repeat old10/14/61/213
+matrices absent an affected source change. Freeze exact resources, fixture/task/
+source/library/faults/endpoints/receipt policy BEFORE any native dispatch; inspect
+completed gates first. Keep sources/models/assets unchanged while workers run.
 
-Collect complete compact preparation diagnostics/timestamps. Must exercise fixed
-inventory, charged CF1 replay-valid durable fallback and attributable warm full
-start, plus physical selected-plan replay and valid full-bound scope. Cold fallback
-alone cannot qualify CF1. Diagnose before expanding; recovery60 still needs its
-own applicable real gate. No comparison screen until applicable engineering gates
-pass. Keep sources/model assets locked while workers run.
+Before a later fresh independent matched screen, prospectively distinguish known
+method acquisition timeouts from unknown infrastructure errors. If a hybrid's
+deployed output is timely replay-valid cold fallback, score that actual plan and
+all paid preprocessing, separately report failed CF1 acquisition; give no credit
+for a warm path never executed. Retain EVERY assigned base/regime/seed/timeout.
+Unknown infrastructure is not an opponent win or automatic both-invalid tie.
+Small positive engineering evidence does not rehabilitate old80 failures.
 
-## Preserved native failure and research direction
+A closed mutation contract to audit physical rows once/model may later help, but
+must cover actual backend/callback operations; row count alone is insufficient.
+A reduced fixed-route LP needs a new equivalence proof (stored energy bands/shared
+charging/numerical extraction). Defer either refactor until justified; they need
+not hold every comparison hostage to an80-trip constructive timeout. Current
+comparison contract must still be frozen and applicable mechanics qualified.
 
-Previous commits f16e0ddd and1f8b2f8b preserve the failed v1 two-task source/evidence.
-Read COMPARISON_NATIVE_PREFLIGHT_RESULTS.md/DIAGNOSIS.md only if needed, not raw
-traces/matrices. CF1 task61577e6156a9296d7ae3 was attempted once; recovery
- eb4d0da1295ea58592ff was correctly left undispatched. Owned PGID84066 absent/reaped.
-CF1 entered charging at2.204s, deadline8.204, returned20.392 before first fixed
-inventory/CF1 optimization. Unclocked scans and diagnostic loss were suspects;
-this repair has not yet measured actual native impact. Cold full fallback24
-vehicles/bill3386.2012021947876 independently replayed; endpoint57.0751s timely.
-No optimality or CF1/control/ML advantage follows. Raw native/license logs stay
-local/hash-indexed; complete39.8MB capture has lossless2.68MB gzip backup.
+## Research/operations boundaries
 
-Unlaunched192-decision study: six arms graph-v8/CatBoost/CA1/random recovery, cold
-full, CF1; eight fresh development bases, three seeds, four-base paired scoring-
-price intervention at60s. No registry/manifest/model inference yet. Match all
-loading/scoring/repair/replay/finalization clocks; CA1 sees a,b, learners see a,
-so distinguish deployable-method contrast from equal-information attribution.
-October17 remains development.91.916% of summed matched savings versus one
-heuristic came from vehicle count; learned tariff responsiveness/generalization/
-FT50 readiness are unestablished. Generic GNN pruning has direct prior art.
-Prioritize reliable recovery/credible classical controls and matched independent
-regime evidence before justified data/ranking/model improvements. Group all
-variants/source plans; inner-only selection. Keep sealed DEV/TEST/A6/B3/
-confirmation/GIRO closed.41-entry Scholar synthesis needs no routine repeat;
+Unlaunched192-decision proposal: graph-v8/CatBoost/CA1/random recovery, cold full,
+CF1;8fresh development bases/3seeds/four-base paired scoring-price intervention,
+60s end-to-end. No new registry/model inference. Keep cold full and strong
+nonlearned/charging-aware ranking controls central; failed CF1 or random alone
+cannot establish learning's added value. CA1 sees a,b, learners a: distinguish
+method contrast from equal-information attribution. October17 remains development;
+91.916% summed matched savings vs one heuristic was vehicle count. No learned
+tariff responsiveness/generalization/FT50 readiness established; generic GNN
+pruning has prior art. Group variants/source plans, inner-only selection, sealed
+DEV/TEST/A6/B3/confirmation/GIRO closed.41-entry Scholar synthesis needs no repeat;
 do not force cross-field analogies. Leave Unicorn to v2g without monitoring.
 
-No Google Doc entry for this routine source-only pass. Prior log has ONE local
-replay/recovery milestone and ONE60s constructive preflight-failure entry, verified
-with eight inline visuals preserved. Do not repeat them, v5 or six October1 entries.
-Back up meaningful milestones to this branch with explicit Nathan Cho
-<nathan.cho2013@gmail.com> author/committer. Preserve branches/history/visuals.
-No PR merge, submission, private-data publication, reset credits, history rewrite
-or unrelated schedule restart. Notify only substantive findings/important failures/
-decisions or a concrete research artifact needing review. One bounded package/wake.
+Original Google Doc received ONE new constraint-audit diagnosis/recommendation
+entry, verified in cf1-preparation-native-v2/google-doc-update.json. Eight inline
+visuals, prior replay/recovery and first CF1-failure entries all remain once. Do
+not repeat those, v5 or six October1 entries. Back up milestones to this branch
+with explicit Nathan Cho <nathan.cho2013@gmail.com> author/committer, preserve
+history/visuals/branches. No PR merge/submission/private data/reset credits/history
+rewrite/unrelated schedule restart. Notify only significant results/failures/
+decisions/review-ready research; one bounded package per wake.
