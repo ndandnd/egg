@@ -21,6 +21,7 @@ from egglab import native_pathflow as pf
 from egglab.recovery_lift import lift_plan
 
 POLICY = 'recovery-shared-clock-coordinator-v1'
+HANDOFF_POLICY = 'anytime-hard-admission-v1'
 _HOOK_LOCK = threading.Lock()
 
 
@@ -53,6 +54,11 @@ class Schedule:
 
     @property
     def admission_reserve_s(self):
+        """Compatibility alias: planned headroom, never a guaranteed reserve."""
+        return self.planned_admission_headroom_s
+
+    @property
+    def planned_admission_headroom_s(self):
         return 2.
 
     @property
@@ -65,11 +71,11 @@ class Schedule:
 
     @property
     def prefix_handoff_end(self):
-        return self.prefix_end-self.admission_reserve_s
+        return self.prefix_end-self.planned_admission_headroom_s
 
     @property
     def full_handoff_end(self):
-        return self.planner_end-self.admission_reserve_s
+        return self.planner_end-self.planned_admission_headroom_s
 
     def as_dict(self):
         return {'parent_monotonic':self.parent_monotonic,'deadline':self.deadline,
@@ -77,8 +83,19 @@ class Schedule:
                 'full_integer_end':self.full_integer_end,'planner_end':self.planner_end,
                 'prefix_search_end':self.prefix_search_end,'full_search_end':self.full_search_end,
                 'prefix_handoff_end':self.prefix_handoff_end,'full_handoff_end':self.full_handoff_end,
-                'admission_reserve_s':self.admission_reserve_s,
+                'handoff_policy':HANDOFF_POLICY,
+                'planned_admission_headroom_s':self.planned_admission_headroom_s,
                 'finalization_reserve_s':3.,'completion_limit_s':3.}
+
+
+def admission_window(at, target, cutoff):
+    """A planner target may be missed; admission must start before its hard limit."""
+    if any(isinstance(value,bool) or not isinstance(value,(int,float)) or not math.isfinite(value)
+           for value in (at,target,cutoff)):
+        raise ValueError('Invalid admission clock window')
+    return {'planner_target':target,'target_overrun_s':max(0.,at-target),
+            'admission_cutoff':cutoff,'admission_remaining_s':cutoff-at,
+            'admission_open':at < cutoff}
 
 
 @dataclass
@@ -263,19 +280,21 @@ def coordinate(source_case, full_case, a, b, *, parent_monotonic, deadline, stor
     def admit(source, plan, stage, cutoff, handoff=None):
         nonlocal fallback, selected, fallback_receipt, durable_failure, dispatch_stopped
         entered = clock()
-        if handoff is not None and entered > handoff:
-            dispatch_stopped = True
-            raise TimeoutError('Physical admission entry exceeded planner handoff')
         events.append({'event':'admission_lift_enter','stage':stage,'at':entered,
                        'anchor':parent_monotonic,'elapsed_s':entered-parent_monotonic,
-                       'planner_handoff':handoff,'cutoff':cutoff})
+                       'planner_handoff':handoff,'cutoff':cutoff,
+                       **admission_window(entered,cutoff if handoff is None else handoff,cutoff)})
+        if entered >= cutoff:
+            dispatch_stopped = True
+            raise TimeoutError('Physical admission entry reached hard stage cutoff')
         try:
             witness = lift_plan(source, full_case, deepcopy(plan), a=a, b=b)
         finally:
             exited = clock()
             events.append({'event':'admission_lift_exit','stage':stage,'at':exited,
                            'anchor':parent_monotonic,'elapsed_s':exited-parent_monotonic,
-                           'planner_handoff':handoff,'cutoff':cutoff})
+                           'planner_handoff':handoff,'cutoff':cutoff,
+                           **admission_window(exited,cutoff if handoff is None else handoff,cutoff)})
         if clock() > cutoff:
             raise TimeoutError('Physical witness admission exceeded stage cutoff')
         if fallback is None:
@@ -324,20 +343,22 @@ def coordinate(source_case, full_case, a, b, *, parent_monotonic, deadline, stor
                 start_plan=None if start is None else deepcopy(start['plan']),
                 start_case=None if start is None else full_case, deadline=planner_end)
         returned = clock()
+        cutoff = schedule.prefix_end if stage=='prefix' else schedule.planner_end
         events.append({'event':'planner_return','stage':stage,'at':returned,
                        'anchor':parent_monotonic,'elapsed_s':returned-parent_monotonic,
                        'planner_handoff':planner_end,
-                       'admission_cutoff':schedule.prefix_end if stage=='prefix' else schedule.planner_end})
-        # Candidate processing/capture is not preemptible: all planner returns,
-        # including no-plan results, must still meet the earlier handoff.
-        if returned > planner_end:
+                       **admission_window(returned,planner_end,cutoff)})
+        # Nonpreemptive candidate processing may miss its budget target. It
+        # grants no new native call and still must leave an open admission gate.
+        if returned >= cutoff:
             dispatch_stopped = True
-            raise TimeoutError('Planner return exceeded admission handoff')
+            raise TimeoutError('Planner return reached hard admission cutoff')
         return result
 
     if physical_fallback is not None:
         try:
-            admit(full_case, physical_fallback, 'initial_fallback', schedule.deadline)
+            admit(full_case, physical_fallback, 'initial_fallback', schedule.planner_end,
+                  schedule.full_handoff_end)
         except Exception as exc:
             failures.append(_failure('initial_fallback', exc))
     if not durable_failure and physical_fallback is None:

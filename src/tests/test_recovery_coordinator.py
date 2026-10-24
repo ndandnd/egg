@@ -219,9 +219,9 @@ def test_expired_import_loading_no_solver_and_initial_fallback(physical):
     source, full, plan = physical
     lifted = lift_plan(source, full, plan, a=[1.,2.], b=[0.,.2])['plan']
     outcome = run(physical, lambda *a, **k: pytest.fail('No planner after gate'),
-                  Clock(28.), physical_fallback=lifted)
+                  Clock(26.), physical_fallback=lifted)
     assert outcome['result']['selected']['true_bill'] == 59.5
-    assert outcome['completion']['elapsed_s'] == 28.
+    assert outcome['completion']['elapsed_s'] == 26.
     assert outcome['result']['events'][-1]['event'] == 'planner_gate_closed'
 
 

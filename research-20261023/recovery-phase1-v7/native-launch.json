@@ -1,0 +1,127 @@
+{
+  "analysis_allowance_s": 20.0,
+  "analysis_argv": [
+    "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/.venv-local/bin/python",
+    "-m",
+    "experiments.recovery_qualification",
+    "analyze",
+    "--lock",
+    "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/research-20261023/recovery-phase1-v7/lock.json",
+    "--output",
+    "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/research-20261023/recovery-phase1-v7/runs",
+    "--report",
+    "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/research-20261023/recovery-phase1-v7/gates.json"
+  ],
+  "automatic_retry": false,
+  "ceiling_s": 1800.0,
+  "complete_carry_s": 1010.0567355880927,
+  "contingency_s": 40.0,
+  "dispatch_stop_s": 1620.0,
+  "freeze_receipt_sha256": "2fe0294de5f1525b35b18baa225a99acb2caa01b3cbf78da149e11918396734c",
+  "lock_sha256": "255b2d4eedf1f2f2b0d9231cc1954f1b823bb27c99aad51d716c8f52a074520f",
+  "max_numerical_workers": 1,
+  "numerical_threads": 1,
+  "parent_environment": {
+    "BLIS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "PYTHONPATH": "src",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "prospective_final_s": 1530.0567355880926,
+  "rss_limit_bytes": 5368709120,
+  "run_argv": [
+    "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/.venv-local/bin/python",
+    "-m",
+    "experiments.recovery_qualification",
+    "run",
+    "--lock",
+    "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/research-20261023/recovery-phase1-v7/lock.json",
+    "--freeze-receipt",
+    "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/research-20261023/recovery-phase1-v7/freeze-attempt01/supervisor.json",
+    "--output",
+    "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/research-20261023/recovery-phase1-v7/runs"
+  ],
+  "run_monitor_supervisor_allowance_s": 200.0,
+  "shutdown_reserve_s": 180.0,
+  "status": "prospective_native_launch_pending_independent_and_parent_review",
+  "stop_on_first_failure": true,
+  "tasks": [
+    {
+      "arm": "static",
+      "base_id": 50999,
+      "fault": null,
+      "id": "de8d8da71bc8d2dd1d5d",
+      "seconds": 30.0,
+      "seed": 17,
+      "trips": 80
+    },
+    {
+      "arm": "recovery",
+      "base_id": 50999,
+      "fault": null,
+      "id": "85710efee4db820ff4bc",
+      "seconds": 30.0,
+      "seed": 17,
+      "trips": 80
+    },
+    {
+      "arm": "cold",
+      "base_id": 50999,
+      "fault": null,
+      "id": "d3de154792c114e78483",
+      "seconds": 30.0,
+      "seed": 17,
+      "trips": 80
+    },
+    {
+      "arm": "start_fault",
+      "base_id": 50999,
+      "fault": "start_setter_exception",
+      "id": "00ab4af02ac326472cf4",
+      "seconds": 30.0,
+      "seed": 17,
+      "trips": 80
+    },
+    {
+      "arm": "static",
+      "base_id": 50997,
+      "fault": null,
+      "id": "584067521b4af0cb3da0",
+      "seconds": 30.0,
+      "seed": 17,
+      "trips": 40
+    },
+    {
+      "arm": "recovery",
+      "base_id": 50997,
+      "fault": null,
+      "id": "27133bea236c6b35ac75",
+      "seconds": 30.0,
+      "seed": 17,
+      "trips": 40
+    },
+    {
+      "arm": "cold",
+      "base_id": 50997,
+      "fault": null,
+      "id": "61cb90ed7e02414d15b8",
+      "seconds": 30.0,
+      "seed": 17,
+      "trips": 40
+    },
+    {
+      "arm": "start_fault",
+      "base_id": 50997,
+      "fault": "start_setter_exception",
+      "id": "27f30de636e0d9047cee",
+      "seconds": 30.0,
+      "seed": 17,
+      "trips": 40
+    }
+  ],
+  "worker_allocations_s": 260.0
+}

@@ -27,6 +27,7 @@ from experiments import codex_local_campaign as campaign
 
 ROOT = Path(__file__).resolve().parents[2]
 POLICY = 'recovery-phase1-runner-v1'
+HANDOFF_POLICY = 'anytime-hard-admission-v1'
 CARRIED_MINIMUM = 88.20958837542922
 CEILING, DISPATCH_STOP, SHUTDOWN_RESERVE = 1800., 1620., 180.
 OUTER_ALLOCATION, RSS_LIMIT = 32.5, 5*1024**3
@@ -102,7 +103,7 @@ def qualification_split():
     return {'prefix_integer_s':12.,'prefix_physical_s':15.,'full_integer_s':24.,
             'physical_s':27.,'deadline_s':30.,'completion_cumulative_s':3.,'finalization_s':3.,
             'prefix_search_s':10.,'full_search_s':22.,'prefix_handoff_s':13.,
-            'full_handoff_s':25.,'admission_reserve_s':2.}
+            'full_handoff_s':25.,'planned_admission_headroom_s':2.,'handoff_policy':HANDOFF_POLICY}
 
 
 def environment():
@@ -667,20 +668,23 @@ def control(case, target, a, b, task, anchor, storage, budget, planner, allowed)
                                  start_plan=None,start_case=None,deadline=schedule.full_handoff_end)
             returned = time.monotonic()
             events.append({**stage_timing('control_planner_return',task,anchor,returned,schedule.full_handoff_end),
-                           'admission_cutoff':schedule.planner_end})
-            if returned > schedule.full_handoff_end:
-                raise TimeoutError('Control planner return exceeded admission handoff')
+                           **rc.admission_window(returned,schedule.full_handoff_end,schedule.planner_end)})
+            if returned >= schedule.planner_end:
+                raise TimeoutError('Control planner return reached hard admission cutoff')
             if native.get('plan') is not None:
                 entered = time.monotonic()
-                if entered > schedule.full_handoff_end:
-                    raise TimeoutError('Control admission entry exceeded planner handoff')
                 events.append({**stage_timing('control_lift_enter',task,anchor,entered,schedule.planner_end),
-                               'planner_handoff':schedule.full_handoff_end})
+                               'planner_handoff':schedule.full_handoff_end,
+                               **rc.admission_window(entered,schedule.full_handoff_end,schedule.planner_end)})
+                if entered >= schedule.planner_end:
+                    raise TimeoutError('Control admission entry reached hard admission cutoff')
                 try:
                     witness = rc.lift_plan(target,case,native['plan'],a=a,b=b)
                 finally:
-                    events.append({**stage_timing('control_lift_exit',task,anchor,time.monotonic(),schedule.planner_end),
-                                   'planner_handoff':schedule.full_handoff_end})
+                    exited = time.monotonic()
+                    events.append({**stage_timing('control_lift_exit',task,anchor,exited,schedule.planner_end),
+                                   'planner_handoff':schedule.full_handoff_end,
+                                   **rc.admission_window(exited,schedule.full_handoff_end,schedule.planner_end)})
                 if time.monotonic() > schedule.planner_end:
                     raise TimeoutError('Control physical admission exceeded shared planner cutoff')
                 candidate = deepcopy(witness)
@@ -1357,6 +1361,24 @@ def run(args):
                 signal.signal(sig,handler)
 
 
+def size_path_coverage(rows):
+    """Each size must independently exercise both clean, uncensored paths."""
+    coverage = {str(size):{'normal_recovery_processed':False,
+                          'durable_fallback_start_fault_exercised':False} for size in (40,80)}
+    for row in rows:
+        task = row['task']
+        if (str(task['trips']) not in coverage or row.get('issues') != []
+                or row.get('censored') is not False or row.get('fallback_bill_exact') is None):
+            continue
+        value = coverage[str(task['trips'])]
+        if task['arm']=='recovery' and any(item.get('processed') is True
+                for item in row.get('native',{}).get('classified',[])):
+            value['normal_recovery_processed'] = True
+        if task['arm']=='start_fault' and row.get('fault_exercised') is True:
+            value['durable_fallback_start_fault_exercised'] = True
+    return coverage
+
+
 def _analyze(args):
     before = time.process_time()
     lock, locksha, output = read(args.lock), sha(args.lock), Path(args.output).resolve()
@@ -1434,6 +1456,7 @@ def _analyze(args):
         unresolved.extend(task['id']+':'+issue for issue in issues)
         rows.append({'task':task,'issues':issues,'endpoint_wall_s':receipt['endpoint_wall_s'],
                      'censored':receipt['endpoint_censored'],'charged_cpu_s':receipt['charged_cpu_s'],
+                     'fault_exercised':state.get('fault_exercised') is True,
                      'rss_bytes':receipt['peak_tree_rss_bytes'],
                      'prefix_bill_exact':None if fallback is None else fallback.get('provenance',{}).get(
                          'source_replay_bill_at_target_market_exact'),
@@ -1441,16 +1464,17 @@ def _analyze(args):
                      'final_bill_exact':None if selected is None else selected['true_bill_exact'],
                      'selected_witness_sha256':None if selected is None else stable(selected['plan']),
                      'bound_provenance':result.get('bound_provenance',[]),'native':evidence})
-    normal_processed = any(row['task']['arm']=='recovery' and row['fallback_bill_exact'] is not None
-                           and any(item['processed'] for item in row['native']['classified']) for row in rows)
-    if not normal_processed:
-        unresolved.append('normal_recovery_native_partial_start_processing_unobserved')
-    if not counts['fault_exercised']:
-        unresolved.append('durable_fallback_start_fault_path_unexercised')
+    coverage = size_path_coverage(rows)
+    for size, value in coverage.items():
+        if not value['normal_recovery_processed']:
+            unresolved.append('normal_recovery_native_partial_start_processing_unobserved:'+size)
+        if not value['durable_fallback_start_fault_exercised']:
+            unresolved.append('durable_fallback_start_fault_path_unexercised:'+size)
     charge = time.process_time()-before
     if total+charge>CEILING:
         unresolved.append('cumulative_hard_ceiling_exceeded')
     report = {'policy':POLICY,'passed':not unresolved,'counts':counts,'rows':rows,
+              'coverage_by_size':coverage,
               'unresolved':unresolved,'cumulative_charged_cpu_s':total+charge,
               'hard_ceiling_s':CEILING,'dispatch_stop_s':DISPATCH_STOP,
               'check_evidence':lock['checks'],'claim':'engineering qualification only; no ranking inference'}

@@ -61,12 +61,13 @@ def test_schedule_retains_hard_limits_and_declares_planned_reserve():
     assert split['prefix_integer_s']==12. and split['full_integer_s']==24.
     assert split['prefix_search_s']==10. and split['full_search_s']==22.
     assert split['prefix_handoff_s']==13. and split['full_handoff_s']==25.
-    assert split['admission_reserve_s']==2.
+    assert split['planned_admission_headroom_s']==2.
+    assert split['handoff_policy']=='anytime-hard-admission-v1'
 
 
 @pytest.mark.parametrize('arm',['static','cold'])
-@pytest.mark.parametrize('returned',[125.,125.001])
-def test_control_reserves_lift_time_before_original_physical_deadline(monkeypatch,arm,returned):
+@pytest.mark.parametrize('returned',[125.,125.001,127.,127.001])
+def test_control_target_miss_is_diagnostic_until_hard_admission_deadline(monkeypatch,arm,returned):
     clock=Clock(104.)
     monkeypatch.setattr(q.time,'monotonic',clock)
     calls=[];lifts=[]
@@ -85,10 +86,14 @@ def test_control_reserves_lift_time_before_original_physical_deadline(monkeypatc
               rc.pf.Budget(phase_seconds=30.),planner,lambda:True)
     budget,kw=calls[0]
     assert kw['deadline']==125. and budget.wall_seconds==21. and budget.phase_seconds==18.
-    assert lifts==([125.] if returned==125. else [])
-    assert len(store.saved)==int(returned==125.)
-    assert (store.result['selected'] is not None) is (returned==125.)
+    assert lifts==([returned] if returned<127. else [])
+    assert len(store.saved)==int(returned<127.)
+    assert (store.result['selected'] is not None) is (returned<127.)
     assert store.result['schedule']==rc.Schedule(100.,130.).as_dict()
+    returned_event=next(e for e in store.result['events'] if e['event']=='control_planner_return')
+    assert returned_event['planner_target']==125.
+    assert returned_event['target_overrun_s']==max(0.,returned-125.)
+    assert returned_event['admission_cutoff']==127. and returned_event['admission_open'] is (returned<127.)
 
 
 def test_actual_control_native_caps_share_handoff_and_completion(monkeypatch):
@@ -118,8 +123,8 @@ def test_actual_control_native_caps_share_handoff_and_completion(monkeypatch):
     assert not store.result['failures']
 
 
-@pytest.mark.parametrize('returned',[113.,113.001])
-def test_coordinator_prefix_handoff_controls_lift_and_full_dispatch(monkeypatch,returned):
+@pytest.mark.parametrize('returned',[113.,113.001,115.,115.001])
+def test_coordinator_prefix_target_and_hard_admission_control_dispatch(monkeypatch,returned):
     source,full=cases();clock=Clock(104.);store=Storage()
     calls=[];lifts=[]
     def planner(case,a,b,budget,**kw):
@@ -137,8 +142,8 @@ def test_coordinator_prefix_handoff_controls_lift_and_full_dispatch(monkeypatch,
                           storage=store,clock=clock,planner=planner)['result']
     assert calls[0][1].wall_seconds==9. and calls[0][1].phase_seconds==6.
     assert calls[0][2]['deadline']==113.
-    if returned==113.:
-        assert lifts==[113.] and len(calls)==2
+    if returned<115.:
+        assert lifts==[returned] and len(calls)==2
         assert calls[1][2]['deadline']==125.
         assert calls[1][1].wall_seconds==10.5 and calls[1][1].phase_seconds==7.5
         assert outcome['selected']['true_bill_exact']=='7'
@@ -162,7 +167,7 @@ def test_prior_durable_fallback_survives_failed_later_admission(monkeypatch,mode
     monkeypatch.setattr(rc,'lift_plan',lift)
     def planner(*a,**kw):
         assert store.saved==[witness()]
-        clock.now=125.001 if mode.startswith('late_') else 125.
+        clock.now=127.001 if mode.startswith('late_') else 125.
         return {'status':'unresolved'} if mode=='late_no_plan' else {'plan':{'tag':'new'}}
     result=rc.coordinate(source,full,[1.],[0.],parent_monotonic=100.,deadline=130.,
         storage=store,clock=clock,planner=planner,physical_fallback={'tag':'old'})['result']
@@ -176,7 +181,7 @@ def test_late_bound_only_prefix_stops_full_without_importing_bound(monkeypatch):
     source,full=cases();clock=Clock();store=Storage();calls=[]
     def planner(case,*a,**kw):
         calls.append(case)
-        clock.now=113.001
+        clock.now=115.001
         return {'lower':1e9,'status':'bounded'}
     result=rc.coordinate(source,full,[1.],[0.],parent_monotonic=100.,deadline=130.,
         storage=store,clock=clock,planner=planner)['result']
@@ -242,7 +247,7 @@ def test_control_late_bound_only_return_is_failure_without_bound_admission(monke
     monkeypatch.setattr(q.time,'monotonic',clock)
     monkeypatch.setattr(rc,'_full_lower',lambda *a,**kw:admissions.append(True))
     def planner(*a,**kw):
-        clock.now=125.001
+        clock.now=127.001
         return {'lower':1e9,'status':'bounded'}
     q.control('full','target',[1.],[0.],{'id':'task','arm':arm},100.,store,
               rc.pf.Budget(),planner,lambda:True)
