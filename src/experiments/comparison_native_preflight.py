@@ -21,17 +21,21 @@ PACKAGE_CAP = PACKAGE_START+PACKAGE_LIMIT
 ENDPOINT_S, STOP_S, OUTER_S = 60., 61., 62.5
 ANALYSIS_FINAL_RESERVE_S, SUPERVISION_RESERVE_S = 5., 40.
 WORKER_ARGV_PREFIX = ('-m','experiments.comparison_native_worker')
+# Explicit adapter bindings; defaults retain the original engineering80 policy.
+ENGINEERING_BASE_ID, ENGINEERING_TRIPS = 50999, 80
+FIXTURE_POLICY = 'same previously frozen engineering50999/80; no generation'
 _LOCK = threading.Lock()
 _BASE_LAUNCH = q.launch
 
 
 def task_matrix(cases):
-    if (len(cases)!=1 or cases[0].get('base_id')!=50999 or cases[0].get('trips')!=80):
-        raise ValueError('Preflight requires the same engineering50999/80 case only')
+    if (len(cases)!=1 or cases[0].get('base_id')!=ENGINEERING_BASE_ID
+            or cases[0].get('trips')!=ENGINEERING_TRIPS):
+        raise ValueError('Preflight requires its explicitly configured engineering case only')
     case = cases[0]
     tasks = []
     for arm in ('cf1','recovery'):
-        task = {'arm':arm,'base_id':50999,'trips':80,'seed':17,'seconds':60.,
+        task = {'arm':arm,'base_id':ENGINEERING_BASE_ID,'trips':ENGINEERING_TRIPS,'seed':17,'seconds':60.,
                 'fault':None}
         task['id'] = q.stable(task)[:20]
         tasks.append(task)
@@ -145,7 +149,9 @@ def freeze(args):
         'rss_limit_bytes':q.RSS_LIMIT,'automatic_retry':False}
     if any(budget_spec.get(key)!=value for key,value in expected_budget.items()):
         raise ValueError('Prospective package budget differs')
-    if len(manifest['case_specs'])!=1 or manifest['case_specs'][0].get('base_id')!=50999 or manifest['case_specs'][0].get('trips')!=80:
+    if (len(manifest['case_specs'])!=1
+            or manifest['case_specs'][0].get('base_id')!=ENGINEERING_BASE_ID
+            or manifest['case_specs'][0].get('trips')!=ENGINEERING_TRIPS):
         raise ValueError('Wrong engineering case specification')
     from egglab import classical_controls as cc
     from egglab import native_recharge as nr
@@ -155,14 +161,14 @@ def freeze(args):
         payload = q.read(spec['fixture'])
         case = q.restore_case(payload['case'])
         nr._check_market(case,payload['a'],payload['b'])
-        if len(case.trips)!=80:
+        if len(case.trips)!=ENGINEERING_TRIPS:
             raise ValueError('Engineering fixture scale mismatch')
         market_sha = q.stable({'a':payload['a'],'b':payload['b']})
         if (case.identity()!=spec.get('full_identity',spec.get('identity'))
                 or market_sha!=spec['market_sha256']):
             raise ValueError('Engineering fixture identity/market mismatch')
         source,selection = cc.restrict_case(case,heuristic(case))
-        cases.append({'base_id':50999,'trips':80,'fixture':str(Path(spec['fixture']).resolve()),
+        cases.append({'base_id':ENGINEERING_BASE_ID,'trips':ENGINEERING_TRIPS,'fixture':str(Path(spec['fixture']).resolve()),
             'identity':case.identity(),'movement_ids':[m.id for m in case.movements],
             'restricted_identity':source.identity(),'restricted_movement_ids':[m.id for m in source.movements],
             'market_sha256':market_sha,'selection_policy':selection['policy']})
@@ -183,7 +189,7 @@ def freeze(args):
         'package_start_charge_s':PACKAGE_START,'package_limit_s':PACKAGE_LIMIT,'package_cap_s':PACKAGE_CAP,
         'prior_accounting_sha256':q.sha(args.accounting),
         'package_budget':deepcopy(budget_spec),
-        'fixture_policy':'same previously frozen engineering50999/80; no generation',
+        'fixture_policy':FIXTURE_POLICY,
         'freeze_accounting':'external supervised receipt required before native launch'}
     # Pure policy/source verification before exclusive durable lock creation.
     verify_lock(lock)
