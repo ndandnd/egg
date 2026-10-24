@@ -1,167 +1,146 @@
-# EGG current handoff —24 October2026: analysis contract; budget decision pending
+# EGG current handoff —24 October2026: pure analysis primitives checked
 
-Worktree /Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017, branch
-codex/ml-prediction-20261017. Bounded GPT-6.1 Sol agents done. No active numerical
-worker, owner, metadata freeze or native attempt. One NONNUMERICAL analysis-contract
-package completed this wake; no source/runtime changes or numerical/check execution.
-Manuscript deferred; cluster/sealed data untouched.
+Worktree /Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017; branch
+codex/ml-prediction-20261017. Use bounded GPT-6.1 Sol agents and short handoffs.
+Agents completed; no active numerical/test worker, owner or pending process.
+One source implementation/review/check package completed this wake. Manuscript
+remains deferred; cluster, model assets and sealed data untouched.
 
-## Newest package — prospective comparison analysis, no execution
+## Newest completed package
 
-Read RECOVERY_ANALYSIS_CONTRACT.md and only relevant companion endpoint/inference/
-mechanism notes. This integrated parent contract clarifies the unlaunched192-cell
-addendum; arm/cohort/resource/retention/clock design unchanged. It adopts
-descriptive finite-cohort reporting rather than optional confirmatory p-values.
-Eight bases are not24 independent seed pairs; four tariff-mechanism bases are not
-12 independent timetables per learner. Under a justified exact two-sided sign-
-flip null, minimum p is1/128 for8 nonzero groups and1/8 for4; pairing/order alone
-doesn't justify uniform independent FAIR signs. No claim that all possible
-statistical tests are impossible. Primary pair contributions weigh1/24, mechanism
-1/12, with conservative missing completion bounds and separate validity bounds;
-these are NOT population confidence intervals. Use exact bill band1/200, keep
-all assigned cases/timeouts/undispatched suffixes. Both-valid bill/equal-fleet
-subsets descriptive, not mediation or imputed failure bills.
+Read COMPARISON_ANALYSIS_SOURCE_RESULTS.md and current
+comparison-analysis-checks/{accounting.json,attempt01/result.json}; only relevant
+source/review/protocol sections if needed. Do not reread broad STATE_MAP/history,
+raw traces or old test matrices.
 
-Critical source gap: comparison_native_worker is two-task QUALIFICATION machinery,
-requiring acquired fallback and native warm processing. UnexercisedNativePath
-becomes engineering_events/worker_failure and halts suffix. Correct for gates,
-wrong as a general comparison outcome policy for cold/healthy acquisition-timeout
-fallbacks. Preserve all failed gates. Future comparison needs SEPARATE endpoint
-schema/policy, with qualification, evidence integrity and deployment as separate
-axes, linked candidate/capture/admission/fallback/start/output evidence.
+New src/egglab/comparison_endpoint.py is a CONDITIONAL semantic policy over strict
+NORMALIZED EXTERNALLY VERIFIED attestations. It does NOT read/verify raw receipts,
+hashes, actual replay/bills, ACK bytes, clocks/monitoring or native processing.
+A caller's false attestation can still produce a false result. It separates
+coverage, acquisition, integrity, deployment, starts and bound scope. Valid cold
+fallback may coexist with failed charging/warm coverage; integrity/invalid admitted
+witness/false original-full-claim takes precedence over a favorable bill. Schema
+contradictions reject or remain unknown. Missing ACK and future controller-only
+failure certificates remain unsupported/unknown. No real-verifier adapter, native
+integration or historical reclassification exists. Coverage PASSED isn't an
+independent native-gate verdict or dispatch permission.
 
-Current missing/malformed ACK defaults unknown. A future separately qualified
-failure-only controller certificate may establish ordinary method deadline/no
-timely deployment without worker ACK, but only with positive stage health,
-causation/full-window/clock/ownership proof, ACK drain-to-EOF after all owned
-writers terminate, no concurrent integrity/interface/resource/accounting fault,
-and complete cleanup/charges. Silence/stop-reason strings are insufficient.
-Current receipts lack that certificate; don't infer it retroactively or score
-partial/malformed transport as algorithmic failure. It can never validate a plan,
-bill, full bound or warm qualification. This nuance preserves the independent
-integration critique rather than silently relabeling cases.
+New comparison_scoring.py uses strict exact rationals and one fixed positive
+currency unit; practical band1/200*max(abs bills,unit), equality tie. Known valid
+beats healthy failure, both failures tie; unknown pair remains[-1,1]. Explicit
+balanced primary8base/3seed or mechanism4base/3seed roster preserves1/24 or1/12
+weights and missing suffix; separate validity bounds retain known opponent.
+No imputed failure bills, complete-case reweighting, p-values or population CIs.
+Scorer cannot detect same-key arm/learner/tariff misjoins: caller must independently
+bind the one oriented contrast and assigned identities.
 
-Mechanism audit adopts exact aligned finite values(atol=rtol=0), dtype/full values,
-hashes/change counts/max deltas; exact B/K/order/masks. No epsilon selector ties.
-Distinguish signed-zero/serialization bytes from numeric changes and roundoff
-from economic response. Track feature->score->order->mask->start->deployment;
-same mask doesn't guarantee same wall-clock outcome or prove topology mediation.
-Keep zero exposure/identical-mask negative controls at original denominators.
-All48 mechanism decisions remain, target tariff fixed within input pair, scoring
-recomputed/paid. Four bases support an exploratory input-method contrast, not
-broad tariff transfer. Context pairing/rotation doesn't eliminate interference.
+Pre-gate independent/parent source review corrected status contradictions:
+unproved lateness overriding timely selected output; coverage versus start/
+processing/acquired-fallback axes; non-full diagnostic inconsistency called a
+full claim; undispatched engineering-stop/ambiguity labels; NOT_STARTED with
+claimed method execution. Review preserved in COMPARISON_ANALYSIS_SOURCE_REVIEW.md.
+Existing qualification worker and failed gates stay unchanged.
 
-No new qualification charge: ledger remains1505.8511370494984s, and source-only7-
-case receipts below remain newest executed work. No models/assets/new cases were
-read; no tests or solver/cluster runs. No Google Doc append for this protocol-only
-package. Budget question was ALREADY presented last wake; no answer has arrived.
-Do not repeat it. One possible useful next bounded package while pending is a pure
-versioned endpoint-adjudication/exact-score module with handwritten receipts,
-first freeze a small source-check protocol/budget if execution is justified. Do
-not change qualification worker or pretend synthetic receipt checks establish
-native behavior. If budget approval arrives, the recorded small mechanism
-source-bound enabling revision/one-attempt plan remains the numerical priority.
+ONE frozen source-only gate selected test_comparison_endpoint.py and
+ test_comparison_scoring.py:54 handwritten cases passed0.12s. Old matrices not
+selected. Owned PGID11990 absent/reaped, exit0, no source changes, complete resource
+accounting. This proves conditional semantic/arithmetic behavior on these examples,
+not independently verified physical evidence, native mechanics or useful prediction.
+No solver, model inference/training, real receipt conversion or new timetable.
 
-## Previous executed source/protocol package
+## Authoritative charge and pending specific budget question
 
-Read CF1_SMALL_MECHANISM_RESULTS.md, CF1_SMALL_MECHANISM_BUDGET_REQUEST.md and
-CF1_SMALL_MECHANISM_REVIEW.md plus current source-check receipts. No broad old
-STATE_MAP/audit/trace reads. New explicit50997/40 CF1 singleton seed17/day/no fault,
-protocol_revision3, original60/61/62.5 endpoints and all physical/capture/start
-requirements. New cf1_small_mechanism_preflight.py reuses restored serialized
-reviewed config. Three default-preserving shared freezer constants expose case
-scope; unconfigured defaults stay50999/80.
+Carry1508.1111370494984 charged seconds from
+comparison-analysis-checks/accounting.json,781 proof paths. Prior1505.8511370494984
+fully inherited. New internal1.482419; whole wrapper1.74wall/1.57CPU =>1.76 including
+0.02 precision; positive reconciliation0.277581, plus0.5 conservative closure spent
+charge, totalnew2.26. ADMIN0; every earlier failure/conservative charge retained.
+Do not use raw receipt pre-tail1507.3335560494984 as current carry.
 
-Reviewer verified existing inspected v7 fixture hash
-c6eca9f94f1190d9736f6ac3732b6dbd395578e723b7907ff2cee179cbd10429 against current
-ledger/lock/owned freeze proof. No new instance/outcome selection. Full identity
-58b3e0628e6ad1e3876bb142cec2636cb7bc826738da0f6a34f60555954370f8; market hash
-f1da29dda920210565f103a311f47b5b5f460e3704050ae711966ca852425be2. Old lock lacks
-selection_policy; later metadata freeze must recompute/store exact selector.
+Current approvedTOTAL1800/dispatch1620/shutdown180, one single-thread local
+worker/5GiB. Dispatch headroom111.88886295050156. No new approval arrived. The
+specific request for TOTAL32 CPU minutes1920 (+120), same shutdown180 =>dispatch
+1740, was ALREADY asked; don't repeat it or reinterpret a heartbeat as approval.
+No borrowing from shutdown or comparison8CPUh, ledger reset or retry credit.
 
-ONE affected source gate cf1-small-mechanism-checks/attempt01 passed7 cases0.04s.
-Old10/14/61/213 matrices not selected. Inert dependencies, no native/fixture imports.
-Owned PGID99202 absent/reaped, exit0, no source changes, complete accounting.
-Historical source evidence only, not charging/feasibility/native qualification.
-No retry or native dispatch.
+The numerical plan remains ONE small inspected50997/40 CF1 mechanism attempt,
+seed17/day/no fault; original60/61/62.5 deployment/supervisor/outer clocks.
+Robust next provisions: source15, freeze10, worker62.5, supervision45, analysis20,
+finalization10; sum162.5/hard165 from newest carry. At current carry endpoint
+1673.1111370494984 fits proposed1740, not current1620. Full review-ready request:
+CF1_SMALL_MECHANISM_BUDGET_REQUEST.md; current charge above supersedes its earlier
+1505 reference without changing the requested total/scope.
 
-Independent review rejected25s supervision (observed28.836847), then rejected5s
-combined final reserve in algebraically fitting115/40/5 draft. Successful40 may
-have multiple captures; analysis/terminal hashing have unpreemptible tails. Root
-accepted critique instead of squeezing reserve. NATIVE_DISPATCH_CLEARED=False
-rejects freeze/run/worker BEFORE delegation. Current115/40/5 is disabled SOURCE
-scaffold, NOT a launch manifest. No metadata freeze authorized even after tests.
+cf1_small_mechanism_preflight.py is DISABLED via NATIVE_DISPATCH_CLEARED=False,
+rejecting freeze/run/worker. Its115/40/5 config is a rejected SOURCE scaffold, not
+a launch manifest:5s final reserve unproven for successful multi-capture analysis.
+If approval arrives, record it and freeze a NEW source-bound enabling revision/
+namespace with explicit approved cumulative constants and exact fixture/task/
+environment/library/fault/clock/receipt policy. Minimal affected checks then fresh
+metadata freeze; review complete receipts before at most ONE attempt. Sources/
+assets locked while workers run. Approval alone doesn't bypass gates; no retry.
+Existing inspected v7 fixture50997/40 hashc6eca9f94f1190d9736f6ac3732b6dbd395578e723b7907ff2cee179cbd10429.
+Its old lock lacks selection_policy; new freeze must recompute/store exact selector.
 
-## Authoritative accounting and concrete pending decision
+If no approval, useful bounded source work can continue. Next candidate is an
+identity-correct join/adapter contract and independent-verification boundary for
+these primitives; never construct trusted attestations merely from worker-owned
+booleans or classify real raw receipts with this unintegrated prototype. Freeze a
+specific source-check budget before any executed new gate; don't repeat old tests,
+ask again, monitor empty queues or manufacture solver retries.
 
-Carry1505.8511370494984 charged seconds from
-cf1-small-mechanism-checks/accounting.json,770 proof paths. Prior1503.9811370494986
-fully carried. New internal1.047729; whole1.35wall/1.14CPU reconciled to1.37 inclusive
-0.02 precision; add0.5 conservative closure spent charge, ADMIN0. All earlier
-failures/conservative charges remain. No credits or negative reconciliation.
+## Prospective comparison and scientific limits
 
-ApprovedTOTAL remains1800/dispatch1620/shutdown180, one single-thread local
-worker/5GiB; remaining dispatch114.1488629505016. Concrete request: TOTAL32 CPU
-minutes1920 (+120), same shutdown180 =>dispatch1740, for ONE small mechanism
-package. This is a specific additional decision, not re-asking approved30 minutes
-or resetting ledger. No comparison8CPUh/shutdown borrowing. The question was
-already presented last wake; absent an actual answer it remains pending.
+RECOVERY_ANALYSIS_CONTRACT.md is integrated analysis authority; companion notes
+preserve critiques. It clarifies the unlaunched192-decision addendum: six arms,
+eight fresh synthetic development bases(4per size),3seeds,144 day decisions plus
+48 price-input mechanism decisions on four assigned subset bases. No cases or
+registries generated/read. Common price-blind B and exact K selector already
+implemented in classical_controls.py, fill excludes B, all loading/scoring/evidence
+paid inside60. No new manifest or comparison launch. Cold full and strong classical
+controls central; CA1 sees a,b while learners seea, a complete-method unequal-input
+contrast. Generic GNN pruning has prior art. October17 remains development;
+91.916% summed matched savings vs one heuristic was vehicle count, not learned
+tariff-response evidence. No model-quality/generalization/FT50-readiness claim.
 
-Robust next provisions: affected source15, metadata freeze10, worker62.5,
-supervision45, analysis20, finalization10; sum162.5/hard165 from newest carry.
-At current carry endpoint1670.8511370494984 fits proposed1740, not current1620.
-Read budget request/protocol first. No automatic retry or80-trip timer tuning.
-If user approves, record authorization and design NEW source-bound enabling
-revision/namespace with explicit new cumulative constants and exact fixture/task/
-environment/library/fault/clock/receipt policies. Minimal affected checks justified
-by that source change, not broad old matrices. Inspect full check+metadata receipts
-before at most ONE native40 attempt. Freeze sources/assets while workers run,
-carry all spend, collect/analyze/preserve failures. Approval doesn't bypass gates.
-If no answer, useful nonnumerical work may continue; no repeated budget questions,
-empty queue checks or scheduled automatic retries.
+Keep every assigned base/variant/seed/timeout/undispatched suffix. Classify evidence
+integrity separately from method acquisition/output. Unknown isn't opponent win
+or both-invalid tie. Current native worker is QUALIFICATION-only; it requires
+acquired fallback/warm processing and stamps UnexercisedNativePath as engineering
+failure, so cannot be reused unchanged for valid cold/timeout comparison outputs.
+Future comparison needs separate source-bound worker/evidence/endpoint policy.
+A separately QUALIFIED controller failure-only certificate could someday prove
+ordinary method deadline/no deployment without ACK using positive full-window/
+stage-health/causation proof and drain-to-EOF after all writers terminate; current
+receipts lack it and the new primitive explicitly does not implement it.
 
-## Prior numerical evidence remains failed
+Descriptive fixed-cohort inference only. Seeds aren't independent timetables;
+under justified uniform fair-sign null,4-base exact two-sided p-floor1/8,8-base1/128.
+Missing intervals aren't population CIs. Mechanism audit exact finite values/
+dtypes/hashes/deltas plus exact B/K/masks; same mask may still differ in runtime.
+Preserve zero exposure/identical masks, no epsilon selector ties or favorable
+conditioning. Target tariff fixed within fresh/stale scoring-input pair, both
+scores recomputed/paid. No pure topology mediation or broad tariff transfer claim.
 
-Latest numerical v2 ca0fa61075b9c6d4e16c (50999/80 CF1 seed17/day) FAILED; no retry/
-replacement/recovery suffix. Worker93286 absent/reaped; supervisor93283 exited,
-owner removed. Details CF1_PREPARATION_NATIVE_RESULTS.md and v2 receipts. Charging
-entry2.2548965/deadline8.2548965; build2.1703005; first inventory2.0026196 including
-rows1.7093449; binary fix0.0067431; second row audit timed out1.7152868, ended
-8.2955883. No CF1 optimize/fixed capture/start. Preparation cost, not infeasibility
-or plan quality. Don't run another80 qualification to tune a deadline.
-Cold full24 vehicles/bill3386.2012021947876 independently exact replayed, output
-50.888516875 timely/uncensored. Cold success doesn't qualify missing CF1 path.
-One39.8MB capture losslessly gzipped2.68MB/hash-verified; raw logs local/hash-indexed.
+## Preserved numerical evidence and operations
 
-Small native success would qualify actual charging/fixed capture/durable CF1
-replay-valid fallback/binary-only full start/attributable native processing ONLY.
-It cannot rehabilitate V1/V2 or establish80 scalability, useful prediction,
-comparative quality, tariff response, generalization or publication readiness.
+Latest numerical v2 taskca0fa61075b9c6d4e16c (50999/80 CF1 seed17/day) FAILED before
+CF1 optimization: model building plus repeated physical-row inventories exhausted
+charging window. See CF1_PREPARATION_NATIVE_RESULTS.md/current v2 receipts only.
+Worker93286 absent/reaped; supervisor93283 exited, owner removed. No retry or
+replacement. Cold full fallback24 vehicles/bill3386.2012021947876 exact replayed,
+output50.888516875 timely; it does not qualify missing charging/warm path. V1/V2
+remain failed. Small future success proves mechanics only, not80 scalability or
+prediction quality. Raw license/native logs local/hash-indexed, capture losslessly
+compressed/hash-verified in earlier backup. No unnecessary raw trace dumps.
 
-## Research/operations boundaries
-
-Unlaunched192-decision proposal: graph-v8/CatBoost/CA1/random recovery, cold full,
-CF1;8fresh development bases/3seeds/four-base paired scoring-price intervention,
-60s end-to-end. No registry/model inference. Freeze comparison contract before
-fresh groups; retain EVERY assigned base/regime/seed/timeout. Score actual timely
-replay-valid deployed fallback with paid preprocessing; report acquisition failure
-separately, no credit to unexecuted warm paths. Unknown infrastructure is neither
-opponent win nor both-invalid tie. Cold full/strong nonlearned charging-aware
-controls central; random/failed CF1 cannot establish learning value. CA1 sees a,b,
-learners a: distinguish method contrast from equal-information attribution.
-October17 remains development;91.916% summed matched savings vs one heuristic was
-vehicle count. Generic GNN pruning has prior art; no learned tariff response,
-generalization or FT50 readiness. Group variants/source plans, inner-only selection.
-Sealed DEV/TEST/A6/B3/confirmation/GIRO closed. Existing41-entry Scholar synthesis
-needs no repeat; don't force cross-field analogies. Leave Unicorn to v2g, no
-monitoring. Row-mutation proof/reduced LP deferred; row count isn't coefficient
-proof and reduced model needs equivalence. Don't hold all comparisons hostage to
-80-trip constructive success.
-
-No Google Doc entry for routine SOURCE preparation. Last meaningful entry was the
-verified24 October constraint-audit diagnosis, eight visuals/prior entries intact.
-Don't repeat it, v5 or six October1 entries. Back up to this origin branch using
-explicit Nathan Cho <nathan.cho2013@gmail.com> author/committer, preserve history/
-branches/visuals. No PR merge/submission/private publication/reset credits or
-unrelated schedule restart. Notify only significant findings/failures/decisions/
-review-ready research. One bounded package per wake.
+Group variants/source plans, inner-only selection; sealed DEV/TEST/A6/B3/
+confirmation/GIRO closed. Leave Unicorn to v2g without monitoring. Existing41-entry
+Scholar synthesis needs no repeat; don't force cross-field analogies. No routine
+Google Doc entry for this source/check package; last meaningful constraint-audit
+entry and8visuals remain. Don't duplicate old entries, v5 or six October1 entries.
+Back up to origin/codex/ml-prediction-20261017 with explicit Nathan Cho
+<nathan.cho2013@gmail.com> author/committer, preserve history/branches/visuals.
+No PR merge/journal submission/private publication/reset credits or unrelated
+schedule restart. Notify only significant findings/failures/decisions/review-ready
+research; routine passing checks/preparation stays quiet. One bounded package per wake.
