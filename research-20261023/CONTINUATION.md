@@ -1,12 +1,46 @@
-# EGG current handoff —24 October2026: conditional comparison binding checked
+# EGG current handoff —24 October2026: verifier scoped; ACK timing gap identified
 
 Worktree /Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017; branch
 codex/ml-prediction-20261017. Use bounded GPT-6.1 Sol agents with short handoffs.
 Agents done; no active numerical/test worker, owner or pending process. One bounded
-source adapter/review/check package completed. Manuscript deferred; no solver,
-model inference/training, new timetable, real receipt conversion or cluster work.
+source-only verifier design/reuse/adversarial-review package completed. Manuscript
+deferred; no solver, model inference/training, new timetable, real receipt conversion
+or cluster work. No new check worker, numerical allocation or accounting receipt;
+the latest fully reconciled spent carry below remains authoritative.
 
 ## Newest completed package
+
+Read COMPARISON_VERIFIER_DESIGN.md; companion COMPARISON_VERIFIER_REUSE_NOTE.md
+maps exact existing helpers, and COMPARISON_VERIFIER_THREAT_NOTE.md preserves eight
+false-acceptance examples. Integrated design controls first-slice sequencing.
+Two bounded Sol6.1 agents read targeted source only; parent integrated/reviewed.
+No production source change, imports/tests, native calls, actual fixture/model/
+capture reads or real-outcome normalization. Compact current accounting/result
+receipt metadata and Git status were checked; source-only notes are not run proof.
+
+New concrete source finding: WorkerStorage.finalize samples completion_monotonic
+BEFORE serializing/os.write of ACK. Scheduling may cross60 after that sample;
+receive_ack stores no controller receive timestamp. Current receipts therefore
+cannot independently establish ACK transport completion by60 or fill all requested
+post-fsync/cleanup times. Don't invent phase times or retrospectively normalize.
+Future controller must freeze explicit ACK timing semantics. Receiver acceptance
+by60 can be sufficient/conservative, but changing to it is prospective policy;
+late receive alone does not prove late send under the old meaning. No repeated
+historical native qualification or failure-only certificate follows from this.
+
+Next bounded implementation: externally pinned manifest/artifact byte snapshots
+and strict physical-witness/bill facts, using existing pure replay/billing checks.
+No NormalizedEvidence or endpoint output until independent controller evidence
+exists. First expose verified/contradicted/unestablished facts and missing-proof
+reasons. Hash and consume same immutable bytes; expected root comes from outside
+worker output, with complete roster frozen before first dispatch/new outcome.
+Physical replay is tolerance-conditional, rational bills exact for stored finite
+numbers. Bill validity doesn't establish which model executed. Use trusted local
+reviewed loader/snapshot, not hostile-host cryptographic/mapped-memory attestation.
+One prospective affected-source package with handcrafted artifacts, no real asset
+conversion, before any check execution. Don't manufacture extra audits/frameworks.
+
+## Previous completed source package
 
 Read COMPARISON_BINDING_SOURCE_RESULTS.md and comparison-binding-checks/
 {accounting.json,attempt01/result.json}; source/review/protocol only as relevant.
@@ -80,13 +114,11 @@ c6eca9f94f1190d9736f6ac3732b6dbd395578e723b7907ff2cee179cbd10429;
 old lock lacks selection_policy, new freeze must recompute/store exact selector.
 No retry/replacement, timer tuning or cold-only retrospective qualification pass.
 
-If no approval, useful bounded source work may continue. Next boundary is a trusted
-frozen manifest root and INDEPENDENT real-evidence verification: source/assignment/
-artifact bytes, selected plan physical replay/exact bill, terminal ACK/clock and
-ownership/resource chain. Current primitives/binder cannot supply those facts.
-Prefer a narrowly scoped verifier input/coverage design before touching real
-outcomes, then freeze any affected source-check budget. Don't manufacture more
-repeated gates, request the same budget again or inspect empty queues.
+If no approval, implement only the narrow facts-only slice now scoped in
+COMPARISON_VERIFIER_DESIGN.md, under a prospective affected-source check budget.
+Current primitives/binder cannot supply independent real-evidence facts. Don't
+touch real outcomes, manufacture repeated gates, request the same budget again
+or inspect empty queues. No numerical approval arrived during this source package.
 
 ## Prospective comparison and preserved science
 
