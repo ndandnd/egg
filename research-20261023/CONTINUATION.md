@@ -1,161 +1,141 @@
-# EGG current research handoff — 24 October 2026
+# EGG current research handoff — 24 October 2026, native-v6 closed
 
-Worktree: `/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017`.
-Branch: `codex/ml-prediction-20261017`. User resumed research toward a long-term
-FT50 aspiration. Manuscript drafting remains deferred. No model/publication
-readiness claim is justified.
+Worktree `/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017`;
+branch `codex/ml-prediction-20261017`. User resumed rigorous research toward a
+long-term FT50 aspiration. Manuscript drafting remains deferred. Use GPT-6.1 Sol
+subagents for short bounded implementation/analysis/review; parent manages
+scientific decisions and integration. Do not reread broad history/STATE_MAP.
 
-## Latest result: supervision passes, native-v5 admission still fails
+## Current result and active work
 
-Read `RECOVERY_PHASE1_V5_RESULTS.md` first, then the compact diagnosis/review
-only if needed. **Native-v5 stopped after5/8 tasks; qualification failed.**
-All four40-trip method/fault checks completed cleanly on ONE engineering
-timetable, seed17: one partial start was processed/accepted; injected setter
-failure retained the same valid fallback. Independent replay found zero invalid
-admitted witnesses; mapping/bound-scope audits found zero violations.
+Read `RECOVERY_PHASE1_V6_RESULTS.md` and the compact current receipts first.
+**V6 failed after2/8 tasks**, first failure stopped dispatch. No worker/subagent
+remains active; native owned groups54029/54551 are absent, leaders returned0,
+owner marker removed. All failures/spend are preserved; no native retry followed.
 
-The first80-trip static task failed its27-second full-case admission gate.
-Planner returned26.840382500s; outer lift entered26.840388374 with0.159611626s
-left, took0.294172584s, and returned27.134560958s. It completed verification
-normally, then the post-lift guard correctly rejected the late candidate before
-fallback admission. Final output27.349969209s was uncensored under30s; that does
-not make27s admission timely. No earlier admitted fallback existed for this task.
-This is insufficient admission headroom, not a replay exception, sink corruption,
-new integer-cutoff bug or observed physical infeasibility. The native next-round
-typed cutoff was correctly recognized. Three80-trip tasks remain undispatched.
-No late witness was admitted or failed result reclassified.
+On ONE80-trip engineering timetable50999, seed17/day, static restricted now
+passed independent full-case replay/admission, final output25.451s. Recovery
+saved the same valid prefix fallback, submitted a binary-only full-model start,
+and native evidence classified it as accepted/processed. A late full-stage
+planner return preserved the fallback; final output26.635s was uncensored.
+Both admitted bills3642.53 are equal: no recovery/ML gain established.
+Independent analysis found zero invalid witnesses, mapping or bound-scope errors.
 
-The source-bound **135-case** suite and replacement external freeze both passed.
-Parent/independent review verified169 checked/179 external source hashes,
-output/artifact/inherited evidence, complete ownership cleanup and accounting,
-unchanged fixture bytes/identities/market/movement/task/split metadata and the
-expected GRB library hash. New cleanup successfully handled a transient native
-fault-task permission-denied probe followed by confirmed absence. The legacy
-v4 cleanup failure did not recur. V1–v4 failures remain preserved; do not use
-an old failed freeze lock to dispatch or analyze changed sources against it.
+The full integer call returned~22.026s, then an unseparated capture/instrumentation
+interval~2.385s and candidate processing1.490s preceded planner return26.015s.
+Full capture39.78MB versus restricted21.28MB. Fixed-topology completion had no
+remaining time and did not run. Strict v6 planner handoff25s correctly rejected
+this return before independent outer lift/bound/selection, despite~0.985s left
+before27. That time is an opportunity, not proof full admission would succeed.
+The raw candidate remains diagnostic, not an admitted bill/result.
 
-No EGG numerical worker or unfinished subagent remains. The run owner marker is
-removed; all five owned groups are confirmed absent. Native and analysis CLI
-exit0 alone is not a pass: read gates.passed=false and failed/undispatched rows.
-No model training, learned ranking inference, comparison screen, cluster work
-or sealed-data access occurred. No automatic native/check/freeze retry followed.
+80 cold/fault and all four40 tasks remain undispatched. Existing analyzer checks
+start/fault coverage globally; parent applied stricter prospective per-size
+coverage. Neither size clears v6. Historical40 v5 paths cannot fill missing v6
+paths after code/allocation changes. CLI exit0 alone is not gate passage.
 
-Detailed current receipts:
-- `freeze-v2-checks/attempt01`, its protocol/review/results:135 regressions passed.
-- `recovery-phase1-v5/freeze-attempt01`: replacement freeze passed, sources/cleanup verified.
-- `recovery-phase1-v5/parent-freeze-review.json`: exact scopes/library/fixture match.
-- `recovery-phase1-v5/gates.json`, `compact-summary.json`, `runs/ledger.jsonl`.
-- `RECOVERY_PHASE1_V5_DIAGNOSIS.md`: bounded anchored timeline, no raw-value dump.
-- `RECOVERY_PHASE1_V5_RESULT_REVIEW.md`: independent terminal-ledger/path audit.
-- `recovery-phase1-v5/raw-diagnostics-index.json`: raw native/license logs stay local, hash indexed; complete capture JSON/plans/receipts are retained for backup.
+The first source-bound191-case check failed one stale fake-clock fixture
+(start23 beyond new22 search stop);190 passed. Exact failed source/receipt are
+preserved in37d7262a. A deliberate fresh check changed only fake start23→21,
+serialization8→10, assertions unchanged: **191 passed**. Both checks had complete
+accounting/cleanup. New external freeze passed; fixtures were byte-identical v5,
+with unchanged identity/market/movement ordering/native library/task IDs.
+Original tasks were explicitly reordered80-first. See:
+- `RECOVERY_ADMISSION_RESERVE_IMPLEMENTATION.md`, source/contract review.
+- `RECOVERY_ADMISSION_RESERVE_CHECK_RESULTS.md`: first check remains failed.
+- `RECOVERY_ADMISSION_RESERVE_FIXTURE_ADDENDUM.md`: deliberate correction.
+- `admission-reserve-fixture-checks/{command.json,attempt01,accounting.json}`.
+- `RECOVERY_PHASE1_V6_FREEZE_REVIEW.md`, `RECOVERY_PHASE1_V6_DIAGNOSIS.md`.
+- `RECOVERY_PHASE1_V6_RESULT_REVIEW.md`, `RECOVERY_HANDOFF_POLICY_REVIEW.md`.
+- `recovery-phase1-v6/{lock.json,native-launch.json,parent-freeze-review.json,
+  gates.json,compact-summary.json,runs/ledger.jsonl,accounting.json}`.
+Raw/license logs remain local and hash-indexed in `raw-diagnostics-index.json`;
+complete public synthetic capture JSON/plans/receipts are retained for Git backup.
 
-## Authoritative resource state
+## Authoritative cumulative budget
 
-The human approved **30 CPU minutes TOTAL**, recorded in
-`RECOVERY_BUDGET_APPROVAL.json`. Runtime and existing hourly schedule persist
-**1800s hard ceiling /1620s dispatch stop /180s shutdown reserve**, one local
-single-thread numerical worker and5GiB. Do not ask again or reset the ledger.
+Use **1005.1053913375928 charged seconds** from
+`recovery-phase1-v6/accounting.json`. This includes every prior failure and
+conservative reconciliation, both new checks, freeze,53.35887391678989s worker
+allocations,28.91248000000007s run supervision (already including25.732684s
+monitor children) and2.039088s final analysis. Gates1005.1015923375928 precede
+the analysis tail and are not full carry. Decimal sum1005.105391337592747 rounds
+to the authoritative field. Do not add monitor CPU again.
 
-**Carry912.8922626277902s** from `recovery-phase1-v5/accounting.json` for the next
-prospective package. It includes prior721.7986948764081, external freeze
-1.720336292723232, five worker allocations117.29974745865911, run supervisor/
-monitor71.13189399999966, final analyze.9415899999999999. The independent decimal
-sum ends.7901 (one floating-point ulp difference); use the conservative account
-field exactly. Gates912.8892966277901 precedes the final analysis tail and is not
-complete carry. Monitor CPU64.00830499999967 is already in run-supervisor charge;
-never add it again. Shared20s administration is already included, ADMIN0 here.
-Every earlier failed charge and conservative watchdog allowance remains carried.
-Remaining dispatch headroom707.1077373722098s; actual later costs remain additional.
+Human-approved **1800 hard /1620 dispatch /180 shutdown reserve**, one local
+single-thread numerical worker,5GiB remain. **ADMIN0**: single shared20s allowance
+is already carried. Do not ask again, reset accounting, extend resource caps or
+automatically retry. Remaining dispatch headroom614.8946086624072s. No additional
+resource commitment was made. Older paused schedules stay paused.
 
-Complete prior0.5CPUh approval persists. No cap increase, extra worker, longer
-case solve, additional seed/case or new resource commitment was made. Old pending
-budget documents remain historical and are superseded by the direct approval.
-The schedule/status/thread were unchanged; unrelated paused automations untouched.
+## Next bounded package: principled anytime admission
 
-## Next bounded package
+The independent policy review recommends distinguishing **planned**13/25 planner
+budgets from **hard**15/27 independent physical/durable admission and30 output.
+The two-second gap would be planned headroom, not a guaranteed reserve. Keep
+10/22 planned native search (inside original12/24 upper caps), cumulative native
+completion3s, final output30 and outer cleanup32.5. Apply identical evidence,
+clock and overrun treatment across all arms; no native renewal or allowance reset.
 
-Implement and statically review an **earlier planner handoff plus explicit
-independent-admission reserve**, inside the unchanged physical/output deadlines.
-If needed shorten planned native search inside its existing integer cap. Keep
-full replay/exact billing/post-lift rejection and earlier valid-fallback retention.
-Apply the same declared allocation across matched controls. Do not suppress
-TimeoutError, bypass full replay, admit v5 late results or assume0.1346s is a
-universal sufficient reserve. The existing fakes already tested correct late
-rejection; the missing evidence is actual80-trip admission timing.
+Implement a new prospective contract: log target-only overruns, retain prior
+valid fallback, optionally attempt candidate admission only while unchanged hard
+15/27 guards permit; reject actual late/invalid replay, copy or durable save.
+Backend/start-setter/storage/replay/typed-token errors stay failures. No retroactive
+v6 reclassification. Avoid another trace-specific fractional-second patch. The
+strict-reserve alternative needs a credible workload-dependent processing bound.
+`RECOVERY_HANDOFF_POLICY_REVIEW.md` details tradeoffs. Parent can decide routine
+engineering design under standing authorization; no new user approval needed.
 
-Before any execution, freeze exact source/clock/argv and a fresh protocol with
-remaining-budget accounting. Add focused fake tests of budget propagation and
-fallback retention, then one source-bound check. A deliberate new qualification
-should put the80-trip bottleneck first in its prospectively recorded order,
-so a repeated timing failure does not consume another successful40-trip prefix.
-Use unchanged engineering identities50997/40 and50999/80, seed17/day/nonlearned
-30%+top-three, correct registry-v2 (50998 rejected), original upper deadlines
-12/15/24/27/30/32.5. No automatic retry or outcome-chosen case replacement.
-A future reserve is an engineering allocation change, not a new ML contribution.
+Before execution require a new source-bound protocol, focused tests (target
+miss versus real hard overrun, fallback retention, both sizes' coverage), fresh
+check/freeze/native namespace, exact source/fixture/task hashes and complete
+prospective budget. One possible pending envelope600s fits: check40+freeze40
+(each32.5 external plus supervision), worker allocations260, run monitoring200,
+analysis20, contingency40 =>1605.1053913375928,14.894609 below dispatch. This is
+**planning only, not a frozen launch manifest or guarantee**; use actual complete
+costs and reassess before dispatch. Preserve first-failure stop, original eight
+engineering tasks50999/80 and50997/40, seed17/day/30%+top-three,80-first order.
+Do not rerun historical gates absent diagnosed source changes. No source edits
+while workers active. No new native attempt/launch protocol was prepared after v6.
 
-Use a new namespace, preserve v5 and carry ALL charge. Recompute a complete
-prospective resource envelope; the old520s monitor allowance cannot simply be
-reused for a full eight-task repeat within remaining headroom. Observed v5
-supervision/worker-allocation ratio is calibration only, not guaranteed capacity.
-Stop on first failure; incomplete/censored/unknown outcomes stay visible. Do not
-repeat the entire old design/Scholar/capture audit. Keep future old-result
-analysis source-bound to its recorded hashes/Git revision.
+After applicable engineering gates, implement exact-cardinality selector,
+charging-aware CA1 and constructive CF1 before the learned-value comparison.
+`RECOVERY_LEARNED_VALUE_STUDY_ADDENDUM.md` is the current unlaunched design:
+six arms, eight fresh development bases, three seeds, four-base paired scoring-
+price intervention;192 proposed60s decisions,28200s planning envelope under8CPUh,
+two workers5GiB each/10GiB aggregate. It is not an executable manifest. Both
+frozen learned scorers receive linear a, not b. CA1 sees a,b; comparison is of
+usable methods, not matched-information proof of learning. Do not repeat the
+completed feature/design audits. Review their named notes only when implementing.
 
-After applicable engineering gates pass, implement exact-cardinality selector,
-charging-aware CA1 and constructive CF1 before the learned-value screen. Preserve
-all timetable variants in groups, inner-only selection and sealed tests.
+## Scientific interpretation and standing rules
 
-## Scientific comparison design prepared while budget was pending
+October17 development remains historical. `bill-mechanism/RESULTS.md` attributes
+91.916% of summed paired graph-versus-one-heuristic savings to vehicle count;
+that does not decompose the68.36% median-group gain. No tariff-responsive learned
+advantage or broad generalization is established. Generic learned arc pruning
+has direct prior art. Prioritize reliable recovery, strong constructive/charging-
+aware classical controls, matched end-to-end budgets, independent timetable/
+regime evaluation; only then justified label/ranking/model improvements.
 
+The completed41-entry Scholar/cross-field review is
+`cross-field-review/CROSS_FIELD_SYNTHESIS.md`; no routine repeat. Outside-field
+results enter only through directly fitting assumptions/useful methods, never
+forced biology/chemistry/quantum analogies. Keep variants grouped, inner-only
+selection, and sealed DEV/TEST/A6/B3/confirmation/GIRO closed.
 
-Read `RECOVERY_LEARNED_VALUE_STUDY_ADDENDUM.md` before any comparison. It
-supersedes the unlaunched nine-arm factorial question/counts/retention/estimand/
-resource plan. Six arms, eight fresh synthetic development bases, three seeds,
-plus four-base paired scoring-price intervention:192 proposed60s decisions,
-28200s planning envelope under the prospective8CPUh ceiling, at most two workers
-5GiB each/10GiB aggregate. This is NOT an executable manifest; no case identities
-were generated/selected. Actual monitoring overhead may force an incomplete study.
+Work locally in `.venv-local`; leave Unicorn to v2g, no routine monitoring or
+launches. Count failures/startup/scoring/replay/recovery/materialization/monitoring.
+Never claim fit/AP, engineering tests or partial starts prove ML value, certification,
+novelty or publication readiness. Preserve actual unrestricted-bound scope.
 
-A common price-blind coverage backbone B plus each ranker's filling from F minus
-B to exact K controls edge count. Rank-dependent top-three unions did not. Equal
-counts do not equalize topology/search difficulty; retain zero-exposure cases.
-Primary is graph recovery versus unvalidated charging-aware CA1, with direct
-CatBoost/constructive CF1 secondaries, random recovery and full cold8 references.
-No static arms, hence no restoration-effect estimate. CA1/CF1 need implementation
-and credibility checks, not favorable-case selection on the new cohort.
+Back up milestones on existing branch with explicit Nathan Cho
+<nathan.cho2013@gmail.com> author/committer, never rewrite history. Do not merge,
+submit a paper, publish private data or redeem credits. The Google Doc already
+contains the consolidated v5 milestone and six October1 entries; do not duplicate
+routine engineering updates. Append a later consolidated scientific milestone
+when useful, preserving history/visuals. Current wake added no duplicate Doc entry.
 
-Both frozen learned scorers receive linear prices a, not b; the old heuristic
-is price-blind. The paired intervention holds native target tariff fixed while
-changing only scorer price inputs, recomputed within both clocks. This can
-separate ranking response from native charging. CA1 sees a,b, so its contrast is
-between deployable methods, not matched-information proof of learning. Detailed
-notes: `RECOVERY_CLASSICAL_BASELINE_SPEC.md`,
-`RECOVERY_FEATURE_AND_OUTCOME_AUDIT.md`, `RECOVERY_COMPARISON_DESIGN_REVIEW.md`,
-`RECOVERY_STUDY_ADVERSARIAL_CHECK.md`. Do not repeat the completed design audit.
-After native qualification, implement selector/CA1 and then CF1 as justified
-bounded work. No comparative launch until applicable engineering gates pass.
-
-The original Google Doc received ONE consolidated v5 milestone, with exact
-append and unchanged prior structure verified in
-`recovery-phase1-v5/google-doc-update.json`. Do not duplicate it or the six
-October1 entries. Earlier v3 result remains intact. Existing automation cap was
-already updated/read back in `automation-budget-approval-update.json`; no new
-schedule or routine notification is needed.
-
-## Scientific priorities
-
-The October17 development screen remains historical: current80-trip gains are mostly fewer vehicles. `bill-mechanism/RESULTS.md` attributes91.916% of summed paired graph-versus-one-heuristic savings to vehicle-count cost; this does not decompose the68.36% median-group gain. At40 trips matched fleet counts agree. Price-responsive learning and broad generalization remain unproved.
-
-Prioritize reliable full-model recovery, constructive/charging-aware classical controls, matched total-budget allocation and genuinely independent timetable/regime evaluation. Then test better labels/ranking losses, ensembles/adaptive retention and justified model improvements. Generic GNN arc pruning is established prior art. Do not infer novelty, certification or a strong predictive model from fit completion, classification scores or engineering tests.
-
-The cross-field/Scholar review is complete in `cross-field-review/CROSS_FIELD_SYNTHESIS.md` (41 core entries, explicit source-access limits). Do not repeat it routinely. Olson/Lusby/Ropke progressive restoration, Montanaro GRASP/pruning and Wu grid/EV coupling constrain novelty. The user's clarification is firm: outside-field work earns a place only through directly fitting assumptions, relevant prior art or useful methods/theory/evaluation; never force biology/chemistry/quantum analogies into the paper. No useful transfer is an acceptable search outcome.
-
-## Operating rules
-
-Use GPT-6.1 Sol for bounded implementation, analysis and routine tasks with short handoffs. Check active agents and exact local receipts first. Use followup_task to reactivate a completed agent; send_message alone does not start a turn. Avoid broad rereads, raw traces, repeated audits and duplicate attempts.
-
-Work locally in `.venv-local`; leave Unicorn to v2g and do not routinely monitor/launch cluster work. Qualification uses one single-thread worker and5GiB. Freeze sources/assets before dispatch and never edit them while workers run. Count startup, scoring, search, replay, recovery, artifact finalization, failures and monitoring. Keep variants within timetable groups and selection inner-only. Keep sealed DEV/TEST/A6/B3/confirmation/GIRO closed.
-
-Back up meaningful milestones to origin/codex/ml-prediction-20261017 with explicit per-command Nathan Cho <nathan.cho2013@gmail.com> author identity, never rewrite history. Keep old branches/bundles. Append consolidated verified scientific milestones to the original Google Doc when useful, preserving history/visuals; don't duplicate the six October1 entries. Do not duplicate routine engineering updates. No PR merge, journal submission, private-data publication or reset-credit redemption.
-
-The hourly research automation remains useful and active; unrelated schedules stay paused. Notify only substantive results, important failures, major decisions or concrete review-ready research. Stay quiet on routine checks and passing tests. Full earlier checkpoint history is preserved in `CONTINUATION_HISTORY_THROUGH_NATIVE_V1.md`; read it only if a specific historical detail is needed.
+Hourly automation remains useful and active. Stay quiet for routine checks,
+preparation/passing tests and non-actionable engineering iterations; notify only
+substantive findings, important blockers/decisions or review-ready research.

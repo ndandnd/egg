@@ -398,8 +398,8 @@ def test_directory_materialization_hash_endpoint_and_cleanup_independence(tmp_pa
 
 
 def test_late_serialization_is_censored_and_failure_still_charged(physical):
-    clock = Clock(23.)
-    store = MemoryStorage(clock, serialize_seconds=8.)
+    clock = Clock(21.)
+    store = MemoryStorage(clock, serialize_seconds=10.)
 
     def planner(*args, **kw):
         raise RuntimeError('failed native work')
