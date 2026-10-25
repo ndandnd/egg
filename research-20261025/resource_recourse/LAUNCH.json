@@ -1,0 +1,436 @@
+{
+  "schema": "one-grid-axis-resource-recourse-launch-v1",
+  "mode": "FROZEN",
+  "review_disposition": "PASS",
+  "workdir": "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017",
+  "branch": "codex/ml-prediction-20261017",
+  "namespace": "research-20261025/resource_recourse/attempt01",
+  "automatic_retry": false,
+  "source_review": "SOURCE_REVIEW.md and INTEGRATION_REVIEW.md: parent scientific composition and independent boundary/protocol/task-list review PASS",
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 VECLIB_MAXIMUM_THREADS=1 NUMEXPR_NUM_THREADS=1 BLIS_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 /usr/bin/time -p -o research-20261025/resource_recourse/process-time.txt .venv-local/bin/python research-20261025/resource_recourse/run.py > research-20261025/resource_recourse/stdout.txt 2> research-20261025/resource_recourse/stderr.txt",
+  "budgets": {
+    "total_cpu_s": 4500,
+    "total_wall_s": 7200,
+    "dispatch_cpu_s": 4140,
+    "closure_cpu_s": 360,
+    "preflight_cpu_s": 120,
+    "finalization_cpu_s": 120,
+    "finalization_wall_s": 180,
+    "child_hard_cpu_s": 90,
+    "parent_endpoint_s": 60,
+    "native_s": 52,
+    "routing_first_native_s": 17.5,
+    "routing_second_native_s": 35,
+    "cleanup_s": 3,
+    "threads": 1,
+    "observed_worker_rss_bytes": 5368709120
+  },
+  "acquisitions": [
+    {
+      "group": "physical_v2_s10001",
+      "base_id": 10001,
+      "services": 20,
+      "grid_kw": 90,
+      "ordinal": 1,
+      "task_id": "A001-g10001-p90",
+      "phase": "acquisition",
+      "target_source": null
+    },
+    {
+      "group": "physical_v2_s10001",
+      "base_id": 10001,
+      "services": 20,
+      "grid_kw": 45,
+      "ordinal": 2,
+      "task_id": "A002-g10001-p45",
+      "phase": "acquisition",
+      "target_source": null
+    },
+    {
+      "group": "physical_v2_s10006",
+      "base_id": 10006,
+      "services": 20,
+      "grid_kw": 45,
+      "ordinal": 3,
+      "task_id": "A003-g10006-p45",
+      "phase": "acquisition",
+      "target_source": null
+    },
+    {
+      "group": "physical_v2_s10006",
+      "base_id": 10006,
+      "services": 20,
+      "grid_kw": 90,
+      "ordinal": 4,
+      "task_id": "A004-g10006-p90",
+      "phase": "acquisition",
+      "target_source": null
+    },
+    {
+      "group": "physical_v2_s10009",
+      "base_id": 10009,
+      "services": 28,
+      "grid_kw": 90,
+      "ordinal": 5,
+      "task_id": "A005-g10009-p90",
+      "phase": "acquisition",
+      "target_source": null
+    },
+    {
+      "group": "physical_v2_s10009",
+      "base_id": 10009,
+      "services": 28,
+      "grid_kw": 45,
+      "ordinal": 6,
+      "task_id": "A006-g10009-p45",
+      "phase": "acquisition",
+      "target_source": null
+    },
+    {
+      "group": "physical_v2_s10005",
+      "base_id": 10005,
+      "services": 28,
+      "grid_kw": 45,
+      "ordinal": 7,
+      "task_id": "A007-g10005-p45",
+      "phase": "acquisition",
+      "target_source": null
+    },
+    {
+      "group": "physical_v2_s10005",
+      "base_id": 10005,
+      "services": 28,
+      "grid_kw": 90,
+      "ordinal": 8,
+      "task_id": "A008-g10005-p90",
+      "phase": "acquisition",
+      "target_source": null
+    }
+  ],
+  "decisions": [
+    {
+      "group": "physical_v2_s10001",
+      "base_id": 10001,
+      "services": 20,
+      "grid_kw": 90,
+      "ordinal": 9,
+      "task_id": "D001-g10001-p90-tsource0-fixed",
+      "phase": "fixed",
+      "target_source": "source0"
+    },
+    {
+      "group": "physical_v2_s10001",
+      "base_id": 10001,
+      "services": 20,
+      "grid_kw": 90,
+      "ordinal": 10,
+      "task_id": "D002-g10001-p90-tsource0-adaptive",
+      "phase": "adaptive",
+      "target_source": "source0"
+    },
+    {
+      "group": "physical_v2_s10001",
+      "base_id": 10001,
+      "services": 20,
+      "grid_kw": 90,
+      "ordinal": 11,
+      "task_id": "D003-g10001-p90-tsource1-adaptive",
+      "phase": "adaptive",
+      "target_source": "source1"
+    },
+    {
+      "group": "physical_v2_s10001",
+      "base_id": 10001,
+      "services": 20,
+      "grid_kw": 90,
+      "ordinal": 12,
+      "task_id": "D004-g10001-p90-tsource1-fixed",
+      "phase": "fixed",
+      "target_source": "source1"
+    },
+    {
+      "group": "physical_v2_s10001",
+      "base_id": 10001,
+      "services": 20,
+      "grid_kw": 45,
+      "ordinal": 13,
+      "task_id": "D005-g10001-p45-tsource0-fixed",
+      "phase": "fixed",
+      "target_source": "source0"
+    },
+    {
+      "group": "physical_v2_s10001",
+      "base_id": 10001,
+      "services": 20,
+      "grid_kw": 45,
+      "ordinal": 14,
+      "task_id": "D006-g10001-p45-tsource0-adaptive",
+      "phase": "adaptive",
+      "target_source": "source0"
+    },
+    {
+      "group": "physical_v2_s10001",
+      "base_id": 10001,
+      "services": 20,
+      "grid_kw": 45,
+      "ordinal": 15,
+      "task_id": "D007-g10001-p45-tsource1-adaptive",
+      "phase": "adaptive",
+      "target_source": "source1"
+    },
+    {
+      "group": "physical_v2_s10001",
+      "base_id": 10001,
+      "services": 20,
+      "grid_kw": 45,
+      "ordinal": 16,
+      "task_id": "D008-g10001-p45-tsource1-fixed",
+      "phase": "fixed",
+      "target_source": "source1"
+    },
+    {
+      "group": "physical_v2_s10006",
+      "base_id": 10006,
+      "services": 20,
+      "grid_kw": 45,
+      "ordinal": 17,
+      "task_id": "D009-g10006-p45-tsource0-fixed",
+      "phase": "fixed",
+      "target_source": "source0"
+    },
+    {
+      "group": "physical_v2_s10006",
+      "base_id": 10006,
+      "services": 20,
+      "grid_kw": 45,
+      "ordinal": 18,
+      "task_id": "D010-g10006-p45-tsource0-adaptive",
+      "phase": "adaptive",
+      "target_source": "source0"
+    },
+    {
+      "group": "physical_v2_s10006",
+      "base_id": 10006,
+      "services": 20,
+      "grid_kw": 45,
+      "ordinal": 19,
+      "task_id": "D011-g10006-p45-tsource1-adaptive",
+      "phase": "adaptive",
+      "target_source": "source1"
+    },
+    {
+      "group": "physical_v2_s10006",
+      "base_id": 10006,
+      "services": 20,
+      "grid_kw": 45,
+      "ordinal": 20,
+      "task_id": "D012-g10006-p45-tsource1-fixed",
+      "phase": "fixed",
+      "target_source": "source1"
+    },
+    {
+      "group": "physical_v2_s10006",
+      "base_id": 10006,
+      "services": 20,
+      "grid_kw": 90,
+      "ordinal": 21,
+      "task_id": "D013-g10006-p90-tsource0-fixed",
+      "phase": "fixed",
+      "target_source": "source0"
+    },
+    {
+      "group": "physical_v2_s10006",
+      "base_id": 10006,
+      "services": 20,
+      "grid_kw": 90,
+      "ordinal": 22,
+      "task_id": "D014-g10006-p90-tsource0-adaptive",
+      "phase": "adaptive",
+      "target_source": "source0"
+    },
+    {
+      "group": "physical_v2_s10006",
+      "base_id": 10006,
+      "services": 20,
+      "grid_kw": 90,
+      "ordinal": 23,
+      "task_id": "D015-g10006-p90-tsource1-adaptive",
+      "phase": "adaptive",
+      "target_source": "source1"
+    },
+    {
+      "group": "physical_v2_s10006",
+      "base_id": 10006,
+      "services": 20,
+      "grid_kw": 90,
+      "ordinal": 24,
+      "task_id": "D016-g10006-p90-tsource1-fixed",
+      "phase": "fixed",
+      "target_source": "source1"
+    },
+    {
+      "group": "physical_v2_s10009",
+      "base_id": 10009,
+      "services": 28,
+      "grid_kw": 90,
+      "ordinal": 25,
+      "task_id": "D017-g10009-p90-tsource0-fixed",
+      "phase": "fixed",
+      "target_source": "source0"
+    },
+    {
+      "group": "physical_v2_s10009",
+      "base_id": 10009,
+      "services": 28,
+      "grid_kw": 90,
+      "ordinal": 26,
+      "task_id": "D018-g10009-p90-tsource0-adaptive",
+      "phase": "adaptive",
+      "target_source": "source0"
+    },
+    {
+      "group": "physical_v2_s10009",
+      "base_id": 10009,
+      "services": 28,
+      "grid_kw": 90,
+      "ordinal": 27,
+      "task_id": "D019-g10009-p90-tsource1-adaptive",
+      "phase": "adaptive",
+      "target_source": "source1"
+    },
+    {
+      "group": "physical_v2_s10009",
+      "base_id": 10009,
+      "services": 28,
+      "grid_kw": 90,
+      "ordinal": 28,
+      "task_id": "D020-g10009-p90-tsource1-fixed",
+      "phase": "fixed",
+      "target_source": "source1"
+    },
+    {
+      "group": "physical_v2_s10009",
+      "base_id": 10009,
+      "services": 28,
+      "grid_kw": 45,
+      "ordinal": 29,
+      "task_id": "D021-g10009-p45-tsource0-fixed",
+      "phase": "fixed",
+      "target_source": "source0"
+    },
+    {
+      "group": "physical_v2_s10009",
+      "base_id": 10009,
+      "services": 28,
+      "grid_kw": 45,
+      "ordinal": 30,
+      "task_id": "D022-g10009-p45-tsource0-adaptive",
+      "phase": "adaptive",
+      "target_source": "source0"
+    },
+    {
+      "group": "physical_v2_s10009",
+      "base_id": 10009,
+      "services": 28,
+      "grid_kw": 45,
+      "ordinal": 31,
+      "task_id": "D023-g10009-p45-tsource1-adaptive",
+      "phase": "adaptive",
+      "target_source": "source1"
+    },
+    {
+      "group": "physical_v2_s10009",
+      "base_id": 10009,
+      "services": 28,
+      "grid_kw": 45,
+      "ordinal": 32,
+      "task_id": "D024-g10009-p45-tsource1-fixed",
+      "phase": "fixed",
+      "target_source": "source1"
+    },
+    {
+      "group": "physical_v2_s10005",
+      "base_id": 10005,
+      "services": 28,
+      "grid_kw": 45,
+      "ordinal": 33,
+      "task_id": "D025-g10005-p45-tsource0-fixed",
+      "phase": "fixed",
+      "target_source": "source0"
+    },
+    {
+      "group": "physical_v2_s10005",
+      "base_id": 10005,
+      "services": 28,
+      "grid_kw": 45,
+      "ordinal": 34,
+      "task_id": "D026-g10005-p45-tsource0-adaptive",
+      "phase": "adaptive",
+      "target_source": "source0"
+    },
+    {
+      "group": "physical_v2_s10005",
+      "base_id": 10005,
+      "services": 28,
+      "grid_kw": 45,
+      "ordinal": 35,
+      "task_id": "D027-g10005-p45-tsource1-adaptive",
+      "phase": "adaptive",
+      "target_source": "source1"
+    },
+    {
+      "group": "physical_v2_s10005",
+      "base_id": 10005,
+      "services": 28,
+      "grid_kw": 45,
+      "ordinal": 36,
+      "task_id": "D028-g10005-p45-tsource1-fixed",
+      "phase": "fixed",
+      "target_source": "source1"
+    },
+    {
+      "group": "physical_v2_s10005",
+      "base_id": 10005,
+      "services": 28,
+      "grid_kw": 90,
+      "ordinal": 37,
+      "task_id": "D029-g10005-p90-tsource0-fixed",
+      "phase": "fixed",
+      "target_source": "source0"
+    },
+    {
+      "group": "physical_v2_s10005",
+      "base_id": 10005,
+      "services": 28,
+      "grid_kw": 90,
+      "ordinal": 38,
+      "task_id": "D030-g10005-p90-tsource0-adaptive",
+      "phase": "adaptive",
+      "target_source": "source0"
+    },
+    {
+      "group": "physical_v2_s10005",
+      "base_id": 10005,
+      "services": 28,
+      "grid_kw": 90,
+      "ordinal": 39,
+      "task_id": "D031-g10005-p90-tsource1-adaptive",
+      "phase": "adaptive",
+      "target_source": "source1"
+    },
+    {
+      "group": "physical_v2_s10005",
+      "base_id": 10005,
+      "services": 28,
+      "grid_kw": 90,
+      "ordinal": 40,
+      "task_id": "D032-g10005-p90-tsource1-fixed",
+      "phase": "fixed",
+      "target_source": "source1"
+    }
+  ],
+  "all_assignments": 40,
+  "active_assignments": 32,
+  "source_freeze": "Commit and push reviewed source/protocol/manifest before command. One in-process source/input hash batch, no shell hash audit.",
+  "claim_scope": "Exposed development operational point diagnostics; no ideal/global certificate or ML promotion"
+}

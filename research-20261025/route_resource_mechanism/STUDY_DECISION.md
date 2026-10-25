@@ -24,6 +24,9 @@ connectors1, resource start/end, charging availability, timetable/movements,
 battery/reserve, efficiency, prices and per-group fleet quantity unchanged.
 The factor1/2 is chosen from the declared90kW source setting, not a cap search.
 No second restriction, alternative cap or expanded fleet follows if it fails.
+Counterbalance resource order by the fixed group index:90/45 for even indices,
+45/90 for odd indices. Arm order alternates within tariff blocks. This changes
+only prospective task ordering, not group membership or resource definitions.
 Source0/source1 tariffs retain original a and b. Source1 cheap-window capacity
 changes from360 to180kWh; common12h terminal capacity from1080 to540kWh. These
 are source-derived capacities, not claims about actual required group energy.
