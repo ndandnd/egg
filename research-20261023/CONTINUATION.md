@@ -1,126 +1,115 @@
-# EGG current handoff — 25 October 2026: scientific reset
+# EGG current handoff — 25 October 2026: sparse classical pool failure
 
-Worktree /Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017, branch
-codex/ml-prediction-20261017. The human requested a rejection premortem and actual
-decisive experiments. Read research-20261025/REJECTION_PREMORTEM_AND_RESEARCH_PLAN.md
-and only current results/protocols needed next. Use bounded GPT-6.1 Sol subagents;
-parent decides science and integrates. Check current agents/receipts.
+Worktree: /Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017
+Branch: codex/ml-prediction-20261017
+Read this checkpoint, then only the current package's compact evidence. Manage
+bounded GPT-6.1 Sol subagents with short handoffs. Check actual agent/worker state
+before edits or launch. All current numerical workers and bounded agents are
+complete; exec session84285 is closed. No attempt is to be resumed.
 
-## Priority change
+## Latest completed package
 
-Stop expanding responsive-supervision infrastructure. Pending component, metadata
-and native attempts remain unsubmitted/unqualified. Preserve sources, failures
-and accounts; do not revive attempts or repeat source matrices. The prior
-checkpoint is in Git through8d86c60d. Five untracked component-preparation files
-remain deferred, separate from this scientific milestone.
+research-20261025/matching_pool/attempt01 ran ONCE, with frozen pool.py/run.py,
+PROTOCOL.md, RESOURCE_DECISION.md and LAUNCH.json. It unions three maximum-
+cardinality chronological path covers (travel, depot capacity, seed17 hash),
+retains all parallel modes for chosen pairs and every boundary movement, then
+solves the original physical model with excluded movement upper bounds zero.
+One fleet-count solve per case, native default seed, independent full-case replay.
 
-The question is whether learning preserves valuable alternatives under electricity
-and resource changes better than strong classical methods. More architectures or
-epochs do not answer the missing baseline/mechanism questions. October17 is a
-20-group DEVELOPMENT cohort.91.916% of summed80-trip graph-versus-simple-heuristic
-savings is vehicle count, not a decomposition of the68.36% median gain.
-Current screen bill is integrated supply cost c+a'L+.5L'BL, not the atomic
-uniform-price payment c+a'L+L'BL. Preserve fields, correct interpretation.
-The graph ranker receives a but no b, so cannot adapt scores to b alone.
+- scale:50685:40:173/1507 movements,93/1427 flexible; three topological paths per
+  cover;3 replay-valid buses, restricted native OPTIMAL/bound3,1.507s whole case.
+- scale:50605:80:273/6042 movements,113/5882 flexible; three topological paths per
+  cover;24 replay-valid buses, restricted OPTIMAL/bound24,12.441s whole case.
+  Native search finished in0.746s, so more time on this same pool is not the fix.
+- Prespecified competence target <=3/5 buses FAILED on80 trips. Both physical
+  witnesses are valid. Diagnostic completion is not competence or full optimality.
+  Known full-case feasible5-bus endpoint is historical, unmatched context.
+- Critical confound:113/5882 flexible modes is only~1.92%, versus historical
+  learned~30% plus per-trip floors. No attribution uniquely to matching/SOC/proxy
+  failure, learning necessity, or generalization. Different exposed cases are not
+  a nested scaling study. No retry, extra solve or adaptive expansion occurred.
 
-## Completed new experiments — do not repeat
+Read matching_pool/RESULTS.md, DIAGNOSIS.md and summary.json. Do not read hundreds
+of MB of raw captures/inventories into context. Original large artifacts remain
+locally; lossless gzip archives and original streaming hashes are preserved.
+Completed source/protocol/decision/result bytes stay unchanged.
 
-1. price_signal_audit/:342 old replayed endpoints, exact objective reconstruction
-   and historic input-hash matching.20 minimum-observed-fleet banks ×five tariffs.
-   Day-to-late yields better fixed-plan selection in13/20 groups, median0.7165%,
-   max4.2338%. Day system-cost versus payment minima differ materially in8/20.
-   Catalog evidence only; no charging reoptimization or learned-response attribution.
-2. catalog_hull_audit/:120 cells, all rational primal/dual catalog bounds within
-   frozen tolerance. Overall exit1/passedfalse staysfalse: one SLSQP non-success,
-   scale50730:40/late/b×5, independently bounded optimization gap1.0913e-9.
-   No retry. Day/b×1 median pure-minus-hull gap0.025455%, max1.021835%; zero-curvature
-   controls exactlyzero. Neither full integrality-gap bound nor executable mixture.
-   Median95%-variation load rank2.5 is only a descriptor of the observed bank.
-3. classical_competence/attempt01:exactly scale50685:40 and50605:80, one default-
-   seed greedy construction/fixed-topology completion each. Process exit0 means
-   records complete, not2/2 feasible.40case:15buses,1856.03542 integrated cost,
-   independent replay/admission13.109s.80case:29constructed buses, internally
-   feasible helper candidate but late return/no independent admission; full record
-   64.613s. Historical graph used3/5buses under unmatched conditions. This greedy
-   is not a serious classical baseline. No infeasibility or ML-win claim.
+## Next concrete step — density control, NOT a retry
 
-4. classical_competence/fleet-first-attempt01: one global fleet-count solve on
-   each same exposed case, original physical model, no learned/greedy scaffold.
-   Both plans independently replayed.40 trips:3 buses, native incumbent/bound3,
-   3.724s total.80 trips:30 buses, fleet bound2,60s native/71.332s total; historical
-   learned endpoint had5. This is unmatched objective/seed/budget context, not a
-   speedup or paired ML result.80-trip matrix has177,958 variables/190,037 rows.
-   Read FLEET_FIRST_RESULTS.md and compact fleet-first-summary.json.
+Read matching_pool/NEXT_CONTROL_DECISION.md. This prospective decision is not yet
+an executable manifest. Implement a thin research-only selector/driver in a fresh
+density-control namespace; no production rewrite, timing controller or old
+qualification gates. Then one focused static peer review and exact source/
+protocol/command freeze before execution.
 
-All paths above are under research-20261025. All numerical/postprocess workers
-are complete; exec sessions1448/54422/10158 are closed. All bounded agents are
-complete. No active experiment remains and no attempt is to be resumed. Large
-raw inventories/captures are preserved locally and losslessly archived in Git.
+Four decisions:40/CA1,40/Cover+CA1,80/Cover+CA1,80/CA1, all native seed17.
+Use the existing classical_controls.ca1_score and select_connections for the
+common backbone B, exact quota K and complete CA1 ranking. Ordinary arm=B+CA1
+fill. Cover arm=B union frozen matching modes C, then the same CA1 fill to K.
+All original boundaries remain. Assert |B union C|<=K; fail rather than enlarge
+K or discard covers adaptively. K=min(M,max(ceil(.30*M),|B|)), same for both arms.
+Each arm pays its own scoring/pool work; no free cached score or old chosen plan.
+All original physical constraints, one pool-restricted fleet solve, independent
+replay and exact post-solve integrated-cost evaluation remain.
 
-## Next executable research step
+Selected practical prospective budget:720CPU/600wall seconds total, one native
+thread and5GiB observed RSS; four120s clocks with preparation30/native deadline90/
+final120 and native cap60. Separate60CPU/90wall finalization. No budget approval
+is pending. This is exposed-case single-seed competence, not independent ML
+comparison. Retain all arms/failures. Only a competent conventional arm earns
+the separately frozen multi-group/multi-seed/equal-budget ML study. More complex
+energy-aware path-cover/resource-constrained route generation follows this
+density control if needed. Do not launch another full fleet-first run or sparse
+attempt01 with more time.
 
-Do not launch192 assignments with the weak greedy control, or repeat the same
-fleet-first pair with more time. Changing only the full solver objective did not
-repair80-trip incumbent search. Build a meaningful classical candidate pool using
-GRASP/global route selection and charging-aware improvement, plus a root-LP-
-informed control where supported, following LITERATURE_TO_EXPERIMENTS.md and
-classical_competence/STATIC_DIAGNOSIS.md. NEXT_BASELINE_PROTOCOL.md is the completed
-fleet-first experiment's frozen protocol, not an unexecuted next command.
+## Scientific context and boundaries
 
-First inspect the existing constructive/classical APIs narrowly and implement
-a small research-only classical pool pilot. Prespecify candidate budgets and
-secondary scores; a route-only matching is a diagnostic, not electric-fleet
-feasibility. Keep original SOC/shared charging constraints and independent replay.
-Do not create a new timing controller or duplicate physical inventories. Record
-a new source/protocol/command, practical resource budget and fresh namespace
-before execution. These development outcomes can diagnose design, not establish
-generalization. Strong baseline competence must precede the larger study.
+Human requested a rejection premortem and actual decisive experiments. The main
+report is research-20261025/REJECTION_PREMORTEM_AND_RESEARCH_PLAN.md. The earlier
+four diagnostics are complete and preserved in price_signal_audit,
+catalog_hull_audit and classical_competence; do not rerun them routinely.
 
-Then freeze matched GNN/CatBoost/classical/full comparisons with common physical
-constraints and a shared feasible incumbent, paid preprocessing/search/replay,
-comparable retained budgets and repeated seeds. Include actual-vs-permuted inputs
-as sensitivity tests AND a similarly tuned tariff-blind model trained only on
-training groups. Frozen-pool and fixed-route charging reoptimization separate
-solver price response from learning. Add fixed-fleet controls, capacity stress
-and independent nested size/regime tests. These comparisons have NOT run.
+October17 is20-group DEVELOPMENT evidence.91.916% of summed80-trip savings over
+one weak heuristic is vehicle-count cost, not established learned price response.
+Current bill is integrated supply/system cost c+a'L+.5L'BL, not atomic uniform-
+price payment c+a'L+L'BL. The ranker receives a but not b and cannot adapt scores
+to b alone. Generic pruning/recovery/convex-hull pricing are prior art.
 
-Classical decomposition identities are not novelty; useful mathematical work
-needs fleet-specific implementability/approximation assumptions and measurable
-consequences. Report catalog gaps in absolute/electricity-normalized units as well
-as total cost, and load-rank ceilings from bank cardinality. Calibrate market
-impact and economic units. Recovery/certification follows the baseline and price-
-information gates, not another standalone infrastructure program.
+After baseline competence: matched GNN/CatBoost/classical/full comparison with
+common feasible starting plans and complete cost accounting; trained tariff-blind
+control plus input interventions; fixed-fleet/fixed-route charging, capacity
+stress, independent nested timetable/regime evaluation. Permutation alone is
+sensitivity, not price-information value. Classical decomposition identities are
+not new theorems. Report catalog gaps in absolute/electricity-normalized units,
+and bank cardinality/rank ceilings. Calibrate price impact/cost units. Keep all
+variants grouped, preprocessing/selection inner-only, sealed tests untouched.
 
-## Resource authority and evidence
+Stop expanding responsive-supervision infrastructure. Its pending component/
+metadata/native attempts remain deferred/unqualified. Preserve every failure,
+source and account; five old untracked component files stay separate. No old
+namespace revival or repeated passed matrices.
 
-No budget answer is pending. Human authorized practical routine budgets; record
-prospective costs and flag unusual commitments, not repeated tiny approval
-questions. New provisions:219CPU seconds for two analyses,240CPU/180wall for
-greedy competence,120CPU/180wall for its summary/archive,360CPU/300wall for
-global fleet-first,60CPU/90wall for its final archive. Numerical thread1, observed RSS
-under5GiB. Actual process totals:research-20261025/SCIENTIFIC_RESOURCE_RECEIPT.json,
-not exact session cost. Legacy conditional guard2546.091499549272 remains in
-cf1-responsive-checks/attempt01-accounting.json; historical actual review CPU is
-UNKNOWN. Never reset old charges/flags or claim restored old-cap compliance.
+## Resources, backup and research log
 
-Large classical receipts are unchanged locally and losslessly archived as
-receipt.json.gz for Git; summary.json records original streaming SHA256/size.
-Do not dump hundreds of MB into context. Compact receipts/results suffice.
-Raw diagnostics stdout/stderr stay local/ignored. Hash consumed inputs once in
-metered new experiments, no duplicate hash loops.
+Human authorized practical routine budgets: record prospective scope and flag
+unusual commitments, no repeated tiny approval requests. Latest measured reset
+CPU:160.91s, comprising earlier146.47 plus matching pilot13.56 and finalization.88.
+See matching_pool/RESOURCE_RECEIPT.json and per-process time files; these rounded
+numerical-process sums are NOT exact session CPU. Legacy conditional guard
+2546.091499549272 remains separately in cf1-responsive-checks/attempt01-accounting.json;
+historical actual review CPU UNKNOWN. Never reset or relabel it. Hash consumed
+inputs once inside metered experiments; no duplicate hash audits.
 
-## Preservation and boundaries
+No cluster access/monitoring/jobs; leave Unicorn to v2g. Sealed
+DEV/TEST/A6/B3/confirmation/GIRO closed. Restricted/fixed-route bounds are not
+unrestricted certificates. No PR merge, journal submission, private publication
+or reset credits. Manuscript deferred pending a coherent contribution.
 
-No cluster access/monitoring/launches; leave Unicorn to v2g. Sealed
-DEV/TEST/A6/B3/confirmation/GIRO remain closed. Restricted/fixed-route bounds are
-not full certificates; training metrics are not useful prediction. No PR merge,
-journal submission, private publication or reset credits. Manuscript deferred;
-aim for one defensible connected contribution.
-
-Back up meaningful work to origin/codex/ml-prediction-20261017, explicit author
-AND committer Nathan Cho <nathan.cho2013@gmail.com>, no history rewrite. Original
-Google Doc has the verified25October scientific-reset/price/hull section; see
-GOOGLE_DOC_SCIENTIFIC_MILESTONE.md. Do not repeat it or the sixOctober1 entries.
-Only append subsequent consolidated scientific milestones, preserving history
-and visuals. Hourly automation useful; unrelated paused schedules stay paused.
-Quiet routine progress; notify substantive results, failures or review-ready work.
+Back up to origin/codex/ml-prediction-20261017 using explicit author AND committer
+Nathan Cho <nathan.cho2013@gmail.com>, never rewrite history. Original Google Doc
+now also has verified section "25 October2026 — Classical baseline controls and
+sparse-pool failure" (actual heading includes spaces; see matching_pool/
+GOOGLE_DOC_APPEND.md), range230638–233233, all8 images preserved. Do not repeat
+that, the earlier25October price/hull entry, or sixOctober1 entries. Append only
+later consolidated verified science. Hourly automation remains useful; unrelated
+paused schedules remain paused. Quiet routine checks; notify substantive results.

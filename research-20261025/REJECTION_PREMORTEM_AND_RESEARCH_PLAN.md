@@ -233,3 +233,14 @@ the80-trip model has177,958 variables and190,037 rows. A stronger classical rout
 pool, root-LP-informed control and common feasible starting plan are now mandatory
 before claiming an electricity-specific learned advantage. See
 `classical_competence/FLEET_FIRST_RESULTS.md`. No further repetitions were made.
+
+A subsequent frozen three-cover conventional pool also completed once. Its40-trip
+plan had3 buses. At80 trips it returned24 replay-valid buses with a numerical
+restricted fleet bound of24 in0.746s of native search. Thus search exhaustion
+does not explain this pool's missed5-bus competence target. Crucially, it kept
+only113/5882 flexible modes (~1.92%), versus the old learned selector's roughly
+30% plus floors. This is a candidate-density confound, not evidence that
+matching or classical methods are inherently inferior. The next separate control
+matches exact K and a common backbone for CA1 alone versus cover-preserving CA1
+fill. No pool expansion or retry followed. See matching_pool/RESULTS.md,
+DIAGNOSIS.md and NEXT_CONTROL_DECISION.md; a broad ML study remains gated.

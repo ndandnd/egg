@@ -1,0 +1,114 @@
+{
+  "complete": true,
+  "passed": true,
+  "cases": [
+    {
+      "case": "scale:50685:40",
+      "status": "replayed_matching_pool_witness",
+      "receipt": "research-20261025/matching_pool/attempt01/scale-50685-40/receipt.json",
+      "elapsed_including_receipt_s": 1.5068763745948672,
+      "cpu_including_receipt_s": 1.401999,
+      "accepted_within_offline120": true,
+      "physical_witness_valid": true,
+      "vehicles": 3,
+      "integrated_cost_exact": "492940449497798801067950425308909972931262421474703/730750818665451459101842416358141509827966271488",
+      "pool": {
+        "policy": "three-global-path-covers-parallel-mode-union-v1",
+        "declared_movements": 1507,
+        "retained_movements": 173,
+        "route_only_path_counts": [
+          3,
+          3,
+          3
+        ]
+      },
+      "declared_matrix": {
+        "physical_rows": 23773,
+        "columns": 20669,
+        "single_inventory": true
+      },
+      "native_bound_scope": "candidate-pool-restricted fleet count, never unrestricted full-model bound"
+    },
+    {
+      "case": "scale:50605:80",
+      "status": "replayed_matching_pool_witness",
+      "receipt": "research-20261025/matching_pool/attempt01/scale-50605-80/receipt.json",
+      "elapsed_including_receipt_s": 12.440767624415457,
+      "cpu_including_receipt_s": 11.754458999999999,
+      "accepted_within_offline120": true,
+      "physical_witness_valid": true,
+      "vehicles": 24,
+      "integrated_cost_exact": "9597970477511656954029715364998240050622407547463127/2923003274661805836407369665432566039311865085952",
+      "pool": {
+        "policy": "three-global-path-covers-parallel-mode-union-v1",
+        "declared_movements": 6042,
+        "retained_movements": 273,
+        "route_only_path_counts": [
+          3,
+          3,
+          3
+        ]
+      },
+      "declared_matrix": {
+        "physical_rows": 190037,
+        "columns": 177958,
+        "single_inventory": true
+      },
+      "native_bound_scope": "candidate-pool-restricted fleet count, never unrestricted full-model bound"
+    }
+  ],
+  "pid": 75431,
+  "objective": "minimize vehicle count only; economic cost evaluated after replay",
+  "scope": "exposed-case classical pool competence; no matched GNN or main60s qualification",
+  "native_seed": null,
+  "seed_policy": "backend default, unmodified; numeric default unknown",
+  "scientific_qualification": false,
+  "repairs": 0,
+  "retries": 0,
+  "secondary_solves": 0,
+  "formulation": "egg-native-pathflow-v3-energy-band-orphan-projection",
+  "native_matrix": "egg-native-pathflow-v2-energy-band",
+  "pool_policy": "three-global-path-covers-parallel-mode-union-v1",
+  "extraction_policy": "native-pathflow-orphan-projection-v1",
+  "mip_version": "1.17.6",
+  "numpy_version": "1.26.4",
+  "scipy_version": "1.13.1",
+  "native_bound_scope": "candidate-pool-restricted fleet count, never unrestricted full-model bound",
+  "feasible_cases": 2,
+  "stop_signal": null,
+  "input_source_sha256": {
+    "research-20261025/matching_pool/run.py": "f7d959ac9bd9965ba13be758b7c4c2158f1125ac99ef1fe302a5413902ef0e77",
+    "research-20261025/matching_pool/PROTOCOL.md": "ecfdcd281d7395d591bc26a8541ae45d77a5f47c7e5da291536e41af8eab4f75",
+    "research-20261025/matching_pool/RESOURCE_DECISION.md": "dc7a2d51fda87852a7d26a80f4feea36d72b5c7323df7f90022fccef8be5dd20",
+    "research-20261025/matching_pool/pool.py": "3210eb9e3753a68a400a24ebd7989142c90af1b20137827a0a273e5031d0020f",
+    "research-20261017/local-assets-v3.json": "2976ef7fcb9d1c577e11e84757995e90f665faae9fd4ee071911ba5a5138ff87",
+    "src/egglab/__init__.py": "98d97b9995afd57827920e43f16adf5065966a9c50577819e986049e5d35c893",
+    "src/egglab/classical_controls.py": "d8edb7c2c5ef79e0428abea3c67deaeb1e3bbfb75ac857ee47bb85852f8796cc",
+    "src/egglab/claude_cases.py": "28fd97eb4351dfc05da83db9420ed9a3e28943b5b18545970ab4e9b9df10842d",
+    "src/egglab/claude_scale_cases.py": "9d58cf00a89bb320e7b4ce6f2332f7ac77943be31341755570b3578a12481445",
+    "src/egglab/constructive_charging.py": "77d2afb5e62d6e0470e9115c8572ea89888c4eb03c1ca43c603116d20e0f7d96",
+    "src/egglab/native_hull.py": "1d5000c3e410a8a4477e5e82b805571cfd4255d3bb79b1d732844bc3042cbc9c",
+    "src/egglab/native_pathflow.py": "81c366d93d327d3573c4b1d468d36121054b3a59ffe2d33c95b152cf33e3140a",
+    "src/egglab/native_recharge.py": "0067123a7f71cc6e9c89e1262cdcbd612cafdcfc252e35bcfca7f1f54c45d0f3",
+    "src/egglab/physical_learning_cases.py": "85f832c80526e02a4531bd0b4a70ed398eb46ae9a6cae2834da163ef3c0c8f1b"
+  },
+  "cpu_s": 13.429895,
+  "wall_s": 14.38943687453866,
+  "observed_peak_rss_bytes": 426901504,
+  "rusage": {
+    "utime_s": 12.341418,
+    "stime_s": 1.12496,
+    "maxrss_platform_units": 426901504,
+    "platform": "darwin"
+  },
+  "budget": {
+    "cpu_s": 360,
+    "wall_s": 300,
+    "case_s": 120,
+    "preparation_s": 30,
+    "native_deadline_s": 90,
+    "native_cap_s": 60,
+    "capture_replay_final_s": 30
+  },
+  "interpretation": "Diagnostic completion is not feasibility of both cases, unrestricted optimality or a paired performance result"
+}
