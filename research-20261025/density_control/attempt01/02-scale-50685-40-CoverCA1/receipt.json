@@ -1,0 +1,166 @@
+{
+  "case": "scale:50685:40",
+  "arm": "CoverCA1",
+  "ordinal": 2,
+  "case_anchor": 6100959.418809291,
+  "case_deadline": 6101079.418809291,
+  "complete": true,
+  "physical_witness_valid": true,
+  "status": "replayed_density_control_witness",
+  "stages": [
+    {
+      "stage": "case_construction",
+      "wall_s": 0.00812945794314146,
+      "cpu_s": 0.00812999999999997,
+      "observed_peak_rss_bytes": 179961856
+    },
+    {
+      "stage": "fresh_CA1_and_selection",
+      "wall_s": 0.10195975005626678,
+      "cpu_s": 0.10194300000000012,
+      "observed_peak_rss_bytes": 179961856
+    },
+    {
+      "stage": "save_selection_ledgers",
+      "wall_s": 0.011969707906246185,
+      "cpu_s": 0.010367000000000015,
+      "observed_peak_rss_bytes": 179961856
+    },
+    {
+      "stage": "full_physical_model",
+      "wall_s": 0.22313783317804337,
+      "cpu_s": 0.22307000000000032,
+      "observed_peak_rss_bytes": 179961856
+    },
+    {
+      "stage": "one_physical_inventory",
+      "wall_s": 0.5098281251266599,
+      "cpu_s": 0.505188,
+      "observed_peak_rss_bytes": 179961856
+    },
+    {
+      "stage": "pool_upper_bound_restriction",
+      "wall_s": 0.0144057497382164,
+      "cpu_s": 0.012035999999999714,
+      "observed_peak_rss_bytes": 179961856
+    },
+    {
+      "stage": "one_fleet_native_solve",
+      "wall_s": 0.19736866652965546,
+      "cpu_s": 0.19733,
+      "observed_peak_rss_bytes": 179961856
+    },
+    {
+      "stage": "one_capture",
+      "wall_s": 0.3443369157612324,
+      "cpu_s": 0.32735100000000017,
+      "observed_peak_rss_bytes": 184549376
+    },
+    {
+      "stage": "unchanged_extraction",
+      "wall_s": 0.11156512424349785,
+      "cpu_s": 0.11156500000000014,
+      "observed_peak_rss_bytes": 184549376
+    },
+    {
+      "stage": "independent_replay",
+      "wall_s": 0.01436508260667324,
+      "cpu_s": 0.014364999999999739,
+      "observed_peak_rss_bytes": 184549376
+    },
+    {
+      "stage": "save_physical_witness",
+      "wall_s": 0.0026234574615955353,
+      "cpu_s": 0.0022459999999999702,
+      "observed_peak_rss_bytes": 184549376
+    }
+  ],
+  "failures": [],
+  "native_seed_requested": 17,
+  "native_seed_readback": 17,
+  "seed_policy": "native model.seed=17 with explicit readback",
+  "case_identity": "789f275da82ba7d1c4b97207a1bd48912e01f64698d1d0421ec1ab450bb0e8d9",
+  "market_identity": "a9007ac335141db48986cc7bc1fe7678cd4093096949ca961b487759db82719f",
+  "trips": 40,
+  "pool": {
+    "policy": "common-backbone-exactK-CA1-versus-CoverCA1-v1",
+    "status": "selected",
+    "M": 1427,
+    "K": 429,
+    "declared_movements": 1507,
+    "retained_movements": 509,
+    "backbone_count": 122,
+    "cover_flexible_count": 93,
+    "protected_count": 169,
+    "fill_count": 260,
+    "ordinary_CA1_overlap": {
+      "intersection": 382,
+      "only_ordinary": 47,
+      "only_arm": 47,
+      "union": 476
+    },
+    "backbone_cover_overlap": 46,
+    "mode_counts": {
+      "declared": {
+        "pullout": 40,
+        "pullin": 40,
+        "direct": 720,
+        "depot": 707
+      },
+      "selected": {
+        "pullout": 40,
+        "pullin": 40,
+        "direct": 325,
+        "depot": 104
+      },
+      "backbone": {
+        "direct": 109,
+        "depot": 13
+      },
+      "cover": {
+        "direct": 53,
+        "depot": 40
+      },
+      "fill": {
+        "direct": 202,
+        "depot": 58
+      }
+    }
+  },
+  "inventory": {
+    "physical_rows": 23773,
+    "columns": 20669,
+    "single_inventory": true
+  },
+  "native": {
+    "status": "OPTIMAL",
+    "incumbent": 3.0,
+    "lower_bound": 3.0,
+    "raw_incumbent_repr": "3.0",
+    "raw_lower_bound_repr": "3.0",
+    "wall_s": 0.1973422085866332,
+    "seconds_cap": 60.0,
+    "threads": 1,
+    "backend": "GRB",
+    "backend_runtime": {
+      "requested": "GRB",
+      "model_solver_name": "GRB",
+      "solver_module": "mip.gurobi",
+      "solver_class": "SolverGurobi",
+      "native_library_path": "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/gurobipy/_batch.cpython-312-darwin.so",
+      "native_library_sha256": "54c2ca41a9a9c80b4dd27df09e6b8a73abbb18de90e95198ae676611910dca96"
+    },
+    "n_vars": 20669,
+    "n_int": 1507,
+    "n_constraints": 23773,
+    "physical_constraints": 23773
+  },
+  "native_bound_scope": "candidate-pool-restricted fleet count, never unrestricted full-model bound",
+  "vehicles": 3,
+  "integrated_cost_exact": "119809975931962759605127689825579444129432844777153/182687704666362864775460604089535377456991567872",
+  "fleet_objective_tolerance": 1e-06,
+  "witness_ready_monotonic": 6100960.975298416,
+  "elapsed_before_receipt_s": 1.5568829588592052,
+  "cpu_before_receipt_s": 1.5304650000000002,
+  "observed_peak_rss_bytes": 184549376
+}

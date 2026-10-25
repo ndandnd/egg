@@ -244,3 +244,16 @@ matching or classical methods are inherently inferior. The next separate control
 matches exact K and a common backbone for CA1 alone versus cover-preserving CA1
 fill. No pool expansion or retry followed. See matching_pool/RESULTS.md,
 DIAGNOSIS.md and NEXT_CONTROL_DECISION.md; a broad ML study remains gated.
+
+The separate exact-density control now supplies a competent conventional arm.
+All four decisions independently replayed. At identical flexible quotas429/1765,
+CA1 versus Cover+CA1 used4 versus3 buses on40 trips and5 versus5 on80. Native
+restricted fleet bounds matched each incumbent; system costs were evaluated
+rather than optimized. Cover+CA1 meets the exposed3/5 gate, ordinary CA1 misses40,
+and the aggregate all-four gate remainsfalse. Pool substitutions were47/6 modes.
+This supports a fairer next comparison, not an ML advantage: conventional scoring
+also finds the five-bus80-trip plan once candidate density is comparable. These
+are one-seed exposed cases. Keep both conventional arms frozen in independent,
+repeated-seed/equal-budget comparisons, including a common feasible fallback and
+paid preparation. See density_control/RESULTS.md, SCIENTIFIC_INTERPRETATION.md
+and NEXT_STUDY_REQUIREMENTS.md. No broad comparison or new training ran here.
