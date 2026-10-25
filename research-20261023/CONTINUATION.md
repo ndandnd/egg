@@ -1,4 +1,4 @@
-# Current handoff — 25 October 2026: modest GNN signal, mixed energy mechanism
+# Current handoff — 25 October 2026: primal-QP check passed; extension still static
 
 Worktree:/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017
 Branch:codex/ml-prediction-20261017. Read this checkpoint and only the relevant
@@ -10,7 +10,13 @@ duplicate an attempted or running task. Manage bounded GPT-6.1 Sol handoffs.
 No numerical workers active. Warm campaign exec72031 and frozen finalizer33404
 CLOSED exit0. Direct-QP attempt01 CLOSED exit1 before any native call; corrected
 attempt02 exec82477 CLOSED exit0. QP analysis and NEW stored-energy diagnostic
-both ran ONCE, CLOSED exit0. All three current bounded agents completed. Sources,
+both ran ONCE, CLOSED exit0. NEW primal-QP attempt03 exec97290 CLOSED exit0,
+one50603/80seed17 nativeMethod0 call produced a replay-valid optimal QP witness;
+its once-only summarize_v3 readout CLOSED exit0. Do NOT rerun it. Two small TRAIN
+registry metadata queries also completed once, no case/model/label work.
+Agentsresponsive_monitor_tests andapproved50_runners currently own STATIC new
+extension preflight/pool-report deltas and affected review; bindings completed
+training-admission note. Check actual agent state before editing/dispatch. Sources,
 receipts, failures and exact outputs preserved. No automatic retry or new model
 training. Do not run completed readouts, old qualification matrices or captures.
 
@@ -55,34 +61,59 @@ every cost ordering, but every downstream solver already uses target prices;
 this does NOT identify learned tariff-information value. Four groups remain
 four units. Models use a,not b; no novel generic pruning/recovery/convex-hull claim.
 
-## Next executable work — narrow new design, then competent replication
+## Next executable work — finish extension admission/binding before launch
 
-Read fixed_route_qp/NEXT_MECHANISM_DESIGN.md and EXTRACTION_FAILURE_DIAGNOSIS.md.
-The selected prospective direction is ONE NEW50603/80 seed17 fixed-route QP
-mechanism check with Method=0 primal simplex set/read back; unchanged matrix,
-objective, accuracy, decoder/replay and valid-prior retention. It may request a
-different allocation; no guarantee or old offender-size inference. Do NOT rerun
-seven passed cases or resume attempt01/02. No new code/command/namespace has yet
-been frozen. Implement only the narrow helper/caller delta, one affected static
-review, fresh source-bound protocol/manifest/command and once-metered new-byte
-binding BEFORE dispatch. Direction120CPU/180wall inside SAME1800CPU/2700wall QP
-package; current carry48.88/50.65 retained. Native52/final60,CPUhard90,cleanup3s,
-one native thread/observed5GiB. No budget answer pending under human practical
-routine authority. Diagnose any new failure; no automatic retries/framework growth.
+Read fixed_route_qp/MECHANISM_RESULTS_V3.md and V3_RESOURCE_RECEIPT.json.
+The separately frozen one-case Method0 check PASSED:replayed1299.0119357338792
+versus valid prior1422.6779732510288, inclusive11.649910s,external11.15CPU/11.71wall.
+Postreadout.01CPU/.03wall; newv3package11.16/11.74. Every physical/objective/
+accuracy/decoder/replay guard unchanged; actualMethod0/seed17 read back. Earlier
+v2barrier7/8 record remains unchanged, not retroactively8/8oneuniformpolicy.
+No charge-magnitude/rootcause, universaladmission, MLquality or speedup claim.
+Do NOT revive old NEXT_MECHANISM_DESIGN as pending or rerun seven passed cases.
 
-warm_replication/ contains STATIC source/cohort drafts only, HELD. Eight fixed
+warm_replication/ contains STATIC source/cohort/protocol drafts only, HELD. Eight fixed
 new development base IDs50604,50606–50612,40/80,3seeds, old7arms+GNN_day;
-8CPUh/10wallh is direction only, not a launch manifest. Reassess/upgrade the
-charging control and all quantities before freezing actual study. Keep both
+8CPUh/10wallh is direction only, not a launch manifest. Source now explicitly
+replaces oldcappedfixed_route withfixed_route_QP (still8arms). Newlocalhelper
+narrowlyallowsactualassignedseeds17/41/73, otherwisefrozenv3Method0/physics.
+SOURCE_REVIEW_QP.md passed originalaffectedintegration. Two ADDITIONAL new
+preflight/pool-report hunks are not yet closed:source-bound TRAINgroupadmission
+and predeclared GNN/GNN_day retainedpooloverlap/exposure. Ownersabove mayONLY
+inspect/write/review, no tests/import/hash/inference/solve. Do not repeat the
+already passed oldsource matrix. Keep both
 CA1 and CoverCA1,random/full,common valid fallback,commonK and all paid clocks.
-GNN_day tests inference conditioning, NOT a comparably trained tariff-blind
+NewPARENT_CONTROL_QUALIFICATION_DECISION.md/PROTOCOL_DRAFT.md requireall48QP
+assignments timelynewphysicalQPcandidate+nativeOPTIMAL, in addition to16valid
+priors/384attemptedrecorded/completeness/noinvalid/fatal/accountingsuccess, then
+GNNprimary/Catsecondary separately>=6/8positivegroupmedians andmean d>.01against
+BOTHCoverandQP. Ifcontrolfails keepalloperationalanalyses butmodelgateinconclusive;
+noavailable-onlyrescue. Original4groupgateunchanged. GNN_day tests inference conditioning, NOT a comparably trained tariff-blind
 control. Independent grouped/nested scale/regime evidence and matched trained
 price-blind control remain missing. Do not train more families or survey more
 literature merely because a batch finishes. Recovery/certification separate.
 
 ## Accounting, documentation and boundaries
 
-fixed_route_qp/FINAL_RESOURCE_RECEIPT.json is current authoritative CLOSED process
+Current closedcumulative7064.41CPU/7239.65elapsed-sum:fixed_route_qp/
+V3_RESOURCE_RECEIPT.json gives7064.39/7239.61 afterMethod0+readout, and
+warm_replication/PREPARATORY_RESOURCE_RECEIPT.json adds.02CPU/.04elapsed from
+thetwo completedTRAINmetadataqueries. SharedQPpackage60.04CPU/62.39elapsed
+inside1800/2700, alloldchargesretained. NewcomparisonhasNOgeneratedcase/model/
+numericalrunyet. Historicaltotals areNOTchargedagain to itsprospective8hbudget.
+
+TRAINmetadatareview found explicitfit/inner/outer80/16/32IDsphysical_v2_s10000–10127.
+WhitelistedTRAINpoolmanifestgroup_eligibilityLIST128records exposesbase_group/
+base_id,butstandalonereaderdidNOTverifyregistrySHAorreadactualbase_groupvalues.
+NewordinarycampaignpreflightwillhashTRAINmanifestONCE,matchpinnedCatpreproc
+pool_manifest_sha256,requiretrain_onlytrue,uniqueactualbase_group→intbase_id map
+coversbothmodels'declaredgroups,andnointersectionplannedIDs. Failedmappingor
+digeststopsBEFOREcaseacquisition; no rowtable/label/DEV/TESTindexfallback. Even
+passingestablishesdeclaredTRAINbase-IDnonoverlap,NOTglobal/variantaliasclosure
+orpopulationindependence. SeeTRAIN_ADMISSION_PARENT_DECISION.md. Sharedprioris
+purefleet-countacquired,notprovenaday-economicoptimum; disclosethatlimitation.
+
+Historical fixed_route_qp/FINAL_RESOURCE_RECEIPT.json recorded CLOSED process
 accounting:attempt01 .72CPU/.92elapsed,attempt02 48.08/49.61,QPanalysis .04/.06,
 energy diagnostic .04/.06 => package48.88CPU/50.65elapsed-sum. Previous closed
 reset+warm7004.35/7177.22 => CLOSED cumulative7053.23CPU/7227.87elapsed-sum.

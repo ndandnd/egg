@@ -1,9 +1,9 @@
-"""Fixed old scorer, plus a fresh day-price GNN ranking control only."""
+"""Fixed old scorer, day-price GNN control and unpruned fixed-topology QP label."""
 import importlib.util
 from pathlib import Path
 import time
 
-POLICY = 'warm-replication-original-scorer-plus-GNN-day-v1'
+POLICY = 'warm-replication-original-scorer-GNN-day-fixed-route-QP-v2'
 OLD_SCORER = 'research-20261025/warm_replanning/scoring.py'
 
 
@@ -34,6 +34,8 @@ def select(case, a, b, arm, *, root, asset_lock, case_key, random_seed,
         from egglab import physical_learning_cases as bank
         ranking_a = bank.market(case, 'day').a
         delegate_arm, rank_input_tariff = 'GNN', 'day'
+    elif arm == 'fixed_route_QP':
+        delegate_arm, rank_input_tariff = 'full', 'not_applicable_fixed_topology'
     check()
     result = original.select(case, ranking_a, b, delegate_arm, root=root,
         asset_lock=asset_lock, case_key=case_key, random_seed=random_seed,

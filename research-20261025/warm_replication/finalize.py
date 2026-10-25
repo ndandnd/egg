@@ -15,7 +15,7 @@ import sys
 
 BASE = Path(__file__).resolve().parent
 GROUPS, SIZES, SEEDS = (50604, 50606, 50607, 50608, 50609, 50610, 50611, 50612), (40, 80), (17, 41, 73)
-ARMS = ('GNN', 'CatBoost', 'CA1', 'CoverCA1', 'random', 'full', 'fixed_route', 'GNN_day')
+ARMS = ('GNN', 'CatBoost', 'CA1', 'CoverCA1', 'random', 'full', 'fixed_route_QP', 'GNN_day')
 ADAPTATION_NEAR_ZERO_D = Q(1, 1_000_000)
 PARTS = ('ops_exact', 'fleet_operating_exact', 'deadhead_exact', 'linear_electricity_exact',
          'quadratic_electricity_exact', 'electricity_exact', 'grid_kwh_exact', 'total_exact')
@@ -60,6 +60,34 @@ def assignments():
                 for position, arm in enumerate(order):
                     yield dict(group=base, case=f'scale:{base}:{size}', size=size,
                         seed=seed, arm=arm, block=block, position=position)
+
+
+def conditioning_overlap(late, day):
+    """Metadata-only set comparison, once per paired block; no raw scores."""
+    pools = {'GNN': late.get('conditioning_pool'), 'GNN_day': day.get('conditioning_pool')}
+    record = dict(defined=False, missing_reason=None)
+    if any(not isinstance(p, dict) for p in pools.values()):
+        return dict(record, missing_reason='One or both conditioning-pool records are missing')
+    if any(p.get('status') != 'selected' for p in pools.values()):
+        return dict(record, missing_reason='One or both conditioning pools were not selected',
+            statuses={arm: p.get('status') for arm, p in pools.items()})
+    if pools['GNN'].get('M') != pools['GNN_day'].get('M') or pools['GNN'].get('K') != pools['GNN_day'].get('K'):
+        return dict(record, missing_reason='Conditioning pools do not share M/K')
+    sets = {}
+    for arm, pool in pools.items():
+        ids = pool.get('selected_flexible_ids')
+        if not isinstance(ids, list) or any(not isinstance(mid, str) for mid in ids):
+            return dict(record, missing_reason=arm+' selected flexible IDs are unavailable')
+        sets[arm] = set(ids)
+        if len(sets[arm]) != len(ids) or len(ids) != pool['K']:
+            return dict(record, missing_reason=arm+' selected flexible IDs are not a unique exact-K pool')
+    a, b = sets['GNN'], sets['GNN_day']
+    intersection, union = len(a & b), len(a | b)
+    return dict(record, defined=True, M=pools['GNN']['M'], K=pools['GNN']['K'], identical=a == b,
+        intersection_count=intersection, union_count=union, Jaccard=Q(intersection, union) if union else Q(1),
+        empty_union_Jaccard_convention=1, differing_connection_count=len(a ^ b),
+        exposure={arm: {key: pool.get(key) for key in ('protected_Bw_count', 'rank_fill_room', 'fill_count')}
+            for arm, pool in pools.items()})
 
 
 def archive_baseline_capture(record, archives, *, required):
@@ -230,11 +258,20 @@ def main():
                 'execution_returncode': execution.get('returncode'), 'execution_reaped': execution.get('reaped'),
                 'execution_failures': execution.get('failures'), 'worker_failures': worker.get('failures'),
                 'planner_status': worker.get('planner_status'), 'planner_failures': worker.get('planner_failures'),
+                'qp_status': worker.get('qp_status'), 'qp_success': worker.get('qp_success'),
+                'qp_candidate_admitted': worker.get('qp_candidate_admitted'),
+                'qp_failures': worker.get('qp_failures'), 'qp_native_stats': worker.get('qp_native_stats'),
+                'qp_copy_contract': worker.get('qp_copy_contract'),
+                'qp_requested_native_seed': worker.get('qp_requested_native_seed'),
+                'qp_actual_native_seed': worker.get('qp_actual_native_seed'),
+                'qp_global_lower_bound': worker.get('qp_global_lower_bound'),
+                'qp_certificate_claim': worker.get('qp_certificate_claim'),
                 'native_calls': worker.get('native_calls'), 'native_call_attempts': worker.get('native_call_attempts'),
                 'admission_checks_passed': worker.get('admission_checks_passed'),
                 'admission_rejected': worker.get('admission_rejected'),
                 'worker_used_fallback': worker.get('used_fallback'), 'worker_resources': worker.get('resources'),
                 'rank_input_tariff': worker.get('rank_input_tariff'),
+                'conditioning_pool': worker.get('conditioning_pool'),
                 'selection_contract': worker.get('selection_contract'),
                 'target_E0': None if prior is None else prior['E0'], 'cost_defined': False,
                 'finalizer_processed': True, 'cost_undefined_reason': None})
@@ -367,7 +404,8 @@ def main():
                 'GNN_operational_fallback': late.get('operational_uses_fallback'),
                 'GNN_day_operational_fallback': day.get('operational_uses_fallback'),
                 'GNN_rank_input_tariff': late.get('rank_input_tariff'),
-                'GNN_day_rank_input_tariff': day.get('rank_input_tariff')})
+                'GNN_day_rank_input_tariff': day.get('rank_input_tariff'),
+                'pool_overlap': conditioning_overlap(late, day)})
         absolute = [r['absolute_cost_difference_day_minus_late'] for r in contrast_cells
             if r['absolute_cost_difference_day_minus_late'] is not None]
         normalized = [r['d'] for r in contrast_cells if r['d'] is not None]
@@ -393,6 +431,24 @@ def main():
             group_median_win_loss_nearzero=adaptation_counts([r['median_d'] for r in contrast_groups]),
             automatic_promotion_threshold=None, learned_information_causal_claim=False,
             interpretation='fixed-model inference-time ranking conditioning only; descriptive development evidence')
+        defined_pools = [r['pool_overlap'] for r in contrast_cells if r['pool_overlap']['defined']]
+        pool_exposure = {}
+        for arm in ('GNN', 'GNN_day'):
+            rooms = [p['exposure'][arm]['rank_fill_room'] for p in defined_pools
+                if type(p['exposure'][arm]['rank_fill_room']) is int]
+            pool_exposure[arm] = dict(planned=48, defined=len(rooms),
+                zero_rank_fill_room=sum(room == 0 for room in rooms),
+                mean_rank_fill_room=Q(sum(rooms), 48) if len(rooms) == 48 else None)
+        out['GNN_day_contrast']['pool_overlap'] = dict(planned_pairs=48, defined_pairs=len(defined_pools),
+            missing_pairs=48-len(defined_pools), identical_pairs=sum(p['identical'] for p in defined_pools),
+            changed_pairs=sum(not p['identical'] for p in defined_pools),
+            mean_Jaccard=sum((p['Jaccard'] for p in defined_pools), Q(0))/48 if len(defined_pools) == 48 else None,
+            median_Jaccard=median([p['Jaccard'] for p in defined_pools]) if len(defined_pools) == 48 else None,
+            mean_differing_connection_count=Q(sum(p['differing_connection_count'] for p in defined_pools), 48) if len(defined_pools) == 48 else None,
+            exposure=pool_exposure,
+            missing=[dict(case=r['case'], seed=r['seed'], reason=r['pool_overlap']['missing_reason'])
+                for r in contrast_cells if not r['pool_overlap']['defined']],
+            automatic_promotion_threshold=None, interpretation='pool exposure only; no available-only promotion or causal attribution')
         out['invalid_admissions'] = invalid_admissions
         # Canonical config_failure includes fatal resource/identity violations.
         # Inspect every record, including a fatal last task after all dispatches.
@@ -411,6 +467,21 @@ def main():
                     fatal_rows.append(dict(location=location, case=decision.get('case'),
                         seed=decision.get('seed'), arm=decision.get('arm'),
                         config_failure=payload.get('config_failure'), contract_failure=payload.get('contract_failure')))
+        qp_cells = [r for r in out['cells'] if r['arm'] == 'fixed_route_QP']
+        qp_qualification = []
+        for cell in qp_cells:
+            checks = dict(recorded=cell['recorded'], attempted=cell['attempted'],
+                parent_timely_endpoint=cell['method_endpoint_accepted'],
+                new_physical_QP_candidate=cell.get('qp_candidate_admitted') is True,
+                strict_QP_success=cell.get('qp_success') is True,
+                native_numerical_OPTIMAL=(cell.get('qp_native_stats') or {}).get('native_optimal') is True)
+            qp_qualification.append(dict(case=cell['case'], seed=cell['seed'], checks=checks,
+                qualified=all(checks.values()), missing_or_failed_checks=[key for key, passed in checks.items() if not passed]))
+        strong_QP_control_qualified = len(qp_qualification) == 48 and all(r['qualified'] for r in qp_qualification)
+        out['strong_QP_control_qualification'] = dict(qualified=strong_QP_control_qualified,
+            planned=48, assigned=len(qp_qualification), qualified_cells=sum(r['qualified'] for r in qp_qualification),
+            cells=qp_qualification, operational_contrasts_retained_on_failure=True,
+            interpretation='all48 require a new physical QP candidate plus native OPTIMAL and parent-timely admission; prior fallback alone cannot qualify')
         eligibility = dict(campaign_passed=master.get('passed') is True,
             campaign_complete=master.get('complete') is True,
             accounting_complete=master.get('accounting_observations_complete') is True,
@@ -420,20 +491,24 @@ def main():
             all_sixteen_valid_priors=len(priors) == 16,
             all384_recorded_and_attempted=len(out['cells']) == 384
                 and all(r['recorded'] and r['attempted'] for r in out['cells']),
+            strong_QP_control_qualified=strong_QP_control_qualified,
             no_invalid_admissions=not invalid_admissions, compact_contracts_valid=not out['validation_errors'])
         out.update(continuation_eligibility_checks=eligibility, fatal_rows=fatal_rows)
         complete_inputs = all(eligibility.values())
         for learned in ('GNN', 'CatBoost'):
             checks = []
-            for control in ('CoverCA1', 'fixed_route'):
+            for control in ('CoverCA1', 'fixed_route_QP'):
                 summary = next(r for r in out['pairwise_summaries'] if (r['learned'], r['control']) == (learned, control))
                 checks.append(dict(control=control, defined_pairs=summary['defined_pairs'],
                     positive_group_medians=summary['positive_complete_group_medians'], mean_d=summary['mean_d'],
                     criterion_passed=summary['defined_pairs'] == 48
                         and summary['positive_complete_group_medians'] >= 6
                         and summary['mean_d'] is not None and summary['mean_d'] > Q(1, 100)))
-            out['learned_continuation'][learned] = dict(exploratory_continue=complete_inputs
-                and all(r['criterion_passed'] for r in checks), complete_inputs=complete_inputs, comparisons=checks,
+            family_continue = complete_inputs and all(r['criterion_passed'] for r in checks)
+            out['learned_continuation'][learned] = dict(exploratory_continue=family_continue,
+                status='inconclusive_unqualified_QP_control' if not strong_QP_control_qualified else
+                    'inconclusive_incomplete_inputs' if not complete_inputs else 'continue' if family_continue else 'do_not_continue',
+                strong_QP_control_qualified=strong_QP_control_qualified, complete_inputs=complete_inputs, comparisons=checks,
                 interpretation='research-direction diagnostic only; no significance, superiority or model promotion')
         out['denominators'] = dict(planned_acquisitions=16, recorded_acquisitions=len(acquisition_rows),
             admitted_valid_priors=len(priors), planned_active_cells=384, recorded_active_rows=len(observed),
@@ -448,6 +523,16 @@ def main():
             config_failure=sum(r['config_failure'] for r in out['cells']),
             operational_fallback=sum(r.get('operational_uses_fallback', False) for r in out['cells']),
             invalid_admissions=len(invalid_admissions))
+        out['fixed_route_QP_diagnostics'] = dict(planned=48, assigned_rows=len(qp_cells),
+            recorded=sum(r['recorded'] for r in qp_cells),
+            attempted=sum(r['attempted'] for r in qp_cells),
+            parent_endpoint_accepted=sum(r['method_endpoint_accepted'] for r in qp_cells),
+            strict_method_success=sum(r['method_success'] for r in qp_cells),
+            helper_physical_candidates=sum(r.get('qp_candidate_admitted') is True for r in qp_cells),
+            parent_timely_candidates=sum(r['method_endpoint_accepted'] and r.get('qp_candidate_admitted') is True for r in qp_cells),
+            helper_provisional_candidates=sum(r.get('qp_candidate_admitted') is True and r.get('qp_success') is False for r in qp_cells),
+            raw_native_optimal=sum((r.get('qp_native_stats') or {}).get('native_optimal') is True for r in qp_cells),
+            interpretation='numerical original-physics fixed-topology QP reports; no unrestricted or exact physical certificate')
         for acquisition in out['acquisitions']:
             archive_baseline_capture(acquisition, out['baseline_capture_archives'],
                 required=acquisition['valid_prior'])
@@ -479,8 +564,10 @@ def main():
             inherited_first_warm_prerun_measured_cpu_decimal='206.31',
             inherited_first_warm_prerun_measured_elapsed_sum_s=223.25,
             inherited_first_warm_prerun_measured_elapsed_decimal='223.25',
-            current_prior_reset_measured_cpu_s=None,
-            current_prior_reset_measured_elapsed_sum_s=None,
+            prior_closed_cumulative_cpu_s=7064.41, prior_closed_cumulative_elapsed_sum_s=7239.65,
+            prior_closed_QP_package_cpu_s=60.04, prior_closed_QP_package_elapsed_sum_s=62.39,
+            historical_totals_charged_to_new_budget=False,
+            cumulative_baseline_status='closed post-v3 plus preparatory metadata-query external-process sums from PREPARATORY_RESOURCE_RECEIPT.json; not whole-session exact CPU',
             legacy_conditional_guard_s=2546.091499549272, legacy_actual_review_cpu='UNKNOWN',
             legacy_reset=False, whole_session_exact_cpu_claim=False,
             exact_number_encoding='rational strings from compact receipts; no solver/score/replay recomputation',
@@ -502,6 +589,7 @@ def main():
                 'admission validation here checks compact receipt contracts only; physical replay is not repeated',
                 'GNN/CatBoost continuation decisions are separate and prospectively fixed; no winner selection',
                 'GNN_day tests inference-time ranking conditioning; no learned-information causality or automatic promotion',
+                'fixed_route_QP uses one Method0 call with actual block seed; fallback/provisional/optimal statuses stay separate',
                 'fixed fleet within each variant; original resource power scales across sizes',
                 'integrated system cost, not atomic payments, equilibrium or full-model certificate',
                 'even positive continuation does not establish value of learned electricity information'])
@@ -509,6 +597,8 @@ def main():
             out['finalization_passed'] = False
             for result in out['learned_continuation'].values():
                 result['exploratory_continue'] = False
+                result['status'] = 'inconclusive_finalization_failure'
+                result['complete_inputs'] = False
         with output.open('x') as stream:
             json.dump(out, stream, indent=2, default=lambda value: str(value) if isinstance(value, Q) else value,
                 allow_nan=False)

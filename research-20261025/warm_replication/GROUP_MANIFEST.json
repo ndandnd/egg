@@ -1,7 +1,7 @@
 {
-  "schema": "warm-replication-prospective-cohort-v1",
+  "schema": "warm-replication-prospective-cohort-v2-strong-QP",
   "created_date": "2026-10-25",
-  "status": "static_cohort_and_control_design_frozen_pending_parent_critique_and_executable_binding",
+  "status": "prospective_cohort_control_and_readout_frozen_see_separate_LAUNCH_json",
   "execution_authorized_by_manifest": false,
   "generation_performed": false,
   "generator": "claude-scale-v1",
@@ -33,7 +33,8 @@
   ],
   "services_order": [40, 80],
   "native_solver_seeds_order": [17, 41, 73],
-  "active_arms_canonical": ["GNN", "CatBoost", "CA1", "CoverCA1", "random", "full", "fixed_route", "GNN_day"],
+  "active_arms_canonical": ["GNN", "CatBoost", "CA1", "CoverCA1", "random", "full", "fixed_route_QP", "GNN_day"],
+  "prospective_control_revision": "Before any new-group outcomes, replace v1 capped fixed_route with direct fixed_route_QP; v1 metadata preserved through Git61bf3fd7, original warm experiment unchanged",
   "group_count": 8,
   "case_count": 16,
   "acquisition_count": 16,
@@ -97,7 +98,19 @@
     "CatBoost_reported_separately": true,
     "winner_selection_after_extension_outcomes": false,
     "common_late_integrated_cost_objective": true,
-    "common_warm_hints_and_prior_load_tangents": true,
+    "common_retained_valid_prior": true,
+    "warm_hints_prior_zero_tangents_and_four_round_completion": "non-QP arms only, same original policy",
+    "fixed_route_QP": {
+      "physics": "original complete stored matrix, all routing fixed to common prior",
+      "objective": "original integrated ops+aL+.5bL2, direct continuous convex QP",
+      "method": 0,
+      "native_seeds": [17, 41, 73],
+      "helper_policy": "new replication-local narrow copy of qualified v3, allowed-seed guard17/41/73, otherwise unchanged",
+      "native_calls": 1,
+      "old_witness_reuse": false,
+      "independent_replay_required": true,
+      "raw_optimum_is_not_physical_endpoint": true
+    },
     "native_cutoff_s": 52,
     "receipt_inclusive_endpoint_s": 60,
     "method_success_separate_from_operational_fallback": true,
@@ -114,7 +127,10 @@
     "native_and_computation_threads": 1,
     "observed_peak_rss_bytes": 5368709120,
     "budget_approval_pending": false,
-    "dispatch_and_closure_reserves": null,
+    "dispatch_cpu_s": 28200,
+    "closure_cpu_reserve_s": 600,
+    "compact_finalizer_cpu_s_inside_closure": 120,
+    "compact_finalizer_wall_s_inside_total": 180,
     "unfunded_assignments": "Retain as unattempted; no automatic budget extension"
   },
   "administrative_stages": [
@@ -123,10 +139,33 @@
     "One complete assigned extension subject to resource/fatal stops, without interim outcome-based resizing",
     "Grouped descriptive readout and separate later research decision"
   ],
-  "primary_descriptive_contrasts": ["GNN versus CoverCA1", "GNN versus fixed_route", "GNN versus GNN_day"],
+  "primary_descriptive_contrasts": ["GNN versus CoverCA1", "GNN versus fixed_route_QP", "GNN versus GNN_day"],
   "additional_reporting": "CatBoost separately and all other frozen arms/unchanged prior; missing, fallback and failure denominators retained",
   "normalization": "Common prior late electricity E0; undefined for missing prior or zero E0",
-  "continuation_rule": null,
+  "continuation_rule": {
+    "primary_family": "GNN",
+    "secondary_family": "CatBoost, reported separately without winner substitution",
+    "comparators_each_required": ["CoverCA1", "fixed_route_QP"],
+    "planned_paired_cells_each": 48,
+    "observations_per_base_group": 6,
+    "required_strictly_positive_complete_group_medians": 6,
+    "planned_groups": 8,
+    "mean_d_strictly_greater_than": 0.01,
+    "d": "(control operational cost - learned operational cost) / common prior late electricity E0",
+    "completeness": "16 valid predetermined priors, all384 assignments attempted and recorded, complete denominators, campaign/accounting success, no fatal/invalid admission/unresolved child",
+    "strong_QP_prerequisite": "48/48 timely new physical QP candidates with native OPTIMAL and strict QP success; prior fallback alone does not qualify",
+    "failed_control": "retain all operational analyses, control gate false and family continuation inconclusive; no available-only rescue",
+    "GNN_day": "descriptive conditioning contrast with pool overlap/exposure, no automatic promotion",
+    "final_generalization_or_model_promotion": false
+  },
+  "TRAIN_admission": {
+    "manifest": "/Users/nadan/Documents/ChatGPT/egg/claude-local/20260930-route-pool128-v3/pool_manifest.json",
+    "bind_once": "same metered source/input/asset batch, registry digest must equal pinned CatBoost preprocessing pool_manifest_sha256",
+    "requirements": "train_only true; unique actual base_group to canonical integer base_id map covers both model-declared fit/inner/outer sets; partitions disjoint in IDs and mapped bases; no planned base intersection",
+    "scope": "model-declared TRAIN base-ID nonoverlap; not arbitrary alias closure, globally unseen use or new physical population",
+    "rows_labels_or_sealed_indexes_opened": false,
+    "failure": "stop before acquisition, preserve every assignment missing; no group replacement or automatic retry"
+  },
   "prior_use_metadata_checked": [
     "research-20261017/local-assets-v2.json:manifest.cohorts qualification/screen case_key fields only",
     "research-20261017/local-assets-v3.json:manifest.cohorts qualification/screen case_key fields only",
@@ -137,15 +176,12 @@
   "outcome_files_opened_for_cohort_selection": false,
   "sealed_indexes_opened": false,
   "protected_sources_opened": false,
-  "source_digests": null,
-  "generated_case_identities": null,
-  "numerical_command": null,
+  "source_digests": "Computed once in metered attempt01/preflight.json; no independent duplicate hash pass",
+  "generated_case_identities": "Produced during paid acquisition in per-case contracts; none generated at manifest freeze",
+  "numerical_command": "Exact separately frozen LAUNCH.json command required; this cohort metadata alone does not dispatch",
   "pending_execution_controls": [
-    "Parent critique and frozen continuation/readout rule",
-    "New executable source and exact selected-asset bindings",
-    "GNN_day scoring-price implementation with unchanged model/transform",
-    "Exact dispatch/closure/finalization provisions inside total budget",
-    "Focused integration review and concrete numerical command"
+    "Measured source/input/asset/TRAIN-admission preflight during the once-only campaign",
+    "Physical acquired-prior/nested-case identities and all per-decision admission checks during paid execution"
   ],
   "interpretation": "Eight deterministic new development groups absent from narrowly checked prior-use registers; staged extension, not globally proven unseen, independent final generalization, fixed-resource scaling or learned-price causality"
 }

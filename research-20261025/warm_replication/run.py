@@ -28,8 +28,8 @@ THREAD_ENV = ('OMP_NUM_THREADS', 'OPENBLAS_NUM_THREADS', 'MKL_NUM_THREADS',
 for _name in THREAD_ENV:
     os.environ[_name] = '1'
 
-POLICY = 'warm-replication-day-to-late-fixed-fleet-fresh-worker-v1'
-ARMS = ('GNN', 'CatBoost', 'CA1', 'CoverCA1', 'random', 'full', 'fixed_route', 'GNN_day')
+POLICY = 'warm-replication-day-to-late-fixed-fleet-original-QP-control-v2'
+ARMS = ('GNN', 'CatBoost', 'CA1', 'CoverCA1', 'random', 'full', 'fixed_route_QP', 'GNN_day')
 GROUPS = (50604, 50606, 50607, 50608, 50609, 50610, 50611, 50612)
 SIZES = (40, 80)
 SEEDS = (17, 41, 73)
@@ -42,6 +42,7 @@ SOURCE_FILES = (
     'research-20261025/warm_replication/run.py',
     'research-20261025/warm_replication/scoring.py',
     'research-20261025/warm_replication/finalize.py',
+    'research-20261025/warm_replication/qp_control.py',
     'research-20261025/warm_replanning/scoring.py',
     'research-20261025/warm_replanning/planner.py',
     'research-20261025/matching_pool/pool.py',
@@ -67,6 +68,7 @@ INPUT_FILES = (
     'research-20261017/local-assets-v3.json',
     'research-20261025/warm_replication/RESOURCE_DECISION.md',
     'research-20261025/warm_replication/LAUNCH.json',
+    '/Users/nadan/Documents/ChatGPT/egg/claude-local/20260930-route-pool128-v3/pool_manifest.json',
 )
 
 
@@ -351,7 +353,7 @@ def worker(args):
             stage('save_initial_fallback', lambda: (
                 save_new(folder/'best-plan.json', best_plan), save_new(folder/'best-replay.json', best_replay)))
             selected = stage('paid_fresh_scoring_and_selection', lambda: scoring.select(case, late.a, late.b,
-                'full' if spec['arm'] == 'fixed_route' else spec['arm'], root=root,
+                spec['arm'], root=root,
                 asset_lock=asset_lock, case_key=spec['case_key'], random_seed=spec['seed'],
                 verified_asset_sha256=preflight['verified_asset_sha256'],
                 common_prior_ids=[mid for vehicle in fallback['vehicles'] for mid in vehicle['movements']],
@@ -364,29 +366,81 @@ def worker(args):
             report['selection_status'] = selected['status']
             report['rank_input_tariff'] = selected['rank_input_tariff']
             report['rank_input_a'] = selected['rank_input_a']
+            if spec['arm'] in ('GNN', 'GNN_day'):
+                protected = len(selected['warm_backbone_ids'])
+                report['conditioning_pool'] = dict(selected_flexible_ids=selected['selected_flexible_ids'],
+                    M=selected['M'], K=selected['K'], status=selected['status'],
+                    protected_Bw_count=protected, rank_fill_room=selected['K']-protected,
+                    fill_count=len(selected['rank_fill_ids']))
             if not selected['native_dispatch_permitted']:
                 report['config_failure'] = True
                 raise ValueError('Preserved selection design failure; no native dispatch')
-            planner_path = (root/'research-20261025/warm_replanning/planner.py').resolve()
-            planner_spec = importlib.util.spec_from_file_location('warm_replication_original_planner', planner_path)
-            if planner_spec is None or planner_spec.loader is None:
-                raise IdentityFailure('Cannot load the frozen original planning library')
-            planner = importlib.util.module_from_spec(planner_spec)
-            planner_spec.loader.exec_module(planner)
-            if Path(planner.__file__).resolve() != planner_path:
-                raise IdentityFailure('Worker imported a different original planning library')
-            check(native_end)
-            remaining = native_end-time.monotonic()
-            budget = nr.Budget(backend='GRB', threads=1, phase_seconds=remaining/4.,
-                wall_seconds=remaining, max_rounds=4, epsilon=1e-4)
-            result = stage('fixed_fleet_economic_replanning', lambda: planner.replan(case, late.a, late.b,
-                fallback_plan=fallback, retained_ids=selected['retained_movement_ids'],
-                seed=spec['seed'], fleet_count=prior['fleet_count'], native_deadline=native_end,
-                admission_deadline=end, budget=budget, use_native_start=True,
-                fixed_route=spec['arm'] == 'fixed_route', completion=True, record=record))
+            if spec['arm'] == 'fixed_route_QP':
+                helper_path = (root/'research-20261025/warm_replication/qp_control.py').resolve()
+                helper_spec = importlib.util.spec_from_file_location('warm_replication_fixed_route_QP', helper_path)
+                if helper_spec is None or helper_spec.loader is None:
+                    raise IdentityFailure('Cannot load the declared fixed-route QP library')
+                helper = importlib.util.module_from_spec(helper_spec)
+                helper_spec.loader.exec_module(helper)
+                if Path(helper.__file__).resolve() != helper_path:
+                    raise IdentityFailure('Worker imported a different fixed-route QP library')
+                check(native_end)
+                report['native_calls'] = None  # Raised helper calls do not fabricate zero dispatch.
+                result = stage('one_fixed_route_QP', lambda: helper.solve(case, late.a, late.b,
+                    fallback, spec['seed'], native_end, end, lambda: check(), record))
+                report.update(qp_status=result['status'], qp_success=result['qp_success'],
+                    qp_candidate_admitted=result['qp_candidate_admitted'], qp_native_stats=result['stats'],
+                    qp_copy_contract=result['copy_contract'], qp_failures=result['failures'],
+                    qp_requested_native_seed=spec['seed'], qp_actual_native_seed=result['stats'].get('seed'),
+                    qp_global_lower_bound=result['global_lower_bound'],
+                    qp_certificate_claim=result['certificate_claim'], native_calls=result['native_calls'],
+                    native_call_attempts=result['native_call_attempts'], bound_scope=result['bound_scope'],
+                    native_search_completed=result['qp_candidate_admitted'])
+                if result['config_failure'] or result['fatal_contract']:
+                    report['config_failure'] = True  # Latch before any subsequent deadline/sink check.
+                if type(result['native_calls']) is not int or result['native_calls'] not in (0, 1):
+                    raise ConfigurationFailure('QP helper violated one native-call contract')
+                if report['config_failure']:
+                    raise ConfigurationFailure('Fixed-route QP copy/configuration contract failed')
+                compact_name = 'qp-result.json'
+            else:
+                planner_path = (root/'research-20261025/warm_replanning/planner.py').resolve()
+                planner_spec = importlib.util.spec_from_file_location('warm_replication_original_planner', planner_path)
+                if planner_spec is None or planner_spec.loader is None:
+                    raise IdentityFailure('Cannot load the frozen original planning library')
+                planner = importlib.util.module_from_spec(planner_spec)
+                planner_spec.loader.exec_module(planner)
+                if Path(planner.__file__).resolve() != planner_path:
+                    raise IdentityFailure('Worker imported a different original planning library')
+                check(native_end)
+                remaining = native_end-time.monotonic()
+                budget = nr.Budget(backend='GRB', threads=1, phase_seconds=remaining/4.,
+                    wall_seconds=remaining, max_rounds=4, epsilon=1e-4)
+                result = stage('fixed_fleet_economic_replanning', lambda: planner.replan(case, late.a, late.b,
+                    fallback_plan=fallback, retained_ids=selected['retained_movement_ids'],
+                    seed=spec['seed'], fleet_count=prior['fleet_count'], native_deadline=native_end,
+                    admission_deadline=end, budget=budget, use_native_start=True,
+                    fixed_route=False, completion=True, record=record))
+                report.update(native_calls=result['native_calls_dispatched'],
+                    native_call_attempts=result['native_call_attempts'], bound_scope=result['bound_scope'],
+                    native_search_completed=bool(result['rounds'])
+                        and any('admission' in row for row in result['rounds'])
+                        and not any('failure' in row or row.get('search_status') == 'no_admissible_native_incumbent'
+                            for row in result['rounds']))
+                compact_name = 'planner-result.json'
             compact = {k: v for k, v in result.items() if k not in ('plan', 'replay')}
-            stage('save_planner_telemetry', lambda: save_new(folder/'planner-result.json', compact))
+            stage('save_method_telemetry', lambda: save_new(folder/compact_name, compact))
             plan, replay = result['plan'], result['replay']
+            if spec['arm'] == 'fixed_route_QP':
+                try:
+                    replay = stage('independent_QP_full_case_replay', lambda: nr.replay_native(case, plan))
+                except ValueError as exc:
+                    raise IdentityFailure('Returned QP selection failed original-case replay: '+str(exc)) from exc
+                if (replay.get('replay_ok') is not True or
+                        sorted(tuple(v['movements']) for v in plan['vehicles']) !=
+                        sorted(tuple(v['movements']) for v in fallback['vehicles'])
+                        or len(plan['vehicles']) != prior['fleet_count']):
+                    raise IdentityFailure('QP result changed fixed routes/fleet or failed full-case replay')
             bill = Fraction(replay['ops_cost'])+nh.supply(late, replay['load'])
             if (replay.get('replay_ok') is not True or len(plan['vehicles']) != prior['fleet_count']
                     or bill != Fraction(result['true_bill_exact']) or bill > initial_bill):
@@ -398,13 +452,7 @@ def worker(args):
                     raise ConfigurationFailure('Native improvement outside allowed pool')
             best_plan, best_replay, best_bill = plan, replay, bill
             report.update(selected_source=result['selected_source'], used_fallback=result['used_fallback'],
-                planner_status=result['status'], planner_failures=result['failures'],
-                native_calls=result['native_calls_dispatched'],
-                native_call_attempts=result['native_call_attempts'], bound_scope=result['bound_scope'],
-                native_search_completed=bool(result['rounds'])
-                    and any('admission' in row for row in result['rounds'])
-                    and not any('failure' in row or row.get('search_status') == 'no_admissible_native_incumbent'
-                        for row in result['rounds']))
+                planner_status=result['status'], planner_failures=result['failures'])
             # The initial files remain immutable; the admitted choice is separate.
             stage('save_admitted_choice', lambda: (
                 save_new(folder/'admitted-plan.json', best_plan), save_new(folder/'admitted-replay.json', best_replay)))
@@ -441,11 +489,83 @@ def worker(args):
             child_processes_permitted=False)
         report['method_endpoint_accepted'] = bool(report['physical_witness_valid'] and not report['failures']
             and time.monotonic() < end)
-        report['method_success'] = bool(report['method_endpoint_accepted']
-            and report['native_search_completed'] and not report.get('planner_failures'))
+        report['method_success'] = bool(report['method_endpoint_accepted'] and
+            (report.get('qp_success') if spec['arm'] == 'fixed_route_QP' else
+             report['native_search_completed'] and not report.get('planner_failures')))
         publish(target, report)
         signal.setitimer(signal.ITIMER_REAL, 0)
     return 0 if report['method_endpoint_accepted'] else 1
+
+
+def train_admission(train, model_metadata, train_digest):
+    """Use only explicit TRAIN registry IDs and model-declared group metadata."""
+    if train.get('train_only') is not True:
+        raise ConfigurationFailure('Exact TRAIN manifest must declare train_only=true')
+    registry = train.get('group_eligibility')
+    if not isinstance(registry, list) or len(registry) != 128:
+        raise ConfigurationFailure('TRAIN group_eligibility must be the exact128-entry registry list')
+    mapping = {}
+    for entry in registry:
+        if not isinstance(entry, dict):
+            raise ConfigurationFailure('TRAIN registry entry is not a mapping')
+        group, base = entry.get('base_group'), entry.get('base_id')
+        if (not isinstance(group, str) or not group or group.strip() != group
+                or type(base) is not int or base < 0 or group in mapping):
+            raise ConfigurationFailure('TRAIN registry needs unique explicit base_group and canonical integer base_id')
+        mapping[group] = base
+    if model_metadata['CatBoost'].get('pool_manifest_sha256') != train_digest:
+        raise ConfigurationFailure('Actual TRAIN manifest digest differs from locked CatBoost preprocessing pin')
+    models, declared_groups, known_groups, failures = {}, set(), set(mapping), []
+    for name, metadata in model_metadata.items():
+        partitions, union = {}, set()
+        for key in ('fit_groups', 'inner_groups', 'outer_groups'):
+            groups = metadata.get(key)
+            if not isinstance(groups, list) or any(not isinstance(g, str) or not g for g in groups):
+                raise ConfigurationFailure(name+' preprocessing lacks canonical declared '+key)
+            partitions[key] = groups
+            union.update(groups)
+        if not union or not union <= known_groups:
+            raise ConfigurationFailure(name+' declared TRAIN groups are missing from actual base_group registry: '+repr(sorted(union-known_groups)))
+        duplicate_groups = {key: sorted({g for g in groups if groups.count(g) > 1})
+            for key, groups in partitions.items()}
+        partition_bases = {key: {mapping[g] for g in groups} for key, groups in partitions.items()}
+        disjoint_checks = {}
+        for left, right in (('fit_groups', 'inner_groups'), ('fit_groups', 'outer_groups'), ('inner_groups', 'outer_groups')):
+            group_overlap = sorted(set(partitions[left]) & set(partitions[right]))
+            base_overlap = sorted(partition_bases[left] & partition_bases[right])
+            disjoint_checks[left+'__'+right] = dict(group_IDs_disjoint=not group_overlap,
+                mapped_base_IDs_disjoint=not base_overlap, group_ID_intersection=group_overlap,
+                mapped_base_ID_intersection=base_overlap)
+        split_consistent = (not any(duplicate_groups.values()) and all(
+            check['group_IDs_disjoint'] and check['mapped_base_IDs_disjoint'] for check in disjoint_checks.values()))
+        if not split_consistent:
+            failures.append(dict(model=name, reason='Duplicate partition group IDs or cross-partition group/base-ID overlap',
+                duplicate_group_IDs=duplicate_groups, partition_disjoint_checks=disjoint_checks))
+        declared_groups.update(union)
+        models[name] = dict(groups=partitions, partition_counts={k: len(v) for k, v in partitions.items()},
+            partition_group_IDs_unique={key: not values for key, values in duplicate_groups.items()},
+            duplicate_partition_group_IDs=duplicate_groups,
+            partition_mapped_base_IDs={key: sorted(values) for key, values in partition_bases.items()},
+            partition_effective_base_counts={key: len(values) for key, values in partition_bases.items()},
+            partition_disjoint_checks=disjoint_checks, split_consistent=split_consistent,
+            declared_group_union=sorted(union), declared_group_count=len(union),
+            mapped_base_ids=sorted({mapping[g] for g in union}),
+            declared_pool_manifest_sha256=metadata.get('pool_manifest_sha256'))
+    registry_ids = set(mapping.values())
+    declared_ids = {mapping[g] for g in declared_groups}
+    overlap = sorted(set(GROUPS) & registry_ids)
+    if overlap:
+        failures.append(dict(reason='Planned replication IDs overlap explicit TRAIN registry', base_IDs=overlap))
+    return dict(passed=not failures, failures=failures, scope='model-declared TRAIN base-ID nonoverlap',
+        train_only=True, train_manifest_path=INPUT_FILES[-1], train_manifest_sha256=train_digest,
+        registry_entries=len(registry), unique_registry_groups=len(mapping),
+        unique_registry_base_ids=len(registry_ids), base_group_to_base_id=mapping,
+        models=models, model_declared_group_union=sorted(declared_groups),
+        model_declared_train_base_ids=sorted(declared_ids), registry_train_base_ids=sorted(registry_ids),
+        planned_base_ids=list(GROUPS), overlapping_planned_train_base_ids=overlap,
+        overlapping_planned_model_declared_base_ids=sorted(set(GROUPS) & declared_ids),
+        prefix_based_ID_inference=False, global_or_timetable_alias_closure_proven=False,
+        alias_or_generator_crosswalk_supplied_to_check=False, case_or_source_row_tables_read=False)
 
 
 def preflight(root, output):
@@ -475,6 +595,12 @@ def preflight(root, output):
         raise ValueError('Preflight imported a different scoring module')
     lock = documents[INPUT_FILES[2]]
     expected = scoring.expected_assets(lock, root)
+    metadata_paths = {
+        'GNN': str((Path(lock['v8_root'])/'task00/inner_progress/fit_only_preprocessing_and_groups.json').resolve()),
+        'CatBoost': str((Path(lock['classical_root'])/'catboost/preprocessing.json').resolve())}
+    if not set(metadata_paths.values()) <= expected.keys():
+        raise ConfigurationFailure('Both selected preprocessing metadata files must be in the locked asset batch')
+    metadata_buffers = {name: bytearray() for name in metadata_paths.values()}
     verified = {}
     for name, required in expected.items():
         if name in verified:
@@ -483,12 +609,20 @@ def preflight(root, output):
             digest = hashlib.sha256()
             for chunk in iter(lambda: stream.read(1024*1024), b''):
                 digest.update(chunk)
+                if name in metadata_buffers:
+                    metadata_buffers[name].extend(chunk)
         actual = digest.hexdigest()
         if actual != required:
             raise ValueError('Pinned selected asset differs: '+name)
         verified[name] = actual
+    # Parse only these two already-hashed preprocessing JSON buffers after all five assets verify.
+    model_metadata = {model: json.loads(bytes(metadata_buffers[path])) for model, path in metadata_paths.items()}
+    admission = train_admission(documents[INPUT_FILES[-1]], model_metadata, digests[INPUT_FILES[-1]])
+    save_new(output/'train-admission.json', admission)
+    if not admission['passed']:
+        raise ConfigurationFailure('TRAIN admission rejected: '+repr(admission['failures']))
     result = dict(policy=POLICY, input_sha256=digests, verified_asset_sha256=verified,
-        asset_lock=lock, group_manifest=manifest,
+        asset_lock=lock, group_manifest=manifest, train_admission=admission,
         source_freeze_assumption='Parent freezes these bytes throughout campaign; workers do not rehash',
         exactly_one_source_input_asset_hash_batch=True,
         inherited_backend_fingerprinting='Unchanged native build API hashes its backend library per model; paid inside worker clocks')
@@ -624,7 +758,10 @@ def campaign(args):
         reference_blocks=[], assigned_active_decisions=EXPECTED_CELLS, group_count=len(GROUPS),
         assigned_acquisitions=EXPECTED_ACQUISITIONS, assigned_blocks=EXPECTED_BLOCKS,
         scientific_qualification=False, failures=[], config_failure=False,
-        resource_violation=False, identity_failure=False, fatal_violation=False, budgets=dict(cpu_s=TOTAL_CPU,
+        resource_violation=False, identity_failure=False, fatal_violation=False,
+        prior_closed_cumulative_cpu_s=7064.41, prior_closed_cumulative_elapsed_sum_s=7239.65,
+        prior_closed_QP_package_cpu_s=60.04, prior_closed_QP_package_elapsed_sum_s=62.39,
+        historical_totals_charged_to_new_budget=False, budgets=dict(cpu_s=TOTAL_CPU,
             wall_s=TOTAL_WALL, dispatch_cpu_s=DISPATCH_CPU, closure_cpu_reserve_s=600,
             finalization_cpu_s=FINAL_CPU, finalization_wall_s=FINAL_WALL))
     def stop(signum, frame):
@@ -727,7 +864,7 @@ def campaign(args):
                                     report['identity_failure'] |= row['identity_failure']
                                 row['native_search_completed'] = child_receipt.get('native_search_completed', False)
                                 contract = child_receipt.get('selection_contract')
-                                if contract is not None and arm not in ('full', 'fixed_route'):
+                                if contract is not None and arm not in ('full', 'fixed_route_QP'):
                                     if key in common and common[key] != contract:
                                         valid = False
                                         stopped = stopped or 'Common B/K/boundary mismatch'

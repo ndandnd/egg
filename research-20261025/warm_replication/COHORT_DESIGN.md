@@ -53,8 +53,13 @@ zero-work reference for each block, not a ninth active solve.
 
 ## Frozen methods and the new fixed-pool comparison
 
-Keep the original seven canonical arms in order:
-`GNN, CatBoost, CA1, CoverCA1, random, full, fixed_route`, then append **GNN_day**.
+Prospective control revision before ANY new-group outcomes: the v1 draft is
+preserved in Git through61bf3fd7. Replace its capped four-round charging arm
+with an explicit **fixed_route_QP**. The canonical eight arms are now
+`GNN, CatBoost, CA1, CoverCA1, random, full, fixed_route_QP, GNN_day`.
+This does not alter the already completed original warm experiment or gate.
+The seven original-topology QP witnesses and separate one-case primal-QP
+mechanism result motivate a competent comparator, not a model-quality claim.
 Retain the old selected GNN and CatBoost assets and fit-only preprocessing; no
 training, checkpoint selection, feature change, ensemble or tuning is permitted.
 Both classical arms remain despite prior results. CatBoost remains reported
@@ -79,11 +84,19 @@ fresh rank order, with **exactly the original K**. If Bw or Bw union C does not
 fit, preserve the design failure and operational fallback; never enlarge K.
 Record base B, Bw, S0, K, fill/exposure counts and GNN/GNN_day pool overlap.
 Identical retained pools are an informative lack of ranking adaptation, not a
-reason to change quota. Full/fixed_route retain their existing meanings.
+reason to change quota. Full retains all movements conditional on fixed fleet.
+fixed_route_QP uses the original complete physical matrix with every routing
+choice fixed to the same common prior, continuous convex integrated cost and
+one Method0 primal-QP call. Its replication-local helper is a narrow copy of the
+qualified mechanism helper with prospectively allowed seeds17/41/73; actual
+outer seed is set/read back in each fresh QP worker. It does not reuse an old
+charging witness or return a raw native optimum without independent replay.
 
-All arms share the late objective, fixed fleet, warm hints, prior-load and
-zero-load tangents, completion policy, native cutoff and independently replayed
-receipt-inclusive admission rule of the existing warm protocol. Operational
+All arms share the late objective, fixed fleet, valid prior fallback, native
+cutoff and independently replayed receipt-inclusive admission rule. The
+non-QP arms retain the old warm hints, prior/zero-load tangents and four-round
+completion policy. The QP arm uses its direct quadratic objective with one
+call instead of supporting tangents or a MIP completion solve. Operational
 fallback cost remains distinct from method success, lateness, configuration
 failure and native-search completion. Record all assigned cells, including
 unattempted cells after resource/fatal stops. No selected extra rounds or longer
@@ -106,7 +119,7 @@ interim performance-based gates that resize this cohort. No execution or later
 training follows automatically from this design.
 
 The parent must freeze the continuation/readout rule before dispatch. Report GNN
-and CatBoost separately against both classical arms, fixed_route, random, full
+and CatBoost separately against both classical arms, fixed_route_QP, random, full
 and unchanged prior; make the GNN-versus-GNN_day contrast explicit. Use the same
 prior late electricity E0 for normalized differences, keeping zero-E0 and missing
 priors undefined. Nested sizes and seeds are repeated measurements within eight
