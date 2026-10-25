@@ -120,8 +120,10 @@ def owner_harness(directory):
     q.write_new = write
     owner = source('cf1_entry_owner', q=q)
     now = SimpleNamespace(value=100.2)
+    capacity = 8
     owner.time = SimpleNamespace(monotonic=lambda: now.value, process_time=lambda: .1)
-    owner.os = SimpleNamespace(getpid=lambda: 211, getppid=lambda: 101)
+    owner.os = SimpleNamespace(getpid=lambda: 211, getppid=lambda: 101,
+        cpu_count=lambda: capacity)
     owner.threading = SimpleNamespace(get_ident=threading.get_ident, active_count=lambda: 1)
     owner.resource = SimpleNamespace(RUSAGE_CHILDREN=1, RUSAGE_SELF=0,
         getrusage=lambda who: SimpleNamespace(ru_utime=0., ru_stime=0.))
@@ -135,7 +137,8 @@ def owner_harness(directory):
     root = {'schema': 'cf1-entry-owner-v1', 'policy': owner.POLICY,
         'nonce': 'independent-nonce', 'owner_pid': 101, 'output': str(output.resolve()),
         'roots': roots, 'task': task, 'entry_allocation_s': owner.ENTRY_S,
-        'suffix_s': owner.SUFFIX_S, 'permit_lifetime_s': owner.PERMIT_S, 'anchor': 100.}
+        'suffix_s': owner.SUFFIX_S, 'permit_lifetime_s': owner.PERMIT_S,
+        'capacity_cpu_count': capacity, 'anchor': 100.}
     write(root_path, root)
     root_sha = q.sha(root_path)
     (directory/'entry-owner-attempt01').mkdir()
@@ -270,7 +273,7 @@ class OwnerTests(unittest.TestCase):
             self.assertEqual(root['controller_command'], command)
             self.assertEqual(runtime[:4], command)
             self.assertEqual(runtime[-8:], ['--owner-fd', '9', '--owner-root',
-                str(folder/'entry-owner.json'), '--owner-root-sha256',
+                str((folder/'entry-owner.json').resolve()), '--owner-root-sha256',
                 h.q.sha(folder/'entry-owner.json'), '--owner-nonce', 'fresh-owner-nonce'])
             self.assertTrue(events[0][2]['start_new_session'])
             self.assertEqual(events[0][2]['pass_fds'], (9,))
@@ -633,10 +636,10 @@ class WrapperTests(unittest.TestCase):
         hashes.update({str(ROOT/'src/tests'/name): h.q.sha(ROOT/'src/tests'/name)
             for name in (*v5.QUALIFIED_TEST_DEPENDENCIES, 'test_cf1_entry_repaired.py')})
         command = v5.check_command()
-        attempt = {'attempt_id': 'attempt01', 'revision': 5, 'policy': v5.POLICY,
+        attempt = {'attempt_id': 'attempt03', 'revision': 5, 'policy': v5.POLICY,
             'command': command, 'command_sha256': stable(command),
             'executed_tests': ['test_cf1_entry_repaired.py'], 'source_hashes': hashes}
-        result = {'attempt_id': 'attempt01', 'revision': 5, 'policy': v5.POLICY,
+        result = {'attempt_id': 'attempt03', 'revision': 5, 'policy': v5.POLICY,
             'command': command, 'command_sha256': stable(command),
             'executed_tests': ['test_cf1_entry_repaired.py']}
         h.store[str(directory/'attempt.json')] = attempt
@@ -661,7 +664,7 @@ class WrapperTests(unittest.TestCase):
                 v5.checked_sources(directory)
             record[key] = original
         for other in (ROOT/'research-20261023/cf1-small-approved-checks/attempt01',
-                      directory.parent/'attempt02'):
+                      directory.parent/'attempt01'):
             with self.assertRaises(ValueError):
                 v5.checked_sources(other)
 

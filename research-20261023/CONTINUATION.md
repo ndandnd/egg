@@ -1,224 +1,124 @@
-# EGG current handoff —24 October2026: v5 source check failed; no numerical work
+# EGG current handoff —24 October2026: qualification stopped; budget decision required
 
 Worktree /Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017; branch
-codex/ml-prediction-20261017. Use bounded GPT-6.1 Sol agents with short handoffs.
-All agents done. No active check, metadata, numerical worker or owner. No cluster
-work, model inference/training, new timetable or sealed data access. Manuscript deferred.
+codex/ml-prediction-20261017. Use bounded GPT-6.1 Sol agents and short handoffs.
+All agents done. No active source, metadata, native worker or owner. No solver,
+training job, actual fixture freeze, cluster work or sealed/private data access.
+No new ML or economic result. Manuscript deferred; long-term FT50 aspiration.
 
-## Newest work package: implementation and failed source check
+## Read first: resource-accounting incident
 
-Read research-20261024/CF1_V5_SOURCE_RESULTS.md,
-CF1_V5_SOURCE_FAILURE_DIAGNOSIS.md and
-cf1-entry-repaired-checks/{accounting-final.json,attempt01/result.json}. New scoped v5
-wrapper and actual owner helper exist, with original v4 ACK/analyzer delegation,
-fresh worker identity, checked preparation,7.5s conservative precharge, independent
-parent/child handshake, final Popen permit and live owner/package guard. Tests
-AST-load production bodies with inert bindings/fake execution, not real native
-qualification. Three bounded Sol6.1 agents implemented/reviewed; all done.
+Read research-20261024/CF1_HASH_REVIEW_BUDGET_INCIDENT.md and
+CF1_HASH_REVIEW_BUDGET_REVIEW.md, plus
+cf1-hash-review-accounting/{accounting.json,budget-proposal.json,
+recovered-event-metadata.json,unmetered-review.json}. These supersede prior claims
+that the whole source phase was within budget. Do not reread broad history or
+run another proof-hash audit.
 
-SOLE frozen source invocation FAILED:26 failures,16 passed,36 subtests passed
-in1.46s. All26 error lines have the same fake OS missing cpu_count; the fake
-root also lacks capacity_cpu_count. Harness construction fails before the owner
-paths, including fake OwnerSupervisor.run. This is a diagnosed test-double defect,
-not evidence that unreached production paths pass or that CF1/ML is poor.
-PGID71595 absent/reaped, no source changes/errors beyond pytest_exit or unresolved
-charges. No patch/retry after failure, real freeze, controller, solver/model or
-cluster work. No active numerical worker/owner; v4 remains stopped/immutable.
+Independent preflight reviews spawned per-file shasum processes in two parallel
+shell loops. Their CPU was unmeasured and poll gaps prevent exact duration recovery.
+Reported waits alone exceed the20s source allowance. The source-test receipts
+are intact, but their closure provisions do not cover these external reviews.
+Parent recovered only scoped task-event metadata; child durable-thread reads
+were unavailable. No conversation contents were copied into the recovery packet.
 
-Current carry1534.2196428390087s. Exact failed source bytes are preserved in187
-snapshot entries (174 new,13 reused);1090 proof paths. The prospective source
-review is historical, not a passing check. No native or later phase clearance.
-Read implementation/owner/source-protocol notes only when needed for the fix;
-don't repeat the full design investigation or raw logs.
+Conditional conservative reconciliation: whole review windows49.347 and32.931s,
+plus2s guard each, times10 single-thread process slots (two loops of shell/jq/
+hasher structure) =862.780s. Add25s conservative incident/handoff closure, remove
+no prior charge. Prior measured/reconciled source carry1538.9434496310162 becomes
+GUARDED2426.723449631016. This is NOT measured hardware CPU. Actual CPU/RSS remain
+unknown; assumptions and incomplete actual observations are explicit. No claim
+of compliance with prior caps or unconditional recovery of exact spend.
 
-## Recorded fresh design
+The approved1920 total/1740 dispatch/180 shutdown remains the authority. The
+conservative guard exceeds it; original20s source and175s campaign cannot fund
+further execution. All checks/metadata/numerical work are STOPPED pending a new
+human budget decision. Do not silently raise limits, reset the ledger, use a lower
+old account, or repeat the already approved32-minute question.
 
-Read research-20261024/CF1_FRESH_MECHANISM_PROTOCOL.md and only relevant companion
-CF1_FRESH_DECISION_REVIEW.md, CF1_FRESH_IMPLEMENTATION_DESIGN.md and
-CF1_FRESH_RECEIPT_NOTE.md. Three bounded Sol6.1 agents reviewed resource/authority,
-scoped implementation reuse and current receipts; parent integrated and reviewed
-the design in the preceding wake. The later implementation/check above updates
-its state and carry. No numerical launch or metadata freeze has occurred.
+Concrete proposed NEWTOTAL50CPUminutes =3000/dispatch2820/shutdown180. One fresh
+175s package from the retained guard would end2601.723449631016 below2820, for
+only the same inspected50997/40 CF1 seed17/day/no-fault mechanism. Human approval
+has NOT been received. Proposal is not a launch manifest or source qualification.
+No new timetable/model/training/comparison/cluster/sealed-data scope is included.
 
-Prospective new175s package starts1527.8351450899538 and ends1702.8351450899538,
-inside global1920/dispatch1740/shutdown180, one thread/5GiB. Same still-unexercised
-50997/40 CF1 seed17/day/no-fault mechanism only. Parent's new package policy is
-within the human's32-minute total under later fresh-design steering; it is not a
-new human175s approval, comparison budget or permission from passed source tests.
-V4 and its rejected ledger remain stopped/immutable; no automatic retry or second
-worker. Fresh source identities were frozen for the failed check only; no native
-task/phase manifest, actual fixture lock or controller clearance exists.
+Future byte verification must use the EXISTING metered single-process Python
+batch inside preflight/final checks. Peer review is static diffs/fields/scope,
+not duplicate external hash loops. Any additional computational check needs its
+own recorded command and elapsed/CPU budget. Do not add another validation
+framework or unmetered audit while resolving this incident.
 
-The implementation now includes the externally owned entry scheme; the failed
-harness prevented its intended source tests from reaching those paths. Source
-review alone does not qualify it. Post-run reconciliation alone remains
-insufficient. Live statuses older than0.25s fail closed, including slow controller
-finalization; this operational limit is not runtime-qualified. No mechanism claim.
+## Preserved source work and stopped native history
 
-## Preserved preceding passed source package
+- V4 stopped before ANY native worker due raw-versus-canonical freeze charge
+  mismatch. Preserve research-20261023/cf1-small-approved-v4 unchanged; no resume.
+  CF1_SMALL_APPROVED_ENTRY_DIAGNOSIS.md identifies the exact subtraction error.
+- Canonical helper, exclusive initializer and entry preparation have passed
+  limited source/metadata checks. No real CF1 mechanics follows from them.
+- New cf1_entry_repaired.py and cf1_entry_owner.py reuse original v4 ACK/analyzer
+  through restored serialized bindings; explicit roots,7.5s precharge, owner
+  handshake, final Popen permit and live funding/status guard are implemented.
+  Known runtime status age>0.25s fails closed, including slow finalization;
+  source-only tests cannot establish real timing/ownership qualification.
+- Source attempt01:26 failures,16 passed,36 subtests; fake OS/root lacked CPU
+  capacity. Preserve all bytes/receipts and CF1_V5_SOURCE_FAILURE_DIAGNOSIS.md.
+- Source attempt02:one macOS path-alias expectation failure,19 passed,61 subtests
+  in0.76s; PGID80495 absent/reaped, unchanged sources and complete cleanup.
+  Its original metered account is cf1-entry-repaired-checks/attempt02-accounting.json
+  with1538.9434496310162 and1111 proofs. That root omits the external reviews;
+  it must NOT replace the incident reconciliation as current carry.
+- Expected owner-root path was narrowly corrected with .resolve(); current checker
+  and fake passing source receipts identify attempt03. Production owner/capacity/
+  timing/funding guards were not weakened. Read CF1_V5_PATH_ALIAS_FIX.md only
+  if needed; later assertions in the failed fake-parent method remain unobserved.
+- Attempt03 never ran and has NO attempt directory. Its frozen design is CANCELLED
+  in cf1-entry-repaired-checks/attempt03-design/status.json because its carry/budget
+  is stale. Do not execute or reuse that command/design. Attempts01/02 remain
+  failures; source review is not a pass. All snapshots and costs are preserved.
 
-Read research-20261024/LAUNCH_ENTRY_RESULTS.md and
-research-20261024/launch-entry-checks/{accounting.json,attempt01/result.json}.
-launch_entry_preparation.py binds explicit independent expected lock/receipt/account
-hashes, policy and total to the completed postfreeze account, byte closure and
-installed policy/funding checks. It calls the comparison validators, derives the
-canonical freeze component, rechecks roots and uses the checked exclusive ledger
-initializer. No CLI, context installation, timing proof, reservation or launch
-authority. Current source-check accounting is not a valid completed freeze input.
-No historical source or rejected ledger changed.
+## Next action, conditional on the user's resource decision
 
-One new affected check:11tests/23subtests passed0.12s, sole
-test_launch_entry_preparation.py. The actual freeze validator, builder, initializer
-and resume consumer handle temporary metadata, including decimal cancellation.
-The FULL LOCK VERIFIER IS MOCKED to avoid fixture/environment assets; real lock
-qualification/controller execution remain unexercised. PGID59374 absent/reaped,
-no changes/errors/unresolved charges. No old matrix, model/fixture/capture, real
-freeze, native, cluster or retry. Three bounded Sol6.1 agents implemented/reviewed;
-all done. Ten immutable snapshots added, eight identical prior snapshots reused;
-no new mutable source proof roots. Its closure carry1527.8351450899538s is now
-superseded by the failed v5 source account above.
+Current output is a concrete budget/recovery proposal, not an experimental result.
+Until an explicit new approval: no test, hash loop, metadata freeze, inference,
+training or native run. Do not repeatedly investigate the same accounting issue,
+spawn review agents, poll an empty queue or ask duplicate questions.
 
-## New scientific steering from the user's referee perspective
+If approved, first record the human answer and acceptance/limits of the historical
+conservative reconciliation. Prepare a fresh source-bound resource design with
+correct current carry, global/package constants and exact commands/identities;
+never revive cancelled03 or failed v4. Keep unchanged native60/61/62.5 endpoints,
+one thread/5GiB, all old failures and no automatic retry. Execute only affected
+source checks under the metered batch, review complete receipts, then separately
+freeze the actual inspected fixture/library/environment and one-case launch.
+No comparison or training launch follows merely from source/model fit completion.
 
-Read research-20261024/REFEREE_ASSESSMENT.md and only relevant companion evidence,
-theory/source notes. Three bounded Sol6.1 agents checked historical public aggregate
-descriptions, primary literature and algebra; parent integrated/corrected status.
-No solver/model tests, data generation, protected outcomes or new local allocation.
-That assessment incurred no numerical allocation; the newer source check above
-updates the cumulative validation carry below.
+## Preserved scientific direction and safeguards
 
-Historical B2 negative total-call/corrected-solver-wall result is supported; don't
-sell A3–A5 as end-to-end winners. The referee largely evaluates August work, not
-current ML/replay evidence. Public status had a genuine summary error: 0/176 applies
-ONLY to b=.05, on32 distinct instances repeated across algorithm/parameter cells,
-including unresolved transients. Moderate b=.01 retained fixed points. Corrected
-the summary against the measurement document; no raw audit or protected data read.
+Prioritize trustworthy physical replay/valid incumbent retention, full unrestricted
+recovery, strong charging-aware/constructive classical baselines and matched
+end-to-end budget comparisons before justified model/data improvements. Generic
+GNN arc pruning has prior art. Existing80-trip savings are91.916% vehicle-count
+component versus one heuristic, not evidence of tariff responsiveness or novelty.
+October17 and initial20-group screens remain development, not final generalization.
 
-Reject promised3–5x speedups solely from T>=96: load-difference rank, pricing cost,
-degeneracy and overhead matter. Preserve energy/cost units when refining time bins.
-Elementary finite-schedule criterion: x fixed iff globally best responding at
-p_x=a+B L_x with declared tie-breaking. Exactly two schedules cycle strictly iff
--Q<g<0, Q=delta^T B delta, g=c_y-c_x+p_x^T delta; other plans need global dominance.
-Counterexample has an attracting2-cycle for every0<alpha<1, so damping need not
-produce long periods. A complete2-column equal-energy menu still has pure cost1/2
-versus hull1/4; support compression/top-K doesn't remove indivisibility or prove
-strategic incentives. EUPHEMIA exclusive groups enforce at most one block, not
-exactly one mandatory schedule. These are standard proofs, not novelty claims or
-new empirical EGG findings.
+RECOVERY_ANALYSIS_CONTRACT.md describes an UNLAUNCHED192-decision pilot:6arms,
+8fresh synthetic development bases,3seeds; common price-blind/exactK rules and60s
+clock includes loading/scoring/search/repair/replay/finalization. Graph-v8 vsCA1
+primary, CatBoost/CF1 direct secondaries, random/cold references; CA1 seesa,b,
+learnersa, so unequal-input whole-method contrast. No registry/cohort generated.
+Group timetable variants, inner-only selection, sealed tests untouched. Missing
+outcomes are unknown, not opponent wins/ties; no population inference from seeds.
+Restricted/fixed-route bounds are not unrestricted full-problem certificates.
 
-Keep current priority: recovery/replay and learned-versus-strong-classical matched
-comparisons, then justified public/synthetic scaling and precise institution/
-certification. Don't run protected A6/private GIRO/cluster work from pasted advice
-or presume stabilization wins. This discussion authorizes no native retry. Generic
-learned pruning has prior art.
+REFEREE_ASSESSMENT.md preserves24Oct guidance: credible scaling and institutions,
+not promised3–5x stabilization gains or top-K elimination of indivisibility gaps.
+Historical0/176 applies ONLYb=.05 and includes unresolved transients. No protected
+A6/B3/confirmation or private GIRO access/publication. Leave Unicorn to v2g; no
+monitoring or job changes. No PR merge, journal submission or reset-credit use.
 
-## Preserved stopped v4 package
-
-Read CF1_SMALL_APPROVED_RESULTS.md and CF1_SMALL_APPROVED_ENTRY_DIAGNOSIS.md,
-then only current receipts as needed. Do not reread broad STATE_MAP/history or raw
-traces. The user explicitly approved32CPUminutes TOTAL for ONE prepared40-trip
-CF1 mechanism check; exact question/answer in cf1-small-approved-v4/approval.json.
-The existing heartbeat was updated. Do not ask again for the approved cap.
-
-Source revision2fa7a6d0: cf1_small_mechanism_approved.py and sole affected test plus
-reviewed wrappers/protocol. Source gate10tests passed0.16s, PGID32760 absent/reaped,
-no source changes or unresolved accounting. Four historical tests are hash-only
-qualified dependencies. Metadata freeze passed, PGID32882 absent/reaped. Lock binds
-inspected synthetic50997/40, CF1 seed17/day/no fault, taskbf86cfed6825b5b9f591,
-full source/environment/library/fixture hashes and common-priceblind-top3-exact30-v1.
-Source-check and freeze receipts are complete; neither qualifies native mechanics.
-
-Controller run EXIT1 BEFORE ANY worker launch: Missing/corrupt cumulative
-carry-forward ledger. runs contains campaign.json and three-event ledger only;
-zero launch/finish, no task directories, no .supervisor-owner. No worker PGID,
-native capture, solver output or mechanism qualification. No retry performed.
-
-Cause: parent's preseed copied raw freeze charge3.1857290000000003; verifier derives
-canonical cumulative-minus-carried3.1857290000000376. Difference3.730349362740526e-14
-seconds fails exact component identity, despite same rounded total. This is a bug
-in parent accounting initialization, not CF1 infeasibility, slow search or ML quality.
-Independent diagnosis shows canonical subtraction correction. Do not loosen exact
-identity, edit the rejected ledger, relabel failure or rerun this namespace.
-
-## Authoritative resources
-
-Current carry1534.2196428390087s from
-research-20261024/cf1-entry-repaired-checks/accounting-final.json,1090 proof paths;
-check_passed=false, phase failed_v5_source_check. Prior1527.8351450899538 retained,
-plus failed-check internal3.6579306243831518, measured source preservation
-1.2265671246716976 and materialization closure0.5. Whole2.91wall/3.47CPU +0.02=3.49
-did not exceed internal charge; no subtraction/positive external top-up. The
-original account1533.2196428390087 is preserved; postcheck-finalization.json adds
-conservative1s for independent verification/handoff materialization. Source phase
-spend6.38449774905485 of20, absolute end1547.8351450899538 respected.
-All earlier failures/charges retained; ADMIN0. Prior passed helper/initializer/
-entry packages and their receipts remain preserved, not repeated.
-The preserved v4 account1518.4011370494984 comprises inherited1509.9511370494984
-plus source2.65, freeze3.8, failed entry/preparation/closure2.0.
-Source/account paths retain full proof closure and positive external reconciliation.
-Failed entry0.98wall/.64CPU ->1.0 with precision; supervisor0.544004 included,
-positive reconciliation0.455996 plus0.5preparation/0.5closure. No raw lower pre-tail
-receipt should replace the final reconciled carry. Rejected launch ledger remains
-unchanged; account root independently carries completed freeze plus failed-entry
-whole-process observations, not a claim of successful resume validation.
-
-ApprovedTOTAL1920/dispatch1740/shutdown180; one thread/5GiB. Historical failed v4
-package165 from1509.9511370494984 =>1674.9511370494984. All limits respected, no
-shutdown/comparison-budget borrowing, new administration credit or reset.
-No further native dispatch under this failed one-attempt package. A future numerical
-attempt needs a separately recorded prospective decision/fresh namespace carrying
-this failure/spend. Never automatically repeat interrupted/unreceipted attempts.
-The fresh175s design above is not an executed allocation or revived v4 package.
-
-## Next bounded useful work
-
-Correct the diagnosed fake OS/root capacity contract only; do not relax production
-checks. Preserve attempt01 and all its sources/receipts. A new prospective source
-decision must bind fresh attempt identity consistently in checker/test/driver;
-do not simply rerun attempt01. Proposed13s source follow-up from current carry
-would end1547.2196428390087, within the original source-phase end, but requires
-reviewed clocks/command/hashes first. No reset, automatic retry, broader source
-matrix, real freeze or native clearance. Reached tests are not evidence about
-the owner scenarios that failed during construction. No need to redesign the
-whole mechanism or repeat completed helper/initializer/entry checks. Keep source
-and cumulative accounting bindings exact; v4 and its ledger remain immutable.
-
-Current approved module's controller ACK observer is source-checked but NOT runtime
-qualified. It persists a complete ACK actually read by controller; observed<=anchor+60
-is sufficient conservative timely evidence. Late receive doesn't prove late send.
-Original60/61/62.5 endpoints and all charging/start/replay rules remain. Oldv3 stays
-disabled and old80 failures remain failed. No general NormalizedEvidence conversion.
-
-COMPARISON_VERIFIER_DESIGN.md scopes subsequent facts-only byte-root/physical
-replay verifier. Companion reuse/threat notes preserve source locations and attacks.
-Endpoint/binding primitives remain conditional on trusted expected manifest and
-independently verified evidence. Physical replay tolerance-conditional; rational
-bills exact for stored finite numbers. No worker flag or self-hash grants truth.
-
-## Preserved science and operations
-
-RECOVERY_ANALYSIS_CONTRACT.md controls unlaunched192-decision pilot:6arms,8fresh
-synthetic development bases,3seeds (144day plus48scoring-input decisions on4subset
-bases). No registry/cohort generated or screen launched. Common price-blind B/exactK,
-all scoring/loading/replay/finalization inside60. Compare graph-v8 vsCA1 primary,
-CatBoost/CF1 direct secondaries, random/cold references. CA1 seesa,b, learnersa;
-whole-method unequal-input contrast. Keep variants grouped and inner-only selection.
-Historical80-trip savings91.916% vehicle-count component, not tariff response.
-Generic learned pruning has prior art; no model-quality/novelty/generalization or
-FT50-readiness conclusion from engineering tests. October17 remains development.
-
-Keep all assigned outcomes and missing cells; unknown is not opponent win/tie.
-Exact1/200 bill band, fixed1/24 or1/12 weights and missing-outcome bounds are
-descriptive finite-cohort, not p-values/populationCIs. Seeds aren't new timetables.
-Current native worker qualification-only; valid cold fallback doesn't qualify an
-unexercised charging/warm path. Restricted/fixed-route bounds aren't global.
-Unsupported ACK-less failure certificates stay unsupported; missing ACK unknown.
-
-Sealed DEV/TEST/A6/B3/confirmation/GIRO closed. Leave Unicorn to v2g, no monitoring.
-No routine Google Doc entry for this engineering startup failure; last consolidated
-milestone/visuals remain. Don't duplicate sixOctober1 entries or oldv5. Existing41-entry
-Scholar synthesis needs no repeat/forced cross-field links. Back up meaningful
-milestones to origin with Nathan Cho <nathan.cho2013@gmail.com> author/committer,
-preserve branches/history/bundles. No PR merge/journal submission/private publication/
-reset credits/unrelated schedule restart. Notify significant findings/failures/
-decisions/review-ready research only. Continue useful source work between runs.
+Back up meaningful work to origin with Nathan Cho <nathan.cho2013@gmail.com>
+author AND committer, never rewrite history. Preserve branches/bundles. No routine
+Google Doc entry for engineering failures; preserve prior visuals/history and
+never repeat the sixOctober1 entries. Stay quiet on unchanged state; this budget
+incident requires user attention. Continue only authorized useful work, avoiding
+expensive idle polling or repeated diagnostics while awaiting the decision.
