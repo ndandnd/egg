@@ -1,121 +1,120 @@
-# Current handoff — 25 October 2026: competent conventional control
+# Current handoff — 25 October2026: warm tariff experiment RUNNING
 
-Worktree: /Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017
-Branch: codex/ml-prediction-20261017. Read this checkpoint, then only relevant
-current protocols and compact receipts. Manage bounded GPT-6.1 Sol subagents.
-Check actual agents and workers before acting; never duplicate attempted work.
+Worktree:/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017
+Branch:codex/ml-prediction-20261017. Read this checkpoint, then only relevant
+current protocols and compact receipts. Check actual agents/workers before any
+new action. Use bounded GPT-6.1 Sol handoffs. Do not duplicate running/attempted
+work. All current bounded source agents are complete.
 
-## Completed density control
+## Active campaign: collect, do not resubmit
 
-research-20261025/density_control/attempt01 ran ONCE after parent and one focused
-static review. All four plans independently replayed on the original full cases
-and were durably recorded within120 seconds. Native session98425 and finalizer
-session51626 are CLOSED; all bounded agents complete. No active numerical worker.
+research-20261025/warm_replanning/attempt01 launched ONCE after parent and one
+focused peer static review. Source/protocol commit0c77fa6a pushed before launch.
+Read warm_replanning/RUNNING_HANDOFF.md, LAUNCH.json and PROTOCOL.md.
 
-Same common backbone B, exact K, all boundaries, original SOC/shared-resource
-physics, native seed17 and one solve/thread per arm. Frozen order:
+Unified exec session72031 RUNNING at latest check; Python campaign PID3571,
+/usr/bin/time PID3563. Child worker PIDs change by task. The metered preflight
+completed and five model assets verified once in attempt01/preflight.json.
+Latest session check still running, one active-decision ledger row, empty campaign
+stderr. No interim performance conclusion. Sources/models/protocol/manifest are
+FROZEN while workers run; no edits, extra inference, verification matrix or retry.
 
-| Case/arm | Flexible K/M | Valid buses | Restricted native bound/status | Total |
-|---|---:|---:|---|---:|
-|50685:40 CA1|429/1427|4|4 OPTIMAL|1.750s|
-|50685:40 Cover+CA1|429/1427|3|3 OPTIMAL|1.557s|
-|50605:80 Cover+CA1|1765/5882|5|5 OPTIMAL|20.393s|
-|50605:80 CA1|1765/5882|5|5 OPTIMAL|20.888s|
+Master attempt01/receipt.json is incomplete until the campaign finishes. Completed
+per-worker external-receipt.json files and decision-ledger.jsonl are incremental
+evidence. Read compact status, not all raw payloads. Check the known exec session
+or one scoped local process view for actual state; do not launch another owner.
+process-time.txt is a final meter only after exit. There is no pending approval.
 
-Cover+CA1 meets exposed targets<=3/5. Ordinary CA1 misses40; aggregate all-four
-competence_passed=false remains false. Finalization/count/contract checks passed.
-Pool substitutions47/6 at40/80: candidate identity can matter at fixed count on40
-within solver numerical qualifications. This supplies a competent arm for the
-next study, not robust superiority, independent generalization or learned value.
+Scientific design: warm day->late tariff replanning at the EXACT active-fleet
+count of one predetermined Cover+CA1 prior per case. This isolates electricity/
+deadhead value from fleet acquisition. Every restricted arm protects the same
+known prior flexible arcs in Bw=baseB union prior arcs, within ORIGINAL common K;
+quota overflow fails, never adapts. Both fixed classical arms remain, plus fixed
+GNN/CatBoost, deterministic random, all-movement full and fixed-route charging.
+Same original SOC/shared-resource physics and same prior/fallback for all arms.
+The full arm is conditional on the fixed-fleet equality, not a full-problem
+certificate. Binary start submission/acceptance is distinct from physical fallback.
 
-Fleet count was optimized, system costs only evaluated. CA1/Cover costs:
-40 trips778.166741/655.818497;80 trips1287.147095/1293.759812. Bounds are restricted
-fleet-count bounds only, not unrestricted full-problem certificates.
-Read density_control/RESULTS.md, SCIENTIFIC_INTERPRETATION.md, summary.json and
-RESOURCE_RECEIPT.json. Large originals stay local with lossless gzip/stream hashes;
-do not dump raw captures/inventories or repeat this four-decision experiment.
+Cohort:4 base groups50600–50603,40/80 variants,seeds17/41/73;8 acquisitions and168
+active60s decisions. Trip records are nested but generator power scales180/270kW
+across sizes; no pure fixed-resource scale claim. IDs absent from inspected
+registers, not globally proven unseen; this is development, not final evaluation.
+Within each size, only tariff changes. No refit, model selection or group
+replacement from outcomes. Record failures and every planned denominator.
 
-Old sparse matching/greedy/full fleet controls, price audit and catalog hull are
-complete, not pending gates. Sparse80 returned24 with113/5882 flexible modes;
-that does not establish classical inferiority. Old/new differences also include
-candidate content, backbone and native seed, so no density-only causal claim.
+Native cutoff52s/final60s from parent beforePopen, cold scorer imports/load paid,
+four tangent rounds, all completion native calls included. Common initial cuts at
+zero and prior load. Exact integrated cost c+a'L+.5L'BL, not atomic payment.
+Late/crashed/failed methods retain unchanged operational fallback but are not
+successful method completion. Acquisition failure leaves genuine missing cells.
 
-## Next package: warm tariff replanning
+## When current campaign ends
 
-Read density_control/NEXT_STUDY_REQUIREMENTS.md. Adapt needed existing score,
-objective and start/fallback APIs into one thin research-only driver. Freeze a
-concrete protocol, exact groups/assets/source/command and ordinary resource budget
-before dispatch. No executable manifest yet. No budget answer is pending.
+Collect complete compact master receipt and final external process meter. Do not
+repeat source, metadata, qualification or old numerical gates. Preserve any fatal
+stop and all costs; no automatic retry. Run the already frozen finalize.py command
+ONCE only after the main session exits, under120CPU/180wall inside the package
+closure provision. It reads compact outcomes, computes separately frozen GNN/
+CatBoost exploratory gates, and byte-archives baseline captures once. It never
+scores, solves or replays. Keep raw originals local and lossless gzip in Git.
 
-Selected scientific setting: warm day-to-late tariff replanning with physical
-resources unchanged. Give every arm the same predetermined replay-valid
-Cover+CA1 prior plan as retained fallback. Measure original acquisition cost
-separately; do not claim cold speedup. Native start processing is distinct from
-retaining a physically valid fallback. Do not return to transport/timing-framework
-development. Retain BOTH frozen classical arms, fixed GNN/CatBoost, deterministic
-random, unrestricted solving, fixed-route charging reoptimization and unchanged-
-plan reference. Same exact B/K for all pruned arms.
+Gate is diagnostic:8 valid priors, all168 attempted/recorded, campaign/accounting
+success, no fatal/invalid admission, then each fixed learned family separately
+must beat BOTH CoverCA1 and fixed_route in>=3/4 group medians and mean normalized
+paired difference>.01 for each, denominator prior late electricity cost. Four
+base groups and repeated seeds/sizes do not support significance or promotion.
+If controls tie/dominate, report it and diagnose before further training. Price
+information still needs a comparably selected trained tariff-blind model plus
+fixed-pool charging, then separate curvature/resource interventions.
 
-Proposed diagnostic: four new base groups, nested40/80 variants, paired native
-seeds17/41/73;168 active60s decisions. Budget direction4CPUh/5wallh inclusive of
-prior acquisition, failed work and finalization; one native thread/observed5GiB.
-Actual IDs, source/asset locks, commands and admission/dispatch reserves still
-need a prospective manifest after narrow API inspection and one focused review.
-This is a budget direction, not a pending command. No automatic retries.
+## Previous completed science — do not rerun
 
-Choose IDs from the authorized synthetic development namespace before generation,
-checking prior-use manifests only. Preserve disclosures; never replace a group
-after seeing outcomes. All variants stay grouped. Failed prior acquisition means
-missing pipeline endpoints for all arms, not a replacement timetable. This small
-cohort remains development evidence until separate final evaluation is frozen.
-No refitting/model selection on evaluation outcomes.
+Density-control attempt01:40 CA1/Cover+CA1=4/3 buses,80=5/5, all independently
+replayed timely at common K429/1765 and seed17. Restricted numerical optima/bounds
+4/3/5/5 only. Cover arm meets exposed3/5 targets; ordinary misses40, so aggregate
+all-four competence staysfalse. Replacements47/6 modes. This established a
+competent control, not generalization, model value or tariff response. Sparse
+matching80 result24 kept only113/5882 flexible modes; it did not disqualify
+classical methods. Old/new changes include content/backbone/seed, not density
+alone. Price audit, finite-catalog hull, greedy and full fleet controls are also
+complete. Their summaries are context only, not pending experiments.
 
-Stop expanding responsive-supervision infrastructure: old component/metadata/
-native work remains deferred/unqualified. Preserve old sources, failures, accounts
-and five untracked component files. No namespace revival or repeated passed
-engineering matrices. More model families/training/literature survey is not next.
+Stop expanding responsive-supervision infrastructure. Old component/metadata/
+native work remains deferred/unqualified. Preserve all sources/failures/accounts
+and five old untracked component files; no namespace revival or repeat matrices.
+More model families, training or literature surveying is not the next action.
 
-## Scientific cautions
+## Accounting and boundaries
 
-Question: does learning preserve valuable feasible alternatives under electricity
-and shared-resource changes beyond competent conventional controls? October17
-is20-group DEVELOPMENT evidence.91.916% of summed80-trip savings against one weak
-heuristic is vehicle-count cost. Generic pruning/recovery/CH pricing is prior art.
-Current bill is integrated system cost c+a'L+.5L'BL, not atomic uniform-price
-payment c+a'L+L'BL. Current graph ranker receives a but no b, so its scores cannot
-adapt to b alone. Training/classification/source tests show no useful speedup,
-novelty or generalization.
+Current package TOTAL4CPUh/5wallh incl all parent/children/startup/acquisition/
+failed work/finalization. Dispatch stop13800CPU,600CPU closure reserve. One native
+thread/observed5GiB. Main compact publication and separate analysis/archive each
+bounded120CPU/180wall within that reserve, not added to4h. No budget answer pending.
+Practical routine budgets authorized; prospectively record scope, flag unusual
+commitments, avoid tiny approval loops.
 
-Optimize the same integrated cost in the next study. Pay startup, scoring,
-construction, search, replay and finalization. Retain best valid fallback; report
-missing/late/rejected endpoints and fleet/electricity/deadhead decomposition.
-Warm replanning and cold acquisition are distinct settings. Price-information
-value still needs a comparably selected trained tariff-blind model plus fixed-
-pool/fixed-route charging; permutation alone tests sensitivity. Independent nested
-scale and physical-regime evidence remains missing. Resource changes, recovery
-and unrestricted certification follow separate measured designs. Restricted or
-fixed-route bounds are not unrestricted certificates. Catalog gaps need absolute
-and electricity-normalized denominators; SVD needs bank-cardinality ceilings.
+Prior CLOSED measured reset numerical-process CPU206.31s/elapsed-sum223.25s.
+Current running spend is separate until actual final reconciliation. Legacy
+conditional guard2546.091499549272s remains separate; historical actual review CPU
+UNKNOWN. Never reset/relabel it, claim restored old-cap compliance or exact session
+CPU. No duplicate hash audits. Once-only preflight except unchanged paid backend
+library identity fingerprints inside existing model builds.
 
-## Resources, log and backup
+Old80-trip savings are91.916% vehicle-count cost against a weak heuristic.
+Generic learned pruning/recovery/CH pricing is prior art. Both current learned
+models receive a but not b, so cannot adapt scores to b alone. Source tests,
+classification/training completion and limited catalogs establish no novelty,
+useful speedup or generalization. Keep all variants grouped and preprocessing/
+selection inner-only; report absolute/electricity-normalized gaps and bank-rank
+ceilings. Unrestricted certification, resource changes and manuscript follow
+coherent scientific evidence, not framework completion.
 
-Latest measured package45.40CPU seconds=43.51 native process+1.89 finalizer;
-elapsed45.32+1.96s. Cumulative reset numerical-process CPU206.31s/elapsed-sum223.25s;
-NOT exact whole-session CPU. Legacy conditional guard2546.091499549272 remains
-separate; historical actual review CPU UNKNOWN. Never reset it or claim restored
-old-cap compliance. Hash consumed inputs once inside measured experiments;
-no duplicate hash audits. Human authorizes practical routine budgets: record
-scope/cost prospectively and flag unusual commitments, no tiny approval loops.
-
-Original Google Doc now has verified heading "25 October 2026 — Equal-density
-conventional control reaches three and five buses", range[233233,235331), all8
-images preserved; see density_control/GOOGLE_DOC_APPEND.md. Do not duplicate it,
-earlier25October milestones or sixOctober1 entries. Append later consolidated
-verified science only. Hourly automation updated; unrelated paused schedules stay
-paused. Quiet routine checks/preparation; notify substantive results or failures.
-
-Back up meaningful milestones to origin/codex/ml-prediction-20261017 with explicit
-author AND committer Nathan Cho <nathan.cho2013@gmail.com>; never rewrite history.
 No cluster access/monitoring/jobs; leave Unicorn to v2g. Sealed
 DEV/TEST/A6/B3/confirmation/GIRO closed. No PR merge, journal submission, private
-publication or reset credits. Manuscript deferred pending a coherent contribution.
+publication or reset credits. Back up meaningful milestones to origin using
+explicit AUTHOR AND COMMITTER Nathan Cho <nathan.cho2013@gmail.com>; never rewrite
+history. Original Google Doc last contains verified equal-density section
+[233233,235331), all8 images; do not repeat it or older25October/October1 entries.
+No Doc append for this launch. Append later consolidated verified science only.
+Keep unrelated paused schedules paused. Quiet healthy running/preparation; notify
+substantive completed results, important failures or major decisions only.
