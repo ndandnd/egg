@@ -47,12 +47,23 @@ FIXED_ROUTE_CONTROL_TRIAGE.md and PARENT_RESEARCH_DECISION.md. Do not silently
 call it a converged convex optimizer or replace its recorded outcomes. This does
 not explain away12%E0 or alterGNN–Cover, but motivates a stronger cheap control.
 
-New fixed_route_qp package is being prepared STATIC ONLY. PROTOCOL.md and
-RESOURCE_DECISION.md exist; qp_control.py owner approved50_bindings, run.py owner
-responsive_monitor_tests. Check their actual states first. They may inspect/write
-only; no imports/tests/hashes/native execution by agents. Parent must review stable
-source plus one focused cross-review, freeze exact LAUNCH/source/command, then
-one new8-case diagnostic. No numerical command has been submitted yet.
+Fixed_route_qp attempt01 ran ONCE after source/protocol commitd4cd4ab1 was pushed.
+It FAILED the combined bound/index/type copy check on first50600/40 BEFORE any
+native optimize call; zero native calls/attempts, seven later cases undispatched,
+PID22815 reaped. Preserve every receipt, v1source and failure. External0.72CPU/
+0.92elapsed is nonrefundable. This is not physical infeasibility. See
+ATTEMPT01_FAILURE_AND_V2_DECISION.md. The old combined error did not identify the
+offender; semantic infinity mismatch is a STATIC diagnosis, not yet confirmed.
+
+Parent recorded a deliberate narrow v2 correction: documented side-specific
+LB<=-1e20 / UB>=1e20 infinity semantics; every other finite bound/index/type/row/
+objective/replay guard unchanged. qp_control_v2.py and run_v2.py are separate
+sources, fresh attempt02 ONLY. PROTOCOL_V2.md,RESOURCE_DECISION_V2.md,LAUNCH_V2.json
+bind the continuing SAME1800CPU/2700wall cap including0.72/0.92carry. One focused
+static delta review must pass before one command; never resume attempt01.
+Inherited unchanged source/prior digests remain frozen; hash predecessorpreflight
+once plus only five freshv2files, no duplicate oldasset/prior audits. No v2
+command yet as of this checkpoint. Check actual receipts and agents before action.
 
 Scope: ALL8 already saved prior topologies, native seed17, original full physical
 matrix, all original routing choices fixed, direct convex integrated-cost QP via
@@ -78,16 +89,18 @@ comparably selected tariff-blind TRAIN fit still required for information value.
 
 Closed warm package:6796.46CPU/6952.21wall main;1.54CPU/1.64wall frozenreadout;
 .04CPU/.12wall compactexport. Total6798.04CPU,elapsed-sum6953.97s. Priorreset206.31CPU/
-223.25elapsed -> CLOSED cumulative7004.35CPU/7177.22elapsed-sum. Not exact sessionCPU.
+223.25elapsed -> warm CLOSED cumulative7004.35CPU/7177.22elapsed-sum. QPattempt01
+adds0.72CPU/0.92elapsed -> CLOSED cumulative7005.07CPU/7178.14elapsed-sum BEFOREv2.
+Not exact sessionCPU.
 Separate legacy conditionalguard2546.091499549272s remains; historical actualreview
 CPU UNKNOWN. Never reset/relabel it or restored old-cap compliance. FutureQPspend
 added separately from actual meters. No duplicate unmetered hash audits.
 
-Original Google Doc last has equal-density section[233233,235331),all8images.
-New warm science not yet appended as of this checkpoint; consolidate the verified
-result AND capped-control caveat once, preserve history/visuals, no duplicate
-older25October or sixOctober1 entries. Sourcewarmcommit0c77fa6a and runningpreflight
-ae119f15 were pushed; new completed outcomes/notes require meaningful backup with
+Original Google Doc now has verified warm-result/capped-control section
+[235331,238074),all8images retained; exact full-string match and heading verified.
+See warm_replanning/GOOGLE_DOC_APPEND.md. DO NOT duplicate it, older25October or
+sixOctober1 entries. Sourcewarmcommit0c77fa6a, runningpreflightae119f15 and
+completedscienceb2c02aac were pushed; new QP failure/v2 sources require backup with
 explicit AUTHOR AND COMMITTER Nathan Cho <nathan.cho2013@gmail.com>. Never rewrite
 history. Five old untracked responsive-component files stay separate/deferred;
 no old namespace revival, engineering matrices or routine experiment repeats.
