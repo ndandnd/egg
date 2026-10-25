@@ -1,142 +1,130 @@
-# Current handoff — 25 October 2026: primal-QP check passed; extension still static
+# Current handoff — 25 October 2026: strengthened warm comparison RUNNING
 
-Worktree:/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017
-Branch:codex/ml-prediction-20261017. Read this checkpoint and only the relevant
-compact protocols/results. Check actual agents and workers before action; never
-duplicate an attempted or running task. Manage bounded GPT-6.1 Sol handoffs.
+Worktree: /Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017
+Branch: codex/ml-prediction-20261017. Read this checkpoint, then only relevant
+compact protocols/receipts and warm_replication/RUNNING_HANDOFF.md. Check actual
+agents and owned worker state before acting. Never duplicate an attempted or
+running experiment. Manage bounded GPT-6.1 Sol agents with short handoffs.
 
-## Actual state — all current work closed
+## Live owner and source freeze
 
-No numerical workers active. Warm campaign exec72031 and frozen finalizer33404
-CLOSED exit0. Direct-QP attempt01 CLOSED exit1 before any native call; corrected
-attempt02 exec82477 CLOSED exit0. QP analysis and NEW stored-energy diagnostic
-both ran ONCE, CLOSED exit0. NEW primal-QP attempt03 exec97290 CLOSED exit0,
-one50603/80seed17 nativeMethod0 call produced a replay-valid optimal QP witness;
-its once-only summarize_v3 readout CLOSED exit0. Do NOT rerun it. Two small TRAIN
-registry metadata queries also completed once, no case/model/label work.
-Agentsresponsive_monitor_tests andapproved50_runners currently own STATIC new
-extension preflight/pool-report deltas and affected review; bindings completed
-training-admission note. Check actual agent state before editing/dispatch. Sources,
-receipts, failures and exact outputs preserved. No automatic retry or new model
-training. Do not run completed readouts, old qualification matrices or captures.
+NEW warm_replication/attempt01 launched ONCE after reviewed source/protocol
+commit bc54492f was pushed. Managed unified exec session31384 was RUNNING at the
+last check. All bounded static agents completed; no other numerical campaign is
+authorized. Sources, models, protocol, manifest, asset lock and registry bytes
+are FROZEN. No extra inference, hash audits, fits, tests or source edits.
 
-## Scientific results and limits
+Preflight PASSED once, verifying five selected assets. train-admission.json
+PASSED the source-pinned TRAIN registry:128 groups/base IDs; both models have
+80 fit/16 inner/32 outer effective base groups with no cross-partition overlap.
+All eight planned bases are absent from that explicit TRAIN registry. This is
+model-declared TRAIN base-ID nonoverlap, not global/variant alias closure,
+new-population transfer or final generalization. No rows, labels or sealed
+indexes were opened. Do not repeat this check.
 
-Warm_replanning/RESULTS.md, POST_RESULT_CRITIQUE.md and RESOURCE_RECEIPT.json are
-the completed original experiment. Eight valid priors,168/168 timely replay-valid
-operational endpoints,167strict method successes. One CatBoost80-trip seed41
-retained an earlier valid improvement after a later round timeout; non-success
-flag remains. Four base groups50600–50603, nested40/80 with180/270kW resources,
-seeds17/41/73: FOUR base units, not24 independent timetables or fixed-resource
-scale evidence. Day->late tariff, original physics, active fleet FIXED to common
-prior; prior arcs protected within same originalK, both classical controls kept,
-all cold loading/features/search/replay/finalization paid. No refit/group replacement.
+The exact pgrep request failed because the sysmond service is unavailable.
+Do not repair monitoring infrastructure or guess old PIDs. Use managed session
+31384 and durable completed child receipts. The root receipt stays incomplete
+until final publication; process-time.txt is final only after exit. If a session
+vanishes or an attempt is unreceipted, preserve it and never automatically retry.
 
-Frozen d=(controlCost-learnedCost)/priorLateElectricity E0:
-- GNN versus CoverCA1 mean d=.01231888200599,positive group medians4/4.
-- GNN versus FOUR-ROUND fixed_route mean d=.12011674805583,positive4/4.
-- GNN exploratory continuation TRUE; CatBoost versus Cover mean d=-.010282453,
-  positive2/4, gate FALSE. No significance or model promotion.
-These are fractions of PRIOR electricity cost, not comparator-relative bill cuts.
-Fleet cost fixed/deadhead0, but demand versus timing/information not isolated.
+## Frozen scientific design
 
-New fixed_route_qp/RESULTS.md, DISPLAY.json and analysis.json challenge the weak
-charging-control concern. All8 original-matrix direct convex QPs reported native
-OPTIMAL;7 independently replayed QP witnesses admitted within60s,1 valid prior
-retained. Last50603/80 failed unchanged session materialization, not search time
-or matrix copy. Its raw objective1299.011935736556 is NOT a feasible bill. Read
-EXTRACTION_FAILURE_DIAGNOSIS.md; failed interval/charge magnitude unidentified.
-Do not erase charge, extend intervals or widen replay tolerances. Seven admitted
-QPs improved their capped-control endpoints, but complete-group median gains were
-only.077–.160%E0. GNN remains cheaper than those seven fixed-topology witnesses;
-that is not causal price-learning evidence. Missing eighth candidate stays
-missing; do not headline the operational13.4222%E0 contrast inflated by fallback.
+Read warm_replication/PROTOCOL.md, LAUNCH.json and RESOURCE_DECISION.md as needed.
+Eight bases50604,50606–50612, nested40/80 variants and seeds17/41/73 give16 prior
+acquisitions,48 blocks and384 active decisions. The eight arms are GNN, CatBoost,
+CA1, CoverCA1, random, full, fixed_route_QP and GNN_day. Uniform Method0 QP uses
+its actual assigned seed; it replaces capped charging, not a ninth arm. The new
+local helper only broadens v3's seed allowlist. Models/preprocessing stay fixed.
 
-New ENERGY_RESULTS_AND_NEXT_DECISION.md and energy-diagnostic.json read all168
-stored endpoints once, no optimization/model/replay. GNN energy versus prior:
-mean -9.0440%,lower24/24. Versus CoverCA1:mean energy -0.7977% of CONTROL energy,
-cost advantage1.2319% of PRIOR E0;lower-energy15/24,cheaper20/24. Six repeated
-cells are cheaper despite using MORE energy. Quantity alone does not explain
-every cost ordering, but every downstream solver already uses target prices;
-this does NOT identify learned tariff-information value. Four groups remain
-four units. Models use a,not b; no novel generic pruning/recovery/convex-hull claim.
+The intervention is day→late tariff with unchanged physics per variant. Active
+fleet is fixed to one predetermined CoverCA1 day fleet-count prior. That prior
+is feasible, not a proven day-cost optimum. Acquisition is charged and reported
+separately. Every arm retains the same valid fallback. Pruned arms protect its
+arcs within the original exact K and common Bw; quota never increases. Full means
+all movements conditional on fixed fleet, not a full original-problem certificate.
 
-## Next executable work — finish extension admission/binding before launch
+Parent clocks begin before Popen: native cutoff52/inclusive endpoint60. All cold
+loads, features, inference, construction, search, replay and publication are paid.
+Other ranking/full arms retain four tangent rounds/completion; QP has one direct
+quadratic call. Native start processing is distinct from retaining a valid fallback.
+GNN_day changes only fresh scoring a to day, then solves the same late objective.
+Report pool overlap/exposure with48 planned pairs; full-pool Jaccard includes
+protected Bw. Identical pools/exhausted ranking room are informative. This is
+inference conditioning, not a trained tariff-blind control. Both learned models
+use a, not b. Power scales180/270kW with size, so no fixed-resource scale claim.
 
-Read fixed_route_qp/MECHANISM_RESULTS_V3.md and V3_RESOURCE_RECEIPT.json.
-The separately frozen one-case Method0 check PASSED:replayed1299.0119357338792
-versus valid prior1422.6779732510288, inclusive11.649910s,external11.15CPU/11.71wall.
-Postreadout.01CPU/.03wall; newv3package11.16/11.74. Every physical/objective/
-accuracy/decoder/replay guard unchanged; actualMethod0/seed17 read back. Earlier
-v2barrier7/8 record remains unchanged, not retroactively8/8oneuniformpolicy.
-No charge-magnitude/rootcause, universaladmission, MLquality or speedup claim.
-Do NOT revive old NEXT_MECHANISM_DESIGN as pending or rerun seven passed cases.
+Continuation prerequisites are16 valid priors, all384 assignments attempted and
+recorded, complete group/pair counts, campaign/accounting success, no fatal or
+invalid admission/unresolved child, AND48/48 QP decisions with a timely NEW
+physical candidate and native OPTIMAL/strict QP success. Then GNN primary and
+CatBoost secondary separately require >=6/8 positive complete group medians AND
+full48 mean (control cost−learned cost)/prior late electricity E0 >.01 against
+BOTH CoverCA1 and QP. Missing/zero E0 is undefined. Failed QP qualification leaves
+all operational results reported but the learned verdict inconclusive. No
+available-only rescue. Report CA1/random/full/unchanged regardless of the formal
+gate. A pass is not significance, model promotion or learned-information causality.
 
-warm_replication/ contains STATIC source/cohort/protocol drafts only, HELD. Eight fixed
-new development base IDs50604,50606–50612,40/80,3seeds, old7arms+GNN_day;
-8CPUh/10wallh is direction only, not a launch manifest. Source now explicitly
-replaces oldcappedfixed_route withfixed_route_QP (still8arms). Newlocalhelper
-narrowlyallowsactualassignedseeds17/41/73, otherwisefrozenv3Method0/physics.
-SOURCE_REVIEW_QP.md passed originalaffectedintegration. Two ADDITIONAL new
-preflight/pool-report hunks are not yet closed:source-bound TRAINgroupadmission
-and predeclared GNN/GNN_day retainedpooloverlap/exposure. Ownersabove mayONLY
-inspect/write/review, no tests/import/hash/inference/solve. Do not repeat the
-already passed oldsource matrix. Keep both
-CA1 and CoverCA1,random/full,common valid fallback,commonK and all paid clocks.
-NewPARENT_CONTROL_QUALIFICATION_DECISION.md/PROTOCOL_DRAFT.md requireall48QP
-assignments timelynewphysicalQPcandidate+nativeOPTIMAL, in addition to16valid
-priors/384attemptedrecorded/completeness/noinvalid/fatal/accountingsuccess, then
-GNNprimary/Catsecondary separately>=6/8positivegroupmedians andmean d>.01against
-BOTHCoverandQP. Ifcontrolfails keepalloperationalanalyses butmodelgateinconclusive;
-noavailable-onlyrescue. Original4groupgateunchanged. GNN_day tests inference conditioning, NOT a comparably trained tariff-blind
-control. Independent grouped/nested scale/regime evidence and matched trained
-price-blind control remain missing. Do not train more families or survey more
-literature merely because a batch finishes. Recovery/certification separate.
+## Resources and next action
 
-## Accounting, documentation and boundaries
+NEW campaign total28800CPU/36000wall includes preflight, acquisitions, decisions,
+failures, shutdown and finalization. Dispatchstop28200CPU; closure reserve600CPU.
+Main publication and separate finalizer each <=120CPU/180wall INSIDE the reserve
+and total. One serial native/computation thread; observed worker RSS<=5GiB,
+parent RSS separately reported. Human practical routine budget authority exists;
+no approval is pending. Flag unusual commitments, not tiny routine questions.
 
-Current closedcumulative7064.41CPU/7239.65elapsed-sum:fixed_route_qp/
-V3_RESOURCE_RECEIPT.json gives7064.39/7239.61 afterMethod0+readout, and
-warm_replication/PREPARATORY_RESOURCE_RECEIPT.json adds.02CPU/.04elapsed from
-thetwo completedTRAINmetadataqueries. SharedQPpackage60.04CPU/62.39elapsed
-inside1800/2700, alloldchargesretained. NewcomparisonhasNOgeneratedcase/model/
-numericalrunyet. Historicaltotals areNOTchargedagain to itsprospective8hbudget.
+While running, make one compact scoped owner/receipt check per wake; healthy
+state stays quiet. Do not edit sources or finalize. Useful STATIC scientific
+design can continue without retuning this cohort from partial outcomes. No
+extra generation, scoring, fitting or solver job.
+After exit, collect the complete master receipt and external meter; preserve
+all failed/late/missing/unattempted cells and spending. Diagnose a fatal stop
+before expansion. THEN run the exact frozen finalizer command ONCE from LAUNCH,
+under its funded allowance. It reads compact outcomes and archives baseline
+capture bytes once; no scores, solver or replay. Review both family gates, all48
+control qualifications, group counts and conditioning-pool exposure/denominators.
 
-TRAINmetadatareview found explicitfit/inner/outer80/16/32IDsphysical_v2_s10000–10127.
-WhitelistedTRAINpoolmanifestgroup_eligibilityLIST128records exposesbase_group/
-base_id,butstandalonereaderdidNOTverifyregistrySHAorreadactualbase_groupvalues.
-NewordinarycampaignpreflightwillhashTRAINmanifestONCE,matchpinnedCatpreproc
-pool_manifest_sha256,requiretrain_onlytrue,uniqueactualbase_group→intbase_id map
-coversbothmodels'declaredgroups,andnointersectionplannedIDs. Failedmappingor
-digeststopsBEFOREcaseacquisition; no rowtable/label/DEV/TESTindexfallback. Even
-passingestablishesdeclaredTRAINbase-IDnonoverlap,NOTglobal/variantaliasclosure
-orpopulationindependence. SeeTRAIN_ADMISSION_PARENT_DECISION.md. Sharedprioris
-purefleet-countacquired,notprovenaday-economicoptimum; disclosethatlimitation.
+## Completed evidence and accounting — do not rerun
 
-Historical fixed_route_qp/FINAL_RESOURCE_RECEIPT.json recorded CLOSED process
-accounting:attempt01 .72CPU/.92elapsed,attempt02 48.08/49.61,QPanalysis .04/.06,
-energy diagnostic .04/.06 => package48.88CPU/50.65elapsed-sum. Previous closed
-reset+warm7004.35/7177.22 => CLOSED cumulative7053.23CPU/7227.87elapsed-sum.
-These rounded external numerical-process sums are NOT whole-session exactCPU
-or continuous elapsed. Do not doublecount overlapping totals. Separate legacy
-conditionalguard2546.091499549272 remains; historical actual reviewCPU UNKNOWN.
-Keep every old failure/charge/unknown; no ledger reset or restored compliance.
-Human allows sensible prospective routine budgets; flag unusual commitments,
-not repeated tiny approval questions. Hash inputs once within metered work;
-inherit frozen unchanged bindings honestly, no duplicate hash audits.
+Original warm_replanning/attempt01 and finalizer completed:8 valid priors,168
+timely replay-valid operational endpoints,167 strict successes. GNN versus Cover
+mean saving1.2318882% of PRIOR late electricity E0, positive medians4/4; exploratory
+gate TRUE. CatBoost versus Cover mean−1.0282453%, positive2/4; gate FALSE. These
+are four base units, not24 independent timetables. Fleet fixed, deadhead zero.
+GNN energy versus prior averaged−9.0440%, lower24/24; versus Cover energy−.7977%
+of CONTROL energy, cost saving1.2319% of PRIOR E0. Six repeated cells were cheaper
+despite more energy. Quantity alone is insufficient; tariff learning is unproven.
 
-Original Google Doc now has warm milestone[235331,238074) AND QP/energy milestone
-[238074,239700),both exact-string/heading verified,all8images retained. Do NOT
-repeat these,earlier25October sections or sixOctober1 entries. Append only later
-consolidated verified science. Source/result commits throughd13ac4a3 plus new
-closeout require/preserve meaningful origin backup, explicit AUTHOR AND COMMITTER
-Nathan Cho <nathan.cho2013@gmail.com>. Never rewrite history. Five old untracked
-responsive-component files stay separate/deferred. No old namespace revival.
+QP v2 had8 native OPTIMAL reports but7 physical QP witnesses; preserve that record.
+Separate v3 Method0 check on50603/80 passed once (exec97290 CLOSED):replayed cost
+1299.0119357338792 versus prior1422.6779732510288, actual Method0/seed17/thread1,
+inclusive11.649910s. Native process11.15CPU/11.71wall plus readout.01CPU/.03wall.
+One-case policy qualification is not retroactive8/8 uniform success or ML-quality
+evidence. No charge, tolerance or decoder change. See MECHANISM_RESULTS_V3.md.
+
+Before the NEW campaign, closed process sums were7064.41CPU/7239.65elapsed-sum
+(PREPARATORY_RESOURCE_RECEIPT.json). The closed QP package was60.04CPU/62.39elapsed
+(V3_RESOURCE_RECEIPT.json). Historical totals are not charged twice to the new8h
+budget. Rounded process sums are not exact whole-session CPU or continuous elapsed.
+Keep legacy conditional guard2546.091499549272 separate; actual old review CPU
+is UNKNOWN. No reset, refunded charge or restored old-cap compliance claim.
+
+## Documentation and boundaries
+
+Back up meaningful milestones to origin with explicit AUTHOR AND COMMITTER
+Nathan Cho <nathan.cho2013@gmail.com>; never rewrite history. Original Google Doc
+has verified warm[235331,238074) and QP/energy[238074,239700) sections, all8 images
+preserved. No entry for routine primal qualification/preparation/launch; append
+only later substantive verified science. Do not repeat older25October/sixOctober1
+entries. Old responsive-supervision work remains deferred/unqualified; five old
+untracked component files are untouched.
 
 Integrated system cost c+a'L+.5L'BL is not atomic uniform-price payment c+a'L+L'BL.
-Restricted/fixed-route bounds are not unrestricted certificates. Group all variants,
-selection/preprocessing inner-only; October17/current cohorts are development.
-Sealed DEV/TEST/A6/B3/confirmation/GIRO closed. No cluster access/monitoring/jobs;
-leave Unicorn to v2g. Manuscript deferred; no PR merge, submission, private
-publication or reset credits. Keep unrelated paused schedules paused. Notify
-substantive science/failures/major decisions; routine checks/preparation quiet.
+Generic pruning/recovery/convex-hull pricing are prior art. Restricted/fixed-route
+bounds are not unrestricted certificates. Preserve grouped, inner-only selection;
+October17/current cohorts are development. Sealed DEV/TEST/A6/B3/confirmation/GIRO
+stay CLOSED. No cluster access, monitoring or jobs; leave Unicorn to v2g.
+Manuscript deferred. No merge, submission, private publication or reset credits.
+Keep unrelated paused schedules paused. Notify only substantive science,
+important failures, major decisions or review-ready artifacts.
