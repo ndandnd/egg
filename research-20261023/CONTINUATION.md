@@ -92,7 +92,12 @@ driver/protocol/qualified outer metering/manifest-preparer: actual Probe and
 FrameChannel, fixed non-numerical stub/dual Unix sockets/actualrusage+echo .05,
 maxcontrolgap.25, deliberate .35s processing hold while control continues,
 ~6s body in20s phase. Component pass denies fullOwner/native/60s/replay/model
-qualification. No submitted primitive/active compute PID. No production changes.
+qualification. No submitted primitive/active compute PID. No production changes. Peer review
+found pending new-driver fixes: defer stops across Popen/PID publication, latch
+stub absence permanently, and avoid signalling already-closed historical groups
+from component outer cleanup. Unknown original identity must produce incomplete
+cleanup, not signals to a possibly reused foreign group. Review those exact
+research-driver fixes before any manifest/execution; no legacy/prod rewrite.
 /root/approved50_bindings completed bounded static phase-accounting analysis:
 freeze() currently requires source-account path; primitive spending must reach
 current metadata input/cumulative carry. Read PRIMITIVE_TO_FREEZE_ACCOUNTING.md
