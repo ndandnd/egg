@@ -1,49 +1,34 @@
-# Warm extension attempt01 — running, source frozen
+# Warm replication attempt01 — CLOSED, no worker remains
 
-Launched ONCE25October2026 after reviewed source/protocol commitbc54492f was
-pushed to origin/codex/ml-prediction-20261017. Managed unified exec session31384
-was still RUNNING at the last bounded check. Do not resubmit or run finalizer
-while that owner is active. Sources/models/PROTOCOL/GROUP_MANIFEST/RESOURCE/
-LAUNCH and registry bytes are FROZEN. All bounded static agents are complete.
+Supersedes historical running handoff preserved at9dbd4d5c and earlier Git.
+Source/protocol freezebc54492f; owner31384 CLOSED exit0. Frozen finalizer88473
+CLOSED exit0, executed once. Compact export completed/passed once. Never poll or
+restart old sessions or repeat preflight, assignments, finalizer/export.
 
-Preflight completed ONCE. Five selected assets verified. train-admission.json
-PASSED:128 registry groups/128baseIDs; both models80fit/16inner/32outer groups
-are disjoint in declared group IDs AND mapped base IDs; all eight planned bases
-are absent from the source-pinned TRAIN registry. This supports model-declared
-TRAIN base-ID nonoverlap only; global/variant alias closure remains unproven.
-No raw training rows, labels, DEV/TEST/confirmation/A6/B3/GIRO were opened.
+Read RESULTS.md, GATE_AND_FAILURE_REVIEW.md, CONDITIONING_AND_NEXT_DECISION.md
+and FINAL_RESOURCE_RECEIPT.json. All16 priors admitted;384 operational endpoints;
+371 strict successes;11 retained intermediate endpoints after later failures;
+2 valid-prior startup-crash fallbacks. All48 strong QPs qualified. Both learned
+families failed frozen >1%E0 mean margin versus CoverCA1 despite7/8 positive
+medians: GNN0.0386688%E0, CatBoost0.1997028%E0. Preserve all failures and gates;
+no available-only rescue, cohort pooling, family promotion or automatic retry.
 
-Exact source/commands and scope: LAUNCH.json,PROTOCOL.md,RESOURCE_DECISION.md.
-Eight bases50604,50606–50612 ×40/80 ×seeds17/41/73 ×eight arms=384 active cells,
-plus16 predetermined common prior acquisitions. Source-bound Method0 QP replaces
-capped charging; GNN_day changes only scoring prices. No fits/old score reuse.
-All48 QP controls must be timely physically admitted numerical-optimal candidates
-for a learned continuation verdict; all operational fallback outcomes still count.
+GNN_day conditioning is small/mixed; models observea/notb and target optimizers
+see target prices. No trained-information causality or publication claim. Eight
+development base groups, not48 independent timetables. Fleet fixed to feasible
+prior; full conditional; integrated system cost not atomic payment. Both
+classical controls remain.
 
-The root receipt is an incomplete placeholder until final publication. Durable
-completed external-receipt.json and decision-ledger.jsonl give incremental
-state; do not read raw native captures or adapt the study from partial outcomes.
-process-time.txt is FINAL only after owner exit. All startup/preflight/model
-loads/search/replay/finalization inside8CPUh/10wallh; dispatch28200CPU,closure600.
-One serial worker/native thread, observedworkerRSS5GiB; no cluster access.
+Measured package12573.69CPU/12984.00elapsed-sum within original28800/36000 inclusive
+of finalizer/export. Closed cumulative process19638.10/20223.65, not exact
+sessionCPU. Old guard2546.091499549272/actualreviewUNKNOWN stays separate. No
+reset/refund/doublecount or restored historical compliance.
 
-OS process listing via the exact pgrep attempt was unavailable (sysmond service
-not found). Do not build a replacement monitor or guess/reuse old PIDs. Managed
-session31384 and durable owned-child receipts are the current ownership evidence.
-If the session vanishes, use complete receipts/final meter; never automatically
-retry an unreceipted/interrupted attempt. All per-cell child IDs are historical
-unless their current ownership is independently established.
-
-When the owner exits: collect complete master receipt and external process meter,
-preserve every failure/missing/unattempted cell and all spend. Diagnose fatal
-stops before expansion. Only then execute the separately frozen finalizer command
-ONCE from LAUNCH.json,<=120CPU/180wall INSIDE total/closure. It reads compact
-outcomes and byte-archives baseline captures; no solver/score/replay. Read both
-family gates, all48 control qualification, group/seed and conditioning-pool
-exposure/missing denominators. No available-only or failed-control promotion.
-
-Before campaign, closed numerical/metadata process sums7064.41CPU/7239.65elapsed,
-not exact sessionCPU. Historical guard2546.091499549272/actualreviewUNKNOWN stays
-separate. Do not charge these again to the new8h budget or claim refunded costs.
-Original Google Doc last scientific sections end239700,all8images preserved;
-no entry for routine preparation/launch. Keep older paused automations paused.
+NEXT: static whitelisting of TRAIN metadata/config/feature and label-source
+provenance, then a new prospective measured once-only metadata readiness command.
+No numerical launch manifest exists. No more fits or replication before
+conditional signal/aliases/teacher readiness is known. Full constraints and next
+action are in research-20261023/CONTINUATION.md. No cluster or sealed-data access.
+No deferred supervision-framework expansion. Google Doc closeout recorded in
+GOOGLE_DOC_APPEND.json; no duplicate append. Completed study sources/models/
+protocols/outcomes stay immutable.
