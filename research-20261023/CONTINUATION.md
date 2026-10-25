@@ -1,4 +1,4 @@
-# Current handoff — 25 October 2026: charging recourse weakens route-label story
+# Current handoff — 25 October 2026: static mechanism complete; resource caller DRAFT
 
 Worktree /Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017; branch
 codex/ml-prediction-20261017. Read this first, then only current compact receipts
@@ -54,27 +54,75 @@ cohort or theorem. The first formatter passed but optional stats aliases were
 empty; it is immutable. Diagnosed completeness export used actual worker fields
 under a separate prospective source/command/review, without any native rerun.
 
-## Next useful action — static operational mechanism, then design
+## Current static package and exact next action
 
-Read NEXT_RESOURCE_STRUCTURE_DECISION.md. Begin source-only with the necessary
-fixed-path charging availability/resource interval/SOC/copied-QP constraints to
-formulate a falsifiable route-flexibility/feasible aggregate-load opportunity
-hypothesis. This is distinct substantive source analysis, not another identity/
-copy/hash/controller audit or recreation of prior notes. No new rows/plans,
-case generation, inference, fitting or native work for this static step.
+research-20261025/route_resource_mechanism is COMPLETE source-only:
+FIXED_ROUTE_STRUCTURE.md, LOAD_SET_SANDWICH.md, MECHANISM_REVIEW.md (PASS),
+CLASSICAL_CONTROL_DESIGN.md, STUDY_DECISION.md and STUDY_REVIEW.md (PASS).
+Do not recreate these notes or repeat the source analysis/audits. No original/
+owned rows/plans, case generation, imports, hashes, tests, replay or solver work
+occurred in this package. Numerical-process accounting below is unchanged.
 
-Ask when route-dependent access intersects binding resources versus when
-charging recourse washes out membership differences; separate intrinsic energy
-from timing opportunity. Small point gaps do not prove load-set equality.
-Classical load-set identity/dominance reasoning is not a new theorem. A future
-controlled small experiment varies one justified resource axis under a fixed
-selection rule ignoring favorable10018 outcomes, with competent classical routing
-plus direct charging, charging-only and feasible operational references. Preserve
-infeasible/failed/late/missing outcomes, no repair or search until ML wins.
-Freeze exact cases/input-field authority/physical change/source/budget/command/
-fresh namespace after narrow review before any new computation. This direction
-is NOT a manifest. Stop/redirect if no important operational mechanism survives
-conventional optimization; do not force learning or run full79 automatically.
+Source mechanism: fixed route ideal grid energy is route consumption/efficiency;
+equal fleet is not equal energy. Source generator defines all service return
+by851 before common terminal opening1080/deadline1800; this is SOURCE-only,
+not newly verified stored-row truth. Common terminal recourse supplies a feasible
+load subset only with appropriate per-vehicle no-midday-SOC/headroom and enough
+total capacity. A coarse load relaxation supplies an outer set. Equal operations/
+energy plus relaxed optimum attainable in the common terminal subset implies
+equal ideal fixed-route value at that tariff; this is classical sandwich logic,
+not a new theorem or certificate from old native points. Optional daytime
+charging can lower quadratic cost even without SOC need. Binding power is
+neither necessary nor sufficient for tariff-sensitive route value, and tightening
+power does not imply the route gap grows monotonically.
+
+A source1 sufficient condition is E<=4p at effective p<=90: uniform charging in
+the four cheap terminal hours has marginal<=.20 versus noncheap .30; under the
+physical terminal assumptions it closes the ideal sandwich. Symbolic ceilings
+360/180kWh for90/45 are NOT claims about actual groups. Flat source0 can still
+reward earlier spreading. Data/solver evidence is still required for mechanisms.
+
+STUDY_DECISION selects next NEW development design: four already exposed first-
+stratum bases10001/10006/10009/10005; grid90/45 ONLY, all other physical resources/
+trips/prices fixed; original source0 topology reference, same exact fleetN across
+arms/levels. Eight fresh full-matrix/all-route-binaries-fixed feasibility-prior
+acquisitions;32 active decisions =4groups×2resources×2tariffs×(fixed-routeQP or
+full-graph classical2-tangent-routing→QP). No fit/models/CoverCA1 adaptation:
+frozenCover rejects20/28, old density objective is fleet-only, so neither is a
+qualified economic routing comparator here. Full-graph conventional control
+must earn reported reliability; not a claim of globally strongest classical.
+
+NEW prospective envelope4500CPU/7200wall,dispatch4140/closure360,preflight120,
+final120CPU/180wall,40workers×hard90,one native thread/observed5GiB. Native52/
+parent-before-Popen final60. Adaptive firstnativecut17.5,second35,sharedrouting35;
+first extraction may use remaining35, second only with new tangent from admitted
+first candidate; then one QP through52/admission60. Zero+valid common-prior load
+initial tangents. Acquisition one zero-price linear feasibility/operations solve.
+If reference prior fails, fixedQP missing but adaptive cold still eligible; no
+old90→45 clipping/retiming/lift, failure is not infeasibility. Costs/components
+primary; optional fixed E_ref is originalsource0 witness mean electricity under
+two original tariffs at90, not oldEbar/warmE0. No learned promotion gate.
+
+STATIC implementation is authorized and underway in NEW resource_recourse:
+- /root/approved50_bindings owns worker.py,classical.py,WORKER_NOTE.md.
+- /root/approved50_runners owns run.py,OWNER_NOTE.md.
+They may only read/edit their new files; no imports/compile/hash/tests/probes/
+data/generation/solves/commits/newagents. Check ACTUAL agent state before acting;
+no numerical worker exists. Parent has NOT reviewed these DRAFT implementations.
+Owner must refuse data/dispatch until a future LAUNCH.json explicitly says
+modeFROZEN/review_dispositionPASS; no launch manifest exists now.
+
+Next finish these static drafts, then parent inspects only the stable new API/
+constructor/tangent/admission/accounting delta, resolves mismatches, performs one
+focused integration review and freezes exact input/field/source/command/fresh
+namespace before any numerical run. Do not repeat the mechanism/design review
+merely because code is absent. No row/plan access before that new freeze. The
+prospective design is NOT a numerical launch or an automatic retry. Keep all
+planned missing/failures and resource interactions undefined when operands absent;
+no available-only rescue, cap scanning, favorable10018 selection, fleet relaxation
+or forcing ML. Old unchanged witness is a no-solve reference only if independently
+valid in the declared variant; invalid schedule is not a valid fallback or proof
+of route infeasibility. Positive classical flexibility would not establish ML.
 
 ## Preserved results and restrictions
 
