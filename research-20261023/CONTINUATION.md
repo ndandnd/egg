@@ -78,6 +78,12 @@ While running, make one compact scoped owner/receipt check per wake; healthy
 state stays quiet. Do not edit sources or finalize. Useful STATIC scientific
 design can continue without retuning this cohort from partial outcomes. No
 extra generation, scoring, fitting or solver job.
+Static interpretation package is now COMPLETE at interpretation-plan/README.md:
+POST_STUDY_DECISION_MAP, MATCHED_TARIFF_BLIND_DESIGN and
+RESTRICTION_SEARCH_INFORMATION. Prepared without partial outcome reads; no
+current criteria changed and no future job is authorized. Do not recreate these
+notes or restart their agents routinely. Use them after the frozen finalizer;
+standard algebra is not a new theorem and a blind tie is not an equivalence proof.
 After exit, collect the complete master receipt and external meter; preserve
 all failed/late/missing/unattempted cells and spending. Diagnose a fatal stop
 before expansion. THEN run the exact frozen finalizer command ONCE from LAUNCH,
