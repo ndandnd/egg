@@ -1,4 +1,4 @@
-# Current handoff — 25 October 2026: static mechanism complete; resource caller DRAFT
+# Current handoff — 25 October 2026: resource-recourse attempt01 RUNNING
 
 Worktree /Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017; branch
 codex/ml-prediction-20261017. Read this first, then only current compact receipts
@@ -103,26 +103,39 @@ old90→45 clipping/retiming/lift, failure is not infeasibility. Costs/component
 primary; optional fixed E_ref is originalsource0 witness mean electricity under
 two original tariffs at90, not oldEbar/warmE0. No learned promotion gate.
 
-STATIC implementation is authorized and underway in NEW resource_recourse:
-- /root/approved50_bindings owns worker.py,classical.py,WORKER_NOTE.md.
-- /root/approved50_runners owns run.py,OWNER_NOTE.md.
-They may only read/edit their new files; no imports/compile/hash/tests/probes/
-data/generation/solves/commits/newagents. Check ACTUAL agent state before acting;
-no numerical worker exists. Parent has NOT reviewed these DRAFT implementations.
-Owner must refuse data/dispatch until a future LAUNCH.json explicitly says
-modeFROZEN/review_dispositionPASS; no launch manifest exists now.
+The NEW resource_recourse source/protocol/LAUNCH was frozen and pushed at
+b9bb166e, then attempt01 launched ONCE. Managed exec session27946 RUNNING at last
+check. Read resource_recourse/RUNNING_HANDOFF.md first for exact live state. All
+bounded static agents complete; no other numerical owner. Never resubmit an
+attempted/interrupted/unreceipted task or guess/reuse PIDs. Check actual managed
+session and durable receipts next wake, not historical owners.
 
-Next finish these static drafts, then parent inspects only the stable new API/
-constructor/tangent/admission/accounting delta, resolves mismatches, performs one
-focused integration review and freezes exact input/field/source/command/fresh
-namespace before any numerical run. Do not repeat the mechanism/design review
-merely because code is absent. No row/plan access before that new freeze. The
-prospective design is NOT a numerical launch or an automatic retry. Keep all
-planned missing/failures and resource interactions undefined when operands absent;
-no available-only rescue, cap scanning, favorable10018 selection, fleet relaxation
-or forcing ML. Old unchanged witness is a no-solve reference only if independently
-valid in the declared variant; invalid schedule is not a valid fallback or proof
-of route infeasibility. Positive classical flexibility would not establish ML.
+Parent SOURCE_REVIEW.md and independent INTEGRATION_REVIEW.md passed before
+launch. Two source-only prelaunch mismatches (canonical launch review key and
+consumed helper inventory) were fixed before any numerical attempt. Owner and
+worker enforce FROZEN/PASS metadata; owner binds exact40 assignments/resources.
+No old physics/helper/model or source namespace was edited. Native compatibility
+and scientific value remain unestablished until results; source PASS is not proof.
+
+All SOURCE_FILES, LAUNCH/PROTOCOL, STUDY_DECISION and input tables are FROZEN
+while owner runs. No extra checks/tests/compile/imports/hash audits, case
+construction, inference/fitting/solver/replay, new owner or source edits. Main
+receipt remains incomplete until publication; process-time.txt final only on
+exit. Healthy running stays quiet; partial outcomes cannot retune the study.
+
+Only after owner closes: collect compact complete master receipt and final
+external process meter, preserve every8acquisition/32active state/failure and
+spend, diagnose fatal stops without retry. If useful, freeze one compact readout
+source/command and execute ONCE within already selected60CPU/90wall inside total/
+remainingclosure; no raw data/scoring/solver/replay. Review all16 blocks/eight
+interactions, strict method/QP/route-change versus operational fallback flags,
+missing denominators, actual opportunity diagnostics and energy/ops/timing
+channels. Administrative passed is not all priors/QPs/methods qualified. No
+available-only rescue, source0 timetable quality assumption, cap scanning,
+favorable10018 selection, fleet relaxation, new models or automatic expansion.
+A failed old schedule or constructor is not fixed-route infeasibility. Positive
+classical flexibility would not establish learning value. Closed accounting
+below is the BEFORE-package prefix; current in-progress spend not added yet.
 
 ## Preserved results and restrictions
 
