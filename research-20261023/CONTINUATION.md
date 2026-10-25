@@ -1,165 +1,134 @@
-# Current handoff — 25 October 2026: schedule coherence CLOSED; route value next
+# Current handoff — 25 October 2026: charging recourse weakens route-label story
 
-Worktree: /Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017
-Branch: codex/ml-prediction-20261017. Read this first, then only current compact
-receipts/protocols named below. Check active agents and owned workers; never
-duplicate attempted work. Manage bounded GPT-6.1 Sol agents with short handoffs.
-Human practical routine budget authority exists; no approval answer is pending.
-Flag unusual commitments/major changes, not tiny routine budgets.
+Worktree /Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017; branch
+codex/ml-prediction-20261017. Read this first, then only current compact receipts
+and protocols. Check actual active agents/owned workers; never duplicate attempted
+work. Use bounded GPT-6.1 Sol agents with short handoffs, parent scientific decisions.
+Human practical routine resource authority exists; no budget answer pending.
 
-## Latest completed evidence — no rerun
+## Latest package CLOSED — do not repeat
 
-catalog_coherence/attempt01 launched ONCE after source/protocol commit3cbb55dd
-was pushed. Managed session36460 CLOSED exit0. Once-only decimal formatter also
-CLOSED exit0. No numerical worker remains; all bounded agents completed. Read
-catalog_coherence/RESULTS.md, INTERPRETATION_REVIEW.md,
-FINAL_RESOURCE_RECEIPT.json and NEXT_TOPOLOGY_CHARGING_DECISION.md. Never repeat
-this replay/coherence/formatting pass, its hash/source audit or old sessions.
+research-20261025/topology_charging/attempt01 launched ONCE after source/protocol
+e637b623 was pushed. Managed owner10363 CLOSED exit0; first compact readout and
+separate actual-field economic export each CLOSED exit0 once. No numerical
+worker remains; bounded implementation/review agents complete. Read RESULTS.md,
+INTERPRETATION_REVIEW.md, FINAL_RESOURCE_RECEIPT.json and
+NEXT_RESOURCE_STRUCTURE_DECISION.md in that folder. No old session polling,
+preflight/hash/replay/QP/display repeat or automatic expansion to79 pairs.
 
-All80 fixed FIT cases/159 source witnesses were admitted;159/159 original plans
-passed unchanged nr.replay_native. All79 complete pairs had strict own-context
-full-schedule preference (+,-) at the frozen1e-6 COST-unit reporting band. No
-other sign bin, own-context domination or positive raw R0/R1 occurred. Both48
-changed-membership and31 same-membership strata show that reversal in every
-pair. Group10037 stays source1-only, replay bookkeeping but null comparison.
+Eight exposed FIT groups/32 route×tariff cells: six different-route pairs and
+two same-route controls;20/28trip strata. Frozen ordered bases10001,10002,10018,
+10006,10009,10010,10015,10005. Metadata selection ignored costs; no replacement.
+All32 attempted, parent timely and qualified with one Method0/seed17 optimize.
+All32 native status2/sourceguards/copy/physical admission; zero beyond-agreement
+candidate/fallback discrepancy. Thirty candidate paths directly compared; two
+helper-admitted fresh candidates had fallback retained and use prospectively
+reviewed unique-path source inference, not a claimed caller replay of an
+unreturned candidate. Candidate C/fallback B/retained U/native N stay separate.
 
-Across79 groups, mean/median own-source advantages were6.5261/6.0491 generator
-cost units for source0 and32.5210/37.9361 for source1. Absolute simulated units,
-not empirical money, bill percentages or learned gains. Exact represented-value
-Fraction costs/signs and components in receipt; DISPLAY.json only rounds existing
-statistics. The specific concern 'the other observed full schedule already
-beats its own-context label' is absent in this two-witness catalog. It is not
-full-space teacher quality, global regret, charging optimality or ML information.
+All8 unchanged full-schedule pairs originally had own-tariff (+,-) reversal.
+After separate charging reoptimization, changed-route bases10001/10002/10009
+returned point differences<=1.3e-14 under either tariff. Base10018 retained
+numerical route1-minus-route0 reversal(+.144435,-1.439997);10010(.970338,.624514)
+and10015(1.386232,2.132219) had route0 numerically cheaper under both. Same-route
+10006/10005 had exact represented candidate difference0 at each tariff and no
+above-agreement control discrepancy. These are feasible numerical POINTS,
+not exact ideal ties/orderings, population rates or learned effects. All32 native
+bound attrs finite, but no justified exact physical optimization-gap interval
+was constructed. Mathematical ordering stays UNRESOLVED; source agreement and
+OptimalityTol are not objective-gap bounds. Old decimal1e-6 fixed-column band
+was not reused as QP accuracy evidence. No full-space certificate.
 
-Even31 identical connection targets have strict contextual schedule preferences.
-Price response can exist without changed membership; route-vs-charging value
-is UNRESOLVED. Canonical vehicle-path equality has not yet been checked. Do not
-infer a controlled charging-only effect, price-causal routing, matched teacher
-RNG/quality or trained tariff-information value. Current models remain unpromoted.
+Within-group mean(F-U)/same original Ebar over each four planned cells ranges
+2.2278%–11.8043%; absolute means4.965207–13.526942 cost units. Full economic
+components in ECONOMIC_EXPORT.json, original exact rationals in owner receipt.
+Ebar is original four-witness×tariff electricity mean, not warmE0, optimized bill
+or energy. Do not attribute fallback decomposition to an unreturned candidate.
+Eight TRAIN groups20/28 do not causally explain separate warm40/80 outcomes.
 
-Unchanged physical replay used original load/ops assertions, TIME_TOL_MIN1e-7
-and ENERGY_TOL1e-6. Costs use recomputed load/ops and exact source policy
-nh.rational(ops)+nh.supply(validated market,load), no float-total downcast.
-Fixed-column cost tie band is distinct from physical tolerances. No repair,
-clipping, QP, solver, generator, model load or new label was used. Mixed TRAIN
-bytes hashed once; transient JSON routing/nonFIT immediate discard explicitly
-recorded. No nonFIT label analysis, old model outer performance or sealed bank.
+Scientific concession: different binary memberships plus coherent stored-schedule
+price preferences do not establish economically valuable tariff-dependent route
+choice after competent charging recourse. Do not automatically train/relabel.
+Keep the one remaining numerical reversal as a lead, not an outcome-selected
+cohort or theorem. The first formatter passed but optional stats aliases were
+empty; it is immutable. Diagnosed completeness export used actual worker fields
+under a separate prospective source/command/review, without any native rerun.
 
-## Next justified package — limited topology charging pilot, not training
+## Next useful action — static operational mechanism, then design
 
-NEXT_TOPOLOGY_CHARGING_DECISION.md is a prospective direction, NOT a launch
-manifest. Do not dispatch all79 groups or refit merely because this check passed.
-Question: does the two-route preference remain after charging is independently
-reoptimized on each fixed topology under both source tariffs?
+Read NEXT_RESOURCE_STRUCTURE_DECISION.md. Begin source-only with the necessary
+fixed-path charging availability/resource interval/SOC/copied-QP constraints to
+formulate a falsifiable route-flexibility/feasible aggregate-load opportunity
+hypothesis. This is distinct substantive source analysis, not another identity/
+copy/hash/controller audit or recreation of prior notes. No new rows/plans,
+case generation, inference, fitting or native work for this static step.
 
-Proposed pilot:3 differing-membership groups +1 same-membership control PER
-declared20/28-trip TRAIN size;8 groups/32 route×tariff cells, seed17/Method0.
-Within each of4 metadata strata sort base_id ascending and take the first3/1,
-ignoring all cost magnitudes. Use the already established pure assignment
-metadata only to materialize/freeze exact IDs once before future QP outcomes.
-Check actual stored trip count/profile matches planned size before dispatch;
-shortage/mismatch stops, no quota adjustment or group replacement. This is an
-exposed FIT diagnostic, not representative population or confirmation evidence.
-Canonicalize each witness's ordered trip/movement paths up to vehicle-number
-permutation; do not assume same membership alone establishes route identity.
-Preserve both same-route control calls rather than adaptively reallocate budget.
+Ask when route-dependent access intersects binding resources versus when
+charging recourse washes out membership differences; separate intrinsic energy
+from timing opportunity. Small point gaps do not prove load-set equality.
+Classical load-set identity/dominance reasoning is not a new theorem. A future
+controlled small experiment varies one justified resource axis under a fixed
+selection rule ignoring favorable10018 outcomes, with competent classical routing
+plus direct charging, charging-only and feasible operational references. Preserve
+infeasible/failed/late/missing outcomes, no repair or search until ML wins.
+Freeze exact cases/input-field authority/physical change/source/budget/command/
+fresh namespace after narrow review before any new computation. This direction
+is NOT a manifest. Stop/redirect if no important operational mechanism survives
+conventional optimization; do not force learning or run full79 automatically.
 
-Reuse the unchanged generic helper research-20261025/warm_replication/qp_control.py:
-solve(case,a,b,prior_plan,17,native_deadline,admission_deadline,check,record).
-Static source inspection found no scale-name/40/80 guard in helper/builder, so
-stored20/28 NativeCases are not excluded. Actual build/copy/license/extraction
-compatibility remains unqualified. Do NOT reuse the full warm campaign launcher:
-it enforces scale cohort, generates cases and loads scores. Implement only a
-thin stored-case caller and existing bounded worker/receipt/resource path; no
-new controller/monitoring framework or repeated old engineering matrices.
+## Preserved results and restrictions
 
-Before numerical work freeze exact cohort/fields/input pins/source/helper/import
-closure, protocol, command, namespace and practical resource/dispatch policy.
-Direction<=1CPUh/2wallh; one native worker/thread, observed5GiB. Per-cell60s parent
-clock before process creation, native cutoff52, extraction/replay/observation paid.
-A conservative proposed allocation3480CPU includes32×90 worker ceilings plus
-preflight/finalization/cleanup; actual budget/admission must be chosen and frozen.
-Human routine authority already exists, no additional budget answer is pending.
+warm_replication/attempt01, finalizer/export CLOSED once:16 valid priors/384
+operational endpoints;371 strict successes+11 retained intermediates after later
+failures+2prior crash fallbacks. GNN/GNN_day50607/40/seed73 rc-6/reaped, stderr
+empty/causeUNKNOWN; no retry/exclusion. All48 strong Method0 QPs qualified.
+BOTH families DO_NOT_CONTINUE: GNNvsCover .0386688%E0,CatBoost .1997028%E0 below
+required>1%E0 despite positive7/8 medians. E0 priorlate ELECTRICITYcost,not bill/
+energy. No pooling old4groups/familyselection/loweredgate. GNNvsQP8.7352508%E0,
+unchanged23.4267235,random.1706251,conditionalfull3.4760564; all controls retained.
+GNN_day inference conditioning is not comparably trained tariff blindness.
 
-Each cell permits one QP optimize only, Method0/seed17/thread1 and unchanged
-physics, rows/bounds/objective, extraction and independent full-case replay.
-Timely NEW physical candidate/nativeOPTIMAL/copy/readback/canonical paths required
-for QP qualification; fallback/provisional availability never substitutes.
-Record physical candidate bill, retained fallback bill, raw native point and
-supported fixed-route bound separately. Helper true_bill_exact may be fallback
-while candidate_bill_exact is distinct. Do not silently call a cheaper fallback
-an optimal-QP witness. Beyond-guard candidate/fallback inconsistency is a
-qualification discrepancy, not a resubmission or free improvement.
+Catalog coherence CLOSED:80 FIT cases/159 unchanged physical witnesses/79 pairs,
+all original full-schedule (+,-),48different31same membership;10037 source1-only.
+Zero two-witness own-context gap is not teacher global optimality. Earlier
+metadata/target audit remains CLOSED:80FIT/79pairs/159sources,48changed31same,
+flexible median Hamming1/160 vs positive-union disagreement2/13. Cat pins pool;
+GNN historical lineage unknown. Foura-derived features11–14 propagate through
+GNN; decoder-only masking leaks. Models receivea/notb. Keep current/October17
+cohorts development; variants grouped, preprocessing/selection inner-only.
+Existing MATCHED_TARIFF_BLIND_DESIGN applies later only if value question survives.
 
-FIRST source-review actual objective-agreement/quality/OptimalityTol/ObjBound
-availability before freezing route-preference classification. The earlier exact
-fixed-column1e-6 band is NOT a guarantee of numerical QP value accuracy. Use
-justified numerical intervals where available; otherwise label differences
-unresolved within optimization/admission uncertainty. Unsupported bounds remain
-null, never full-space certificates. Same canonical routes have a common ideal
-value; above-guard discrepancies are unresolved/failure, not price preference.
-Keep planned8/32 and6changed/2controls denominators, all failures/late/missing
-cells, no available-only promotion or retries. Original-witness Ebar stays fixed;
-F-V charging gains are operational and do not by themselves prove QP success.
-
-The exact candidate data remain the two pinned TRAIN tables in the completed
-receipts (cases faf0428f79744a9e26fa04e80baec4734443e3cfe538e404d74f41f626a294d6;
-sources7c5fab4c648b27fda5e9ecc55cd418f0a066c8e46196bc31d5f9405e5a6409d5)
-under /Users/nadan/Documents/ChatGPT/egg/claude-local/20260930-route-pool128-v3/.
-Use completed metadata/target/coherence receipts for FIT IDs/strata. Explicit
-whole-table byte hashing and routing-only transient TRAIN decode remain; no
-nonFIT semantics or other outcome/shard path. Hash consumed inputs once in the
-metered batch, no duplicate full hash audits. Do not open plan values again before
-the new concrete input/field/source/resource/command freeze.
-
-## Preserved ML result and broader scope
-
-warm_replication/attempt01, finalizer/export are CLOSED.16valid priors and384
-operational endpoints:371strict successes+11retained intermediate endpoints after
-later method failures+2prior fallbacks. GNN/GNN_day50607/40/seed73 returned-6,
-reaped, stderr empty/causeUNKNOWN. Preserve paid failures; no retry/exclusion.
-All48 strong Method0 QPs qualified. BOTH families DO_NOT_CONTINUE: GNNvsCover
-mean0.0386688%E0,CatBoost0.1997028%E0, below required>1%E0 despitepositive7/8
-medians. E0 is common prior late ELECTRICITYcost, not totalbill orenergy. Cat
-stays secondary; no pooling old4groups, family selection or lowered gate.
-GNNvsQP8.7352508%E0,unchanged23.4267235,random0.1706251,conditionalfull3.4760564;
-all controls retained. GNN_day conditioning is not comparably trained blindness.
-
-Eight warm DEVELOPMENTbasegroups,not48independent timetables. Fixed fleet prior
-is feasible,not proven day-economic optimum; power180/270kW scales with size.
-Full means all movements conditional on fixed fleet,not original certificate.
 Integrated system cost c+a'L+.5L'BL is NOT atomic payment c+a'L+L'BL. Generic
-pruning/recovery/convex-hull pricing is prior art. No novelty, significance,
-generalization, learned information or publication readiness from these checks.
-Manuscript deferred; no automatic new model families or literature survey.
+pruning/recovery/convex-hull pricing prior art. No novelty/significance/generalization/
+useful prediction/publication readiness from source tests/labels/classification.
+Warm8basegroups are not48independent timetables; fixed fleet prior feasible not
+day-economic optimum; power180/270 scales with size; full solver conditional on
+fleet not original certificate. Manuscript deferred; no more literature survey/
+model-family expansion. Density/sparsepool/greedy/fleet/price/hull/oldQP/readouts
+complete, not routinely repeated. Responsive-supervision deferred/unqualified,
+all failures/sources/accounts preserved; do not revive infrastructure.
 
-Metadata/target audits remain CLOSED:80FIT/79pairs/159sources,48changed31same;
-flexible median Hamming1/160 versus positive-union disagreement2/13. Cat pins the
-pool; historical GNN lineage remains unknown. Foura-derived feature columns11–14
-propagate through GNN; decoder-only blindness leaks. Models seea/notb. Keep
-variants grouped and fit preprocessing/selection inner-only; current/October17
-cohorts development. Use MATCHED_TARIFF_BLIND_DESIGN later if justified. Earlier
-density/sparse-pool/greedy/fullfleet/price/hull/QP/readouts remain complete, not
-routinely repeated. Old responsive-supervision work stays deferred/unqualified.
+## Accounting, backup and original Doc
 
-## Latest accounting and documentation
+Latest FINAL_RESOURCE_RECEIPT: StageA.01CPU/.03elapsed, owner18.81/20.59,
+compact.02/.04,economicexport.03/.04; displayed package18.87CPU/20.70elapsed-sum,
+retained charge18.95CPU, within3600CPU/7200wall/3240dispatch/360closure. Parent
+observedRSS41,533,440B; worker max95,223,808B; max parent endpoint.980307s. All
+children reaped. Observations are not instantaneous memory containment proof.
+Closed displayed process sums19660.14CPU/20248.44elapsed-sum; retained tracking
+19660.30CPU. Not exact sessionCPU or continuouselapsed. Child rows already in
+owner meter; StageA carried once; no doublecount. Separate legacyconditionalguard
+2546.091499549272; actual oldreviewCPU UNKNOWN. Preserve all charges/failures/
+unknowns; no reset/refund/restored old-cap compliance. Hash consumed inputs once
+inside metered work, no duplicate audits; record new computation commands/budgets.
 
-catalog_coherence/FINAL_RESOURCE_RECEIPT.json: main2.59CPU/2.91elapsed; decimal
-format.03/.10; total2.62CPU/3.01elapsed-sum, retained phase charge2.66 for rounding.
-Main observed prepubRSS64,651,264B. Displayed closed process sums19641.27CPU/
-20227.74elapsed-sum; retained tracking19641.35CPU. Not exact sessionCPU/continuous
-elapsed or instantaneous memory proof. Prior packages/child rows already inprefix,
-never add twice. Legacy conditionalguard2546.091499549272 separate; actual old
-reviewCPU UNKNOWN. Preserve all charges/failures/unknowns; no reset/refund or
-restored historical compliance claim.
-
+Original Google Doc latest section[249019,252221),all8images retained;
+topology_charging/GOOGLE_DOC_APPEND.json. Do not duplicate that/older25October/
+sixOctober1entries. Append only consolidated verified science, not preparation.
 Back up meaningful milestones to origin/codex/ml-prediction-20261017 with explicit
-AUTHOR AND COMMITTER Nathan Cho <nathan.cho2013@gmail.com>, never rewrite history.
-Original Google Doc newcoherence section verified[246084,249019),all8images
-retained; catalog_coherence/GOOGLE_DOC_APPEND.json records it. Do not duplicate
-that,older25October or sixOctober1entries. Append only later consolidated science,
-not preparation. Leave exact worker/account/next-action handoff; unrelated schedules
-staypaused. No merge/submission/private publication/resetcredits. Sealed
-DEV/TEST/A6/B3/confirmation/GIROCLOSED. No cluster access/monitoring/jobs, leave
-Unicorn to v2g. Notify only substantive findings/importantfailures/majordecisions
-or review-ready artifacts; routine preparation/checks stayquiet.
+AUTHOR AND COMMITTER Nathan Cho <nathan.cho2013@gmail.com>, never rewritehistory.
+Leave concise worker/account/next-action handoff. Sealed DEV/TEST/A6/B3/confirmation/
+GIRO CLOSED; no cluster access/monitoring/jobs, leave Unicorn to v2g. No merge,
+submission,private publication/resetcredits. Keep unrelated schedules paused.
+Notify only substantive findings/important failures/major decisions or review-ready
+artifacts; routine preparation/checks/healthy running stays quiet.

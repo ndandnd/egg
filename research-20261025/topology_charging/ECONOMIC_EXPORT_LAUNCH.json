@@ -1,0 +1,16 @@
+{
+  "scope": "Once-only actual-field economic/qualification export after diagnosed first-formatter omissions",
+  "decision": "READOUT_COMPLETENESS_DECISION.md",
+  "inputs": [
+    "attempt01/receipt.json",
+    "COMPACT_READOUT.json"
+  ],
+  "output": "ECONOMIC_EXPORT.json",
+  "cpu_s": 30,
+  "wall_s": 60,
+  "inside_package_cpu_s": 3600,
+  "inside_closure_cpu_s": 360,
+  "command": "/usr/bin/time -p -o research-20261025/topology_charging/economic-export-time.txt .venv-local/bin/python research-20261025/topology_charging/economic_export.py > research-20261025/topology_charging/economic-export-stdout.txt 2> research-20261025/topology_charging/economic-export-stderr.txt",
+  "automatic_retry": false,
+  "review": "PASS: ECONOMIC_EXPORT_REVIEW.md"
+}
