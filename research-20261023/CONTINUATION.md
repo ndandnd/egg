@@ -1,124 +1,95 @@
-# EGG current handoff —24 October2026: qualification stopped; budget decision required
+# EGG current handoff —24 October2026: resumption approved; metadata-monitor correction
 
 Worktree /Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017; branch
-codex/ml-prediction-20261017. Use bounded GPT-6.1 Sol agents and short handoffs.
-All agents done. No active source, metadata, native worker or owner. No solver,
-training job, actual fixture freeze, cluster work or sealed/private data access.
-No new ML or economic result. Manuscript deferred; long-term FT50 aspiration.
+codex/ml-prediction-20261017. Use GPT-6.1 Sol bounded agents/short handoffs. Check
+active agents and exact worker receipts first. No computational worker is active;
+no numerical solver worker or training job launched in this resumption. No cluster
+or sealed data. Manuscript deferred; long-term FT50 remains aspiration, not status.
 
-## Read first: resource-accounting incident
+## Authority and operative accounting
 
-Read research-20261024/CF1_HASH_REVIEW_BUDGET_INCIDENT.md and
-CF1_HASH_REVIEW_BUDGET_REVIEW.md, plus
-cf1-hash-review-accounting/{accounting.json,budget-proposal.json,
-recovered-event-metadata.json,unmetered-review.json}. These supersede prior claims
-that the whole source phase was within budget. Do not reread broad history or
-run another proof-hash audit.
+Human replied: “you can raise it to whatever doesn't hinder our research. keep
+the ball rolling”. Pending-budget STOP is superseded. Choose sensible prospective
+routine budgets; flag unusual commitments or major scientific changes. No repeated
+micro-approval question is pending. Current TOTAL3000/dispatch2820/shutdown180,
+one thread/5GiB, only inspected synthetic50997/40 CF1seed17/day/no-fault. Package
+275 from original accepted2426.723449631016 guard ends2701.723449631016.
 
-Independent preflight reviews spawned per-file shasum processes in two parallel
-shell loops. Their CPU was unmeasured and poll gaps prevent exact duration recovery.
-Reported waits alone exceed the20s source allowance. The source-test receipts
-are intact, but their closure provisions do not cover these external reviews.
-Parent recovered only scoped task-event metadata; child durable-thread reads
-were unavailable. No conversation contents were copied into the recovery packet.
+CURRENT authoritative account:
+research-20261024/cf1-resumption/failed-monitor-accounting.json
+charged_cpu_s2490.175941173126. Retain every failure and all charges. The original
+unmetered-review actual CPU is UNKNOWN; the accepted guard is conditional
+conservative reconciliation, not measured CPU or a restored old-cap compliance
+claim. CF1_HASH_REVIEW_BUDGET_INCIDENT.md and old evidence stay immutable. Do not
+reread broad history/STATE_MAP or repeat accounting/proof audits.
 
-Conditional conservative reconciliation: whole review windows49.347 and32.931s,
-plus2s guard each, times10 single-thread process slots (two loops of shell/jq/
-hasher structure) =862.780s. Add25s conservative incident/handoff closure, remove
-no prior charge. Prior measured/reconciled source carry1538.9434496310162 becomes
-GUARDED2426.723449631016. This is NOT measured hardware CPU. Actual CPU/RSS remain
-unknown; assumptions and incomplete actual observations are explicit. No claim
-of compliance with prior caps or unconditional recovery of exact spend.
+## What actually happened
 
-The approved1920 total/1740 dispatch/180 shutdown remains the authority. The
-conservative guard exceeds it; original20s source and175s campaign cannot fund
-further execution. All checks/metadata/numerical work are STOPPED pending a new
-human budget decision. Do not silently raise limits, reset the ledger, use a lower
-old account, or repeat the already approved32-minute question.
+Read CF1_RESUMPTION_RESULTS.md for consolidated evidence; details only as needed.
+- Source04 passed20 tests/61 subtests; exact sources preserved. v5 metadata freeze
+  failed at5s work endpoint, PGID4100 reaped/absent; no lock/native. This exhausted
+  startup work allowance, not a general process-monitor diagnosis.
+- Source05 passed21/61. v5b real metadata freeze PASSED, elapsed7.833760s,
+  charged11.772027s; PGID6971 reaped/absent without cleanup diagnostics. Real
+  source/fixture/environment/library bindings and receipt closure verified.
+- Parent postfreeze finalizer wrote hard_ceiling_s instead of required
+  hard_total_ceiling_s. Actual controller7512 rejected it before output/precharge/
+  native; owner gate false. Preserve wrong record, owner root/receipt/logs. Owner
+  observation-complete flag staysfalse; external conservative reconciliation is
+  separate, with full7.5s entry provision plus2s closure, not a passed owner run.
+- Corrected finalizer/launcher passed one static consumer-field review. Source06
+  PASSED21 tests/61 subtests in1.10s, PGID8477 closed, unchanged bytes.
+- v5c metadata freeze FAILED during15s work because process_snapshot timed out
+  after0.239720250479877s; PGID8668 reaped/absent. No lock/owner/native worker.
+  This is host-monitor latency distinct from prior5s work exhaustion. Failed
+  phase9.735511875913858s and source06 carry are included in current account.
 
-Concrete proposed NEWTOTAL50CPUminutes =3000/dispatch2820/shutdown180. One fresh
-175s package from the retained guard would end2601.723449631016 below2820, for
-only the same inspected50997/40 CF1 seed17/day/no-fault mechanism. Human approval
-has NOT been received. Proposal is not a launch manifest or source qualification.
-No new timetable/model/training/comparison/cluster/sealed-data scope is included.
+Old source01/02 remain failures; corrected03 was NEVER submitted and cancelled.
+V4 stopped before native due canonical freeze-charge mismatch; preserve it. Do
+not resume failed namespaces, rerun old matrices or silently retry commands.
 
-Future byte verification must use the EXISTING metered single-process Python
-batch inside preflight/final checks. Peer review is static diffs/fields/scope,
-not duplicate external hash loops. Any additional computational check needs its
-own recorded command and elapsed/CPU budget. Do not add another validation
-framework or unmetered audit while resolving this incident.
+## Next bounded package
 
-## Preserved source work and stopped native history
+Read CF1_METADATA_MONITOR_DIRECTION.md, current account, then active agents/new
+prospective receipts. Implement NEW source/metadata wrappers only: sample timeout1s,
+complete-sample gap1.25s clipped to absolute work deadline; retain0.05polling,
+ownership, sampled RSS5GiB, CPU/memory-pressure/cleanup checks. Record sampling
+limits; sampled RSS does not prove an instantaneous memory bound. Preserve
+production native monitor/controller/owner freshness and60/61/62.5 admission/ACK
+clocks. Do not relax native policy in this package.
 
-- V4 stopped before ANY native worker due raw-versus-canonical freeze charge
-  mismatch. Preserve research-20261023/cf1-small-approved-v4 unchanged; no resume.
-  CF1_SMALL_APPROVED_ENTRY_DIAGNOSIS.md identifies the exact subtraction error.
-- Canonical helper, exclusive initializer and entry preparation have passed
-  limited source/metadata checks. No real CF1 mechanics follows from them.
-- New cf1_entry_repaired.py and cf1_entry_owner.py reuse original v4 ACK/analyzer
-  through restored serialized bindings; explicit roots,7.5s precharge, owner
-  handshake, final Popen permit and live funding/status guard are implemented.
-  Known runtime status age>0.25s fails closed, including slow finalization;
-  source-only tests cannot establish real timing/ownership qualification.
-- Source attempt01:26 failures,16 passed,36 subtests; fake OS/root lacked CPU
-  capacity. Preserve all bytes/receipts and CF1_V5_SOURCE_FAILURE_DIAGNOSIS.md.
-- Source attempt02:one macOS path-alias expectation failure,19 passed,61 subtests
-  in0.76s; PGID80495 absent/reaped, unchanged sources and complete cleanup.
-  Its original metered account is cf1-entry-repaired-checks/attempt02-accounting.json
-  with1538.9434496310162 and1111 proofs. That root omits the external reviews;
-  it must NOT replace the incident reconciliation as current carry.
-- Expected owner-root path was narrowly corrected with .resolve(); current checker
-  and fake passing source receipts identify attempt03. Production owner/capacity/
-  timing/funding guards were not weakened. Read CF1_V5_PATH_ALIAS_FIX.md only
-  if needed; later assertions in the failed fake-parent method remain unobserved.
-- Attempt03 never ran and has NO attempt directory. Its frozen design is CANCELLED
-  in cf1-entry-repaired-checks/attempt03-design/status.json because its carry/budget
-  is stale. Do not execute or reuse that command/design. Attempts01/02 remain
-  failures; source review is not a pass. All snapshots and costs are preserved.
+Fresh source07/native namespacev5d, same policy/protocol revision5 and one still
+unexercised case. New wrappers/helpers/source identity need exact metered manifest,
+static narrow deadline review, then affected source gate once. Source20 +metadata25
++entry7.5 +native62.5 +supervision45 +final30 reserved end2680.175941173126 fits
+existing package2701.723449631016. This direction alone is NOT a launch manifest.
+After actual passing source, complete carry reconciliation, actual freeze and
+correct hard_total_ceiling_s accounting, only the unchanged external owner may
+launch one native case. No automatic retry. Preserve all failed evidence.
 
-## Next action, conditional on the user's resource decision
+All hashing stays in existing metered single-process Python batch; static peers
+never duplicate full hash passes/per-file shell loops. Freeze qualified sources
+while workers run. Include startup/setup/replay/resources/finalization in charge.
+Source or metadata pass is not actual ownership/start/replay/ACK qualification.
+No new ML/economic result, cost improvement, speedup or full certification.
 
-Current output is a concrete budget/recovery proposal, not an experimental result.
-Until an explicit new approval: no test, hash loop, metadata freeze, inference,
-training or native run. Do not repeatedly investigate the same accounting issue,
-spawn review agents, poll an empty queue or ask duplicate questions.
+## Research and collaboration guardrails
 
-If approved, first record the human answer and acceptance/limits of the historical
-conservative reconciliation. Prepare a fresh source-bound resource design with
-correct current carry, global/package constants and exact commands/identities;
-never revive cancelled03 or failed v4. Keep unchanged native60/61/62.5 endpoints,
-one thread/5GiB, all old failures and no automatic retry. Execute only affected
-source checks under the metered batch, review complete receipts, then separately
-freeze the actual inspected fixture/library/environment and one-case launch.
-No comparison or training launch follows merely from source/model fit completion.
+Prioritize trustworthy replay/full recovery, strong charging-aware/constructive
+classical controls, matched complete budgets and independent timetable/regime
+validation, then justified model/data improvements. October17 evidence is
+DEVELOPMENT. 91.916% of matched80-trip savings vs one heuristic is vehicle-count
+component, not established tariff response. Generic learned pruning is prior art.
+Restricted/fixed-route bounds are not unrestricted certificates. Do not promise
+3–5x stabilization/top-K cure or journal readiness. Existing referee/literature
+reviews are preserved; no forced cross-field connections or repeated searches.
 
-## Preserved scientific direction and safeguards
-
-Prioritize trustworthy physical replay/valid incumbent retention, full unrestricted
-recovery, strong charging-aware/constructive classical baselines and matched
-end-to-end budget comparisons before justified model/data improvements. Generic
-GNN arc pruning has prior art. Existing80-trip savings are91.916% vehicle-count
-component versus one heuristic, not evidence of tariff responsiveness or novelty.
-October17 and initial20-group screens remain development, not final generalization.
-
-RECOVERY_ANALYSIS_CONTRACT.md describes an UNLAUNCHED192-decision pilot:6arms,
-8fresh synthetic development bases,3seeds; common price-blind/exactK rules and60s
-clock includes loading/scoring/search/repair/replay/finalization. Graph-v8 vsCA1
-primary, CatBoost/CF1 direct secondaries, random/cold references; CA1 seesa,b,
-learnersa, so unequal-input whole-method contrast. No registry/cohort generated.
-Group timetable variants, inner-only selection, sealed tests untouched. Missing
-outcomes are unknown, not opponent wins/ties; no population inference from seeds.
-Restricted/fixed-route bounds are not unrestricted full-problem certificates.
-
-REFEREE_ASSESSMENT.md preserves24Oct guidance: credible scaling and institutions,
-not promised3–5x stabilization gains or top-K elimination of indivisibility gaps.
-Historical0/176 applies ONLYb=.05 and includes unresolved transients. No protected
-A6/B3/confirmation or private GIRO access/publication. Leave Unicorn to v2g; no
-monitoring or job changes. No PR merge, journal submission or reset-credit use.
-
-Back up meaningful work to origin with Nathan Cho <nathan.cho2013@gmail.com>
-author AND committer, never rewrite history. Preserve branches/bundles. No routine
-Google Doc entry for engineering failures; preserve prior visuals/history and
-never repeat the sixOctober1 entries. Stay quiet on unchanged state; this budget
-incident requires user attention. Continue only authorized useful work, avoiding
-expensive idle polling or repeated diagnostics while awaiting the decision.
+Group variants; preprocessing/selection inner-only; sealed DEV/TEST/A6/B3/
+confirmation/GIRO closed. Leave Unicorn to v2g, no routine monitoring/launch.
+Back up meaningful milestones with explicit Nathan Cho <nathan.cho2013@gmail.com>
+author AND committer on origin/codex/ml-prediction-20261017. Preserve oldbranches.
+Only verified consolidated SCIENTIFIC milestones to original Google Doc, preserve
+visuals/history; sixOct1 entries already posted. No PRmerge/journal submission/
+private-data publication/resetcredits. Hourly research automation stays active;
+unrelated paused schedules stay paused. No human approval is needed for the
+already authorized bounded correction.

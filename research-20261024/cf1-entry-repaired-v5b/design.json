@@ -1,0 +1,74 @@
+{
+  "policy": "cf1-entry-repaired-v5",
+  "backend": "GRB",
+  "tariff": "day",
+  "models": {},
+  "case_specs": [
+    {
+      "base_id": 50997,
+      "trips": 40,
+      "fixture": "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/research-20261023/recovery-phase1-v7/fixtures/base50997-n40.json",
+      "full_identity": "58b3e0628e6ad1e3876bb142cec2636cb7bc826738da0f6a34f60555954370f8",
+      "market_sha256": "f1da29dda920210565f103a311f47b5b5f460e3704050ae711966ca852425be2"
+    }
+  ],
+  "tasks": [
+    {
+      "arm": "cf1",
+      "base_id": 50997,
+      "trips": 40,
+      "seed": 17,
+      "seconds": 60.0,
+      "fault": null,
+      "protocol_revision": 5,
+      "id": "cca533d3cc5125d6cadf"
+    }
+  ],
+  "native_library": {
+    "path": "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/gurobipy/_batch.cpython-312-darwin.so",
+    "sha256": "54c2ca41a9a9c80b4dd27df09e6b8a73abbb18de90e95198ae676611910dca96"
+  },
+  "package_budget": {
+    "initial_charged_cpu_s": 2426.723449631016,
+    "additional_hard_cap_s": 225.0,
+    "absolute_package_ceiling_s": 2651.723449631016,
+    "analysis_reserve_s": 30.0,
+    "next_worker_allocation_s": 62.5,
+    "next_worker_supervision_reservation_s": 45.0,
+    "physical_and_ack_endpoint_s": 60.0,
+    "supervisor_stop_s": 61.0,
+    "outer_allocation_s": 62.5,
+    "global_hard_ceiling_s": 3000.0,
+    "global_dispatch_stop_s": 2820.0,
+    "global_shutdown_reserve_s": 180.0,
+    "threads": 1,
+    "numerical_workers": 1,
+    "rss_limit_bytes": 5368709120,
+    "automatic_retry": false,
+    "check_planning_s": 20.0,
+    "freeze_planning_s": 25.0,
+    "metadata_work_s": 15.0,
+    "metadata_outer_s": 17.5,
+    "metadata_phase_s": 25.0,
+    "entry_precharge_planning_s": 7.5,
+    "independent_analysis_planning_s": 20.0,
+    "artifact_finalization_planning_s": 10.0
+  },
+  "evidence": {
+    "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/research-20261024/cf1-resumption/approval2.json": "b1a1bc9c4bb458663698a3c3a461112ada69dcb72f0a2419fe9a4ba4f2ee528d",
+    "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/research-20261024/cf1-resumption/accepted-carry.json": "095890c9c95012a9d04e06cd0f39699af992f829d0aca18ebe8d4f410b5621a7",
+    "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/research-20261024/cf1-resumption/failed-freeze-accounting.json": "8558037f6b768f229d9e14d922eb4ddc1f8b8c36783571725dc2202cac1d8765",
+    "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/research-20261024/cf1-resumption/native-launcher-v5b.py": "63517b2edb5fae83679aed266504de70c485651382bff417dff1bf305a8c1001",
+    "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/research-20261024/cf1-entry-repaired-checks/attempt05-accounting.json": "2d0fdc4ddb87b4fa03519e21212dd4526ef3746b42520c82ba3126d5243373fb",
+    "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/research-20261024/cf1-resumption/freeze-preparation2.py": "145c1dbfcc9518340ca4db19034e15893203471f4b175904b12d56099da585e9",
+    "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/research-20261024/CF1_RESUMPTION_PROTOCOL.md": "69ee8559e38b7ff033f229d91e42dd5fe3f95b5647ad4bbd92191232671afaa8",
+    "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/research-20261024/CF1_RESUMPTION_REVIEW.md": "160bfe458cefb9e7f6e4947bdefb74a259266c8a35ebb5635a40aa64ffacb227",
+    "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/research-20261024/CF1_RESUMPTION_WRAPPERS.md": "d5d0e9311b909e693d273bfdb75b2ff3cfead379083d969ef371cf35b2018a5e",
+    "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/research-20261024/CF1_RESUMPTION2_PROTOCOL.md": "3d3290d9aaf27f958ecfa05789249e077aa69920c56869d9002759a9862ac664",
+    "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/research-20261024/CF1_RESUMPTION2_WRAPPERS.md": "13b639775edb4b55ab962d5f0d60dfb887c0ee8b33f98e4d6ddda67539a2bdea",
+    "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/research-20261024/cf1-entry-repaired-v5b/analysis-command.json": "7bef490cead07d150dfb0b1572cd77d0021ef6988a9c07e81937b9b8bc663f13",
+    "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/research-20261024/cf1-entry-repaired-v5b/run-command-template.json": "d6f919d621362eeb4714b0ebb90dfccd206a75ae3748ef223db10a32a9ecc294"
+  },
+  "scope": "One inspected40 CF1 mechanism under approved resumption; no ML quality or comparative claim",
+  "automatic_retry": false
+}

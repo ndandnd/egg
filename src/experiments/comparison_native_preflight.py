@@ -19,6 +19,7 @@ PACKAGE_START = 1296.29257734018
 PACKAGE_LIMIT = 230.
 PACKAGE_CAP = PACKAGE_START+PACKAGE_LIMIT
 ENDPOINT_S, STOP_S, OUTER_S = 60., 61., 62.5
+FREEZE_ELAPSED_LIMIT_S = 10.
 ANALYSIS_FINAL_RESERVE_S, SUPERVISION_RESERVE_S = 5., 40.
 WORKER_ARGV_PREFIX = ('-m','experiments.comparison_native_worker')
 # Explicit adapter bindings; defaults retain the original engineering80 policy.
@@ -221,7 +222,8 @@ def freeze_accounting(lock, lockpath, receiptpath):
             or not q.finite(charged) or not q.finite(supervisor)
             or not q.finite(receipt.get('charged_allocation_s'))
             or charged!=receipt['charged_allocation_s']+supervisor
-            or not q.finite(receipt.get('elapsed_allocation_s')) or receipt['elapsed_allocation_s']>10.
+            or not q.finite(receipt.get('elapsed_allocation_s'))
+            or receipt['elapsed_allocation_s']>FREEZE_ELAPSED_LIMIT_S
             or not q.finite(receipt.get('sampled_peak_rss_bytes')) or receipt['sampled_peak_rss_bytes']>q.RSS_LIMIT
             or not q.finite(cumulative,lock['carried_charge_s']+charged)
             or cumulative!=lock['carried_charge_s']+charged

@@ -79,7 +79,7 @@ def wrapper_harness():
             str(ROOT/'src/experiments/otherwise_unlisted.py'): 'complete-source-closure'}))
     adapter = SimpleNamespace(q=q, POLICY='original', PACKAGE_START=1.,
         PACKAGE_LIMIT=2., PACKAGE_CAP=3., ANALYSIS_FINAL_RESERVE_S=5.,
-        SUPERVISION_RESERVE_S=40., ENGINEERING_BASE_ID=50999,
+        SUPERVISION_RESERVE_S=40., FREEZE_ELAPSED_LIMIT_S=10., ENGINEERING_BASE_ID=50999,
         ENGINEERING_TRIPS=80, FIXTURE_POLICY='original',
         WORKER_ARGV_PREFIX=('original',), task_matrix=lambda cases: [],
         checked_sources=lambda directory: {'inherited': 'qualified-dependency'},
@@ -199,7 +199,7 @@ class OwnerTests(unittest.TestCase):
                 supervisor.cpu0, supervisor.monitor0, supervisor.anchor = 0., 0., 100.
                 supervisor.peak_cpu, supervisor.active_other_cpu, supervisor.capacity = .4, .1, 8
                 supervisor.roots = {**h.roots,
-                    'expected_cumulative_charge_s': 1700. if damage == 'package' else 1540.}
+                    'expected_cumulative_charge_s': 2600. if damage == 'package' else 1540.}
                 supervisor.output, supervisor.task = str(h.output), h.task
                 if damage == 'owner-reserve':
                     h.owner.time.process_time = lambda: 15.01
@@ -515,11 +515,12 @@ class WrapperTests(unittest.TestCase):
                 self.assertEqual(h.adapter.POLICY, h.v5.POLICY)
                 self.assertEqual((h.adapter.PACKAGE_START, h.adapter.PACKAGE_LIMIT,
                                   h.adapter.PACKAGE_CAP),
-                    (1527.8351450899538, 175., 1702.8351450899538))
+                    (2426.723449631016, 275., 2701.723449631016))
+                self.assertEqual(h.adapter.FREEZE_ELAPSED_LIMIT_S, 17.5)
                 self.assertEqual((h.adapter.ANALYSIS_FINAL_RESERVE_S,
                     h.adapter.SUPERVISION_RESERVE_S), (30., 45.))
                 self.assertEqual((h.q.CEILING, h.q.DISPATCH_STOP,
-                                  h.q.SHUTDOWN_RESERVE), (1920., 1740., 180.))
+                                  h.q.SHUTDOWN_RESERVE), (3000., 2820., 180.))
                 self.assertEqual(h.adapter.WORKER_ARGV_PREFIX,
                                  ('-m', 'experiments.cf1_entry_repaired', 'worker'))
                 self.assertEqual(h.worker.task_matrix(), h.v5.task_matrix())
@@ -540,7 +541,44 @@ class WrapperTests(unittest.TestCase):
             self.assertEqual(vars(module), before)
         self.assertFalse(original_lock.locked())
         with h.v5.revision5():
-            pass
+            self.assertEqual(h.adapter.FREEZE_ELAPSED_LIMIT_S, 17.5)
+        self.assertEqual(h.adapter.FREEZE_ELAPSED_LIMIT_S, 10.)
+
+    def test_actual_freeze_consumer_obeys_only_its_installed_elapsed_limit(self):
+        # Inert metadata validates the actual branch, not byte/OS qualification.
+        q = SimpleNamespace(launch=lambda *args: None, RSS_LIMIT=5*1024**3,
+            finite=lambda value, minimum=0.: type(value) in (int, float)
+                and math.isfinite(value) and value >= minimum,
+            sha=lambda path: 'digest', verify_hashes=lambda inventory: None)
+        adapter = source('comparison_native_preflight', q=q)
+        self.assertEqual(adapter.FREEZE_ELAPSED_LIMIT_S, 10.)
+        lock = {'carried_charge_s': 1300., 'prior_accounting_sha256': 'prior',
+                'sources': {'inert-source': 'digest'}}
+        charged = 17.5+.2
+        cumulative = lock['carried_charge_s']+charged
+        receipt = {'policy': adapter.POLICY, 'phase': 'comparison_native_freeze',
+            'passed': True, 'failure': None, 'monitor_failure': None, 'source_changes': [],
+            'returncode': 0, 'secondary_errors': [], 'primary_failure': None,
+            'accounting_observations_complete': True, 'accounting_unresolved': False,
+            'charge_is_lower_bound': False, 'artifact_hashes': {'stdout.log': 'digest'},
+            'lock_sha256': 'digest', 'prior_accounting_sha256': 'prior',
+            'source_hashes': lock['sources'], 'termination': {'group_absent': True,
+                'reaped': True, 'owned_pgids': [211], 'surviving_pgids': [],
+                'cleanup_errors': [], 'probe_diagnostics': []},
+            'charged_cpu_s': charged, 'supervisor_cpu_s': .2,
+            'charged_allocation_s': 17.5, 'elapsed_allocation_s': 17.5,
+            'sampled_peak_rss_bytes': 0, 'cumulative_qualification_charge_s': cumulative,
+            'stdout_sha256': 'digest', 'stderr_sha256': 'digest'}
+        q.read = lambda path: receipt
+        args = (lock, '/inert-v5b-freeze/lock.json', '/inert-v5b-freeze/result.json')
+        with self.assertRaises(ValueError):
+            adapter.freeze_accounting(*args)
+        adapter.FREEZE_ELAPSED_LIMIT_S = 17.5
+        self.assertEqual(adapter.freeze_accounting(*args),
+                         {**lock, 'freeze_charge_s': cumulative-lock['carried_charge_s']})
+        receipt['elapsed_allocation_s'] = 17.500001
+        with self.assertRaises(ValueError):
+            adapter.freeze_accounting(*args)
 
     def test_original_lock_contention_and_partial_configuration_restore(self):
         h = wrapper_harness()
@@ -606,6 +644,9 @@ class WrapperTests(unittest.TestCase):
         original_analyze = h.approved.analyze
         original_transport = h.approved._transport_evidence
         def analyze(args):
+            self.assertEqual((h.q.CEILING, h.q.DISPATCH_STOP,
+                              h.q.SHUTDOWN_RESERVE), (3000., 2820., 180.))
+            self.assertEqual(h.adapter.FREEZE_ELAPSED_LIMIT_S, 17.5)
             h.q.write_new(args.report, {'passed': True, 'issues': [],
                                       'rows': [{'task': task, 'issues': []}]})
         h.adapter.analyze = analyze
@@ -617,11 +658,18 @@ class WrapperTests(unittest.TestCase):
         self.assertIs(h.approved.analyze, original_analyze)
         self.assertIs(h.approved._transport_evidence, original_transport)
         self.assertIs(h.q.write_new, writer)
-        h.adapter.analyze = lambda args: (_ for _ in ()).throw(ValueError('analysis injected'))
+        def failed_analyze(args):
+            self.assertEqual((h.q.CEILING, h.q.DISPATCH_STOP,
+                              h.q.SHUTDOWN_RESERVE), (3000., 2820., 180.))
+            self.assertEqual(h.adapter.FREEZE_ELAPSED_LIMIT_S, 17.5)
+            raise ValueError('analysis injected')
+        h.adapter.analyze = failed_analyze
         with self.assertRaisesRegex(ValueError, 'analysis injected'):
             h.v5.analyze(args)
         self.assertIs(h.q.write_new, writer)
-        self.assertEqual(h.q.CEILING, 1800.)
+        self.assertEqual((h.q.CEILING, h.q.DISPATCH_STOP,
+                          h.q.SHUTDOWN_RESERVE), (1800., 1620., 180.))
+        self.assertEqual(h.adapter.FREEZE_ELAPSED_LIMIT_S, 10.)
 
     def test_source_gate_requires_new_execution_and_complete_current_closure(self):
         h = wrapper_harness()
@@ -636,10 +684,10 @@ class WrapperTests(unittest.TestCase):
         hashes.update({str(ROOT/'src/tests'/name): h.q.sha(ROOT/'src/tests'/name)
             for name in (*v5.QUALIFIED_TEST_DEPENDENCIES, 'test_cf1_entry_repaired.py')})
         command = v5.check_command()
-        attempt = {'attempt_id': 'attempt03', 'revision': 5, 'policy': v5.POLICY,
+        attempt = {'attempt_id': 'attempt06', 'revision': 5, 'policy': v5.POLICY,
             'command': command, 'command_sha256': stable(command),
             'executed_tests': ['test_cf1_entry_repaired.py'], 'source_hashes': hashes}
-        result = {'attempt_id': 'attempt03', 'revision': 5, 'policy': v5.POLICY,
+        result = {'attempt_id': 'attempt06', 'revision': 5, 'policy': v5.POLICY,
             'command': command, 'command_sha256': stable(command),
             'executed_tests': ['test_cf1_entry_repaired.py']}
         h.store[str(directory/'attempt.json')] = attempt
@@ -651,12 +699,12 @@ class WrapperTests(unittest.TestCase):
                 v5.checked_sources(directory)
             hashes[path] = original
         for record, key, value in (
-                (attempt, 'attempt_id', 'attempt02'), (attempt, 'revision', 4),
+                (attempt, 'attempt_id', 'attempt05'), (attempt, 'revision', 4),
                 (attempt, 'policy', h.approved.POLICY),
                 (attempt, 'command', command+['src/tests/test_constructive_controls.py']),
                 (attempt, 'command_sha256', 'changed'),
                 (attempt, 'executed_tests', ['test_cf1_small_mechanism_approved.py']),
-                (result, 'attempt_id', 'attempt02'), (result, 'revision', 4),
+                (result, 'attempt_id', 'attempt05'), (result, 'revision', 4),
                 (result, 'policy', h.approved.POLICY)):
             original = record[key]
             record[key] = value
@@ -664,7 +712,8 @@ class WrapperTests(unittest.TestCase):
                 v5.checked_sources(directory)
             record[key] = original
         for other in (ROOT/'research-20261023/cf1-small-approved-checks/attempt01',
-                      directory.parent/'attempt01'):
+                      directory.parent/'attempt01', directory.parent/'attempt03',
+                      directory.parent/'attempt04', directory.parent/'attempt05'):
             with self.assertRaises(ValueError):
                 v5.checked_sources(other)
 
@@ -763,7 +812,7 @@ class WrapperTests(unittest.TestCase):
         h.q.ledger_events, h.q.resume_state = real.ledger_events, real.resume_state
         h.q._monitor_child_cpu_s = 0.
         h.adapter.OUTER_S = 62.5
-        h.q.CEILING, h.q.DISPATCH_STOP, h.q.SHUTDOWN_RESERVE = 1920., 1740., 180.
+        h.q.CEILING, h.q.DISPATCH_STOP, h.q.SHUTDOWN_RESERVE = 3000., 2820., 180.
         h.v5.time = SimpleNamespace(process_time=lambda: 10.)
         with tempfile.TemporaryDirectory() as temporary:
             output = Path(temporary)
@@ -795,16 +844,16 @@ class WrapperTests(unittest.TestCase):
         h.q.ledger_events, h.q.resume_state = real.ledger_events, real.resume_state
         h.q._monitor_child_cpu_s = 0.
         h.adapter.OUTER_S = 62.5
-        h.q.CEILING, h.q.DISPATCH_STOP, h.q.SHUTDOWN_RESERVE = 1920., 1740., 180.
+        h.q.CEILING, h.q.DISPATCH_STOP, h.q.SHUTDOWN_RESERVE = 3000., 2820., 180.
         h.v5.time = SimpleNamespace(process_time=lambda: 10.)
         with tempfile.TemporaryDirectory() as temporary:
             output = Path(temporary)
             ledger = output/'ledger.jsonl'
             real.append_ledger(ledger, {'event': 'carry_forward',
-                'charged_cpu_s': 1560., 'freeze_charge_s': 2.})
+                'charged_cpu_s': 2580., 'freeze_charge_s': 2.})
             prefix = real.ledger_events(ledger)
-            roots = funding_roots(h, 1562.)
-            budget = {'carried_charge_s': 1560., 'freeze_charge_s': 2., 'tasks': []}
+            roots = funding_roots(h, 2582.)
+            budget = {'carried_charge_s': 2580., 'freeze_charge_s': 2., 'tasks': []}
             with self.assertRaises(ValueError):
                 h.v5._validate_precharge(output, prefix, budget, roots)
             real.append_ledger(ledger, wrapper_charge(h, output, roots['expected_lock_sha256']))

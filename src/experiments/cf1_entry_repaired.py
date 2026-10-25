@@ -17,14 +17,14 @@ from experiments.launch_entry_preparation import prepare_new_output
 
 adapter, native_worker = approved.adapter, approved.native_worker
 POLICY = 'cf1-entry-repaired-v5'
-PACKAGE_START, PACKAGE_LIMIT, PACKAGE_CAP = 1527.8351450899538, 175., 1702.8351450899538
+PACKAGE_START, PACKAGE_LIMIT, PACKAGE_CAP = 2426.723449631016, 275., 2701.723449631016
 ANALYSIS_FINAL_RESERVE_S, SUPERVISION_RESERVE_S = 30., 45.
 ENGINEERING_BASE_ID, ENGINEERING_TRIPS = 50997, 40
 FIXTURE_POLICY, SCOPE = approved.FIXTURE_POLICY, approved.SCOPE
 ACK_OBSERVATION = 'controller-ack-observation-v5.json'
 WORKER_ARGV_PREFIX = ('-m', 'experiments.cf1_entry_repaired', 'worker')
-NAMESPACE = 'research-20261024/cf1-entry-repaired-v5'
-CHECK_NAMESPACE = 'research-20261024/cf1-entry-repaired-checks/attempt03'
+NAMESPACE = 'research-20261024/cf1-entry-repaired-v5c'
+CHECK_NAMESPACE = 'research-20261024/cf1-entry-repaired-checks/attempt06'
 ENTRY_PRECHARGE_S = 7.5
 _CONFIG_LOCK = threading.Lock()
 _BASE_CHECKED = approved.preflight.checked_sources
@@ -62,11 +62,11 @@ def checked_sources(directory):
     checks = _BASE_CHECKED(directory)
     attempt, result = q.read(directory/'attempt.json'), q.read(directory/'result.json')
     command = check_command()
-    if (attempt.get('attempt_id') != 'attempt03' or attempt.get('revision') != 5
+    if (attempt.get('attempt_id') != 'attempt06' or attempt.get('revision') != 5
             or attempt.get('policy') != POLICY or attempt.get('command') != command
             or attempt.get('command_sha256') != q.stable(command)
             or attempt.get('executed_tests') != ['test_cf1_entry_repaired.py']
-            or result.get('attempt_id') != 'attempt03' or result.get('revision') != 5
+            or result.get('attempt_id') != 'attempt06' or result.get('revision') != 5
             or result.get('policy') != POLICY or result.get('command') != command
             or result.get('command_sha256') != q.stable(command)
             or result.get('executed_tests') != ['test_cf1_entry_repaired.py']):
@@ -93,12 +93,24 @@ def configuration5():
         if not original_lock.acquire(blocking=False):
             raise RuntimeError('Revision4 configuration is already active')
         held = True
+        original_revision4 = approved.revision4
+        @contextmanager
+        def budgeted_revision4():
+            with original_revision4():
+                old_freeze_limit = adapter.FREEZE_ELAPSED_LIMIT_S
+                try:
+                    adapter.FREEZE_ELAPSED_LIMIT_S = 17.5
+                    adapter.q.CEILING, adapter.q.DISPATCH_STOP, adapter.q.SHUTDOWN_RESERVE = 3000., 2820., 180.
+                    yield
+                finally:
+                    adapter.FREEZE_ELAPSED_LIMIT_S = old_freeze_limit
         changes = {'POLICY': POLICY, 'PACKAGE_START': PACKAGE_START,
             'PACKAGE_LIMIT': PACKAGE_LIMIT, 'PACKAGE_CAP': PACKAGE_CAP,
             'ANALYSIS_FINAL_RESERVE_S': ANALYSIS_FINAL_RESERVE_S,
             'SUPERVISION_RESERVE_S': SUPERVISION_RESERVE_S,
             'task_matrix': task_matrix, 'checked_sources': checked_sources,
-            'ACK_OBSERVATION': ACK_OBSERVATION, '_CONFIG_LOCK': _DelegateLock()}
+            'ACK_OBSERVATION': ACK_OBSERVATION, '_CONFIG_LOCK': _DelegateLock(),
+            'revision4': budgeted_revision4}
         for name, value in changes.items():
             saved[name] = getattr(approved, name)
             setattr(approved, name, value)
@@ -151,7 +163,7 @@ def freeze(args):
     _exact_path(args.lock, NAMESPACE+'/lock.json')
     _exact_path(getattr(args, 'design', None) or args.manifest, NAMESPACE+'/design.json')
     _exact_path(args.checks, CHECK_NAMESPACE)
-    _exact_path(args.accounting, str(Path(CHECK_NAMESPACE).parent/'attempt03-accounting.json'))
+    _exact_path(args.accounting, str(Path(CHECK_NAMESPACE).parent/'attempt06-accounting.json'))
     with revision5():
         return {**adapter.freeze(args), 'tasks': 1}
 
@@ -299,7 +311,7 @@ def analyze(args):
     _exact_path(args.lock, NAMESPACE+'/lock.json')
     _exact_path(args.output, NAMESPACE+'/runs')
     _exact_path(args.report, NAMESPACE+'/report.json')
-    # The unchanged analyzer enters its own original revision4 context.
+    # The unchanged analyzer enters the scoped, budgeted revision4 context.
     with configuration5():
         return approved.analyze(args)
 
