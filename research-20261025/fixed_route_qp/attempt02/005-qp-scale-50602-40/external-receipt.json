@@ -1,0 +1,239 @@
+{
+  "case": "scale:50602:40",
+  "folder": "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/research-20261025/fixed_route_qp/attempt02/005-qp-scale-50602-40",
+  "parent_anchor": 6118062.197903583,
+  "attempted": true,
+  "pid": 25223,
+  "reaped": true,
+  "returncode": 0,
+  "timed_out": false,
+  "config_failure": false,
+  "resource_violation": false,
+  "identity_failure": false,
+  "failures": [],
+  "worker": {
+    "policy": "original-warm-eight-priors-direct-fixed-route-qp-v2",
+    "case": "scale:50602:40",
+    "seed": 17,
+    "complete": true,
+    "method_endpoint_accepted": true,
+    "qp_success": true,
+    "physical_witness_valid": true,
+    "config_failure": false,
+    "resource_violation": false,
+    "identity_failure": false,
+    "parent_anchor": 6118062.197903583,
+    "native_deadline": 6118114.197903583,
+    "admission_deadline": 6118122.197903583,
+    "failures": [],
+    "stages": [
+      {
+        "stage": "case_construction",
+        "wall_s": 0.007518959231674671,
+        "cpu_s": 0.007517999999999997,
+        "observed_peak_rss_bytes": 25690112
+      },
+      {
+        "stage": "target_market",
+        "wall_s": 9.583309292793274e-06,
+        "cpu_s": 8.999999999995123e-06,
+        "observed_peak_rss_bytes": 25690112
+      },
+      {
+        "stage": "load_prior_plan",
+        "wall_s": 0.0007774587720632553,
+        "cpu_s": 0.00047000000000000514,
+        "observed_peak_rss_bytes": 25853952
+      },
+      {
+        "stage": "load_prior_replay",
+        "wall_s": 0.00049587432295084,
+        "cpu_s": 0.00015500000000000236,
+        "observed_peak_rss_bytes": 25919488
+      },
+      {
+        "stage": "independent_prior_replay",
+        "wall_s": 0.014954457990825176,
+        "cpu_s": 0.014954999999999996,
+        "observed_peak_rss_bytes": 28409856
+      },
+      {
+        "stage": "save_replayed_fallback",
+        "wall_s": 0.0030510006472468376,
+        "cpu_s": 0.0027340000000000003,
+        "observed_peak_rss_bytes": 28786688
+      },
+      {
+        "stage": "one_direct_fixed_topology_qp",
+        "wall_s": 1.266855207271874,
+        "cpu_s": 1.2523019999999998,
+        "observed_peak_rss_bytes": 129482752
+      },
+      {
+        "stage": "save_qp_stats",
+        "wall_s": 0.00046083424240350723,
+        "cpu_s": 0.0004509999999999792,
+        "observed_peak_rss_bytes": 129482752
+      },
+      {
+        "stage": "independent_qp_candidate_replay",
+        "wall_s": 0.017370165325701237,
+        "cpu_s": 0.017370000000000108,
+        "observed_peak_rss_bytes": 129482752
+      }
+    ],
+    "native_calls": 1,
+    "case_identity": "ab67003d6844c1d8e0193f2bb0281b0959e6ad59b2bfacd1a0a17984668324e7",
+    "target_market_identity": "57e449404c0912d4295c25dd7e90b51ae703cf63aa34f51dce195953633701ba",
+    "fleet_count": 6,
+    "fallback_bill_exact": "736656360542872650637036234492962711301916785211285/730750818665451459101842416358141509827966271488",
+    "selected_source": "direct_qp",
+    "used_fallback": false,
+    "native_call_attempts": 1,
+    "qp_candidate_admitted": true,
+    "helper_failures": [],
+    "copy_contract": {
+      "passed": true,
+      "original_variables": 18780,
+      "original_physical_rows": 21692,
+      "copied_variables": 18780,
+      "copied_physical_rows": 21692,
+      "source_nonzeros": 171648,
+      "read_back_nonzeros": 171648,
+      "fixed_routing_binaries": 1438,
+      "continuous_unfixed_variables": 17342,
+      "linear_objective_terms": 70,
+      "diagonal_quadratic_terms": 30,
+      "mapping": "original var.idx equals copied Var.index, dense zero-based; all checked",
+      "bounds": "side-specific documented unbounded sentinels canonicalized; every other bound exact",
+      "bound_policy": "Gurobi-LB-le-minus1e20-negative-infinity-UB-ge1e20-positive-infinity",
+      "infinite_bound_count": 30,
+      "infinite_variable_count": 30,
+      "infinite_bound_examples": [
+        {
+          "original_index": 18750,
+          "original_name": "var(18750)",
+          "original_type": "C",
+          "copied_index": 18750,
+          "copied_name": "var(18750)",
+          "copied_type": "C",
+          "original_raw_bounds_repr": [
+            "0.0",
+            "1e+100"
+          ],
+          "copied_readback_bounds_repr": [
+            "0.0",
+            "inf"
+          ],
+          "original_canonical_tags_repr": "(('exact_value', 0.0), ('UB_positive_infinity', None))",
+          "copied_canonical_tags_repr": "(('exact_value', 0.0), ('UB_positive_infinity', None))",
+          "raw_bounds_exactly_equal": false,
+          "canonical_equal": true
+        },
+        {
+          "original_index": 18751,
+          "original_name": "var(18751)",
+          "original_type": "C",
+          "copied_index": 18751,
+          "copied_name": "var(18751)",
+          "copied_type": "C",
+          "original_raw_bounds_repr": [
+            "0.0",
+            "1e+100"
+          ],
+          "copied_readback_bounds_repr": [
+            "0.0",
+            "inf"
+          ],
+          "original_canonical_tags_repr": "(('exact_value', 0.0), ('UB_positive_infinity', None))",
+          "copied_canonical_tags_repr": "(('exact_value', 0.0), ('UB_positive_infinity', None))",
+          "raw_bounds_exactly_equal": false,
+          "canonical_equal": true
+        },
+        {
+          "original_index": 18752,
+          "original_name": "var(18752)",
+          "original_type": "C",
+          "copied_index": 18752,
+          "copied_name": "var(18752)",
+          "copied_type": "C",
+          "original_raw_bounds_repr": [
+            "0.0",
+            "1e+100"
+          ],
+          "copied_readback_bounds_repr": [
+            "0.0",
+            "inf"
+          ],
+          "original_canonical_tags_repr": "(('exact_value', 0.0), ('UB_positive_infinity', None))",
+          "copied_canonical_tags_repr": "(('exact_value', 0.0), ('UB_positive_infinity', None))",
+          "raw_bounds_exactly_equal": false,
+          "canonical_equal": true
+        },
+        {
+          "original_index": 18753,
+          "original_name": "var(18753)",
+          "original_type": "C",
+          "copied_index": 18753,
+          "copied_name": "var(18753)",
+          "copied_type": "C",
+          "original_raw_bounds_repr": [
+            "0.0",
+            "1e+100"
+          ],
+          "copied_readback_bounds_repr": [
+            "0.0",
+            "inf"
+          ],
+          "original_canonical_tags_repr": "(('exact_value', 0.0), ('UB_positive_infinity', None))",
+          "copied_canonical_tags_repr": "(('exact_value', 0.0), ('UB_positive_infinity', None))",
+          "raw_bounds_exactly_equal": false,
+          "canonical_equal": true
+        },
+        {
+          "original_index": 18754,
+          "original_name": "var(18754)",
+          "original_type": "C",
+          "copied_index": 18754,
+          "copied_name": "var(18754)",
+          "copied_type": "C",
+          "original_raw_bounds_repr": [
+            "0.0",
+            "1e+100"
+          ],
+          "copied_readback_bounds_repr": [
+            "0.0",
+            "inf"
+          ],
+          "original_canonical_tags_repr": "(('exact_value', 0.0), ('UB_positive_infinity', None))",
+          "copied_canonical_tags_repr": "(('exact_value', 0.0), ('UB_positive_infinity', None))",
+          "raw_bounds_exactly_equal": false,
+          "canonical_equal": true
+        }
+      ],
+      "physical_rows": "all stored coefficients/RHS/senses checked by original index, no tolerance",
+      "objective": "original ops+a*load linear expression plus .5*b*load^2; sparse read-back checked",
+      "original_cffi_variables_retained": true,
+      "text_round_trip": false,
+      "extraction_view": "raw .x-only values for x/charge/loads; compiled/model metadata unchanged"
+    },
+    "objective_exact": "812026332685779905091557119029127526337277152043011362331863245868500175/862718293348820473429344482784628181556388621521298319395315527974912",
+    "objective": 941.2415836619516,
+    "stop_signal": null,
+    "resources": {
+      "self_cpu_s": 1.3670149999999999,
+      "waited_children_cpu_s": 0.0,
+      "combined_cpu_s": 1.3670170000000001,
+      "observed_peak_rss_bytes": 129482752,
+      "scope": "through receipt preparation; external meter includes publication/exit"
+    },
+    "elapsed_before_receipt_s": 1.3890186250209808,
+    "method_success": true
+  },
+  "complete_receipt_read_monotonic": 6118063.661142916,
+  "waited_child_cpu_s": 1.3812500000000014,
+  "parent_cpu_s": 0.002028000000000002,
+  "unresolved_cpu_reserve_s": 0.0,
+  "parent_elapsed_s": 1.4632393335923553,
+  "method_endpoint_accepted": true
+}

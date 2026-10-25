@@ -1,0 +1,5598 @@
+{
+  "schema": "egg-native-recharge-v1",
+  "case_identity": "7f049adbbb31d283f6f74c544a890bd07519c4e13a2d9a14b9693787cfa6a4c3",
+  "formulation": "egg-native-pathflow-v3-energy-band-orphan-projection",
+  "native_matrix": "egg-native-pathflow-v2-energy-band",
+  "extraction_policy": "native-pathflow-orphan-projection-v1",
+  "vehicles": [
+    {
+      "vehicle": 0,
+      "trips": [
+        "T001",
+        "T002",
+        "T007",
+        "T008",
+        "T013",
+        "T014",
+        "T020",
+        "T025",
+        "T031",
+        "T032",
+        "T038",
+        "T040",
+        "T047",
+        "T051",
+        "T052",
+        "T059",
+        "T063",
+        "T064",
+        "T071",
+        "T080"
+      ],
+      "movements": [
+        "out_T001",
+        "direct_T001_T002",
+        "direct_T002_T007",
+        "direct_T007_T008",
+        "direct_T008_T013",
+        "direct_T013_T014",
+        "depot_T014_T020",
+        "depot_T020_T025",
+        "depot_T025_T031",
+        "direct_T031_T032",
+        "depot_T032_T038",
+        "depot_T038_T040",
+        "depot_T040_T047",
+        "depot_T047_T051",
+        "direct_T051_T052",
+        "depot_T052_T059",
+        "depot_T059_T063",
+        "direct_T063_T064",
+        "depot_T064_T071",
+        "direct_T071_T080",
+        "in_T080"
+      ]
+    },
+    {
+      "vehicle": 1,
+      "trips": [
+        "T003",
+        "T004",
+        "T010",
+        "T019",
+        "T018",
+        "T027",
+        "T028",
+        "T035",
+        "T039",
+        "T043",
+        "T042",
+        "T049",
+        "T050",
+        "T055",
+        "T056",
+        "T061",
+        "T062",
+        "T069",
+        "T073",
+        "T074",
+        "T079"
+      ],
+      "movements": [
+        "out_T003",
+        "depot_T003_T004",
+        "direct_T004_T010",
+        "depot_T010_T019",
+        "direct_T019_T018",
+        "depot_T018_T027",
+        "depot_T027_T028",
+        "depot_T028_T035",
+        "depot_T035_T039",
+        "depot_T039_T043",
+        "direct_T043_T042",
+        "depot_T042_T049",
+        "direct_T049_T050",
+        "depot_T050_T055",
+        "depot_T055_T056",
+        "direct_T056_T061",
+        "direct_T061_T062",
+        "depot_T062_T069",
+        "direct_T069_T073",
+        "direct_T073_T074",
+        "depot_T074_T079",
+        "in_T079"
+      ]
+    },
+    {
+      "vehicle": 2,
+      "trips": [
+        "T005",
+        "T009",
+        "T012",
+        "T017",
+        "T021",
+        "T022",
+        "T026",
+        "T033",
+        "T034",
+        "T041",
+        "T044",
+        "T048",
+        "T054",
+        "T058",
+        "T065",
+        "T066",
+        "T070",
+        "T072",
+        "T077",
+        "T078"
+      ],
+      "movements": [
+        "out_T005",
+        "direct_T005_T009",
+        "direct_T009_T012",
+        "depot_T012_T017",
+        "depot_T017_T021",
+        "depot_T021_T022",
+        "depot_T022_T026",
+        "depot_T026_T033",
+        "depot_T033_T034",
+        "depot_T034_T041",
+        "depot_T041_T044",
+        "depot_T044_T048",
+        "depot_T048_T054",
+        "direct_T054_T058",
+        "depot_T058_T065",
+        "direct_T065_T066",
+        "depot_T066_T070",
+        "depot_T070_T072",
+        "direct_T072_T077",
+        "depot_T077_T078",
+        "in_T078"
+      ]
+    },
+    {
+      "vehicle": 3,
+      "trips": [
+        "T006",
+        "T011",
+        "T015",
+        "T016",
+        "T023",
+        "T024",
+        "T029",
+        "T030",
+        "T037",
+        "T036",
+        "T045",
+        "T046",
+        "T053",
+        "T057",
+        "T060",
+        "T067",
+        "T068",
+        "T075",
+        "T076"
+      ],
+      "movements": [
+        "out_T006",
+        "direct_T006_T011",
+        "depot_T011_T015",
+        "depot_T015_T016",
+        "depot_T016_T023",
+        "direct_T023_T024",
+        "depot_T024_T029",
+        "direct_T029_T030",
+        "depot_T030_T037",
+        "direct_T037_T036",
+        "depot_T036_T045",
+        "direct_T045_T046",
+        "depot_T046_T053",
+        "depot_T053_T057",
+        "direct_T057_T060",
+        "depot_T060_T067",
+        "direct_T067_T068",
+        "depot_T068_T075",
+        "direct_T075_T076",
+        "in_T076"
+      ]
+    }
+  ],
+  "charges": [
+    {
+      "vehicle": 1,
+      "movement": "depot_T003_T004",
+      "connector": 0,
+      "start_min": 424.0,
+      "end_min": 431.0,
+      "grid_kwh": 31.5
+    },
+    {
+      "vehicle": 1,
+      "movement": "depot_T003_T004",
+      "connector": 0,
+      "start_min": 431.0,
+      "end_min": 435.0,
+      "grid_kwh": 5.233333333321212
+    },
+    {
+      "vehicle": 3,
+      "movement": "depot_T011_T015",
+      "connector": 0,
+      "start_min": 520.0,
+      "end_min": 537.0,
+      "grid_kwh": 62.02222222218177
+    },
+    {
+      "vehicle": 1,
+      "movement": "depot_T010_T019",
+      "connector": 0,
+      "start_min": 537.0,
+      "end_min": 538.9999999999962,
+      "grid_kwh": 8.999999999963396
+    },
+    {
+      "vehicle": 3,
+      "movement": "depot_T011_T015",
+      "connector": 0,
+      "start_min": 538.9999999999962,
+      "end_min": 539.0,
+      "grid_kwh": 1.6814598822490947e-11
+    },
+    {
+      "vehicle": 1,
+      "movement": "depot_T010_T019",
+      "connector": 0,
+      "start_min": 539.0,
+      "end_min": 540.0,
+      "grid_kwh": 4.4999999999575016
+    },
+    {
+      "vehicle": 1,
+      "movement": "depot_T010_T019",
+      "connector": 0,
+      "start_min": 543.0,
+      "end_min": 552.0,
+      "grid_kwh": 13.34572701293684
+    },
+    {
+      "vehicle": 1,
+      "movement": "depot_T010_T019",
+      "connector": 0,
+      "start_min": 552.0,
+      "end_min": 552.7981813614855,
+      "grid_kwh": 3.126109610543438
+    },
+    {
+      "vehicle": 2,
+      "movement": "depot_T012_T017",
+      "connector": 0,
+      "start_min": 552.7981813614855,
+      "end_min": 561.0,
+      "grid_kwh": 32.12275468582144
+    },
+    {
+      "vehicle": 1,
+      "movement": "depot_T010_T019",
+      "connector": 0,
+      "start_min": 571.0,
+      "end_min": 573.2165421472607,
+      "grid_kwh": 3.5761636905413146
+    },
+    {
+      "vehicle": 3,
+      "movement": "depot_T015_T016",
+      "connector": 0,
+      "start_min": 573.2165421472607,
+      "end_min": 576.0,
+      "grid_kwh": 4.490824106106071
+    },
+    {
+      "vehicle": 0,
+      "movement": "depot_T014_T020",
+      "connector": 0,
+      "start_min": 576.0,
+      "end_min": 579.889484088768,
+      "grid_kwh": 12.589153816570803
+    },
+    {
+      "vehicle": 1,
+      "movement": "depot_T010_T019",
+      "connector": 0,
+      "start_min": 579.889484088768,
+      "end_min": 580.8901756856586,
+      "grid_kwh": 3.238954100001506
+    },
+    {
+      "vehicle": 3,
+      "movement": "depot_T015_T016",
+      "connector": 0,
+      "start_min": 580.8901756856586,
+      "end_min": 582.0,
+      "grid_kwh": 3.592185668778318
+    },
+    {
+      "vehicle": 0,
+      "movement": "depot_T014_T020",
+      "connector": 0,
+      "start_min": 582.0,
+      "end_min": 583.483217834971,
+      "grid_kwh": 4.964803503486571
+    },
+    {
+      "vehicle": 3,
+      "movement": "depot_T015_T016",
+      "connector": 0,
+      "start_min": 583.483217834971,
+      "end_min": 584.0,
+      "grid_kwh": 1.7298348516187698
+    },
+    {
+      "vehicle": 0,
+      "movement": "depot_T014_T020",
+      "connector": 0,
+      "start_min": 584.0,
+      "end_min": 600.0,
+      "grid_kwh": 39.72534081253947
+    },
+    {
+      "vehicle": 0,
+      "movement": "depot_T014_T020",
+      "connector": 0,
+      "start_min": 602.0,
+      "end_min": 603.8844344038134,
+      "grid_kwh": 7.019776586336395
+    },
+    {
+      "vehicle": 2,
+      "movement": "depot_T017_T021",
+      "connector": 0,
+      "start_min": 603.8844344038134,
+      "end_min": 609.0,
+      "grid_kwh": 19.05618339662477
+    },
+    {
+      "vehicle": 0,
+      "movement": "depot_T014_T020",
+      "connector": 0,
+      "start_min": 610.0,
+      "end_min": 615.0,
+      "grid_kwh": 18.868524961064722
+    },
+    {
+      "vehicle": 3,
+      "movement": "depot_T016_T023",
+      "connector": 0,
+      "start_min": 623.0,
+      "end_min": 633.0,
+      "grid_kwh": 23.750639215380662
+    },
+    {
+      "vehicle": 2,
+      "movement": "depot_T021_T022",
+      "connector": 0,
+      "start_min": 642.0,
+      "end_min": 646.0,
+      "grid_kwh": 13.0876938387574
+    },
+    {
+      "vehicle": 0,
+      "movement": "depot_T020_T025",
+      "connector": 0,
+      "start_min": 646.0,
+      "end_min": 648.0,
+      "grid_kwh": 4.802802889632094
+    },
+    {
+      "vehicle": 0,
+      "movement": "depot_T020_T025",
+      "connector": 0,
+      "start_min": 648.0,
+      "end_min": 654.8529207723917,
+      "grid_kwh": 21.08210331656955
+    },
+    {
+      "vehicle": 1,
+      "movement": "depot_T018_T027",
+      "connector": 0,
+      "start_min": 654.8529207723917,
+      "end_min": 659.0,
+      "grid_kwh": 12.757940102074508
+    },
+    {
+      "vehicle": 1,
+      "movement": "depot_T018_T027",
+      "connector": 0,
+      "start_min": 659.0,
+      "end_min": 660.0,
+      "grid_kwh": 2.076187552502064
+    },
+    {
+      "vehicle": 1,
+      "movement": "depot_T018_T027",
+      "connector": 0,
+      "start_min": 660.0,
+      "end_min": 669.0,
+      "grid_kwh": 24.621431526717327
+    },
+    {
+      "vehicle": 1,
+      "movement": "depot_T018_T027",
+      "connector": 0,
+      "start_min": 683.0,
+      "end_min": 684.2651730089386,
+      "grid_kwh": 4.077033673949355
+    },
+    {
+      "vehicle": 2,
+      "movement": "depot_T022_T026",
+      "connector": 0,
+      "start_min": 684.2651730089386,
+      "end_min": 687.0,
+      "grid_kwh": 8.81300949056443
+    },
+    {
+      "vehicle": 2,
+      "movement": "depot_T022_T026",
+      "connector": 0,
+      "start_min": 687.0,
+      "end_min": 696.0,
+      "grid_kwh": 21.973746673497054
+    },
+    {
+      "vehicle": 0,
+      "movement": "depot_T025_T031",
+      "connector": 0,
+      "start_min": 696.0,
+      "end_min": 696.4637440512806,
+      "grid_kwh": 1.4095925450310143
+    },
+    {
+      "vehicle": 2,
+      "movement": "depot_T022_T026",
+      "connector": 0,
+      "start_min": 696.4637440512806,
+      "end_min": 697.0,
+      "grid_kwh": 1.6299991028582201
+    },
+    {
+      "vehicle": 0,
+      "movement": "depot_T025_T031",
+      "connector": 0,
+      "start_min": 703.0,
+      "end_min": 706.0492692505322,
+      "grid_kwh": 10.13317692321811
+    },
+    {
+      "vehicle": 3,
+      "movement": "depot_T024_T029",
+      "connector": 0,
+      "start_min": 706.0492692505322,
+      "end_min": 714.0,
+      "grid_kwh": 26.421465188476116
+    },
+    {
+      "vehicle": 0,
+      "movement": "depot_T025_T031",
+      "connector": 0,
+      "start_min": 714.0,
+      "end_min": 720.0,
+      "grid_kwh": 23.422396734684
+    },
+    {
+      "vehicle": 0,
+      "movement": "depot_T025_T031",
+      "connector": 0,
+      "start_min": 720.0,
+      "end_min": 727.0,
+      "grid_kwh": 17.730707835215156
+    },
+    {
+      "vehicle": 0,
+      "movement": "depot_T025_T031",
+      "connector": 0,
+      "start_min": 727.0,
+      "end_min": 728.4765835259464,
+      "grid_kwh": 5.394314628923648
+    },
+    {
+      "vehicle": 1,
+      "movement": "depot_T027_T028",
+      "connector": 0,
+      "start_min": 728.4765835259464,
+      "end_min": 733.0,
+      "grid_kwh": 16.525127925332562
+    },
+    {
+      "vehicle": 0,
+      "movement": "depot_T025_T031",
+      "connector": 0,
+      "start_min": 733.0,
+      "end_min": 733.5077651212987,
+      "grid_kwh": 1.8257855943261971
+    },
+    {
+      "vehicle": 1,
+      "movement": "depot_T027_T028",
+      "connector": 0,
+      "start_min": 733.5077651212987,
+      "end_min": 734.3465876324598,
+      "grid_kwh": 3.0161781359801374
+    },
+    {
+      "vehicle": 2,
+      "movement": "depot_T026_T033",
+      "connector": 0,
+      "start_min": 734.3465876324598,
+      "end_min": 735.0,
+      "grid_kwh": 2.34949357048823
+    },
+    {
+      "vehicle": 0,
+      "movement": "depot_T025_T031",
+      "connector": 0,
+      "start_min": 735.0,
+      "end_min": 735.4825473116545,
+      "grid_kwh": 1.4739228062324776
+    },
+    {
+      "vehicle": 2,
+      "movement": "depot_T026_T033",
+      "connector": 0,
+      "start_min": 735.4825473116545,
+      "end_min": 736.0,
+      "grid_kwh": 1.5805399803887246
+    },
+    {
+      "vehicle": 2,
+      "movement": "depot_T026_T033",
+      "connector": 0,
+      "start_min": 736.0,
+      "end_min": 745.0,
+      "grid_kwh": 40.02706097066664
+    },
+    {
+      "vehicle": 2,
+      "movement": "depot_T026_T033",
+      "connector": 0,
+      "start_min": 745.0,
+      "end_min": 748.0,
+      "grid_kwh": 13.5
+    },
+    {
+      "vehicle": 1,
+      "movement": "depot_T028_T035",
+      "connector": 0,
+      "start_min": 775.0,
+      "end_min": 776.0,
+      "grid_kwh": 1.078720411406092
+    },
+    {
+      "vehicle": 1,
+      "movement": "depot_T028_T035",
+      "connector": 0,
+      "start_min": 776.0,
+      "end_min": 780.0,
+      "grid_kwh": 18.0
+    },
+    {
+      "vehicle": 1,
+      "movement": "depot_T028_T035",
+      "connector": 0,
+      "start_min": 780.0,
+      "end_min": 783.0,
+      "grid_kwh": 9.750203046082602
+    },
+    {
+      "vehicle": 1,
+      "movement": "depot_T028_T035",
+      "connector": 0,
+      "start_min": 783.0,
+      "end_min": 786.8088636771856,
+      "grid_kwh": 13.892143379562029
+    },
+    {
+      "vehicle": 3,
+      "movement": "depot_T030_T037",
+      "connector": 0,
+      "start_min": 786.8088636771856,
+      "end_min": 788.0,
+      "grid_kwh": 4.344454930287265
+    },
+    {
+      "vehicle": 2,
+      "movement": "depot_T033_T034",
+      "connector": 0,
+      "start_min": 791.0,
+      "end_min": 793.4702419348988,
+      "grid_kwh": 5.204686569952316
+    },
+    {
+      "vehicle": 3,
+      "movement": "depot_T030_T037",
+      "connector": 0,
+      "start_min": 793.4702419348988,
+      "end_min": 797.0,
+      "grid_kwh": 7.437038509090412
+    },
+    {
+      "vehicle": 3,
+      "movement": "depot_T030_T037",
+      "connector": 0,
+      "start_min": 797.0,
+      "end_min": 802.0,
+      "grid_kwh": 8.927169505854119
+    },
+    {
+      "vehicle": 0,
+      "movement": "depot_T032_T038",
+      "connector": 0,
+      "start_min": 802.0,
+      "end_min": 804.210718364644,
+      "grid_kwh": 5.243249301426059
+    },
+    {
+      "vehicle": 3,
+      "movement": "depot_T030_T037",
+      "connector": 0,
+      "start_min": 804.210718364644,
+      "end_min": 807.0,
+      "grid_kwh": 6.615450986410981
+    },
+    {
+      "vehicle": 0,
+      "movement": "depot_T032_T038",
+      "connector": 0,
+      "start_min": 807.0,
+      "end_min": 826.0,
+      "grid_kwh": 13.062055557024072
+    },
+    {
+      "vehicle": 0,
+      "movement": "depot_T032_T038",
+      "connector": 0,
+      "start_min": 826.0,
+      "end_min": 826.2515770975608,
+      "grid_kwh": 1.0420670050982326
+    },
+    {
+      "vehicle": 1,
+      "movement": "depot_T035_T039",
+      "connector": 0,
+      "start_min": 826.2515770975608,
+      "end_min": 830.0,
+      "grid_kwh": 15.526484189769002
+    },
+    {
+      "vehicle": 0,
+      "movement": "depot_T032_T038",
+      "connector": 0,
+      "start_min": 830.0,
+      "end_min": 830.2578103530459,
+      "grid_kwh": 1.0818655817121625
+    },
+    {
+      "vehicle": 1,
+      "movement": "depot_T035_T039",
+      "connector": 0,
+      "start_min": 830.2578103530459,
+      "end_min": 834.7491314247428,
+      "grid_kwh": 18.847209301261916
+    },
+    {
+      "vehicle": 2,
+      "movement": "depot_T034_T041",
+      "connector": 0,
+      "start_min": 834.7491314247428,
+      "end_min": 835.0,
+      "grid_kwh": 1.052735368837953
+    },
+    {
+      "vehicle": 0,
+      "movement": "depot_T032_T038",
+      "connector": 0,
+      "start_min": 835.0,
+      "end_min": 835.2568720644554,
+      "grid_kwh": 0.9021610776922099
+    },
+    {
+      "vehicle": 1,
+      "movement": "depot_T035_T039",
+      "connector": 0,
+      "start_min": 835.2568720644554,
+      "end_min": 835.7614949223588,
+      "grid_kwh": 1.7722873146193259
+    },
+    {
+      "vehicle": 2,
+      "movement": "depot_T034_T041",
+      "connector": 0,
+      "start_min": 835.7614949223588,
+      "end_min": 836.0,
+      "grid_kwh": 0.837654333241901
+    },
+    {
+      "vehicle": 1,
+      "movement": "depot_T035_T039",
+      "connector": 0,
+      "start_min": 836.0,
+      "end_min": 836.6769543047826,
+      "grid_kwh": 2.173306401515727
+    },
+    {
+      "vehicle": 2,
+      "movement": "depot_T034_T041",
+      "connector": 0,
+      "start_min": 836.6769543047826,
+      "end_min": 837.0,
+      "grid_kwh": 1.0371117702301802
+    },
+    {
+      "vehicle": 2,
+      "movement": "depot_T034_T041",
+      "connector": 0,
+      "start_min": 837.0,
+      "end_min": 840.0,
+      "grid_kwh": 3.7525177294564034
+    },
+    {
+      "vehicle": 2,
+      "movement": "depot_T034_T041",
+      "connector": 0,
+      "start_min": 841.0,
+      "end_min": 862.0,
+      "grid_kwh": 25.356036861355435
+    },
+    {
+      "vehicle": 1,
+      "movement": "depot_T039_T043",
+      "connector": 0,
+      "start_min": 872.0,
+      "end_min": 872.7204543751104,
+      "grid_kwh": 2.5507005098999955
+    },
+    {
+      "vehicle": 3,
+      "movement": "depot_T036_T045",
+      "connector": 0,
+      "start_min": 872.7204543751104,
+      "end_min": 873.0,
+      "grid_kwh": 0.9897048204294688
+    },
+    {
+      "vehicle": 0,
+      "movement": "depot_T038_T040",
+      "connector": 0,
+      "start_min": 873.0,
+      "end_min": 873.2237452473664,
+      "grid_kwh": 0.9041962368448346
+    },
+    {
+      "vehicle": 1,
+      "movement": "depot_T039_T043",
+      "connector": 0,
+      "start_min": 873.2237452473664,
+      "end_min": 874.7626911814926,
+      "grid_kwh": 6.219167283877174
+    },
+    {
+      "vehicle": 3,
+      "movement": "depot_T036_T045",
+      "connector": 0,
+      "start_min": 874.7626911814926,
+      "end_min": 875.0,
+      "grid_kwh": 0.9590091552336655
+    },
+    {
+      "vehicle": 1,
+      "movement": "depot_T039_T043",
+      "connector": 0,
+      "start_min": 875.0,
+      "end_min": 885.710397579757,
+      "grid_kwh": 46.933338632478964
+    },
+    {
+      "vehicle": 3,
+      "movement": "depot_T036_T045",
+      "connector": 0,
+      "start_min": 885.710397579757,
+      "end_min": 886.0,
+      "grid_kwh": 1.2690479841512736
+    },
+    {
+      "vehicle": 3,
+      "movement": "depot_T036_T045",
+      "connector": 0,
+      "start_min": 886.0,
+      "end_min": 897.0,
+      "grid_kwh": 28.577981805233062
+    },
+    {
+      "vehicle": 2,
+      "movement": "depot_T041_T044",
+      "connector": 0,
+      "start_min": 897.0,
+      "end_min": 898.3816381432465,
+      "grid_kwh": 4.0264014564476165
+    },
+    {
+      "vehicle": 3,
+      "movement": "depot_T036_T045",
+      "connector": 0,
+      "start_min": 898.3816381432465,
+      "end_min": 900.0,
+      "grid_kwh": 4.716267113023279
+    },
+    {
+      "vehicle": 2,
+      "movement": "depot_T041_T044",
+      "connector": 0,
+      "start_min": 900.0,
+      "end_min": 902.9445001576721,
+      "grid_kwh": 8.19315656168844
+    },
+    {
+      "vehicle": 3,
+      "movement": "depot_T036_T045",
+      "connector": 0,
+      "start_min": 902.9445001576721,
+      "end_min": 907.0,
+      "grid_kwh": 11.28454520795946
+    },
+    {
+      "vehicle": 0,
+      "movement": "depot_T040_T047",
+      "connector": 0,
+      "start_min": 907.0,
+      "end_min": 907.356424386191,
+      "grid_kwh": 1.2056214536888086
+    },
+    {
+      "vehicle": 2,
+      "movement": "depot_T041_T044",
+      "connector": 0,
+      "start_min": 907.356424386191,
+      "end_min": 907.6682124209698,
+      "grid_kwh": 1.0546369953806494
+    },
+    {
+      "vehicle": 3,
+      "movement": "depot_T036_T045",
+      "connector": 0,
+      "start_min": 907.6682124209698,
+      "end_min": 908.0,
+      "grid_kwh": 1.1222863497670548
+    },
+    {
+      "vehicle": 0,
+      "movement": "depot_T040_T047",
+      "connector": 0,
+      "start_min": 908.0,
+      "end_min": 908.5267801278434,
+      "grid_kwh": 1.573027936551777
+    },
+    {
+      "vehicle": 2,
+      "movement": "depot_T041_T044",
+      "connector": 0,
+      "start_min": 908.5267801278434,
+      "end_min": 909.0,
+      "grid_kwh": 1.4130906609580534
+    },
+    {
+      "vehicle": 0,
+      "movement": "depot_T040_T047",
+      "connector": 0,
+      "start_min": 909.0,
+      "end_min": 912.1229298204684,
+      "grid_kwh": 9.228813149535895
+    },
+    {
+      "vehicle": 2,
+      "movement": "depot_T041_T044",
+      "connector": 0,
+      "start_min": 912.1229298204684,
+      "end_min": 914.0,
+      "grid_kwh": 5.54707628776128
+    },
+    {
+      "vehicle": 0,
+      "movement": "depot_T040_T047",
+      "connector": 0,
+      "start_min": 917.0,
+      "end_min": 938.0,
+      "grid_kwh": 37.258816925877674
+    },
+    {
+      "vehicle": 1,
+      "movement": "depot_T042_T049",
+      "connector": 0,
+      "start_min": 947.0,
+      "end_min": 953.0,
+      "grid_kwh": 25.920273260908292
+    },
+    {
+      "vehicle": 1,
+      "movement": "depot_T042_T049",
+      "connector": 0,
+      "start_min": 953.0,
+      "end_min": 955.8235959941446,
+      "grid_kwh": 11.913300052778887
+    },
+    {
+      "vehicle": 2,
+      "movement": "depot_T044_T048",
+      "connector": 0,
+      "start_min": 955.8235959941446,
+      "end_min": 956.0,
+      "grid_kwh": 0.7442827715527053
+    },
+    {
+      "vehicle": 2,
+      "movement": "depot_T044_T048",
+      "connector": 0,
+      "start_min": 956.0,
+      "end_min": 960.0,
+      "grid_kwh": 6.042924244558833
+    },
+    {
+      "vehicle": 2,
+      "movement": "depot_T044_T048",
+      "connector": 0,
+      "start_min": 960.0,
+      "end_min": 975.0,
+      "grid_kwh": 19.25648091303597
+    },
+    {
+      "vehicle": 0,
+      "movement": "depot_T047_T051",
+      "connector": 0,
+      "start_min": 975.0,
+      "end_min": 975.540068855379,
+      "grid_kwh": 1.6023743811862483
+    },
+    {
+      "vehicle": 2,
+      "movement": "depot_T044_T048",
+      "connector": 0,
+      "start_min": 975.540068855379,
+      "end_min": 976.0,
+      "grid_kwh": 1.3646072642592848
+    },
+    {
+      "vehicle": 0,
+      "movement": "depot_T047_T051",
+      "connector": 0,
+      "start_min": 976.0,
+      "end_min": 980.0,
+      "grid_kwh": 9.774487507719584
+    },
+    {
+      "vehicle": 0,
+      "movement": "depot_T047_T051",
+      "connector": 0,
+      "start_min": 980.0,
+      "end_min": 983.2237979499214,
+      "grid_kwh": 10.101892167636583
+    },
+    {
+      "vehicle": 3,
+      "movement": "depot_T046_T053",
+      "connector": 0,
+      "start_min": 983.2237979499214,
+      "end_min": 986.0,
+      "grid_kwh": 8.699333575216377
+    },
+    {
+      "vehicle": 0,
+      "movement": "depot_T047_T051",
+      "connector": 0,
+      "start_min": 986.0,
+      "end_min": 986.5081020357642,
+      "grid_kwh": 1.5391144342421004
+    },
+    {
+      "vehicle": 3,
+      "movement": "depot_T046_T053",
+      "connector": 0,
+      "start_min": 986.5081020357642,
+      "end_min": 987.0,
+      "grid_kwh": 1.490029961779379
+    },
+    {
+      "vehicle": 3,
+      "movement": "depot_T046_T053",
+      "connector": 0,
+      "start_min": 989.0,
+      "end_min": 1006.0,
+      "grid_kwh": 43.937724392408576
+    },
+    {
+      "vehicle": 2,
+      "movement": "depot_T048_T054",
+      "connector": 0,
+      "start_min": 1006.0,
+      "end_min": 1007.6192677190187,
+      "grid_kwh": 4.451553269423766
+    },
+    {
+      "vehicle": 3,
+      "movement": "depot_T046_T053",
+      "connector": 0,
+      "start_min": 1007.6192677190187,
+      "end_min": 1011.0,
+      "grid_kwh": 9.294022020996305
+    },
+    {
+      "vehicle": 2,
+      "movement": "depot_T048_T054",
+      "connector": 0,
+      "start_min": 1011.0,
+      "end_min": 1020.0,
+      "grid_kwh": 10.990231970992701
+    },
+    {
+      "vehicle": 1,
+      "movement": "depot_T050_T055",
+      "connector": 0,
+      "start_min": 1024.0,
+      "end_min": 1027.8520897512183,
+      "grid_kwh": 16.517436243297222
+    },
+    {
+      "vehicle": 2,
+      "movement": "depot_T048_T054",
+      "connector": 0,
+      "start_min": 1027.8520897512183,
+      "end_min": 1028.0,
+      "grid_kwh": 0.6342266825973712
+    },
+    {
+      "vehicle": 1,
+      "movement": "depot_T050_T055",
+      "connector": 0,
+      "start_min": 1028.0,
+      "end_min": 1031.8520897509309,
+      "grid_kwh": 16.517436207063653
+    },
+    {
+      "vehicle": 2,
+      "movement": "depot_T048_T054",
+      "connector": 0,
+      "start_min": 1031.8520897509309,
+      "end_min": 1032.0,
+      "grid_kwh": 0.6342266824858438
+    },
+    {
+      "vehicle": 2,
+      "movement": "depot_T048_T054",
+      "connector": 0,
+      "start_min": 1032.0,
+      "end_min": 1044.0,
+      "grid_kwh": 29.981326182583803
+    },
+    {
+      "vehicle": 2,
+      "movement": "depot_T048_T054",
+      "connector": 0,
+      "start_min": 1044.0,
+      "end_min": 1044.911272177575,
+      "grid_kwh": 3.1267243375015954
+    },
+    {
+      "vehicle": 3,
+      "movement": "depot_T053_T057",
+      "connector": 0,
+      "start_min": 1044.911272177575,
+      "end_min": 1048.0,
+      "grid_kwh": 10.597931871455433
+    },
+    {
+      "vehicle": 3,
+      "movement": "depot_T053_T057",
+      "connector": 0,
+      "start_min": 1048.0,
+      "end_min": 1054.0,
+      "grid_kwh": 19.78891485922976
+    },
+    {
+      "vehicle": 0,
+      "movement": "depot_T052_T059",
+      "connector": 0,
+      "start_min": 1054.0,
+      "end_min": 1054.6526570140404,
+      "grid_kwh": 2.084471212531825
+    },
+    {
+      "vehicle": 3,
+      "movement": "depot_T053_T057",
+      "connector": 0,
+      "start_min": 1054.6526570140404,
+      "end_min": 1056.0,
+      "grid_kwh": 4.303175492212693
+    },
+    {
+      "vehicle": 0,
+      "movement": "depot_T052_T059",
+      "connector": 0,
+      "start_min": 1056.0,
+      "end_min": 1073.0,
+      "grid_kwh": 14.377849742446902
+    },
+    {
+      "vehicle": 0,
+      "movement": "depot_T052_T059",
+      "connector": 0,
+      "start_min": 1073.0,
+      "end_min": 1073.1407127376503,
+      "grid_kwh": 0.5541453835216097
+    },
+    {
+      "vehicle": 1,
+      "movement": "depot_T055_T056",
+      "connector": 0,
+      "start_min": 1073.1407127376503,
+      "end_min": 1074.0,
+      "grid_kwh": 3.383986961673988
+    },
+    {
+      "vehicle": 0,
+      "movement": "depot_T052_T059",
+      "connector": 0,
+      "start_min": 1080.0,
+      "end_min": 1084.0,
+      "grid_kwh": 16.288052683120586
+    },
+    {
+      "vehicle": 0,
+      "movement": "depot_T052_T059",
+      "connector": 0,
+      "start_min": 1084.0,
+      "end_min": 1085.0,
+      "grid_kwh": 4.5
+    },
+    {
+      "vehicle": 0,
+      "movement": "depot_T059_T063",
+      "connector": 0,
+      "start_min": 1116.0,
+      "end_min": 1123.0,
+      "grid_kwh": 29.61820496973338
+    },
+    {
+      "vehicle": 0,
+      "movement": "depot_T059_T063",
+      "connector": 0,
+      "start_min": 1123.0,
+      "end_min": 1124.6075053610325,
+      "grid_kwh": 6.795296275219601
+    },
+    {
+      "vehicle": 2,
+      "movement": "depot_T058_T065",
+      "connector": 0,
+      "start_min": 1124.6075053610325,
+      "end_min": 1128.0,
+      "grid_kwh": 14.340858041723404
+    },
+    {
+      "vehicle": 0,
+      "movement": "depot_T059_T063",
+      "connector": 0,
+      "start_min": 1128.0,
+      "end_min": 1130.1233793377253,
+      "grid_kwh": 9.148861868028455
+    },
+    {
+      "vehicle": 2,
+      "movement": "depot_T058_T065",
+      "connector": 0,
+      "start_min": 1130.1233793377253,
+      "end_min": 1136.0,
+      "grid_kwh": 25.32020055707465
+    },
+    {
+      "vehicle": 2,
+      "movement": "depot_T058_T065",
+      "connector": 0,
+      "start_min": 1136.0,
+      "end_min": 1138.0,
+      "grid_kwh": 9.0
+    },
+    {
+      "vehicle": 2,
+      "movement": "depot_T058_T065",
+      "connector": 0,
+      "start_min": 1138.0,
+      "end_min": 1140.0,
+      "grid_kwh": 7.490377384504722
+    },
+    {
+      "vehicle": 2,
+      "movement": "depot_T058_T065",
+      "connector": 0,
+      "start_min": 1140.0,
+      "end_min": 1157.0,
+      "grid_kwh": 6.398277537884614
+    },
+    {
+      "vehicle": 3,
+      "movement": "depot_T060_T067",
+      "connector": 0,
+      "start_min": 1166.0,
+      "end_min": 1173.0,
+      "grid_kwh": 11.577289124278902
+    },
+    {
+      "vehicle": 1,
+      "movement": "depot_T062_T069",
+      "connector": 0,
+      "start_min": 1174.0,
+      "end_min": 1176.091670003772,
+      "grid_kwh": 7.427299421424321
+    },
+    {
+      "vehicle": 3,
+      "movement": "depot_T060_T067",
+      "connector": 0,
+      "start_min": 1176.091670003772,
+      "end_min": 1177.0,
+      "grid_kwh": 3.2253839483673907
+    },
+    {
+      "vehicle": 1,
+      "movement": "depot_T062_T069",
+      "connector": 0,
+      "start_min": 1177.0,
+      "end_min": 1184.634623546805,
+      "grid_kwh": 31.565691473741147
+    },
+    {
+      "vehicle": 3,
+      "movement": "depot_T060_T067",
+      "connector": 0,
+      "start_min": 1184.634623546805,
+      "end_min": 1186.0,
+      "grid_kwh": 5.6452098263713
+    },
+    {
+      "vehicle": 1,
+      "movement": "depot_T062_T069",
+      "connector": 0,
+      "start_min": 1186.0,
+      "end_min": 1194.0,
+      "grid_kwh": 29.6627005269632
+    },
+    {
+      "vehicle": 1,
+      "movement": "depot_T062_T069",
+      "connector": 0,
+      "start_min": 1194.0,
+      "end_min": 1200.0,
+      "grid_kwh": 27.0
+    },
+    {
+      "vehicle": 1,
+      "movement": "depot_T062_T069",
+      "connector": 0,
+      "start_min": 1200.0,
+      "end_min": 1207.0,
+      "grid_kwh": 30.55412871787839
+    },
+    {
+      "vehicle": 0,
+      "movement": "depot_T064_T071",
+      "connector": 0,
+      "start_min": 1217.0,
+      "end_min": 1222.0,
+      "grid_kwh": 8.858456611760985
+    },
+    {
+      "vehicle": 0,
+      "movement": "depot_T064_T071",
+      "connector": 0,
+      "start_min": 1222.0,
+      "end_min": 1232.0,
+      "grid_kwh": 45.0
+    },
+    {
+      "vehicle": 0,
+      "movement": "depot_T064_T071",
+      "connector": 0,
+      "start_min": 1232.0,
+      "end_min": 1232.506874109174,
+      "grid_kwh": 1.923626694687582
+    },
+    {
+      "vehicle": 2,
+      "movement": "depot_T066_T070",
+      "connector": 0,
+      "start_min": 1232.506874109174,
+      "end_min": 1235.0,
+      "grid_kwh": 9.461606797444277
+    },
+    {
+      "vehicle": 2,
+      "movement": "depot_T066_T070",
+      "connector": 0,
+      "start_min": 1235.0,
+      "end_min": 1239.0,
+      "grid_kwh": 18.0
+    },
+    {
+      "vehicle": 2,
+      "movement": "depot_T066_T070",
+      "connector": 0,
+      "start_min": 1239.0,
+      "end_min": 1240.0,
+      "grid_kwh": 1.978700083843563
+    },
+    {
+      "vehicle": 3,
+      "movement": "depot_T068_T075",
+      "connector": 0,
+      "start_min": 1255.0,
+      "end_min": 1257.0,
+      "grid_kwh": 6.725332948121187
+    },
+    {
+      "vehicle": 3,
+      "movement": "depot_T068_T075",
+      "connector": 0,
+      "start_min": 1260.0,
+      "end_min": 1270.0,
+      "grid_kwh": 45.0
+    },
+    {
+      "vehicle": 2,
+      "movement": "depot_T070_T072",
+      "connector": 0,
+      "start_min": 1270.0,
+      "end_min": 1275.5050651936767,
+      "grid_kwh": 24.772793371507248
+    },
+    {
+      "vehicle": 3,
+      "movement": "depot_T068_T075",
+      "connector": 0,
+      "start_min": 1275.5050651936767,
+      "end_min": 1276.0,
+      "grid_kwh": 2.2272066284507903
+    },
+    {
+      "vehicle": 2,
+      "movement": "depot_T070_T072",
+      "connector": 0,
+      "start_min": 1276.0,
+      "end_min": 1281.5050651955244,
+      "grid_kwh": 24.77279337982168
+    },
+    {
+      "vehicle": 3,
+      "movement": "depot_T068_T075",
+      "connector": 0,
+      "start_min": 1281.5050651955244,
+      "end_min": 1282.0,
+      "grid_kwh": 2.227206620136656
+    },
+    {
+      "vehicle": 3,
+      "movement": "depot_T068_T075",
+      "connector": 0,
+      "start_min": 1282.0,
+      "end_min": 1283.0,
+      "grid_kwh": 4.499999999868201
+    },
+    {
+      "vehicle": 2,
+      "movement": "depot_T077_T078",
+      "connector": 0,
+      "start_min": 1354.0,
+      "end_min": 1364.0,
+      "grid_kwh": 44.99999999998653
+    },
+    {
+      "vehicle": 3,
+      "movement": "in_T076",
+      "connector": 0,
+      "start_min": 1366.0,
+      "end_min": 1373.0,
+      "grid_kwh": 31.499999999990333
+    },
+    {
+      "vehicle": 1,
+      "movement": "in_T079",
+      "connector": 0,
+      "start_min": 1373.0,
+      "end_min": 1376.20768113015,
+      "grid_kwh": 14.434565085669133
+    },
+    {
+      "vehicle": 3,
+      "movement": "in_T076",
+      "connector": 0,
+      "start_min": 1376.20768113015,
+      "end_min": 1379.0,
+      "grid_kwh": 12.565434914321337
+    },
+    {
+      "vehicle": 1,
+      "movement": "in_T079",
+      "connector": 0,
+      "start_min": 1379.0,
+      "end_min": 1379.5068868199912,
+      "grid_kwh": 2.280990689954377
+    },
+    {
+      "vehicle": 3,
+      "movement": "in_T076",
+      "connector": 0,
+      "start_min": 1379.5068868199912,
+      "end_min": 1380.0,
+      "grid_kwh": 2.219009310034185
+    },
+    {
+      "vehicle": 1,
+      "movement": "in_T079",
+      "connector": 0,
+      "start_min": 1380.0,
+      "end_min": 1391.799942777443,
+      "grid_kwh": 38.46994889453019
+    },
+    {
+      "vehicle": 3,
+      "movement": "in_T076",
+      "connector": 0,
+      "start_min": 1391.799942777443,
+      "end_min": 1401.0,
+      "grid_kwh": 29.993851483339228
+    },
+    {
+      "vehicle": 1,
+      "movement": "in_T079",
+      "connector": 0,
+      "start_min": 1401.0,
+      "end_min": 1403.9379851844542,
+      "grid_kwh": 8.050952432490929
+    },
+    {
+      "vehicle": 2,
+      "movement": "in_T078",
+      "connector": 0,
+      "start_min": 1403.9379851844542,
+      "end_min": 1407.2084177538802,
+      "grid_kwh": 8.961957054595914
+    },
+    {
+      "vehicle": 3,
+      "movement": "in_T076",
+      "connector": 0,
+      "start_min": 1407.2084177538802,
+      "end_min": 1410.0,
+      "grid_kwh": 7.649764877582652
+    },
+    {
+      "vehicle": 0,
+      "movement": "in_T080",
+      "connector": 0,
+      "start_min": 1410.0,
+      "end_min": 1418.9745946504697,
+      "grid_kwh": 32.9188705925038
+    },
+    {
+      "vehicle": 1,
+      "movement": "in_T079",
+      "connector": 0,
+      "start_min": 1418.9745946504697,
+      "end_min": 1425.799317286816,
+      "grid_kwh": 25.033126290986395
+    },
+    {
+      "vehicle": 2,
+      "movement": "in_T078",
+      "connector": 0,
+      "start_min": 1425.799317286816,
+      "end_min": 1434.3065816720873,
+      "grid_kwh": 31.20470019003097
+    },
+    {
+      "vehicle": 3,
+      "movement": "in_T076",
+      "connector": 0,
+      "start_min": 1434.3065816720873,
+      "end_min": 1440.0,
+      "grid_kwh": 20.8834948501813
+    },
+    {
+      "vehicle": 0,
+      "movement": "in_T080",
+      "connector": 0,
+      "start_min": 1440.0,
+      "end_min": 1460.3326241672366,
+      "grid_kwh": 68.8485246105966
+    },
+    {
+      "vehicle": 1,
+      "movement": "in_T079",
+      "connector": 0,
+      "start_min": 1460.3326241672366,
+      "end_min": 1472.3058569035163,
+      "grid_kwh": 40.54269640415992
+    },
+    {
+      "vehicle": 2,
+      "movement": "in_T078",
+      "connector": 0,
+      "start_min": 1472.3058569035163,
+      "end_min": 1490.2520313657099,
+      "grid_kwh": 60.76774074825726
+    },
+    {
+      "vehicle": 3,
+      "movement": "in_T076",
+      "connector": 0,
+      "start_min": 1490.2520313657099,
+      "end_min": 1500.0,
+      "grid_kwh": 33.00770490327035
+    },
+    {
+      "vehicle": 0,
+      "movement": "in_T080",
+      "connector": 0,
+      "start_min": 1500.0,
+      "end_min": 1520.3326241672376,
+      "grid_kwh": 68.8485246105998
+    },
+    {
+      "vehicle": 1,
+      "movement": "in_T079",
+      "connector": 0,
+      "start_min": 1520.3326241672376,
+      "end_min": 1532.3058569035175,
+      "grid_kwh": 40.542696404159784
+    },
+    {
+      "vehicle": 2,
+      "movement": "in_T078",
+      "connector": 0,
+      "start_min": 1532.3058569035175,
+      "end_min": 1550.2520313657099,
+      "grid_kwh": 60.767740748253736
+    },
+    {
+      "vehicle": 3,
+      "movement": "in_T076",
+      "connector": 0,
+      "start_min": 1550.2520313657099,
+      "end_min": 1560.0,
+      "grid_kwh": 33.00770490327002
+    },
+    {
+      "vehicle": 0,
+      "movement": "in_T080",
+      "connector": 0,
+      "start_min": 1560.0,
+      "end_min": 1574.8817786331408,
+      "grid_kwh": 5.74602008342538
+    },
+    {
+      "vehicle": 1,
+      "movement": "in_T079",
+      "connector": 0,
+      "start_min": 1574.8817786331408,
+      "end_min": 1590.5799955795687,
+      "grid_kwh": 6.06125598772639
+    },
+    {
+      "vehicle": 2,
+      "movement": "in_T078",
+      "connector": 0,
+      "start_min": 1590.5799955795687,
+      "end_min": 1605.2548698694832,
+      "grid_kwh": 5.666132017567538
+    },
+    {
+      "vehicle": 3,
+      "movement": "in_T076",
+      "connector": 0,
+      "start_min": 1605.2548698694832,
+      "end_min": 1620.0,
+      "grid_kwh": 5.6932585782449125
+    },
+    {
+      "vehicle": 0,
+      "movement": "in_T080",
+      "connector": 0,
+      "start_min": 1620.0,
+      "end_min": 1634.8817782513593,
+      "grid_kwh": 5.74601993601529
+    },
+    {
+      "vehicle": 1,
+      "movement": "in_T079",
+      "connector": 0,
+      "start_min": 1634.8817782513593,
+      "end_min": 1650.5799948018514,
+      "grid_kwh": 6.061255834851166
+    },
+    {
+      "vehicle": 2,
+      "movement": "in_T078",
+      "connector": 0,
+      "start_min": 1650.5799948018514,
+      "end_min": 1665.254868716906,
+      "grid_kwh": 5.666131872830045
+    },
+    {
+      "vehicle": 3,
+      "movement": "in_T076",
+      "connector": 0,
+      "start_min": 1665.254868716906,
+      "end_min": 1680.0,
+      "grid_kwh": 5.693259023267718
+    },
+    {
+      "vehicle": 0,
+      "movement": "in_T080",
+      "connector": 0,
+      "start_min": 1680.0,
+      "end_min": 1694.8817786331406,
+      "grid_kwh": 5.746020083425327
+    },
+    {
+      "vehicle": 1,
+      "movement": "in_T079",
+      "connector": 0,
+      "start_min": 1694.8817786331406,
+      "end_min": 1710.5799955795685,
+      "grid_kwh": 6.061255987726381
+    },
+    {
+      "vehicle": 2,
+      "movement": "in_T078",
+      "connector": 0,
+      "start_min": 1710.5799955795685,
+      "end_min": 1725.254869869483,
+      "grid_kwh": 5.666132017567531
+    },
+    {
+      "vehicle": 3,
+      "movement": "in_T076",
+      "connector": 0,
+      "start_min": 1725.254869869483,
+      "end_min": 1740.0,
+      "grid_kwh": 5.693258578244981
+    },
+    {
+      "vehicle": 0,
+      "movement": "in_T080",
+      "connector": 0,
+      "start_min": 1740.0,
+      "end_min": 1754.8817786331408,
+      "grid_kwh": 5.746020083425409
+    },
+    {
+      "vehicle": 1,
+      "movement": "in_T079",
+      "connector": 0,
+      "start_min": 1754.8817786331408,
+      "end_min": 1770.5799955795687,
+      "grid_kwh": 6.061255987726374
+    },
+    {
+      "vehicle": 2,
+      "movement": "in_T078",
+      "connector": 0,
+      "start_min": 1770.5799955795687,
+      "end_min": 1785.2548698694832,
+      "grid_kwh": 5.666132017567527
+    },
+    {
+      "vehicle": 3,
+      "movement": "in_T076",
+      "connector": 0,
+      "start_min": 1785.2548698694832,
+      "end_min": 1800.0,
+      "grid_kwh": 5.693258578244909
+    }
+  ],
+  "load": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    36.73333333332121,
+    75.52222222211947,
+    122.50185185894455,
+    122.50185185894216,
+    122.50185185899564,
+    122.50185185895987,
+    122.50185185912488,
+    122.50185185897477,
+    122.50185185896781,
+    122.50185185889687,
+    122.5018518586017,
+    122.50185177940482,
+    122.50185185903086,
+    122.50185185373599,
+    103.49999999978456,
+    107.9999999999559,
+    203.16666666624135,
+    203.16666666628413,
+    203.16666666628333,
+    23.16666666696422,
+    23.16666666696422,
+    23.16666666696422,
+    23.16666666696422
+  ],
+  "ops_cost": 400.0,
+  "raw_solver_load": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    36.73333333332121,
+    75.52222222211977,
+    122.50185185894316,
+    122.5018518589442,
+    122.50185185899461,
+    122.50185185896079,
+    122.50185185912444,
+    122.50185185898033,
+    122.50185185896682,
+    122.5018518588975,
+    122.50185185859992,
+    122.50185177941258,
+    122.50185185902895,
+    122.50185185373599,
+    103.49999999978493,
+    107.99999999995592,
+    203.1666666662423,
+    203.16666666628365,
+    203.16666666628365,
+    23.166666666964222,
+    23.166666666964225,
+    23.166666666964222,
+    23.166666666964222
+  ],
+  "raw_charge_load": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    36.73333333332121,
+    75.52222222211948,
+    122.50185185894455,
+    122.50185185894216,
+    122.50185185899562,
+    122.50185185895987,
+    122.50185185912487,
+    122.50185185897477,
+    122.50185185896781,
+    122.50185185889687,
+    122.5018518586017,
+    122.5018517794048,
+    122.50185185903088,
+    122.50185185373599,
+    103.49999999978458,
+    107.99999999995589,
+    203.16666666624138,
+    203.16666666628413,
+    203.16666666628333,
+    23.16666666696422,
+    23.16666666696422,
+    23.16666666696422,
+    23.16666666696422
+  ],
+  "roundoff": {
+    "negative_correction": {
+      "policy": "native-roundoff-qualification-v2",
+      "budget_kwh": 1e-08,
+      "negative_to_zero": [],
+      "negative_l1_kwh": 0.0,
+      "negative_l1_exact": "0",
+      "accepted": true
+    },
+    "serial_decoding": {
+      "policy": "native-roundoff-qualification-v2",
+      "endpoint_rule": "exact-energy-proportional-full-interval",
+      "intervals": [
+        {
+          "interval": 10,
+          "start_min": 424,
+          "end_min": 431,
+          "grid_kwh": 31.5,
+          "capacity_kwh": 31.5,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 11,
+          "start_min": 431,
+          "end_min": 435,
+          "grid_kwh": 5.233333333321212,
+          "capacity_kwh": 18.0,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 28,
+          "start_min": 520,
+          "end_min": 537,
+          "grid_kwh": 62.02222222218177,
+          "capacity_kwh": 76.5,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 29,
+          "start_min": 537,
+          "end_min": 539,
+          "grid_kwh": 8.999999999980211,
+          "capacity_kwh": 9.0,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 30,
+          "start_min": 539,
+          "end_min": 540,
+          "grid_kwh": 4.4999999999575016,
+          "capacity_kwh": 4.5,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 33,
+          "start_min": 543,
+          "end_min": 552,
+          "grid_kwh": 13.34572701293684,
+          "capacity_kwh": 40.5,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 34,
+          "start_min": 552,
+          "end_min": 561,
+          "grid_kwh": 35.24886429636488,
+          "capacity_kwh": 40.5,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 36,
+          "start_min": 571,
+          "end_min": 576,
+          "grid_kwh": 8.066987796647386,
+          "capacity_kwh": 22.5,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 37,
+          "start_min": 576,
+          "end_min": 582,
+          "grid_kwh": 19.420293585350628,
+          "capacity_kwh": 27.0,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 38,
+          "start_min": 582,
+          "end_min": 584,
+          "grid_kwh": 6.694638355105341,
+          "capacity_kwh": 9.0,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 39,
+          "start_min": 584,
+          "end_min": 600,
+          "grid_kwh": 39.72534081253947,
+          "capacity_kwh": 72.0,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 41,
+          "start_min": 602,
+          "end_min": 609,
+          "grid_kwh": 26.075959982961166,
+          "capacity_kwh": 31.5,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 43,
+          "start_min": 610,
+          "end_min": 615,
+          "grid_kwh": 18.868524961064722,
+          "capacity_kwh": 22.5,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 45,
+          "start_min": 623,
+          "end_min": 633,
+          "grid_kwh": 23.750639215380662,
+          "capacity_kwh": 45.0,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 47,
+          "start_min": 642,
+          "end_min": 646,
+          "grid_kwh": 13.0876938387574,
+          "capacity_kwh": 18.0,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 48,
+          "start_min": 646,
+          "end_min": 648,
+          "grid_kwh": 4.802802889632094,
+          "capacity_kwh": 9.0,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 49,
+          "start_min": 648,
+          "end_min": 659,
+          "grid_kwh": 33.84004341864406,
+          "capacity_kwh": 49.5,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 50,
+          "start_min": 659,
+          "end_min": 660,
+          "grid_kwh": 2.076187552502064,
+          "capacity_kwh": 4.5,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 51,
+          "start_min": 660,
+          "end_min": 669,
+          "grid_kwh": 24.621431526717327,
+          "capacity_kwh": 40.5,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 54,
+          "start_min": 683,
+          "end_min": 687,
+          "grid_kwh": 12.890043164513784,
+          "capacity_kwh": 18.0,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 55,
+          "start_min": 687,
+          "end_min": 696,
+          "grid_kwh": 21.973746673497054,
+          "capacity_kwh": 40.5,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 56,
+          "start_min": 696,
+          "end_min": 697,
+          "grid_kwh": 3.0395916478892344,
+          "capacity_kwh": 4.5,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 58,
+          "start_min": 703,
+          "end_min": 714,
+          "grid_kwh": 36.55464211169423,
+          "capacity_kwh": 49.5,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 59,
+          "start_min": 714,
+          "end_min": 720,
+          "grid_kwh": 23.422396734684,
+          "capacity_kwh": 27.0,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 60,
+          "start_min": 720,
+          "end_min": 727,
+          "grid_kwh": 17.730707835215156,
+          "capacity_kwh": 31.5,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 61,
+          "start_min": 727,
+          "end_min": 733,
+          "grid_kwh": 21.91944255425621,
+          "capacity_kwh": 27.0,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 62,
+          "start_min": 733,
+          "end_min": 735,
+          "grid_kwh": 7.191457300794564,
+          "capacity_kwh": 9.0,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 63,
+          "start_min": 735,
+          "end_min": 736,
+          "grid_kwh": 3.054462786621202,
+          "capacity_kwh": 4.5,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 64,
+          "start_min": 736,
+          "end_min": 745,
+          "grid_kwh": 40.02706097066664,
+          "capacity_kwh": 40.5,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 65,
+          "start_min": 745,
+          "end_min": 748,
+          "grid_kwh": 13.5,
+          "capacity_kwh": 13.5,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 69,
+          "start_min": 775,
+          "end_min": 776,
+          "grid_kwh": 1.078720411406092,
+          "capacity_kwh": 4.5,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 70,
+          "start_min": 776,
+          "end_min": 780,
+          "grid_kwh": 18.0,
+          "capacity_kwh": 18.0,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 71,
+          "start_min": 780,
+          "end_min": 783,
+          "grid_kwh": 9.750203046082602,
+          "capacity_kwh": 13.5,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 72,
+          "start_min": 783,
+          "end_min": 788,
+          "grid_kwh": 18.236598309849292,
+          "capacity_kwh": 22.5,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 74,
+          "start_min": 791,
+          "end_min": 797,
+          "grid_kwh": 12.641725079042729,
+          "capacity_kwh": 27.0,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 75,
+          "start_min": 797,
+          "end_min": 802,
+          "grid_kwh": 8.927169505854119,
+          "capacity_kwh": 22.5,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 76,
+          "start_min": 802,
+          "end_min": 807,
+          "grid_kwh": 11.85870028783704,
+          "capacity_kwh": 22.5,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 77,
+          "start_min": 807,
+          "end_min": 826,
+          "grid_kwh": 13.062055557024072,
+          "capacity_kwh": 85.5,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 78,
+          "start_min": 826,
+          "end_min": 830,
+          "grid_kwh": 16.568551194867236,
+          "capacity_kwh": 18.0,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 79,
+          "start_min": 830,
+          "end_min": 835,
+          "grid_kwh": 20.981810251812032,
+          "capacity_kwh": 22.5,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 80,
+          "start_min": 835,
+          "end_min": 836,
+          "grid_kwh": 3.5121027255534365,
+          "capacity_kwh": 4.5,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 81,
+          "start_min": 836,
+          "end_min": 837,
+          "grid_kwh": 3.210418171745907,
+          "capacity_kwh": 4.5,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 82,
+          "start_min": 837,
+          "end_min": 840,
+          "grid_kwh": 3.7525177294564034,
+          "capacity_kwh": 13.5,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 84,
+          "start_min": 841,
+          "end_min": 862,
+          "grid_kwh": 25.356036861355435,
+          "capacity_kwh": 94.5,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 87,
+          "start_min": 872,
+          "end_min": 873,
+          "grid_kwh": 3.5404053303294645,
+          "capacity_kwh": 4.5,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 88,
+          "start_min": 873,
+          "end_min": 875,
+          "grid_kwh": 8.082372675955675,
+          "capacity_kwh": 9.0,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 89,
+          "start_min": 875,
+          "end_min": 886,
+          "grid_kwh": 48.202386616630235,
+          "capacity_kwh": 49.5,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 90,
+          "start_min": 886,
+          "end_min": 897,
+          "grid_kwh": 28.577981805233062,
+          "capacity_kwh": 49.5,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 91,
+          "start_min": 897,
+          "end_min": 900,
+          "grid_kwh": 8.742668569470895,
+          "capacity_kwh": 13.5,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 92,
+          "start_min": 900,
+          "end_min": 907,
+          "grid_kwh": 19.4777017696479,
+          "capacity_kwh": 31.5,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 93,
+          "start_min": 907,
+          "end_min": 908,
+          "grid_kwh": 3.3825447988365127,
+          "capacity_kwh": 4.5,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 94,
+          "start_min": 908,
+          "end_min": 909,
+          "grid_kwh": 2.9861185975098303,
+          "capacity_kwh": 4.5,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 95,
+          "start_min": 909,
+          "end_min": 914,
+          "grid_kwh": 14.775889437297176,
+          "capacity_kwh": 22.5,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 97,
+          "start_min": 917,
+          "end_min": 938,
+          "grid_kwh": 37.258816925877674,
+          "capacity_kwh": 94.5,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 100,
+          "start_min": 947,
+          "end_min": 953,
+          "grid_kwh": 25.920273260908292,
+          "capacity_kwh": 27.0,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 101,
+          "start_min": 953,
+          "end_min": 956,
+          "grid_kwh": 12.657582824331591,
+          "capacity_kwh": 13.5,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 102,
+          "start_min": 956,
+          "end_min": 960,
+          "grid_kwh": 6.042924244558833,
+          "capacity_kwh": 18.0,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 103,
+          "start_min": 960,
+          "end_min": 975,
+          "grid_kwh": 19.25648091303597,
+          "capacity_kwh": 67.5,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 104,
+          "start_min": 975,
+          "end_min": 976,
+          "grid_kwh": 2.966981645445533,
+          "capacity_kwh": 4.5,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 105,
+          "start_min": 976,
+          "end_min": 980,
+          "grid_kwh": 9.774487507719584,
+          "capacity_kwh": 18.0,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 106,
+          "start_min": 980,
+          "end_min": 986,
+          "grid_kwh": 18.80122574285296,
+          "capacity_kwh": 27.0,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 107,
+          "start_min": 986,
+          "end_min": 987,
+          "grid_kwh": 3.0291443960214792,
+          "capacity_kwh": 4.5,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 109,
+          "start_min": 989,
+          "end_min": 1006,
+          "grid_kwh": 43.937724392408576,
+          "capacity_kwh": 76.5,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 110,
+          "start_min": 1006,
+          "end_min": 1011,
+          "grid_kwh": 13.74557529042007,
+          "capacity_kwh": 22.5,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 111,
+          "start_min": 1011,
+          "end_min": 1020,
+          "grid_kwh": 10.990231970992701,
+          "capacity_kwh": 40.5,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 114,
+          "start_min": 1024,
+          "end_min": 1028,
+          "grid_kwh": 17.151662925894595,
+          "capacity_kwh": 18.0,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 115,
+          "start_min": 1028,
+          "end_min": 1032,
+          "grid_kwh": 17.1516628895495,
+          "capacity_kwh": 18.0,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 116,
+          "start_min": 1032,
+          "end_min": 1044,
+          "grid_kwh": 29.981326182583803,
+          "capacity_kwh": 54.0,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 117,
+          "start_min": 1044,
+          "end_min": 1048,
+          "grid_kwh": 13.724656208957029,
+          "capacity_kwh": 18.0,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 118,
+          "start_min": 1048,
+          "end_min": 1054,
+          "grid_kwh": 19.78891485922976,
+          "capacity_kwh": 27.0,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 119,
+          "start_min": 1054,
+          "end_min": 1056,
+          "grid_kwh": 6.387646704744519,
+          "capacity_kwh": 9.0,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 120,
+          "start_min": 1056,
+          "end_min": 1073,
+          "grid_kwh": 14.377849742446902,
+          "capacity_kwh": 76.5,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 121,
+          "start_min": 1073,
+          "end_min": 1074,
+          "grid_kwh": 3.938132345195598,
+          "capacity_kwh": 4.5,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 124,
+          "start_min": 1080,
+          "end_min": 1084,
+          "grid_kwh": 16.288052683120586,
+          "capacity_kwh": 18.0,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 125,
+          "start_min": 1084,
+          "end_min": 1085,
+          "grid_kwh": 4.5,
+          "capacity_kwh": 4.5,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 130,
+          "start_min": 1116,
+          "end_min": 1123,
+          "grid_kwh": 29.61820496973338,
+          "capacity_kwh": 31.5,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 131,
+          "start_min": 1123,
+          "end_min": 1128,
+          "grid_kwh": 21.136154316943006,
+          "capacity_kwh": 22.5,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 132,
+          "start_min": 1128,
+          "end_min": 1136,
+          "grid_kwh": 34.469062425103104,
+          "capacity_kwh": 36.0,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 133,
+          "start_min": 1136,
+          "end_min": 1138,
+          "grid_kwh": 9.0,
+          "capacity_kwh": 9.0,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 134,
+          "start_min": 1138,
+          "end_min": 1140,
+          "grid_kwh": 7.490377384504722,
+          "capacity_kwh": 9.0,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 135,
+          "start_min": 1140,
+          "end_min": 1157,
+          "grid_kwh": 6.398277537884614,
+          "capacity_kwh": 76.5,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 137,
+          "start_min": 1166,
+          "end_min": 1173,
+          "grid_kwh": 11.577289124278902,
+          "capacity_kwh": 31.5,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 139,
+          "start_min": 1174,
+          "end_min": 1177,
+          "grid_kwh": 10.652683369791712,
+          "capacity_kwh": 13.5,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 140,
+          "start_min": 1177,
+          "end_min": 1186,
+          "grid_kwh": 37.21090130011245,
+          "capacity_kwh": 40.5,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 141,
+          "start_min": 1186,
+          "end_min": 1194,
+          "grid_kwh": 29.6627005269632,
+          "capacity_kwh": 36.0,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 142,
+          "start_min": 1194,
+          "end_min": 1200,
+          "grid_kwh": 27.0,
+          "capacity_kwh": 27.0,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 143,
+          "start_min": 1200,
+          "end_min": 1207,
+          "grid_kwh": 30.55412871787839,
+          "capacity_kwh": 31.5,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 146,
+          "start_min": 1217,
+          "end_min": 1222,
+          "grid_kwh": 8.858456611760985,
+          "capacity_kwh": 22.5,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 147,
+          "start_min": 1222,
+          "end_min": 1232,
+          "grid_kwh": 45.0,
+          "capacity_kwh": 45.0,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 148,
+          "start_min": 1232,
+          "end_min": 1235,
+          "grid_kwh": 11.38523349213186,
+          "capacity_kwh": 13.5,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 149,
+          "start_min": 1235,
+          "end_min": 1239,
+          "grid_kwh": 18.0,
+          "capacity_kwh": 18.0,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 150,
+          "start_min": 1239,
+          "end_min": 1240,
+          "grid_kwh": 1.978700083843563,
+          "capacity_kwh": 4.5,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 152,
+          "start_min": 1255,
+          "end_min": 1257,
+          "grid_kwh": 6.725332948121187,
+          "capacity_kwh": 9.0,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 154,
+          "start_min": 1260,
+          "end_min": 1270,
+          "grid_kwh": 45.0,
+          "capacity_kwh": 45.0,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 155,
+          "start_min": 1270,
+          "end_min": 1276,
+          "grid_kwh": 26.99999999995804,
+          "capacity_kwh": 27.0,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 156,
+          "start_min": 1276,
+          "end_min": 1282,
+          "grid_kwh": 26.999999999958337,
+          "capacity_kwh": 27.0,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 157,
+          "start_min": 1282,
+          "end_min": 1283,
+          "grid_kwh": 4.499999999868201,
+          "capacity_kwh": 4.5,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 167,
+          "start_min": 1354,
+          "end_min": 1364,
+          "grid_kwh": 44.99999999998653,
+          "capacity_kwh": 45.0,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 169,
+          "start_min": 1366,
+          "end_min": 1373,
+          "grid_kwh": 31.499999999990333,
+          "capacity_kwh": 31.5,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 170,
+          "start_min": 1373,
+          "end_min": 1379,
+          "grid_kwh": 26.99999999999047,
+          "capacity_kwh": 27.0,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 171,
+          "start_min": 1379,
+          "end_min": 1380,
+          "grid_kwh": 4.499999999988562,
+          "capacity_kwh": 4.5,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 172,
+          "start_min": 1380,
+          "end_min": 1401,
+          "grid_kwh": 68.46380037786942,
+          "capacity_kwh": 94.5,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 173,
+          "start_min": 1401,
+          "end_min": 1410,
+          "grid_kwh": 24.662674364669495,
+          "capacity_kwh": 40.5,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 174,
+          "start_min": 1410,
+          "end_min": 1440,
+          "grid_kwh": 110.04019192370247,
+          "capacity_kwh": 135.0,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 175,
+          "start_min": 1440,
+          "end_min": 1500,
+          "grid_kwh": 203.16666666628413,
+          "capacity_kwh": 270.0,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 176,
+          "start_min": 1500,
+          "end_min": 1560,
+          "grid_kwh": 203.16666666628333,
+          "capacity_kwh": 270.0,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 177,
+          "start_min": 1560,
+          "end_min": 1620,
+          "grid_kwh": 23.16666666696422,
+          "capacity_kwh": 270.0,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 178,
+          "start_min": 1620,
+          "end_min": 1680,
+          "grid_kwh": 23.16666666696422,
+          "capacity_kwh": 270.0,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 179,
+          "start_min": 1680,
+          "end_min": 1740,
+          "grid_kwh": 23.16666666696422,
+          "capacity_kwh": 270.0,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        },
+        {
+          "interval": 180,
+          "start_min": 1740,
+          "end_min": 1800,
+          "grid_kwh": 23.16666666696422,
+          "capacity_kwh": 270.0,
+          "capacity_excess_kwh": 0.0,
+          "capacity_excess_exact": "0",
+          "saturated_roundoff_adjustment": false
+        }
+      ],
+      "capacity_excess_kwh": 0.0,
+      "capacity_excess_exact": "0",
+      "combined_roundoff_kwh": 0.0,
+      "materialized_session_excess_kwh": 0.0,
+      "materialized_session_excess_exact": "0",
+      "combined_roundoff_exact": "0",
+      "budget_kwh": 1e-08
+    },
+    "projection": {
+      "policy": "native-pathflow-orphan-projection-v1",
+      "shared_negative_normalizer_policy": "native-roundoff-qualification-v2",
+      "budget_kwh": 1e-08,
+      "budget_exact": "3022314549036573/302231454903657293676544",
+      "negative_l1_exact": "0",
+      "orphan_positive_l1_exact": "0",
+      "raw_to_projected_l1_exact": "0",
+      "raw_to_projected_l1_kwh": 0.0,
+      "raw_load_row_residual_l1_exact": "2077574963687741/77371252455336267181195264",
+      "changes": [],
+      "periods": [
+        {
+          "period": 0,
+          "raw_solver_load_kwh": 0.0,
+          "raw_solver_load_repr": "0.0",
+          "raw_charge_sum_exact": "0",
+          "projected_charge_sum_exact": "0",
+          "native_minus_raw_charge_exact": "0",
+          "projected_minus_raw_charge_exact": "0",
+          "physical_plan_load_kwh": 0.0,
+          "physical_plan_load_repr": "0.0",
+          "plan_minus_projected_exact": "0",
+          "plan_minus_native_exact": "0"
+        },
+        {
+          "period": 1,
+          "raw_solver_load_kwh": 0.0,
+          "raw_solver_load_repr": "0.0",
+          "raw_charge_sum_exact": "0",
+          "projected_charge_sum_exact": "0",
+          "native_minus_raw_charge_exact": "0",
+          "projected_minus_raw_charge_exact": "0",
+          "physical_plan_load_kwh": 0.0,
+          "physical_plan_load_repr": "0.0",
+          "plan_minus_projected_exact": "0",
+          "plan_minus_native_exact": "0"
+        },
+        {
+          "period": 2,
+          "raw_solver_load_kwh": 0.0,
+          "raw_solver_load_repr": "0.0",
+          "raw_charge_sum_exact": "0",
+          "projected_charge_sum_exact": "0",
+          "native_minus_raw_charge_exact": "0",
+          "projected_minus_raw_charge_exact": "0",
+          "physical_plan_load_kwh": 0.0,
+          "physical_plan_load_repr": "0.0",
+          "plan_minus_projected_exact": "0",
+          "plan_minus_native_exact": "0"
+        },
+        {
+          "period": 3,
+          "raw_solver_load_kwh": 0.0,
+          "raw_solver_load_repr": "0.0",
+          "raw_charge_sum_exact": "0",
+          "projected_charge_sum_exact": "0",
+          "native_minus_raw_charge_exact": "0",
+          "projected_minus_raw_charge_exact": "0",
+          "physical_plan_load_kwh": 0.0,
+          "physical_plan_load_repr": "0.0",
+          "plan_minus_projected_exact": "0",
+          "plan_minus_native_exact": "0"
+        },
+        {
+          "period": 4,
+          "raw_solver_load_kwh": 0.0,
+          "raw_solver_load_repr": "0.0",
+          "raw_charge_sum_exact": "0",
+          "projected_charge_sum_exact": "0",
+          "native_minus_raw_charge_exact": "0",
+          "projected_minus_raw_charge_exact": "0",
+          "physical_plan_load_kwh": 0.0,
+          "physical_plan_load_repr": "0.0",
+          "plan_minus_projected_exact": "0",
+          "plan_minus_native_exact": "0"
+        },
+        {
+          "period": 5,
+          "raw_solver_load_kwh": 0.0,
+          "raw_solver_load_repr": "0.0",
+          "raw_charge_sum_exact": "0",
+          "projected_charge_sum_exact": "0",
+          "native_minus_raw_charge_exact": "0",
+          "projected_minus_raw_charge_exact": "0",
+          "physical_plan_load_kwh": 0.0,
+          "physical_plan_load_repr": "0.0",
+          "plan_minus_projected_exact": "0",
+          "plan_minus_native_exact": "0"
+        },
+        {
+          "period": 6,
+          "raw_solver_load_kwh": 0.0,
+          "raw_solver_load_repr": "0.0",
+          "raw_charge_sum_exact": "0",
+          "projected_charge_sum_exact": "0",
+          "native_minus_raw_charge_exact": "0",
+          "projected_minus_raw_charge_exact": "0",
+          "physical_plan_load_kwh": 0.0,
+          "physical_plan_load_repr": "0.0",
+          "plan_minus_projected_exact": "0",
+          "plan_minus_native_exact": "0"
+        },
+        {
+          "period": 7,
+          "raw_solver_load_kwh": 36.73333333332121,
+          "raw_solver_load_repr": "36.73333333332121",
+          "raw_charge_sum_exact": "1292439268062669/35184372088832",
+          "projected_charge_sum_exact": "1292439268062669/35184372088832",
+          "native_minus_raw_charge_exact": "0",
+          "projected_minus_raw_charge_exact": "0",
+          "physical_plan_load_kwh": 36.73333333332121,
+          "physical_plan_load_repr": "36.73333333332121",
+          "plan_minus_projected_exact": "0",
+          "plan_minus_native_exact": "0"
+        },
+        {
+          "period": 8,
+          "raw_solver_load_kwh": 75.52222222211977,
+          "raw_solver_load_repr": "75.52222222211977",
+          "raw_charge_sum_exact": "5843248921535613011869011651/77371252455336267181195264",
+          "projected_charge_sum_exact": "5843248921535613011869011651/77371252455336267181195264",
+          "native_minus_raw_charge_exact": "22089515168061/77371252455336267181195264",
+          "projected_minus_raw_charge_exact": "0",
+          "physical_plan_load_kwh": 75.52222222211947,
+          "physical_plan_load_repr": "75.52222222211947",
+          "plan_minus_projected_exact": "-1000229015235/77371252455336267181195264",
+          "plan_minus_native_exact": "-21/70368744177664"
+        },
+        {
+          "period": 9,
+          "raw_solver_load_kwh": 122.50185185894316,
+          "raw_solver_load_repr": "122.50185185894316",
+          "raw_charge_sum_exact": "551699294384138351/4503599627370496",
+          "projected_charge_sum_exact": "551699294384138351/4503599627370496",
+          "native_minus_raw_charge_exact": "-6255/4503599627370496",
+          "projected_minus_raw_charge_exact": "0",
+          "physical_plan_load_kwh": 122.50185185894455,
+          "physical_plan_load_repr": "122.50185185894455",
+          "plan_minus_projected_exact": "17/4503599627370496",
+          "plan_minus_native_exact": "49/35184372088832"
+        },
+        {
+          "period": 10,
+          "raw_solver_load_kwh": 122.5018518589442,
+          "raw_solver_load_repr": "122.5018518589442",
+          "raw_charge_sum_exact": "275849647192063823/2251799813685248",
+          "projected_charge_sum_exact": "275849647192063823/2251799813685248",
+          "native_minus_raw_charge_exact": "4593/2251799813685248",
+          "projected_minus_raw_charge_exact": "0",
+          "physical_plan_load_kwh": 122.50185185894216,
+          "physical_plan_load_repr": "122.50185185894216",
+          "plan_minus_projected_exact": "-15/2251799813685248",
+          "plan_minus_native_exact": "-9/4398046511104"
+        },
+        {
+          "period": 11,
+          "raw_solver_load_kwh": 122.50185185899461,
+          "raw_solver_load_repr": "122.50185185899461",
+          "raw_charge_sum_exact": "137924823596092101/1125899906842624",
+          "projected_charge_sum_exact": "137924823596092101/1125899906842624",
+          "native_minus_raw_charge_exact": "-1141/1125899906842624",
+          "projected_minus_raw_charge_exact": "0",
+          "physical_plan_load_kwh": 122.50185185899564,
+          "physical_plan_load_repr": "122.50185185899564",
+          "plan_minus_projected_exact": "11/1125899906842624",
+          "plan_minus_native_exact": "9/8796093022208"
+        },
+        {
+          "period": 12,
+          "raw_solver_load_kwh": 122.50185185896079,
+          "raw_solver_load_repr": "122.50185185896079",
+          "raw_charge_sum_exact": "275849647192103673/2251799813685248",
+          "projected_charge_sum_exact": "275849647192103673/2251799813685248",
+          "native_minus_raw_charge_exact": "2087/2251799813685248",
+          "projected_minus_raw_charge_exact": "0",
+          "physical_plan_load_kwh": 122.50185185895987,
+          "physical_plan_load_repr": "122.50185185895987",
+          "plan_minus_projected_exact": "7/2251799813685248",
+          "plan_minus_native_exact": "-65/70368744177664"
+        },
+        {
+          "period": 13,
+          "raw_solver_load_kwh": 122.50185185912444,
+          "raw_solver_load_repr": "122.50185185912444",
+          "raw_charge_sum_exact": "137924823596237615/1125899906842624",
+          "projected_charge_sum_exact": "137924823596237615/1125899906842624",
+          "native_minus_raw_charge_exact": "-479/1125899906842624",
+          "projected_minus_raw_charge_exact": "0",
+          "physical_plan_load_kwh": 122.50185185912488,
+          "physical_plan_load_repr": "122.50185185912488",
+          "plan_minus_projected_exact": "17/1125899906842624",
+          "plan_minus_native_exact": "31/70368744177664"
+        },
+        {
+          "period": 14,
+          "raw_solver_load_kwh": 122.50185185898033,
+          "raw_solver_load_repr": "122.50185185898033",
+          "raw_charge_sum_exact": "1103398588768548937/9007199254740992",
+          "projected_charge_sum_exact": "1103398588768548937/9007199254740992",
+          "native_minus_raw_charge_exact": "50103/9007199254740992",
+          "projected_minus_raw_charge_exact": "0",
+          "physical_plan_load_kwh": 122.50185185897477,
+          "physical_plan_load_repr": "122.50185185897477",
+          "plan_minus_projected_exact": "55/9007199254740992",
+          "plan_minus_native_exact": "-391/70368744177664"
+        },
+        {
+          "period": 15,
+          "raw_solver_load_kwh": 122.50185185896682,
+          "raw_solver_load_repr": "122.50185185896682",
+          "raw_charge_sum_exact": "1103398588768486271/9007199254740992",
+          "projected_charge_sum_exact": "1103398588768486271/9007199254740992",
+          "native_minus_raw_charge_exact": "-8959/9007199254740992",
+          "projected_minus_raw_charge_exact": "0",
+          "physical_plan_load_kwh": 122.50185185896781,
+          "physical_plan_load_repr": "122.50185185896781",
+          "plan_minus_projected_exact": "1/9007199254740992",
+          "plan_minus_native_exact": "35/35184372088832"
+        },
+        {
+          "period": 16,
+          "raw_solver_load_kwh": 122.5018518588975,
+          "raw_solver_load_repr": "122.5018518588975",
+          "raw_charge_sum_exact": "551699294383923661/4503599627370496",
+          "projected_charge_sum_exact": "551699294383923661/4503599627370496",
+          "native_minus_raw_charge_exact": "2803/4503599627370496",
+          "projected_minus_raw_charge_exact": "0",
+          "physical_plan_load_kwh": 122.50185185889687,
+          "physical_plan_load_repr": "122.50185185889687",
+          "plan_minus_projected_exact": "-13/4503599627370496",
+          "plan_minus_native_exact": "-11/17592186044416"
+        },
+        {
+          "period": 17,
+          "raw_solver_load_kwh": 122.50185185859992,
+          "raw_solver_load_repr": "122.50185185859992",
+          "raw_charge_sum_exact": "551699294382594319/4503599627370496",
+          "projected_charge_sum_exact": "551699294382594319/4503599627370496",
+          "native_minus_raw_charge_exact": "-8015/4503599627370496",
+          "projected_minus_raw_charge_exact": "0",
+          "physical_plan_load_kwh": 122.5018518586017,
+          "physical_plan_load_repr": "122.5018518586017",
+          "plan_minus_projected_exact": "-15/4503599627370496",
+          "plan_minus_native_exact": "125/70368744177664"
+        },
+        {
+          "period": 18,
+          "raw_solver_load_kwh": 122.50185177941258,
+          "raw_solver_load_repr": "122.50185177941258",
+          "raw_charge_sum_exact": "137924823506480795/1125899906842624",
+          "projected_charge_sum_exact": "137924823506480795/1125899906842624",
+          "native_minus_raw_charge_exact": "8757/1125899906842624",
+          "projected_minus_raw_charge_exact": "0",
+          "physical_plan_load_kwh": 122.50185177940482,
+          "physical_plan_load_repr": "122.50185177940482",
+          "plan_minus_projected_exact": "21/1125899906842624",
+          "plan_minus_native_exact": "-273/35184372088832"
+        },
+        {
+          "period": 19,
+          "raw_solver_load_kwh": 122.50185185902895,
+          "raw_solver_load_repr": "122.50185185902895",
+          "raw_charge_sum_exact": "137924823596131787/1125899906842624",
+          "projected_charge_sum_exact": "137924823596131787/1125899906842624",
+          "native_minus_raw_charge_exact": "-2171/1125899906842624",
+          "projected_minus_raw_charge_exact": "0",
+          "physical_plan_load_kwh": 122.50185185903086,
+          "physical_plan_load_repr": "122.50185185903086",
+          "plan_minus_projected_exact": "-11/1125899906842624",
+          "plan_minus_native_exact": "135/70368744177664"
+        },
+        {
+          "period": 20,
+          "raw_solver_load_kwh": 122.50185185373599,
+          "raw_solver_load_repr": "122.50185185373599",
+          "raw_charge_sum_exact": "551699294360681077/4503599627370496",
+          "projected_charge_sum_exact": "551699294360681077/4503599627370496",
+          "native_minus_raw_charge_exact": "11/4503599627370496",
+          "projected_minus_raw_charge_exact": "0",
+          "physical_plan_load_kwh": 122.50185185373599,
+          "physical_plan_load_repr": "122.50185185373599",
+          "plan_minus_projected_exact": "11/4503599627370496",
+          "plan_minus_native_exact": "0"
+        },
+        {
+          "period": 21,
+          "raw_solver_load_kwh": 103.49999999978493,
+          "raw_solver_load_repr": "103.49999999978493",
+          "raw_charge_sum_exact": "7283165022373065/70368744177664",
+          "projected_charge_sum_exact": "7283165022373065/70368744177664",
+          "native_minus_raw_charge_exact": "25/70368744177664",
+          "projected_minus_raw_charge_exact": "0",
+          "physical_plan_load_kwh": 103.49999999978456,
+          "physical_plan_load_repr": "103.49999999978456",
+          "plan_minus_projected_exact": "-1/70368744177664",
+          "plan_minus_native_exact": "-13/35184372088832"
+        },
+        {
+          "period": 22,
+          "raw_solver_load_kwh": 107.99999999995592,
+          "raw_solver_load_repr": "107.99999999995592",
+          "raw_charge_sum_exact": "243194379877907463/2251799813685248",
+          "projected_charge_sum_exact": "243194379877907463/2251799813685248",
+          "native_minus_raw_charge_exact": "57/2251799813685248",
+          "projected_minus_raw_charge_exact": "0",
+          "physical_plan_load_kwh": 107.9999999999559,
+          "physical_plan_load_repr": "107.9999999999559",
+          "plan_minus_projected_exact": "25/2251799813685248",
+          "plan_minus_native_exact": "-1/70368744177664"
+        },
+        {
+          "period": 23,
+          "raw_solver_load_kwh": 203.1666666662423,
+          "raw_solver_load_repr": "203.1666666662423",
+          "raw_charge_sum_exact": "228745331073047611/1125899906842624",
+          "projected_charge_sum_exact": "228745331073047611/1125899906842624",
+          "native_minus_raw_charge_exact": "1029/1125899906842624",
+          "projected_minus_raw_charge_exact": "0",
+          "physical_plan_load_kwh": 203.16666666624135,
+          "physical_plan_load_repr": "203.16666666624135",
+          "plan_minus_projected_exact": "-27/1125899906842624",
+          "plan_minus_native_exact": "-33/35184372088832"
+        },
+        {
+          "period": 24,
+          "raw_solver_load_kwh": 203.16666666628365,
+          "raw_solver_load_repr": "203.16666666628365",
+          "raw_charge_sum_exact": "3574145798017121/17592186044416",
+          "projected_charge_sum_exact": "3574145798017121/17592186044416",
+          "native_minus_raw_charge_exact": "-17/35184372088832",
+          "projected_minus_raw_charge_exact": "0",
+          "physical_plan_load_kwh": 203.16666666628413,
+          "physical_plan_load_repr": "203.16666666628413",
+          "plan_minus_projected_exact": "0",
+          "plan_minus_native_exact": "17/35184372088832"
+        },
+        {
+          "period": 25,
+          "raw_solver_load_kwh": 203.16666666628365,
+          "raw_solver_load_repr": "203.16666666628365",
+          "raw_charge_sum_exact": "3574145798017107/17592186044416",
+          "projected_charge_sum_exact": "3574145798017107/17592186044416",
+          "native_minus_raw_charge_exact": "11/35184372088832",
+          "projected_minus_raw_charge_exact": "0",
+          "physical_plan_load_kwh": 203.16666666628333,
+          "physical_plan_load_repr": "203.16666666628333",
+          "plan_minus_projected_exact": "0",
+          "plan_minus_native_exact": "-11/35184372088832"
+        },
+        {
+          "period": 26,
+          "raw_solver_load_kwh": 23.166666666964222,
+          "raw_solver_load_repr": "23.166666666964222",
+          "raw_charge_sum_exact": "13041673921094569/562949953421312",
+          "projected_charge_sum_exact": "13041673921094569/562949953421312",
+          "native_minus_raw_charge_exact": "1/562949953421312",
+          "projected_minus_raw_charge_exact": "0",
+          "physical_plan_load_kwh": 23.16666666696422,
+          "physical_plan_load_repr": "23.16666666696422",
+          "plan_minus_projected_exact": "-1/562949953421312",
+          "plan_minus_native_exact": "-1/281474976710656"
+        },
+        {
+          "period": 27,
+          "raw_solver_load_kwh": 23.166666666964225,
+          "raw_solver_load_repr": "23.166666666964225",
+          "raw_charge_sum_exact": "1630209240136821/70368744177664",
+          "projected_charge_sum_exact": "1630209240136821/70368744177664",
+          "native_minus_raw_charge_exact": "1/140737488355328",
+          "projected_minus_raw_charge_exact": "0",
+          "physical_plan_load_kwh": 23.16666666696422,
+          "physical_plan_load_repr": "23.16666666696422",
+          "plan_minus_projected_exact": "0",
+          "plan_minus_native_exact": "-1/140737488355328"
+        },
+        {
+          "period": 28,
+          "raw_solver_load_kwh": 23.166666666964222,
+          "raw_solver_load_repr": "23.166666666964222",
+          "raw_charge_sum_exact": "26083347842189137/1125899906842624",
+          "projected_charge_sum_exact": "26083347842189137/1125899906842624",
+          "native_minus_raw_charge_exact": "3/1125899906842624",
+          "projected_minus_raw_charge_exact": "0",
+          "physical_plan_load_kwh": 23.16666666696422,
+          "physical_plan_load_repr": "23.16666666696422",
+          "plan_minus_projected_exact": "-1/1125899906842624",
+          "plan_minus_native_exact": "-1/281474976710656"
+        },
+        {
+          "period": 29,
+          "raw_solver_load_kwh": 23.166666666964222,
+          "raw_solver_load_repr": "23.166666666964222",
+          "raw_charge_sum_exact": "26083347842189137/1125899906842624",
+          "projected_charge_sum_exact": "26083347842189137/1125899906842624",
+          "native_minus_raw_charge_exact": "3/1125899906842624",
+          "projected_minus_raw_charge_exact": "0",
+          "physical_plan_load_kwh": 23.16666666696422,
+          "physical_plan_load_repr": "23.16666666696422",
+          "plan_minus_projected_exact": "-1/1125899906842624",
+          "plan_minus_native_exact": "-1/281474976710656"
+        }
+      ],
+      "plan_sum_residual_l1_exact": "11411229740739/77371252455336267181195264",
+      "pre_decode_total_exact": "121595/4503599627370496",
+      "pre_decode_accepted": true,
+      "interval_capacity_excess_exact": "0",
+      "session_capacity_excess_exact": "0",
+      "pre_replay_total_exact": "121595/4503599627370496",
+      "pre_replay_accepted": true,
+      "replay_load_residual_l1_exact": "1/17592186044416",
+      "whole_incumbent_total_exact": "121851/4503599627370496",
+      "whole_incumbent_total_kwh": 2.705635715471999e-11,
+      "remaining_budget_exact": "3014137266849309/302231454903657293676544",
+      "accepted": true
+    },
+    "load_delta_kwh": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      -1.4210854715202004e-14,
+      0.0,
+      0.0,
+      1.4210854715202004e-14,
+      0.0,
+      1.4210854715202004e-14,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      1.4210854715202004e-14,
+      -1.4210854715202004e-14,
+      0.0,
+      -1.4210854715202004e-14,
+      1.4210854715202004e-14,
+      -2.842170943040401e-14,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "native_load_delta_kwh": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      -2.984279490192421e-13,
+      1.3926637620897964e-12,
+      -2.0463630789890885e-12,
+      1.0231815394945443e-12,
+      -9.237055564881302e-13,
+      4.405364961712621e-13,
+      -5.5564441936439835e-12,
+      9.947598300641403e-13,
+      -6.252776074688882e-13,
+      1.7763568394002505e-12,
+      -7.759126674500294e-12,
+      1.9184653865522705e-12,
+      0.0,
+      -3.694822225952521e-13,
+      -1.4210854715202004e-14,
+      -9.379164112033322e-13,
+      4.831690603168681e-13,
+      -3.126388037344441e-13,
+      -3.552713678800501e-15,
+      -7.105427357601002e-15,
+      -3.552713678800501e-15,
+      -3.552713678800501e-15
+    ]
+  },
+  "replay": {
+    "replay_ok": true,
+    "load": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      36.73333333332121,
+      75.52222222211947,
+      122.50185185894455,
+      122.50185185894216,
+      122.50185185899564,
+      122.50185185895987,
+      122.50185185912488,
+      122.50185185897477,
+      122.50185185896781,
+      122.50185185889687,
+      122.5018518586017,
+      122.50185177940482,
+      122.50185185903086,
+      122.50185185373599,
+      103.49999999978456,
+      107.99999999995588,
+      203.16666666624138,
+      203.16666666628413,
+      203.16666666628333,
+      23.16666666696422,
+      23.16666666696422,
+      23.16666666696422,
+      23.16666666696422
+    ],
+    "ops_cost": 400.0,
+    "grid_kwh": 2495.9444444444266,
+    "consumption_kwh": 2246.350000000003,
+    "max_grid_kw": 270.0,
+    "soc_trajectories": [
+      [
+        {
+          "time_min": 0.0,
+          "soc_kwh": 232.32,
+          "kind": "initial"
+        },
+        {
+          "time_min": 367.0,
+          "soc_kwh": 228.84,
+          "kind": "movement"
+        },
+        {
+          "time_min": 392.0,
+          "soc_kwh": 228.84,
+          "kind": "movement"
+        },
+        {
+          "time_min": 392.0,
+          "soc_kwh": 207.09,
+          "kind": "service"
+        },
+        {
+          "time_min": 403.0,
+          "soc_kwh": 206.87,
+          "kind": "movement"
+        },
+        {
+          "time_min": 431.0,
+          "soc_kwh": 206.87,
+          "kind": "movement"
+        },
+        {
+          "time_min": 431.0,
+          "soc_kwh": 182.51,
+          "kind": "service"
+        },
+        {
+          "time_min": 435.0,
+          "soc_kwh": 182.42999999999998,
+          "kind": "movement"
+        },
+        {
+          "time_min": 466.0,
+          "soc_kwh": 182.42999999999998,
+          "kind": "movement"
+        },
+        {
+          "time_min": 466.0,
+          "soc_kwh": 155.45999999999998,
+          "kind": "service"
+        },
+        {
+          "time_min": 480.0,
+          "soc_kwh": 155.17999999999998,
+          "kind": "movement"
+        },
+        {
+          "time_min": 508.0,
+          "soc_kwh": 155.17999999999998,
+          "kind": "movement"
+        },
+        {
+          "time_min": 508.0,
+          "soc_kwh": 130.82,
+          "kind": "service"
+        },
+        {
+          "time_min": 512.0,
+          "soc_kwh": 130.73999999999998,
+          "kind": "movement"
+        },
+        {
+          "time_min": 537.0,
+          "soc_kwh": 130.73999999999998,
+          "kind": "movement"
+        },
+        {
+          "time_min": 537.0,
+          "soc_kwh": 108.98999999999998,
+          "kind": "service"
+        },
+        {
+          "time_min": 548.0,
+          "soc_kwh": 108.76999999999998,
+          "kind": "movement"
+        },
+        {
+          "time_min": 572.0,
+          "soc_kwh": 87.88999999999999,
+          "kind": "service"
+        },
+        {
+          "time_min": 576.0,
+          "soc_kwh": 84.40999999999998,
+          "kind": "movement"
+        },
+        {
+          "time_min": 579.889484088768,
+          "soc_kwh": 95.7402384349137,
+          "kind": "charge"
+        },
+        {
+          "time_min": 583.483217834971,
+          "soc_kwh": 100.20856158805162,
+          "kind": "charge"
+        },
+        {
+          "time_min": 600.0,
+          "soc_kwh": 135.96136831933714,
+          "kind": "charge"
+        },
+        {
+          "time_min": 603.8844344038134,
+          "soc_kwh": 142.2791672470399,
+          "kind": "charge"
+        },
+        {
+          "time_min": 615.0,
+          "soc_kwh": 159.26083971199816,
+          "kind": "charge"
+        },
+        {
+          "time_min": 621.0,
+          "soc_kwh": 154.04083971199816,
+          "kind": "movement"
+        },
+        {
+          "time_min": 642.0,
+          "soc_kwh": 135.77083971199815,
+          "kind": "service"
+        },
+        {
+          "time_min": 646.0,
+          "soc_kwh": 132.29083971199816,
+          "kind": "movement"
+        },
+        {
+          "time_min": 648.0,
+          "soc_kwh": 136.61336231266705,
+          "kind": "charge"
+        },
+        {
+          "time_min": 654.8529207723917,
+          "soc_kwh": 155.58725529757965,
+          "kind": "charge"
+        },
+        {
+          "time_min": 663.0,
+          "soc_kwh": 152.10725529757966,
+          "kind": "movement"
+        },
+        {
+          "time_min": 690.0,
+          "soc_kwh": 128.61725529757965,
+          "kind": "service"
+        },
+        {
+          "time_min": 696.0,
+          "soc_kwh": 123.39725529757965,
+          "kind": "movement"
+        },
+        {
+          "time_min": 696.4637440512806,
+          "soc_kwh": 124.66588858810756,
+          "kind": "charge"
+        },
+        {
+          "time_min": 706.0492692505322,
+          "soc_kwh": 133.78574781900386,
+          "kind": "charge"
+        },
+        {
+          "time_min": 720.0,
+          "soc_kwh": 154.86590488021946,
+          "kind": "charge"
+        },
+        {
+          "time_min": 727.0,
+          "soc_kwh": 170.8235419319131,
+          "kind": "charge"
+        },
+        {
+          "time_min": 728.4765835259464,
+          "soc_kwh": 175.67842509794437,
+          "kind": "charge"
+        },
+        {
+          "time_min": 733.5077651212987,
+          "soc_kwh": 177.32163213283795,
+          "kind": "charge"
+        },
+        {
+          "time_min": 735.4825473116545,
+          "soc_kwh": 178.64816265844718,
+          "kind": "charge"
+        },
+        {
+          "time_min": 740.0,
+          "soc_kwh": 175.1681626584472,
+          "kind": "movement"
+        },
+        {
+          "time_min": 770.0,
+          "soc_kwh": 175.1681626584472,
+          "kind": "movement"
+        },
+        {
+          "time_min": 770.0,
+          "soc_kwh": 149.0681626584472,
+          "kind": "service"
+        },
+        {
+          "time_min": 776.0,
+          "soc_kwh": 148.9481626584472,
+          "kind": "movement"
+        },
+        {
+          "time_min": 798.0,
+          "soc_kwh": 129.8081626584472,
+          "kind": "service"
+        },
+        {
+          "time_min": 802.0,
+          "soc_kwh": 126.3281626584472,
+          "kind": "movement"
+        },
+        {
+          "time_min": 804.210718364644,
+          "soc_kwh": 131.04708702973065,
+          "kind": "charge"
+        },
+        {
+          "time_min": 826.0,
+          "soc_kwh": 142.80293703105232,
+          "kind": "charge"
+        },
+        {
+          "time_min": 826.2515770975608,
+          "soc_kwh": 143.74079733564074,
+          "kind": "charge"
+        },
+        {
+          "time_min": 830.2578103530459,
+          "soc_kwh": 144.71447635918167,
+          "kind": "charge"
+        },
+        {
+          "time_min": 835.2568720644554,
+          "soc_kwh": 145.52642132910466,
+          "kind": "charge"
+        },
+        {
+          "time_min": 842.0,
+          "soc_kwh": 140.30642132910467,
+          "kind": "movement"
+        },
+        {
+          "time_min": 869.0,
+          "soc_kwh": 116.81642132910467,
+          "kind": "service"
+        },
+        {
+          "time_min": 873.0,
+          "soc_kwh": 113.33642132910467,
+          "kind": "movement"
+        },
+        {
+          "time_min": 873.2237452473664,
+          "soc_kwh": 114.15019794226502,
+          "kind": "charge"
+        },
+        {
+          "time_min": 881.0,
+          "soc_kwh": 108.93019794226502,
+          "kind": "movement"
+        },
+        {
+          "time_min": 903.0,
+          "soc_kwh": 89.79019794226502,
+          "kind": "service"
+        },
+        {
+          "time_min": 907.0,
+          "soc_kwh": 86.31019794226502,
+          "kind": "movement"
+        },
+        {
+          "time_min": 907.356424386191,
+          "soc_kwh": 87.39525725058495,
+          "kind": "charge"
+        },
+        {
+          "time_min": 908.5267801278434,
+          "soc_kwh": 88.81098239348155,
+          "kind": "charge"
+        },
+        {
+          "time_min": 912.1229298204684,
+          "soc_kwh": 97.11691422806386,
+          "kind": "charge"
+        },
+        {
+          "time_min": 938.0,
+          "soc_kwh": 130.64984946135377,
+          "kind": "charge"
+        },
+        {
+          "time_min": 942.0,
+          "soc_kwh": 127.16984946135376,
+          "kind": "movement"
+        },
+        {
+          "time_min": 969.0,
+          "soc_kwh": 103.67984946135377,
+          "kind": "service"
+        },
+        {
+          "time_min": 975.0,
+          "soc_kwh": 98.45984946135377,
+          "kind": "movement"
+        },
+        {
+          "time_min": 975.540068855379,
+          "soc_kwh": 99.9019864044214,
+          "kind": "charge"
+        },
+        {
+          "time_min": 980.0,
+          "soc_kwh": 108.69902516136902,
+          "kind": "charge"
+        },
+        {
+          "time_min": 983.2237979499214,
+          "soc_kwh": 117.79072811224195,
+          "kind": "charge"
+        },
+        {
+          "time_min": 986.5081020357642,
+          "soc_kwh": 119.17593110305984,
+          "kind": "charge"
+        },
+        {
+          "time_min": 991.0,
+          "soc_kwh": 115.69593110305983,
+          "kind": "movement"
+        },
+        {
+          "time_min": 1022.0,
+          "soc_kwh": 115.69593110305983,
+          "kind": "movement"
+        },
+        {
+          "time_min": 1022.0,
+          "soc_kwh": 88.72593110305984,
+          "kind": "service"
+        },
+        {
+          "time_min": 1029.0,
+          "soc_kwh": 88.58593110305983,
+          "kind": "movement"
+        },
+        {
+          "time_min": 1050.0,
+          "soc_kwh": 70.31593110305984,
+          "kind": "service"
+        },
+        {
+          "time_min": 1054.0,
+          "soc_kwh": 66.83593110305983,
+          "kind": "movement"
+        },
+        {
+          "time_min": 1054.6526570140404,
+          "soc_kwh": 68.71195519433847,
+          "kind": "charge"
+        },
+        {
+          "time_min": 1073.0,
+          "soc_kwh": 81.65201996254069,
+          "kind": "charge"
+        },
+        {
+          "time_min": 1073.1407127376503,
+          "soc_kwh": 82.15075080771014,
+          "kind": "charge"
+        },
+        {
+          "time_min": 1084.0,
+          "soc_kwh": 96.80999822251867,
+          "kind": "charge"
+        },
+        {
+          "time_min": 1085.0,
+          "soc_kwh": 100.85999822251867,
+          "kind": "charge"
+        },
+        {
+          "time_min": 1089.0,
+          "soc_kwh": 97.37999822251867,
+          "kind": "movement"
+        },
+        {
+          "time_min": 1110.0,
+          "soc_kwh": 79.10999822251867,
+          "kind": "service"
+        },
+        {
+          "time_min": 1116.0,
+          "soc_kwh": 73.88999822251867,
+          "kind": "movement"
+        },
+        {
+          "time_min": 1123.0,
+          "soc_kwh": 100.54638269527871,
+          "kind": "charge"
+        },
+        {
+          "time_min": 1124.6075053610325,
+          "soc_kwh": 106.66214934297635,
+          "kind": "charge"
+        },
+        {
+          "time_min": 1130.1233793377253,
+          "soc_kwh": 114.89612502420196,
+          "kind": "charge"
+        },
+        {
+          "time_min": 1140.0,
+          "soc_kwh": 111.41612502420196,
+          "kind": "movement"
+        },
+        {
+          "time_min": 1167.0,
+          "soc_kwh": 111.41612502420196,
+          "kind": "movement"
+        },
+        {
+          "time_min": 1167.0,
+          "soc_kwh": 87.92612502420197,
+          "kind": "service"
+        },
+        {
+          "time_min": 1183.0,
+          "soc_kwh": 87.60612502420197,
+          "kind": "movement"
+        },
+        {
+          "time_min": 1208.0,
+          "soc_kwh": 65.85612502420197,
+          "kind": "service"
+        },
+        {
+          "time_min": 1212.0,
+          "soc_kwh": 62.376125024201976,
+          "kind": "movement"
+        },
+        {
+          "time_min": 1222.0,
+          "soc_kwh": 70.34873597478686,
+          "kind": "charge"
+        },
+        {
+          "time_min": 1232.0,
+          "soc_kwh": 110.84873597478686,
+          "kind": "charge"
+        },
+        {
+          "time_min": 1232.506874109174,
+          "soc_kwh": 112.58000000000568,
+          "kind": "charge"
+        },
+        {
+          "time_min": 1239.0,
+          "soc_kwh": 109.10000000000568,
+          "kind": "movement"
+        },
+        {
+          "time_min": 1270.0,
+          "soc_kwh": 109.10000000000568,
+          "kind": "movement"
+        },
+        {
+          "time_min": 1270.0,
+          "soc_kwh": 82.13000000000568,
+          "kind": "service"
+        },
+        {
+          "time_min": 1385.0,
+          "soc_kwh": 79.83000000000568,
+          "kind": "movement"
+        },
+        {
+          "time_min": 1406.0,
+          "soc_kwh": 61.56000000000569,
+          "kind": "service"
+        },
+        {
+          "time_min": 1410.0,
+          "soc_kwh": 58.08000000000569,
+          "kind": "movement"
+        },
+        {
+          "time_min": 1418.9745946504697,
+          "soc_kwh": 87.70698353325912,
+          "kind": "charge"
+        },
+        {
+          "time_min": 1460.3326241672366,
+          "soc_kwh": 149.67065568279605,
+          "kind": "charge"
+        },
+        {
+          "time_min": 1520.3326241672376,
+          "soc_kwh": 211.63432783233588,
+          "kind": "charge"
+        },
+        {
+          "time_min": 1574.8817786331408,
+          "soc_kwh": 216.80574590741872,
+          "kind": "charge"
+        },
+        {
+          "time_min": 1634.8817782513593,
+          "soc_kwh": 221.9771638498325,
+          "kind": "charge"
+        },
+        {
+          "time_min": 1694.8817786331406,
+          "soc_kwh": 227.14858192491528,
+          "kind": "charge"
+        },
+        {
+          "time_min": 1754.8817786331408,
+          "soc_kwh": 232.31999999999815,
+          "kind": "charge"
+        }
+      ],
+      [
+        {
+          "time_min": 0.0,
+          "soc_kwh": 232.32,
+          "kind": "initial"
+        },
+        {
+          "time_min": 390.0,
+          "soc_kwh": 228.84,
+          "kind": "movement"
+        },
+        {
+          "time_min": 418.0,
+          "soc_kwh": 204.48000000000002,
+          "kind": "service"
+        },
+        {
+          "time_min": 424.0,
+          "soc_kwh": 199.26000000000002,
+          "kind": "movement"
+        },
+        {
+          "time_min": 431.0,
+          "soc_kwh": 227.61,
+          "kind": "charge"
+        },
+        {
+          "time_min": 435.0,
+          "soc_kwh": 232.3199999999891,
+          "kind": "charge"
+        },
+        {
+          "time_min": 443.0,
+          "soc_kwh": 227.0999999999891,
+          "kind": "movement"
+        },
+        {
+          "time_min": 465.0,
+          "soc_kwh": 207.95999999998912,
+          "kind": "service"
+        },
+        {
+          "time_min": 473.0,
+          "soc_kwh": 200.99999999998911,
+          "kind": "movement"
+        },
+        {
+          "time_min": 510.0,
+          "soc_kwh": 200.2599999999891,
+          "kind": "movement"
+        },
+        {
+          "time_min": 533.0,
+          "soc_kwh": 180.24999999998911,
+          "kind": "service"
+        },
+        {
+          "time_min": 537.0,
+          "soc_kwh": 176.76999999998912,
+          "kind": "movement"
+        },
+        {
+          "time_min": 538.9999999999962,
+          "soc_kwh": 184.86999999995618,
+          "kind": "charge"
+        },
+        {
+          "time_min": 540.0,
+          "soc_kwh": 188.91999999991793,
+          "kind": "charge"
+        },
+        {
+          "time_min": 552.0,
+          "soc_kwh": 200.9311543115611,
+          "kind": "charge"
+        },
+        {
+          "time_min": 552.7981813614855,
+          "soc_kwh": 203.7446529610502,
+          "kind": "charge"
+        },
+        {
+          "time_min": 573.2165421472607,
+          "soc_kwh": 206.9632002825374,
+          "kind": "charge"
+        },
+        {
+          "time_min": 580.8901756856586,
+          "soc_kwh": 209.87825897253876,
+          "kind": "charge"
+        },
+        {
+          "time_min": 586.0,
+          "soc_kwh": 206.39825897253877,
+          "kind": "movement"
+        },
+        {
+          "time_min": 609.0,
+          "soc_kwh": 206.39825897253877,
+          "kind": "movement"
+        },
+        {
+          "time_min": 609.0,
+          "soc_kwh": 186.38825897253878,
+          "kind": "service"
+        },
+        {
+          "time_min": 616.0,
+          "soc_kwh": 186.2482589725388,
+          "kind": "movement"
+        },
+        {
+          "time_min": 644.0,
+          "soc_kwh": 161.88825897253878,
+          "kind": "service"
+        },
+        {
+          "time_min": 648.0,
+          "soc_kwh": 158.4082589725388,
+          "kind": "movement"
+        },
+        {
+          "time_min": 659.0,
+          "soc_kwh": 169.89040506440585,
+          "kind": "charge"
+        },
+        {
+          "time_min": 660.0,
+          "soc_kwh": 171.75897386165772,
+          "kind": "charge"
+        },
+        {
+          "time_min": 669.0,
+          "soc_kwh": 193.9182622357033,
+          "kind": "charge"
+        },
+        {
+          "time_min": 684.2651730089386,
+          "soc_kwh": 197.58759254225774,
+          "kind": "charge"
+        },
+        {
+          "time_min": 691.0,
+          "soc_kwh": 194.10759254225775,
+          "kind": "movement"
+        },
+        {
+          "time_min": 721.0,
+          "soc_kwh": 168.00759254225775,
+          "kind": "service"
+        },
+        {
+          "time_min": 727.0,
+          "soc_kwh": 162.78759254225776,
+          "kind": "movement"
+        },
+        {
+          "time_min": 733.0,
+          "soc_kwh": 177.66020767505705,
+          "kind": "charge"
+        },
+        {
+          "time_min": 734.3465876324598,
+          "soc_kwh": 180.37476799743916,
+          "kind": "charge"
+        },
+        {
+          "time_min": 741.0,
+          "soc_kwh": 175.15476799743917,
+          "kind": "movement"
+        },
+        {
+          "time_min": 771.0,
+          "soc_kwh": 149.05476799743917,
+          "kind": "service"
+        },
+        {
+          "time_min": 775.0,
+          "soc_kwh": 145.57476799743918,
+          "kind": "movement"
+        },
+        {
+          "time_min": 776.0,
+          "soc_kwh": 146.54561636770467,
+          "kind": "charge"
+        },
+        {
+          "time_min": 780.0,
+          "soc_kwh": 162.74561636770466,
+          "kind": "charge"
+        },
+        {
+          "time_min": 783.0,
+          "soc_kwh": 171.520799109179,
+          "kind": "charge"
+        },
+        {
+          "time_min": 786.8088636771856,
+          "soc_kwh": 184.02372815078482,
+          "kind": "charge"
+        },
+        {
+          "time_min": 792.0,
+          "soc_kwh": 180.54372815078483,
+          "kind": "movement"
+        },
+        {
+          "time_min": 820.0,
+          "soc_kwh": 156.18372815078482,
+          "kind": "service"
+        },
+        {
+          "time_min": 826.0,
+          "soc_kwh": 150.96372815078482,
+          "kind": "movement"
+        },
+        {
+          "time_min": 830.0,
+          "soc_kwh": 164.93756392157692,
+          "kind": "charge"
+        },
+        {
+          "time_min": 834.7491314247428,
+          "soc_kwh": 181.90005229271264,
+          "kind": "charge"
+        },
+        {
+          "time_min": 835.7614949223588,
+          "soc_kwh": 183.49511087587004,
+          "kind": "charge"
+        },
+        {
+          "time_min": 836.6769543047826,
+          "soc_kwh": 185.4510866372342,
+          "kind": "charge"
+        },
+        {
+          "time_min": 841.0,
+          "soc_kwh": 181.9710866372342,
+          "kind": "movement"
+        },
+        {
+          "time_min": 866.0,
+          "soc_kwh": 160.2210866372342,
+          "kind": "service"
+        },
+        {
+          "time_min": 872.0,
+          "soc_kwh": 155.0010866372342,
+          "kind": "movement"
+        },
+        {
+          "time_min": 872.7204543751104,
+          "soc_kwh": 157.2967170961442,
+          "kind": "charge"
+        },
+        {
+          "time_min": 874.7626911814926,
+          "soc_kwh": 162.89396765163366,
+          "kind": "charge"
+        },
+        {
+          "time_min": 885.710397579757,
+          "soc_kwh": 205.13397242086472,
+          "kind": "charge"
+        },
+        {
+          "time_min": 890.0,
+          "soc_kwh": 201.65397242086473,
+          "kind": "movement"
+        },
+        {
+          "time_min": 911.0,
+          "soc_kwh": 201.65397242086473,
+          "kind": "movement"
+        },
+        {
+          "time_min": 911.0,
+          "soc_kwh": 183.38397242086472,
+          "kind": "service"
+        },
+        {
+          "time_min": 915.0,
+          "soc_kwh": 183.3039724208647,
+          "kind": "movement"
+        },
+        {
+          "time_min": 943.0,
+          "soc_kwh": 158.94397242086472,
+          "kind": "service"
+        },
+        {
+          "time_min": 947.0,
+          "soc_kwh": 155.46397242086474,
+          "kind": "movement"
+        },
+        {
+          "time_min": 953.0,
+          "soc_kwh": 178.7922183556822,
+          "kind": "charge"
+        },
+        {
+          "time_min": 955.8235959941446,
+          "soc_kwh": 189.5141884031832,
+          "kind": "charge"
+        },
+        {
+          "time_min": 960.0,
+          "soc_kwh": 186.0341884031832,
+          "kind": "movement"
+        },
+        {
+          "time_min": 983.0,
+          "soc_kwh": 186.0341884031832,
+          "kind": "movement"
+        },
+        {
+          "time_min": 983.0,
+          "soc_kwh": 166.02418840318322,
+          "kind": "service"
+        },
+        {
+          "time_min": 992.0,
+          "soc_kwh": 165.8441884031832,
+          "kind": "movement"
+        },
+        {
+          "time_min": 1020.0,
+          "soc_kwh": 141.48418840318323,
+          "kind": "service"
+        },
+        {
+          "time_min": 1024.0,
+          "soc_kwh": 138.00418840318324,
+          "kind": "movement"
+        },
+        {
+          "time_min": 1027.8520897512183,
+          "soc_kwh": 152.86988102215074,
+          "kind": "charge"
+        },
+        {
+          "time_min": 1031.8520897509309,
+          "soc_kwh": 167.73557360850802,
+          "kind": "charge"
+        },
+        {
+          "time_min": 1036.0,
+          "soc_kwh": 164.25557360850803,
+          "kind": "movement"
+        },
+        {
+          "time_min": 1067.0,
+          "soc_kwh": 137.28557360850803,
+          "kind": "service"
+        },
+        {
+          "time_min": 1073.0,
+          "soc_kwh": 132.06557360850803,
+          "kind": "movement"
+        },
+        {
+          "time_min": 1074.0,
+          "soc_kwh": 135.1111618740146,
+          "kind": "charge"
+        },
+        {
+          "time_min": 1080.0,
+          "soc_kwh": 129.8911618740146,
+          "kind": "movement"
+        },
+        {
+          "time_min": 1109.0,
+          "soc_kwh": 129.8911618740146,
+          "kind": "movement"
+        },
+        {
+          "time_min": 1109.0,
+          "soc_kwh": 104.66116187401462,
+          "kind": "service"
+        },
+        {
+          "time_min": 1110.0,
+          "soc_kwh": 104.64116187401463,
+          "kind": "movement"
+        },
+        {
+          "time_min": 1132.0,
+          "soc_kwh": 104.64116187401463,
+          "kind": "movement"
+        },
+        {
+          "time_min": 1132.0,
+          "soc_kwh": 85.50116187401463,
+          "kind": "service"
+        },
+        {
+          "time_min": 1144.0,
+          "soc_kwh": 85.26116187401463,
+          "kind": "movement"
+        },
+        {
+          "time_min": 1170.0,
+          "soc_kwh": 62.641161874014635,
+          "kind": "service"
+        },
+        {
+          "time_min": 1174.0,
+          "soc_kwh": 59.16116187401464,
+          "kind": "movement"
+        },
+        {
+          "time_min": 1176.091670003772,
+          "soc_kwh": 65.84573135329653,
+          "kind": "charge"
+        },
+        {
+          "time_min": 1184.634623546805,
+          "soc_kwh": 94.25485367966357,
+          "kind": "charge"
+        },
+        {
+          "time_min": 1194.0,
+          "soc_kwh": 120.95128415393044,
+          "kind": "charge"
+        },
+        {
+          "time_min": 1200.0,
+          "soc_kwh": 145.25128415393044,
+          "kind": "charge"
+        },
+        {
+          "time_min": 1207.0,
+          "soc_kwh": 172.750000000021,
+          "kind": "charge"
+        },
+        {
+          "time_min": 1211.0,
+          "soc_kwh": 169.270000000021,
+          "kind": "movement"
+        },
+        {
+          "time_min": 1233.0,
+          "soc_kwh": 150.13000000002103,
+          "kind": "service"
+        },
+        {
+          "time_min": 1241.0,
+          "soc_kwh": 143.17000000002102,
+          "kind": "movement"
+        },
+        {
+          "time_min": 1261.0,
+          "soc_kwh": 142.770000000021,
+          "kind": "movement"
+        },
+        {
+          "time_min": 1289.0,
+          "soc_kwh": 142.770000000021,
+          "kind": "movement"
+        },
+        {
+          "time_min": 1289.0,
+          "soc_kwh": 118.41000000002101,
+          "kind": "service"
+        },
+        {
+          "time_min": 1304.0,
+          "soc_kwh": 118.11000000002102,
+          "kind": "movement"
+        },
+        {
+          "time_min": 1333.0,
+          "soc_kwh": 92.88000000002103,
+          "kind": "service"
+        },
+        {
+          "time_min": 1337.0,
+          "soc_kwh": 89.40000000002102,
+          "kind": "movement"
+        },
+        {
+          "time_min": 1341.0,
+          "soc_kwh": 85.92000000002102,
+          "kind": "movement"
+        },
+        {
+          "time_min": 1367.0,
+          "soc_kwh": 63.30000000002102,
+          "kind": "service"
+        },
+        {
+          "time_min": 1373.0,
+          "soc_kwh": 58.08000000002102,
+          "kind": "movement"
+        },
+        {
+          "time_min": 1376.20768113015,
+          "soc_kwh": 71.07110857712324,
+          "kind": "charge"
+        },
+        {
+          "time_min": 1379.5068868199912,
+          "soc_kwh": 73.12400019808219,
+          "kind": "charge"
+        },
+        {
+          "time_min": 1391.799942777443,
+          "soc_kwh": 107.74695420315936,
+          "kind": "charge"
+        },
+        {
+          "time_min": 1403.9379851844542,
+          "soc_kwh": 114.9928113924012,
+          "kind": "charge"
+        },
+        {
+          "time_min": 1425.799317286816,
+          "soc_kwh": 137.52262505428894,
+          "kind": "charge"
+        },
+        {
+          "time_min": 1472.3058569035163,
+          "soc_kwh": 174.01105181803285,
+          "kind": "charge"
+        },
+        {
+          "time_min": 1532.3058569035175,
+          "soc_kwh": 210.49947858177666,
+          "kind": "charge"
+        },
+        {
+          "time_min": 1590.5799955795687,
+          "soc_kwh": 215.95460897073042,
+          "kind": "charge"
+        },
+        {
+          "time_min": 1650.5799948018514,
+          "soc_kwh": 221.40973922209648,
+          "kind": "charge"
+        },
+        {
+          "time_min": 1710.5799955795685,
+          "soc_kwh": 226.8648696110502,
+          "kind": "charge"
+        },
+        {
+          "time_min": 1770.5799955795687,
+          "soc_kwh": 232.32000000000394,
+          "kind": "charge"
+        }
+      ],
+      [
+        {
+          "time_min": 0.0,
+          "soc_kwh": 232.32,
+          "kind": "initial"
+        },
+        {
+          "time_min": 418.0,
+          "soc_kwh": 228.84,
+          "kind": "movement"
+        },
+        {
+          "time_min": 447.0,
+          "soc_kwh": 203.61,
+          "kind": "service"
+        },
+        {
+          "time_min": 455.0,
+          "soc_kwh": 196.65,
+          "kind": "movement"
+        },
+        {
+          "time_min": 463.0,
+          "soc_kwh": 196.49,
+          "kind": "movement"
+        },
+        {
+          "time_min": 493.0,
+          "soc_kwh": 196.49,
+          "kind": "movement"
+        },
+        {
+          "time_min": 493.0,
+          "soc_kwh": 170.39000000000001,
+          "kind": "service"
+        },
+        {
+          "time_min": 525.0,
+          "soc_kwh": 169.75000000000003,
+          "kind": "movement"
+        },
+        {
+          "time_min": 548.0,
+          "soc_kwh": 149.74000000000004,
+          "kind": "service"
+        },
+        {
+          "time_min": 552.0,
+          "soc_kwh": 146.26000000000005,
+          "kind": "movement"
+        },
+        {
+          "time_min": 561.0,
+          "soc_kwh": 175.17047921723935,
+          "kind": "charge"
+        },
+        {
+          "time_min": 565.0,
+          "soc_kwh": 171.69047921723936,
+          "kind": "movement"
+        },
+        {
+          "time_min": 596.0,
+          "soc_kwh": 144.72047921723936,
+          "kind": "service"
+        },
+        {
+          "time_min": 602.0,
+          "soc_kwh": 139.50047921723936,
+          "kind": "movement"
+        },
+        {
+          "time_min": 609.0,
+          "soc_kwh": 156.65104427420164,
+          "kind": "charge"
+        },
+        {
+          "time_min": 613.0,
+          "soc_kwh": 153.17104427420165,
+          "kind": "movement"
+        },
+        {
+          "time_min": 636.0,
+          "soc_kwh": 133.16104427420166,
+          "kind": "service"
+        },
+        {
+          "time_min": 642.0,
+          "soc_kwh": 127.94104427420166,
+          "kind": "movement"
+        },
+        {
+          "time_min": 646.0,
+          "soc_kwh": 139.71996872908332,
+          "kind": "charge"
+        },
+        {
+          "time_min": 652.0,
+          "soc_kwh": 134.49996872908332,
+          "kind": "movement"
+        },
+        {
+          "time_min": 679.0,
+          "soc_kwh": 111.00996872908333,
+          "kind": "service"
+        },
+        {
+          "time_min": 683.0,
+          "soc_kwh": 107.52996872908332,
+          "kind": "movement"
+        },
+        {
+          "time_min": 687.0,
+          "soc_kwh": 115.46167727059131,
+          "kind": "charge"
+        },
+        {
+          "time_min": 696.0,
+          "soc_kwh": 135.23804927673865,
+          "kind": "charge"
+        },
+        {
+          "time_min": 697.0,
+          "soc_kwh": 136.70504846931104,
+          "kind": "charge"
+        },
+        {
+          "time_min": 703.0,
+          "soc_kwh": 131.48504846931104,
+          "kind": "movement"
+        },
+        {
+          "time_min": 729.0,
+          "soc_kwh": 108.86504846931103,
+          "kind": "service"
+        },
+        {
+          "time_min": 733.0,
+          "soc_kwh": 105.38504846931103,
+          "kind": "movement"
+        },
+        {
+          "time_min": 735.0,
+          "soc_kwh": 107.49959268275043,
+          "kind": "charge"
+        },
+        {
+          "time_min": 736.0,
+          "soc_kwh": 108.92207866510029,
+          "kind": "charge"
+        },
+        {
+          "time_min": 745.0,
+          "soc_kwh": 144.94643353870026,
+          "kind": "charge"
+        },
+        {
+          "time_min": 748.0,
+          "soc_kwh": 157.09643353870027,
+          "kind": "charge"
+        },
+        {
+          "time_min": 760.0,
+          "soc_kwh": 153.61643353870028,
+          "kind": "movement"
+        },
+        {
+          "time_min": 785.0,
+          "soc_kwh": 131.86643353870028,
+          "kind": "service"
+        },
+        {
+          "time_min": 791.0,
+          "soc_kwh": 126.64643353870028,
+          "kind": "movement"
+        },
+        {
+          "time_min": 793.4702419348988,
+          "soc_kwh": 131.33065145165736,
+          "kind": "charge"
+        },
+        {
+          "time_min": 803.0,
+          "soc_kwh": 126.11065145165736,
+          "kind": "movement"
+        },
+        {
+          "time_min": 826.0,
+          "soc_kwh": 106.10065145165736,
+          "kind": "service"
+        },
+        {
+          "time_min": 830.0,
+          "soc_kwh": 102.62065145165735,
+          "kind": "movement"
+        },
+        {
+          "time_min": 835.0,
+          "soc_kwh": 103.56811328361151,
+          "kind": "charge"
+        },
+        {
+          "time_min": 836.0,
+          "soc_kwh": 104.32200218352922,
+          "kind": "charge"
+        },
+        {
+          "time_min": 837.0,
+          "soc_kwh": 105.25540277673639,
+          "kind": "charge"
+        },
+        {
+          "time_min": 840.0,
+          "soc_kwh": 108.63266873324716,
+          "kind": "charge"
+        },
+        {
+          "time_min": 862.0,
+          "soc_kwh": 131.45310190846706,
+          "kind": "charge"
+        },
+        {
+          "time_min": 866.0,
+          "soc_kwh": 127.97310190846706,
+          "kind": "movement"
+        },
+        {
+          "time_min": 891.0,
+          "soc_kwh": 106.22310190846706,
+          "kind": "service"
+        },
+        {
+          "time_min": 897.0,
+          "soc_kwh": 101.00310190846706,
+          "kind": "movement"
+        },
+        {
+          "time_min": 898.3816381432465,
+          "soc_kwh": 104.62686321926991,
+          "kind": "charge"
+        },
+        {
+          "time_min": 902.9445001576721,
+          "soc_kwh": 112.00070412478951,
+          "kind": "charge"
+        },
+        {
+          "time_min": 907.6682124209698,
+          "soc_kwh": 112.94987742063209,
+          "kind": "charge"
+        },
+        {
+          "time_min": 909.0,
+          "soc_kwh": 114.22165901549434,
+          "kind": "charge"
+        },
+        {
+          "time_min": 914.0,
+          "soc_kwh": 119.2140276744795,
+          "kind": "charge"
+        },
+        {
+          "time_min": 920.0,
+          "soc_kwh": 113.9940276744795,
+          "kind": "movement"
+        },
+        {
+          "time_min": 949.0,
+          "soc_kwh": 88.76402767447951,
+          "kind": "service"
+        },
+        {
+          "time_min": 953.0,
+          "soc_kwh": 85.2840276744795,
+          "kind": "movement"
+        },
+        {
+          "time_min": 956.0,
+          "soc_kwh": 85.95388216887694,
+          "kind": "charge"
+        },
+        {
+          "time_min": 960.0,
+          "soc_kwh": 91.3925139889799,
+          "kind": "charge"
+        },
+        {
+          "time_min": 975.0,
+          "soc_kwh": 108.72334681071227,
+          "kind": "charge"
+        },
+        {
+          "time_min": 976.0,
+          "soc_kwh": 109.95149334854563,
+          "kind": "charge"
+        },
+        {
+          "time_min": 982.0,
+          "soc_kwh": 104.73149334854563,
+          "kind": "movement"
+        },
+        {
+          "time_min": 1002.0,
+          "soc_kwh": 87.33149334854562,
+          "kind": "service"
+        },
+        {
+          "time_min": 1006.0,
+          "soc_kwh": 83.85149334854562,
+          "kind": "movement"
+        },
+        {
+          "time_min": 1007.6192677190187,
+          "soc_kwh": 87.857891291027,
+          "kind": "charge"
+        },
+        {
+          "time_min": 1020.0,
+          "soc_kwh": 97.74910006492044,
+          "kind": "charge"
+        },
+        {
+          "time_min": 1028.0,
+          "soc_kwh": 98.31990407925808,
+          "kind": "charge"
+        },
+        {
+          "time_min": 1032.0,
+          "soc_kwh": 98.89070809349533,
+          "kind": "charge"
+        },
+        {
+          "time_min": 1044.0,
+          "soc_kwh": 125.87390165782075,
+          "kind": "charge"
+        },
+        {
+          "time_min": 1044.911272177575,
+          "soc_kwh": 128.6879535615722,
+          "kind": "charge"
+        },
+        {
+          "time_min": 1054.0,
+          "soc_kwh": 123.46795356157219,
+          "kind": "movement"
+        },
+        {
+          "time_min": 1075.0,
+          "soc_kwh": 105.19795356157219,
+          "kind": "service"
+        },
+        {
+          "time_min": 1083.0,
+          "soc_kwh": 98.2379535615722,
+          "kind": "movement"
+        },
+        {
+          "time_min": 1090.0,
+          "soc_kwh": 98.0979535615722,
+          "kind": "movement"
+        },
+        {
+          "time_min": 1119.0,
+          "soc_kwh": 72.8679535615722,
+          "kind": "service"
+        },
+        {
+          "time_min": 1123.0,
+          "soc_kwh": 69.38795356157219,
+          "kind": "movement"
+        },
+        {
+          "time_min": 1128.0,
+          "soc_kwh": 82.29472579912326,
+          "kind": "charge"
+        },
+        {
+          "time_min": 1136.0,
+          "soc_kwh": 105.08290630049044,
+          "kind": "charge"
+        },
+        {
+          "time_min": 1138.0,
+          "soc_kwh": 113.18290630049043,
+          "kind": "charge"
+        },
+        {
+          "time_min": 1140.0,
+          "soc_kwh": 119.92424594654469,
+          "kind": "charge"
+        },
+        {
+          "time_min": 1157.0,
+          "soc_kwh": 125.68269573064084,
+          "kind": "charge"
+        },
+        {
+          "time_min": 1161.0,
+          "soc_kwh": 122.20269573064084,
+          "kind": "movement"
+        },
+        {
+          "time_min": 1188.0,
+          "soc_kwh": 122.20269573064084,
+          "kind": "movement"
+        },
+        {
+          "time_min": 1188.0,
+          "soc_kwh": 98.71269573064085,
+          "kind": "service"
+        },
+        {
+          "time_min": 1206.0,
+          "soc_kwh": 98.35269573064085,
+          "kind": "movement"
+        },
+        {
+          "time_min": 1228.0,
+          "soc_kwh": 79.21269573064085,
+          "kind": "service"
+        },
+        {
+          "time_min": 1232.0,
+          "soc_kwh": 75.73269573064084,
+          "kind": "movement"
+        },
+        {
+          "time_min": 1235.0,
+          "soc_kwh": 84.2481418483407,
+          "kind": "charge"
+        },
+        {
+          "time_min": 1239.0,
+          "soc_kwh": 100.4481418483407,
+          "kind": "charge"
+        },
+        {
+          "time_min": 1240.0,
+          "soc_kwh": 102.2289719237999,
+          "kind": "charge"
+        },
+        {
+          "time_min": 1246.0,
+          "soc_kwh": 97.0089719237999,
+          "kind": "movement"
+        },
+        {
+          "time_min": 1266.0,
+          "soc_kwh": 79.60897192379991,
+          "kind": "service"
+        },
+        {
+          "time_min": 1270.0,
+          "soc_kwh": 76.12897192379991,
+          "kind": "movement"
+        },
+        {
+          "time_min": 1275.5050651936767,
+          "soc_kwh": 98.42448595815644,
+          "kind": "charge"
+        },
+        {
+          "time_min": 1281.5050651955244,
+          "soc_kwh": 120.71999999999595,
+          "kind": "charge"
+        },
+        {
+          "time_min": 1288.0,
+          "soc_kwh": 115.49999999999595,
+          "kind": "movement"
+        },
+        {
+          "time_min": 1317.0,
+          "soc_kwh": 115.49999999999595,
+          "kind": "movement"
+        },
+        {
+          "time_min": 1317.0,
+          "soc_kwh": 90.26999999999595,
+          "kind": "service"
+        },
+        {
+          "time_min": 1348.0,
+          "soc_kwh": 63.29999999999595,
+          "kind": "service"
+        },
+        {
+          "time_min": 1354.0,
+          "soc_kwh": 58.07999999999595,
+          "kind": "movement"
+        },
+        {
+          "time_min": 1364.0,
+          "soc_kwh": 98.57999999998383,
+          "kind": "charge"
+        },
+        {
+          "time_min": 1370.0,
+          "soc_kwh": 93.35999999998383,
+          "kind": "movement"
+        },
+        {
+          "time_min": 1397.0,
+          "soc_kwh": 69.86999999998383,
+          "kind": "service"
+        },
+        {
+          "time_min": 1401.0,
+          "soc_kwh": 66.38999999998383,
+          "kind": "movement"
+        },
+        {
+          "time_min": 1407.2084177538802,
+          "soc_kwh": 74.45576134912015,
+          "kind": "charge"
+        },
+        {
+          "time_min": 1434.3065816720873,
+          "soc_kwh": 102.53999152014802,
+          "kind": "charge"
+        },
+        {
+          "time_min": 1490.2520313657099,
+          "soc_kwh": 157.23095819357957,
+          "kind": "charge"
+        },
+        {
+          "time_min": 1550.2520313657099,
+          "soc_kwh": 211.92192486700793,
+          "kind": "charge"
+        },
+        {
+          "time_min": 1605.2548698694832,
+          "soc_kwh": 217.02144368281873,
+          "kind": "charge"
+        },
+        {
+          "time_min": 1665.254868716906,
+          "soc_kwh": 222.12096236836578,
+          "kind": "charge"
+        },
+        {
+          "time_min": 1725.254869869483,
+          "soc_kwh": 227.22048118417655,
+          "kind": "charge"
+        },
+        {
+          "time_min": 1785.2548698694832,
+          "soc_kwh": 232.31999999998732,
+          "kind": "charge"
+        }
+      ],
+      [
+        {
+          "time_min": 0.0,
+          "soc_kwh": 232.32,
+          "kind": "initial"
+        },
+        {
+          "time_min": 455.0,
+          "soc_kwh": 227.1,
+          "kind": "movement"
+        },
+        {
+          "time_min": 485.0,
+          "soc_kwh": 227.1,
+          "kind": "movement"
+        },
+        {
+          "time_min": 485.0,
+          "soc_kwh": 201.0,
+          "kind": "service"
+        },
+        {
+          "time_min": 492.0,
+          "soc_kwh": 200.86,
+          "kind": "movement"
+        },
+        {
+          "time_min": 514.0,
+          "soc_kwh": 181.72000000000003,
+          "kind": "service"
+        },
+        {
+          "time_min": 520.0,
+          "soc_kwh": 176.50000000000003,
+          "kind": "movement"
+        },
+        {
+          "time_min": 537.0,
+          "soc_kwh": 232.3199999999636,
+          "kind": "charge"
+        },
+        {
+          "time_min": 539.0,
+          "soc_kwh": 232.31999999997873,
+          "kind": "charge"
+        },
+        {
+          "time_min": 543.0,
+          "soc_kwh": 228.83999999997874,
+          "kind": "movement"
+        },
+        {
+          "time_min": 565.0,
+          "soc_kwh": 209.69999999997876,
+          "kind": "service"
+        },
+        {
+          "time_min": 571.0,
+          "soc_kwh": 204.47999999997876,
+          "kind": "movement"
+        },
+        {
+          "time_min": 576.0,
+          "soc_kwh": 208.52174169547422,
+          "kind": "charge"
+        },
+        {
+          "time_min": 582.0,
+          "soc_kwh": 211.75470879737472,
+          "kind": "charge"
+        },
+        {
+          "time_min": 584.0,
+          "soc_kwh": 213.31156016383162,
+          "kind": "charge"
+        },
+        {
+          "time_min": 590.0,
+          "soc_kwh": 208.09156016383162,
+          "kind": "movement"
+        },
+        {
+          "time_min": 619.0,
+          "soc_kwh": 182.86156016383163,
+          "kind": "service"
+        },
+        {
+          "time_min": 623.0,
+          "soc_kwh": 179.38156016383164,
+          "kind": "movement"
+        },
+        {
+          "time_min": 633.0,
+          "soc_kwh": 200.75713545767422,
+          "kind": "charge"
+        },
+        {
+          "time_min": 637.0,
+          "soc_kwh": 197.27713545767423,
+          "kind": "movement"
+        },
+        {
+          "time_min": 667.0,
+          "soc_kwh": 197.27713545767423,
+          "kind": "movement"
+        },
+        {
+          "time_min": 667.0,
+          "soc_kwh": 171.17713545767424,
+          "kind": "service"
+        },
+        {
+          "time_min": 675.0,
+          "soc_kwh": 171.01713545767424,
+          "kind": "movement"
+        },
+        {
+          "time_min": 699.0,
+          "soc_kwh": 150.13713545767425,
+          "kind": "service"
+        },
+        {
+          "time_min": 703.0,
+          "soc_kwh": 146.65713545767426,
+          "kind": "movement"
+        },
+        {
+          "time_min": 714.0,
+          "soc_kwh": 170.43645412730277,
+          "kind": "charge"
+        },
+        {
+          "time_min": 718.0,
+          "soc_kwh": 166.95645412730278,
+          "kind": "movement"
+        },
+        {
+          "time_min": 742.0,
+          "soc_kwh": 166.95645412730278,
+          "kind": "movement"
+        },
+        {
+          "time_min": 742.0,
+          "soc_kwh": 146.07645412730278,
+          "kind": "service"
+        },
+        {
+          "time_min": 751.0,
+          "soc_kwh": 145.89645412730277,
+          "kind": "movement"
+        },
+        {
+          "time_min": 779.0,
+          "soc_kwh": 121.53645412730278,
+          "kind": "service"
+        },
+        {
+          "time_min": 783.0,
+          "soc_kwh": 118.05645412730277,
+          "kind": "movement"
+        },
+        {
+          "time_min": 788.0,
+          "soc_kwh": 121.96646356456131,
+          "kind": "charge"
+        },
+        {
+          "time_min": 797.0,
+          "soc_kwh": 128.65979822274267,
+          "kind": "charge"
+        },
+        {
+          "time_min": 802.0,
+          "soc_kwh": 136.69425077801137,
+          "kind": "charge"
+        },
+        {
+          "time_min": 807.0,
+          "soc_kwh": 142.64815666578124,
+          "kind": "charge"
+        },
+        {
+          "time_min": 811.0,
+          "soc_kwh": 139.16815666578125,
+          "kind": "movement"
+        },
+        {
+          "time_min": 835.0,
+          "soc_kwh": 139.16815666578125,
+          "kind": "movement"
+        },
+        {
+          "time_min": 835.0,
+          "soc_kwh": 118.28815666578126,
+          "kind": "service"
+        },
+        {
+          "time_min": 841.0,
+          "soc_kwh": 118.16815666578125,
+          "kind": "movement"
+        },
+        {
+          "time_min": 864.0,
+          "soc_kwh": 98.15815666578125,
+          "kind": "service"
+        },
+        {
+          "time_min": 868.0,
+          "soc_kwh": 94.67815666578124,
+          "kind": "movement"
+        },
+        {
+          "time_min": 873.0,
+          "soc_kwh": 95.56889100416777,
+          "kind": "charge"
+        },
+        {
+          "time_min": 875.0,
+          "soc_kwh": 96.43199924387807,
+          "kind": "charge"
+        },
+        {
+          "time_min": 886.0,
+          "soc_kwh": 97.57414242961421,
+          "kind": "charge"
+        },
+        {
+          "time_min": 897.0,
+          "soc_kwh": 123.29432605432396,
+          "kind": "charge"
+        },
+        {
+          "time_min": 900.0,
+          "soc_kwh": 127.53896645604492,
+          "kind": "charge"
+        },
+        {
+          "time_min": 907.0,
+          "soc_kwh": 137.69505714320843,
+          "kind": "charge"
+        },
+        {
+          "time_min": 908.0,
+          "soc_kwh": 138.70511485799878,
+          "kind": "charge"
+        },
+        {
+          "time_min": 912.0,
+          "soc_kwh": 135.2251148579988,
+          "kind": "movement"
+        },
+        {
+          "time_min": 932.0,
+          "soc_kwh": 135.2251148579988,
+          "kind": "movement"
+        },
+        {
+          "time_min": 932.0,
+          "soc_kwh": 117.82511485799878,
+          "kind": "service"
+        },
+        {
+          "time_min": 948.0,
+          "soc_kwh": 117.50511485799879,
+          "kind": "movement"
+        },
+        {
+          "time_min": 976.0,
+          "soc_kwh": 93.14511485799879,
+          "kind": "service"
+        },
+        {
+          "time_min": 980.0,
+          "soc_kwh": 89.66511485799879,
+          "kind": "movement"
+        },
+        {
+          "time_min": 986.0,
+          "soc_kwh": 97.49451507569353,
+          "kind": "charge"
+        },
+        {
+          "time_min": 987.0,
+          "soc_kwh": 98.83554204129497,
+          "kind": "charge"
+        },
+        {
+          "time_min": 1006.0,
+          "soc_kwh": 138.37949399446268,
+          "kind": "charge"
+        },
+        {
+          "time_min": 1011.0,
+          "soc_kwh": 146.74411381335935,
+          "kind": "charge"
+        },
+        {
+          "time_min": 1015.0,
+          "soc_kwh": 143.26411381335936,
+          "kind": "movement"
+        },
+        {
+          "time_min": 1038.0,
+          "soc_kwh": 123.25411381335935,
+          "kind": "service"
+        },
+        {
+          "time_min": 1044.0,
+          "soc_kwh": 118.03411381335935,
+          "kind": "movement"
+        },
+        {
+          "time_min": 1048.0,
+          "soc_kwh": 127.57225249766924,
+          "kind": "charge"
+        },
+        {
+          "time_min": 1054.0,
+          "soc_kwh": 145.38227587097603,
+          "kind": "charge"
+        },
+        {
+          "time_min": 1056.0,
+          "soc_kwh": 149.25513381396746,
+          "kind": "charge"
+        },
+        {
+          "time_min": 1060.0,
+          "soc_kwh": 145.77513381396747,
+          "kind": "movement"
+        },
+        {
+          "time_min": 1084.0,
+          "soc_kwh": 145.77513381396747,
+          "kind": "movement"
+        },
+        {
+          "time_min": 1084.0,
+          "soc_kwh": 124.89513381396748,
+          "kind": "service"
+        },
+        {
+          "time_min": 1134.0,
+          "soc_kwh": 123.89513381396748,
+          "kind": "movement"
+        },
+        {
+          "time_min": 1162.0,
+          "soc_kwh": 99.53513381396748,
+          "kind": "service"
+        },
+        {
+          "time_min": 1166.0,
+          "soc_kwh": 96.05513381396747,
+          "kind": "movement"
+        },
+        {
+          "time_min": 1173.0,
+          "soc_kwh": 106.47469402581848,
+          "kind": "charge"
+        },
+        {
+          "time_min": 1177.0,
+          "soc_kwh": 109.37753957934913,
+          "kind": "charge"
+        },
+        {
+          "time_min": 1186.0,
+          "soc_kwh": 114.4582284230833,
+          "kind": "charge"
+        },
+        {
+          "time_min": 1190.0,
+          "soc_kwh": 110.9782284230833,
+          "kind": "movement"
+        },
+        {
+          "time_min": 1216.0,
+          "soc_kwh": 110.9782284230833,
+          "kind": "movement"
+        },
+        {
+          "time_min": 1216.0,
+          "soc_kwh": 88.35822842308329,
+          "kind": "service"
+        },
+        {
+          "time_min": 1223.0,
+          "soc_kwh": 88.21822842308329,
+          "kind": "movement"
+        },
+        {
+          "time_min": 1251.0,
+          "soc_kwh": 63.85822842308329,
+          "kind": "service"
+        },
+        {
+          "time_min": 1255.0,
+          "soc_kwh": 60.37822842308329,
+          "kind": "movement"
+        },
+        {
+          "time_min": 1257.0,
+          "soc_kwh": 66.43102807639237,
+          "kind": "charge"
+        },
+        {
+          "time_min": 1270.0,
+          "soc_kwh": 106.93102807639237,
+          "kind": "charge"
+        },
+        {
+          "time_min": 1276.0,
+          "soc_kwh": 108.93551404199808,
+          "kind": "charge"
+        },
+        {
+          "time_min": 1282.0,
+          "soc_kwh": 110.94000000012106,
+          "kind": "charge"
+        },
+        {
+          "time_min": 1283.0,
+          "soc_kwh": 114.99000000000244,
+          "kind": "charge"
+        },
+        {
+          "time_min": 1287.0,
+          "soc_kwh": 111.51000000000244,
+          "kind": "movement"
+        },
+        {
+          "time_min": 1316.0,
+          "soc_kwh": 111.51000000000244,
+          "kind": "movement"
+        },
+        {
+          "time_min": 1316.0,
+          "soc_kwh": 86.28000000000245,
+          "kind": "service"
+        },
+        {
+          "time_min": 1334.0,
+          "soc_kwh": 85.92000000000245,
+          "kind": "movement"
+        },
+        {
+          "time_min": 1362.0,
+          "soc_kwh": 61.56000000000245,
+          "kind": "service"
+        },
+        {
+          "time_min": 1366.0,
+          "soc_kwh": 58.08000000000245,
+          "kind": "movement"
+        },
+        {
+          "time_min": 1373.0,
+          "soc_kwh": 86.42999999999375,
+          "kind": "charge"
+        },
+        {
+          "time_min": 1379.0,
+          "soc_kwh": 97.73889142288296,
+          "kind": "charge"
+        },
+        {
+          "time_min": 1380.0,
+          "soc_kwh": 99.73599980191372,
+          "kind": "charge"
+        },
+        {
+          "time_min": 1401.0,
+          "soc_kwh": 126.73046613691903,
+          "kind": "charge"
+        },
+        {
+          "time_min": 1410.0,
+          "soc_kwh": 133.61525452674343,
+          "kind": "charge"
+        },
+        {
+          "time_min": 1440.0,
+          "soc_kwh": 152.4103998919066,
+          "kind": "charge"
+        },
+        {
+          "time_min": 1500.0,
+          "soc_kwh": 182.11733430484992,
+          "kind": "charge"
+        },
+        {
+          "time_min": 1560.0,
+          "soc_kwh": 211.82426871779293,
+          "kind": "charge"
+        },
+        {
+          "time_min": 1620.0,
+          "soc_kwh": 216.94820143821335,
+          "kind": "charge"
+        },
+        {
+          "time_min": 1680.0,
+          "soc_kwh": 222.07213455915428,
+          "kind": "charge"
+        },
+        {
+          "time_min": 1740.0,
+          "soc_kwh": 227.19606727957475,
+          "kind": "charge"
+        },
+        {
+          "time_min": 1800.0,
+          "soc_kwh": 232.31999999999516,
+          "kind": "charge"
+        }
+      ]
+    ]
+  }
+}

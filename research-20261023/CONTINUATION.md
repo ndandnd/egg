@@ -62,8 +62,13 @@ sources, fresh attempt02 ONLY. PROTOCOL_V2.md,RESOURCE_DECISION_V2.md,LAUNCH_V2.
 bind the continuing SAME1800CPU/2700wall cap including0.72/0.92carry. One focused
 static delta review must pass before one command; never resume attempt01.
 Inherited unchanged source/prior digests remain frozen; hash predecessorpreflight
-once plus only five freshv2files, no duplicate oldasset/prior audits. No v2
-command yet as of this checkpoint. Check actual receipts and agents before action.
+once plus only five freshv2files, no duplicate oldasset/prior audits. V2 was
+launched ONCE after reviewed source/protocol commit82e2535f was pushed. Exec82477
+CLOSED exit0:8/8 native calls and accepted operational endpoints,7/8 physicalQP
+successes. Last50603/80 returned nativeOPTIMAL but unchanged extraction rejected
+an unrepresentable positive-charge session; it retained the valid prior. Never
+report that raw optimum as a physically feasible bill. No retries/source edits
+occurred during execution. Check actual receipts and agents before action.
 
 Scope: ALL8 already saved prior topologies, native seed17, original full physical
 matrix, all original routing choices fixed, direct convex integrated-cost QP via
@@ -91,6 +96,9 @@ Closed warm package:6796.46CPU/6952.21wall main;1.54CPU/1.64wall frozenreadout;
 .04CPU/.12wall compactexport. Total6798.04CPU,elapsed-sum6953.97s. Priorreset206.31CPU/
 223.25elapsed -> warm CLOSED cumulative7004.35CPU/7177.22elapsed-sum. QPattempt01
 adds0.72CPU/0.92elapsed -> CLOSED cumulative7005.07CPU/7178.14elapsed-sum BEFOREv2.
+V2 external48.08CPU/49.61elapsed -> CLOSED cumulative7053.15CPU/7227.75elapsed-sum
+BEFORE compactanalysis. SharedQPpackage spent48.80CPU/50.53elapsed beforeanalysis,
+including attempt01. These overlapping views must NOT be summed wholesale.
 Not exact sessionCPU.
 Separate legacy conditionalguard2546.091499549272s remains; historical actualreview
 CPU UNKNOWN. Never reset/relabel it or restored old-cap compliance. FutureQPspend
