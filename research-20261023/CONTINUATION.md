@@ -14,14 +14,14 @@ or major scientific changes. Do not repeat old32/50-minute approval questions.
 Read research-20261025/NATIVE_MONITOR_IMPLEMENTATION_PROTOCOL.md and
 research-20261025/responsive-supervision/budget-adoption.json. Parent prospectively
 selected NEW3600 total/dispatch3420/shutdown180 and package600 from original
-accepted guard2426.723449631016, end3026.723449631016. Retained carry is
-2541.8243213823207, not zero. Old3000-policy records stay unchanged. Historical
+accepted guard2426.723449631016, end3026.723449631016. Budget adoption retained carry2541.8243213823207, not zero. CURRENT active carry
+is2546.091499549272 in cf1-responsive-checks/attempt01-accounting.json. Old3000-policy records stay unchanged. Historical
 actual review CPU is UNKNOWN; guard is conditional conservative reconciliation,
 not measured CPU or restored old-cap compliance. Preserve every failure/charge.
 
 Newest legacy account: research-20261024/cf1-resumption/failed-native-monitor-accounting.json.
-New adoption links it without discarding old charges/flags. No current new-policy
-source/primitive/metadata/native gate has passed. All new source work is STATIC.
+New adoption links it without discarding old charges/flags. The new-policy source gate has now PASSED; real primitive/metadata/native gates
+remain unqualified. Production/helper/test bytes are frozen for the next phase.
 The new budget is NOT permission to execute legacy v5e or unfrozen commands.
 
 ## Completed bounded package
@@ -75,22 +75,42 @@ cleanup/file auditing must not counterfeit active .25 status; success only after
 true terminal accounting and all owned groups/helpers closed. Discrete RSS is not
 instantaneous safety and this is not hostile-code containment/hard real-time.
 
-### Active agents — STATIC only, check actual status
+### Current source success and next static preparation
 
-- /root/approved50_bindings owns new cf1_responsive_supervision.py and
-  cf1_responsive_owner.py integration, using existing physics/replay/ledger.
-- /root/approved50_runners owns new src/egglab/async_resource_probe.py helper.
-- /root/responsive_monitor_tests owns new src/tests/test_responsive_supervision_v6.py;
-  coordinate actual APIs with both implementers, no constant-only mirror tests.
+Source gate actually ran once:45tests/75subtests passed in.15s, no source changes,
+PGID27953 reaped/absent, actual fresh observations complete. Internalcharge
+2.3443187506379486; phase4.267178166951537 includes preparation, whole-process
+reconciliation, snapshot preservation and closure. CURRENT carry2546.091499549272
+in research-20261025/cf1-responsive-checks/attempt01-accounting.json,1390proofs,
+15new/175reused exact snapshots. Original sourcephase30 end2571.8243213823207
+remains; remaining about25.7328s, no phase/cumulative reset. Read
+RESPONSIVE_SOURCE_RESULTS.md; this is source/compositional, not actual OS/native
+qualification. All current production/helper/test bytes FROZEN for primitive.
 
-They may read/edit bounded source/tests, NO imports/compile/hashes/tests/probes/
-metadata/native/cluster/commits/newagents. No test/command manifest frozen yet.
-Parent next reviews stable APIs/integration, freezes exact source/command/budget,
-runs one metered30s source gate. After complete reconciled receipts separately
-freeze one20s real no-native control/resource primitive. Review it before actual
-metadata/one native case in fresh namespace. No automatic retry; diagnose any
-failure before a separately recorded design. Existing metered Python batch only,
-no duplicate full hash/per-file shell audit. Sources locked during actual workers.
+/root/approved50_runners prepares new research-only real component primitive
+driver/protocol/qualified outer metering/manifest-preparer: actual Probe and
+FrameChannel, fixed non-numerical stub/dual Unix sockets/actualrusage+echo .05,
+maxcontrolgap.25, deliberate .35s processing hold while control continues,
+~6s body in20s phase. Component pass denies fullOwner/native/60s/replay/model
+qualification. No submitted primitive/active compute PID. No production changes.
+/root/approved50_bindings completed bounded static phase-accounting analysis:
+freeze() currently requires source-account path; primitive spending must reach
+current metadata input/cumulative carry. Read PRIMITIVE_TO_FREEZE_ACCOUNTING.md
+and parent METADATA_PHASE_INPUT_DECISION.md: prefer a separately reviewed,
+source-bound phase driver calling existing adapter.freeze with current closed P
+and exact reproduced path/strong primitive guards, not the rejecting legacyCLI.
+Only after primitive pass; binding validation must be metered and carried.
+Do not bypass costs, overwrite source01 or pretend changed source remains qualified.
+Tests agent is done with45 source tests. Check statuses before duplicating work.
+
+Agents may read/write specified NEW research files only: NO imports/compile/hash/
+tests/probes/freezes/native/commits/newagents. Parent reviews primitive's stable
+source/criteria, freezes exact command/current source-account bindings and runs
+one20s real no-native component gate. Review receipts before metadata/native.
+If metadata phase-input needs a source change, separately record it and a fresh
+source gate within remaining original source authority; no automatic retry.
+All hashing remains existing metered Python batch, no peer duplicate hash audits.
+
 
 ## Research and preservation
 

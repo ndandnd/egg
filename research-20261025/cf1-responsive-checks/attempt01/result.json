@@ -1,0 +1,121 @@
+{
+  "attempt_id": "attempt01",
+  "revision": 6,
+  "command": [
+    "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/.venv-local/bin/python",
+    "-m",
+    "pytest",
+    "-q",
+    "src/tests/test_responsive_supervision_v6.py"
+  ],
+  "source_gate_only": true,
+  "native_dispatch": false,
+  "metadata_freeze": false,
+  "model_source_asset_access": false,
+  "research_data_loaded_for_analysis": false,
+  "no_native_primitive_performed": false,
+  "non_native_sample_policy": {
+    "scope": "source-tests-and-metadata-only",
+    "process_sample_timeout_s": 1.0,
+    "completed_sample_gap_limit_s": 1.25,
+    "poll_interval_s": 0.05,
+    "absolute_work_deadline_clipping": true,
+    "numerical_monitor_changed": false
+  },
+  "executed_tests": [
+    "test_responsive_supervision_v6.py"
+  ],
+  "hashed_qualified_test_dependencies": [
+    "test_constructive_controls.py",
+    "test_comparison_native_adapter.py",
+    "test_cf1_preparation_preflight.py",
+    "test_cf1_small_mechanism_preflight.py",
+    "test_cf1_small_mechanism_approved.py",
+    "test_launch_accounting.py",
+    "test_launch_prefix_initializer.py",
+    "test_launch_entry_preparation.py",
+    "test_cf1_entry_repaired.py"
+  ],
+  "command_sha256": "51529374f245b53bf2aa122e3c46aafe3601644a4de859a862f879062139bed9",
+  "parent_monotonic": 6091653.031750916,
+  "carried_charge_s": 2541.8243213823207,
+  "prior_charge_s": 2541.8243213823207,
+  "carry_is_accepted_conservative_guard": true,
+  "prior_actual_cpu_s": null,
+  "historical_accounting_observations_complete": false,
+  "legacy_owner_observations_complete": false,
+  "administration_allowance_s": 0.0,
+  "hard_ceiling_s": 3600.0,
+  "dispatch_stop_s": 3420.0,
+  "shutdown_reserve_s": 180.0,
+  "wall_limit_s": 20.0,
+  "outer_limit_s": 22.5,
+  "inclusive_planning_s": 25.0,
+  "absolute_package_end_s": 2571.8243213823207,
+  "analysis_finalization_reserve_s": 5.0,
+  "rss_limit_bytes": 5368709120,
+  "solver_free": true,
+  "policy": "cf1-responsive-supervision-v6",
+  "returncode": 0,
+  "failure": null,
+  "secondary_errors": [],
+  "termination": {
+    "owned_pgids": [
+      27953
+    ],
+    "leader_returncode": 0,
+    "reaped": true,
+    "group_absent": true,
+    "surviving_pgids": [],
+    "group_states": [
+      {
+        "pgid": 27953,
+        "state": "absent"
+      }
+    ],
+    "probe_diagnostics": [],
+    "cleanup_errors": [],
+    "cleanup_deadline": 6091675.531750916,
+    "helper_result": {
+      "pgid": 27953,
+      "owned_pgids": [
+        27953
+      ],
+      "group_absent": true,
+      "returncode": 0,
+      "probe_diagnostics": [],
+      "cleanup_errors": [],
+      "group_states": [
+        {
+          "pgid": 27953,
+          "state": "absent"
+        }
+      ],
+      "cleanup_deadline": 6091675.531750916
+    }
+  },
+  "source_changes": [],
+  "passed": true,
+  "sampled_peak_rss_bytes": 51511296,
+  "elapsed_allocation_s": 1.5233607506379485,
+  "sampled_process_tree_cpu_s": 0.22,
+  "observed_children_cpu_s": 0.5332779999999999,
+  "monitor_child_cpu_s": 0.265609,
+  "charged_allocation_s": 1.5233607506379485,
+  "supervisor_cpu_s": 0.8209580000000001,
+  "charged_cpu_s": 2.3443187506379486,
+  "sampled_plus_monitor_cpu_s": 0.48560899999999996,
+  "accounting_observations_complete": true,
+  "stdout_sha256": "a7fcb7d9ff65dc79abff896746afc8b616c5b1dfa57d6f0aac2d78fc48e1286c",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "artifact_hashes": {
+    "attempt.json": "dc302e34c34a65ca197c8e4c8d56be3c7e044c599df9a2c616ba11dc829d9b6e",
+    "ownership.jsonl": "5c6fba40a9e18a88c50773d65e1c1338a061032f96b08b2c72089884f2fc33e2",
+    "resources.jsonl": "220d8dc7c59d69770636749efcc0340e7acc9c8150a13b910217c09d16a9ca7b",
+    "stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdout.log": "a7fcb7d9ff65dc79abff896746afc8b616c5b1dfa57d6f0aac2d78fc48e1286c"
+  },
+  "cumulative_qualification_charge_s": 2544.1686401329584,
+  "administration_scope": "No new administration allowance",
+  "scope": "V6 fake-execution source qualification only; no real resource primitive, model/source asset, metadata freeze, native worker or mechanism clearance"
+}

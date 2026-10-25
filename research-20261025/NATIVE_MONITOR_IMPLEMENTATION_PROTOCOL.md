@@ -52,6 +52,9 @@ host capacity without a prospective policy decision. With K=C+3<=15:
 These are sufficient provisions for the stated envelope, not exact work
 measurements. Label conservative overlap; never add the same measured counter
 twice as exact CPU. Do not spend a reserve already needed for cleanup/finalization.
+Implementation additionally validates ps CPU precision<=.01s and retains a
+labelled K*.02s quantization/conversion allowance, at most.30s at capacity12.
+The preceding sufficient bounds become60.30 and106.80s, still below65 and120.
 If startup, capacity or service falls outside the envelope, fail closed and retain
 the result; do not silently widen bounds or alter a running frozen trial.
 
