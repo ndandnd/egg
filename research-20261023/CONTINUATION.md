@@ -1,11 +1,43 @@
-# Current handoff — 25 October 2026: eight-group result CLOSED; ML margin fails
+# Current handoff — 25 October 2026: TRAIN metadata CLOSED; paired labels next
 
 Worktree: /Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017
 Branch: codex/ml-prediction-20261017. Read this first, then compact
-warm_replication/RESULTS.md, FINAL_RESOURCE_RECEIPT.json and current reviews.
+train_readiness/RESULTS.md, FINAL_RESOURCE_RECEIPT.json and current next-decision
+notes; warm_replication/RESULTS.md only when the prior scientific result is needed.
 Check actual agents/owned workers; never duplicate attempted work. Manage short
 bounded GPT-6.1 Sol handoffs. Human practical routine resource authority exists;
 no approval is pending. Flag unusual commitments or major changes.
+
+## Latest package — do not rerun
+
+train_readiness/attempt01 completed ONCE, exit0/checksPASS after source/protocol
+commitd962c8f2 was pushed. All static agents completed; no numerical worker remains.
+Read train_readiness/RESULTS.md, INTERPRETATION_REVIEW.md,
+FINAL_RESOURCE_RECEIPT.json and NEXT_FIT_LABEL_DECISION.md. No weights, rows,
+labels, source plans, model inference, fits, solver or replay were accessed.
+Do not repeat this audit, schema reads or its source review.
+
+Both declared80 FITgroups map unambiguously to TRAIN metadata;79 full source
+pairs/159 sourcefleets, with physical_v2_s10037 incomplete (source1 only).
+Global TRAIN metadata128groups/127fullpairs/255of256fleets. Three selected
+metadata pins and Cat preprocessing's registry pin matched. Features17, with
+four a-derived coordinates11–14; no directb. GNN preprocessing supplies no pool
+lineagepin or seed. Cat provenance says historical TRAIN single feasible
+incumbents, not optima/independent benchmarks. Projection unknowns=[] means no
+shape exceptions; named scientific readiness_limits remain UNKNOWN.
+
+Static source contract: source0 flata=.20; source1 a=.10 atperiods18–21/.30elsewhere;
+b=1/900 fixed. This is intended within-case price variation, not verified numeric
+historical row values or conditional label changes. Teacher target is one
+cheapest observed replayed catalog plan under integrated cost. Full GNN lineage,
+per-label teacher/searchquality and conditional binary signal remain unestablished.
+Passing metadata checks DOES NOT authorize refitting or rescue the failed ML gate.
+
+External audit meter displayed.04CPU/.27elapsed; self CPU before publication
+.045704. Retain.06CPU as conservative phase rounding charge. Displayed closed
+process sums now19638.14CPU/20223.92elapsed-sum; retained tracking19638.16CPU
+includes the new phase rounding charge, not an exact total. Old guard/unknown
+reviewCPU stay separate. Full receipt records all distinctions.
 
 ## Completed evidence — no rerun
 
@@ -53,17 +85,32 @@ classical restriction captures most observed improvement over the unchanged
 prior. Do not pool older groups to rescue the gate, call generic pruning novel,
 start a training sweep or claim FT50/publication readiness. Manuscript deferred.
 
-NEXT is a narrow TRAIN-only readiness audit before any fitting or broad
-replication. Begin STATIC with selected asset lock, source-pinned registry/model
-configs and feature/label-generation source APIs: identify exact permitted
-metadata for within-physical-timetable tariff coverage/assignment, canonical
-base/variant aliases, teacher objective/source-plan policy, conditional target
-variation and price-derived feature paths. No broad row-data search. Then freeze
-exact input allowlist, source/command/fresh namespace and a small practical
-measured budget for ONE metadata readout. Metadata absence means UNKNOWN, not
-permission to infer support or scan rows. Any later TRAIN row/label scan needs
-its own exact allowlist/denominator/prospective decision. Never open sealed banks
-or historical outer outcomes. No readiness command is currently a launch manifest.
+NEXT is a separately frozen FIT-only paired target/support audit, not a refit.
+Use train_readiness/NEXT_FIT_LABEL_DECISION.md as a design direction, not a launch
+manifest. Candidate exact TRAIN tables are
+/Users/nadan/Documents/ChatGPT/egg/claude-local/20260930-route-pool128-v3/cases.jsonl
+and source_inputs.jsonl beside it. Their declared pins are already in the completed
+metadata receipt: cases faf0428f79744a9e26fa04e80baec4734443e3cfe538e404d74f41f626a294d6;
+sources 7c5fab4c648b27fda5e9ecc55cd418f0a066c8e46196bc31d5f9405e5a6409d5.
+Do not open them before a new exact input/field/FIT-ID allowlist, source/protocol/
+command/freshnamespace and practical measured budget are frozen and reviewed.
+Start source-only: verify exported row schema/identity/selected-movement encoding
+and choose truthful routing semantics. Hashing a complete TRAIN table is byte
+access; json.loads of a non-FIT line transiently decodes its content. Do not claim
+identifier-only parsing if using that route. Either explicitly specify permitted
+routing-only transient TRAIN decoding, with non-FIT semantic analysis forbidden,
+or use a source-verified FIT export/index. Do not invent a monitoring/parser
+framework. No sealed data, old model outer performance or non-FIT label analysis.
+
+Reconcile all80 intended FITgroups/79 expected fullpairs/one incomplete group;
+report actual admitted pair denominators and every mismatch. Check paired
+physical/market/plan identities, align movement universe and measure within-case
+binary positive-set/Hamming disagreement, including flexible-kind breakdown.
+No teacher solves/replay/inference/metrics from evaluation groups. Changing labels
+can reflect teacher search, not causal price information. Absent/constant targets
+are findings, not permission to search for favorable tariffs. No new performance
+threshold or automatic training follows. Hash consumed inputs once inside this
+new metered package, no redundant metadata/proof audits.
 
 Use existing interpretation-plan/MATCHED_TARIFF_BLIND_DESIGN.md; do not recreate
 notes or survey more literature. Need conditional supervision support and alias
@@ -94,11 +141,12 @@ preflight establishes declared128base-ID nonoverlap only, not global alias
 closure or population transfer. All current/October17 cohorts are development.
 Restricted/fixed-route lower bounds are not unrestricted certificates.
 
-FINAL_RESOURCE_RECEIPT.json: campaign12570.79CPU/12980.97elapsed; finalizer2.85/2.95;
+warm_replication/FINAL_RESOURCE_RECEIPT.json: campaign12570.79CPU/12980.97elapsed; finalizer2.85/2.95;
 export.05/.08; package12573.69CPU/12984.00elapsed-sum within28800/36000 total.
 Finalizer/export INSIDE original closure600, not extra. Prior closed prefix
-7064.41/7239.65 not charged again. Closed cumulative process sums19638.10CPU/
-20223.65elapsed-sum are not exact sessionCPU or continuous elapsed. Child rows
+7064.41/7239.65 not charged again. Pre-metadata cumulative process sums19638.10CPU/
+20223.65elapsed-sum are not exact sessionCPU or continuous elapsed. Latest metadata
+increment and rounding charge are above; never add the full prefix again. Child rows
 already in campaign meter; never doublecount. HistoricalQP60.04/62.39 overlaps
 prior prefix. Legacy conditionalguard2546.091499549272 separate; actual old
 reviewCPU UNKNOWN. No reset/refund/restored-old-cap-compliance claim.
