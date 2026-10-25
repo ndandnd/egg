@@ -1,0 +1,151 @@
+{
+  "schema": "warm-replication-prospective-cohort-v1",
+  "created_date": "2026-10-25",
+  "status": "static_cohort_and_control_design_frozen_pending_parent_critique_and_executable_binding",
+  "execution_authorized_by_manifest": false,
+  "generation_performed": false,
+  "generator": "claude-scale-v1",
+  "generator_entry": "egglab.claude_cases.make(scale:<base_id>:<services>)",
+  "sampling": {
+    "candidate_base_id_range_inclusive": [50600, 50999],
+    "rule": "First eight ascending IDs after the explicitly recorded prior-use exclusions; no outcome-based selection or replacement",
+    "selected_base_ids": [50604, 50606, 50607, 50608, 50609, 50610, 50611, 50612],
+    "random_sample_claim": false,
+    "globally_unseen_claim": false,
+    "prior_use_search_globally_exhaustive": false,
+    "future_exposure_discovery_policy": "Retain fixed ID and disclose exposure; no replacement using generated cases or outcomes",
+    "exclusions": {
+      "oct17_v2_v3_qualification_and_screen": [50605, 50641, 50670, 50685, 50717, 50730, 50743, 50751, 50759, 50805, 50816, 50877, 50891, 50903, 50907, 50919, 50925, 50941, 50954, 50955, 50991, 50998],
+      "preceding_warm_groups": [50600, 50601, 50602, 50603],
+      "old_pilots_also_in_oct17_register": [50605, 50685],
+      "known_engineering_parent_supplied": [50997, 50999]
+    }
+  },
+  "groups": [
+    {"group_index": 0, "group_id": "claude-scale-v1:50604", "base_id": 50604, "case_keys": ["scale:50604:40", "scale:50604:80"]},
+    {"group_index": 1, "group_id": "claude-scale-v1:50606", "base_id": 50606, "case_keys": ["scale:50606:40", "scale:50606:80"]},
+    {"group_index": 2, "group_id": "claude-scale-v1:50607", "base_id": 50607, "case_keys": ["scale:50607:40", "scale:50607:80"]},
+    {"group_index": 3, "group_id": "claude-scale-v1:50608", "base_id": 50608, "case_keys": ["scale:50608:40", "scale:50608:80"]},
+    {"group_index": 4, "group_id": "claude-scale-v1:50609", "base_id": 50609, "case_keys": ["scale:50609:40", "scale:50609:80"]},
+    {"group_index": 5, "group_id": "claude-scale-v1:50610", "base_id": 50610, "case_keys": ["scale:50610:40", "scale:50610:80"]},
+    {"group_index": 6, "group_id": "claude-scale-v1:50611", "base_id": 50611, "case_keys": ["scale:50611:40", "scale:50611:80"]},
+    {"group_index": 7, "group_id": "claude-scale-v1:50612", "base_id": 50612, "case_keys": ["scale:50612:40", "scale:50612:80"]}
+  ],
+  "services_order": [40, 80],
+  "native_solver_seeds_order": [17, 41, 73],
+  "active_arms_canonical": ["GNN", "CatBoost", "CA1", "CoverCA1", "random", "full", "fixed_route", "GNN_day"],
+  "group_count": 8,
+  "case_count": 16,
+  "acquisition_count": 16,
+  "block_count": 48,
+  "active_decisions": 384,
+  "active_decision_wall_s": 60,
+  "reference": {"arm": "unchanged", "active_solve": false, "blocks": 48},
+  "order": {
+    "version": "cyclic-eight-block-direction-v1",
+    "block_index": "b=((group_index*2+size_index)*3+seed_index), all indexes zero-based",
+    "rule": "Left rotate active_arms_canonical by b modulo8, then reverse when floor(b/8) is odd",
+    "position_frequency_per_arm_over_48_blocks": 6,
+    "carryover_balance_claim": false,
+    "adaptive_reordering": false
+  },
+  "physical_design": {
+    "nested_trip_records": true,
+    "shared_trip_ids": "T001 through T040",
+    "generation_time_shared_record_check_required": true,
+    "generator_modification": false,
+    "fixed_resource_size_comparison": false,
+    "resource_scaling_rule": "90*ceil(services/28) kW shared grid and per-bus power, one connector",
+    "power_kw_by_services": {"40": 180, "80": 270},
+    "intervention": "day-to-late market coefficients only; physical case unchanged within each size variant",
+    "active_fleet_count": "Exactly the shared predetermined prior fleet count for all eight arms"
+  },
+  "prior_plan": {
+    "policy": "One predetermined CoverCA1 day prior per case variant, seed17, pure fleet-count acquisition; shared across arms and replanning seeds",
+    "acquisition_wall_s": 120,
+    "preparation_cutoff_s": 30,
+    "native_cutoff_s": 90,
+    "native_cap_s": 60,
+    "acquisition_cost_reported_separately": true,
+    "failed_acquisition": "Keep every assignment missing; no zero-cost endpoint, replacement, extra acquisition seed or repair"
+  },
+  "fixed_model_control": {
+    "arm": "GNN_day",
+    "checkpoint_and_preprocessing": "Exactly the existing locked GNN used by GNN",
+    "ranking_linear_prices": "day a, freshly rescored with cold model objects inside each paid decision",
+    "optimization_linear_prices": "late a",
+    "optimization_curvature": "same late b as all arms",
+    "curvature_feature_added": false,
+    "cached_scores_or_old_pools_used": false,
+    "claim_scope": "Fixed-model ranking adaptation; not causal value of learned electricity information"
+  },
+  "restricted_pool_contract": {
+    "base_B": "Original price-blind backbone from unchanged classical_controls selector",
+    "quota_K": "Original min(M,max(ceil(.30*M),|B|)); never enlarged",
+    "warm_Bw": "B union common prior flexible movement IDs S0, identical across restricted arms",
+    "cover_extra": "CoverCA1 additionally protects frozen cover union C",
+    "boundaries": "All original boundary modes retained",
+    "fill": "Fresh arm-specific rank order after protection to exactly original K",
+    "over_capacity": "Preserve design failure and operational fallback; no native dispatch or quota adjustment",
+    "record": ["base_B", "S0", "Bw", "K", "rank_fill", "exposure_count", "GNN_GNN_day_pool_overlap"]
+  },
+  "method_policy": {
+    "models_and_preprocessing_fixed": true,
+    "new_training": false,
+    "checkpoint_or_family_reselection": false,
+    "both_classical_arms_retained": true,
+    "CatBoost_reported_separately": true,
+    "winner_selection_after_extension_outcomes": false,
+    "common_late_integrated_cost_objective": true,
+    "common_warm_hints_and_prior_load_tangents": true,
+    "native_cutoff_s": 52,
+    "receipt_inclusive_endpoint_s": 60,
+    "method_success_separate_from_operational_fallback": true,
+    "automatic_retry": false,
+    "adaptive_time_or_quota": false
+  },
+  "resource_direction": {
+    "total_cpu_hours": 8,
+    "total_cpu_s": 28800,
+    "total_wall_hours": 10,
+    "total_wall_s": 36000,
+    "includes": ["preparation", "cold loading", "acquisitions", "active decisions", "failed work", "shutdown", "accounting", "finalization"],
+    "concurrent_workers": 1,
+    "native_and_computation_threads": 1,
+    "observed_peak_rss_bytes": 5368709120,
+    "budget_approval_pending": false,
+    "dispatch_and_closure_reserves": null,
+    "unfunded_assignments": "Retain as unattempted; no automatic budget extension"
+  },
+  "administrative_stages": [
+    "Static cohort/control metadata freeze",
+    "Parent critique and prospective executable protocol/source/asset/command binding",
+    "One complete assigned extension subject to resource/fatal stops, without interim outcome-based resizing",
+    "Grouped descriptive readout and separate later research decision"
+  ],
+  "primary_descriptive_contrasts": ["GNN versus CoverCA1", "GNN versus fixed_route", "GNN versus GNN_day"],
+  "additional_reporting": "CatBoost separately and all other frozen arms/unchanged prior; missing, fallback and failure denominators retained",
+  "normalization": "Common prior late electricity E0; undefined for missing prior or zero E0",
+  "continuation_rule": null,
+  "prior_use_metadata_checked": [
+    "research-20261017/local-assets-v2.json:manifest.cohorts qualification/screen case_key fields only",
+    "research-20261017/local-assets-v3.json:manifest.cohorts qualification/screen case_key fields only",
+    "research-20261025/warm_replanning/GROUP_MANIFEST.json:assigned base IDs/design metadata",
+    "research-20261025/warm_replanning/PROTOCOL.md:fixed operational/scientific policies",
+    "Parent-supplied known pilot and engineering exclusions"
+  ],
+  "outcome_files_opened_for_cohort_selection": false,
+  "sealed_indexes_opened": false,
+  "protected_sources_opened": false,
+  "source_digests": null,
+  "generated_case_identities": null,
+  "numerical_command": null,
+  "pending_execution_controls": [
+    "Parent critique and frozen continuation/readout rule",
+    "New executable source and exact selected-asset bindings",
+    "GNN_day scoring-price implementation with unchanged model/transform",
+    "Exact dispatch/closure/finalization provisions inside total budget",
+    "Focused integration review and concrete numerical command"
+  ],
+  "interpretation": "Eight deterministic new development groups absent from narrowly checked prior-use registers; staged extension, not globally proven unseen, independent final generalization, fixed-resource scaling or learned-price causality"
+}
