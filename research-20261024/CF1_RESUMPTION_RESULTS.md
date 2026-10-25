@@ -49,3 +49,17 @@ claim. No further human budget decision is pending; no numerical worker launched
 Scientific priorities remain reliable recovery/replay, strong classical controls
 and matched independent timetable evaluation; this is not an ML improvement or
 publication result.
+
+Source08 then passed21/61 in0.88s. Actual v5e metadata freeze passed with
+elapsed6.790463667s, charge10.266245s and PGID14802 closed. Its real owner aborted
+before precharge/prefix/native admission: memory_pressure exhausted the shared
+0.24s sample deadline. Controller15112 terminated/reaped, group absent, no cleanup
+errors. The20s entry provision did not affect this distinct production monitoring
+bottleneck. Preserve the incomplete actual owner observation flag.
+
+Current carry2541.8243213823207 is in
+cf1-resumption/failed-native-monitor-accounting.json. Next is a bounded static
+supervision design, not another budget-only/native retry. See
+research-20261025/NATIVE_MONITOR_FAILURE.md and the pending NATIVE_MONITOR_DESIGN.md.
+Source/metadata/ownership control and true resource age must remain distinct from
+the scientific60/61/62.5 endpoints. No numerical worker or ML result yet.

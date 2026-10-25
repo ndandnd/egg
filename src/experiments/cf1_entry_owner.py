@@ -21,13 +21,13 @@ import time
 
 from experiments import recovery_qualification as q
 
-ENTRY_S = 7.5
+ENTRY_S = 20.
 SUFFIX_S = 2.5
 PERMIT_S = .1
 MAX_MESSAGE = 32768
 POLICY = 'cf1-entry-repaired-v5'
 WORKER_PREFIX = ('-m', 'experiments.cf1_entry_repaired', 'worker')
-PACKAGE_CAP = 2701.723449631016
+PACKAGE_CAP = 2776.723449631016
 HARD_CEILING, DISPATCH_STOP, SHUTDOWN_RESERVE = 3000., 2820., 180.
 ANALYSIS_FINAL_S, CLEANUP_S, OWNER_CPU_MAX_S = 30., 1.5, 15.
 _GUARD_LOCK = threading.Lock()
@@ -428,7 +428,7 @@ class OwnerSupervisor:
         # crosschecks. No timestamp supplied by the child establishes the anchor.
         bound = max(self.peak_cpu, reported, now-self.anchor)+own+monitors+SUFFIX_S
         _require(bound <= ENTRY_S and now+SUFFIX_S <= self.anchor+ENTRY_S,
-                 'Whole-entry cost plus conservative suffix exceeds 7.5 seconds')
+                 'Whole-entry cost plus conservative suffix exceeds 20 seconds')
         expires = min(now+PERMIT_S, self.anchor+ENTRY_S,
                       request['controller_sample_monotonic']+SUFFIX_S/(self.capacity+2))
         _require(expires > now, 'Controller CPU report too old for conservative suffix')

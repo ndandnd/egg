@@ -168,7 +168,7 @@ def wrapper_charge(h, output, lock_sha='a'*64):
     root = ROOT/h.v5.NAMESPACE/'entry-owner.json'
     digest = h.q.sha(root)
     return {'event': 'supervisor_cpu', 'phase': 'whole_entry_precharge',
-        'charged_cpu_s': 7.5, 'nonrefundable': True, 'policy': h.v5.POLICY,
+        'charged_cpu_s': 20., 'nonrefundable': True, 'policy': h.v5.POLICY,
         'task': h.v5.task_matrix()[0], 'output': str(Path(output).resolve()),
         'lock_sha256': lock_sha, 'owner_root': str(root),
         'owner_root_sha256': digest, 'root_sha256': digest,
@@ -199,7 +199,7 @@ class OwnerTests(unittest.TestCase):
                 supervisor.cpu0, supervisor.monitor0, supervisor.anchor = 0., 0., 100.
                 supervisor.peak_cpu, supervisor.active_other_cpu, supervisor.capacity = .4, .1, 8
                 supervisor.roots = {**h.roots,
-                    'expected_cumulative_charge_s': 2600. if damage == 'package' else 1540.}
+                    'expected_cumulative_charge_s': 2670. if damage == 'package' else 1540.}
                 supervisor.output, supervisor.task = str(h.output), h.task
                 if damage == 'owner-reserve':
                     h.owner.time.process_time = lambda: 15.01
@@ -304,16 +304,16 @@ class OwnerTests(unittest.TestCase):
                 supervisor._sample = sample
                 request = {**h.client._binding(), 'operation': 'prelaunch',
                     'precharge_sha256': h.client.precharge_sha256,
-                    'funding_sha256': stable({'charged_cpu_s': 1547.5}),
+                    'funding_sha256': stable({'charged_cpu_s': 1560.}),
                     'controller_reaped_child_cpu_s': 0.,
-                    'controller_cpu_s': 8. if damage == 'overcap' else .2,
+                    'controller_cpu_s': 21. if damage == 'overcap' else .2,
                     'controller_sample_monotonic': 100.2, 'entry_helpers': []}
                 proc = SimpleNamespace(pid=211)
                 if damage == 'none':
                     response = supervisor._gate(request, proc)
                     permit = response['permit']
                     self.assertTrue(permit['observations_complete'])
-                    self.assertLessEqual(permit['entry_bound_s'], 7.5)
+                    self.assertLessEqual(permit['entry_bound_s'], 20.)
                     self.assertLessEqual((permit['expires_monotonic']-permit['issued_monotonic'])
                         *(supervisor.capacity+2), h.owner.SUFFIX_S+1.e-12)
                     self.assertEqual(h.q.read(response['evidence_path']), permit)
@@ -329,13 +329,13 @@ class OwnerTests(unittest.TestCase):
             h = owner_harness(temporary)
             precharge(h)
             completed, total = h.q.resume_state(h.output, h.budget, 'a'*64)
-            self.assertEqual((completed, total), ({}, 1547.5))
+            self.assertEqual((completed, total), ({}, 1560.))
             events = h.q.ledger_events(h.output/'ledger.jsonl')
             self.assertEqual(len(events), 2)
             event = events[-1]
             self.assertEqual(event['phase'], 'whole_entry_precharge')
             self.assertTrue(event['nonrefundable'])
-            self.assertEqual(event['charged_cpu_s'], 7.5)
+            self.assertEqual(event['charged_cpu_s'], 20.)
             self.assertEqual(event['owner_root_sha256'], h.q.sha(h.root_path))
             before = (h.output/'ledger.jsonl').read_bytes()
             with self.assertRaises(ValueError):
@@ -349,7 +349,7 @@ class OwnerTests(unittest.TestCase):
                 if damage == 'root':
                     h.root_path.write_text(h.root_path.read_text()+' ')
                 elif damage == 'late':
-                    h.now.value = 108.
+                    h.now.value = 121.
                 else:
                     record = h.q.read(Path(temporary)/'entry-owner-attempt01/controller.json')
                     record['controller_pid'] = 212
@@ -393,7 +393,7 @@ class OwnerTests(unittest.TestCase):
                     self.assertIs(h.q.subprocess.Popen(list(h.owner._MONITOR_COMMANDS[0])), monitor)
                     self.assertEqual(len(calls), 1)
                     h.client.used = True
-                    h.now.value = 108.
+                    h.now.value = 121.
                     h.client._request = lambda value: self.fail('Post-handoff monitor requested entry permit')
                     self.assertIs(h.q.subprocess.Popen(list(h.owner._MONITOR_COMMANDS[0])), monitor)
                     with self.assertRaises(ValueError):
@@ -408,7 +408,7 @@ class OwnerTests(unittest.TestCase):
             with self.subTest(damage=damage), tempfile.TemporaryDirectory() as temporary:
                 h = owner_harness(temporary)
                 precharge(h)
-                funding = {'charged_cpu_s': 1547.5}
+                funding = {'charged_cpu_s': 1560.}
                 request = {**h.client._binding(), 'operation': 'prelaunch',
                     'precharge_sha256': h.client.precharge_sha256,
                     'funding_sha256': stable(funding), 'controller_reaped_child_cpu_s': 0.,
@@ -419,10 +419,10 @@ class OwnerTests(unittest.TestCase):
                     'suffix_s': h.owner.SUFFIX_S, 'issued_monotonic': 100.2,
                     'expires_monotonic': 100.25}
                 if damage == 'incomplete': permit['observations_complete'] = False
-                elif damage == 'overcap': permit['entry_bound_s'] = 7.6
+                elif damage == 'overcap': permit['entry_bound_s'] = 20.1
                 elif damage == 'unowned': permit['controller_pid'] = 212
                 elif damage == 'binding': permit['lock_sha256'] = 'b'*64
-                elif damage == 'late': permit['expires_monotonic'] = 108.
+                elif damage == 'late': permit['expires_monotonic'] = 121.
                 gate = Path(temporary)/'entry-owner-gate.json'
                 h.q.write_new(gate, permit)
                 response = {'allowed': damage != 'missing', 'permit': permit,
@@ -464,7 +464,7 @@ class OwnerTests(unittest.TestCase):
                     return h.q.subprocess.Popen(command, start_new_session=True, pass_fds=(9,))
                 def funding():
                     funding_calls.append(True)
-                    return {'charged_cpu_s': 1547.5}
+                    return {'charged_cpu_s': 1560.}
                 with h.client.entry_scope():
                     if damage == 'none':
                         self.assertEqual(h.client.launch_guard(args, h.task, h.output, 'a'*64,
@@ -515,7 +515,7 @@ class WrapperTests(unittest.TestCase):
                 self.assertEqual(h.adapter.POLICY, h.v5.POLICY)
                 self.assertEqual((h.adapter.PACKAGE_START, h.adapter.PACKAGE_LIMIT,
                                   h.adapter.PACKAGE_CAP),
-                    (2426.723449631016, 275., 2701.723449631016))
+                    (2426.723449631016, 350., 2776.723449631016))
                 self.assertEqual(h.adapter.FREEZE_ELAPSED_LIMIT_S, 17.5)
                 self.assertEqual((h.adapter.ANALYSIS_FINAL_RESERVE_S,
                     h.adapter.SUPERVISION_RESERVE_S), (30., 45.))
@@ -684,10 +684,10 @@ class WrapperTests(unittest.TestCase):
         hashes.update({str(ROOT/'src/tests'/name): h.q.sha(ROOT/'src/tests'/name)
             for name in (*v5.QUALIFIED_TEST_DEPENDENCIES, 'test_cf1_entry_repaired.py')})
         command = v5.check_command()
-        attempt = {'attempt_id': 'attempt07', 'revision': 5, 'policy': v5.POLICY,
+        attempt = {'attempt_id': 'attempt08', 'revision': 5, 'policy': v5.POLICY,
             'command': command, 'command_sha256': stable(command),
             'executed_tests': ['test_cf1_entry_repaired.py'], 'source_hashes': hashes}
-        result = {'attempt_id': 'attempt07', 'revision': 5, 'policy': v5.POLICY,
+        result = {'attempt_id': 'attempt08', 'revision': 5, 'policy': v5.POLICY,
             'command': command, 'command_sha256': stable(command),
             'executed_tests': ['test_cf1_entry_repaired.py']}
         h.store[str(directory/'attempt.json')] = attempt
@@ -699,12 +699,12 @@ class WrapperTests(unittest.TestCase):
                 v5.checked_sources(directory)
             hashes[path] = original
         for record, key, value in (
-                (attempt, 'attempt_id', 'attempt06'), (attempt, 'revision', 4),
+                (attempt, 'attempt_id', 'attempt07'), (attempt, 'revision', 4),
                 (attempt, 'policy', h.approved.POLICY),
                 (attempt, 'command', command+['src/tests/test_constructive_controls.py']),
                 (attempt, 'command_sha256', 'changed'),
                 (attempt, 'executed_tests', ['test_cf1_small_mechanism_approved.py']),
-                (result, 'attempt_id', 'attempt06'), (result, 'revision', 4),
+                (result, 'attempt_id', 'attempt07'), (result, 'revision', 4),
                 (result, 'policy', h.approved.POLICY)):
             original = record[key]
             record[key] = value
@@ -714,7 +714,7 @@ class WrapperTests(unittest.TestCase):
         for other in (ROOT/'research-20261023/cf1-small-approved-checks/attempt01',
                       directory.parent/'attempt01', directory.parent/'attempt03',
                       directory.parent/'attempt04', directory.parent/'attempt05',
-                      directory.parent/'attempt06'):
+                      directory.parent/'attempt06', directory.parent/'attempt07'):
             with self.assertRaises(ValueError):
                 v5.checked_sources(other)
 
@@ -732,7 +732,7 @@ class WrapperTests(unittest.TestCase):
         h.adapter.freeze_accounting = lambda *args: h.store[str(base/'lock.json')]
         ledger = []
         h.q.ledger_events = lambda path: deepcopy(ledger)
-        h.q.resume_state = lambda *args: ({}, 1547.5)
+        h.q.resume_state = lambda *args: ({}, 1560.)
         original = lambda *args: h.events.append('fake-worker')
         h.adapter.launch = original
         class Owner:
@@ -828,7 +828,7 @@ class WrapperTests(unittest.TestCase):
             state = {}
             task, = h.v5.task_matrix()
             evidence = h.v5._funding_check(output, budget, roots, task, 10., state)
-            self.assertEqual(evidence['charged_cpu_s'], 1547.5)
+            self.assertEqual(evidence['charged_cpu_s'], 1560.)
             self.assertEqual(state['total'], real.resume_state(output, budget, roots['expected_lock_sha256'])[1])
             real.append_ledger(ledger, {'event': 'launch', 'task_id': task['id'],
                                         'parent_monotonic': 100.})
@@ -851,17 +851,17 @@ class WrapperTests(unittest.TestCase):
             output = Path(temporary)
             ledger = output/'ledger.jsonl'
             real.append_ledger(ledger, {'event': 'carry_forward',
-                'charged_cpu_s': 2580., 'freeze_charge_s': 2.})
+                'charged_cpu_s': 2670., 'freeze_charge_s': 2.})
             prefix = real.ledger_events(ledger)
-            roots = funding_roots(h, 2582.)
-            budget = {'carried_charge_s': 2580., 'freeze_charge_s': 2., 'tasks': []}
+            roots = funding_roots(h, 2672.)
+            budget = {'carried_charge_s': 2670., 'freeze_charge_s': 2., 'tasks': []}
             with self.assertRaises(ValueError):
                 h.v5._validate_precharge(output, prefix, budget, roots)
             real.append_ledger(ledger, wrapper_charge(h, output, roots['expected_lock_sha256']))
             h.v5._validate_precharge(output, prefix, budget, roots)
             with self.assertRaisesRegex(RuntimeError, 'reservation exhausted'):
                 h.v5._funding_check(output, budget, roots, h.v5.task_matrix()[0], 10., {})
-            real.append_ledger(ledger, {'event': 'supervisor_cpu', 'charged_cpu_s': 7.5})
+            real.append_ledger(ledger, {'event': 'supervisor_cpu', 'charged_cpu_s': 20.})
             with self.assertRaises(ValueError):
                 h.v5._validate_precharge(output, prefix, budget, roots)
 
