@@ -1,4 +1,12 @@
-# Running campaign — 25 October2026
+# CLOSED campaign — 25 October2026
+
+10:37 UTC collection: main session72031 and finalizer33404 are CLOSED exit0.
+All8 priors and168/168 physical endpoints admitted;167 method_success, one
+retained CatBoost improvement after later timeout. GNN passed the frozen
+exploratory gate, CatBoost did not; see RESULTS.md/RESOURCE_RECEIPT.json.
+Following startup/running paragraphs are historical snapshots, SUPERSEDED by
+the current CONTINUATION.md. Do not resubmit or rerun finalization. The prepared
+replication remains held for a new direct fixed-topology QP control diagnostic.
 
 Source/protocol commit0c77fa6a was pushed before the single launch on the existing
 codex/ml-prediction-20261017 branch, author AND committer Nathan Cho
@@ -11,9 +19,11 @@ Unified exec session72031 is RUNNING at the latest check. Persistent campaign
 Python PID3571, /usr/bin/time PID3563; worker PIDs change per assigned decision.
 At startup the observed child was3611 in004-acquisition-scale-50601-80-CoverCA1;
 that is a historical startup observation, not a claim it remains current. The
-latest scoped session check was still running with one active-decision ledger
-row and empty campaign stderr. No interim model-quality claim or outcome-based
-change was made.
+09:38 UTC scoped check was still running with139 completed active-decision ledger
+rows and empty campaign stderr. Observed current child PID12276 was task148,
+scale:50603:40/random; that PID is a snapshot, not future authority. No interim
+model-quality claim or outcome-based change was made. Master receipt still
+incomplete; final resource meter not yet available.
 
 Read actual session/owned worker state and compact receipts before action.
 `attempt01/receipt.json` is deliberately incomplete until final publication;

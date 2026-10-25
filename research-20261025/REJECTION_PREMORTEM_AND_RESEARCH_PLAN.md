@@ -257,3 +257,22 @@ are one-seed exposed cases. Keep both conventional arms frozen in independent,
 repeated-seed/equal-budget comparisons, including a common feasible fallback and
 paid preparation. See density_control/RESULTS.md, SCIENTIFIC_INTERPRETATION.md
 and NEXT_STUDY_REQUIREMENTS.md. No broad comparison or new training ran here.
+
+The first matched conditional warm study is now complete on four additional
+base groups,40/80 nested variants and three native seeds. All168 endpoints were
+accepted;167 met method_success, with one CatBoost run retaining an earlier
+improved result after a later timeout. Holding fleet count fixed and deadhead
+cost zero removed the previous fewer-vehicles explanation. GNN passed the frozen
+diagnostic rule: mean paired gain1.2318882% of prior late electricity cost versus
+CoverCA1,12.0116748% versus the four-round fixed-route control, positive group
+medians4/4 for each. CatBoost failed versus CoverCA1 (mean−1.0282453%,positive2/4).
+The four groups are not24 independent timetables; no price-information causality,
+SOTA, significance, cold speedup or unrestricted certificate follows. The small
+Cover margin needs replication. See warm_replanning/RESULTS.md and critique.
+
+A new important control issue was found before the next launch: fixed-route
+charging stops at four tangent rounds with unused time and nonzero finite-envelope
+gap. A direct convex-QP fixed-topology check is next, before the prepared eight-
+group GNN_day replication. The old four-round results and gate stay unchanged;
+no retroactive replacement of a comparator. This is strengthening the classical
+control rather than manufacturing a learned advantage.
