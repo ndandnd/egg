@@ -684,10 +684,10 @@ class WrapperTests(unittest.TestCase):
         hashes.update({str(ROOT/'src/tests'/name): h.q.sha(ROOT/'src/tests'/name)
             for name in (*v5.QUALIFIED_TEST_DEPENDENCIES, 'test_cf1_entry_repaired.py')})
         command = v5.check_command()
-        attempt = {'attempt_id': 'attempt06', 'revision': 5, 'policy': v5.POLICY,
+        attempt = {'attempt_id': 'attempt07', 'revision': 5, 'policy': v5.POLICY,
             'command': command, 'command_sha256': stable(command),
             'executed_tests': ['test_cf1_entry_repaired.py'], 'source_hashes': hashes}
-        result = {'attempt_id': 'attempt06', 'revision': 5, 'policy': v5.POLICY,
+        result = {'attempt_id': 'attempt07', 'revision': 5, 'policy': v5.POLICY,
             'command': command, 'command_sha256': stable(command),
             'executed_tests': ['test_cf1_entry_repaired.py']}
         h.store[str(directory/'attempt.json')] = attempt
@@ -699,12 +699,12 @@ class WrapperTests(unittest.TestCase):
                 v5.checked_sources(directory)
             hashes[path] = original
         for record, key, value in (
-                (attempt, 'attempt_id', 'attempt05'), (attempt, 'revision', 4),
+                (attempt, 'attempt_id', 'attempt06'), (attempt, 'revision', 4),
                 (attempt, 'policy', h.approved.POLICY),
                 (attempt, 'command', command+['src/tests/test_constructive_controls.py']),
                 (attempt, 'command_sha256', 'changed'),
                 (attempt, 'executed_tests', ['test_cf1_small_mechanism_approved.py']),
-                (result, 'attempt_id', 'attempt05'), (result, 'revision', 4),
+                (result, 'attempt_id', 'attempt06'), (result, 'revision', 4),
                 (result, 'policy', h.approved.POLICY)):
             original = record[key]
             record[key] = value
@@ -713,7 +713,8 @@ class WrapperTests(unittest.TestCase):
             record[key] = original
         for other in (ROOT/'research-20261023/cf1-small-approved-checks/attempt01',
                       directory.parent/'attempt01', directory.parent/'attempt03',
-                      directory.parent/'attempt04', directory.parent/'attempt05'):
+                      directory.parent/'attempt04', directory.parent/'attempt05',
+                      directory.parent/'attempt06'):
             with self.assertRaises(ValueError):
                 v5.checked_sources(other)
 

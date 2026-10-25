@@ -23,8 +23,8 @@ ENGINEERING_BASE_ID, ENGINEERING_TRIPS = 50997, 40
 FIXTURE_POLICY, SCOPE = approved.FIXTURE_POLICY, approved.SCOPE
 ACK_OBSERVATION = 'controller-ack-observation-v5.json'
 WORKER_ARGV_PREFIX = ('-m', 'experiments.cf1_entry_repaired', 'worker')
-NAMESPACE = 'research-20261024/cf1-entry-repaired-v5c'
-CHECK_NAMESPACE = 'research-20261024/cf1-entry-repaired-checks/attempt06'
+NAMESPACE = 'research-20261024/cf1-entry-repaired-v5d'
+CHECK_NAMESPACE = 'research-20261024/cf1-entry-repaired-checks/attempt07'
 ENTRY_PRECHARGE_S = 7.5
 _CONFIG_LOCK = threading.Lock()
 _BASE_CHECKED = approved.preflight.checked_sources
@@ -62,11 +62,11 @@ def checked_sources(directory):
     checks = _BASE_CHECKED(directory)
     attempt, result = q.read(directory/'attempt.json'), q.read(directory/'result.json')
     command = check_command()
-    if (attempt.get('attempt_id') != 'attempt06' or attempt.get('revision') != 5
+    if (attempt.get('attempt_id') != 'attempt07' or attempt.get('revision') != 5
             or attempt.get('policy') != POLICY or attempt.get('command') != command
             or attempt.get('command_sha256') != q.stable(command)
             or attempt.get('executed_tests') != ['test_cf1_entry_repaired.py']
-            or result.get('attempt_id') != 'attempt06' or result.get('revision') != 5
+            or result.get('attempt_id') != 'attempt07' or result.get('revision') != 5
             or result.get('policy') != POLICY or result.get('command') != command
             or result.get('command_sha256') != q.stable(command)
             or result.get('executed_tests') != ['test_cf1_entry_repaired.py']):
@@ -163,7 +163,7 @@ def freeze(args):
     _exact_path(args.lock, NAMESPACE+'/lock.json')
     _exact_path(getattr(args, 'design', None) or args.manifest, NAMESPACE+'/design.json')
     _exact_path(args.checks, CHECK_NAMESPACE)
-    _exact_path(args.accounting, str(Path(CHECK_NAMESPACE).parent/'attempt06-accounting.json'))
+    _exact_path(args.accounting, str(Path(CHECK_NAMESPACE).parent/'attempt07-accounting.json'))
     with revision5():
         return {**adapter.freeze(args), 'tasks': 1}
 

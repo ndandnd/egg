@@ -1,0 +1,47 @@
+Traceback (most recent call last):
+  File "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/src/experiments/recovery_qualification.py", line 1277, in run
+    item = launch(args,task,output,locksha)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/src/experiments/comparison_native_preflight.py", line 341, in gated_launch
+    return launch(*args)
+           ^^^^^^^^^^^^^
+  File "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/src/experiments/cf1_entry_repaired.py", line 228, in launch
+    return owner_gate.launch_guard(args, task, output, locksha,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/src/experiments/cf1_entry_owner.py", line 283, in launch_guard
+    permit = self._permit(funding)
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/src/experiments/cf1_entry_owner.py", line 246, in _permit
+    response = _receive(self.channel, min(time.monotonic()+.3,
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/src/experiments/cf1_entry_owner.py", line 63, in _receive
+    raise EOFError('Entry owner channel closed')
+EOFError: Entry owner channel closed
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/src/experiments/cf1_entry_repaired.py", line 357, in <module>
+    main()
+  File "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/src/experiments/cf1_entry_repaired.py", line 351, in main
+    result = {'freeze': freeze, 'run': run, 'analyze': analyze, 'worker': worker}[args.command](args)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/src/experiments/cf1_entry_repaired.py", line 193, in run
+    return run_prepared(args, roots=roots, owner_gate=owner)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/src/experiments/cf1_entry_repaired.py", line 233, in run_prepared
+    return adapter.run(args)
+           ^^^^^^^^^^^^^^^^^
+  File "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/src/experiments/comparison_native_preflight.py", line 358, in run
+    result = q.run(args)
+             ^^^^^^^^^^^
+  File "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/src/experiments/recovery_qualification.py", line 1331, in run
+    signal.signal(sig,signal.SIG_IGN)
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/signal.py", line 56, in signal
+    @_wraps(_signal.signal)
+    
+  File "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/src/experiments/codex_local_campaign.py", line 29, in signal_stop
+    raise SupervisorStop(f'supervisor_signal_{signum}')
+experiments.codex_local_campaign.SupervisorStop: supervisor_signal_15

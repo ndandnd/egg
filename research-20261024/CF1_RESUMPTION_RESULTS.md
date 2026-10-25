@@ -32,12 +32,20 @@ inside the longer15s work allowance. PGID8668 closed; no lock/native worker.
 This is distinct from the earlier5s work exhaustion. Preserve its complete
 failed receipts; no assertion that a model or physical plan failed follows.
 
-Current authoritative carry2490.175941173126 is in
-cf1-resumption/failed-monitor-accounting.json. The next bounded direction is
-CF1_METADATA_MONITOR_DIRECTION.md: robust source/metadata-only sampling in new
-wrappers, source07/fresh v5d, unchanged numerical endpoints and existing275s
-package. The proposed complete remaining reservation fits inside the same total.
-No further human budget decision is pending. No numerical worker has launched.
+Source07 passed21/61. The corrected non-numerical monitor supported a successful
+v5d actual freeze (elapsed5.107905s, charged8.424137s, PGID12288 closed). The
+actual owner then reached valid metadata/prefix/controller processing, but its
+conservative whole-entry cost11.489445s exceeded the7.5s provision before the
+final native gate. Controller12627 closed; gatefalse and no numerical task.
+
+Current authoritative carry2519.8385849245133 is in
+cf1-resumption/failed-entry-cost-accounting.json. It retains the nonrefundable
+prefix and the larger conservative whole-entry observation without double
+counting the same startup. No historical unknown is converted to measured CPU.
+Next is CF1_ENTRY_COST_DIRECTION.md: prospective20s entry provision, package350
+ending2776.723449631016 within unchanged global3000. Source08/freshv5e require
+exact source/command freezing and actual gates; no automatic retry or new model
+claim. No further human budget decision is pending; no numerical worker launched.
 Scientific priorities remain reliable recovery/replay, strong classical controls
 and matched independent timetable evaluation; this is not an ML improvement or
 publication result.
