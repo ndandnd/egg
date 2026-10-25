@@ -1,137 +1,126 @@
-# EGG current handoff —25 October2026: responsive supervision implementation
+# EGG current handoff — 25 October 2026: scientific reset
 
-Worktree /Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017; branch
-codex/ml-prediction-20261017. Act as manager with GPT-6.1 Sol bounded agents/short
-handoffs. Check active agents/exact receipts before edits or dispatch. No active
-computational worker. No numerical solver/training worker launched in this
-resumption. No cluster or sealed-data access; no new ML/economic result.
+Worktree /Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017, branch
+codex/ml-prediction-20261017. The human requested a rejection premortem and actual
+decisive experiments. Read research-20261025/REJECTION_PREMORTEM_AND_RESEARCH_PLAN.md
+and only current results/protocols needed next. Use bounded GPT-6.1 Sol subagents;
+parent decides science and integrates. Check current agents/receipts.
 
-## Newest authority and accounting
+## Priority change
 
-Human authorized practical budgets that keep research moving. No human approval
-is pending; choose sensible prospective routine budgets, flag unusual commitments
-or major scientific changes. Do not repeat old32/50-minute approval questions.
-Read research-20261025/NATIVE_MONITOR_IMPLEMENTATION_PROTOCOL.md and
-research-20261025/responsive-supervision/budget-adoption.json. Parent prospectively
-selected NEW3600 total/dispatch3420/shutdown180 and package600 from original
-accepted guard2426.723449631016, end3026.723449631016. Budget adoption retained carry2541.8243213823207, not zero. CURRENT active carry
-is2546.091499549272 in cf1-responsive-checks/attempt01-accounting.json. Old3000-policy records stay unchanged. Historical
-actual review CPU is UNKNOWN; guard is conditional conservative reconciliation,
-not measured CPU or restored old-cap compliance. Preserve every failure/charge.
+Stop expanding responsive-supervision infrastructure. Pending component, metadata
+and native attempts remain unsubmitted/unqualified. Preserve sources, failures
+and accounts; do not revive attempts or repeat source matrices. The prior
+checkpoint is in Git through8d86c60d. Five untracked component-preparation files
+remain deferred, separate from this scientific milestone.
 
-Newest legacy account: research-20261024/cf1-resumption/failed-native-monitor-accounting.json.
-New adoption links it without discarding old charges/flags. The new-policy source gate has now PASSED; real primitive/metadata/native gates
-remain unqualified. Production/helper/test bytes are frozen for the next phase.
-The new budget is NOT permission to execute legacy v5e or unfrozen commands.
+The question is whether learning preserves valuable alternatives under electricity
+and resource changes better than strong classical methods. More architectures or
+epochs do not answer the missing baseline/mechanism questions. October17 is a
+20-group DEVELOPMENT cohort.91.916% of summed80-trip graph-versus-simple-heuristic
+savings is vehicle count, not a decomposition of the68.36% median gain.
+Current screen bill is integrated supply cost c+a'L+.5L'BL, not the atomic
+uniform-price payment c+a'L+L'BL. Preserve fields, correct interpretation.
+The graph ranker receives a but no b, so cannot adapt scores to b alone.
 
-## Completed bounded package
+## Completed new experiments — do not repeat
 
-Source08 PASSED21 tests/61 subtests in0.88s, PGID14648 reaped/absent, unchanged
-bytes. Actual v5e metadata PASSED:6.790463667s elapsed,10.266245s charged,
-PGID14802 reaped/absent, no cleanup diagnostics. Postfreezecarry2537.9429304233154.
-Actual owner then failed at1.421138959s: sequential ps/memory_pressure exhausted
-shared0.24s resource-sample deadline. Controller15112 terminated/reaped-15,
-group absent, cleanup errors empty, gatefalse, no prefix/task/numerical worker.
-Owner conservative charge1.8813909590054751, observation-complete=false retained;
-separate external conservative max+2closure gives current2541.8243213823207.
-No20s precharge issued, so none was refunded. Entry20 did not change probe timing.
+1. price_signal_audit/:342 old replayed endpoints, exact objective reconstruction
+   and historic input-hash matching.20 minimum-observed-fleet banks ×five tariffs.
+   Day-to-late yields better fixed-plan selection in13/20 groups, median0.7165%,
+   max4.2338%. Day system-cost versus payment minima differ materially in8/20.
+   Catalog evidence only; no charging reoptimization or learned-response attribution.
+2. catalog_hull_audit/:120 cells, all rational primal/dual catalog bounds within
+   frozen tolerance. Overall exit1/passedfalse staysfalse: one SLSQP non-success,
+   scale50730:40/late/b×5, independently bounded optimization gap1.0913e-9.
+   No retry. Day/b×1 median pure-minus-hull gap0.025455%, max1.021835%; zero-curvature
+   controls exactlyzero. Neither full integrality-gap bound nor executable mixture.
+   Median95%-variation load rank2.5 is only a descriptor of the observed bank.
+3. classical_competence/attempt01:exactly scale50685:40 and50605:80, one default-
+   seed greedy construction/fixed-topology completion each. Process exit0 means
+   records complete, not2/2 feasible.40case:15buses,1856.03542 integrated cost,
+   independent replay/admission13.109s.80case:29constructed buses, internally
+   feasible helper candidate but late return/no independent admission; full record
+   64.613s. Historical graph used3/5buses under unmatched conditions. This greedy
+   is not a serious classical baseline. No infeasibility or ML-win claim.
 
-Read research-20261025/NATIVE_MONITOR_FAILURE.md for compact evidence, and
-NATIVE_MONITOR_DESIGN.md for diagnosis/options. Blocking owner probes delay
-control requests; prelaunch repeats probes inside response/permit windows;
-controller probes delay ACK reads and status updates. Do not fix this by another
-entry-budget-only retry or cached-data timestamp reset. All v5e/source08 artifacts
-immutable. Prior v5/v5b/v5c/v5d failures/passes preserved in CF1_RESUMPTION_RESULTS.md;
-source03 NEVER ran/cancelled, source01/02 failures, v4 failed before native on
-canonical charge. Do not repeat old matrices/STATE_MAP/accounting audits.
+4. classical_competence/fleet-first-attempt01: one global fleet-count solve on
+   each same exposed case, original physical model, no learned/greedy scaffold.
+   Both plans independently replayed.40 trips:3 buses, native incumbent/bound3,
+   3.724s total.80 trips:30 buses, fleet bound2,60s native/71.332s total; historical
+   learned endpoint had5. This is unmatched objective/seed/budget context, not a
+   speedup or paired ML result.80-trip matrix has177,958 variables/190,037 rows.
+   Read FLEET_FIRST_RESULTS.md and compact fleet-first-summary.json.
 
-## Coherent next implementation, no execution yet
+All paths above are under research-20261025. All numerical/postprocess workers
+are complete; exec sessions1448/54422/10158 are closed. All bounded agents are
+complete. No active experiment remains and no attempt is to be resumed. Large
+raw inventories/captures are preserved locally and losslessly archived in Git.
 
-Parent accepted SINGLE-THREAD nonblocking fixed OS probes and promptly serviced
-control/ACK, subject to implementation protocol proof/funding obligations. New
-policy cf1-responsive-supervision-v6, task revision6, new namespace
-research-20261025/cf1-responsive-v6; source checks
-research-20261025/cf1-responsive-checks/attempt01.
-Leave legacy behavior/evidence unchanged; no general campaign framework.
+## Next executable research step
 
-Actual recorded capacity12 gives K=C+3<=15. Prospective entry65 funds observed
-startup20+resource uncertainty33.75+control tail3.75+suffix2.5 (<=60). Prospective
-SUP120 covers controllerCPU31.5+ownerCPU15+resource33.75+control3.75+cleanup22.5
-(106.5), with explicit conservative overlaps, not exact CPU claims. Capacity>12
-requires a prospective decision, not silent reconfiguration. Remain one numerical
-worker/native thread and aggregate sampled RSS5GiB, all helper CPU counted.
-Source30+real no-native primitive20+metadata25+entry65+native62.5+SUP120+final45
-=367.5, nominalend2909.3243213823207 inside newpackage3026.723449631016. Actual
-funding still required; directions/adoption alone are NOT a launch manifest.
+Do not launch192 assignments with the weak greedy control, or repeat the same
+fleet-first pair with more time. Changing only the full solver objective did not
+repair80-trip incumbent search. Build a meaningful classical candidate pool using
+GRASP/global route selection and charging-aware improvement, plus a root-LP-
+informed control where supported, following LITERATURE_TO_EXPERIMENTS.md and
+classical_competence/STATIC_DIAGNOSIS.md. NEXT_BASELINE_PROTOCOL.md is the completed
+fleet-first experiment's frozen protocol, not an unexecuted next command.
 
-Keep one live fixed ps/memory probe pair, bounded output/parse/cleanup, registered
-PID/PGIDs; no new Python monitor process/thread. Minimum probe-start interval.25,
-maxduration1, maxcompletedgap1.25, true earliest START age<=2.25. Never refresh age
-on delivery/cache reads. Preserve .25 control freshness, .1 one-use permit TTL,
-fresh-rusage-after-probe and original60/61/62.5 completion/stop/outer checks.
-Control/ACK timers must progress while probes/parse are pending. Separate telemetry
-from privileged frames; bind both to exact roots/nonce/task/controller. Post-exit
-cleanup/file auditing must not counterfeit active .25 status; success only after
-true terminal accounting and all owned groups/helpers closed. Discrete RSS is not
-instantaneous safety and this is not hostile-code containment/hard real-time.
+First inspect the existing constructive/classical APIs narrowly and implement
+a small research-only classical pool pilot. Prespecify candidate budgets and
+secondary scores; a route-only matching is a diagnostic, not electric-fleet
+feasibility. Keep original SOC/shared charging constraints and independent replay.
+Do not create a new timing controller or duplicate physical inventories. Record
+a new source/protocol/command, practical resource budget and fresh namespace
+before execution. These development outcomes can diagnose design, not establish
+generalization. Strong baseline competence must precede the larger study.
 
-### Current source success and next static preparation
+Then freeze matched GNN/CatBoost/classical/full comparisons with common physical
+constraints and a shared feasible incumbent, paid preprocessing/search/replay,
+comparable retained budgets and repeated seeds. Include actual-vs-permuted inputs
+as sensitivity tests AND a similarly tuned tariff-blind model trained only on
+training groups. Frozen-pool and fixed-route charging reoptimization separate
+solver price response from learning. Add fixed-fleet controls, capacity stress
+and independent nested size/regime tests. These comparisons have NOT run.
 
-Source gate actually ran once:45tests/75subtests passed in.15s, no source changes,
-PGID27953 reaped/absent, actual fresh observations complete. Internalcharge
-2.3443187506379486; phase4.267178166951537 includes preparation, whole-process
-reconciliation, snapshot preservation and closure. CURRENT carry2546.091499549272
-in research-20261025/cf1-responsive-checks/attempt01-accounting.json,1390proofs,
-15new/175reused exact snapshots. Original sourcephase30 end2571.8243213823207
-remains; remaining about25.7328s, no phase/cumulative reset. Read
-RESPONSIVE_SOURCE_RESULTS.md; this is source/compositional, not actual OS/native
-qualification. All current production/helper/test bytes FROZEN for primitive.
+Classical decomposition identities are not novelty; useful mathematical work
+needs fleet-specific implementability/approximation assumptions and measurable
+consequences. Report catalog gaps in absolute/electricity-normalized units as well
+as total cost, and load-rank ceilings from bank cardinality. Calibrate market
+impact and economic units. Recovery/certification follows the baseline and price-
+information gates, not another standalone infrastructure program.
 
-/root/approved50_runners prepares new research-only real component primitive
-driver/protocol/qualified outer metering/manifest-preparer: actual Probe and
-FrameChannel, fixed non-numerical stub/dual Unix sockets/actualrusage+echo .05,
-maxcontrolgap.25, deliberate .35s processing hold while control continues,
-~6s body in20s phase. Component pass denies fullOwner/native/60s/replay/model
-qualification. No submitted primitive/active compute PID. No production changes. Peer review
-found pending new-driver fixes: defer stops across Popen/PID publication, latch
-stub absence permanently, and avoid signalling already-closed historical groups
-from component outer cleanup. Unknown original identity must produce incomplete
-cleanup, not signals to a possibly reused foreign group. Review those exact
-research-driver fixes before any manifest/execution; no legacy/prod rewrite.
-/root/approved50_bindings completed bounded static phase-accounting analysis:
-freeze() currently requires source-account path; primitive spending must reach
-current metadata input/cumulative carry. Read PRIMITIVE_TO_FREEZE_ACCOUNTING.md
-and parent METADATA_PHASE_INPUT_DECISION.md: prefer a separately reviewed,
-source-bound phase driver calling existing adapter.freeze with current closed P
-and exact reproduced path/strong primitive guards, not the rejecting legacyCLI.
-Only after primitive pass; binding validation must be metered and carried.
-Do not bypass costs, overwrite source01 or pretend changed source remains qualified.
-Tests agent is done with45 source tests. Check statuses before duplicating work.
+## Resource authority and evidence
 
-Agents may read/write specified NEW research files only: NO imports/compile/hash/
-tests/probes/freezes/native/commits/newagents. Parent reviews primitive's stable
-source/criteria, freezes exact command/current source-account bindings and runs
-one20s real no-native component gate. Review receipts before metadata/native.
-If metadata phase-input needs a source change, separately record it and a fresh
-source gate within remaining original source authority; no automatic retry.
-All hashing remains existing metered Python batch, no peer duplicate hash audits.
+No budget answer is pending. Human authorized practical routine budgets; record
+prospective costs and flag unusual commitments, not repeated tiny approval
+questions. New provisions:219CPU seconds for two analyses,240CPU/180wall for
+greedy competence,120CPU/180wall for its summary/archive,360CPU/300wall for
+global fleet-first,60CPU/90wall for its final archive. Numerical thread1, observed RSS
+under5GiB. Actual process totals:research-20261025/SCIENTIFIC_RESOURCE_RECEIPT.json,
+not exact session cost. Legacy conditional guard2546.091499549272 remains in
+cf1-responsive-checks/attempt01-accounting.json; historical actual review CPU is
+UNKNOWN. Never reset old charges/flags or claim restored old-cap compliance.
 
+Large classical receipts are unchanged locally and losslessly archived as
+receipt.json.gz for Git; summary.json records original streaming SHA256/size.
+Do not dump hundreds of MB into context. Compact receipts/results suffice.
+Raw diagnostics stdout/stderr stay local/ignored. Hash consumed inputs once in
+metered new experiments, no duplicate hash loops.
 
-## Research and preservation
+## Preservation and boundaries
 
-Qualification is not prediction quality, speedup, tariff response or unrestricted
-certification. Prioritize replay/full recovery, strong charging-aware/constructive
-classical controls and matched independent timetable/regime evaluation, then
-justified ML/data improvements. October17 is DEVELOPMENT;91.916% of matched80-trip
-savings vs one heuristic is vehicle count, not established tariff responsiveness.
-Generic learned pruning is prior art; restricted/fixed-route bounds are not full
-certificates. Keep variants grouped/inner-only preprocessing and selection, sealed
-DEV/TEST/A6/B3/confirmation/GIRO closed. No forced cross-field ties or journal
-readiness claim. Manuscript deferred, FT50 aspiration remains goal.
+No cluster access/monitoring/launches; leave Unicorn to v2g. Sealed
+DEV/TEST/A6/B3/confirmation/GIRO remain closed. Restricted/fixed-route bounds are
+not full certificates; training metrics are not useful prediction. No PR merge,
+journal submission, private publication or reset credits. Manuscript deferred;
+aim for one defensible connected contribution.
 
-Leave Unicorn to v2g; no routine monitor/launch. Back up meaningful milestones to
-origin/codex/ml-prediction-20261017 with Nathan Cho <nathan.cho2013@gmail.com>
-explicit author AND committer, no history rewrite. Only consolidated verified
-scientific milestones to original Google Doc; preserve visuals/history, sixOct1
-entries already posted. No PRmerge/journal/private publication/resetcredits.
-Hourly automation useful/active; keep unrelated paused schedules paused.
+Back up meaningful work to origin/codex/ml-prediction-20261017, explicit author
+AND committer Nathan Cho <nathan.cho2013@gmail.com>, no history rewrite. Original
+Google Doc has the verified25October scientific-reset/price/hull section; see
+GOOGLE_DOC_SCIENTIFIC_MILESTONE.md. Do not repeat it or the sixOctober1 entries.
+Only append subsequent consolidated scientific milestones, preserving history
+and visuals. Hourly automation useful; unrelated paused schedules stay paused.
+Quiet routine progress; notify substantive results, failures or review-ready work.
