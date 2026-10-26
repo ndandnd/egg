@@ -1,4 +1,4 @@
-# Correspondence complete; new seam source reviewed
+# Correspondence and one bounded seam complete
 
 26 October 2026. `README.md`, `PHYSICAL_INTERFACE.md`, `ECONOMIC_INTERFACE.md`
 and `ORACLE_CONNECTION.md` complete the concrete source correspondence. Scientific
@@ -11,17 +11,23 @@ approved50_bindings, approved50_runners and responsive_monitor_tests completed;
 no numerical worker is active at this checkpoint. No native runtime qualification
 is inferred from static review. No original rows/GIRO/old plans/model weights read.
 
-Next: commit these exact reviewed sources, run the ONE10CPU/30wall source-pin
-preparation, reconcile its final external meter, adopt a FROZEN/PASS command and
-funding manifest, commit control, then execute NEW `duty_market_seam/attempt01`
-ONCE if admission remains coherent. Source preparation is inside the NEW1500CPU/
-2400wall package (dispatch1320/closure180). All twelve assignments stay present;
-no retry or outcome replacement. In-memory compact readout is published during
-the same owner's finalization, avoiding a later analysis/formatter pass.
+The source94b99383/control471521da seam has now CLOSED once, owner39314exit0.
+Its source preparation and inline publication each ran once;12/12 physical
+endpoints,4qualifiedQP commons/8strictMIQP deliveries, no failure/missing. Read
+../duty_market_seam/RESULTS.md, INTERPRETATION_REVIEW.md and FINAL_RESOURCE_RECEIPT.json.
+Fixed duties with visit choice captured all returned full-routing gain on this
+ONEfixture; point ties are not ideal equivalence, population evidence or a neural
+impossibility result. No repeat native/hash/replay/export pass. All agents complete.
 
-Current closed displayed process sums19923.95CPU/20520.60elapsed-sum, retained
-tracking19924.31CPU. No new numerical spend before the preparation command.
+Next: ../duty_market_seam/NEXT_INTERFACE_DECISION.md specifies the source-only
+actual adjacent price-taking/fixed-duty call boundary. Use registered source APIs,
+preserve station/terminal/duty semantics; no sibling edits, data access, new
+numerical run or broad model expansion without its own exact prospective design.
+
+Current closed displayed process sums19926.33CPU/20524.17elapsed-sum, retained
+tracking19926.74CPU. New package2.38displayedCPU/3.57elapsed-sum, retained2.43CPU.
 Separate legacy conditionalguard2546.091499549272; old actual reviewCPU UNKNOWN.
 These are not exact session CPU/continuous elapsed or instantaneous containment.
 No cluster/sibling edits/job monitoring/messages/sealed data; unrelated schedules
-stay paused. Google Doc unchanged at scientific range[262470,267061),8images.
+stay paused. Google Doc correction/seam range[267061,271755),8images and earlier
+text verified preserved; receipt in ../duty_market_seam/GOOGLE_DOC_APPEND.json.

@@ -1,4 +1,4 @@
-# Current handoff — correspondence complete; new duty/market seam source reviewed
+# Current handoff — correspondence and duty/market seam COMPLETE; adjacent API next
 
 Worktree /Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017, branch
 codex/ml-prediction-20261017. Read this first, then current compact receipts and
@@ -7,7 +7,7 @@ never duplicate an attempt. Use bounded GPT-6.1 Sol agents with short handoffs;
 parent manages scientific decisions/integration. Routine resource authority
 exists; no human budget answer is pending.
 
-## 26 October correspondence and prospective seam
+## 26 October correspondence and completed seam
 
 Read research-20261026/evspdr_correspondence/README.md and HANDOFF.md. Concrete
 physical/economic/interface correspondence is complete, with a focused scientific
@@ -17,17 +17,43 @@ solver. Fixed movement paths are stricter than fixed ordered service duties.
 Separate posted/strategic/system economic objectives are already defined and can
 be explicitly mapped to native coefficients without hiding original a,b,U.
 
-NEW duty_market_seam static implementation and INTEGRATION_REVIEW.md passed.
-One literal eight-trip base, four economic contexts including b=0 collapse,
-twelve planned stages (fixed-path target QP, fixed-duty MIQP, full exactN MIQP).
-No original TRAIN/GIRO/plans/models or old experimental retry. No cross-institution
-mean, population inference or ML promotion; all institutions and failures separate.
-New resource package1500CPU/2400wall, dispatch1320/closure180; source preparation
-10CPU/30wall inside preflight60. Next exact action is commit, metered source pin
-preparation once, external reconciliation, then frozen source-bound main command
-if admitted. DRAFT/PENDING still denies fixture generation/dispatch. All three
-bounded agents complete, no numerical worker at this checkpoint. Accounting below
-is unchanged until new preparation/owner external receipts close.
+NEW duty_market_seam is CLOSED: source94b99383/control471521da, managed owner39314
+exit0. Source preparation, native owner and inline compact publication ran ONCE.
+Read RESULTS.md, INTERPRETATION_REVIEW.md, FINAL_RESOURCE_RECEIPT.json and
+NEXT_INTERFACE_DECISION.md; attempt01/READOUT.md is compact exact-state readout.
+No old-session polling, source/hash/replay/native/formatter rerun or fixture tuning.
+One literal eight-trip base/four economic contexts,12/12 timely physical endpoints,
+4 qualified fixed-path targetQPs,8 strict MIQP deliveries, all12nativeOPTIMAL;
+no failure/missing/discrepancy/unresolvedchild. All bounded agents complete.
+
+Fixed duties with free charging visits captured all returned full-routing gains:
+QP−duty=5.555556(b0),6.250000(posted),6.344843(system),6.835857(strategic) synthetic
+cost units, duty−full represented0 in all4 contexts. System full changed duties
+without lower returned cost. This is ONE-base point evidence, not ideal equivalence,
+population generalization, a neural negative theorem or a computational bottleneck.
+N2/ops200/service160kWh fixed; common movement40kWh versus duty/full20(first3)
+or18(strategic). Energy/timing/access changes are joint, not causally separated.
+Original a,b,U and cross-valuations retained; exact coefficient residual0.
+U is market background, not demand on the fleet60kW residual connection.
+No original TRAIN/GIRO/oldplans/models or refit; old learning gates unchanged.
+
+Next is STATIC source-only adjacent oracle call boundary under
+NEXT_INTERFACE_DECISION.md: required in-memory trip/transfer representation,
+capacity-pricer constructor/linear-price callback and fixed-duty entry point in
+registered EVSP-DR checkout3a0ab6a8. Use existing constraint correspondence, no
+repeat audits. Specify a minimal EGG-local wrapper using adjacent APIs by reference
+on a future separately frozen synthetic instance; preserve station/power/plugs,
+partition/fleet/terminal and certificate scopes. No sibling edit/job/data or new
+native call from this direction alone. No forced disruption redirect/global stop.
+
+Closed package2.38displayedCPU/3.57elapsed-sum, retained2.43CPU within1500/2400;
+max observed workerRSS57180160bytes/one thread. NEW closed global sums
+19926.33CPU/20524.17elapsed-sum, retained19926.74CPU. Preparation and child deltas
+already overlap adopted/owner meters, no doublecount. Separate legacyguard
+2546.091499549272/actual oldreviewCPU UNKNOWN remain. Not exact session CPU or
+continuous elapsed. Google Doc correction/seam section verified[267061,271755),
+all8images and earlier text retained; GOOGLE_DOC_APPEND.json records it. No duplicate
+append. No numerical worker remains; all three bounded agents completed.
 
 ## Human correction supersedes the blanket stop
 
@@ -51,7 +77,7 @@ absence of a price-maker model throughout EGG. Withdraw that global stopping
 rationale and the forced disruption-only redirect. Frozen negative ML results
 remain unchanged for their tested scope; no automatic model promotion follows.
 
-Next executable work is one concrete source/interface correspondence between
+The now-completed source/interface correspondence covers
 EVSP-DR and EGG: service partition/coverage, fleet cap/exactN/fixed duties,
 SOC/reserve/terminal energy, station power/plugs/grid caps, charge windows and
 transfers, time/load/price units and economic objective. Identify deliberate
