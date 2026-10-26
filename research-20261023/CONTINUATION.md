@@ -24,8 +24,9 @@ This is not a claim that no real application exists. Do not recreate the design,
 repeat reviews, invent an anchor, or run more computation. Reopening requires a
 distinct prospective external-evidence scope with an operational anchor and
 authoritative source/version, or new scientific steering. No budget decision is
-pending. The hourly automation's current direction is exhausted and is to be
-removed; unrelated schedules stay unchanged/paused. All agents complete; no
+pending. The hourly automation advance-egg-journal-research was deleted with
+confirmed deleteStatus=deleted; unrelated schedules stay unchanged/paused.
+All agents complete; no
 numerical worker exists. All numerical accounting/guard/UNKNOWNs below unchanged.
 Read problem_stakes_gate/HANDOFF.md for exact closure, not older next-step text.
 

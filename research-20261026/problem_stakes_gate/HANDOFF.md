@@ -20,8 +20,9 @@ source/version; no budget answer is pending and no old budget is reset.
 
 All agents are complete; no numerical worker exists. Numerical totals, separate
 legacy guard, scientific outcomes and Google Doc state below are unchanged.
-The hourly automation is to be removed because its current authorized direction
-is exhausted; unrelated schedules are untouched. Future work requires new
+Automation `advance-egg-journal-research` was deleted with confirmed
+`deleteStatus=deleted` because its current authorized direction is exhausted;
+unrelated schedules are untouched. Future work requires new
 evidence scope or scientific steering, rather than another scheduled audit.
 
 26 October 2026. The source-only package is COMPLETE after parent integration and
