@@ -1,4 +1,4 @@
-# Current handoff — conventional economic-recourse design
+# Current handoff — static economic-recourse pilot, no run
 
 Worktree: /Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017.
 Branch: codex/ml-prediction-20261017. Read this first, then only relevant current
@@ -7,13 +7,17 @@ never duplicate an attempt. Use bounded GPT-6.1 Sol agents with short handoffs.
 The parent manages science and integration. Human practical routine resource
 authority exists; no budget answer is pending.
 
-## Latest static package and next action
+## Latest static implementation and next action
 
-research-20261026/economic_recourse_design is a NEW static-only package. Read
-README.md, STUDY_DESIGN.md, API_NOTE.md, DENOMINATORS_AND_COHORT.md and REVIEW.md.
-No metadata, rows, cases, plans or models were opened; no imports, hashes, tests,
-numerical jobs or native calls ran. No numerical worker remains. All bounded
-agents are complete after the design review; check actual state before work.
+research-20261026/economic_recourse_pilot is NEW, STATIC and DRAFT. Read HANDOFF.md,
+NATIVE_REVIEW.md, INTEGRATION_REVIEW.md, FIELD_AUTHORITY_NOTE.md and only necessary
+source/notes. Helper/worker/owner/selector and draft protocols/manifests are saved;
+focused static reviews passed after narrow corrections. No metadata, rows, cases,
+plans or models were opened; no imports, compile, hashes, tests, numerical jobs
+or native calls ran. No selection/numerical attempt namespace exists. No worker
+is active; all bounded agents complete after the final narrow review addendum.
+Check actual state before work. The design package at d94ee95f is complete;
+do not recreate it or repeat old source/identity/matrix audits.
 
 Selected direction: test conventional economic route recourse beyond a paid,
 already target-QP-charged common feasible incumbent, using ONE direct convex MIQP
@@ -43,17 +47,36 @@ translated full/native-processed start. Preserve free binary types, one exact-N
 row, unchanged convex objective/matrix/extraction/replay and arbitrary returned-
 route/exact-N admission. Actual MIQP compatibility/settings/start mapping remain
 unqualified. One native optimize per worker, no extra final QP or method switch.
+Fresh supported-status timely MIQP physical delivery can count as strict method
+success without native OPTIMAL; target-QP acquisition STILL requires OPTIMAL.
+Same-topology improvement beyond the unchanged source agreement screen removes
+strict qualification, with explicit discrepancy and best physical U retained
+operationally. Full8-context means are delivered operational pipeline increments,
+with discrepancy counts/flags, not intrinsic route value or causal attribution.
 
-Next authorized work is STATIC implementation only in NEW
-research-20261026/economic_recourse_pilot. Use a thin helper/caller and existing
-bounded owner/worker machinery. No new controller, repeated full identity/copy
-audit, engineering matrix or historical source review. Inspect only necessary
-APIs/output schema and affected integer/start/admission deltas. Keep manifests
-DRAFT/PENDING and refuse original-data access or dispatch until exact cohort,
-input/nested fields, sources, MIQP parameters, command and resource rules are
-reviewed/frozen. No actual metadata/rows/plans/specs, imports/compile/hash/tests,
-execution, native calls, replay, fitting or numerical namespace is authorized
-merely by this static direction. The old QP helper remains immutable.
+Next executable step is prospective METADATA-ONLY selector admission. It may read
+only the fixed closed fit_target_support/attempt01/receipt.json, projecting its
+3 administrative flags and80 group/base identities. This receipt has no stored
+profile; the selector uses the already source-verified assignment formula,
+j=(7*(base-10000))%54;20 if(j//3)%2==0 else28. No project import or case generation.
+Its separate gate now requires exact literal root/path, full40hex tracked input
+revision and unchanged-from-named-revision assumption BEFORE metadata input;
+optional SHA cannot replace that version binding. Full JSON transient decode is
+explicit; metrics, availability, labels and costs are not analyzed. Freeze exact
+source/protocol/input version/command and10CPU30wall (body5/20 plus5/10 reserve)
+inside proposed preflight120/total2400, then selection01 may run ONCE if coherent.
+Use existing metered single-process source/preflight batch, no unmetered shell
+hashes or duplicate reviewer audits. No such command or source pins are frozen
+yet. Preserve failures/spend; no automatic retry.
+
+Review/reconcile completed selection receipt before any actual ID/row/native
+manifest. Main LAUNCH stays DRAFT/PENDING until cohort/field/source/parameter/
+environment/command/funding freeze. Current drafts admit NO actual metadata,
+rows/plans/specs, imports/compile/hash/tests, replay/native/solve/fitting or native
+namespace. Reuse existing bounded machinery; do not create controllers or repeat
+old engineering/source matrices. The old QP helper stays immutable. Future main
+adopts selection cost once for package funding; global cumulative accounting must
+not add a selection charge again after it was already carried into the prefix.
 
 Proposed separate package2400CPU/3600wall, dispatch2040/closure360;16 potential
 serial workers funded90CPU each, one native thread/observed RSS<=5GiB. Per-worker
