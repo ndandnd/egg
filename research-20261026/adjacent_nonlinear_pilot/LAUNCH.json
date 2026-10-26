@@ -1,0 +1,78 @@
+{
+  "policy": "adjacent-retained-bank-nonlinear-pilot-v1",
+  "mode": "DRAFT",
+  "review_disposition": "PENDING",
+  "workdir": "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017",
+  "source_revision": null,
+  "source_freeze_assumption": "parent-approved-frozen-commit",
+  "source_sha256": null,
+  "design_helper_revision": "bd3291b1664feb6ddf98dc7bd14404184109d538",
+  "sibling_source_root": "/Users/nadan/Documents/projects/demandresponse/.codex-work/capacity-packed-20261001",
+  "sibling_source_revision": "3a0ab6a8ab50e4af7d5a7be7688d5ffa1fbbf78c",
+  "source_closure": {"roots": ["run_capacity_terminal_cg"], "sibling_python_paths": null},
+  "command": null,
+  "prospective_command": "/usr/bin/time -p -o research-20261026/adjacent_nonlinear_pilot/process-time.txt .venv-local/bin/python -B research-20261026/adjacent_nonlinear_pilot/run.py > research-20261026/adjacent_nonlinear_pilot/stdout.txt 2> research-20261026/adjacent_nonlinear_pilot/stderr.txt",
+  "context_order": ["T01-fixed_duty-posted", "T02-full-posted", "T04-full-system", "T03-fixed_duty-system", "T05-fixed_duty-strategic", "T06-full-strategic"],
+  "environment": {
+    "OMP_NUM_THREADS": "1", "OPENBLAS_NUM_THREADS": "1", "MKL_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1", "NUMEXPR_NUM_THREADS": "1", "BLIS_NUM_THREADS": "1",
+    "SLURM_CPUS_PER_TASK": "1"
+  },
+  "start_fee": 0,
+  "clean_argv": ["--start-fee", "0"],
+  "budgets": {
+    "total_cpu_s": 480, "total_wall_s": 900, "dispatch_cpu_s": 420, "closure_cpu_s": 60,
+    "combined_preflight_cpu_s": 60, "preparation_cpu_s": 10, "preparation_wall_s": 20,
+    "admission_cpu_s": 45, "admission_wall_s": 120, "worker_cpu_s": 60, "worker_wall_s": 90,
+    "native_cutoff_s": 80, "relaxation_native_s": 10, "binary_native_s": 30,
+    "cleanup_s": 3, "finalization_cpu_s": 60, "finalization_wall_s": 120
+  },
+  "native_parameters": {
+    "relaxation": {"Threads": 1, "Method": 0, "Seed": 17, "NonConvex": 0},
+    "binary": {"Threads": 1, "Method": 1, "NodeMethod": 1, "Seed": 17, "NonConvex": 0, "MIPGap": 0, "MIPGapAbs": 0}
+  },
+  "economic_policy": {
+    "policy": "source-station-adders-portfolio-b1-over900-v1",
+    "hours": [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25],
+    "market_a": 0, "market_U": 0, "station_adders": "original_fixture_station_quotes",
+    "load_map": "sum_all_six_stations_same_hour", "posted_prices": 0, "posted_b": 0,
+    "nonlinear_b_numerator": 1, "nonlinear_b_denominator": 900, "b_conversion": "1.0/900.0",
+    "bus_cost": 100000, "session_fee": 0, "fleet_cap": 2,
+    "grid_terminal_target": 80, "realized_terminal_target": 80, "representation": "realized"
+  },
+  "data_authority": {
+    "external_fixed": {
+      "path": "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/research-20261026/adjacent_bridge_qualification/attempt01/001-fixed_duty/external-receipt.json",
+      "version": {"git_revision": "08306e40b54543f8f479289b3252fec242aaa7c7", "assumption": "parent-approved-immutable-producer"},
+      "sha256": null,
+      "allowed_fields": ["task_id", "arm", "reaped", "returncode", "method_late", "administrative_packet_accepted", "physical_endpoint_accepted", "cpu_observation_complete", "worker.receipt_complete", "worker.fixture_id", "worker.source_revision", "worker.method_endpoint_accepted", "worker.physical_valid", "worker.config_failure", "worker.fatal_contract", "worker.resource_violation", "worker.identity_failure", "worker.failures", "worker.oracle_summary.columns_sha256"]
+    },
+    "external_full": {
+      "path": "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/research-20261026/adjacent_bridge_qualification/attempt01/002-full/external-receipt.json",
+      "version": {"git_revision": "08306e40b54543f8f479289b3252fec242aaa7c7", "assumption": "parent-approved-immutable-producer"},
+      "sha256": null,
+      "allowed_fields": ["task_id", "arm", "reaped", "returncode", "method_late", "administrative_packet_accepted", "physical_endpoint_accepted", "cpu_observation_complete", "worker.receipt_complete", "worker.fixture_id", "worker.source_revision", "worker.method_endpoint_accepted", "worker.physical_valid", "worker.config_failure", "worker.fatal_contract", "worker.resource_violation", "worker.identity_failure", "worker.failures", "worker.oracle_summary.columns_sha256"]
+    },
+    "columns_fixed": {
+      "path": "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/research-20261026/adjacent_bridge_qualification/attempt01/001-fixed_duty/oracle/columns.jsonl",
+      "version": {"producer_receipt_git_revision": "08306e40b54543f8f479289b3252fec242aaa7c7", "assumption": "closed-local-untracked-output-unchanged", "scope": "producer receipt Git provenance only; raw artifact untracked"},
+      "sha256": null, "producer_pin": "external_fixed.worker.oracle_summary.columns_sha256",
+      "allowed_fields": ["trips", "route_nodes", "route", "charging_stops.stations", "charging_stops.cst", "charging_stops.cet", "charging_stops.kwh", "expanded_grid_charging_stops.stations", "expanded_grid_charging_stops.cst", "expanded_grid_charging_stops.cet", "expanded_grid_charging_stops.kwh", "cost", "continuous_realized_cost", "terminal_energy_kwh", "continuous_terminal_energy_kwh", "capacity_occupancy[][0]", "capacity_occupancy[][1]", "capacity_occupancy[][2]", "continuous_realized_charging_blocks[].stop_index", "continuous_realized_charging_blocks[].block_index", "continuous_realized_charging_blocks[].station", "continuous_realized_charging_blocks[].start_min", "continuous_realized_charging_blocks[].end_min", "continuous_realized_charging_blocks[].tariff_hour", "continuous_realized_charging_blocks[].tariff_key", "continuous_realized_charging_blocks[].price_per_kwh", "continuous_realized_charging_blocks[].expanded_grid_kwh", "continuous_realized_charging_blocks[].realized_kwh"]
+    },
+    "columns_full": {
+      "path": "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/research-20261026/adjacent_bridge_qualification/attempt01/002-full/oracle/columns.jsonl",
+      "version": {"producer_receipt_git_revision": "08306e40b54543f8f479289b3252fec242aaa7c7", "assumption": "closed-local-untracked-output-unchanged", "scope": "producer receipt Git provenance only; raw artifact untracked"},
+      "sha256": null, "producer_pin": "external_full.worker.oracle_summary.columns_sha256",
+      "allowed_fields": ["trips", "route_nodes", "route", "charging_stops.stations", "charging_stops.cst", "charging_stops.cet", "charging_stops.kwh", "expanded_grid_charging_stops.stations", "expanded_grid_charging_stops.cst", "expanded_grid_charging_stops.cet", "expanded_grid_charging_stops.kwh", "cost", "continuous_realized_cost", "terminal_energy_kwh", "continuous_terminal_energy_kwh", "capacity_occupancy[][0]", "capacity_occupancy[][1]", "capacity_occupancy[][2]", "continuous_realized_charging_blocks[].stop_index", "continuous_realized_charging_blocks[].block_index", "continuous_realized_charging_blocks[].station", "continuous_realized_charging_blocks[].start_min", "continuous_realized_charging_blocks[].end_min", "continuous_realized_charging_blocks[].tariff_hour", "continuous_realized_charging_blocks[].tariff_key", "continuous_realized_charging_blocks[].price_per_kwh", "continuous_realized_charging_blocks[].expanded_grid_kwh", "continuous_realized_charging_blocks[].realized_kwh"]
+    },
+    "fixed_selected": {
+      "path": "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/research-20261026/adjacent_bridge_qualification/attempt01/001-fixed_duty/selected-routes.json",
+      "version": {"producer_receipt_git_revision": "08306e40b54543f8f479289b3252fec242aaa7c7", "assumption": "closed-local-untracked-output-unchanged", "scope": "producer receipt Git provenance only; raw artifact untracked"},
+      "sha256": null, "historical_pin": null, "exact_record_membership_in": "columns_fixed",
+      "allowed_fields": ["trips", "route_nodes", "route", "charging_stops.stations", "charging_stops.cst", "charging_stops.cet", "charging_stops.kwh", "expanded_grid_charging_stops.stations", "expanded_grid_charging_stops.cst", "expanded_grid_charging_stops.cet", "expanded_grid_charging_stops.kwh", "cost", "continuous_realized_cost", "terminal_energy_kwh", "continuous_terminal_energy_kwh", "capacity_occupancy[][0]", "capacity_occupancy[][1]", "capacity_occupancy[][2]", "continuous_realized_charging_blocks[].stop_index", "continuous_realized_charging_blocks[].block_index", "continuous_realized_charging_blocks[].station", "continuous_realized_charging_blocks[].start_min", "continuous_realized_charging_blocks[].end_min", "continuous_realized_charging_blocks[].tariff_hour", "continuous_realized_charging_blocks[].tariff_key", "continuous_realized_charging_blocks[].price_per_kwh", "continuous_realized_charging_blocks[].expanded_grid_kwh", "continuous_realized_charging_blocks[].realized_kwh"]
+    }
+  },
+  "preparation_accounting": {"external_accepted": false, "charged_cpu_s": null, "elapsed_s": null},
+  "tracking_prefix": null,
+  "numerical_resource_prefix": null
+}
