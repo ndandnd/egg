@@ -1,4 +1,42 @@
-# Current handoff — prospective grouped pricing workload STATIC design complete
+# Current handoff — grouped pricing workload STATIC implementation reviewed
+
+NEW research-20261026/pricing_workload_pilot is COMPLETE STATIC. Read HANDOFF.md,
+INTEGRATION_REVIEW.md, PROTOCOL.md, FIELD_AUTHORITY.md and only needed API notes.
+Parent constructor review and one focused integration review passed. Constructor,
+thin actual-oracle/cache worker, serial owner, preparer and DRAFT controls are
+saved. All three bounded agents completed; no numerical worker, preparation01
+or attempt01 exists. No actual data/metadata/artifact values, imports, compile,
+tests, hashes, generation, replay or native execution occurred. Do not recreate
+the design or repeat old source/correspondence/identity/controller reviews.
+
+Both controls remain DRAFT/PENDING with operative freeze fields null. NEXT is
+separate exact source-preparation freeze: choose10CPU/20wall (body6/15) inside
+preflight120/180 and total7200/10800, record reviewed source and control versions,
+exact isolated command and fresh preparation01, then execute once. No budget
+answer pending. Reconcile its external meter/adopt cost once before freezing
+the main exact cohort/order/fields/import/native-parameter/command/funding launch.
+No SOURCE_PINNED/PENDING candidate can generate or dispatch. No automatic retry.
+No new runtime qualification or scientific evidence is inferred from this code.
+
+Four61001–61004 groups, nested12/24, fixed source resources, independent fixed/full
+A0/F1 and own-bank C1 retain48 assigned states and the reviewed practical screens.
+Aliases union on ANY same-size physical match, no replacement. Operational common
+availability is separate from strict A0/F1 delivery; C1 needs physical+strict+
+nativeOPTIMAL. Late-native or fallback-only endpoints cannot qualify. Full paid
+F1 stage_elapsed_s is the effort denominator; prePopen parent_elapsed_s governs
+180s admission. Native150 signal can defer; outer ownership remains decisive.
+Selected/common C/B/U, entire-bank availability and missing/provenance fields stay
+distinct. No seed warming under nonuniform power, cache union, copied solver,
+scope rescue or automatic training. Details and next exact step are in HANDOFF.
+
+No numerical spend: displayed19937.16CPU/20541.00elapsed-sum,retained19937.77CPU.
+Separate legacyguard2546.091499549272/oldactualreviewCPUUNKNOWN unchanged; not exact
+sessionCPU/continuous elapsed/instantaneous containment. No doublecount/refund.
+No GoogleDoc preparation entry; latestscience[276717,280825),all8images. Preserve
+all closedstudies/failedversions/scoped oldlearninggates, read-onlysibling and
+protectedbanks/clusterclosed. Unrelated schedules stay unchanged.
+
+## Previous checkpoint — prospective grouped pricing workload STATIC design complete
 
 NEW research-20261026/pricing_workload_design is COMPLETE. Read README.md,
 STUDY_DESIGN.md, SYNTHETIC_SPEC.md, TELEMETRY_AND_CONTROLS.md, REVIEW.md and
