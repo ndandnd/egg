@@ -1,4 +1,58 @@
-# Current handoff — actual adjacent synthetic comparison CLOSED once
+# Current handoff — nonlinear finite-bank composition STATIC complete
+
+NEW research-20261026/adjacent_nonlinear_design is complete as a source-only
+implementation/design package. Read README.md, REVIEW.md, HANDOFF.md and
+QUALIFICATION_DESIGN.md, then only the narrow helper/API source needed.
+column_contract.py and bank_master.py are stable, with one focused static PASS.
+All three bounded agents completed; no numerical worker, launch manifest or
+attempt namespace exists. No bank/receipt/metadata value, data, import, compile,
+test, hash, replay or numerical/native execution occurred. Static PASS is not
+runtime/native/physical qualification. Do not recreate these notes/reviews.
+
+The selected minimal composition is a finite-bank continuous QP plus binary
+MIQP, reusing AffineMarket conventions and original oracle physical admission
+by reference. The new builder itself imports no solver and never optimizes.
+Primary economics use fixed REALIZED witness loads while retaining conservative
+grid occupancy and BOTH grid/realized aggregate terminal rows. Column projection
+keeps ordered duties, occupancy COUNTS, two energy representations and origin
+IDs; it is not physical validation. A known common physical incumbent must be
+independently admitted and retained by the future caller. No grid-linear pricing
+certificate transfers to this objective or finite bank.
+
+Actual remaining seams are explicit: network prices are baked into integrals/
+alternative pruning, so assigning net.prices cannot update its price oracle;
+the source's single-duty continuous optimizer is scalar-power/unlimited-plug/
+linear-tariff, not a jointly capacity-constrained nonlinear refiner. The current
+single-grid-terminal pricer is also not an exact realized-load/two-terminal
+pricing oracle. First qualify finite-bank selection without claiming those gaps
+are solved, rather than copying a controller or fitting a surrogate for them.
+
+NEXT implement only a thin caller/preparation DRAFT manifest using the stable
+helpers and existing bounded ownership machinery. The future exact inputs are
+the two COMPLETE synthetic journals and producer external receipts from closed
+adjacent_bridge_qualification/attempt01/001-fixed_duty and 002-full, the fixed-duty
+selected fleet and immutable source fixture. NO values are admitted yet.
+Require non-null recorded oracle_summary.columns_sha256 and a single metered
+consumed-bank hash match; missing pins stop, no silent adoption or oracle rerun.
+Freeze exact input/nested-field/source/import/native-parameter/command/funding
+authority and a fresh namespace before any metadata or bank access/execution.
+
+Future design has six arm-context assignments/three paired contrasts on ONE
+exposed base: whole fixed-duty subset versus same entire union, each under
+posted/system/strategic economics. No favorable-column selection/dedup. Hourly
+market load sums stations, marketa=U0, original quotes are station adders;
+posted marketquote0, synthetic b1/900 for system/strategic. Same original physics,
+cap2/overlap argument and common fallback. One relaxation and one binary call
+per assignment, all failure/missing denominators retained, no extra oracle,
+refiner, native retry or learned claim. Proposed NEW480CPU/900wall (420dispatch,
+60closure, prep60 included) is a direction, not a launch or reopened old budget.
+
+No new numerical spend. Closed displayed19928.95CPU/20529.00elapsed-sum,
+retained19929.42CPU; separate legacyguard2546.091499549272/oldactualreviewCPUUNKNOWN.
+Not exact sessionCPU/continuous elapsed/instantaneous containment. Google Doc
+latest scientific range[271755,276717),8images; no preparation append.
+
+## Previously completed actual adjacent synthetic comparison
 
 The human requested actual EVSP-DR execution and a scoped neural/iteration
 assessment. research-20261026/adjacent_bridge_qualification is COMPLETE from
