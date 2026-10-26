@@ -1,40 +1,28 @@
-# Managed native owner — running at last observed session check
+# CLOSED — no worker remains
 
-ONE economic_recourse_pilot/attempt01 owner command was dispatched after exact
-FROZEN source/control b44d08eb was pushed. Managed unified exec session72484 was
-still RUNNING at the last scoped check. Do not assume it remains alive, guess
-PIDs, resubmit or poll historical owners. Use this managed session and durable
-owned receipts. All bounded source/review agents are complete.
+Managed owner72484 exited0 after one launch from FROZEN b44d08eb. The only
+compact readout exited0/PASS after3f461bbd/1eedda65. Do not poll old sessions,
+repeat preflight/selection/source freezes/native/readout/export/hash audits or
+resubmit cases. All bounded agents are complete; check actual state first.
 
-Consumed sources/protocols/authority, LAUNCH, selected identities and original
-inputs are FROZEN. No source edits, tests/imports, extra hashes/inference/fits,
-case generation, native jobs or duplicate owner while it runs. Partial outcomes
-cannot retune/exclude/replace any planned cell. Main receipt incomplete until
-publication; process-time.txt is final only after exit. Running stays quiet.
+Read RESULTS.md, INTERPRETATION_REVIEW.md, FINAL_RESOURCE_RECEIPT.json and
+NEXT_RESEARCH_DECISION.md.16/16 native calls/timely operational endpoints,
+8qualified QP commons/8strict MIQP deliveries, no failure/discrepancy/missing.
+6nativeOPTIMAL/2TIME_LIMIT (10021), intrinsic opportunity unresolved there.
+Full-eight mean routing increment .18127943units/.10624451%TARGET-COMMON
+electricity versus18.62186109units from unchanged→QP. Material-to-point-screen
+routing gains only10017; sixzero/roundoff points do not prove equivalence.
+Four exposed FIT groups are not eight independent timetables or learning gains.
 
-Study:4 exposed FIT groups10007/20,10013/20,10017/28,10021/28, source0/source1
-targets, seed17, original physics/resources and exact source0 fleet.8 paid
-target-QP→MIQP pairs/16assigned states. Protected target common U requires fresh
-QP C/nativeOPTIMAL; U can be B. One direct MIQP/partial binary hint/unknown start
-processing; supported-status timely physical point need not be OPTIMAL. Preserve
-all operational/strict/failure/missing flags and qualification discrepancies.
-No automatic retry/method switch, native/global certificate or ML promotion.
+Metadata/source/native/readout package112.73 displayedCPU/114.38elapsed-sum,
+retained112.85CPU inside2400/3600. Global displayed19923.95CPU/20520.60elapsed-sum,
+retained19924.31CPU. Prelaunch and waited child rows already included, no double
+charge. Separate legacyguard2546.091499549272/actual old reviewCPU UNKNOWN.
+No reset/refund or exact-session/continuous-time/containment claim.
 
-Budget2400CPU/3600wall,2040dispatch/360closure, one serial native thread/observed
-workerRSS<=5GiB;90CPU worker hardcap/native52/parent endpoint60/cleanup3. Each
-context's unbroken pipeline includes TWO paid workers, no single60s claim.
-Preflight120/final120CPU180wall INSIDE total. Complete already closed prelaunch
-carry .17CPU/.17elapsed is adopted once. Before-owner global sums19811.31CPU/
-20406.39elapsed-sum, retained19811.63CPU; those already include prelaunch. Add
-only owner external charge later, no child-row/prelaunch doublecount. Legacy
-conditionalguard2546.091499549272 and UNKNOWN old actual review CPU unchanged.
-
-After owner closes, collect complete compact master receipt plus external
-process meter once, preserving all16 states and all spend. Diagnose fatal stop
-before expansion; no retry. No separate readout/solver/replay command has been
-prospectively authorized beyond the owner's within-total compact finalization.
-Review compact outcomes first; any needed readout must be separately frozen and
-paid within the existing closure/total, not an extra budget. No original rows,
-raw plan/specs or raw native captures need to enter context. Do not commit those
-raw artifacts; stage exact compact/source files only. Google Doc has no launch
-entry; append only later consolidated verified science. No cluster/sealed data.
+Next is STATIC source-only problem-stakes/target gate, not more fitting/scaling/
+native jobs. No favorable10017 or hard10021 extension. Historical frozen sources,
+protocols, controls and every raw local artifact remain unchanged. Raw original
+plans/specs/master are not staged or published; compact readout/source/science
+receipts suffice for backup. Google Doc new verified range[262470,267061),8images.
+No cluster/sealed data/new experiment/manuscript authority follows.

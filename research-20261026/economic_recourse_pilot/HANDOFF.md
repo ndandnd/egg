@@ -1,42 +1,22 @@
-# Metadata CLOSED; one prospective native pilot remains gated
+# COMPLETE — see closed-owner handoff and scientific results
 
-Read research-20261023/CONTINUATION.md first, then only current compact evidence.
-The metadata source-pin, selection01 and finalization each CLOSED once/exit0.
-Source/control backups e92d4dc8/e509d9a4; no rerun, export or FIT metadata/hash
-read. Fixed order10007/20,10013/20,10017/28,10021/28, no replacements. Read
-SELECTION_RESULTS.md and FINAL_SELECTION_RESOURCE_RECEIPT.json. Stored original
-profiles/plans and native compatibility are still unverified; no original rows,
-plans, project imports, replay or solver calls have occurred.
+The entire pilot, including identity selection/source preparation, owner72484 and
+one compact readout, is CLOSED. Read RUNNING_HANDOFF.md (CLOSED), RESULTS.md,
+INTERPRETATION_REVIEW.md, FINAL_RESOURCE_RECEIPT.json and NEXT_RESEARCH_DECISION.md.
+No worker remains; all bounded agents complete. No command may be repeated from
+the historical FROZEN control artifacts. Preserve all source/configuration/data.
 
-Parent separately recorded NATIVE_ADOPTION_DECISION.md, exact field authority,
-command and resources. NATIVE_LAUNCH_REVIEW.md passed after the narrow prep gate
-ordering fix. Current main state is NATIVE_PREPARATION_FROZEN/PASS, still denied
-by owner/worker. Source/cohort pins and accepted actual native-prep carry remain
-pending. All bounded agents complete; no numerical worker/native attempt exists.
+Four exposed groups/eight paired targets,16 timely endpoints,8qualified target
+commons/8strict bounded MIQP deliveries,6nativeOPTIMAL/2TIME_LIMIT, no failure/
+missing/discrepancy. Mean delivered routing increment .18127943generatorunits or
+.10624451%target-common electricity; most delivered savings came from competent
+fixed-route charging (18.62186109meanunits). Only10017 exceeded point agreement;
+10021 intrinsic opportunity remains unresolved. No equivalence, ideal optimality,
+learning, novelty or generalization claim. Both earlier ML no-go decisions stand.
 
-Next frozen command is prepare_native.py once, native-preparation01,5CPU15wall
-inside complete prelaunch25CPU75wall/preflight120/total2400. It reads only literal
-source/control and new closed selection/accounting artifacts, never original
-tables/plans or old FIT metadata. SOURCE_PINNED still denies main. Parent must
-externally accept its receipt/meter, adopt actual carry once, commit/push exact
-FROZEN/PASS control, then separately execute the one already admitted owner
-command. Sources stay frozen while workers run. No automatic launch/retry.
-
-The native pilot is4groups/8contexts/16stages, paid target-QP→one full-graph exact-N
-MIQP, original physics/resources. All startup/copy/search/replay/publication paid;
-two worker anchors and unbroken full context clock, no single60s claim. Preserve
-fresh-C prerequisite versus retained U (possibly B), native values/startUNKNOWN,
-strict/operational/route-change/discrepancy flags. Time-limit physical MIQP can
-qualify without OPTIMAL; target QP still needsOPTIMAL. Native API exceptions are
-fatal bootstrap stops; no extra QP/method menu. No training or promotion follows.
-
-Closed metadata.06 displayedCPU/.13elapsed-sum, retained.12CPU, within20/60.
-Current displayed sums19811.28CPU/20406.35elapsed-sum, retained19811.58CPU. This
-already includes metadata; complete-preparation owner funding must not add it
-globally again. Native source-prep/owner cost not yet spent. Legacy conditional
-guard2546.091499549272 and UNKNOWN old actual reviewCPU unchanged. Process sums
-are not exact session CPU/continuous elapsed; prior child rows overlap owners.
-
-Keep earlier both-family learning no-go and ideal fixed-N exclusions unchanged.
-No sealed data/cluster/fitting/manuscript/broader cohort authority. Google Doc
-latest verified section ends262470 with eight images; no preparation append.
+Next source-only gate concerns operating stakes, economic units/institution and
+valuable conditional targets before more compute. No model, native retry, new
+cohort/parameter/cap/fleet axis, sealed data, cluster or manuscript is authorized.
+Global closed sums19923.95CPU/20520.60elapsed-sum, retained19924.31CPU; legacyguard/
+UNKNOWN old actual reviewCPU separate. Exact budgets/accounting in final receipt.
+Original raw inputs/plans/specs/master remain local; stage compact evidence only.
