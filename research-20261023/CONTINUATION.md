@@ -47,6 +47,31 @@ has been restored as ACTIVE automation advance-egg-local-prediction-research,
 focused on this correspondence under the standing instruction to continue useful
 research. Unrelated paused schedules untouched.
 
+## Neural route prediction remains an open research direction
+
+The human explicitly questioned whether the scoped ML result was being turned
+into a permanent ban. It must NOT be. The valid claim is that the frozen GNN
+ranking/pruning-plus-optimizer pipeline missed the predeclared mean >1% of prior
+electricity E0 margin over CoverCA1 on eight synthetic development groups under
+fixed-fleet, warm day-to-late, common-quota, 60-second policies. Its measured mean
+advantage over Cover was +.0386688%E0, with positive medians7/8. Positive means
+versus fixed-route QP(+8.7352508%E0) and conditional full search(+3.4760564%E0)
+do not identify the learned increment because strong classical restriction also
+helped. There was no equivalence test or general theorem against neural methods.
+
+Keep the failed gate and all failures unchanged; do not pool old cohorts or
+lower the threshold. But 'no automatic expansion of this tested configuration'
+does not mean 'never revisit neural route/column proposals'. Re-entry requires
+a specific new diagnosis/question: align the actual EVSP-DR operational model,
+identify a costly decision/search bottleneck, and justify a training target that
+reflects useful alternatives rather than arbitrary incumbent membership. Then
+prospectively compare learned/classical/random/full methods at matched inclusive
+budgets and grouped evaluation. Price-information claims require appropriate
+input support and a matched trained-blind control; current a-only models cannot
+answer b-information questions. No architecture sweep or automatic fit now, and
+no promise that a model-consistent new test will be positive. The whole program
+is not stopped by the old configuration's result.
+
 ## Superseded prerequisite-design closure — retained history, do not enforce
 
 26 October 2026 07:07 UTC heartbeat completed the sole bounded sufficiency check

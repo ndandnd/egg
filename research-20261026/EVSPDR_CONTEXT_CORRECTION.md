@@ -86,6 +86,32 @@ work only; no cluster monitoring/jobs, and no changes to the sibling project.
 
 ## Accountability
 
+### Clarification after the human's neural-prediction question
+
+The failed warm replication is a negative continuation decision for the specified
+frozen learned policies, not a permanent prohibition on neural route prediction.
+For the GNN, the mean advantage over CoverCA1 was positive .0386688% of common
+prior electricity E0 but below the predeclared >1% rule. Seven of eight group
+medians were positive. Its larger gains over fixed-route QP and bounded full
+search do not isolate learned information because conventional restriction also
+helped. No zero-effect/equivalence test or global architecture conclusion follows.
+
+The evaluated network ranked movement candidates inside a hybrid optimization
+pipeline. It was not a test of every neural route constructor, route/column
+proposal target, operational model or training procedure. The eight timetable
+groups and repeated size/seed cells are development evidence. Earlier positive
+four-group evidence cannot rescue the failed replication, but neither result
+settles all future settings. Models receive a/notb, binary labels represent one
+observed teacher plan, and historical GNN pool lineage is incomplete.
+
+The correct next ML question may be whether a specifically diagnosed, costly
+EVSP-DR decision/search step benefits from learned proposals at equal complete
+budgets. First establish model/target correspondence and a reason classical
+controls leave useful residual work, then record one bounded experiment with
+grouped evaluation and all failures. Keep original gates immutable and avoid
+outcome-driven model/cohort selection. This permits justified revisiting; it
+does not authorize an immediate training sweep or assume learning will succeed.
+
 Two bounded GPT-6.1 Sol source/context checks corroborated the correction. No
 imports, tests, hashes, inference, fitting, replay, native jobs or source changes
 were needed. The numerical ledger is unchanged: displayed19923.95 CPU seconds,
