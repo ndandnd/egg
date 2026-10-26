@@ -1,4 +1,53 @@
-# Current handoff — correspondence and duty/market seam COMPLETE; adjacent API next
+# Current handoff — adjacent oracle boundary COMPLETE; synthetic qualification next
+
+26 October latest: research-20261026/adjacent_oracle_boundary is a completed
+STATIC package. Read README.md, API_CONTRACT.md, FIXED_DUTY_COMPOSITION.md,
+SYNTHETIC_BRIDGE_DESIGN.md, REVIEW.md and HANDOFF.md as needed. The focused
+source review PASSED; no import, test, hash, fixture, data, replay or numerical
+run occurred. All bounded authors/reviewer completed; no numerical worker or
+attempt exists. Do not recreate the correspondence, boundary notes or source
+audits, or poll old CLOSED owners.
+
+The concrete gap is resolved as a local draft composition: the old adjacent
+fixed-duty CLI/frontier omits shared plugs and can discard occupancy alternatives.
+boundary.py takes the registered CapacityTerminalNetwork class by reference;
+its small subclass filters only three inherited candidate generators to duty
+first/next/last trips BEFORE capacity alternative packing. It copies no solver,
+DP or replay code. Both arms use the existing capacity master with partition=True.
+Full routing remains fleet-first under a cap, not exactN; the future synthetic
+fixture uses two overlapping mandatory service trips as an independent lower
+bound matching cap2. This is classical interface adaptation, not a new theorem.
+
+Registered sibling source remains read-only at
+/Users/nadan/Documents/projects/demandresponse/.codex-work/capacity-packed-20261001,
+revision3a0ab6a8ab50e4af7d5a7be7688d5ffa1fbbf78c. Labels/horizon are registered
+constants; no silent global relabeling. Expanded-grid master cost/terminal energy
+and plug occupancy remain distinct from continuous realized energy/cost and
+physical admission. Capacity-LP pricing scope differs from finite-pool integer
+and unrestricted physical claims. Linear quoted-price oracle calls do not by
+themselves optimize EGG nonlinear strategic/system objectives.
+
+Next concrete work: implement the minimal NEW synthetic bridge caller/bootstrap
+using this draft and existing bounded worker machinery, with ONE new source-defined
+synthetic base, ONE linear quote and TWO arms (fixed duty/full routing). Freeze
+exact literals/frame/adjacency/fields, station powers/plugs, duty/fleet overlap
+witness, terminal policy, source/import closure, output admission, commands and
+practical inclusive budgets before any imports/data/numerical execution. No
+current launch manifest exists. Fee0, source BUS_COST_KX1e5, explicit
+SLURM_CPUS_PER_TASK=1 and clean sys.argv/import order require prospective binding;
+nonuniform-power API rejects external seeds, so no shared-seed claim. Existing
+cg_seconds permits closure re-solves beyond that clock: enforce a paid outer
+process deadline rather than altering the sibling loop or reviving a controller.
+Preserve all two-arm failures/missing/late/unresolved states; no automatic retry,
+fixture tuning, original data, model fitting or nonlinear/population claim.
+
+Accounting unchanged: displayed19926.33CPU/20524.17elapsed-sum, retained19926.74CPU;
+legacy conditionalguard2546.091499549272 separate/actual oldreviewCPU UNKNOWN.
+No new numerical spend or reset. Google Doc latest science remains
+[267061,271755),8images preserved; no preparation append. Historical learned
+no-go results remain scoped, not permanent neural-route abandonment.
+
+## Previous completed correspondence and duty-market seam
 
 Worktree /Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017, branch
 codex/ml-prediction-20261017. Read this first, then current compact receipts and
