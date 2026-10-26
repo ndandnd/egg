@@ -1,0 +1,68 @@
+{
+  "policy": "descriptor-json-wire-literal-check-v1",
+  "source_revision": "96906ae1936ff6f3ac33cbd9a3536791f672ec36",
+  "passed": true,
+  "outcomes": [
+    {
+      "name": "old_comparison_mismatches_integer_2_10_wire_keys",
+      "passed": true
+    },
+    {
+      "name": "normalized_descriptor_matches_round_trip",
+      "passed": true
+    },
+    {
+      "name": "changed_price_rejected",
+      "passed": true
+    },
+    {
+      "name": "missing_hour_rejected",
+      "passed": true
+    },
+    {
+      "name": "reordered_duties_rejected",
+      "passed": true
+    },
+    {
+      "name": "changed_battery_rejected",
+      "passed": true
+    },
+    {
+      "name": "wire_key_collision_rejected",
+      "passed": true
+    },
+    {
+      "name": "boolean_does_not_equal_integer",
+      "passed": true
+    },
+    {
+      "name": "integer_does_not_equal_float_encoding",
+      "passed": true
+    }
+  ],
+  "failures": [],
+  "consumed_sha256": {
+    "LAUNCH.json": "3a0b25c614daac33035026acc7e89190fe48d5555743c24c992a76bcf89b9b8b",
+    "check.py": "c326caf214c2cb79d87eac4c4023310f0c6acc13d5ccf9f6a825e3b41f0de04a",
+    "descriptor.py": "5cf421ad5588bba1a9184c000f751af69b90534a55fa26ed28cb175d47383757",
+    "PROTOCOL.md": "e162bfa48818b5532661dabf4169e7b350b25917bc6e357c24de8dbd5eb73559"
+  },
+  "data_inputs": [],
+  "scope": "Descriptor wire normalization only; no physical/native/scientific qualification",
+  "old_strings": {
+    "fresh": "{\"duties\":[[2,10],[3,11]],\"enabled\":true,\"hours\":[2,10],\"name\":\"illustrative-only\",\"physics\":{\"battery\":80.0,\"power\":60.0,\"reserve\":10.0},\"prices\":{\"S\":{\"2\":0.125,\"10\":0.25}}}",
+    "loaded": "{\"duties\":[[2,10],[3,11]],\"enabled\":true,\"hours\":[2,10],\"name\":\"illustrative-only\",\"physics\":{\"battery\":80.0,\"power\":60.0,\"reserve\":10.0},\"prices\":{\"S\":{\"10\":0.25,\"2\":0.125}}}"
+  },
+  "all_checks_completed": true,
+  "stop_signal": null,
+  "resources": {
+    "cpu_s": 0.037922,
+    "user_s": 0.021578999999999997,
+    "system_s": 0.016343,
+    "elapsed_s": 0.040825000032782555,
+    "peak_rss_bytes": 20398080,
+    "rss_convention": "macOS bytes; other platforms KiB converted to bytes",
+    "python_threads": 1,
+    "prepublication_only": true
+  }
+}
