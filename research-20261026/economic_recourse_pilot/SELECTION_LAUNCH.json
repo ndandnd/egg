@@ -1,6 +1,6 @@
 {
   "policy": "first-two-per-declared-profile-exposed-FIT-cohort-v1",
-  "mode": "PREPARATION_FROZEN",
+  "mode": "FROZEN",
   "review_disposition": "PASS",
   "workdir": "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017",
   "input": "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/research-20261025/fit_target_support/attempt01/receipt.json",
@@ -11,7 +11,10 @@
     "git_revision": "21bd18e8fdedfbb4895c8e21008df1fd68ad50ec",
     "freeze_assumption": "tracked-receipt-unchanged-from-named-revision"
   },
-  "source_sha256": null,
+  "source_sha256": {
+    "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/research-20261026/economic_recourse_pilot/select_cohort.py": "04dc4e0a8138daa11df1f7b66ab73677f396dbd288539437ef0df23d535fce16",
+    "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/research-20261026/economic_recourse_pilot/SELECTION_PROTOCOL.md": "b06a8d21f6e5f6b5b92363311e65738687998560f5771e24f754b6deb7da5150"
+  },
   "command": "/usr/bin/time -p -o research-20261026/economic_recourse_pilot/selection-time.txt .venv-local/bin/python -I -S -B research-20261026/economic_recourse_pilot/select_cohort.py > research-20261026/economic_recourse_pilot/selection-stdout.txt 2> research-20261026/economic_recourse_pilot/selection-stderr.txt",
   "tracking_prefix": {
     "base_displayed_cpu_s": 19811.22,
@@ -19,7 +22,19 @@
     "base_retained_tracking_cpu_s": 19811.46,
     "metadata_package_cpu_s": 20,
     "metadata_package_wall_s": 60,
-    "source_preparation_external_acceptance": "PENDING",
+    "source_preparation_external_acceptance": {
+      "exit_code": 0,
+      "receipt_complete": true,
+      "phase_complete": true,
+      "displayed_cpu_s": 0.02,
+      "displayed_elapsed_s": 0.05,
+      "retained_cpu_charge_s": 0.04,
+      "within_5CPU_15wall": true
+    },
+    "current_displayed_cpu_s": 19811.24,
+    "current_elapsed_sum_s": 20406.27,
+    "current_retained_tracking_cpu_s": 19811.50,
+    "already_carried_metadata_components": ["source_preparation"],
     "separate_legacy_conditional_guard_s": 2546.091499549272,
     "historical_actual_review_cpu": "UNKNOWN"
   },
@@ -32,5 +47,5 @@
     "publication_wall_s": 10
   },
   "inside_campaign_preflight_120_and_total_2400": true,
-  "no_execution_authority": true
+  "no_execution_authority": false
 }
