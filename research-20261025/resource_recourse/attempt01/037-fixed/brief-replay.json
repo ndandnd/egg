@@ -1,0 +1,131 @@
+{
+  "replay_ok": true,
+  "fleet_count": 3,
+  "vehicle_cost_exact": "300",
+  "deadhead_minutes_exact": "383",
+  "deadhead_cost_exact": "0",
+  "ops_cost_exact": "300",
+  "ops_component_residual_exact": "0",
+  "linear_electricity_exact": "452016034028048184135527094457319/2535301200456458802993406410752",
+  "quadratic_electricity_exact": "5412992550177387099118901485119586229671360366693/182687704666362864775460604089535377456991567872",
+  "electricity_exact": "37984180428804702973583587566333216025000510130277/182687704666362864775460604089535377456991567872",
+  "total_exact": "92790491828713562406221768793193829262097980491877/182687704666362864775460604089535377456991567872",
+  "grid_kwh_exact": "980153532182983/1099511627776",
+  "consumption_kwh_exact": "7057105431717479/8796093022208",
+  "max_grid_kw": 90.0,
+  "units": "generator cost units; kWh; minutes",
+  "period_loads": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    65.93333333333335,
+    42.0,
+    0.0,
+    60.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    60.29259259259252,
+    60.29259259259252,
+    60.29259259259252,
+    60.29259259259261,
+    60.29259259259261,
+    60.29259259259261,
+    60.29259259259261,
+    60.29259259259261,
+    60.2925925925926,
+    60.29259259259254,
+    60.29259259259261,
+    60.29259259259264
+  ],
+  "service_energy_exact": "105080238305622095/140737488355328",
+  "movement_energy_exact": "1002681421037767243/18014398509481984",
+  "ideal_grid_demand_exact": "14452951924157395403/16212958658533786",
+  "replay_grid_minus_ideal_exact": "-506667174875045/8913168282854738199176019968",
+  "opportunity_diagnostics": {
+    "available": true,
+    "diagnostic_only": true,
+    "native_feasibility_certificate": false,
+    "projected_load_set_equality_claim": false,
+    "price_optimality_claim": false,
+    "source1_cheap_period_indices": [
+      18,
+      19,
+      20,
+      21
+    ],
+    "unavailable_reasons": [],
+    "per_vehicle": [
+      {
+        "vehicle": 0,
+        "service_energy_exact": "76943999633624923/281474976710656",
+        "movement_energy_exact": "329663492723520311/18014398509481984",
+        "total_consumption_exact": "5254079469275515383/18014398509481984",
+        "ideal_grid_kwh_exact": "5254079469275515383/16212958658533786",
+        "no_midday_soc_margin_kwh_exact": "-1068974407552660599/18014398509481984",
+        "no_midday_soc_sufficient": false,
+        "last_pullin_return_min_exact": "796"
+      },
+      {
+        "vehicle": 1,
+        "service_energy_exact": "70627701156237801/281474976710656",
+        "movement_energy_exact": "688870599002591077/36028797018963968",
+        "total_consumption_exact": "9729216347001029605/36028797018963968",
+        "ideal_grid_kwh_exact": "9729216347001029605/32425917317067572",
+        "no_midday_soc_margin_kwh_exact": "-1359006223555320037/36028797018963968",
+        "no_midday_soc_sufficient": false,
+        "last_pullin_return_min_exact": "834"
+      },
+      {
+        "vehicle": 2,
+        "service_energy_exact": "31294387910690733/140737488355328",
+        "movement_energy_exact": "657165257625902787/36028797018963968",
+        "total_consumption_exact": "8668528562762730435/36028797018963968",
+        "ideal_grid_kwh_exact": "8668528562762730435/32425917317067572",
+        "no_midday_soc_margin_kwh_exact": "-298318439317020867/36028797018963968",
+        "no_midday_soc_sufficient": false,
+        "last_pullin_return_min_exact": "775"
+      }
+    ],
+    "selected_depot_windows": [
+      {
+        "vehicle": 0,
+        "movement": "depot_T02_T09",
+        "lo_min_exact": "427",
+        "hi_min_exact": "478"
+      },
+      {
+        "vehicle": 1,
+        "movement": "depot_T14_T21",
+        "lo_min_exact": "619",
+        "hi_min_exact": "659"
+      },
+      {
+        "vehicle": 2,
+        "movement": "depot_T06_T11",
+        "lo_min_exact": "481",
+        "hi_min_exact": "509"
+      }
+    ],
+    "total_ideal_grid_kwh_exact": "14452951924157395403/16212958658533786",
+    "common_terminal_start_min_exact": "1080",
+    "all_return_by_terminal_open": true,
+    "all_no_midday_soc_sufficient": false,
+    "common_terminal_capacity_grid_kwh_exact": "1080",
+    "source1_cheap_resource_capacity_grid_kwh_exact": "360",
+    "common_terminal_cheap_capacity_grid_kwh_exact": "360",
+    "total_grid_le_common_terminal_capacity": true,
+    "total_grid_le_common_terminal_cheap_capacity": false,
+    "E_le_cheapcap_conditional": null,
+    "conditional_assumptions": "Admitted paths; nonnegative consumption; full initial/final batteries; constant efficiency; common deadline; zero/one serial connector; all return by opening and each bus can reach terminal without midday charging",
+    "interpretation": "Ideal demand/window/capacity diagnostics only. Optional daytime charging can still lower quadratic cost; no feasibility, set-equality or optimality claim."
+  }
+}

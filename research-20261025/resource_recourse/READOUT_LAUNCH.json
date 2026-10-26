@@ -1,0 +1,25 @@
+{
+  "policy": "resource-recourse-closed-owner-economic-readout-v1",
+  "mode": "FROZEN",
+  "review_disposition": "PASS",
+  "workdir": "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017",
+  "inputs": ["attempt01/receipt.json", "process-time.txt"],
+  "output": "READOUT.json",
+  "source": "research-20261025/resource_recourse/readout.py",
+  "budgets": {
+    "cpu_s": 60,
+    "wall_s": 90,
+    "inside_total_cpu_s": 4500,
+    "inside_total_wall_s": 7200,
+    "inside_closure_cpu_s": 360,
+    "owner_finalization_reserved_cpu_s": 120
+  },
+  "planned": {"acquisitions": 8, "active": 32, "blocks": 16, "interactions": 8, "variants": 8},
+  "scope": "One closed-owner readout; no TRAIN/project imports/replay/solver or method-success admission gate",
+  "source_manifest_hashing": "Own source, manifest, closed owner receipt and external meter hashed once from consumed byte buffers; no repeated original-input or project-source audit",
+  "accounting": "Check external closed owner meter before receipt parse; check owner accounting complete and zero unresolved reserve; readout post-meter remains pending",
+  "command": "/usr/bin/time -p -o research-20261025/resource_recourse/readout-time.txt .venv-local/bin/python research-20261025/resource_recourse/readout.py > research-20261025/resource_recourse/readout-stdout.txt 2> research-20261025/resource_recourse/readout-stderr.txt",
+  "automatic_retry": false,
+  "new_scientific_gate": false,
+  "ideal_ordering": "UNRESOLVED"
+}
