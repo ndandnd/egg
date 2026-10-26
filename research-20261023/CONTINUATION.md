@@ -1,4 +1,34 @@
-# Current handoff — nonlinear bank admission passed; comparison failed before native work
+# Current handoff — descriptor repair qualified; integrated reuse STATIC in progress
+
+NEW descriptor_wire_repair/attempt01 CLOSED exit0, all nine literal checks PASS.
+Source96906ae1936ff6f3ac33cbd9a3536791f672ec36, controlb8523e73, results7a3f6e37.
+Read its RESULTS.md and FINAL_RESOURCE_RECEIPT.json only as needed. Do not rerun
+the check, hash its sources again or change this completed package. It confirms
+normalization before sorting with mutation/collision rejection; no actual bank,
+physical replay, model or native work ran. It does not qualify integrated reuse.
+Displayed .03CPU/.07wall, internal prepublication .037922CPU, retained .06CPU.
+Global displayed19931.13CPU/20532.49elapsed-sum, retained19931.68CPU. Other
+accounting cautions and legacy guard/unknown below are unchanged.
+
+STATIC implementation is in NEW research-20261026/adjacent_nonlinear_reuse.
+approved50_bindings owns worker.py/WORKER_NOTE; approved50_runners owns the thin
+owner/preparation/protocol/DRAFT manifest; responsive_monitor_tests owns one
+focused integration review after stable API handoffs. No numerical worker.
+They may only read/edit new sources plus narrow necessary source APIs; no
+actual artifact values, import/compile/hash/test/native/commit/new agents.
+Check actual agent state before continuation. No integrated launch is frozen.
+
+The new caller transfers the already admitted prepared bank and committed A00
+external receipt from 8ba29b54a338cb8b48176f8b85772ea73d018564 under exact new
+field/version/digest authority. It must preserve the original admission source,
+bank membership, parameters and six scientific contexts; common/selected fleets
+still get independent joint admission. Use tested descriptor_equal only for
+fixture comparison. Do not repeat all360 column replays or original journals.
+Parent review/freeze of exact source/input/command/funding precedes any data or
+native work. Proposed NEW480CPU/900wall is separate; the .06 check cost is already
+in the prefix and is not adopted again. No result is inferred from these drafts.
+
+## Previous checkpoint — nonlinear admission passed; comparison failed before native work
 
 NEW research-20261026/adjacent_nonlinear_pilot/attempt01 is CLOSED_FAILED.
 Reviewed source 077b3bc4ff8f9c7e766df4c9a2e893ba8bc5f0ff and frozen control
