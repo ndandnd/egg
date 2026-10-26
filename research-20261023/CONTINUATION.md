@@ -1,147 +1,125 @@
-# Current handoff — necessary early-capacity diagnostic CLOSED
+# Current handoff — all-mode capacity diagnosis CLOSED
 
 Worktree: /Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017.
 Branch: codex/ml-prediction-20261017. Read this first, then only current compact
-receipts/protocols. Check actual agents and owned workers; never duplicate
-attempted work. Use bounded GPT-6.1 Sol agents with short handoffs; parent manages
-science/integration. Human routine budget authority exists; no answer pending.
+receipts/protocols. Check actual agents/owned workers; never duplicate attempted
+work. Use bounded GPT-6.1 Sol agents with short handoffs. Parent manages science
+and integration. Human practical routine budget authority exists; no answer pending.
 
 ## Latest completed evidence
 
-capacity_cut_diagnostic/attempt01 launched ONCE after source/protocol478da6df
-was pushed. Isolated stdlib process exited0, administrative body complete.
-No numerical worker remains. Read RESULTS.md, INTERPRETATION_REVIEW.md,
-FINAL_RESOURCE_RECEIPT.json and NEXT_ALL_MODE_DECISION.md in that folder.
-HANDOFF.md gives exact state. No rerun/hash audit/replay/solver/extra export.
-Only existing derived opportunity diagnostics were analyzed; no original cases,
-plans, TRAIN, costs, loads, models, project imports or native libraries.
+all_mode_capacity/attempt01 ran ONCE after source/protocol/manifest c2b2006b was
+pushed. Isolated stdlib process exited0; all4 external/spec bindings and8 paired
+resource controls admitted,2 conditional ideal exclusions. No numerical worker
+or unresolved child remains; all bounded agents complete. Read that folder's
+RESULTS.md, INTERPRETATION_REVIEW.md, FINAL_RESOURCE_RECEIPT.json and
+NEXT_SCIENTIFIC_DECISION.md; HANDOFF.md gives exact state. Do not rerun/export/
+hash-audit/read original specs or retry native cells. Only permitted projections
+of4 fixed p90 owned specs were analyzed, not plans/selectedIDs/prices/costs/
+originalTRAIN/models/projectlibraries/replay/solver.
 
-All8 reference diagnostics available;3 ideal necessary-cut violations, exactly
-45kW10006/10009/10005.12/16 adaptive records available,0 violations;4 missing,
-not passes. All90kW references have no detected violation.24 records are repeated
-roles/resources/tariffs within four exposed groups, not independent tests.
+All-mode charging union gives optimistic early access; independent incoming/
+outgoing movement-energy bounds are combined by MAX, not sum, and service added
+once. All declared trip/leg consumption ends by1080.10009/45/fixedN4 requires
+about390.4kWh early versus299.25capacity (about91.1shortfall), controlled by SOC.
+10005/45/fixedN3 needs about326.0 after allowing540postopening versus296.25early
+capacity (about29.7shortfall), controlled by total-demand/postcapacity. Exact
+binary-coefficient fractions are primary. No epsilon or changed physical guard.
 
-Before terminal opening1080, each bus needs ell=max(0,-(B-reserve-D))/eta.
-Capacity uses MERGED selected depot windows per bus and shared union. Shared
-requirement=max(sum ell,totalgrid−postopeningcapacity,0). At45kW reference shared
-shortfalls are58.4333,222.8389,262.1944kWh. Reserve-deficit sum controls10006/10009;
-total-demand minus terminal capacity controls10005. Individual cuts also fail
-for1/4/2 reference buses, respectively. Exact represented fractions are primary.
+All4 p90 controls and10001/10006 at45 have no detected violation. Thus two old
+unresolved full-graph cases have an ideal obstruction across ALL declared route
+choices at their frozen N. This is stronger than one rejected topology/search,
+but conditional on inherited ideal assumptions. Native INF_OR_UNBD stays unchanged;
+no native-precision or unrestricted variable-fleet EVSP certificate. Passing cuts
+are not schedules, and4 exposed groups are not8 independent cases. No new theorem,
+learning gain, population conclusion or complete resource-cost mean follows.
 
-10006 reference96 merged minutes supplies at most72kWh versus130.4333 early
-required. Admitted adaptive routes at45 expose194 minutes/145.5kWh versus130.9889
-required, margin14.5111 at both tariffs, no per-bus violation. This explains a
-conditional ideal charging-access obstruction despite higher energy use. Passing
-cuts do not construct a schedule; prior independent replay supplies the separate
-witness. No tolerance-qualified/native/unrestricted certificate, new theorem,
-ML value or population claim follows. Old global INF_OR_UNBD remains unresolved.
+## Next static scientific decision
 
-## Next: all-declared-mode outer cuts; static draft only
+The resource study and both capacity diagnoses are complete. Do not retry the
+impossible fixed-N variants, scan caps/add fleet, rerun old analyses, or force ML.
+NEXT_SCIENTIFIC_DECISION.md is the parent's direction, not a launch/data manifest.
+Next STATIC work: define a minimal falsifiable conventional economic-recourse
+test beyond a fully paid, already TARGET-QP-charged common feasible incumbent.
+Use existing routing/QP APIs/clocks; no controller or repeated identity/copy audit.
+Inspect only narrow relevant source if needed. Separate feasibility restoration
+from cost improvement and intrinsic energy from timing/access. Include competent
+classical routing and charging-only/unchanged references with explicit operational
+and cost denominators. Keep every planned failure/missing endpoint; no available-
+only promotion or favorable selection of10006/10018/other old outcomes.
 
-Diagnose the two unresolved full-graph45 cases before cut-aware routing or new
-learning. NEXT_ALL_MODE_DECISION is a source-only mathematical direction, NOT
-a manifest or permission to read new case values now. Include all4 groups
-10001/10006/10009/10005 at90/45, with known feasible controls, not only failures.
+The previous adaptive method ranked routes before finalQP from a zero-price
+feasibility prior; that did not give it a target-optimized shared fallback. A
+strong conventional economic-recourse test remains necessary before learning.
+Do not repair the old missing operands or claim broader-graph method dominance.
+If prospective common-incumbent acquisition is needed, pay it and define missing
+outcomes. Freeze exact cohort/input/source/protocol/commands/resources/failure
+rules before future data access/computation. No new numerical study/refit is yet
+frozen. If competent conventional optimization removes the useful opportunity,
+concede/redirect instead of adding models/labels.
 
-Future exact inputs: resource_recourse/attempt01/{001,004,005,008}-acquisition/
-external-receipt.json and spec.json (p90 cases, respectively those four groups).
-Read/hash each metadata receipt and spec once inside a newly metered batch;
-require actual spec SHA256 equal its already recorded external spec_sha256.
-Never follow data-supplied paths. Semantic fields: binding/context/fleetN and
-case trip/movement geometry/timing/energy, battery/reserve/efficiency, terminal
-horizon/resources. NO reference_selected_ids, plans, charge/load arrays, vehicle/
-operation/deadhead costs, prices/objectives, models, original TRAIN or other
-artifacts. Transient full JSON decoding must be explicit. Do not reconstruct
-whole case identity if it entails reading excluded costs; inherit bound spec.
+## Preserved resource and selected-topology evidence
 
-For fixed N, movement-energy LB=max(sum minimum incoming per trip +N minimum
-pullin, sum minimum outgoing per trip +N minimum pullout). These are two valid
-partitions; NEVER add them together. Add mandatory service energy for D_LB.
-Union windows from ALL declared depot modes gives preopening upper capacity,
-even if their modes are mutually incompatible. If all trip/leg consumption ends
-by1080, earlygrid >=max(0,(D_LB−N(B-reserve))/eta). Otherwise only the safe
-completed-service SOC bound or unknown. Independently, earlygrid >=max(0,
-D_LB/eta−whole postopening resource capacity). Compare justified lower bounds
-with the all-mode merged-union capacity. No matching/mincostflow/optimization,
-subset enumeration, custom prefix expansion or cap scanning.
+capacity_cut_diagnostic/attempt01 at478da6df/ae274a56 CLOSED once:8 reference
+diagnostics available,3 necessary selected-topology violations exactly45kW10006/
+10009/10005;12/16 adaptive records available,0 violations,4missing notpasses.
+10006 reference96mergedminutes/72kWh cannot meet130.4333early need; replay-admitted
+adaptive45 exposes194minutes/145.5kWh against130.9889 (margin14.5111) atbothtariffs.
+Higher energy can coexist with useful access. Selected cuts alone did not prove
+full-graph infeasibility; all-mode diagnosis above is separate stronger evidence.
 
-A violated outer cut excludes every declared route collection at that fixed N
-under stated ideal assumptions; NOT unrestricted variable-fleet EVSP or native
-precision. Passing leaves feasibility unknown. Any exclusion of a known feasible
-control is a discrepancy to diagnose, not permission to alter tolerances, revoke
-past admission or drop that control. Missing/invalid assumptions remain unknown.
-
-Select separate NEW30CPU/60wall, body25/50 plus reserve5/10, stdlib one process/
-thread, no children/native. Current prefix19811.37 retained CPU is not reset.
-/root/approved50_bindings is authorized STATIC implementation in NEW all_mode_capacity:
-run.py,DRAFT protocol/manifest,note only. It may not open artifact values or
-import/compile/hash/test/execute/replay/solve/commit/spawn agents. Check its
-ACTUAL state. Parent has not reviewed this new draft or frozen its launch.
-Next finish it, perform one focused math/source/field/binding review, freeze exact
-source/input-version/protocol/command/fresh namespace/funding, then run ONCE if
-coherent. Do not recreate prior mechanism notes or repeat old engineering gates.
-No automatic solver retry, capacity/fleet change, refit, full79 or new cohort.
-
-## Preserved resource-recourse result
-
-resource_recourse/attempt01 sourceb9bb166e owner27946/readout CLOSED once; backup
-13de4822.8 acquisitions attempted,5 valid;26/32active attempted,22qualified QP/
-operational endpoints,21 declared full-method successes.6fixed missing, adaptive
-cold eligible. All40 states retained, no unresolved child.10006/45 has valid5bus
-alternative witnesses at both prices despite highergrid570.9889 versus reference
-ideal555.5222.10009/10005 cold methods INF_OR_UNBD, not proven infeasible/timeouts.
-
-Only10/16 cost blocks and2/8 interactions defined, both10001; complete meanNULL.
-10001 source0 gains.195301at90/.163498at45, interaction−.031803; source1~roundoff.
-No available-only rescue. Higher energy505.7333versus500.3333 is offset by lower
-quadratic cost10.3142versus11.5895 at90, samefleet3/zerodeadheadcost. This is a
-small conventional load-spreading point tradeoff, not a learning increment.
-Adaptive route ranking precedes its finalQP from a zero-price feasibility prior;
-fixed separately target-QP-optimizes the prior. A larger graph cannot guarantee
-this bounded method dominates. Future cost work needs a strong target-charged
-common incumbent with fully paid acquisition; no rerun or past-point revision.
-C/B/U/nativeN and physical/QP/method/route-change flags remain distinct.
+resource_recourse sourceb9bb166e/closeout13de4822 owner27946/readout CLOSED once.
+8acquisitions attempted/5priors,26/32active attempted,22qualifiedQP/operational
+endpoints,21declaredfullmethod.6fixedmissing; adaptivecoldeligible. All40states
+retained, no unresolvedchild.10006/45 has valid5bus alternatives despite higher
+grid570.9889 versus referenceideal555.5222.10009/10005cold methods INF_OR_UNBD,
+not native proof of infeasibility/timeouts. Only10/16costblocks and2/8interactions
+defined, both10001; complete meanNULL.10001source0gain.195301at90/.163498at45,
+interaction−.031803;source1roundoff. No available-only rescue. Small conventional
+load-spreading tradeoff505.7333 versus500.3333kWh, lowerquadraticcost10.3142 versus
+11.5895 at90, same3fleet/zero deadheadcost is not a learning increment.
+C/B/U/nativeN and operational/QP/fullmethod/route-change flags remain distinct.
 
 ## Standing evidence and restrictions
 
 Both learned families retain warm_replication DO_NOT_CONTINUE: GNNvsCover
-.0386688%E0,CatBoost.1997028%E0 below required>1%E0 despite positive7/8 medians;
-48 strong QPs qualified. Keep371 strict+11 retained intermediate+2prior crash
-fallbacks, including unexplained rc−6 GNN/GNN_day50607/40/seed73. No retry,
-exclusion, pooling old groups, family selection, lowered gate or refit. E0 is
-prior late electricity, not bill/energy. GNN_day is not trained tariff blindness;
-models see a/notb, encoder price features leak, historical GNN lineage unknown.
+.0386688%E0, CatBoost.1997028%E0 belowrequired>1%E0 despitepositive7/8medians;
+48strongQPs qualified. Preserve371strict+11retainedintermediate+2priorcrashfallbacks,
+including rc−6 GNN/GNN_day50607/40/seed73, empty stderr/causeUNKNOWN. No retry,
+exclusion,pooling oldgroups,familyselection,loweredgate or automaticrefit.
+E0 is priorlate ELECTRICITY, not bill/energy. GNN_day is not trained tariffblindness;
+models receive a/notb, pricefeatures leakthroughencoding, GNNlineageunknown.
 
-Earlier topology32/32QP, metadata/targets/coherence/density/sparse-pool/fleet/
-greedy/price/hull/QP/warm studies and static mechanism82b0891f are CLOSED, not
-routinely repeated. Responsive-supervision remains deferred/unqualified; retain
-all sources/failures/accounts without infrastructure revival. Generic pruning/
-recovery/convex-hull pricing is prior art. Objective c+a'L+.5L'BL is integrated
-system cost, NOT atomic payment. Current/October17 cohorts are development;
-variants grouped, preprocessing/selection inner-only.8warmgroups are not48
-independent cases; feasible fleet prior not day-economic optimum,180/270kW scales
-with size, full fixed-fleet search not original unrestricted certification.
-Finite bounds/OPTIMAL/source agreement/OptimalityTol are not exact physical-gap
-certificates. No novelty/significance/generalization/publication readiness from
-source checks/classification/small point effects. Manuscript/model-family/
-literature expansion stays deferred. Practical routine budgets need no tiny asks.
+Earlier topology32/32QP, metadata/targets/coherence/density/sparse-pool/greedy/
+fleet/price/hull/QP/warm and static mechanism82b0891f are complete, not repeated
+routinely. Responsive-supervision remains deferred/unqualified; preserve sources,
+failures/accounts without infrastructure revival. Generic pruning/recovery/
+convex-hull pricing is priorart. Integrated cost c+a'L+.5L'BL is NOT atomic payment
+c+a'L+L'BL. Current/October17 evidence development; variantsgrouped, preprocessing/
+selectioninner-only.8warmgroups are not48independentcases, fixedfleetprior feasible
+notday-economicoptimum,180/270kW scaleswithsize, fullfixedfleet notunrestrictedcert.
+Finitebounds/OPTIMAL/OptimalityTol/sourceagreement are not exact physical-gap
+certificates. No novelty/significance/generalization/publicationreadiness from
+sourcechecks/classification/smallpointeffects. Manuscript/model-family/literature
+expansion deferred. Sealed DEV/TEST/A6/B3/confirmation/GIRO CLOSED. No cluster
+access/monitoring/jobs; leave Unicorn to v2g. Keep unrelated schedules paused.
 
 ## Accounting and documentation
 
-Latest analytic package.04CPU/.07wall, retained.06CPU, within separate20CPU/45wall;
-no children/native. Closed displayed process sums19811.15CPU/20406.13elapsed-sum,
-retainedtracking19811.37CPU. Not exact session CPU/continuous time/instantaneous
-containment. Prior child rows overlap owner meter; no doublecount. Separate
-legacyconditionalguard2546.091499549272; actual old reviewCPU UNKNOWN. Preserve
-charges/failures/unknowns, no reset/refund/restored old-cap compliance. Hash
-consumed inputs once in metered batches; prospectively record commands/budgets.
+Latest NEW30CPU/60wall package:0.07displayedCPU/0.09wall, retainedcharge0.09CPU;
+one stdlib process/nochildren/native, observedselfpeak23,658,496bytes. Closed
+displayed process sums19811.22CPU/20406.22elapsed-sum, retainedtracking19811.46CPU.
+Not exact sessionCPU/continuouselapsed/instantaneouscontainment. Priorchildrows
+overlap ownermeters; no doublecount. Separate legacyconditionalguard2546.091499549272;
+actual oldreviewCPU UNKNOWN. Preserve charges/failures/unknowns, no reset/refund/
+restoredoldcompliance. Hash consumed inputs once in metered batches; freeze new
+commands/budgets prospectively. Routine practical budgets need no tiny asks.
 
-Original Google Doc capacity-cut section verified[256116,259200),all8 images;
-capacity_cut_diagnostic/GOOGLE_DOC_APPEND.json. No duplicate earlier sections or
-preparation-only entries. Back up milestones to origin/codex/ml-prediction-20261017
-with explicit author AND committer Nathan Cho <nathan.cho2013@gmail.com>, never
-rewrite history. Leave exact agents/worker/account/next step. Sealed DEV/TEST/A6/
-B3/confirmation/GIRO CLOSED; no cluster access/monitoring/jobs, leave Unicorn to
-v2g. No merge/submission/private-data publication/reset credits. Keep unrelated
-schedules paused. Notify substantive findings/important failures/major decisions/
-review-ready artifacts; routine preparation and healthy running quiet.
+Original Google Doc all-route-cut section verified[259200,262470),all8images
+retained; all_mode_capacity/GOOGLE_DOC_APPEND.json. Do not duplicate earlier
+25October/sixOctober1 sections or append preparation. Back up meaningful milestones
+to origin/codex/ml-prediction-20261017 with explicit AUTHOR AND COMMITTER Nathan Cho
+<nathan.cho2013@gmail.com>, never rewrite history. No merge/submission/private-data
+publication/resetcredits. Leave concise exact agents/workers/account/nextstep.
+Notify substantive findings/important failures/major decisions/review-ready
+artifacts; routine preparation and healthy running quiet.
