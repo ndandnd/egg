@@ -1,0 +1,40 @@
+{
+  "policy": "adjacent-synthetic-capacity-bridge-v1",
+  "mode": "DRAFT",
+  "review_disposition": "PENDING",
+  "workdir": "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017",
+  "fixture": "adjacent-six-trip-v1",
+  "arms": ["fixed_duty", "full"],
+  "source_revision": null,
+  "source_freeze_assumption": "parent-approved-frozen-commit",
+  "source_sha256": null,
+  "sibling_source_root": "/Users/nadan/Documents/projects/demandresponse/.codex-work/capacity-packed-20261001",
+  "sibling_source_revision": "3a0ab6a8ab50e4af7d5a7be7688d5ffa1fbbf78c",
+  "sibling_freeze_assumption": "registered-worktree-unchanged-from-named-revision",
+  "source_closure": {"roots": ["run_capacity_terminal_cg"], "sibling_python_paths": null},
+  "command": null,
+  "prospective_command": "/usr/bin/time -p -o research-20261026/adjacent_bridge_qualification/process-time.txt .venv-local/bin/python -B research-20261026/adjacent_bridge_qualification/run.py > research-20261026/adjacent_bridge_qualification/stdout.txt 2> research-20261026/adjacent_bridge_qualification/stderr.txt",
+  "environment": {
+    "OMP_NUM_THREADS": "1", "OPENBLAS_NUM_THREADS": "1", "MKL_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1", "NUMEXPR_NUM_THREADS": "1", "BLIS_NUM_THREADS": "1",
+    "SLURM_CPUS_PER_TASK": "1"
+  },
+  "start_fee": 0,
+  "clean_argv": ["--start-fee", "0"],
+  "budgets": {
+    "total_cpu_s": 900, "total_wall_s": 1800, "dispatch_cpu_s": 690, "closure_cpu_s": 210,
+    "preflight_cpu_s": 60, "preparation_cpu_s": 30, "preparation_wall_s": 60,
+    "finalization_cpu_s": 60, "finalization_wall_s": 90,
+    "worker_hard_cpu_s": 240, "worker_endpoint_s": 240, "cleanup_s": 3,
+    "cg_seconds": 60, "mip_seconds": 90
+  },
+  "preparation_accounting": {"external_accepted": false, "charged_cpu_s": null, "elapsed_s": null},
+  "tracking_prefix": {
+    "display_cpu_s": 19926.33, "elapsed_sum_s": 20524.17, "retained_cpu_s": 19926.74,
+    "scope": "Historical numerical prefix before this new package; no overlapping owner child CPU added twice"
+  },
+  "numerical_resource_prefix": {
+    "display_cpu_s": 19926.33, "elapsed_sum_s": 20524.17, "retained_cpu_s": 19926.74,
+    "legacy_review_guard_s": 2546.091499549272, "legacy_actual_cpu_s": null
+  }
+}
