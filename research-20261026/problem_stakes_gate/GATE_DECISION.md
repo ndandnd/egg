@@ -1,5 +1,13 @@
 # Decision: current learning claim does not pass the stakes gate
 
+> **Scope correction, 26 October 2026:** the global missing-operational-model
+> premise and disruption-only redirect are withdrawn. EVSP-DR supplies modeled
+> service/fleet/charging constraints and a documented Partille benchmark context;
+> EGG's original market/regime modules already separate strategic payment from
+> system cost. See `../EVSPDR_CONTEXT_CORRECTION.md`. The recent pilots' local
+> objectives, measured effects, uncertainty and frozen ML continuation failures
+> remain intact. Do not read this historical memo as a project-wide no-go.
+
 26 October 2026. Parent integration of the closed compact evidence and narrow
 source analysis. No experiment, model, data access or manuscript is launched.
 

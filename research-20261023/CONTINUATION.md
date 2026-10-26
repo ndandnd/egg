@@ -1,4 +1,4 @@
-# Current handoff — conditional redirect stopped; no active numerical work
+# Current handoff — EVSP-DR context corrected; model correspondence is next
 
 Worktree /Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017, branch
 codex/ml-prediction-20261017. Read this first, then current compact receipts and
@@ -7,7 +7,47 @@ never duplicate an attempt. Use bounded GPT-6.1 Sol agents with short handoffs;
 parent manages scientific decisions/integration. Routine resource authority
 exists; no human budget answer is pending.
 
-## Prerequisite-design closure — do not repeat
+## Human correction supersedes the blanket stop
+
+26 October 2026: the human correctly pointed out that EVSP-DR already models
+fleet/service commitments and charging restrictions. Read
+research-20261026/EVSPDR_CONTEXT_CORRECTION.md first. Source/context inspection
+confirmed mandatory trip coverage, fixed-duty sequence commitments, fleet caps
+and fleet-first selection, SOC/reserve, charging windows, station-specific
+power (including Partille PARX60kW), and shared plug limits. Adjacent registered
+source: /Users/nadan/Documents/projects/demandresponse/.codex-work/capacity-packed-20261001.
+EGG's README/HANDOFF already identified this oracle/Swedish benchmark foundation.
+The prior inference from missing recent notes to missing project-wide operating
+model was wrong. A newly named legal operator/contract is not a universal
+prerequisite to research on a documented benchmark. Calibration/assumptions must
+still be stated, including inferred plug configurations and historical physics.
+
+EGG market.py/regimes.py ALSO already define separate posted-price, strategic
+fleet-payment and system-cost objectives with background load U. The recent
+native-pilot system-cost interpretation is valid locally; it does not establish
+absence of a price-maker model throughout EGG. Withdraw that global stopping
+rationale and the forced disruption-only redirect. Frozen negative ML results
+remain unchanged for their tested scope; no automatic model promotion follows.
+
+Next executable work is one concrete source/interface correspondence between
+EVSP-DR and EGG: service partition/coverage, fleet cap/exactN/fixed duties,
+SOC/reserve/terminal energy, station power/plugs/grid caps, charge windows and
+transfers, time/load/price units and economic objective. Identify deliberate
+abstractions versus omissions relevant to the intended EGG question. Use adjacent
+oracles as interfaces, without copying/editing sibling code or launching its
+jobs. Then prepare one bounded model-consistent comparison; no old retry/training
+sweep/sealed-data opening is authorized by this source inspection. Exact future
+inputs/sources/commands/resources must be prospectively fixed as usual. No new
+blanket approval gates or repeated source audits. Human routine budget authority
+persists; no budget answer is pending.
+
+All source-check agents complete, no numerical workers. No new numerical spend;
+accounting and historical outcomes below unchanged. Hourly research follow-up
+has been restored as ACTIVE automation advance-egg-local-prediction-research,
+focused on this correspondence under the standing instruction to continue useful
+research. Unrelated paused schedules untouched.
+
+## Superseded prerequisite-design closure — retained history, do not enforce
 
 26 October 2026 07:07 UTC heartbeat completed the sole bounded sufficiency check
 for the proposed operational evidence admission. Parent and approved50_runners

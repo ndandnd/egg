@@ -1,5 +1,13 @@
 # Closed gate — conditional redirect stopped at evidence prerequisites
 
+> **SUPERSEDED by the human's 26 October EVSP-DR correction.** The missing-anchor
+> stop below was based on an unjustifiably narrow context. EVSP-DR already models
+> service/fleet commitments and charging restrictions; EGG already identifies it
+> as the adjacent oracle and has separate strategic/system economic objectives.
+> Read `../EVSPDR_CONTEXT_CORRECTION.md` and the current continuation. Preserve
+> the local experimental findings, but do not enforce the blanket stop or forced
+> disruption-only redirect. No historical numerical result is changed.
+
 26 October 2026, 07:07 UTC heartbeat. The one bounded prerequisite-design
 sufficiency check is COMPLETE. Parent and approved50_runners used only the
 current continuation and this package's admitted notes; no new source was fetched.

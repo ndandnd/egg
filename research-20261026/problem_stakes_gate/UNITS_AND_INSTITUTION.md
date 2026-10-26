@@ -1,5 +1,12 @@
 # Units and institutional objective — source-only gate
 
+> **Scope correction, 26 October 2026:** the implemented objective discussed
+> here is the recent native-pilot path. EGG also has `AffineMarket` and separate
+> strategic/system solve paths in `src/egglab/market.py` and `regimes.py`, including
+> background load. The period-energy dimensional analysis remains valid; a
+> project-wide absence of a price-maker model does not follow. See
+> `../EVSPDR_CONTEXT_CORRECTION.md` for the source-backed correction.
+
 The implemented objective is **integrated supply/system cost plus intrinsic fleet operations**, in synthetic generator cost units. It is not established to be a fleet's electricity payment under a uniform clearing-price market. The source gives coherent dimensional conventions, but neither monetary calibration nor an observed market institution. This note uses only the current handoff/decision and narrow source definitions; no rows, plans, receipts, metadata values, model assets, replay or computation were accessed. No current coefficients are changed and no experiment follows automatically.
 
 ## What the objective actually values
