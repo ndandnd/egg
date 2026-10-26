@@ -1,4 +1,57 @@
-# Current handoff — nonlinear bank comparison CLOSED, no delivered reassignment gain
+# Current handoff — prospective grouped pricing workload STATIC design complete
+
+NEW research-20261026/pricing_workload_design is COMPLETE. Read README.md,
+STUDY_DESIGN.md, SYNTHETIC_SPEC.md, TELEMETRY_AND_CONTROLS.md, REVIEW.md and
+HANDOFF.md as needed. One focused review passed after ratio/strict-delivery/
+pipeline-latency clarifications. All bounded agents completed, no numerical
+worker. No data/rows/plans/metadata values, imports, hashes, generation, tests,
+native work or new measurements occurred. Do not recreate the design/reviews.
+
+Selected future workload:61001–61004, nested12/24 trips (four duties,3/6waves),
+source-defined180-minute waves with45-minute40kWh services and common-wave
+jitter0/5/10; unchanged60/120kW,oneplug,B80/reserve10/SOC10/block30, horizon1560,
+fleetcap4 and terminal160. Four simultaneous trips witness minimumfleet4, not
+charging feasibility. Canonical aliases grouped before outcomes; no replacements.
+Flat and source_shape quotes, independent fixed/full discovery.16 sequences
+each paid A0flat acquisition + F1fresh target + C1own-bank target =48 states.
+No constructive guaranteed-feasible reference prerequisite: A0 may fail, then
+F1cold remains eligible and C1missing is retained. Never share a full/fixed union.
+
+Nonuniformpower rejects source warm-CG seeds. Preserve physics and use retained
+finite-bank selection C1 with actual source target revaluation. Native cache
+terminal grid160/realized0 inactive matches grid-native scope; independent
+physical endpoint requires bothgrid/realized160 for all arms. The valid-column
+overlap witness pluscap fixesN4 and operationsconstant, aligning sourcefleetfirst
+and cachecombinedcost. No new coupled continuous or nonlinear price oracle.
+
+Prospective primaryfull and secondaryfixed-duty screens are distinct. Each has
+8targetF1cells, groupmedians pricingwall>=5s andshare>=25% in>=3/4groups. Primary
+value must exceed BOTH owncache and independentfixedF1; secondary onlyowncache.
+Each requires positive>=3/4groupmedians and full8 mean PAIRED ratio>1%, normalized
+by its owncommonA0 targetGRIDelectricity (primary usesfullA0 forbothcontrols).
+All16A0valid/all16strictF1newnativephysical/all16physicalnativeOPTIMALC1 plus
+completeaccounting/fourgroupclusters required; fallback-only is not strict.
+Missing/failure makesreadinessinconclusive. Secondary cannotrescueprimary.
+Pass justifies separate target/provenance audit, not fit; failure stops that
+scope without searching for favorable scarcity/scale. No significance or moneyclaim.
+
+NEXT minimal SOURCE-ONLY implementation in NEW pricing_workload_pilot using
+existing actual-oracle/cache/ownership APIs; constructor+thin workers/owner only.
+One focused affected-delta review, then exact generated-input/source/cohort/order/
+parameter/command/funding manifest must be frozen before any generation or
+numerical work. No code/runtime qualification or launch exists yet. Proposed
+NEW7200CPU/10800wall,dispatch6600/closure600;48workers120CPU180wall; one native
+thread/observed5GiB. SourceCG nominal caps are not whole-process clocks. No new
+monitor, clonedsolver, private inputs, broadquery/label/architecture sweep.
+
+No numerical spend: displayed19937.16CPU/20541.00elapsed-sum,retained19937.77CPU.
+Separate legacyguard2546.091499549272/oldactualreviewCPUUNKNOWN remains; not exact
+sessionCPU/continuous elapsed/instantaneous containment. Prior preparation/child
+charges already overlapowner. No reset/refund. GoogleDoc latestscience
+[276717,280825),all8images; no preparationappend. Preserve all closedstudies,
+oldwarmno-go scopes, read-onlysibling, protectedbanks/clusterclosed.
+
+## Previous checkpoint — nonlinear bank comparison CLOSED, no delivered reassignment gain
 
 NEW research-20261026/adjacent_nonlinear_reuse/attempt01 CLOSED exit0. Source
 9321c6dd8e99ca84bdd2ef190069f16bb2c0a510 / frozen control afe34b6a. Managed owner
