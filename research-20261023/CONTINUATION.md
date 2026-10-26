@@ -1,4 +1,4 @@
-# Current handoff — stronger classical economic pilot CLOSED
+# Current handoff — problem-stakes gate COMPLETE, no numerical launch
 
 Worktree /Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017, branch
 codex/ml-prediction-20261017. Read this first, then current compact receipts and
@@ -6,6 +6,43 @@ only needed sources/protocols. Check actual agents/owned workers before acting;
 never duplicate an attempt. Use bounded GPT-6.1 Sol agents with short handoffs;
 parent manages scientific decisions/integration. Routine resource authority
 exists; no human budget answer is pending.
+
+## Latest static scientific decision
+
+research-20261026/problem_stakes_gate is COMPLETE after parent integration and one
+focused review. Read GATE_DECISION.md, UNITS_AND_INSTITUTION.md, DECISION_TARGET.md,
+REVIEW.md and HANDOFF.md. Do not recreate them or repeat the source review.
+No numerical worker exists; all bounded agents completed: approved50_bindings
+(units/institution), approved50_runners (target), responsive_monitor_tests (review).
+
+NO-GO for expansion of the current learned economic-pruning/price-maker claim.
+Stakes and material residual value after competent conventional optimization
+remain unestablished. This is not zero-effect/equivalence or a universal no-value
+theorem. Single conditional redirect: conventional service-continuity escalation
+when externally specified charging access/capacity changes. Existing classical
+cuts/recourse do not establish novelty or a need for prediction. No new numerical
+experiment, labels, fit or larger cohort is authorized by the gate.
+
+Source clarifies L=period grid kWh, a=cost/kWh,b=cost/kWh². For physical marginal
+cost alpha+beta*average_power over Delta_h, b=beta/Delta_h; increasing slots at
+unchanged b can change economics. Current integrated system procurement cost is
+not atomic uniform-price payment. Generator coefficients have no validated money
+or operating horizon; exactN and zero movement-time cost make operations constant
+in the pilot. Preserve old results/field names without retrospective reinterpretation.
+
+Next is one prospective prerequisite evidence-admission design for an operating
+anchor: decision maker, actual service/fleet commitments and independently
+justified resource changes. Specify authoritative source/version, exact fields,
+outcome-independent choice and the decision the evidence can support before any
+new access. This is not another mechanism/literature/model survey or permission
+to fetch data. No new data/numerical command until a separate exact scope is
+reviewed/frozen. If credible evidence cannot be specified, stop/redirect rather
+than inventing more busywork. Do not retune scarcity/curvature, repeat favorable
+10017/10006 or hard10021/old45 cases, or invent missed-service/money penalties.
+
+No new numerical spend in this static package; closed sums/guard below unchanged.
+No Google Doc preparation entry; latest verified scientific range stays
+[262470,267061),8images. All earlier pilot/no-go/resource evidence below remains.
 
 ## Latest completed result
 
@@ -53,15 +90,15 @@ and full operational denominators preserved. Both worker anchors/startup/build/
 copy/search/replay/publication/parent observation are paid; no single60s or
 cold/equal-budget speedup claim. Source/input/parameter/manifests immutable.
 
-## Next source-only scientific gate
+## Completed gate's scientific background (do not repeat)
 
 Keep further ML fitting and scale expansion stopped. The present cost story has
 not established an important learning increment. This is not proof that every
 route benefit is absent: one group improved and one remains unresolved.
-NEXT_RESEARCH_DECISION.md selects the next bounded STATIC task, not another
-experiment: a short source-only problem-stakes and conditional-target gate memo
-using closed compact evidence and already defined source models. Do not recreate
-prior load-set/identity/copy notes or survey more literature/model families.
+NEXT_RESEARCH_DECISION.md selected the bounded STATIC task now completed above,
+not another experiment. Its problem-stakes/target memo used compact evidence and
+defined source models. Do not recreate it, prior load-set/identity/copy notes or
+survey more literature/model families.
 
 Resolve concrete operating decision/material stakes, consistent integrated
 system-cost versus atomic payment institution, and units of time/kW/kWh/a/b/
