@@ -1,4 +1,52 @@
-# Current handoff — adjacent oracle boundary COMPLETE; synthetic qualification next
+# Current handoff — actual adjacent synthetic comparison CLOSED once
+
+The human requested actual EVSP-DR execution and a scoped neural/iteration
+assessment. research-20261026/adjacent_bridge_qualification is COMPLETE from
+sourcecaf047b58047262ef24e3de069b810be0775b778/frozen control4c20be73.
+Managed owner99190 exited0; source preparation, owner and inline READOUT completed
+ONCE. No numerical worker remains; all bounded agents complete. Read RESULTS.md,
+INTERPRETATION_REVIEW.md, FINAL_RESOURCE_RECEIPT.json, NEXT_NEURAL_DECISION.md and
+RUNNING_HANDOFF.md. Do not poll old sessions, resubmit, repeat preflight/hash/
+fixture/replay/native/readout/export, tune this fixture or edit frozen sources.
+
+One new six-trip synthetic base/one posted quote/two arms invoked the actual
+registered multistation capacity oracle by reference. Both timely physical
+two-bus endpoints passed coverage/SOC/reserve/aggregate-terminal/shared-plug
+admission; no failure/missing/unresolved child. Fixed duty/full grid charging
+costs39/39; continuous realized costs29.5/29.0 and charge212/208kWh. Full changed
+duties. Grid LP/finite-pool MIP claims do not certify continuous cost or unrestricted
+integer optimality. Pricing .047649/.086619 seconds establishes no useful neural
+acceleration bottleneck. No nonlinear feedback or learned policy was tested.
+
+The separately written ITERATION_AND_NEURAL_DIRECTION.md gives an analytic
+two-cycle for naive full replacement at current prices; it is not an observed
+cycle in this run. Neural prediction is reopened only as a distinct conditional
+valuable-column/expansion-priority hypothesis, with correct price/dual inputs,
+classical correction and physical admission. Old warm learning failures remain
+unchanged; there is no universal neural no-go and no new fit authority.
+
+NEXT: narrow STATIC nonlinear-interface/conditional-target design using existing
+EGG objective/tangent APIs and the callable adjacent oracle. Distinguish system
+gradient a+bU+bL from strategic marginal outlay a+bU+2bL; preserve station resources,
+retained alternatives, integer recovery and grid/continuous certificate scopes.
+Resolve selection objective and conventional physical-cost tie-breaking/charging
+completion before ambiguous teacher labels. Subsequently a separately frozen,
+grouped workload must show a costly decision and valuable-alternative support
+before learning. No new source/data/cohort/numerical/fit manifest exists. Do not
+recreate the completed correspondence/boundary/iteration notes or survey models.
+
+Package2.62 displayedCPU/4.83elapsed-sum, retained2.68CPU within900/1800;
+observed worker peak118767616bytes, native thread1. Global closed displayed
+19928.95CPU/20529.00elapsed-sum, retained19929.42CPU. Child rows overlap owner and
+preparation adopted once. Separate legacyguard2546.091499549272/actual oldreviewCPU
+UNKNOWN remains; not exact sessionCPU/continuous elapsed/instantaneous containment.
+Google Doc latest verified science [271755,276717), all8 images and prior text
+preserved; see GOOGLE_DOC_APPEND.json. No duplicate append.
+
+Everything below is preserved historical context; old NEXT/launch/accounting
+directions are superseded by this current handoff where they conflict.
+
+## Previously completed static adjacent boundary
 
 26 October latest: research-20261026/adjacent_oracle_boundary is a completed
 STATIC package. Read README.md, API_CONTRACT.md, FIXED_DUTY_COMPOSITION.md,
