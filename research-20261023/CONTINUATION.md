@@ -1,4 +1,4 @@
-# Current handoff — one native pilot FROZEN; command not yet executed
+# Current handoff — one native pilot owner RUNNING at last check
 
 Worktree /Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017, branch
 codex/ml-prediction-20261017. Read this first, then only current compact receipts
@@ -22,16 +22,21 @@ ONE conventional economic-recourse pilot. Read NATIVE_LAUNCH_REVIEW.md (PASS),
 NATIVE_INPUT_AUTHORITY.md and NATIVE_PREPARATION_PROTOCOL.md. The new native
 preparation CLOSED once/exit0, no original input/native access. Exact source/cohort
 pins and external preparation cost are now accepted; main control is FROZEN/PASS.
-No native worker/attempt01 exists yet;
-all bounded agents complete after narrow final review. Actual native compatibility
+ONE native owner was launched after FROZEN backup b44d08eb. Managed exec session
+72484 is RUNNING at last check; read economic_recourse_pilot/RUNNING_HANDOFF.md
+and consult actual managed session before any action. Never resubmit/guess PIDs.
+All bounded agents complete after narrow final review. Actual native compatibility
 is unqualified. Native/source/data gates are NOT inferred from selection PASS.
 
 Do not repeat source prep/selector/finalizer/hash audits. Native source prep read13
 literal code/protocol files and new derived cohort/accounting artifacts only;
 external .03CPU/.04elapsed, retained.05CPU, within5/15. Complete accepted prelaunch
-carry .17CPU/.17elapsed is inside25/75/preflight120/total2400. Next execute the
-exact FROZEN main owner command ONCE after its committed/pushed control; fresh
-attempt01. Sources stay frozen during workers. No automatic retry or old matrix.
+carry .17CPU/.17elapsed is inside25/75/preflight120/total2400. The exact FROZEN
+owner command has now run ONCE in fresh attempt01. Do not repeat. Sources remain
+frozen during workers; no extra imports/tests/hashes/native/inference/data work.
+After close, read complete compact master/external meter and diagnose any fatal
+stop; no automatic retry, old matrix or unapproved separate readout. All16states
+and costs persist. Routine healthy running is quiet.
 
 The source/authority/adoption review found and fixed a gate-order issue BEFORE
 execution: prep control/root/command/PASS checks precede derived-artifact reads.
@@ -122,7 +127,8 @@ do not fill the gap with more labels/models.
 
 Metadata package measured.06CPU/.13elapsed-sum, retained.12CPU within20/60. Closed
 displayed sums after native source prep19811.31CPU/20406.39elapsed-sum, retained
-tracking19811.63CPU. Owner cost not yet spent. Not exact sessionCPU/continuous elapsed/
+tracking19811.63CPU BEFORE owner; current campaign cost is in progress, not yet
+added. Not exact sessionCPU/continuous elapsed/
 instantaneous containment; old child rows overlap owner meters. Separate legacy
 conditional guard2546.091499549272, actual old reviewCPU UNKNOWN. Preserve every
 charge/failure/unknown; no reset/refund/restored old compliance. Hash buffers once
