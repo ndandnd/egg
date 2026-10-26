@@ -1,0 +1,51 @@
+{
+  "policy": "literal-synthetic-duty-market-seam-owner-v1",
+  "mode": "DRAFT",
+  "review_disposition": "PENDING",
+  "workdir": "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017",
+  "fixture": "duty-market-seam-v1",
+  "context_ids": ["b0_all", "posted", "system", "strategic"],
+  "phases": ["target_qp", "fixed_duty", "full"],
+  "dependent_dispatch_order": {
+    "b0_all": ["fixed_duty", "full"],
+    "posted": ["full", "fixed_duty"],
+    "system": ["fixed_duty", "full"],
+    "strategic": ["full", "fixed_duty"]
+  },
+  "source_sha256": null,
+  "source_revision": null,
+  "source_freeze_assumption": "parent-approved-frozen-commit",
+  "command": null,
+  "tracking_prefix": null,
+  "numerical_resource_prefix": null,
+  "environment": null,
+  "mixed_integer_parameters": null,
+  "preparation_accounting": {
+    "external_accepted": null,
+    "charged_cpu_s": null,
+    "elapsed_s": null
+  },
+  "budgets": {
+    "total_cpu_s": 1500,
+    "total_wall_s": 2400,
+    "dispatch_cpu_s": 1320,
+    "closure_cpu_s": 180,
+    "preflight_cpu_s": 60,
+    "finalization_cpu_s": 60,
+    "finalization_wall_s": 90,
+    "preparation_cpu_s": 10,
+    "preparation_wall_s": 30,
+    "worker_hard_cpu_s": 90,
+    "native_cutoff_s": 52,
+    "endpoint_s": 60,
+    "cleanup_s": 3
+  },
+  "planned_base_units": 1,
+  "planned_contexts": 4,
+  "planned_workers": 12,
+  "input_authority": "NEW literal adapter fixture and economic arrays only; no old rows, plans, metadata or GIRO",
+  "no_pooled_cross_institution_mean": true,
+  "no_execution_authority": true,
+  "no_automatic_retry": true,
+  "no_ML_fit_or_promotion": true
+}

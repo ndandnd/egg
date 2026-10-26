@@ -1,4 +1,4 @@
-# Current handoff — EVSP-DR context corrected; model correspondence is next
+# Current handoff — correspondence complete; new duty/market seam source reviewed
 
 Worktree /Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017, branch
 codex/ml-prediction-20261017. Read this first, then current compact receipts and
@@ -6,6 +6,28 @@ only needed sources/protocols. Check actual agents/owned workers before acting;
 never duplicate an attempt. Use bounded GPT-6.1 Sol agents with short handoffs;
 parent manages scientific decisions/integration. Routine resource authority
 exists; no human budget answer is pending.
+
+## 26 October correspondence and prospective seam
+
+Read research-20261026/evspdr_correspondence/README.md and HANDOFF.md. Concrete
+physical/economic/interface correspondence is complete, with a focused scientific
+PASS. Native EGG is a one-depot/one-connector full-recharge abstraction; the inspected
+local oracle path is not a working adapter to the registered multistation EVSP-DR
+solver. Fixed movement paths are stricter than fixed ordered service duties.
+Separate posted/strategic/system economic objectives are already defined and can
+be explicitly mapped to native coefficients without hiding original a,b,U.
+
+NEW duty_market_seam static implementation and INTEGRATION_REVIEW.md passed.
+One literal eight-trip base, four economic contexts including b=0 collapse,
+twelve planned stages (fixed-path target QP, fixed-duty MIQP, full exactN MIQP).
+No original TRAIN/GIRO/plans/models or old experimental retry. No cross-institution
+mean, population inference or ML promotion; all institutions and failures separate.
+New resource package1500CPU/2400wall, dispatch1320/closure180; source preparation
+10CPU/30wall inside preflight60. Next exact action is commit, metered source pin
+preparation once, external reconciliation, then frozen source-bound main command
+if admitted. DRAFT/PENDING still denies fixture generation/dispatch. All three
+bounded agents complete, no numerical worker at this checkpoint. Accounting below
+is unchanged until new preparation/owner external receipts close.
 
 ## Human correction supersedes the blanket stop
 
