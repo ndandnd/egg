@@ -1,52 +1,42 @@
-# STATIC implementation — DRAFT, no launch
+# Metadata CLOSED; one prospective native pilot remains gated
 
-The new direct-MIQP helper, target-QP/route worker, thin owner, metadata-only
-selector and DRAFT protocols/manifests are saved. Read NATIVE_REVIEW.md and
-INTEGRATION_REVIEW.md, then only needed sources/notes. No metadata/input values,
-imports, compile, tests, hashes, numerical jobs or native calls ran. No selector
-or numerical attempt namespace was created. No worker is active; bounded agents
-are complete after the final narrow review addendum. Check actual state first.
+Read research-20261023/CONTINUATION.md first, then only current compact evidence.
+The metadata source-pin, selection01 and finalization each CLOSED once/exit0.
+Source/control backups e92d4dc8/e509d9a4; no rerun, export or FIT metadata/hash
+read. Fixed order10007/20,10013/20,10017/28,10021/28, no replacements. Read
+SELECTION_RESULTS.md and FINAL_SELECTION_RESOURCE_RECEIPT.json. Stored original
+profiles/plans and native compatibility are still unverified; no original rows,
+plans, project imports, replay or solver calls have occurred.
 
-The owner/selector gates remain DRAFT/PENDING. No cohort identities, original-row
-allowlists, source pins, commands, environment or tracking-prefix adoption are
-frozen. The selector now requires a concrete literal-path/full tracked-revision
-input_version BEFORE reading its single metadata receipt; optional SHA does not
-replace version authority. It uses only80 FIT group/base identities and the
-source-derived20/28 profile formula, excluding the full previous8 pilot IDs.
-Actual stored profiles must later match without replacement. No target metric,
-source availability or favorable outcome is a selection criterion.
+Parent separately recorded NATIVE_ADOPTION_DECISION.md, exact field authority,
+command and resources. NATIVE_LAUNCH_REVIEW.md passed after the narrow prep gate
+ordering fix. Current main state is NATIVE_PREPARATION_FROZEN/PASS, still denied
+by owner/worker. Source/cohort pins and accepted actual native-prep carry remain
+pending. All bounded agents complete; no numerical worker/native attempt exists.
 
-Native API: one free-binary full-graph exact-N convex MIQP, fixed prospective
-parameters, one partial binary hint (processing UNKNOWN), unchanged extraction/
-replay and protected U. Supported-status timely physical MIQP delivery can count
-as strict method success without native OPTIMAL; target-QP common qualification
-still needs fresh C/native OPTIMAL. Common plan is retained U, possibly old B,
-not an unreturned C. Same-topology beyond-agreement improvement is a qualification
-discrepancy; physical best U remains operational and all8-context means expose
-discrepancy flags rather than dropping points. No optimality/certification claim.
+Next frozen command is prepare_native.py once, native-preparation01,5CPU15wall
+inside complete prelaunch25CPU75wall/preflight120/total2400. It reads only literal
+source/control and new closed selection/accounting artifacts, never original
+tables/plans or old FIT metadata. SOURCE_PINNED still denies main. Parent must
+externally accept its receipt/meter, adopt actual carry once, commit/push exact
+FROZEN/PASS control, then separately execute the one already admitted owner
+command. Sources stay frozen while workers run. No automatic launch/retry.
 
-Next executable step is prospective METADATA-ONLY selector admission: resolve
-any remaining narrow static gate issues, freeze exact existing receipt version,
-selector/protocol/source pins/command and10CPU30wall allowance inside proposed
-preflight120/total2400, then execute selection01 once if coherent. Use existing
-metered single-process source/preflight batch; no unmetered/duplicate hash audit.
-Review/reconcile its receipt before binding actual IDs and any original-data/
-native manifest. Main LAUNCH remains DRAFT until that later freeze. Do not run a
-solver, import/compile/test the native drafts, or open rows/plans merely because
-this implementation exists. No automatic retry or alternative method.
+The native pilot is4groups/8contexts/16stages, paid target-QP→one full-graph exact-N
+MIQP, original physics/resources. All startup/copy/search/replay/publication paid;
+two worker anchors and unbroken full context clock, no single60s claim. Preserve
+fresh-C prerequisite versus retained U (possibly B), native values/startUNKNOWN,
+strict/operational/route-change/discrepancy flags. Time-limit physical MIQP can
+qualify without OPTIMAL; target QP still needsOPTIMAL. Native API exceptions are
+fatal bootstrap stops; no extra QP/method menu. No training or promotion follows.
 
-Proposed pilot2400CPU/3600wall, dispatch2040/closure360,16 workers each90CPU,
-one native thread/observed RSS<=5GiB; parent-before-Popen52native/60admission/
-3cleanup per worker. Two consecutive paid anchors and unbroken context latency
-include common acquisition plus routing. Preflight/finalization inside total.
-No new numerical spend: displayed sums19811.22CPU/20406.22elapsed-sum, retained
-tracking19811.46CPU; separate legacy guard2546.091499549272/actual old review CPU
-UNKNOWN unchanged. These are not exact session CPU/continuous elapsed. Keep all
-old failures/charges, no resets/refunds, no doublecount of overlapping child rows.
+Closed metadata.06 displayedCPU/.13elapsed-sum, retained.12CPU, within20/60.
+Current displayed sums19811.28CPU/20406.35elapsed-sum, retained19811.58CPU. This
+already includes metadata; complete-preparation owner funding must not add it
+globally again. Native source-prep/owner cost not yet spent. Legacy conditional
+guard2546.091499549272 and UNKNOWN old actual reviewCPU unchanged. Process sums
+are not exact session CPU/continuous elapsed; prior child rows overlap owners.
 
-All previous studies, especially both learned-family no-go decisions and the two
-conditional fixed-N ideal exclusions, are immutable and not rerun. No training,
-manuscript, new resource/cap/fleet axis, cluster or sealed-data authority follows.
-There is no Google Doc entry for this preparation; latest verified section still
-ends262470 with eight images intact. Back up source milestones with explicit
-author and committer identity, never rewrite history or publish original data.
+Keep earlier both-family learning no-go and ideal fixed-N exclusions unchanged.
+No sealed data/cluster/fitting/manuscript/broader cohort authority. Google Doc
+latest verified section ends262470 with eight images; no preparation append.

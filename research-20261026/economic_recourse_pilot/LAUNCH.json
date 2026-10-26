@@ -1,15 +1,92 @@
 {
   "policy": "paid-target-QP-common-incumbent-direct-MIQP-pilot-v1",
-  "mode": "DRAFT",
-  "review_disposition": "PENDING",
+  "mode": "NATIVE_PREPARATION_FROZEN",
+  "review_disposition": "PASS",
   "workdir": "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017",
-  "command": null,
-  "environment": null,
-  "tracking_prefix": null,
+  "command": "/usr/bin/time -p -o research-20261026/economic_recourse_pilot/process-time.txt .venv-local/bin/python -B research-20261026/economic_recourse_pilot/run.py > research-20261026/economic_recourse_pilot/stdout.txt 2> research-20261026/economic_recourse_pilot/stderr.txt",
+  "environment": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1"
+  },
+  "tracking_prefix": {
+    "pilot_base_displayed_cpu_s": 19811.22,
+    "pilot_base_elapsed_sum_s": 20406.22,
+    "pilot_base_retained_tracking_cpu_s": 19811.46,
+    "current_displayed_cpu_s": 19811.28,
+    "current_elapsed_sum_s": 20406.35,
+    "current_retained_tracking_cpu_s": 19811.58,
+    "metadata_already_globally_carried_cpu_s": 0.12,
+    "metadata_already_globally_carried_elapsed_s": 0.13,
+    "native_source_preparation_external_acceptance": "PENDING",
+    "legacy_conditional_guard_s_separate": 2546.091499549272,
+    "historical_actual_review_cpu": "UNKNOWN",
+    "global_rule": "Add only new process charges to current prefix; complete prelaunch is adopted for internal funding without global doublecount"
+  },
   "source_sha256": null,
-  "cohort_admission": null,
-  "data_authority": null,
-  "mixed_integer_parameters": null,
+  "cohort_admission": {
+    "receipt_sha256": null,
+    "expected_groups": [
+      {
+        "group": "physical_v2_s10007",
+        "base_id": 10007,
+        "services": 20,
+        "profile_source": "source-derived declared assignment service projection; stored case must later match"
+      },
+      {
+        "group": "physical_v2_s10013",
+        "base_id": 10013,
+        "services": 20,
+        "profile_source": "source-derived declared assignment service projection; stored case must later match"
+      },
+      {
+        "group": "physical_v2_s10017",
+        "base_id": 10017,
+        "services": 28,
+        "profile_source": "source-derived declared assignment service projection; stored case must later match"
+      },
+      {
+        "group": "physical_v2_s10021",
+        "base_id": 10021,
+        "services": 28,
+        "profile_source": "source-derived declared assignment service projection; stored case must later match"
+      }
+    ],
+    "preparation_accounting": {
+      "external_accepted": null,
+      "charged_cpu_s": null,
+      "elapsed_s": null
+    }
+  },
+  "data_authority": {
+    "cases": {
+      "path": "/Users/nadan/Documents/ChatGPT/egg/claude-local/20260930-route-pool128-v3/cases.jsonl",
+      "sha256": "faf0428f79744a9e26fa04e80baec4734443e3cfe538e404d74f41f626a294d6",
+      "fields": ["base_group", "base_id", "split", "generator", "physical_profile", "case_identity", "case"]
+    },
+    "source_inputs": {
+      "path": "/Users/nadan/Documents/ChatGPT/egg/claude-local/20260930-route-pool128-v3/source_inputs.jsonl",
+      "sha256": "7c5fab4c648b27fda5e9ecc55cd418f0a066c8e46196bc31d5f9405e5a6409d5",
+      "fields": ["base_group", "base_id", "source", "case_identity", "market_kind", "market_identity", "source_plan_hash", "source_plan"]
+    }
+  },
+  "mixed_integer_parameters": {
+    "Threads": 1,
+    "Seed": 17,
+    "Method": 0,
+    "NodeMethod": 0,
+    "NonConvex": 0,
+    "MIPFocus": 0,
+    "FeasibilityTol": 1e-9,
+    "IntFeasTol": 1e-9,
+    "OptimalityTol": 1e-9,
+    "BarConvTol": 1e-10,
+    "MIPGap": 1e-9,
+    "MIPGapAbs": 1e-6
+  },
   "budgets": {
     "total_cpu_s": 2400,
     "total_wall_s": 3600,

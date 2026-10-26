@@ -1,10 +1,12 @@
-# DRAFT conventional economic-recourse pilot
+# Prospectively admitted conventional economic-recourse pilot
 
-PENDING review. No metadata, original row/plan, numerical input, project import,
-hash pass, test or solver work occurred during preparation. `LAUNCH.json` is
-DRAFT/PENDING with IDs, source/input pins, parameters, environment, command and
-tracking prefix unset. Both owner and worker must deny admitted work before a
-future FROZEN/PASS freeze. This is not a launch or a funding reservation.
+NATIVE_ADOPTION_DECISION.md separately selects one pilot after accepted metadata.
+Exact cohort/input scope, parameters, environment, command and initial prefix are
+declared; source/cohort pins and actual preparation adoption await the metered
+NATIVE_PREPARATION_PROTOCOL.md step. Owner/worker deny NATIVE_PREPARATION_FROZEN
+and SOURCE_PINNED until parent external acceptance and committed FROZEN/PASS main
+control. No original row/plan or native work occurred while preparing this
+authority. Static review does not qualify actual native compatibility.
 
 ## Question and cohort
 
@@ -14,16 +16,27 @@ fleet N and both unchanged target tariffs. Eight paired contexts have sixteen
 planned serial worker stages. No model/training,45-kW restriction, cap/fleet scan,
 old-cohort retry or cold substitution for missing target incumbents.
 
-The separately gated metadata-only selection is specified in
-`SELECTION_PROTOCOL.md`. Its sole input/projection and source-derived profile
-formula select first2 per profile after uniform full8pilot exclusion, without
-reading outcomes. Freeze resulting IDs/order and external selection resource
-adoption before original data. No replacement for a later missing source0 or
-failed target QP. The main launch must pin `selection01/receipt.json`, its exact
-groups, and externally accepted within-budget CPU/elapsed adoption. Actual IDs
-are not present in this draft.
+The separately gated metadata-only package closed once, all three processes
+exit0. Its fixed order is10007/20,10013/20,10017/28,10021/28, selected first2 per
+declared profile after uniform full8pilot exclusion. The prepared main cohort proof
+records exactly those groups; no replacement for later source0 or target-QP
+failure. Main must pin the closed `selection01/receipt.json`; its source/version
+and cohort proof remain separate from complete prelaunch cost adoption.
 
-Original authority remains UNFROZEN. The future main launch must name exactly
+`cohort_admission` has exactly `receipt_sha256`, `expected_groups`, and
+`preparation_accounting`. The latter's required scalar fields are
+`external_accepted: true`, `charged_cpu_s`, `elapsed_s`. They describe COMPLETE
+prelaunch preparation, capped at25CPU/75wall: closed metadata20/60 allowance plus
+prospective native source-freeze5/15, all inside preflight120/total2400. Actual
+metadata cost is0.06 displayed CPU/0.13 elapsed and0.12 retained CPU. Adopt0.12
+plus measured native-freeze retained charge once, and0.13 plus its elapsed once;
+do not fill totals until that freeze is externally accepted. Current global
+prefix19811.28 displayedCPU/20406.35 elapsed-sum/19811.58 retainedCPU already
+carries metadata0.12. Pilot-cap accounting includes that carry; a later global
+tracking update must not add the carried metadata or source-freeze charge again.
+
+Original numerical authority is fixed in NATIVE_INPUT_AUTHORITY.md and becomes
+active only at the separately committed FROZEN/PASS main launch. It names exactly
 the two TRAIN streams, byte pins and selected-row field allowlists. The owner
 supports one whole-stream hash/read per table,512-MiB total/16-MiB line cap,
 transient JSON decoding for top-level group/source routing, immediate noncohort
@@ -94,9 +107,9 @@ source parameter readbacks must be frozen before dispatch.
 ## Budget, failures and records
 
 NEW total2400 CPU/3600 wall; dispatch2040, closure360. Preflight120 CPU includes
-selection; finalization120 CPU/180 wall is inside total/closure. Before QP fund
+the complete preparation25/75 provision; finalization120 CPU/180 wall is inside total/closure. Before QP fund
 both90-CPU workers and their60+3 wall provisions plus final180; recheck before
-route. Account cumulative owner+waited children+once-adopted selection charge;
+route. Account cumulative owner+waited children+once-adopted complete preparation charge;
 unreaped child retains90 CPU reserve and stops onward. Task deltas are telemetry,
 not added again. Historical tracking/UNKNOWN review CPU remain separate, no reset.
 External meter must close publication/exit tails; receipt resource observations

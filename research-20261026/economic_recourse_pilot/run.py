@@ -153,25 +153,25 @@ def frozen_launch():
         worker_hard_cpu_s=90, native_cutoff_s=52, endpoint_s=60, cleanup_s=3):
         raise SystemExit('Frozen package budgets differ')
     cohort = launch['cohort_admission']
-    if (not isinstance(cohort, dict) or set(cohort) != {'receipt_sha256', 'expected_groups', 'selection_accounting'}
-            or not isinstance(cohort['selection_accounting'], dict)
-            or cohort['selection_accounting'].get('external_accepted') is not True
-            or not isinstance(cohort['selection_accounting'].get('charged_cpu_s'), (int, float))
-            or not isinstance(cohort['selection_accounting'].get('elapsed_s'), (int, float))
-            or not 0 <= cohort['selection_accounting']['charged_cpu_s'] <= 10
-            or not 0 <= cohort['selection_accounting']['elapsed_s'] <= 30
+    if (not isinstance(cohort, dict) or set(cohort) != {'receipt_sha256', 'expected_groups', 'preparation_accounting'}
+            or not isinstance(cohort['preparation_accounting'], dict)
+            or cohort['preparation_accounting'].get('external_accepted') is not True
+            or not isinstance(cohort['preparation_accounting'].get('charged_cpu_s'), (int, float))
+            or not isinstance(cohort['preparation_accounting'].get('elapsed_s'), (int, float))
+            or not 0 <= cohort['preparation_accounting']['charged_cpu_s'] <= 25
+            or not 0 <= cohort['preparation_accounting']['elapsed_s'] <= 75
             or launch['environment'] != {k: '1' for k in THREAD_ENV}):
-        raise SystemExit('Frozen selection accounting/thread environment is incomplete')
+        raise SystemExit('Frozen complete preparation accounting/thread environment is incomplete')
     return launch, raw
 
 
 def admit_cohort(launch, report, check):
     check(); admission = launch['cohort_admission']
-    if set(admission) != {'receipt_sha256', 'expected_groups', 'selection_accounting'}:
+    if set(admission) != {'receipt_sha256', 'expected_groups', 'preparation_accounting'}:
         raise ContractError('Cohort receipt/identities/accounting must be frozen together')
     raw = bind(HERE/'selection01/receipt.json', admission['receipt_sha256'], report)
     selected = json.loads(raw)
-    accounting = admission['selection_accounting']
+    accounting = admission['preparation_accounting']
     if (selected.get('policy') != 'first-two-per-declared-profile-exposed-FIT-cohort-v1'
             or selected.get('receipt_complete') is not True or selected.get('selection_passed') is not True
             or selected.get('admitted_FIT_identity_count') != 80
@@ -189,11 +189,11 @@ def admit_cohort(launch, report, check):
                 for g in groups)):
         raise ContractError('Frozen cohort canonical identities/profile counts differ')
     charge, elapsed = float(accounting['charged_cpu_s']), float(accounting['elapsed_s'])
-    if not 0 <= charge <= 10 or not 0 <= elapsed <= 30:
-        raise ContractError('Selection charge outside its within-campaign provision')
+    if not 0 <= charge <= 25 or not 0 <= elapsed <= 75:
+        raise ContractError('Complete prelaunch charge outside its within-campaign provision')
     report.update(groups=groups, contexts=tasks(groups), cohort_admission=admission,
-        selection_resources=accounting, selection_inherited_source_hashes=selected.get('input_sha256'),
-        selection_charge_adopted_once=True)
+        preparation_resources=accounting, selection_inherited_source_hashes=selected.get('input_sha256'),
+        cohort_metadata_version=selected.get('input_version'), preparation_charge_adopted_once=True)
     check()
     return groups
 
@@ -454,7 +454,7 @@ def main():
     report = dict(policy=POLICY, receipt_complete=False, passed=False, config_failure=False,
         failures=[], groups=pending, contexts=tasks(pending), input_sha256={str(HERE/'LAUNCH.json'): hashlib.sha256(gate_raw).hexdigest()},
         table_streams={}, accounting_complete=False, historical_tracking_prefix=launch['tracking_prefix'],
-        historical_scope='Separate closed prefix, not charged again to this NEW package; old review CPU UNKNOWN',
+        historical_scope='Global prefix already carries closed preparation components; package-cap adoption is not another global charge; old review CPU UNKNOWN',
         budgets=launch['budgets'], no_automatic_retry=True)
     stopped = None; unresolved = 0.; phase = 'preflight'; final_cpu0 = final_wall0 = None
 
@@ -469,8 +469,8 @@ def main():
     def check():
         if stopped is not None:
             raise TimeoutError('Owner stop remains latched')
-        selection = report.get('selection_resources', launch['cohort_admission']['selection_accounting'])
-        prior_cpu, prior_elapsed = float(selection['charged_cpu_s']), float(selection['elapsed_s'])
+        preparation = report.get('preparation_resources', launch['cohort_admission']['preparation_accounting'])
+        prior_cpu, prior_elapsed = float(preparation['charged_cpu_s']), float(preparation['elapsed_s'])
         if (threading.active_count() != 1 or rss_bytes() > 5*1024**3
                 or self_cpu()+child_cpu()+unresolved+prior_cpu > TOTAL_CPU
                 or time.monotonic()-WALL0+prior_elapsed > TOTAL_WALL):
@@ -480,7 +480,7 @@ def main():
             report['config_failure'] = True; raise ContractError('Preflight/finalization provision exceeded')
 
     def funded(workers=1):
-        prior = report['selection_resources']
+        prior = report['preparation_resources']
         return (self_cpu()+child_cpu()+unresolved+float(prior['charged_cpu_s'])+90.*workers <= DISPATCH_CPU
             and time.monotonic()-WALL0+float(prior['elapsed_s'])+63.*workers+180. <= TOTAL_WALL)
 
@@ -490,7 +490,7 @@ def main():
         resource.setrlimit(resource.RLIMIT_CPU, (120, 2400))
         for sig in (signal.SIGALRM, signal.SIGXCPU, signal.SIGTERM, signal.SIGINT):
             signal.signal(sig, stop)
-        prior_elapsed = float(launch['cohort_admission']['selection_accounting']['elapsed_s'])
+        prior_elapsed = float(launch['cohort_admission']['preparation_accounting']['elapsed_s'])
         signal.setitimer(signal.ITIMER_REAL, max(.001, TOTAL_WALL-prior_elapsed-60.-(time.monotonic()-WALL0)))
         originals, nr, nh = preflight(launch, report, check)
         save_new(output/'preflight.json', {k: report[k] for k in ('input_sha256', 'table_streams', 'groups', 'originals', 'preflight_admitted')})
@@ -543,7 +543,7 @@ def main():
         report['failures'].append(dict(stage=phase, type=type(exc).__name__, message=str(exc)))
     finally:
         phase = 'finalization'; final_cpu0 = self_cpu(); final_wall0 = time.monotonic()
-        prior = launch['cohort_admission']['selection_accounting']
+        prior = launch['cohort_admission']['preparation_accounting']
         signal.setitimer(signal.ITIMER_REAL, max(.001, min(180., TOTAL_WALL-float(prior['elapsed_s'])-(final_wall0-WALL0))))
         try:
             for context in report['contexts']:
@@ -563,7 +563,8 @@ def main():
             ledger=ledger, unresolved_cpu_reserve_s=unresolved,
             ledger_complete=len(report['contexts']) == 8 and len(ledger) == 16 and len({r['task_id'] for r in ledger}) == 16,
             resources=dict(self_cpu_s=self_cpu(), waited_children_cpu_s=child_cpu(), combined_cpu_s=self_cpu()+child_cpu(),
-                selection_charge_s=float(prior['charged_cpu_s']),
+                preparation_charge_s=float(prior['charged_cpu_s']),
+                preparation_scope='Complete prelaunch carry for pilot caps; already-carried global components must not be appended again',
                 package_cpu_before_publication_s=self_cpu()+child_cpu()+float(prior['charged_cpu_s']),
                 package_elapsed_sum_before_publication_s=time.monotonic()-WALL0+float(prior['elapsed_s']),
                 observed_self_peak_rss_bytes=rss_bytes(), prepublication_only=True, external_tail_acceptance_pending=True),
