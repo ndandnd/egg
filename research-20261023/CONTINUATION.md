@@ -1,4 +1,4 @@
-# Current handoff — cohort CLOSED; one native pilot prospectively admitted
+# Current handoff — one native pilot FROZEN; command not yet executed
 
 Worktree /Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017, branch
 codex/ml-prediction-20261017. Read this first, then only current compact receipts
@@ -20,19 +20,18 @@ No original rows/plans/cases/models/project imports/replay/native calls occurred
 Parent separately recorded NATIVE_ADOPTION_DECISION.md for the already reviewed
 ONE conventional economic-recourse pilot. Read NATIVE_LAUNCH_REVIEW.md (PASS),
 NATIVE_INPUT_AUTHORITY.md and NATIVE_PREPARATION_PROTOCOL.md. The new native
-preparation control is NATIVE_PREPARATION_FROZEN/PASS, source/cohort pins and
-actual complete prelaunch cost pending. No native worker/attempt01 exists yet;
+preparation CLOSED once/exit0, no original input/native access. Exact source/cohort
+pins and external preparation cost are now accepted; main control is FROZEN/PASS.
+No native worker/attempt01 exists yet;
 all bounded agents complete after narrow final review. Actual native compatibility
 is unqualified. Native/source/data gates are NOT inferred from selection PASS.
 
-Next execute only the frozen source-pin prepare_native.py command ONCE after
-source/protocol backup. Fresh native-preparation01,5CPU/15wall(body3/10+2/5),
-stdlib one process/no children. It reads13 literal code/protocol files and new
-derived selection/accounting artifacts, never FIT metadata again or original
-tables/plans/imports. It fills source/cohort pins but leaves SOURCE_PINNED, still
-denied. Review external prep receipt/meter, adopt actual charge once, then commit/
-push exact FROZEN/PASS main control before one separately admitted owner command.
-Preparation never dispatches main. No automatic retry or old engineering matrix.
+Do not repeat source prep/selector/finalizer/hash audits. Native source prep read13
+literal code/protocol files and new derived cohort/accounting artifacts only;
+external .03CPU/.04elapsed, retained.05CPU, within5/15. Complete accepted prelaunch
+carry .17CPU/.17elapsed is inside25/75/preflight120/total2400. Next execute the
+exact FROZEN main owner command ONCE after its committed/pushed control; fresh
+attempt01. Sources stay frozen during workers. No automatic retry or old matrix.
 
 The source/authority/adoption review found and fixed a gate-order issue BEFORE
 execution: prep control/root/command/PASS checks precede derived-artifact reads.
@@ -122,8 +121,8 @@ do not fill the gap with more labels/models.
 ## Accounting and documentation
 
 Metadata package measured.06CPU/.13elapsed-sum, retained.12CPU within20/60. Closed
-displayed sums19811.28CPU/20406.35elapsed-sum, retainedtracking19811.58CPU. No
-native-source-prep/owner cost yet. Not exact sessionCPU/continuous elapsed/
+displayed sums after native source prep19811.31CPU/20406.39elapsed-sum, retained
+tracking19811.63CPU. Owner cost not yet spent. Not exact sessionCPU/continuous elapsed/
 instantaneous containment; old child rows overlap owner meters. Separate legacy
 conditional guard2546.091499549272, actual old reviewCPU UNKNOWN. Preserve every
 charge/failure/unknown; no reset/refund/restored old compliance. Hash buffers once
