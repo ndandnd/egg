@@ -1,4 +1,57 @@
-# Current handoff — nonlinear finite-bank composition STATIC complete
+# Current handoff — nonlinear bank admission passed; comparison failed before native work
+
+NEW research-20261026/adjacent_nonlinear_pilot/attempt01 is CLOSED_FAILED.
+Reviewed source 077b3bc4ff8f9c7e766df4c9a2e893ba8bc5f0ff and frozen control
+212faf19 remain immutable. Managed owner 15827 exited 1; admission and first
+context children were reaped, with no unresolved child or numerical worker.
+All three bounded agents are complete. Source preparation, owner and inline
+readout ran once. Read RESULTS.md, FAILURE_DIAGNOSIS.md,
+FINAL_RESOURCE_RECEIPT.json, NEXT_REPAIR_DECISION.md and RUNNING_HANDOFF.md only
+as needed. Do not poll old sessions, rerun source admission, journals, physical
+replay, readout/export or automatically retry attempt01.
+
+Both producer journal pins matched. All 360 retained columns passed original
+audit/realization/validation and fresh projection; the two-bus common fixed-duty
+fleet passed joint physical admission. The first context T01-fixed_duty-posted
+then rejected the prepared-bank fixture identity despite a matching bank digest.
+It made ZERO optimize calls; five remaining contexts are explicitly unattempted.
+No context qualified and all three optimized contrasts are undefined. The
+inline readout's operational zero contrasts compare the same protected fallback
+with itself; they are not method success, route equivalence or negative ML evidence.
+
+Source-only diagnosis found a sufficient JSON boundary defect: integer hour
+keys 0..25 sort numerically before serialization, whereas loaded string keys
+sort lexically. Canonical strings differ after an unchanged round trip. The
+prepared bank was not reopened for that diagnosis; other composite-guard
+conditions were not reverified. No frozen code was patched or retried.
+
+NEXT: implement only the narrow fixture-descriptor wire-normalization correction
+in a NEW version, preserving whole-record membership identity and all other
+guards. Freeze a tiny literal stdlib check under NEW 5 CPU / 10 wall seconds
+before executing it once. It must detect old key-order failure while still
+rejecting changed prices, missing hours, reordered duties and changed battery.
+No project imports, artifact values, native or physical replay for this check.
+Only after review/pass may a separately frozen integrated qualification reuse
+the already admitted prepared bank and its admission receipt under exact new
+authority, rather than repeating 360 passed replays. Prepared-bank SHA256 is
+999310ae2e4f55c221bc5e26194c65ea170e09daa58d52d67658d6f4caef9e14.
+Common/selected fleets still require joint physical admission. No new native
+manifest exists; old attempt, spending and failures stay immutable.
+
+Package displayed 2.15 CPU / 3.42 elapsed-sum, retained 2.20 CPU inside 480/900.
+Global closed displayed 19931.10 CPU / 20532.42 elapsed-sum, retained tracking
+19931.62 CPU. Preparation is adopted once; child rows overlap owner. Separate
+legacy conditional guard 2546.091499549272; actual historical review CPU UNKNOWN.
+Not exact session CPU, continuous elapsed or instantaneous containment. No
+reset/refund/restored historical compliance. No Google Doc entry for this
+engineering failure; latest verified science remains [271755,276717), eight images.
+
+The EVSP-DR correction, actual adjacent bridge and scoped old learning negatives
+remain intact. Neural column proposals are conditionally open, with no new fit
+authority or demonstrated acceleration bottleneck. Sealed inputs and cluster
+remain closed; sibling source is read-only. Keep unrelated schedules paused.
+
+## Historical checkpoint — nonlinear finite-bank composition STATIC complete
 
 NEW research-20261026/adjacent_nonlinear_design is complete as a source-only
 implementation/design package. Read README.md, REVIEW.md, HANDOFF.md and
