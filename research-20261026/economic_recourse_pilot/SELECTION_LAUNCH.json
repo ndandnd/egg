@@ -1,19 +1,28 @@
 {
   "policy": "first-two-per-declared-profile-exposed-FIT-cohort-v1",
-  "mode": "DRAFT",
-  "review_disposition": "PENDING",
+  "mode": "PREPARATION_FROZEN",
+  "review_disposition": "PASS",
   "workdir": "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017",
   "input": "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/research-20261025/fit_target_support/attempt01/receipt.json",
   "input_sha256": null,
   "input_version": {
     "repository_root": "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017",
     "repository_path": "research-20261025/fit_target_support/attempt01/receipt.json",
-    "git_revision": null,
+    "git_revision": "21bd18e8fdedfbb4895c8e21008df1fd68ad50ec",
     "freeze_assumption": "tracked-receipt-unchanged-from-named-revision"
   },
   "source_sha256": null,
-  "command": null,
-  "tracking_prefix": null,
+  "command": "/usr/bin/time -p -o research-20261026/economic_recourse_pilot/selection-time.txt .venv-local/bin/python -I -S -B research-20261026/economic_recourse_pilot/select_cohort.py > research-20261026/economic_recourse_pilot/selection-stdout.txt 2> research-20261026/economic_recourse_pilot/selection-stderr.txt",
+  "tracking_prefix": {
+    "base_displayed_cpu_s": 19811.22,
+    "base_elapsed_sum_s": 20406.22,
+    "base_retained_tracking_cpu_s": 19811.46,
+    "metadata_package_cpu_s": 20,
+    "metadata_package_wall_s": 60,
+    "source_preparation_external_acceptance": "PENDING",
+    "separate_legacy_conditional_guard_s": 2546.091499549272,
+    "historical_actual_review_cpu": "UNKNOWN"
+  },
   "budgets": {
     "total_cpu_s": 10,
     "total_wall_s": 30,

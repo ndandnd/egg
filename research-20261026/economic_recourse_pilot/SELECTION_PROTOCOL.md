@@ -1,8 +1,11 @@
-# DRAFT metadata-only cohort selection
+# Prospective frozen metadata-only cohort selection
 
-PENDING review and source/command/prefix freeze. `select_cohort.py` refuses before
-the sole numerical metadata input unless this separate launch is FROZEN/PASS.
-No actual metadata values or selected IDs were read during preparation.
+Static gate review passed; PREPARATION_PROTOCOL.md records the exact prospective
+source-pin and execution stages. `select_cohort.py` refuses before the sole
+metadata input unless its separate launch is FROZEN/PASS. PREPARATION_FROZEN and
+SOURCE_PINNED states still deny it. No actual metadata values/selected IDs were
+read during source preparation. Parent must accept metered preparation and
+freeze the carried prefix/control before the one selector command.
 
 The only DATA input is the fixed closed
 `research-20261025/fit_target_support/attempt01/receipt.json`. One capped
@@ -29,8 +32,9 @@ alias closure, model-training independence or final-generalization claim.
 
 Fresh exclusive `selection01` preserves partial/failure receipts. Source and
 this protocol are read/hashed once against parent-frozen pins; launch bytes are
-read once and their consumed digest recorded. Exact command, source pins and
-tracking prefix are unset. An optional existing input pin may be frozen; absent
+read once and their consumed digest recorded. Exact command and initial prefix
+are prospective; metered preparation fills source pins and parent adopts its
+external charge before selector freeze. An optional existing input pin may be frozen; absent
 one, consumed bytes are bound by their once-computed digest and the mandatory
 prospectively named tracked version. `input_version` must contain the literal
 repository root and repository-relative receipt path, a full40-hex Git revision,
@@ -40,7 +44,7 @@ The closed receipt is immutable under standing policy; the named tracked version
 is frozen prospectively. This is an explicit freeze assumption, not a new Git
 subprocess or independent working-tree comparison. A supplied preexisting SHA is
 compared with the consumed once-computed digest; it cannot substitute for an
-absent version descriptor. The draft revision remains null.
+absent version descriptor. The named tracked version is21bd18e8fdedfbb4895c8e21008df1fd68ad50ec.
 No original rows, plans, cases, generators, project imports, optimizer, replay,
 children or model assets are used.
 
