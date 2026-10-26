@@ -1,4 +1,60 @@
-# Current handoff — descriptor repair qualified; integrated reuse STATIC in progress
+# Current handoff — nonlinear bank comparison CLOSED, no delivered reassignment gain
+
+NEW research-20261026/adjacent_nonlinear_reuse/attempt01 CLOSED exit0. Source
+9321c6dd8e99ca84bdd2ef190069f16bb2c0a510 / frozen control afe34b6a. Managed owner
+1039, preparation and inline readout each ran once; all seven children reaped.
+All bounded agents completed; no numerical worker. Read RESULTS.md,
+INTERPRETATION_REVIEW.md, FINAL_RESOURCE_RECEIPT.json, NEXT_WORKLOAD_DECISION.md
+and RUNNING_HANDOFF.md only as needed. Do not poll old sessions, rerun source/
+bank admission, hashes, replay, native, readout/export or resubmit contexts.
+
+All360 original columns were transferred under their exact pin and completed
+source-bound admission; original journals/all-column replay were not repeated.
+Common/selected fleets received fresh independent joint admission. All6 contexts
+qualified timely physical endpoints, all12 native calls OPTIMAL, no missing or
+failure. Both arms selected full-origin206/223, same original fixed duties,
+fleet2, realized198kWh and terminal82kWh versus common212/90. Excluding constant
+ops200000, posted/system/strategic costs28.4/34.038888889/39.677777778; common
+29.5/36.335555556/43.171111111. Fixed-minus-entire-bank represented cost0 in all3.
+These are successful method contrasts, not old failed-attempt fallback zeros.
+
+Fixed-duty control is the complete duty-preserving SUBSET OF THE UNION BANK,
+including full-oracle-origin columns. Ties do not show that standalone fixed-duty
+pricing discovers them equally cheaply or that full-origin records are uniquely
+necessary. Discovery and final reassignment differ. Terminal-energy reduction
+8kWh accompanies total charging reduction14kWh; do not label it all route-energy
+efficiency or timing causality. Continuous points are mixtures, not schedules;
+finite-bank/native bounds are not exact physical or omitted-column certificates.
+Native calls .0027–.0281s show no current acceleration bottleneck. ONE exposed
+base, not six independent timetables; no general equivalence or neural no-go.
+
+NEXT is ONE source-only prospective grouped column-discovery workload design
+using the existing actual adjacent GRID-LINEAR capacity oracle, explicitly
+separate from the realized-load nonlinear bank master. Measure conventional
+pricing effort and valuable-alternative support before fitting. Fix deterministic
+base seeds/nested sizes and source-defined constraints/context list before any
+outcomes; do not choose favorable cases/scarcity/scale until ML could win. Keep
+paid acquisition, classical/cached controls and complete failure denominators.
+No new cohort/input/native/fit manifest exists. Do not recreate prior interface,
+stakes, correspondence or iteration notes. If pricing stays cheap/value absent,
+stop that acceleration hypothesis, not neural prediction universally.
+
+Descriptor_wire_repair also CLOSED once (source96906ae1/controlb8523e73), all9
+literal checks PASS. No rerun. Old adjacent_nonlinear_pilot attempt01 remains
+CLOSED_FAILED; no charge/failed state was erased by this new version.
+
+Reuse package6.03displayedCPU/8.51elapsed-sum, retained6.09CPU inside480/900.
+Global closed displayed19937.16CPU/20541.00elapsed-sum, retained19937.77CPU.
+Descriptor .06 is already in prefix; preparation/children already overlap their
+owner meters. Separate legacyguard2546.091499549272, actual oldreviewCPUUNKNOWN.
+Not exact sessionCPU/continuous elapsed/instantaneous containment; no refund/reset.
+Google Doc consolidated append[276717,280825) verified, all prior text/eight images
+retained. Do not duplicate it. Sibling read-only, sealed banks/cluster closed;
+old warm learned-policy no-go decisions and development labels remain intact.
+
+Everything below is historical; old NEXT directives/accounting are superseded.
+
+## Previous checkpoint — descriptor repair qualified; integrated reuse STATIC in progress
 
 NEW descriptor_wire_repair/attempt01 CLOSED exit0, all nine literal checks PASS.
 Source96906ae1936ff6f3ac33cbd9a3536791f672ec36, controlb8523e73, results7a3f6e37.
