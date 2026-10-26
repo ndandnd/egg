@@ -1,4 +1,4 @@
-# Current handoff — problem-stakes gate COMPLETE, no numerical launch
+# Current handoff — conditional redirect stopped; no active numerical work
 
 Worktree /Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017, branch
 codex/ml-prediction-20261017. Read this first, then current compact receipts and
@@ -6,6 +6,28 @@ only needed sources/protocols. Check actual agents/owned workers before acting;
 never duplicate an attempt. Use bounded GPT-6.1 Sol agents with short handoffs;
 parent manages scientific decisions/integration. Routine resource authority
 exists; no human budget answer is pending.
+
+## Prerequisite-design closure — do not repeat
+
+26 October 2026 07:07 UTC heartbeat completed the sole bounded sufficiency check
+for the proposed operational evidence admission. Parent and approved50_runners
+read only current admitted notes. No named actual operator/depot or versioned
+authoritative operating/engineering source is available in that context. Actual
+service/fleet commitments and allowed alternatives, independently justified
+charging restrictions/timing, decision deadline/recourse, and real-equipment
+mapping remain unspecified. Synthetic FIT groups, teacherN and experimental
+caps cannot fill those gaps. No new source was fetched or manifest frozen.
+
+The conditional service-continuity redirect is STOPPED under the explicit rule
+to stop when a credible anchor cannot be specified from authorized context.
+This is not a claim that no real application exists. Do not recreate the design,
+repeat reviews, invent an anchor, or run more computation. Reopening requires a
+distinct prospective external-evidence scope with an operational anchor and
+authoritative source/version, or new scientific steering. No budget decision is
+pending. The hourly automation's current direction is exhausted and is to be
+removed; unrelated schedules stay unchanged/paused. All agents complete; no
+numerical worker exists. All numerical accounting/guard/UNKNOWNs below unchanged.
+Read problem_stakes_gate/HANDOFF.md for exact closure, not older next-step text.
 
 ## Latest static scientific decision
 
@@ -30,7 +52,9 @@ not atomic uniform-price payment. Generator coefficients have no validated money
 or operating horizon; exactN and zero movement-time cost make operations constant
 in the pilot. Preserve old results/field names without retrospective reinterpretation.
 
-Next is one prospective prerequisite evidence-admission design for an operating
+The following prerequisite design direction was attempted and closed without
+an admissible anchor as recorded above; do not repeat it automatically:
+one prospective prerequisite evidence-admission design for an operating
 anchor: decision maker, actual service/fleet commitments and independently
 justified resource changes. Specify authoritative source/version, exact fields,
 outcome-independent choice and the decision the evidence can support before any

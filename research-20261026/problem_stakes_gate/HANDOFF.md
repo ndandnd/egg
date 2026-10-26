@@ -1,4 +1,28 @@
-# Closed static scientific gate
+# Closed gate — conditional redirect stopped at evidence prerequisites
+
+26 October 2026, 07:07 UTC heartbeat. The one bounded prerequisite-design
+sufficiency check is COMPLETE. Parent and approved50_runners used only the
+current continuation and this package's admitted notes; no new source was fetched.
+No actual operator/depot or authoritative operating/engineering document with
+a version is identified there. Actual service/fleet commitments and permitted
+alternatives, independently supported charging restrictions and timing, decision
+deadline/recourse, and mapping to real equipment remain unspecified. Synthetic
+FIT identities, teacher fleet N and an experimental cap are not that evidence.
+
+Consequently no executable evidence-admission manifest was frozen. Following
+the standing instruction to stop if a credible anchor cannot be specified from
+authorized context, this conditional service-continuity redirect stops here.
+This is an evidence/authority limit, not a finding that real applications do not
+exist. Do not repeat the check, invent an anchor, start a source search, or create
+another general memo automatically. Reopening needs a distinct prospective
+external-evidence scope identifying the operational anchor and authoritative
+source/version; no budget answer is pending and no old budget is reset.
+
+All agents are complete; no numerical worker exists. Numerical totals, separate
+legacy guard, scientific outcomes and Google Doc state below are unchanged.
+The hourly automation is to be removed because its current authorized direction
+is exhausted; unrelated schedules are untouched. Future work requires new
+evidence scope or scientific steering, rather than another scheduled audit.
 
 26 October 2026. The source-only package is COMPLETE after parent integration and
 one focused review. Read `GATE_DECISION.md`, `UNITS_AND_INSTITUTION.md`,
@@ -30,7 +54,8 @@ displayed process sums remain 19923.95 CPU /20520.60 elapsed-sum; retained track
 historical actual review CPU remain. These are not whole-session CPU or continuous
 elapsed; no reset, refund, restored old compliance or new numerical charge.
 
-**Next executable step is prerequisite design, not computation:** if continuing
+**Historical prerequisite design direction (now closed without admission):**
+if continuing
 the sole candidate redirect, record a narrow prospective evidence-admission
 package for the decision maker, actual service/fleet commitments and independently
 justified charging-resource changes. Specify one operational anchor, authoritative
