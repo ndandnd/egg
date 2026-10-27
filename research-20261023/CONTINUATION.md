@@ -1,16 +1,25 @@
-# Current handoff — conventional recovery RUNNING
+# Current handoff — conventional recovery CLOSED_FAILED
 
-Human27Oct requested the next actual experiment, no timeline, and challenged
+Human27Oct requested actual next experiment, no timeline, and challenged
 V2G/EVSP–grid-pricing novelty. Read research-20261027/conventional_recovery_pilot/
-RUNNING_HANDOFF.md, PROTOCOL.md and MAIN_CONTROL_REVIEW.md. Source234668a8,
-maincontrolc7c69a75; one managed owner session63025 RUNNING, all agents complete.
-Do not duplicate, edit consumed source/control, inspect partial outcomes or
-rerun preparation/hash/native/replay/readout. Source preparation CLOSED_PASS;
-.38CPU/.44elapsed retained adopted once by owner; all old study closures persist.
-V2G_NOVELTY.md corrects broad novelty claim with primary papers; current inspected
-EGG paths consume power, not export. Forty fresh conventional states; no fit.
-No automation. After owner closes collect final compact receipts/meter and
-interpret grouped classical recovery evidence. See exact handoff for budget/prefix.
+RESULTS.md, FAILURE_DIAGNOSIS.md, FINAL_RESOURCE_RECEIPT.json, RUNNING_HANDOFF.md,
+IMPORT_REPAIR.patch, REPAIR_REVIEW.md and INTERPRETATION_REVIEW.md.
+Source234668a8/maincontrolc7c69a75; owner63025 CLOSED exit1/all4childrenreaped.
+F/N/D firstcell62001/12 strictphysicalnativeOPTIMAL; firstUN failed missing
+gurobipy lazyimport beforemodelcreation/optimize;36laterstatesunattempted.
+AlljointpairedmeansNULL. Frozenattempt/sources/controls immutable; nooldpoll,
+preparation/hash/native/replay/readout/export rerun. No numericalworker.
+Allboundedagentscompleted. Source-only explicit-import repair is reviewready
+butnotapplied. Human approval requested for separatelyfrozen repairedcontinuation
+with successfulacquisitionreuse; noautomaticretry. Silenceisnotapproval.
+BroadV2G/busgridpricing noveltyclaims contradictedbyprimarypapers; inspected
+EGGpaths are consumption-only. No scientificrecovery/ML/V2G claimfromfailure.
+NoGoogleDocappend orautomation; oldstudyclosures/sealed/clusterrestrictionspersist.
+
+Package17.28displayedCPU/19.17elapsed-sum, retained17.34CPU; prep adoptedonce.
+Globalclosed20284.99displayedCPU/20908.41elapsed-sum/20285.74retainedCPU;
+legacyguard2546.091499549272 separate; static/tool/reviewCPUUNKNOWN.
+Noreset/refund/restoredcompliance; nochilddoublecount.
 
 ## Previous checkpoint — retained history
 
