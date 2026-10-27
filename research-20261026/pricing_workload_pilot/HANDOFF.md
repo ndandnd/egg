@@ -1,4 +1,10 @@
-# Static implementation closed — execution remains gated
+# Closure supersedes this static handoff
+
+The once-only owner28625 has CLOSED. See RUNNING_HANDOFF.md and RESULTS.md for
+the complete48-state inconclusive scientific result and final accounting.
+Do not use the historical DRAFT instructions below to launch anything again.
+
+## Historical static implementation — superseded
 
 The new constructor, thin A0/F1/C1 worker, existing-pattern serial owner,
 source preparer, exact field note and DRAFT controls are saved. Parent reviewed
@@ -77,9 +83,3 @@ failures and old scoped learned-policy no-go decisions remain intact. Sibling
 source stays read-only; protected banks and cluster remain closed. No training,
 manuscript, submission, merge or private-data publication. Unrelated schedules
 remain unchanged. Back up this milestone with the required author and committer.
-# Closure supersedes this static handoff
-
-The once-only owner28625 has CLOSED. See RUNNING_HANDOFF.md and RESULTS.md for
-the complete48-state inconclusive scientific result and final accounting.
-Do not use the historical DRAFT instructions below to launch anything again.
-
