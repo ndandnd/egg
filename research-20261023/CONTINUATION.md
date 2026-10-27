@@ -1,4 +1,41 @@
-# Current handoff — grouped pricing workload launched once
+# Current handoff — grouped pricing workload closed, readiness inconclusive
+
+pricing_workload_pilot/attempt01 CLOSED after sourcebb9086e8/controlc9adcd6f.
+Managed owner28625 exited0; all40 attempted children reaped/exit0, no numerical
+worker remains. Bounded reviews complete. Preparation/owner/inlineREADOUT once;
+no separate export/finalizer/native/replay/hash. Read its RESULTS.md,
+FAILURE_DIAGNOSIS.md, INTERPRETATION_REVIEW.md, FINAL_RESOURCE_RECEIPT.json and
+NEXT_RESEARCH_DECISION.md; RUNNING_HANDOFF now CLOSED. Do not poll/resubmit.
+
+All48 planned states/four distinct groups retained. A0strict8/16,F1strict12/16
+(fixed8/8/full4/8),C1strictOPTIMAL8/16; eightC1 unattempted after ownA0failure.
+All12 attempted NoSelection have finite-pool fleet-stage3/INFEASIBLE/noincumbent,
+nochargingstage. ElevenCGpricing_certified; full61004/24/F1cg_time_limit.
+Everyfull24F1 failed yet everyfixedF1 was physically admitted. This is a
+retained-pool integer-delivery limitation, not proved physical infeasibility
+or an identified missing route/neural remedy. No repair/transfer/retry.
+
+Both frozen readiness statuses INCONCLUSIVE. Effort complete but0/4groupspass
+bothscopes: fullpricingmedian2.540–2.786s/share9.76–11.13%, fixed.849–.991s/
+8.66–9.93%. Primaryvalue3/8pairs forbothcontrols,secondary5/8; full8meansNULL.
+Availablefullvsfixed ratios0,-1/187,0 do not establish fullroutingincrement.
+Do not train or shop harder/favorable cases/resources/quotes to rescue it.
+Different conditional target: compatible useful columns for integer recovery,
+only after a separate prospective decision demonstrating residual value beyond
+competent classical/common-incumbent recovery. No new manifest/fit/data authority.
+Do not recreate reviews or invent busywork on subsequent wakes; absent new
+justified work, finish quietly. Old scoped warm no-go and EVSP-DR correction stand.
+
+New package330.51displayedCPU/347.96elapsed-sum, retained330.57CPU including
+prep once. Preparation deniedsysctl/wrapper1/unknownchild preserved; main-p
+meter accepted. PeakworkerRSS775454720bytes/thread1; no late/resource/fatal/
+unresolvedchild. Globalcloseddisplayed20267.67CPU/20888.96elapsed-sum,
+retained20268.34CPU. Legacyguard2546.091499549272 separate/oldactualreviewUNKNOWN;
+not exactsessionCPU/continuouselapsed/instantaneouscontainment; no doublecount.
+GoogleDoccloseout[280825,285218)verified, prior text/all8images preserved.
+Protectedbanks/clusterclosed; siblingreadonly; unrelatedschedulesunchanged.
+
+## Previous checkpoint — grouped pricing workload launched once
 
 NEW pricing_workload_pilot/attempt01 launched ONCE after frozen control c9adcd6f
 was pushed; reviewed source bb9086e8f003bebde4e4fe7f7686fa160f459abf. Managed

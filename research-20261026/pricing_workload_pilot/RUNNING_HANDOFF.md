@@ -1,4 +1,42 @@
-# Workload dispatched once — exact managed owner
+# CLOSED — grouped pricing workload, scientific readiness inconclusive
+
+Owner **28625 exited0**. All40 attempted children exited0 and were reaped;
+no unresolved worker remains. All bounded reviewers completed. Source
+preparation, owner and inline publication each ran ONCE. No separate readout,
+export, replay, source hash or native pass followed closure. Do not poll old
+sessions or resubmit any of the48 planned states.
+
+Read RESULTS.md, FAILURE_DIAGNOSIS.md, INTERPRETATION_REVIEW.md,
+FINAL_RESOURCE_RECEIPT.json and NEXT_RESEARCH_DECISION.md. Four distinct groups;
+all48states recorded,40attempted,28qualified physical deliveries: A0 8/16,
+F1 12/16 (fixed8/8/full4/8), C1 8/16. EightC1 are explicitly missing after
+own A0 failure. TwelveNoSelection outcomes have fleet-stage3/INFEASIBLE in
+retained pools and no charging stage; elevenpricing_certified, oneCGtime_limit.
+All fixedF1 endpoints exist, so full24 failures do not prove physical
+infeasibility. No retry, bank transfer or recovery solve occurred.
+
+Both frozen readiness decisions are INCONCLUSIVE, not complete negative
+value screens. Complete effort screens pass0/4groups in both scopes. Primary
+comparisons define3/8 pairs each, secondary5/8; full-eight meansNULL. No fit,
+harder/favorable cohort, cap/price/size tuning or automatic alternative target.
+The potential different question is compatible columns for integer recovery;
+its decision value and competent classical baselines need a separate
+prospective decision. Do not invent routine audits or repeatedly recreate
+this conclusion; absent new justified work, finish quietly.
+
+Final package330.51displayedCPU/347.96elapsed-sum, retained330.57CPU, including
+preparation exactly once. Preparation wrapperexit1/unknownchild/deniedsysctl
+remain explicit. Main external meter accepted, peakworkerRSS775454720bytes,
+native thread1, no resource/late/fatal violation. Closed global displayed
+20267.67CPU/20888.96elapsed-sum, retained20268.34CPU. Child rows overlapowner;
+legacyguard2546.091499549272 separate, historicalactualreviewCPUUNKNOWN.
+Not exactsessionCPU/continuouselapsed/instantaneouscontainment; no refunds.
+
+Google Doc consolidated closeout verified[280825,285218), prior text and all
+eight images retained. No duplicate append. Sealedbanks/clusterclosed and
+read-only sibling restrictions persist; unrelated schedules unchanged.
+
+## Historical dispatch handoff (superseded by closure above)
 
 The new attempt01 was launched ONCE after frozen main control c9adcd6f was
 pushed. Reviewed implementation bb9086e8f003bebde4e4fe7f7686fa160f459abf;
