@@ -1,4 +1,40 @@
-# Current handoff — grouped pricing workload STATIC implementation reviewed
+# Current handoff — grouped pricing workload launched once
+
+NEW pricing_workload_pilot/attempt01 launched ONCE after frozen control c9adcd6f
+was pushed; reviewed source bb9086e8f003bebde4e4fe7f7686fa160f459abf. Managed
+unified exec session28625 was RUNNING at dispatch return. Read its
+RUNNING_HANDOFF.md first; check this exact session/owned receipts rather than
+assuming it remains alive, guessing PIDs, resubmitting or polling old owners.
+All bounded static agents completed. No duplicate numerical owner is allowed.
+Consumed sources, notes, parameters and controls are FROZEN while it runs.
+
+Source preparation ran once after5c814801. Body completed with no reported
+failure; source pins/closure admitted. Extended Darwin time wrapper exited1
+because sysctl kern.clockrate was denied; child exit UNKNOWN. Basic displayed
+0.28CPU/0.31elapsed and self prepublication0.284292CPU/0.291023wall retained;
+accepted retained0.32CPU/0.32elapsed inside main package ONCE. See
+PREPARATION_RESOURCE_RECEIPT and MAIN_CONTROL_REVIEW. No rerun or clean-wrapper
+claim. Main uses POSIX -p CPU/elapsed and separate receipt RSS observations.
+
+The48 assigned A0/F1/C1 states and two predeclared scopes are unchanged. Total
+7200CPU/10800wall includes preparation/preflight/all workers/publication;
+dispatch6600/closure600, worker120/180 with native150 request/one thread/5GiB.
+Pre-package displayed19937.16CPU/20541.00elapsed-sum, retained19937.77CPU remain
+the prefix; preparation is adopted by owner, not charged again on closeout.
+Legacyguard2546.091499549272/oldactualreviewCPUUNKNOWN remain separate.
+
+One compact scoped check per wake; healthy running is quiet. Master receipt
+is incomplete until final publication; process-time.txt final only after exit.
+No extra hashes, tests, probes, generation, scores, inference, replay, pricing
+or source edits. After owner closes, inspect complete compact master/READOUT
+and final external meter, preserve all failures/missing/late/unattempted states
+and diagnose fatal stops before more work. Inline readout runs with owner;
+NO separate finalizer/export or automatic retry. No training permission follows.
+No Google Doc launch/preparation append; latestscience[276717,280825),eightimages.
+All closed studies, scoped oldlearninggates, read-only sibling and protected
+banks/cluster restrictions remain intact; unrelated schedules unchanged.
+
+## Previous checkpoint — grouped pricing workload STATIC implementation reviewed
 
 NEW research-20261026/pricing_workload_pilot is COMPLETE STATIC. Read HANDOFF.md,
 INTEGRATION_REVIEW.md, PROTOCOL.md, FIELD_AUTHORITY.md and only needed API notes.
