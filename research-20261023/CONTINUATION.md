@@ -1,3 +1,20 @@
+# Current handoff — repaired recovery RUNNING
+
+Human explicitly approved repaired continuation; no approval pending. Read
+research-20261027/conventional_recovery_continuation/RUNNING_HANDOFF.md,
+PROTOCOL.md, MAIN_CONTROL_REVIEW.md. Sourcec5473f4f/maincontrol2d927cc9;
+one managedowner51949 RUNNING. Allboundedagentscomplete. Three oldsuccessful
+62001/12F/N/D rows transfer underexactpins;37possiblefreshworkers, same40
+scientificassignments. Importfixonly inunionbranch; no cohort/physics/objective
+tuning. Frozen consumedfiles; no duplicates/oldpoll/hash/replay/readout/export.
+Binding+prep oncepassed; .40retainedCPU/.51elapsedallowance adoptedonce.
+Prefix20284.99displayedCPU/20908.41elapsed-sum/20285.74retainedCPU excludes
+thisnewpackage. Oldfailure preserved; newallowance4930CPU7600wallinclusive.
+Afterexit collectfinalcompactreceipts/meter, interpret andbackup. Noautomatic
+retry, fit, sealed/cluster/siblingmutation ornewautomation.
+
+## Previous checkpoint — retained history
+
 # Current handoff — conventional recovery CLOSED_FAILED
 
 Human27Oct requested actual next experiment, no timeline, and challenged
