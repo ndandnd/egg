@@ -1,16 +1,16 @@
 {
   "policy": "conventional-recovery-continuation-source-preparation-v1",
-  "mode": "DRAFT",
-  "review_disposition": "PENDING",
+  "mode": "FROZEN",
+  "review_disposition": "PASS",
   "workdir": "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017",
-  "source_revision": null,
-  "source_freeze_assumption": null,
+  "source_revision": "c5473f4f4c2b05e7e78bf14cedcf06c34178963a",
+  "source_freeze_assumption": "parent-approved-frozen-commit",
   "source_sha256": null,
-  "command": null,
+  "command": "/usr/bin/time -p .venv-local/bin/python -I -S -B research-20261027/conventional_recovery_continuation/prepare.py --source-revision c5473f4f4c2b05e7e78bf14cedcf06c34178963a > research-20261027/conventional_recovery_continuation/preparation-console.txt 2> research-20261027/conventional_recovery_continuation/preparation-time.txt",
   "budgets": {"cpu_s": 10, "wall_s": 20, "body_cpu_s": 6, "body_wall_s": 15},
   "purpose": "One new metered source-only AST import closure preparation, inside preflight120CPU180wall and residual new4930CPU7600wall. The separate 5CPU10wall reuse metadata binding is also inside those ceilings. Consumed source buffers are cached and hashed once. No artifact, bank, selected-payload or original data reads; no project/native imports, fixture generation or retries.",
   "namespace": "research-20261027/conventional_recovery_continuation/preparation01",
   "control_version_rule": "The commit publishing frozen control is separate from reviewed implementation source. Metered preparation consumes and pins control once without a self-referential hash audit.",
   "external_meter": "/usr/bin/time -p basic user plus system CPU and real elapsed, with observed RSS separately retained in the self receipt. Preparation and reuse binding are each charged exactly once in main preflight.",
-  "authorization": "DRAFT denies source preparation execution until parent source review and explicit preparation freeze."
+  "authorization": "Human authorized repaired continuation. Parent and focused integration review PASS. One source-only preparation in fresh preparation01 under10CPU20wall(body6/15), withinpreflight120/180 andnew4930/7600. No imports/backend/generation/data/native calls or automatic retry. Main remainsDRAFT/PENDING."
 }
