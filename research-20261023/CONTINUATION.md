@@ -1,3 +1,19 @@
+# Current handoff — conventional recovery RUNNING
+
+Human27Oct requested the next actual experiment, no timeline, and challenged
+V2G/EVSP–grid-pricing novelty. Read research-20261027/conventional_recovery_pilot/
+RUNNING_HANDOFF.md, PROTOCOL.md and MAIN_CONTROL_REVIEW.md. Source234668a8,
+maincontrolc7c69a75; one managed owner session63025 RUNNING, all agents complete.
+Do not duplicate, edit consumed source/control, inspect partial outcomes or
+rerun preparation/hash/native/replay/readout. Source preparation CLOSED_PASS;
+.38CPU/.44elapsed retained adopted once by owner; all old study closures persist.
+V2G_NOVELTY.md corrects broad novelty claim with primary papers; current inspected
+EGG paths consume power, not export. Forty fresh conventional states; no fit.
+No automation. After owner closes collect final compact receipts/meter and
+interpret grouped classical recovery evidence. See exact handoff for budget/prefix.
+
+## Previous checkpoint — retained history
+
 # Current handoff — ICML research assessment and literal qualification
 
 27 October human explicitly requested an ICML January target, substantive rejection
