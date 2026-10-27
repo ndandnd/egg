@@ -1,0 +1,11 @@
+# Main prospective control review — PASS
+
+Narrow review of stable LAUNCH.json, LAUNCH_FREEZE.md and PREPARATION_RESOURCE_RECEIPT.json only, against the already reviewed source contract. No source rehash/audit, generated descriptor, bank, case, outcome, project import, compilation, test or execution. No implementation/control edit by this reviewer.
+
+No concrete control blocker found. Main FROZEN/PASS names implementation bb9086e8f003bebde4e4fe7f7686fa160f459abf; its publishing control version is explicitly separate. Source pins are transferred from the completed preparation candidate, not independently recalculated. The exact root command guards absent attempt01/process-time.txt and uses .venv-local Python -B with POSIX /usr/bin/time -p. This is one exclusive new owner, not a preparation/worker retry.
+
+Native maps match reviewed source: one thread, Method1/MIPGap0, inherited default Seed; original empty-seed partition oracle/batch30/no optional search policies and nominal50/50; C1 one nominal100 call. All seven environment entries are1. The literal48-stage order matches declared base/size/restriction counterbalancing and A0-before-target parity. Cohort/resources/screens and no-external-input authority remain unchanged.
+
+Preparation adoption is0.32CPU/0.32elapsed exactly once inside preflight120/180 and total7200/10800. Both tracking prefixes explicitly exclude it. Preserve displayed0.28CPU/0.31elapsed, self prepublication0.284292CPU/0.291023wall and observed RSS separately. Wrapper exit1/sysctl denial, child exit UNKNOWN and full_extended_meter_accepted=false remain explicit; this is admitted source-body/basic-meter evidence, not a clean wrapper or complete extended-meter claim. No repeat is requested.
+
+Budgets match reviewed source: total7200CPU/10800wall, dispatch6600/closure600, preflight120/180, each worker120/180/native150 request, cleanup3, unresolved-child120 and final120/180 within totals. Actual main -p meter and receipt still require external reconciliation after closure; observed RSS comes from receipts, not nonexistent extended statistics. Deferred native interruption and complete-read180 acceptance remain distinct. This static PASS neither establishes runtime/physical success nor authorizes automatic retries, expansion, fitting or a scientific conclusion.
