@@ -1,0 +1,65 @@
+{
+  "policy": "conventional-recovery-owner-v1",
+  "mode": "DRAFT",
+  "review_disposition": "PENDING",
+  "workdir": "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017",
+  "source_revision": null,
+  "source_freeze_assumption": null,
+  "source_sha256": null,
+  "source_closure": {"roots": ["run_capacity_terminal_cg"], "sibling_python_paths": null},
+  "command": null,
+  "sibling_source_root": "/Users/nadan/Documents/projects/demandresponse/.codex-work/capacity-packed-20261001",
+  "sibling_source_revision": "3a0ab6a8ab50e4af7d5a7be7688d5ffa1fbbf78c",
+  "base_seeds": [62001, 62002, 62003, 62004],
+  "sizes": [12, 24],
+  "phases": ["F", "N", "D", "UN", "UD"],
+  "planned_states": 40,
+  "quote": "source_shape",
+  "start_fee": 0,
+  "clean_argv": ["--start-fee", "0"],
+  "budgets": {
+    "total_cpu_s": 5100, "total_wall_s": 7800,
+    "dispatch_cpu_s": 4800, "dispatch_wall_s": 7200,
+    "closure_cpu_s": 300, "closure_wall_s": 600,
+    "preflight_cpu_s": 120, "preflight_wall_s": 180,
+    "worker_cpu_s": 120, "worker_wall_s": 180,
+    "native_cutoff_s": 150, "cleanup_s": 3, "unresolved_child_cpu_s": 120,
+    "finalization_cpu_s": 120, "finalization_wall_s": 180
+  },
+  "native_parameters": {
+    "oracle": {
+      "Threads": 1, "Method": 1, "MIPGap": 0, "Seed": "unchanged_native_default",
+      "CG_nominal_s": 50, "MIP_nominal_s": {"F": 50, "N": 50, "D": 25},
+      "dive_nominal_s": {"F": 0, "N": 0, "D": 25},
+      "seeds": [], "partition": true, "batch_size": 30, "max_iters": 100000,
+      "rc_eps": 0.000001, "viol_tol": 0.000001, "smoothing": 0,
+      "dive_theta": 0.7, "dive_mode": "simple", "partial_pricing": null,
+      "directional": false, "integer_pricing_seconds": 0
+    },
+    "union": {"Threads": 1, "Method": 1, "MIPGap": 0, "Seed": "unchanged_native_default", "nominal_s": 100, "optimize_calls": 1},
+    "native_cutoff_s": 150, "parent_wall_s": 180, "hard_cpu_s": 120, "rss_bytes": 5368709120
+  },
+  "environment": {
+    "OMP_NUM_THREADS": "1", "OPENBLAS_NUM_THREADS": "1", "MKL_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1", "NUMEXPR_NUM_THREADS": "1", "BLIS_NUM_THREADS": "1",
+    "SLURM_CPUS_PER_TASK": "1"
+  },
+  "data_authority": {"external_inputs": [], "own_campaign_artifacts_only": true},
+  "tracking_prefix": {
+    "retained_research_cpu_s": 20268.40,
+    "displayed_research_cpu_s": 20267.71,
+    "research_wall_elapsed_sum_s": 20889.24,
+    "legacy_excluded_cpu_s": 2546.091499549272,
+    "source_review_cpu_s": "UNKNOWN"
+  },
+  "numerical_resource_prefix": {
+    "retained_research_cpu_s": 20268.40,
+    "research_wall_elapsed_sum_s": 20889.24,
+    "source_review_cpu_s": "UNKNOWN",
+    "new_preparation_adopted_once": false
+  },
+  "preparation_limits": {"cpu_s": 10, "wall_s": 20, "body_cpu_s": 6, "body_wall_s": 15},
+  "preparation_accounting": {"external_accepted": false, "charged_cpu_s": null, "elapsed_s": null},
+  "authorization": "DRAFT denies source preparation, fixture generation, artifact inputs, project/native imports and dispatch until parent review and explicit separate freeze. No automatic retry.",
+  "scope": "Minimal conventional recovery study, not the full NEXT_EXPERIMENT gate; no ML promotion, novelty, nonlinear or V2G claim."
+}
