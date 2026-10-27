@@ -1,3 +1,32 @@
+# Current handoff — ICML research assessment and literal qualification
+
+27 October human explicitly requested an ICML January target, substantive rejection
+assessment, missing research and follow-through. NEW research-20261027/
+icml_research_decision contains README, PRIOR_ART, SCIENTIFIC_TARGET,
+NEXT_EXPERIMENT, RESULTS, FINAL_RESOURCE_RECEIPT and HANDOFF. Read those compact
+notes for this direction. Source4a20f8da/control7378c728; one stdlib literal check
+CLOSED_PASS,213 assertions on one abstract family, no transport/solver/fit.
+All3 bounded Sol tasks completed, no child/persistent session/numerical worker.
+Do not rerun/hash the literal check or old packages.
+
+Closest prior art already covers GNN electric-bus pruning, integer-useful column
+learning, multi-column selection and classical compatible-set repair. No ML
+contribution established yet. Conditional next target is costly valuable integer
+completion after competent conventional recovery. Direct joint completion is
+mandatory; fixed-pool selection and paid generation are distinct. Partition-aware
+diving exists but was off in the old pilot; existing IPColGen adaptation rejects
+partition mode. Do not weaken service or call unsupported recovery as a baseline.
+Next transport cohort/manifest/command remains PENDING; no old failed-cell retry,
+scarcity/scale shopping or automatic fit. Internal ready date15Jan2027; official
+ICML2027 deadline unconfirmed. No new automation or GoogleDoc append.
+
+New literal .04CPU/.28wall displayed, retained.06CPU; globalclosed displayed
+20267.71CPU/20889.24elapsed-sum, retained20268.40CPU. Static/tool/Git/reviewCPU
+UNKNOWN and not zero; legacyguard2546.091499549272 separate. No doublecount,
+reset/refund or restored historical compliance. All earlier restrictions persist.
+
+## Previous checkpoint — grouped pricing workload closed
+
 # Current handoff — grouped pricing workload closed, readiness inconclusive
 
 pricing_workload_pilot/attempt01 CLOSED after sourcebb9086e8/controlc9adcd6f.
