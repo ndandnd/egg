@@ -1,3 +1,37 @@
+# Current handoff — grid-information learning CLOSED_COMPLETE
+
+New human request for a distinct joint EVSP–grid ML experiment and capacity diagnosis
+completed. Read research-20261027/grid_information_pilot/RESULTS.md,
+INTERPRETATION_REVIEW.md, FINAL_RESOURCE_RECEIPT.json, RUNNING_HANDOFF.md,
+GOOGLE_DOC_APPEND.json. Sourcecf110af92471d4579d3c27952eef936a34d151aa,
+control6e4b7101; owner13232exit0/solechild84240exit0/reaped. Allthreeboundedagents
+completed, no numericalworker. Sourceadmission/owner/worker/inlineREADOUTonce;
+no retry/finalizer/export/hash/replay/native. Frozen consumedfilesimmutable.
+
+12train/4validation/8newdevelopmenttestgroups,all24distinct;128bank+768teststates
+allstrictphysical/nativeOPTIMAL,no failure/missing/unattempted. UnknownbackgroundU
+prediction beforejointcontinuouscharging/freepaths; properaffinesystemeconomics.
+QuadRidge bestfittedexpectedcost71.352922,largeMSE71.368882,DFL71.621344,
+unconditional71.989536,conditionalmean71.276929. Information0.9947648%pairedmeanE,
+positive8/8groups,narrowlymissed>1%screen; quad-to-referenceheadroom0.1052607%.
+Fixedrouteconditionalreference matchedjoint to roundoff,notroutelearningvalue.
+No empiricalforecasting/V2G/novelty/unrestrictedphysical claim.
+
+Capacity MATTERED:32²→128² improved0.1088803%pairedE,positive7/8groups;
+256²32rowprivilegedfitdiagnosticpassedRMSE.009978815at292updates,notproduction.
+MainMSE500cap/convergenceunproved; thisdoesnotretrospectivelysettleoldGNN.
+DFLselectedseed29epoch4worseneditsMSEinitvalidation;seed17improvedbutnotselected.
+Epoch0noteligible;recipe/surrogatelimitsretained,noDFLfamilyban/posthocrescue.
+Bothpromotiongatesfailed. Close scopedproposal; no hardercohort/fit/retry/newmanifest.
+
+New69.16displayedCPU/82.36elapsed,retained69.18 inclfit+sourceadmissiononce.
+Global21340.92displayedCPU/22031.57elapsed-sum/21341.77retainedCPU. Legacyguard
+2546.091499549272separate,static/tool/reviewUNKNOWN,noreset/refund/doublecount.
+GoogleDocverified[290401,295880),allpriorcontent/eightimages;noduplicateappend.
+Automationdeleted; sealed/cluster/siblingmutationclosed. No approvalpending.
+
+## Previous checkpoint — retained history
+
 # Current handoff — repaired conventional recovery CLOSED_COMPLETE
 
 Human-approved continuation done. Readresearch-20261027/conventional_recovery_continuation/
