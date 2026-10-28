@@ -1,17 +1,31 @@
-# Current handoff — repaired recovery RUNNING
+# Current handoff — repaired conventional recovery CLOSED_COMPLETE
 
-Human explicitly approved repaired continuation; no approval pending. Read
-research-20261027/conventional_recovery_continuation/RUNNING_HANDOFF.md,
-PROTOCOL.md, MAIN_CONTROL_REVIEW.md. Sourcec5473f4f/maincontrol2d927cc9;
-one managedowner51949 RUNNING. Allboundedagentscomplete. Three oldsuccessful
-62001/12F/N/D rows transfer underexactpins;37possiblefreshworkers, same40
-scientificassignments. Importfixonly inunionbranch; no cohort/physics/objective
-tuning. Frozen consumedfiles; no duplicates/oldpoll/hash/replay/readout/export.
-Binding+prep oncepassed; .40retainedCPU/.51elapsedallowance adoptedonce.
-Prefix20284.99displayedCPU/20908.41elapsed-sum/20285.74retainedCPU excludes
-thisnewpackage. Oldfailure preserved; newallowance4930CPU7600wallinclusive.
-Afterexit collectfinalcompactreceipts/meter, interpret andbackup. Noautomatic
-retry, fit, sealed/cluster/siblingmutation ornewautomation.
+Human-approved continuation done. Readresearch-20261027/conventional_recovery_continuation/
+RESULTS.md,INTERPRETATION_REVIEW.md,FINAL_RESOURCE_RECEIPT.json,
+NEXT_RESEARCH_DECISION.md,RUNNING_HANDOFF.md,GOOGLE_DOC_APPEND.json.
+Sourcec5473f4f/maincontrol2d927cc9;owner51949exited0,37newchildrenreapedexit0,
+3successfulpriorrowsreused;all3boundedagentscompleted,nonumericalworker.
+Binding/sourceprep/owner/inlineREADOUTeachonce;nooldpoll/retry/hash/replay/native/
+readout/export/finalizer. Originalfailedattemptstaysimmutable;41actualchildren
+acrossversions. Noapprovalpendingforthecompletedrun.
+
+All40states/fourgroups: F8/8,N4/8,D4/8,UN8/8,UD8/8strictphysical. EightN/D
+24tripNoSelectionfinitepoolfleetINFEASIBLE,notphysicalinfeasibility;Falone8/8.
+All24producerbanksqualified,16unionnativeOPTIMAL/physical. Six/eightperunion
+retainedtiedFafterfreshcandidate;alllargercandidatesF-origin,notuniquenessproof.
+UN-F=UD-F complete8mean31/13776=.225029%pairedownFgridE,positive2/4groups;
+UD-UN0all8. Nativejoint.04597–4.86856s vsfullstage2.8339–46.5301s.
+62001/12gridgain82to81.5worsensreal61.1to62.0/charge412to422,terminal180same.
+Noomittedroute/exactphysical/nonlinear/V2Gcertificate. Stop learnedfixedbank
+selectorfortestedregime;noautomaticfit/hardercohort/staticbusywork. Distinct
+justifiedhypothesis orhumandirectionneeded;notuniversalneuralban.
+
+New986.77displayedCPU/1040.80elapsed-sum,986.85retained;originalfailurepaid.
+Combinedstudy1004.05displayedCPU/1059.97elapsed-sum/1004.19retained.
+Global21271.76displayedCPU/21949.21elapsed-sum/21272.59retained. Legacyguard
+2546.091499549272separate;static/tool/reviewCPUUNKNOWN,noreset/refund.
+GoogleDocappendverified[285218,290401),allpriortext/eightimagesretained.
+No duplicateappend. Automationdeleted;sealed/cluster/siblingmutationclosed.
 
 ## Previous checkpoint — retained history
 
