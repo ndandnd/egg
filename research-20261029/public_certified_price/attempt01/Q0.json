@@ -1,0 +1,56 @@
+{
+  "status": "PASS",
+  "literal": {
+    "loads": [
+      "0",
+      "2"
+    ],
+    "ops": "1",
+    "prices": [
+      "3602879701896397/18014398509481984",
+      "466292697418769247/2305843009213693952"
+    ],
+    "objective": "3233304308475202015/2305843009213693952",
+    "private_score": "1619214202025616223/1152921504606846976",
+    "conjugate": "5124095576030431/2305843009213693952"
+  },
+  "negative_controls": [
+    {
+      "id": "changed-gradient",
+      "rejected": true
+    },
+    {
+      "id": "changed-cost",
+      "rejected": true
+    },
+    {
+      "id": "negative-load",
+      "rejected": true
+    }
+  ],
+  "comparisons": [
+    {
+      "status": "EXACT_SUPPORT_CERTIFIED",
+      "private_score": "1619214202025616223/1152921504606846976",
+      "response_lower": "1619214202025616223/1152921504606846976",
+      "own_price_regret_upper": "0",
+      "exact_support_equality": true
+    },
+    {
+      "status": "SUPPORT_UNRESOLVED",
+      "private_score": "1619214202025616223/1152921504606846976",
+      "response_lower": "466292697418769247/1152921504606846976",
+      "own_price_regret_upper": "1",
+      "exact_support_equality": false
+    },
+    {
+      "status": "CONTRADICTION",
+      "private_score": "1619214202025616223/1152921504606846976",
+      "response_lower": "2772135706632463199/1152921504606846976",
+      "own_price_regret_upper": null,
+      "exact_support_equality": false,
+      "reason": "Exact response lower exceeds certified physical bill"
+    }
+  ],
+  "scope": "New stdlib transfer/identity algebra only; no repeated native Q0"
+}

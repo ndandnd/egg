@@ -25,3 +25,7 @@ Minimal `run.py` repair now validates row terminal statuses, Boolean resource/ti
 One evidence-preservation adjustment is pending parent integration: construct the native packet and reset `packet_published=False` **before** testing exported price equality. Otherwise a price mismatch occurs before the existing failed-packet handler has the native result to preserve. Mathematical rejection is already correct; this changes only preservation of the diagnostic. Parent is reviewing/editing worker in parallel, so no competing worker edit was made here.
 
 Subject to that ordering adjustment, no remaining integration blocker found. Source/control freeze and actual complete external closure remain required; this review establishes no numerical support result.
+
+## Pre-freeze resolution
+
+Parent reports the requested exact preservation move was applied: native packet construction and `packet_published=False` now precede the exported-price comparison, with no other worker mutation. This resolves the outstanding evidence-ordering item. Integration verdict is scoped PASS; no runtime result was inferred by this source-only acknowledgement.
