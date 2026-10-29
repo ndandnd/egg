@@ -1,9 +1,9 @@
-\section{Classical exact formulations for charge-only setup}
+\subsection{Classical exact formulations for charge-only setup}
 \label{app:setupchargeonly}
 Loss of the minimum-$r_m$ summary does not require enumerating all matchings
-or using a learned method. Under the common-window charge-only model,
-ordinary resource allocation and a polynomial-size duty formulation remain
-available. These are classical baselines, not new optimization algorithms.
+or using a learned method. The common-window charge-only model admits
+ordinary resource allocation and a compact duty formulation.
+These are classical baselines, not new optimization algorithms.
 
 Assume common capacity $B$, zero other draw/reserve, full initial and
 terminal inventories, common efficiency $\alpha\in(0,1]$ in both windows,
@@ -16,7 +16,7 @@ time, energy and cost. Terminal actions have no setup. No minimum session, taper
 access change is allowed. Early sessions on one bus can then be merged
 without changing endpoint SOC or increasing transfer time or setup count.
 
-\subsection{An exact interval for a fixed matching}
+\subsubsection{An exact interval for a fixed matching}
 Fix the duties. A bus consuming $A_v$ before the early window and $B_v$
 afterward has the true grid-energy box
 \[
@@ -56,7 +56,7 @@ only $C=0$ is possible, requiring all $r_v=0$ and $G\le H$.
 The scan uses mandatory count and ordered capacities as well as $R$;
 it is not an exact joint-matching reduction.
 
-\subsection{A compact duty MILP}
+\subsubsection{A compact duty MILP}
 Use each allowed pair $(i,j)$ and each standalone $(i,*)$, $(*,j)$
 as a candidate duty $d$, at most $n^2+2n$ in total. Let $A_d,B_d$ be
 its energies before/after the early window, with zero for an absent
