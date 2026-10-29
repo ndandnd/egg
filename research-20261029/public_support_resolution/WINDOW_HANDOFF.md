@@ -1,4 +1,54 @@
-# Current checkpoint — 29 October 17:28 UTC, window ACTIVE
+# Current checkpoint — 29 October 17:43 UTC, window ACTIVE
+
+Final review artifact PDF13 is CLOSED_COMPLETE_VISUAL_PASS:
+output/pdf/focused-theory-20261029-v13/main.pdf,66pages/main1–8.
+Source2193e0c234931efad8acacbf1cefeefe3ac9e985,
+control0790859e2c322b187028bc7960b2c3794eda8967 pushed before ONE build.
+Compile53795exit0/render47206exit0; no numerical/artifact worker remains.
+AllactualPNGs inspected: parent1–22/core23–44/fresh45–66, allPASS.
+Read PDF_SNAPSHOT13_RECEIPT.json/PDF_QA13_* and INDEPENDENT_REVIEW_BRIEF.md.
+No rerender/oldpoll/sourcehash/scientificreplay follows. PDF12 retained with
+editorial orphan-page defect: parent1–12 inspected,13–23 explicitlyuninspected,
+other44pagespassed. It is not an all-pagePASS. Separate reviewed paragraph
+shortening fixed layout in13; no scientific claim/result changed.
+
+PDF12cost13.55displayedCPU14.09elapsed retained13.59;
+PDF13cost13.44displayedCPU15.46elapsed retained13.48; bothadoptedonce.
+GLOBAL CLOSED24141.80displayedCPU/25089.97elapsed-sum/24144.08retainedCPU.
+Legacy2546.091499549272 separate. Parent/tool/static/agent/visual/remoteCPU
+and artifactRSS UNKNOWN; childrows overlapowner; no reset/refund/exactsession
+CPU/continuouselapsed/instantaneouscontainment claim. All prior failures paid.
+
+All three bounded review agents completed; check actualstates before action.
+Fresh no-history significance review: suitable for qualified external review,
+NOT submission-ready/establishedICMLfit. No demonstratedcentralcontradiction
+in its scopedread, but novelty/significance/practicalreach remainunresolved.
+MULLER_SUBSUMPTION_ANALYSIS.md nowcomplete/reviewed: supplied-resource cost
+aggregation and optimaldisaggregation alreadyknown, populationupdatesallowed,
+fixed-matchinglosslesssum directspecialization. Exactremainingcandidate is
+cross-matching wholepolygon containment via minimumR atfixedcardinality,
+withfiniteSOCserialrealization. Comparison doesnotclear novelty or establish
+non-derivability from otherknownresults. Explicit same-batch exclusion and
+thiscomparison are inPDF13. Reviewerbrief points toexactfinalbuild.
+
+User asks howwearedoing/whatmissing/reviewdraft. Yesreviewcopy; noexternal
+review sent. Remainingmaterialholes: external mathematical/novelty assessment,
+usefuloperationalregime/calibratedmagnitude/prevalence, externalreplication/
+releaseinventory, and substantiveMLcontribution. LargerMSEmodel improved
+smaller in7/8groupmeans, butbestquadraticridge remainsstronger; 500-update
+ceilings andoldGNNseparatescope prohibituniversalcapacity/convergenceclaims.
+Do not reviveclosedmodels or makefavorablecases toforceMLvalue.
+
+Guidecurrent; private48slidedeck state27 unchanged. Exact-lawportablepass and
+alloldclosedattempts belowremainimmutable. No newresearchcomputationfrozen.
+Continueonlyindependentlyusefulscopedwork until18:10:45UTC; donotinvent
+extraappendices, repeatedaudits or runs tofilltime. Atdeadline launchnothing,
+safelycloseownedwork/reportactualstate/deleteONLY heartbeat
+egg-paper-research-through-29-october-14-10-et. Notasubmissionreadyclaim.
+
+## Earlier checkpoint — retained history
+
+# Checkpoint — 29 October 17:28 UTC, window ACTIVE
 
 No numerical/artifact worker remains. NEW exact-law portable attempt01 is
 CLOSED_PASS: source6c8dfb83bb83196b7b591db9057aa794502dad5d/control71924fb1,
