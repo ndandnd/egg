@@ -1,0 +1,11 @@
+# Self-study guide update review
+
+Updated only `GUIDE.md` and this review. Read the existing guide, the consolidated learning-update draft, compact `public_support_tree/attempt01/results.json`, and `public_price_witness/RESULTS.md`. No raw packets, recomputation, replay, imports, tests, hashes, native execution, deck edits or commits were used.
+
+The guide now explains why a convex attainable load interval can retain a nonconvex joint load–operating-cost frontier. Its fixed shared-connector section distinguishes early K/terminal H from the older terminal-K convention, preserves infeasible cardinalities, collinear physical thresholds and zero-fee handling, and separates the general allowed-graph theorem from its complete-graph sorting shortcut and 14-case qualification. The earlier eight-case hardware policy remains separate.
+
+The new V2G section distinguishes gross throughput from net settlement, states lossless/equal-rate/signed-domain assumptions, explains both persistence and restoration, and retains the paid-idle-bus cap and H=S limitation. It claims no V2G software or learning experiment.
+
+The public section replaces the obsolete unresolved interval with exact-certificate strict separation. Displays are CH≤441.142238, D≥441.151027, gap≥0.008790 and the outward physical upper D≤441.532913. The gap lower comes from the exact rational difference, not subtraction of rounded displayed endpoints. Compact results report COMPLETE coverage of 303 nodes, positive-gap certification, no failures and resource pass. No raw tree was rechecked for this editorial update. The price-witness package's earlier unresolved statement is explained as its own package boundary.
+
+The guide distinguishes incumbent regret, conditional route optimality, feasible mixture upper and global physical lower. It does not assert an exact global physical optimum or global hull optimum. The conclusion is model-specific and the certified lower gap is small. Learning-pilot values, conventional recovery details, strong classical comparisons and the honest larger-model/old-GNN capacity diagnosis were preserved. The study answer and research outlook were updated so they no longer contradict the resolved public sign. The 22-slide deck remains unchanged and is explicitly identified as older.

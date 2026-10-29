@@ -1,118 +1,135 @@
-\section{What the public timetable does and does not establish}\label{sec:public}
-The analytical construction proves possibility, not operational frequency.
-The public case uses the Hildenbrand timetable from the Sistig data
+\section{An exact positive gap on one public timetable}\label{sec:public}
+For the stated charge-only model of one public 37-service timetable, an
+independently checked physical lower bound strictly exceeds a feasible
+complete-plan mixture's hull upper. The outward bounds are
+\begin{equation}\label{eq:publicbounds}
+ \CH_{15}\le441.142238<441.151027\le D_{15}\le441.532913,
+ \qquad D_{15}-\CH_{15}\ge0.008790.
+\end{equation}
+The gap lower is rounded downward from the exact rational difference,
+not obtained by subtracting the two separately rounded displayed bounds.
+The upper on $D_{15}$ rounds upward the qualified exact witness value
+$441.532912\ldots$. Neither $D_{15}$ nor $\CH_{15}$ is known exactly.
+By Proposition~\ref{prop:support}, no physical fleet is supported at its
+own marginal prices under this declared model and tariff convention.
+This is an exact sign certificate with a small certified separation; it
+is not evidence of a practically large loss or operational prevalence.
+
+\subsection{The declared case and objective}
+The case uses the Hildenbrand timetable from the Sistig data
 \citep{sistig2025dataset,sistig2025electrification}: 37 mandatory services
-and the complete directed deadhead matrix. Depot 15 and depot 16 define
-separate one-depot modifications of the original network. Source timetable
-offsets, including next-day services, are retained; source data do not
-provide the synthetic energy and cost assumptions below.
+and the complete directed deadhead matrix. Depot 15 and depot 16 are
+separate one-depot modifications of the same base timetable, not independent
+operational samples. The nonlinear sign certificate concerns depot 15.
+Source timetable offsets, including next-day services, are retained; the
+source data do not supply the energy or economic calibration below.
 
 Service consumption is 1.20 kWh/km plus 16 kWh per service hour; directed
 deadheads use 0.96 kWh/km plus 16 kWh per travel hour, and explicit off-depot
-waiting uses 16 kWh/h. Depot-parked auxiliary draw is zero. A used bus has
-400 kWh usable inventory, zero reserve, unit efficiency and 360 kW acceptance.
-One 360 kW connector is shared. Every used bus starts full and returns full
-by a synthetic 30:00 service-block boundary. There is no taper or switching
-time. Monetary movement cost is zero; movement time and energy remain
-physical constraints. The used-bus fee is 100. This finite block is not a
-certificate of repeating daily operation.
+waiting uses 16 kWh/h. Depot-parked auxiliary draw is zero. Each used bus
+has 400 kWh usable inventory, zero reserve, unit efficiency and 360 kW
+acceptance. One 360 kW connector is shared. Every used bus starts full
+and returns full by a synthetic 30:00 service-block boundary. There is
+no taper or switching time. Monetary movement cost is zero, but movement
+time and energy remain physical constraints. The used-bus fee is 100.
+This finite block is not a certificate of repeating daily operation.
+The public model remains charge-only; the preceding V2G classification
+is a separate analytical model and was not applied to this timetable.
 
-The initial flat tariff is 0.2 per kWh. Because the complete-plan objective
-is linear, its physical and hull optima have equal value regardless of the
-discrete assignments. A native numerical flat optimum near 408.53 at depot 15
-is tolerance-qualified and does not identify the ideal stored-input rational
-optimum. Exact rational evidence instead provides a two-bus physical witness
-and a cardinality-gated path-cover relaxation, giving outward bounds
-\[
- D^{\rm flat}_{15}\in[404.92,408.54].
-\]
-An exact one-bus obstruction establishes minimum fleet size two. Depot 16
-has an exact lower bound 414.39, but its reported two-bus upper witness is
-numerical; the resulting interval must be labeled mixed evidence.
-
-On the same finite depot 15 ideal model, let
+For its 30 hourly market intervals, the convex supply objective is
 \begin{equation}\label{eq:publicF}
  F(e)=\sum_{t=1}^{30}\left(0.2e_t+\frac{e_t^2}{1800}\right).
 \end{equation}
-The displayed coefficients denote the original stored binary values in the
-exact certificates.\footnote{Precisely, the linear coefficient is
+These familiar decimal coefficients denote the original stored binary
+values used in every exact certificate.\footnote{The linear coefficient is
 $3602879701896397/18014398509481984$ and the quadratic Hessian coefficient is
 $5124095576030431/4611686018427387904$; the quadratic term is half the latter
-times $e_t^2$. The familiar decimal expression displays their intended scale.}
-A new exact two-bus witness and an independently reconstructed rational
-lower certificate for a per-leg perspective energy-flow relaxation
-give the presently established outward bounds
-\begin{equation}\label{eq:publicbounds}
- 434.17\le\CH_{15}\le D_{15}\le441.54,\qquad
- 0\le D_{15}-\CH_{15}\le7.37.
-\end{equation}
-The new exact lower is approximately $434.17948$, rounded downward here;
-its validity follows from a supply tangent, sign-valid rational row
-multipliers and finite-bound compensation for stationarity residuals.
-It improves the earlier energy-floor lower of 429.22. The continuous
-energy-flow relaxation is not asserted to equal the complete-fleet hull.
-A separate native integer solve returned OPTIMAL with objective
-$441.532912\ldots$, but its candidate failed strict physical replay and
-did not itself improve the exact upper or establish ideal-model optimality.
-The native status and the independently checked rational lower are
-different evidence. An earlier admitted witness had cost
-$442.123049\ldots$. A time-limited classical MIQP supplied its routes and
-charging proposal; two terminal energy changes smaller than $7\cdot10^{-12}$
-kWh restored exact full inventories. A separate rational event replay then
-verified all services, directed movements, battery bounds, shared connector
-use and full replenishment. The original unadmitted numerical proposal is
-retained separately. No route or nonterminal charging allocation changed.
+coefficient times $e_t^2$.} The coefficients are synthetic. The result
+therefore concerns a specified ideal scheduling and supply-cost instance,
+not calibrated market behavior, a strategic pricing equilibrium or an ML
+experiment.
 
-For any fleet with at least three buses, its operating cost and only the
-linear mandatory-service-energy component already exceed $477.82$. Movement
-consumption and the quadratic cost are nonnegative. Such a fleet cannot
-improve the new physical upper. Together with the one-bus obstruction, this
-establishes exactly two buses at any physical planner optimum. It does not
-exclude larger-fleet components from arbitrary hull mixtures or from a
-price-response problem at another tariff.
+\subsection{What establishes the strict separation}
+The physical upper comes from a newly reconstructed rational charging
+allocation on selected routes. It passed an independent exact physical
+replay, including every service, movement, battery bound, shared connector
+and full terminal inventory. A separate sign-constrained rational dual
+certificate proves its charging optimum on those routes. That conditional
+optimality is not promoted into a global planning certificate.
 
-Separately, a second strictly admitted physical plan and the protected witness
-give a feasible complete-plan mixture with value $441.600681\ldots$, hence
-$\CH_{15}\le441.61$. Its negative initial directional derivative proves that
-the protected witness is unsupported at its own marginal prices. A mixture
-is not a dispatch, and an unsupported incumbent is not proof that an optimal
-physical fleet is unsupported. A subsequent fixed-route charging QP returned
-the same lower numerical value $441.532912\ldots$, but its first exact dual
-recovery failed on a multiplier sign; the conditional global own-price
-checks were therefore unattempted. A distinct rational phase-I method then
-constructed a new exact primal, admitted it by independent physical replay,
-and found sign-valid multipliers certifying its fixed-route charging optimum.
-This supplies the stronger physical upper in \eqref{eq:publicbounds}; it also
-supersedes the earlier mixture upper as a bound on $\CH$. The original failure
-remains recorded. Fixed-route optimality still does not exclude a profitable
-complete-fleet deviation or certify global marginal-price support.
-A subsequent full declared-graph response query at this stronger incumbent's
-exact marginal prices returned a native integer optimum but again failed
-strict physical admission. Its value alone is not a profitable physical
-deviation. Using only those selected route identifiers, one new linear
-charging problem and rational construction produced a separately admitted
-response. Its fixed-price objective has an exact fixed-route optimality
-certificate. Its nonlinear planning cost is higher, but its bill at the
-incumbent's posted prices is strictly lower. Thus this stronger incumbent
-is also provably unsupported. A directly checked rational mixture of the
-two admitted plans has a value strictly below the incumbent's physical cost.
-The mixture is a feasible hull upper, and its exact value is recorded in the
-reproducibility artifacts; it is not a physical schedule or a global hull
-optimum. No full-route discovery or old physical replay was repeated to
-construct it.
+A different strictly admitted physical response has a higher nonlinear
+planning cost but a lower bill at this incumbent's fixed marginal prices.
+It therefore supplies a genuine deviation, rather than a raw floating
+candidate. An exact two-plan mixture of these admitted plans, checked by
+direct quadratic evaluation and one-dimensional optimality conditions,
+supplies the hull upper in \eqref{eq:publicbounds}. A mean complete-plan
+load is not a physical daily dispatch; the mixture upper is not asserted
+to be the global hull optimum.
 
-The bounds neither determine
-$D_{15}$ or $\CH_{15}$ nor establish a positive gap. No new public sign
-certificate is asserted in this draft.
+The missing global step is supplied by a new physical branch proof.
+An exact one-bus obstruction proves that at least two buses are needed.
+For every fleet with at least three buses, the vehicle fee and only the
+linear mandatory-service-energy term already exceed 477.82; omitted
+movement consumption and quadratic supply cost are nonnegative. These
+facts permit searching the two-bus physical domain while covering every
+other fleet count separately. They do not exclude larger-fleet components
+from arbitrary hull mixtures or from response problems at other tariffs.
 
-There are distinct valid ways to close this question. An exact physical
-witness $x$ and a globally valid linear-response lower bound matching
-$c(x)+\nabla F(e(x))^\top e(x)$ prove support and hence $D=\CH$.
-Alternatively, a physical lower bound strictly above a feasible mixture's
-hull upper bound proves positive gap. A globally certified hull optimizer
-can also prove failure through nonimplementability: strict convexity in
-\eqref{eq:publicF} fixes its load and operating cost, and a hull operating
-cost not in $100\mathbb Z_+$ cannot be the cost of a physical fleet.
-All these routes require a global certificate or a complete infeasibility
-argument. A finite plan bank, incumbent regret, or a small native solver
-gap does not settle the sign of the ideal-model gap.
+The search produced a 303-node binary tree using 353 native calls.
+Each branch retains both values of an original movement-selection binary.
+Native multipliers and tangent loads are only proposals: exact signed
+row multipliers with finite-box residual compensation certify node lowers,
+and exact positive contradictions certify infeasible leaves. A separate
+coverage checker reconstructed the original semantic model and checked
+all 303 nodes, every inherited branch domain, and the higher-fleet floor.
+It returned complete coverage and an exact global physical lower strictly
+above the separately admitted hull upper. Thus the conclusion follows
+from rational bounds and exhaustive coverage, not a native OPTIMAL status,
+a finite plan bank or a small reported solver gap. The tree lower applies
+to physical $D_{15}$; it is not a lower bound on $\CH_{15}$.
+
+\subsection{Evidence history and limitations}
+Earlier unsuccessful stages remain part of the reproducibility record.
+They motivate the distinct certificate steps but are not retrospectively
+credited with the final result.
+\begin{center}
+\begin{tabular}{p{0.30\textwidth}p{0.62\textwidth}}
+\toprule
+Stage & Admitted conclusion and limit\\
+\midrule
+Native integer planning & Floating objective near 441.532912, but the raw
+candidate failed strict physical admission.\\
+First fixed-route recovery & Exact multiplier-sign failure; no physical
+upper or global price check was admitted by that attempt.\\
+Rational primal and dual & New exact physical witness and fixed-route
+charging optimum; global fleet optimality remained separate.\\
+Full-graph posted-price query & Exact LP response lower and regret upper;
+raw native MIP optimum failed strict admission.\\
+Fixed-route price witness & New strict physical deviation and a checked
+mixture upper; this stage alone did not prove a global gap.\\
+Physical tree and final checker & Complete physical lower strictly above
+that source-bound mixture upper; positive global gap certified.\\
+\bottomrule
+\end{tabular}
+\end{center}
+Each new physical point was admitted once; source-bound qualified witnesses
+were transferred without repeating their physical replay. The final tree
+qualification passed 39 exact controls without a backend call. Its search,
+complete coverage audit and resource closure are distinct from scientific
+optimality: the result certifies a separation, not either exact optimum.
+
+An earlier continuous energy-flow relaxation supplied the independently
+valid lower $434.17\le\CH_{15}$; it is not asserted to equal the complete-
+fleet hull. It remains a hull lower, whereas the new branched lower is
+physical only. The initial flat-tariff model also remains a separate
+comparison: its linear objective has identical physical and hull values,
+with exact outward depot-15 bounds $[404.92,408.54]$. Depot 16 has an
+exact flat lower 414.39 and a numerical upper witness, so that comparison
+is mixed evidence, not a second nonlinear sign certificate.
+
+The certified positive difference is small, and its exact size is not
+known. One timetable with synthetic energy and economic assumptions cannot
+estimate prevalence, operating savings or welfare effects in bus systems.
+The result extends the analytical possibility to this fully specified
+varied-time charge-only instance; it does not validate the simplified
+common-window model empirically or establish a learning contribution.

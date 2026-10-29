@@ -1,4 +1,46 @@
-# Current checkpoint — 29 October 08:22 UTC, window ACTIVE
+# Current checkpoint — 29 October 08:45 UTC, window ACTIVE
+
+Hard deadline18:10:45UTC/14:10:45ET unchanged. Continue useful research; draft
+is not submission-ready. NEW public_support_tree/attempt01 CLOSED_PASS:
+source6a171357b65254b52cade63ed95dcce798485f36/control6bdcf254. Managedowner35302
+exited0; worker72719 exited0/reaped. No numerical worker remains. Do not poll
+35302 or any older closed owner. All3 assigned states delivered, Q0 PASS39
+controls, exactchecker COMPLETE303nodes. Search353nativecalls/304proofvectors.
+Read public_support_tree/RESULTS.md, INTERPRETATION_REVIEW.md,
+FINAL_RESOURCE_RECEIPT.json and compact attempt01/results.json ONLY asneeded.
+No rawgzip/rerun/replay/readout/export/hashaudit or automaticretry.
+
+PUBLIC GLOBAL SIGN RESOLVED in the declaredmodel: exactphysicalDlower exceeds
+the transferred feasiblehullupper. Outward CH<=441.142238, D>=441.151027,
+exactdifference D-CH>=0.008790. Do not subtract roundedendpointdisplays to
+reconstruct the separatelyroundedgap. Qualifiedphysicalupper441.532912…
+requires upwarddisplay441.532913. The newtreebound is physicalONLY, notCHlower.
+Onebusobstruction+complete2bustree+3plusfloor coverallphysicalcounts, never
+restrictmixturecomponents. No physicalfleet is supported at its ownmarginal
+prices for the statedwholefleetparticipant/convexobjective. Neitherexactoptimum
+known. Smallmodel-specificgap, onepublicbase/syntheticcoefficients, noempirical
+calibration/prevalence/publicV2G/MLadvantage. Internalindependentcheck, notexternal
+replication. Alloldfailedcandidates/recoveries/time limits/costs remainpreserved.
+
+Treeclosedcost1055.86displayedCPU/1079.58elapsed,retained1055.88 coveringowner
+1055.869365; peakobservedworkerRSS836059136bytes/native1. PDFsnapshot02closed
+cost6.91CPU/8.00elapsed-sum/retained6.95;31pages individuallyvisuallycheckedPASS.
+Bothadoptedonce: GLOBALCLOSED23298.17CPU/24214.23elapsed-sum/23299.46retainedCPU.
+Legacyguard2546.091499549272 separate; tool/static/agent/reviewCPU UNKNOWN.
+Nochilddoublecount, noexactwhole-session/continuouselapsed/instantcontainmentclaim.
+
+Paper main/public_case updated to globalresult, notyetfreshcompiled. Snapshot02
+output/pdf/focused-theory-20261029-v2/main.pdf predates globalresult; retainit.
+Guide research-20261029/support_extension/GUIDE.md updated; existing22slidedeck
+update in progress via connected artifact_external_e52775c4-fb35-4c5c-a6df-9748b8a7ed5e,
+page_8f9b3c1086e081918f946ab9bd0d715a. No deckmutation yet atthischeckpoint.
+Coreagent conducts bounded criticalresearchreview03; other2agenttaskscomplete.
+Checkactualagentstate. Parentintegratesnextusefulresearchdecision andlearningdeck.
+No newnumericalmanifest/worker is frozen. Deadline/backup/sealedrestrictionspersist.
+
+## Earlier checkpoint — retained history
+
+# Checkpoint — 29 October 08:22 UTC, window ACTIVE
 
 Hard deadline remains18:10:45UTC/14:10:45ET. Continue useful work, no early
 submission-ready claim. Latest closed price-witness packets f5ec2aa5770188d173af7297620a5fcea99fef9a

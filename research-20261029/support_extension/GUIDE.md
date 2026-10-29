@@ -1,6 +1,6 @@
 # EGG self-study guide
 
-Companion to the 22-slide **Understanding EGG** learning deck, prepared 29 October 2026. This guide explains the current evidence; it is not an independent reproduction. The support extension has completed exact implementation qualification, and its written proof establishes its continuous-domain claims. Sources are repository-relative to `ml-prediction-20261017`. See the extension's [proof](PROOF.md) and [results](RESULTS.md).
+Self-study companion to the 22-slide **Understanding EGG** learning deck, updated 29 October 2026. The guide incorporates later theory and the resolved public support sign; the older deck has not been updated alongside it. This guide explains existing evidence and is not an independent reproduction. Written proofs establish continuous-domain claims; finite exact checks qualify implementations. Sources are repository-relative to `ml-prediction-20261017`. See the support extension's [proof](PROOF.md) and [results](RESULTS.md).
 
 ## Start with the question
 
@@ -27,7 +27,7 @@ Read the guide in order. First explain the three objectives without equations; t
 | Δ | Physical–hull gap D−CH. |
 | Regret r(x;p) | Gain available by changing the entire fleet while holding posted p fixed. |
 | Column | A variable representing an option in a restricted optimization model. Physical EVSP columns can represent one-bus duties; the economic hull here instead uses columns representing whole feasible fleets. A collection of duty columns must still satisfy service coverage and shared-resource constraints. |
-| V2G | Vehicle-to-grid export. It is not implemented in the inspected current experimental path. |
+| V2G | Vehicle-to-grid export. The new analytical section treats a declared lossless model; the inspected learning experiments do not implement V2G. |
 
 Source: `paper/latex/model_theory.tex`; `research-20261028/paper_core_verification/STATE.md`; `research-20261027/grid_information_pilot/RESULTS.md`.
 
@@ -67,6 +67,8 @@ Running these two plans on different days is a different calculation. Its mean p
 
 The unit of convexification matters. A hull of whole fleets retains each component plan's shared-charger feasibility. A relaxation based on separate duties can have a different feasible region and bound.
 
+Nor must the obstruction be a missing energy load. In the two-batch class below, the attainable early-load set is an entire interval. Every intermediate load can be dispatched using enough buses, but the cheapest operating cost drops in steps as service pairing becomes possible. The hull interpolates **load and operating cost together**. At a physical intermediate load, its interpolated operating-cost label may still be unattainable. Continuous charging and a convex load-only set therefore do not settle support.
+
 Source: `paper/latex/exact_results.tex`; `paper/latex/model_theory.tex`.
 
 ## What the support theorem establishes
@@ -103,6 +105,24 @@ The completed implementation check matched all 20 predeclared exact cases, inclu
 
 Source: `research-20261028/paper_core_verification/RESULTS.md`.
 
+## Fixed shared connectors and heterogeneous assignments
+
+The richer two-batch theorem keeps one early connector of power K for one hour and one terminal connector of power H for one hour. These resources do not scale with fleet size. Here K means **early** power; in the preceding two-service characterization K meant terminal power. Buses have common battery capacity B, start and end full, and service energies lie in (0,B]. Services occur in two batches around the common charging windows. Permitted transitions consume no time, energy or operating cost, and each service retains a standalone-bus option.
+
+An allowed bipartite successor graph declares which first/second services can share a bus. A pairing with energies a and b needs at least [a+b−B]+ early energy and can buy at most a. Let r_m be the minimum sum of those lower bounds among allowed matchings of size m, and ν the maximum matching size. With total service energy S, define
+
+    L=max(0,S−H),   U=min(sum of first-batch energies,K).
+
+At cardinality m the exact physical early-load interval is [max(L,r_m),U], with operating cost f(2n−m), whenever its lower endpoint does not exceed U. An empty interval is infeasible; clipping its lower endpoint to U would invent a schedule. Serial charging implements each permitted early and terminal quantity because the relevant buses share their respective windows. Full refill fixes late load at S−E.
+
+The thresholds r_m are nondecreasing and discretely convex on m=0,…,ν. For positive fee, the hull's lowest operating-cost frontier starts at the clipped left endpoint L, passes through retained assignment thresholds, and ends with a horizontal segment up to U. With strictly convex supply along (E,S−E), find its unique hull-minimizing E. The gap is zero exactly when that E is L, a retained physical threshold, or on the final horizontal segment. Strictly between retained thresholds the gap is positive. Keep intermediate physical thresholds even when adjacent hull edges are collinear. At zero fee, every feasible load has zero operating cost and the gap is zero.
+
+This projection and support criterion apply to an arbitrary fixed allowed graph under the stated physics. Only the shortcut using the smallest energies and opposite-order pairing requires complete crossmatching. Nonzero transition consumption or different windows can change total energy or serialization and are outside this result.
+
+The separate 14-case exact qualification covers complete crossmatchings using raw SOC enumeration and serial witnesses, including infeasibility, zero powers/fees and continuous ties. All 24 negative controls and the smoke check passed. It includes a physical collinear threshold E=20 and a clipped physical boundary E=5. It does not numerically qualify every sparse graph. The older eight-case qualification concerns a different policy with resources scaled by n; keep its denominator and hardware assumptions separate.
+
+Sources: `paper/focused-theory-20261029/heterogeneous.tex`; `research-20261029/shared_connector_support/RESULTS.md`; `research-20261029/public_support_resolution/ALLOWED_GRAPH_EXTENSION.md`.
+
 ## Why ownership matters in replication
 
 The manuscript replicates service pairs and charging resources while scaling supply curvature. The physical planning gap is at most 5/n and tends to zero. Along n=40k+1, absolute whole-owner regret tends to 351/40 rather than zero. One owner can coordinate a deviation of its entire fleet.
@@ -113,18 +133,22 @@ Reserved resources make unilateral deviations well defined. Separate owners shar
 
 Source: `paper/latex/exact_results.tex`.
 
-## What the public case leaves unknown
+## The public case: a resolved sign, a small model-specific gap
 
 The manuscript uses one 37-service public timetable in two separate one-depot variants. Scenario energy, charging and monetary assumptions are partly synthetic; these are not two independent timetable samples.
 
-The nonlinear depot-15 bounds are
+For the nonlinear depot-15 ideal model, the new exact certificates establish
 
-    429.22 ≤ CH ≤ D ≤ 512.77,
-    0 ≤ Δ ≤ 83.55.
+    CH ≤ 441.142238 < 441.151027 ≤ D ≤ 441.532913,
+    Δ ≥ 0.008790.
 
-The interval includes zero, so support failure at the public optimal fleet remains unresolved. A feasible fleet establishes an upper bound, not optimality. Its positive regret would establish an incentive for that incumbent, not automatically the optimal fleet. The flat-price case cannot exhibit a physical–hull objective gap because its objective is linear over the energy/cost pairs.
+These are compact reported displays of exact rational certificates; the strict comparison uses the rational values, not subtraction of rounded displays. The hull upper comes from a feasible mixture of two separately admitted physical plans. An independent checker verified the complete 303-node binary-tree coverage and exact node bounds; a qualified physical floor excludes fleets of three or more buses. Together these bound every physical plan above that feasible hull value. The tree is a physical lower-bound certificate, not an exact global hull computation or an exact physical optimum.
 
-Source: `paper/latex/public_case.tex`; `research-20261028/paper_core_verification/STATE.md`.
+A cheaper fixed-price response had already proved that the protected incumbent was unsupported at its own prices. That alone did not settle global support. The new strict separation now proves that no globally optimal physical fleet in this declared model has own-price support, under the stated price/duality qualifications. The admitted physical upper remains a feasible plan, not an assertion that its exact global optimality is known.
+
+The certified gap lower is small in synthetic cost units. It establishes a sign and a mechanism in one idealized timetable variant, not operational prevalence, calibrated losses, a large practical effect, or an ML advantage. The flat-price variant still cannot have a physical–hull objective gap because its objective is linear over the energy/cost pairs.
+
+Sources: `research-20261029/public_support_tree/attempt01/results.json`; `research-20261029/public_price_witness/RESULTS.md`; the current focused-theory public-case discussion. The price-witness RESULTS describes its own earlier package boundary as unresolved; the subsequent independently checked tree resolves the sign.
 
 ## Conventional recovery: a strong control matters
 
@@ -166,7 +190,21 @@ The written [proof](PROOF.md) supplies the continuous-domain claims. Independent
 
 **The fee-8 counterexample prevents a tempting shortcut.** For the added battery25 bus at fee8, D=93 lies below the old CH94.8875, but the new CH is92.95. Gap0.05 and own-price regret1 remain. The enlarged hull also improves, so beating the old hull physically does not settle support in the enlarged model. For battery25 and fees h≥7, erasure occurs only at h=7. The proof supplies the fuller battery/fee region and retains planner ties; a selected optimum's regret is not necessarily every optimum's regret.
 
-These are a physical stability class, a changed-equipment region and a counterexample within the declared synthetic model. They establish no unrestricted larger-EVSP theorem, calibrated welfare effect, public-fleet prevalence, V2G result or new ML advantage. General support/convex-hull theory remains attributed prior art.
+These are a physical stability class, a changed-equipment region and a counterexample within the declared synthetic model. This particular implementation qualification establishes no unrestricted larger-EVSP theorem, calibrated welfare effect, public-fleet prevalence, V2G experiment or new ML advantage. General support/convex-hull theory remains attributed prior art.
+
+## Lossless V2G: persistence and restoration
+
+The newer V2G result is analytical, not an implemented learning experiment. It permits lossless bidirectional early charging, uniform acceptance, compulsory full terminal refill, and the same posted rate for purchases and exports within an interval. Supply must be defined on every admitted signed net load, or through an explicit background-demand model. Losses and asymmetric buy/sell tariffs require different analysis.
+
+Connector use depends on gross energy. Buying 1 and exporting 1 has net load 0 but consumes 2 units of connector throughput. Checking only the absolute net total would create fictitious capacity. Full terminal refill still charges the horizon for energy replacement; export does not create free initial inventory.
+
+V2G can preserve the obstruction: in the two-by-two example with early power K=15 and terminal power H=49, the relevant thresholds stay 0,0,9, so the same positive gap persists. More battery actions need not change the joint load–cost frontier.
+
+It can also restore support. In the stated three-by-three example, one assigned bus buys 1 early while another exports 1. Net early energy is 0, gross throughput is 2, and all buses finish full. Under that example's supply function, the charge-only gap 1/4 disappears and D=CH=67/5, supported at prices (1/5,1/5). The mechanism changes when assigned inventories are available; it does not cancel connector time.
+
+Paid idle buses need an explicit availability rule. With at most 2n buses total, deleting matching edges and using standalone service buses already represents their entire load–cost projection. In the examples with H=S, fleets above 2n are also dominated by cheaper standalone fleets at the same load. This uncapped dominance is not general when H>S: extra idle inventory can permit useful negative early net load. Idle buses are therefore not universally irrelevant.
+
+Source: `paper/focused-theory-20261029/v2g.tex`. These are exact statements for declared ideal physics and settlement, not field evidence or a qualified V2G software result.
 
 ## Study questions and answers
 
@@ -175,14 +213,14 @@ These are a physical stability class, a changed-equipment region and a counterex
 3. **Can randomizing daily schedules implement CH at the same expected cost?** Generally no. CH evaluates supply cost at the mean load; random daily operation incurs the mean of physical supply costs.
 4. **Does one large regret at a solver price prove no supporting price exists?** Not with nonunique prices. Support existence requires considering every admissible candidate price, or an appropriate certificate over that set.
 5. **Does Δ→0 make all incentives vanish?** Not necessarily for absolute whole-owner regret. The replicated example separates it from vanishing individual and per-bus incentives.
-6. **Has the public case established support failure?** No. Its certified gap interval includes zero.
+6. **Has the public case established support failure?** Yes for the declared nonlinear depot-15 ideal model: an independently certified physical lower strictly exceeds a feasible hull upper. The small certified gap does not establish prevalence or operational magnitude.
 7. **Did larger neural capacity help?** Yes in the new pilot. It still did not beat the best fitted classical baseline, and the old GNN remains a separate unresolved diagnosis.
 8. **If a new physical plan beats the old CH, is the enlarged model supported?** Not necessarily. Compare the enlarged model's D with its own CH; both may decrease. The verified fee-8 extension has D93 below old CH94.8875, yet new CH92.95 and positive gap0.05.
 
 ## What would materially strengthen the research
 
-A stronger analytical contribution would characterize preservation or disappearance of the obstruction within richer physically admissible duty sets, with precise assumptions and meaningful counterexamples. A stronger operational contribution would specify the participant and tariff institution, provide independent timetable evidence and obtain informative global support bounds. A stronger ML contribution would identify a valuable attainable decision beyond competent classical controls and demonstrate complete end-to-end gains.
+A stronger analytical contribution would extend the precise projection and support criteria beyond the declared two-batch physics, with meaningful counterexamples where they fail. A stronger operational contribution would specify participant rights and tariff institutions, provide independent timetable evidence and calibrate the magnitude of the effect. A stronger ML contribution would identify a valuable attainable decision beyond competent classical controls and demonstrate complete end-to-end gains.
 
-The current state supports an analytical mechanism, the completed capacity/fee characterization and the completed support-extension qualification. Practical prevalence, calibrated magnitude, public optimal-fleet support and a competitive neural method remain absent or unresolved. The extension's proof and bounded exact qualification do not resolve those external-evidence questions.
+The current state supports an analytical mechanism, continuous-domain characterizations, bounded exact implementation qualifications, and a positive global physical–hull gap in one public ideal-model variant. Matching, convex QP/LP, branching and exact certificate checking are classical methods; the public separation is not evidence of ML advantage. Practical prevalence, calibrated magnitude and a competitive neural method remain absent or unresolved. None of the new theory or certificates changes the learning pilot's baseline comparison or resolves the old GNN's model-capacity diagnosis.
 
 Source: `research-20261028/paper_core_verification/STATE.md`; `research-20261028/paper_core_verification/RESULTS.md`; `paper/latex/main.tex`.
