@@ -2,7 +2,7 @@
 
 This is an internal research draft for skeptical review, not a claim of established novelty, operational validity or ICML readiness. Please assess the mathematics and significance independently. No external sending or publication is authorized by this memo.
 
-Source entry point: `main.tex`. The parent is preparing PDF09; the latest PDF is provisionally PDF08 until that update is confirmed. Use the final PDF named by the parent, since this memo does not verify its build or correspondence to source.
+Source entry point: `main.tex`. The parent reports PDF10 compiled to66 pages with all page-level visual QA passed; PDF11 is pending the latest source integration. Use the final PDF named by the parent, since this memo does not independently verify its build or correspondence to source.
 
 ## A ten-minute reading order
 
@@ -22,9 +22,9 @@ Source entry point: `main.tex`. The parent is preparing PDF09; the latest PDF is
 
 ## Established tools versus candidate contribution
 
-Matching integrality and cardinality value convexity, interval/box aggregation, conversion accounting, time sharing, planar halfspace counting, convex optimization, convex-hull pricing and support duality are classical. Assignment/charging integration and V2G modeling are also prior art.
+Matching integrality and cardinality value convexity, interval/box aggregation, conversion accounting, time sharing, planar halfspace counting, convex optimization, convex-hull pricing and support duality are classical. Assignment/charging integration and V2G modeling are also prior art. Cost-aware flexibility aggregation and cost-optimal disaggregation are explicitly established by Müller, Szabó, Sundström and Lygeros (2019), inspected in their [author version](https://arxiv.org/pdf/1705.02815), Sections IV–V/equations12–17: a fixed population with common-generator zonotopes and separable piecewise-linear convex costs. Neither adding costs nor distinguishing a full cost set from its lower envelope is claimed as novelty by itself.
 
-The candidate contribution is their explicit physical synthesis: cost-labelled assignment-dependent aggregate compression across all matchings in this restricted class, with constructive finite-action exactness and carefully separated failure boundaries. Whether that synthesis is sufficiently new or consequential remains for external assessment. No new general scheduling algorithm, generic pricing theorem, calibrated empirical saving or learning advance is claimed.
+The candidate contribution is their explicit physical synthesis: at fixed fleet cardinality, one minimum summed early-requirement matching contains the entire purchase/export polygon of every other service assignment, with constructive SOC-feasible finite serial realization and the associated vehicle-cost layers. Its assumptions and setup/edge-energy failure boundaries are essential. The verified fixed-population cost-aggregation overlap does not itself establish or exclude subsumption of this narrower replacement theorem; whether that synthesis is sufficiently new or consequential remains for external assessment. No new general scheduling algorithm, generic pricing theorem, calibrated empirical saving or learning advance is claimed.
 
 ## Five pointed reviewer questions
 
