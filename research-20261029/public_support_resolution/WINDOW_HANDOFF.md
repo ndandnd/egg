@@ -7,7 +7,12 @@ withdrew Hao–Michini comparison. Branch codex/ml-prediction-20261017.
 
 Latest numerical milestone 0cb3c54de6e8e5c391afb37bcbb68ad3a51925ee and
 transfer authority 3cbb8c9d965e9222ef8a98191bf775b4925382a1 are pushed.
-No numerical or artifact worker remains. Do not poll closed managed sessions
+NEW public_certified_price/attempt01 launched ONCE after pushed control
+a6515e69, source0c562e338ea23e1c5de3215c968afeec6ba2e3bf. Managed owner18338
+is RUNNING at launch; check that exact session or its owned compact receipts,
+not guessed PIDs or historical owners. New600CPU/900wall, LP60/MIP180, all
+fleet counts and original graph, exact newly admitted incumbent prices.
+No artifact worker remains. Do not poll closed managed sessions
 62232,64890,44309,28200,3935,61201,73359 or older sessions listed below.
 
 public_rational_recovery/attempt01 CLOSED_PASS: source
@@ -51,7 +56,8 @@ Latest CLOSED GLOBAL sums:22224.27 displayedCPU/23115.14 elapsed-sum/
 runtime/drawings/PDF compile/render. Child observations overlap owner meters.
 Legacy conditional guard2546.091499549272 separate; actual tool/static/review
 CPU UNKNOWN. Not exact whole-session CPU, continuous elapsed or instantaneous
-containment. No reset/refund/restored compliance. No running cost pending.
+containment. No reset/refund/restored compliance. Running price package is
+NOT yet included; adopt its final owner meter once on closure.
 
 Paper focused-theory-20261029 now has a compiled25-page FIRST snapshot in
 output/pdf/focused-theory-20261029/main.pdf. All25 rendered pages inspected;
@@ -62,16 +68,15 @@ layouts retained. Native scientific environment unchanged; isolated plotting
 target /private/tmp/egg-paper-plot-libs-20261029. Compile/render meters and
 PDF_QA_MAIN/PDF_QA_APPENDIX contain artifact evidence. No new Google Doc append.
 
-Current agents (check actual status before acting): paper_core_review has
-prepared SOURCE-ONLY public_certified_price worker/owner/protocol/DRAFT, with
-qualified incumbent transfer and one new full-graph LP60/MIP180 at its exact
-own prices; no launch/freeze yet. independent_physical_reference prepared
+Current agents (check actual status before acting): paper_core_review completed
+the now-frozen certified-price sources; paper_literature_review completed its
+integration review. independent_physical_reference prepared
 SOURCE-ONLY public_support_tree/checker.py, exact node/Farkas/binary-coverage
 checker; paper_literature_review reviewed and hardened exclusion assumptions
 and incomplete-state flags. No tree search/manifest exists. All numerical
 sources already consumed remain frozen. Agents have no execution authority.
 
-Next: independently review/freeze/run the new own-price diagnostic; use its
+Next: close the running own-price diagnostic once and use its complete
 results to choose exact global certificate work. Do not copy native bounds
 into exact results. Tree bounds for quadratic physical problems are NOT CH
 bounds. Independently reviewed allowed-graph theorem permits fixed successor

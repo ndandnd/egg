@@ -1,6 +1,7 @@
 \section{Aggregation and the owner of the deviation}\label{sec:ownership}
-Replication provides a separate way to distinguish a planning-value gap
-from a participant's incentive. Replicate the nominal services to $n$
+The homogeneous specialization of Section~\ref{sec:heterogeneous} provides
+a separate way to distinguish a planning-value gap from a participant's
+incentive. Replicate the nominal services to $n$
 simultaneous copies of A and $n$ copies of B. Retain the per-bus physical
 parameters and fee 7. Provide $n$ early connectors of power 10 kW and $n$
 terminal connectors of power 30 kW. Supply scales with the market:
@@ -16,6 +17,9 @@ is in $[10m,10n]$, and terminal energy is $30n-E$. All terminal charges
 fit: each paired bus takes one connector, while each unpaired A/B pair
 shares one connector serially. Thus the projected opportunities used below
 have explicit physical realizations.
+All A-to-B crossmatchings are admitted in this aggregate model. Identical
+energies make their projected outcomes depend only on $m$; fixed pair duties
+are not being imposed here. In the threshold notation, $r_m=10m$.
 
 \begin{theorem}[Planning gap and whole-owner regret]\label{thm:replication}
 The hull value is $\CH_n=7591n/80$. Every physical planner optimum takes
@@ -61,6 +65,12 @@ and the explicit connector assignment make this possible with unchanged
 aggregate load, operating cost and marginal price. This is a reimplementation
 of the economic outcome, not a claim that a cross-matched literal schedule
 already respects the newly imposed ownership rights.
+This step is specific to identical services. In the heterogeneous example
+of Section~\ref{sec:heterogeneous}, fixed pairs with energies $(5,14)$
+and $(15,15)$ require 10 early kWh when both use one bus, whereas the
+crossed complete assignment requires only 9. The latter outcome cannot
+be transferred to that fixed-pair institution by relabeling. No individual
+regret bound for heterogeneous fixed ownership is asserted below.
 
 \begin{corollary}[Reserved participants]\label{cor:individual}
 For any physical planner optimum reimplemented in the reserved-pair

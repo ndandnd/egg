@@ -24,26 +24,25 @@
 Continuous charging does not make service assignments divisible. We study
 whether a complete electric-bus fleet minimizes its operating cost and
 electricity bill at the marginal supply prices associated with its own load.
-A two-service construction has no supported physical plan despite restoring
-every used battery to its initial full inventory. We characterize exactly
-when connector capacity and vehicle cost create this obstruction. Additional
-nonnegative-energy movements preserve it under the original equipment and
-charging windows, whereas an explicitly enlarged battery choice can remove it.
+For a heterogeneous two-batch class with a declared service-successor graph,
+we derive the exact joint load--vehicle-cost projection with one fixed
+shared connector in each charging window. Classical matching structure
+determines the complete-plan frontier and a support criterion for strictly
+convex supply at positive vehicle fees. A fully replenished heterogeneous
+example has a positive gap. A
+two-service specialization then characterizes how connector capacity and
+vehicle cost create the obstruction. Nonnegative-energy movements preserve
+it under the original resources, whereas an enlarged battery choice can remove it.
 A higher fee for that added battery gives a counterexample to a natural
 sufficiency test based on the old convexified value. Replication separates
 vanishing planning gaps from a whole owner's absolute deviation incentive;
 participants with reserved individual resources have vanishing incentives.
 The supporting-price machinery is classical. The contribution developed here
-is the physical construction and its conditional stability and erasure
+is the physical load--cost classification and its conditional support, stability and erasure
 characterizations. A public 37-service case has informative exact bounds but
 its optimal-fleet price support remains unresolved. These analytical results
 do not establish prevalence in operating fleets.
 \end{abstract}
-\noindent\textbf{Draft status.} This is a focused research draft for critical
-assessment of correctness, originality and significance. The public-case
-interval below is the presently established interval; no new timetable-scale
-certificate is claimed. The draft is not a submission-readiness judgment.
-
 \section{Introduction}
 An electric-bus operator assigns mandatory services to vehicles and decides
 when to recharge them. Continuous charging offers flexibility, but a vehicle
@@ -62,18 +61,24 @@ strategic model in which that operator anticipates a new tariff after each
 alternative it considers.
 
 The connection between price support and convexification is established in
-nonconvex market theory. Our question is what a fully specified electric-bus
-model can contribute beyond that connection. Full terminal replenishment is
-central: an initially full battery must not provide free net energy over a
-finite horizon. Our first construction buys exactly the same total energy
-under both service assignments, restores every used bus to full, and still
-has a strictly positive physical--hull gap. The mechanism is a change in
-\emph{when} the fleet purchases energy, coupled with the fixed
-cost of a used bus.
+nonconvex market theory. We develop its physical implications for a class of
+heterogeneous services in two simultaneous batches. Every assignment allowed
+by the declared successor graph is retained, with one fixed shared connector
+in each charging window.
+An exact joint energy--vehicle-cost projection reduces the complete fleet set to
+early-energy thresholds indexed by matching cardinality; standard matching
+convexity then identifies the hull and a precise support criterion. The
+energy-only feasible set is an interval; the relevant nonconvexity concerns
+its cost-labelled assignment layers. Full
+terminal replenishment is central: an initially full battery must not provide
+free net energy over a finite horizon. Every plan buys the same total service
+energy, yet its assignment changes \emph{when} that energy must be purchased,
+coupled with the fixed cost of a used bus.
 
-The main analysis then asks whether this obstruction is an artifact of an
-overly small alternative set. We give an exact connector-capacity and vehicle-
-fee characterization, and distinguish two kinds of enlargement. Additional
+The heterogeneous class makes the assignment set exhaustive under explicit
+timing and resource assumptions. A two-service specialization provides an
+accessible illustration and an exact connector-capacity and vehicle-fee
+characterization. We then distinguish two kinds of enlargement. Additional
 energy-consuming movements under unchanged equipment and charging access
 cannot improve either the physical or hull value in the stated construction.
 An added battery type changes the equipment set and can restore support. Its
@@ -91,6 +96,7 @@ prevalence are separate research questions.
 
 \input{related_work}
 \input{framework}
+\input{heterogeneous}
 \input{construction}
 \input{expansion}
 \input{ownership}
@@ -120,7 +126,10 @@ can replace every service assignment. Independent operators need compatible
 resource rights before their unilateral alternatives are well defined.
 The replication theorem uses reserved service pairs and connectors to make
 that comparison exact. It does not infer incentives for independently owned
-buses competing for the same unreserved depot connector.
+buses competing for the same unreserved depot connector. Heterogeneous fixed
+service pairs cannot generally reproduce the efficient complete-crossmatching
+outcome by relabeling; that step in the replication comparison relies on
+identical services.
 
 All analytical models omit stochastic delays, battery degradation,
 temperature effects, charging taper and switching time. Monetary and supply
@@ -130,19 +139,22 @@ abstractions. The analytical formulas and exact implementation comparisons
 support the declared mechanisms, not estimates of an operator's savings or
 an assessment of a deployed market design.
 
-The strongest present contribution is therefore a focused analytical study:
-a fully replenished physical realization, exact stability and erasure
-regions, and a participant-scale distinction. Whether these results are
-sufficiently original and significant relative to the closest prior work
-requires critical assessment. A resolved public support certificate and
-independent timetable evidence would strengthen the case; neither should be
-implied by the current bounds. No learning advantage is established here.
+The two-batch theorem allows fixed shared charging resources but assumes
+two simultaneous service batches and no travel.
+The public timetable has varied service times, movement and waiting energy,
+and one shared connector, so it is outside that theorem's scope. Extending
+the projection to such coupled resources or obtaining a complete public
+certificate would connect the structural analysis to a wider operational
+setting. The present bounds leave that connection unresolved.
 
 \section{Conclusion}
 An electric-bus fleet can lack marginal-price support even when charging is
-continuous and every used battery is fully replenished. The two-service
-model permits an exact answer as connector capacity, vehicle fees and
-battery options change. Energy-consuming movement additions preserve the
+continuous and every used battery is fully replenished. For heterogeneous
+two-batch services with allowed successor matchings and positive vehicle fees,
+cardinality-matching thresholds determine exactly which hull-optimal loads
+are physically supported. The two-service model shows how connector
+capacity, vehicle fees and battery options change that answer.
+Energy-consuming movement additions preserve the
 obstruction under unchanged resources; a sufficiently capable battery can
 remove it at an appropriate fee. Neither a cheaper newly admitted plan nor
 a vanishing planning gap alone resolves the relevant incentive question.
@@ -156,13 +168,25 @@ and analytical formulas; agreement is an internal cross-check, not external
 replication. The connector/fee qualification contains twenty fixed cases,
 and the support-extension qualification fourteen fixed cases, with explicit
 boundary and corruption controls. These cases qualify implementations;
-the proofs establish the continuous-domain statements. Archived outcome and
+the proofs establish the continuous-domain statements. The heterogeneous
+adequate-resource specialization matched independent raw SOC enumeration
+and threshold formulas on all eight fixed cases; eighteen negative controls
+and a smoke anchor passed, including tie and continuous-response checks.
+The fixed single-shared-connector extension separately matched raw SOC
+enumeration and serial witnesses against the sorted-threshold formulas on all
+fourteen prospectively fixed cases, with twenty-four negative controls and a
+smoke anchor passing. These include physical collinear-threshold and clipped
+lower-boundary optima, assignment ties and response continua. Both are internal
+qualifications, not external replication; the eight-case run concerns the
+separate $n$-connector resource policy.
+Archived outcome and
 resource records distinguish exact arithmetic from tolerance-qualified
-native computations. No new numerical execution was performed to author
-this draft, and no public optimal-fleet support conclusion is drawn from
-the finite plan bank or solver statuses.
+native computations. This evidence update reads stored qualification results
+without rerunning the scientific calculations. No public optimal-fleet support
+conclusion is drawn from the finite plan bank or solver statuses.
 
 \appendix
+\input{heterogeneous_proofs}
 \input{proofs}
 \bibliographystyle{plainnat}
 \bibliography{references}

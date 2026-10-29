@@ -1,0 +1,295 @@
+\section{Complete assignments and their load--cost frontier}\label{sec:heterogeneous}
+The relevant projection keeps operating cost as well as load. A whole
+interval of early loads can be physical while the cheapest vehicle count
+changes discontinuously across it. We characterize this joint frontier
+first with fixed shared resources, then with a separate adequate-resource
+specialization.
+
+There are $n\ge1$ mandatory depot-to-depot services $A_i$ in $[0,1]$
+and $n$ services $B_j$ in $[2,3]$. Batteries have capacity $B>0$ and
+$0<a_i,b_j\le B$. A fixed declared bipartite graph $\Gamma$ specifies
+which A-to-B shared-bus assignments are allowed. Every allowed transition
+has zero movement time, energy and cost. Every service retains its standalone
+bus option and its original depot charging access. At most $2n$ buses are used, each at fee $f>0$,
+starting full and returning full by hour 4. One shared early connector
+has power $K\ge0$ in $[1,2]$; one shared terminal connector has power
+$H\ge0$ in $[3,4]$. Each bus accepts the corresponding connector power.
+There is no other charging, reserve, loss, taper, auxiliary draw or switching
+time. Powers $K,H$ are fixed resources, not multiples of $n$.
+The graph is an operational compatibility restriction, not a selected bank
+of duties used to approximate a larger declared opportunity set. Write
+$\nu$ for its maximum matching cardinality, including $\nu=0$.
+
+Define
+\[
+ S=\sum_i a_i+\sum_j b_j,\quad L=\max\{0,S-H\},\quad
+ U=\min\{\sum_i a_i,K\},\quad r_{ij}=[a_i+b_j-B]_+,
+\]
+\[
+ r_m=\min_{\substack{M\subseteq\Gamma\\|M|=m}}\sum_{(i,j)\in M}r_{ij},\qquad
+ r_0=0,\qquad c_m=f(2n-m),
+\]
+where $M$ ranges over allowed partial bipartite matchings and
+$m=0,\ldots,\nu$. Every such cardinality exists by deleting edges from
+a maximum matching. A matching of size $m$ uses $2n-m$ buses.
+
+\begin{theorem}[Fixed shared-resource load--cost projection]\label{thm:sharedprojection}
+The model is feasible exactly when $L\le U$. In that case put
+\[
+ m_{\max}=\max\{0\le m\le\nu:r_m\le U\},\qquad
+ m_0=\max\{0\le m\le\nu:r_m\le L\}.
+\]
+Its complete physical projection is
+\begin{equation}\label{eq:sharedprojection}
+ \bigcup_{m=0}^{m_{\max}}
+ \{(E,S-E,c_m):\max\{L,r_m\}\le E\le U\}.
+\end{equation}
+The thresholds $r_m$ are nondecreasing and discretely convex. The
+lowest operating-cost boundary $C(E)$ of the complete-plan hull starts
+at $(L,c_{m_0})$, visits $(r_m,c_m)$ for $m_0<m\le m_{\max}$,
+and is horizontal at $c_{m_{\max}}$ on
+$[\max\{L,r_{m_{\max}}\},U]$.
+\end{theorem}
+
+For a fixed matching, early purchases satisfy $0\le x_i\le a_i$ and
+$x_i\ge r_{ij}$ for a paired service. Their sum ranges over
+$[R(M),\sum_i a_i]$. Serialize them at power $K$: the shared early
+constraint is exactly $E\le K$. Every bus is present for terminal
+charging, and individual refill demands sum to $S-E$. Serialization at
+power $H$ is possible exactly when $S-E\le H$. Zero-power cases require
+zero energy and no division. Appendix~\ref{app:heterogeneous} proves
+both directions and the frontier geometry. Cardinalities above $\nu$ do
+not exist; those with $r_m>U$ are resource-infeasible. Neither supplies
+a fictitious upper-clipped endpoint.
+The energy-only feasible set is simply $[L,U]$; it is the joint cost
+frontier that matters for convexification.
+
+\begin{corollary}[Support from the cost-labelled frontier]\label{cor:sharedsupport}
+Suppose $L\le U$ and $G(E)=F(E,S-E)$ is finite, continuous and strictly
+convex on $[L,U]$. Let $E^*$ uniquely minimize $C(E)+G(E)$. Then
+\begin{equation}\label{eq:sharedsupport}
+ D=\CH\quad\Longleftrightarrow\quad E^*\in
+ \{L\}\cup\{r_m:m_0<m\le m_{\max}\}
+ \cup[\max\{L,r_{m_{\max}}\},U].
+\end{equation}
+The gap is positive precisely in the open intervals between adjacent
+retained thresholds. Admissible marginal-price support additionally
+requires Proposition~\ref{prop:support}'s supply and price-attainment
+qualification.
+\end{corollary}
+
+The clipped endpoint $L$ and intermediate physical thresholds on collinear
+edges must be retained. If $L=U$ or $m_0=m_{\max}$ the gap is zero.
+At $f=0$ the zero-matching branch attains every load at zero operating
+cost, so the positive-fee interior criterion would fail.
+The empty matching remains available even with isolated vertices or no
+allowed edges. Consequently the feasibility test is unchanged; when
+$\nu=0$, the entire projection has operating cost $2nf$ and its gap is zero.
+
+\begin{corollary}[Classical ordered matching reduction for the complete graph]\label{cor:sortedmatching}
+If $\Gamma$ contains every A-to-B edge, then for increasingly sorted
+energies $a_{(i)},b_{(i)}$,
+\[
+ r_m=\sum_{i=1}^m[a_{(i)}+b_{(m+1-i)}-B]_+.
+\]
+\end{corollary}
+Monotonicity permits selecting the $m$ smallest energies in each batch;
+a convex positive-part exchange inequality then favors opposite pairing.
+The appendix proves this classical assignment reduction. No matching
+algorithm novelty is claimed.
+The shortcut does not extend to arbitrary allowed graphs. With A energies
+$(5,15)$, B energies $(14,15)$ and battery capacity 20, allowing only the
+two corresponding-index edges gives $r_2=10$; the complete graph's crossed
+assignment gives $r_2=9$. The general theorem uses the graph's actual
+minimum-cost matching values and never invents a forbidden edge.
+
+The fixed allowed-graph extension has independent source-only proof review;
+its sparse-graph implementation qualification has not been performed.
+The complete-crossmatching specialization has a separate, prospectively
+frozen fourteen-case exact implementation qualification. Raw
+SOC enumeration and serial charging witnesses matched the sorted-threshold
+formulas in all fourteen cases; all twenty-four negative controls and the
+smoke anchor passed. The cases include a physically attained intermediate
+collinear threshold and a supported clipped lower boundary, as well as
+zero-power, zero-fee, infeasible and continuous-response cases. This is an
+internal implementation check, separate from the eight-case adequate-resource
+qualification below. Fixed chargers also impose throughput limits as service
+demand grows; this is no claim of indefinite scalability with $n$.
+Nonzero transition consumption would make total energy matching-dependent;
+transition time or staggered charging windows would invalidate the common-
+window serial argument. Inserting an arbitrary directed timetable graph
+without addressing those changes is therefore outside this theorem.
+
+\subsection{A separate adequate-resource specialization}
+We next study a different hardware policy in which the complete assignment set has an exact
+energy projection. There are $n\ge1$ mandatory depot-to-depot services
+$A_i$ occupying $[0,1]$ and $n$ mandatory services $B_j$ occupying $[2,3]$.
+Their consumptions are $a_i$ and $b_j$, with
+\begin{equation}\label{eq:batchassumptions}
+ 0<a_i\le20,\qquad0<b_j\le20,\qquad a_i+b_j\le30
+ \quad\text{for every }i,j.
+\end{equation}
+Every A-to-B assignment is allowed, without movement time, energy or cost.
+At most $2n$ identical buses may be used. Each has capacity 20 kWh,
+starts full and returns full by hour 4. Its operating fee is strictly
+positive, $f>0$.
+
+Early charging in $[1,2]$ uses $n$ connectors of 10 kW each and an
+aggregate grid limit of $10n$ kW. Terminal charging in $[3,4]$ uses $n$
+connectors of 30 kW each and an aggregate grid limit of $30n$ kW. Per-bus
+acceptance matches those connector powers. There is no other charging,
+reserve, loss, taper or switching time. The grid limits are part of the
+assumption: connector counts alone would not establish the simultaneous
+allocation used below.
+
+Since the services in each batch are simultaneous and have positive duration,
+a bus can cover at most one A and one B. Thus a complete assignment is a
+partial bipartite matching $M$. A matched pair uses one bus; unmatched
+services each use a separate bus. All crossmatchings and all cardinalities
+$m=0,\ldots,n$ are retained.
+
+Define
+\begin{align}
+ S&=\sum_i a_i+\sum_j b_j,&u_i&=\min\{a_i,10\},&U&=\sum_i u_i,\\
+ r_{ij}&=[a_i+b_j-20]_+,&
+ r_m&=\min_{|M|=m}\sum_{(i,j)\in M}r_{ij},&c_m&=f(2n-m),
+\end{align}
+where $r_0=0$. The edge cost $r_{ij}$ is the minimum early purchase
+needed by a bus covering $A_i$ then $B_j$. The thresholds $r_m$ are
+minimum-cost cardinality-matching values, not samples from a plan bank.
+
+\begin{theorem}[Exact heterogeneous fleet projection]\label{thm:batchprojection}
+Under \eqref{eq:batchassumptions} and the stated resources, including $f>0$,
+the complete physical projection is exactly
+\begin{equation}\label{eq:batchprojection}
+ \bigcup_{m=0}^n\{(E,S-E,c_m):r_m\le E\le U\}.
+\end{equation}
+The thresholds are nondecreasing and discretely convex:
+\begin{equation}\label{eq:discreteconvex}
+ 0\le r_1-r_0\le r_2-r_1\le\cdots\le r_n-r_{n-1}.
+\end{equation}
+Let $m_0=\max\{m:r_m=0\}$. The lowest operating-cost boundary of the
+complete-plan hull is the affine interpolant through
+$(r_m,c_m)$ for $m=m_0,\ldots,n$, followed by the horizontal segment
+$c_n$ on $[r_n,U]$.
+\end{theorem}
+
+The physical part of the theorem is the battery and connector argument.
+A bus that has served $A_i$ can buy any $x_i\le u_i$ early; pairing it
+with $B_j$ adds the lower bound $x_i\ge r_{ij}$. There are exactly $n$
+A buses, so their individual charge intervals can be allocated simultaneously.
+Terminal replenishment fits by grouping each matched bus alone and each
+unmatched A/B pair together on one connector. The discrete-convexity step
+uses standard bipartite min-cost-flow integrality and convex LP value
+functions. It is not a new matching theorem. The complete proof is in
+Appendix~\ref{app:heterogeneous}.
+
+Use the same scaled supply family as the later replication calculation:
+\begin{equation}\label{eq:batchsupply}
+ F_n(E,L)=4E+\frac{E^2+L^2}{10n},\qquad
+ G(E)=F_n(E,S-E),\qquad E_0=\frac{S-20n}{2}.
+\end{equation}
+Strict convexity makes the hull minimizing early load $E^*$ unique.
+
+\begin{theorem}[A complete support criterion for the two-batch class]
+\label{thm:batchsupport}
+For strictly positive fee $f>0$ under Theorem~\ref{thm:batchprojection},
+\begin{equation}\label{eq:batchzero}
+ D=\CH\quad\Longleftrightarrow\quad
+ E^*\in\{r_m:m=m_0,\ldots,n\}\cup[r_n,U].
+\end{equation}
+The gap is strictly positive exactly when $E^*$ lies strictly inside an
+adjacent threshold interval $(r_{j-1},r_j)$, $j>m_0$.
+If $d_j=r_j-r_{j-1}>0$, an intermediate threshold $r_m$ minimizes the
+hull objective exactly when
+\begin{equation}\label{eq:batchvertex}
+ \frac{f}{d_{m+1}}\le G'(r_m)\le\frac{f}{d_m},
+ \qquad m_0<m<n.
+\end{equation}
+\end{theorem}
+
+The criterion includes weak support at ties. A threshold is physical, but
+an interior point between consecutive thresholds interpolates operating
+costs that no fleet at that early load can attain. Collinear adjacent
+segments do not erase the intervening physical threshold. If $f=0$,
+the conclusion about strict interiors would fail: the zero-matching
+branch realizes every early load at zero operating cost, so the gap is
+always zero. Strict positivity of the fee is therefore substantive.
+
+The values themselves require only matching thresholds and scalar convex
+minimizations. With $\clamp(v;\ell,u)=\min\{u,\max\{\ell,v\}\}$,
+\begin{equation}\label{eq:batchD}
+ D=\min_{0\le m\le n}\{c_m+G(\clamp(E_0;r_m,U))\}.
+\end{equation}
+For each sloping hull edge $j>m_0$, evaluate its objective at
+\begin{equation}\label{eq:batchh}
+ h_j=\clamp\left(E_0+\frac{5nf}{2d_j};r_{j-1},r_j\right).
+\end{equation}
+Compare these values with the minimum on the final horizontal segment.
+Their minimum is $\CH$. If $m_0=n$, that horizontal segment alone
+remains and $D=\CH$.
+
+\subsection{A heterogeneous full-crossmatching obstruction}
+Take $n=2$, $f=7$, A energies $(5,15)$ and B energies $(14,15)$.
+Every crossmatching is admitted, with early-requirement matrix
+\[
+ (r_{ij})=\begin{pmatrix}0&0\\9&10\end{pmatrix}.
+\]
+The crossed full matching requires 9 early kWh; the other full matching
+requires 10. Thus $r_0=r_1=0$, $r_2=9$, $S=49$, and $U=15$.
+The full physical projection is
+\begin{center}
+\begin{tabular}{ccc}
+\toprule
+Matched services $m$ & Early energy interval & Operating cost\\
+\midrule
+0 & $[0,15]$ & 28\\
+1 & $[0,15]$ & 21\\
+2 & $[9,15]$ & 14\\
+\bottomrule
+\end{tabular}
+\end{center}
+Here $G(E)=2401/20-9E/10+E^2/10$. The physical optimum is the
+crossed two-bus plan at $E=9$. The hull joins $(0,21)$ to $(9,14)$
+and minimizes at $E^*=151/18$, strictly inside that edge. Exactly,
+\begin{equation}\label{eq:heteroexample}
+ D=\frac{2681}{20},\qquad\CH=\frac{434201}{3240},\qquad
+ \Delta=\frac{121}{3240}>0.
+\end{equation}
+At the physical optimum's marginal price $(49/10,4)$, its bill plus
+operating cost is $2181/10$; the one-pair zero-early complete fleet costs
+217, so its regret is $11/10$.
+
+The hull endpoints have full-inventory witnesses. For zero early charge,
+pair the 5-energy A with the 14-energy B and serve the other services
+separately. Terminal demands 19, 15 and 15 fit two connectors by serially
+grouping the last two. For early charge 9, use the crossed full matching:
+the 15-energy A bus buys 9 early, and both buses buy 20 terminally.
+Every used battery starts and finishes at 20. Mixture weights $11/162$
+and $151/162$ give the hull point. These numbers are analytically derived
+and independently checked in a source-only proof review. A separately
+frozen eight-case exact qualification of this adequate-resource class
+matched raw SOC enumeration against the threshold formulas in all eight
+cases, including ties and continuous response sets; all eighteen negative
+controls and the smoke anchor passed. This qualifies those implementations,
+not the fixed shared-resource extension above or operational prevalence.
+
+The same example also has a fixed shared-resource realization: take
+$B=20$, one early connector of power $K=15$ and one terminal connector
+of power $H=49$. Then $L=0$, $U=15$ and the same thresholds give the
+identical entire joint load--cost projection by
+Theorem~\ref{thm:sharedprojection}. Hence the displayed $D,\CH$, gap
+and regret also hold for this different hardware. Individual allocation
+sets differ: the 15-energy A bus may now buy more than 10 early kWh.
+The theorem supplies new serial realizations at powers 15 and 49;
+the earlier parallel-connector witness timings are not reused as shared
+connector schedules. This conclusion is analytical and is not covered by
+the eight-case adequate-resource implementation qualification.
+
+Both classes contain meaningful service-assignment choices, but retain
+two simultaneous batches and zero-time, zero-energy allowed transitions. The
+shared-resource theorem uses fixed connector powers; only the separate
+adequate-resource specialization scales charging resources with $n$.
+Neither covers the public varied-time case. The following two-service model makes the
+same physical/hull distinction transparent and shows how connector and
+equipment changes can preserve or remove it.

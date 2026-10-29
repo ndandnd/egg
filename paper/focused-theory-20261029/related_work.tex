@@ -7,6 +7,8 @@ problems motivate our use of a complete fleet: charging feasibility is joint
 across the selected vehicle duties, especially at a shared connector.
 Our question concerns support over alternatives that can change both the
 number of used buses and the charging opportunities created by their duties.
+Integrated flow and set-partitioning models already combine assignments,
+battery feasibility and charging slots \citep{borndorfer2024integrated}.
 \citet{wu2022grid} already choose vehicle-to-trip assignments and charging
 under grid-related objectives; full overnight charging is among their
 assumptions. Endogenous assignments, full charging and grid-aware scheduling
@@ -19,12 +21,9 @@ additionally allows service assignments and used-bus costs to change under
 explicit terminal replacement-energy accounting. More directly,
 \citet{wu2019gridinteractive} describe bus service planning coupled to market
 clearing and distribution locational marginal prices in a bilevel framework.
-This rules out a claim of first coupling bus operations to endogenous
-electricity prices.\footnote{The current bounded review verified the publisher
-abstract and section previews of \citet{wu2019gridinteractive}, but not its
-full formulation. Its relation to the narrow full-replenishment support
-construction must be checked before final submission positioning. No absence
-of integrality, replenishment or related support results is asserted.}
+Our question is the support of complete physical fleets at a fixed posted
+marginal tariff, rather than a first coupling of bus operations to endogenous
+electricity prices.
 
 Price-support failure with indivisible operating decisions is established
 in electricity-market research. \citet{oneill2005} study prices in markets
@@ -40,6 +39,16 @@ self-scheduling oracles also have established decomposition treatments
 physical alternatives in this application; it is not new column-generation
 machinery.
 
+Exact EV flexibility aggregation is also established.
+\citet{mukhiAbate2023exact} characterize fixed-population charging polytopes
+using permutahedra, with prescribed availability and full departure charge.
+\citet{mukhiLohoAbate2025exact} give generalized-polymatroid representations
+and exact Minkowski aggregation for convex individual flexibility sets.
+Our distinction is the joint load--vehicle-cost frontier when service pairing
+and the number of used buses change. The load-only projection in our class
+is an interval, not a new nonconvex flexibility set. Fixed-matching interval
+aggregation and ordered matching are classical ingredients.
+
 Aggregation must specify who owns the aggregated decisions. The classical
 perspective of \citet{starr1969} and dispatchable-demand results of
 \citet{hreinsson2021} explain why aggregate nonconvexities can become small.
@@ -48,18 +57,13 @@ planning-value gap, one owner's absolute fixed-price incentive and the
 incentives of independently reserved service pairs. The explicit rates do
 not contradict approximate aggregation results.
 
-The intended contribution is the physical and economic specificity of the
-construction: full initial and terminal inventories, exhaustive service
-partitions, continuous charging, declared connector constraints, and exact
-conditions for persistence or disappearance when feasible choices expand.
-The expansion statements use elementary convex analysis and dominance;
-their value is the question they settle in this fleet model, not a claim
-of new general equilibrium machinery. The closest-prior-art assessment is
-an explicit remaining part of evaluating the draft's contribution.
-In particular, the movement class consists of alternatives dominated under
-the preserved resources. That restrictiveness must be weighed against the
-more substantive equipment region, where newly feasible choices can either
-erase or preserve failure. Algebraic breadth in this small model does not
-establish operational breadth. A timetable-scale certificate could address
-scale, but one synthetic public scenario would still leave institutional
-relevance and prevalence to be established.
+Our structural result concerns the joint physical load--cost projection of heterogeneous
+two-batch services with declared successor matchings, full inventories and stated
+charging resources. Standard bipartite-flow integrality and LP value-function
+convexity enter the proof; general matching and price-support theory are not
+new claims. The resulting threshold criterion explains precisely where
+the optimal whole-plan mixture lacks a physical implementation. The
+two-service parameter and equipment regions then isolate changes that
+preserve or erase the obstruction. Movement-only stability is narrower:
+its additional alternatives are dominated under the preserved resources.
+All these conclusions are conditional on their physical and tariff models.

@@ -11,7 +11,8 @@ Latest qualified public primal and fixed-route charging certificate are at
 0cb3c54de6e8e5c391afb37bcbb68ad3a51925ee, with transfer authority at
 3cbb8c9d965e9222ef8a98191bf775b4925382a1. Outward bounds now
 434.17<=CH<=D<=441.54; support sign is unresolved. New complete-fleet own-price
-diagnostic is SOURCE ONLY, not launched. See WINDOW_HANDOFF for exact current
+diagnostic launched once in managed owner18338 after pushed controla6515e69;
+source0c562e338ea23e1c5de3215c968afeec6ba2e3bf. See WINDOW_HANDOFF for exact current
 agents, closed sessions, costs and next action. Do not rerun closed attempts.
 
 ## Previous checkpoint — retained history

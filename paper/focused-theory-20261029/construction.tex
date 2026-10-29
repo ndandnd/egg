@@ -1,4 +1,7 @@
-\section{A fully replenished physical obstruction}\label{sec:construction}
+\section{Two services: capacity, fees and replenishment}\label{sec:construction}
+The case $n=1$, $a_1=b_1=15$ gives a direct picture of the preceding
+threshold geometry. Varying its terminal resource also permits a complete
+connector-capacity characterization.
 Two mandatory depot-to-depot services consume 15 kWh each: A occupies
 $[0,1]$ and B occupies $[2,3]$. At most two identical buses are available,
 each with 20 kWh capacity, zero reserve and full initial inventory. Early
@@ -45,6 +48,17 @@ The mixture weights are $27/40$ and $13/40$. Both components are physical;
 the mean operating cost $371/40$ is a convexification. Running those plans
 on different days would have average physical cost 99.275, not 94.8875.
 
+\begin{figure}[t]
+\centering
+\includegraphics[width=\textwidth]{figures-v3/physical_cost_frontier.png}
+\caption{The nominal model's obstruction lies in the joint load--vehicle-cost
+frontier. Every early load from 0 to 10 is feasible with two buses, but the
+lower interpolated operating cost is not a physical fleet cost at an interior
+load. Adding the convex supply cost makes that distinction consequential.
+Curves illustrate the proved formulas; they are not sampled experimental data.}
+\label{fig:frontier}
+\end{figure}
+
 At the physical optimum's marginal price $(6,4)$, its bill plus operating
 cost is 147. The two-bus zero-early alternative costs 134 at that fixed
 tariff. This 13-unit incentive changes the entire fleet. By contrast, the
@@ -53,8 +67,8 @@ the marginal supply price of the one-bus physical load. The distinction
 explains why a hull price and an own-load tariff answer different questions.
 
 \subsection{An exact connector and fee characterization}
-Define $\clamp(v;\ell,u)=\min\{u,\max\{\ell,v\}\}$. The next result
-describes the entire declared parameter domain, including its boundaries.
+Using the same clamp notation, the next result describes the entire
+declared parameter domain, including its boundaries.
 
 \begin{theorem}[Connector capacity and vehicle fee]\label{thm:capacity}
 For $0\le K\le30$ and $f\ge0$, the model is infeasible if $K<20$.
@@ -83,6 +97,22 @@ with $f=7$ the gap is zero for $20\le K\le47/2$ and positive for
 $47/2<K\le30$. Extra charging capacity can create a price-support failure
 by enlarging the alternative set; it does not increase the planner's minimum
 cost or show that installing a connector worsens welfare.
+
+Figure~\ref{fig:regions} contrasts this capacity effect with the equipment
+extension proved in Section~\ref{sec:expansion}. The support boundaries are
+included as weak-support cases; shaded positive-gap regions are strict interiors.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\textwidth]{figures-v3/support_regions.png}
+\caption{Analytical support regions. Left: the nominal model is feasible for
+$K\ge20$; the orange interior has a positive physical--hull gap. At fee 7,
+support is lost only for $K>23.5$. Right: green denotes support after adding
+battery capacity $B$ at fee $q$ while retaining the original buses. The green
+boundary is included. Better equipment alone is insufficient: $B=25,q=8$
+still gives gap $0.05$. Units and coefficients are synthetic.}
+\label{fig:regions}
+\end{figure}
 
 The full price-response value is
 \begin{equation}\label{eq:fullresponse}

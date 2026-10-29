@@ -34,16 +34,59 @@ On the same finite depot 15 ideal model, let
 \begin{equation}\label{eq:publicF}
  F(e)=\sum_{t=1}^{30}\left(0.2e_t+\frac{e_t^2}{1800}\right).
 \end{equation}
-The existing exact two-bus witness and exact energy-based dual certificate
+The displayed coefficients denote the original stored binary values in the
+exact certificates.\footnote{Precisely, the linear coefficient is
+$3602879701896397/18014398509481984$ and the quadratic Hessian coefficient is
+$5124095576030431/4611686018427387904$; the quadratic term is half the latter
+times $e_t^2$. The familiar decimal expression displays their intended scale.}
+A new exact two-bus witness and an independently reconstructed rational
+lower certificate for a per-leg perspective energy-flow relaxation
 give the presently established outward bounds
 \begin{equation}\label{eq:publicbounds}
- 429.22\le\CH_{15}\le D_{15}\le512.77,\qquad
- 0\le D_{15}-\CH_{15}\le83.55.
+ 434.17\le\CH_{15}\le D_{15}\le441.54,\qquad
+ 0\le D_{15}-\CH_{15}\le7.37.
 \end{equation}
-The lower certificate uses the two-path flat relaxation's energy floor,
-a comparison against larger bus counts at its chosen uniform price, and
-the 24 hours in which charging can occur. It does not exclude all larger
-fleets from physical planning optimum. The bounds neither determine
+The new exact lower is approximately $434.17948$, rounded downward here;
+its validity follows from a supply tangent, sign-valid rational row
+multipliers and finite-bound compensation for stationarity residuals.
+It improves the earlier energy-floor lower of 429.22. The continuous
+energy-flow relaxation is not asserted to equal the complete-fleet hull.
+A separate native integer solve returned OPTIMAL with objective
+$441.532912\ldots$, but its candidate failed strict physical replay and
+did not itself improve the exact upper or establish ideal-model optimality.
+The native status and the independently checked rational lower are
+different evidence. The new admitted witness has cost
+$442.123049\ldots$. A time-limited classical MIQP supplied its routes and
+charging proposal; two terminal energy changes smaller than $7\cdot10^{-12}$
+kWh restored exact full inventories. A separate rational event replay then
+verified all services, directed movements, battery bounds, shared connector
+use and full replenishment. The original unadmitted numerical proposal is
+retained separately. No route or nonterminal charging allocation changed.
+
+For any fleet with at least three buses, its operating cost and only the
+linear mandatory-service-energy component already exceed $477.82$. Movement
+consumption and the quadratic cost are nonnegative. Such a fleet cannot
+improve the new physical upper. Together with the one-bus obstruction, this
+establishes exactly two buses at any physical planner optimum. It does not
+exclude larger-fleet components from arbitrary hull mixtures or from a
+price-response problem at another tariff.
+
+Separately, a second strictly admitted physical plan and the protected witness
+give a feasible complete-plan mixture with value $441.600681\ldots$, hence
+$\CH_{15}\le441.61$. Its negative initial directional derivative proves that
+the protected witness is unsupported at its own marginal prices. A mixture
+is not a dispatch, and an unsupported incumbent is not proof that an optimal
+physical fleet is unsupported. A subsequent fixed-route charging QP returned
+the same lower numerical value $441.532912\ldots$, but its first exact dual
+recovery failed on a multiplier sign; the conditional global own-price
+checks were therefore unattempted. A distinct rational phase-I method then
+constructed a new exact primal, admitted it by independent physical replay,
+and found sign-valid multipliers certifying its fixed-route charging optimum.
+This supplies the stronger physical upper in \eqref{eq:publicbounds}; it also
+supersedes the earlier mixture upper as a bound on $\CH$. The original failure
+remains recorded. Fixed-route optimality still does not exclude a profitable
+complete-fleet deviation or certify global marginal-price support.
+The bounds neither determine
 $D_{15}$ or $\CH_{15}$ nor establish a positive gap. No new public sign
 certificate is asserted in this draft.
 
