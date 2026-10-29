@@ -1,11 +1,14 @@
 {
-  "status":"DRAFT",
-  "api_closure_status":"PENDING",
+  "status":"FROZEN",
+  "api_closure_status":"REVIEWED",
   "run_id":"attempt01",
-  "source_revision":null,
-  "exact_command":null,
-  "global_prefix":null,
-  "dispatch_authorized":false,
+  "source_revision":"6c8dfb83bb83196b7b591db9057aa794502dad5d",
+  "exact_command":"env OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 VECLIB_MAXIMUM_THREADS=1 NUMEXPR_NUM_THREADS=1 /usr/bin/time -p .venv-local/bin/python -I -S -B research-20261029/public_exact_energy_portable/run.py --run-id attempt01 > research-20261029/public_exact_energy_portable/attempt01.console.txt 2> research-20261029/public_exact_energy_portable/attempt01.time.txt",
+  "working_directory":"/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017",
+  "global_prefix":{"displayed_cpu_s":24056.52,"displayed_elapsed_sum_s":24999.97,"retained_cpu_s":24058.64,"legacy_conditional_guard_separate":2546.091499549272,"parent_tool_static_agent_cpu":"UNKNOWN","not_exact_whole_session":true},
+  "dispatch_authorized":true,
+  "runtime":{"implementation":"cpython","version":"3.12.2","flags":["-I","-S","-B"],"binary64":[2,53,1024,1],"environment":{"OMP_NUM_THREADS":"1","OPENBLAS_NUM_THREADS":"1","MKL_NUM_THREADS":"1","VECLIB_MAXIMUM_THREADS":"1","NUMEXPR_NUM_THREADS":"1"}},
+  "parent_freeze_basis":["REVIEW.md","INTEGRATION_REVIEW.md"],
   "assigned":["PREFLIGHT","BUNDLE","ADAPTER_Q0","PORTABLE_CHECK"],
   "package_cpu_s":600,"package_wall_s":900,"worker_cpu_s":550,"worker_wall_s":780,
   "stage_limits":{"PREFLIGHT":[30,45],"BUNDLE":[30,75],"ADAPTER_Q0":[20,30],"PORTABLE_CHECK":[400,530]},
@@ -28,5 +31,5 @@
   "distribution_status":"UNRESOLVED_LOCAL_REVIEW_ONLY",
   "external_replication":false,
   "human_deadline_utc":"2026-10-29T18:10:45Z",
-  "scope":"One new exact-law descriptor retained-proof portable verification, with TWO fresh target physical replays and ONE target375-node check; no native/search/recovery/source-law or finite-walk-premise re-audit. No execution until exact helper closure and separate parent freeze."
+  "scope":"One new exact-law descriptor retained-proof portable verification, with TWO fresh target physical replays and ONE target375-node check; no native/search/recovery/source-law or finite-walk-premise re-audit. Source and separate control are frozen before one dispatch. No automatic retry."
 }
