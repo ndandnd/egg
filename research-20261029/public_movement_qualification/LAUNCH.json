@@ -1,6 +1,6 @@
 {
-  "status": "DRAFT_PENDING_REVIEW",
-  "source_revision": null,
+  "status": "FROZEN",
+  "source_revision": "4421b7f0b801e47be13aa1e12ca2dd3bc4f3e9b2",
   "run_id": "attempt01",
   "assigned": ["SOURCE_ADMISSION", "Q0", "PUBLIC_OD", "INDEPENDENT"],
   "package_cpu_s": 720,
@@ -15,7 +15,10 @@
     "sha256": "af6da4dea220063d1b2486a4c958bff19ae621328f07bde4a95a5c70690ebeb6",
     "bytes": 8046032
   },
-  "command": null,
-  "accounting_prefix": null,
-  "authority": "Source-only until separate exact review/source/control/command/funding freeze. No automatic retry."
+  "command": "set -C\n/usr/bin/time -p .venv-local/bin/python -I -S -B research-20261029/public_movement_qualification/run.py --run-id attempt01 > research-20261029/public_movement_qualification/attempt01-console.txt 2> research-20261029/public_movement_qualification/attempt01-time.txt",
+  "cwd": "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017",
+  "environment": {"python_flags":["-I","-S","-B"],"OMP_NUM_THREADS":"1","OPENBLAS_NUM_THREADS":"1","MKL_NUM_THREADS":"1","VECLIB_MAXIMUM_THREADS":"1","NUMEXPR_NUM_THREADS":"1","native_libraries":"NONE_IMPORTED"},
+  "accounting_prefix": {"displayed_cpu_s":"23918.88","elapsed_sum_s":"24848.29","retained_cpu_s":"23920.39","legacy_guard_separate":"2546.091499549272","static_tool_agent_review_cpu":"UNKNOWN"},
+  "authority": "Parent reviewed source-only gate and separately freezes this exact command/input/namespace/environment/inclusive funding. One dispatch only, no automatic retry. Prior PDF and research costs already inside prefix; do not add again.",
+  "deadline_utc": "2026-10-29T18:10:45Z"
 }
