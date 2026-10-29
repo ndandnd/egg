@@ -154,7 +154,9 @@ A cheaper fixed-price response had already proved that the protected incumbent w
 
 The certified gap lower is small in synthetic cost units. It establishes a sign and a mechanism in one idealized timetable variant, not operational prevalence, calibrated losses, a large practical effect, or an ML advantage. A separate exact fee argument shows that every vehicle fee at least the nominal 100 preserves the positive lower-gap guarantee; a sufficient open interval also extends below 100. This is fee stability with the physical model held fixed, not robustness to reserve, losses, access or delays. The flat-price variant still cannot have a physical–hull objective gap because its objective is linear over the energy/cost pairs.
 
-The exact certificate index maps each inequality to its immutable evidence and checking source. These checks were independently formulated within this project. A standalone solver-free verification bundle is being prepared for reader inspection; no independent external replication is claimed.
+Two further exact checks now bind the model to its source construction. All directed time/distance triangle inequalities passed on the five public locations. A separately written comparison verified all 37 services, 1370 canonical movement modes and 2648 legs, including missing modes that should be time-infeasible. That removes an input-correspondence concern. It does not prove that arbitrary extra walks or retimed waits are dominated: the exact stored energy law and charging access also matter. Tiny changes can cross a battery or charging-feasibility threshold, so the positive gap alone is not permission to smooth over rounding. The public conclusion remains global within its declared graph.
+
+The exact certificate index maps each inequality to its immutable evidence and checking source. These checks were independently formulated within this project. The standalone solver-free bundle has completed its local author-run verification; reader redistribution remains pending, and no independent external replication is claimed.
 
 Sources: `research-20261029/public_support_tree/attempt01/results.json`; `research-20261029/public_price_witness/RESULTS.md`; the current focused-theory public-case discussion. The price-witness RESULTS describes its own earlier package boundary as unresolved; the subsequent independently checked tree resolves the sign.
 
@@ -227,6 +229,12 @@ For a fixed matching, let R be its total mandatory early battery recharge. The l
 Thus one classical matching value per cardinality still describes the efficient joint load–cost set. It does **not** describe every physical allocation: battery-neutral charge/export cycles can create dominated points. For coordinatewise nondecreasing supply cost, removing those points preserves the physical and hull planning values. Negative prices or asymmetric export payments require further alternatives. At zero prices some removed plans can tie, so the reduction gives response values without enumerating all responses.
 
 The continuous theorem has an independent proof review. Ten prospectively fixed cases also matched a separate raw SOC/sign-polytope enumeration, with complete frontier-segment attainment and physical replay. This is a finite implementation qualification, not ten independent real fleets, empirical validation, or public-case V2G. See `lossy_projection_qualification/RESULTS.md` and the focused draft's common-loss section.
+
+## Why the two-batch assumptions matter
+
+The matching reduction is special to duties containing at most one service from each of two batches. A third batch can already create a different problem: if buses cannot charge between batches, each selected triple of service energies must fit in one battery. With exactly enough total battery inventory, the triples must all sum exactly to capacity. This contains the classical strongly hard Numerical Three-Dimensional Matching problem, even with every transition available and enough terminal charging afterward.
+
+The draft gives the short reduction and its proof. This is a boundary explanation, not a new EVSP hardness claim, evidence that every three-batch case is difficult, or a reason to prefer ML. It explains why two independently good adjacent matchings need not combine into battery-feasible complete duties.
 
 ## Study questions and answers
 

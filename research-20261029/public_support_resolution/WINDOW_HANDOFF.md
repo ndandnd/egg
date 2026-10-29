@@ -1,4 +1,46 @@
-# Current checkpoint — 29 October 11:31 UTC, window ACTIVE
+# Current checkpoint — 29 October 12:04 UTC, window ACTIVE
+
+NEW public_canonical_qualification/attempt01 CLOSED_PASS. Reviewed source
+eee9c52066ea8c6d6d746e9bd2cc627864f85a57/control9011e31e. Owner exact command
+exited0 without yielding a session; child32512exit0/reaped. All5stages DELIVERED,
+Q0four expected outcomes/19 corruption controls passed, native0, no failures or
+resource violations. Both implementations accepted37services,37pullouts,
+37pullins,1332direct+1332via-depot predicates including infeasible absences,
+1370modes/2648legs,blockedaccess0. PriorOD evidence adopted without triangles.
+Read only its RESULTS, INTERPRETATION_REVIEW, FINAL_RESOURCE_RECEIPT and compact
+attempt01/results.json if needed. No rerun/hash/replay/old session polling.
+All consumed sources/controls/outputs frozen. No numerical worker remains.
+
+Canonical PASS is correspondence/provenance only. Exact energy-path dominance
+and continuous-wait bridge remain UNKNOWN; larger opportunity extension is
+UNATTEMPTED. Parent retains declared-graph support scope. New source-only
+EXACT_ENERGY_DOMINANCE_LEMMA/REVIEW and ENERGY_SCOPE_DECISION_CANDIDATE describe
+sufficient premises and why a positive gap alone cannot absorb coefficient
+changes across feasibility thresholds. No broader law or computation is frozen.
+
+New .61displayedCPU/.74elapsed, owner.609348CPU, retained.65 adoptedonce;
+peak68845568bytes. CURRENTGLOBAL23919.72displayedCPU/24849.36elapsed-sum/
+23921.31retainedCPU. Legacyguard2546.091499549272 and parent/tool/static/agent
+reviewCPU UNKNOWN remain separate. Nested child observations overlap owner.
+No preparation, finalizer or readout rerun. Local narrow ps was sandbox-denied;
+absence not inferred from it. Closed managed receipts establish owned closure.
+
+Paper adds independently reviewed classical three-batch hardness boundary
+(not novelty), public canonical qualification/scope paragraph, and guide
+clarifications. These latest edits are NOT yet compiled; PDF04 remains the
+previous39page fully inspected artifact. Current31slide deck remainsunchanged.
+Threeboundedagents finished canonical/theory reviews; check actual statuses.
+Core and physical reviewer propose an OPTIONAL fair frontier-vs-directMIQP
+demonstration; no cohort/code/dispatch authorized yet. Read their short
+support_extension/FRONTIER_* notes and PRECISE_CONTRIBUTION_COMPARISON only if
+choosing that direction. Parent manages research choices and paper integration.
+Deadline18:10:45UTC; draftNOTsubmissionready/no centralMLcontribution. Continue
+useful work, later refreshedPDF/guide/deck with independent review. No new
+worker afterdeadline; close/report/delete research heartbeat then.
+
+## Earlier checkpoint — retained history
+
+# Checkpoint — 29 October 11:31 UTC, window ACTIVE
 
 NEW public_movement_qualification/attempt01 CLOSED_PASS. Reviewedsource
 4421b7f0b801e47be13aa1e12ca2dd3bc4f3e9b2/control05ac687a. Singleownercommand

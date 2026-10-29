@@ -36,6 +36,18 @@ The certificate quantifies over all fleets admitted by this graph. Extending
 that claim to a larger continuous-routing opportunity set requires an
 additional coverage or dominance argument, not merely the same timetable.
 
+Two separate exact metadata checks narrow this limitation. The source's
+five-location directed time and distance tables satisfy every triangle
+inequality. Independent comparisons also verified all 37 service mappings,
+all 1370 emitted modes and their 2648 legs against the certified descriptor,
+including every required or time-infeasible direct and via-depot incidence.
+Thus the declared graph is complete for the stated canonical constructor.
+These checks establish correspondence and stored-energy provenance, not
+energy dominance over arbitrary additional walks or continuously retimed
+waiting. In particular, small coefficient differences can cross battery or
+charging-feasibility thresholds; a positive objective gap alone does not
+justify changing the energy law. The declared-graph scope is retained.
+
 Service consumption is 1.20 kWh/km plus 16 kWh per service hour; directed
 deadheads use 0.96 kWh/km plus 16 kWh per travel hour, and explicit off-depot
 waiting uses 16 kWh/h. Depot-parked auxiliary draw is zero. Each used bus
@@ -47,6 +59,9 @@ time and energy remain physical constraints. The used-bus fee is 100.
 This finite block is not a certificate of repeating daily operation.
 The public model remains charge-only; the preceding V2G classification
 is a separate analytical model and was not applied to this timetable.
+Service, movement and waiting energies use the original stored binary64
+values produced in the source's operation order; the formulas above describe
+their provenance, not a replacement by unrounded rational coefficients.
 
 For its 30 hourly market intervals, the convex supply objective is
 \begin{equation}\label{eq:publicF}
