@@ -1,5 +1,5 @@
 {
- "status":"DRAFT","run_id":"attempt01","source_revision":null,
+ "status":"FROZEN","run_id":"attempt01","source_revision":"199519ed9741ecc36ef88860479344a2ea9b70f7",
  "assigned":["Q0","METADATA","PUBLIC_TREE","INDEPENDENT_TREE_CHECK"],
  "epsilon":"1/10000",
  "package_cpu_s":900,"package_wall_s":1200,"worker_cpu_s":840,"worker_wall_s":1000,
@@ -12,6 +12,14 @@
  },
  "checker_source_revision":"6a171357b65254b52cade63ed95dcce798485f36",
  "semantic_source_revision":"3278d50f8323618bd36809b1bbb1a0da081e23ff",
- "command":"PENDING parent exact command/source/control/console/external meter freeze",
- "authority":"DRAFT only. One fixed-mixture-gradient all-fleet linear lower attempt; no backend execution or new workload authorized."
+ "command":"env OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 VECLIB_MAXIMUM_THREADS=1 NUMEXPR_NUM_THREADS=1 /usr/bin/time -p .venv-local/bin/python -I -B research-20261029/public_hull_lower/run.py --run-id attempt01 > research-20261029/public_hull_lower/process-time-and-owner.txt 2>&1",
+ "working_directory":"/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017",
+ "branch":"codex/ml-prediction-20261017",
+ "fresh_namespace":"research-20261029/public_hull_lower/attempt01",
+ "backend":"gurobipy12.0.1 checked inside paid worker; native Threads1",
+ "environment":{"OMP_NUM_THREADS":"1","OPENBLAS_NUM_THREADS":"1","MKL_NUM_THREADS":"1","VECLIB_MAXIMUM_THREADS":"1","NUMEXPR_NUM_THREADS":"1"},
+ "closed_resource_prefix":{"displayed_cpu_s":23298.17,"elapsed_sum_s":24214.23,"retained_cpu_s":23299.46},
+ "legacy_conditional_guard_separate":2546.091499549272,
+ "review_tool_cpu":"UNKNOWN separately",
+ "authority":"Parent reviewed exact source, metadata transform, all-fleet linear scope and independent integration. One fresh attempt01 after this separate control is pushed. No price changes, retry, old replay or separate finalizer. Source protocol historical DRAFT text remains immutable; this control supplies dispatch authority."
 }
