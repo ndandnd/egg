@@ -422,6 +422,19 @@ proof and its physical premises were checked independently.
 
 ## Study questions and answers
 
+Plugging time also changes which assignment is useful, even without making
+either assignment infeasible. In the independently checked two-by-two example,
+the cross assignment requires only 0.6 early energy but must plug in two buses;
+the diagonal requires 0.8 but plugs in only one. With 0.15 time per plug-in and
+unit charging power, both can operate, yet the diagonal can shift more energy
+into the early window. Under the monotone linear objective E+2L plus vehicle
+fees, the exact best values are 6.35 versus 6.50. Keeping only the assignment
+with minimum total early requirement therefore loses 0.15. This is a failure
+of that setup-free summary, not a physical–hull support gap: a linear objective
+has the same optimum over a set and its convex hull. It also supplies no
+hardness or ML advantage claim. See `setup_matching_boundary.tex` and its
+separate fresh proof review.
+
 A tempting computational shortcut also fails: interpolate the number of
 matched service pairs first, then apply the charging formulas as though that
 fractional fleet were physical. An independently derived one-pair example has

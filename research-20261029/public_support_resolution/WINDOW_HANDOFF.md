@@ -1,4 +1,52 @@
-# Current checkpoint — 29 October 15:48 UTC, window ACTIVE
+# Current checkpoint — 29 October 16:32 UTC, window ACTIVE
+
+No numerical or artifact worker remains. PDF07 and PDF08 each compiled and
+rendered ONCE. Latest PDF08 is output/pdf/focused-theory-20261029-v8/main.pdf,
+63 pages: main 1–8, appendices 9–63. All actual PNGs visually inspected:
+parent 1–21, physical reviewer 22–41, literature reviewer 42–63, PASS.
+Read PDF_SNAPSHOT08_RECEIPT.json and PDF_QA08_*; no old render or session poll.
+Source d237b8ba50b31d4fd90976a2377b8d05a44ec661/control 4c5b15de.
+Compile session55541 exited0; render38836 exited0. PDF08 cost13.04CPU/
+15.20 elapsed-sum, retained13.08. PDF07's documented editorial/layout defects
+and cost14.47CPU/18.33elapsed, retained14.51 remain preserved separately.
+GLOBAL CLOSED 24042.75 displayedCPU /24985.11 elapsed-sum /24044.79 retainedCPU.
+Legacy2546.091499549272 separate; static/agent/tool/visual/remoteCPU UNKNOWN.
+All costs adopted once; no exact whole-session/continuous-time claim.
+
+Fresh skeptical source referee found no substantive central projection flaw,
+requested explicit z_m membership in W_m^0 in the setup bound. This precision
+repair is saved AFTER PDF08, not claimed present in it. No submission-ready
+or substantive ML claim. INDEPENDENT_REVIEW_BRIEF.md prepares skeptical review;
+no external sending is authorized or performed. User status question answered
+with PDF08 and missing novelty/significance, practical calibration, learning
+advantage and third-party reproducibility; it does not cancel the window.
+
+NEW analytical setup boundary independently derived and freshly reviewed:
+both complete-graph perfect matchings feasible, but minimum-R cross has two
+mandatory charging recipients while diagonal has one. With unit B/powers,
+a=b=(.9,.4), tau=.15, f1, H2 and F=E+2L, true minimum127/20 versus restricted
+13/2, loss3/20. This is NOT a support gap, hardness or ML result. New TeX wired
+after setup_time; no numerical execution. setup_time also gives conditional
+slack-anchor physical/hull value bounds and an always-feasible discontinuity
+counterexample. All are analytical, not new public-case qualifications.
+
+Deck is44slides/state23 on SAME private Page
+page_8f9b3c1086e081918f946ab9bd0d715a; changed42–44 actual PNGs visually PASS,
+PRESENTATION_RECEIPT07. Guide updated. No public sharing or Google Doc append.
+
+Useful bounded source-only tasks now examine the exact CHARGE-ONLY setup
+baseline: fixed-matching optional-capacity sort/scan and an ordinary O(n²)
+duty MILP/convex-MIQP. No V2G/general-hull/runtime/novelty/ML claim. Actual agent
+states must be checked: core integration and independent formulation crosscheck
+pending; fresh referee review brief complete. No new computation or PDF09
+command is frozen. Next integrate only reviewed analytical content, source
+commit, separate exact PDF09 freeze/push, compile/render once and inspect all
+new pages. Deadline18:10:45UTC unchanged; launch no worker afterward. Preserve
+all old attempts, failures, costs, unknowns and original-law export limitations.
+
+## Earlier checkpoint — retained history
+
+# Checkpoint — 29 October 15:48 UTC, window ACTIVE
 
 No numerical/artifact worker remains. Both new full-polygon illustrations
 are CLOSED: figure01 created with a layout defect (12.39CPU/13.85wall,
