@@ -1,4 +1,59 @@
-# Current checkpoint — 29 October 16:32 UTC, window ACTIVE
+# Current checkpoint — 29 October 16:58 UTC, window ACTIVE
+
+No numerical/artifact worker running. Latest reviewed PDF10:
+output/pdf/focused-theory-20261029-v10/main.pdf,66pages/main1–8;
+allactualPNGs visuallyPASS(parent1–22,physical23–44,freshreferee45–66).
+Source90784b7e172d10855c6b7a999393fd9d056b7bfc/control50721fdc;
+compile39997exit0/render89616exit0. Cost13.40CPU/14.44elapsed,retained13.44.
+PDF09 permanentlyCLOSED_FAILED (appendixcounter>Z),.37CPU/.42wall,retained.41;
+no09render. Grouping setup subsections fixed that presentation failure in10.
+GLOBAL CLOSED24056.52displayedCPU/24999.97elapsed-sum/24058.64retainedCPU;
+legacy2546.091499549272 separate; static/agent/tool/visual/remoteCPU UNKNOWN.
+Read PDF_SNAPSHOT09/10_RECEIPT and PDF_QA10_* onlyifneeded. No oldsessionpoll.
+
+PDF10 now includes explicit setup-anchor membership, reviewed setup matching
+counterexample, fixed-matching charge-only capacity scan and ordinary exact
+O(n²)-duty MILP/convex-MIQP. These new baselines are analytical/classical,
+not runtime, general hull, V2G-setup or ML claims. No science was recomputed.
+Deck47slides samePage8f9b3c1086e081918f946ab9bd0d715a, newnovelty46/guide47
+actualPNGvisuallyPASS; receipts08/09 preserve previous46slide checkpoint.
+
+Substantive final primary prior-art check found Müller etal2019 explicit cost
+aggregation/optimal disaggregation (inspected arXiv1705.02815v1). Thus adding
+costs is not a novelty claim. Relatedwork/bib and reviewerbrief updated AFTER
+PDF10; PDF11 not frozen. Narrow physical-replacement theorem not shown subsumed,
+but novelty/significance remain un-cleared; no ML advantage/ICML-ready claim.
+Main source/guide/deck explicitly preserve this distinction. Latest backup
+88cb822b plus current uncommitted version precision/guide/deck receipt.
+
+NEXT useful purpose is a NEW local exact-additive-law portable proof verifier.
+Read EXACT_LAW_PORTABLE_DECISION.md, NEXT_SCOPE.md and API.md. Parent explicitly
+permits prospective fresh physical/tree predicates ONCE for portability;
+this is not replay-free and not an oldattemptresume. No discovery/native/
+recovery/routechoice/mixtureoptimization or oldlaw303audit. Source-law transform,
+canonicalwalkpremises and empiricalroads are not requalified. A trust-only
+receipt export would not meet this purpose. Localrights remain unresolved.
+
+NEW public_exact_energy_portable source implementation is DRAFT/PENDING:
+physicalagent owns bundle.py/verify.py/APIhandoff; core owns reusedbounded
+run.py/worker.py/PROTOCOL/FIELD_AUTHORITY/LAUNCH. No evidence decoding/import/
+hash/test/replay/export or command has run; no attempt01 exists from this
+package. Three frozen mathcheckers target_semantics6665/physical3278/tree6a171;
+targethelper6665 strips oldscalarclaims and grafts retained303+72 to375 once
+duringassembly. TARGETcase record.case (validated.case agreement), NEWwitnesses
+TOPLEVELcandidate, comparisonfixedweights/claims. LOWERpacket contains audit,
+notfullproof. Source/APIclosure is documented, wrapperbindings stillpending.
+Check actualagents; freshreferee completedPDF10QA, no worker. Proposed600CPU/
+900wall is NOTlaunchauthority. Next parent+focusedindependent source review,
+exact source/input/command/environment/resourcefreeze andpush beforeONEfresh
+localCLIqualification iffull900s remain before18:10:45UTC. Noautomaticretry.
+Then consolidate verified outcome/limits and newpriorart into nextPDF; preserve
+every oldfailure/cost/unknown. Atdeadline no newworker, safelycloseanddelete
+egg-paper-research-through-29-october-14-10-et heartbeat.
+
+## Earlier checkpoint — retained history
+
+# Checkpoint — 29 October 16:32 UTC, window ACTIVE
 
 No numerical or artifact worker remains. PDF07 and PDF08 each compiled and
 rendered ONCE. Latest PDF08 is output/pdf/focused-theory-20261029-v8/main.pdf,

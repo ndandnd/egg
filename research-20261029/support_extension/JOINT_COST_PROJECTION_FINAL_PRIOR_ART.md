@@ -25,6 +25,11 @@ Sections IV–V fix a population of resource sets. Equations(12)–(13) retain f
 
 ## Effect on the narrow claim
 
+Version precision: the consumed primary PDF explicitly prints
+`arXiv:1705.02815v1 [cs.SY] 8 May 2017` on its first line. The bibliography
+therefore pins version1 rather than inferring a version from an unversioned
+URL. This records the original read, not a new fetch or audit.
+
 This review falsifies a broader framing that existing aggregate flexibility descriptions omit costs or cannot support cost-optimal disaggregation. Current comparison should explicitly recognize that cost aggregation itself is established. An aggregate *minimum-cost value function* and our complete joint load/cost layers are different mathematical objects, but that difference alone does not establish significance: ordinary c+F and tariff-response optimization already asks for the lower cost envelope.
 
 The remaining precise candidate contribution is physical: an endogenous partial service matching changes fleet size and battery-exchange boxes, yet one minimum summed positive requirement per cardinality contains the FULL purchase/export polygon of every other matching, with individual SOC-feasible finite serial realization under common windows/losses/shared occupancy. The cost coordinate survives those assignment-created alternatives. Neither an operational MILP with costs nor prescribed-resource cost aggregation automatically proves that replacement statement. Conversely, an uninspected scheduling/resource-allocation theorem could still subsume it. The stronger paper should state that theorem and its restrictive action law, not rely on “cost-labelled aggregation” as a novelty slogan.

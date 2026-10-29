@@ -468,6 +468,19 @@ frontier theorem. It remains small without inventing fractional fleet physics.
 
 ## What would materially strengthen the research
 
+The novelty claim must stay narrow. EVSP–charging integration, V2G, grid-aware
+scheduling and convex-hull pricing already exist. Müller, Szabó, Sundström
+and Lygeros also explicitly aggregate flexibility costs and optimize
+disaggregation for a fixed resource population (2019 journal article;
+[inspected author version](https://arxiv.org/pdf/1705.02815v1), Sections IV–V).
+Adding a cost coordinate is therefore insufficient by itself. Our candidate
+result is the physical replacement theorem: at each matching cardinality,
+one minimum-requirement service matching preserves the whole purchase/export
+polygon of every other matching under common-window assumptions. The focused
+search did not establish that this theorem is subsumed, but it did not clear
+novelty or establish significance. The independent-review brief asks that
+question directly.
+
 A stronger analytical contribution would extend the precise projection and support criteria beyond the declared two-batch physics, with meaningful counterexamples where they fail. A stronger operational contribution would specify participant rights and tariff institutions, provide independent timetable evidence and calibrate the magnitude of the effect. A stronger ML contribution would identify a valuable attainable decision beyond competent classical controls and demonstrate complete end-to-end gains.
 
 The current state supports an analytical mechanism, continuous-domain characterizations, bounded exact implementation qualifications, and a positive global physical–hull gap in one public ideal-model variant. Matching, convex QP/LP, branching and exact certificate checking are classical methods; the public separation is not evidence of ML advantage. Practical prevalence, calibrated magnitude and a competitive neural method remain absent or unresolved. None of the new theory or certificates changes the learning pilot's baseline comparison or resolves the old GNN's model-capacity diagnosis.
