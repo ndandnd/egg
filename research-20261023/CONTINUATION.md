@@ -7,13 +7,16 @@ in the public37servicecase, with strongclassical bounds/independentverification,
 plus readabletheorydraft and carefulnovelty. Human withdrewHao–Michinicomparison.
 FIRST read research-20261029/public_support_resolution/WINDOW_HANDOFF.md for
 the current owner/agents/accounting/nextscope; it supersedes earliernextsteps.
-Latest qualified public primal and fixed-route charging certificate are at
-0cb3c54de6e8e5c391afb37bcbb68ad3a51925ee, with transfer authority at
-3cbb8c9d965e9222ef8a98191bf775b4925382a1. Outward bounds now
-434.17<=CH<=D<=441.54; support sign is unresolved. New complete-fleet own-price
-diagnostic launched once in managed owner18338 after pushed controla6515e69;
-source0c562e338ea23e1c5de3215c968afeec6ba2e3bf. See WINDOW_HANDOFF for exact current
-agents, closed sessions, costs and next action. Do not rerun closed attempts.
+Latest exactphysicalprice response andmixture are atf5ec2aa5770188d173af7297620a5fcea99fef9a,
+transferauthorityc5f056b90ca895786c44f96903cdaafff97fce52. Owner49757exit0 and
+worker67238reaped. The bestqualified441.532912 incumbent isnowprovablyunsupported;
+globaloptimal-fleetsupport remainsunresolved. Newfeasiblemixtureupper isstrictly
+belowit. Publicsupporttreeworker launchedONCE managedowner35302 afterfrozen
+control6bdcf254/source6a171357b65254b52cade63ed95dcce798485f36. Noresubmission;
+checkexactowner/receiptsonly. IndependentlyprovedsharedconnectorV2Gextension exists,
+includingpersistenceandrestoration;no numericalqualification/publicV2Gclaim.
+Closedglobal22235.40CPU/23126.65elapsed-sum/22236.63retained. See WINDOW_HANDOFF
+for exactagents/sessions/accounting/nextaction. Do notrerun closedattempts.
 
 ## Previous checkpoint — retained history
 

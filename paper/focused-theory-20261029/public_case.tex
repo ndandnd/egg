@@ -55,7 +55,7 @@ A separate native integer solve returned OPTIMAL with objective
 $441.532912\ldots$, but its candidate failed strict physical replay and
 did not itself improve the exact upper or establish ideal-model optimality.
 The native status and the independently checked rational lower are
-different evidence. The new admitted witness has cost
+different evidence. An earlier admitted witness had cost
 $442.123049\ldots$. A time-limited classical MIQP supplied its routes and
 charging proposal; two terminal energy changes smaller than $7\cdot10^{-12}$
 kWh restored exact full inventories. A separate rational event replay then
@@ -86,6 +86,21 @@ This supplies the stronger physical upper in \eqref{eq:publicbounds}; it also
 supersedes the earlier mixture upper as a bound on $\CH$. The original failure
 remains recorded. Fixed-route optimality still does not exclude a profitable
 complete-fleet deviation or certify global marginal-price support.
+A subsequent full declared-graph response query at this stronger incumbent's
+exact marginal prices returned a native integer optimum but again failed
+strict physical admission. Its value alone is not a profitable physical
+deviation. Using only those selected route identifiers, one new linear
+charging problem and rational construction produced a separately admitted
+response. Its fixed-price objective has an exact fixed-route optimality
+certificate. Its nonlinear planning cost is higher, but its bill at the
+incumbent's posted prices is strictly lower. Thus this stronger incumbent
+is also provably unsupported. A directly checked rational mixture of the
+two admitted plans has a value strictly below the incumbent's physical cost.
+The mixture is a feasible hull upper, and its exact value is recorded in the
+reproducibility artifacts; it is not a physical schedule or a global hull
+optimum. No full-route discovery or old physical replay was repeated to
+construct it.
+
 The bounds neither determine
 $D_{15}$ or $\CH_{15}$ nor establish a positive gap. No new public sign
 certificate is asserted in this draft.

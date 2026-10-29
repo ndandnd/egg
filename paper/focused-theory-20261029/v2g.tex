@@ -1,0 +1,259 @@
+\section{Bidirectional early charging under an explicit settlement rule}
+\label{sec:v2g}
+The two-batch model also permits an exact extension in which assigned buses
+can discharge before the second batch. This changes both the physical
+opportunity set and the tariff interpretation. We assume ideal efficiency
+one, symmetric charging and discharging acceptance, and the \emph{same}
+posted price for signed net purchases and exports in a market interval.
+An asymmetric buy/sell tariff or a lossy battery is a different model.
+
+Retain $n$ A services in $[0,1]$, $n$ B services in $[2,3]$, capacity
+$B>0$, consumptions $0<a_i,b_j\le B$, and the fixed allowed successor
+graph $\Gamma$ of Section~\ref{sec:heterogeneous}. Every singleton remains
+available; allowed transitions have zero time, energy and cost. A matching
+of size $m$ uses exactly $N_m=2n-m$ assigned buses, each with fee $f>0$,
+full initial inventory and full terminal replenishment. We first derive
+the projection with service-assigned buses, then allow identical paid idle
+buses below. In particular, a B-only bus is assigned to service,
+starts full and is available at the depot throughout the early window.
+
+All assigned buses can use the single early connector during $[1,2]$ in
+either direction at power magnitude $K\ge0$. Its unit-window resource is
+\emph{gross} throughput: if bus $v$ has signed net early purchase $q_v$,
+then $\sum_v|q_v|\le K$ must be realizable. A constraint on $|\sum_vq_v|$
+alone would incorrectly allow charging and discharging to cancel connector
+time. Terminal replenishment in $[3,4]$ uses one charging-only connector
+of power $H\ge0$. Each bus accepts those corresponding powers. There
+is no other charging, reserve, auxiliary draw, taper or switching time.
+
+Net early load $E=\sum_vq_v$ may now be negative. The nonnegative fleet-load
+convention in Section~\ref{sec:framework} is therefore replaced explicitly
+for this section: $F$ must be defined and finite on all admitted signed
+loads $(E,S-E)$. Alternatively, declare fixed background demand and an
+incremental cost $F(e)=C(d+e)-C(d)$ whose domain contains the whole feasible
+signed-load set. Export settlement still uses the same linear rate as
+purchases. There is no implicit extension of a cost defined only on
+nonnegative fleet demand. If aggregate export is prohibited, impose $E\ge0$
+explicitly; the lower thresholds below are then additionally clipped at zero.
+
+Write $S=\sum_i a_i+\sum_j b_j$, $P=\sum_i a_i$, and let $\nu$
+be the maximum matching cardinality of $\Gamma$. Retain the matching values
+\[
+ r_m=\min_{\substack{M\subseteq\Gamma\\|M|=m}}
+       \sum_{(i,j)\in M}[a_i+b_j-B]_+,
+ \qquad 0\le m\le\nu,
+\]
+with $r_0=0$. The matching machinery is unchanged; the available assigned
+battery inventory and gross connector budget create the new thresholds.
+
+\begin{lemma}[Minimum gross energy for a fixed matching]\label{lem:v2ggross}
+For a fixed allowed matching $M$ of size $m$, put
+\[
+ R=\sum_{(i,j)\in M}[a_i+b_j-B]_+,\qquad T=S-N_mB.
+\]
+Before the shared connector constraint, signed early charges have total
+$E\in[T,P]$. At a prescribed such $E$, their minimum gross throughput is
+\begin{equation}\label{eq:v2ggross}
+ \min_{\sum_vq_v=E}\sum_v|q_v|=\max\{E,2R-E\}.
+\end{equation}
+The minimum is attained by one monotone action of the chosen sign per bus.
+\end{lemma}
+
+\begin{theorem}[Signed-load projection and joint frontier]\label{thm:v2g}
+Under the above assumptions, define
+\begin{equation}\label{eq:v2gthresholds}
+ t_m=\max\{S-H,\ S-(2n-m)B,\ 2r_m-K\},\qquad
+ U=\min\{P,K\},\qquad c_m=f(2n-m).
+\end{equation}
+The complete physical projection is exactly the union of
+\begin{equation}\label{eq:v2gprojection}
+ \{(E,S-E,c_m):t_m\le E\le U\}
+\end{equation}
+over $0\le m\le\nu$ with $t_m\le U$. The model is feasible exactly
+when $t_0\le U$. The sequence $t_m$ is nondecreasing and discretely convex.
+
+When feasible, let $m_{\max}=\max\{m\le\nu:t_m\le U\}$ and
+$m_0=\max\{m\le m_{\max}:t_m=t_0\}$. The hull's lowest operating-cost
+boundary starts at $(t_0,c_{m_0})$, visits $(t_m,c_m)$ for
+$m_0<m\le m_{\max}$, and is horizontal at $c_{m_{\max}}$ on
+$[t_{m_{\max}},U]$. Physical thresholds on collinear hull edges remain
+part of this statement.
+\end{theorem}
+
+\begin{corollary}[Support and physical attainment]\label{cor:v2gsupport}
+Suppose $t_0\le U$ and $G(E)=F(E,S-E)$ is finite, continuous and strictly
+convex on $[t_0,U]$. Let $E^*$ be the unique minimizer of the hull
+operating boundary plus $G$. Then, for $f>0$,
+\[
+ D=\CH\quad\Longleftrightarrow\quad
+ E^*\in\{t_0\}\cup\{t_m:m_0<m\le m_{\max}\}
+             \cup[t_{m_{\max}},U].
+\]
+Admissible own-load support additionally requires the framework's convex-
+supply, dual-attainment and price-set qualification on the declared signed
+domain. At $f=0$, the empty-matching branch has zero operating cost over
+the entire feasible interval and the gap is zero, so the positive-fee
+strict-interior criterion must not be applied.
+\end{corollary}
+
+\subsection{Why the projection is exact}
+\begin{proof}[Proof of Lemma~\ref{lem:v2ggross}]
+A paired bus has signed charge in $[a_i+b_j-B,a_i]$: early headroom
+gives the upper bound, and enough inventory for B gives the lower bound.
+An A-only bus has $q\in[a_i-B,a_i]$; a B-only bus has
+$q\in[b_j-B,0]$. These endpoint conditions keep inventory in $[0,B]$
+before and after the remaining service. A monotone action between those
+inventories is also feasible throughout the early window. Terminal demand
+is that bus's service consumption minus $q$, between zero and $B$.
+
+All upper endpoints are nonnegative and sum to $P$. The sum of positive
+lower endpoints is $R$, while the sum of all lower endpoints is
+$T=S-N_mB$. Thus total possible negative excursion is $R-T$. For
+$E\ge R$, set negative coordinates to zero and distribute purchases
+among the independent nonnegative intervals, whose sum spans $[R,P]$.
+Gross energy is then $E$. For $T\le E<R$, keep mandatory positive
+coordinates at their lower endpoints and distribute discharge of magnitude
+$R-E$ among the remaining negative intervals. This is possible exactly
+because $R-E\le R-T$ and has gross energy $2R-E$.
+
+Conversely, total positive purchases are at least $R$, so any allocation
+with net $E$ has gross energy at least $2R-E$ and at least $E$.
+The constructions attain both regimes in \eqref{eq:v2ggross}. Additional
+charge/discharge cycles cannot reduce gross energy and are unnecessary.
+\end{proof}
+
+\begin{proof}[Proof of Theorem~\ref{thm:v2g}]
+The lemma and early gross budget give $T\le E\le P$, $E\le K$
+and $E\ge2R-K$. All buses are present for the full early window;
+their monotone actions serialize in at most one hour when $K>0$.
+For $K=0$, the inequalities force $R=0$, $E=0$ and zero gross energy,
+without division. Every bus's terminal refill is nonnegative and at most
+$B$. They serialize at $H$ exactly when $S-E\le H$; at $H=0$ no
+positive terminal demand can be met. With a nonempty positive B batch,
+$E\le P<S$ makes that zero-terminal-power case infeasible.
+
+For a fixed matching, the exact interval is consequently
+\[
+ [\max\{S-H,S-N_mB,2R(M)-K\},U].
+\]
+Only $R(M)$ varies at fixed cardinality. Its attained minimum $r_m$
+gives the widest interval; all such intervals have common upper endpoint
+$U$. Their union is \eqref{eq:v2gprojection}. Since $r_m$ is
+nondecreasing, its threshold minimum is $t_0$; feasibility is precisely
+$t_0\le U$, attained by a standalone fleet when needed.
+
+Standard allowed-edge bipartite matching convexity gives discretely convex
+$r_m$. Interpolate it linearly on $[0,\nu]$. Taking the maximum of
+the resulting convex function $2r-K$, the affine function $S-(2n-m)B$
+and the constant $S-H$ gives a convex function whose integer values are
+$t_m$. Each component is nondecreasing, so the thresholds are also
+nondecreasing. Zero increments can occur only in an initial block.
+After retaining its cheapest cardinality, the positive threshold increments
+are nondecreasing. Frontier slopes $-f/(t_m-t_{m-1})$ are therefore
+nondecreasing, followed by zero. Each endpoint is physical and each edge
+is its whole-plan mixture; every physical branch lies above this convex
+graph. This proves the lower-boundary assertion without introducing
+nonexistent or resource-infeasible cardinalities.
+\end{proof}
+
+\begin{proof}[Proof of Corollary~\ref{cor:v2gsupport}]
+Strict convexity of $G$ gives one minimizing hull load. At a retained
+threshold or on the final horizontal segment, a physical plan attains the
+frontier. In an adjacent open threshold interval, $f>0$ makes its
+interpolated cost strictly below every physical branch at that load.
+The compact finite union of physical intervals then has a strictly larger
+minimum. The classical support criterion applies only with the stated
+signed-domain and price qualifications. At fee zero the empty matching
+physically attains the entire interval at zero operating cost.
+\end{proof}
+
+\subsection{Identical paid idle buses}
+An idle bus has the same capacity, initial full inventory, terminal-full
+requirement, connector access and fee as a service bus. Its early signed
+charge lies in $[-B,0]$ and its terminal refill is $-q$. It has no separate
+energy source or export tariff.
+
+\begin{proposition}[Idle buses under a total fleet cap]
+Allow identical paid idle buses, with total fleet at most $2n$. The complete
+cost-labelled projection in Theorem~\ref{thm:v2g} is unchanged.
+\end{proposition}
+\begin{proof}
+Consider a matching of size $m$ with $k$ idle buses. Its total fleet is
+$N=2n-m+k$, so the cap implies $k\le m$. The box argument of
+Lemma~\ref{lem:v2ggross} still applies: idle buses add only negative
+headroom. The matching's interval is therefore
+\[
+ [\max\{S-H,S-NB,2R-K\},U],
+\]
+at operating cost $fN$. Delete any $k$ matching edges and use the resulting
+$m-k$ matching without idle buses. This fleet has the same size $N$ and
+fee. Deleting edges cannot increase $R$, while the inventory term $S-NB$
+and upper endpoint $U$ stay fixed. Its feasible interval contains the
+original interval. Thus every projected point with idle buses has an
+identical load and cost without them. The reverse inclusion is immediate.
+\end{proof}
+
+For the two examples below, $H=S$. Even if the fleet cap is removed,
+fleets larger than $2n$ cannot improve the lower frontier: terminal
+capacity forces $E\ge0$, and the $2n$ standalone buses realize every
+$E\in[0,U]$ at fee $2nf$. Any larger fleet has the same upper endpoint
+$U$ and a higher fee when $f>0$. It is therefore dominated at each
+feasible load. The literal projection acquires higher-cost layers, but
+its lower frontier and support conclusions are unchanged. This argument
+does not apply when $H>S$: additional idle inventory can then enable
+negative net early loads and may be useful.
+
+\subsection{Persistence and removal of an intermediate charge requirement}
+For the earlier anchor with A energies $(5,15)$, B energies $(14,15)$,
+battery capacity 20, $K=15$ and $H=49$, the matching values are
+$(r_0,r_1,r_2)=(0,0,9)$ and the new thresholds remain
+\[
+ (t_0,t_1,t_2)=(0,0,9).
+\]
+Although individual buses gain discharging options, the entire cost-labelled
+projection is unchanged. At the earlier fee and supply objective, its
+previous positive gap therefore survives analytically. The terminal bound
+here enforces $E\ge0$, so this particular conclusion does not require
+evaluating the old supply function at negative fleet loads. This is a proof
+consequence, not a new V2G implementation qualification or experiment.
+
+Bidirectional charging can also remove a positive gap. Take complete
+crossmatching, A energies $(1,1,19)$, B energies $(2,10,19)$, capacity
+20, $K=2$, $H=52$ and fee $f=1$. Here $S=52$ and
+$(r_0,r_1,r_2,r_3)=(0,0,0,1)$. In the charge-only model, the cheapest
+physical operating cost is 4 on $0\le E<1$ and 3 on $1\le E\le2$.
+Its hull boundary is $4-E$ on $[0,1]$, followed by the constant 3.
+For the convex supply cost
+\[
+ F(E,L)=E^2+\frac{E+L}{5},\qquad
+ G(E)=E^2+\frac{52}{5},
+\]
+the physical minima at $E=0$ and $E=1$ tie, whereas the hull minimum
+is at $E=1/2$. Consequently,
+\[
+ D=\frac{72}{5},\qquad \CH=\frac{283}{20},\qquad
+ D-\CH=\frac14.
+\]
+
+With bidirectional charging, all four thresholds $t_m$ are zero, so the
+three-bus operating cost 3 is physical throughout $[0,2]$. In particular,
+pair the services as $(1,19)$, $(1,10)$ and $(19,2)$ and assign signed
+early charges $0,-1,1$, respectively. Their net load is zero and gross
+throughput is 2. Their terminal refills are $20,12,20$, totaling 52;
+all intermediate inventories respect capacity. Thus
+\[
+ D=\CH=3+\frac{52}{5}=\frac{67}{5},\qquad E^*=0.
+\]
+At the own-load price $\nabla F(0,52)=(1/5,1/5)$, every feasible plan
+pays $52/5$ for net energy, and the three-bus plan minimizes operating
+cost. Hence it is supported under the stated settlement rule. Discharge
+from another assigned bus offsets a mandatory positive early purchase,
+using the gross connector budget in both directions. These exact values
+follow analytically from the projection theorem; they are not a numerical
+implementation qualification.
+
+The result concerns lossless common-window physics and the specified net
+settlement. It neither establishes novelty of V2G or matching theory nor
+covers degradation, asymmetric prices, realistic travel, or the public
+37-service case. That case remains charge-only and unchanged. No numerical
+qualification of this bidirectional extension is claimed.

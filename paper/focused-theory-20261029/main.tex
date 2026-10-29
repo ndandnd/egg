@@ -15,33 +15,30 @@
 \newcommand{\X}{\mathcal X}
 \newcommand{\CH}{\mathrm{CH}}
 \newcommand{\clamp}{\operatorname{clamp}}
-\title{Marginal-Price Support for Fully Replenished Electric-Bus Fleets}
+\title{Assignment-Dependent Charging and Marginal-Price Support in Electric-Bus Fleets}
 \author{Nathan Cho}
 \date{Research draft, 29 October 2026}
 \begin{document}
 \maketitle
 \begin{abstract}
-Continuous charging does not make service assignments divisible. We study
-whether a complete electric-bus fleet minimizes its operating cost and
-electricity bill at the marginal supply prices associated with its own load.
-For a heterogeneous two-batch class with a declared service-successor graph,
-we derive the exact joint load--vehicle-cost projection with one fixed
-shared connector in each charging window. Classical matching structure
-determines the complete-plan frontier and a support criterion for strictly
-convex supply at positive vehicle fees. A fully replenished heterogeneous
-example has a positive gap. A
-two-service specialization then characterizes how connector capacity and
-vehicle cost create the obstruction. Nonnegative-energy movements preserve
-it under the original resources, whereas an enlarged battery choice can remove it.
-A higher fee for that added battery gives a counterexample to a natural
-sufficiency test based on the old convexified value. Replication separates
-vanishing planning gaps from a whole owner's absolute deviation incentive;
-participants with reserved individual resources have vanishing incentives.
-The supporting-price machinery is classical. The contribution developed here
-is the physical load--cost classification and its conditional support, stability and erasure
-characterizations. A public 37-service case has informative exact bounds but
-its optimal-fleet price support remains unresolved. These analytical results
-do not establish prevalence in operating fleets.
+We characterize when a complete electric-bus fleet minimizes its operating
+cost and electricity bill at the marginal supply prices associated with
+its own load. For heterogeneous services in two simultaneous batches,
+a declared successor graph and fixed shared charging resources, we derive
+the exact joint load--vehicle-cost frontier with full battery replenishment.
+Cardinality-matching thresholds determine where a convexified optimum has
+a physical implementation. The load-only set is an interval; its discrete
+vehicle-cost layers cause the obstruction. A bidirectional extension accounts
+for gross connector throughput and signed electricity settlement. Vehicle-to-grid
+operation can preserve or remove a positive gap, and identical paid idle
+buses are redundant under a stated fleet cap. Exact examples and parameter
+regions distinguish useful flexibility from mere enlargement of the duty set.
+The matching and price-support machinery is classical; the contribution is
+the complete physical classification under these explicit assumptions.
+For one public 37-service timetable, an exact feasible response proves that
+the best certified incumbent is unsupported, while global optimal-fleet
+support remains unresolved. Synthetic coefficients and ideal common-window
+physics limit conclusions about operational prevalence or calibrated value.
 \end{abstract}
 \section{Introduction}
 An electric-bus operator assigns mandatory services to vehicles and decides
@@ -75,6 +72,15 @@ free net energy over a finite horizon. Every plan buys the same total service
 energy, yet its assignment changes \emph{when} that energy must be purchased,
 coupled with the fixed cost of a used bus.
 
+Bidirectional charging changes this frontier through both available battery
+inventory and connector time. Charging one bus while discharging another
+does not cancel the time spent on a single connector: its resource is gross
+throughput. We derive the resulting signed-load thresholds and show exactly
+how the obstruction can persist or disappear. Under a total fleet cap,
+identical paid idle buses add no projected alternatives beyond those obtained
+by separating matched service pairs. This statement concerns the declared
+ideal model, not the value of spare buses in general V2G operations.
+
 The heterogeneous class makes the assignment set exhaustive under explicit
 timing and resource assumptions. A two-service specialization provides an
 accessible illustration and an exact connector-capacity and vehicle-fee
@@ -97,6 +103,7 @@ prevalence are separate research questions.
 \input{related_work}
 \input{framework}
 \input{heterogeneous}
+\input{v2g}
 \input{construction}
 \input{expansion}
 \input{ownership}
@@ -152,7 +159,10 @@ An electric-bus fleet can lack marginal-price support even when charging is
 continuous and every used battery is fully replenished. For heterogeneous
 two-batch services with allowed successor matchings and positive vehicle fees,
 cardinality-matching thresholds determine exactly which hull-optimal loads
-are physically supported. The two-service model shows how connector
+are physically supported. Bidirectional charging preserves that structure
+with different thresholds: it can leave a positive gap intact or eliminate
+it. Gross connector time and terminal replacement remain binding even when
+net exports are allowed. The two-service model shows how connector
 capacity, vehicle fees and battery options change that answer.
 Energy-consuming movement additions preserve the
 obstruction under unchanged resources; a sufficiently capable battery can
@@ -186,6 +196,7 @@ without rerunning the scientific calculations. No public optimal-fleet support
 conclusion is drawn from the finite plan bank or solver statuses.
 
 \appendix
+\input{adequate_resources}
 \input{heterogeneous_proofs}
 \input{proofs}
 \bibliographystyle{plainnat}

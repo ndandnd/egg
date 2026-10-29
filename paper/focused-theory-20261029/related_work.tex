@@ -49,6 +49,26 @@ and the number of used buses change. The load-only projection in our class
 is an interval, not a new nonconvex flexibility set. Fixed-matching interval
 aggregation and ordered matching are classical ingredients.
 
+Bidirectional charging and transport decisions have also been combined
+previously. \citet[Sections 2.1--2.2]{blatiak2022v2g} optimize commercial
+fleet trip timing and charging against energy and balancing-service prices.
+The abstract of \citet{zhou2025v2g} describes multi-depot bus
+charging/discharging, spare-bus revenues and cross-line operation. Our
+comparison with that work is limited to its abstract; we make no claim
+about the absence of related structural results in its full formulation.
+Neither coupling transport to V2G nor using spare buses for grid services
+is a novelty claim here.
+
+Signed aggregate flexibility is established as well.
+\citet[Section II, Example 1]{altaha2024flexibility} model lossless
+bidirectional batteries with initial and final energy requirements and
+aggregate a fixed population through Minkowski sums. Our V2G extension
+instead classifies the joint load--fleet-cost frontier created by successor
+matching and a shared gross-throughput budget. Its thresholds and paid-idle
+elimination argument concern that restricted physical class; the
+persistence and restoration examples illustrate the classification, rather
+than establishing a first signed-aggregation or V2G price-support result.
+
 Aggregation must specify who owns the aggregated decisions. The classical
 perspective of \citet{starr1969} and dispatchable-demand results of
 \citet{hreinsson2021} explain why aggregate nonconvexities can become small.

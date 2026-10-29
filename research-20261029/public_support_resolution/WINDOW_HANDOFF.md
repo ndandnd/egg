@@ -1,4 +1,71 @@
-# Current checkpoint — 29 October 07:28 UTC, window ACTIVE
+# Current checkpoint — 29 October 08:22 UTC, window ACTIVE
+
+Hard deadline remains18:10:45UTC/14:10:45ET. Continue useful work, no early
+submission-ready claim. Latest closed price-witness packets f5ec2aa5770188d173af7297620a5fcea99fef9a
+and transfer authority c5f056b90ca895786c44f96903cdaafff97fce52 are pushed.
+NEW public_support_tree/attempt01 launchedONCE after pushedcontrol6bdcf254;
+source6a171357b65254b52cade63ed95dcce798485f36. Exactmanagedowner35302 isRUNNING
+at its lastcompactcheck. Checkonlythatexactowner/durablereceipts; no guesses
+orresubmission. Do notpollclosed18338 or49757. AllconsumedtreefilesFROZEN.
+
+NEW public_price_witness/attempt01 CLOSED_PASS: sourcecddd5072be949c36a8f674dd12298503a73407a7,
+control61b14412, owner49757exit0,worker67238exit0/reaped. Allfive states
+DELIVERED/timely/resourcepass, Q0passed, one newfixed-routeLP OPTIMAL, new
+rationalphysicalpoint ADMITTED afteronestrictscreen, separateexactlinear
+fixed-routeoptimality certified. A strictlypositive own-price regret lower
+proves the bestqualified441.532912 incumbent is unsupported. Its GLOBAL
+physicaloptimality remainsunknown. New two-plan mixture is an exact feasible
+hullupper strictlybelowthat incumbent, NOT physicaldispatch or globalCHopt.
+Read RESULTS/INTERPRETATION_REVIEW/FINAL_RESOURCE_RECEIPT/TRANSFER_AUTHORITY.
+No rawgzip/oldreplay/native/export/readout/hashrerun or automaticretry.
+
+Prior public_certified_price/attempt01 CLOSED atfef98584fe130da0c5647426a7ce599846340fd9:
+source0c562e33/controla6515e69; worker59672exit0/reaped, ownerreceipt+external
+metercomplete. Supervisor tool exitUNKNOWN becausecompletionoutputtruncated;
+recoverypollreportedunknownsession. Do notinventexit0 orpollagain. ExactLP
+response lower454.3299 suppliesregretupper, nativeMIP461.80263 rawstrictFAIL.
+That phase admitsnoresponse. Newwitness usesits routesonly, newchargingLP,
+newexactpoint/replay; failuresremainimmutable. Cost9.96CPU10.23wall retain9.98.
+Newwitnesscost1.17CPU1.28wall retain1.19. CLOSEDGLOBAL22235.40displayedCPU/
+23126.65elapsed-sum/22236.63retainedCPU. Legacyguard2546.091499549272 separate;
+static/tool/agent/reviewCPU UNKNOWN, nestedobservationsoverlap, notexactsession.
+
+The public_support_tree producer/checker/worker/Q0 are independentlyreviewed
+andFROZEN. Targetauthorityc5f056b9,
+compactsourceproducerresultsf5ec2aa5, originalcase253c1e29, semantics3278d50f.
+Newconditionalexact2-busQP tree plus independentlyverified>=3servicefloor
+aims physicalDlower>feasiblehulltarget. Nooldrootpacket/replay. Native status
+cannotprune; exactnode/Farkaschecks andcompletebinarycoverage required.
+Opensearchmaystillhavecompletevalidboundcoverage BELOWtarget. Requireexact
+globalphysicalboundstrictlyaboveadmittedtarget beforeclaimsupportfailure.
+Quadratictreebound is NOTCHlower. Proposed3600CPU5400wall/500nodes/1000calls,
+one native thread5GiB. Finalcontext+expansion+checker checkpoint550wall is
+inside600CPU900wallreserve; exactrationaloutward6decimaldisplays inlineonly.
+Itsactualcurrentcost isNOTincludedinclosedprefixuntilownercloses.
+
+NEW analyticalV2G extension is independentlyproved in
+V2G_EXTENSION_CANDIDATE.md / V2G_EXTENSION_REVIEW.md and prepared in
+paper/focused-theory-20261029/v2g.tex. Grossconnectoruse is sum|q|, not|sumq|;
+thresholdt_m=max(S-H,S-(2n-m)B,2r_m-K). Explicitlosslesssamebuy/sellprice and
+signed-loadsupplydomain. Paididenticalidlebuseswithtotalfleet<=2n do notchange
+projection: deleteidlecountmatchingedges,samefleet/cost,widerinterval.
+AtH=S uncappedextraidlefleetsadddominatedcostlayers;notliteralprojectionequality.
+Oldpositiveanchor thresholds0,0,9 surviveV2G; a separateexactexample restores
+gap1/4 tozero (D72/5,CH283/20 becomesD=CH67/5). Proof-only, no newnumerical
+qualification/noveltyclearance/publicV2Gclaim. Parentwiring/readability pending.
+
+Agentscheckactualstatus: allthreeboundedagentscompletedtreepreparation/reviews,
+V2Gproof/section/primaryliteratureandproposedlearningupdate. Noagentnumeric
+authority. ParentintegratedmainV2Gsection; oldadequateparallelresourcepolicy
+movedtoappendix; publicincumbentunsupportedclaimupdated,globalpending.
+Latest compiled25-pagePDF is olderthannewtheory/publicresults; preserveoldlogs,
+compilefreshsnapshotandvisuallyverifybeforefinaldelivery. Existing22slideguide
+isolder; consolidateactualverifiednewsciencebeforeupdating, nooldsectionduplicate.
+Heartbeatremainsactive; neverstopatthismilestone. Allpriorrestrictionsbelowpersist.
+
+## Earlier checkpoint — retained history
+
+# Checkpoint — 29 October 07:28 UTC
 
 Hard deadline 18:10:45 UTC / 14:10:45 ET, start 05:10:45 UTC. Continue useful
 research until then or a genuinely submission-ready excellent draft. Current
