@@ -1,4 +1,34 @@
-# Current checkpoint — 29 October 17:43 UTC, window ACTIVE
+# Final checkpoint — 29 October 18:17 UTC, window CLOSED
+
+The authorized deadline18:10:45UTC has passed. No research worker was launched
+afterward. No numerical/artifact worker remains. Actual collaboration inventory
+confirms final_significance_referee, fresh_theory_referee and paper_core_review
+allcompleted. All owned attempted workers are closed/reaped in retainedreceipts;
+no historical session was polled or resumed duringcloseout.
+
+Heartbeat egg-paper-research-through-29-october-14-10-et was DELETED through
+the app automationtool, deleteStatus=deleted. Unrelated schedules unchanged.
+This closes the time-limited research window, NOT a claim of a submission-ready
+paper. Read WINDOW_CLOSEOUT.md, then the finalreviewbrief and compactreceipts
+only as needed. No new work is frozen/queued; further experiments need a
+scientifically justified new prospective scope, preserving all oldattempts.
+
+Final artifact remains PDF13,66pages/main1–8, allactualPNGs visuallyPASS.
+The public37case has a certifiedpositivegap in each of two explicitlydifferent
+charge-onlymodels; common-window physicalprojection and boundaries proved/
+internallyreviewed. External novelty/significance, operational usefulness,
+externalreplication/releaseinventory and substantiveMLadvantage remainopen.
+No externalreview sent, paper submitted, evidencebundlepublished or modelsrerun.
+
+Numerical/artifact accounting UNCHANGED at GLOBAL CLOSED24141.80displayedCPU/
+25089.97elapsed-sum/24144.08retainedCPU. Legacy2546.091499549272 separate;
+parent/tool/static/agent/visual/remoteCPU UNKNOWN. Closeout is statictool/Git
+work only, not a new metered researchpackage. All failures/costs remainpaid.
+Prior finalartifactbackupc9862fe8; this closeout receives a newnormalcommit.
+
+## Earlier checkpoint — retained history
+
+# Checkpoint — 29 October 17:43 UTC, window ACTIVE
 
 Final review artifact PDF13 is CLOSED_COMPLETE_VISUAL_PASS:
 output/pdf/focused-theory-20261029-v13/main.pdf,66pages/main1–8.
