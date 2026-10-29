@@ -228,6 +228,14 @@ Neither a finite plan bank nor a native solver status alone establishes that
 conclusion. Failed strict replays and earlier unsuccessful certification stages
 remain archived with their costs. This verification is internal, not external
 replication; the public timetable's energy and economic assumptions are synthetic.
+We also packaged the retained evidence with a standalone standard-library
+Python checker. One fresh isolated process rechecked both complete physical
+points, the fixed mixture, the all-fleet exclusions and the combined
+375-node proof tree, reproducing the stronger lower bound without a solver.
+The complete local construction-and-check phase took about33 seconds.
+This author-run command qualification is not an independent external
+replication. Source/data redistribution rights remain under review; the
+package is currently a local review artifact, not a claimed public release.
 
 \appendix
 \input{adequate_resources}

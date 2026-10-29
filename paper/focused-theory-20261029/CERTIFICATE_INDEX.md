@@ -1,6 +1,6 @@
 # Public certificate index for an external reader
 
-This is a navigation and verification specification for retained evidence, not a completed standalone verification distribution. All paths are relative to the repository root `ml-prediction-20261017`. Revisions below are immutable Git objects; source and result revisions are deliberately distinguished. This index was prepared from approved compact maps/results and narrow source entry points, without opening compressed evidence or rerunning any audit.
+This is a navigation and verification specification for retained evidence. A local standalone command has now passed; it is not a public distribution or external replication. All paths are relative to the repository root `ml-prediction-20261017`. Revisions below are immutable Git objects; source and result revisions are deliberately distinguished. This index is maintained from approved compact maps/results and narrow source entry points, without independently opening compressed evidence or rerunning an audit.
 
 ## What model is certified
 
@@ -73,8 +73,16 @@ An offline reader should first obtain the exact revisions and fixed-path buffers
 
 Regenerating native proposals is a different, expensive procedure requiring a fresh namespace, independently obtained compatible Gurobi environment, complete acquisition/admission/search/check/publication accounting and prospectively fixed resources. A closed attempt directory must not be resubmitted. Native timing, bases and floating solutions need not reproduce bit-for-bit for the retained exact proof to remain valid.
 
-## External packaging status and missing piece
+## Local standalone verification and remaining external gap
 
-**No turnkey standalone external verification package or externally replicated run is supplied by this index.** The repository retains pinned sources, decoded-schema contracts, compressed proof/witness packets and internal paid check receipts. Existing workers mix source admission, construction and producer execution; they are not advertised as one offline verification command. A new reader must presently assemble the pinned buffers and call the correct narrow checking entry points with their documented schemas and source-bound transfer chain.
+`research-20261029/public_certificate_bundle/attempt01` is CLOSED_PASS from source `f6845fe6d803607a88d05e6b3284fd53bb4eb58d` and separate control `1ad59047`. Its exported `public-sign-verifier` directory contains the six exact evidence packets, three immutable independent checker sources, new adapter and manifest. A single fresh isolated POSIX CPython process passed all375 combined tree nodes, both full physical points, the fixed mixture and freshly reconstructed fleet exclusions. It reproduced L_phys above with zero native calls. Full local construction/check cost32.62 displayedCPU/33.26elapsed; peak observedRSS659914752bytes. See the package's compact RESULTS, verification.json and FINAL_RESOURCE_RECEIPT.
 
-The missing deliverable is a separately reviewed, solver-free offline verifier bundle/command with an explicit immutable input manifest, portable dependency closure, packet-schema adapters, resource expectations and an externally exercised successful invocation. That adapter must verify retained evidence rather than silently invoke native search, trust arbitrary authority booleans, reuse a conditional lower as global, or weaken exact physical replay. Producing and executing such a bundle is new work, not accomplished by this documentation task. Internal independent checks are not external replication.
+The manifest must be authenticated through a separate trusted channel. For this admitted local export its digest is `fa7d7d40c95e185eb4165fe2cb19e14ca0e5cbf63db0321b0c7d4bc5c007c6e7`. From an untouched authorized copy, the reader-facing command is:
+
+```sh
+python3 -I -S -B verify.py --manifest-sha256 fa7d7d40c95e185eb4165fe2cb19e14ca0e5cbf63db0321b0c7d4bc5c007c6e7 --output verification.json
+```
+
+It requires POSIX CPython stdlib, no site packages, Git, network or optimizer. Output creation is exclusive: the closed author's copy already has its output and must not be rerun. The builder requires Git to assemble pinned inputs; the exported check does not. Constructing the bundle and checking exported-copy integrity are separately paid trust stages, not repeated native discovery. The local adapter Q0 comprises2 anchors and13 negative controls.
+
+**External replication and redistribution remain unresolved.** The successful invocation was author-run on the same host. The generated bundle stays local while source/data licensing and release rights are reviewed; only compact provenance/results and new source are backed up. No third-party/platform validation or published verification distribution is claimed. Internal independent mathematical checking and a fresh exported command strengthen reproducibility but do not substitute for external scrutiny.

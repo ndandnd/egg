@@ -1,4 +1,49 @@
-# Current checkpoint — 29 October 10:11 UTC, window ACTIVE
+# Current checkpoint — 29 October 10:39 UTC, window ACTIVE
+
+Deadline18:10:45UTC unchanged; draft NOT submission-ready, no central ML result.
+No numerical worker remains. public_physical_refinement/attempt01 CLOSED_PASS
+atd8e22ffd3753fced3ec825c68714fd549d914230, sourcea2156a0c/controlba0059ce,
+owner41927exit0/child611exit0/reaped. All4delivered/Q024PASS;72newdescendants,
+102nativecalls; VALID_REFINEMENT completecoverage epsilonmet. Physical interval
+441.532912<=D<=441.532913; retainedCH<=441.142238 yields conservative endpoint
+gap>=.390674. No exactoptimum/newCHlower/retimingcompleteness/publicV2G claim.
+Refinement340.46CPU/347.74wall/340.49retained adoptedonce; precisionphaseCLOSED.
+Read its compact RESULTS/INTERPRETATION_REVIEW/FINAL_RESOURCE_RECEIPT onlyifneeded.
+
+NEW public_certificate_bundle/attempt01 CLOSED_PASS, reviewedsource
+f6845fe6d803607a88d05e6b3284fd53bb4eb58d/control1ad59047. Owner28114exit0,
+worker7221andCLI7238exit0/reaped; no unresolved child. All4delivered, Q02anchors
++13negativecontrols. ExactlyONE fresh isolated exported stdlibCLI checked both
+physicalpoints/fixedmixture/freshsemanticfleetfloors/ONE grafted375-nodetree,
+reproducing stronger exactlower/native0. Read only RESULTS,INTERPRETATION_REVIEW,
+FINAL_RESOURCE_RECEIPT and compactverification.json. No rerun/hash/replay/native.
+Trustedmanifestfa7d7d40c95e185eb4165fe2cb19e14ca0e5cbf63db0321b0c7d4bc5c007c6e7.
+Local author-run samehost portability, NOT externalreplication. Export stays
+local pending licensing/redistribution; backupsource+compactreceipts only.
+New32.62CPU/33.26elapsed/32.65retained adoptedonce. GLOBALCLOSED23902.64CPU/
+24830.82elapsed-sum/23904.07retained. Legacyguard2546.091499549272 separate;
+tool/static/agent/reviewCPU UNKNOWN. Nestedchildmetersoverlap, notexactsession.
+
+Current paper now integrates tighterbound, declaredgraphscope, commonloss
+finitefrontier and algorithmicconsequences (rationalcertificate existence
+requires rational physicalgenerators, notjustobjective). Independent source
+and interpretation reviews passed; no newgenericmatching/dualityclaim.
+PDFsnapshot02 remains OLD31pages; next freshsnapshot03 requires prospective
+artifactplan/source/command, compile/render/fullvisualQA. Guideandlivelearning
+deck updated31slides/state16 with fullaffectedvisualQA; receipt03/content03
+snapshots saved. Samepage8f9b3c1086e081918f946ab9bd0d715a; currentref
+artifact_external_235ebe39-fc20-4a37-9769-888f9fc14871. ToolauthoringCPUunknown.
+
+Actual threeboundedagents complete: independent_physical_reference final7slide
+visualQA, paper_core_review portableinterpretationPASS, paper_literature_review
+paper/refinedproofintegrationPASS. Check actual state before nextdelegation.
+Parent closes/backsup currentmilestone, thenfreshPDF and usefulcriticalresearch
+within remainingwindow. No newnumericalmanifest beyond closedpackages.
+Do notpoll28114/41927/98407/2468/71167/35302 orolderclosedowners.
+
+## Earlier checkpoint — retained history
+
+# Checkpoint — 29 October 10:11 UTC, window ACTIVE
 
 lossy_projection_qualification/attempt01 is CLOSED_PASS. Source 4bf1b6e1a97bffd40cebdbf02308d329cbd85c57, control db9cdee0; managed owner98407 exited0, child94669 exited0/reaped. No numerical worker remains; do not poll old sessions. All11 assigned states delivered, Q0PASS and all10 prospective scientific cases MATCHED independent raw SOC/sign-polytope enumeration and entire-segment attainment. Q0 anchor overlaps a scientific case. No failure, native call or resource violation. Read only RESULTS.md, INTERPRETATION_REVIEW.md and FINAL_RESOURCE_RECEIPT.json as needed. New1.61 displayedCPU/1.68wall, retained1.63 adoptedonce. GLOBAL CLOSED23529.56CPU/24449.82elapsed-sum/23530.93retained. Legacyguard2546.091499549272 separate; tool/static/agent/reviewCPU UNKNOWN. No old re-enumeration/replay/hash/readout.
 
