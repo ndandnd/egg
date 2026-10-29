@@ -1,5 +1,5 @@
 {
- "status":"DRAFT_NO_EXECUTION_AUTHORITY","run_id":"attempt01","source_revision":null,
+ "status":"FROZEN","run_id":"attempt01","source_revision":"f6845fe6d803607a88d05e6b3284fd53bb4eb58d",
  "assigned":["PREFLIGHT","BUNDLE","ADAPTER_Q0","PORTABLE_CHECK"],
  "package_cpu_s":600,"package_wall_s":900,"worker_cpu_s":550,"worker_wall_s":780,
  "observed_rss_bytes":5368709120,"native_calls":0,
@@ -20,6 +20,10 @@
   "evidence/refinement.json.gz":{"revision":"d8e22ffd3753fced3ec825c68714fd549d914230","path":"research-20261029/public_physical_refinement/attempt01/PUBLIC_REFINEMENT.json.gz"}
  },
  "command":".venv-local/bin/python -I -S -B research-20261029/public_certificate_bundle/run.py --run-id attempt01",
- "external_meter":"PENDING_PARENT_FREEZE","funding_prefix":{"displayed_cpu_s":"23870.02","elapsed_s":"24797.56","retained_cpu_s":"23871.42"},
+ "external_meter":"/usr/bin/time -p; exclusive console-attempt01.txt and time-attempt01.txt; all nested child observations overlap",
+ "exact_shell_command":"set -C\nenv OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 VECLIB_MAXIMUM_THREADS=1 NUMEXPR_NUM_THREADS=1 /usr/bin/time -p .venv-local/bin/python -I -S -B research-20261029/public_certificate_bundle/run.py --run-id attempt01 > research-20261029/public_certificate_bundle/console-attempt01.txt 2> research-20261029/public_certificate_bundle/time-attempt01.txt",
+ "working_directory":"/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017",
+ "environment":{"interpreter":".venv-local/bin/python","recorded_version":"CPython3.12.2 from pyvenv.cfg, no probe","flags":["-I","-S","-B"],"OMP_NUM_THREADS":"1","OPENBLAS_NUM_THREADS":"1","MKL_NUM_THREADS":"1","VECLIB_MAXIMUM_THREADS":"1","NUMEXPR_NUM_THREADS":"1","external_native_calls":0},
+ "funding_prefix":{"displayed_cpu_s":"23870.02","elapsed_s":"24797.56","retained_cpu_s":"23871.42"},
  "purpose":"One new solver-free retained-evidence check and local portable bundle; no distribution or external replication claim"
 }
