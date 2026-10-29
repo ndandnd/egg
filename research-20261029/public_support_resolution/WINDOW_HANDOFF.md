@@ -28,11 +28,20 @@ paper_literature_review completed NOVELTY_REVIEW and WU2019_FORMULATION_REVIEW;
 currently reviewing integrated source launch. They have source-only authority,
 no numerical execution/hash/compile/import. Parent integrates/freezes.
 
-LAUNCH.json is DRAFT, no numerical execution yet. Parent wrote PROTOCOL.md,
-worker.py and existing-pattern run.py. Proposed attempt01 is a1800CPU/2400wall
+LAUNCH.json is FROZEN and attempt01 ran ONCE after control80339e0a was
+pushed. Exact reviewed source2f386362aa241a8a4f197a88a50fa150b6d47d9c.
+Managed unified exec session62808 EXITED0; worker17665 exited0/reaped. No
+numerical worker remains. Read RESULTS.md, NATIVE_INTERPRETATION_REVIEW.md and
+FINAL_RESOURCE_RECEIPT.json. Do not poll that closed session or resubmit. All
+consumed source/protocol/control files are immutable. Parent wrote PROTOCOL.md,
+worker.py and existing-pattern run.py. The attempt is a1800CPU/2400wall
 classical diagnostic: literal translation qualification, matched OA/MIQP300s,
 rootQP90s and selected candidate own-price LP60/MIP240. Read those current
-files plus LAUNCH_SOURCE_REVIEW before freezing. Draft does not authorize run.
+files plus LAUNCH_SOURCE_REVIEW and PARENT_FREEZE_REVIEW. Source-only integration
+passed; Q0 passed and all six states delivered administratively. OA/MIQP/
+priceMIP TIME_LIMIT; all three integer candidates fail strict rational replay
+with small terminal/headroom/conservation residues. No new exact public upper.
+Inline output already ran; no separate readout/export/finalizer.
 New user instruction reopens public37case
 inspection and justified new computation, preserving old source/output attempts.
 Use a fresh namespace and prospectively freeze exact source/input/environment/
@@ -51,10 +60,24 @@ one37servicebase, two separate depot variants, synthetic energy/economics,
 full refill, shared360kW connector. Primary unresolvedcase is depot15 quadratic
 F=sum(.2e+e²/1800), fee100, currentexact429.22<=CH<=D<=512.77.
 
-Closed numerical prefix21342.37displayedCPU/22034.86elapsed-sum/
-21343.26retainedCPU, legacyguard2546.091499549272separate. Static/tool/
+Closed numerical prefix22019.51displayedCPU/22900.37elapsed-sum/
+22020.42retainedCPU, legacyguard2546.091499549272separate. Static/tool/
 review/authoring actualCPU UNKNOWN. Childreceipts overlapowner. No reset/refund.
-No new numerical spend yet this window. Back up milestones with explicit author
+Closed attempt01 cost677.14displayedCPU/865.51elapsed, retained677.16CPU.
+Do not add child rows twice.
+
+NEW source-only development (not frozen/never run): energy_flow.py per-leg
+perspective model and exact_dual.py independent rational semantic/dualchecker.
+Read ENERGY_FLOW_FORMULATION, EXACT_DUAL_CERTIFICATE_PLAN and
+ENERGY_FLOW_SOURCE_REVIEW. A proved minimumfleet cut is being added before
+future freeze. FIXED_TOPOLOGY_CERTIFICATE_PLAN derives exact rational flow
+construction for new upper witnesses, not yet implemented or launched.
+New heterogeneous complete-crossmatching theorem has independent proofreview
+in STRUCTURAL_EXTENSION_REVIEW; integrated into focusedtheorypaper, independent
+code qualification pending. research-20261029/heterogeneous_support/reference.py
+is source-only rawphysics reference, no manifest or execution. Never treat
+these new sources as already qualified/funded launch controls.
+Back up milestones with explicit author
 and committer Nathan Cho <nathan.cho2013@gmail.com>, without rewriting history.
 
 At every checkpoint record exact active agents/worker session and next action.
