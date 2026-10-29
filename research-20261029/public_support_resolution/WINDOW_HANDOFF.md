@@ -1,4 +1,30 @@
-# Current checkpoint — 29 October 11:22 UTC, window ACTIVE
+# Current checkpoint — 29 October 11:31 UTC, window ACTIVE
+
+NEW public_movement_qualification/attempt01 CLOSED_PASS. Reviewedsource
+4421b7f0b801e47be13aa1e12ca2dd3bc4f3e9b2/control05ac687a. Singleownercommand
+completedexit0 ininitialexec(no managedsession),child24652exit0/reaped. No
+numericalworker. All4DELIVERED,Q0PASS (anchor+5extractor+9producer+12independent
+controls),native0. Fivepubliclocations,25entries per distance/timemetric and
+125orderedtriangles each allchecked;zero violations/nonzerodiagonals/negative
+entries,minslack0; independentcompleteagreement. Read only RESULTS,
+INTERPRETATION_REVIEW whenready, FINAL_RESOURCE_RECEIPT and compactresults.
+No rerun/hash/oldmatrixcheck/native/replay. Geometryonly, exactJSONdecimals;
+modecoverage/access/energyremainUNATTEMPTED and empiricalpairedpathrealizability
+UNKNOWN. Currentdeclaredgraph support bounds unchanged.
+
+Newcost.23displayedCPU/.33elapsed,owner.240878CPU,retained.27,peak65388544bytes;
+alladoptedonce. CURRENTGLOBAL23919.11CPU/24848.62elapsed-sum/23920.66retained.
+Legacyguard2546.091499549272 andtool/static/agent/reviewCPU UNKNOWN separate.
+Coreinterpretscompactgate; independentagentprepares SOURCEONLY minimal
+CANONICAL_GATE_SPEC.md for remainingcoverage/access/energychecks with noactual
+values/inputs/imports/tests/hashes. No secondgateimplementation ormanifest
+exists; parentchoosesnext usefulwork andseparatelyfreezesbeforecomputation.
+Deadline18:10:45UTC; focused39pagePDF04/allvisualQA closedbelow; draftNOT
+submission-ready/no centralMLresult. Existing31slidelearningdeckunchanged.
+
+## Earlier checkpoint — retained history
+
+# Checkpoint — 29 October 11:22 UTC, window ACTIVE
 
 Deadline18:10:45UTC unchanged. No numerical worker remains; current draft NOT
 submission-ready and no central ML contribution. Latest pushedHEAD eb754ffb,

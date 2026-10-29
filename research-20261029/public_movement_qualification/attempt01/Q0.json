@@ -1,0 +1,175 @@
+{
+  "status": "PASS",
+  "extractor_anchor": {
+    "status": "PASS",
+    "metric_status": "PASS",
+    "summary_matches": true,
+    "scope": "Exact source OD metrics only; no routing/support conclusion",
+    "summary_mismatches": [],
+    "independent_summary": {
+      "status": "PASS",
+      "location_count": 2,
+      "arc_count": 4,
+      "expected_arc_count": 4,
+      "triangle_count_per_metric": 8,
+      "distance_triangle_checks": 8,
+      "time_triangle_checks": 8,
+      "distance_entries_checked": 4,
+      "time_entries_checked": 4,
+      "distance_min_slack": "0",
+      "time_min_slack": "0",
+      "distance_violation_count": 0,
+      "time_violation_count": 0,
+      "distance_violations": [],
+      "time_violations": [],
+      "distance_negative_count": 0,
+      "time_negative_count": 0,
+      "distance_nonzero_diagonal_count": 0,
+      "time_nonzero_diagonal_count": 0,
+      "schema_errors": {},
+      "schema_error_count": 0
+    }
+  },
+  "extractor_controls": [
+    {
+      "id": "duplicate_arc",
+      "rejected": true
+    },
+    {
+      "id": "missing_arc",
+      "rejected": true
+    },
+    {
+      "id": "float_quantity",
+      "rejected": true
+    },
+    {
+      "id": "boolean_quantity",
+      "rejected": true
+    },
+    {
+      "id": "changed_units",
+      "rejected": true
+    }
+  ],
+  "producer_literals": {
+    "status": "PASS",
+    "literal_controls": [
+      {
+        "id": "positive-metric",
+        "status": "PASS",
+        "gate_status": "PASS"
+      },
+      {
+        "id": "distance-only-failure",
+        "status": "PASS",
+        "gate_status": "FAIL"
+      },
+      {
+        "id": "time-only-failure",
+        "status": "PASS",
+        "gate_status": "FAIL"
+      },
+      {
+        "id": "duplicate-arc",
+        "status": "PASS",
+        "gate_status": "UNKNOWN"
+      },
+      {
+        "id": "missing-arc",
+        "status": "PASS",
+        "gate_status": "UNKNOWN"
+      },
+      {
+        "id": "duplicate-location",
+        "status": "PASS",
+        "gate_status": "UNKNOWN"
+      },
+      {
+        "id": "nonzero-diagonal",
+        "status": "PASS",
+        "gate_status": "FAIL"
+      },
+      {
+        "id": "source-overflow",
+        "status": "PASS",
+        "gate_status": "UNKNOWN"
+      },
+      {
+        "id": "negative-entry",
+        "status": "PASS",
+        "gate_status": "FAIL"
+      }
+    ],
+    "native_calls": 0,
+    "scope": "New exact gate implementation fixtures; no actual public metadata or dominance claim"
+  },
+  "independent_literals": {
+    "status": "PASS",
+    "literal_controls": [
+      {
+        "id": "own-complete-metric-anchor",
+        "status": "PASS",
+        "metric_status": "PASS"
+      },
+      {
+        "id": "own-distance-failure-anchor",
+        "status": "PASS",
+        "metric_status": "FAIL"
+      },
+      {
+        "id": "changed-count",
+        "status": "PASS",
+        "metric_status": "FAIL"
+      },
+      {
+        "id": "changed-minimum",
+        "status": "PASS",
+        "metric_status": "FAIL"
+      },
+      {
+        "id": "changed-witness",
+        "status": "PASS",
+        "metric_status": "FAIL"
+      },
+      {
+        "id": "boolean-witness-index",
+        "status": "PASS",
+        "metric_status": "FAIL"
+      },
+      {
+        "id": "false-PASS",
+        "status": "PASS",
+        "metric_status": "FAIL"
+      },
+      {
+        "id": "missing-arc",
+        "status": "PASS",
+        "metric_status": "UNKNOWN"
+      },
+      {
+        "id": "duplicate-arc",
+        "status": "PASS",
+        "metric_status": "UNKNOWN"
+      },
+      {
+        "id": "float-quantity",
+        "status": "PASS",
+        "metric_status": "UNKNOWN"
+      },
+      {
+        "id": "huge-exponent",
+        "status": "PASS",
+        "metric_status": "UNKNOWN"
+      },
+      {
+        "id": "source-ceiling",
+        "status": "PASS",
+        "metric_status": "UNKNOWN"
+      }
+    ],
+    "native_calls": 0,
+    "scope": "Own fixed literals and summary-corruption controls; no producer or public data calls"
+  },
+  "native_calls": 0
+}
