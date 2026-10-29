@@ -1,12 +1,17 @@
 {
- "status":"DRAFT_NO_EXECUTION_AUTHORITY","run_id":"attempt01","source_revision":null,
+ "status":"FROZEN","run_id":"attempt01","source_revision":"4bf1b6e1a97bffd40cebdbf02308d329cbd85c57",
  "assigned":["Q0","lossless-one","charge-loss-one","discharge-loss-one","both-losses-complete","negative-early-no-edges","terminal-clip","zero-early-count-clip","zero-terminal-infeasible","collinear-thresholds","forbidden-crossing"],
  "package_cpu_s":1800,"package_wall_s":2400,
  "worker_self_cpu_s":1650,"worker_inclusive_cpu_s":1700,"worker_wall_s":2200,
  "observed_rss_bytes":1073741824,"native_calls":0,"active_systems_per_enumeration":2000000,
  "stage_limits":{"admission":[50,60],"Q0":[40,60],"case":[140,180],"final_reserve":[150,180]},
  "source_files":["worker.py","run.py","reference.py","candidate.py","qualification.py","CASES.json","PROTOCOL.md"],
- "command":".venv-local/bin/python -I -S -B research-20261029/lossy_projection_qualification/run.py --run-id attempt01",
- "funding_prefix":"PENDING_PARENT_FREEZE","external_meter":"PENDING_PARENT_FREEZE",
+ "command":"env OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 VECLIB_MAXIMUM_THREADS=1 NUMEXPR_NUM_THREADS=1 /usr/bin/time -p .venv-local/bin/python -I -S -B research-20261029/lossy_projection_qualification/run.py --run-id attempt01 > research-20261029/lossy_projection_qualification/process-time-and-owner.txt 2>&1",
+ "funding_prefix":{"displayed_cpu_s":23527.95,"elapsed_sum_s":24448.14,"retained_cpu_s":23529.30,"legacy_conditional_guard_separate":2546.091499549272},
+ "external_meter":"research-20261029/lossy_projection_qualification/process-time-and-owner.txt",
+ "working_directory":"/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017",
+ "environment":{"OMP_NUM_THREADS":"1","OPENBLAS_NUM_THREADS":"1","MKL_NUM_THREADS":"1","VECLIB_MAXIMUM_THREADS":"1","NUMEXPR_NUM_THREADS":"1"},
+ "fixed_window_deadline_utc":"2026-10-29T18:10:45Z",
+ "no_automatic_retry":true,
  "purpose":"Ten prospective exact physical-frontier implementation literals; not favorable gap search"
 }
