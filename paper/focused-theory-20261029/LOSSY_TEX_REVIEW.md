@@ -1,0 +1,15 @@
+# Independent source-only manuscript integration review
+
+Reviewed lossy.tex, its main.tex input/appendix wiring, the V2G transition paragraph and the new public fee subsection. No imports, compilation, artifacts, computation or paper edits were performed.
+
+**PASS: no required mathematical correction found.**
+
+The export symbol X consistently replaces the earlier export D without changing the accounting identity, minimum-export expression or proofs. The original physical objective D remains unambiguous. The fixed-matching thresholds, both terminal affine pieces, gross grid throughput and monotone per-bus SOC/serial construction agree with the reviewed proof. The model explicitly retains zero reserve, full start/end inventory, common efficiencies and windows, grid-side symmetric early power, no travel/taper/switching time and a supply domain accommodating signed loads.
+
+The theorem correctly states that Z is physical and dominates every complete physical point after removing within-bus cycles; it does not identify Z with the complete projection. Across-cardinality Pareto pruning remains explicit. The convex-hull finite-endpoint reduction and coordinatewise-monotone objective qualification are faithful. Zero-price ties, negative prices/nonmonotone objectives, capped-idle dominance rather than projection equality, and the absence of an uncapped conclusion are preserved. The discrete-convex threshold proof uses a convex interpolation and nonnegative transformations as reviewed; it does not assert the lossless scalar support criterion.
+
+main.tex inputs lossy.tex after v2g.tex and invokes LossyProjectionProofs after the appendix transition and certificate appendix. The macro is defined when the input is processed, so this source ordering is coherent. Section/lemma/theorem/equation labels and references inspected here agree. This is source-level wiring review, not compilation confirmation. The V2G transition uses the same X accounting and correctly distinguishes the new efficient-frontier reduction from the lossless classification. The manuscript does not claim completed numerical lossy qualification or public-timetable V2G evidence.
+
+The fee subsection correctly takes the original global lower as a lower on the exactly-two subset, fixes a two-bus mixture with slope two, and derives the three-plus contribution from Nf+A≥3f+A for f≥0. Thus the displayed gap lower min(L2−U,L3−U+τ) and sufficient open region f>100+U−L3 are correct within the explicitly stated nonnegative-fee domain. All f≥100 retain the original positive guarantee; equality at the lower endpoint is not claimed to restore support. The paragraph correctly rejects shifting an arbitrary higher-fleet bound by three times a negative fee change and disclaims physical-parameter robustness or maximality.
+
+The manuscript claims reviewed here are analytical/model-specific, with classical theory attribution and internal certificate scope intact. Any later completed implementation-qualification statement requires its own closed result and should not be added on the strength of this source review.

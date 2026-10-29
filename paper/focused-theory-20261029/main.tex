@@ -31,7 +31,10 @@ a physical implementation. The load-only set is an interval; its discrete
 vehicle-cost layers cause the obstruction. A bidirectional extension accounts
 for gross connector throughput and signed electricity settlement. Vehicle-to-grid
 operation can preserve or remove a positive gap, and identical paid idle
-buses are redundant under a stated fleet cap. Exact examples and parameter
+buses are redundant under a stated fleet cap. With common conversion losses,
+the efficient joint early/terminal load--cost frontier consists of at most
+two line segments per matching cardinality, permitting a finite reduction
+for coordinatewise nondecreasing supply objectives. Exact examples and parameter
 regions distinguish useful flexibility from mere enlargement of the duty set.
 The matching and price-support machinery is classical; the contribution is
 the complete physical classification under these explicit assumptions.
@@ -83,6 +86,13 @@ identical paid idle buses add no projected alternatives beyond those obtained
 by separating matched service pairs. This statement concerns the declared
 ideal model, not the value of spare buses in general V2G operations.
 
+Common conversion losses require keeping both early and terminal grid loads:
+net early energy alone hides the replacement energy lost through exports.
+We derive a finite efficient-frontier description using the same matching
+values, with at most two pieces per cardinality. This preserves physical and
+convexified planning values for monotone supply costs, while deliberately
+retaining a narrower scope than the full lossless support classification.
+
 The heterogeneous class makes the assignment set exhaustive under explicit
 timing and resource assumptions. A two-service specialization provides an
 accessible illustration and an exact connector-capacity and vehicle-fee
@@ -107,6 +117,7 @@ prevalence remain separate research questions.
 \input{framework}
 \input{heterogeneous}
 \input{v2g}
+\input{lossy}
 \input{construction}
 \input{expansion}
 \input{ownership}
@@ -166,7 +177,9 @@ cardinality-matching thresholds determine exactly which hull-optimal loads
 are physically supported. Bidirectional charging preserves that structure
 with different thresholds: it can leave a positive gap intact or eliminate
 it. Gross connector time and terminal replacement remain binding even when
-net exports are allowed. The two-service model shows how connector
+net exports are allowed. With common losses, a joint two-load description
+replaces the scalar frontier; its finite efficient segments retain an exact
+planning reduction for monotone supply objectives. The two-service model shows how connector
 capacity, vehicle fees and battery options change that answer.
 Energy-consuming movement additions preserve the
 obstruction under unchanged resources; a sufficiently capable battery can
@@ -209,6 +222,7 @@ replication; the public timetable's energy and economic assumptions are syntheti
 \input{heterogeneous_proofs}
 \input{proofs}
 \input{certificates}
+\LossyProjectionProofs
 \bibliographystyle{plainnat}
 \bibliography{references}
 \end{document}

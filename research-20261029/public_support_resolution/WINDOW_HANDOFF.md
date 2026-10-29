@@ -1,4 +1,18 @@
-# Current checkpoint — 29 October 09:35 UTC, window ACTIVE
+# Current checkpoint — 29 October 09:43 UTC, window ACTIVE
+
+public_hull_repaired/attempt01 CLOSED_VALID_LOWER_ACCURACY_UNRESOLVED, sourcef091fb3247c3cc4d822da388297a869f371990d1/control277232c1. Managedowner2468exit0; child91184exit0/reaped. Do notpollagain. All4delivered, logging6PASS, source-boundmetadataadoptedwithoutoldderive/Q0. SearchOPEN_SEARCH255nodes131nativecalls nodecap; independentCOMPLETEcoverage yieldsCHlower427.968400, weakerthanexisting434.17. Epsilonfalse. No automaticfixedprice/capcontinuation; allpriorpositivegap/feeintervalunchanged. Readpublic_hull_repaired RESULTS/INTERPRETATION_REVIEW/FINAL_RESOURCE_RECEIPT onlyasneeded. New223.62CPU/227.47elapsed/223.64retained adoptedonce. GLOBAL23527.95CPU/24448.14elapsed-sum/23529.30retained. No numericalworkeractive.
+
+Common-loss efficientfrontier theorem independentlyPASS andTeXfaithfulnessPASS: finite≤2segmentspercardinality determinedbyr_m forcommonη/grid-sidegrossconnector andmonotoneobjectives. Notfullloadprojection/scalarsupportcriterion/publicV2G. ClosestAlTaha–Bitar2024 lossySOCreformulation cited; nofirstlossyconvexificationclaim. LOSSY_NOVELTY_REVIEW boundedcomparison. Paperwiredlossy.tex/body+proofappendix, notyetfreshcompiled.
+
+lossy_projection_qualification SOURCEONLY,DRAFT: tenfixedrationalimplementationliterals, independentrawSOC/sign-polytopevertices vsformula/allsegmentcoverage,13negativecontrols. SourceintegrationPASS; worker/resourceguardreviewpending, noattempt/dispatch. Proposed1800CPU2400wall,native0,11assignedstatesQ0+10cases;Q0anchoroverlapiscontrolnot11independentcases. Parentserializesdispatchafterfreeze. No outcomesknown.
+
+ParentalsochoseoneSOURCEONLY public_physical_refinement under PHYSICAL_TIGHTENING_DECISION: tighterDlower towardqualifiedphysicalU−1/10000, distinctfromclosedfixedpricehullwork. Proposed1200CPU1800wall255NEWnodes300NEWQPcalls10s/final180CPU240wall. Transferold303-nodecertifiedpartition/frontierat ef0e08203dba5ac2ddcaff6bd8639cc9a70677b9, verifyonlynewrefinementswithroot_decisions; nooldsearch/auditrepeat. Literatureagentownsproducer/transfer, independentagentcheckerafterlossyreview, corelossyworker. Noactualoldrawread/newcomputation/manifestfreeze. Ifminimaltransparentinterfacefails,retainresolvedsignratherthannewframework.
+
+Deadline18:10:45UTC unchanged; currentdraftNOTsubmissionready. Next closeoutbackup, finish/freezeonequalifiedlossyexacttestpackage, thenfreshPDF/criticalreview. Existingguide/deck27verified; consolidatefurtherverifiedscienceaftertestresults.
+
+## Earlier checkpoint — retained history
+
+# Checkpoint — 29 October 09:27 UTC, window ACTIVE
 
 NEW public_fee_stability/attempt01 CLOSED_PASS fromsource872e38aef22dd4f736daa4862fa46b4d38af811b/control d37fea3b. Directmanagedexec exited0 withoutyieldedsessionID; child89046exit0/reaped. All3statesdelivered/native0, independentlychecked exactsufficientfeeinterval. Nbar2; supportfailure persists forallf>=100 withsamecertifiedpositivegaplower andforopenregionf>100+U−L3. Exactrationalthresholdincompactresults; notmaximal/physicalparameterrobustness. ReadRESULTS/INTERPRETATION_REVIEW/FINAL_RESOURCE_RECEIPT onlyasneeded. No repeatmetadataadmission/arithmetic/oldreplay. .29displayedCPU/.43elapsed/.31retained adoptedonce. GLOBAL23304.33CPU/24220.67elapsed-sum/23305.66retained. No numericalworkeractive.
 
