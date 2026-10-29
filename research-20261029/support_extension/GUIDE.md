@@ -165,7 +165,7 @@ For the nonlinear depot-15 ideal model, the new exact certificates establish
 
 These are conservative outward displays of exact rational certificates. The gap shown is a valid lower bound from subtracting an upward hull endpoint from a downward physical endpoint. The hull upper comes from a feasible mixture of two separately admitted physical plans. An independent checker first verified a complete 303-node binary tree, then accepted a refinement with 72 new descendants and all original regions retained. A qualified physical floor excludes fleets of three or more buses. The physical optimum is now enclosed within 0.000001 model units. Its exact value and the exact hull optimum remain unknown.
 
-A separate local portable package has now verified the complete retained result in one fresh standard-library Python process, with no solver. It rechecked both physical plans, the fixed mixture, fresh fleet exclusions and one combined 375-node proof tree. The complete construction/check took about 33 seconds. This is author-run verification on the same host, not external replication; the bundle remains local pending redistribution review. The manuscript's certificate index gives the exact input/source identities and verification recipe.
+A separate local portable package verified this ORIGINAL BINARY-MODEL retained result in one fresh standard-library Python process, with no solver. It rechecked both physical plans, the fixed mixture, fresh fleet exclusions and one combined 375-node proof tree. The complete construction/check took about33 seconds. The exact-law model below now has a DISTINCT export. Both are author-run verification on the same host, not external replication; the bundles remain local pending redistribution review. The manuscript's certificate index gives their separate identities, scopes and recipes.
 
 A cheaper fixed-price response had already proved that the protected incumbent was unsupported at its own prices. That alone did not settle global support. The new strict separation now proves that no globally optimal physical fleet in this declared model has own-price support, under the stated price/duality qualifications. The admitted physical upper remains a feasible plan, not an assertion that its exact global optimality is known.
 
@@ -173,7 +173,7 @@ The certified gap lower is small in synthetic cost units. It establishes a sign 
 
 Two further exact checks now bind the model to its source construction. All directed time/distance triangle inequalities passed on the five public locations. A separately written comparison verified all 37 services, 1370 canonical movement modes and 2648 legs, including missing modes that should be time-infeasible. That removes an input-correspondence concern. It does not prove that arbitrary extra walks or retimed waits are dominated: the exact stored energy law and charging access also matter. Tiny changes can cross a battery or charging-feasibility threshold, so the positive gap alone is not permission to smooth over rounding. The public conclusion remains global within its declared graph.
 
-The exact certificate index maps each inequality to its immutable evidence and checking source. These checks were independently formulated within this project. The standalone solver-free bundle has completed its local author-run verification; reader redistribution remains pending, and no independent external replication is claimed.
+The exact certificate index maps each inequality to its immutable evidence and checking source. These checks were independently formulated within this project. The original-law and exact-law solver-free bundles have separately completed local author-run verification; reader redistribution remains pending, and no independent external replication is claimed.
 
 Sources: `research-20261029/public_support_tree/attempt01/results.json`; `research-20261029/public_price_witness/RESULTS.md`; the current focused-theory public-case discussion. The price-witness RESULTS describes its own earlier package boundary as unresolved; the subsequent independently checked tree resolves the sign.
 
@@ -191,6 +191,21 @@ Two reconstructed physical plans and the complete retained branch partition
 were checked under the new energy law. A diagnostic-key error stopped the first
 final comparison; a separately checked summary-only consumer completed it,
 without repeating those successful calculations. The failed attempt remains.
+
+A distinct exact-law portable bundle has now passed one fresh isolated CLI
+verification. It reconstructed the explicit target ledger, strictly rechecked
+both NEW physical witnesses, one375-node target tree/fresh all-fleet floor and
+the fixed mixture. All4 assigned stages delivered; the adapter had3 anchors
+and12 negative controls. Construction/qualification took47.70wall/45.93CPU
+seconds; the CLI itself took35.81wall seconds. This intentionally repeats
+retained mathematical checks for portability, without native search, route or
+charge recovery. Source prefix6c8dfb83/control71924fb1 and trusted manifest
+56579467ecbcf5e11479cc5406278c531ba57bb78084750f68c6050dc78d39dc identify
+the local package; the certificate index gives its recipe. It does not re-audit
+the source-law transformation or the walk/access premises discussed next.
+The original binary-model export remains separately scoped. Neither is
+third-party replication or a publicly redistributed artifact; the previous
+failed comparison and all paid costs remain unchanged.
 
 Why does this extend the opportunity set? In the defined directed-arc model,
 time and energy triangle inequalities let us shorten a noncharging detour, or

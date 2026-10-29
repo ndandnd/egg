@@ -101,7 +101,7 @@ exact-additive law, fresh target certificates and a dominance argument cover
 finite walks over specified paired arcs and continuous waiting. These distinct
 models share synthetic economics and do not establish empirical road
 completeness or operational prevalence. Small exact qualification suites and
-the original-model portable verifier address implementation trust, not
+the two separately scoped portable verifiers address implementation trust, not
 generalization or third-party replication.
 
 \input{related_work}
@@ -160,10 +160,14 @@ on eight fixed cases, including finite-cycle replay and common transition
 energy; earlier one-direction checks have a narrower scope.
 Appendix~\ref{app:evidence} preserves all case/control denominators and
 their scopes. The public result uses classical native proposals followed by
-exact physical admission and rational coverage certificates. One fresh
-standalone standard-library Python process rechecked the original binary-model
-proof without a solver in a construction-and-check phase of about 33 seconds.
-That exported checker does not certify the separate exact-additive model.
+exact physical admission and rational coverage certificates. Separate fresh
+standalone standard-library Python processes rechecked each model's retained
+proof without a solver: about 33 seconds for the original binary-model
+construction/check and about 48 seconds for the exact-additive construction/check.
+The latter checks the explicit target descriptor, two physical witnesses,
+all-fleet exclusions, a 375-node tree and the fixed mixture. It does not
+re-audit the source-law transformation or broader-walk theorem's premises.
+Neither checker substitutes for the other model's evidence.
 This is internal author-run verification, not external replication. The
 certificate index binds sources, inputs, exact constants and command.
 Earlier failures and costs remain archived. The exported package stays local

@@ -1,0 +1,77 @@
+{
+  "source_revision": "6c8dfb83bb83196b7b591db9057aa794502dad5d",
+  "child_pid": 54315,
+  "child_exit": 0,
+  "reaped": true,
+  "failure": null,
+  "assigned": [
+    "PREFLIGHT",
+    "BUNDLE",
+    "ADAPTER_Q0",
+    "PORTABLE_CHECK"
+  ],
+  "ledger": [
+    {
+      "id": "PREFLIGHT",
+      "status": "DELIVERED",
+      "elapsed_s": 0.07287654187530279,
+      "resources": {
+        "cpu_s": 0.093927,
+        "self_cpu_s": 0.042623999999999995,
+        "peak_rss_bytes": 23724032
+      },
+      "summary": {
+        "status": "ADMITTED_WRAPPER_SOURCE"
+      }
+    },
+    {
+      "id": "BUNDLE",
+      "status": "DELIVERED",
+      "elapsed_s": 11.639850500039756,
+      "resources": {
+        "cpu_s": 11.363436000000002,
+        "self_cpu_s": 11.158617000000001,
+        "peak_rss_bytes": 768212992
+      },
+      "summary": {
+        "status": "BUILT_LOCAL_REVIEW_ONLY"
+      }
+    },
+    {
+      "id": "ADAPTER_Q0",
+      "status": "DELIVERED",
+      "elapsed_s": 0.0015568332746624947,
+      "resources": {
+        "cpu_s": 11.364999000000001,
+        "self_cpu_s": 11.16018,
+        "peak_rss_bytes": 768212992
+      },
+      "summary": {
+        "status": "PASS"
+      }
+    },
+    {
+      "id": "PORTABLE_CHECK",
+      "status": "DELIVERED",
+      "elapsed_s": 35.82046158332378,
+      "resources": {
+        "cpu_s": 45.847884,
+        "self_cpu_s": 11.181296000000001,
+        "peak_rss_bytes": 768212992
+      },
+      "summary": {
+        "status": "PASS",
+        "manifest_sha256": "56579467ecbcf5e11479cc5406278c531ba57bb78084750f68c6050dc78d39dc",
+        "native_calls": 0
+      }
+    }
+  ],
+  "cpu_s": 45.929881,
+  "elapsed_s": 47.65599283296615,
+  "peak_rss_bytes": 768212992,
+  "resource_pass": true,
+  "distribution_status": "UNRESOLVED_LOCAL_REVIEW_ONLY",
+  "external_replication": false,
+  "native_calls": 0,
+  "accounting": "Owner plus waited children overlap worker; external meter includes startup/shutdown"
+}

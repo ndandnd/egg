@@ -1,6 +1,6 @@
 # Public certificate index for an external reader
 
-This is a navigation and verification specification for retained evidence. A local standalone command has passed for the ORIGINAL BINARY-CONSUMPTION model only; the separately closed exact-law result below is not covered by that exported command. Neither is a public distribution or external replication. All paths are relative to the repository root `ml-prediction-20261017`. Revisions below are immutable Git objects; source and result revisions are deliberately distinguished. This index is maintained from approved compact maps/results and narrow source entry points, without independently opening compressed evidence or rerunning an audit.
+This is a navigation and verification specification for retained evidence. TWO separately scoped local standalone exports have passed: one for the ORIGINAL BINARY-CONSUMPTION model and a distinct one for the exact-additive target. Neither export checks the other model, and neither is a public distribution or external replication. All paths are relative to the repository root `ml-prediction-20261017`. Revisions below are immutable Git objects; source and result revisions are deliberately distinguished. This index is maintained from approved compact maps/results and narrow source entry points, without independently opening compressed evidence or rerunning an audit.
 
 ## Original binary-consumption model
 
@@ -87,9 +87,23 @@ up at `fdb85682cf6476227d6fa8fb8258613f512d65d4`. This is the output revision,
 distinct from its source and control above; the bounded index reviewer did not
 independently establish this Git binding.
 
-### Local reproduction limitation for the new law
+### Separately closed exact-law portable verification
 
-The new target has author-run, source-bound semantic/physical/lower checks and a separately authored comparison checker, but NO newly exported standalone verifier bundle is established by these closeouts. The original `public-sign-verifier` manifest and CLI below verify only the original binary model: substituting new packets into it would not create an admitted exact-law check. Inspect the new packages' exact source/control, fixed field authorities, complete receipts and immutable products separately. A future fresh retained-evidence verification would need its own exact-law export/admission and resource protocol; closed attempt directories must not be rerun. Native search regeneration, another physical replay or a further active-face attempt is not part of the successful comparison-only phase. Licensing, external-host reproduction and public redistribution remain unresolved for both chains.
+`research-20261029/public_exact_energy_portable/attempt01` subsequently closed PASS, source prefix`6c8dfb83`/control`71924fb1`. All4 assigned stages PREFLIGHT,BUNDLE,ADAPTER_Q0,PORTABLE_CHECK were DELIVERED. The adapter qualification has3 anchors and12 negative controls. Exactly one isolated exported CLI (pid54412,exit0,reaped) reconstructed the target ledger/minimum fleet, strictly replayed both NEW target witnesses, checked one375-node target proof with freshly reconstructed all-fleet floor, and recomputed the unchanged fixed mixture. It reproduced the exact target lower/upper/gap and outward displays above; no native call, search, charge recovery or new weight occurred. This purpose intentionally repeats retained mathematical predicates; it is not replay-free or a resumed old attempt.
+
+The fresh export is `attempt01/bundle`, with trusted local manifest digest
+`56579467ecbcf5e11479cc5406278c531ba57bb78084750f68c6050dc78d39dc`.
+For an untouched authorized copy, its reader-facing command is:
+
+```sh
+python3 -I -S -B verify.py --manifest-sha256 56579467ecbcf5e11479cc5406278c531ba57bb78084750f68c6050dc78d39dc --output verification.json
+```
+
+The closed author's copy already contains its exclusive output and must not be rerun. The admitted runtime was CPython 3.12.2 with IEEE binary64 semantics; another runtime has not been qualified. As with the original export, the manifest digest needs a separate trusted channel. Sources/input members are recorded by the new builder manifest. The parent-bound full source revision is `6c8dfb83bb83196b7b591db9057aa794502dad5d`; the separate control is `71924fb1`. The bundle itself remains local and is not falsely represented as a committed public artifact. Preserve the closed bundle/source binding before any external transfer.
+
+The entire construction/qualification took47.70wall/45.93displayedCPU seconds; the fresh CLI took35.81wall seconds. Worker inclusive45.848034CPU overlaps that outer observation and is not added again. Compact results report no failure/resource violation and observedRSS768212992bytes. Sources here are only `attempt01/results.json`, `PORTABLE_CHECK.json` and the parent's closeout figures, not a new measurement or evidence replay.
+
+The trust boundary remains explicit: the export certifies the DECLARED RATIONAL TARGET DESCRIPTOR. It does NOT independently re-audit the rich-source energy transformation, canonical access/time/triangle premises, finite-walk dominance lemma or empirical paired-road realization. Those remain separate proof/admission obligations. The old `public-sign-verifier` below remains original-model-only; the new exact-law bundle does not replace it. The earlier target FAILED comparison and distinct successful summary-only completion remain immutable, with all costs retained. Licensing, external-host reproduction and public redistribution remain unresolved for both chains; this is same-host author-run portability qualification, not external replication or novelty clearance.
 
 ## Retained-evidence verification versus search regeneration
 
