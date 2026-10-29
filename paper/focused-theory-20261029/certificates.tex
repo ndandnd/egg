@@ -1,0 +1,71 @@
+\section{How the public lower certificate is checked}\label{app:certificates}
+This appendix explains the algebra behind the public certificate. It is a
+classical convex lower-bound construction, not a new optimization algorithm.
+The native solver proposes numbers; exact arithmetic establishes the bound.
+
+\paragraph{A lower bound that tolerates imperfect multipliers.}
+Write a node relaxation as
+\[
+ \min_x\ q(x)=c_0+c^\top x+\tfrac12x^\top Qx,
+ \quad Ax\ge b,\quad Ex=d,\quad \ell\le x\le u,
+\]
+where $Q\succeq0$ and every variable has finite bounds. Row signs can be
+normalized into this form; branch decisions narrow the box or add exact
+equalities. Choose any rational tangent point $z$, nonnegative rational
+multipliers $\lambda$ and unrestricted rational multipliers $\nu$. Put
+\[
+ g=c+Qz,\qquad r=g-A^\top\lambda-E^\top\nu.
+\]
+Convexity and the constraints give the valid node lower bound
+\begin{equation}\label{eq:rationalbound}
+ B=c_0-\tfrac12 z^\top Qz+b^\top\lambda+d^\top\nu
+       +\sum_j\min\{r_j\ell_j,r_j u_j\}.
+\end{equation}
+Indeed the tangent lower plane is
+$c_0-\tfrac12z^\top Qz+g^\top x$. Subtracting
+$\lambda^\top(Ax-b)+\nu^\top(Ex-d)$ cannot raise it on the
+feasible set, and minimizing the remaining residual over the finite box
+gives~\eqref{eq:rationalbound}. Neither $z$ nor the proposed multipliers
+need solve the relaxation exactly. A sign-invalid inequality multiplier
+cannot be accepted; residual compensation makes approximate stationarity
+safe without declaring it to be exact stationarity. For a linear objective,
+take $Q=0$. All coefficients and comparisons in the accepted bound are
+rational, including the original stored supply coefficients.
+
+\paragraph{An infeasible node also needs evidence.}
+For $\lambda\ge0$ and arbitrary $\nu$, every feasible point satisfies
+\[
+ (A^\top\lambda+E^\top\nu)^\top x
+       \ge b^\top\lambda+d^\top\nu.
+\]
+If the maximum of the left-hand side over $[\ell,u]$ is strictly below
+the right-hand side, the node is infeasible. This finite-box contradiction
+is checked exactly. A native infeasibility status alone does not justify
+deleting a branch. Failure to obtain a valid contradiction leaves its
+domain represented by a valid lower bound or an unresolved state.
+
+\paragraph{Coverage is a separate obligation.}
+Branching on a binary movement variable $x_j$ produces the two domains
+$x_j=0$ and $x_j=1$. Both children are retained, and the checker verifies
+their inherited domains. The minimum valid lower over a complete covering
+fringe bounds every integer plan in the declared root domain. Search can
+stop before finding an optimum if every fringe bound already exceeds the
+fixed comparison target. Conversely, complete domain coverage with weak
+bounds is not a positive-gap certificate.
+
+The public quadratic tree has the exactly-two-bus root domain. Its separate
+one-bus obstruction and nonnegative-cost floor for three or more buses are
+therefore essential to the global physical conclusion. Convexified fleets
+are not restricted to two buses. A feasible complete-plan mixture supplies
+an upper on $\CH$; only a global physical lower strictly above that upper
+establishes $D>\CH$. The tree bound is never used as a hull lower.
+
+\paragraph{What independent verification means here.}
+The checker reconstructs the declared semantic constraints and objective,
+checks proposed rational bounds and contradictions, verifies every branch
+domain and completes the fleet-count argument. It does not rerun the native
+search or assume that a reported solver optimum is exact. Physical upper
+witnesses and mixture admission have separate checks and source-bound
+provenance. These are internal independent implementations and reviews;
+they are not external replication or a claim that the declared physical
+model is an empirically calibrated transit system.

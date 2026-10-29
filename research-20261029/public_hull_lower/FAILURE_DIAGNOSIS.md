@@ -1,0 +1,11 @@
+# Closed attempt01: event-adapter collision
+
+Read only compact results/owner receipt/external meter and the relevant frozen worker.event/producer.emit/native-event lines. No public gzip, replay, hash, import, test, computation or native work. Frozen source `199519ed9741ecc36ef88860479344a2ea9b70f7`, control `eda680c5` remain unchanged.
+
+The sufficient engineering cause is a duplicate keyword in the event adapter. Worker.event constructs `dict(elapsed_s=worker_clock, **value)`. The producer's completed-native event already contains `elapsed_s=call_clock`, and producer.emit passes that dictionary to the worker callback. Python rejects the duplicate keyword before JSON publication with the recorded TypeError. This is a namespace collision between two valid clocks, not a model, dual-sign or mathematical certificate failure. I authored the adapter and missed this integration collision in source review.
+
+The frozen sequence explains the scope of lost progress: snapshot calls optimize, constructs its native event, and invokes emit before returning to the node-bound extraction. The exception therefore stops processing before the first LP proposal can replace the independently verified zero-multiplier seed. Producer catches it and returns PRODUCER_UNRESOLVED, one native call, one open root. This does not establish anything about native LP difficulty, its response value, the fixed price's attainable precision or tree search tractability. No unobserved root status/bound is inferred from compact evidence.
+
+Completed paid work remains valid: nineteen new Q0 checks PASS; exact metadata transform ADMITTED_FIXED_PRICE_TRANSFORM; source/input admission; one native call; publication of the unresolved producer; and an independent final complete audit of its surviving one-node seed. The callback event is appended inside the producer before forwarding, but no raw packet was opened to inspect it and no native result is promoted.
+
+A narrow future repair should give worker and native clocks distinct keys (for example worker_elapsed_s versus elapsed_s), then qualify their composition without a backend. No change to objective, price, target, search cap, solver method or certificate logic is indicated by this failure. No frozen source was repaired here.

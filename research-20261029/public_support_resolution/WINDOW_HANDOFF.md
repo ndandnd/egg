@@ -1,4 +1,64 @@
-# Current checkpoint — 29 October 08:45 UTC, window ACTIVE
+# Current checkpoint — 29 October 09:23 UTC, window ACTIVE
+
+Deadline18:10:45UTC unchanged. public_hull_lower/attempt01 CLOSED_WITH_PRODUCER_ENGINEERING_FAILURE: source199519ed9741ecc36ef88860479344a2ea9b70f7/control eda680c5. Managed owner71167 exited0; worker85363 exited0/reaped. Do not poll either again. No numerical worker remains. Q0 nineteen checks and fixed-price METADATA passed; first LP callback collided on elapsed_s before root-bound extraction. All4 states administratively delivered; final independent complete seed coverage gives only Vlower0, uninformative CHlower−32.387594, epsilon false. Existing stronger434.17 CHlower and certified positive gap remain unchanged. Read only public_hull_lower/RESULTS,FAILURE_DIAGNOSIS,INTERPRETATION_REVIEW,FINAL_RESOURCE_RECEIPT and REPAIR_DECISION as needed. No rawpacket audit or automatic retry.
+
+Parent is making a deliberate fresh repair decision under the human research window: same fixed price/target/domain/caps, distinct event clocks and actual adapter literal checks, transfer already admitted METADATA after its milestone commit. No repaired source or dispatch exists yet. Original attempt and all charges remain immutable.
+
+public_fee_stability remains SOURCE-ONLY/DRAFT; coreagent applies worker/owner fail-closed guards and independentagent checks only their delta. No artifact read/calculation/run/attempt exists. Parent reviews then separately freezes source/control/funding before one serial dispatch. Fee calculation is independent of the failed hull magnitude phase.
+
+Closed package5.87displayedCPU/6.01elapsed/5.89retained adopted once. GLOBAL CLOSED23304.04displayedCPU/24220.24elapsed-sum/23305.35retainedCPU. Legacyguard2546.091499549272 separate; static/tool/agent/review CPU UNKNOWN. No child doublecount, exact session or containment claim.
+
+Guide27slide deck remains visually checked at3739d0f7. Readable certificate appendix independently PASS, pending fresh PDF. Public support sign resolved, current paper NOT submission-ready. Continue useful research until deadline; preserve all older restrictions and outcomes below.
+
+## Earlier checkpoint — retained history
+
+# Checkpoint — 29 October 09:12 UTC, window ACTIVE
+
+Deadline18:10:45UTC unchanged. NEW public_hull_lower/attempt01 launchedONCE
+at09:10UTC after pushedcontrol eda680c5; reviewedsource
+199519ed9741ecc36ef88860479344a2ea9b70f7. Exactmanagedowner71167 RUNNING at
+launch. Checkonlythisowner/durablecompactreceipts, nohistoricalpoll/duplicates.
+Allconsumedhullsources/controlFROZEN. Noothernumericalworker. Parentownsclosure.
+Thisnew900CPU1200wall package attempts an all-fleet LINEAR responsebound at
+the gradient ofthealreadyadmittedmixture; onefixedprice, noautomaticchanged
+price/mixture/retry. Existingphysicalpositivegap remainsresolvedregardless.
+CHlower=k+Vlower requiresindependentcompleteALLFLEETlinearcoverage; noN2
+equality oroldnonlinear3plusfloor. TargetH−CHlower<=1/10000 may beunattainable
+atthisfrozenprice. Readpublic_hull_lower/PROTOCOL,LAUNCH,PARENT_FREEZE_REVIEW
+andINTEGRATION_REVIEW ifneeded; no rawpartialoutcomes.
+
+public_fee_stability is SOURCE-ONLY/DRAFT, neverrun. Coreagentimplements
+pendingworkerFROZEN/control andownermasterguards; independentagentreviewing
+thatdelta. Noattemptfolder/controlfreeze yet. Proposed120CPU180wall/nativenone,
+oneeconomicfeeinterval fromclosedmetadata. Allphysicalcounts/negativefeeshifts
+handledunderfee>=0; metadataL3mustexplicitlybe3f0+mandatoryenergyfloor.
+Parentserializes numericaldispatch afterhullownercloses, noautomaticnewwork.
+
+Learningguideand27slideSpacesdeckupdated/visuallychecked, backedat3739d0f7.
+See support_extension/PRESENTATION_RECEIPT02.json. Samepage
+page_8f9b3c1086e081918f946ab9bd0d715a, currentref
+artifact_external_e52775c4-fb35-4c5c-a6df-9748b8a7ed5e. All27rendered;
+twoagentschecked1–18,parent19–27andaffectedrepairs2/18/19/20. No remaining
+materialdefectsobserved. Speaker notes+guide preserveML/classicalresults.
+
+PrimaryauthorfulltextZhou–An–Schmöcker2025 obtainedviaauthorResearchGateHTML;
+related_work comparisonupgradedfromabstract-only, nofirstV2G/EVSP-gridclaim.
+V2Glossassessment+independentreview prove losslessscalarprojectiondoesnot
+transferbysimplerescaling; exactcounterexampleandcyclelimitationsrecorded.
+Paper v2g.tex includesconciselosslimitation. Parentaddedreadableclassical
+certificateappendix withindependentPASS andEVIDENCE_MAP; notyetcompiledfresh.
+Currentcompiledsnapshot02predatesglobalresult; preserveituntilnextsnapshot.
+
+CLOSEDGLOBALstill23298.17displayedCPU/24214.23elapsed-sum/23299.46retainedCPU.
+Runninghullnotincludeduntilexit; source/static/tool/authoring/reviewCPU UNKNOWN
+separate. Priorlegacyguard2546.091499549272 unchanged. Nochilddoublecount.
+Nextclosehullonce, independentlyinterpret, reviewfee sourceandfreezeseparately
+onlyifready, integrateverifiedscience intofreshPDFandcriticalpaperreview.
+CurrentpaperNOTsubmissionready; continueusefulworkthroughhumanwindow.
+
+## Earlier checkpoint — retained history
+
+# Checkpoint — 29 October 08:42 UTC, window ACTIVE
 
 Hard deadline18:10:45UTC/14:10:45ET unchanged. Continue useful research; draft
 is not submission-ready. NEW public_support_tree/attempt01 CLOSED_PASS:
