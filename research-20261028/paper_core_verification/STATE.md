@@ -1,4 +1,8 @@
-# Project state and claim register — 28 October 2026
+# Project state and claim register — cycle initiated 28 October 2026
+
+Cycle CLOSED_PASS; source2407a28f/control424f3fdb. All20 exact comparisons,
+arithmetic smoke and12negativecontrols passed. See RESULTS.md and HANDOFF.md
+for the completed cycle and next concrete action. No worker/approval pending.
 
 Venue-neutral direction. This record supersedes the venue positioning in the
 historical paper ledger; original manuscripts/results remain preserved.
@@ -65,7 +69,7 @@ market design, or operationally validated savings paper.
 |---|---|---|
 |Positive physical–whole-fleet-hull gap prevents own-price support|Proved under compactness/common feasible set, convex supply and stated dual qualification; established theory specialization|paper/latex/model_theory.tex and proof_appendix.tex; no claim of new general theorem|
 |Full replenishment and continuous charging do not eliminate the obstruction|Proved under the explicit two-service ideal model; previously independently audited|paper/latex/exact_results.tex; old threshold/robustness/replication receipts retained, not rerun|
-|Exact capacity/vehicle-fee support-failure region|New derivation under PROTOCOL.md assumptions; source review, execution initially PENDING|PROOF.md; new independent physical enumeration vs closed-form comparison in cycle01/results.json after dispatch|
+|Exact capacity/vehicle-fee support-failure region|Proved under PROTOCOL.md assumptions; internal independent-formulation implementation check passed20/20, not external replication|PROOF.md; cycle01/results.json; INTERPRETATION_REVIEW.md; known raw Markdown delimiter defect does not alter JSON|
 |Small planning gap can coexist with positive absolute whole-owner regret|Proved for the stated replicated family and subsequence; per-bus/reserved-pair incentives vanish|paper/latex/exact_results.tex and proof_appendix.tex; ownership/resource scaling essential|
 |Public optimal fleet has support failure|UNRESOLVED|Public exact gap interval includes zero; incumbent regret does not settle optimum regret. No new public input or result access|
 |New neural method improves joint EVSP/grid decisions beyond competent classical methods|NOT ESTABLISHED|grid_information_pilot RESULTS/READOUT: quadraticridge best fitted, fixed-route reference matched joint, scoped DFL no-promotion|
@@ -75,10 +79,10 @@ market design, or operationally validated savings paper.
 
 ## Priorities and stop rules
 
-1. Complete this small exact cycle, review underlying code/proof/output, and
-   preserve any failed boundary, missing case or resource state. No rerun on
-   disagreement; diagnose first and record a new decision/source version.
-2. Next scientific step, if this passes: prove a scope-limited embedding or
+1. Completed: exact cycle, underlying code/proof/output review and all resource
+   gates passed. Preserve source/raw outputs and known table formatting defect.
+   No failed/missing case; no automatic rerun. Check RESULTS.md before use.
+2. Next scientific step: prove a scope-limited embedding or
    stability statement for the support obstruction inside richer duty sets,
    including which additional alternatives can erase it. Prefer a counterexample
    that falsifies an overbroad extension to another sweep of favorable fixtures.

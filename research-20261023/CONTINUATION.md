@@ -1,3 +1,39 @@
+# Current handoff — venue-neutral paper core verification CLOSED_PASS
+
+Human requested actual project reconciliation, a credible paper direction,
+minimal harness and one complete baseline/change/independent-check cycle.
+Read research-20261028/paper_core_verification/STATE.md, RESULTS.md,
+INTERPRETATION_REVIEW.md, FINAL_RESOURCE_RECEIPT.json and HANDOFF.md.
+Source2407a28f7773ede756a9b17d87d60ca59163a3e5/control424f3fdb; ownerchunkfaaa45
+exit0/child65741exit0reaped, no managedrunning session or unresolvedworker.
+All3 boundedagentscompleted. Singleowner/worker/inlineoutput once; no oldrun,
+nativebackend, fit, retry or separateexport/hash/replay pass.
+
+Independent rawSOC-polytope exactbaseline vs new closedformK/feecharacterization:
+20/20exactmatches,2correctinfeasible/12zerogap/6positivegap;12negativecontrols
+rejectedplusarithmetic smoke. Fullcontinuousdeviations/flatintervals/plannerties
+retained. NominalD97/CH7591over80/r13;K30fee5tiedoptimaD95have regrets15and5.
+Proof coversfullstatedidealparameterdomain;testsqualifyimplementation,notproof
+byfinitegrid/externalreplication/prevalence. Generalconvexificationispriorart.
+Strongestpaper narrowanalytical bus-specificsupport,notcurrentML/V2Gmethod.
+Mainremaininggap significance/publicoptimal-fleetsupport/credibleinstitution.
+
+Source/rawoutputsimmutable. KnownrawTABLE.md A|Bdelimiterformattingdefect;
+JSONauthoritative,no scientificmismatch/no rerun. Manuscriptsunchanged;
+paperREADMEv0.7pointercorrectedtoLaTeXv0.10,oldledgerpreservedwithcurrentoverlay.
+Nextscope: proveorrefute preservationofsupportobstructionwhenadditionalduty
+alternativesareallowed;avoidgenericrestatement/favorabletoysweep. Not a frozen
+newnumericrun/fit. Noapprovalpending. Noautomationcreatedorrevived.
+
+New.44displayedCPU/.74elapsed-sum,retained.46CPU;global21341.36displayedCPU/
+22032.31elapsed-sum/21342.23retainedCPU. Childrenoverlapowner,legacyguard
+2546.091499549272separate;static/tool/reviewUNKNOWN,noreset/refund.
+Notexactwhole-sessionCPU/continuouselapsed/instantaneouscontainment.
+GoogleDocunchanged[lastscience290401,295880),eightimages]. Sealed/clusterclosed,
+siblingreadonly,priorstudiesclosed. BackupsNathanCho author+committer.
+
+## Previous checkpoint — retained history
+
 # Current handoff — grid-information learning CLOSED_COMPLETE
 
 New human request for a distinct joint EVSP–grid ML experiment and capacity diagnosis
