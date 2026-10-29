@@ -1,4 +1,52 @@
-# Current checkpoint — 29 October 10:39 UTC, window ACTIVE
+# Current checkpoint — 29 October 11:22 UTC, window ACTIVE
+
+Deadline18:10:45UTC unchanged. No numerical worker remains; current draft NOT
+submission-ready and no central ML contribution. Latest pushedHEAD eb754ffb,
+focused scientific TeX source fa0b8c03b81a582e316b48cba1427e35f9b29307.
+Physical/support science and portable author-run certificate below unchanged.
+No old search/replay/hash/query/worker poll is authorized.
+
+PDF03 CLOSED: compile9761exit0/render79712exit0,39pages allinspected; specific
+editorial issues repaired in sourcefa0. Cost7.66CPU/7.97elapsed/7.70retained
+adoptedonce. GLOBALCLOSED23910.30CPU/24838.79elapsed-sum/23911.77retained.
+Separatelegacyguard2546.091499549272 and tool/static/agent/reviewCPU UNKNOWN.
+PDF04 singlecompile28403 completed per durable compiler console/log39pages;
+its tool completion was truncated, later exact session gone, so wrapperexit
+UNKNOWN (notzero). Explicit STATUS_NOTE accepts compiler-success evidence for
+onealreadybudgetedrender. Render62431exit0. Meters1.63CPU/1.92wall compile,
+6.95CPU/7.58wall render. All39pages individuallyvisuallyPASS with one minor
+page3margin polish item. PDF04receipt adopts8.58CPU/9.50elapsed/8.62retained
+once: CURRENTGLOBAL23918.88CPU/24848.29elapsed-sum/23920.39retained.
+No activeartifactworker, no recompile/rerender.
+
+NEW SOURCEONLY public_movement_qualification is DRAFT, no attempt exists.
+Parent selected one useful publicOD metric gate to test whether a conditional
+canonicalization proof could extend beyond the declaredmovementgraph.
+Read MOVEMENT_DOMINANCE_CANDIDATE/ADVERSARIAL/FIELD_SPEC/METADATA_PATHS only.
+The conditional proof needs time/distance triangles, consistent energy,
+complete canonical modes and identical chargingaccess. Independent analytical
+terminal-access counterexample disproves trianglesalone. Archived richpublic
+input path/revision identified; NOactualvaluesread. Proposed test firstchecks
+only sharedsourceOD/locationfields, full l²/l³ denominators; allservice/variant
+rows untouched. Jointpathrealizability staysUNKNOWN; mode/access/energy gates
+UNATTEMPTED. MatrixFAIL does not establish that supportfailure disappears.
+
+New producer/extractor/independent checker/serialworker sources being reviewed,
+notexecuted/imported/compiled/tested/hashed. ExactLAUNCH is DRAFT and deniesrun.
+Proposed720CPU900wall total, worker660CPU840wall, native0, observedRSS5GiB,
+sourceinputcommit2f386362aa241a8a4f197a88a50fa150b6d47d9c and recordedpublic
+SHAaf6da4dea220063d1b2486a4c958bff19ae621328f07bde4a95a5c70690ebeb6 must
+be consumed/boundONCE only after separate reviewed source/control/command/
+fundingfreeze. No new theoremcoverageclaim or originaldata/archive access.
+Core reviewsworker/resources; literature independentliteral/integration and
+PDF27–39; independent_physical_reference finishedextractor+PDF14–26. Check
+actualagentsbeforedelegation. Parent integrates/freezes/dispatchesonlyafter
+reviews, thencontinues usefulresearch withinwindow. Existing31slide deck
+receipt03 unchanged; guide includes classical gap-to-regret bound explanation.
+
+## Earlier checkpoint — retained history
+
+# Checkpoint — 29 October 10:39 UTC, window ACTIVE
 
 Deadline18:10:45UTC unchanged; draft NOT submission-ready, no central ML result.
 No numerical worker remains. public_physical_refinement/attempt01 CLOSED_PASS
