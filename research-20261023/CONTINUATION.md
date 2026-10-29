@@ -1,3 +1,40 @@
+# Current handoff — support extension CLOSED_PASS and learning guide complete
+
+Latest human request completed in research-20261029/support_extension.
+Read HANDOFF.md, RESULTS.md, PROOF.md, INTERPRETATION_REVIEW.md,
+FINAL_RESOURCE_RECEIPT.json and GUIDE.md. Source349018d917d3fedc098e77b34b9fb586ffbfd74c,
+control ed13b362. One owner managed73360exit0; worker85478exit0/reaped.
+All14 fixed exact cases passed,10positive/4zero gaps;17negative controls
+rejected plus smoke. No unresolved numerical worker. Allthree bounded Sol
+agents completed. No old replay/hash/native/fit or new automation.
+
+An old unsupported plan cannot be rescued by enlarging its deviation set.
+Global support may be restored by a new plan. Movement-only nonnegative
+energy/cost additions under unchanged nominal equipment preserve D97,
+CH7591/80 andgap169/80. Added batteryB atfee7 restores support exactly at
+B>=(55-sqrt95)/2 within20..30; explicitly equipment expansion, not an omitted
+route in the old exhaustive two-service model. B25fee7 givesD=CH92/fullrefill;
+B25fee8 givesD93/CH92.95/gap.05 despiteD<oldCH. B25fee12 retains both planner
+ties/regrets5and13. General dual-certificate conditions and full(B,h) support
+region proved. Written proof covers continuum; exact cases qualify two
+independent formulations, not external replication/prevalence/new generaltheory.
+
+Self-study GUIDE.md plus editable22-slide presentation with notes, source
+citations, native tables/chart and exercises. PRESENTATION_RECEIPT.json records
+page_8f9b3c1086e081918f946ab9bd0d715a and artifact reference. Allslides rendered
+and inspected at fullsize; units/chartlabels fixed and affectedslides rechecked.
+Publicsupport/significance and distinct MLbenefit remain open; V2G absent here.
+No further numericalexperiment is frozen. Old studies and outputs stayclosed.
+
+Package1.01displayedCPU/2.55elapsed,retained1.03CPU within60/90.
+Global21342.37displayedCPU/22034.86elapsed-sum/21343.26retainedCPU.
+Childrenoverlapowner,legacyguard2546.091499549272separate;tool/review/slideCPU
+UNKNOWN. No reset/refund/exactsessionclaim. Manuscript/GoogleDoc unchanged;
+noautomation. Keep sealeddata/cluster/sibling restrictions. ExplicitNathanCho
+authorandcommitter backup. See HANDOFF for exact closure and nextdecision.
+
+## Previous checkpoint — retained history
+
 # Current handoff — venue-neutral paper core verification CLOSED_PASS
 
 Human requested actual project reconciliation, a credible paper direction,
