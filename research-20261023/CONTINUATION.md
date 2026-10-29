@@ -7,9 +7,12 @@ in the public37servicecase, with strongclassical bounds/independentverification,
 plus readabletheorydraft and carefulnovelty. Human withdrewHao–Michinicomparison.
 FIRST read research-20261029/public_support_resolution/WINDOW_HANDOFF.md for
 the current owner/agents/accounting/nextscope; it supersedes earliernextsteps.
-Currentclosedmilestone929bd005 gives exactupper442.123049017..., outward
-429.22<=CH<=D<=442.13/gap<=12.91. Supportsignunresolved. No numericalworker
-currently; newenergyflow sourcesawaitfreeze. Do not rerunclosedattempts.
+Latest qualified public primal and fixed-route charging certificate are at
+0cb3c54de6e8e5c391afb37bcbb68ad3a51925ee, with transfer authority at
+3cbb8c9d965e9222ef8a98191bf775b4925382a1. Outward bounds now
+434.17<=CH<=D<=441.54; support sign is unresolved. New complete-fleet own-price
+diagnostic is SOURCE ONLY, not launched. See WINDOW_HANDOFF for exact current
+agents, closed sessions, costs and next action. Do not rerun closed attempts.
 
 ## Previous checkpoint — retained history
 
