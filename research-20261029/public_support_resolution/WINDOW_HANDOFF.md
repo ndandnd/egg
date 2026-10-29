@@ -1,4 +1,50 @@
-# Current checkpoint — 29 October 12:54 UTC, window ACTIVE
+# Current checkpoint — 29 October 13:21 UTC, window ACTIVE
+
+NEW public_exact_energy_comparison/attempt01 CLOSED_PASS, source6c2319480239c19c839eeff868a7fc018dacc217,
+control0688cc1a, closeoutfdb85682cf6476227d6fa8fb8258613f512d65d4 (pushpending).
+Exact ownercommandexit0initialreturn (no yielded session), child49774exit0/reaped,
+all4DELIVERED, native/replay/tree/face0. Direct and independent variance arithmetic
+agree: NEWexact-law target D in[441.532912,441.532913], CH<=441.142238,
+gap>=.390674. Same outward display asoldlaw but DIFFERENTexactfractions/semantics.
+Read RESULTS,INTERPRETATION_REVIEW,FINAL_RESOURCE_RECEIPT,compactCOMPARISON only.
+No rerun/hash/oldsessions/physical/proof replay. All consumedfilesFROZEN.
+
+Prior public_exact_energy_target/attempt01 CLOSED_FAILED atd27f9f13ff8e61721dda39ee680be612c01c8ecc,
+source6665c2b9/control36fe4fe4; owner55904exit1 child46365exit1/reaped. Six
+DELIVERED source/Q0/newsemantics/375nodetargetbound/twonewstrictprimals, then
+COMPARISONfailed integer-keydiagnostic seal BEFOREmixture. Fullproductsretained.
+The distinctsummary-onlyconsumer completedpreviouslymissingcomparison without
+repeatingtree/face/replay oroldhash. Failedattempt49.39CPU51.13wall,retained49.44;
+completion.22CPU.33wall,retained.27; alladoptedonce. CURRENTGLOBAL23969.33displayedCPU/
+24900.82elapsed-sum/23971.02retainedCPU; legacy2546.091499549272 separate,
+parent/tool/static/agentreviewCPU UNKNOWN. Noownednumericalworker remains.
+
+Exact-lawcanonicaldominance+completepriorpredicates nowextendNEWtargetVALUES to
+arbitraryfinitewalks/continuouslinearwaiting overdeclaredpairedODarcs under
+selecteddepot-onlycharge/freepark,fullterminal/uniteta/nonnegativeconsumption.
+Oldbinarylaw staysdeclaredgraph. Empiricalpairedroadrealization/publicV2G/noML
+claims unchanged. Paper+guideupdatedUNCOMPILED; separateexact-energyproofreviewPASS.
+
+Newindependentreviewedanalyticalboundary: commontransitiond preserves2pieces/m;
+edge-varyingtasks canproduce2^kefficientphysicalbranchesatonefleetcount. Allcorner
+pointscollinear,hullsimple,compactsymbolicrepresentationpossible,nohardnessclaim.
+NEWreviewedcorollarysamefamilyF=3E+L+(E-3)^2/(2K) hasgap9/(2K)>0 forallk>=1,
+includingall2^kalternatives (gapshrinks). Coreaddingreadableappendixcorollary.
+FigureSOURCEONLY make_transition_figure.py/render_transition_figure.py neverrun;
+parentreviewed/fixedwholewrapper45wallclip, nofigure/artifactmanifestfrozenyet.
+Prepareone50CPU60wallfigurethenfreshPDF05+fullQA/criticalreview/learningdeckupdate.
+Optional12cellruntimebenchmark remainsDEFERRED; nonewcohort/model/recoverywork.
+
+Focusedprimaryliteratureupdate addsArvis2026V2G+UC prescribed-profileaggregation;
+Mukhi2026journalmetadata verified,acceptedPDF403,technicalcomparison staysv2.
+No broadfirstEV-grid/V2Gnoveltyclaim. Threeboundedagentscompletedlatestreviews
+exceptcoreappendix;checkactualstates. Deadline18:10:45UTC, draftNOTsubmissionready,
+nocentralMLcontribution. Continueusefulwork; nodeadline-overrun/newworkeraftercutoff;
+close/report/deletethisheartbeatthen. OldPDF04/deck31remainlastverifiedartifacts.
+
+## Earlier checkpoint — retained history
+
+# Checkpoint — 29 October 12:54 UTC, window ACTIVE
 
 NEW public_exact_energy_target/attempt01 launched ONCE, managed owner55904
 RUNNING at initial exact-session return. Reviewed source6665c2b9f045410b4bbf19060b6780b0779f5534,
