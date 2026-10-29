@@ -60,6 +60,18 @@ are not restricted to two buses. A feasible complete-plan mixture supplies
 an upper on $\CH$; only a global physical lower strictly above that upper
 establishes $D>\CH$. The tree bound is never used as a hull lower.
 
+The later physical refinement preserves the source-admitted 303-node
+partition and all 152 frontier identities. Each new local branch begins
+with its original leaf's inherited decisions. A retained base bound remains
+valid throughout its descendants; new exact certificates can strengthen
+that bound but cannot erase a domain. Complete coverage of all original
+leaves, with 72 new nodes checked, therefore gives a tighter physical
+lower without repeating the old numerical proof audit. Together with the
+retained physical witness it yields the outward interval
+$[441.532912,441.532913]$. Subtracting the retained up-rounded hull upper
+$441.142238$ from the down-rounded physical lower gives the conservative
+gap lower $0.390674$, not an exact gap or a new hull lower.
+
 \paragraph{What independent verification means here.}
 The checker reconstructs the declared semantic constraints and objective,
 checks proposed rational bounds and contradictions, verifies every branch

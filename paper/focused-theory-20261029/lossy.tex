@@ -108,6 +108,50 @@ vertex and attainment along complete frontier segments. These finite
 implementation checks supplement the proof; they do not establish
 empirical validity or prevalence.
 
+\subsection{Planning and support from the finite frontier}
+\label{sec:lossyalgorithm}
+The reduction gives a direct way to compute the two planning values under
+the monotonicity assumptions of Theorem~\ref{thm:lossyfrontier}. There are
+at most $2(\nu+1)$ affine segments and $M\le3(\nu+1)$ generating records
+$v_j=(u_j,c_j)$, where $u_j=(E_j,L_j)$; empty intervals are omitted and
+singletons require only one record. Physical planning minimizes
+$c_m+F(E,L_m(E))$ on each segment, a convex one-dimensional problem,
+and takes the smallest value. Hull planning solves
+\[
+ \min_{\lambda\ge0,\;\sum_j\lambda_j=1}
+ \left\{\sum_j\lambda_jc_j+
+ F\!\left(\sum_j\lambda_ju_j\right)\right\}.
+\]
+These use standard matching and convex-optimization tools; the physical
+result is that the matching values suffice to construct their input.
+
+For differentiable $F$, a proposed hull point
+$(\bar u,\bar c)=\sum_j\lambda_j(u_j,c_j)$ has a short sufficient
+certificate: feasible weights, its exact objective and gradient
+$p=\nabla F(\bar u)$, and the inequalities
+\[
+ c_j+p\cdot u_j\ge\bar c+p\cdot\bar u
+ \qquad\text{for every generating record }j.
+\]
+Convexity proves optimality on the hull; nonnegative $p$ and physical
+dominance extend the private-score lower bound to all original plans.
+For any nonnegative posted price, the minimum private score is likewise
+the minimum over these records. At zero prices this computes the value,
+not every response: discarded dominated plans or entire segments can tie.
+
+If the generators and convex quadratic coefficients are rational, there
+exists a hull optimum with rational loads, cost and weights, permitting
+an exact rational certificate. Rational physical data, including the
+efficiencies, suffice for rational generators; a rational objective alone
+does not. At any optimum the supporting functional has normal $(p,1)$,
+so its face has dimension at most two, or the whole hull already does.
+Thus at most three generators suffice. Enumerating their simplex faces
+and solving rational linear stationarity systems also handles singular
+positive-semidefinite quadratics; no inverse of a singular Hessian is
+required. Flat optimum sets can contain irrational points despite the
+existence of a rational representative. These finite deductions make no
+new runtime or general scheduling-complexity claim.
+
 % Parent may invoke this macro in the appendix after inputting this file.
 \newcommand{\LossyProjectionProofs}{%
 \section{Proofs for the common-loss efficient projection}\label{app:lossy}

@@ -3,16 +3,16 @@ For the stated charge-only movement-graph model of one public 37-service timetab
 independently checked physical lower bound strictly exceeds a feasible
 complete-plan mixture's hull upper. The outward bounds are
 \begin{equation}\label{eq:publicbounds}
- \CH_{15}\le441.142238<441.151027\le D_{15}\le441.532913,
- \qquad D_{15}-\CH_{15}\ge0.008790.
+ \CH_{15}\le441.142238<441.532912\le D_{15}\le441.532913,
+ \qquad D_{15}-\CH_{15}\ge0.390674.
 \end{equation}
-The gap lower is rounded downward from the exact rational difference,
-not obtained by subtracting the two separately rounded displayed bounds.
+The gap lower is the conservative difference of the down-rounded physical
+lower and up-rounded hull upper shown here; it is not an exact gap value.
 The upper on $D_{15}$ rounds upward the qualified exact witness value
 $441.532912\ldots$. Neither $D_{15}$ nor $\CH_{15}$ is known exactly.
 By Proposition~\ref{prop:support}, no physical fleet is supported at its
 own marginal prices under this declared model and tariff convention.
-This is an exact sign certificate with a small certified separation; it
+This is an exact sign certificate with a conservative separation; it
 is not evidence of a practically large loss or operational prevalence.
 
 \subsection{The declared case and objective}
@@ -94,7 +94,15 @@ and exact positive contradictions certify infeasible leaves. A separate
 coverage checker reconstructed the original semantic model and checked
 all 303 nodes, every inherited branch domain, and the higher-fleet floor.
 It returned complete coverage and an exact global physical lower strictly
-above the separately admitted hull upper. Thus the conclusion follows
+above the separately admitted hull upper. A subsequent bounded refinement
+retained this partition and all 152 original frontier identities, adding
+72 nodes with 102 new native calls. New bounds were checked under their
+inherited branch domains, while source-bound old bounds remained valid on
+every retained or unresolved subtree. The independent refinement checker
+returned complete base coverage and the tighter physical interval in
+\eqref{eq:publicbounds}, meeting its prospectively fixed $10^{-4}$ width
+target. The outward interval width is at most $10^{-6}$; equality of the
+exact bounds is not claimed. Thus the conclusion follows
 from rational bounds and exhaustive coverage, not a native OPTIMAL status,
 a finite plan bank or a small reported solver gap. The tree lower applies
 to physical $D_{15}$; it is not a lower bound on $\CH_{15}$.
@@ -143,12 +151,16 @@ Fixed-route price witness & New strict physical deviation and a checked
 mixture upper; this stage alone did not prove a global gap.\\
 Physical tree and final checker & Complete physical lower strictly above
 that source-bound mixture upper; positive global gap certified.\\
+Retained-partition refinement & All 152 original frontier identities retained;
+72 new nodes and 102 new calls narrow the physical interval to width at most
+$10^{-6}$, without a new hull lower.\\
 \bottomrule
 \end{tabular}
 \end{center}
 Each new physical point was admitted once; source-bound qualified witnesses
-were transferred without repeating their physical replay. The final tree
-qualification passed 39 exact controls without a backend call. Its search,
+were transferred without repeating their physical replay. The original tree
+qualification passed 39 exact controls without a backend call; the distinct
+refinement interface qualification passed 24 new checks. Its search,
 complete coverage audit and resource closure are distinct from scientific
 optimality: the result certifies a separation, not either exact optimum.
 
@@ -161,8 +173,11 @@ with exact outward depot-15 bounds $[404.92,408.54]$. Depot 16 has an
 exact flat lower 414.39 and a numerical upper witness, so that comparison
 is mixed evidence, not a second nonlinear sign certificate.
 
-The certified positive difference is small, and its exact size is not
-known. One timetable with synthetic energy and economic assumptions cannot
+The first sign certificate gave a downward exact-difference display
+$0.008790$; the later endpoint bound in \eqref{eq:publicbounds} supersedes
+that headline without replacing its evidence. The physical value is now
+tightly enclosed, but the hull optimum and exact gap remain unknown.
+One timetable with synthetic energy and economic assumptions cannot
 estimate prevalence, operating savings or welfare effects in bus systems.
 The result extends the analytical possibility to this fully specified
 varied-time charge-only instance; it does not validate the simplified

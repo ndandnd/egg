@@ -41,13 +41,18 @@ qualification of every sparse graph or of the analytical V2G extension.
 | Rational physical witness | artifact `0cb3c54de6e8e5c391afb37bcbb68ad3a51925ee`; authority `3cbb8c9d965e9222ef8a98191bf775b4925382a1` | Strict physical upper441.532912… and fixed-route charging optimum |
 | Admitted response and two-plan mixture | artifact `f5ec2aa5770188d173af7297620a5fcea99fef9a`; authority `c5f056b90ca895786c44f96903cdaafff97fce52` | Feasible CH upper; no mixture-global-optimum claim |
 | Physical branch search/checker | source `6a171357b65254b52cade63ed95dcce798485f36`; control `6bdcf254`; artifact `ef0e08203dba5ac2ddcaff6bd8639cc9a70677b9` |303-node exact physical coverage plus fleet-count exclusions |
+| Retained-partition physical refinement | source `a2156a0cce74cefaa9e457f3e766d952e09f59c5`; control `ba0059ce`; artifact `d8e22ffd3753fced3ec825c68714fd549d914230` | All152 base frontier identities retained;72 new nodes/102 new calls; physical width at most0.000001 |
 
 Compact results, interpretation reviews and final resource receipts live in
-the respective `research-20261029/public_*` packages. The definitive accepted
-inequality is recorded in `public_support_tree/attempt01/results.json`:
-CH<=441.142238, D>=441.151027 and exact-difference D−CH>=0.008790, with
-proper outward displays. The exact rationals, not these rounded numbers,
-decide strict separation. D<=441.532913 is the safe six-decimal physical upper.
+the respective `research-20261029/public_*` packages. The current physical
+interval is recorded in `public_physical_refinement/attempt01/results.json`:
+441.532912<=D<=441.532913, with outward width at most0.000001. Combining
+its down-rounded lower with retained CH<=441.142238 gives conservative
+D−CH>=0.390674 by endpoint subtraction. This is not an exact gap value.
+The original `public_support_tree/attempt01/results.json` established the
+earlier D>=441.151027 and downward exact-difference gap display0.008790;
+that evidence is preserved, with its distinct rounding convention. Exact
+optima D and CH remain unknown; the refinement supplies no new CH lower.
 
 The source-bound mixture is admitted separately from the lower certificate.
 The quadratic two-bus tree covers physical plans; the one-bus obstruction
@@ -85,6 +90,9 @@ parent read and cleanup are paid in the package owner meters. Nested child
 observations overlap those meters. The public tree cost1055.86displayedCPU
 and1079.58elapsed seconds; all earlier discovery and failed stages remain
 additional paid work, not an end-to-end speedup claim.
+The later physical refinement adds340.46 displayedCPU/347.74wall seconds,
+retaining340.49CPU to cover the finer owner observation and closure; it is
+not charged as a second303-node search or old algebra audit.
 
 An independent reader can inspect the frozen sources, compact acceptance
 records, exact arithmetic proof format and complete source/command/resource
@@ -93,7 +101,7 @@ obtained solver environment has not been performed. The current artifact
 chain is not advertised as a turnkey, externally replicated benchmark.
 
 The positive sign is for one specified charge-only model. Public timetable
-data do not calibrate the energy or economic assumptions. The small certified
+data do not calibrate the energy or economic assumptions. The certified
 separation is not an estimate of operational prevalence or practical welfare
 loss, and no substantive ML advantage is established by these certificates.
 The learning guide/deck retain the separate model-capacity tests and their

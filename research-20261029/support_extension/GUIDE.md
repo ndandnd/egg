@@ -1,6 +1,6 @@
 # EGG self-study guide
 
-Self-study companion to the 22-slide **Understanding EGG** learning deck, updated 29 October 2026. The guide incorporates later theory and the resolved public support sign; the older deck has not been updated alongside it. This guide explains existing evidence and is not an independent reproduction. Written proofs establish continuous-domain claims; finite exact checks qualify implementations. Sources are repository-relative to `ml-prediction-20261017`. See the support extension's [proof](PROOF.md) and [results](RESULTS.md).
+Self-study companion to the **Understanding EGG** learning deck, updated 29 October 2026. The guide covers the public support certificate, the common-loss extension and the learning results. It explains existing evidence and is not an independent reproduction. Written proofs establish continuous-domain claims; finite exact checks qualify implementations. Sources are repository-relative to `ml-prediction-20261017`. See the support extension's [proof](PROOF.md) and [results](RESULTS.md).
 
 ## Start with the question
 
@@ -27,7 +27,7 @@ Read the guide in order. First explain the three objectives without equations; t
 | Δ | Physical–hull gap D−CH. |
 | Regret r(x;p) | Gain available by changing the entire fleet while holding posted p fixed. |
 | Column | A variable representing an option in a restricted optimization model. Physical EVSP columns can represent one-bus duties; the economic hull here instead uses columns representing whole feasible fleets. A collection of duty columns must still satisfy service coverage and shared-resource constraints. |
-| V2G | Vehicle-to-grid export. The new analytical section treats a declared lossless model; the inspected learning experiments do not implement V2G. |
+| V2G | Vehicle-to-grid export. The analytical sections treat lossless and common-efficiency models; the public support certificate and inspected learning experiments are charge-only. |
 
 Source: `paper/latex/model_theory.tex`; `research-20261028/paper_core_verification/STATE.md`; `research-20261027/grid_information_pilot/RESULTS.md`.
 
@@ -87,7 +87,9 @@ Source: `paper/latex/model_theory.tex`.
 
 General linear-price support, participant convexification, duality and lost-opportunity accounting are established theory. Entire feasible schedules as columns, self-scheduling pricing oracles and column generation for convex-hull prices also have direct precedents. Ramping constraints and bus participation in electricity auctions are not new by themselves.
 
-The plausible narrow contribution is a physically explicit construction with endogenous bus assignments and compulsory full replenishment, plus precise conditions and participant-rights distinctions. The source check is bounded, not an exhaustive novelty clearance, and supports no “first” claim. Hreinsson et al. was inspected only at abstract level; absence of a whole-owner result there is unverified.
+The strongest current candidate contribution is an explicit assignment-dependent **joint load–operating-cost frontier**. For a restricted two-batch class, classical cardinality matching values describe all cost layers, give support conditions, and still determine at most two efficient segments per cardinality with common conversion losses. These statements explain what can be decided across a class of objectives without enumerating complete fleets. General matching, convex aggregation and price-support duality remain established tools.
+
+Joint EV scheduling, V2G and electricity pricing already appear in prior work. Zhou, An and Schmöcker model bus connections with charging and export; Wu and colleagues connect scheduling and distribution-grid prices. Al Taha and Bitar give lossy-storage reformulations. Our distinction must therefore be the specific physical classification and its consequences. The source check is bounded and supports no “first integration” claim. See the focused draft's related-work comparison and `LOSSY_NOVELTY_REVIEW.md`.
 
 Small exact examples demonstrate possibility. They do not measure prevalence, calibrated losses, operational savings or the performance of a scalable new algorithm.
 
@@ -135,18 +137,20 @@ Source: `paper/latex/exact_results.tex`.
 
 ## The public case: a resolved sign, a small model-specific gap
 
-The manuscript uses one 37-service public timetable in two separate one-depot variants. Scenario energy, charging and monetary assumptions are partly synthetic; these are not two independent timetable samples.
+The manuscript uses one 37-service public timetable in two separate one-depot variants. Scenario energy, charging and monetary assumptions are partly synthetic; these are not two independent timetable samples. The certified model admits the pinned descriptor's finite movement graph, fixed travel-leg times and declared depot/terminal charging windows. Charging inside those windows is continuous. A complete directed travel matrix does not prove completeness over arbitrary unlisted paths, extra depot visits, retiming or other charging locations. The support result is global within the declared graph and fleet cap.
 
 For the nonlinear depot-15 ideal model, the new exact certificates establish
 
-    CH ≤ 441.142238 < 441.151027 ≤ D ≤ 441.532913,
-    Δ ≥ 0.008790.
+    CH ≤ 441.142238 < 441.532912 ≤ D ≤ 441.532913,
+    Δ ≥ 0.390674.
 
-These are compact reported displays of exact rational certificates; the strict comparison uses the rational values, not subtraction of rounded displays. The hull upper comes from a feasible mixture of two separately admitted physical plans. An independent checker verified the complete 303-node binary-tree coverage and exact node bounds; a qualified physical floor excludes fleets of three or more buses. Together these bound every physical plan above that feasible hull value. The tree is a physical lower-bound certificate, not an exact global hull computation or an exact physical optimum.
+These are conservative outward displays of exact rational certificates. The gap shown is a valid lower bound from subtracting an upward hull endpoint from a downward physical endpoint. The hull upper comes from a feasible mixture of two separately admitted physical plans. An independent checker first verified a complete 303-node binary tree, then accepted a refinement with 72 new descendants and all original regions retained. A qualified physical floor excludes fleets of three or more buses. The physical optimum is now enclosed within 0.000001 model units. Its exact value and the exact hull optimum remain unknown.
 
 A cheaper fixed-price response had already proved that the protected incumbent was unsupported at its own prices. That alone did not settle global support. The new strict separation now proves that no globally optimal physical fleet in this declared model has own-price support, under the stated price/duality qualifications. The admitted physical upper remains a feasible plan, not an assertion that its exact global optimality is known.
 
-The certified gap lower is small in synthetic cost units. It establishes a sign and a mechanism in one idealized timetable variant, not operational prevalence, calibrated losses, a large practical effect, or an ML advantage. The flat-price variant still cannot have a physical–hull objective gap because its objective is linear over the energy/cost pairs.
+The certified gap lower is small in synthetic cost units. It establishes a sign and a mechanism in one idealized timetable variant, not operational prevalence, calibrated losses, a large practical effect, or an ML advantage. A separate exact fee argument shows that every vehicle fee at least the nominal 100 preserves the positive lower-gap guarantee; a sufficient open interval also extends below 100. This is fee stability with the physical model held fixed, not robustness to reserve, losses, access or delays. The flat-price variant still cannot have a physical–hull objective gap because its objective is linear over the energy/cost pairs.
+
+The exact certificate index maps each inequality to its immutable evidence and checking source. These checks were independently formulated within this project. A standalone solver-free verification bundle is being prepared for reader inspection; no independent external replication is claimed.
 
 Sources: `research-20261029/public_support_tree/attempt01/results.json`; `research-20261029/public_price_witness/RESULTS.md`; the current focused-theory public-case discussion. The price-witness RESULTS describes its own earlier package boundary as unresolved; the subsequent independently checked tree resolves the sign.
 
@@ -206,6 +210,20 @@ Paid idle buses need an explicit availability rule. With at most 2n buses total,
 
 Source: `paper/focused-theory-20261029/v2g.tex`. These are exact statements for declared ideal physics and settlement, not field evidence or a qualified V2G software result.
 
+## Common conversion losses: why two load coordinates matter
+
+Let alpha be charging efficiency, delta discharging efficiency, C early grid purchases and X early grid exports. The battery gains alpha*C−X/delta, while the grid sees E=C−X. If total service energy is S and every bus finishes full, terminal purchases satisfy
+
+    L = S/alpha − E + (1/(alpha*delta)−1)*X.
+
+The same early net load can therefore require different terminal purchases. Replacing S by S/alpha in a lossless formula misses export losses and gross connector use.
+
+For a fixed matching, let R be its total mandatory early battery recharge. The least export needed at early net load E is max(R/alpha−E,0). Substituting that quantity above produces a continuous curve with at most two straight pieces. Inventory, gross early throughput and terminal capacity determine its feasible endpoints. Among matchings with the same number of paired services, the matching minimizing R has the best such curve.
+
+Thus one classical matching value per cardinality still describes the efficient joint load–cost set. It does **not** describe every physical allocation: battery-neutral charge/export cycles can create dominated points. For coordinatewise nondecreasing supply cost, removing those points preserves the physical and hull planning values. Negative prices or asymmetric export payments require further alternatives. At zero prices some removed plans can tie, so the reduction gives response values without enumerating all responses.
+
+The continuous theorem has an independent proof review. Ten prospectively fixed cases also matched a separate raw SOC/sign-polytope enumeration, with complete frontier-segment attainment and physical replay. This is a finite implementation qualification, not ten independent real fleets, empirical validation, or public-case V2G. See `lossy_projection_qualification/RESULTS.md` and the focused draft's common-loss section.
+
 ## Study questions and answers
 
 1. **Why impose full terminal replenishment?** To charge the modeled horizon for replacement energy rather than letting it consume free initial inventory. It does not make service assignments divisible.
@@ -213,7 +231,7 @@ Source: `paper/focused-theory-20261029/v2g.tex`. These are exact statements for 
 3. **Can randomizing daily schedules implement CH at the same expected cost?** Generally no. CH evaluates supply cost at the mean load; random daily operation incurs the mean of physical supply costs.
 4. **Does one large regret at a solver price prove no supporting price exists?** Not with nonunique prices. Support existence requires considering every admissible candidate price, or an appropriate certificate over that set.
 5. **Does Δ→0 make all incentives vanish?** Not necessarily for absolute whole-owner regret. The replicated example separates it from vanishing individual and per-bus incentives.
-6. **Has the public case established support failure?** Yes for the declared nonlinear depot-15 ideal model: an independently certified physical lower strictly exceeds a feasible hull upper. The small certified gap does not establish prevalence or operational magnitude.
+6. **Has the public case established support failure?** Yes within its finite declared movement graph and charging windows: an independently certified physical lower strictly exceeds a feasible hull upper. Unlisted travel/access alternatives could change the conclusion. The small certified gap does not establish prevalence or operational magnitude.
 7. **Did larger neural capacity help?** Yes in the new pilot. It still did not beat the best fitted classical baseline, and the old GNN remains a separate unresolved diagnosis.
 8. **If a new physical plan beats the old CH, is the enlarged model supported?** Not necessarily. Compare the enlarged model's D with its own CH; both may decrease. The verified fee-8 extension has D93 below old CH94.8875, yet new CH92.95 and positive gap0.05.
 

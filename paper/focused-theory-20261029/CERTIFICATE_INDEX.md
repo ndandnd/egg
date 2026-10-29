@@ -16,7 +16,11 @@ Supply uses 30 market intervals and original stored-binary coefficients
 
 The perspective energy-flow and independent reconstruction sources are pinned at `3278d50f8323618bd36809b1bbb1a0da081e23ff`: `research-20261029/public_support_resolution/energy_flow.py`, `exact_dual.py`, and required `src/egglab/native_recharge.py`/package schema. Every lower refers to that rational semantic model, not an unqualified native floating-point objective.
 
-## Inequalities and their retained evidence
+## Original sign certificate and retained evidence
+
+This table preserves the original sign-certificate chain. Its physical lower
+is denoted L_phys_old in the constants below; the stronger current physical
+interval and its distinct endpoint-rounding convention follow the table.
 
 | Claim | Source/input/output binding | Checking entry point and scope |
 |---|---|---|
@@ -28,6 +32,12 @@ The perspective energy-flow and independent reconstruction sources are pinned at
 
 Each package's compact `RESULTS.md`, `attempt01/results.json`, owner/worker receipts and final resource receipt state the acceptance boundary and paid cost. Prior failed physical screens/recoveries are not overwritten by later admitted constructions. Native OPTIMAL alone proves none of the exact inequalities above.
 
+## Refined physical lower and current conservative gap
+
+The later physical-refinement source is `a2156a0cce74cefaa9e457f3e766d952e09f59c5`, control `ba0059ce`, artifact `d8e22ffd3753fced3ec825c68714fd549d914230`. Its compact `research-20261029/public_physical_refinement/attempt01/results.json` records VALID_REFINEMENT, complete base coverage and epsilon_met. All152 source-admitted original frontier identities and inherited decisions remain covered;72 new nodes were checked after102 new native proposals. New `checker.verify_refinements` combines their checked bounds with retained base evidence and the same fleet-count argument. No old303-node algebra audit/search was repeated.
+
+The current outward interval is `441.532912 <= D <= 441.532913`, width at most `0.000001`. Combining its down-rounded lower with retained up-rounded `CH <= 441.142238` gives **conservative endpoint bound `D−CH >= 0.390674`**. This is not an exact-gap display. The table's original `0.008790` remains the historical downward display of its exact rational difference. The refinement supplies no CH lower; neither exact optimum is known.
+
 ## Exact accepted constants
 
 These constants are transcribed from approved compact records, not recomputed here:
@@ -38,10 +48,13 @@ These constants are transcribed from approved compact records, not recomputed he
     U_hull = 1443179923968803775290098006217163515009032774663398228930303365915411930614170875502024167442451530845
              /3271461678119739162838778949479488288386427183774469641575516104263648171125254058271345771399872512
 
-    L_phys = 161185737312360042121870470606817314079130382670151
+    L_phys = 80662634237282610902559758444585953851595472957985
+             /182687704666362864775460604089535377456991567872
+
+    L_phys_old = 161185737312360042121870470606817314079130382670151
              /365375409332725729550921208179070754913983135744
 
-    L_phys−U_hull = 28757315678009341708588197937979967078054123344385860826329513296439211419698507473389021538473603
+    L_phys_old−U_hull = 28757315678009341708588197937979967078054123344385860826329513296439211419698507473389021538473603
              /3271461678119739162838778949479488288386427183774469641575516104263648171125254058271345771399872512
 
     L_root = 89305539793542554823848003373759814314980879303792249486127549713

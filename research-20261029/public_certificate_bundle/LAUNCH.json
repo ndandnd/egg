@@ -1,0 +1,25 @@
+{
+ "status":"DRAFT_NO_EXECUTION_AUTHORITY","run_id":"attempt01","source_revision":null,
+ "assigned":["PREFLIGHT","BUNDLE","ADAPTER_Q0","PORTABLE_CHECK"],
+ "package_cpu_s":600,"package_wall_s":900,"worker_cpu_s":550,"worker_wall_s":780,
+ "observed_rss_bytes":5368709120,"native_calls":0,
+ "stage_limits":{"PREFLIGHT":[30,45],"BUNDLE":[20,60],"ADAPTER_Q0":[20,30],"PORTABLE_CHECK":[400,530]},
+ "final_reserve":[60,90],
+ "cli_limits":{"cpu_s":400,"wall_s":500,"cleanup_wall_s":3},
+ "verify_limits":{"seconds":500,"checker_seconds":450,"rss_bytes":2147483648,"compressed_bytes":536870912,"decompressed_bytes":536870912,"total_bytes":1073741824,"tree_nodes":375,"tree_depth":375},
+ "distribution_status":"UNRESOLVED_LOCAL_REVIEW_ONLY",
+ "input_pins":{
+  "checkers/physical.py":{"revision":"3278d50f8323618bd36809b1bbb1a0da081e23ff","path":"research-20261029/public_support_resolution/independent_verify.py"},
+  "checkers/semantic.py":{"revision":"3278d50f8323618bd36809b1bbb1a0da081e23ff","path":"research-20261029/public_support_resolution/exact_dual.py"},
+  "checkers/tree.py":{"revision":"6a171357b65254b52cade63ed95dcce798485f36","path":"research-20261029/public_support_tree/checker.py"},
+  "evidence/case.json":{"revision":"253c1e29295e766b3889fc8f5c28d9808e00b3d6","path":"research-20261029/public_support_resolution/attempt01/case_descriptor.json"},
+  "evidence/physical.json.gz":{"revision":"0cb3c54de6e8e5c391afb37bcbb68ad3a51925ee","path":"research-20261029/public_rational_recovery/attempt01/PUBLIC_PRIMAL.json.gz"},
+  "evidence/response.json.gz":{"revision":"f5ec2aa5770188d173af7297620a5fcea99fef9a","path":"research-20261029/public_price_witness/attempt01/EXACT_PRIMAL.json.gz"},
+  "evidence/mixture.json.gz":{"revision":"f5ec2aa5770188d173af7297620a5fcea99fef9a","path":"research-20261029/public_price_witness/attempt01/MIXTURE.json.gz"},
+  "evidence/tree.json.gz":{"revision":"ef0e08203dba5ac2ddcaff6bd8639cc9a70677b9","path":"research-20261029/public_support_tree/attempt01/PUBLIC_TREE.json.gz"},
+  "evidence/refinement.json.gz":{"revision":"d8e22ffd3753fced3ec825c68714fd549d914230","path":"research-20261029/public_physical_refinement/attempt01/PUBLIC_REFINEMENT.json.gz"}
+ },
+ "command":".venv-local/bin/python -I -S -B research-20261029/public_certificate_bundle/run.py --run-id attempt01",
+ "external_meter":"PENDING_PARENT_FREEZE","funding_prefix":{"displayed_cpu_s":"23870.02","elapsed_s":"24797.56","retained_cpu_s":"23871.42"},
+ "purpose":"One new solver-free retained-evidence check and local portable bundle; no distribution or external replication claim"
+}
