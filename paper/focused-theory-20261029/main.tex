@@ -27,7 +27,8 @@ its own load. For heterogeneous services in two simultaneous batches,
 a declared successor graph and fixed shared charging resources, we derive
 the exact joint load--vehicle-cost frontier with full battery replenishment.
 Cardinality-matching thresholds determine where a convexified optimum has
-a physical implementation. The load-only set is an interval; its discrete
+a physical implementation. In this lossless class the load-only set is an
+interval; its discrete
 vehicle-cost layers cause the obstruction. A bidirectional extension accounts
 for gross connector throughput and signed electricity settlement. Vehicle-to-grid
 operation can preserve or remove a positive gap, and identical paid idle
@@ -44,6 +45,9 @@ branching certificate separates every fleet in its declared movement graph from 
 convexified plan, proving a conservative positive gap of at least $0.390674$
 in the stated objective units. The physical value lies in the outward interval
 $[441.532912,441.532913]$; the hull optimum remains unknown.
+With a separately defined exact additive consumption law, fresh certificates
+and a dominance argument extend the positive gap to finite walks over the
+specified paired directed arcs and continuous waiting.
 Synthetic coefficients and ideal
 physics limit conclusions about operational prevalence or calibrated value.
 \end{abstract}
@@ -94,6 +98,13 @@ We derive a finite efficient-frontier description using the same matching
 values, with at most two pieces per cardinality. This preserves physical and
 convexified planning values for monotone supply costs, while deliberately
 retaining a narrower scope than the full lossless support classification.
+The reduction also admits a common compulsory transition-energy task per
+matched pair. When that energy varies by edge, a small counterexample shows
+why minimum early recharge alone loses an efficient assignment: pairing
+can change total replacement energy as well as its timing.
+An explicit family then retains a positive support gap despite exponentially
+many efficient physical branches at a fixed fleet size. This boundary concerns
+physical alternatives, not exponential hull complexity or computational hardness.
 
 The two-batch assumptions make the assignment set exhaustive. A separate
 37-service public timetable supplies an exact existence certificate beyond
@@ -109,7 +120,9 @@ carefully; their complete analyses are retained in the appendices.
 \input{heterogeneous}
 \input{v2g}
 \input{lossy}
+\input{transition_energy}
 \input{public_case}
+\input{exact_energy_extension}
 \input{consequences}
 
 \section{Implications and limits}
@@ -127,8 +140,12 @@ economics require further analysis. The nominal reserve/loss neighborhood
 does not validate those abstractions empirically. The public case uses varied
 times and movement energy, but remains charge-only within fixed declared
 movement modes and charging windows. Its certificate does not prove
-completeness for arbitrary retiming or unlisted access. Synthetic coefficients
-and one base timetable leave calibrated magnitude and prevalence open.
+completeness for arbitrary retiming or unlisted access. A separately defined
+exact additive law admits a wider result: under its explicit triangle
+and charging-access premises, a separate certificate covers arbitrary finite
+walks in the paired-arc model. Neither law certifies all empirical road options.
+Synthetic coefficients and one base timetable leave calibrated magnitude
+and prevalence open.
 
 \section{Conclusion}
 Service assignments change the joint load--vehicle-cost set even when its
@@ -167,6 +184,8 @@ contribution is claimed.
 \input{proofs}
 \input{certificates}
 \LossyProjectionProofs
+\TransitionEnergyProofs
+\input{exponential_transition}
 \input{evidence_details}
 \bibliographystyle{plainnat}
 \bibliography{references}

@@ -1,0 +1,149 @@
+\section{Which transition energies preserve the reduction?}
+\label{sec:transitionenergy}
+Zero transition energy ensures that total service consumption is independent
+of the matching. A controlled extension permits a common energy cost per
+matched pair. This is a compulsory service-transition task, performed over
+a common positive-duration, noncharging interval after the early window
+and before the B batch. It is an abstract extension of the common-window
+model, not a claim about arbitrary road movements or charging access.
+
+\begin{corollary}[Common transition energy]\label{cor:commontransition}
+Retain the assumptions of Theorem~\ref{thm:lossyfrontier}, except that each
+matched A--B pair consumes the same additional energy $d\ge0$ during that
+interval, with nonnegative consumption throughout. Insert this interval
+after early exchange and translate the B batch and terminal window later
+without changing their durations or budgets: for example, A on $[0,1]$,
+early exchange on $[1,2]$, transition on $[2,3]$, B on $[3,4]$ and terminal
+exchange on $[4,5]$. Singletons perform no
+transition task. Restrict the allowed graph to edges with $b_j+d\le B$.
+Write $S=\sum_i a_i+\sum_j b_j$, $P=\sum_i a_i$,
+$S_m=S+md$, $N_m=2n-m$, and
+\[
+ r_m=\min_{|M|=m}\sum_{(i,j)\in M}(a_i+b_j+d-B)_+,
+ \quad U=\min\{P/\alpha,K\},
+ \quad \kappa=\frac1{\alpha\delta}-1.
+\]
+For $m=0,\ldots,\nu$ in this restricted graph, the efficient curve is
+\[
+ L_m(E)=\frac{S_m}{\alpha}-E+
+       \kappa\left(\frac{r_m}{\alpha}-E\right)_+,
+ \qquad t_m\le E\le U,
+\]
+where
+\begin{align*}
+ t_m=\max\Biggl\{&
+ (\alpha^{-1}-\delta)r_m+\delta(S_m-N_mB),\quad
+ 2r_m/\alpha-K,\\[-2pt]
+ &S_m/\alpha-H,\quad
+ \frac{S_m/\alpha+\kappa r_m/\alpha-H}{1+\kappa}
+ \Biggr\}.
+\end{align*}
+Intervals with $t_m>U$ are infeasible. There are at most two efficient
+segments per cardinality. Under coordinatewise nondecreasing supply costs,
+these curves suffice for physical and convexified planning values and for
+nonnegative posted-price value queries, as in
+Section~\ref{sec:lossyalgorithm}. They do not enumerate every response tie
+or the full physical projection. The sequence $t_m$ is discrete convex.
+\end{corollary}
+
+The proof uses the same interval allocation as
+Lemma~\ref{lem:lossyfixed}: a paired bus now has early battery-exchange box
+$[a_i+b_j+d-B,a_i]$. Its lower endpoints sum to $S_m-N_mB$ and its positive
+lower endpoints to the matching requirement. Thus both the requirement and
+the terminal energy account include the task. Appendix~\ref{app:transitionenergy}
+gives the details, including capped paid-idle dominance. No lossless scalar
+support criterion is transferred by this corollary. This analytical extension
+has source-level proof review but no numerical implementation qualification.
+
+\paragraph{Varying edge energies need more information.}
+The failure already occurs with charging only; disable early exports in
+this example. Consider $n=2$, $a=b=(13,1)$, $B=20$, unit efficiency, early budget $K=14$
+and terminal budget $H=40$. Every edge is allowed, with transition energies
+$\left(\begin{smallmatrix}0&6\\6&0\end{smallmatrix}\right)$.
+Use A services on $[0,1]$, early charging on $[1,2]$, positive-duration
+noncharging transitions on $[2,3]$, B services on $[3,4]$ and terminal
+charging on $[4,5]$. One connector of power14 early and40 terminal,
+with adequate acceptance, serially realizes the stated budgets. Access and
+other nonservice energy are zero. Transition tasks are compulsory; no
+metric-road realization or substitute route is assumed.
+\begin{center}
+\begin{tabular}{lccc}
+\toprule
+Full matching & Minimum early requirement & Total energy & Load segment\\
+\midrule
+Identity & $6$ & $28$ & $(E,28-E),\ 6\le E\le14$\\
+Cross & $0$ & $40$ & $(E,40-E),\ 0\le E\le14$\\
+\bottomrule
+\end{tabular}
+\end{center}
+At $E=6$ the identity's terminal load22 is smaller than every cross load
+with early purchase at most6. Selecting only the minimum-requirement
+matching therefore loses an efficient branch. For the fixed monotone
+convex supply cost $F(E,L)=E+L$, its two-bus value is $2f+28$ instead of
+the cross value $2f+40$. Allowing singleton duties does not repair the
+error when $f>0$: the true value is $2f+28$, whereas even the best
+minimum-requirement choice at every cardinality gives
+\[
+ \min\{2f+40,3f+28,4f+28\}
+ =2f+28+\min\{12,f\}>2f+28.
+\]
+This elementary counterexample isolates the lost assignment-independence
+of total energy. It is neither a general hardness result nor a public-case
+or empirical finding.
+Appendix~\ref{app:exponentialtransition} extends the construction to
+$2^k$ efficient physical pieces at a single fleet size, each necessary for
+some monotone convex planning objective. Its numerical magnitudes grow
+with $k$, and the hull remains simple; it proves neither hardness nor an
+exponential requirement for every symbolic representation.
+For one smooth monotone convex objective in that family, the exact gap is
+$9/(2K)>0$ even with all these alternatives available. The gap decreases
+with the family's charging budget $K$; there is no uniform-size claim.
+
+% Invoke once in the appendix, after this file has been input.
+\newcommand{\TransitionEnergyProofs}{%
+\section{Proof of the common-transition extension}\label{app:transitionenergy}
+\begin{proof}[Proof of Corollary~\ref{cor:commontransition}]
+For a fixed matching, paired, A-only and B-only early battery-exchange
+boxes are, respectively,
+\[
+ [a_i+b_j+d-B,a_i],\qquad [a_i-B,a_i],\qquad[b_j-B,0].
+\]
+The edge condition makes the first box nonempty. Capacity after A gives
+the upper endpoints; nonnegative SOC after the transition and B gives the
+lower endpoints. Nonnegative consumption during the post-early portion
+then guarantees all its intermediate SOC constraints. The upper endpoints
+sum to $P$, all lower endpoints to $T=S_m-N_mB$, and their positive parts
+to $R=\sum_{(i,j)\in M}(a_i+b_j+d-B)_+$.
+
+The allocation argument of Lemma~\ref{lem:lossyfixed} therefore gives
+minimum export $D_R(E)=(R/\alpha-E)_+$ and terminal load
+$S_m/\alpha-E+\kappa D_R(E)$. The available negative battery exchange,
+early gross budget and terminal budget give the four lower bounds in
+$t_m$ with $R$ in place of $r_m$; early capacity and gross budget give
+$E\le\min(P/\alpha,K)$. Every point in that interval is attained by
+distributing positive or negative exchange over the boxes, executing early
+exchanges serially, performing the noncharging task and B service, and
+refilling serially at the terminal. Extra cycles weakly increase terminal
+load and resource use, so monotone value objectives permit their removal.
+
+At fixed $m$, total energy $S_m$ and fleet $N_m$ are constant across
+matchings. Both the terminal curve and each threshold term are
+nondecreasing in $R$, since $\alpha^{-1}-\delta\ge0$ and $\kappa\ge0$.
+A matching attaining $r_m$ consequently dominates all other size-$m$
+curves. Componentwise replacement also proves the convexified-value
+claim. Classical cardinality-matching convexity makes $r_m$ discrete
+convex, while $S_m$ and $S_m-N_mB$ are affine. Each threshold term is
+discrete convex and so is their maximum: extend each term by its convex
+linear interpolant, take the convex maximum, and restrict to integers.
+
+For completeness, suppose $k$ paid idle buses are admitted with total
+$N=2n-m+k\le2n$, all available early. Their boxes are $[-B,0]$.
+Delete any $k\le m$ matching edges and replace each deleted pair plus
+one idle bus by its two singleton services. Fleet and fee stay unchanged,
+$P$ stays unchanged, total energy drops by $kd$, and $R$ weakly decreases.
+Every threshold term weakly decreases and the terminal curve weakly
+decreases at the same $E$. The no-idle representative therefore dominates
+under monotone economics. This proves efficient-value dominance, not
+equality of feasible load sets; it makes no claim about uncapped idle fleets.
+\end{proof}
+}

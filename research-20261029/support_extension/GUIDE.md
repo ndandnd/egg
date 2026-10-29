@@ -160,6 +160,35 @@ The exact certificate index maps each inequality to its immutable evidence and c
 
 Sources: `research-20261029/public_support_tree/attempt01/results.json`; `research-20261029/public_price_witness/RESULTS.md`; the current focused-theory public-case discussion. The price-witness RESULTS describes its own earlier package boundary as unresolved; the subsequent independently checked tree resolves the sign.
 
+## A broader public model now has its own certificate
+
+The original result used stored floating-point consumption values as exact
+coefficients. We separately defined a model using exact additive travel and
+waiting formulas, keeping the timetable, fleet/resources and supply cost fixed.
+This distinction matters: even tiny coefficient changes can affect feasibility.
+
+Fresh checks give **441.532912 ≤ D ≤441.532913**, **CH ≤441.142238**, hence
+**D−CH ≥0.390674** for the new model too. The displayed numbers coincide, but
+the exact fractions differ. The new argument did not assume the old gap survived.
+Two reconstructed physical plans and the complete retained branch partition
+were checked under the new energy law. A diagnostic-key error stopped the first
+final comparison; a separately checked summary-only consumer completed it,
+without repeating those successful calculations. The failed attempt remains.
+
+Why does this extend the opportunity set? In the defined directed-arc model,
+time and energy triangle inequalities let us shorten a noncharging detour, or
+stay at the selected depot instead of making intermediate excursions. We can
+retain the original charging times and curtail purchases when the battery is
+full. This preserves feasibility while decreasing each period's purchases.
+Thus arbitrary finite walks and continuous waiting cannot beat the canonical
+model's physical or convexified planning values under monotone supply costs.
+
+The proof needs the exact waiting law, complete canonical access, one charging
+depot, nonnegative consumption and ideal charging. It does not certify that
+every paired time/distance arc is an actual road path, add public V2G, estimate
+prevalence or establish calibrated savings. See `exact_energy_extension.tex` and
+`public_exact_energy_comparison/RESULTS.md` for the precise statement.
+
 ## Conventional recovery: a strong control matters
 
 Independent fixed-duty F delivered all eight tested cases. Full discovery N and simple diving D each strictly delivered four; all their failures occurred in the larger 24-service cases. Those failures were selection-policy failures rather than proof of physical infeasibility, because F supplied feasible fleets.
@@ -232,9 +261,26 @@ The continuous theorem has an independent proof review. Ten prospectively fixed 
 
 ## Why the two-batch assumptions matter
 
-The matching reduction is special to duties containing at most one service from each of two batches. A third batch can already create a different problem: if buses cannot charge between batches, each selected triple of service energies must fit in one battery. With exactly enough total battery inventory, the triples must all sum exactly to capacity. This contains the classical strongly hard Numerical Three-Dimensional Matching problem, even with every transition available and enough terminal charging afterward.
+Zero transition energy can be relaxed in one controlled way. If every paired duty performs the same compulsory energy-consuming task after early charging, total consumption is fixed within each matching cardinality: S+m*d. The same matching statistic still gives at most two efficient segments per cardinality, with that extra energy included in terminal refill. The graph must exclude pairs whose B service plus transition cannot fit in a full battery. This is an abstract common-task extension, with proof review but no new numerical implementation qualification.
+
+Varying transition energy changes the answer. In a charge-only example with A and B energies (13,1) and batteries20, the identity matching needs6 early units and consumes28 overall. Cross transitions each consume6 extra units: that matching needs0 early units but consumes40 overall. Choosing only the smallest early requirement loses the identity's efficient charging branch. With a linear unit electricity price and any positive bus fee, allowing singleton duties still does not rescue that shortcut. Total energy has become assignment-dependent. This is a scope counterexample, not a measured public-route effect or a new hardness claim.
+
+The proved reduction concerns duties containing at most one service from each of two batches. A third batch can already create a different problem: if buses cannot charge between batches, each selected triple of service energies must fit in one battery. With exactly enough total battery inventory, the triples must all sum exactly to capacity. This contains the classical strongly hard Numerical Three-Dimensional Matching problem, even with every transition available and enough terminal charging afterward.
 
 The draft gives the short reduction and its proof. This is a boundary explanation, not a new EVSP hardness claim, evidence that every three-batch case is difficult, or a reason to prefer ML. It explains why two independently good adjacent matchings need not combine into battery-feasible complete duties.
+
+There is a stronger analytical boundary: k independent two-by-two assignment
+blocks can create **2^k efficient physical charging branches at the same fleet
+size** when connection energy varies. Each branch matters for some monotone
+convex supply objective. Yet all their corner points can lie on one straight
+hull edge and share a single supporting price. Many physical alternatives
+therefore need not mean a complicated hull or difficult price calculation.
+The construction uses growing binary-encoded energy magnitudes and has a compact
+symbolic description; it is not a hardness or ML-advantage result.
+For the same complete family, a smooth monotone convex supply objective has
+an exact physical–hull gap of **9/(2K)>0**. Thus support failure can survive
+all those feasible alternatives. The gap shrinks as this family's K grows;
+this proves neither a uniform loss nor that adding alternatives never helps.
 
 ## Study questions and answers
 
