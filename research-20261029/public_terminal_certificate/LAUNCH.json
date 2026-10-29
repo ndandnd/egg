@@ -1,0 +1,19 @@
+{
+ "status":"DRAFT",
+ "source_revision":null,
+ "run_id":"cycle01",
+ "package_cpu_s":50,
+ "package_wall_s":90,
+ "worker_self_cpu_s":40,
+ "worker_observed_cpu_s":45,
+ "worker_wall_s":60,
+ "observed_rss_limit_bytes":5368709120,
+ "native_threads":0,
+ "stdlib_threads":1,
+ "input_revision":"253c1e29295e766b3889fc8f5c28d9808e00b3d6",
+ "command":"set -C\nenv OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 VECLIB_MAXIMUM_THREADS=1 NUMEXPR_NUM_THREADS=1 /usr/bin/time -p .venv-local/bin/python -I -S -B research-20261029/public_terminal_certificate/run.py --run-id cycle01 > research-20261029/public_terminal_certificate/owner-console.txt 2> research-20261029/public_terminal_certificate/owner-time.txt",
+ "prior_displayed_cpu_s":22019.51,
+ "prior_elapsed_sum_s":22900.37,
+ "prior_retained_cpu_s":22020.42,
+ "no_retry":true
+}
