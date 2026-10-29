@@ -88,6 +88,29 @@ from rational bounds and exhaustive coverage, not a native OPTIMAL status,
 a finite plan bank or a small reported solver gap. The tree lower applies
 to physical $D_{15}$; it is not a lower bound on $\CH_{15}$.
 
+\subsection{Stability to the vehicle fee}
+The strict separation is not confined to the particular fee100. Change only
+the used-bus fee to $f=100+\tau\ge0$, leaving physics and the supply objective
+fixed. Let $L_2$ be the certified original physical lower, $U$ the admitted
+mixture upper and $L_3=300+A$ the verified mandatory-energy floor for fleets
+with at least three buses. The global bound $L_2$ is also valid on the
+exactly-two-bus subset. Both admitted mixture components use exactly two
+buses, so the mixture objective shifts by $2\tau$. Consequently
+\begin{equation}\label{eq:feestability}
+ D_f-\CH_f\ \ge\
+ \min\{L_2-U,\ L_3-U+\tau\}.
+\end{equation}
+The second term follows from $Nf+A\ge3f+A$ for $N\ge3$ and $f\ge0$;
+it would not follow by shifting an arbitrary higher-fleet bound by $3\tau$.
+Thus every $f\ge100$ retains the original positive lower bound in
+\eqref{eq:publicbounds}. A separate exact arithmetic calculation, checked
+by an independently implemented interval intersection, also certifies the
+open sufficient region $f>100+U-L_3$. The exact rational endpoint is retained
+in the accompanying result packet. This is a sufficient certificate using
+a fixed mixture, not the maximal fee interval or a claim that equality at
+its endpoint restores support. It changes one economic parameter; it does
+not establish robustness to losses, battery capacity or station resources.
+
 \subsection{Evidence history and limitations}
 Earlier unsuccessful stages remain part of the reproducibility record.
 They motivate the distinct certificate steps but are not retrospectively

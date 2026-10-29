@@ -1,4 +1,14 @@
-# Current checkpoint — 29 October 09:23 UTC, window ACTIVE
+# Current checkpoint — 29 October 09:35 UTC, window ACTIVE
+
+NEW public_fee_stability/attempt01 CLOSED_PASS fromsource872e38aef22dd4f736daa4862fa46b4d38af811b/control d37fea3b. Directmanagedexec exited0 withoutyieldedsessionID; child89046exit0/reaped. All3statesdelivered/native0, independentlychecked exactsufficientfeeinterval. Nbar2; supportfailure persists forallf>=100 withsamecertifiedpositivegaplower andforopenregionf>100+U−L3. Exactrationalthresholdincompactresults; notmaximal/physicalparameterrobustness. ReadRESULTS/INTERPRETATION_REVIEW/FINAL_RESOURCE_RECEIPT onlyasneeded. No repeatmetadataadmission/arithmetic/oldreplay. .29displayedCPU/.43elapsed/.31retained adoptedonce. GLOBAL23304.33CPU/24220.67elapsed-sum/23305.66retained. No numericalworkeractive.
+
+NEW public_hull_repaired SOURCE-ONLY/DRAFT nowprepared: oldproducer199519/checker6a171/semantics3278 unchanged, admittedMETADATAtransferredat8353f03456c10c33bd2e1f0f79b3744f1ca2eac2. Actualeventadapterloggingcontrols, distinctworker/nativeclocks; samefixedprice/epsilon/allfleetdomain/caps. Await parentandfocusedindependentreview, separateexactsource/controlfreeze; noattempt/dispatchyet. Originalfailedhullattempt remainsclosedandpaid.
+
+Coreagent preparesboundedlossyefficientfrontiertheory; independentagent reviewsproof. This is SOURCE-ONLY analyticalextension, no newnumerics/claims yet. Corethenreviews repairedhullsource. Literatureagentownsrepairedsource. Currentpaper addsreviewedfee corollary, pendingnewPDF. Guide/deck27alreadyverified. Deadline18:10:45UTC remains; currentdraftNOTsubmissionready.
+
+## Earlier checkpoint — retained history
+
+# Checkpoint — 29 October 09:23 UTC, window ACTIVE
 
 Deadline18:10:45UTC unchanged. public_hull_lower/attempt01 CLOSED_WITH_PRODUCER_ENGINEERING_FAILURE: source199519ed9741ecc36ef88860479344a2ea9b70f7/control eda680c5. Managed owner71167 exited0; worker85363 exited0/reaped. Do not poll either again. No numerical worker remains. Q0 nineteen checks and fixed-price METADATA passed; first LP callback collided on elapsed_s before root-bound extraction. All4 states administratively delivered; final independent complete seed coverage gives only Vlower0, uninformative CHlower−32.387594, epsilon false. Existing stronger434.17 CHlower and certified positive gap remain unchanged. Read only public_hull_lower/RESULTS,FAILURE_DIAGNOSIS,INTERPRETATION_REVIEW,FINAL_RESOURCE_RECEIPT and REPAIR_DECISION as needed. No rawpacket audit or automatic retry.
 
