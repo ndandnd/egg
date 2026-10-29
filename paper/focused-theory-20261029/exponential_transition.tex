@@ -95,6 +95,17 @@ including when $f=0$. Different charging allocations with the same loads
 can still tie; uniqueness of a literal schedule is not claimed.
 \end{proof}
 
+\begin{figure}[ht]
+\centering
+\includegraphics[width=\linewidth]{figures-transition/transition_frontier.pdf}
+\caption{The analytical construction with $k=3$, $B=80$, $K=148$ and
+$S_{\max}=380$. Its eight efficient physical pieces have collinear corners.
+Open circles exclude the dominated right endpoint of each nonfinal piece.
+The simple lower hull illustrates why this branch count is not a hull-vertex
+or optimization-hardness result. The common six-bus fee is omitted.}
+\label{fig:transitionbranches}
+\end{figure}
+
 \paragraph{What the branch count does not imply.}
 All corners lie on $L=S_{\max}-3E$ and share the supporting price $(3,1)$.
 They therefore do not give $2^k$ hull vertices or distinct linear-price

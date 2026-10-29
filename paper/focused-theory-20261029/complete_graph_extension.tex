@@ -1,0 +1,115 @@
+\section{Complete assignment compatibility does not remove the example}
+\label{app:completegraphtransition}
+The disjoint blocks in Proposition~\ref{prop:exponentialtransition}
+make its independent choices transparent, but disconnected assignment
+compatibility is not necessary for its support obstruction. The following
+extension admits every cross-batch assignment, including every perfect
+matching. Its edge consumptions remain compulsory abstract tasks, not
+metric road movements or optional routes.
+
+\begin{proposition}[A complete-graph extension]
+\label{prop:completegraphtransition}
+Retain $k,w_i,W,B,K$, the $2k$ simultaneous services in each batch, and
+the charge-only common-window model of
+Proposition~\ref{prop:exponentialtransition}, including $B\ge20w_{\max}$
+and fleet cap $2k$. Replace the allowed graph by the complete bipartite
+graph. Keep the original within-block transition energies, and on each
+interblock edge to B service $j$ set
+\[
+ d_{ij}=B-b_j.
+\]
+Increase the shared terminal power/budget to $H=2kB$, retaining the unit
+terminal window and adequate per-bus acceptance. Every perfect matching
+is physically feasible. For $f\ge0$ and
+$F(E,L)=3E+L+(E-3)^2/(2K)$, the ENTIRE complete-graph problem has
+\[
+ \CH=S_{\max}+2kf,\qquad
+ D=\CH+\frac{9}{2K}>\CH.
+\]
+All $2^k$ original corners remain uniquely optimal in projected load/cost
+coordinates for their respective monotone convex selector objectives in
+Proposition~\ref{prop:exponentialtransition}. This does not assert that
+the full efficient frontier is unchanged.
+\end{proposition}
+
+\begin{proof}
+The fleet cap and simultaneous batches force exactly $2k$ buses, each
+serving one A and one B service. No singleton, partial matching or idle
+bus can avoid this restriction. All edges perform their compulsory
+nonnegative task during the same positive-duration noncharging interval
+between early charging and B. Access and all other draw remain as in the
+original common-window construction.
+
+For an edge put $e_{ij}=a_i+b_j+d_{ij}$ and
+$r_{ij}=(e_{ij}-B)_+$. Its early purchase interval is
+$[r_{ij},a_i]$ whenever $b_j+d_{ij}\le B$. This condition holds for all
+within-block edges by $B\ge20w_{\max}$, and with equality for every
+interblock edge. In the latter case $e_{ij}=a_i+B$ and $r_{ij}=a_i$:
+the bus refills completely in the early window.
+
+For any perfect matching $M$, these intervals sum to $[R_M,K]$, where
+$R_M=\sum_Mr_{ij}$ and $S_M=\sum_Me_{ij}$. The complete matching branch
+is $L=S_M-E$, $R_M\le E\le K$. Each bus's terminal purchase is at most
+$e_{ij}-r_{ij}=\min(e_{ij},B)\le B$, so $H=2kB$ accommodates the
+whole interval. Serial charging realizes both common-window budgets;
+nonnegative subsequent consumption preserves every intermediate SOC
+constraint. In particular $E=K$ works for EVERY perfect matching, not
+just a favorable subset.
+
+Give each high A/B service in block $i$ potential $B/2+9w_i$ and each
+low service potential $w_i$. Write these as row potentials $u_i$ and
+column potentials $v_j$; their combined sum is $S_{\max}=kB+20W$.
+Every within-block edge satisfies
+$e_{ij}+2r_{ij}=u_i+v_j$. An interblock edge has
+$e_{ij}+2r_{ij}=B+3a_i$, with the following slacks:
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+Origin & Destination & $e_{ij}+2r_{ij}-u_i-v_j$\\
+\midrule
+High in block $i$ & High in block $j$ & $3B/2-9w_j$\\
+High in block $i$ & Low in block $j$ & $2B-w_j$\\
+Low in block $i$ & High in block $j$ & $B/2+2w_i-9w_j$\\
+Low in block $i$ & Low in block $j$ & $B+2w_i-w_j$\\
+\bottomrule
+\end{tabular}
+\end{center}
+Each slack is at least $\gamma=w_{\max}+2w_{\min}\ge3$; the
+low-to-high bound is limiting and follows from $B/2\ge10w_{\max}$.
+Summing this feasible assignment-potential certificate gives
+\[
+ S_M+2R_M\ge S_{\max},
+\]
+with surplus at least $\gamma$ if any interblock edge is used. Hence
+every physical point satisfies
+$3E+L=S_M+2E\ge S_{\max}$, and so does every complete-plan mixture.
+
+The original within-block matchings remain feasible with the enlarged
+terminal budget. The equal mixture of their corners $R=0$ and $R=6$
+attains $(3,S_{\max}-9)$, proving $\CH=S_{\max}+2kf$ by the same
+affine lower bound as Corollary~\ref{cor:exponentialgap}. Within-block
+physical schedules have minimum excess $9/(2K)$, at exactly those two
+corners. Every interblock schedule has excess at least $\gamma\ge3$,
+strictly greater than $9/(2K)\le9/28$. Thus no omitted assignment can
+improve the physical value; the stated strict gap holds for the full
+complete-graph opportunity set. The hull optimum remains unique in
+projected coordinates, and the classical support implication applies.
+
+Finally, for a retained corner $R_*$ use
+$F_{R_*}(E,L)=3E+L+(E-R_*)^2/(2K)$. It is coordinatewise strictly
+increasing and convex as before. Within-block schedules achieve its
+affine lower bound only at that selected corner; interblock schedules
+have affine excess at least $\gamma$. This proves unique projected
+optimality of every retained corner despite the complete graph.
+\end{proof}
+
+The extension removes infeasible added assignments and graph disconnection
+as explanations of the obstruction. It does not remove the fleet cap,
+common-window/charge-only assumptions, scalable connector powers or
+compulsory edge-task interpretation. Added branches can change efficient
+portions away from the selected corners; no equality of the full old
+and new physical frontiers is claimed. The corners remain collinear,
+the gap shrinks with $K$, and neither generic hardness, exponential hull
+complexity, empirical prevalence nor robustness to arbitrary new road
+options follows. This is an analytically reviewed construction, not a
+new numerical experiment.

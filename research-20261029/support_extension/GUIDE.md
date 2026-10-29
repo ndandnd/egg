@@ -282,6 +282,19 @@ an exact physical–hull gap of **9/(2K)>0**. Thus support failure can survive
 all those feasible alternatives. The gap shrinks as this family's K grows;
 this proves neither a uniform loss nor that adding alternatives never helps.
 
+The construction can also admit a **complete assignment graph with every
+perfect matching physically feasible**. Added connections require enough
+replacement energy that a simple assignment-potential inequality places them
+above the old minimum. Enlarging terminal capacity makes every matching's
+whole charging interval feasible. The exact gap remains 9/(2K), and each
+original corner still matters for a suitable convex objective. Thus neither
+missing assignment edges nor infeasibility of the added matchings explains
+this example's support failure. These connections are compulsory abstract
+energy tasks, not geographically realized road routes. The full efficient
+frontier may change, and the common windows, fleet cap and scaling resources
+remain limitations. The proof was derived and checked independently; no
+numerical experiment is claimed.
+
 ## Study questions and answers
 
 1. **Why impose full terminal replenishment?** To charge the modeled horizon for replacement energy rather than letting it consume free initial inventory. It does not make service assignments divisible.
@@ -289,7 +302,7 @@ this proves neither a uniform loss nor that adding alternatives never helps.
 3. **Can randomizing daily schedules implement CH at the same expected cost?** Generally no. CH evaluates supply cost at the mean load; random daily operation incurs the mean of physical supply costs.
 4. **Does one large regret at a solver price prove no supporting price exists?** Not with nonunique prices. Support existence requires considering every admissible candidate price, or an appropriate certificate over that set.
 5. **Does Δ→0 make all incentives vanish?** With uniformly bounded load range and smoothness, and uniformly positive strong convexity, planner own-price regret does vanish. Our replication changes these constants as the fleet grows, separating persistent absolute whole-owner regret from vanishing individual and per-bus incentives.
-6. **Has the public case established support failure?** Yes within its finite declared movement graph and charging windows: an independently certified physical lower strictly exceeds a feasible hull upper. Unlisted travel/access alternatives could change the conclusion. The small certified gap does not establish prevalence or operational magnitude.
+6. **Has the public case established support failure?** Yes for the original finite movement graph, and separately for the exact-additive-consumption model with arbitrary finite walks over its paired primitive arcs. Both have fresh certified positive gaps. The latter extension uses a dominance theorem and specified charging access; neither result covers every empirical road option. The small certified gap does not establish prevalence or operational magnitude.
 7. **Did larger neural capacity help?** Yes in the new pilot. It still did not beat the best fitted classical baseline, and the old GNN remains a separate unresolved diagnosis.
 8. **If a new physical plan beats the old CH, is the enlarged model supported?** Not necessarily. Compare the enlarged model's D with its own CH; both may decrease. The verified fee-8 extension has D93 below old CH94.8875, yet new CH92.95 and positive gap0.05.
 

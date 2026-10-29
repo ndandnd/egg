@@ -1,0 +1,55 @@
+{
+  "status": "CREATED",
+  "kind": "Proved analytical family illustration; not numerical qualification or empirical experiment",
+  "source_sha256": "2e83d89fbfe101074de32979143c7d9c97c4340de395681a0b3376c299dfba2d",
+  "outputs": [
+    "transition_frontier.png",
+    "transition_frontier.pdf"
+  ],
+  "parameters": {
+    "k": 3,
+    "weights": [
+      1,
+      2,
+      4
+    ],
+    "battery": 80,
+    "early_budget": 148,
+    "terminal_budget": 380,
+    "requirements": [
+      0,
+      6,
+      12,
+      18,
+      24,
+      30,
+      36,
+      42
+    ],
+    "fleet": 6
+  },
+  "physical_rule": "L=380-2R-E; R<=E<R_next, final42<=E<=148",
+  "hull_vertices": [
+    [
+      0,
+      380
+    ],
+    [
+      42,
+      254
+    ],
+    [
+      148,
+      148
+    ]
+  ],
+  "self_cpu_s": 0.8082029999999999,
+  "elapsed_s": 13.145291374996305,
+  "observed_rss_bytes": 95551488,
+  "cpu_ceiling_s": 30,
+  "wall_ceiling_s": 45,
+  "observed_rss_ceiling_bytes": 5368709120,
+  "resource_pass": true,
+  "visual_qa": "PENDING",
+  "runtime": "Admitted Matplotlib3.9.4 Agg; separate external50CPU/60wall inclusive meter authoritative"
+}

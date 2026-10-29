@@ -1,8 +1,8 @@
 # Public certificate index for an external reader
 
-This is a navigation and verification specification for retained evidence. A local standalone command has now passed; it is not a public distribution or external replication. All paths are relative to the repository root `ml-prediction-20261017`. Revisions below are immutable Git objects; source and result revisions are deliberately distinguished. This index is maintained from approved compact maps/results and narrow source entry points, without independently opening compressed evidence or rerunning an audit.
+This is a navigation and verification specification for retained evidence. A local standalone command has passed for the ORIGINAL BINARY-CONSUMPTION model only; the separately closed exact-law result below is not covered by that exported command. Neither is a public distribution or external replication. All paths are relative to the repository root `ml-prediction-20261017`. Revisions below are immutable Git objects; source and result revisions are deliberately distinguished. This index is maintained from approved compact maps/results and narrow source entry points, without independently opening compressed evidence or rerunning an audit.
 
-## What model is certified
+## Original binary-consumption model
 
 The case is the descriptor at revision `253c1e29295e766b3889fc8f5c28d9808e00b3d6`, path `research-20261029/public_support_resolution/attempt01/case_descriptor.json`, identity `1917409b43c0433b4ac2504b0b28c1bb2aa63a033c79ba1a4057418b63874ed7`.
 
@@ -14,7 +14,7 @@ Supply uses 30 market intervals and original stored-binary coefficients
     b = 5124095576030431/4611686018427387904,
     F(e) = Σ(a e_t + b e_t²/2).
 
-The perspective energy-flow and independent reconstruction sources are pinned at `3278d50f8323618bd36809b1bbb1a0da081e23ff`: `research-20261029/public_support_resolution/energy_flow.py`, `exact_dual.py`, and required `src/egglab/native_recharge.py`/package schema. Every lower refers to that rational semantic model, not an unqualified native floating-point objective.
+The perspective energy-flow and independent reconstruction sources are pinned at `3278d50f8323618bd36809b1bbb1a0da081e23ff`: `research-20261029/public_support_resolution/energy_flow.py`, `exact_dual.py`, and required `src/egglab/native_recharge.py`/package schema. Every lower in the original chain below refers to that rational semantic model, not an unqualified native floating-point objective.
 
 ## Original sign certificate and retained evidence
 
@@ -67,13 +67,37 @@ The separately closed fee-only extension source is `872e38aef22dd4f736daa4862fa4
 
 `checker.check(fields,proposed)` checks exact interval intersection, bound/mixture metadata and openness. Its source-bound affine three-plus floor is essential for negative fee shifts; no generic old bound is shifted by three times the fee change. All f≥100 preserve the nominal positive gap guarantee. The endpoint is not a maximality or support-restoration claim. This index does not invent a fee output-artifact commit; consult the parent closeout for its eventual immutable result revision before external transfer.
 
+## Separately certified exact-additive-consumption target
+
+The NEW identity is `1917409b43c0433b4ac2504b0b28c1bb2aa63a033c79ba1a4057418b63874ed7::exact-consumption-v1`. Its service consumption is exact `6/5 * distance_km + duration_seconds/225`; travel is exact `24/25000 * distance_m + duration_seconds/225`; off-depot waiting is exactly `duration_seconds/225`. Nonenergy fields and the original binary SUPPLY coefficients remain unchanged. This is a different coefficient model, not a tolerance adjustment or reinterpretation of the older certificate.
+
+| Closed phase | Exact provenance and retained products | Accepted scope |
+|---|---|---|
+| New target construction/lower/points, final comparison FAILED | Source `6665c2b9f045410b4bbf19060b6780b0779f5534`, control `36fe4fe4`; failed closeout artifact `d27f9f13ff8e61721dda39ee680be612c01c8ecc`; namespace `research-20261029/public_exact_energy_target/attempt01`. See `TARGET.json.gz`, `LOWER.json.gz`, `INCUMBENT_ROUTES.json.gz`, `RESPONSE_ROUTES.json.gz` and compact results/receipts. | Six stages DELIVERED: new semantics independently validated, retained375-node partition evaluated under NEW target rows, both new target physical points admitted with one face attempt and one strict replay each. COMPARISON FAILED on a string-key diagnostic-seal interface error. This phase remains FAILED/NOT_CERTIFIED; it alone supplies no target hull upper or gap conclusion. |
+| Distinct comparison-only completion, CLOSED_PASS | Source `6c2319480239c19c839eeff868a7fc018dacc217`, control `0688cc1a`; namespace `research-20261029/public_exact_energy_comparison/attempt01`. `TRANSFER.json` binds the projected new-point summaries/lower and unchanged weights; `COMPARISON.json` retains exact rationals, direct calculation and independent quadratic-variance calculation; compact `RESULTS.md`, `INTERPRETATION_REVIEW.md` and `FINAL_RESOURCE_RECEIPT.json` close the phase. | All4 states DELIVERED. It completes the previously missing fixed-weight arithmetic without another semantic reconstruction, tree check, face recovery, physical replay or native call. The predecessor remains failed. The comparison's separate output-artifact commit is not specified in the compact closeout documents consulted here; obtain that immutable binding before a further external transfer rather than treating the source commit as an output commit. |
+
+The new result is `441.532912 <= D_exact <= 441.532913`, `CH_exact <= 441.142238`, and `D_exact−CH_exact >= 0.390674`. These conservative six-decimal displays happen to match the binary-model displays, but their exact retained fractions differ. The gap display floors the exact difference; it is not an exact optimum or a claim that two rounded displays determine the exact difference. The all-physical lower is not a CH lower; the new fixed mixture is feasible, not necessarily hull-optimal. No old gap, objective, KKT claim or physical feasibility was transferred to the new law. Historical fixed weights were retained in the same left/right order.
+
+The prior time/distance triangle and exhaustive canonical time/access qualifications, plus the reviewed exact-energy dominance theorem, preserve physical and complete-plan convexified VALUES for arbitrary finite walks over the declared paired primitive arcs and continuous exact-linear waits. This requires selected depot15 as the sole charging/free-parking location, common terminal access, nonnegative consumption, unchanged resource/fleet limits and monotone supply. It is not equality of all feasible load sets, an empirical joint-road-path realization, arbitrary charging access, public V2G or operational prevalence. The original binary model retains its finite declared-graph scope.
+
+Resource closeouts remain separate and paid. The failed target owner55904/child46365 exited1/reaped, all7 assigned attempted,6 delivered/1 failed; external49.39CPU/51.13wall, retained49.44CPU, observedRSS1,824,948,224bytes. The successful comparison owner returned exit0 directly (no managed-session ID), child49774 exited0/reaped; external0.22CPU/0.33wall, owner inclusive0.230313CPU, retained0.27CPU, observedRSS37,896,192bytes. Nested CPU overlaps and is adopted once. These values come from the two FINAL_RESOURCE_RECEIPT records, not a new measurement; unknown parent/static-review costs remain separate. No failed-stage refund or retroactive success is implied.
+
+Parent immutable result binding: the comparison outputs and closeout are backed
+up at `fdb85682cf6476227d6fa8fb8258613f512d65d4`. This is the output revision,
+distinct from its source and control above; the bounded index reviewer did not
+independently establish this Git binding.
+
+### Local reproduction limitation for the new law
+
+The new target has author-run, source-bound semantic/physical/lower checks and a separately authored comparison checker, but NO newly exported standalone verifier bundle is established by these closeouts. The original `public-sign-verifier` manifest and CLI below verify only the original binary model: substituting new packets into it would not create an admitted exact-law check. Inspect the new packages' exact source/control, fixed field authorities, complete receipts and immutable products separately. A future fresh retained-evidence verification would need its own exact-law export/admission and resource protocol; closed attempt directories must not be rerun. Native search regeneration, another physical replay or a further active-face attempt is not part of the successful comparison-only phase. Licensing, external-host reproduction and public redistribution remain unresolved for both chains.
+
 ## Retained-evidence verification versus search regeneration
 
 An offline reader should first obtain the exact revisions and fixed-path buffers, authenticate the sources/descriptor/authorities and inspect successful complete receipts. Then reconstruct semantic rows independently, check physical upper witnesses, check the two-plan mixture, and verify every retained tree leaf/branch and fleet-count exclusion using rational arithmetic. Finally compare exact constants. This verifies retained evidence without rerunning native search. The tree's original 353 native calls are evidence generation, not a necessary step of its rational leaf-algebra/coverage check. The standard tangent, finite-box residual and Farkas formulas are explained in `certificates.tex`.
 
 Regenerating native proposals is a different, expensive procedure requiring a fresh namespace, independently obtained compatible Gurobi environment, complete acquisition/admission/search/check/publication accounting and prospectively fixed resources. A closed attempt directory must not be resubmitted. Native timing, bases and floating solutions need not reproduce bit-for-bit for the retained exact proof to remain valid.
 
-## Local standalone verification and remaining external gap
+## Original-model local standalone verification and remaining external gap
 
 `research-20261029/public_certificate_bundle/attempt01` is CLOSED_PASS from source `f6845fe6d803607a88d05e6b3284fd53bb4eb58d` and separate control `1ad59047`. Its exported `public-sign-verifier` directory contains the six exact evidence packets, three immutable independent checker sources, new adapter and manifest. A single fresh isolated POSIX CPython process passed all375 combined tree nodes, both full physical points, the fixed mixture and freshly reconstructed fleet exclusions. It reproduced L_phys above with zero native calls. Full local construction/check cost32.62 displayedCPU/33.26elapsed; peak observedRSS659914752bytes. See the package's compact RESULTS, verification.json and FINAL_RESOURCE_RECEIPT.
 
