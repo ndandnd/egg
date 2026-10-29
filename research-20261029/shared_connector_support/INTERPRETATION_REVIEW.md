@@ -1,0 +1,17 @@
+# Interpretation review of the closed shared-connector qualification
+
+29 October 2026. Reviewed the existing compact table, owner/worker receipts and JSON projections of the stored master controls and two boundary rows. No scientific recomputation, replay, imports, tests, hashes, backend use or raw-bank reads.
+
+**PASS for the scoped readout and internal implementation qualification.** The master and owner agree on14 attempted/passed states, no missing states and no failures. The24 stored `rejected` fields are all true; the separate smoke field is true. The owner reports worker exit0, reaped=true, no failure/read error and resource_pass=true. Parent reports the enclosing owner exit0 and final external meter.
+
+The14 outcomes are two positive gaps, ten feasible zero gaps and two infeasible cases. Positive gaps are exact rational synthetic results, not numerical tolerances. The other outcomes are equally important qualifications: infeasible cardinalities are discarded, total resource infeasibility is detected, K/H zero cases do not divide by zero, f0 does not falsely inherit the positive-fee support criterion, and assignment/response continua are retained.
+
+The actual stored collinear row has thresholds0,10,20,30 and physical/hull early energy20 in both implementations, with exact objective850/3 and zero physical-optimum regret. The actual clipped lower-boundary row has thresholds0,0,0,8, L5,U10 and physical/hull early energy5 in both implementations, exact objective425/3 and zero regret. These are genuine prospective checks of the two limitations noted in the earlier twelve-state source review. The earlier review remains historical; it is not retroactively rewritten as fourteen-case execution evidence.
+
+The negative controls test meaningful omissions or corruptions: objective/threshold/heterogeneous label changes, omitted L, fictitious upper-clipped cardinalities, f0 sign, zero-power intervals, infeasibility classification, erased ties, collapsed flat responses, changed allocation continua, fixed-witness power excess, terminal charge omission and domain violations. They do not prove the absence of every possible implementation bug.
+
+The exact reference and analytical candidate share a declared mathematical model and are internal cross-checks. A finite qualification does not replace the continuous theorem, establish novelty or estimate operational prevalence. The fixed shared hardware class differs from the separate eight-state adequate-resource specialization and must keep its own14-state denominator. Both exclude the public varied-time one-connector timetable; the public support question remains separate.
+
+Resource accounting is consistent with the supplied package meter and receipts. Use3.39CPU/3.48wall once, retain3.41CPU, and do not add worker3.302385CPU or owner3.38732CPU again. Observed peak RSS58,163,200 bytes is within512MiB. The independently performed figure-v2 accounting is outside this package and has a separate ledger entry. Prefix additions in the final receipt are local arithmetic from the supplied frozen prefix, not a reconstruction of the full concurrent research clock.
+
+Only the focused manuscript's qualification/evidence paragraphs were updated to report the new14-state internal qualification and preserve the separate eight-state scope. No theorem, proof, public-case bound or other paper part was changed by this readout task.
