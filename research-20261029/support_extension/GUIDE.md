@@ -32,7 +32,7 @@ TeX filenames in this table are relative to `paper/focused-theory-20261029/`.
 | Duty | One bus's sequence of services, movements and charging. |
 | Complete fleet plan x | Duties jointly covering every mandatory service while respecting battery and shared charging constraints. |
 | X | The full admissible set of complete plans under one declared model. |
-| e(x) | Purchased grid energy by market interval. |
+| e(x) | Net grid energy by market interval; positive purchases and negative exports. Charge-only variants restrict it to nonnegative values. |
 | c(x) | Intrinsic fleet operating cost, including the declared vehicle fee. |
 | F(e) | Incremental supply cost of providing fleet load e. |
 | U | Background grid demand in the learning pilot; not battery inventory. |

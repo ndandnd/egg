@@ -60,6 +60,8 @@ plus its intrinsic operating cost? This is an own-load price-support test.
 Its participant is one operator controlling the complete fleet. It is not a
 strategic model in which that operator anticipates a new tariff after each
 alternative it considers.
+The support test is classical; our contribution is the physical set
+description that makes its application explicit for a restricted fleet class.
 
 The difficulty need not be a complicated load-only feasible set. Assigning
 services to the same bus can impose an early recharge requirement while
@@ -104,13 +106,7 @@ generalization or third-party replication.
 
 \input{related_work}
 \input{framework}
-\input{heterogeneous}
-\input{v2g}
-\input{lossy}
-\input{transition_energy}
-\input{public_case}
-\input{exact_energy_extension}
-\input{consequences}
+\input{core_results}
 
 \section{Implications and limits}
 The obstruction concerns one posted-tariff institution with a complete-fleet
@@ -120,8 +116,10 @@ or a convergence claim. Convex-hull pricing and general support duality are
 established theory. The physical contribution is the explicit assignment-dependent
 projection under the stated timing, resource, loss and action assumptions.
 
-The analytical models omit stochastic delays, degradation, temperature,
-taper and switching time. Common windows and efficiencies enable the finite
+The analytical models omit stochastic delays, state-dependent degradation,
+temperature, taper and switching time. A common affine-throughput wear
+extension remains an ideal cost model, not a battery-aging calibration.
+Common windows and efficiencies enable the finite
 reduction; arbitrary timetables, vehicle-dependent losses, restricted cycling
 and intrawindow price variation require further analysis. Full polygons can
 handle negative period prices; the smaller efficient frontier cannot discard
@@ -139,9 +137,10 @@ and prevalence open.
 \section{Conclusion}
 Service assignments change the joint load--vehicle-cost set even when its
 load-only projection is simple. For the stated common-window class,
-cardinality-matching values determine an exact lossless support classification
-and, with common losses and ideal finite cycling, the complete load--cost
-projection. Monotone objectives admit a smaller efficient frontier. Gross
+cardinality-matching values determine the complete load--cost projection
+with common losses and ideal finite cycling. The lossless specialization
+gives an exact scalar support classification; monotone objectives admit a
+smaller efficient frontier. Gross
 connector use, full replacement energy and constructive serial attainment are
 essential to that description. A separately checked public-timetable certificate establishes
 the same qualitative obstruction in a richer declared charge-only model.
@@ -168,6 +167,13 @@ pending redistribution review; no public release or substantive learning
 contribution is claimed.
 
 \appendix
+\input{heterogeneous}
+\input{v2g}
+\input{lossy}
+\input{transition_energy}
+\input{public_case}
+\input{exact_energy_extension}
+\input{consequences}
 \input{adequate_resources}
 \input{construction}
 \input{expansion}

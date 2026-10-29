@@ -1,4 +1,35 @@
-# Current checkpoint — 29 October 15:27 UTC, window ACTIVE
+# Current checkpoint — 29 October 15:51 UTC, window ACTIVE
+
+No numerical/artifact worker remains. Both new full-polygon illustrations
+are CLOSED: figure01 created with a layout defect (12.39CPU/13.85wall,
+retained12.44); separately frozen figure02 visually PASS (.55CPU/.93wall,
+retained.60), source df17345af1db1d65501c485f2358906f5a5f07ba/control dca3d22e.
+Figure02 command returned exit0 initially, no managed session. Do not rerender
+or poll old owners. Read FIGURE_FULL_POLYGON_RECEIPT02.json only as needed.
+Current GLOBAL CLOSED 24015.24 displayedCPU /24951.58 elapsed-sum/
+24017.20 retainedCPU, including both figures and all preceding packages once.
+Legacy2546.091499549272 separate; static/agent/tool/visual/remoteCPU UNKNOWN.
+
+Current main is reorganized around new core_results.tex, with detailed
+theorems/public proofs retained after the appendix boundary. CORE_MAIN_REVIEW
+and CORE_NARRATIVE_REVIEW PASS; parent applied explicit noncharging-service,
+charge-only-terminal and nonempty-planning premises. Framework now consistently
+uses signed net grid energy and distinguishes absent buses from paid idle buses.
+Critical reviews07 find a focused research draft, NOT submission-ready and no
+substantive ML contribution. Latest verified PDF remains snapshot06, 52pages;
+all new source UNCOMPILED. No PDF07 command/control is frozen yet.
+
+Two bounded agents independently examine a NEW ANALYTICAL extension for positive
+per-action connector setup time: a conservative inner polygon and a slack-based
+error bound, or a counterexample. Parent will integrate only after proof review.
+No new numerical experiment, raw data access, import, hash, solver or worker.
+Check actual agent states; do not duplicate their notes. Literature review idle.
+Deadline18:10:45UTC unchanged. Next finish proof/integration, freeze one new
+PDF07 source/control, compile/render once, visually inspect all pages, back up.
+
+## Earlier checkpoint — retained history
+
+# Checkpoint — 29 October 15:27 UTC, window ACTIVE
 
 NEW full_lossy_polygon_qualification/attempt01 CLOSED_PASS: source
 91554d65dec01272308e48f0b68ef3885ab60059/controld2e52b76 pushed before ONE

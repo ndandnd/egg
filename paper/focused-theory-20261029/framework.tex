@@ -3,9 +3,12 @@ Fix mandatory services, directed movement opportunities, a charging horizon
 and physical equipment. A complete plan $x\in\X$ covers every mandatory
 service exactly once, assigns the services to used buses, routes those buses,
 and schedules charging subject to battery and shared-resource constraints.
-Unused buses contribute neither energy purchases nor operating cost. Let
-$e(x)\in\R_+^T$ denote purchased grid energy by market interval and $c(x)$
-intrinsic operating cost. Each used battery starts full and finishes at the
+Uncounted buses neither exchange energy nor incur operating cost. When a
+variant admits paid idle buses, they count as used participants under that
+variant's fleet and access rules. Let $e(x)\in\R^T$ denote net grid energy
+by market interval, positive for purchases and negative for exports, and let
+$c(x)$ be intrinsic operating cost. Charge-only variants restrict
+$e(x)\in\R_+^T$. Each used battery starts full and finishes at the
 same required full inventory. Assume the projected image
 \[
  S=\{(e(x),c(x)):x\in\X\}
@@ -15,7 +18,8 @@ problems below use exactly this common set.
 
 Let $F:\R^T\to\R\cup\{+\infty\}$ be proper, closed and convex, finite on
 all feasible loads. It represents incremental supply cost conditional on
-fixed background demand. Define
+fixed background demand, on the declared feasible signed-load domain when
+exports are allowed. Define
 \begin{align}
  D&=\min_{x\in\X}\{c(x)+F(e(x))\},\label{eq:D}\\
  \CH&=\min_{(e,c)\in\operatorname{conv}S}\{c+F(e)\},
@@ -42,9 +46,9 @@ price $p\in\partial F(e(x))$ for which $r(x;p)=0$. Alternative plans may
 tie. If an economic convention restricts the price set, existence is tested
 only in that declared subset.
 \end{definition}
-For differentiable supply we use its gradient. For the nonnegative-domain
-quadratic below this means the gradient of its unrestricted quadratic
-formula, including at a zero load. Domain normals are not additional
+For differentiable supply we use its gradient. For our quadratic examples
+this means the gradient of the unrestricted quadratic formula, including
+at a zero load. In charge-only variants, orthant-domain normals are not additional
 generation-price choices. With nonsmooth supply, a failed support test at
 one chosen multiplier does not exclude support at another admissible price.
 
