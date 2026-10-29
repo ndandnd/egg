@@ -1,12 +1,14 @@
 {
-  "status": "DRAFT",
+  "status": "FROZEN",
   "run_id": "cycle01",
-  "source_revision": null,
+  "source_revision": "2407a28f7773ede756a9b17d87d60ca59163a3e5",
   "package_cpu_s": 20,
   "package_wall_s": 30,
   "worker_cpu_s": 15,
   "worker_wall_s": 20,
-  "exact_command": null,
+  "exact_command": "set -C\n/usr/bin/time -p .venv-local/bin/python -I -S -B research-20261028/paper_core_verification/run.py --run-id cycle01 > research-20261028/paper_core_verification/owner-console.txt 2> research-20261028/paper_core_verification/owner-time.txt",
+  "working_directory": "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017",
+  "review": "REVIEW.md static PASS; no numerical execution before this freeze",
   "approval_basis": "28 October human request for one bounded independent baseline/change/verification cycle",
   "retry": false,
   "raw_results_overwrite": false
