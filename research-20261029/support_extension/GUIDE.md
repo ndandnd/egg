@@ -435,6 +435,19 @@ has the same optimum over a set and its convex hull. It also supplies no
 hardness or ML advantage claim. See `setup_matching_boundary.tex` and its
 separate fresh proof review.
 
+There is still a competent classical treatment of this charge-only setup case.
+For a fixed assignment, sort the optional recipients by available battery
+headroom and scan how many buses plug in. The exact feasible total charge is
+an interval: adding recipients increases headroom but consumes setup time.
+For joint assignment, an ordinary mixed-integer duty model chooses pair and
+standalone duties, charging amounts and setup permissions. It has at most
+n²+2n candidate duties for the two-batch class and exactly enforces individual
+SOC and full terminal refill. Polynomial model size does not guarantee fast
+solution, and its continuous relaxation is not automatically the complete-plan
+hull. This proof-reviewed baseline is not a new algorithm or measured speed
+result; it prevents treating failure of the smaller summary as an ML opportunity
+without evidence. See `setup_charge_only.tex`.
+
 A tempting computational shortcut also fails: interpolate the number of
 matched service pairs first, then apply the charging formulas as though that
 fractional fleet were physical. An independently derived one-pair example has
