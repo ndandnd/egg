@@ -39,11 +39,15 @@ and exact Minkowski aggregation for convex individual flexibility sets.
 V2G, into unit commitment using exact aggregation and separation. Coupling
 vehicle flexibility with grid dispatch is therefore not itself our novelty.
 \citet[author version, Sections IV--V, equations~(12)--(17)]{muller2019aggregation}
-already aggregate flexibility costs and optimize disaggregation for a fixed
-resource population with common-generator zonotopes and separable piecewise-linear
-convex costs. Cost-aware aggregation and optimal disaggregation are therefore
-established. Our claimed distinction is the physical replacement across
-service assignments and fleet cardinalities, not adding costs to aggregation.
+already aggregate flexibility costs and optimize disaggregation for supplied
+resource sets with common-generator zonotopes and separable piecewise-linear
+convex costs; their aggregate can be updated when resources are added, removed
+or changed. Our fixed-matching lossless interval aggregation is an elementary
+specialization. The remaining claim is the constructive identity that, at each
+cardinality, one minimum-requirement matching realizes the entire polygon of
+every assignment. Classical extended formulations can encode the union, but
+encoding it alone does not establish this replacement. This distinction does
+not by itself establish novelty relative to broader aggregation theory.
 \citet[Section II, Example 1]{altaha2024flexibility} likewise aggregate
 lossless bidirectional batteries with initial/final requirements.
 Our lossless load-only projection is an interval, not a new nonconvex

@@ -5,7 +5,8 @@ to an ideal common-window class, rather than arbitrary operational timetables.
 There are $n\ge1$ mandatory A services in $[0,1]$ and $n$ mandatory B
 services in $[2,3]$, with battery demands $0<a_i,b_j\le B$ and common
 capacity $B>0$. A fixed bipartite graph $\Gamma$ lists every allowed
-A--B successor pair. Every service also has a standalone option; transitions
+A--B successor pair. Same-batch succession is forbidden: each bus serves
+at most one A service and one B service. Every service also has a standalone option; transitions
 have zero time, energy and monetary cost. A partial matching of size $m$
 uses $N_m=2n-m$ buses, each at fee $f>0$, under fleet cap $2n$.
 Services are indivisible noncharging intervals with nonnegative battery draw

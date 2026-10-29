@@ -1,4 +1,52 @@
-# Current checkpoint — 29 October 16:58 UTC, window ACTIVE
+# Current checkpoint — 29 October 17:28 UTC, window ACTIVE
+
+No numerical/artifact worker remains. NEW exact-law portable attempt01 is
+CLOSED_PASS: source6c8dfb83bb83196b7b591db9057aa794502dad5d/control71924fb1,
+owner83721exit0, worker54315/CLI54412exit0/reaped. All4stagesDELIVERED,
+3adapteranchors/12negativecontrols,2strictphysicalwitnesses/one375targettree,
+freshallfleetfloor/fixedmixture. No native or new search. Read package RESULTS,
+INTERPRETATION_REVIEW,FINAL_RESOURCE_RECEIPT,RUNNING_HANDOFF only. No oldpoll,
+hash/build/export/replay/check/finalizer. Localbundle rights/externalreplication
+remain unresolved; descriptorcheck doesnot re-audit source-law/walkpremises.
+Cost45.93CPU47.70wall retained45.97, observedRSS768212992bytes, adoptedonce.
+
+ConsolidatedPDF11 is output/pdf/focused-theory-20261029-v11/main.pdf:
+66pages/main1–8; allactualPNGsPASS(parent1–22/core23–44/fresh45–66).
+Sourceeb2633fc88886a6395dac744d319f83b55e4ec97/control0197af09;
+compile73158/render51514exit0. Cost12.36CPU12.75elapsed-sum retained12.40.
+Globalclosed24114.81displayedCPU/25060.42elapsed-sum/24117.01retainedCPU;
+legacy2546.091499549272 separate. Parent/tool/static/agent/visual/remoteCPU
+UNKNOWN, childrenoverlapowner; notexactsessionCPU/continuouselapsed/containment.
+Latestbackup3cc3642f. No refunds/resets of any oldfailure/spend.
+
+Learningdeck48slides, sameprivatePage8f9b3c1086e081918f946ab9bd0d715a,
+refartifact_external_c53d48ca-4301-4503-bf9b-16ca98e298d1,state27.
+New47checkerlimitations/guide48 actualPNGvisuallyPASS, receipt10. Guide and
+reviewerbrief updated. open_in_codex forPDF11 returnedqueued, notproofvisible.
+
+Fresh no-history final_significance_referee completed: ready for qualified
+independent-review circulation, NOT submission-ready/ICML contribution.
+No demonstrated central contradiction in scopedread. Maincandidate is entire
+assignment-polygon replacement by minimum-R atfixedcardinality; uncertainty
+is significance/novelty/practicalreach. Minor wording: explicitly forbid
+samebatchchaining. Parentwillclarifythat; sourcechangeuncompileduntilnextfreeze.
+Coreagent doing ONE focused technical Müller2019 subsumption comparison,
+notbroadsurvey, no computation/rawaccess. Check actualagentstate beforeaction.
+
+Bounded releasecheck couldnot retrieve3primarypages; currentbibliography
+records datasetCCBY4.0 but currentverification/codebundlelicenseinventory
+incomplete. PUBLIC_CASE_RELEASE_REVIEW.md preserves unknowns. Physicalagent
+attempt erroredmodelcapacity; no researchworkran, noautomaticretry. Do not
+infer datasetunlicensed or publishbundle. Independentexternalreviewunsent.
+
+Next integrate only meaningful finalclarifications/comparison, separateone
+finalPDFfreeze ifneeded, preserveallattempts. At18:10:45UTC launchnothing,
+safelycloseownedwork,reportactualstateanddeleteonly
+egg-paper-research-through-29-october-14-10-et. Notyetexcellent/submissionready.
+
+## Earlier checkpoint — retained history
+
+# Checkpoint — 29 October 16:58 UTC, window ACTIVE
 
 No numerical/artifact worker running. Latest reviewed PDF10:
 output/pdf/focused-theory-20261029-v10/main.pdf,66pages/main1–8;
