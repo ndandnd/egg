@@ -14,19 +14,20 @@ new work after the deadline. Close owned work safely and report actual outcome.
 The goal is active in this chat. A bounded heartbeat is configured only
 as continuation support; it must not duplicate an active owner or research task.
 
-Branch codex/ml-prediction-20261017, current closed milestone aa0d7663.
-Latest closed exact extension: support_extension/HANDOFF.md and compact
-receipts. No owned numerical worker remains from that cycle. Managed73360
-exited0; sole worker85478 exited0/reaped. Do not poll that historical session.
+Branch codex/ml-prediction-20261017, current closed milestone929bd005
+(pushed; local branch agrees with origin). Latest public exact upper is in
+public_terminal_certificate/RESULTS.md, INTERPRETATION_REVIEW.md and
+FINAL_RESOURCE_RECEIPT.json. Owner exit0/worker33007exit0/reaped, no numerical
+worker remains. Do not poll closed historical sessions62808 or73360.
 
-Three bounded GPT6.1Sol agents are reused in the current turn. Check actual
-state before reuse. independent_physical_reference completed model map,
-native probe, independent rational verifier and adversarial theory review.
-paper_core_review created paper/focused-theory-20261029 and repaired native
-probe status/round provenance; currently applying independent theory fixes.
-paper_literature_review completed NOVELTY_REVIEW and WU2019_FORMULATION_REVIEW;
-currently reviewing integrated source launch. They have source-only authority,
-no numerical execution/hash/compile/import. Parent integrates/freezes.
+Three bounded GPT6.1Sol agents are reused; check actualstate before reuse.
+independent_physical_reference currently designs a source-only exact public
+support closure certificate after preparing the energy-flow worker/owner.
+paper_core_review currently creates source-only heterogeneous theorem candidate,
+qualification worker/owner and DRAFT controls against independent reference.py.
+paper_literature_review currently reviews public_energy_flow integration and
+new protocol. No agent has numerical/import/hash/commit authority. Parent
+integrates, freezes and runs. No agent or worker may duplicate closed work.
 
 LAUNCH.json is FROZEN and attempt01 ran ONCE after control80339e0a was
 pushed. Exact reviewed source2f386362aa241a8a4f197a88a50fa150b6d47d9c.
@@ -39,8 +40,8 @@ classical diagnostic: literal translation qualification, matched OA/MIQP300s,
 rootQP90s and selected candidate own-price LP60/MIP240. Read those current
 files plus LAUNCH_SOURCE_REVIEW and PARENT_FREEZE_REVIEW. Source-only integration
 passed; Q0 passed and all six states delivered administratively. OA/MIQP/
-priceMIP TIME_LIMIT; all three integer candidates fail strict rational replay
-with small terminal/headroom/conservation residues. No new exact public upper.
+priceMIP TIME_LIMIT; all three raw integer candidates fail strict rational replay
+with small terminal/headroom/conservation residues. These failures stay closed.
 Inline output already ran; no separate readout/export/finalizer.
 New user instruction reopens public37case
 inspection and justified new computation, preserving old source/output attempts.
@@ -58,19 +59,34 @@ ML policies or create hard cases to manufacture value. General hull/duality
 theory is prior art. Read paper/latex/public_case.tex for current public model:
 one37servicebase, two separate depot variants, synthetic energy/economics,
 full refill, shared360kW connector. Primary unresolvedcase is depot15 quadratic
-F=sum(.2e+e²/1800), fee100, currentexact429.22<=CH<=D<=512.77.
+F=sum(a*e+b*e²/2), storedbinarya=.2,b=1/900, fee100. New separately constructed
+terminal-only exact witness gives429.22<=CH<=D<=442.13 andgap<=12.91 outward.
+Its strict exactupper442.1230490171687... is in the producer receipt. Only two
+final charging allocations changed by tiny rational residuals; all services,
+routes and nonterminal charges stayed fixed. Exact elementary3+bus lower
+477.8235038838777... plus onebus obstruction proves physicaloptimalfleet2.
+This does NOT restrict CH mixtures or arbitrary price responses to2buses.
+New witness/certificate transfer authority at929bd005 avoids duplicate replay;
+old native proposals remain unadmitted and old costs/failures preserved.
 
-Closed numerical prefix22019.51displayedCPU/22900.37elapsed-sum/
-22020.42retainedCPU, legacyguard2546.091499549272separate. Static/tool/
+Closed numerical prefix22020.27displayedCPU/22901.21elapsed-sum/
+22021.20retainedCPU, legacyguard2546.091499549272separate. Static/tool/
 review/authoring actualCPU UNKNOWN. Childreceipts overlapowner. No reset/refund.
 Closed attempt01 cost677.14displayedCPU/865.51elapsed, retained677.16CPU.
-Do not add child rows twice.
+Terminal certificate cost.76displayedCPU/.84wall,retained.78CPU. Do not add
+child rows twice. All40 previous pricingworkloadchildren and later closed
+children remain reaped; no oldsessionpoll/replay/hash/export follows.
 
 NEW source-only development (not frozen/never run): energy_flow.py per-leg
 perspective model and exact_dual.py independent rational semantic/dualchecker.
 Read ENERGY_FLOW_FORMULATION, EXACT_DUAL_CERTIFICATE_PLAN and
-ENERGY_FLOW_SOURCE_REVIEW. A proved minimumfleet cut is being added before
-future freeze. FIXED_TOPOLOGY_CERTIFICATE_PLAN derives exact rational flow
+ENERGY_FLOW_SOURCE_REVIEW. Proved minimumfleetcut now included and independently
+reconstructed. NEW public_energy_flow worker/run/PROTOCOL/DRAFTLAUNCH fixes
+five statesQ0/rootQP/MIQP/ownpriceLP/MIP,1800CPU/2400wall; awaiting focused
+integrationreview and exact source/controlfreeze before ONE new attempt01.
+No runtime/import/compile/hash/test for that package occurred. Its ownprices
+derive from transferred certifiedloads and stayfixed. New packets gzipinline.
+FIXED_TOPOLOGY_CERTIFICATE_PLAN derives exact rational flow
 construction for new upper witnesses, not yet implemented or launched.
 New heterogeneous complete-crossmatching theorem has independent proofreview
 in STRUCTURAL_EXTENSION_REVIEW; integrated into focusedtheorypaper, independent

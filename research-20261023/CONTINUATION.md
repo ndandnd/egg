@@ -1,3 +1,18 @@
+# Active 29 October research window
+
+Human authorized13hours of autonomous research beginning05:10:45UTC and ending
+18:10:45UTC on29October2026 (14:10:45ET), unless a rigorously submission-ready
+excellent firstdraft is achieved sooner. Main question: actual support failure
+in the public37servicecase, with strongclassical bounds/independentverification,
+plus readabletheorydraft and carefulnovelty. Human withdrewHao–Michinicomparison.
+FIRST read research-20261029/public_support_resolution/WINDOW_HANDOFF.md for
+the current owner/agents/accounting/nextscope; it supersedes earliernextsteps.
+Currentclosedmilestone929bd005 gives exactupper442.123049017..., outward
+429.22<=CH<=D<=442.13/gap<=12.91. Supportsignunresolved. No numericalworker
+currently; newenergyflow sourcesawaitfreeze. Do not rerunclosedattempts.
+
+## Previous checkpoint — retained history
+
 # Current handoff — support extension CLOSED_PASS and learning guide complete
 
 Latest human request completed in research-20261029/support_extension.
