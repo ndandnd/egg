@@ -1,5 +1,5 @@
 \section{An exact positive gap on one public timetable}\label{sec:public}
-For the stated charge-only model of one public 37-service timetable, an
+For the stated charge-only movement-graph model of one public 37-service timetable, an
 independently checked physical lower bound strictly exceeds a feasible
 complete-plan mixture's hull upper. The outward bounds are
 \begin{equation}\label{eq:publicbounds}
@@ -23,6 +23,17 @@ separate one-depot modifications of the same base timetable, not independent
 operational samples. The nonlinear sign certificate concerns depot 15.
 Source timetable offsets, including next-day services, are retained; the
 source data do not supply the energy or economic calibration below.
+
+The opportunity set is the explicitly declared finite movement graph.
+Its pullout, direct service-to-service, via-depot and pullin modes have
+fixed leg times and specified depot charging gaps. Services may be assigned
+to any compatible complete path in this graph; charging allocations within
+the declared gaps remain continuous and share the connector. The complete
+directed deadhead matrix supplies movement data, but does not by itself
+authorize arbitrary retiming, extra depot visits or unlisted movement modes.
+The certificate quantifies over all fleets admitted by this graph. Extending
+that claim to a larger continuous-routing opportunity set requires an
+additional coverage or dominance argument, not merely the same timetable.
 
 Service consumption is 1.20 kWh/km plus 16 kWh per service hour; directed
 deadheads use 0.96 kWh/km plus 16 kWh per travel hour, and explicit off-depot

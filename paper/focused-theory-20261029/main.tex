@@ -39,7 +39,7 @@ regions distinguish useful flexibility from mere enlargement of the duty set.
 The matching and price-support machinery is classical; the contribution is
 the complete physical classification under these explicit assumptions.
 For one public 37-service timetable, an independently checked rational
-branching certificate separates every physical fleet from a feasible
+branching certificate separates every fleet in its declared movement graph from a feasible
 convexified plan, proving a positive gap of at least $0.008790$ in the stated
 objective units. This small certified separation resolves existence under
 the declared model, not practical magnitude. Synthetic coefficients and ideal
@@ -109,8 +109,8 @@ These are application-specific results in a synthetic model. We do not
 claim that nonconvex demand or convex-hull price support is a new concept.
 The public timetable evidence supplies a separate exact certificate beyond
 the two-batch class. A feasible convexified value below an independently
-verified lower bound for every physical fleet proves a positive gap for the
-declared 37-service model. The separation is small; practical magnitude and
+verified lower bound for every physical fleet in the declared movement graph
+proves a positive gap for the 37-service model. The separation is small; practical magnitude and
 prevalence remain separate research questions.
 
 \input{related_work}
@@ -168,6 +168,9 @@ branching certificate establishes the same qualitative obstruction without
 claiming that the two-batch threshold formula applies. Extending the readable
 projection to varied timing and movement remains open; one internally checked
 case cannot establish operational prevalence or economically significant loss.
+The public movement graph also fixes leg times and charging access. Its
+certificate is not automatically a certificate for arbitrary retimed or
+additional movement modes outside that declared opportunity set.
 
 \section{Conclusion}
 An electric-bus fleet can lack marginal-price support even when charging is
@@ -205,7 +208,12 @@ fourteen prospectively fixed cases, with twenty-four negative controls and a
 smoke anchor passing. These include physical collinear-threshold and clipped
 lower-boundary optima, assignment ties and response continua. Both are internal
 qualifications, not external replication; the eight-case run concerns the
-separate $n$-connector resource policy.
+separate $n$-connector resource policy. The common-loss extension matched
+independent raw inventory/sign-polytope enumeration on all ten fixed
+rational cases, retaining every assignment and infeasible cardinality.
+Its checks include all projected vertices, exact full-segment attainment
+and physical replay, rather than a sampled energy grid. The hand-anchor
+control overlaps one case and is not an additional independent observation.
 Archived outcome and
 resource records distinguish exact arithmetic from tolerance-qualified
 native computations. This evidence update reads stored qualification results

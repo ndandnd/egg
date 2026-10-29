@@ -57,6 +57,25 @@ mixture components. No native OPTIMAL label or failed raw integer candidate
 is promoted into an exact physical witness. All prior strict-replay failures,
 failed multiplier recovery and time limits remain in the evidence history.
 
+The model-to-certificate inclusion is stated separately in
+`MODEL_TO_CERTIFICATE_REVIEW.md`. Every schedule using the descriptor's fixed
+declared movement modes maps to its binary cover, per-leg inventory and
+continuous charging-interval rows with identical load and operating cost.
+The interval partition uses all declared window/resource/market endpoints,
+not an energy sampling grid. The derived fleet cut is necessary under that
+same access policy; direct/pullout modes admit no implicit charging.
+The descriptor's fleet cap, fixed leg times/energies and depot/terminal charge
+windows define the certified opportunity set. A complete directed deadhead
+matrix alone does not prove completeness over arbitrary departure-time
+choices, extra depot visits or other unlisted charging access. No such broader
+operational completeness claim or data-to-mode generation audit is supplied
+by this source-only mapping review.
+The narrowly inspected generator chooses maximal via-depot gaps on the SAME
+directed inbound/outbound arcs (immediate return/latest next departure).
+Zero-draw depot waiting and nonnegative consumption justify timing/excursion
+domination only with those travel alternatives fixed; they do not prove that
+arbitrary multi-leg routes are dominated by a nonmetric matrix's direct arc.
+
 ## Reproduction and practical limitations
 
 The recorded native environment uses Gurobi12.0.1 with one configured thread;
