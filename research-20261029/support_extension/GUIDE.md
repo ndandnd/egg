@@ -4,9 +4,24 @@ Self-study companion to the **Understanding EGG** learning deck, updated 29 Octo
 
 ## Start with the question
 
-A bus fleet can minimize total operating and electricity supply cost while wanting to change its schedule at the marginal electricity prices associated with its own load. The current research establishes this possibility in explicit small models. It has not established how common or economically important it is in operating fleets.
+A bus fleet can minimize total operating and electricity supply cost while wanting to change its schedule at the marginal electricity prices associated with its own load. The current research establishes this possibility in explicit analytical models and one idealized public timetable. It has not established how common or economically important it is in operating fleets.
 
 Read the guide in order. First explain the three objectives without equations; then work through the numerical example; finally interpret the experiments and open questions.
+
+For the current mathematical account, use `paper/focused-theory-20261029/main.tex`
+and its included sections. The older `paper/latex/` references below retain the
+history of the original examples; the focused draft contains the later results.
+
+| Question to study | Current source | What to take from it |
+|---|---|---|
+| What exactly does a price support? | `framework.tex` | One complete-fleet participant and a fixed tariff; the hull and strategic-reset questions differ. |
+| Which assignments must be retained? | `heterogeneous.tex`, `lossy.tex` | The complete lossless projection and common-loss efficient frontier have different scopes. |
+| Can more feasible alternatives remove the failure? | `complete_graph_extension.tex`, `strict_curvature_robustness.tex` | They can matter, but the obstruction can survive complete compatibility and local parameter changes. |
+| Is the public result global? | `public_case.tex`, `exact_energy_extension.tex` | Yes within each separately specified model; the two consumption laws have different certificates. |
+| Why did learned methods not win? | `research-20261027/grid_information_pilot/RESULTS.md` | Greater neural capacity helped, but the best fitted classical baseline remained stronger in that study. |
+| What is still missing for a strong paper? | The final section of this guide | Significance, wider applicability, calibration and a substantive ML result remain separate questions. |
+
+TeX filenames in this table are relative to `paper/focused-theory-20261029/`.
 
 ## Glossary
 
@@ -255,11 +270,52 @@ The same early net load can therefore require different terminal purchases. Repl
 
 For a fixed matching, let R be its total mandatory early battery recharge. The least export needed at early net load E is max(R/alpha−E,0). Substituting that quantity above produces a continuous curve with at most two straight pieces. Inventory, gross early throughput and terminal capacity determine its feasible endpoints. Among matchings with the same number of paired services, the matching minimizing R has the best such curve.
 
-Thus one classical matching value per cardinality still describes the efficient joint load–cost set. It does **not** describe every physical allocation: battery-neutral charge/export cycles can create dominated points. For coordinatewise nondecreasing supply cost, removing those points preserves the physical and hull planning values. Negative prices or asymmetric export payments require further alternatives. At zero prices some removed plans can tie, so the reduction gives response values without enumerating all responses.
+Thus one classical matching value per cardinality still describes the efficient joint load–cost set. This smaller curve does **not** describe every physical allocation: battery-neutral charge/export cycles can create dominated points. For coordinatewise nondecreasing supply cost, removing those points preserves the physical and hull planning values. Negative prices may require those omitted alternatives. At zero prices some removed plans can tie, so the smaller reduction gives response values without enumerating all responses.
 
-The continuous theorem has an independent proof review. Ten prospectively fixed cases also matched a separate raw SOC/sign-polytope enumeration, with complete frontier-segment attainment and physical replay. This is a finite implementation qualification, not ten independent real fleets, empirical validation, or public-case V2G. See `lossy_projection_qualification/RESULTS.md` and the focused draft's common-loss section.
+The efficient-frontier theorem has an independent proof review. Ten prospectively fixed cases also matched a separate raw SOC/sign-polytope enumeration, with complete frontier-segment attainment and physical replay. This is a finite implementation qualification, not ten independent real fleets, empirical validation, or public-case V2G. See `lossy_projection_qualification/RESULTS.md` and the focused draft's common-loss section.
+
+There is now a stronger **complete projection**, under explicit ideal cycling
+rules. For each matching size, keep total early purchases C and exports X.
+Let Q=alpha*C−X/delta be battery exchange. Five linear inequalities suffice:
+mandatory purchases C>=r_m/alpha; X>=0; the lower and upper inventory/refill
+bounds on Q; and shared gross use C+X<=K. The resulting polygon has at most
+five vertices. It maps exactly to early net load, terminal refill and vehicle
+cost, including the alternatives the efficient curve discarded.
+
+The constructive proof matters. First realize the required Q with one action
+direction per bus. Any residual totals are battery-neutral cycles, with exported
+energy alpha*delta times purchased energy. Split them into finitely many safe
+charge/discharge pairs on one available bus, then serialize all actions on the
+single connector. No bus charges and discharges simultaneously. This construction
+requires unrestricted finite switching, no minimum session or cycling cost,
+adequate common power acceptance and whole-window availability. Cycle count can
+be large. A real degradation model or finer time-varying tariff needs new analysis.
+
+The full polygons preserve arbitrary period-total objectives and negative-price
+queries; convex objectives use ordinary convex optimization on each polygon and
+their complete-plan hull. The smaller efficient curve still needs monotonicity.
+The full theorem has two independent analytical derivations but **no new numerical
+implementation qualification**. It does not turn the public timetable into a
+V2G experiment or establish an ML advantage. See `full_lossy_projection.tex`.
 
 ## Why the two-batch assumptions matter
+
+The supply assumption matters just as much. Convex network dispatch does not
+automatically become more costly when load increases at a particular location.
+Congestion can make extra withdrawal relieve a bottleneck and replace expensive
+generation with cheaper generation elsewhere. This is the established negative
+nodal-price phenomenon, even with positive generator offers.
+
+An independently checked three-bus example uses strictly increasing quadratic
+generation costs and a constrained transmission line. For an extra depot load
+x between 0 and 1, its exact incremental dispatch cost is −0.89x+0.05x²: convex,
+yet decreasing throughout that interval. Therefore positive generator costs
+alone do not justify discarding componentwise larger fleet loads. The smaller
+common-loss frontier must check its load-monotonicity premise; the new full
+polygons retain those alternatives under their explicit cycling assumptions.
+This is an ideal DC-network illustration, not a new negative-price discovery,
+an AC-grid qualification or a change to the public timetable's synthetic cost.
+See `network_monotonicity.tex` and Baker–Gangammanavar (2024), Section V-B.
 
 Zero transition energy can be relaxed in one controlled way. If every paired duty performs the same compulsory energy-consuming task after early charging, total consumption is fixed within each matching cardinality: S+m*d. The same matching statistic still gives at most two efficient segments per cardinality, with that extra energy included in terminal refill. The graph must exclude pairs whose B service plus transition cannot fit in a full battery. This is an abstract common-task extension, with proof review but no new numerical implementation qualification.
 

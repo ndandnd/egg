@@ -55,6 +55,50 @@ gives the details, including capped paid-idle dominance. No lossless scalar
 support criterion is transferred by this corollary. This analytical extension
 has source-level proof review but no numerical implementation qualification.
 
+\begin{corollary}[Complete polygons with a common transition task]
+\label{cor:commontransitionfull}
+Retain the timing, restricted graph $b_j+d\le B$ and definitions
+$S_m,N_m,r_m,P$ of Corollary~\ref{cor:commontransition}, and permit
+the finite early actions of Theorem~\ref{thm:fulllossyprojection}.
+For service-assigned fleets, the complete physical projection is the union
+over $m=0,\ldots,\nu$ of
+\[
+ \left\{\left(C-X,\frac{S_m-Q}{\alpha},fN_m\right):
+          (C,X)\in W_m^{d}\right\},
+\]
+where
+\[
+\begin{split}
+ W_m^{d}=\bigl\{(C,X):\;&C\ge r_m/\alpha,\quad X\ge0,
+                  \quad C+X\le K,\\
+ &\max\{S_m-N_mB,S_m-\alpha H\}
+       \le Q=\alpha C-X/\delta\le P\bigr\}.
+\end{split}
+\]
+Each nonempty polygon has at most five vertices. Their affine images
+generate the complete-plan hull. Keeping these full polygons preserves
+arbitrary projected-objective values, including negative-price queries;
+no monotonicity assumption is required.
+\end{corollary}
+\begin{proof}
+The paired exchange box is $[a_i+b_j+d-B,a_i]$; singleton boxes are
+unchanged. Their lower endpoints sum to $S_m-N_mB$, upper endpoints to
+$P$, and positive lower endpoints to the matching requirement.
+The finite-cycle construction of Theorem~\ref{thm:fulllossyprojection}
+occurs before the transition task and returns to the starting early SOC.
+Nonnegative task and B-service consumption then preserves intermediate
+SOC feasibility. At fixed $m$, $S_m$ is independent of the matching,
+so a matching attaining $r_m$ contains every other matching's polygon.
+The full-set and hull conclusions follow.
+\end{proof}
+For $d>0$ this is not a literal paid-idle elimination result. Deleting
+an edge while replacing its paired bus and an idle bus by two singletons
+reduces total consumption by $d$. It changes terminal load even at the
+same $C,X$, so only the earlier monotone-value dominance claim follows.
+The statement also excludes edge-dependent task energies, charging during
+the task and altered access policies. It is an analytical extension,
+not a newly numerically qualified model.
+
 \paragraph{Varying edge energies need more information.}
 The failure already occurs with charging only; disable early exports in
 this example. Consider $n=2$, $a=b=(13,1)$, $B=20$, unit efficiency, early budget $K=14$

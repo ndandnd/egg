@@ -1,10 +1,11 @@
-\section{Common losses and the efficient load--cost frontier}
+\section{Common losses and the joint load--cost set}
 \label{sec:lossy}
 With losses, early net grid energy no longer determines terminal purchases.
-Nevertheless, the same cardinality-matching values describe an exact
-\emph{efficient} frontier under the common-window assumptions. This is
-a reduction for monotone economic objectives, rather than equality of the
-complete physical projection.
+The same cardinality-matching values nevertheless suffice under the
+common-window assumptions. Retaining finite cycling actions gives a complete
+polygonal projection. Discarding dominated actions gives a smaller
+\emph{efficient} frontier for monotone economic objectives. The two
+descriptions have different economic and physical qualifications.
 
 Retain the services, allowed graph, battery capacity $B$, positive fee $f$
 and service-assigned buses of Section~\ref{sec:v2g}. Every bus starts and
@@ -29,6 +30,10 @@ energy is $E=C-X$. Full replenishment gives
 Thus two allocations with the same $E$ may have different $L$.
 The supply objective must be defined on the resulting signed load domain,
 or on an explicitly declared background-demand translation.
+
+\input{full_lossy_projection}
+
+\subsection{The smaller efficient frontier for monotone costs}
 
 \begin{lemma}[Least terminal purchase at a fixed early net load]
 \label{lem:lossyfixed}
@@ -89,16 +94,27 @@ smaller terminal load; it does not identify the full physical set.
 Under nonnegative early and terminal posted prices, the same reduction
 preserves the minimum bill plus operating cost. At zero prices dominated
 allocations can tie, so it does not enumerate every price response.
-Negative prices, asymmetric export settlement and a nonmonotone supply
-objective require additional alternatives. The lossless scalar criterion
+Negative prices or a nonmonotone supply objective may require the alternatives
+retained by Theorem~\ref{thm:fulllossyprojection}; they cannot use the smaller
+set $Z$ by assertion. Asymmetric export settlement must keep its distinct
+purchase/export coordinates. The lossless scalar criterion
 for the location of a supported hull optimum is not asserted here:
 different cardinalities can have different terminal loads at the same $E$.
+Convex network dispatch with increasing generation costs need not give a
+load-monotone value function: congestion can make a nodal marginal price
+negative. Appendix~\ref{app:networkmonotonicity} gives an exact illustration
+and the established pricing precedent. The smaller efficient set therefore
+requires a load-domain monotonicity check. The complete polygons instead
+retain all period-aggregate load/cost points, subject to their explicit
+cycling assumptions and the network objective's declared domain.
 
 Identical paid idle buses remain redundant for these efficient values
 under the total fleet cap $2n$. Deleting as many matching edges as there
 are idle buses preserves the total fleet and fee and lowers $R$, so an
-all-assigned fleet has no larger $L$ at the same $E$. With losses this is
-a domination statement, rather than equality of the literal projection.
+all-assigned fleet has no larger $L$ at the same $E$. This efficient-set
+argument gives dominance. If finite cycling is retained, the complete
+projection result above gives the stronger equality of the whole projected
+set, as its capped-idle corollary explains.
 There is no general uncapped-idle conclusion when negative net early loads
 are valuable. The theorem remains conditional on common efficiencies,
 common windows and ideal serial use; it is not a public-timetable V2G

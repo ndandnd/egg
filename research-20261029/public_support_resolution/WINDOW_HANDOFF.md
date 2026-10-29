@@ -1,4 +1,54 @@
-# Current checkpoint — 29 October 14:12 UTC, window ACTIVE
+# Current checkpoint — 29 October 15:09 UTC, window ACTIVE
+
+No numerical/artifact worker remains. PDF06 compile88518/render28272 both
+exited0, all52 actual PNGs visually inspected. Read PDF_SNAPSHOT06_RECEIPT.json
+and PDF_QA06_* only; do not rerun. Current closed prefix24001.99 displayedCPU /
+24936.31 elapsed-sum /24003.81 retainedCPU includes PDF06 10.77/11.56,
+retained10.81 once. Legacy2546.091499549272 separate; parent/tool/static/agent,
+visual/remote-presentation CPU UNKNOWN. Last pushed sourcefdc1faf0/controld91fab82.
+Deck saved38slides/state21; PRESENTATION_RECEIPT05 records changed36–38 visual
+PASS. Page page_8f9b3c1086e081918f946ab9bd0d715a, same private learning artifact.
+
+NEW complete common-loss polygon theorem independently reviewed PASS:
+support_extension/FULL_LOSSY_PROJECTION_CANDIDATE.md, *_INDEPENDENT.md,
+FULL_LOSSY_PRIOR_ART_CHECK.md and FULL_LOSSY_NEGATIVE_PRICE_EXAMPLE.md.
+Finite sequential neutral cycles make complete C/X projection exact, five
+halfspaces per matching cardinality, <=5(nu+1) hull generators. Matching
+threshold r_m suffices for the ENTIRE polygon, arbitrary projected objectives
+including negative prices. Common-d extension uses S_m; capped-idle literal
+projection only d0. No switching/degradation/cyclelimit or intrawindow-price
+claim. The efficient smaller frontier STILL requires monotone objectives.
+Negative-price anchor fullvalue−3/2 vs efficient−1 is linear D=CH, not a gap.
+New TeX/guide integration UNCOMPILED, numerical qualification NOT YET DONE.
+
+NETWORK_MONOTONICITY_REVIEW/NETWORK_PRICE_PRIOR_ART document a classical DC
+negative-LMP example with convex positive generation costs; it motivates the
+full-set theorem, not a new network-pricing claim. Public37 positive support
+gap and its exact-law/binary distinctions below unchanged. No public V2G/MLwin.
+PUBLIC_HULL_BOUND_FEASIBILITY explains why repeating old same-gradient
+all-fleet lower solve is NOT new work; no new hull-lower dispatch authorized.
+
+NEW SOURCE-ONLY full_lossy_polygon_qualification is DRAFT, no attempt exists.
+Parent prospectively selected8 literalcases/Q0 BEFOREoutcomes to test full
+finite-cycle polygons against independently enumerated rawbus polygons,
+Minkowski sums/clip and once-only strict physical replay. Candidate, reference,
+comparator, old-pattern owner/worker prepared; exactsource reviews inprogress.
+Read PROTOCOL,CASES,API_HANDOFF_* and currentSOURCE/OWNERreviews only. DRAFT
+LAUNCHdeniesdata/import/test/hash/dispatch. Proposed300CPU600wall inclusive,
+worker270self275inclusive540wall,RSS1GiB/native0, fullnextstage+closure funding.
+No new computation before separate reviewed exactsource/control/commandfreeze
+and push. Failure/empty/missing/unattempted rows retained; no automaticretry.
+
+Agents: core reviews reference/comparator; physical reviewer checks owner/
+candidate; literature finished TeX integration and owner sources. Check actual
+states before reuse. All SOURCEONLY/no executionauthority. Parent manages
+scientific choices/integration. Deadline18:10:45UTC unchanged; continue useful
+work. Draft NOT submission-ready/no central MLwin. At cutoff no newresearch
+worker, safelyclose/report/delete windowheartbeat; unrelated schedules unchanged.
+
+## Earlier checkpoint — retained history
+
+# Checkpoint — 29 October 14:12 UTC, window ACTIVE
 
 No numerical or artifact worker remains. All public exact-energy target and
 comparison states are CLOSED as recorded below; comparison closeout fdb85682

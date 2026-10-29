@@ -22,16 +22,19 @@
 \maketitle
 \begin{abstract}
 Service assignments change both an electric-bus fleet's charging opportunities
-and its vehicle cost. We characterize this joint physical frontier for
-heterogeneous services in two batches with common charging windows, a fixed
-successor graph and full battery replenishment. With common conversion losses
-and shared gross connector limits, one minimum-requirement matching value per
-cardinality determines an efficient early-load, terminal-load and vehicle-cost
-frontier with at most two segments per cardinality. It preserves physical and
-convexified planning values for coordinatewise nondecreasing supply costs; the
-lossless specialization gives an exact load--cost classification and
-own-marginal-price support criterion. The matching and price-support machinery
-is classical. Our physical reduction also has a precise limitation:
+and its vehicle cost. We derive an exact joint period-load--vehicle-cost projection
+for heterogeneous services in two batches with common charging windows,
+conversion efficiencies, a fixed successor graph and full replenishment.
+When finite repeated charge/discharge actions are allowed without switching
+or cycling penalties, one minimum-requirement matching value per cardinality
+determines a polygon with at most five vertices. A constructive serial
+realization respects individual inventories and the shared gross connector
+limit. Retaining these complete polygons preserves projected planning and
+price-response values even for negative prices; monotone supply costs admit
+a smaller efficient frontier with at most two segments per cardinality.
+The lossless specialization gives a scalar own-price support criterion.
+Matching, conversion accounting and price-support machinery are classical.
+Our physical reduction also has a precise limitation:
 edge-dependent compulsory transition consumption can retain a positive support
 gap on a complete assignment graph even when every perfect matching is feasible.
 The obstruction persists with strongly convex separable supply cost and in a
@@ -65,12 +68,15 @@ does not retain that tradeoff. We identify a restricted physical class in
 which it can be described exactly: heterogeneous two-batch services, common
 charging windows and conversion efficiencies, a fixed successor graph, shared
 gross connector use and full terminal replenishment. A minimum-requirement
-matching at each cardinality suffices to construct the efficient joint
-energy--vehicle-cost frontier. Standard convexification then turns that
-physical description into planning and own-price support decisions. In the
-lossless specialization the full cost-labelled projection is available;
-with losses, dominated schedules are discarded only for monotone value
-objectives. Gross connector use counts both purchases and exports, and full
+matching at each cardinality suffices to construct the joint energy--vehicle-cost
+set. With losses and unrestricted finite early direction changes, this set is
+a union of polygons having at most five vertices each. Their constructive
+realization uses sequential actions, never simultaneous charging and exporting.
+Standard convexification then gives planning and own-price support decisions.
+For monotone objectives, removing dominated cycling actions leaves at most two
+efficient segments per cardinality. Keeping the full polygons avoids that
+economic restriction, but relies on ideal switching and period-aggregate
+settlement. Gross connector use counts both purchases and exports; full
 terminal replenishment prevents free net use of initial battery inventory.
 
 We delineate why this reduction works. A common transition-energy task can
@@ -111,13 +117,15 @@ The obstruction concerns one posted-tariff institution with a complete-fleet
 participant. It is a possibility under characterized conditions, not an
 inevitable failure of marginal tariffs, a strategic tariff-reset equilibrium
 or a convergence claim. Convex-hull pricing and general support duality are
-established theory. The physical contribution is the explicit assignment-
-dependent frontier under the stated timing, resource and loss assumptions.
+established theory. The physical contribution is the explicit assignment-dependent
+projection under the stated timing, resource, loss and action assumptions.
 
 The analytical models omit stochastic delays, degradation, temperature,
 taper and switching time. Common windows and efficiencies enable the finite
-reduction; arbitrary timetables, vehicle-dependent losses and negative-price
-economics require further analysis. The nominal reserve/loss neighborhood
+reduction; arbitrary timetables, vehicle-dependent losses, restricted cycling
+and intrawindow price variation require further analysis. Full polygons can
+handle negative period prices; the smaller efficient frontier cannot discard
+larger loads under a nonmonotone objective. The nominal reserve/loss neighborhood
 does not validate those abstractions empirically. The public case uses varied
 times and movement energy, but remains charge-only within fixed declared
 movement modes and charging windows. Its certificate does not prove
@@ -132,9 +140,10 @@ and prevalence open.
 Service assignments change the joint load--vehicle-cost set even when its
 load-only projection is simple. For the stated common-window class,
 cardinality-matching values determine an exact lossless support classification
-and, with common losses, a finite efficient frontier for monotone planning.
-Gross connector use and full replacement energy are essential to that
-description. A separately checked public-timetable certificate establishes
+and, with common losses and ideal finite cycling, the complete load--cost
+projection. Monotone objectives admit a smaller efficient frontier. Gross
+connector use, full replacement energy and constructive serial attainment are
+essential to that description. A separately checked public-timetable certificate establishes
 the same qualitative obstruction in a richer declared charge-only model.
 These results identify when continuous charging flexibility does and does
 not remove assignment-induced price-support failure, while leaving empirical
@@ -143,6 +152,9 @@ significance and more general scheduling classes open.
 \section*{Evidence and reproducibility}
 Independent physical enumeration qualifies the finite analytical
 implementations; constructive proofs establish their continuum statements.
+The new full common-loss polygon theorem has independent analytical review
+but no fresh numerical implementation qualification; earlier one-direction
+checks do not qualify its cycling construction.
 Appendix~\ref{app:evidence} preserves all case/control denominators and
 their scopes. The public result uses classical native proposals followed by
 exact physical admission and rational coverage certificates. One fresh
@@ -166,6 +178,7 @@ contribution is claimed.
 \input{certificates}
 \clearpage
 \LossyProjectionProofs
+\input{network_monotonicity}
 \TransitionEnergyProofs
 \input{exponential_transition}
 \input{complete_graph_extension}

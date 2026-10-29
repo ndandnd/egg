@@ -4,7 +4,7 @@ Grid-aware scheduling, capacitated charging and scalable route-and-recharge
 models already combine bus duties with charging access
 \citep{wu2022grid,devos2024capacity,parmentier2023fleets}; integrated flow
 and set-partitioning models also choose assignments and charging slots
-\citep{borndorfer2024integrated}. \citet{wu2022grid} include endogenous
+\citep[Sections 2.1 and 4]{borndorfer2024integrated}. \citet{wu2022grid} include endogenous
 vehicle-to-trip assignment and full overnight charging. Integer bus-charging
 aggregation/disaggregation around auction bids is studied by
 \citet{zoltowskaLin2021}, while \citet{wu2019gridinteractive} couple service
@@ -53,12 +53,18 @@ not establish a first signed-aggregation or V2G support result.
 \citet[Theorems 1--3]{altahaBitar2024lossy} establish a piecewise-affine
 grid-power/SOC bijection, convex feasibility in a single store's SOC variables,
 and sufficient monotonicity conditions for convex reformulation. These
-transformations and conditions are prior art. Theorem~\ref{thm:lossyfrontier}
-combines service-dependent vehicle counts, successor choices and shared
-gross connector use in an efficient joint early-load, terminal-load and
-vehicle-cost frontier with at most two segments per cardinality. Common
-windows and monotone economics are essential to discarding dominated
-points while preserving planning values.
+transformations and conditions are prior art. Their discrete signed control
+has one direction per time step. Our complete projection explicitly permits
+successive actions inside one common window; its purchases and exports are
+integrated totals, not simultaneous physical controls. Dropping complementarity
+alone would not establish exactness. Theorem~\ref{thm:fulllossyprojection}
+instead proves a serial SOC-feasible realization and an assignment-dependent
+joint load--vehicle-cost polygon with at most five vertices per cardinality.
+Theorem~\ref{thm:lossyfrontier} gives the smaller efficient frontier with at
+most two segments. Common windows and monotone economics are essential to
+discarding dominated points in that smaller representation. Conversion
+bookkeeping, time sharing, box aggregation and planar vertex counting are
+classical; the physical replacement across all assignments is the claim here.
 
 \paragraph{Support, lost opportunity cost and ownership.}
 Nonconvex pricing and uplift are established
