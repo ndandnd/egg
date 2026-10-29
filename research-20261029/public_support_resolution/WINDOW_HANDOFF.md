@@ -1,4 +1,38 @@
-# Current checkpoint — 29 October 12:04 UTC, window ACTIVE
+# Current checkpoint — 29 October 12:54 UTC, window ACTIVE
+
+NEW public_exact_energy_target/attempt01 launched ONCE, managed owner55904
+RUNNING at initial exact-session return. Reviewed source6665c2b9f045410b4bbf19060b6780b0779f5534,
+separate control36fe4fe4 pushed before dispatch. Read its PROTOCOL,
+PARENT_SOURCE_REVIEW, CONTROL_REVIEW and compact receipts after closure only.
+All consumed package sources/control FROZEN. No old worker poll, duplicate owner,
+partial numerical inspection, hash/replay/retry or separate finalizer.
+
+This explicitly NEW exact-additive consumption model preserves nonenergy fields
+and original binary supply, adopts qualified canonical timing/access coverage,
+then independently validates new coefficients/full rows. One retained375-node
+partition/multiplier proposal pass and two predetermined one-face primal attempts
+must provide fresh bounds/mixture; old gap/feasibility does NOT transfer. No native
+calls or new search. Broader finite-arc-walk scope remains CONDITIONAL on the
+reviewed exact-energy dominance theorem and fresh numerical success. Empirical
+paired-road realization and public V2G remain unproved.
+
+Seven states, inclusive1200CPU/1800wall, worker1140/1740,selfhard1080,
+closure60/60 inside; full stage funding, one thread, observed5GiB. Current CLOSED
+prefix23919.72displayedCPU/24849.36elapsed-sum/23921.31retained excludes this run;
+adopt final external owner meter ONCE, child observations overlap. Legacyguard
+2546.091499549272 and parent/tool/static/agentreviewCPU UNKNOWN stay separate.
+
+Current agents: physical reviewer checks standalone exact_energy_extension.tex;
+literature reviewer tests an analytical exponential edge-energy boundary; core
+completed worker/owner and standalone theorem text. Check actual states before
+reuse. No agent has execution/actualdata/hash/commit authority. New theory/guide
+edits remain uncompiled; old PDF04/deck31 unchanged. Deadline18:10:45UTC; draft
+NOT submissionready/no centralMLcontribution. Continue useful work, no new worker
+afterdeadline; safely close/report/delete this research heartbeat then.
+
+## Earlier checkpoint — retained history
+
+# Checkpoint — 29 October 12:04 UTC, window ACTIVE
 
 NEW public_canonical_qualification/attempt01 CLOSED_PASS. Reviewed source
 eee9c52066ea8c6d6d746e9bd2cc627864f85a57/control9011e31e. Owner exact command
