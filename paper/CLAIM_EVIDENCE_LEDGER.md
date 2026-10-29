@@ -1,5 +1,14 @@
 # Manuscript claim and evidence ledger
 
+**28 October 2026 current overlay:** use the venue-neutral
+[project state and claim register](../research-20261028/paper_core_verification/STATE.md)
+for current positioning, inspected evidence and open obligations. The target
+venue and “no eligible learned experiment yet” wording below are historical:
+later learning experiments completed without establishing the proposed ML
+contribution. Their original failures, limitations and capacity effects remain
+in their own receipts. The table below is preserved as an earlier claim ledger,
+not silently upgraded to independent current validation.
+
 Working title: **When marginal electricity prices cannot coordinate electric-bus
 schedules: complete-fleet certificates and a replenished-fleet counterexample**.
 Working target: Transportation Research Part C, conditional on a credible

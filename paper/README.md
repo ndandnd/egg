@@ -1,5 +1,14 @@
 # EGG working manuscript
 
+**Current source pointer (28 October 2026):** `latex/main.tex` and
+`latex/README.md` identify research draft **0.10**, dated 29 September 2026.
+The v0.7 “current” wording below is retained historical release documentation;
+it is no longer the current source version. This pointer does not newly verify
+any compiled PDF. The venue-neutral project state, recent negative ML evidence,
+claim scope and bounded next verification are in
+[`STATE.md`](../research-20261028/paper_core_verification/STATE.md).
+Original manuscripts and release artifacts remain unchanged.
+
 The current research draft is **0.7**, built from `latex/main.tex`:
 [revised manuscript](../output/pdf/egg-journal-v0.7-reviewed-draft.pdf).
 It adds analytical public lower bounds and joint D/CH/gap/incumbent-regret

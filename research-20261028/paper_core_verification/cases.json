@@ -1,0 +1,27 @@
+{
+  "schema": "egg-exact-capacity-fee-v1",
+  "seed": null,
+  "reason_no_seed": "Deterministic exact boundary qualification; no sampled population or stochastic solver",
+  "cases": [
+    {"id":"zero-capacity", "K":"0", "fee":"7"},
+    {"id":"infeasible-below-minimum", "K":"199/10", "fee":"7"},
+    {"id":"minimum-capacity", "K":"20", "fee":"7"},
+    {"id":"minimum-zero-fee-tie", "K":"20", "fee":"0"},
+    {"id":"low-capacity-low-fee", "K":"22", "fee":"2"},
+    {"id":"lower-gap-boundary", "K":"22", "fee":"12/5"},
+    {"id":"interior-gap-two-bus", "K":"22", "fee":"3"},
+    {"id":"planner-tie-low-capacity", "K":"22", "fee":"16/5"},
+    {"id":"upper-gap-boundary", "K":"22", "fee":"4"},
+    {"id":"large-fee-zero-gap", "K":"22", "fee":"5"},
+    {"id":"old-slice-left", "K":"23", "fee":"7"},
+    {"id":"old-slice-boundary", "K":"47/2", "fee":"7"},
+    {"id":"old-slice-right", "K":"24", "fee":"7"},
+    {"id":"vertex-zero-fee-flat-response", "K":"25", "fee":"0"},
+    {"id":"large-capacity-zero-fee", "K":"30", "fee":"0"},
+    {"id":"planner-tie-large-capacity", "K":"30", "fee":"5"},
+    {"id":"nominal-smoke", "K":"30", "fee":"7"},
+    {"id":"large-capacity-upper-boundary", "K":"30", "fee":"20"},
+    {"id":"large-capacity-above-boundary", "K":"30", "fee":"21"},
+    {"id":"rational-interior", "K":"109/4", "fee":"11/3"}
+  ]
+}
