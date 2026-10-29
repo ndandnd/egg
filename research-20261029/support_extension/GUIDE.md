@@ -15,7 +15,7 @@ history of the original examples; the focused draft contains the later results.
 | Question to study | Current source | What to take from it |
 |---|---|---|
 | What exactly does a price support? | `framework.tex` | One complete-fleet participant and a fixed tariff; the hull and strategic-reset questions differ. |
-| Which assignments must be retained? | `heterogeneous.tex`, `lossy.tex` | The complete lossless projection and common-loss efficient frontier have different scopes. |
+| Which assignments must be retained? | `heterogeneous.tex`, `lossy.tex`, `full_lossy_projection.tex` | Full lossy polygons retain finite cycling; the smaller efficient frontier requires monotone objectives. |
 | Can more feasible alternatives remove the failure? | `complete_graph_extension.tex`, `strict_curvature_robustness.tex` | They can matter, but the obstruction can survive complete compatibility and local parameter changes. |
 | Is the public result global? | `public_case.tex`, `exact_energy_extension.tex` | Yes within each separately specified model; the two consumption laws have different certificates. |
 | Why did learned methods not win? | `research-20261027/grid_information_pilot/RESULTS.md` | Greater neural capacity helped, but the best fitted classical baseline remained stronger in that study. |
@@ -102,7 +102,7 @@ Source: `paper/latex/model_theory.tex`.
 
 General linear-price support, participant convexification, duality and lost-opportunity accounting are established theory. Entire feasible schedules as columns, self-scheduling pricing oracles and column generation for convex-hull prices also have direct precedents. Ramping constraints and bus participation in electricity auctions are not new by themselves.
 
-The strongest current candidate contribution is an explicit assignment-dependent **joint load–operating-cost frontier**. For a restricted two-batch class, classical cardinality matching values describe all cost layers, give support conditions, and still determine at most two efficient segments per cardinality with common conversion losses. These statements explain what can be decided across a class of objectives without enumerating complete fleets. General matching, convex aggregation and price-support duality remain established tools.
+The strongest current candidate contribution is an explicit assignment-dependent **joint load–operating-cost projection**. For a restricted two-batch class, one classical matching value per fleet size determines an exact polygon with at most five vertices, even with common conversion losses and finite sequential cycling. This preserves arbitrary period-price responses, including negative prices. Monotone objectives need only a smaller efficient frontier, with at most two segments per fleet size. The result avoids enumerating complete fleets under its specific physics; it is not a new matching, generic aggregation or price-support theorem.
 
 Joint EV scheduling, V2G and electricity pricing already appear in prior work. Zhou, An and Schmöcker model bus connections with charging and export; Wu and colleagues connect scheduling and distribution-grid prices. Al Taha and Bitar give lossy-storage reformulations. Our distinction must therefore be the specific physical classification and its consequences. The source check is bounded and supports no “first integration” claim. See the focused draft's related-work comparison and `LOSSY_NOVELTY_REVIEW.md`.
 
@@ -294,9 +294,37 @@ be large. A real degradation model or finer time-varying tariff needs new analys
 The full polygons preserve arbitrary period-total objectives and negative-price
 queries; convex objectives use ordinary convex optimization on each polygon and
 their complete-plan hull. The smaller efficient curve still needs monotonicity.
-The full theorem has two independent analytical derivations but **no new numerical
-implementation qualification**. It does not turn the public timetable into a
-V2G experiment or establish an ML advantage. See `full_lossy_projection.tex`.
+The full theorem has independent analytical review and a separate eight-case
+exact implementation qualification: all34 partial matchings,20 cardinality
+layers and85 vertex schedules were retained, including infeasible layers.
+All12 corruption controls behaved as expected. Independent raw bus polygons
+and serial physical replay agreed with the formula. These small cases are
+implementation checks, not a population or speed benchmark. They do not turn
+the public timetable into a V2G experiment or establish an ML advantage. See
+`full_lossy_projection.tex` and `full_lossy_polygon_qualification/RESULTS.md`.
+
+A concrete negative-price example shows the distinction. With one paired bus,
+B=1, service energies3/4 each, charging efficiency1/2, export efficiency1,
+early budget2 and terminal budget3, a neutral cycle can buy1/3 and export1/6
+without changing stored energy. Later early charging buys3/2. Total early net
+load is5/3, terminal load3/2 and bus cost2. At prices(-3,1), the total private
+score is−3/2. Keeping only the efficient curve gives−1. Both values are exact.
+The negative price rewards an otherwise wasteful cycle under this ideal
+settlement model. Because this is a linear price query, physical and hull
+minima agree: it is **not another positive support gap**.
+
+Two useful extensions also have independent proof review. Charging and export
+may have different common power limits: replace the gross-energy bound by
+the exact occupied time C/K_charge + X/K_export <= 1. Common linear wear
+charges on purchased, exported and terminal energy can remain in the joint
+cost coordinate. With lossless conversion, equal net loads may still have
+different wear because gross cycling differs; net energy alone loses that cost.
+The constructive early schedule needs at most N+2*ceil(2*alpha*K_charge/B)
+actions, plus at most N terminal actions. Allowing at least this many preserves
+the complete aggregate set; it is not a minimal count or runtime claim.
+These extensions are analytical. The eight implementation cases used equal
+directional power and no wear; switching delays and state-dependent battery
+degradation remain outside the proof.
 
 ## Why the two-batch assumptions matter
 
@@ -317,7 +345,7 @@ This is an ideal DC-network illustration, not a new negative-price discovery,
 an AC-grid qualification or a change to the public timetable's synthetic cost.
 See `network_monotonicity.tex` and Baker–Gangammanavar (2024), Section V-B.
 
-Zero transition energy can be relaxed in one controlled way. If every paired duty performs the same compulsory energy-consuming task after early charging, total consumption is fixed within each matching cardinality: S+m*d. The same matching statistic still gives at most two efficient segments per cardinality, with that extra energy included in terminal refill. The graph must exclude pairs whose B service plus transition cannot fit in a full battery. This is an abstract common-task extension, with proof review but no new numerical implementation qualification.
+Zero transition energy can be relaxed in one controlled way. If every paired duty performs the same compulsory energy-consuming task after early charging, total consumption is fixed within each matching cardinality: S+m*d. The same matching statistic gives the full polygon, or at most two efficient segments under monotone objectives, with that extra energy included in terminal refill. The graph must exclude pairs whose B service plus transition cannot fit in a full battery. This abstract extension has proof review and one literal in the separate full-polygon qualification; arbitrary road transitions remain outside it.
 
 Varying transition energy changes the answer. In a charge-only example with A and B energies (13,1) and batteries20, the identity matching needs6 early units and consumes28 overall. Cross transitions each consume6 extra units: that matching needs0 early units but consumes40 overall. Choosing only the smallest early requirement loses the identity's efficient charging branch. With a linear unit electricity price and any positive bus fee, allowing singleton duties still does not rescue that shortcut. Total energy has become assignment-dependent. This is a scope counterexample, not a measured public-route effect or a new hardness claim.
 

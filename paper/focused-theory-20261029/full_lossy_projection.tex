@@ -130,10 +130,11 @@ $(1-\alpha\delta)z$. This explains why monotone objectives can discard
 it in the efficient-frontier result below, while arbitrary objectives
 must retain the full polygons. Its smaller set $Z$ still requires the
 stated monotonicity assumptions. The finite cycle count can be large;
-no runtime or generic hull-algorithm claim is made. This constructive
-theorem has no fresh numerical implementation qualification and supplies
-no public-timetable V2G, empirical or learning evidence. The earlier
-one-direction qualification does not by itself qualify these full polygons.
+no runtime or generic hull-algorithm claim is made. A separate eight-case
+exact qualification of these full polygons, described in
+Appendix~\ref{app:evidence}, includes finite-action physical replay.
+It supplies no public-timetable V2G, empirical or learning evidence.
+The earlier one-direction qualification has a different scope.
 
 \paragraph{Why a negative-price query needs the full set.}
 Take $n=1$, $B=1$, $a=b=3/4$, $\alpha=1/2$, $\delta=1$,
@@ -169,5 +170,91 @@ refill, so the negative early rate rewards a point that monotone
 economics discards. Because the queried objective is linear, its minimum
 over the physical set and its complete-plan hull is the same:
 $D=\CH=-3/2$ for this objective. This is not a positive planning gap
-or an equilibrium claim. The calculation is analytical, with no new
-numerical qualification or public-timetable V2G conclusion.
+or an equilibrium claim. This analytical anchor also passed the separate
+full-polygon implementation control; it gives no public-timetable V2G conclusion.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{figures/full_lossy_polygon-v1.pdf}
+\caption{The full paired polygon retains a finite neutral cycle that the
+efficient frontier discards. At the negative posted price, that cycle improves
+the fleet's linear response value. This illustration has $D=\CH$; it is not a
+positive planning-gap example. The right panel shows the three serial early
+actions of the same physical witness.}
+\label{fig:fullpolygon}
+\end{figure}
+
+\begin{corollary}[Directional powers, affine wear and a finite action cap]
+\label{cor:directionalwear}
+Retain the full-action assumptions of
+Theorem~\ref{thm:fulllossyprojection}. In the unit early window let common
+purchase power be $K_c>0$ and export power $K_d>0$, accepted by every
+bus in the corresponding direction. Replace the gross-budget halfspace by
+\[
+ C/K_c+X/K_d\le1.
+\]
+With the other four halfspaces unchanged, these are still the exact
+cardinality polygons. For common affine grid-throughput wear coefficients,
+their complete joint load--cost images are
+\[
+ E=C-X,\qquad L=(S-Q)/\alpha,\qquad
+ c=fN_m+w_cC+w_dX+w_tL.
+\]
+Each polygon still has at most five vertices, whose affine images generate
+the complete-plan hull. Fixed nonnegative wear coefficients have their
+usual cost interpretation; exact projection equality itself needs no
+coefficient-sign or economic-monotonicity restriction.
+
+For a fixed used fleet $N$, every attainable aggregate point has a
+realization with at most
+\[
+ N+2\left\lceil\frac{2\alpha K_c}{B}\right\rceil
+ \quad\hbox{early charge/export actions},\qquad
+ N\quad\hbox{terminal charge actions}.
+\]
+An action cap at least these bounds preserves the aggregate projection,
+not every literal schedule. Replacing $N$ by $2n$ gives one bound for
+all cardinalities under the standing fleet cap.
+\end{corollary}
+
+\begin{proof}
+The endpoint boxes, mandatory purchases and terminal accounting are
+unchanged. Necessity of the new halfspace follows because the two
+directions occupy at least $C/K_c$ and $X/K_d$ connector time and cannot
+overlap. For sufficiency use the same baseline exchanges and neutral
+cycles as in Theorem~\ref{thm:fulllossyprojection}. Execute each purchase
+at power $K_c$ and each export at $K_d$; their total serial duration is
+exactly the displayed occupancy. Directional asymmetry adds no SOC
+condition. At fixed cardinality a minimum-$R$ matching reproduces the
+same $C,X,Q,L$, hence the same affine wear cost, for any other matching.
+This proves complete-set equality; affine imaging and convex combination
+give the vertex and hull claims. The common-task version uses $S_m$
+in place of $S$, as in Corollary~\ref{cor:commontransitionfull}.
+
+The residual $z=C-C_0$ has battery throughput $\alpha z\le\alpha K_c$.
+Choosing chunks of depth $B/2$, with a possibly smaller last chunk, needs at most
+$J=\lceil2\alpha K_c/B\rceil$ cycles, each with two actions. The chosen
+orientation fits the bus's initial SOC, and each cycle returns to it.
+Each bus then needs at most one baseline early action and one terminal
+charge; zero actions are omitted. Restricting to this action count adds
+no aggregate point and removes none, since every point has the explicit
+bounded-action realization. The count is conservative, not minimal,
+and does not bound runtime or the number of actions in arbitrary schedules.
+\end{proof}
+
+Wear must remain in the cost image. In the lossless case a neutral cycle
+adds equal amounts $z$ to $C,X$, leaving $E,L$ unchanged but adding
+$(w_c+w_d)z$ to intrinsic cost. Thus net loads and a constant vehicle
+fee alone cannot represent this complete joint projection. For the same
+reason, convexification retains each component's actual wear cost. Affine
+wear commutes with averaging when $C,X,L$ remain separate; mean net loads
+alone need not determine it.
+
+This corollary does not transfer the smaller efficient-$Z$ formulas to
+unequal powers or wear, nor cover SOC/depth/rate-dependent degradation,
+per-session cost, positive switching time, minimum durations or
+heterogeneous acceptance. Its positive-power assumptions are separate
+from the theorem's zero-budget cases. It is an analytical extension with
+no numerical implementation qualification: the eight full-polygon cases
+use symmetric early powers and no wear. No public-timetable, empirical
+wear-calibration or computational-advantage conclusion follows.

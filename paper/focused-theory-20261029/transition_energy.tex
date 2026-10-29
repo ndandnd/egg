@@ -52,8 +52,9 @@ $[a_i+b_j+d-B,a_i]$. Its lower endpoints sum to $S_m-N_mB$ and its positive
 lower endpoints to the matching requirement. Thus both the requirement and
 the terminal energy account include the task. Appendix~\ref{app:transitionenergy}
 gives the details, including capped paid-idle dominance. No lossless scalar
-support criterion is transferred by this corollary. This analytical extension
-has source-level proof review but no numerical implementation qualification.
+support criterion is transferred by this corollary. The separate full-polygon
+qualification includes one common-task literal and checks the efficient lower
+threshold as well; the continuous-domain claim rests on the proof.
 
 \begin{corollary}[Complete polygons with a common transition task]
 \label{cor:commontransitionfull}
@@ -96,8 +97,8 @@ an edge while replacing its paired bus and an idle bus by two singletons
 reduces total consumption by $d$. It changes terminal load even at the
 same $C,X$, so only the earlier monotone-value dominance claim follows.
 The statement also excludes edge-dependent task energies, charging during
-the task and altered access policies. It is an analytical extension,
-not a newly numerically qualified model.
+the task and altered access policies. One common-task literal passed the
+separate full-polygon qualification; it does not qualify arbitrary task models.
 
 \paragraph{Varying edge energies need more information.}
 The failure already occurs with charging only; disable early exports in

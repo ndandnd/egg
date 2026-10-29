@@ -1,4 +1,43 @@
-# Current checkpoint — 29 October 15:09 UTC, window ACTIVE
+# Current checkpoint — 29 October 15:27 UTC, window ACTIVE
+
+NEW full_lossy_polygon_qualification/attempt01 CLOSED_PASS: source
+91554d65dec01272308e48f0b68ef3885ab60059/controld2e52b76 pushed before ONE
+owner dispatch. Exactcommand returnedexit0initial(no managedsession), child99007
+exit0/reaped. No numericalworker remains. All9assignedrows delivered: Q0+8cases,
+12corruptionsrejected,34casepartialmatchings/20cardinalitylayers/85strictvertex
+schedules. Wholepolygons agree through ONEfixedmatching percardinality, all
+infeasible layersretained. Read RESULTS,INTERPRETATION_REVIEW,FINAL_RESOURCE_RECEIPT,
+RUNNING_HANDOFF only. No source/hash/replay/rawpacket/readout/export/native rerun.
+
+New cost.31displayedCPU/.49elapsed, owner.319892, retained.35 coversrounding;
+peakobserved27099136bytes, native0, configuredthread1. GLOBALCLOSED24002.30CPU/
+24936.80elapsed-sum/24004.16retained; legacy2546.091499549272 separate; static/
+agent/tool/visual/remoteauthoringCPU UNKNOWN. All costs adoptedonce/childrenoverlap.
+
+NEW independent analytical extension: DIRECTIONAL_POWER_WEAR_CANDIDATE.md and
+*_INDEPENDENT.md PASS. Unequalcommonpositive charge/exportpowers replacegross
+byC/Kc+X/Kd<=1, commonaffineGRIDwear retainedinJOINTc; r_m/5vertexfullprojection
+survives. EarlyactioncapN+2ceil(2alphaKc/B),terminal<=N suffices foraggregate
+equality, notliteralallschedules/minimalcap/runtime. Lossless netloads alone
+losewearcost. This extension is NOTnumericallyqualified by8symmetric/nowearcases.
+TeX integrated, DIRECTIONAL_WEAR_TEX_AND_FIGURE_REVIEW PASS; sourceuncompiled.
+
+Deck saved42slides/state22, changed38–42actualPNGvisuallyPASS, receipt06.
+SamePagepage_8f9b3c1086e081918f946ab9bd0d715a; newconnectedref
+artifact_external_79808973-070b-4ab1-b391-6c62a9bf4337. Allprior37contentpages
+preserved. No sharing/publication. Guideupdated. LatestverifiedPDF06still52pages.
+
+NEW analyticalfigure sources make_full_polygon_figure.py/render_full_polygon_figure.py
+source-reviewed only, NOTRUN. They illustrate provednegativepriceanchor, no new
+case/result. Prospective50CPU60wall, cachedoncehash/newfigures/full_lossy_polygon-v1
+exclusiveoutputs, admittedartifactruntime. Separateexactsource/controlfreeze+
+push needed beforeonefigurecommand. Then consolidatedNEWPDF07freeze/compile/
+render/allpageQA, no oldfigure/PDF reruns. Allagentscompletedlatestboundedtasks;
+checkactualstatesbefore reuse. Deadline18:10:45UTC; notsubmissionready/noMLwin.
+
+## Earlier checkpoint — retained history
+
+# Checkpoint — 29 October 15:09 UTC, window ACTIVE
 
 No numerical/artifact worker remains. PDF06 compile88518/render28272 both
 exited0, all52 actual PNGs visually inspected. Read PDF_SNAPSHOT06_RECEIPT.json

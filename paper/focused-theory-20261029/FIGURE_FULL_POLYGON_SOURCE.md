@@ -1,0 +1,9 @@
+# Full-polygon analytical illustration: source-only handoff
+
+New sources: `make_full_polygon_figure.py` and `render_full_polygon_figure.py`. Neither has been imported, compiled, executed, tested, hashed or rendered during preparation. Parent must separately freeze and authorize one invocation. Proposed external allowance: 50 CPU/60 wall seconds, including source admission, cached execution, Matplotlib startup, both exports and receipt; internal45 CPU/55 wall cutoff. One-thread environment and the existing admitted Matplotlib3.9.4 isolated artifact runtime are required.
+
+Wrapper API: isolated Python `-I -S -B render_full_polygon_figure.py --source-revision <full40hex>`. It compares both current source buffers with that Git revision, hashes cached buffers once within the future paid invocation, and executes only the cached authoring source. It uses the existing runtime-receipt admission pattern; no scientific evidence packet or numerical result is consumed. Source preparation grants no dispatch authority or retry.
+
+New exclusive outputs in `figures/`: `full_lossy_polygon-v1.pdf`, `full_lossy_polygon-v1.png`, and `full_lossy_polygon-v1-receipt.json`. Existing versioned outputs cause failure; exclusive file handles also prohibit overwrite. Partial failure does not authorize regeneration. PDF remains vector; PNG is260dpi. Future visual QA is pending.
+
+Panel(a) draws the supplied exact paired polygon vertices (1,2),(3/2,3/2),(5/3,3/2),(4/3,2), marks its efficient segment and the −1 versus−3/2 fixed-price minima. Panel(b) connects only the proved literal SOC milestones: times0,1/6,1/4,1 and inventories1/4,5/12,1/4,1. The three actions are successive, not simultaneous. Endpoint B and terminal refill appear as text, not a simulated trajectory. Labels identify abstract energy/time units, signed posted prices, fee, and **linear D=CH**, explicitly excluding a positive support gap or experiment. No actual public V2G conclusion is implied.
