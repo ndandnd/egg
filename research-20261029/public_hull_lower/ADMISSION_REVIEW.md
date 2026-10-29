@@ -1,0 +1,21 @@
+# Source-only admission review and API handoff
+
+The plan is mathematically sound: an all-fleet fixed-price lower L_V at p=∇F(ubar) gives CH≥k+L_V, with k=−Σb_t ubar_t²/2. The requested linear threshold is H−k−1/10000. The admitted fixed mixture supplies H without a new physical replay or weight optimization. A fixed segment-optimal price need not be a global hull-optimal price, so failure to meet epsilon is a valid possible outcome.
+
+## API
+
+`admission.admit(authority, packet, coefficients, pins)` accepts decoded cached buffers, not filenames. The consumer must byte-admit and source-bind the fixed revisions/paths in `admission.PINS`: original case descriptor, closed price authority, and closed MIXTURE packet. No paths from metadata are followed. The authority is checked against the known producer source/control, case identity, immutable packet revision, fixed metadata paths, producer check/physical-admission statuses and successful reaped/resource closeout assertions. This transfers the existing admitted components and mixture; it does not recertify their physical feasibility or weight optimum.
+
+`coefficients` is `{a:[exact original stored-float rationals], b:[...]}` obtained from the authenticated semantic source and dimensioned by the admitted case's market intervals. It must not be derived from arbitrary packet data or decimal approximations. The original source uses Fraction(float(.2)) and Fraction(float(1/900)); the consumer should obtain that same original binary coefficient semantics. Floats supplied directly to this API are rejected, so convert the source's stored coefficients explicitly before calling.
+
+The packet schema was inspected only through the narrow original writer: top-level mixture, independent_check and hull_upper_exact; mixture fields loads, ops, objective, lambda_left/right; audit fields status and objective_exact. Admission checks weights, dimensions, nonnegative loads/curvature/operations, exact H agreement, and the new algebraic identity H=cbar+F(ubar). This cheap algebra is prospectively paid new work, not a repeated old mixture/KKT audit.
+
+Returned fields include mean_loads,cbar,H,a,b,p,k,epsilon,target,weights,source_identity,input_pins, objective_mode='linear', fleet_count=None, all_bus_counts_retained=true and minimum_fleet=2. `validate_derived(record)` independently reconstructs all derived algebra/domain fields and rejects changes. `close_bound(record, linear_lower)` converts a separately complete, independently checked all-fleet linear bound to hull_lower, hull_upper, width and epsilon_met; it rejects a contradiction above the admitted feasible upper. It does not authenticate the supplied linear bound: that is the tree checker's responsibility.
+
+`qualification.run(admission, checker)` is pure literal qualification with no backend or artifact reads. It includes exact gradient/constant/threshold anchors, tampered derived fields, objective/dimension/sign/domain guards, a complete synthetic all-domain linear tree, an omitted child, an explicit open fringe, changed-price bound rejection and an unavailable exact-two multiplier. The worker should additionally exercise immutable authority/pin tampering through `admit` if it constructs literal admitted metadata; public source admission is independently required regardless of arithmetic qualification.
+
+## Required integration checks
+
+The new native producer and exact checker must use identical exact p with linear objective coefficients, minimum-fleet cut only, no exact-two equality and no old nonlinear higher-fleet exclusion. Final coverage must be checked in a fresh semantic context with fleet_count=None, explicit limits and no omitted fringe. A complete finite lower remains useful even if it misses the frozen threshold. An all-infeasible result contradicts the admitted components and is diagnostic failure. All algebra, admission, qualification and closure belong inside the prospective package clocks.
+
+Only narrow source writers/contracts and the prospective plan were read. No actual authority/packet/case values, raw artifacts, gzip payloads, imports, execution, tests, hashes, native calls or commits were consumed or performed. These new sources are unexecuted and require independent source review before freeze.
