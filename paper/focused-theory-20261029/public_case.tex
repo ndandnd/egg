@@ -24,7 +24,8 @@ operational samples. The nonlinear sign certificate concerns depot 15.
 Source timetable offsets, including next-day services, are retained; the
 source data do not supply the energy or economic calibration below.
 
-The opportunity set is the explicitly declared finite movement graph.
+The opportunity set is the explicitly declared finite movement graph and
+its descriptor's fleet cap.
 Its pullout, direct service-to-service, via-depot and pullin modes have
 fixed leg times and specified depot charging gaps. Services may be assigned
 to any compatible complete path in this graph; charging allocations within
@@ -61,12 +62,11 @@ not calibrated market behavior, a strategic pricing equilibrium or an ML
 experiment.
 
 \subsection{What establishes the strict separation}
-The physical upper comes from a newly reconstructed rational charging
-allocation on selected routes. It passed an independent exact physical
-replay, including every service, movement, battery bound, shared connector
-and full terminal inventory. A separate sign-constrained rational dual
-certificate proves its charging optimum on those routes. That conditional
-optimality is not promoted into a global planning certificate.
+The physical upper is a rational charging allocation on selected routes,
+independently replayed against every service, movement, battery bound,
+shared connector and full terminal inventory. A separate rational dual
+certificate establishes its charging optimum conditional on those routes,
+not global fleet optimality.
 
 A different strictly admitted physical response has a higher nonlinear
 planning cost but a lower bill at this incumbent's fixed marginal prices.
@@ -78,7 +78,8 @@ load is not a physical daily dispatch; the mixture upper is not asserted
 to be the global hull optimum.
 
 The missing global step is supplied by a new physical branch proof.
-An exact one-bus obstruction proves that at least two buses are needed.
+An independently reconstructed minimum-fleet obstruction rules out one bus
+within the declared movement graph.
 For every fleet with at least three buses, the vehicle fee and only the
 linear mandatory-service-energy term already exceed 477.82; omitted
 movement consumption and quadratic supply cost are nonnegative. These
@@ -86,97 +87,41 @@ facts permit searching the two-bus physical domain while covering every
 other fleet count separately. They do not exclude larger-fleet components
 from arbitrary hull mixtures or from response problems at other tariffs.
 
-The search produced a 303-node binary tree using 353 native calls.
-Each branch retains both values of an original movement-selection binary.
-Native multipliers and tangent loads are only proposals: exact signed
-row multipliers with finite-box residual compensation certify node lowers,
-and exact positive contradictions certify infeasible leaves. A separate
-coverage checker reconstructed the original semantic model and checked
-all 303 nodes, every inherited branch domain, and the higher-fleet floor.
-It returned complete coverage and an exact global physical lower strictly
-above the separately admitted hull upper. A subsequent bounded refinement
-retained this partition and all 152 original frontier identities, adding
-72 nodes with 102 new native calls. New bounds were checked under their
-inherited branch domains, while source-bound old bounds remained valid on
-every retained or unresolved subtree. The independent refinement checker
-returned complete base coverage and the tighter physical interval in
-\eqref{eq:publicbounds}, meeting its prospectively fixed $10^{-4}$ width
-target. The outward interval width is at most $10^{-6}$; equality of the
-exact bounds is not claimed. Thus the conclusion follows
-from rational bounds and exhaustive coverage, not a native OPTIMAL status,
-a finite plan bank or a small reported solver gap. The tree lower applies
-to physical $D_{15}$; it is not a lower bound on $\CH_{15}$.
+Binary branching retains both values of each selected movement variable.
+For every fringe region, exact tangent planes, signed row multipliers and
+finite-box residual compensation give a valid lower; an infeasible region
+requires an exact positive contradiction. Independent semantic reconstruction
+and complete branch coverage make these bounds exhaustive. A bounded
+refinement retains the original partition and strengthens its leaves under
+their inherited decisions, yielding \eqref{eq:publicbounds}. The outward
+physical interval has width at most $10^{-6}$, but equality of the exact
+bounds is not claimed. Appendix~\ref{app:certificates} gives the checkable
+algebra and Appendix~\ref{app:publichistory} records the search and
+qualification stages. This is a global physical lower, not a hull lower;
+a native OPTIMAL status, finite plan bank or small solver gap would not
+establish it.
 
 \subsection{Stability to the vehicle fee}
-The strict separation is not confined to the particular fee100. Change only
-the used-bus fee to $f=100+\tau\ge0$, leaving physics and the supply objective
-fixed. Let $L_2$ be the certified original physical lower, $U$ the admitted
-mixture upper and $L_3=300+A$ the verified mandatory-energy floor for fleets
-with at least three buses. The global bound $L_2$ is also valid on the
-exactly-two-bus subset. Both admitted mixture components use exactly two
-buses, so the mixture objective shifts by $2\tau$. Consequently
-\begin{equation}\label{eq:feestability}
- D_f-\CH_f\ \ge\
- \min\{L_2-U,\ L_3-U+\tau\}.
-\end{equation}
-The second term follows from $Nf+A\ge3f+A$ for $N\ge3$ and $f\ge0$;
-it would not follow by shifting an arbitrary higher-fleet bound by $3\tau$.
-Thus every $f\ge100$ retains the original positive lower bound in
-\eqref{eq:publicbounds}. A separate exact arithmetic calculation, checked
-by an independently implemented interval intersection, also certifies the
-open sufficient region $f>100+U-L_3$. The exact rational endpoint is retained
-in the accompanying result packet. This is a sufficient certificate using
-a fixed mixture, not the maximal fee interval or a claim that equality at
-its endpoint restores support. It changes one economic parameter; it does
-not establish robustness to losses, battery capacity or station resources.
+Holding physics and the supply objective fixed, every used-bus fee
+$f\ge100$ retains the positive gap guarantee in \eqref{eq:publicbounds}.
+Both admitted mixture components use two buses, so their fee shift cancels
+that of the two-bus lower; a separate nonnegative-fee floor covers larger
+fleets. An independently checked exact interval calculation also gives an
+open sufficient range below 100. Appendix~\ref{app:publicfee} gives the
+derivation and endpoint qualifications. This varies one economic parameter,
+not losses, battery capacity or station resources.
 
-\subsection{Evidence history and limitations}
-Earlier unsuccessful stages remain part of the reproducibility record.
-They motivate the distinct certificate steps but are not retrospectively
-credited with the final result.
-\begin{center}
-\begin{tabular}{p{0.30\textwidth}p{0.62\textwidth}}
-\toprule
-Stage & Admitted conclusion and limit\\
-\midrule
-Native integer planning & Floating objective near 441.532912, but the raw
-candidate failed strict physical admission.\\
-First fixed-route recovery & Exact multiplier-sign failure; no physical
-upper or global price check was admitted by that attempt.\\
-Rational primal and dual & New exact physical witness and fixed-route
-charging optimum; global fleet optimality remained separate.\\
-Full-graph posted-price query & Exact LP response lower and regret upper;
-raw native MIP optimum failed strict admission.\\
-Fixed-route price witness & New strict physical deviation and a checked
-mixture upper; this stage alone did not prove a global gap.\\
-Physical tree and final checker & Complete physical lower strictly above
-that source-bound mixture upper; positive global gap certified.\\
-Retained-partition refinement & All 152 original frontier identities retained;
-72 new nodes and 102 new calls narrow the physical interval to width at most
-$10^{-6}$, without a new hull lower.\\
-\bottomrule
-\end{tabular}
-\end{center}
-Each new physical point was admitted once; source-bound qualified witnesses
-were transferred without repeating their physical replay. The original tree
-qualification passed 39 exact controls without a backend call; the distinct
-refinement interface qualification passed 24 new checks. Its search,
-complete coverage audit and resource closure are distinct from scientific
-optimality: the result certifies a separation, not either exact optimum.
-
-An earlier continuous energy-flow relaxation supplied the independently
-valid lower $434.17\le\CH_{15}$; it is not asserted to equal the complete-
-fleet hull. It remains a hull lower, whereas the new branched lower is
-physical only. The initial flat-tariff model also remains a separate
-comparison: its linear objective has identical physical and hull values,
-with exact outward depot-15 bounds $[404.92,408.54]$. Depot 16 has an
-exact flat lower 414.39 and a numerical upper witness, so that comparison
-is mixed evidence, not a second nonlinear sign certificate.
-
-The first sign certificate gave a downward exact-difference display
-$0.008790$; the later endpoint bound in \eqref{eq:publicbounds} supersedes
-that headline without replacing its evidence. The physical value is now
-tightly enclosed, but the hull optimum and exact gap remain unknown.
+\subsection{Interpretation and limitations}
+Classical native planning already found an objective near 441.532912;
+the contribution of the certificate chain is exact admission and exhaustive
+coverage, not a better heuristic objective or an ML advantage. Earlier
+failed physical screens and multiplier recovery remain failures in
+Table~\ref{tab:publichistory}; later certificates do not relabel them.
+The earlier continuous relaxation's valid hull lower $434.17$ remains
+distinct from the branched physical lower. Appendix~\ref{app:publichistory}
+also separates flat-tariff comparisons, internal qualifications and the
+new portable retained-evidence check. The physical value is tightly
+enclosed, but the hull optimum and exact gap remain unknown.
 One timetable with synthetic energy and economic assumptions cannot
 estimate prevalence, operating savings or welfare effects in bus systems.
 The result extends the analytical possibility to this fully specified

@@ -81,3 +81,92 @@ witnesses and mixture admission have separate checks and source-bound
 provenance. These are internal independent implementations and reviews;
 they are not external replication or a claim that the declared physical
 model is an empirically calibrated transit system.
+
+\subsection{Fee-only stability of the certificate}\label{app:publicfee}
+Change only the used-bus fee to $f=100+\tau\ge0$, leaving physics and
+the supply objective fixed. Let $L_2$ be the current certified nominal-fee physical
+lower, $U$ the admitted mixture upper and $L_3=300+A$ the verified
+mandatory-energy floor for fleets with at least three buses. The global
+bound $L_2$ is valid on the exactly-two-bus subset. Both admitted mixture
+components use exactly two buses, so their fixed mixture shifts by
+$2\tau$. Consequently
+\begin{equation}\label{eq:feestability}
+ D_f-\CH_f\ \ge\
+ \min\{L_2-U,\ L_3-U+\tau\}.
+\end{equation}
+The second term follows from $Nf+A\ge3f+A$ for $N\ge3$ and $f\ge0$;
+it would not follow by shifting an arbitrary higher-fleet bound by $3\tau$.
+Thus every $f\ge100$ retains the positive guarantee in
+\eqref{eq:publicbounds}. A separate exact arithmetic calculation, checked
+by an independently implemented interval intersection, certifies the open
+sufficient region $f>100+U-L_3$. Its exact rational endpoint is retained in
+the result packet. This uses a fixed mixture and transferred bounds; it is
+not the maximal fee interval or a claim that equality at the endpoint
+restores support. It establishes no robustness to physical-parameter changes.
+The historical interval calculation used the earlier positive lower bound.
+Its endpoint depends on $U,L_3$, not the magnitude of $L_2-U$ once positive.
+Replacing $L_2$ by the refined nominal-fee bound therefore preserves that
+endpoint and strengthens the guarantee for $f\ge100$ algebraically; it
+does not represent a second interval computation.
+
+\subsection{Retained evidence history}
+\label{app:publichistory}
+Table~\ref{tab:publichistory} separates native proposals, physical admission
+and complete bounds. Earlier failures remain part of the record and are
+not credited with later scientific conclusions.
+The original search produced a 303-node binary tree using 353 native calls.
+An independent semantic coverage check verified every node, inherited
+branch domain and higher-fleet floor, proving a global physical lower
+strictly above the admitted hull upper. The later bounded refinement kept
+all 152 frontier identities, added 72 nodes with 102 new native calls, and
+checked new bounds under their inherited domains. Retained old bounds
+remained valid on every unresolved subtree. Complete base coverage met
+the prospectively fixed $10^{-4}$ physical-width target; the outward
+interval in \eqref{eq:publicbounds} has width at most $10^{-6}$, without
+claiming equality of its exact bounds.
+
+Each new physical point was admitted once within the production chain;
+source-bound qualified witnesses were then transferred without repeating
+their replay. The separate portable verification subsequently rechecked
+both complete witnesses in one fresh process. Original tree qualification
+passed 39 exact controls without a backend call; the distinct refinement
+interface qualification passed 24 new checks. Search, complete coverage,
+resource closure and scientific optimality remain separate obligations.
+The result certifies a separation, not either exact optimum.
+
+An earlier continuous energy-flow relaxation gave the valid hull lower
+$434.17\le\CH_{15}$, not an asserted exact hull value. The initial
+flat-tariff comparison has a linear objective and therefore identical
+physical and hull values, with exact outward depot-15 bounds
+$[404.92,408.54]$. Depot 16 has an exact flat lower 414.39 and a numerical
+upper witness: mixed evidence, not a second nonlinear sign certificate.
+The first sign certificate's downward exact-difference display was
+$0.008790$. The later endpoint bound in \eqref{eq:publicbounds} supersedes
+that headline without replacing its retained evidence. The hull optimum
+and exact gap remain unknown.
+\begin{table}[htbp]
+\centering
+\caption{Public-case evidence stages and their admission boundaries.}
+\label{tab:publichistory}
+\begin{tabular}{lp{0.62\textwidth}}
+\toprule
+Stage & Admitted conclusion and limit\\
+\midrule
+Native integer planning & Floating objective near 441.532912, but the raw
+candidate failed strict physical admission.\\
+First route recovery & Exact multiplier-sign failure; no physical
+upper or global price check was admitted by that attempt.\\
+Rational primal and dual & New exact physical witness and fixed-route
+charging optimum; global fleet optimality remained separate.\\
+Full-graph price query & Exact LP response lower and regret upper;
+raw native MIP optimum failed strict admission.\\
+Fixed-route price witness & New strict physical deviation and a checked
+mixture upper; this stage alone did not prove a global gap.\\
+Physical tree and checker & Complete physical lower strictly above
+that source-bound mixture upper; positive global gap certified.\\
+Partition refinement & All 152 original frontier identities retained;
+72 new nodes and 102 new calls narrow the physical interval to width at most
+$10^{-6}$, without a new hull lower.\\
+\bottomrule
+\end{tabular}
+\end{table}

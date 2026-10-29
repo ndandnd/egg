@@ -1,129 +1,78 @@
 \section{Relation to existing work}
-Electric-bus scheduling combines service assignment, battery feasibility and
-charging access. Grid-aware multi-depot scheduling, capacitated stations and
-scalable route-and-recharge generation are studied by
-\citet{wu2022grid,devos2024capacity,parmentier2023fleets}. These operational
-problems motivate our use of a complete fleet: charging feasibility is joint
-across the selected vehicle duties, especially at a shared connector.
-Our question concerns support over alternatives that can change both the
-number of used buses and the charging opportunities created by their duties.
-Integrated flow and set-partitioning models already combine assignments,
-battery feasibility and charging slots \citep{borndorfer2024integrated}.
-\citet{wu2022grid} already choose vehicle-to-trip assignments and charging
-under grid-related objectives; full overnight charging is among their
-assumptions. Endogenous assignments, full charging and grid-aware scheduling
-are therefore not, separately or together, sufficient novelty claims here.
+\paragraph{Operational coupling.}
+Grid-aware scheduling, capacitated charging and scalable route-and-recharge
+models already combine bus duties with charging access
+\citep{wu2022grid,devos2024capacity,parmentier2023fleets}; integrated flow
+and set-partitioning models also choose assignments and charging slots
+\citep{borndorfer2024integrated}. \citet{wu2022grid} include endogenous
+vehicle-to-trip assignment and full overnight charging. Integer bus-charging
+aggregation/disaggregation around auction bids is studied by
+\citet{zoltowskaLin2021}, while \citet{wu2019gridinteractive} couple service
+planning to market clearing and distribution marginal prices in a bilevel
+model. Thus assignment, full charging and endogenous electricity prices are
+not sufficient novelty claims. We instead ask whether a fixed posted
+marginal tariff supports a complete fleet over alternatives that change
+both used-bus costs and duty-created charging opportunities.
 
-\citet{zoltowskaLin2021} formulate aggregation and disaggregation of bus
-charging around hourly auction bids using integer models. Their work is a
-precedent for discrete bus charging and market participation; our question
-additionally allows service assignments and used-bus costs to change under
-explicit terminal replacement-energy accounting. More directly,
-\citet{wu2019gridinteractive} describe bus service planning coupled to market
-clearing and distribution locational marginal prices in a bilevel framework.
-Our question is the support of complete physical fleets at a fixed posted
-marginal tariff, rather than a first coupling of bus operations to endogenous
-electricity prices.
+Transport and V2G are also established: \citet[Sections 2.1--2.2]{blatiak2022v2g}
+optimize commercial-fleet trip timing and charging against energy and
+balancing prices. The author manuscript of \citet[Section 2]{zhou2025v2g}
+chooses bus use, connections and partial charging/discharging under input
+purchase/export tariffs, including vehicle fees, deadheading, charging,
+export revenue and degradation, with full-depot inventory/overnight
+recharging. These materially overlap
+our physics; the manuscript's imperfectly extracted mathematical glyphs
+preclude detailed claims about its connector or terminal constraints.
+Our distinction is an exact cost-labelled threshold and own-load support
+classification, not richer V2G operations, first transport--V2G coupling
+or first use of spare buses for grid services.
 
-Price-support failure with indivisible operating decisions is established
-in electricity-market research. \citet{oneill2005} study prices in markets
-with nonconvexities; \citet{gribikHoganPope2007} discuss market-clearing
-prices and uplift. Convex-hull pricing provides the relevant convexification
-framework \citep{schiro2016,huaBaldick2017}. Linear-price support in
-decentralized problems with integralities is also studied through complete
-linear descriptions \citep{huembs2022complete}. We use this machinery; we do
-not present the support equivalence below as a new general theorem.
-Whole feasible participant schedules as columns and their fixed-price
-self-scheduling oracles also have established decomposition treatments
-\citep{andrianesis2022hull}. The complete-fleet unit ensures the right
-physical alternatives in this application; it is not new column-generation
-machinery.
-
-Exact EV flexibility aggregation is also established.
+\paragraph{Joint loads and vehicle cost.}
 \citet{mukhiAbate2023exact} characterize fixed-population charging polytopes
-using permutahedra, with prescribed availability and full departure charge.
+with prescribed availability and full departure charge using permutahedra.
 \citet{mukhiLohoAbate2025exact} give generalized-polymatroid representations
 and exact Minkowski aggregation for convex individual flexibility sets.
-Our distinction is the joint load--vehicle-cost frontier when service pairing
-and the number of used buses change. The load-only projection in our class
-is an interval, not a new nonconvex flexibility set. Fixed-matching interval
-aggregation and ordered matching are classical ingredients.
+\citet[Section II, Example 1]{altaha2024flexibility} likewise aggregate
+lossless bidirectional batteries with initial/final requirements.
+Our load-only projection is an interval, not a new nonconvex flexibility
+set. Theorem~\ref{thm:sharedprojection} instead retains every attainable
+load--vehicle-cost layer as successor matching and fleet size change;
+Corollary~\ref{cor:sharedsupport} tests hull-optimum physical attainment.
+Fixed-matching interval aggregation and ordered matching remain classical.
+The V2G thresholds and capped paid-idle elimination concern this restricted
+class with shared gross throughput; persistence/restoration examples do
+not establish a first signed-aggregation or V2G support result.
 
-Bidirectional charging and transport decisions have also been combined
-previously. \citet[Sections 2.1--2.2]{blatiak2022v2g} optimize commercial
-fleet trip timing and charging against energy and balancing-service prices.
-The public author manuscript of \citet[Section 2]{zhou2025v2g} jointly
-chooses bus use, trip connections and partial charging/discharging under
-input purchase and export tariffs. Its objective includes vehicle fees,
-deadheading, charging, export revenue and degradation, with full-depot
-inventory and overnight recharging described in the model and case study.
-These features materially overlap our physical setting. Our comparison
-uses the author manuscript; imperfectly extracted mathematical glyphs do
-not justify detailed claims about its connector or terminal constraints.
-The distinction is our exact cost-labelled threshold and own-load support
-classification, not a richer operational V2G formulation.
-Neither coupling transport to V2G nor using spare buses for grid services
-is a novelty claim here.
-
-Signed aggregate flexibility is established as well.
-\citet[Section II, Example 1]{altaha2024flexibility} model lossless
-bidirectional batteries with initial and final energy requirements and
-aggregate a fixed population through Minkowski sums. Our V2G extension
-instead classifies the joint load--fleet-cost frontier created by successor
-matching and a shared gross-throughput budget. Its thresholds and paid-idle
-elimination argument concern that restricted physical class; the
-persistence and restoration examples illustrate the classification, rather
-than establishing a first signed-aggregation or V2G price-support result.
-
-Lossy storage also has exact coordinate reformulations.
+\paragraph{Common losses.}
 \citet[Theorems 1--3]{altahaBitar2024lossy} establish a piecewise-affine
-grid-power/SOC bijection, a convex SOC feasible set for a single store,
-and sufficient monotonicity conditions for a convex reformulated objective.
-Our common-loss result does not claim these transformations or convexity
-conditions as new. It combines service-dependent vehicle counts and
-successor choices with shared gross connector use to describe the efficient
-joint early-load, terminal-load and vehicle-cost envelope. Its finite
-piecewise description is conditional on the stated common-window model,
-and excludes dominated points only under explicitly monotone economics.
+grid-power/SOC bijection, convex single-store SOC feasibility and sufficient
+monotonicity conditions for convex reformulation. We do not claim these
+transformations or conditions as new. Theorem~\ref{thm:lossyfrontier}
+combines service-dependent vehicle counts, successor choices and shared
+gross connector use in an efficient joint early-load, terminal-load and
+vehicle-cost frontier with at most two segments per cardinality. Common
+windows and monotone economics are essential to discarding dominated
+points while preserving planning values.
 
-Aggregation must specify who owns the aggregated decisions. The classical
-perspective of \citet{starr1969} and dispatchable-demand results of
-\citet{hreinsson2021} explain why aggregate nonconvexities can become small.
-Our replication calculation instead isolates a distinction between a
-planning-value gap, one owner's absolute fixed-price incentive and the
-incentives of independently reserved service pairs. The explicit rates do
-not contradict approximate aggregation results.
+\paragraph{Support, lost opportunity cost and ownership.}
+Nonconvex pricing and uplift are established
+\citep{oneill2005,gribikHoganPope2007}; convex-hull pricing supplies the
+convexification and lost-opportunity-cost framework
+\citep{schiro2016,huaBaldick2017}. Complete linear descriptions address
+support with integralities \citep{huembs2022complete}, and whole-participant
+schedule columns with fixed-price self-scheduling oracles have established
+decomposition treatments \citep{andrianesis2022hull}. Our support equivalence
+and complete-fleet unit apply these tools, not new pricing duality or
+column-generation machinery. Classical aggregation
+\citep{starr1969,hreinsson2021} explains small aggregate nonconvexities;
+our replication calculation distinguishes the planning gap, a composite
+owner's absolute fixed-price incentive and independently reserved pairs'
+incentives. Its rates do not contradict approximate aggregation results.
 
-The comparison concerns what can be decided from an explicit frontier,
-rather than whether assignments or storage can be optimized at all:
-\begin{center}
-\small
-\begin{tabular}{p{0.40\textwidth}p{0.52\textwidth}}
-\toprule
-Established viewpoint & Decision supplied by this classification\\
-\midrule
-Operational fleet models choose assignments and charging for a specified
-objective \citep{wu2022grid,borndorfer2024integrated,zhou2025v2g}.
-& Theorem~\ref{thm:sharedprojection} gives every attainable load--vehicle-cost
-layer in the stated two-batch class; Corollary~\ref{cor:sharedsupport}
-tests physical attainment of its hull optimum.\\
-Fixed-population flexibility represents aggregate battery loads
-\citep{mukhiAbate2023exact,altaha2024flexibility}.
-& Changing successor matches and vehicle counts changes operating-cost
-layers even when the load-only set is an interval. The thresholds retain
-this distinction.\\
-Lossy-storage reformulation relates grid power and inventory
-\citep{altahaBitar2024lossy}.
-& Theorem~\ref{thm:lossyfrontier} reduces the assignment-dependent efficient
-joint load--cost set to at most two segments per cardinality, preserving
-planning values under monotone supply costs.\\
-\bottomrule
-\end{tabular}
-\end{center}
-These are restricted structural decisions, not claims of a richer operational
-model or faster solution of general bus scheduling. Standard matching
-integrality, value-function convexity and price-support duality remain the
-underlying tools. The capacity, fee and equipment examples explain the
-classification's consequences; the separately certified public instance
-establishes existence within its declared movement graph, rather than
-extending the closed-form theorem to arbitrary timetables.
+The contribution is a physical classification under explicit assumptions,
+not a richer operational model or faster general scheduling algorithm.
+Matching integrality, value-function convexity and price-support duality
+remain the underlying tools. Capacity, fee and equipment examples explain
+the classification; the public certificate establishes existence within
+its declared movement graph, without extending the closed-form theorem
+to arbitrary timetables.

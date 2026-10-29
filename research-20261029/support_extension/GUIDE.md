@@ -131,6 +131,8 @@ The manuscript replicates service pairs and charging resources while scaling sup
 
 If each owner instead controls one service pair with reserved connectors, each owner's regret is at most 20/n. These individual incentives vanish. Per-bus and relative whole-fleet regret also vanish in this family. Thus approximate aggregate convexity does not by itself answer the question about an absolute deviation gain for one owner controlling the aggregate.
 
+There is a useful qualification. For a fixed family with bounded load diameter R, supply gradient Lipschitz constant L, and strong-convexity constant μ bounded away from zero, a physical planner's own-price regret is at most Δ+LR√(2Δ/μ). It therefore vanishes as Δ does. This follows from classical convex analysis; it is not a new pricing theorem. Our replication changes the family: load diameter grows with n while supply curvature decreases as 1/n. Those changing constants allow the absolute whole-owner incentive to persist. At the hull price, the fleet's regret is exactly Δ minus the supply Bregman difference; moving to the physical plan's own price changes that allocation.
+
 Reserved resources make unilateral deviations well defined. Separate owners sharing an unallocated connector need an explicit rights or congestion model before their deviation sets can be assumed independent.
 
 Source: `paper/latex/exact_results.tex`.
@@ -145,6 +147,8 @@ For the nonlinear depot-15 ideal model, the new exact certificates establish
     Δ ≥ 0.390674.
 
 These are conservative outward displays of exact rational certificates. The gap shown is a valid lower bound from subtracting an upward hull endpoint from a downward physical endpoint. The hull upper comes from a feasible mixture of two separately admitted physical plans. An independent checker first verified a complete 303-node binary tree, then accepted a refinement with 72 new descendants and all original regions retained. A qualified physical floor excludes fleets of three or more buses. The physical optimum is now enclosed within 0.000001 model units. Its exact value and the exact hull optimum remain unknown.
+
+A separate local portable package has now verified the complete retained result in one fresh standard-library Python process, with no solver. It rechecked both physical plans, the fixed mixture, fresh fleet exclusions and one combined 375-node proof tree. The complete construction/check took about 33 seconds. This is author-run verification on the same host, not external replication; the bundle remains local pending redistribution review. The manuscript's certificate index gives the exact input/source identities and verification recipe.
 
 A cheaper fixed-price response had already proved that the protected incumbent was unsupported at its own prices. That alone did not settle global support. The new strict separation now proves that no globally optimal physical fleet in this declared model has own-price support, under the stated price/duality qualifications. The admitted physical upper remains a feasible plan, not an assertion that its exact global optimality is known.
 
@@ -230,7 +234,7 @@ The continuous theorem has an independent proof review. Ten prospectively fixed 
 2. **Why are 97, 94.8875 and 13 different?** They are respectively physical optimum, convexified planning optimum and fixed-price deviation gain at the physical optimum's marginal price.
 3. **Can randomizing daily schedules implement CH at the same expected cost?** Generally no. CH evaluates supply cost at the mean load; random daily operation incurs the mean of physical supply costs.
 4. **Does one large regret at a solver price prove no supporting price exists?** Not with nonunique prices. Support existence requires considering every admissible candidate price, or an appropriate certificate over that set.
-5. **Does Δ→0 make all incentives vanish?** Not necessarily for absolute whole-owner regret. The replicated example separates it from vanishing individual and per-bus incentives.
+5. **Does Δ→0 make all incentives vanish?** With uniformly bounded load range and smoothness, and uniformly positive strong convexity, planner own-price regret does vanish. Our replication changes these constants as the fleet grows, separating persistent absolute whole-owner regret from vanishing individual and per-bus incentives.
 6. **Has the public case established support failure?** Yes within its finite declared movement graph and charging windows: an independently certified physical lower strictly exceeds a feasible hull upper. Unlisted travel/access alternatives could change the conclusion. The small certified gap does not establish prevalence or operational magnitude.
 7. **Did larger neural capacity help?** Yes in the new pilot. It still did not beat the best fitted classical baseline, and the old GNN remains a separate unresolved diagnosis.
 8. **If a new physical plan beats the old CH, is the enlarged model supported?** Not necessarily. Compare the enlarged model's D with its own CH; both may decrease. The verified fee-8 extension has D93 below old CH94.8875, yet new CH92.95 and positive gap0.05.

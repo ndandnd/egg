@@ -37,7 +37,8 @@ two line segments per matching cardinality, permitting a finite reduction
 for coordinatewise nondecreasing supply objectives. Exact examples and parameter
 regions distinguish useful flexibility from mere enlargement of the duty set.
 The matching and price-support machinery is classical; the contribution is
-the complete physical classification under these explicit assumptions.
+the exact lossless load--cost classification and common-loss efficient
+frontier under these explicit assumptions.
 For one public 37-service timetable, an independently checked rational
 branching certificate separates every fleet in its declared movement graph from a feasible
 convexified plan, proving a conservative positive gap of at least $0.390674$
@@ -94,155 +95,78 @@ values, with at most two pieces per cardinality. This preserves physical and
 convexified planning values for monotone supply costs, while deliberately
 retaining a narrower scope than the full lossless support classification.
 
-The heterogeneous class makes the assignment set exhaustive under explicit
-timing and resource assumptions. A two-service specialization provides an
-accessible illustration and an exact connector-capacity and vehicle-fee
-characterization. We then distinguish two kinds of enlargement. Additional
-energy-consuming movements under unchanged equipment and charging access
-cannot improve either the physical or hull value in the stated construction.
-An added battery type changes the equipment set and can restore support. Its
-fee matters: a newly admitted plan cheaper than the old hull optimum need
-not restore support because the enlarged hull can improve further. Finally,
-an exact replication calculation shows why a small planning gap and a small
-whole-owner incentive are different statements.
-
-These are application-specific results in a synthetic model. We do not
-claim that nonconvex demand or convex-hull price support is a new concept.
-The public timetable evidence supplies a separate exact certificate beyond
-the two-batch class. A feasible convexified value below an independently
-verified lower bound for every physical fleet in the declared movement graph
-proves a positive gap for the 37-service model. The separation is small; practical magnitude and
-prevalence remain separate research questions.
+The two-batch assumptions make the assignment set exhaustive. A separate
+37-service public timetable supplies an exact existence certificate beyond
+that class: a feasible complete-plan mixture lies below a checked lower
+bound on every physical fleet in its declared movement graph. The energy
+and economic coefficients are synthetic, so this establishes a mechanism,
+not operational prevalence. Equipment and ownership examples explain why
+additional alternatives and aggregate planning accuracy must be interpreted
+carefully; their complete analyses are retained in the appendices.
 
 \input{related_work}
 \input{framework}
 \input{heterogeneous}
 \input{v2g}
 \input{lossy}
-\input{construction}
-\input{expansion}
-\input{ownership}
 \input{public_case}
+\input{consequences}
 
 \section{Implications and limits}
-The examples identify a conditional failure of a specified posted-tariff
-institution. The supply function is convex; the indivisibility lies on the
-fleet side. Continuous energy decisions and terminal energy accounting do
-not eliminate that indivisibility. Conversely, an indivisible fleet need
-not lack supporting marginal prices: the exact parameter regions include
-zero-gap cases, and an added battery choice can physically implement a
-supported load. The correct claim is a possibility with characterized
-conditions, not inevitable failure of marginal tariffs.
+The obstruction concerns one posted-tariff institution with a complete-fleet
+participant. It is a possibility under characterized conditions, not an
+inevitable failure of marginal tariffs, a strategic tariff-reset equilibrium
+or a convergence claim. Convex-hull pricing and general support duality are
+established theory. The physical contribution is the explicit assignment-
+dependent frontier under the stated timing, resource and loss assumptions.
 
-The expansion results are deliberately explicit about resource changes.
-The movement-only stability theorem preserves charging access, equipment,
-service requirements and nonnegative movement consumption. It says nothing
-about a new charging location, regenerative energy, altered travel energy,
-service cancellation or a more capable battery. Those changes can alter the
-relevant energy projection. The equipment result studies one such change
-directly rather than describing an arbitrary projected point as an omitted
-feasible duty of the original model.
-
-The participant definition is equally consequential. A whole-fleet deviation
-can replace every service assignment. Independent operators need compatible
-resource rights before their unilateral alternatives are well defined.
-The replication theorem uses reserved service pairs and connectors to make
-that comparison exact. It does not infer incentives for independently owned
-buses competing for the same unreserved depot connector. Heterogeneous fixed
-service pairs cannot generally reproduce the efficient complete-crossmatching
-outcome by relabeling; that step in the replication comparison relies on
-identical services.
-
-All analytical models omit stochastic delays, battery degradation,
-temperature effects, charging taper and switching time. Monetary and supply
-coefficients are synthetic. The positive-gap neighborhood admits a reserve,
-constant losses and one connector, but remains conditional on those
-abstractions. The analytical formulas and exact implementation comparisons
-support the declared mechanisms, not estimates of an operator's savings or
-an assessment of a deployed market design.
-
-The two-batch theorem allows fixed shared charging resources but assumes
-two simultaneous service batches and no travel.
-The public timetable has varied service times, movement and waiting energy,
-and one shared connector, so it is outside that theorem's scope. Its exact
-branching certificate establishes the same qualitative obstruction without
-claiming that the two-batch threshold formula applies. Extending the readable
-projection to varied timing and movement remains open; one internally checked
-case cannot establish operational prevalence or economically significant loss.
-The public movement graph also fixes leg times and charging access. Its
-certificate is not automatically a certificate for arbitrary retimed or
-additional movement modes outside that declared opportunity set.
+The analytical models omit stochastic delays, degradation, temperature,
+taper and switching time. Common windows and efficiencies enable the finite
+reduction; arbitrary timetables, vehicle-dependent losses and negative-price
+economics require further analysis. The nominal reserve/loss neighborhood
+does not validate those abstractions empirically. The public case uses varied
+times and movement energy, but remains charge-only within fixed declared
+movement modes and charging windows. Its certificate does not prove
+completeness for arbitrary retiming or unlisted access. Synthetic coefficients
+and one base timetable leave calibrated magnitude and prevalence open.
 
 \section{Conclusion}
-An electric-bus fleet can lack marginal-price support even when charging is
-continuous and every used battery is fully replenished. For heterogeneous
-two-batch services with allowed successor matchings and positive vehicle fees,
-cardinality-matching thresholds determine exactly which hull-optimal loads
-are physically supported. Bidirectional charging preserves that structure
-with different thresholds: it can leave a positive gap intact or eliminate
-it. Gross connector time and terminal replacement remain binding even when
-net exports are allowed. With common losses, a joint two-load description
-replaces the scalar frontier; its finite efficient segments retain an exact
-planning reduction for monotone supply objectives. The two-service model shows how connector
-capacity, vehicle fees and battery options change that answer.
-Energy-consuming movement additions preserve the
-obstruction under unchanged resources; a sufficiently capable battery can
-remove it at an appropriate fee. Neither a cheaper newly admitted plan nor
-a vanishing planning gap alone resolves the relevant incentive question.
-The public case provides an exact existence certificate in a more detailed
-declared model, while leaving practical prevalence and calibrated value open.
+Service assignments change the joint load--vehicle-cost set even when its
+load-only projection is simple. For the stated common-window class,
+cardinality-matching values determine an exact lossless support classification
+and, with common losses, a finite efficient frontier for monotone planning.
+Gross connector use and full replacement energy are essential to that
+description. A separately checked public-timetable certificate establishes
+the same qualitative obstruction in a richer declared charge-only model.
+These results identify when continuous charging flexibility does and does
+not remove assignment-induced price-support failure, while leaving empirical
+significance and more general scheduling classes open.
 
 \section*{Evidence and reproducibility}
-The analytical claims concern the stated ideal models. Exact rational
-implementation comparisons use independently formulated physical enumeration
-and analytical formulas; agreement is an internal cross-check, not external
-replication. The connector/fee qualification contains twenty fixed cases,
-and the support-extension qualification fourteen fixed cases, with explicit
-boundary and corruption controls. These cases qualify implementations;
-the proofs establish the continuous-domain statements. The heterogeneous
-adequate-resource specialization matched independent raw SOC enumeration
-and threshold formulas on all eight fixed cases; eighteen negative controls
-and a smoke anchor passed, including tie and continuous-response checks.
-The fixed single-shared-connector extension separately matched raw SOC
-enumeration and serial witnesses against the sorted-threshold formulas on all
-fourteen prospectively fixed cases, with twenty-four negative controls and a
-smoke anchor passing. These include physical collinear-threshold and clipped
-lower-boundary optima, assignment ties and response continua. Both are internal
-qualifications, not external replication; the eight-case run concerns the
-separate $n$-connector resource policy. The common-loss extension matched
-independent raw inventory/sign-polytope enumeration on all ten fixed
-rational cases, retaining every assignment and infeasible cardinality.
-Its checks include all projected vertices, exact full-segment attainment
-and physical replay, rather than a sampled energy grid. The hand-anchor
-control overlaps one case and is not an additional independent observation.
-Archived outcome and
-resource records distinguish exact arithmetic from tolerance-qualified
-native computations. This evidence update reads stored qualification results
-without rerunning the scientific calculations. The public positive-gap result
-uses a source-bound feasible mixture and an independently reconstructed exact
-303-node coverage certificate, with 353 classical native proposal calls,
-followed by a retained-partition refinement with 72 new nodes and 102 new
-calls. The latter tightly encloses the physical value without supplying a
-new hull lower.
-Neither a finite plan bank nor a native solver status alone establishes that
-conclusion. Failed strict replays and earlier unsuccessful certification stages
-remain archived with their costs. This verification is internal, not external
-replication; the public timetable's energy and economic assumptions are synthetic.
-We also packaged the retained evidence with a standalone standard-library
-Python checker. One fresh isolated process rechecked both complete physical
-points, the fixed mixture, the all-fleet exclusions and the combined
-375-node proof tree, reproducing the stronger lower bound without a solver.
-The complete local construction-and-check phase took about33 seconds.
-This author-run command qualification is not an independent external
-replication. Source/data redistribution rights remain under review; the
-package is currently a local review artifact, not a claimed public release.
+Independent physical enumeration qualifies the finite analytical
+implementations; constructive proofs establish their continuum statements.
+Appendix~\ref{app:evidence} preserves all case/control denominators and
+their scopes. The public result uses classical native proposals followed by
+exact physical admission and rational coverage certificates. One fresh
+standalone standard-library Python process rechecked the retained complete
+proof without a solver in a construction-and-check phase of about 33 seconds.
+This is internal author-run verification, not external replication. The
+certificate index binds sources, inputs, exact constants and command.
+Earlier failures and costs remain archived. The exported package stays local
+pending redistribution review; no public release or substantive learning
+contribution is claimed.
 
 \appendix
 \input{adequate_resources}
+\input{construction}
+\input{expansion}
+\input{ownership}
 \input{heterogeneous_proofs}
+\input{v2g_proofs}
 \input{proofs}
 \input{certificates}
 \LossyProjectionProofs
+\input{evidence_details}
 \bibliographystyle{plainnat}
 \bibliography{references}
 \end{document}

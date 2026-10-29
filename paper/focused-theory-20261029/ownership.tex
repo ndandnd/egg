@@ -85,3 +85,54 @@ optima with $m=13$ and $m=14$ have whole-owner regrets 7 and 14,
 respectively. Neither the whole-owner calculation
 nor the reserved-pair calculation specifies an institution for unreserved
 shared chargers or strategic anticipation of a tariff reset.
+
+\subsection{Which uniform controls make a small gap informative?}
+The preceding example does not imply that planning error and incentives are
+unrelated. The selected price matters in the classical link between lost
+opportunity cost and duality gaps \citep{huaBaldick2017}. The following
+elementary convex-analysis bound makes the relevant uniform controls explicit;
+it is an explanatory consequence, not a new general pricing principle.
+
+\begin{proposition}[Gap and own-price regret under uniform curvature]
+\label{prop:regretbound}
+Let the projected complete-plan set $S=\{(u(x),c(x)):x\in\X\}$ be nonempty
+and compact, and let $K$ be its load projection, of diameter $R_K$.
+Suppose $F$ is differentiable, $\mu$-strongly convex and has
+$\Lambda$-Lipschitz gradient on a relative neighborhood of
+$\operatorname{conv}K$, where $0<\mu\le\Lambda$.
+Use one fixed Euclidean norm on its affine hull.
+For any physical planner optimum $x$, at $p=\nabla F(u(x))$,
+\[
+ \Delta\le r(x;p)\le
+ \Delta+\Lambda R_K\sqrt{2\Delta/\mu}.
+\]
+If loads lie in a proper affine subspace, gradients and norms can be taken
+tangentially: normal price components add the same amount to every bill.
+Economic price admissibility is a separate qualification.
+\end{proposition}
+\begin{proof}
+Let $(u^*,c^*)$ minimize $c+F(u)$ on $\operatorname{conv}S$ and put
+$q=\nabla F(u^*)$. Hull optimality and linear minimization give
+$V(q)=c^*+q\cdot u^*$. With the Bregman difference
+$B_F(u,u^*)=F(u)-F(u^*)-q\cdot(u-u^*)$, this yields the exact identity
+\[
+ c(x)+q\cdot u(x)-V(q)=\Delta-B_F(u(x),u^*)\ge0.
+\]
+Consequently $\|u(x)-u^*\|\le\sqrt{2\Delta/\mu}$.
+For this fixed plan, regret is the maximum of affine price functions with
+slopes $u(x)-u(y)$, so it is $R_K$-Lipschitz in price. Transfer from $q$ to
+$p$, use gradient smoothness and discard the nonpositive Bregman term to
+obtain the upper bound. The lower bound is the tangent inequality from
+Proposition~\ref{prop:support}.
+\end{proof}
+
+Uniformly bounded $R_K,\Lambda$ and a uniform positive lower bound on
+$\mu$ therefore make planner regret vanish as $\Delta\to0$. In our
+replication family, however,
+$\mu_n=\Lambda_n=1/(5n)$ and $R_{K,n}=10\sqrt2\,n$ in two-load
+coordinates. The displayed upper becomes $\Delta_n+40|\delta|$.
+Indeed the fixed-$q$ score gap is zero there, so retaining its Bregman
+term sharpens this to $40|\delta|$. The exact nonvanishing whole-owner
+regret is thus consistent with the bound. Arbitrary nonoptimal plans require
+their own excess $c(x)+F(u(x))-\CH$ in place of $\Delta$; nonsmooth supply
+or vanishing curvature needs a different argument.
