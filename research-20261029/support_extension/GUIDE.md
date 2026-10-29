@@ -295,7 +295,28 @@ frontier may change, and the common windows, fleet cap and scaling resources
 remain limitations. The proof was derived and checked independently; no
 numerical experiment is claimed.
 
+The obstruction also survives **strictly positive curvature in both charging
+periods**. Giving the added connections a small energy margin and the terminal
+charger spare capacity makes every perfect matching strictly feasible in the
+relevant resource inequalities. With a strongly convex separable objective,
+the exact gap becomes 9/(2K)+81/(4M)>0, where M is the construction's reference
+total. A continuity argument proves a positive gap in a sufficiently small
+admissible relative neighborhood of each fixed finite instance. This removes
+flat terminal cost and exact capacity saturation as explanations for that
+example. It gives no numerical radius, uniform-in-size guarantee, empirical
+road realization or perturbation certificate for the public timetable. The
+proof and its physical premises were checked independently.
+
 ## Study questions and answers
+
+A tempting computational shortcut also fails: interpolate the number of
+matched service pairs first, then apply the charging formulas as though that
+fractional fleet were physical. An independently derived one-pair example has
+true physical and hull values both equal to 7, yet this shortcut admits 6.75.
+The resource bounds combine incorrectly after averaging. This is a false gap
+created by a relaxation, not a real support failure. The exact compact baseline
+instead mixes the complete feasible endpoints and kinks supplied by the
+frontier theorem. It remains small without inventing fractional fleet physics.
 
 1. **Why impose full terminal replenishment?** To charge the modeled horizon for replacement energy rather than letting it consume free initial inventory. It does not make service assignments divisible.
 2. **Why are 97, 94.8875 and 13 different?** They are respectively physical optimum, convexified planning optimum and fixed-price deviation gain at the physical optimum's marginal price.

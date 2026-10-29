@@ -21,35 +21,25 @@
 \begin{document}
 \maketitle
 \begin{abstract}
-We characterize when a complete electric-bus fleet minimizes its operating
-cost and electricity bill at the marginal supply prices associated with
-its own load. For heterogeneous services in two simultaneous batches,
-a declared successor graph and fixed shared charging resources, we derive
-the exact joint load--vehicle-cost frontier with full battery replenishment.
-Cardinality-matching thresholds determine where a convexified optimum has
-a physical implementation. In this lossless class the load-only set is an
-interval; its discrete
-vehicle-cost layers cause the obstruction. A bidirectional extension accounts
-for gross connector throughput and signed electricity settlement. Vehicle-to-grid
-operation can preserve or remove a positive gap, and identical paid idle
-buses are redundant under a stated fleet cap. With common conversion losses,
-the efficient joint early/terminal load--cost frontier consists of at most
-two line segments per matching cardinality, permitting a finite reduction
-for coordinatewise nondecreasing supply objectives. Exact examples and parameter
-regions distinguish useful flexibility from mere enlargement of the duty set.
-The matching and price-support machinery is classical; the contribution is
-the exact lossless load--cost classification and common-loss efficient
-frontier under these explicit assumptions.
-For one public 37-service timetable, an independently checked rational
-branching certificate separates every fleet in its declared movement graph from a feasible
-convexified plan, proving a conservative positive gap of at least $0.390674$
-in the stated objective units. The physical value lies in the outward interval
-$[441.532912,441.532913]$; the hull optimum remains unknown.
-With a separately defined exact additive consumption law, fresh certificates
-and a dominance argument extend the positive gap to finite walks over the
-specified paired directed arcs and continuous waiting.
-Synthetic coefficients and ideal
-physics limit conclusions about operational prevalence or calibrated value.
+Service assignments change both an electric-bus fleet's charging opportunities
+and its vehicle cost. We characterize this joint physical frontier for
+heterogeneous services in two batches with common charging windows, a fixed
+successor graph and full battery replenishment. With common conversion losses
+and shared gross connector limits, one minimum-requirement matching value per
+cardinality determines an efficient early-load, terminal-load and vehicle-cost
+frontier with at most two segments per cardinality. It preserves physical and
+convexified planning values for coordinatewise nondecreasing supply costs; the
+lossless specialization gives an exact load--cost classification and
+own-marginal-price support criterion. The matching and price-support machinery
+is classical. Our physical reduction also has a precise limitation:
+edge-dependent compulsory transition consumption can retain a positive support
+gap on a complete assignment graph even when every perfect matching is feasible.
+The obstruction persists with strongly convex separable supply cost and in a
+relative open numerical neighborhood under fixed timing and access. Separately
+checked rational certificates establish a positive gap on one 37-service
+timetable under explicitly distinguished binary and exact-additive consumption
+models. These are model-specific existence results with synthetic coefficients,
+not evidence of operational prevalence or calibrated savings.
 \end{abstract}
 \section{Introduction}
 An electric-bus operator assigns mandatory services to vehicles and decides
@@ -68,54 +58,43 @@ Its participant is one operator controlling the complete fleet. It is not a
 strategic model in which that operator anticipates a new tariff after each
 alternative it considers.
 
-The connection between price support and convexification is established in
-nonconvex market theory. We develop its physical implications for a class of
-heterogeneous services in two simultaneous batches. Every assignment allowed
-by the declared successor graph is retained, with one fixed shared connector
-in each charging window.
-An exact joint energy--vehicle-cost projection reduces the complete fleet set to
-early-energy thresholds indexed by matching cardinality; standard matching
-convexity then identifies the hull and a precise support criterion. The
-energy-only feasible set is an interval; the relevant nonconvexity concerns
-its cost-labelled assignment layers. Full
-terminal replenishment is central: an initially full battery must not provide
-free net energy over a finite horizon. Every plan buys the same total service
-energy, yet its assignment changes \emph{when} that energy must be purchased,
-coupled with the fixed cost of a used bus.
+The difficulty need not be a complicated load-only feasible set. Assigning
+services to the same bus can impose an early recharge requirement while
+reducing the number of paid vehicles. A fixed-population charging aggregate
+does not retain that tradeoff. We identify a restricted physical class in
+which it can be described exactly: heterogeneous two-batch services, common
+charging windows and conversion efficiencies, a fixed successor graph, shared
+gross connector use and full terminal replenishment. A minimum-requirement
+matching at each cardinality suffices to construct the efficient joint
+energy--vehicle-cost frontier. Standard convexification then turns that
+physical description into planning and own-price support decisions. In the
+lossless specialization the full cost-labelled projection is available;
+with losses, dominated schedules are discarded only for monotone value
+objectives. Gross connector use counts both purchases and exports, and full
+terminal replenishment prevents free net use of initial battery inventory.
 
-Bidirectional charging changes this frontier through both available battery
-inventory and connector time. Charging one bus while discharging another
-does not cancel the time spent on a single connector: its resource is gross
-throughput. We derive the resulting signed-load thresholds and show exactly
-how the obstruction can persist or disappear. Under a total fleet cap,
-identical paid idle buses add no projected alternatives beyond those obtained
-by separating matched service pairs. This statement concerns the declared
-ideal model, not the value of spare buses in general V2G operations.
+We delineate why this reduction works. A common transition-energy task can
+be included because total energy stays fixed within a matching cardinality.
+Edge-dependent tasks break that property. A complete-graph construction
+admits every perfect matching yet retains a positive gap, even with strongly
+convex supply cost and strict feasibility margins. Its relative-neighborhood
+statement keeps the discrete topology, charging access and ideal common-window
+physics fixed. The example rules out several simple explanations for the
+obstruction without claiming generic routing hardness, exponential hull
+complexity or empirical robustness. V2G, paid idle fleets and ownership
+examples clarify further consequences; their complete arguments are retained
+in the relevant sections and appendices.
 
-Common conversion losses require keeping both early and terminal grid loads:
-net early energy alone hides the replacement energy lost through exports.
-We derive a finite efficient-frontier description using the same matching
-values, with at most two pieces per cardinality. This preserves physical and
-convexified planning values for monotone supply costs, while deliberately
-retaining a narrower scope than the full lossless support classification.
-The reduction also admits a common compulsory transition-energy task per
-matched pair. When that energy varies by edge, a small counterexample shows
-why minimum early recharge alone loses an efficient assignment: pairing
-can change total replacement energy as well as its timing.
-An explicit family then retains a positive support gap despite exponentially
-many efficient physical branches at a fixed fleet size. This boundary concerns
-physical alternatives, not exponential hull complexity or computational hardness.
-A further extension admits a complete assignment graph with every perfect
-matching physically feasible and preserves the same strictly positive gap.
-
-The two-batch assumptions make the assignment set exhaustive. A separate
-37-service public timetable supplies an exact existence certificate beyond
-that class: a feasible complete-plan mixture lies below a checked lower
-bound on every physical fleet in its declared movement graph. The energy
-and economic coefficients are synthetic, so this establishes a mechanism,
-not operational prevalence. Equipment and ownership examples explain why
-additional alternatives and aggregate planning accuracy must be interpreted
-carefully; their complete analyses are retained in the appendices.
+The public-timetable analysis serves a different purpose. Exact physical
+lower bounds and independently admitted complete-plan mixture uppers establish
+existence beyond the two-batch class. The original binary-consumption
+certificate concerns its declared movement graph. A separately defined
+exact-additive law, fresh target certificates and a dominance argument cover
+finite walks over specified paired arcs and continuous waiting. These distinct
+models share synthetic economics and do not establish empirical road
+completeness or operational prevalence. Small exact qualification suites and
+the original-model portable verifier address implementation trust, not
+generalization or third-party replication.
 
 \input{related_work}
 \input{framework}
@@ -185,10 +164,12 @@ contribution is claimed.
 \input{v2g_proofs}
 \input{proofs}
 \input{certificates}
+\clearpage
 \LossyProjectionProofs
 \TransitionEnergyProofs
 \input{exponential_transition}
 \input{complete_graph_extension}
+\input{strict_curvature_robustness}
 \input{evidence_details}
 \bibliographystyle{plainnat}
 \bibliography{references}

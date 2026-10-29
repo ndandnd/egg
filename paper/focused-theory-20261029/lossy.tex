@@ -125,6 +125,30 @@ and takes the smallest value. Hull planning solves
 These use standard matching and convex-optimization tools; the physical
 result is that the matching values suffice to construct their input.
 
+\begin{remark}[Interpolate complete plans, not fractional fleet physics]
+\label{rem:fractionalcardinality}
+Interpolating $r_m$ and substituting a continuous cardinality into
+\eqref{eq:lossyt} need not give this hull. Take one service per batch,
+$B=1$, $a=b=3/4$, $\alpha=1/2$, $\delta=1$, $K=2$, $H=3$ and $f=2$.
+Then $r_0=0$, $r_1=1/2$; the two complete efficient branches are
+\[
+ (E,3-E,4),\quad 0\le E\le3/2;\qquad
+ (E,3-E,2),\quad 1\le E\le3/2.
+\]
+Both physical and hull minima of $c+3E+L$ equal $7$. Instead put
+$r(m)=m/2$, $N=2-m$ and $c=2N$ for fractional $m$. The same formulas
+admit $m=1/2$, $E=1/4$, $L=3$, $c=3$, of cost $27/4<7$:
+the four lower bounds in \eqref{eq:lossyt} are $1/4,-1,0,1/4$,
+and the terminal formula gives $3$. Every actual mixture with mean
+cardinality $m$ requires $E\ge m$, so this point is fictitious.
+Taking maxima of resource bounds after averaging can relax the averages
+of complete feasible branches. Convexity of the matching sequence proves
+neither equality nor physical attainability of that shortcut. The finite
+generator formulation above retains the required coupling exactly.
+This example has no true physical--hull gap: the artificial reduction
+creates one.
+\end{remark}
+
 For differentiable $F$, a proposed hull point
 $(\bar u,\bar c)=\sum_j\lambda_j(u_j,c_j)$ has a short sufficient
 certificate: feasible weights, its exact objective and gradient

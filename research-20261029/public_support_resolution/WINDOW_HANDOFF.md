@@ -1,4 +1,55 @@
-# Current checkpoint — 29 October 13:21 UTC, window ACTIVE
+# Current checkpoint — 29 October 14:12 UTC, window ACTIVE
+
+No numerical or artifact worker remains. All public exact-energy target and
+comparison states are CLOSED as recorded below; comparison closeout fdb85682
+was pushed. Figure95224, PDF05 compile30265/render1730 all exited0. Do not poll
+old sessions, replay certificates, rerun figures or reuse output namespaces.
+Latest pushed control86d2b821; reviewed PDF05 source756871f6ba2609a3a9e918bbf8f196f8eadcbc6a.
+
+Closed accounting is now 23991.22 displayed CPU / 24924.75 elapsed-sum /
+23993.00 retained CPU. This includes the analytical figure11.77CPU/13.25wall
+(retained11.82) and PDF05 10.12CPU/10.68wall (retained10.16), each adopted once.
+Legacy conditional guard2546.091499549272 stays separate; tool/static/agent,
+visual review and remote presentation CPU remain UNKNOWN. No doublecount.
+
+PDF05 has50 pages, all actual PNGs inspected. Specific float, heading and
+word-spacing defects were repaired in NEW uncompiled source. Read
+paper/focused-theory-20261029/PDF_SNAPSHOT05_RECEIPT.json and PDF_QA05_* only.
+The learning deck is saved at state20 with36slides, all7 changed pages visually
+checked. Its page_id is page_8f9b3c1086e081918f946ab9bd0d715a; receipt is
+support_extension/PRESENTATION_RECEIPT04.json. No public sharing occurred.
+
+New strict-curvature construction and independent proof/TeX reviews PASS:
+support_extension/STRICT_CURVATURE_ROBUSTNESS_CANDIDATE.md, *_REVIEW.md and
+STRICT_CURVATURE_TEX_REVIEW.md. It makes all complete-graph matchings feasible,
+with positive curvature in BOTH load coordinates and gap9/(2K)+81/(4M)>0.
+Strict feasibility plus finite-branch continuity gives a relative open
+neighborhood for each fixed instance, no uniform radius/public-case transfer.
+Parent read and wired strict_curvature_robustness.tex; paper/guide reflect it.
+CONCEPTUAL_FOCUS_REVIEW06.md guided a shorter abstract/introduction centered
+on the physical common-loss sufficient-statistic reduction. This is not a
+new generic pricing/matching theorem or ML result. Sources remain uncompiled.
+
+Wu2019 full formulation remains unavailable: see WU2019_FULL_FORMULATION_REVIEW.md.
+One normal-browser check failed at the observation service; no paywall inference
+or bypass. Keep explicit preview-only uncertainty, no absence-based novelty.
+NEW_PUBLIC_V2G_DECISION.md defers a new signed-load public model rather than
+claiming an unfinished native candidate as evidence.
+
+Two agents now independently reason SOURCE ONLY about whether interpolating
+matching cardinality/r_m yields an exact compact common-loss hull or a strict
+relaxation. Check actual states and read their COMPACT_HULL_* notes only when
+complete. No computation/cohort/manifest is authorized by that question. Parent
+must independently assess any claim before integration. Literature agent idle.
+Next integrate useful mathematical finding if verified, freeze NEW PDF06
+source/control, compile/render once and inspect all pages; update learning deck
+only for substantive changes. No PDF06 source/control/command is frozen yet.
+Deadline18:10:45UTC; continue useful work. Draft NOT submission-ready, no
+central ML win. At deadline close owned work/report/delete window heartbeat.
+
+## Earlier checkpoint — retained history
+
+# Checkpoint — 29 October 13:21 UTC, window ACTIVE
 
 NEW public_exact_energy_comparison/attempt01 CLOSED_PASS, source6c2319480239c19c839eeff868a7fc018dacc217,
 control0688cc1a, closeoutfdb85682cf6476227d6fa8fb8258613f512d65d4 (pushpending).

@@ -9,7 +9,10 @@ vehicle-to-trip assignment and full overnight charging. Integer bus-charging
 aggregation/disaggregation around auction bids is studied by
 \citet{zoltowskaLin2021}, while \citet{wu2019gridinteractive} couple service
 planning to market clearing and distribution marginal prices in a bilevel
-model. Thus assignment, full charging and endogenous electricity prices are
+model.\footnote{Our comparison with \citet{wu2019gridinteractive} is limited
+to the publisher's preview. Its full tariff timing and complete-fleet
+deviation formulation remain unverified; we do not infer their absence.}
+Thus assignment, full charging and endogenous electricity prices are
 not sufficient novelty claims. We instead ask whether a fixed posted
 marginal tariff supports a complete fleet over alternatives that change
 both used-bus costs and duty-created charging opportunities.
@@ -49,8 +52,8 @@ not establish a first signed-aggregation or V2G support result.
 \paragraph{Common losses.}
 \citet[Theorems 1--3]{altahaBitar2024lossy} establish a piecewise-affine
 grid-power/SOC bijection, convex feasibility in a single store's SOC variables,
-and sufficient monotonicity conditions for convex reformulation. We do not claim these
-transformations or conditions as new. Theorem~\ref{thm:lossyfrontier}
+and sufficient monotonicity conditions for convex reformulation. These
+transformations and conditions are prior art. Theorem~\ref{thm:lossyfrontier}
 combines service-dependent vehicle counts, successor choices and shared
 gross connector use in an efficient joint early-load, terminal-load and
 vehicle-cost frontier with at most two segments per cardinality. Common
