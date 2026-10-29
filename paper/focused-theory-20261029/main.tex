@@ -116,8 +116,12 @@ or a convergence claim. Convex-hull pricing and general support duality are
 established theory. The physical contribution is the explicit assignment-dependent
 projection under the stated timing, resource, loss and action assumptions.
 
-The analytical models omit stochastic delays, state-dependent degradation,
-temperature, taper and switching time. A common affine-throughput wear
+The exact analytical projections omit stochastic delays, state-dependent
+degradation, temperature, taper and switching time. A separate setup-time
+approximation bounds the effect of a positive per-action delay when every
+relevant layer has verified connector-time slack; without that premise,
+even value continuity can fail (Proposition~\ref{prop:setupslack}).
+A common affine-throughput wear
 extension remains an ideal cost model, not a battery-aging calibration.
 Common windows and efficiencies enable the finite
 reduction; arbitrary timetables, vehicle-dependent losses, restricted cycling
@@ -185,6 +189,7 @@ contribution is claimed.
 \input{certificates}
 \clearpage
 \LossyProjectionProofs
+\input{setup_time}
 \input{network_monotonicity}
 \TransitionEnergyProofs
 \input{exponential_transition}

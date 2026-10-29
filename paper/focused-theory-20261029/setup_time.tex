@@ -1,0 +1,120 @@
+\section{A controlled approximation with per-action setup time}
+\label{app:setuptime}
+Positive setup time changes the exact common-window model. A conservative
+inner approximation follows from the constructive action bound, provided
+an explicit occupancy-slack premise holds. The argument is classical
+convex contraction and Lipschitz control, not a new generic robustness
+theory or an assertion that switching time is negligible.
+
+Retain the positive directional powers and physical assumptions of
+Corollary~\ref{cor:directionalwear}. Each nonzero early charge/export
+action now occupies an additional fixed connector time $\tau\ge0$,
+with no energy exchanged during setup. This is a per-action setup, not
+merely a charge-to-export direction-change penalty. Setups have no extra
+monetary fee; terminal charging is unchanged. All buses remain available
+throughout the unit early window. Common affine throughput wear may be
+included in the intrinsic cost image, but no minimum session, history-
+dependent degradation or other new constraint is introduced.
+
+Let $W_m^0$ be the setup-free cardinality polygon, with occupancy
+$h(C,X)=C/K_c+X/K_d\le1$, and let $\Phi_m(C,X)=(E,L,c)$ be its full
+affine image, including wear when present. Define
+\[
+ A_m=N_m+2\left\lceil\frac{2\alpha K_c}{B}\right\rceil,
+ \qquad
+ W_m^{\rm in}(\tau)=
+ \{x\in W_m^0:h(x)\le1-\tau A_m\}.
+\]
+Write $Y_m^0=\Phi_m(W_m^0)$ and let $Y_m^\tau$ be the actual projection
+of all size-$m$ matchings under the setup law. Ignoring setup gives an
+outer bound, while the constructive action list gives the sandwich
+\begin{equation}\label{eq:setupsandwich}
+ \Phi_m(W_m^{\rm in}(\tau))\subseteq Y_m^\tau\subseteq Y_m^0.
+\end{equation}
+Indeed its at most $A_m$ early actions take time $h+\tau A_{\rm actual}
+\le1$. Insert one setup before each nonzero action and retain their
+serial order. No SOC or terminal quantity changes. The outer inclusion
+does not assert that minimum-$r_m$ matching remains an exact sufficient
+statistic once setup is imposed.
+
+\begin{proposition}[Slack-anchor approximation]\label{prop:setupslack}
+For each nonempty $W_m^0$, suppose an anchor $z_m$ has
+$h(z_m)\le1-\sigma_m$ with $\sigma_m>0$. Define
+\[
+ \varepsilon=\max_{m:W_m^0\ne\varnothing}\frac{\tau A_m}{\sigma_m}
+ \le1,\qquad
+ M=\max_{m:W_m^0\ne\varnothing}J(\Phi_m(z_m)),
+\]
+where $J(E,L,c)=c+F(E,L)$ is convex, lower semicontinuous and finite
+on the setup-free hull. Let the nonempty outer union be $Y^0$ and the
+true setup union be $Y^\tau$. Define physical and hull values as infima
+over $Y$ and $\operatorname{conv}Y$, respectively. Then
+\[
+ 0\le D_\tau-D_0\le\varepsilon(M-D_0),\qquad
+ 0\le\CH_\tau-\CH_0\le\varepsilon(M-\CH_0).
+\]
+Consequently, with $\Delta_\tau=D_\tau-\CH_\tau$,
+\begin{equation}\label{eq:setupgapbound}
+ |\Delta_\tau-\Delta_0|\le\varepsilon(M-\CH_0).
+\end{equation}
+A nominal gap greater than this allowance remains strictly positive.
+\end{proposition}
+
+\begin{proof}
+For $x\in W_m^0$ use $x_\tau=(1-\varepsilon)x+\varepsilon z_m$.
+Convexity preserves every battery and terminal halfspace, while
+$h(x_\tau)\le1-\varepsilon\sigma_m\le1-\tau A_m$.
+Thus the same minimizing matching has the physical realization in
+\eqref{eq:setupsandwich}. The affine map gives
+$y_\tau=(1-\varepsilon)y+\varepsilon\Phi_m(z_m)$.
+Convexity bounds its objective by $(1-\varepsilon)J(y)+\varepsilon M$.
+Apply this to an outer physical near-minimizer. Setup restrictions only
+remove plans, proving the physical increment bounds.
+
+For a hull point $y=\sum_i\theta_i y_i$, replace each component and
+keep its weight. The new mean is
+$(1-\varepsilon)y+\varepsilon\sum_i\theta_i\Phi_{m_i}(z_{m_i})$.
+Convexity bounds the anchor mean's objective by $M$, so the same argument
+gives the hull increment bounds. The mean is a mixture, not a physical
+dispatch. Since $D_0\ge\CH_0$, both nonnegative increments lie in
+$[0,\varepsilon(M-\CH_0)]$. Their difference proves
+\eqref{eq:setupgapbound} without a factor two. Comparisons of infima
+avoid an extra compactness assertion for the true setup set. Empty
+outer layers are omitted; point and segment layers are allowed if
+they have the required slack anchor.
+\end{proof}
+
+An optional distance bound uses the smaller individual contractions
+$\lambda_m=\tau A_m/\sigma_m$: every outer point has a setup-feasible
+point within $\lambda_m\operatorname{diam}(Y_m^0)$ in a fixed norm
+with declared energy/cost scaling. This remains wear-aware when the
+lossless load map is noninjective. If $J$ is $M_{\rm Lip}$-Lipschitz
+on the outer hull, put $\eta_\tau=\max_m\lambda_m
+\operatorname{diam}(Y_m^0)$; the physical and hull increments are in
+$[0,M_{\rm Lip}\eta_\tau]$, hence the gap changes by at most that
+same allowance. The primary convex bound needs no Lipschitz premise.
+Support implications retain the framework's usual price and attainment
+qualifications.
+
+\paragraph{Why occupancy slack cannot be omitted.}
+Take $n=1$, $B=1$, $a=b=3/4$, unit efficiencies,
+$K_c=K_d=1/2$, $H=2$ and $f=1$, with the single successor edge and
+both standalone options. The paired bus needs $Q\ge1/2$, while
+$C+X\le1/2$ forces $C=1/2,X=0$. Its early charge fills the entire
+window, so every $\tau>0$ removes this layer. The two-bus layer remains
+feasible for every $\tau$: use no early action and purchase $3/2$
+terminal units. For $F(E,L)=E+L$, full replenishment gives $E+L=3/2$.
+Thus physical and hull values jump from $5/2$ to $7/2$ at any positive
+setup time, even though the model stays feasible. No unconditional
+continuity claim is possible. A zero-action point itself supplies
+occupancy slack; the missing paired-layer anchor is the obstruction.
+
+The slack criterion is sufficient, not necessary: zero-action points need
+no setup, and $A_m$ is conservative. If $\tau A_m>\sigma_m$, clipping
+$\varepsilon$ to one does not prove the required time bound. An empty inner
+set does not itself prove true infeasibility. For a fixed instance with
+the stated anchors, $\varepsilon\to0$ as $\tau\downarrow0$; no uniform
+radius across fleet families, unchanged optimizer, efficient-$Z$ formula,
+minimum action count or runtime follows. This analytical approximation
+has no numerical qualification and transfers no public-timetable,
+empirical battery or learning claim.

@@ -9,7 +9,9 @@ A bus fleet can minimize total operating and electricity supply cost while wanti
 Read the guide in order. First explain the three objectives without equations; then work through the numerical example; finally interpret the experiments and open questions.
 
 For the current mathematical account, use `paper/focused-theory-20261029/main.tex`
-and its included sections. The older `paper/latex/` references below retain the
+and its included sections. Its main argument now runs through `framework.tex`
+and the condensed `core_results.tex`; the detailed derivations and certificate
+models remain in appendices. The older `paper/latex/` references below retain the
 history of the original examples; the focused draft contains the later results.
 
 | Question to study | Current source | What to take from it |
@@ -323,8 +325,35 @@ The constructive early schedule needs at most N+2*ceil(2*alpha*K_charge/B)
 actions, plus at most N terminal actions. Allowing at least this many preserves
 the complete aggregate set; it is not a minimal count or runtime claim.
 These extensions are analytical. The eight implementation cases used equal
-directional power and no wear; switching delays and state-dependent battery
-degradation remain outside the proof.
+directional power and no wear. Positive switching delays remain outside the
+exact polygon theorem; the next subsection gives only a conditional inner
+approximation. State-dependent battery degradation remains outside both.
+
+### Positive setup time: an outer model and a physical inner model
+
+Suppose each **nonzero early action** occupies the shared connector for a setup time τ before energy transfer. Setup changes no inventory and has no monetary fee; terminal charging stays unchanged. This is a new constraint, so the ideal polygon is an **outer bound**, not the exact positive-setup feasible set. Removing setup can only enlarge the set. A smaller, constructively physical **inner bound** keeps the polygon's battery/terminal inequalities and reserves time for the finite action list.
+
+With directional powers Kc,Kd>0, define occupied transfer time h(C,X)=C/Kc+X/Kd. The existing construction needs at most
+
+`A_m = N_m + 2 ceil(2 α Kc/B)`
+
+early actions on cardinality layer m. Therefore `h(C,X) <= 1−τ A_m` is sufficient for physical feasibility: insert setup before each action, then execute the same serial charge/export schedule. The inner set lies inside the actual setup-constrained set, which lies inside the original ideal set. An empty conservative inner set does **not** prove actual infeasibility, and minimum-required-energy matching is not thereby proved exact for the actual setup problem.
+
+There is a quantitative approximation only with an explicit slack premise. For **every nonempty ideal layer**, supply an anchor z_m in that same polygon with `h(z_m) <= 1−σ_m`, where σ_m>0. If `τ A_m <= σ_m`, set `λ_m=τ A_m/σ_m`. Moving any ideal point toward this anchor by fraction λ_m keeps every other linear constraint and creates enough setup time. If Y_m is the ideal joint load–cost image, the displacement is at most `λ_m diam(Y_m)`. Empty ideal layers need no invented anchor. Use one declared norm with fixed energy/money scaling, and put `η=max_m λ_m diam(Y_m)`.
+
+If the planning objective is M-Lipschitz on the whole ideal joint hull, both physical and hull infimum values can increase by at most Mη. Consequently their gap obeys `|Δ_τ−Δ_0| <= Mη`; a nominal gap exceeding Mη stays positive under these assumptions. This is a fixed-instance sufficient bound, not an exact setup optimum, a universal radius, or a guarantee obtained by clipping λ_m when the slack test fails. Lipschitz continuity must be justified; finiteness of a convex cost at boundary points alone does not imply it.
+
+The paper's main bound avoids that Lipschitz requirement for convex supply cost.
+Use the common fraction `ε=max_m τ A_m/σ_m <=1` and let `M_A` be the largest
+objective value of the chosen anchors. Convexity gives physical cost increase
+at most `ε(M_A−D_0)` and hull cost increase at most `ε(M_A−CH_0)`.
+Their gap therefore changes by at most `ε(M_A−CH_0)`. Both increases are
+nonnegative, so the error allowance is not doubled. This still requires the
+anchors; it does not infer spare connector time from a solver's success.
+
+**Why slack matters even when the whole problem stays feasible.** Let n=1, B=1, a=b=3/4, α=δ=1, Kc=Kd=1/2, H=2 and bus fee1. A paired bus must purchase1/2 early; that transfer already occupies the entire early window. Its layer disappears for every τ>0. Two standalone buses remain feasible with no early action and total terminal refill3/2. For the increasing linear supply cost F(E,L)=E+L, the values jump from `D_0=CH_0=5/2` to `D_τ=CH_τ=7/2` for every positive τ. This is an always-feasible **value discontinuity**, not a positive support gap: D=CH on each side.
+
+This analytical result combines the explicit finite-action construction with classical convex contraction and value bounds. It is not numerical qualification, empirical switching-time validation, an exact positive-setup hull, or a transfer of either public-timetable certificate. The varied-time public model has no admitted common-window slack anchor. Sources: `SWITCHING_TIME_APPROXIMATION_INDEPENDENT.md` and `SWITCHING_TIME_APPROXIMATION_CANDIDATE.md`; the independent note supplies the always-feasible counterexample and confirms the one-error-allowance gap bound.
 
 ## Why the two-batch assumptions matter
 
