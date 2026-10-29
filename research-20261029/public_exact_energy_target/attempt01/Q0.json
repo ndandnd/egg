@@ -1,0 +1,149 @@
+{
+  "status": "PASS",
+  "target": {
+    "status": "PASS",
+    "checks": [
+      {
+        "id": "exact-service",
+        "passed": true
+      },
+      {
+        "id": "exact-travel",
+        "passed": true
+      },
+      {
+        "id": "exact-wait",
+        "passed": true
+      },
+      {
+        "id": "target-rational-parser",
+        "passed": true
+      },
+      {
+        "id": "boolean-source",
+        "rejected": true
+      },
+      {
+        "id": "float-source",
+        "rejected": true
+      },
+      {
+        "id": "nonfinite-source",
+        "rejected": true
+      },
+      {
+        "id": "rational-not-decimal-source",
+        "rejected": true
+      },
+      {
+        "id": "negative-target-energy",
+        "rejected": true
+      },
+      {
+        "id": "float-target-energy",
+        "rejected": true
+      },
+      {
+        "id": "noncanonical-target-energy",
+        "rejected": true
+      },
+      {
+        "id": "huge-target-exponent",
+        "rejected": true
+      }
+    ],
+    "public_inputs_read": false,
+    "native_calls": 0
+  },
+  "checker": {
+    "status": "PASS",
+    "controls": [
+      {
+        "id": "float-energy",
+        "rejected": true
+      },
+      {
+        "id": "bool-energy",
+        "rejected": true
+      },
+      {
+        "id": "decimal-not-canonical",
+        "rejected": true
+      },
+      {
+        "id": "negative-energy",
+        "rejected": true
+      },
+      {
+        "id": "huge-rational-exponent",
+        "rejected": true
+      },
+      {
+        "id": "old-scalars-not-proof-inputs",
+        "passed": true
+      },
+      {
+        "id": "wrong-target-identity",
+        "rejected": true
+      },
+      {
+        "id": "changed-new-objective-claim",
+        "rejected": true
+      },
+      {
+        "id": "old-mixture-value-rejected",
+        "rejected": true
+      },
+      {
+        "id": "weight-not-source-admitted",
+        "rejected": true
+      },
+      {
+        "id": "foreign-point-admission",
+        "rejected": true
+      }
+    ],
+    "anchors": 2,
+    "native_calls": 0,
+    "scope": "New pure parser/proposal/mixture adapter controls; MOCK admissions, no public input/proof recheck"
+  },
+  "full_interface": {
+    "status": "PASS",
+    "anchors": [
+      {
+        "id": "complete-one-service-target-ledger",
+        "passed": true,
+        "services": 1,
+        "modes": 2,
+        "exact_service": "11/2",
+        "exact_travel": "26/5"
+      }
+    ],
+    "controls": [
+      {
+        "id": "changed-target-energy",
+        "rejected": true
+      },
+      {
+        "id": "changed-nonenergy",
+        "rejected": true
+      },
+      {
+        "id": "changed-target-identity",
+        "rejected": true
+      },
+      {
+        "id": "missing-mode",
+        "rejected": true
+      },
+      {
+        "id": "opaque-unselected-projection-not-traversed",
+        "passed": true
+      }
+    ],
+    "native_calls": 0,
+    "public_inputs_read": false,
+    "scope": "ONE complete hand-authored synthetic target+old/new-six-tuple interface; MOCK source authority only"
+  },
+  "native_calls": 0
+}
