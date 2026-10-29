@@ -1,0 +1,125 @@
+\section{A fully replenished physical obstruction}\label{sec:construction}
+Two mandatory depot-to-depot services consume 15 kWh each: A occupies
+$[0,1]$ and B occupies $[2,3]$. At most two identical buses are available,
+each with 20 kWh capacity, zero reserve and full initial inventory. Early
+charging is available only in $[1,2]$ at 10 kW, both per bus and in total.
+Terminal charging is available only in $[3,4]$, using one connector of
+power $K\le30$ kW. Every used bus must finish full at hour 4. Charging is
+continuous and lossless, with no taper or switching time. Travel cost,
+movement consumption and auxiliary load are zero. All prices and costs in
+this section are synthetic.
+
+There are exactly two service partitions up to vehicle labels. With one
+bus, inventory after A is 5; it needs at least 10 early kWh to complete B.
+The early limit therefore fixes load $(10,20)$. With two buses, A's bus
+buys $x\in[0,10]$ early; terminal purchases are $15-x$ for A's bus and 15
+for B's bus. Each bus returns full. Both partitions buy exactly 30 kWh;
+initial inventory cannot subsidize the horizon.
+
+Let $f\ge0$ be the cost of a used bus and define
+\begin{equation}\label{eq:supply}
+ F(x,z)=4x+\frac{x^2+z^2}{10},\qquad x,z\ge0,
+ \qquad g(x)=F(x,30-x)=90-2x+\frac{x^2}{5}.
+\end{equation}
+The early/late distinction permits different marginal supply costs despite
+constant total energy.
+
+\begin{theorem}[Nominal failure]\label{thm:nominal}
+For $K=30$ and $f=7$,
+\[
+ D=97,\qquad \CH=\frac{7591}{80}=94.8875,\qquad
+ \Delta=\frac{169}{80}>0.
+\]
+The unique physical planner load is $(10,20)$ with one bus. Its own-price
+regret at $p=(6,4)$ is 13.
+\end{theorem}
+
+The one-bus objective is $7+g(10)=97$; the two-bus branch minimizes
+$14+g(x)$ at $x=5$, giving 99. The hull instead mixes one bus at early
+energy 10 with two buses at early energy 0. Its cheapest operating cost at
+mean early energy $x$ is $14-0.7x$. Thus its objective is
+\[
+ 14-0.7x+g(x)=\frac{7591}{80}+\frac15(x-27/4)^2.
+\]
+The mixture weights are $27/40$ and $13/40$. Both components are physical;
+the mean operating cost $371/40$ is a convexification. Running those plans
+on different days would have average physical cost 99.275, not 94.8875.
+
+At the physical optimum's marginal price $(6,4)$, its bill plus operating
+cost is 147. The two-bus zero-early alternative costs 134 at that fixed
+tariff. This 13-unit incentive changes the entire fleet. By contrast, the
+hull price $(107/20,93/20)$ makes the two hull components tie, but is not
+the marginal supply price of the one-bus physical load. The distinction
+explains why a hull price and an own-load tariff answer different questions.
+
+\subsection{An exact connector and fee characterization}
+Define $\clamp(v;\ell,u)=\min\{u,\max\{\ell,v\}\}$. The next result
+describes the entire declared parameter domain, including its boundaries.
+
+\begin{theorem}[Connector capacity and vehicle fee]\label{thm:capacity}
+For $0\le K\le30$ and $f\ge0$, the model is infeasible if $K<20$.
+If $K=20$, $D=\CH=f+90$; both service partitions tie only at $f=0$.
+For $K>20$, put
+\[
+ \ell=30-K,\quad d=K-20,\quad t=\max\{5,\ell\},\quad
+ h=\clamp\left(5+\frac{5f}{2d};\ell,10\right).
+\]
+Then
+\begin{align}
+ D&=\min\{f+90,\ 2f+g(t)\},\label{eq:capacityD}\\
+ \CH&=2f-\frac{f(h-\ell)}d+g(h).\label{eq:capacityCH}
+\end{align}
+For $f>0$, the gap is strictly positive exactly when
+\begin{equation}\label{eq:capacityregion}
+ \max\left\{0,\frac25d(\ell-5)\right\}<f<2d.
+\end{equation}
+For $f=0$ the gap is zero. Both physical planner partitions are retained
+when $f=90-g(t)$.
+\end{theorem}
+
+The proof is a physical projection and one-dimensional convex minimization,
+not a finite parameter scan (Appendix~\ref{app:capacity}). In particular,
+with $f=7$ the gap is zero for $20\le K\le47/2$ and positive for
+$47/2<K\le30$. Extra charging capacity can create a price-support failure
+by enlarging the alternative set; it does not increase the planner's minimum
+cost or show that installing a connector worsens welfare.
+
+The full price-response value is
+\begin{equation}\label{eq:fullresponse}
+ V(p)=\min\{f+10p_1+20p_2,\;
+ 2f+\ell p_1+(30-\ell)p_2,\;2f+10p_1+20p_2\}.
+\end{equation}
+An affine objective attains its minimum on each physical segment at an
+endpoint. If $p_1=p_2$, its whole two-bus interval is minimizing within
+that partition and must be retained whenever its bill also ties globally.
+This includes the zero-fee boundaries; an endpoint representative alone
+would omit part of the response set.
+
+\subsection{Positive reserve and charging losses}
+The nominal early limit is binding: adding reserve or losses without
+changing power can remove the one-bus branch. This is a feasibility issue,
+not disappearance of the pricing mechanism. A nearby construction uses
+reserve 1 kWh, efficiency $19/20$, early power 12 kW and one terminal
+connector of 30 kW, keeping the service energies, capacity 20 and fee 7.
+The one-bus state sequence is
+\[
+ 20\longrightarrow5\longrightarrow16\longrightarrow1
+ \longrightarrow20.
+\]
+It buys $220/19$ grid kWh early and 20 terminally. A physical two-bus
+endpoint buys $30/19$ early and 30 terminally; terminal sessions of
+$9/19$ and $10/19$ hour fit serially.
+
+\begin{proposition}[A nondegenerate neighborhood]\label{prop:reserve}
+For these modified parameters,
+\[
+ D=\frac{38527}{361},\qquad
+ \CH=\frac{2987911}{28880},\qquad
+ \Delta=\frac{94249}{28880}>0.
+\]
+With terminal power 30 fixed, a positive gap persists in an open
+neighborhood of the stated reserve, efficiency and early power.
+\end{proposition}
+Appendix~\ref{app:reserve} states the strict inequalities defining this
+neighborhood. The result remains conditional on constant efficiency,
+zero switching time and the absence of charging taper.

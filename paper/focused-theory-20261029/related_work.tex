@@ -1,0 +1,65 @@
+\section{Relation to existing work}
+Electric-bus scheduling combines service assignment, battery feasibility and
+charging access. Grid-aware multi-depot scheduling, capacitated stations and
+scalable route-and-recharge generation are studied by
+\citet{wu2022grid,devos2024capacity,parmentier2023fleets}. These operational
+problems motivate our use of a complete fleet: charging feasibility is joint
+across the selected vehicle duties, especially at a shared connector.
+Our question concerns support over alternatives that can change both the
+number of used buses and the charging opportunities created by their duties.
+\citet{wu2022grid} already choose vehicle-to-trip assignments and charging
+under grid-related objectives; full overnight charging is among their
+assumptions. Endogenous assignments, full charging and grid-aware scheduling
+are therefore not, separately or together, sufficient novelty claims here.
+
+\citet{zoltowskaLin2021} formulate aggregation and disaggregation of bus
+charging around hourly auction bids using integer models. Their work is a
+precedent for discrete bus charging and market participation; our question
+additionally allows service assignments and used-bus costs to change under
+explicit terminal replacement-energy accounting. More directly,
+\citet{wu2019gridinteractive} describe bus service planning coupled to market
+clearing and distribution locational marginal prices in a bilevel framework.
+This rules out a claim of first coupling bus operations to endogenous
+electricity prices.\footnote{The current bounded review verified the publisher
+abstract and section previews of \citet{wu2019gridinteractive}, but not its
+full formulation. Its relation to the narrow full-replenishment support
+construction must be checked before final submission positioning. No absence
+of integrality, replenishment or related support results is asserted.}
+
+Price-support failure with indivisible operating decisions is established
+in electricity-market research. \citet{oneill2005} study prices in markets
+with nonconvexities; \citet{gribikHoganPope2007} discuss market-clearing
+prices and uplift. Convex-hull pricing provides the relevant convexification
+framework \citep{schiro2016,huaBaldick2017}. Linear-price support in
+decentralized problems with integralities is also studied through complete
+linear descriptions \citep{huembs2022complete}. We use this machinery; we do
+not present the support equivalence below as a new general theorem.
+Whole feasible participant schedules as columns and their fixed-price
+self-scheduling oracles also have established decomposition treatments
+\citep{andrianesis2022hull}. The complete-fleet unit ensures the right
+physical alternatives in this application; it is not new column-generation
+machinery.
+
+Aggregation must specify who owns the aggregated decisions. The classical
+perspective of \citet{starr1969} and dispatchable-demand results of
+\citet{hreinsson2021} explain why aggregate nonconvexities can become small.
+Our replication calculation instead isolates a distinction between a
+planning-value gap, one owner's absolute fixed-price incentive and the
+incentives of independently reserved service pairs. The explicit rates do
+not contradict approximate aggregation results.
+
+The intended contribution is the physical and economic specificity of the
+construction: full initial and terminal inventories, exhaustive service
+partitions, continuous charging, declared connector constraints, and exact
+conditions for persistence or disappearance when feasible choices expand.
+The expansion statements use elementary convex analysis and dominance;
+their value is the question they settle in this fleet model, not a claim
+of new general equilibrium machinery. The closest-prior-art assessment is
+an explicit remaining part of evaluating the draft's contribution.
+In particular, the movement class consists of alternatives dominated under
+the preserved resources. That restrictiveness must be weighed against the
+more substantive equipment region, where newly feasible choices can either
+erase or preserve failure. Algebraic breadth in this small model does not
+establish operational breadth. A timetable-scale certificate could address
+scale, but one synthetic public scenario would still leave institutional
+relevance and prevalence to be established.

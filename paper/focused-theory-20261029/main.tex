@@ -1,0 +1,169 @@
+\documentclass[11pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools,booktabs,graphicx,microtype}
+\usepackage[numbers]{natbib}
+\usepackage[colorlinks=true,allcolors=blue]{hyperref}
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}\newtheorem{remark}[theorem]{Remark}
+\newcommand{\R}{\mathbb R}
+\newcommand{\X}{\mathcal X}
+\newcommand{\CH}{\mathrm{CH}}
+\newcommand{\clamp}{\operatorname{clamp}}
+\title{Marginal-Price Support for Fully Replenished Electric-Bus Fleets}
+\author{Nathan Cho}
+\date{Research draft, 29 October 2026}
+\begin{document}
+\maketitle
+\begin{abstract}
+Continuous charging does not make service assignments divisible. We study
+whether a complete electric-bus fleet minimizes its operating cost and
+electricity bill at the marginal supply prices associated with its own load.
+A two-service construction has no supported physical plan despite restoring
+every used battery to its initial full inventory. We characterize exactly
+when connector capacity and vehicle cost create this obstruction. Additional
+nonnegative-energy movements preserve it under the original equipment and
+charging windows, whereas an explicitly enlarged battery choice can remove it.
+A higher fee for that added battery gives a counterexample to a natural
+sufficiency test based on the old convexified value. Replication separates
+vanishing planning gaps from a whole owner's absolute deviation incentive;
+participants with reserved individual resources have vanishing incentives.
+The supporting-price machinery is classical. The contribution developed here
+is the physical construction and its conditional stability and erasure
+characterizations. A public 37-service case has informative exact bounds but
+its optimal-fleet price support remains unresolved. These analytical results
+do not establish prevalence in operating fleets.
+\end{abstract}
+\noindent\textbf{Draft status.} This is a focused research draft for critical
+assessment of correctness, originality and significance. The public-case
+interval below is the presently established interval; no new timetable-scale
+certificate is claimed. The draft is not a submission-readiness judgment.
+
+\section{Introduction}
+An electric-bus operator assigns mandatory services to vehicles and decides
+when to recharge them. Continuous charging offers flexibility, but a vehicle
+cannot cover a fraction of a service. Assigning two services to the same bus
+can therefore impose an intermediate energy requirement that disappears when
+two buses are used. A tariff may reward the resulting change in charging
+without compensating the operator for its additional vehicle.
+
+We ask a precise question. A supplier has a convex incremental cost for
+serving aggregate fleet demand. A tariff is calculated from a candidate
+fleet's load and posted before the operator chooses its complete schedule.
+Holding that tariff fixed, does the candidate minimize the operator's bill
+plus its intrinsic operating cost? This is an own-load price-support test.
+Its participant is one operator controlling the complete fleet. It is not a
+strategic model in which that operator anticipates a new tariff after each
+alternative it considers.
+
+The connection between price support and convexification is established in
+nonconvex market theory. Our question is what a fully specified electric-bus
+model can contribute beyond that connection. Full terminal replenishment is
+central: an initially full battery must not provide free net energy over a
+finite horizon. Our first construction buys exactly the same total energy
+under both service assignments, restores every used bus to full, and still
+has a strictly positive physical--hull gap. The mechanism is a change in
+\emph{when} the fleet purchases energy, coupled with the fixed
+cost of a used bus.
+
+The main analysis then asks whether this obstruction is an artifact of an
+overly small alternative set. We give an exact connector-capacity and vehicle-
+fee characterization, and distinguish two kinds of enlargement. Additional
+energy-consuming movements under unchanged equipment and charging access
+cannot improve either the physical or hull value in the stated construction.
+An added battery type changes the equipment set and can restore support. Its
+fee matters: a newly admitted plan cheaper than the old hull optimum need
+not restore support because the enlarged hull can improve further. Finally,
+an exact replication calculation shows why a small planning gap and a small
+whole-owner incentive are different statements.
+
+These are application-specific results in a synthetic model. We do not
+claim that nonconvex demand or convex-hull price support is a new concept.
+The public timetable evidence is included to state clearly what is known at
+a larger scale and what remains unproved. Its bounds do not currently show
+that its optimal physical fleet is unsupported. Practical magnitude and
+prevalence are separate research questions.
+
+\input{related_work}
+\input{framework}
+\input{construction}
+\input{expansion}
+\input{ownership}
+\input{public_case}
+
+\section{Implications and limits}
+The examples identify a conditional failure of a specified posted-tariff
+institution. The supply function is convex; the indivisibility lies on the
+fleet side. Continuous energy decisions and terminal energy accounting do
+not eliminate that indivisibility. Conversely, an indivisible fleet need
+not lack supporting marginal prices: the exact parameter regions include
+zero-gap cases, and an added battery choice can physically implement a
+supported load. The correct claim is a possibility with characterized
+conditions, not inevitable failure of marginal tariffs.
+
+The expansion results are deliberately explicit about resource changes.
+The movement-only stability theorem preserves charging access, equipment,
+service requirements and nonnegative movement consumption. It says nothing
+about a new charging location, regenerative energy, altered travel energy,
+service cancellation or a more capable battery. Those changes can alter the
+relevant energy projection. The equipment result studies one such change
+directly rather than describing an arbitrary projected point as an omitted
+feasible duty of the original model.
+
+The participant definition is equally consequential. A whole-fleet deviation
+can replace every service assignment. Independent operators need compatible
+resource rights before their unilateral alternatives are well defined.
+The replication theorem uses reserved service pairs and connectors to make
+that comparison exact. It does not infer incentives for independently owned
+buses competing for the same unreserved depot connector.
+
+All analytical models omit stochastic delays, battery degradation,
+temperature effects, charging taper and switching time. Monetary and supply
+coefficients are synthetic. The positive-gap neighborhood admits a reserve,
+constant losses and one connector, but remains conditional on those
+abstractions. The analytical formulas and exact implementation comparisons
+support the declared mechanisms, not estimates of an operator's savings or
+an assessment of a deployed market design.
+
+The strongest present contribution is therefore a focused analytical study:
+a fully replenished physical realization, exact stability and erasure
+regions, and a participant-scale distinction. Whether these results are
+sufficiently original and significant relative to the closest prior work
+requires critical assessment. A resolved public support certificate and
+independent timetable evidence would strengthen the case; neither should be
+implied by the current bounds. No learning advantage is established here.
+
+\section{Conclusion}
+An electric-bus fleet can lack marginal-price support even when charging is
+continuous and every used battery is fully replenished. The two-service
+model permits an exact answer as connector capacity, vehicle fees and
+battery options change. Energy-consuming movement additions preserve the
+obstruction under unchanged resources; a sufficiently capable battery can
+remove it at an appropriate fee. Neither a cheaper newly admitted plan nor
+a vanishing planning gap alone resolves the relevant incentive question.
+The public case remains a certification problem rather than empirical
+confirmation of the mechanism.
+
+\section*{Evidence and reproducibility}
+The analytical claims concern the stated ideal models. Exact rational
+implementation comparisons use independently formulated physical enumeration
+and analytical formulas; agreement is an internal cross-check, not external
+replication. The connector/fee qualification contains twenty fixed cases,
+and the support-extension qualification fourteen fixed cases, with explicit
+boundary and corruption controls. These cases qualify implementations;
+the proofs establish the continuous-domain statements. Archived outcome and
+resource records distinguish exact arithmetic from tolerance-qualified
+native computations. No new numerical execution was performed to author
+this draft, and no public optimal-fleet support conclusion is drawn from
+the finite plan bank or solver statuses.
+
+\appendix
+\input{proofs}
+\bibliographystyle{plainnat}
+\bibliography{references}
+\end{document}

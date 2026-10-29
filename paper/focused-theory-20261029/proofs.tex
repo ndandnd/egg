@@ -1,0 +1,286 @@
+\section{Support, physical projection and parameter proofs}
+\subsection{The classical support criterion}\label{app:support}
+\begin{proof}[Proof of Proposition~\ref{prop:support}]
+For any hull point $(e,c)$, linear minimization gives
+$c+p^\top e\ge V(p)$. If $p\in\partial F(e(x))$, then
+$F(e)\ge F(e(x))+p^\top(e-e(x))$. Adding and minimizing over the hull
+gives
+\[
+ \CH\ge V(p)+F(e(x))-p^\top e(x)
+       =c(x)+F(e(x))-r(x;p).
+\]
+This proves \eqref{eq:lower}. If $r(x;p)=0$, equality of physical and hull
+values follows immediately.
+
+Conversely let $D=\CH$. Compactness and lower semicontinuity give a
+physical minimizer. The relative-interior qualification gives strong
+Fenchel duality and an attained maximum
+$\CH=V(p^*)-F^*(p^*)$. Under the alternative finite-minorant condition,
+apply the same duality theorem to the finite minorant. It agrees with $F$
+on hull loads and its conjugate is at least $F^*$. The corresponding
+price gives a dual bound for $F$ at least $\CH$; weak duality forces
+equality, hence attainment for $F$ as well.
+
+For any physical minimizer $x$ and any attained hull-dual maximizer $p^*$,
+\[
+ \underbrace{c(x)+(p^*)^\top e(x)-V(p^*)}_{\ge0}
+ +\underbrace{F(e(x))-(p^*)^\top e(x)+F^*(p^*)}_{\ge0}
+ =D-\CH=0.
+\]
+Both terms vanish. Fenchel equality gives $p^*\in\partial F(e(x))$;
+the first term gives support. For restricted economic prices the converse
+requires an attained dual price in that subset, as stated.
+Every dual maximizer satisfies the displayed unrestricted algebraic
+conclusion; only the admissible maximizers give support under a restricted
+economic definition.
+\end{proof}
+
+\subsection{Physical projection and the connector/fee region}\label{app:capacity}
+\begin{proof}[Proofs of Theorems~\ref{thm:nominal} and~\ref{thm:capacity}]
+With one bus, the state after A is 5 and the state after B is $x-10$.
+Early charging has $x\le10$, so feasibility forces $x=10$. Terminal
+replenishment is 20 and requires $K\ge20$. With two buses, A's bus has
+terminal demand $15-x$, B's bus has demand 15, and $0\le x\le10$.
+Serial charging at power $K$ fits the terminal hour exactly when
+$30-x\le K$. These conditions also satisfy each battery's individual
+headroom and inventory bounds. Thus for $K\ge20$ the two-bus early
+interval is $[\ell,10]$, $\ell=30-K$; for $K<20$ neither partition
+is feasible. At $K=20$ both projected loads are $(10,20)$ and their
+costs differ only by $f$.
+
+For $K>20$, strict convexity of $g$ gives the two-bus minimum at
+$t=\max\{5,\ell\}$. The one-bus minimum is the fixed point 10,
+proving \eqref{eq:capacityD}. Projecting complete plans to early energy
+and operating cost gives the segment $\{(x,2f):\ell\le x\le10\}$
+and the point $(10,f)$. Their convex hull has lowest cost
+\[
+ c_{\min}(x)=2f-\frac{f(x-\ell)}{10-\ell},\qquad\ell\le x\le10.
+\]
+The derivative of $c_{\min}(x)+g(x)$ vanishes at
+$5+5f/(2d)$, $d=10-\ell$, proving \eqref{eq:capacityCH}.
+
+For $f>0$, an interior hull minimizer has lower operating cost than every
+two-bus physical plan at the same early load. Strict convexity excludes
+the distinct one-bus point from attaining its objective. Therefore the
+gap is positive exactly when $\ell<h<10$. Equivalently
+$\tfrac25d(\ell-5)<f<2d$, together with $f>0$, which gives
+\eqref{eq:capacityregion}. At an endpoint the physical endpoint attains
+the hull minimum. For $f=0$, $h=t$, and the two-bus physical plan attains
+the hull. Equality of the two physical branch minima gives exactly
+$f=90-g(t)$; within each branch strict convexity fixes its minimizing
+load. The affine-response formula \eqref{eq:fullresponse} follows by
+minimizing over every point of those physical segments.
+
+For $K=30,f=7$, the lower hull objective is
+$104-27x/10+x^2/5=7591/80+(x-27/4)^2/5$. Physical branch values are 97
+and 99. The one-bus gradient is $(6,4)$, and the complete two-bus
+response at that price is the zero-early endpoint. Bills 147 and 134 give
+regret 13. The mixture and operating-cost values in the text follow from
+weight $27/40$ on the one-bus point.
+\end{proof}
+
+\subsection{A reserve/loss neighborhood}\label{app:reserve}
+\begin{proof}[Proof of Proposition~\ref{prop:reserve}]
+For reserve $0\le r\le5$, constant efficiency $0<\eta\le1$, early
+power $P$, and terminal power $K$, define grid-energy quantities
+\[
+ T=30/\eta,\quad \ell=\max\{0,T-K\},\quad
+ u=\min\{P,15/\eta\},\quad
+ h=\max\{\ell,(10+r)/\eta\}.
+\]
+The two-bus early interval is $[\ell,u]$; the one-bus interval is
+$[h,u]$ if nonempty. The lower terminal-capacity condition is
+$T-x\le K$. For the one-bus plan, its state after B is $\eta x-10$,
+so reserve imposes $x\ge(10+r)/\eta$. Charging only A's bus early
+realizes every interval point; terminal demands fit serially, and the
+individual bounds follow from the inventory headroom 15 and the stated
+reserve range.
+
+Write $G_T(x)=F(x,T-x)=G_T(m)+k(x-m)^2$, where $k=1/5$ and
+$m=T/2-10$. Suppose
+\begin{equation}\label{eq:strictreserve}
+ \ell<m<h<u,\qquad f>0,\qquad f<2k(h-\ell)(h-m).
+\end{equation}
+On $[\ell,h]$ the hull's lowest operating cost is
+$2f-f(x-\ell)/(h-\ell)$, obtained from the two-bus endpoint $\ell$
+and one-bus endpoint $h$; on $[h,u]$ it is $f$. Put $d=h-\ell$.
+The hull minimizer $x^*=m+f/(2kd)$ lies in $(m,h)$. Physical and hull
+values are
+\begin{align*}
+ D&=G_T(m)+\min\{f+k(h-m)^2,2f\},\\
+ \CH&=G_T(m)+2f-\frac{f(m-\ell)}d-\frac{f^2}{4kd^2}.
+\end{align*}
+Subtracting gives
+\[
+ \Delta=\min\left\{k(h-x^*)^2,
+ \frac{f(m-\ell)}d+\frac{f^2}{4kd^2}\right\}>0.
+\]
+At $(r,\eta,P,K,f)=(1,19/20,12,30,7)$,
+\[
+ (\ell,m,h,u,d)=(30/19,110/19,220/19,12,10).
+\]
+In particular $u-h=8/19>0$ and $2kd(h-m)=440/19>7$.
+Rational substitution gives the stated values. All inequalities in
+\eqref{eq:strictreserve} are strict and the parameter functions are
+continuous locally. They therefore persist in an open neighborhood of
+$(r,\eta,P)$ with $K=30$ fixed.
+\end{proof}
+
+\section{Expansion and equipment proofs}
+\subsection{The old-plan and dual-certificate statements}\label{app:expansion}
+\begin{proof}[Proof of Proposition~\ref{prop:expansion}]
+Set inclusion gives $V_Z(p)=\min\{V_X(p),V_Y(p)\}\le V_X(p)$, so
+old-plan regret cannot decrease. By Proposition~\ref{prop:support}, no old
+plan can become supported. If failure is erased, $D_Z=\CH_Z\le\CH_X<D_X$;
+thus a new plan attains physical optimum and $D_Y\le\CH_X$. If instead
+$\min\{D_X,D_Y\}>\CH_X$, then $D_Z>\CH_X\ge\CH_Z$, proving survival.
+
+Under \eqref{eq:dualsafe}, $V_Z(p^*)=V_X(p^*)$, so
+\[
+ \CH_Z\ge V_Z(p^*)-F^*(p^*)=\CH_X\ge\CH_Z.
+\]
+For any new physical plan,
+\begin{align*}
+ c(y)+F(e(y))-\CH_X
+ ={}&[c(y)+(p^*)^\top e(y)-V_X(p^*)]\\
+ &+[F(e(y))-(p^*)^\top e(y)+F^*(p^*)].
+\end{align*}
+Both brackets are nonnegative. Equality holds exactly under the fleet and
+supply equalities stated in the proposition. Compactness ensures that if
+$D_Z=\CH_X$, some physical plan attains that equality; it cannot be old.
+With a uniform fleet margin $\varepsilon$, every new physical plan lies
+at least $\varepsilon$ above $\CH_X$, while every old one lies at least
+$\Delta_X$ above it. This gives the quantitative bound. Strict convexity
+of $F$ makes the minimizer of $F(e)-(p^*)^\top e$ unique on its convex
+domain whenever attained, proving the projected-point interpretation.
+\end{proof}
+
+\begin{proof}[Proof of Theorem~\ref{thm:movement}]
+Each added plan buys total energy $30+w$, $w\ge0$, because its initial
+and final battery inventories agree. Its early purchase $u$ is at most 10.
+For two used buses, the old $(u,30-u)$ plan of cost 14 is feasible and
+componentwise no larger in load or cost. For one bus, completion of both
+services by hour 3 requires $20+u\ge30$ even before any additional
+nonnegative movement consumption. Thus $u=10$, and the old one-bus
+plan dominates it. No added feasible plan can reduce the physical
+objective because $F$ is coordinatewise nondecreasing.
+
+Every hull point is a finite convex combination of physical points.
+Replace each added component by its old dominator; its mixture has no
+larger cost or load in any coordinate. Consequently it has no larger
+convex supply objective. This gives $\CH_X\le\CH_Z$, and inclusion
+gives the reverse inequality. The same inclusion/dominance argument
+gives $D_X=D_Z$. This proof does not require the movement timing to be
+favorable: it concerns every added plan that remains feasible.
+\end{proof}
+
+\subsection{Battery enlargement and fee thresholds}\label{app:battery}
+\begin{proof}[Proof of Theorem~\ref{thm:battery} and
+\eqref{eq:B25D}--\eqref{eq:B25CH}]
+The one-new-bus state sequence imposes $x\ge30-B=a$ and $x\le10$.
+Every point of $[a,10]$ is feasible and fully replenished. With two
+buses, the A bus's headroom after its service is 15 for either type;
+B's bus starts full before service and cannot buy early energy. Serial
+terminal charging gives every $x\in[0,10]$ for every type assignment.
+Since $q\ge7$, all mixed/new two-bus projected points are dominated by
+the old two-bus interval. Therefore
+\[
+ D_Z=\min\{97,q+g(t)\},\qquad t=\max\{5,a\}.
+\]
+Every supported physical plan is a physical planner optimum. No projected
+old plan can be rescued, and a dominated two-bus addition cannot have
+zero regret: at equal cost it has an unsupported old counterpart; at
+larger cost it has a strictly cheaper old counterpart at every price.
+It suffices to test the new branch's unique physical minimizer $t$.
+
+If $a\le5$, $t=5$, so $p=(5,5)$. All plans buy 30 units; comparison
+with the old one-bus plan is simply $q\le7$, hence $q=7$.
+If $a>5$, $t=a$ and $p_1-p_2=2a/5-2>0$. Within the new branch,
+the endpoint $a$ minimizes the fixed-price objective. The best old
+two-bus plan is its zero-early endpoint. Comparison against it gives
+\[
+ q\le14-a(p_1-p_2)=14+2a-\tfrac25a^2=A(a).
+\]
+Comparison against the old one-bus point gives
+\[
+ q\le7+(10-a)(p_1-p_2)=C(a).
+\]
+These comparisons include all physical alternatives by affine minimization
+on every branch. They prove \eqref{eq:batteryregion}. For $a>5$,
+$C(a)\ge7$ and $A(a)\ge7$ exactly when
+$a\le(5+\sqrt{95})/2$ in the relevant domain; also $A(a)-C(a)=27-4a$.
+At $q=7$, including $a\le5$, this proves \eqref{eq:batterythreshold}.
+
+At fee 7 below the battery threshold, the hull's lower boundary joins
+$(0,14)$ to $(a,7)$ and is then flat to 10. The hull objective on the
+first edge is $14-7x/a+g(x)$ and is minimized at
+$t_h=5+35/(2a)<a$. The physical optimum has early energy $a$;
+its gap is $(a-t_h)^2/5$. At and above the threshold the physical
+point $(\max\{5,a\},7)$ attains the hull minimum. Thus the boundary is
+derived on the whole continuous battery domain, not inferred from a scan.
+
+For $B=25$, the added endpoint is $(5,q)$. It is below the old lower
+hull $14-0.7x$ exactly when $q<21/2$. In that regime the new lower
+boundary joins $(0,14)$ to $(5,q)$ to $(10,7)$. The objective decreases
+along the first edge. On the second it is minimized at
+$x=5+(q-7)/2$ with operating cost $q-(q-7)^2/10$. Its value is
+$85+q-(q-7)^2/20$. At $q=21/2$ this equals $7591/80$; above it the
+whole new segment is dominated by the old hull. This proves the formulas.
+For $q=8$, substitution gives $\CH_Z=1859/20$ and $D_Z=93$.
+For $q=12$, both physical minima are 97. At the new load's price $(5,5)$,
+the old one-bus bill is cheaper by 5. At the old load's price $(6,4)$,
+the old zero-early two-bus bill remains 134; every new one-bus bill is
+at least $q+130\ge137$. Thus the old plan's regret is 13, including
+at the fee 12 tie. All quantities use fixed posted prices.
+\end{proof}
+
+\section{Replication proof}\label{app:replication}
+\begin{proof}[Proof of Theorem~\ref{thm:replication} and
+Corollary~\ref{cor:individual}]
+For $m$ paired buses, the complete projected physical set has early energy
+$E\in[10m,10n]$, late energy $30n-E$ and operating cost $14n-7m$.
+The connector assignment in the text realizes every such early total:
+paired buses take 10 each, and unpaired A buses distribute the remainder.
+Convexification has lower operating boundary $14n-0.7E$. Substitution
+in \eqref{eq:scaledF} gives the hull minimizer $E=27n/4$ and value
+$7591n/80$.
+
+For fixed integer $m\ge n/2$, supply is minimized at $E=10m$ and total
+cost is
+\[
+ 104n-27m+\frac{20m^2}{n}
+ =\frac{7591n}{80}+\frac{20}{n}(m-27n/40)^2.
+\]
+For $m\le n/2$, the best early energy is $5n$ and branch cost is
+$99n-7m$, decreasing with $m$. For odd $n$, moving from
+$\lfloor n/2\rfloor$ to $\lceil n/2\rceil$ changes the minimized
+cost by $-7+5/n<0$. For even $n$ the branch formulas meet at $n/2$.
+Thus an integer nearest to $27n/40$ is optimal, including both at a tie,
+and $|\delta|\le1/2$. This proves \eqref{eq:scaledgap}.
+
+At that optimum the own-load marginal price is
+\[
+ p=(4+2m/n,\ 6-2m/n).
+\]
+The optimal $m$ has $m/n\ge1/2$, so a cheapest two-bus pair response
+buys zero early (the whole interval ties when $m/n=1/2$).
+The one-bus private objective minus that two-bus
+objective is $40\delta/n$. If $\delta\ge0$, precisely the $m$
+paired choices are disadvantaged; otherwise the $n-m$ unpaired choices
+are. This proves \eqref{eq:scaledregret}. With one owner, all choices can
+be replaced simultaneously. To compare separate ownership, first implement
+the optimum using $m$ fixed-pair owners with one bus and $n-m$ with two.
+Each one-bus owner buys 10 early; each two-bus owner buys zero early at the
+planner optimum, giving the same total load and operating cost as the
+aggregate optimum even if its literal matching crossed the new ownership
+labels. Reserved connectors make each unilateral replacement feasible.
+The identical projected opportunity sets give the same complete-fleet
+response value, while each owner's gain is at most $20/n$. Summing the
+disadvantaged owners' gains yields the whole-owner expression.
+
+For $n=40k+1$, the optimum is $m=27k+1$, so $\delta=13/40$;
+substitution yields the displayed subsequence. If $40$ divides $n$,
+$\delta=0$. At $n=20$, the tied $m=13,14$ have $\delta=-1/2,1/2$,
+giving regrets 7 and 14 respectively. All ties concern physical plans;
+no fractional bus schedule is being implemented.
+\end{proof}

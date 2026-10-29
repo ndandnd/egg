@@ -1,0 +1,60 @@
+\section{What the public timetable does and does not establish}\label{sec:public}
+The analytical construction proves possibility, not operational frequency.
+The public case uses the Hildenbrand timetable from the Sistig data
+\citep{sistig2025dataset,sistig2025electrification}: 37 mandatory services
+and the complete directed deadhead matrix. Depot 15 and depot 16 define
+separate one-depot modifications of the original network. Source timetable
+offsets, including next-day services, are retained; source data do not
+provide the synthetic energy and cost assumptions below.
+
+Service consumption is 1.20 kWh/km plus 16 kWh per service hour; directed
+deadheads use 0.96 kWh/km plus 16 kWh per travel hour, and explicit off-depot
+waiting uses 16 kWh/h. Depot-parked auxiliary draw is zero. A used bus has
+400 kWh usable inventory, zero reserve, unit efficiency and 360 kW acceptance.
+One 360 kW connector is shared. Every used bus starts full and returns full
+by a synthetic 30:00 service-block boundary. There is no taper or switching
+time. Monetary movement cost is zero; movement time and energy remain
+physical constraints. The used-bus fee is 100. This finite block is not a
+certificate of repeating daily operation.
+
+The initial flat tariff is 0.2 per kWh. Because the complete-plan objective
+is linear, its physical and hull optima have equal value regardless of the
+discrete assignments. A native numerical flat optimum near 408.53 at depot 15
+is tolerance-qualified and does not identify the ideal stored-input rational
+optimum. Exact rational evidence instead provides a two-bus physical witness
+and a cardinality-gated path-cover relaxation, giving outward bounds
+\[
+ D^{\rm flat}_{15}\in[404.92,408.54].
+\]
+An exact one-bus obstruction establishes minimum fleet size two. Depot 16
+has an exact lower bound 414.39, but its reported two-bus upper witness is
+numerical; the resulting interval must be labeled mixed evidence.
+
+On the same finite depot 15 ideal model, let
+\begin{equation}\label{eq:publicF}
+ F(e)=\sum_{t=1}^{30}\left(0.2e_t+\frac{e_t^2}{1800}\right).
+\end{equation}
+The existing exact two-bus witness and exact energy-based dual certificate
+give the presently established outward bounds
+\begin{equation}\label{eq:publicbounds}
+ 429.22\le\CH_{15}\le D_{15}\le512.77,\qquad
+ 0\le D_{15}-\CH_{15}\le83.55.
+\end{equation}
+The lower certificate uses the two-path flat relaxation's energy floor,
+a comparison against larger bus counts at its chosen uniform price, and
+the 24 hours in which charging can occur. It does not exclude all larger
+fleets from physical planning optimum. The bounds neither determine
+$D_{15}$ or $\CH_{15}$ nor establish a positive gap. No new public sign
+certificate is asserted in this draft.
+
+There are distinct valid ways to close this question. An exact physical
+witness $x$ and a globally valid linear-response lower bound matching
+$c(x)+\nabla F(e(x))^\top e(x)$ prove support and hence $D=\CH$.
+Alternatively, a physical lower bound strictly above a feasible mixture's
+hull upper bound proves positive gap. A globally certified hull optimizer
+can also prove failure through nonimplementability: strict convexity in
+\eqref{eq:publicF} fixes its load and operating cost, and a hull operating
+cost not in $100\mathbb Z_+$ cannot be the cost of a physical fleet.
+All these routes require a global certificate or a complete infeasibility
+argument. A finite plan bank, incumbent regret, or a small native solver
+gap does not settle the sign of the ideal-model gap.
