@@ -1,7 +1,11 @@
 {
-  "status": "DRAFT",
+  "status": "FROZEN",
   "run_id": "attempt01",
-  "source_revision": "PENDING",
+  "source_revision": "c8ed513e64da7cb2ea478a73b1455e5a760a37c8",
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 VECLIB_MAXIMUM_THREADS=1 NUMEXPR_NUM_THREADS=1 /usr/bin/time -p .venv-local/bin/python -I -B research-20261029/public_energy_flow/run.py --run-id attempt01 > research-20261029/public_energy_flow/process-time-and-owner.txt 2>&1",
+  "working_directory": "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017",
+  "environment": {"python": ".venv-local/bin/python -I -B", "gurobipy": "12.0.1", "native_threads": 1, "OMP_NUM_THREADS": "1", "OPENBLAS_NUM_THREADS": "1", "MKL_NUM_THREADS": "1", "VECLIB_MAXIMUM_THREADS": "1", "NUMEXPR_NUM_THREADS": "1"},
+  "pre_package_prefix": {"displayed_cpu_s": 22020.27, "elapsed_sum_s": 22901.21, "retained_cpu_s": 22021.20},
   "package_cpu_s": 1800,
   "package_wall_s": 2400,
   "worker_cpu_s": 1700,
@@ -12,5 +16,5 @@
     {"id": "upper_replay", "revision": "929bd0052b064c2aa9ef10b77fa067b70c7653af", "path": "research-20261029/public_terminal_certificate/cycle01/independent_replay.json"},
     {"id": "transfer", "revision": "929bd0052b064c2aa9ef10b77fa067b70c7653af", "path": "research-20261029/public_terminal_certificate/TRANSFER_AUTHORITY.json"}
   ],
-  "note": "Non-executable draft; source revision and prospective protocol require parent review/freeze. Passed upper transfers by source-bound authority; no duplicate physical replay."
+  "note": "Parent freeze after focused integration review. One fresh attempt only; no automatic retry. Passed upper transfers by source-bound authority; no duplicate physical replay. Static PASS is not runtime qualification. All five state failures/missing states and inclusive costs are retained."
 }
