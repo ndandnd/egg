@@ -252,6 +252,21 @@ using the gross connector budget in both directions. These exact values
 follow analytically from the projection theorem; they are not a numerical
 implementation qualification.
 
+Losses cannot be incorporated by rescaling the early-energy threshold alone.
+Let $\eta_c,\eta_d$ denote charge and discharge efficiencies, $X$ early
+grid exports and $E$ early net grid purchase. Full replenishment requires
+terminal grid purchase
+\[
+ L=\frac{S}{\eta_c}-E+
+       \left(\frac{1}{\eta_c\eta_d}-1\right)X.
+\]
+For strict round-trip loss, the same net early load can therefore have
+different terminal demand. The lossless one-dimensional projection does
+not transfer directly. Under the common-window assumptions and nonnegative
+prices or marginal supply cost, within-bus cycles can be removed without
+worsening the objective, but cross-bus redistribution cannot generally be
+removed in that way. A support classification with losses remains open.
+
 The result concerns lossless common-window physics and the specified net
 settlement. It neither establishes novelty of V2G or matching theory nor
 covers degradation, asymmetric prices, realistic travel, or the public
