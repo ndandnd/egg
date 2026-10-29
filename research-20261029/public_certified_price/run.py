@@ -40,7 +40,8 @@ def main():
         except BaseException as exc:
             failure=type(exc).__name__+': '+str(exc)
             if child is not None and child.poll() is None:
-                os.killpg(child.pid,signal.SIGKILL)
+                try:os.killpg(child.pid,signal.SIGKILL)
+                except ProcessLookupError:pass
                 try:child.wait(timeout=3)
                 except subprocess.TimeoutExpired:failure+='; UNRESOLVED_CHILD'
     try:
