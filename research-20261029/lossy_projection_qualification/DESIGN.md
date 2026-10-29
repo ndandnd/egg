@@ -1,0 +1,25 @@
+# Prospective independent lossy-frontier qualification
+
+Source-only design; no cases were executed or selected from outcomes. Native calls zero. Parent must review and freeze literal cases, candidate/checker sources, command and complete resource allowance before execution.
+
+## Independent physical reference
+
+For n≤2, enumerate every partial matching in the declared allowed bipartite graph, including empty matchings and every standalone service. Enumerate every per-bus positive/negative early-exchange sign pattern, including degenerate zero overlaps. Build raw inventory inequalities from the actual service sequence, capacity and zero reserve; add the sign inequalities, shared gross grid throughput and common terminal demand constraints. Exact rational Gaussian active-constraint enumeration supplies all vertices of each bounded polytope, with no energy grid and no matching-threshold formula. Project each vertex to (early net grid energy, terminal grid energy, bus fee), retaining the original exchange vector and exact serial connector witness.
+
+`reference.enumerate_physical(spec)` returns all raw branches, including infeasible sign branches and assignments, plus vertices/witnesses. `reference.slice_at(result,E,N=None)` intersects projected convex polygons with an exact vertical slice and returns the least terminal energy per requested bus count. It uses physical polytope vertices and their pairwise convex combinations, not the candidate formula. Pairwise combinations suffice for a scalar equality plus convex weights; no need to infer an unattainable charge allocation from aggregate loads.
+
+Before active-system enumeration, exactly identical coefficient vectors are grouped with their tightest RHS. This preserves the polytope because simultaneous inequalities v·x≤b_i are equivalent to v·x≤min b_i. All original SOC/resource names and RHS values remain as provenance, and accepted vertices are checked against every original row. No sign pattern, assignment or infeasible branch is removed by this optimization. No benchmark or timing claim has been made.
+
+## Exact comparison logic for a separately authored candidate
+
+Compare cycle-free efficient curves per cardinality before global Pareto pruning. The reference is independent of r_m or export-min formulas. For every raw projected vertex, check both affine lower planes of the proposed candidate curve and inclusion in its claimed E interval; affine inequalities then hold over each entire raw sign polytope. Candidate minimum-export necessity is thus checked on physical primitives, not only at a selected optimum.
+
+Attainability requires more than candidate endpoints: for each proposed affine segment, intersect it with each projected sign-polytope polygon. This produces a closed interval of segment parameters for that polytope. The union must cover [0,1] exactly, with no omitted open gap. Each interval endpoint is certified by convex combinations of physical vertices and therefore by interpolation of exchange vectors and serial schedules. Alternatively obtain all lower-envelope breakpoints independently from projected polygon-edge endpoints and pairwise edge intersections, then compare exact slice minima on every resulting cell and boundary. Comparing only candidate knots or only physical vertex E coordinates is insufficient because different affine envelopes may cross inside a cell.
+
+Global pruning should compare physical curve segments across costs, preserving ties and distinct coordinates. Complete physical projections and dominated cyclic allocations are not claimed equal to the efficient union. Fixed positive and zero-price controls must distinguish value equality from enumeration of all tied responses. Convex-hull planning equality under monotone F can be checked later, but is not needed to qualify this physical frontier identity.
+
+## Prospective literal coverage proposal
+
+Freeze a small named suite before any run: lossless; strict common losses; terminal-clipped feasible curve; no allowed successor edges; an isolated allowed edge; zero early power feasible; zero terminal power infeasible for positive services; empty feasible cardinality after resource clipping; completely infeasible resources; and a capped-idle comparison only if a separately implemented idle reference is added. Include rational efficiencies with different charging/discharging values, and retain all cardinalities/sign branches rather than only favorable matching optima. Exact literal values and denominator must be chosen/reviewed prospectively by parent, not generated from outcomes. The present reference intentionally excludes idles and n>2.
+
+Meaningful negative controls should alter one lower plane, drop a raw sign/matching branch, erase an infeasible cardinality, omit a slice-cover interval, corrupt a witness's terminal charge, early gross occupancy, service assignment or battery endpoint. Independent witness replay checks inventory and serial resource use. Source/formula agreement alone is not qualification. All admission, arithmetic, failures and publication must be inside a single bounded stdlib-only phase; this document authorizes none.
