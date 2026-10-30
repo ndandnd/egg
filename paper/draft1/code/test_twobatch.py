@@ -260,10 +260,27 @@ def test_interior_face_explains_nonconvergence():
             continue
         pistar = sup.g(inst, Es)
         if kind == "vertex":
-            out = iterate(inst, sup, float(pistar) + 0.01, 0.01, max_iter=20000)
-            # converge to pi* (geometric) unless pi* sits on a normal-cone boundary
-            if out["outcome"] == "fixed_point" or abs(out["pis"][-1] - float(pistar)) < 1e-6:
-                seen[kind] += 1
+            # Theorem (c): with a*M below the distance from pi* to the boundary
+            # of E*'s normal cone, prices converge and E_k = E* eventually.
+            Vs = strict_vertices(hull_vertices(inst))
+            j = next((i for i, (x, _) in enumerate(Vs) if x == Es), None)
+            if j is None:
+                continue
+            sl = [(Vs[i][1] - Vs[i + 1][1]) / (Vs[i + 1][0] - Vs[i][0]) for i in range(len(Vs) - 1)]
+            hi = sl[j - 1] if j >= 1 else None          # left face slope magnitude
+            lo = sl[j] if j < len(sl) else None         # right face slope magnitude
+            dist = min([x for x in ((hi - pistar) if hi is not None else None,
+                                     (pistar - lo) if lo is not None else None) if x is not None] + [Fr(10**6)])
+            M = max(abs(sup.g(inst, inst.Lo) - pistar), abs(sup.g(inst, inst.U) - pistar))
+            if dist <= 0 or M == 0:
+                continue
+            a = min(Fr(1, 2), dist / (2 * M))
+            if a < Fr(1, 2000):
+                continue
+            out = iterate(inst, sup, float(pistar + M), float(a), max_iter=int(60 / a) + 2000)
+            assert out["Es"][-1] == Es
+            assert abs(out["pis"][-1] - float(pistar)) < 1e-6 * (1 + abs(float(pistar)))
+            seen[kind] += 1
             continue
         if any(E == Es for E, _ in hull_vertices(inst)):
             continue  # E* is a collinear physical threshold: knife-edge

@@ -74,6 +74,17 @@ class FloatClass:
         self.edges = [(self.V[i][0], self.V[i + 1][0], (self.V[i][1] - self.V[i + 1][1]) / (self.V[i + 1][0] - self.V[i][0]))
                       for i in range(len(self.V) - 1) if self.V[i + 1][1] < self.V[i][1] - 1e-9]
 
+    def locate(self, Es, tol=1e-9):
+        """Where the hull optimum sits: 'vertex' (a breakpoint Lo or r_m, or U),
+        'flat' (inside the cheapest fleet's interval) or 'sloping'."""
+        bps = sorted({lo for _, lo, c in self.layers if abs(c - self.V[-1][1]) < 1e-9 or
+                      any(abs(lo - v[0]) < tol and abs(c - v[1]) < 1e-9 for v in self.V)} | {self.U})
+        if any(abs(Es - x) <= tol * (1 + abs(x)) for x in bps):
+            return "vertex"
+        cmin = min(c for *_, c in self.layers)
+        lo_flat = min(lo for _, lo, c in self.layers if abs(c - cmin) < 1e-9)
+        return "flat" if lo_flat < Es < self.U else "sloping"
+
     def ell_max(self):
         """delta_max: largest gap between consecutive physical breakpoints
         max(Lo, r_m) of the lower boundary (one cardinality apart)."""
@@ -161,41 +172,52 @@ def load_ops(min_runs=5):
     return [o for o in d["operators"] if "error" not in o and min(len(o["a_kwh"]), len(o["b_kwh"])) >= min_runs], d["meta"]
 
 
-def critical_spreads(ops, Bs=(400, 450, 500), fs=(100, 150, 200)):
+def eligible(o, B):
+    """The two-batch model has no in-service charging, so a peak run that
+    needs more than the usable battery cannot be served. Such
+    operator/battery combinations are reported and excluded, never trimmed."""
+    return max(o["a_kwh"] + o["b_kwh"]) <= B
+
+
+def critical_spreads(ops, Bs=(250, 300, 350, 400), fs=(50, 100, 150, 200)):
     out = []
     for o in ops:
         for B in Bs:
-            a = [x for x in o["a_kwh"] if x <= B]
-            b = [x for x in o["b_kwh"] if x <= B]
-            X = FloatClass(a, b, B, K=sum(a), H=sum(a) + sum(b), f=1.0)
-            r = r_sorted(np.array(a), np.array(b), B)
-            for f in fs:
+            ok = eligible(o, B)
+            a, b = o["a_kwh"], o["b_kwh"]
+            n_over = sum(1 for x in a + b if x > B)
+            lm, r = 0.0, np.zeros(1)
+            if ok:
+                X = FloatClass(a, b, B, K=sum(a), H=sum(a) + sum(b), f=1.0)
+                r = r_sorted(np.array(a), np.array(b), B)
                 lm = X.ell_max()
-                out.append(dict(operator=o["operator"], B=B, f=f, nA=len(a), nB=len(b),
-                                dropped=len(o["a_kwh"]) + len(o["b_kwh"]) - len(a) - len(b),
-                                n_pairs_free=int((r == 0).sum() - 1), nu=len(r) - 1,
-                                ell_max_kwh=lm, pi_crit=(f / lm if lm > 0 else None),
-                                S_kwh=X.S, P_kwh=sum(a)))
+            for f in fs:
+                out.append(dict(operator=o["operator"], B=B, f=f, nA=len(a), nB=len(b), eligible=ok,
+                                runs_over_B=n_over, all_pairs_free=bool(ok and r.max() == 0),
+                                delta_max_kwh=lm, pi_crit=(f / lm if ok and lm > 0 else None)))
     return out
 
 
 def sweep(ops, B=400, f=150.0, K_frac=1.0, s0_grid=None, rho_grid=None, with_iter=True):
     s0_grid = s0_grid if s0_grid is not None else np.round(np.linspace(-0.2, 1.6, 37), 3)
-    rho_grid = rho_grid if rho_grid is not None else [0.0, 0.5, 1.0, 2.0, 4.0]
+    rho_grid = rho_grid if rho_grid is not None else [0.5, 1.0, 2.0, 4.0]
     rows = []
     for o in ops:
-        a = [x for x in o["a_kwh"] if x <= B]
-        b = [x for x in o["b_kwh"] if x <= B]
+        if not eligible(o, B):
+            continue
+        a, b = o["a_kwh"], o["b_kwh"]
         X = FloatClass(a, b, B, K=K_frac * sum(a), H=sum(a) + sum(b), f=f)
         for rho in rho_grid:
             kap = rho * PBAR / X.S
             for s0 in s0_grid:
                 r = X.solve(float(s0), kap)
                 it = iterate_float(X, float(s0), kap) if with_iter else None
-                rows.append(dict(undamped=it, operator=o["operator"], B=B, f=f, K_frac=K_frac, rho=rho, s0=float(s0),
-                                 gap=r["gap"], D=r["D"], regret=r["regret"],
-                                 rel_gap=r["gap"] / abs(r["D"]) if r["D"] else 0.0,
-                                 rel_regret=r["regret"] / abs(r["D"]) if r["D"] else 0.0))
+                # total daily cost: vehicles plus energy, with the overnight
+                # marginal price at zero load fixed at PBAR (G omits p_L*S)
+                total = r["D"] + PBAR * X.S
+                rows.append(dict(undamped=it, location=X.locate(r["Es"]), operator=o["operator"], B=B, f=f,
+                                 K_frac=K_frac, rho=rho, s0=float(s0), gap=r["gap"], D=r["D"], total_cost=total,
+                                 regret=r["regret"], rel_gap=r["gap"] / total, rel_regret=r["regret"] / total))
     return rows
 
 
@@ -203,7 +225,7 @@ def main():
     os.makedirs(RES, exist_ok=True)
     check_against_exact()
     ops, meta = load_ops()
-    crit = critical_spreads(ops, Bs=(250, 300, 350, 400), fs=(50, 100, 150, 200))
+    crit = critical_spreads(ops)
     sweeps = {f"B{B}_K{kf}": sweep(ops, B=B, K_frac=kf) for B in (300, 400) for kf in (1.0, 0.5)}
     json.dump(dict(meta=meta, pbar=PBAR, operators=[o["operator"] for o in ops], critical=crit,
                    sweeps=sweeps), open(os.path.join(RES, "study.json"), "w"), indent=0)
@@ -211,16 +233,22 @@ def main():
     for B in (250, 300, 350, 400):
         base = [c for c in crit if c["B"] == B and c["f"] == 150]
         pc = sorted(c["pi_crit"] for c in base if c["pi_crit"])
-        summary[f"B{B}"] = dict(n_gap_possible=len(pc), pi_crit_min=pc[0] if pc else None,
-                                pi_crit_median=float(np.median(pc)) if pc else None)
+        summary[f"B{B}"] = dict(eligible=sum(c["eligible"] for c in base),
+                                all_pairs_free=sum(c["all_pairs_free"] for c in base),
+                                n_gap_possible=len(pc), pi_crit_min=pc[0] if pc else None,
+                                pi_crit_median=float(np.median(pc)) if pc else None,
+                                runs_over_B=sum(c["runs_over_B"] for c in base))
     for name, S in sweeps.items():
         g = [r for r in S if r["gap"] > 1e-9]
-        summary[name] = dict(cells=len(S), gap_cells=len(g),
+        cyc = [r for r in S if r["undamped"] == "cycle"]
+        summary[name] = dict(operators=len({r["operator"] for r in S}), cells=len(S), gap_cells=len(g),
                              gap_cells_s0_le_0p3=sum(1 for r in g if r["s0"] <= 0.3),
                              max_rel_gap=max((r["rel_gap"] for r in g), default=0.0),
                              median_regret_over_gap=float(np.median([r["regret"] / r["gap"] for r in g])) if g else None,
-                             undamped_cycle_cells=sum(1 for r in S if r["undamped"] == "cycle"),
-                             undamped_cycle_cells_zero_gap=sum(1 for r in S if r["undamped"] == "cycle" and r["gap"] <= 1e-9),
+                             undamped_cycle_cells=len(cyc),
+                             undamped_cycle_cells_zero_gap=sum(1 for r in cyc if r["gap"] <= 1e-9),
+                             cycle_location={k: sum(1 for r in cyc if r["location"] == k) for k in ("vertex", "flat", "sloping")},
+                             location_all={k: sum(1 for r in S if r["location"] == k) for k in ("vertex", "flat", "sloping")},
                              undamped_none=sum(1 for r in S if r["undamped"] == "none"))
     json.dump(summary, open(os.path.join(RES, "summary.json"), "w"), indent=1)
     print(json.dumps(summary, indent=1))

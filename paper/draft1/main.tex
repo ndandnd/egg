@@ -41,21 +41,21 @@ Our main theorem shows that, for every number of paired services, a single
 minimum-requirement matching determines the complete joint set of grid loads
 and vehicle costs, a polygon with at most five vertices, including charging
 losses and vehicle-to-grid exports. On this exact description we prove three
-results about price formation. A positive support gap requires the marginal
-cost spread between charging windows to exceed the daily vehicle cost divided
-by the largest forced-charging increment, and it is at most one eighth of the
-supply curvature times that increment squared. Price iteration, undamped or
-damped, fails to converge exactly when the hull optimum lies inside a face of
-the cost frontier. This happens with or without a support gap, so cycling is
-not evidence of nonconvexity. Diminishing steps converge to the convex-hull
-price, and with quadratic supply costs their time-averaged schedules recover the
-convex-hull plan. Edge-dependent
-transition energy and a third service batch mark where the reduction ends.
-A study of 18 German bus operators, using public timetable data, shows that with
-400\,kWh batteries most operators' peak runs pair without midday charging, so
-support cannot fail. With 250--300\,kWh batteries, failure becomes possible only at
-spreads near or above 0.7\,EUR/kWh. Undamped price iteration nonetheless cycles
-in about 12\% of the scenarios, almost all of them with no support gap.
+results about price formation. A positive support gap requires the marginal-cost
+spread between charging windows to reach the daily vehicle cost divided by the
+largest forced-charging increment, and it is at most one eighth of the spread's
+slope times that increment squared. With a small constant step, price iteration
+converges when the hull optimum is a vertex of the cost frontier and never
+converges when it lies inside a face. A face optimum occurs with or without a
+support gap, so a price cycle is not evidence of nonconvexity. Diminishing steps
+converge to the convex-hull price, and with quadratic supply costs their
+time-averaged schedules recover the convex-hull plan. Edge-dependent transition
+energy and a third service batch mark where the reduction ends. A study of 18
+German bus operators, using public timetable data, shows that with 400\,kWh
+batteries 15 operators can pair every afternoon run without midday charging, so
+support cannot fail at any price. Wherever failure is possible, it needs a spread
+of at least 0.5\,EUR/kWh, and more than 1\,EUR/kWh for the median operator. Undamped price iteration nonetheless
+cycles in 15\% of the scenarios, almost all of them without a support gap.
 \end{abstract}
 
 \section{Introduction}\label{sec:intro}
@@ -104,19 +104,20 @@ point has a finite, serial, state-of-charge-feasible realization.
 \item \textbf{Anatomy of the support gap (\cref{prop:anatomy}).} In the
 lossless case the gap $\Delta=D-\CH$ between physical and convexified planning
 values is positive only if the marginal-cost spread between the two charging
-windows reaches $f/\delta$, where $f$ is the daily vehicle cost and $\delta$ an
+windows reaches $f/\eta$, where $f$ is the daily vehicle cost and $\eta$ an
 increment between consecutive forced-charging thresholds. The gap is at most
-$\kappa\delta^2/8$ for supply curvature $\kappa$.
-\item \textbf{Price dynamics (\cref{thm:iteration}).} For the price iteration
-used in practice and in our earlier computational work, undamped prices are
-eventually periodic with period at most two. With any constant step, prices
-fail to converge exactly when the hull optimum lies in the relative interior of
-a frontier face. With a small step, the loads then alternate between the face's
-two endpoints and the prices stay within an $O(a)$ band around the convex-hull
-price. Diminishing steps converge to that price, and with quadratic supply
-costs the step-weighted time averages of the loads recover the hull optimum. Non-convergence occurs both
-with and without a support gap. Cycling diagnoses a degenerate tangency, not
-nonconvexity.
+$\kappa\eta^2/8$, where $\kappa$ bounds the slope of that spread.
+\item \textbf{Price dynamics (\cref{thm:iteration}).} For the damped
+price-adjustment loop that posts the marginal cost of the last response, undamped
+prices are eventually periodic with period at most two and can cycle even when a
+supporting price exists. With a small constant step, prices converge if the hull
+optimum is a vertex of the cost frontier, and never converge if it lies in the
+relative interior of a face. In the latter case the loads alternate between the
+face's two endpoints and the prices stay within an $O(a)$ band around the
+convex-hull price. Diminishing steps converge to that price, and with quadratic supply
+costs the step-weighted time averages of the loads recover the hull optimum. A face optimum
+arises both with and without a support gap. Persistent cycling therefore
+diagnoses a degenerate tangency, not nonconvexity.
 \item \textbf{Where the reduction stops (\cref{sec:boundaries}).} A common
 transition energy per pair preserves the reduction. Edge-dependent transition
 energy breaks it: on a complete assignment graph where every perfect matching is
@@ -127,12 +128,12 @@ establish a strictly positive gap.
 \item \textbf{Calibrated evidence (\cref{sec:study}).} Using the public
 timetables of 18 German operators \citep{sistig2025dataset,sistig2025electrification},
 we build morning and afternoon peak runs and compute when the obstruction can
-arise. With 400\,kWh batteries, 15 of 18 operators' peak runs pair without midday
-charging, and support failure is impossible. With smaller batteries it becomes
-possible, but only at marginal-cost spreads of roughly 0.7\,EUR/kWh or more for a
-150\,EUR/day vehicle cost; when it occurs, the gap stays below 0.07\% of total cost.
-Undamped price iteration nevertheless cycles in about 12\% of scenarios, nearly
-all of which have no gap.
+arise. With 400\,kWh batteries, 15 of 18 operators can pair every afternoon run
+without midday charging, and support failure is impossible at any price. Across
+battery sizes, failure needs a marginal-cost spread of at least 0.5\,EUR/kWh for a
+150\,EUR/day vehicle cost, and more than 1\,EUR/kWh for the median operator. When it
+occurs, the gap is below 0.06\% of total daily cost. Undamped price iteration
+nevertheless cycles in 15\% of scenarios, nearly all of which have no gap.
 \end{enumerate}
 
 The support criterion itself, matching integrality and convex-hull pricing are
@@ -340,16 +341,18 @@ $\ell_m=\max\{\mathrm{Lo},r_m\}$. Then
 the model is feasible exactly when $\mathrm{Lo}\le U$, and $r_m$ is nondecreasing and
 discretely convex in $m$ (\cref{app:projection}). Let $m_0$ be the largest $m$
 with $r_m\le\mathrm{Lo}$ and $m_{\max}$ the largest $m$ with $\ell_m\le U$. The
-lower boundary $\bar c(E)$ of the hull's operating cost starts at
-$(\mathrm{Lo},fN_{m_0})$, passes through the \emph{breakpoints}
-$(r_m,fN_m)$ for $m_0<m\le m_{\max}$, and is flat at $fN_{m_{\max}}$ up to $U$.
+lower boundary $\bar c(E)$ of the hull's operating cost is piecewise linear. Call
+$\mathrm{Lo}$ and $r_m$ for $m_0<m\le m_{\max}$ the \emph{breakpoints}. The boundary
+starts at $(\mathrm{Lo},fN_{m_0})$, interpolates linearly between consecutive
+breakpoints $(\ell_{m-1},fN_{m-1})$ and $(\ell_m,fN_m)$, and is flat at
+$fN_{m_{\max}}$ from the last breakpoint to $U$ (the \emph{flat face}).
 Consecutive breakpoints are one cardinality apart, so each sloping segment has slope
-$-f/\delta_m$ with increment $\delta_m=\ell_m-\ell_{m-1}>0$.
+$-f/\eta_m$ with increment $\eta_m=\ell_m-\ell_{m-1}>0$.
 
 \begin{corollary}[Support classification]\label{cor:support}
 Let $G(E)=F(E,S_0-E)$ be continuous and strictly convex on $[\mathrm{Lo},U]$ and let
 $E^*$ minimize $\bar c+G$. Then $\Delta=0$ if and only if $E^*$ is physical:
-$E^*\in\{\mathrm{Lo}\}\cup\{r_m:m_0<m\le m_{\max}\}\cup[\ell_{m_{\max}},U]$. The gap is
+$E^*$ is a breakpoint or lies in the flat face $[\ell_{m_{\max}},U]$. The gap is
 positive exactly when $E^*$ lies strictly between two consecutive breakpoints.
 \end{corollary}
 
@@ -392,7 +395,8 @@ $[t_m,U]$ with $t_m=\max\{S_0-H,\,S_0-N_mB,\,2r_m-K\}$ (\cref{app:projection}).
 
 On the physical set, the terminal load is $S_0-E$. A posted price $p=(p_E,p_L)$
 therefore charges $p_LS_0+\pi E$ with $\pi=p_E-p_L$, and the operator's response
-depends only on the \emph{spread} $\pi$. Let $F$ be differentiable and convex, and
+depends only on the \emph{spread} $\pi$. Assume $\mathrm{Lo}<U$, and let $F$ be convex
+and differentiable on a neighbourhood of the attainable loads. Let
 let $g(E)=\partial_EF-\partial_LF$ at $(E,S_0-E)$. This is the marginal-cost spread
 at early load $E$, and it equals $G'(E)$. Assume $g$ is continuous and strictly
 increasing on $[\mathrm{Lo},U]$, let $E^*$ be the unique hull optimum, and let
@@ -405,14 +409,14 @@ solver would.
 expensive enough to straddle, and its size is controlled by the face length.
 
 \begin{proposition}[Gap conditions]\label{prop:anatomy}
-Let $\delta_{\max}=\max_{m_0<m\le m_{\max}}\delta_m$ (zero if there is no sloping
+Let $\eta_{\max}=\max_{m_0<m\le m_{\max}}\eta_m$ (zero if there is no sloping
 face).
 \begin{enumerate}[label=(\roman*),itemsep=1pt]
 \item If $\Delta>0$, then $E^*$ lies strictly between consecutive breakpoints
-$u<u'$ with $\pi^*=f/(u'-u)$. In particular $\max_{[\mathrm{Lo},U]}g\ge f/\delta_{\max}$:
-no gap can occur when the vehicle cost exceeds $\delta_{\max}$ times the largest
+$u<u'$ with $\pi^*=f/(u'-u)$. In particular $\max_{[\mathrm{Lo},U]}g\ge f/\eta_{\max}$:
+no gap can occur when the vehicle cost exceeds $\eta_{\max}$ times the largest
 marginal-cost spread.
-\item If $g$ is $\kappa$-Lipschitz, then $\Delta\le\kappa(u'-u)^2/8\le\kappa\delta_{\max}^2/8$.
+\item If $g$ is $\kappa$-Lipschitz, then $\Delta\le\kappa(u'-u)^2/8\le\kappa\eta_{\max}^2/8$.
 \end{enumerate}
 \end{proposition}
 
@@ -430,8 +434,8 @@ fleet's response, and move the price toward the marginal cost of that response:
 \end{equation}
 Applied componentwise to $(p_E,p_L)$, the damped update
 $p_{k+1}=(1-a_k)p_k+a_k\nabla F(e_k)$ induces exactly \eqref{eq:iteration} on the
-spread. This is the loop that the price-maker fleet literature, including our own
-computational program, uses to detect fixed points and cycles. A fixed point is a
+spread. It is the natural damped fixed-point scheme for computing a price that
+equals the marginal cost of the response it induces. A fixed point is a
 spread with $\pi=g(E)$ for some selected $E\in R(\pi)$, that is, a supported
 plan. The behaviour hinges on whether $E^*$ is a strict vertex of the hull
 boundary or lies in the relative interior of a maximal face $[w,w']$, which may
@@ -448,23 +452,23 @@ $M=\max_{E\in[\mathrm{Lo},U]}|g(E)-\pi^*|$.
 Under the standing assumptions of this section:
 \begin{enumerate}[label=(\alph*),itemsep=2pt]
 \item \emph{Fixed points.} Some vertex selection has a fixed point if and only if
-$E^*$ is a breakpoint, that is, one of $\mathrm{Lo}$, $r_m$ ($m_0<m\le m_{\max}$)
-or $U$. In particular there is no fixed point when $\Delta>0$, nor when $E^*$ lies
+$E^*$ is a breakpoint or $E^*=U$. In particular there is no fixed point when $\Delta>0$, nor when $E^*$ lies
 inside the flat face, although $\Delta=0$ in the latter case.
 \item \emph{Undamped iteration} ($a_k\equiv1$, a deterministic selection). Every orbit is eventually
 periodic with period one or two. If $E^*$ lies in the relative interior of a
-face $[w,w']$ and $\pi_0\neq\pi^*$, the period is two and the cycle's loads satisfy
+maximal face $[w,w']$ and $\pi_0\neq\pi^*$, the period is two and the cycle's loads satisfy
 $E_{\rm lo}\le w<w'\le E_{\rm hi}$.
 \item \emph{Constant step} $a\in(0,1)$. Every orbit enters the interval
 $|\pi-\pi^*|\le aM$ after finitely many steps and remains there. If $E^*$ is a strict
 vertex in the interior of its normal cone, and $aM$ is smaller than the distance
 from $\pi^*$ to the cone's boundary, then $\pi_k\to\pi^*$ geometrically and $E_k=E^*$
-eventually. If $E^*$ lies in the relative interior of a face $[w,w']$, the prices
+eventually. If $E^*$ lies in the relative interior of a maximal face $[w,w']$, the prices
 converge for at most countably many initial prices, and for none if $E^*$ is not a
 breakpoint. If moreover $aM$ is smaller than the distance from $\pi^*$ to the
 far ends of the normal cones of $w$ and $w'$, then eventually every load lies in
-$[w,w']$ and equals $w$ or $w'$ unless $\pi_k=\pi^*$ exactly, both $w$ and $w'$
-recur infinitely often, and
+$[w,w']$ and equals $w$ or $w'$ unless $\pi_k=\pi^*$ exactly; unless the orbit
+reaches $\pi^*$ and the selection then picks $E^*$, both $w$ and $w'$ recur
+infinitely often; and
 $\pi_k\in[\pi^*-a\,d_-,\ \pi^*+a\,d_+]$ with $d_-=\pi^*-g(w)$ and $d_+=g(w')-\pi^*$.
 \item \emph{Diminishing steps} ($a_k\to0$, $\sum_ka_k=\infty$). Then $\pi_k\to\pi^*$,
 and the step-weighted averages of $g(E_k)$ converge to $\pi^*$. If $g$ is affine,
@@ -474,10 +478,15 @@ the step-weighted average load converges to $E^*$.
 
 \Cref{lem:sign} is the whole engine. It follows from monotonicity of the hull
 boundary's subdifferential, and the proofs are in \cref{app:prices}.
-\Cref{fig:anchor}b illustrates all three regimes on the worked example.
+\Cref{fig:anchor}b illustrates all three regimes on the worked example. The
+step-size conditions in (c) matter. In the worked example with the steeper supply
+$F(E,L)=16E+(E^2+L^2)/4$, the hull optimum is the supported vertex $E^*=9$, yet
+undamped iteration from $\pi_0=3$ alternates between loads $0$ and $15$ forever,
+while the step $a=1/10$ converges. Part (b) also assumes a selection that depends
+only on the current price; history-dependent tie rules are outside its scope.
 
-\paragraph{What the theorem says about cycling.} Non-convergence of
-\eqref{eq:iteration} is caused by a \emph{degenerate tangency}: the optimal load
+\paragraph{What the theorem says about cycling.} With small steps,
+non-convergence of \eqref{eq:iteration} is caused by a \emph{degenerate tangency}: the optimal load
 sits on a face of the frontier, where the linear response jumps between the
 face's endpoints. That happens in two different situations. On a sloping face
 the interior loads are not physical, so $\Delta>0$ and no posted price can
@@ -596,65 +605,76 @@ energies and nothing else: off-peak service, crews and multi-depot structure are
 not modeled.
 
 \paragraph{Economics.} We treat economics as a sensitivity grid rather than a
-calibration. The daily vehicle cost is $f\in\{50,100,150,200\}$\,EUR (base
-150). The supply cost in each window is quadratic,
-$\bar p_wE+\kappa E^2/2$, so the marginal-cost spread is
-$g(E)=s_0+\kappa(2E-S_0)$. The zero-load spread $s_0$ ranges from $-0.2$ to
-$1.6$\,EUR/kWh. The price impact $\kappa=\rho\,\bar p/S_0$ with $\bar p=0.15$\,EUR/kWh
-and $\rho\in\{0,0.5,1,2,4\}$: drawing the fleet's whole daily energy in one window
-would raise that window's marginal cost by $\rho\bar p$. The midday budget $K$ is
-either ample ($K=P$) or half that, and the overnight budget is ample.
+calibration. The daily vehicle cost is $f=150$\,EUR in the sweeps; critical
+spreads scale linearly in $f$. The supply cost in each window is quadratic,
+$\bar p_wE+\beta E^2/2$, so the marginal-cost spread is
+$g(E)=s_0+\beta(2E-S_0)$, which is Lipschitz with $\kappa=2\beta$. The zero-load
+spread $s_0=\bar p_E-\bar p_L$ ranges over 37 values from $-0.2$ to
+$1.6$\,EUR/kWh. The price impact is $\beta=\rho\,\bar p/S_0$ with $\bar p=0.15$\,EUR/kWh
+and $\rho\in\{0.5,1,2,4\}$: drawing the fleet's whole daily energy in one window
+would raise that window's marginal cost by $\rho\bar p$. We report costs relative
+to the total daily cost, vehicles plus energy, with the overnight zero-load price
+set to $\bar p$. The midday budget $K$ is either ample ($K=P$) or half that, and
+the overnight budget is ample. The model has no in-service charging, so a run
+needing more than the usable battery $B$ cannot be served. We exclude such
+operator--battery combinations rather than trimming their runs (57 runs exceed
+250\,kWh, 13 exceed 300\,kWh, 8 exceed 350\,kWh, none exceed 400\,kWh).
 
 \paragraph{Result 1: with today's batteries the obstruction is mostly impossible.}
 \Cref{prop:anatomy}(i) turns the data into a necessary condition: a gap requires
-a marginal spread of at least $f/\delta_{\max}$, which depends only on run
-energies and battery size. \Cref{fig:critical} shows it per operator. With
-$B=400$\,kWh, 15 of 18 operators can pair every afternoon run with a morning run
-without midday charging. Then $r_m\equiv0$, the frontier is flat, and support
+a marginal spread of at least $f/\eta_{\max}$, which depends only on run energies
+and battery size. \Cref{fig:critical} shows it per operator. With $B=400$\,kWh,
+15 of 18 operators have $r_m=0$ for every $m$: every pairing of a morning and an
+afternoon run needs no midday charging. The frontier is then flat, and support
 cannot fail at any price. For the remaining three the critical spread is
-0.53\,EUR/kWh or more, and in two of them above 35\,EUR/kWh. Smaller batteries make
-the forced-charging increments real: at $B=300$\,kWh eleven operators admit a gap,
-at spreads of at least 0.75\,EUR/kWh (median 1.25); at $B=250$\,kWh all 18 do,
-from 0.69\,EUR/kWh (median 0.91). These thresholds are several times the 0.15\,EUR/kWh reference energy price
-used to scale the price impact.
-Support failure therefore needs capacity or scarcity pricing, or a much cheaper
-vehicle, together with a battery sized close to the paired energy.
+0.53\,EUR/kWh or more, and above 35\,EUR/kWh for two of them. Smaller batteries
+make forced charging real. At $B=350$\,kWh, 5 of 17 eligible operators admit a gap,
+from 0.81\,EUR/kWh (median 1.40). At $B=300$\,kWh, 8 of 14 do, from 0.91\,EUR/kWh
+(median 1.27). At $B=250$\,kWh, all 9 eligible operators do, from 0.72\,EUR/kWh
+(median 1.70). These thresholds are several times the 0.15\,EUR/kWh reference
+energy price. Support failure therefore needs capacity or scarcity pricing, or a
+much cheaper vehicle, together with a battery sized close to the paired energy.
 
 \begin{figure}[t]
 \centering
 \includegraphics[width=\textwidth]{figures/critical.pdf}
-\caption{Critical marginal-cost spread $f/\delta_{\max}$ below which no support
+\caption{Critical marginal-cost spread $f/\eta_{\max}$ below which no support
 gap can occur (\cref{prop:anatomy}), for a vehicle cost of 150\,EUR/day, per
-operator and usable battery size. Hollow markers at the right: every afternoon run
-pairs with a morning run without midday charging, so no gap is possible.}
+operator and usable battery size $B$. Hollow markers: $r_m=0$ for all $m$, so no
+gap is possible at any price. Crosses: some peak run needs more than $B$, so the
+combination is outside the model.}
 \label{fig:critical}
 \end{figure}
 
 \paragraph{Result 2: gaps are rare and small; regret is not.}
-Over the $18\times37\times5$ grid at $B=300$\,kWh, only 13 scenarios have
-$\Delta>0$, all with $s_0>0.3$\,EUR/kWh. The largest gap is 0.063\% of total cost.
-At $B=400$\,kWh there are 7 such scenarios, with gaps up to 0.027\%. In gap
-scenarios the planner optimum's regret at its own marginal prices is a median
-4.7 times the gap at $B=300$ (8.5 at $B=400$). The operator's incentive to deviate
-is an order of magnitude larger than the welfare at stake, as in the worked example.
-Halving the midday budget leaves these gap counts unchanged.
+At $B=400$\,kWh the grid has $18\times37\times4=2664$ scenarios. Only 7 have
+$\Delta>0$, all with $s_0>0.3$\,EUR/kWh, and the largest gap is 0.023\% of total
+daily cost. At $B=300$\,kWh (14 eligible operators, 2072 scenarios) there are 6,
+with gaps up to 0.054\%. In gap scenarios, the planner optimum's regret at its own
+marginal prices is a median 8.5 times the gap at $B=400$ (4.2 at $B=300$). The
+operator's incentive to deviate is several times the welfare at stake, as in the
+worked example. Halving the midday budget leaves these gap counts unchanged.
 
 \paragraph{Result 3: cycling is common and mostly unrelated to the gap.}
-Undamped iteration from the zero-load spread cycles in 391 of 3330 scenarios at
-$B=300$ (12\%), and 378 of these have $\Delta=0$ (\cref{fig:sweep}). They
-concentrate at small spreads, where the hull optimum falls inside the flat face:
-the cheapest fleet has spare midday capacity, and the vertex response jumps
-between its two ends. This is case (a) of \cref{thm:iteration} with $\Delta=0$.
-At $B=400$\,kWh, 390 of the 397 cycling scenarios have no gap. A
-computational study that counted price cycles as evidence of assignment
-nonconvexity would overstate it by more than an order of magnitude here.
+Undamped iteration, started from the spread at the smallest attainable early
+load, cycles in 397 of the 2664 scenarios at $B=400$\,kWh (15\%). Of these, 390 have
+$\Delta=0$ (\cref{fig:sweep}). Classifying the hull optimum explains them: it lies
+inside the flat face in 384 cycling scenarios, inside a sloping face in 7 (exactly
+the gap scenarios) and at a vertex in 6, where the undamped step is too large
+for part (c) of \cref{thm:iteration}. Every scenario with a face optimum cycles.
+The flat-face cases concentrate at small spreads: the cheapest fleet has spare
+midday capacity, and the vertex response jumps between the two ends of its
+interval. With half the midday budget, 189 scenarios (7\%) cycle, 182 of them
+without a gap. At $B=300$\,kWh the pattern is the same: 307 of 2072 cycle and 301
+of these have no gap. A study that counted price cycles as evidence of
+assignment nonconvexity would overstate it by a factor of about fifty here.
 
 \begin{figure}[t]
 \centering
 \includegraphics[width=\textwidth]{figures/sweep.pdf}
-\caption{Number of operators (of 18, $B=300$\,kWh, $f=150$\,EUR/day, ample midday
+\caption{Number of operators (of 18; $B=400$\,kWh, $f=150$\,EUR/day, ample midday
 budget) whose undamped price iteration cycles (a) and whose planning problem has a
-positive gap (b), as functions of the zero-load spread and the price impact
+positive gap (b), as functions of the zero-load spread $s_0$ and the price impact
 $\rho$. Cycling concentrates at small spreads with no gap.}
 \label{fig:sweep}
 \end{figure}
@@ -665,18 +685,30 @@ $\rho$. Cycling concentrates at small spreads with no gap.}
 assignment nonconvexity. A depot facing a marginal-cost tariff will under- or
 over-charge at midday only when the spread prices forced charging at the
 vehicle cost it saves. That requires battery capacity close to the paired energy
-of peak runs, together with a spread near $f/\delta$. When it happens, the
-welfare loss is second order, of size $\kappa\delta^2/8$, but the operator's bill
+of peak runs, together with a spread near $f/\eta$. When it happens, the
+welfare loss is second order, at most $\kappa\eta^2/8$, but the operator's bill
 regret is first order. At the convex-hull price an uplift of at most $\Delta$
-supports the planner optimum (\cref{sec:model}), which is far cheaper than
-compensating the regret at the operator's own marginal prices. Re-pricing until
-convergence is not.
+supports the planner optimum (\cref{sec:model}). That is far cheaper than
+compensating the regret at the operator's own marginal prices, and it works where
+re-pricing until convergence does not.
+
+\paragraph{How much the price-maker concern matters.} The calibrated study gives
+a sober answer for peak operations. With current battery sizes, most operators'
+peak runs pair freely, and the assignment nonconvexity is invisible to any
+price. Where it is visible, it needs spreads several times the reference
+energy price, and the welfare at stake is a few hundredths of a percent of daily cost.
+The operator's incentive to deviate, however, is several times larger. The
+binding consideration for tariff design is therefore the incentive problem, not
+the efficiency loss. Battery downsizing, demand charges and scarcity pricing all
+push depots toward the regime where the obstruction appears, so the threshold
+$f/\eta_{\max}$ is the quantity to monitor.
 
 \paragraph{For price-coordination algorithms.} \Cref{thm:iteration} separates
 two causes of non-convergence. Degenerate flat-face responses can be removed by
 selection rules, such as choosing the response closest to the previous load or
 announcing a target quantity. Sloping-face gaps cannot be removed by any price.
-Constant damping only narrows the band; diminishing steps with averaging recover
+Constant damping only narrows the band, and an overly large step can make prices
+cycle even around a supported vertex. Diminishing steps with averaging recover
 the hull plan. Iterative tariff negotiation between a depot and a supplier
 should therefore report the gap, or a certificate that $E^*$ is physical,
 rather than a cycle count.

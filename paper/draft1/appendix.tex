@@ -85,7 +85,7 @@ completeness of $\Gamma$.
 All thresholds at or below $\mathrm{Lo}$ are dominated in cost by $m_0$. The first retained
 increment is $r_{m_0+1}-\mathrm{Lo}\le r_{m_0+1}-r_{m_0}$, and later increments are the
 original nondecreasing matching increments, all positive after $m_0$. The slopes
-$-f/\delta_m$ are therefore nondecreasing, followed by the flat segment.
+$-f/\eta_m$ are therefore nondecreasing, followed by the flat segment.
 Endpoints are physical, interpolants are hull mixtures, and every physical
 branch lies on or above this convex graph, so the graph is exactly the lower
 hull boundary. Consecutive breakpoints differ by one cardinality.
@@ -150,14 +150,14 @@ The finite candidate set $\mathcal V$ consists of all layer endpoints $(\ell_m,f
 and $(U,fN_m)$. Since a linear function attains its minimum over $\conv\mathcal P$
 at a point of $\mathcal V$, every $E\in R(\pi)$ satisfies $\bar c(E)=fN_m$ for its
 layer and $E\in H(\pi)$. The layer endpoints that lie on $\bar c$ are exactly the
-breakpoints $\mathrm{Lo}$, $r_m$ ($m_0<m\le m_{\max}$) and $U$. The hull optimum satisfies
+breakpoints $\mathrm{Lo}$, $r_m$ ($m_0<m\le m_{\max}$) and the point $U$. The hull optimum satisfies
 $-\pi^*\in\partial\bar c(E^*)$ because $G$ is differentiable.
 
 \subsection{Proof of Proposition~\ref{prop:anatomy}}
 (i) By \cref{cor:support}, $\Delta>0$ places $E^*$ strictly between consecutive
 breakpoints $u<u'$, where $\bar c$ is affine with slope $-f/(u'-u)$ because
 consecutive breakpoints differ by one cardinality. Optimality at an interior point
-gives $g(E^*)=f/(u'-u)\ge f/\delta_{\max}$, and $\max g\ge g(E^*)$.
+gives $g(E^*)=f/(u'-u)\ge f/\eta_{\max}$, and $\max g\ge g(E^*)$.
 
 (ii) On $[u,u']$ let $\phi=\bar c+G$. Then $\phi'(E)=-f/(u'-u)+g(E)$ is
 $\kappa$-Lipschitz and vanishes at $E^*$, so $\phi(E)-\phi(E^*)\le\kappa(E-E^*)^2/2$.
@@ -187,11 +187,12 @@ minimizes the convex function $\bar c+G$; by uniqueness $\hat E=E^*$ and
 $\hat\pi=\pi^*$.
 
 \emph{(a)} By (F3), a fixed point requires $E^*\in R(\pi^*)$ to be a selectable
-layer endpoint on $\bar c$, that is, a breakpoint. Conversely, if $E^*$ is a
-breakpoint then $E^*\in H(\pi^*)$ is a candidate attaining the minimum, so
+layer endpoint on $\bar c$, that is, a breakpoint or $U$. Conversely, if $E^*$ is
+a breakpoint or $U$, then $E^*\in H(\pi^*)$ is a candidate attaining the minimum, so
 $E^*\in R(\pi^*)$ and a selection choosing it makes $\pi^*$ a fixed point. If
 $\Delta>0$, $E^*$ is not physical and hence not a breakpoint; if $E^*$ lies inside
-the flat face $(\ell_{m_{\max}},U)$ it is physical but not a breakpoint.
+the open flat face $(\ell_{m_{\max}},U)$ it is physical but neither a breakpoint nor
+$U$.
 
 \emph{(b)} Let $\sigma$ be the selection, a function of $\pi$ with values in
 $R(\pi)$; by (F1) it is nonincreasing, so $h=g\circ\sigma$ is nonincreasing and
@@ -235,16 +236,19 @@ $\pi'=(1-a)\pi+ag(w)\in[\pi^*-ad_-,\pi)$, and symmetrically from below; from
 $\pi^*$ the update stays in $[\pi^*-ad_-,\pi^*+ad_+]$. This band is therefore
 invariant. Above $\pi^*$, prices contract geometrically toward $g(w)<\pi^*$ and cross
 $\pi^*$ in finitely many steps; below, they contract toward $g(w')>\pi^*$. Hence
-the band is entered and both $w$ and $w'$ recur infinitely often.
+the band is entered, and both $w$ and $w'$ recur infinitely often unless some
+$\pi_k=\pi^*$ and the selection picks $E^*$ (possible only if $E^*$ is a breakpoint),
+after which the orbit is fixed. Because $\mathrm{Lo}<U$ and $g$ is strictly
+increasing, $M>0$, so the interval $d\le aM$ is reached in finitely many steps.
 
-\emph{(d)} With $d_{k+1}\le\max\{(1-a_k)d_k,a_kM\}$, fix $\varepsilon>0$ and $K$ with
-$a_kM<\varepsilon$ for $k\ge K$. After $K$, the interval $d\le\varepsilon$ is invariant,
+\emph{(d)} With $d_{k+1}\le\max\{(1-a_k)d_k,a_kM\}$, fix $\varepsilon>0$ and $k_\varepsilon$ with
+$a_kM<\varepsilon$ for $k\ge k_\varepsilon$. After $k_\varepsilon$, the interval $d\le\varepsilon$ is invariant,
 and outside it $d$ contracts by the factors $1-a_k$, whose product diverges to
 zero because $\sum a_k=\infty$. Thus $\limsup d_k\le\varepsilon$ for every
-$\varepsilon$. Summing the update gives $\sum_{k<K}a_k(g(E_k)-\pi_k)=\pi_K-\pi_0$,
-which is bounded; dividing by $A_K=\sum_{k<K}a_k\to\infty$ and using
-$\pi_k\to\pi^*$ (Stolz--Ces\`aro) gives $\sum_{k<K}a_kg(E_k)/A_K\to\pi^*$. If $g$
-is affine, this average equals $g\bigl(\sum_{k<K}a_kE_k/A_K\bigr)$, and invertibility
+$\varepsilon$. Summing the update gives $\sum_{k<n}a_k(g(E_k)-\pi_k)=\pi_n-\pi_0$,
+which is bounded; dividing by $A_n=\sum_{k<n}a_k\to\infty$ and using
+$\pi_k\to\pi^*$ (Stolz--Ces\`aro) gives $\sum_{k<n}a_kg(E_k)/A_n\to\pi^*$. If $g$
+is affine, this average equals $g\bigl(\sum_{k<n}a_kE_k/A_n\bigr)$, and invertibility
 of $g$ gives the load statement. \qed
 
 \paragraph{Numerical verification.} The repository contains an exact

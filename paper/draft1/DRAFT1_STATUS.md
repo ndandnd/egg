@@ -31,10 +31,24 @@ draft (`paper/focused-theory-20261029/`, PDF v13) is kept unchanged as an archiv
 
 ## Calibrated study (code/study.py → results/summary.json)
 
-18 operators kept of 20 (two with fewer than five peak runs per batch).
-B=400 kWh: 15/18 cannot have a gap at any price. B=300: 11/18 can, at spreads
-≥0.75 EUR/kWh (f=150). Gap scenarios: 13/3330 (B=300), max 0.063% of cost,
-regret ≈ 4.7× gap. Undamped cycles: 391/3330, of which 378 have Δ=0.
+18 of 20 operators (two have fewer than five peak runs per batch). Operator /
+battery combinations with a run longer than the battery are excluded, not trimmed.
+B=400 kWh (all 18 eligible): 15 have r_m ≡ 0, so no gap at any price; the other
+three need spreads ≥0.53 EUR/kWh (f=150). B=300: 8 of 14 eligible can have a gap,
+from 0.91 EUR/kWh. Sweep at B=400 (2664 scenarios): 7 gap scenarios, max 0.023% of
+total daily cost, regret ≈ 8.5× gap; undamped cycles in 397, of which 390 have Δ=0
+(384 flat-face optima, 7 sloping-face, 6 vertex optima with too large a step).
+
+## Independent referee pass (30 Oct)
+
+A fresh referee subagent checked the new proofs, the n_A≠n_B projection and every
+number. Fixed: an overstated iff for non-convergence (the abstract now separates
+small-step convergence at vertices from cycling with large steps); a consistent
+breakpoint definition; recurrence and M>0 caveats in Theorem (c); the
+undisclosed run filter (now explicit exclusion); relative-cost denominator
+(now total daily cost); κ notation; ρ=0 removed from the grid; the
+"order of magnitude" overstatement; the uncited "our earlier work" claim;
+the stale test log and a non-asserting test branch.
 
 ## Open / next
 

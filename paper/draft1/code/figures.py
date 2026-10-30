@@ -77,30 +77,36 @@ def fig_critical():
     nice = {o: o.split("__", 1)[1].replace("_", " ")[:24] for o in ops}
     Bs = [250, 300, 350, 400]
     order = sorted(ops, key=lambda o: min([c["pi_crit"] or 1e9 for c in crit if c["operator"] == o]))
-    fig, ax = plt.subplots(figsize=(6.6, 3.4))
-    cap = 60.0
+    fig, ax = plt.subplots(figsize=(6.6, 3.5))
+    free_x, over_x = 60.0, 140.0
     for j, B in enumerate(Bs):
-        ys, xs, hollow = [], [], []
+        pts, free, over = [], [], []
         for i, o in enumerate(order):
             c = next(c for c in crit if c["operator"] == o and c["B"] == B)
             y = i + (j - 1.5) * 0.17
-            if c["pi_crit"] is None:
-                hollow.append((cap, y))
+            if not c["eligible"]:
+                over.append(y)
+            elif c["pi_crit"] is None:
+                free.append(y)
             else:
-                xs.append(c["pi_crit"])
-                ys.append(y)
-        ax.scatter(xs, ys, s=16, color=SERIES[j], label=f"$B={B}$ kWh", zorder=3, edgecolor="white", linewidth=0.6)
-        if hollow:
-            ax.scatter([h[0] for h in hollow], [h[1] for h in hollow], s=14, facecolor="none", edgecolor=SERIES[j], linewidth=0.9, zorder=3)
+                pts.append((c["pi_crit"], y))
+        ax.scatter([p[0] for p in pts], [p[1] for p in pts], s=16, color=SERIES[j], label=f"$B={B}$ kWh",
+                   zorder=3, edgecolor="white", linewidth=0.6)
+        ax.scatter([free_x] * len(free), free, s=14, facecolor="none", edgecolor=SERIES[j], linewidth=0.9, zorder=3)
+        ax.scatter([over_x] * len(over), over, s=14, marker="x", color=SERIES[j], linewidth=0.9, zorder=3)
     ax.set_xscale("log")
-    ax.set_xlim(0.4, 80)
+    ax.set_xlim(0.4, 220)
     ax.set_yticks(range(len(order)))
     ax.set_yticklabels([nice[o] for o in order], fontsize=7)
     ax.invert_yaxis()
-    ax.axvline(cap, color=GRID, lw=6, zorder=1)
-    ax.text(cap, -1.1, "no gap\npossible", ha="center", fontsize=7, color=INK2)
-    ax.set_xlabel(r"critical marginal-cost spread $f/\delta_{\max}$ (EUR/kWh), $f=150$ EUR/day")
-    ax.legend(loc="lower right", fontsize=7.5, ncol=2)
+    for x in (free_x, over_x):
+        ax.axvline(x, color=GRID, lw=6, zorder=1)
+    ax.text(free_x, -1.2, "no gap\npossible", ha="center", fontsize=6.5, color=INK2)
+    ax.text(over_x, -1.2, "run\n> battery", ha="center", fontsize=6.5, color=INK2)
+    ax.set_xticks([0.5, 1, 2, 5, 10, 20, 40])
+    ax.set_xticklabels(["0.5", "1", "2", "5", "10", "20", "40"])
+    ax.set_xlabel(r"critical marginal-cost spread $f/\eta_{\max}$ (EUR/kWh), $f=150$ EUR/day")
+    ax.legend(loc="center", bbox_to_anchor=(0.62, 0.52), fontsize=7.5, ncol=2)
     ax.grid(axis="y", visible=False)
     fig.tight_layout()
     fig.savefig(os.path.join(FIG, "critical.pdf"))
@@ -109,7 +115,8 @@ def fig_critical():
 def fig_sweep():
     d = json.load(open(os.path.join(RES, "study.json")))
     fig, axs = plt.subplots(1, 2, figsize=(6.6, 2.4))
-    rows = d["sweeps"]["B300_K1.0"]
+    rows = d["sweeps"]["B400_K1.0"]
+    nops = len({r["operator"] for r in rows})
     s0s = sorted({r["s0"] for r in rows})
     rhos = [0.5, 1.0, 2.0, 4.0]
     for j, rho in enumerate(rhos):
@@ -121,8 +128,8 @@ def fig_sweep():
     axs[1].set_title(r"(b) positive gap $\Delta>0$", fontsize=8.5, loc="left", color=INK)
     for ax in axs:
         ax.set_xlabel(r"zero-load spread $s_0$ (EUR/kWh)")
-        ax.set_ylim(-0.5, 17.5)
-    axs[0].set_ylabel(f"operators (of {len(d['operators'])}), $B=300$ kWh")
+        ax.set_ylim(-0.5, nops + 0.5)
+    axs[0].set_ylabel(f"operators (of {nops}), $B=400$ kWh")
     axs[0].legend(loc="upper right", fontsize=7)
     fig.tight_layout()
     fig.savefig(os.path.join(FIG, "sweep.pdf"))
