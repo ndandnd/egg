@@ -75,7 +75,10 @@ class FloatClass:
                       for i in range(len(self.V) - 1) if self.V[i + 1][1] < self.V[i][1] - 1e-9]
 
     def ell_max(self):
-        return max((x2 - x1 for x1, x2, _ in self.edges), default=0.0)
+        """delta_max: largest gap between consecutive physical breakpoints
+        max(Lo, r_m) of the lower boundary (one cardinality apart)."""
+        lo = sorted({lo for _, lo, _ in self.layers})
+        return max((y - x for x, y in zip(lo, lo[1:])), default=0.0)
 
     # G(E) = s0*E + kappa*(E^2 + (S-E)^2)/2 up to a constant; g = G'
     @staticmethod

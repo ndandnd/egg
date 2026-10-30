@@ -99,7 +99,7 @@ def fig_critical():
     ax.invert_yaxis()
     ax.axvline(cap, color=GRID, lw=6, zorder=1)
     ax.text(cap, -1.1, "no gap\npossible", ha="center", fontsize=7, color=INK2)
-    ax.set_xlabel(r"critical marginal-cost spread $f/\ell_{\max}$ (EUR/kWh), $f=150$ EUR/day")
+    ax.set_xlabel(r"critical marginal-cost spread $f/\delta_{\max}$ (EUR/kWh), $f=150$ EUR/day")
     ax.legend(loc="lower right", fontsize=7.5, ncol=2)
     ax.grid(axis="y", visible=False)
     fig.tight_layout()
@@ -122,7 +122,7 @@ def fig_sweep():
     for ax in axs:
         ax.set_xlabel(r"zero-load spread $s_0$ (EUR/kWh)")
         ax.set_ylim(-0.5, 17.5)
-    axs[0].set_ylabel("operators (of 17), $B=300$ kWh")
+    axs[0].set_ylabel(f"operators (of {len(d['operators'])}), $B=300$ kWh")
     axs[0].legend(loc="upper right", fontsize=7)
     fig.tight_layout()
     fig.savefig(os.path.join(FIG, "sweep.pdf"))

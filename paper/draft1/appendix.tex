@@ -1,0 +1,378 @@
+\section{Proofs for Section~\ref{sec:projection}}\label{app:projection}
+
+\subsection{Proof of Theorem~\ref{thm:projection}}
+Fix one allowed matching $M$ with $|M|=m$, fleet $N=N_m$, requirement
+$R=\sum_{(i,j)\in M}(a_i+b_j-B)_+$ and $T=S_0-NB$. Let $x_v$ be a bus's net early
+battery gain. A paired bus serving $A_i$ and $B_j$ holds $B-a_i$ after its
+morning service; it cannot exceed capacity, so $x_v\le a_i$, and it must hold at
+least $b_j$ before the afternoon service, so $x_v\ge a_i+b_j-B$. An A-only bus
+has $x_v\in[a_i-B,a_i]$, and a B-only bus, full before the early window, has
+$x_v\in[b_j-B,0]$. These boxes are nonempty because $a_i,b_j\le B$. Their lower
+endpoints sum to $T$, their positive lower endpoints to $R$, and their upper
+endpoints to $P$; every upper endpoint is nonnegative.
+
+\emph{Necessity.} Whatever the order of actions, $x_v=\alpha C_v-X_v/\delta$ for
+the bus's early purchases $C_v$ and exports $X_v$, so the total $Q$ lies in
+$[T,P]$. A positive lower endpoint needs at least its value divided by $\alpha$
+in purchases, hence $C\ge R/\alpha$. Exports are nonnegative, the shared
+connector carries gross energy $C+X\le K$, and full terminal replenishment
+needs the terminal purchase $L=(S_0-Q)/\alpha\le H$. Terminal purchases are
+nonnegative because $Q\le P<S_0$.
+
+\emph{Sufficiency.} Fix totals $(C,X)$ satisfying these inequalities with $R$ in
+place of $r_m$. For any $Q\in[T,P]$ the boxes admit gains whose positive parts
+sum to $A=\max\{R,Q\}$. If $Q\ge R$, start from the positive lower endpoints and
+zero elsewhere, and distribute $Q-R$ through the remaining headroom. If $Q<R$,
+keep the mandatory positive gains and distribute the negative total $Q-R$
+through the negative lower intervals, whose combined lower endpoint is $T-R$.
+One-direction exchanges then realize $C_0=A/\alpha$ and $X_0=\delta(A-Q)$. Since
+$X\ge0$ implies $\alpha C\ge Q$, and $\alpha C\ge R$, the residual $z=C-C_0$ is
+nonnegative and $X-X_0=\alpha\delta z$.
+
+Realize these residuals by battery-neutral cycles on one bus before its
+one-direction exchange. At early state of charge $s\in[0,B]$, use
+charge-then-discharge cycles of depth at most $B-s$ if $s\le B/2$, and
+discharge-then-charge cycles of depth at most $s$ otherwise. The permitted depth
+is at least $B/2>0$. Split the residual battery throughput $\alpha z$ into
+finitely many such chunks. Each returns to $s$, stays in $[0,B]$, and uses grid
+purchases depth$/\alpha$ and exports $\delta\cdot$depth, so together they
+realize exactly $(z,\alpha\delta z)$. Execute the cycles and then all
+one-direction exchanges serially: their gross energy is $C+X\le K$, so they fit
+the common early window at the connector's power. The endpoint boxes guarantee
+the afternoon service, and nonnegative service draw preserves every
+intermediate state-of-charge bound. Refill serially at the terminal connector
+using total $L\le H$. If $K=0$ all early actions vanish; if $H=0$, then $P<S_0$
+makes every polygon empty, consistent with infeasibility.
+
+\emph{Replacement.} At fixed $m$, the quantities $S_0,P,N_m,T$ and the fleet cost
+do not depend on the matching; only $R$ does, and only through $C\ge R/\alpha$.
+Hence the polygon of a matching attaining $r_m$ contains the polygon of every
+other matching of size $m$, and every point of it has just been realized.
+The union over matchings of size $m$ therefore equals the polygon $W_m$, and the
+union over $m$ gives $\mathcal P$. Each $W_m$ is defined by five half-planes, so
+it has at most five vertices, and $\conv\mathcal P$ is the convex hull of their
+images. With exports prohibited, the construction above uses no exports when
+$X=0$: then $\alpha C=Q\ge R$, so $A=Q$, $X_0=0$ and $z=0$. \qed
+
+\paragraph{Idle buses.} Identical paid idle buses under the total fleet cap
+$n_A+n_B$ do not change $\mathcal P$. An idle bus has the box $[-B,0]$. A plan
+with $m$ pairs and $q$ idle buses has $q\le m$ by the cap; deleting $q$ pairs
+and serving their services separately preserves $N,S_0,P,T$ and the fleet cost
+while lowering $R$, and reproduces the same $(C,X)$.
+
+\subsection{The lossless cases}
+\emph{Charge-only.} With $\alpha=\delta=1$ and $X=0$, $W_m$ becomes
+$\{C:\ C\ge r_m,\ C\le K,\ S_0-N_mB\le C\le P,\ C\ge S_0-H\}$. Since
+$S_0-N_mB$ is the sum of all lower endpoints and $r_m$ the sum of their positive
+parts, $S_0-N_mB\le r_m$, and the layer is $\{E:\max\{\mathrm{Lo},r_m\}\le E\le U\}$ with
+$L=S_0-E$, which is \eqref{eq:lossless}. Feasibility is $\mathrm{Lo}\le U$ because the empty
+matching has $r_0=0$.
+
+\emph{Bidirectional.} With $\alpha=\delta=1$ and exports allowed, $E=C-X$ and
+$L=S_0-E$. A point $E$ is attainable in layer $m$ if and only if
+$\max\{S_0-N_mB,S_0-H\}\le E\le P$ and some $C\ge\max\{r_m,E\}$ satisfies
+$2C-E\le K$, that is, $E\le K$ and $E\ge2r_m-K$. The layer is therefore
+$[t_m,U]$ with $t_m=\max\{S_0-H,\,S_0-N_mB,\,2r_m-K\}$ and $U=\min\{P,K\}$.
+
+\subsection{Monotonicity, convexity and the frontier}
+Deleting an edge from a minimum matching of size $m$ shows $r_{m-1}\le r_m$.
+For discrete convexity, consider the unit-capacity source--A--B--sink network on
+the allowed edges with costs $(a_i+b_j-B)_+$. Its minimum-cost flow LP is
+integral at integer flow values $m=0,\dots,\nu$, and its value is convex in the
+required flow, so $2r_m\le r_{m-1}+r_{m+1}$. This uses bipartiteness, not
+completeness of $\Gamma$.
+
+All thresholds at or below $\mathrm{Lo}$ are dominated in cost by $m_0$. The first retained
+increment is $r_{m_0+1}-\mathrm{Lo}\le r_{m_0+1}-r_{m_0}$, and later increments are the
+original nondecreasing matching increments, all positive after $m_0$. The slopes
+$-f/\delta_m$ are therefore nondecreasing, followed by the flat segment.
+Endpoints are physical, interpolants are hull mixtures, and every physical
+branch lies on or above this convex graph, so the graph is exactly the lower
+hull boundary. Consecutive breakpoints differ by one cardinality.
+
+\subsection{Proof of Corollary~\ref{cor:support}}
+The convex frontier plus strictly convex continuous $G$ has a unique minimizer
+$E^*$. At $\mathrm{Lo}$, at a breakpoint or on the flat segment, a physical plan attains
+the frontier, so $D=\CH$. Strictly between consecutive breakpoints the frontier's
+operating cost is strictly below that of every physical branch because $f>0$, so no
+physical plan attains the hull optimum; compactness of the finite union of
+physical segments then gives $D>\CH$.
+
+\subsection{Sorted matching for the complete graph}
+Replacing a selected service by an unused smaller draw while keeping its partner
+cannot increase the nondecreasing edge cost, so some optimal size-$m$ matching
+uses the $m$ smallest draws in each batch. With $h(t)=(t-B)_+$ and $a\le a'$,
+$b\le b'$, convexity gives $h(a+b)+h(a'+b')\ge h(a+b')+h(a'+b)$. Swapping any
+two partners ordered in the same direction therefore cannot raise the cost, and
+repeated exchanges yield opposite order. For a non-complete graph this shortcut
+fails: with A draws $(5,15)$, B draws $(14,15)$ and $B=20$, allowing only the
+index-matched edges gives $r_2=10$ instead of $9$.
+
+\subsection{The worked example}
+The requirement matrix is $\bigl(\begin{smallmatrix}0&0\\9&10\end{smallmatrix}\bigr)$,
+so $r_0=r_1=0$, $r_2=9$, $S_0=49$, $\mathrm{Lo}=0$ and $U=15$. With
+$G(E)=2401/20-9E/10+E^2/10$, the physical minima of layers $m=0,1$ are at $E=9/2$,
+with values $5841/40$ and $5561/40$; layer $m=2$ is minimized at its endpoint
+$E=9$ with value $2681/20$. On the sloping hull face the objective is
+$2821/20-151E/90+E^2/10$, minimized at $E^*=151/18$ with value $434201/3240$, so
+$\Delta=121/3240$. The hull point mixes the three-bus plan at $E=0$ and the
+two-bus plan at $E=9$ with weights $11/162$ and $151/162$. At the physical
+optimum's marginal prices $(49/10,4)$ each layer's bill is minimized at its lowest
+endpoint; bill plus vehicle cost is $224$, $217$ and $2181/10$, so the regret is
+$11/10$. Both mixed plans have explicit serial witnesses: at $E=0$ pair the 5-draw
+A with the 14-draw B and refill $19,15,15$ on the terminal connector; at $E=9$ the
+15-draw A bus charges $9$ at midday in the crossed pairing and both buses refill
+$20$.
+
+\section{Proof of Proposition~\ref{prop:support}}\label{app:support}
+For any hull point $(e,c)$, linear minimization gives $c+p^\top e\ge V(p)$. If
+$p\in\partial F(e(x))$, then $F(e)\ge F(e(x))+p^\top(e-e(x))$. Adding and
+minimizing over the hull gives $\CH\ge V(p)+F(e(x))-p^\top e(x)=c(x)+F(e(x))-r(x;p)$,
+which is the regret bound; if $r(x;p)=0$, then $D=\CH$.
+
+Conversely let $D=\CH$. Compactness gives a physical minimizer $x$. The
+relative-interior condition gives strong Fenchel duality with an attained
+maximizer, $\CH=V(p^*)-F^*(p^*)$. Then
+\[
+ \underbrace{c(x)+(p^*)^\top e(x)-V(p^*)}_{\ge0}
+ +\underbrace{F(e(x))-(p^*)^\top e(x)+F^*(p^*)}_{\ge0}=D-\CH=0,
+\]
+so both terms vanish: Fenchel equality gives $p^*\in\partial F(e(x))$, and the
+first term gives $r(x;p^*)=0$. \qed
+
+\section{Proofs for Section~\ref{sec:prices}}\label{app:prices}
+
+Throughout, $\bar c$ is the lower hull boundary on $[\mathrm{Lo},U]$, extended by
+$+\infty$ outside, and $H(\pi)=\arg\min_E\{\bar c(E)+\pi E\}$ is the hull response.
+The finite candidate set $\mathcal V$ consists of all layer endpoints $(\ell_m,fN_m)$
+and $(U,fN_m)$. Since a linear function attains its minimum over $\conv\mathcal P$
+at a point of $\mathcal V$, every $E\in R(\pi)$ satisfies $\bar c(E)=fN_m$ for its
+layer and $E\in H(\pi)$. The layer endpoints that lie on $\bar c$ are exactly the
+breakpoints $\mathrm{Lo}$, $r_m$ ($m_0<m\le m_{\max}$) and $U$. The hull optimum satisfies
+$-\pi^*\in\partial\bar c(E^*)$ because $G$ is differentiable.
+
+\subsection{Proof of Proposition~\ref{prop:anatomy}}
+(i) By \cref{cor:support}, $\Delta>0$ places $E^*$ strictly between consecutive
+breakpoints $u<u'$, where $\bar c$ is affine with slope $-f/(u'-u)$ because
+consecutive breakpoints differ by one cardinality. Optimality at an interior point
+gives $g(E^*)=f/(u'-u)\ge f/\delta_{\max}$, and $\max g\ge g(E^*)$.
+
+(ii) On $[u,u']$ let $\phi=\bar c+G$. Then $\phi'(E)=-f/(u'-u)+g(E)$ is
+$\kappa$-Lipschitz and vanishes at $E^*$, so $\phi(E)-\phi(E^*)\le\kappa(E-E^*)^2/2$.
+Both $u$ and $u'$ are physical with cost $\bar c$, so
+$D\le\min\{\phi(u),\phi(u')\}$ while $\CH=\phi(E^*)$. One of $u,u'$ is within
+$(u'-u)/2$ of $E^*$, which gives $\Delta\le\kappa(u'-u)^2/8$. \qed
+
+\subsection{Proof of Lemma~\ref{lem:sign}}
+Let $E\in R(\pi)\subseteq H(\pi)$, so $-\pi\in\partial\bar c(E)$, and recall
+$-\pi^*\in\partial\bar c(E^*)$. Monotonicity of the subdifferential of the convex
+function $\bar c$ gives $(-\pi+\pi^*)(E-E^*)\ge0$, that is, $(\pi-\pi^*)(E-E^*)\le0$.
+Since $g$ is increasing and $g(E^*)=\pi^*$, $(\pi-\pi^*)(g(E)-\pi^*)\le0$. For the
+second claim write
+$\pi_{k+1}-\pi^*=(1-a)(\pi_k-\pi^*)+a(g(E_k)-\pi^*)$. The two terms have
+opposite (weak) signs, and for real $x,y$ with $xy\le0$, $|x+y|\le\max\{|x|,|y|\}$.
+Since $E_k\in[\mathrm{Lo},U]$, $|g(E_k)-\pi^*|\le M$. \qed
+
+\subsection{Proof of Theorem~\ref{thm:iteration}}
+We use three facts. (F1) The same monotonicity argument shows that $\pi<\pi'$,
+$E\in H(\pi)$ and $E'\in H(\pi')$ imply $E\ge E'$. (F2) If $E^*$ lies in the relative
+interior of a maximal face $[w,w']$, then $\partial\bar c(E^*)=\{-\pi^*\}$, the face
+has slope $-\pi^*$, $[w,w']\subseteq H(\pi^*)$, and $E^*\in H(\pi)$ only for
+$\pi=\pi^*$. By (F1), $H(\pi)\subseteq[\mathrm{Lo},w]$ for $\pi>\pi^*$ and
+$H(\pi)\subseteq[w',U]$ for $\pi<\pi^*$. (F3) A fixed point $\hat\pi=g(\hat E)$ with
+$\hat E\in R(\hat\pi)$ has $-g(\hat E)\in\partial\bar c(\hat E)$, so $\hat E$
+minimizes the convex function $\bar c+G$; by uniqueness $\hat E=E^*$ and
+$\hat\pi=\pi^*$.
+
+\emph{(a)} By (F3), a fixed point requires $E^*\in R(\pi^*)$ to be a selectable
+layer endpoint on $\bar c$, that is, a breakpoint. Conversely, if $E^*$ is a
+breakpoint then $E^*\in H(\pi^*)$ is a candidate attaining the minimum, so
+$E^*\in R(\pi^*)$ and a selection choosing it makes $\pi^*$ a fixed point. If
+$\Delta>0$, $E^*$ is not physical and hence not a breakpoint; if $E^*$ lies inside
+the flat face $(\ell_{m_{\max}},U)$ it is physical but not a breakpoint.
+
+\emph{(b)} Let $\sigma$ be the selection, a function of $\pi$ with values in
+$R(\pi)$; by (F1) it is nonincreasing, so $h=g\circ\sigma$ is nonincreasing and
+$h\circ h$ is nondecreasing. For $k\ge1$, $\pi_k$ lies in the finite set
+$g(\{E:(E,c)\in\mathcal V\})$. The odd and even subsequences are orbits of the
+nondecreasing map $h\circ h$, hence monotone, hence eventually constant in a finite
+set. Thus $\pi_{k+2}=\pi_k$ eventually. In the face case with $\pi_0\neq\pi^*$, we
+show by induction that $\pi_k\ne\pi^*$: if $\pi_k\neq\pi^*$ then by (F2)
+$E_k\ne E^*$, so $\pi_{k+1}=g(E_k)\ne\pi^*$. By (F3) there is then no fixed
+point along the orbit, and the period is two. If $\pi_a>\pi^*$ is one state of the
+cycle, (F2) gives $E_a\le w<E^*$, hence $\pi_b=g(E_a)<\pi^*$ and $E_b\ge w'$.
+
+\emph{(c)} By \cref{lem:sign}, $d_k=|\pi_k-\pi^*|$ satisfies
+$d_{k+1}\le\max\{(1-a)d_k,aM\}$, so $d_k\le\max\{(1-a)^kd_0,aM\}$ and the
+interval $d\le aM$ is reached in finitely many steps and is invariant.
+
+\emph{Vertex case.} If $\pi^*$ is interior to the normal cone
+$\{\pi:E^*\in H(\pi)\}$ and $aM$ is less than its distance to the cone's boundary,
+then inside the invariant interval $H(\pi)=\{E^*\}$, so $E_k=E^*$ and
+$\pi_{k+1}-\pi^*=(1-a)(\pi_k-\pi^*)$.
+
+\emph{Face case: non-convergence.} Suppose $\pi_k\to\bar\pi$. Then
+$a(g(E_k)-\pi_k)=\pi_{k+1}-\pi_k\to0$, so $g(E_k)\to\bar\pi$. Since $E_k$ ranges over a
+finite set and $g$ is injective, $E_k=\bar E$ for all large $k$, with
+$\bar\pi=g(\bar E)$. The set $\{\pi:\bar E\in R(\pi)\}$ is closed, being defined by
+finitely many weak linear inequalities, so $\bar E\in R(\bar\pi)$, and (F3) gives
+$\bar E=E^*$ and $\bar\pi=\pi^*$. If $E^*$ is not a breakpoint it is never selected,
+which is a contradiction. If it is a breakpoint, $E^*\in R(\pi_k)$ forces
+$\pi_k=\pi^*$ by (F2), so the orbit hits $\pi^*$ exactly. For a fixed sequence of
+selected loads, $\pi_k$ is affine in $\pi_0$ with slope $(1-a)^k\neq0$, so each
+finite selection sequence admits at most one such $\pi_0$, and there are countably
+many sequences.
+
+\emph{Face case: trapping.} Write $[\pi^*,\sigma]$ for the normal cone of $w$ and
+$[\sigma',\pi^*]$ for that of $w'$ (with $\sigma=+\infty$ if $w=\mathrm{Lo}$ and
+$\sigma'=-\infty$ if $w'=U$), and assume $aM<\min\{\sigma-\pi^*,\pi^*-\sigma'\}$.
+Inside the invariant interval, $\pi>\pi^*$ forces $E=w$ and $\pi<\pi^*$ forces
+$E=w'$; at $\pi=\pi^*$ the selection is a breakpoint in $[w,w']$. With
+$d_-=\pi^*-g(w)>0$ and $d_+=g(w')-\pi^*>0$, an update from $\pi>\pi^*$ gives
+$\pi'=(1-a)\pi+ag(w)\in[\pi^*-ad_-,\pi)$, and symmetrically from below; from
+$\pi^*$ the update stays in $[\pi^*-ad_-,\pi^*+ad_+]$. This band is therefore
+invariant. Above $\pi^*$, prices contract geometrically toward $g(w)<\pi^*$ and cross
+$\pi^*$ in finitely many steps; below, they contract toward $g(w')>\pi^*$. Hence
+the band is entered and both $w$ and $w'$ recur infinitely often.
+
+\emph{(d)} With $d_{k+1}\le\max\{(1-a_k)d_k,a_kM\}$, fix $\varepsilon>0$ and $K$ with
+$a_kM<\varepsilon$ for $k\ge K$. After $K$, the interval $d\le\varepsilon$ is invariant,
+and outside it $d$ contracts by the factors $1-a_k$, whose product diverges to
+zero because $\sum a_k=\infty$. Thus $\limsup d_k\le\varepsilon$ for every
+$\varepsilon$. Summing the update gives $\sum_{k<K}a_k(g(E_k)-\pi_k)=\pi_K-\pi_0$,
+which is bounded; dividing by $A_K=\sum_{k<K}a_k\to\infty$ and using
+$\pi_k\to\pi^*$ (Stolz--Ces\`aro) gives $\sum_{k<K}a_kg(E_k)/A_K\to\pi^*$. If $g$
+is affine, this average equals $g\bigl(\sum_{k<K}a_kE_k/A_K\bigr)$, and invertibility
+of $g$ gives the load statement. \qed
+
+\paragraph{Numerical verification.} The repository contains an exact
+rational-arithmetic implementation of the projection, hull, gap and iteration
+(\texttt{code/twobatch.py}) and randomized checks of every statement in this
+section on several thousand instances: the period and bracketing claims in (b);
+the absence of fixed points; trapping, band and recurrence in (c) at half the
+stated step threshold; convergence in (d); and both parts of
+\cref{prop:anatomy}. Instances are drawn so that the hull optimum falls on
+sloping faces, flat faces and vertices.
+
+\section{Proofs for Section~\ref{sec:boundaries}}\label{app:boundaries}
+
+\subsection{Common transition energy}
+Suppose every matched pair performs a compulsory task of energy $d\ge0$, with
+nonnegative draw, during a noncharging interval after the early window and
+before the B batch. A paired bus then needs $x_v\ge a_i+b_j+d-B$ to finish its
+afternoon service, cannot exceed $x_v\le a_i$, and needs terminal refill
+$a_i+b_j+d-x_v$. The box is nonempty exactly when $b_j+d\le B$, so edges
+violating this are removed. Lower endpoints sum to $S_m-N_mB$ with
+$S_m=S_0+md$, positive lower endpoints to the matching's requirement with $d$
+included, and the upper endpoints still to $P$. Because $S_m$ depends only on $m$,
+the proof of \cref{thm:projection} applies verbatim with $S_0$ replaced by $S_m$.
+
+\subsection{Proof of Proposition~\ref{prop:completegraph}}
+\emph{A disjoint-block construction.} Let $w_i=2^i$ for $i=0,\dots,k-1$,
+$W=\sum_iw_i$, $B=20\max_iw_i$. Block $i$ has two A and two B services with draws
+$(B/2+3w_i,\,w_i)$ in each batch. Use windows A $[0,1]$, early charging $[1,2]$,
+noncharging transition tasks $[2,3]$, B $[3,4]$ and terminal charging $[4,5]$; one
+early connector of budget $K=kB/2+4W$ and one terminal connector. Within a block,
+the identity edges carry transition energy $0$ and the cross edges $6w_i$. The fleet
+cap is $2k$, so exactly $2k$ buses are used and every bus serves one service from
+each batch. Identity requires early purchase $6w_i$ and consumes $B+8w_i$; cross
+requires none and consumes $B+20w_i$. For a set $I$ of identity blocks, with
+$R=6\sum_{i\in I}w_i$ and $S_{\max}=kB+20W$, total consumption is $S_{\max}-2R$, the
+per-bus early intervals sum to $[R,K]$, and the complete branch is
+$\{(E,\,S_{\max}-2R-E,\,2kf):R\le E\le K\}$, each point realized by serial charging.
+
+\emph{Complete graph.} Now admit every A--B edge. Keep the within-block transition
+energies, and on each edge between different blocks set $d_{ij}=B-b_j$; raise the
+terminal budget to $H=2kB$. For any edge put $e_{ij}=a_i+b_j+d_{ij}$ and
+$r_{ij}=(e_{ij}-B)_+$. Its early purchase interval is $[r_{ij},a_i]$ whenever
+$b_j+d_{ij}\le B$, which holds for within-block edges because $B\ge20\max w_i$ and
+with equality between blocks. In the latter case $e_{ij}=a_i+B$ and $r_{ij}=a_i$: the
+bus refills completely at midday. For a perfect matching $M$ these intervals sum
+to $[R_M,K]$ with $R_M=\sum_Mr_{ij}$, total consumption is $S_M=\sum_Me_{ij}$, and the
+branch is $L=S_M-E$, $R_M\le E\le K$. Each terminal purchase is at most
+$e_{ij}-r_{ij}\le B$, so $H=2kB$ accommodates it; $E=K$ is feasible for every
+perfect matching.
+
+Give each high service (draw $B/2+3w_i$) in block $i$ the potential $B/2+9w_i$ and
+each low service the potential $w_i$, as row potentials $u_i$ and column potentials
+$v_j$; their total is $S_{\max}$. Every within-block edge satisfies
+$e_{ij}+2r_{ij}=u_i+v_j$. A between-block edge has $e_{ij}+2r_{ij}=B+3a_i$, with slack
+over $u_i+v_j$ equal to $3B/2-9w_j$, $2B-w_j$, $B/2+2w_i-9w_j$ or $B+2w_i-w_j$ for the
+four high/low combinations. Each is at least $\gamma=w_{\max}+2w_{\min}\ge3$, the
+low-to-high case being limiting because $B/2\ge10w_{\max}$. Summing this
+assignment-potential certificate over $M$ gives $S_M+2R_M\ge S_{\max}$, with surplus at
+least $\gamma$ if any between-block edge is used. Hence every physical point, and
+every mixture, satisfies $3E+L=S_M+2E\ge S_M+2R_M\ge S_{\max}$.
+
+With $F(E,L)=3E+L+(E-3)^2/(2K)$, total cost is at least $2kf+S_{\max}$. The equal
+mixture of the within-block corners $R=0$ and $R=6$ attains it at load
+$(3,S_{\max}-9)$, so $\CH=S_{\max}+2kf$. On a within-block branch the cost is
+$2kf+S_{\max}+2(E-R)+(E-3)^2/(2K)$, increasing in $E$ (derivative at least
+$2-3/K>0$ since $K\ge14$), hence minimized at $E=R$; the values $R=6t$ nearest to 3
+are $0$ and $6$, giving excess $9/(2K)$. Every between-block schedule has excess at
+least $\gamma\ge3>9/(2K)$. Therefore $D=\CH+9/(2K)$. \qed
+
+\subsection{Proof of Proposition~\ref{prop:threebatch}}
+Reduce from numerical three-dimensional matching, strongly NP-complete
+\citep[SP16]{garey1979}: three multisets of $n$ positive integers must be
+partitioned into triples, one from each, each summing to $B$. We may assume total
+$nB$ and every number at most $B$, mapping violations to a fixed NO instance. Make
+the multisets services in $[0,1)$, $[1,2)$ and $[2,3)$ with those numbers as
+battery draws, with charging unavailable before time 3. Overlap and the fleet cap
+force exactly $n$ buses, each serving one service per batch; a duty $(a,b,c)$ is
+feasible exactly when $a+b+c\le B$, and the total $nB$ forces equality. Conversely, a
+matching yields duties ending empty, which refill serially for $B$ time units each
+during $[3,3+nB]$. The construction is polynomial and preserves strong hardness;
+membership in NP is immediate. \qed
+
+\section{The certified public timetable}\label{app:public}
+The case uses the Hildenbrand timetable of \citet{sistig2025dataset}: 37 mandatory
+services, the complete directed $5\times5$ deadhead matrix, and depot 15 as the sole
+charging and parking location. Service energy is $1.2$\,kWh/km plus 16\,kWh per
+service hour; deadheads use $0.96$\,kWh/km plus 16\,kWh per hour; off-depot waiting
+uses 16\,kWh/h. Each used bus has 400\,kWh usable energy and 360\,kW acceptance; one
+360\,kW connector is shared; every bus starts full and returns full by 30:00. The
+used-bus cost is 100 and the supply cost is
+$F(e)=\sum_{t=1}^{30}(0.2e_t+e_t^2/1800)$ over hourly intervals, with the exact binary
+values of these coefficients used throughout.
+
+\emph{Upper bound on $\CH$.} An incumbent physical plan and a second admitted
+physical response, which has a higher planning cost but a lower bill at the
+incumbent's marginal prices, are mixed. Exact quadratic evaluation and
+one-dimensional optimality conditions give $\CH\le441.142238$.
+
+\emph{Lower bound on $D$.} A minimum-fleet argument excludes one bus. For three or
+more buses, vehicle cost plus the linear mandatory-service energy term already
+exceeds $477.82$. The two-bus domain is covered by a binary branching tree over
+movement variables. At each leaf, exact tangent planes, signed row multipliers and
+finite-box residual compensation give a valid rational lower bound, and infeasible
+leaves carry rational infeasibility certificates. An independent reconstruction
+checks coverage and every leaf, giving $D\ge441.532912$. A feasible schedule gives
+$D\le441.532913$.
+
+\emph{Scope.} The first certificate concerns the declared movement graph (pull-out,
+direct, via-depot and pull-in modes with fixed leg times). A second, separately
+checked certificate uses an exactly additive energy law and, under directed
+triangle inequalities that the source tables satisfy, extends the result to
+arbitrary finite walks over the location pairs with continuous waiting. The
+displayed bounds coincide, but neither certificate is transferred to the other model. The
+gap holds for every vehicle cost $f\ge100$, since both mixture components and the
+two-bus lower bound shift equally. Standalone checkers using only the Python standard
+library re-verify each certificate in under a minute (\cref{app:repro}).
+
+\section{Reproducibility}\label{app:repro}
+All code and derived data are in the repository at \texttt{paper/draft1/}:
+\begingroup\sloppy
+\begin{itemize}[itemsep=1pt]
+\item \texttt{code/twobatch.py}: exact projection, hull, gap and price iteration;
+\texttt{code/test\_twobatch.py}: the randomized checks of \cref{sec:prices}.
+\item \texttt{code/calibrate.py}: builds peak-run energies from the archive of
+\citet{sistig2025dataset}, written to \texttt{data/peak\_runs.json}.
+\item \texttt{code/study.py}: the sweep, written to \texttt{results/summary.json}
+and \texttt{results/study.json}; \texttt{code/figures.py}: all figures.
+\item \texttt{make.sh} regenerates results, figures and the PDF.
+\end{itemize}
+\endgroup
+The public-timetable certificates, their portable checkers and an index binding
+sources to commands are under \texttt{research-20261029/} and
+\texttt{paper/focused-theory-20261029/CERTIFICATE\_INDEX.md}.
