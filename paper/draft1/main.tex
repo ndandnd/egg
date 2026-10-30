@@ -48,7 +48,8 @@ supply curvature times that increment squared. Price iteration, undamped or
 damped, fails to converge exactly when the hull optimum lies inside a face of
 the cost frontier. This happens with or without a support gap, so cycling is
 not evidence of nonconvexity. Diminishing steps converge to the convex-hull
-price, and their time-averaged schedules recover the convex-hull plan. Edge-dependent
+price, and with quadratic supply costs their time-averaged schedules recover the
+convex-hull plan. Edge-dependent
 transition energy and a third service batch mark where the reduction ends.
 A study of 18 German bus operators, using public timetable data, shows that with
 400\,kWh batteries most operators' peak runs pair without midday charging, so
@@ -112,8 +113,8 @@ eventually periodic with period at most two. With any constant step, prices
 fail to converge exactly when the hull optimum lies in the relative interior of
 a frontier face. With a small step, the loads then alternate between the face's
 two endpoints and the prices stay within an $O(a)$ band around the convex-hull
-price. Diminishing steps converge to that price, and step-weighted
-time averages of the loads recover the hull optimum. Non-convergence occurs both
+price. Diminishing steps converge to that price, and with quadratic supply
+costs the step-weighted time averages of the loads recover the hull optimum. Non-convergence occurs both
 with and without a support gap. Cycling diagnoses a degenerate tangency, not
 nonconvexity.
 \item \textbf{Where the reduction stops (\cref{sec:boundaries}).} A common
@@ -252,9 +253,11 @@ physical optimum is supported by every maximizer of $V(p)-F^*(p)$.
 \end{proposition}
 
 This specializes standard arguments \citep{oneill2005,gribikHoganPope2007,huaBaldick2017};
-the proof is in \cref{app:support}. The regret lower bound is useful on its own:
-a positive gap forces every physical plan to be
-leave money on the table at its own marginal prices, by at least $\Delta$.
+the proof is in \cref{app:support}. Two consequences are used below. A positive
+gap gives every physical plan a regret of at least $\Delta$ at its own marginal
+prices. Conversely, at a maximizer $p^*$ of $V(p)-F^*(p)$ (a convex-hull price), the
+identity in the proof shows that a physical optimum's regret is at most $\Delta$,
+so an uplift payment of at most $\Delta$ supports it.
 
 \section{An exact assignment-dependent projection}\label{sec:projection}
 
@@ -448,7 +451,7 @@ Under the standing assumptions of this section:
 $E^*$ is a breakpoint, that is, one of $\mathrm{Lo}$, $r_m$ ($m_0<m\le m_{\max}$)
 or $U$. In particular there is no fixed point when $\Delta>0$, nor when $E^*$ lies
 inside the flat face, although $\Delta=0$ in the latter case.
-\item \emph{Undamped iteration} ($a_k\equiv1$). Every orbit is eventually
+\item \emph{Undamped iteration} ($a_k\equiv1$, a deterministic selection). Every orbit is eventually
 periodic with period one or two. If $E^*$ lies in the relative interior of a
 face $[w,w']$ and $\pi_0\neq\pi^*$, the period is two and the cycle's loads satisfy
 $E_{\rm lo}\le w<w'\le E_{\rm hi}$.
@@ -664,8 +667,9 @@ over-charge at midday only when the spread prices forced charging at the
 vehicle cost it saves. That requires battery capacity close to the paired energy
 of peak runs, together with a spread near $f/\delta$. When it happens, the
 welfare loss is second order, of size $\kappa\delta^2/8$, but the operator's bill
-regret is first order. A small uplift payment of size $\Delta$ at the
-convex-hull price (\cref{prop:support}) is the efficient remedy. Re-pricing until
+regret is first order. At the convex-hull price an uplift of at most $\Delta$
+supports the planner optimum (\cref{sec:model}), which is far cheaper than
+compensating the regret at the operator's own marginal prices. Re-pricing until
 convergence is not.
 
 \paragraph{For price-coordination algorithms.} \Cref{thm:iteration} separates
