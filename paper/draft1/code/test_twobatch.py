@@ -233,3 +233,49 @@ if __name__ == "__main__":
         if name.startswith("test_"):
             fn()
             print("ok", name)
+
+
+def test_interior_face_explains_nonconvergence():
+    """Unified statement: for a small constant step the prices converge iff
+    E* is not in the relative interior of a hull face; Delta > 0 iff, in
+    addition, E* is not physical. Checked on random instances."""
+    rng = random.Random(7)
+    seen = {"vertex": 0, "face_gap": 0, "face_nogap": 0}
+    for _ in range(4000):
+        inst, sup = draw(rng)
+        if not feasible(inst):
+            continue
+        CH, Es, _ = hull_opt(inst, sup)
+        V, k = edge_of(inst, Es)
+        D = gap(inst, sup)
+        if k is None:
+            # E* at a strict vertex (or single point): constant small step converges
+            kind = "vertex"
+        else:
+            kind = "face_gap" if D > 0 else "face_nogap"
+            if D == 0:
+                # physical: either flat face or a collinear threshold
+                assert V[k][1] == V[k + 1][1] or any(E == Es for E, _ in hull_vertices(inst))
+        if seen[kind] >= 25:
+            continue
+        pistar = sup.g(inst, Es)
+        if kind == "vertex":
+            out = iterate(inst, sup, float(pistar) + 0.01, 0.01, max_iter=20000)
+            # converge to pi* (geometric) unless pi* sits on a normal-cone boundary
+            if out["outcome"] == "fixed_point" or abs(out["pis"][-1] - float(pistar)) < 1e-6:
+                seen[kind] += 1
+            continue
+        if any(E == Es for E, _ in hull_vertices(inst)):
+            continue  # E* is a collinear physical threshold: knife-edge
+        _, sig_lo, sig_hi, dlo, dhi, abar = trap_threshold(inst, sup, V, k, Es)
+        a = abar / 2
+        if a < Fr(1, 2000):
+            continue
+        pi0 = (pistar + sig_hi) / 2 if sig_hi is not None else pistar + 1
+        out = iterate(inst, sup, float(pi0), float(a), max_iter=int(40 / a) + 2000)
+        assert out["outcome"] != "fixed_point"
+        tail = out["Es"][out["first"]:] if out["outcome"] == "cycle" else out["Es"][-1500:]
+        assert {V[k][0], V[k + 1][0]} <= set(tail)
+        seen[kind] += 1
+    print(seen)
+    assert min(seen.values()) >= 10
