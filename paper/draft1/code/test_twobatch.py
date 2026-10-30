@@ -279,3 +279,15 @@ def test_interior_face_explains_nonconvergence():
         seen[kind] += 1
     print(seen)
     assert min(seen.values()) >= 10
+
+
+def test_unequal_batches_sorted_formula():
+    """The sorted closed form and the fleet count N_m = n_A + n_B - m hold
+    for unequal batch sizes (the calibrated instances have n_A != n_B)."""
+    rng = random.Random(8)
+    for _ in range(300):
+        B = Fr(rng.randint(10, 30))
+        a = [Fr(rng.randint(1, int(B))) for _ in range(rng.randint(1, 4))]
+        b = [Fr(rng.randint(1, int(B))) for _ in range(rng.randint(1, 4))]
+        inst = Instance(a, b, B, sum(a), sum(a) + sum(b), 1)
+        assert r_values(inst) == r_values_bruteforce(inst)
