@@ -228,11 +228,6 @@ def test_fee_dominance_and_gap_bound():
             assert D <= sup.curv * ell * ell / 8
 
 
-if __name__ == "__main__":
-    for name, fn in list(globals().items()):
-        if name.startswith("test_"):
-            fn()
-            print("ok", name)
 
 
 def test_interior_face_explains_nonconvergence():
@@ -308,3 +303,10 @@ def test_unequal_batches_sorted_formula():
         b = [Fr(rng.randint(1, int(B))) for _ in range(rng.randint(1, 4))]
         inst = Instance(a, b, B, sum(a), sum(a) + sum(b), 1)
         assert r_values(inst) == r_values_bruteforce(inst)
+
+
+if __name__ == "__main__":
+    for name, fn in list(globals().items()):
+        if name.startswith("test_"):
+            fn()
+            print("ok", name)
