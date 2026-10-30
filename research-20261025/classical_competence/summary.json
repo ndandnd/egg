@@ -1,0 +1,155 @@
+{
+  "scope": "offline classical competence; not main60s comparison or native controller qualification",
+  "cohort_complete": true,
+  "feasible_cases": 1,
+  "cases": [
+    {
+      "case": "scale:50685:40",
+      "receipt": "research-20261025/classical_competence/attempt01/scale-50685-40/receipt.json",
+      "status": "replayed_offline_witness",
+      "elapsed_including_receipt_s": 13.109029209241271,
+      "cpu_including_receipt_s": 9.294758999999999,
+      "accepted_within_offline60": true,
+      "physical_witness_valid": true,
+      "vehicles": 15,
+      "objective_exact": "339074850655927360937082001877334591199882049321719/182687704666362864775460604089535377456991567872",
+      "constructed_vehicles": 15,
+      "stages": [
+        {
+          "stage": "case_construction",
+          "wall_s": 0.020508291199803352,
+          "cpu_s": 0.017022999999999983,
+          "observed_peak_rss_bytes": 42156032
+        },
+        {
+          "stage": "construct_routes",
+          "wall_s": 0.3574566664174199,
+          "cpu_s": 0.267014,
+          "observed_peak_rss_bytes": 46415872
+        },
+        {
+          "stage": "save_construction",
+          "wall_s": 0.003910624422132969,
+          "cpu_s": 0.0028880000000000017,
+          "observed_peak_rss_bytes": 46415872
+        },
+        {
+          "stage": "complete_topology",
+          "wall_s": 11.166935458779335,
+          "cpu_s": 7.748958,
+          "observed_peak_rss_bytes": 254902272
+        },
+        {
+          "stage": "independent_replay",
+          "wall_s": 0.04798350017517805,
+          "cpu_s": 0.03745100000000079,
+          "observed_peak_rss_bytes": 254902272
+        },
+        {
+          "stage": "save_physical_witness",
+          "wall_s": 0.008897749707102776,
+          "cpu_s": 0.006791999999999021,
+          "observed_peak_rss_bytes": 254902272
+        }
+      ],
+      "failures": [],
+      "completion_status": "feasible",
+      "completion_error": null,
+      "completion_error_type": null,
+      "historical_context": {
+        "directory": "fcd50d4d08ce3ea9129b",
+        "vehicles": 3,
+        "bill_exact": "55812581748588891084480325720948202270944153346761/91343852333181432387730302044767688728495783936",
+        "seed": 17,
+        "interpretation": "unmatched historical learned/pruned endpoint; different default seed/allocation; no speedup or paired effect"
+      },
+      "objective_float": 1856.0354199817098,
+      "completion_failures": []
+    },
+    {
+      "case": "scale:50605:80",
+      "receipt": "research-20261025/classical_competence/attempt01/scale-50605-80/receipt.json",
+      "status": "failed_or_unresolved",
+      "elapsed_including_receipt_s": 64.6127016665414,
+      "cpu_including_receipt_s": 57.792978999999995,
+      "accepted_within_offline60": false,
+      "physical_witness_valid": false,
+      "vehicles": null,
+      "objective_exact": null,
+      "constructed_vehicles": 29,
+      "stages": [
+        {
+          "stage": "case_construction",
+          "wall_s": 0.05550312530249357,
+          "cpu_s": 0.051390999999998854,
+          "observed_peak_rss_bytes": 254902272
+        },
+        {
+          "stage": "construct_routes",
+          "wall_s": 1.3012867076322436,
+          "cpu_s": 1.177022000000001,
+          "observed_peak_rss_bytes": 254902272
+        },
+        {
+          "stage": "save_construction",
+          "wall_s": 0.0040793754160404205,
+          "cpu_s": 0.0035260000000008063,
+          "observed_peak_rss_bytes": 254902272
+        },
+        {
+          "stage": "complete_topology",
+          "wall_s": 53.73746441677213,
+          "cpu_s": 48.350881,
+          "observed_peak_rss_bytes": 1178386432
+        }
+      ],
+      "failures": [
+        {
+          "stage": "complete_topology",
+          "type": "TimeoutError",
+          "message": "Offline case stage deadline exhausted"
+        }
+      ],
+      "completion_status": "feasible",
+      "completion_error": null,
+      "completion_error_type": null,
+      "historical_context": {
+        "directory": "13ec9aa673986e09bfe4",
+        "vehicles": 5,
+        "bill_exact": "117068415545289829852882191815294783197212532069955/91343852333181432387730302044767688728495783936",
+        "seed": 17,
+        "interpretation": "unmatched historical learned/pruned endpoint; different default seed/allocation; no speedup or paired effect"
+      },
+      "completion_failures": [
+        {
+          "stage": "objective2:extract",
+          "error_type": "TimeoutError",
+          "error": "Shared fixed charging deadline exhausted"
+        }
+      ]
+    }
+  ],
+  "archives": [
+    {
+      "source": "attempt01/scale-50685-40/receipt.json",
+      "archive": "attempt01/scale-50685-40/receipt.json.gz",
+      "source_sha256": "e5370e36821439d05207d8a63497da1b3477a617d3b985e4a111c2ec7f3d72b5",
+      "source_bytes": 40243988,
+      "archive_bytes": 1152619,
+      "verification": "streamed same source bytes into SHA256 and gzip; no second hash pass"
+    },
+    {
+      "source": "attempt01/scale-50605-80/receipt.json",
+      "archive": "attempt01/scale-50605-80/receipt.json.gz",
+      "source_sha256": "43dab55554161d1c529a704b6ae51611d09f683d147b250023370c25e29df385",
+      "source_bytes": 327269509,
+      "archive_bytes": 9284485,
+      "verification": "streamed same source bytes into SHA256 and gzip; no second hash pass"
+    }
+  ],
+  "native_process_time": "real 78.45\nuser 59.55\nsys 8.09\n",
+  "native_observed_peak_rss_bytes": 1178386432,
+  "postprocess_cpu_s": 3.3786150000000004,
+  "postprocess_wall_s": 3.8164996253326535,
+  "postprocess_peak_rss_bytes_darwin": 968622080
+}

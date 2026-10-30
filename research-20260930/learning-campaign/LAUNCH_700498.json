@@ -1,0 +1,84 @@
+{
+  "job_id": "700498",
+  "submitted_at_utc": "2026-09-30T15:08:01Z",
+  "source_commit": "15b0053aa2aaaea3d9ffbaafdc84dbf9c803af92",
+  "source_branch": "codex/journal-research-20260927",
+  "remote_checkout": "/home/nc437/egg-tariff-response-20260930",
+  "attempt_relative": "result/learning_campaign/20260930-tariff-response-attempt1",
+  "wrapper": "src/cluster/tariff_response.sbatch",
+  "protocol": "PROTOCOL_TARIFF_RESPONSE_TRANSFER.md",
+  "launch_review": "TARIFF_RESPONSE_LAUNCH_REVIEW.md",
+  "requested": {
+    "cpus_per_task": 1,
+    "memory_gb": 8,
+    "wall_seconds": 6000,
+    "native_threads": 1,
+    "requeue": false,
+    "excluded_nodes": [
+      "scaglione-compute-01"
+    ]
+  },
+  "profile": {
+    "dev": {
+      "2032": 20,
+      "2033": 28,
+      "2034": 20,
+      "2035": 28
+    }
+  },
+  "variants": {
+    "late": "0.10 in hours 22\u201326, 0.30 otherwise",
+    "day": "0.10 in hours 10\u201314, 0.30 otherwise",
+    "flat": "41/150 throughout 30-hour horizon"
+  },
+  "curvature": "1/900 for every variant",
+  "independent_timetable_groups": 4,
+  "test_groups_unobserved": [
+    2004,
+    2005,
+    2020,
+    2021
+  ],
+  "declared_cells": 44,
+  "cell_order_counts": {
+    "source_acquisition_before_inference": 8,
+    "charging_after_all_frozen_predictions": 24,
+    "cold": 12
+  },
+  "model": "Load existing six-training-group charge-response ridge unchanged; no fit, decoder change or tuning.",
+  "prospective_controls": [
+    "always_source0",
+    "always_source1",
+    "train_majority",
+    "cheapest_direct",
+    "nearest_price",
+    "frozen_edge_prior"
+  ],
+  "prediction_order": "All twelve variant choices frozen before any target LP or cold outcome. Inference failure is preserved while independent controls continue.",
+  "caps_seconds": {
+    "native_solver_wall": 70,
+    "charging_phase": 45,
+    "charging_wall": 55,
+    "child_hard": 100,
+    "inference_hard": 60,
+    "controller": 5400,
+    "outer_shell": 5700
+  },
+  "source_pin_count": 27,
+  "archived_input_pin_count": 7,
+  "submission_guard": ".submission-tariff-response-attempt1/jobid.txt",
+  "submission_checks": {
+    "no_active_egg_job": true,
+    "fresh_checkout": true,
+    "tracked_checkout_clean": true,
+    "exclusive_attempt_absent": true
+  },
+  "launch_script_sha256": "f08ae217022a547cc3936255113e65a2a253d7e080b88fb24b619a5fccf5335f",
+  "submission_stdout": "HEAD is now at 15b0053 Freeze grouped tariff-transfer test with constant-choice controls\n700498\n2026-09-30T15:08:01Z\n",
+  "observation": {
+    "recorded_at_utc": "2026-09-30T15:09:15.449010+00:00",
+    "state": "SUBMITTED",
+    "queue_state_not_polled_after_submission": true
+  },
+  "scientific_result": "pending; no new outcome inspected"
+}

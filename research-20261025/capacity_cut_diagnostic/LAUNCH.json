@@ -1,0 +1,44 @@
+{
+  "policy": "necessary-preterminal-capacity-cuts-projected-readout-v1",
+  "mode": "FROZEN",
+  "review_disposition": "PASS",
+  "workdir": "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017",
+  "tracking_prefix": {
+    "displayed_process_cpu_s": 19811.11,
+    "elapsed_sum_s": 20406.06,
+    "retained_tracking_cpu_s": 19811.31,
+    "new_separate_allowance_cpu_s": 20,
+    "new_separate_allowance_wall_s": 45,
+    "prospective_retained_prefix_plus_allowance_s": 19831.31,
+    "separate_legacy_conditional_guard_s": 2546.091499549272,
+    "historical_actual_review_CPU": "UNKNOWN",
+    "scope": "Closed measured-process prefix; separate guard is not exact CPU and is not added to this allowance"
+  },
+  "input": "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/research-20261025/resource_recourse/READOUT.json",
+  "expected_input_sha256": null,
+  "output_namespace": "research-20261025/capacity_cut_diagnostic/attempt01",
+  "budgets": {
+    "body_cpu_s": 15,
+    "body_wall_s": 35,
+    "total_cpu_s": 20,
+    "total_wall_s": 45,
+    "publication_cpu_reserve_s": 5,
+    "publication_wall_reserve_s": 10
+  },
+  "planned": {
+    "original_reference": 8,
+    "planned_adaptive": 16,
+    "physical_groups": 4
+  },
+  "separate_new_package": true,
+  "closed_resource_recourse_package_reopened": false,
+  "command": "/usr/bin/time -p -o research-20261025/capacity_cut_diagnostic/process-time.txt .venv-local/bin/python -I -S -B research-20261025/capacity_cut_diagnostic/run.py > research-20261025/capacity_cut_diagnostic/stdout.txt 2> research-20261025/capacity_cut_diagnostic/stderr.txt",
+  "automatic_retry": false,
+  "feasibility_or_global_certificate": false,
+  "new_performance_gate": false,
+  "input_version_commit": "13de4822",
+  "reviews": [
+    "REVIEW.md: independent math/projection PASS",
+    "REVIEW_IO.md: parent source/IO/resource PASS"
+  ]
+}

@@ -1,0 +1,85 @@
+{
+  "admitted_lower": 36.999999,
+  "admitted_upper": 37.00000099999855,
+  "backend_runtime": {
+    "model_solver_name": "CBC",
+    "native_library_path": "/Users/nadan/Documents/ChatGPT/egg/.research-venv-repaired-1176/lib/python3.12/site-packages/cbcbox/cbc_dist/lib/libCbc.dylib",
+    "native_library_sha256": "fe44771023b133390daf7b72790c2ce65d1ccb2e5ac77c7a04c8d8f8648aff7d",
+    "requested": "CBC",
+    "solver_class": "SolverCbc",
+    "solver_module": "mip.cbc"
+  },
+  "budget": {
+    "backend": "CBC",
+    "epsilon": 0.0001,
+    "phase_seconds": 3.0,
+    "threads": 1,
+    "wall_seconds": 5.0
+  },
+  "case_identity": "f24ed85ecec207ad543878c4cb247575629026fe1259ba3226155e439905b140",
+  "event_names": [
+    "mip_start_setup",
+    "native_start",
+    "native_status",
+    "native_incumbent",
+    "charge_normalization",
+    "charge_projection",
+    "charge_projection",
+    "serial_decoding",
+    "charge_projection",
+    "charge_projection",
+    "objective_reconstruction"
+  ],
+  "fixture": "experiments.native_recharge_qualification.cyclic_case",
+  "model_seed": 0,
+  "native_stats": {
+    "backend": "CBC",
+    "backend_runtime": {
+      "model_solver_name": "CBC",
+      "native_library_path": "/Users/nadan/Documents/ChatGPT/egg/.research-venv-repaired-1176/lib/python3.12/site-packages/cbcbox/cbc_dist/lib/libCbc.dylib",
+      "native_library_sha256": "fe44771023b133390daf7b72790c2ce65d1ccb2e5ac77c7a04c8d8f8648aff7d",
+      "requested": "CBC",
+      "solver_class": "SolverCbc",
+      "solver_module": "mip.cbc"
+    },
+    "incumbent": 37.0,
+    "lower_bound": 37.0,
+    "n_constraints": 38,
+    "n_int": 6,
+    "n_vars": 18,
+    "physical_constraints": 38,
+    "raw_incumbent_repr": "37.0",
+    "raw_lower_bound_repr": "37.0",
+    "seconds_cap": 3.0,
+    "status": "OPTIMAL",
+    "threads": 1,
+    "wall_s": 0.022968458011746407
+  },
+  "prices": [
+    1.0,
+    1.0,
+    1.0,
+    1.0
+  ],
+  "python_mip_version": "1.17.6",
+  "result_status": "certified",
+  "solver_start_acceptance": "unknown",
+  "source_plan_case_identity": "f24ed85ecec207ad543878c4cb247575629026fe1259ba3226155e439905b140",
+  "start_setup": {
+    "binary_count": 6,
+    "event": "mip_start_setup",
+    "meaning": "binary hint submitted; solver acceptance and feasibility unverified",
+    "selected_count": 3,
+    "setup_elapsed_s": 0.2078747497871518,
+    "status": "submitted",
+    "timings": {
+      "model_build_s": 0.2014684579335153,
+      "objective_attach_s": 0.003925874829292297,
+      "start_attach_s": 0.0022873333655297756,
+      "validation_s": 0.000189916230738163
+    },
+    "wall_remaining_s": 4.7921249167993665,
+    "zero_count": 3
+  },
+  "total_wall_s": 0.23160891700536013
+}

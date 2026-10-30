@@ -1,0 +1,66 @@
+.....F..............                                                                [100%]
+=================================== FAILURES ===================================
+___ OwnerTests.test_owner_fake_process_anchor_argv_ready_and_cleanup_receipt ___
+
+self = <test_cf1_entry_repaired.OwnerTests testMethod=test_owner_fake_process_anchor_argv_ready_and_cleanup_receipt>
+
+    def test_owner_fake_process_anchor_argv_ready_and_cleanup_receipt(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            h = owner_harness(temporary)
+            folder = Path(temporary)/'separate-owner'
+            folder.mkdir()
+            events = []
+            class Channel:
+                def fileno(self): return 9
+                def sendall(self, raw): events.append(('send', json.loads(raw)))
+                def close(self): pass
+            h.owner.socket = SimpleNamespace(socketpair=lambda: (Channel(), Channel()))
+            h.owner.os = SimpleNamespace(getpid=lambda: 101, cpu_count=lambda: 8, environ={})
+            h.owner.signal = SimpleNamespace(SIG_BLOCK=0, SIG_SETMASK=1, SIGTERM=15,
+                SIGINT=2, pthread_sigmask=lambda *args: set(), signal=lambda *args: None)
+            h.owner.secrets = SimpleNamespace(token_hex=lambda size: 'fresh-owner-nonce')
+            h.q.THREAD_KEYS = ('OMP_NUM_THREADS',)
+            h.q.stop_owned = lambda *args, **kwargs: {'group_absent': True,
+                'cleanup_errors': [], 'returncode': 0, 'owned_pgids': [211]}
+            proc = SimpleNamespace(pid=211, returncode=0, poll=lambda: 0, wait=lambda **kwargs: 0)
+            def popen(command, **kwargs):
+                self.assertTrue((folder/'entry-owner.json').is_file())
+                self.assertFalse((folder/'entry-owner-attempt01/controller.json').exists())
+                events.append(('popen', command, kwargs))
+                return proc
+            h.owner.subprocess = SimpleNamespace(Popen=popen)
+            supervisor = h.owner.OwnerSupervisor(directory=folder/'entry-owner-attempt01',
+                roots=h.roots, task=h.task, output=h.output)
+            command = [h.owner.sys.executable, '-m', 'experiments.cf1_entry_repaired', 'run']
+            with self.assertRaisesRegex(RuntimeError, 'Owned entry failed'):
+                supervisor.run(command)
+            receipt = h.q.read(folder/'entry-owner-attempt01/owner-receipt.json')
+            root = h.q.read(folder/'entry-owner.json')
+            runtime = events[0][1]
+            self.assertEqual(root['controller_command'], command)
+            self.assertEqual(runtime[:4], command)
+>           self.assertEqual(runtime[-8:], ['--owner-fd', '9', '--owner-root',
+                str(folder/'entry-owner.json'), '--owner-root-sha256',
+                h.q.sha(folder/'entry-owner.json'), '--owner-nonce', 'fresh-owner-nonce'])
+E           AssertionError: Lists differ: ['--o[28 chars]', '/private/var/folders/hk/6g28n39j5_s33j2kn2[184 chars]nce'] != ['--o[28 chars]', '/var/folders/hk/6g28n39j5_s33j2kn2w4xmp400[176 chars]nce']
+E           
+E           First differing element 3:
+E           '/private/var/folders/hk/6g28n39j5_s33j2kn2[54 chars]json'
+E           '/var/folders/hk/6g28n39j5_s33j2kn2w4xmp400[46 chars]json'
+E           
+E             ['--owner-fd',
+E              '9',
+E              '--owner-root',
+E           -  '/private/var/folders/hk/6g28n39j5_s33j2kn2w4xmp40000gn/T/tmp5cl28mre/separate-owner/entry-owner.json',
+E           ?   --------
+E           
+E           +  '/var/folders/hk/6g28n39j5_s33j2kn2w4xmp40000gn/T/tmp5cl28mre/separate-owner/entry-owner.json',
+E              '--owner-root-sha256',
+E              'eb02d921cb77e92cabe56a2e361b036da8dd320d1f8dbd2ec155a36d25590f0a',
+E              '--owner-nonce',
+E              'fresh-owner-nonce']
+
+src/tests/test_cf1_entry_repaired.py:275: AssertionError
+=========================== short test summary info ============================
+FAILED src/tests/test_cf1_entry_repaired.py::OwnerTests::test_owner_fake_process_anchor_argv_ready_and_cleanup_receipt
+1 failed, 19 passed, 61 subtests passed in 0.76s

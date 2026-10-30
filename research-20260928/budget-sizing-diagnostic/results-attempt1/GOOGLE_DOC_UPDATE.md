@@ -1,0 +1,9 @@
+## Cold solving succeeds when the stopping limits are relaxed — 28 September 2026
+
+The eight-cell diagnostic completed successfully in 51 seconds on one CPU. On the three-service development timetable, cold solving reached the prescribed numerical tolerance with five pricing calls in the original market and six in the changed market. Four-call runs stopped early. In the changed market, the 4096-bit arithmetic limit also stopped progress; increasing only the call allowance was insufficient, while allowing 16 calls and 8192 bits produced a numerical certificate.
+
+This supports the reviewer’s concern that the earlier tiny-case reuse advantage depended on restrictive baseline limits. It does not establish that reuse is useless, or prove a speedup for any method. The changed-market numerical refinement took about 0.81 seconds versus about 0.01 seconds of recorded pricing-solver work; full child time was 3.70 seconds. Route prediction is therefore not yet the demonstrated bottleneck on this case. These are single-seed development results under native solver tolerances, not exact ideal-model proofs or public-timetable conclusions.
+
+All eight runs, including the five budget stops, remain in the result table. The next computational package will establish a viable cold baseline on the already generated larger development timetables before comparing retained columns and nearest-neighbor retrieval at common solution quality. That is a new prospective design; the old failed retrieval attempt and its frozen limits remain unchanged. For short jobs, completion will be checked within the same work session, with the hourly automation as a fallback.
+
+[Eight-cell result table, figure and verification receipts](https://github.com/ndandnd/egg/tree/codex/journal-research-20260927/research-20260928/budget-sizing-diagnostic/results-attempt1)

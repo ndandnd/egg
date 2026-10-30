@@ -1,0 +1,200 @@
+{
+  "budget": {
+    "backend": "CBC",
+    "epsilon": 0.0001,
+    "max_rounds": 48,
+    "phase_seconds": 10,
+    "threads": 1,
+    "wall_seconds": 45
+  },
+  "case": {
+    "battery_kwh": 20.0,
+    "deadhead_cost_per_min": 0.0,
+    "depot": "D",
+    "efficiency": 1.0,
+    "graph_scope": "declared-movement-modes-only",
+    "market_edges_min": [
+      0,
+      60,
+      120,
+      180,
+      240
+    ],
+    "max_vehicles": 1,
+    "movements": [
+      {
+        "after": "A",
+        "before": null,
+        "depot_split": null,
+        "id": "out_A",
+        "kind": "pullout",
+        "legs": [
+          {
+            "arrive_min": 0,
+            "depart_min": 0,
+            "destination": "D",
+            "energy_kwh": 0.0,
+            "origin": "D"
+          }
+        ]
+      },
+      {
+        "after": null,
+        "before": "A",
+        "depot_split": null,
+        "id": "in_A",
+        "kind": "pullin",
+        "legs": [
+          {
+            "arrive_min": 60,
+            "depart_min": 60,
+            "destination": "D",
+            "energy_kwh": 0.0,
+            "origin": "D"
+          }
+        ]
+      },
+      {
+        "after": "B",
+        "before": null,
+        "depot_split": null,
+        "id": "out_B",
+        "kind": "pullout",
+        "legs": [
+          {
+            "arrive_min": 120,
+            "depart_min": 120,
+            "destination": "D",
+            "energy_kwh": 0.0,
+            "origin": "D"
+          }
+        ]
+      },
+      {
+        "after": null,
+        "before": "B",
+        "depot_split": null,
+        "id": "in_B",
+        "kind": "pullin",
+        "legs": [
+          {
+            "arrive_min": 180,
+            "depart_min": 180,
+            "destination": "D",
+            "energy_kwh": 0.0,
+            "origin": "D"
+          }
+        ]
+      },
+      {
+        "after": "B",
+        "before": "A",
+        "depot_split": 1,
+        "id": "depot_AB",
+        "kind": "depot",
+        "legs": [
+          {
+            "arrive_min": 60,
+            "depart_min": 60,
+            "destination": "D",
+            "energy_kwh": 0.0,
+            "origin": "D"
+          },
+          {
+            "arrive_min": 120,
+            "depart_min": 120,
+            "destination": "D",
+            "energy_kwh": 0.0,
+            "origin": "D"
+          }
+        ]
+      },
+      {
+        "after": "B",
+        "before": "A",
+        "depot_split": null,
+        "id": "direct_AB",
+        "kind": "direct",
+        "legs": [
+          {
+            "arrive_min": 60,
+            "depart_min": 60,
+            "destination": "D",
+            "energy_kwh": 0.0,
+            "origin": "D"
+          }
+        ]
+      }
+    ],
+    "name": "fixed_one_bus",
+    "recharge_deadline_min": 240,
+    "reserve_kwh": 1,
+    "resources": [
+      {
+        "connectors": 0,
+        "end_min": 60,
+        "grid_kw": 0,
+        "per_bus_kw": 0,
+        "start_min": 0
+      },
+      {
+        "connectors": 1,
+        "end_min": 120,
+        "grid_kw": 10.0,
+        "per_bus_kw": 10.0,
+        "start_min": 60
+      },
+      {
+        "connectors": 0,
+        "end_min": 180,
+        "grid_kw": 0,
+        "per_bus_kw": 0,
+        "start_min": 120
+      },
+      {
+        "connectors": 1,
+        "end_min": 240,
+        "grid_kw": 30,
+        "per_bus_kw": 30,
+        "start_min": 180
+      }
+    ],
+    "terminal_open_min": 0,
+    "trips": [
+      {
+        "end_min": 60,
+        "end_place": "D",
+        "energy_kwh": 15.0,
+        "id": "A",
+        "start_min": 0,
+        "start_place": "D"
+      },
+      {
+        "end_min": 180,
+        "end_place": "D",
+        "energy_kwh": 15.0,
+        "id": "B",
+        "start_min": 120,
+        "start_place": "D"
+      }
+    ],
+    "vehicle_cost": 7
+  },
+  "case_identity": "c82980e8598155c8adf9d72a4124b523c4cd10d5de3ee50a1c3f4fdae7053e5a",
+  "expected_status": "infeasible",
+  "id": "fixed_reserve_one_bus",
+  "objective": "pricing",
+  "prices": [
+    1,
+    1,
+    1,
+    1
+  ],
+  "source_hashes": {
+    "doc/NATIVE_RECHARGE_QUALIFICATION_PROTOCOL_20260927.md": "016c911e3f11e77710c5132c690ba1dc6e19f64d442ea38f794a60565f1b6dd4",
+    "src/egglab/native_recharge.py": "3b7af6b5b9f19a659415ba443e5f14e2d745615ae41ce7a2dffeaa58aad9d32d",
+    "src/experiments/native_recharge_qualification.py": "f475cc6d4078a28829b33e1d0371a7f4a2ec824614e71837694a859efab666de",
+    "src/tests/test_native_recharge.py": "b39651280102187b01dd10eac4a9027cad95bc8fdc34765586549ae06b1a2e5c"
+  },
+  "target": null
+}

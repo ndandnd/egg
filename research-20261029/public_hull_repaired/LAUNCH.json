@@ -1,0 +1,26 @@
+{
+ "status":"FROZEN","run_id":"attempt01","source_revision":"f091fb3247c3cc4d822da388297a869f371990d1",
+ "assigned":["LOGGING_Q0","METADATA_TRANSFER","PUBLIC_TREE","INDEPENDENT_TREE_CHECK"],
+ "epsilon":"1/10000",
+ "package_cpu_s":900,"package_wall_s":1200,"worker_cpu_s":840,"worker_wall_s":1000,
+ "audit_reserve_cpu_s":180,"audit_reserve_wall_s":240,
+ "native_threads":1,"backend_version":"12.0.1","observed_rss_bytes":5368709120,
+ "search_limits":{"nodes":255,"native_calls":300,"seconds":720,"cpu_seconds":600,"lp_seconds":10,"checker_seconds":10,"closure_seconds":10,"closure_cpu_seconds":5},
+ "inputs":{
+  "case":{"revision":"253c1e29295e766b3889fc8f5c28d9808e00b3d6","path":"research-20261029/public_support_resolution/attempt01/case_descriptor.json"},
+  "metadata":{"revision":"8353f03456c10c33bd2e1f0f79b3744f1ca2eac2","path":"research-20261029/public_hull_lower/attempt01/METADATA.json.gz"},
+  "results":{"revision":"8353f03456c10c33bd2e1f0f79b3744f1ca2eac2","path":"research-20261029/public_hull_lower/attempt01/results.json"},
+  "owner":{"revision":"8353f03456c10c33bd2e1f0f79b3744f1ca2eac2","path":"research-20261029/public_hull_lower/attempt01/owner_receipt.json"}
+ },
+ "producer_revision":"199519ed9741ecc36ef88860479344a2ea9b70f7",
+ "checker_revision":"6a171357b65254b52cade63ed95dcce798485f36",
+ "semantic_revision":"3278d50f8323618bd36809b1bbb1a0da081e23ff",
+ "command":"env OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 VECLIB_MAXIMUM_THREADS=1 NUMEXPR_NUM_THREADS=1 /usr/bin/time -p .venv-local/bin/python -I -B research-20261029/public_hull_repaired/run.py --run-id attempt01 > research-20261029/public_hull_repaired/process-time-and-owner.txt 2>&1",
+ "external_meter":"research-20261029/public_hull_repaired/process-time-and-owner.txt",
+ "working_directory":"/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017",
+ "environment":{"OMP_NUM_THREADS":"1","OPENBLAS_NUM_THREADS":"1","MKL_NUM_THREADS":"1","VECLIB_MAXIMUM_THREADS":"1","NUMEXPR_NUM_THREADS":"1"},
+ "funding_prefix":{"displayed_cpu_s":23304.33,"elapsed_sum_s":24220.67,"retained_cpu_s":23305.66,"legacy_conditional_guard_separate":2546.091499549272},
+ "fixed_window_deadline_utc":"2026-10-29T18:10:45Z",
+ "no_automatic_retry":true,
+ "authority":"One deliberate cause-based fresh version under the human research window; old attempt immutable"
+}

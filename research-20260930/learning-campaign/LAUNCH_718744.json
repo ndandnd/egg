@@ -1,0 +1,79 @@
+{
+  "array_job_id": "718744",
+  "submitted_at_utc": "2026-09-30T20:37:04Z",
+  "source_commit": "b0cc428cd13d3b47fb9b2622bc6b41f102542703",
+  "source_branch": "codex/journal-research-20260927",
+  "remote_checkout": "/home/nc437/egg-route-model128-20260930-v3",
+  "sparse_checkout_paths": [
+    "src",
+    "research-20260930/learning-campaign",
+    "result/physical_learning/20260930-route-pool128-v3"
+  ],
+  "attempt_relative": "result/physical_learning/20260930-route-model128-v3",
+  "pool_manifest": "result/physical_learning/20260930-route-pool128-v3/pool_manifest.json",
+  "pool_manifest_sha256": "d9aad5b5ea62fd82a8b4f6a3c20a95c57953ba12c7bf0949fa06004aa511c40d",
+  "protocol": "ROUTE_MODEL64_128_V3_PROTOCOL.md",
+  "review": "ROUTE_MODEL64_V3_REVIEW.md",
+  "environment_receipt": "ROUTE_TRAINING_ENVIRONMENT.json",
+  "wrapper": "src/cluster/physical_route_model_v3.sbatch",
+  "task_ids": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11
+  ],
+  "concurrent_task_limit": 4,
+  "seeds": [
+    17,
+    29,
+    43
+  ],
+  "outer_folds": 4,
+  "independent_training_groups": 128,
+  "source_fleets": 255,
+  "fit_inner_outer_group_counts": [
+    80,
+    16,
+    32
+  ],
+  "models": [
+    "constant",
+    "kind_frequency",
+    "logistic",
+    "mlp32",
+    "hist_boosted"
+  ],
+  "requested_per_task": {
+    "cpus": 1,
+    "memory_gb": 8,
+    "wall_seconds": 1800,
+    "native_threads": 1,
+    "requeue": false,
+    "excluded_nodes": [
+      "scaglione-compute-01"
+    ]
+  },
+  "total_requested_cpu_hour_cap": 6,
+  "shell_cap_seconds": 1700,
+  "launch_script_sha256": "b2722a44c540f8d31fbfde4d79a96802d7c0c4caf8164c011b00cfc39d78e51b",
+  "submission_guard": ".submission-route-model128-v3/array_jobid.txt",
+  "allowed_preexisting_egg_jobs": [],
+  "scientific_outcomes_not_inspected": true,
+  "intended_source_fleets": 256,
+  "observed_state": "SUBMITTED",
+  "postsubmission_queue_check_performed": false,
+  "missing_source_labels": [
+    "physical_v2_s10037/source0"
+  ],
+  "model_settings_unchanged_from_32": true,
+  "common_original32_group_comparison_prespecified": true,
+  "submission_guard_observed_no_active_egg_jobs": true
+}

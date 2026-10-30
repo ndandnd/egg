@@ -1,0 +1,90 @@
+\section{Proofs for lossless bidirectional charging}\label{app:v2g}
+The assumptions and result statements remain in Section~\ref{sec:v2g}.
+
+\subsection{Why the projection is exact}
+\begin{proof}[Proof of Lemma~\ref{lem:v2ggross}]
+A paired bus has signed charge in $[a_i+b_j-B,a_i]$: early headroom
+gives the upper bound, and enough inventory for B gives the lower bound.
+An A-only bus has $q\in[a_i-B,a_i]$; a B-only bus has
+$q\in[b_j-B,0]$. These endpoint conditions keep inventory in $[0,B]$
+before and after the remaining service. A monotone action between those
+inventories is also feasible throughout the early window. Terminal demand
+is that bus's service consumption minus $q$, between zero and $B$.
+
+All upper endpoints are nonnegative and sum to $P$. The sum of positive
+lower endpoints is $R$, while the sum of all lower endpoints is
+$T=S-N_mB$. Thus total possible negative excursion is $R-T$. For
+$E\ge R$, set negative coordinates to zero and distribute purchases
+among the independent nonnegative intervals, whose sum spans $[R,P]$.
+Gross energy is then $E$. For $T\le E<R$, keep mandatory positive
+coordinates at their lower endpoints and distribute discharge of magnitude
+$R-E$ among the remaining negative intervals. This is possible exactly
+because $R-E\le R-T$ and has gross energy $2R-E$.
+
+Conversely, total positive purchases are at least $R$, so any allocation
+with net $E$ has gross energy at least $2R-E$ and at least $E$.
+The constructions attain both regimes in \eqref{eq:v2ggross}. Additional
+charge/discharge cycles cannot reduce gross energy and are unnecessary.
+\end{proof}
+
+\begin{proof}[Proof of Theorem~\ref{thm:v2g}]
+The lemma and early gross budget give $T\le E\le P$, $E\le K$
+and $E\ge2R-K$. All buses are present for the full early window;
+their monotone actions serialize in at most one hour when $K>0$.
+For $K=0$, the inequalities force $R=0$, $E=0$ and zero gross energy,
+without division. Every bus's terminal refill is nonnegative and at most
+$B$. They serialize at $H$ exactly when $S-E\le H$; at $H=0$ no
+positive terminal demand can be met. With a nonempty positive B batch,
+$E\le P<S$ makes that zero-terminal-power case infeasible.
+
+For a fixed matching, the exact interval is consequently
+\[
+ [\max\{S-H,S-N_mB,2R(M)-K\},U].
+\]
+Only $R(M)$ varies at fixed cardinality. Its attained minimum $r_m$
+gives the widest interval; all such intervals have common upper endpoint
+$U$. Their union is \eqref{eq:v2gprojection}. Since $r_m$ is
+nondecreasing, its threshold minimum is $t_0$; feasibility is precisely
+$t_0\le U$, attained by a standalone fleet when needed.
+
+Standard allowed-edge bipartite matching convexity gives discretely convex
+$r_m$. Interpolate it linearly on $[0,\nu]$. Taking the maximum of
+the resulting convex function $2r-K$, the affine function $S-(2n-m)B$
+and the constant $S-H$ gives a convex function whose integer values are
+$t_m$. Each component is nondecreasing, so the thresholds are also
+nondecreasing. Zero increments can occur only in an initial block.
+After retaining its cheapest cardinality, the positive threshold increments
+are nondecreasing. Frontier slopes $-f/(t_m-t_{m-1})$ are therefore
+nondecreasing, followed by zero. Each endpoint is physical and each edge
+is its whole-plan mixture; every physical branch lies above this convex
+graph. This proves the lower-boundary assertion without introducing
+nonexistent or resource-infeasible cardinalities.
+\end{proof}
+
+\begin{proof}[Proof of Corollary~\ref{cor:v2gsupport}]
+Strict convexity of $G$ gives one minimizing hull load. At a retained
+threshold or on the final horizontal segment, a physical plan attains the
+frontier. In an adjacent open threshold interval, $f>0$ makes its
+interpolated cost strictly below every physical branch at that load.
+The compact finite union of physical intervals then has a strictly larger
+minimum. The classical support criterion applies only with the stated
+signed-domain and price qualifications. At fee zero the empty matching
+physically attains the entire interval at zero operating cost.
+\end{proof}
+
+\subsection{Identical paid idle buses}
+\begin{proof}[Proof of Proposition~\ref{prop:v2gidle}]
+Consider a matching of size $m$ with $k$ idle buses. Its total fleet is
+$N=2n-m+k$, so the cap implies $k\le m$. The box argument of
+Lemma~\ref{lem:v2ggross} still applies: idle buses add only negative
+headroom. The matching's interval is therefore
+\[
+ [\max\{S-H,S-NB,2R-K\},U],
+\]
+at operating cost $fN$. Delete any $k$ matching edges and use the resulting
+$m-k$ matching without idle buses. This fleet has the same size $N$ and
+fee. Deleting edges cannot increase $R$, while the inventory term $S-NB$
+and upper endpoint $U$ stay fixed. Its feasible interval contains the
+original interval. Thus every projected point with idle buses has an
+identical load and cost without them. The reverse inclusion is immediate.
+\end{proof}

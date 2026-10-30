@@ -1,0 +1,160 @@
+\section{Complete fleets and marginal-price support}\label{sec:model}
+
+The unit of optimization is a \emph{complete} fleet plan, rather than an
+individual vehicle duty.  Fix a timetable, allowed directed movements, a
+charging horizon, and the equipment and energy assumptions.  Let
+$\Fleet\ne\varnothing$ contain precisely the plans that cover every mandatory
+service once, assign the services to used buses, route those buses through
+allowed movements, respect battery and charger constraints, and restore every
+used bus to its required terminal inventory.  For $x\in\Fleet$, write $c(x)$
+for intrinsic operating cost and $e(x)\in\R_+^T$ for grid energy bought in the
+$T$ market intervals.  An unused bus contributes neither charging nor cost.
+We use the same $\Fleet$, $c$, and $e$ for physical planning, price response,
+and convexification.  Finitely many discrete duties with bounded continuous
+charging give a compact $\Fleet$ in the cases below; assume more generally
+that its image $\{(e(x),c(x)):x\in\Fleet\}$ is compact.
+
+In the timed physical model, each used path starts at battery inventory $B$.
+A service or directed movement consumes its declared energy in chronological
+order.  Inventory remains between reserve $r$ and capacity $B$ at every
+event.  A depot charging session buying $q$ grid kWh adds $\eta q$ inventory,
+where $0<\eta\leq1$, within its availability window and bus-power limit.
+Concurrent sessions obey the shared power or connector limit.  Each path
+finishes at inventory $B$ by the declared horizon.  In the homogeneous
+single-connector formulation, charging intervals are split at all visit and
+market boundaries.  If interval $k$ has duration $d_k$ and power $P_k$, its
+charges obey $0\leq z_{mk}\leq P_kd_k y_m$ and
+$\sum_m z_{mk}\leq P_kd_k$, where $y_m$ indicates the selected visit.
+Serial allocation of $z_{mk}/P_k$ hours to the visits realizes these totals
+when switching time is zero, efficiency is constant, and charging does not
+taper.  The worked constructions below assume zero travel cost and no
+unlisted travel or auxiliary load; the public case declares its movement
+energy separately.
+
+Let $F:\R^T\to\R\cup\{+\infty\}$ be a proper, closed, convex supply cost,
+finite at every physical load.  Its effective domain includes the feasible
+loads but may also encode generation capacity and ramp limits.  Write
+$\mathcal E=\operatorname{conv}\{e(x):x\in\Fleet\}$.  For the support
+equivalence, assume either
+$\operatorname{ri}\mathcal E\cap\operatorname{ri}(\operatorname{dom}F)
+\ne\varnothing$, or that $F$ has a finite convex minorant on $\R^T$ that
+agrees with it on $\mathcal E$.  The latter covers the nonnegative-domain
+quadratic used below via its unrestricted quadratic formula.
+Here $F$ represents the supplier's aggregate incremental provision cost for
+fleet charging, conditional on background demand already accounted for. A
+system operator posts the marginal tariff calculated from a candidate or
+forecast fleet load before the fleet chooses a schedule. The tariff is held
+fixed when evaluating alternative complete fleets. This ex-ante pricing rule
+is the institution tested below; the supplier is not a strategic player and
+the fleet does not anticipate a tariff reset during its deviation.
+The physical and complete-fleet-hull values are
+\begin{equation}\label{eq:theory-values}
+\begin{aligned}
+ D&=\min_{x\in\Fleet}\{c(x)+F(e(x))\},\\
+ CH&=\min_{(e,c)\in\operatorname{conv}\{(e(x),c(x)):x\in\Fleet\}}
+       \{c+F(e)\},\qquad \Delta=D-CH\geq0.
+\end{aligned}
+\end{equation}
+The hull mixes whole feasible plans, including their charger constraints;
+its mean load is a pricing and bounding object, not necessarily a dispatch.
+For a posted price $p$, define the complete-fleet response
+$V(p)=\min_{x\in\Fleet}\{c(x)+p^\top e(x)\}$.  A marginal price at a
+physical plan $x$ is any $p\in\partial F(e(x))$; this set can contain more
+than one price and need not be nonempty at every boundary load.  Define
+\begin{equation}\label{eq:theory-regret}
+ r(x;p)=c(x)+p^\top e(x)-V(p).
+\end{equation}
+Write $H(x)=c(x)+F(e(x))-CH$ for the cost of plan $x$ above the hull
+optimum. For a stated price selection $p_x$, write $r(x)=r(x;p_x)$.
+When several dispatch prices are valid, reported regret depends on that choice.
+The alternative in $V(p)$ takes the posted price as fixed, as the stated
+tariff rule requires.  A strategic fleet instead compares bills such as
+$c(y)+p_y^\top e(y)$ across its alternatives $y$ and anticipates
+the resulting price change.  That objective differs from both
+$c(y)+p^\top e(y)$ and the planner's $c(y)+F(e(y))$; it needs a specified
+settlement rule and strategic game.  The present price-support and
+compensation statements make no claim about strategic behavior
+\citep{oneill2005,gribikHoganPope2007,ganTopcuLow2013}.
+
+\begin{proposition}[Complete-fleet support]\label{prop:theory-support}
+Under the common-model and attainment assumptions above, every physical
+$x\in\Fleet$ and every $p\in\partial F(e(x))$ satisfy
+\begin{equation}\label{eq:theory-support}
+ r(x;p)\geq c(x)+F(e(x))-CH\geq D-CH=\Delta.
+\end{equation}
+Moreover, $D=CH$ if and only if some physical plan is a best response at
+some price in its subdifferential.  If $D=CH$, every physical planner
+optimizer is supported by every attained maximizer of the hull dual
+$V(p)-F^*(p)$.
+\end{proposition}
+
+The proof in Appendix~\ref{app:theory-proofs} is a specialization of classical
+nonconvex price-support and convexification arguments
+\citep{starr1969,oneill2005,gribikHoganPope2007,huaBaldick2017,schiro2016}.
+It says nothing about whether an iterative price adjustment converges or
+which optimum an algorithm selects.  The stated qualification
+ensures strong Fenchel duality and an attained supporting price.  If an
+economic price convention admits only a subset of $\partial F(e(x))$, the
+converse additionally requires an attained supporting price in that subset.
+In particular, a normal caused solely by extending a nonnegative-load cost
+as $+\infty$ to negative loads is not automatically a generation price.
+
+\begin{corollary}[Best price at a hull-optimal load]\label{cor:best-price}
+Under Proposition~\ref{prop:theory-support}'s assumptions, if a physical plan
+$x$ has the same load as a hull minimizer, then
+\begin{equation}\label{eq:best-price}
+ \min_{p\in\partial F(e(x))}r(x;p)=H(x).
+\end{equation}
+\end{corollary}
+Any attained hull-dual price realizes this minimum: it supports supply at
+that load, leaving the fleet's cost excess as its regret. Thus minimizing
+regret over the price set has an exact benchmark. The same conclusion holds
+for a restricted set of economic prices if it contains such a hull-dual
+price. Appendix~\ref{app:theory-proofs} gives the proof; the ramped example
+in Section~\ref{sec:generation} realizes the equality with positive regret.
+
+The accounting identity also requires a stated deviation right.  In this
+paper one fleet controls all buses and its alternative must be a member of
+the same $\Fleet$.  Separate operators using shared chargers would need
+reserved capacities, trades, or congestion rights before a unilateral
+opportunity set could be defined.  For the single fleet, put
+$F^*(p)=\sup_{u\in\R^T}\{p^\top u-F(u)\}$ and define
+\begin{align}\label{eq:theory-loc}
+ \mathrm{LOC}_{\rm fleet}(x;p)&=c(x)+p^\top e(x)-V(p),\\
+ \mathrm{LOC}_{\rm supply}(x;p)&=F(e(x))-p^\top e(x)+F^*(p).
+\end{align}
+Whenever $F^*(p)$ is finite, both terms are nonnegative and their sum is
+$c(x)+F(e(x))-[V(p)-F^*(p)]$.  At a hull-optimal price and a physical planner
+optimizer, strong Fenchel duality makes that sum $\Delta$; the fleet and
+supply portions depend on the chosen common price.  At any
+$p\in\partial F(e(x))$, supply LOC is zero and fleet LOC equals $r(x;p)$.
+No budget-balance or payment institution
+follows from this arithmetic.
+
+For quadratic supply $F(e)=a^\top e+\tfrac12 e^\top Qe$ on $\R_+^T$ with
+$Q\succeq0$, take the unrestricted-quadratic gradient price
+$p_x=a+Qe(x)$ and
+write $\|z\|_Q=(z^\top Qz)^{1/2}$.  There is a useful complement
+to the lower bound.  Let
+$R_Q=\max_{x,y\in\Fleet}\|e(x)-e(y)\|_Q$. Then
+\begin{equation}\label{eq:theory-upper}
+ H(x)\leq r(x)\leq H(x)+R_Q\sqrt{2H(x)}.
+\end{equation}
+Thus a small cost gap controls own-price regret only together with the
+curvature-weighted range of feasible fleet loads.  The proof permits singular
+$Q$ and boundary loads and appears in Appendix~\ref{app:theory-proofs}.
+
+For numerical certification, valid bounds
+$D\in[L_D,U_D]$ and $CH\in[L_{CH},U_{CH}]$ imply
+$\Delta\in[L_D-U_{CH},U_D-L_{CH}]$.  A replay-feasible physical plan supplies
+an upper bound on $D$; a mixture of replay-feasible complete plans supplies
+an upper bound on $CH$.  At any price with finite $F^*(p)$, a global
+price-response lower bound $\underline V(p)\leq V(p)$ gives the hull lower
+bound $\underline V(p)-F^*(p)$.  A nearly solved restricted column pool alone
+cannot supply that global lower bound.  In the separable implementation,
+$F(e)=\sum_t(a_te_t+b_te_t^2/2)$ for $e\geq0$ and $b_t\geq0$;
+the conjugate term is
+$[p_t-a_t]_+^2/(2b_t)$ when $b_t>0$, and is finite at $b_t=0$ only for
+$p_t\leq a_t$.  These are standard convexification and Fenchel certificates
+over complete plans, rather than a new general convex-hull pricing method
+\citep{huaBaldick2017}.  Section~\ref{sec:computational} compares two specified market states.

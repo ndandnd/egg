@@ -1,0 +1,159 @@
+{
+  "design": {
+    "budget": {
+      "backend": "GRB",
+      "epsilon": 0.0001,
+      "max_rounds": 1,
+      "phase_seconds": 45,
+      "threads": 1,
+      "wall_seconds": 55
+    },
+    "cell_order": [
+      {
+        "seed": 2016,
+        "source": "source0"
+      },
+      {
+        "seed": 2016,
+        "source": "source1"
+      },
+      {
+        "seed": 2017,
+        "source": "source0"
+      },
+      {
+        "seed": 2017,
+        "source": "source1"
+      },
+      {
+        "seed": 2018,
+        "source": "source0"
+      },
+      {
+        "seed": 2018,
+        "source": "source1"
+      },
+      {
+        "seed": 2019,
+        "source": "source0"
+      },
+      {
+        "seed": 2019,
+        "source": "source1"
+      }
+    ],
+    "charging_objective": "linear market.a; exact nonlinear target scored after replay",
+    "child_seconds": 100,
+    "controller_seconds": 1200,
+    "declared_cells": 8,
+    "groups": {
+      "learning_s2016_n20": {
+        "archive": "/home/nc437/egg-fixed-source-charge-20260930/result/learning_campaign/20260930-stage2-attempt1",
+        "case_identity": "1a67e5991dca59a6dbd5d0390a2b02647d86a4b7cf2585f9af9f02da9981438e",
+        "market_identity": "ada81cf6f2636179a8133ba394597c874a500453679c4a9cdc40c997bf78a192",
+        "seed": 2016,
+        "source_plan_hashes": {
+          "source0": "8fdbe385f04d5b6aa438db019b9f28095addf81c6af28282491aa51fd79a0c7c",
+          "source1": "b2cb84d2ae0ece4e5499cbc9bc25172b1e085d3802666715f0367caff5916910"
+        }
+      },
+      "learning_s2017_n28": {
+        "archive": "/home/nc437/egg-fixed-source-charge-20260930/result/learning_campaign/20260930-stage2-attempt1",
+        "case_identity": "d90b4d889fae5f3df4d9b254b87053333f00da48bbe71e258445840fcc4eb8d0",
+        "market_identity": "4b9d8b8654d56985e2be9a131308d0adac10433e24f0c7f2deadf9465ab61a5c",
+        "seed": 2017,
+        "source_plan_hashes": {
+          "source0": "36edbf85bbb7b2e1354cc8db4e2c166afe4c861002fff5264f725f9603be97c2",
+          "source1": "3ae08a36f3963fb2f74c264a332347249b397b3fefa53a6e248a175af3aeddd3"
+        }
+      },
+      "learning_s2018_n20": {
+        "archive": "/home/nc437/egg-fixed-source-charge-20260930/result/learning_campaign/20260930-transfer-attempt1",
+        "case_identity": "e2002725ac59ca06b31ba7abb4f7dfef51e753be48a8c33feebeb58494ccdefa",
+        "market_identity": "b82fc12162415ee802be1dec2efdacd94e2b8ff777b08e33bec4a9d1bb1094f4",
+        "seed": 2018,
+        "source_plan_hashes": {
+          "source0": "34ba8bb2721bf8f77d57d2a9de89daf0c0cc50f4c8f41f418641aa461740a8fc",
+          "source1": "4c87d93d021d5e2c63072ea25cdd9183eb57009f7f6996ecdf719eddcbd02925"
+        }
+      },
+      "learning_s2019_n28": {
+        "archive": "/home/nc437/egg-fixed-source-charge-20260930/result/learning_campaign/20260930-transfer-attempt1",
+        "case_identity": "de83f53aedf8692faf91ead4a40938943875a440a49bbe5521cf661305802e84",
+        "market_identity": "44993583923422717382871cb72b8a8f8d018e01c62b568e5c9cef58f56ce4ee",
+        "seed": 2019,
+        "source_plan_hashes": {
+          "source0": "2795d36b8285ca55e731bd67891f6489b25a2c4ce9a8c75504614dbb88c95017",
+          "source1": "241b710f40d5deda9d1e57b421c0b68bbcf6e90b15ebd6d7598492d5b7a37b3e"
+        }
+      }
+    },
+    "no_fresh_hull": true,
+    "no_route_reoptimization": true,
+    "source_only_pre_target": true,
+    "test_groups_unobserved": [
+      2004,
+      2005,
+      2020,
+      2021
+    ]
+  },
+  "input_hashes": {
+    "stage2/catalog.jsonl": "f40d71f82f25cf397e24fe000ad4795fc9fb8f67a8983288192698e6069bd041",
+    "stage2/frozen.json": "6de8846d024f3a7bc59e6c19e7c30086061b967b8e9fcdcc7a62496dd6b24cb6",
+    "stage2/learned/proposals.jsonl": "257f8bfa544e1f716ac81d6dc4f345aa38e74e83ffc93122006877c948f5a49a",
+    "stage2/learning_receipt.json": "a9b9370304b90c1042546b583fd34743b6ccc1dc026d1679b3b98b856e1549e4",
+    "stage2/learning_s2016_n20/state0/source0/receipt.json": "44b250e457e6cd62734e5d273aad184803115ff437d95f0520940acb86b27f79",
+    "stage2/learning_s2016_n20/state0/source1/receipt.json": "ebd011c837d1e00efa3d1699c79cc8796fe7e68c04bd4ae17da59ec5921d101d",
+    "stage2/learning_s2017_n28/state0/source0/receipt.json": "9f0655444f28bbdb8e3b891c1cf67e11e118e8026905368b2d4b2dcedb8f7fba",
+    "stage2/learning_s2017_n28/state0/source1/receipt.json": "7f417cddcdf3b3bc159d470cd9970743342161ec0b26f42770d92a59da2f6479",
+    "stage2/summary.json": "3688d16a98f08b65321d82acaabb93a8dea4b4d4218dda7a06f05a2da26ab5f6",
+    "transfer/catalog.jsonl": "6a8cd79eeb8bffcf564c98bd4b44686f4ce0de09ab620e32a9764d7afe93504a",
+    "transfer/frozen.json": "fcc5e463fe1be13bd944b51bff74e7e108399c60eb971ce5e12027b3e90b469a",
+    "transfer/inference_receipt.json": "bbc30133088305331a6e0d6ccbb2f09d9b4af8bc4aa3ba4441f35db454f36bdb",
+    "transfer/learned/proposals.jsonl": "21d5b83149b4e4f5f7f8490f49a1471a1fd53717d713b7710ceca96c2eea8176",
+    "transfer/learning_s2018_n20/state0/source0/receipt.json": "9a6e059fa90759edde39d0d9f43876c48ac41c6806ef9c36b471b7c34c9389b0",
+    "transfer/learning_s2018_n20/state0/source1/receipt.json": "c90e349b2a9f67fd63b4edc780d19f04e55b98f6ef4192a36fd70f2472b3f26b",
+    "transfer/learning_s2019_n28/state0/source0/receipt.json": "6201b651fe19f6ac2e42168f06662a66e97029f5bd9207ff206e5a8794beca36",
+    "transfer/learning_s2019_n28/state0/source1/receipt.json": "f57c8d2a3674e11efebf1e4aa514f6b876c41b89bb91e9ea7bd56df4a42961ff",
+    "transfer/summary.json": "fdbb4e7ac07e949a4d9ef5b647b7652bb99cf5259cfa256a4a326097a6d93430"
+  },
+  "native_probe": {
+    "backend_identity": {
+      "model_solver_name": "GRB",
+      "native_library_path": "/home/nc437/evsp_env/lib/python3.12/site-packages/gurobipy/_attrutil.cpython-312-x86_64-linux-gnu.so",
+      "native_library_sha256": "57f87a886aa5a1fd8356494fa1b81e9f9c7d957c898d09e96145440c76c762b7",
+      "requested": "GRB",
+      "solver_class": "SolverGurobi",
+      "solver_module": "mip.gurobi"
+    },
+    "model_seed": 0
+  },
+  "protocol": "egg-fixed-source-target-charging-development-20260930-v1",
+  "runtime": {
+    "gurobi_runtime": "12.0.3",
+    "gurobipy": "12.0.3",
+    "machine": "x86_64",
+    "mip": "1.17.6",
+    "python_abi": "cpython-312",
+    "python_build": "3.12.13 | packaged by Anaconda, Inc. | (main, Mar 19 2026, 20:20:58) [GCC 14.3.0]",
+    "python_implementation": "cpython",
+    "python_version": "3.12.13"
+  },
+  "scientific_admission": "pending independent result review",
+  "source_commit": "c9f50bfc6a5cc916da4ea10f9e2747e6ccd4a338",
+  "source_hashes": {
+    "research-20260930/learning-campaign/PROTOCOL_FIXED_SOURCE_CHARGE.md": "05932c5c1d2afe80a8b359680366c6aaf3bfdcadd1e476135775166cc7f4dd59",
+    "src/cluster/fixed_source_charge.sbatch": "85332e5c90f50aef5f6b60bf32ca5614fe98505d21f61a03f319f7c65cc4d904",
+    "src/cluster/unicorn_env.sh": "1731f65b21fd9c81f5726078490aed384974ac2e4869bdc13e7259d5ab045678",
+    "src/egglab/learned_proposals.py": "5b58b9495ccb401bf7a865ba4058a81838b575f517268e76bad40f0b7dcbd479",
+    "src/egglab/native_hull.py": "dc8f04bfeab01fb6aaa4afca61c97887993b4e6181be8cabfa76858265051ffd",
+    "src/egglab/native_pathflow.py": "cd61085c5942248e53cdfbd92056c4ba324dfd81d5d18b726f58715298003df0",
+    "src/egglab/native_recharge.py": "0067123a7f71cc6e9c89e1262cdcbd612cafdcfc252e35bcfca7f1f54c45d0f3",
+    "src/egglab/route_fixed_repair.py": "4be6d534a1aabd0e2adc7f6711d9d8352bbc38340e5bd7456fbae4ab982aa05b",
+    "src/experiments/budget_sizing_diagnostic.py": "2b9da59b1699133cd7b5ffdc2465d4e5e8fe0d6a7b4e25560f189a6c4fc7ce23",
+    "src/experiments/computational_benchmark.py": "da96e4601e34dc797526703db68c2d2cbda57d78a9048c8fd7c34889ffca1c8f",
+    "src/experiments/fixed_source_charge_campaign.py": "ddf78171db2863e248f8630ccb96980743339ee4ce2b6192ba4082655caef2cd",
+    "src/tests/test_fixed_source_charge_campaign.py": "c8b6d64e14f9c3f9ba0435552aa5f11037391cfb5d8d650da03fd982945d907e"
+  }
+}

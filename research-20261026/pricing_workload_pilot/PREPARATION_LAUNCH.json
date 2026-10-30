@@ -1,0 +1,15 @@
+{
+  "policy": "independent-pricing-workload-source-preparation-v1",
+  "mode": "FROZEN",
+  "review_disposition": "PASS",
+  "workdir": "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017",
+  "source_revision": "bb9086e8f003bebde4e4fe7f7686fa160f459abf",
+  "source_freeze_assumption": "parent-approved-frozen-commit",
+  "source_sha256": null,
+  "command": "test ! -e research-20261026/pricing_workload_pilot/preparation01 && test ! -e research-20261026/pricing_workload_pilot/preparation-process-time.txt && /usr/bin/time -l -o research-20261026/pricing_workload_pilot/preparation-process-time.txt .venv-local/bin/python -I -S -B research-20261026/pricing_workload_pilot/prepare.py --source-revision bb9086e8f003bebde4e4fe7f7686fa160f459abf > research-20261026/pricing_workload_pilot/preparation-stdout.txt 2> research-20261026/pricing_workload_pilot/preparation-stderr.txt",
+  "budgets": {"cpu_s": 10, "wall_s": 20, "body_cpu_s": 6, "body_wall_s": 15},
+  "purpose": "One source-only preparation inside campaign preflight120CPU180wall and total7200CPU10800wall. No generation, owned artifact or original data reads. Consume each source buffer once; preserve failure and actual cost without retry. Main LAUNCH stays DRAFT/PENDING until external reconciliation and a separate freeze.",
+  "namespace": "research-20261026/pricing_workload_pilot/preparation01",
+  "control_version_rule": "The commit publishing this control is separate from the reviewed implementation source revision. This control buffer is itself consumed and pinned by the metered preparation. No self-referential digest or repeated hash audit.",
+  "external_meter": "Darwin /usr/bin/time -l; user plus system CPU and real elapsed, with self prepublication receipt retained for rounding reconciliation"
+}

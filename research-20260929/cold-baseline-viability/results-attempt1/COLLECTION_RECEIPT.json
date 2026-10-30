@@ -1,0 +1,35 @@
+{
+  "collection": {
+    "archive_sha256": "b2ebd010f792cca40a0602f2d4231ca5e384c2824c43a993821a29ea4bb01ebd",
+    "bytes": 4324039,
+    "command": [
+      "ssh",
+      "-o",
+      "BatchMode=yes",
+      "-o",
+      "ConnectTimeout=15",
+      "unicorn2",
+      "tar -czf - -C /home/nc437/egg-cold-baseline-20260929 result/cold_baseline_viability/20260929-attempt1 result/cold_baseline_viability/20260929-attempt1.launch result/cold_baseline_viability/20260929-attempt1.slurm_wrapper_receipt.json egg-cold-viability-593482.out egg-cold-viability-593482.err"
+    ],
+    "complete_ssh_seconds": 0.7928548748604953,
+    "returncode": 0,
+    "utc": "2026-09-29T00:33:33.448391+00:00"
+  },
+  "exit_code": "0:0",
+  "job_id": "593482",
+  "note": "MANIFEST.json inventories full private raw tree; curated subset uses reduced frozen_identity.json.",
+  "raw_directory_relative_to_workspace": "research-20260929/cluster/cold-baseline-viability-attempt1/collected/result/cold_baseline_viability/20260929-attempt1",
+  "raw_frozen_sha256": "228f80c102dce13c5dcb17dd843a2bfb9a3ee9a387b2b56e2b939146fad264e7",
+  "raw_manifest_sha256": "d9ef723513d1dc802f974bea4098dd702a41ffb0c32076b142ae0732dd618ed4",
+  "slurm_elapsed_seconds": 114,
+  "source_ci_at_submission": "in_progress",
+  "source_ci_final": {
+    "conclusion": "success",
+    "head_sha": "e3ac75fc53c00594572126413b704ab1de42086e",
+    "run_id": 36503342208
+  },
+  "source_ci_run": 36503342208,
+  "source_commit": "e3ac75fc53c00594572126413b704ab1de42086e",
+  "source_validation": "Focused pure checks and independent review; unchanged core/shared helpers from passing601102a; full CI observed separately.",
+  "state": "COMPLETED"
+}

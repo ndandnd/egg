@@ -1,0 +1,192 @@
+{
+  "controller_cap_seconds": 2100,
+  "declared_cells": 6,
+  "declared_stages": 12,
+  "design": {
+    "budgets": {
+      "planner": {
+        "backend": "GRB",
+        "epsilon": 0.0001,
+        "max_rounds": 16,
+        "phase_seconds": 160,
+        "threads": 1,
+        "wall_seconds": 180
+      },
+      "response": {
+        "backend": "GRB",
+        "epsilon": 0.0001,
+        "max_rounds": 1,
+        "phase_seconds": 45,
+        "threads": 1,
+        "wall_seconds": 60
+      }
+    },
+    "cases": {
+      "native_scale_dev_s1006_n08": {
+        "case_identity": "e46493aba0d055dac32abc52b921ff57726d52454d1aad1de8de98282d2adb8e",
+        "market_identities": {
+          "source0": "5965aee832750b5b4b014245c2fbff37854877b0a1c46b5f3980a51e207eba99",
+          "target": "af160c9559075ffdcbb8708692f4d547ff12d22307d1ffa4d830e8376d000040"
+        }
+      },
+      "native_scale_dev_s1006_n16": {
+        "case_identity": "6d3a176c62bd325db353f979d6d725f3931f7cc1cb7205965e5f37fb840e963a",
+        "market_identities": {
+          "source0": "f6431fe69ca51804156917853d5b2ac016b1facafffbc4030512c91eda5c3942",
+          "target": "4f30853c1bec68dcc03c8031ffbb78d3c8313bdcf9c8142af3054064d5706359"
+        }
+      },
+      "native_scale_dev_s1006_n24": {
+        "case_identity": "522e53c2b467dd252d6e725472a17994a6b7e08bbe4f9972047ecc4dc7508486",
+        "market_identities": {
+          "source0": "b122421bd699aa16231a621ce79f04a89ab99f4e322dbbfcd4c5869e051d48f8",
+          "target": "b3b5757517a0f04f14524017446844fe95fdb52c5711ee1c672f425d6185016a"
+        }
+      }
+    },
+    "controller_cap_seconds": 2100,
+    "development_only": true,
+    "hard_child_seconds": {
+      "planner": 210,
+      "response": 90
+    },
+    "hull_source": {
+      "native_scale_dev_s1006_n08/source0": {
+        "case_identity": "e46493aba0d055dac32abc52b921ff57726d52454d1aad1de8de98282d2adb8e",
+        "lower_exact": "11464703846363379850626013146611/25755440766541803690609606656",
+        "market_identity": "5965aee832750b5b4b014245c2fbff37854877b0a1c46b5f3980a51e207eba99",
+        "source_commit": "60a66e77be18e067aee4026f0e3a31dc120ec427",
+        "source_job_id": "595105",
+        "upper_exact": "20330271708953139413662770405760555103929720792117531487551802419181/45671926166590716193865151022383844364247891968000000000000000000"
+      },
+      "native_scale_dev_s1006_n08/target": {
+        "case_identity": "e46493aba0d055dac32abc52b921ff57726d52454d1aad1de8de98282d2adb8e",
+        "lower_exact": "77149222308252160087931725509847/180288085365792625834267246592",
+        "market_identity": "af160c9559075ffdcbb8708692f4d547ff12d22307d1ffa4d830e8376d000040",
+        "source_commit": "60a66e77be18e067aee4026f0e3a31dc120ec427",
+        "source_job_id": "595105",
+        "upper_exact": "1221501127680398510453167647765713669049635622751/2854495385411919762116571938898990272765493248"
+      },
+      "native_scale_dev_s1006_n16/source0": {
+        "case_identity": "6d3a176c62bd325db353f979d6d725f3931f7cc1cb7205965e5f37fb840e963a",
+        "lower_exact": "705074667279791099701409178027169/1442304682926341006674137972736",
+        "market_identity": "f6431fe69ca51804156917853d5b2ac016b1facafffbc4030512c91eda5c3942",
+        "source_commit": "60a66e77be18e067aee4026f0e3a31dc120ec427",
+        "source_job_id": "595105",
+        "upper_exact": "44653697185700883490490111627786076959381749309235230827001470903851/91343852333181432387730302044767688728495783936000000000000000000"
+      },
+      "native_scale_dev_s1006_n16/target": {
+        "case_identity": "6d3a176c62bd325db353f979d6d725f3931f7cc1cb7205965e5f37fb840e963a",
+        "lower_exact": "84937648908786279789904333379509/180288085365792625834267246592",
+        "market_identity": "4f30853c1bec68dcc03c8031ffbb78d3c8313bdcf9c8142af3054064d5706359",
+        "source_commit": "60a66e77be18e067aee4026f0e3a31dc120ec427",
+        "source_job_id": "595105",
+        "upper_exact": "172136324154276603882430560806859432396332935579393/365375409332725729550921208179070754913983135744"
+      },
+      "native_scale_dev_s1006_n24/source0": {
+        "case_identity": "522e53c2b467dd252d6e725472a17994a6b7e08bbe4f9972047ecc4dc7508486",
+        "lower_exact": "388906488812811099880809356034237/721152341463170503337068986368",
+        "market_identity": "b122421bd699aa16231a621ce79f04a89ab99f4e322dbbfcd4c5869e051d48f8",
+        "source_commit": "60a66e77be18e067aee4026f0e3a31dc120ec427",
+        "source_job_id": "595105",
+        "upper_exact": "157633121355969426064038562081735202328985803316981681999284571853/292300327466180583640736966543256603931186508595200000000000000"
+      },
+      "native_scale_dev_s1006_n24/target": {
+        "case_identity": "522e53c2b467dd252d6e725472a17994a6b7e08bbe4f9972047ecc4dc7508486",
+        "lower_exact": "97770510816529737876266959471497/180288085365792625834267246592",
+        "market_identity": "b3b5757517a0f04f14524017446844fe95fdb52c5711ee1c672f425d6185016a",
+        "source_commit": "60a66e77be18e067aee4026f0e3a31dc120ec427",
+        "source_job_id": "595105",
+        "upper_exact": "396287313203782562602623715734850017761817052396151/730750818665451459101842416358141509827966271488"
+      }
+    },
+    "independent_test_data": false,
+    "order": [
+      {
+        "case": "native_scale_dev_s1006_n08",
+        "market": "source0",
+        "state_index": 0
+      },
+      {
+        "case": "native_scale_dev_s1006_n08",
+        "market": "target",
+        "state_index": 1
+      },
+      {
+        "case": "native_scale_dev_s1006_n16",
+        "market": "target",
+        "state_index": 1
+      },
+      {
+        "case": "native_scale_dev_s1006_n16",
+        "market": "source0",
+        "state_index": 0
+      },
+      {
+        "case": "native_scale_dev_s1006_n24",
+        "market": "source0",
+        "state_index": 0
+      },
+      {
+        "case": "native_scale_dev_s1006_n24",
+        "market": "target",
+        "state_index": 1
+      }
+    ]
+  },
+  "freeze_host_environment": {
+    "hostname": "sonic-cpu-01.cs.cornell.edu",
+    "platform": "Linux-6.8.0-138-generic-x86_64-with-glibc2.39"
+  },
+  "native_probe": {
+    "backend_identity": {
+      "model_solver_name": "GRB",
+      "native_library_path": "/home/nc437/evsp_env/lib/python3.12/site-packages/gurobipy/_attrutil.cpython-312-x86_64-linux-gnu.so",
+      "native_library_sha256": "57f87a886aa5a1fd8356494fa1b81e9f9c7d957c898d09e96145440c76c762b7",
+      "requested": "GRB",
+      "solver_class": "SolverGurobi",
+      "solver_module": "mip.gurobi"
+    },
+    "model_seed": 0
+  },
+  "protocol": "egg-economic-support-diagnostic-development-20260929-v1",
+  "scientific_admission": "pending independent review",
+  "software_runtime": {
+    "gurobi_runtime": "12.0.3",
+    "gurobipy": "12.0.3",
+    "machine": "x86_64",
+    "mip": "1.17.6",
+    "numpy": "1.26.4",
+    "python_abi": "cpython-312",
+    "python_build": "3.12.13 | packaged by Anaconda, Inc. | (main, Mar 19 2026, 20:20:58) [GCC 14.3.0]",
+    "python_implementation": "cpython",
+    "python_version": "3.12.13",
+    "scipy": "1.13.1"
+  },
+  "source_commit": "41fa5f1e23833922292e2f70e346f386485aaa51",
+  "source_hashes": {
+    "research-20260928/retrieval-comparison/SYNTHETIC_PREFLIGHT.json": "b68ef2e194b005802916a40ad72a98dc2bd2bdc7b123897e6e2c0350eaddc60c",
+    "research-20260929/economic-support-diagnostic/DESIGN.md": "15ce7ec3f85a07029c14576379053d386966eeddba8849acdb71f486973d8aa8",
+    "research-20260929/economic-support-diagnostic/IMPLEMENTATION.md": "762f00d1632ce27fd54d2818c811aac58da26ad8b9f6e630ad057ad4857de636",
+    "research-20260929/economic-support-diagnostic/README.md": "8e2d48e1324540ebb0f20a6760559ef6a7a1f3572455ea1a326406964eafaf8f",
+    "research-20260929/qp-baseline-diagnostic/results-attempt1/COLLECTION_RECEIPT.json": "bcf78c359dee0861a726bbdfa3185e025a9bdfee8f90d8d21120408d8adc1b0a",
+    "research-20260929/qp-baseline-diagnostic/results-attempt1/MANIFEST.json": "6606267bd59df01c5a6d6b5aa500d37353f2cb9a232a062cd87dbbcbf04d49b9",
+    "research-20260929/qp-baseline-diagnostic/results-attempt1/frozen_identity.json": "e50d83c6804e83f60f723fa21471b77a43a001507aa2d43d3c45d3aa008a9ced",
+    "research-20260929/qp-baseline-diagnostic/results-attempt1/summary.json": "6c739dd25e9c6e1665ec0445aac3319acd648447ebc7736150fcb68f3d99382b",
+    "research-20260929/qp-baseline-diagnostic/results-attempt1/supervisor_receipt.json": "c90ff7525021a5fb63ac1c7f449d6123f9b76f2c974ceec8f52d90bb073f5bcf",
+    "research-20260929/qp-baseline-diagnostic/results-attempt1/wrapper_receipt.json": "fbe4da7b56b8299076eeb2804bfe070a1759e391b0f1c42b309db113684ff8a7",
+    "src/cluster/economic_support_diagnostic.sbatch": "0c0a3561e025c67350cc13b0859da5601aab71d2df706da6c78d113683b56ebf",
+    "src/cluster/unicorn_env.sh": "1731f65b21fd9c81f5726078490aed384974ac2e4869bdc13e7259d5ab045678",
+    "src/egglab/native_hull.py": "dc8f04bfeab01fb6aaa4afca61c97887993b4e6181be8cabfa76858265051ffd",
+    "src/egglab/native_pathflow.py": "cd61085c5942248e53cdfbd92056c4ba324dfd81d5d18b726f58715298003df0",
+    "src/egglab/native_recharge.py": "0067123a7f71cc6e9c89e1262cdcbd612cafdcfc252e35bcfca7f1f54c45d0f3",
+    "src/egglab/solver.py": "4d5ea429a84441d20b23856d903f9a499cb1e7e2d51ec61e6c163617478c6074",
+    "src/experiments/budget_sizing_diagnostic.py": "2b9da59b1699133cd7b5ffdc2465d4e5e8fe0d6a7b4e25560f189a6c4fc7ce23",
+    "src/experiments/computational_benchmark.py": "da96e4601e34dc797526703db68c2d2cbda57d78a9048c8fd7c34889ffca1c8f",
+    "src/experiments/economic_support_diagnostic.py": "42b0872c7692403589eca6a97fcfb6bfd0cdc6e60fc22128d823562a675e7862",
+    "src/experiments/native_scaling_cases.py": "faed7a5b122c6ed233aac75b2f4e54044b006e1bf56139a729d4a875fa2d5c2f",
+    "src/experiments/qp_baseline_diagnostic.py": "0de2633d4eae278c5f12677b7cde3756c50d384a0c5df365033703cc052e4bf8",
+    "src/experiments/retrieval_comparison.py": "74d2b1f634196ef6450620c9ebdda6421dde29ff03b92c0800afbf158689ed77",
+    "src/tests/test_economic_support_diagnostic.py": "ea8627b3d60287f5679c805b91667120200a2d813980b95d3ffcbe705d45fc1f"
+  }
+}

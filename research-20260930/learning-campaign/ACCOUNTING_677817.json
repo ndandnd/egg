@@ -1,0 +1,16 @@
+{
+  "observed_at_utc": "2026-09-30T04:47:49.361905+00:00",
+  "job_id": "677817",
+  "state": "COMPLETED",
+  "exit_code": "0:0",
+  "elapsed_seconds": 91,
+  "allocated_cpus": 2,
+  "node": "snavely-cpu-16",
+  "source": "sacct -j 677817 --noheader --parsable2 --format=JobID,State,Elapsed,ExitCode,AllocCPUS,NodeList",
+  "rows": [
+    "677817|COMPLETED|00:01:31|0:0|2|snavely-cpu-16",
+    "677817.batch|COMPLETED|00:01:31|0:0|2|snavely-cpu-16",
+    "677817.extern|COMPLETED|00:01:31|0:0|2|snavely-cpu-16"
+  ],
+  "interpretation": "Requested one CPU per task, allocated two logical CPUs by Slurm; native library threads constrained to one. Wrapper elapsed85s differs from full allocation91s."
+}

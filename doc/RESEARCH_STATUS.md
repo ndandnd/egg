@@ -1,3 +1,43 @@
+# Research status — journal research branch
+
+Updated 27 September 2026. Current work is on
+`codex/journal-research-20260927`, draft PR56; nothing is merged or submitted.
+This opening snapshot supersedes the older operational handoff below for the
+journal research effort. Historical claims below are preserved, not newly audited.
+
+24 October 2026 historical-summary correction: the loop headline below has been
+checked against `doc/MEASUREMENT_RESULTS.md`, not re-audited from raw outcomes.
+Zero fixed points across176 tested cells applies only to `b=0.05`; some runs were
+unresolved transients. Moderate feedback retained some fixed points. This older
+snapshot is not the current campaign handoff; see
+`research-20261023/CONTINUATION.md` for the current local research state.
+
+| Research question | Evidence now | Remaining work |
+|---|---|---|
+| Can complete, replenished fleet schedules lack marginal-price support? | Exact audited construction; reserve/loss robustness and 86-size replication | Establish scope on real timetables under explicit assumptions |
+| Does a small planning gap settle incentive quality? | Exact scaling example and reviewed participant normalization; two reviewers passed a quadratic load-radius bound | Integrate the new bound into source draft0.4 and review the full scientific narrative |
+| Is the native physical oracle qualified? | CBC+GRB small controls, half-minute extension, compact20-cell gate and separate raw/physical audits | Full public-case result audit |
+| Does the native hull controller work? | First failure preserved; corrected eight-cell execution passed, independent audit being packaged | Qualify explicit compact-oracle integration before public hull work |
+| Is a complete public timetable admitted? | All37 Hildenbrand services, directed source data, declared energy model, independently checked two-depot-variant intake | Job557543 is running the first two-cell flat-price pilot; no result claim yet |
+| Is a paper available? | Reviewed PDF0.3:17pages,sixfigures, backed up and linked in GoogleDoc | Public economic evidence and final independent scientific review before calling it an excellent first draft |
+
+Immediate next actions are automatic: collect and independently audit job557543,
+complete compact-hull integration qualification, then freeze a modest matched
+planner/hull/regret study. Keep all failures and unresolved intervals. Costs,
+energy rates and hardware restrictions remain declared modeling assumptions;
+no operational benefit, general speed advantage or new general welfare theorem
+is claimed. Major scientific-claim changes, private-data release or materially
+larger compute commitments are flagged to the user. No such decision is pending.
+
+Detailed continuation: `AUTONOMOUS_RESEARCH_CONTINUATION.md`; chronological
+research record: `JOURNAL_RESEARCH_LOG.md`; publication claims:
+`../paper/CLAIM_EVIDENCE_LEDGER.md`. The GoogleDoc is an updated narrative record;
+Git manifests and source freezes identify reproducible evidence.
+
+---
+
+## Earlier rolling handoff (preserved)
+
 # Research status (rolling handoff)
 
 Last updated: 2026-08-18. This is the single entry point for "where the
@@ -18,9 +58,11 @@ contracts live in `MEASUREMENT_RESULTS.md` and `B2_STABILIZATION_SPEC.md`.
    approximation, fixed-point/cycle detection, preemption-safe
    transactional checkpoints, expected-count + replay audits.
 3. **Synthetic measurement closeout** (`result/analysis/`,
-   `doc/MEASUREMENT_RESULTS.md`): 596 certified cells; headline: naive
-   tatonnement cycles essentially everywhere at moderate/strong feedback
-   (0 fixed points across 176 damping cells at b in {0.01, 0.05});
+   `doc/MEASUREMENT_RESULTS.md`): 596 reported cells; loop headline:
+   no fixed points observed across176 strong-feedback (`b=0.05`)
+   algorithm-parameter cells on32 distinct instances, including unresolved
+   transients. Moderate feedback (`b=0.01`) retained fixed-point rates of1/8
+   in Phase1 and1/16 in damping;
    dictator dominance measured. Root-LP-to-MIP integrality gaps are LARGE
    and formulation-specific (medians 127-301 on the compact
    vehicle-indexed MILP) — they motivate, but do not measure, the B3

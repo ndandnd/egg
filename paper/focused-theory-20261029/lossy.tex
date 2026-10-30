@@ -1,0 +1,278 @@
+\section{Common losses and the joint load--cost set}
+\label{sec:lossy}
+With losses, early net grid energy no longer determines terminal purchases.
+The same cardinality-matching values nevertheless suffice under the
+common-window assumptions. Retaining finite cycling actions gives a complete
+polygonal projection. Discarding dominated actions gives a smaller
+\emph{efficient} frontier for monotone economic objectives. The two
+descriptions have different economic and physical qualifications.
+
+Retain the services, allowed graph, battery capacity $B$, positive fee $f$
+and service-assigned buses of Section~\ref{sec:v2g}. Every bus starts and
+finishes full, has zero reserve, and is available throughout the early
+window. There is no travel, auxiliary consumption, taper or switching time.
+Let $\alpha\in(0,1]$ be the common charging efficiency in both windows
+and $\delta\in(0,1]$ the common discharging efficiency. Powers and energies
+are measured on the \emph{grid side}: early purchases $C$ and exports $X$
+use the shared connector's gross budget $C+X\le K$, and terminal grid
+purchases satisfy $L\le H$. Each bus accepts the corresponding connector
+power. Signed exports receive the same posted rate as purchases.
+Write
+\[
+ S=\sum_i a_i+\sum_j b_j,\qquad P=\sum_i a_i,\qquad
+ \kappa=\frac{1}{\alpha\delta}-1\ge0.
+\]
+Battery exchange is $\alpha C_v-X_v/\delta$, whereas net early grid
+energy is $E=C-X$. Full replenishment gives
+\begin{equation}\label{eq:lossyaccounting}
+ L=\frac S\alpha-E+\kappa X.
+\end{equation}
+Thus two allocations with the same $E$ may have different $L$.
+The supply objective must be defined on the resulting signed load domain,
+or on an explicitly declared background-demand translation.
+
+\input{full_lossy_projection}
+
+\subsection{The smaller efficient frontier for monotone costs}
+
+\begin{lemma}[Least terminal purchase at a fixed early net load]
+\label{lem:lossyfixed}
+Fix an allowed matching $M$ of size $m$, using $N=2n-m$ buses. Put
+\[
+ R=\sum_{(i,j)\in M}[a_i+b_j-B]_+,\quad T=S-NB,\quad
+ d_R(E)=\left[\frac R\alpha-E\right]_+,\quad
+ L_R(E)=\frac S\alpha-E+\kappa d_R(E).
+\]
+Among early allocations with at most one direction of action per bus,
+the feasible early-net interval is exactly $[t(R,N),U]$, when nonempty,
+where
+\begin{align}
+ U&=\min\{P/\alpha,K\},\label{eq:lossyU}\\
+ t(R,N)&=\max\left\{
+ (1/\alpha-\delta)R+\delta(S-NB),\quad
+ 2R/\alpha-K,\quad S/\alpha-H,\quad
+ \frac{S/\alpha+\kappa R/\alpha-H}{1+\kappa}
+ \right\}.\label{eq:lossyt}
+\end{align}
+For each such $E$, the least attainable terminal purchase is $L_R(E)$.
+It is achieved with $C=E+d_R(E)$ and $X=d_R(E)$.
+\end{lemma}
+
+The first threshold in \eqref{eq:lossyt} accounts for available battery
+inventory; the second prevents offsetting purchases and exports from
+evading connector time. The last two enforce terminal refill on both
+pieces of $L_R$. In particular, replacing service energy by $S/\alpha$
+in the lossless formula would omit both the export loss and its connector
+consequences.
+
+Retain the allowed-graph matching values $r_m$ from
+Section~\ref{sec:heterogeneous}, for $m=0,\ldots,\nu$. Define
+$N_m=2n-m$, $t_m=t(r_m,N_m)$, $L_m=L_{r_m}$ and $c_m=fN_m$.
+\begin{theorem}[Finite efficient-frontier reduction with common losses]
+\label{thm:lossyfrontier}
+The set
+\begin{equation}\label{eq:lossyZ}
+ Z=\bigcup_{\substack{0\le m\le\nu\\t_m\le U}}
+ \{(E,L_m(E),c_m):t_m\le E\le U\}
+\end{equation}
+is physical. Every physical point is weakly dominated coordinatewise
+in $(E,L,c)$ by a point of $Z$ with the same operating cost. Hence the
+complete physical set's coordinatewise efficient frontier is obtained
+by removing dominated points from $Z$. The thresholds $t_m$ are
+nondecreasing and discretely convex.
+
+Each cardinality contributes at most two line segments, with a possible
+kink at $E=r_m/\alpha$. Thus $\operatorname{conv}Z$ is the convex hull
+of finitely many segment endpoints and kinks. If the convex supply
+objective is coordinatewise nondecreasing on the admitted signed domain,
+physical and hull planning values can be computed over $Z$ and
+$\operatorname{conv}Z$, respectively, without changing either value.
+\end{theorem}
+
+Dominance here allows a replacement with smaller early load as well as
+smaller terminal load; it does not identify the full physical set.
+Under nonnegative early and terminal posted prices, the same reduction
+preserves the minimum bill plus operating cost. At zero prices dominated
+allocations can tie, so it does not enumerate every price response.
+Negative prices or a nonmonotone supply objective may require the alternatives
+retained by Theorem~\ref{thm:fulllossyprojection}; they cannot use the smaller
+set $Z$ by assertion. Asymmetric export settlement must keep its distinct
+purchase/export coordinates. The lossless scalar criterion
+for the location of a supported hull optimum is not asserted here:
+different cardinalities can have different terminal loads at the same $E$.
+Convex network dispatch with increasing generation costs need not give a
+load-monotone value function: congestion can make a nodal marginal price
+negative. Appendix~\ref{app:networkmonotonicity} gives an exact illustration
+and the established pricing precedent. The smaller efficient set therefore
+requires a load-domain monotonicity check. The complete polygons instead
+retain all period-aggregate load/cost points, subject to their explicit
+cycling assumptions and the network objective's declared domain.
+
+Identical paid idle buses remain redundant for these efficient values
+under the total fleet cap $2n$. Deleting as many matching edges as there
+are idle buses preserves the total fleet and fee and lowers $R$, so an
+all-assigned fleet has no larger $L$ at the same $E$. This efficient-set
+argument gives dominance. If finite cycling is retained, the complete
+projection result above gives the stronger equality of the whole projected
+set, as its capped-idle corollary explains.
+There is no general uncapped-idle conclusion when negative net early loads
+are valuable. The theorem remains conditional on common efficiencies,
+common windows and ideal serial use; it is not a public-timetable V2G
+result. A separate ten-case exact qualification matched these efficient-frontier
+formulas to independent one-direction SOC/sign-polytope enumeration, checking
+all vertices of those sign polytopes and attainment along complete frontier
+segments. It did not qualify the full cycling polygons. These finite
+implementation checks supplement the proof; they do not establish
+empirical validity or prevalence.
+
+\subsection{Planning and support from the finite frontier}
+\label{sec:lossyalgorithm}
+The reduction gives a direct way to compute the two planning values under
+the monotonicity assumptions of Theorem~\ref{thm:lossyfrontier}. There are
+at most $2(\nu+1)$ affine segments and $M\le3(\nu+1)$ generating records
+$v_j=(u_j,c_j)$, where $u_j=(E_j,L_j)$; empty intervals are omitted and
+singletons require only one record. Physical planning minimizes
+$c_m+F(E,L_m(E))$ on each segment, a convex one-dimensional problem,
+and takes the smallest value. Hull planning solves
+\[
+ \min_{\lambda\ge0,\;\sum_j\lambda_j=1}
+ \left\{\sum_j\lambda_jc_j+
+ F\!\left(\sum_j\lambda_ju_j\right)\right\}.
+\]
+These use standard matching and convex-optimization tools; the physical
+result is that the matching values suffice to construct their input.
+
+\begin{remark}[Interpolate complete plans, not fractional fleet physics]
+\label{rem:fractionalcardinality}
+Interpolating $r_m$ and substituting a continuous cardinality into
+\eqref{eq:lossyt} need not give this hull. Take one service per batch,
+$B=1$, $a=b=3/4$, $\alpha=1/2$, $\delta=1$, $K=2$, $H=3$ and $f=2$.
+Then $r_0=0$, $r_1=1/2$; the two complete efficient branches are
+\[
+ (E,3-E,4),\quad 0\le E\le3/2;\qquad
+ (E,3-E,2),\quad 1\le E\le3/2.
+\]
+Both physical and hull minima of $c+3E+L$ equal $7$. Instead put
+$r(m)=m/2$, $N=2-m$ and $c=2N$ for fractional $m$. The same formulas
+admit $m=1/2$, $E=1/4$, $L=3$, $c=3$, of cost $27/4<7$:
+the four lower bounds in \eqref{eq:lossyt} are $1/4,-1,0,1/4$,
+and the terminal formula gives $3$. Every actual mixture with mean
+cardinality $m$ requires $E\ge m$, so this point is fictitious.
+Taking maxima of resource bounds after averaging can relax the averages
+of complete feasible branches. Convexity of the matching sequence proves
+neither equality nor physical attainability of that shortcut. The finite
+generator formulation above retains the required coupling exactly.
+This example has no true physical--hull gap: the artificial reduction
+creates one.
+\end{remark}
+
+For differentiable $F$, a proposed hull point
+$(\bar u,\bar c)=\sum_j\lambda_j(u_j,c_j)$ has a short sufficient
+certificate: feasible weights, its exact objective and gradient
+$p=\nabla F(\bar u)$, and the inequalities
+\[
+ c_j+p\cdot u_j\ge\bar c+p\cdot\bar u
+ \qquad\text{for every generating record }j.
+\]
+Convexity proves optimality on the hull; nonnegative $p$ and physical
+dominance extend the private-score lower bound to all original plans.
+For any nonnegative posted price, the minimum private score is likewise
+the minimum over these records. At zero prices this computes the value,
+not every response: discarded dominated plans or entire segments can tie.
+
+If the generators and convex quadratic coefficients are rational, there
+exists a hull optimum with rational loads, cost and weights, permitting
+an exact rational certificate. Rational physical data, including the
+efficiencies, suffice for rational generators; a rational objective alone
+does not. At any optimum the supporting functional has normal $(p,1)$,
+so its face has dimension at most two, or the whole hull already does.
+Thus at most three generators suffice. Enumerating their simplex faces
+and solving rational linear stationarity systems also handles singular
+positive-semidefinite quadratics; no inverse of a singular Hessian is
+required. Flat optimum sets can contain irrational points despite the
+existence of a rational representative. These finite deductions make no
+new runtime or general scheduling-complexity claim.
+
+% Parent may invoke this macro in the appendix after inputting this file.
+\newcommand{\LossyProjectionProofs}{%
+\section{Proofs for the common-loss efficient projection}\label{app:lossy}
+\begin{proof}[Proof of Lemma~\ref{lem:lossyfixed}]
+In battery coordinates $x_v$, the boxes are
+$[a_i+b_j-B,a_i]$ for a paired bus, $[a_i-B,a_i]$ for an A-only bus,
+and $[b_j-B,0]$ for a B-only bus. Their positive lower endpoints sum
+to $R$, all lower endpoints to $T$, and upper endpoints to $P$.
+Available negative battery exchange therefore totals $R-T$.
+A one-direction allocation has
+$C_v=(x_v)_+/\alpha$ and $X_v=\delta(-x_v)_+$.
+Mandatory purchases give $C\ge R/\alpha$, hence
+$X=C-E\ge d_R(E)$. Equation~\eqref{eq:lossyaccounting} proves the
+terminal lower bound.
+
+For $E\ge R/\alpha$, use no negative exchange and distribute positive
+battery exchange $\alpha E$ among the independent intervals, whose
+positive totals fill $[R,P]$. For $E<R/\alpha$, keep mandatory positive
+coordinates at their lower bounds and distribute negative battery
+exchange $(R/\alpha-E)/\delta$ over the negative intervals. This is
+possible exactly when
+$E\ge R/\alpha-\delta(R-T)$.
+These constructions attain $d_R(E)$ and span the raw interval
+$[(1/\alpha-\delta)R+\delta T,P/\alpha]$.
+For any one-direction allocation the same endpoints are necessary from
+$C\ge R/\alpha$, $X\le\delta(R-T)$ and $C\le P/\alpha$.
+
+The construction's gross grid throughput is
+$E+2d_R(E)=\max\{E,2R/\alpha-E\}$, the minimum possible at that $E$.
+The early constraint is therefore exactly $E\le K$ and
+$E\ge2R/\alpha-K$. Also
+\[
+ L_R(E)=\max\{S/\alpha-E,
+ S/\alpha+\kappa R/\alpha-(1+\kappa)E\}.
+\]
+Requiring both pieces to be at most $H$ gives the last two bounds in
+\eqref{eq:lossyt}. Each early action is monotone between valid endpoint
+inventories and can be serialized; each terminal refill is between zero
+and $B/\alpha$ grid units and all refills serialize when their sum is
+at most $H$. Zero-power cases require zero energy without division.
+This proves necessity and physical attainment. The curve is strictly
+decreasing in $E$, so its distinct points at the same fee do not dominate
+one another.
+\end{proof}
+
+\begin{proof}[Proof of Theorem~\ref{thm:lossyfrontier}]
+At a fixed cardinality, every term of $t(R,N)$ and $L_R(E)$ is
+nondecreasing in $R$. A matching attaining $r_m$ therefore has a
+feasible interval containing that of any other matching of the same
+size, and a terminal load no larger at the same early load and fee.
+The lemma gives the physical replacement. Standard cardinality-matching
+convexity applies to $r_m$. Its linear interpolation, multiplied by
+nonnegative constants and combined with the affine nondecreasing term
+$\delta(S-(2n-m)B)$, shows that every threshold component is convex
+and nondecreasing. Their maximum has these properties, hence its integer
+samples $t_m$ do as well.
+
+A bus with purchases and exports can have a battery-neutral cycle
+removed: reduce $C_v$ by $\varepsilon$ and $X_v$ by
+$\alpha\delta\varepsilon$, until one is zero. Battery exchange and
+terminal load are unchanged, while connector use and early net purchase
+weakly decrease. Reconstructing a monotone action in the common window
+preserves inventory feasibility. Removing all such cycles and applying
+the preceding matching replacement gives a point of $Z$ weakly below
+every physical point, with unchanged fee. Conversely every point of $Z$
+is physical. Removing dominated points from $Z$ therefore yields exactly
+the physical efficient frontier.
+
+The displayed $L_m$ has at most one kink, giving the finite-segment and
+convex-hull description. For a coordinatewise nondecreasing supply
+objective, replacement cannot worsen physical cost. Replacing each
+component of an arbitrary whole-plan mixture similarly lowers its mean
+load coordinatewise without changing its mean operating cost, so it
+cannot worsen hull cost. The reverse inequalities follow from physical
+inclusion of $Z$. This proves equality of the reduced values.
+
+For $k$ capped paid idles, the fleet has size $N=2n-m+k\le2n$, hence
+$k\le m$. Delete $k$ matching edges; the resulting all-assigned fleet
+has the same $N$ and fee, no larger $R$ and the same $T=S-NB$.
+The same replacement argument proves the stated efficient-value
+redundancy, without asserting equality of all projected loads.
+\end{proof}
+}

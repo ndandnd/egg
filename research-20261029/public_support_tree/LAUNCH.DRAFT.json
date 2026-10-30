@@ -1,0 +1,41 @@
+{
+  "status": "DRAFT",
+  "run_id": "attempt01",
+  "source_revision": "PENDING parent review and freeze",
+  "command": "PENDING parent exact command, console and external meter paths",
+  "supplied_closed_prefix": {"displayed_cpu_s": 22235.40, "elapsed_sum_s": 23126.65, "retained_cpu_s": 22236.63},
+  "prefix_note": "Parent-supplied completed snapshot, not a reconstructed current clock; update at freeze for intervening paid work.",
+  "package_cpu_s": 3600,
+  "package_wall_s": 5400,
+  "worker_cpu_s": 3540,
+  "worker_wall_s": 5200,
+  "audit_reserve_cpu_s": 600,
+  "audit_reserve_wall_s": 900,
+  "native_threads": 1,
+  "observed_rss_allowance_bytes": 5368709120,
+  "search_limits": {
+    "nodes": 500,
+    "native_calls": 1000,
+    "seconds": 4200,
+    "cpu_seconds": 3000,
+    "qp_seconds": 30,
+    "infeasibility_lp_seconds": 15,
+    "checker_seconds": 60,
+    "closure_seconds": 10,
+    "closure_cpu_seconds": 5
+  },
+  "inputs": [
+    {"id": "case", "revision": "253c1e29295e766b3889fc8f5c28d9808e00b3d6", "path": "research-20261029/public_support_resolution/attempt01/case_descriptor.json"},
+    {"id": "target", "revision": "c5f056b90ca895786c44f96903cdaafff97fce52", "path": "research-20261029/public_price_witness/TRANSFER_AUTHORITY.json"},
+    {"id": "target_results", "revision": "f5ec2aa5770188d173af7297620a5fcea99fef9a", "path": "research-20261029/public_price_witness/attempt01/results.json"}
+  ],
+  "target_binding": {
+    "producer_source_revision": "cddd5072be949c36a8f674dd12298503a73407a7",
+    "producer_control_commit_prefix": "61b14412",
+    "producer_namespace": "research-20261029/public_price_witness/attempt01"
+  },
+  "target_upper_bound": "1443179923968803775290098006217163515009032774663398228930303365915411930614170875502024167442451530845/3271461678119739162838778949479488288386427183774469641575516104263648171125254058271345771399872512",
+  "semantic_source_revision": "3278d50f8323618bd36809b1bbb1a0da081e23ff",
+  "scope": "Physical D_two plus source-case-derived physical>=3 service floor; not CH",
+  "authority": "DRAFT only. No dispatch, backend execution or new workload is authorized by these proposed ceilings. No old root input or fresh physical replay."
+}

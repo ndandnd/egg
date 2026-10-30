@@ -1,0 +1,254 @@
+{
+  "attempt_frozen_json": "result/learning_repair/20260930-charging-cap-attempt1/frozen.json",
+  "attempt_frozen_sha256": "d63a51ba1e63cd1a99c954d06878b605bfdd72772971869104aef3051f25fa5e",
+  "cells": [
+    {
+      "case": "learning_s2016_n20",
+      "case_identity": "1a67e5991dca59a6dbd5d0390a2b02647d86a4b7cf2585f9af9f02da9981438e",
+      "cover_milp_status": 0,
+      "cover_mip_gap": 0.0,
+      "fixed_charge_native_status": "INFEASIBLE",
+      "individual_route_lp": {
+        "charge_variables": 85,
+        "compiled_intervals": 64,
+        "feasible": true,
+        "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "minimum_total_extra_grid_kwh": null,
+        "overloaded_intervals": [],
+        "status": 0
+      },
+      "minimum_overload_lp": {
+        "charge_variables": 85,
+        "compiled_intervals": 64,
+        "feasible": true,
+        "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "minimum_total_extra_grid_kwh": 5.18888888888886,
+        "overloaded_intervals": [
+          {
+            "base_grid_cap_kwh": 1.5,
+            "end_min": 509,
+            "extra_grid_kwh": 1.5,
+            "interval": 24,
+            "start_min": 508
+          },
+          {
+            "base_grid_cap_kwh": 9.0,
+            "end_min": 561,
+            "extra_grid_kwh": 3.68888888888886,
+            "interval": 33,
+            "start_min": 555
+          }
+        ],
+        "status": 0
+      },
+      "per_route_optimistic_capacity_passed": true,
+      "policy": "cost_only",
+      "repair_json": "result/learning_repair/20260930-charging-cap-attempt1/learning_s2016_n20/state0/cost_only/repair.json",
+      "repair_sha256": "626ac14b349be2db4d3143679a66a9ff685f2d153b0f3fddaa95e9bf336946fd",
+      "selected_bus_count": 4,
+      "shared_interval_lp": {
+        "charge_variables": 85,
+        "compiled_intervals": 64,
+        "feasible": false,
+        "message": "The problem is infeasible. (HiGHS Status 8: model_status is Infeasible; primal_status is At lower/fixed bound)",
+        "minimum_total_extra_grid_kwh": null,
+        "overloaded_intervals": [],
+        "status": 2
+      }
+    },
+    {
+      "case": "learning_s2016_n20",
+      "case_identity": "1a67e5991dca59a6dbd5d0390a2b02647d86a4b7cf2585f9af9f02da9981438e",
+      "cover_milp_status": 1,
+      "cover_mip_gap": 0.20074761587536977,
+      "fixed_charge_native_status": "INFEASIBLE",
+      "individual_route_lp": {
+        "charge_variables": 79,
+        "compiled_intervals": 64,
+        "feasible": true,
+        "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "minimum_total_extra_grid_kwh": null,
+        "overloaded_intervals": [],
+        "status": 0
+      },
+      "minimum_overload_lp": {
+        "charge_variables": 79,
+        "compiled_intervals": 64,
+        "feasible": true,
+        "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "minimum_total_extra_grid_kwh": 1.9222222222222372,
+        "overloaded_intervals": [
+          {
+            "base_grid_cap_kwh": 7.5,
+            "end_min": 523,
+            "extra_grid_kwh": 1.9222222222222372,
+            "interval": 26,
+            "start_min": 518
+          }
+        ],
+        "status": 0
+      },
+      "per_route_optimistic_capacity_passed": true,
+      "policy": "cost_learned",
+      "repair_json": "result/learning_repair/20260930-charging-cap-attempt1/learning_s2016_n20/state0/cost_learned/repair.json",
+      "repair_sha256": "3136fc270199e216ac60c85b2435845cfbea71d45edd1214875907478804b861",
+      "selected_bus_count": 5,
+      "shared_interval_lp": {
+        "charge_variables": 79,
+        "compiled_intervals": 64,
+        "feasible": false,
+        "message": "The problem is infeasible. (HiGHS Status 8: model_status is Infeasible; primal_status is At lower/fixed bound)",
+        "minimum_total_extra_grid_kwh": null,
+        "overloaded_intervals": [],
+        "status": 2
+      }
+    },
+    {
+      "case": "learning_s2017_n28",
+      "case_identity": "d90b4d889fae5f3df4d9b254b87053333f00da48bbe71e258445840fcc4eb8d0",
+      "cover_milp_status": 0,
+      "cover_mip_gap": 0.0,
+      "fixed_charge_native_status": "INFEASIBLE",
+      "individual_route_lp": {
+        "charge_variables": 106,
+        "compiled_intervals": 76,
+        "feasible": true,
+        "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "minimum_total_extra_grid_kwh": null,
+        "overloaded_intervals": [],
+        "status": 0
+      },
+      "minimum_overload_lp": {
+        "charge_variables": 106,
+        "compiled_intervals": 76,
+        "feasible": true,
+        "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "minimum_total_extra_grid_kwh": 70.82222222222218,
+        "overloaded_intervals": [
+          {
+            "base_grid_cap_kwh": 1.5,
+            "end_min": 488,
+            "extra_grid_kwh": 1.5,
+            "interval": 21,
+            "start_min": 487
+          },
+          {
+            "base_grid_cap_kwh": 27.0,
+            "end_min": 507,
+            "extra_grid_kwh": 14.133333333333324,
+            "interval": 23,
+            "start_min": 489
+          },
+          {
+            "base_grid_cap_kwh": 18.0,
+            "end_min": 528,
+            "extra_grid_kwh": 1.0666666666666695,
+            "interval": 25,
+            "start_min": 516
+          },
+          {
+            "base_grid_cap_kwh": 13.5,
+            "end_min": 537,
+            "extra_grid_kwh": 25.555555555555532,
+            "interval": 26,
+            "start_min": 528
+          },
+          {
+            "base_grid_cap_kwh": 4.5,
+            "end_min": 540,
+            "extra_grid_kwh": 4.5,
+            "interval": 27,
+            "start_min": 537
+          },
+          {
+            "base_grid_cap_kwh": 4.5,
+            "end_min": 544,
+            "extra_grid_kwh": 4.5,
+            "interval": 29,
+            "start_min": 541
+          },
+          {
+            "base_grid_cap_kwh": 1.5,
+            "end_min": 578,
+            "extra_grid_kwh": 1.5,
+            "interval": 33,
+            "start_min": 577
+          },
+          {
+            "base_grid_cap_kwh": 9.0,
+            "end_min": 584,
+            "extra_grid_kwh": 7.566666666666659,
+            "interval": 34,
+            "start_min": 578
+          },
+          {
+            "base_grid_cap_kwh": 10.5,
+            "end_min": 689,
+            "extra_grid_kwh": 10.5,
+            "interval": 50,
+            "start_min": 682
+          }
+        ],
+        "status": 0
+      },
+      "per_route_optimistic_capacity_passed": true,
+      "policy": "cost_only",
+      "repair_json": "result/learning_repair/20260930-charging-cap-attempt1/learning_s2017_n28/state0/cost_only/repair.json",
+      "repair_sha256": "c9fb7a536e69bdca9d58ff509a08fae2031b4c642f10412ee21d9000c1dead9d",
+      "selected_bus_count": 4,
+      "shared_interval_lp": {
+        "charge_variables": 106,
+        "compiled_intervals": 76,
+        "feasible": false,
+        "message": "The problem is infeasible. (HiGHS Status 8: model_status is Infeasible; primal_status is At lower/fixed bound)",
+        "minimum_total_extra_grid_kwh": null,
+        "overloaded_intervals": [],
+        "status": 2
+      }
+    },
+    {
+      "case": "learning_s2017_n28",
+      "case_identity": "d90b4d889fae5f3df4d9b254b87053333f00da48bbe71e258445840fcc4eb8d0",
+      "cover_milp_status": 1,
+      "cover_mip_gap": 0.5002983699139558,
+      "fixed_charge_native_status": "OPTIMAL",
+      "individual_route_lp": {
+        "charge_variables": 129,
+        "compiled_intervals": 76,
+        "feasible": true,
+        "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "minimum_total_extra_grid_kwh": null,
+        "overloaded_intervals": [],
+        "status": 0
+      },
+      "minimum_overload_lp": {
+        "charge_variables": 129,
+        "compiled_intervals": 76,
+        "feasible": true,
+        "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "minimum_total_extra_grid_kwh": 0.0,
+        "overloaded_intervals": [],
+        "status": 0
+      },
+      "per_route_optimistic_capacity_passed": true,
+      "policy": "cost_learned",
+      "repair_json": "result/learning_repair/20260930-charging-cap-attempt1/learning_s2017_n28/state0/cost_learned/repair.json",
+      "repair_sha256": "3145dcb7683d75c8a80010d81aa61890d57ffd8c185ad6d248d5af65507062ef",
+      "selected_bus_count": 8,
+      "shared_interval_lp": {
+        "charge_variables": 129,
+        "compiled_intervals": 76,
+        "feasible": true,
+        "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "minimum_total_extra_grid_kwh": null,
+        "overloaded_intervals": [],
+        "status": 0
+      }
+    }
+  ],
+  "frozen_json": "result/learning_campaign/20260930-stage2-attempt1/frozen.json",
+  "frozen_sha256": "6de8846d024f3a7bc59e6c19e7c30086061b967b8e9fcdcc7a62496dd6b24cb6",
+  "method": "Fixed-route continuous charging LP with native per-visit interval caps, SOC/reserve/full-terminal rows; compare without and with native shared interval grid rows. Slack LP minimizes sum of extra interval grid kWh. Numerical HiGHS results are diagnostic, not exact infeasibility certificates.",
+  "schema": "egg-charging-cap-fixed-cover-diagnosis-v1",
+  "scope": "Only the four selected covers; no conclusion about alternate covers, minimum physical bus count, or global fleet feasibility."
+}

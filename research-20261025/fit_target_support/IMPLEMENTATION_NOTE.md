@@ -1,0 +1,19 @@
+# FIT target-support collector boundary
+
+Static implementation only. No metadata receipt, table, row, target, label, plan or asset was read; no import, test, compilation, hash, replay, fit or solver ran to prepare this source. Static contracts are supplied by `IDENTITY_SOURCE_MAP.md`, `ROW_SOURCE_CONTRACT.md` and the prospective protocol. This note is not launch authority.
+
+`audit_targets.py` admits only the literal prior metadata receipt and two literal TRAIN JSONL paths/pins, plus its source/PROTOCOL/LAUNCH identities. Metadata/identity bytes are read and hashed once at8MiB each. Each table is streamed once, original bytes hashed in that same pass, with512MiB file and16MiB line limits. Ordinary transient `json.loads` decodes every TRAIN row solely to route on top-level base_group; non-FIT objects are immediately discarded without further field inspection or retention. This is expressly whole-TRAIN byte access/routing decode, not FIT-only byte access. No referenced path, learner, dataset adapter, project module, weights or outcome table is opened.
+
+The two frozen FIT lists must be the same80 unique IDs, with the explicit metadata base mapping and declared79 pairs/159 sources/10037-source1-only contract. No intersection selection or replacement is permitted. Only FIT case/source identity and membership fields from the protocol are examined. A small source-faithful dictionary normalizer inserts the exact dataclass defaults, rejects unknown/missing stored fields, and preserves JSON number types and list order. Canonical object hashes use default-spaced sorted-key JSON. Source markets use the original float expressions on the stored case name/grid; no physical case or assignment is regenerated.
+
+The entire unmodified FIT source_plan is traversed only to reproduce its declared hash. Semantic inspection uses its case identity and vehicle movement membership; charges, loads, costs, nested replay/roundoff and separate source_replay are not interpreted or exported. Duplicate selected IDs, duplicate rows, unknown IDs, malformed fields, market/case/plan hash mismatches and missing cases/sources remain findings. No physical feasibility or teacher optimality claim is made.
+
+No target metrics are published until both whole-table pins and stability checks pass. The once-only receipt preserves all80 group statuses, the expected missing comparison, actual admitted paired denominator and compact all/flexible/by-kind counts. Its initial aggregate includes identical/different counts and equal-group Hamming/Jaccard-disagreement means, medians and ranges; missing comparisons are never zero-filled. Incomplete support blocks the planned complete report, not a new model-quality gate. No movement-ID sets, binary vectors, physical cases, raw labels or plans are dumped.
+
+Per-source vehicle counts and their pairwise equality are retained so membership changes are not described as a fixed-fleet effect without evidence. An empty flexible/kind positive union keeps its explicit zero denominator and undefined Jaccard value; it neither invalidates the otherwise admitted source nor becomes zero disagreement.
+
+One process/thread uses body270CPU/540wall and total300CPU/600wall, with observed peak RSS5GiB. Fresh attempt01 owns an exclusive placeholder and final failure/success receipt; no retry occurs. Parent freezes source, pins, field/routing scope and command after one static review. All prior charges and unknown historical review CPU remain separate; add this external meter once. Any later teacher/row extension, fitting or evaluation requires a new justified decision.
+
+The narrow parent resource closure adds an end-of-body check after aggregation
+and latches the final observed RSS/thread violation to failed/incomplete support
+before publication. This does not change any data/identity or learning criterion.

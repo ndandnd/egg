@@ -1,0 +1,191 @@
+{
+  "policy": "original-matrix-fixed-route-public-gurobipy-QP-v2-semantic-infinity",
+  "true_bill_exact": "27212811597023201662604701636376816493722437763123/22835963083295358096932575511191922182123945984",
+  "true_bill": 1191.664721902162,
+  "fallback_bill_exact": "474044409432080467668432707658909404812228006217773/365375409332725729550921208179070754913983135744",
+  "selected_source": "direct_qp",
+  "used_fallback": false,
+  "qp_success": true,
+  "qp_candidate_admitted": true,
+  "native_calls": 1,
+  "native_call_attempts": 1,
+  "stats": {
+    "entered_monotonic": 6118047.586323208,
+    "returned_monotonic": 6118047.692952,
+    "wall_s": 0.10662879142910242,
+    "cpu_s": 0.09522599999999848,
+    "native_overrun_s": 0.0,
+    "Status": 2,
+    "SolCount": 1,
+    "ObjVal": 1191.6647219021668,
+    "ObjBound": 1191.6647219007762,
+    "Runtime": 0.10658097267150879,
+    "Work": 0.21255501947492056,
+    "IterCount": 0.0,
+    "BarIterCount": 11,
+    "MaxVio": 1.6135539000608064e-10,
+    "ConstrVio": 2.4698465495021082e-11,
+    "BoundVio": 0.0,
+    "DualVio": 6.286452119233189e-12,
+    "ComplVio": 1.6135539000608064e-10,
+    "ConstrResidual": 0.0,
+    "DualResidual": 8.680867059222447e-17,
+    "solver": "gurobipy",
+    "package_version": "12.0.1",
+    "native_version": [
+      12,
+      0,
+      1
+    ],
+    "threads": 1,
+    "seed": 17,
+    "FeasibilityTol": 1e-09,
+    "OptimalityTol": 1e-09,
+    "BarConvTol": 1e-10,
+    "TimeLimit": 43.010362333618104,
+    "native_lower_bound": 1191.6647219007762,
+    "lower_bound_scope": "raw numerical fixed-topology QP attribute, null if unsupported",
+    "native_optimal": true,
+    "raw_objective_exact": "870809971104745820474924590969115030805319276878657/730750818665451459101842416358141509827966271488",
+    "replay_objective_exact": "27212811597023201662604701636376816493722437763123/22835963083295358096932575511191922182123945984",
+    "native_to_physical_cost_delta": -4.774847184307873e-12,
+    "raw_to_physical_cost_delta_exact": "-3367271574138605056903006201268458721/730750818665451459101842416358141509827966271488"
+  },
+  "copy_contract": {
+    "passed": true,
+    "original_variables": 174049,
+    "original_physical_rows": 186528,
+    "copied_variables": 174049,
+    "copied_physical_rows": 186528,
+    "source_nonzeros": 1579050,
+    "read_back_nonzeros": 1579050,
+    "fixed_routing_binaries": 6162,
+    "continuous_unfixed_variables": 167887,
+    "linear_objective_terms": 110,
+    "diagonal_quadratic_terms": 30,
+    "mapping": "original var.idx equals copied Var.index, dense zero-based; all checked",
+    "bounds": "side-specific documented unbounded sentinels canonicalized; every other bound exact",
+    "bound_policy": "Gurobi-LB-le-minus1e20-negative-infinity-UB-ge1e20-positive-infinity",
+    "infinite_bound_count": 30,
+    "infinite_variable_count": 30,
+    "infinite_bound_examples": [
+      {
+        "original_index": 174019,
+        "original_name": "var(174019)",
+        "original_type": "C",
+        "copied_index": 174019,
+        "copied_name": "var(174019)",
+        "copied_type": "C",
+        "original_raw_bounds_repr": [
+          "0.0",
+          "1e+100"
+        ],
+        "copied_readback_bounds_repr": [
+          "0.0",
+          "inf"
+        ],
+        "original_canonical_tags_repr": "(('exact_value', 0.0), ('UB_positive_infinity', None))",
+        "copied_canonical_tags_repr": "(('exact_value', 0.0), ('UB_positive_infinity', None))",
+        "raw_bounds_exactly_equal": false,
+        "canonical_equal": true
+      },
+      {
+        "original_index": 174020,
+        "original_name": "var(174020)",
+        "original_type": "C",
+        "copied_index": 174020,
+        "copied_name": "var(174020)",
+        "copied_type": "C",
+        "original_raw_bounds_repr": [
+          "0.0",
+          "1e+100"
+        ],
+        "copied_readback_bounds_repr": [
+          "0.0",
+          "inf"
+        ],
+        "original_canonical_tags_repr": "(('exact_value', 0.0), ('UB_positive_infinity', None))",
+        "copied_canonical_tags_repr": "(('exact_value', 0.0), ('UB_positive_infinity', None))",
+        "raw_bounds_exactly_equal": false,
+        "canonical_equal": true
+      },
+      {
+        "original_index": 174021,
+        "original_name": "var(174021)",
+        "original_type": "C",
+        "copied_index": 174021,
+        "copied_name": "var(174021)",
+        "copied_type": "C",
+        "original_raw_bounds_repr": [
+          "0.0",
+          "1e+100"
+        ],
+        "copied_readback_bounds_repr": [
+          "0.0",
+          "inf"
+        ],
+        "original_canonical_tags_repr": "(('exact_value', 0.0), ('UB_positive_infinity', None))",
+        "copied_canonical_tags_repr": "(('exact_value', 0.0), ('UB_positive_infinity', None))",
+        "raw_bounds_exactly_equal": false,
+        "canonical_equal": true
+      },
+      {
+        "original_index": 174022,
+        "original_name": "var(174022)",
+        "original_type": "C",
+        "copied_index": 174022,
+        "copied_name": "var(174022)",
+        "copied_type": "C",
+        "original_raw_bounds_repr": [
+          "0.0",
+          "1e+100"
+        ],
+        "copied_readback_bounds_repr": [
+          "0.0",
+          "inf"
+        ],
+        "original_canonical_tags_repr": "(('exact_value', 0.0), ('UB_positive_infinity', None))",
+        "copied_canonical_tags_repr": "(('exact_value', 0.0), ('UB_positive_infinity', None))",
+        "raw_bounds_exactly_equal": false,
+        "canonical_equal": true
+      },
+      {
+        "original_index": 174023,
+        "original_name": "var(174023)",
+        "original_type": "C",
+        "copied_index": 174023,
+        "copied_name": "var(174023)",
+        "copied_type": "C",
+        "original_raw_bounds_repr": [
+          "0.0",
+          "1e+100"
+        ],
+        "copied_readback_bounds_repr": [
+          "0.0",
+          "inf"
+        ],
+        "original_canonical_tags_repr": "(('exact_value', 0.0), ('UB_positive_infinity', None))",
+        "copied_canonical_tags_repr": "(('exact_value', 0.0), ('UB_positive_infinity', None))",
+        "raw_bounds_exactly_equal": false,
+        "canonical_equal": true
+      }
+    ],
+    "physical_rows": "all stored coefficients/RHS/senses checked by original index, no tolerance",
+    "objective": "original ops+a*load linear expression plus .5*b*load^2; sparse read-back checked",
+    "original_cffi_variables_retained": true,
+    "text_round_trip": false,
+    "extraction_view": "raw .x-only values for x/charge/loads; compiled/model metadata unchanged"
+  },
+  "failures": [],
+  "config_failure": false,
+  "fatal_contract": false,
+  "global_lower_bound": null,
+  "bound_scope": "numerical original-matrix fixed-topology QP only",
+  "certificate_claim": false,
+  "native_deadline": 6118090.59654775,
+  "admission_deadline": 6118098.59654775,
+  "admitted_monotonic": 6118049.3417295,
+  "candidate_bill_exact": "27212811597023201662604701636376816493722437763123/22835963083295358096932575511191922182123945984",
+  "status": "QP_admitted",
+  "returned_monotonic": 6118049.341742916
+}

@@ -1,0 +1,463 @@
+{
+  "cover": "Understanding EGG",
+  "as_of": "2026-10-29",
+  "slides": [
+    {
+      "section": "01 / THE RESEARCH QUESTION",
+      "title": "Can efficient bus schedules be supported by grid prices?",
+      "columns": [
+        [
+          "What is established",
+          "Small physical models can have an optimal fleet that wants to deviate at its own marginal electricity prices."
+        ],
+        [
+          "What remains open",
+          "How prevalent is this in realistic fleets? Which scalable method changes decisions enough to beat strong classical controls?"
+        ]
+      ],
+      "take": "The current strongest contribution is analytical. A distinct ML contribution is still unproven.",
+      "notes": "Read this deck as a self-study companion. Established means proved in the declared exact model or observed in the stated development experiment. It does not mean empirically widespread. Source: research-20261028/paper_core_verification/STATE.md; paper/latex/model_theory.tex. Current date 29 October 2026."
+    },
+    {
+      "section": "01 / THE MODEL",
+      "title": "A duty is one bus. The economic choice is the whole fleet.",
+      "rows": [
+        [
+          "Object",
+          "Meaning"
+        ],
+        [
+          "Service",
+          "Mandatory trip with timing and energy use"
+        ],
+        [
+          "Duty",
+          "One bus's services, movements and charging"
+        ],
+        [
+          "Complete plan x",
+          "All duties, jointly feasible under shared resources"
+        ],
+        [
+          "e(x), c(x)",
+          "Grid energy by interval and fleet operating cost"
+        ]
+      ],
+      "take": "Shared plugs and service coverage belong inside feasibility. V2G export is absent from the experiments here.",
+      "notes": "EVSP already contains service/fleet/duty commitments, battery/SOC, windows, station power and shared plugs. The project does not need a newly named legal operator as a blanket methodological prerequisite. Whole-fleet convexification differs from separately convexifying duties. V2G means exporting energy to the grid; do not claim it was implemented or tested in the current path. Sources: paper/latex/model_theory.tex; research-20261028/paper_core_verification/STATE.md."
+    },
+    {
+      "section": "01 / THREE OBJECTIVES",
+      "title": "Supply cost, a posted bill and strategic payment differ.",
+      "rows": [
+        [
+          "Decision",
+          "Objective",
+          "What changes during a deviation?"
+        ],
+        [
+          "Planner",
+          "c(x) + F(e(x))",
+          "Supply cost follows the load"
+        ],
+        [
+          "Posted-price fleet",
+          "c(x) + p · e(x)",
+          "The announced price p stays fixed"
+        ],
+        [
+          "Strategic fleet",
+          "c(x) + p(e(x)) · e(x)",
+          "Price responds under a specified rule"
+        ]
+      ],
+      "take": "A support test asks whether the planner's choice also minimizes the fixed-price bill.",
+      "notes": "For p(L)=a+bU+bL, incremental system cost has gradient a+bU+bL, while fleet payment p(L)L has derivative a+bU+2bL. Vector/separable convention applies componentwise. General strategic interaction requires settlement and deviation rules; a support test is not a solved price-maker game. EGG already models posted, strategic uniform-price and integrated system objectives. Sources: paper/latex/model_theory.tex and research-20261026 adjacent nonlinear consolidated findings."
+    },
+    {
+      "section": "02 / THE EXACT EXAMPLE",
+      "title": "Full replenishment removes free initial-energy credit.",
+      "rows": [
+        [
+          "Physical ingredient",
+          "Declared value"
+        ],
+        [
+          "Services A, B",
+          "[0,1] and [2,3], each uses 15 kWh"
+        ],
+        [
+          "Battery and vehicle fee",
+          "20 kWh, fee 7 per used bus"
+        ],
+        [
+          "Early / terminal charging",
+          "[1,2] at 10 kW / [3,4] at 30 kW"
+        ],
+        [
+          "Inventory and fleet",
+          "Start full, end full, at most two buses"
+        ]
+      ],
+      "take": "Every feasible fleet purchases 30 kWh. The choice is timing and fleet structure, not unpaid depletion.",
+      "notes": "Lossless continuous charging, reserve zero, depot-to-depot services and shared/per-bus power limits. Terminal charging has one connector in this extension, and serial schedules attain the complete projected intervals. One bus must use early/late energy (10,20). Two buses allow (q,30−q) for 0≤q≤10. Source: paper/latex/exact_results.tex; research-20261029/support_extension/PROOF.md."
+    },
+    {
+      "section": "02 / THREE NUMBERS TO KEEP SEPARATE",
+      "title": "97 is physical. 94.8875 is a hull bound.",
+      "rows": [
+        [
+          "Quantity",
+          "Value",
+          "Interpretation"
+        ],
+        [
+          "Physical optimum D",
+          "97",
+          "One bus, energy (10,20)"
+        ],
+        [
+          "Whole-fleet hull CH",
+          "94.8875",
+          "Cost evaluated at a convex mean load"
+        ],
+        [
+          "Random daily mixture",
+          "99.275",
+          "Expected physical cost of the hull's mixture"
+        ]
+      ],
+      "take": "D − CH = 2.1125. A fractional mixture is not a dispatch or free randomization benefit.",
+      "notes": "F(q,z)=4q+(q²+z²)/10. Cheapest two-bus physical plan uses (5,25), costs99. Hull optimum mixes weights27/40 and13/40 of onebus(10,20,c7) and twobus(0,30,c14), giving load(27/4,93/4), operating cost371/40, CH7591/80. Mean physical cost=(27/40)97+(13/40)104=99.275. Supply cost at mean load is not mean supply cost. Source: paper/latex/exact_results.tex."
+    },
+    {
+      "section": "02 / THE SUPPORT FAILURE",
+      "title": "At price (6,4), the optimal fleet wants to change.",
+      "rows": [
+        [
+          "Complete fleet",
+          "Physical system cost",
+          "Bill plus vehicle cost at p=(6,4)"
+        ],
+        [
+          "One bus, load (10,20)",
+          "97",
+          "147"
+        ],
+        [
+          "Two buses, load (0,30)",
+          "104",
+          "134"
+        ]
+      ],
+      "take": "The profitable fixed-price deviation is 13, even though it raises physical system cost.",
+      "notes": "Marginal price ∇F(10,20)=(6,4). Regret r(x;p)=c(x)+p·e(x)−min_y[c(y)+p·e(y)]. This deviation changes the entire fleet while keeping price fixed. Do not recalculate a new price for the alternative in this support test. The gap2.1125 and regret13 are different quantities. Source: paper/latex/exact_results.tex; research-20261028/paper_core_verification/PROOF.md."
+    },
+    {
+      "section": "03 / WHAT THE THEOREM SAYS",
+      "title": "A positive physical–hull gap rules out own-price support.",
+      "columns": [
+        [
+          "The inequality",
+          "r(x;p) ≥ c(x) + F(e(x)) − CH ≥ D − CH"
+        ],
+        [
+          "The qualifications",
+          "Use the same complete-plan set, compactness and attained dual prices. With nonsmooth supply, consider all admissible prices."
+        ]
+      ],
+      "take": "The general convex-duality mechanism is established theory. Our claim must be the specific physical result.",
+      "notes": "For p in the supply subdifferential at e(x), Fenchel equality and the hull dual bound yield r(x;p) ≥ physical cost − CH ≥ D − CH. Under compactness and strong duality with attained prices, zero gap is equivalent to the existence of a supported physical optimum. A single solver multiplier does not exclude alternative supporting subgradients. This general mechanism is prior art. Sources: paper/latex/model_theory.tex; research-20261028/paper_core_verification/PRIOR_ART.md. Primary sources: https://link.springer.com/article/10.1007/s00186-022-00775-z ; https://users.ece.utexas.edu/~baldick/papers/convex_hull_2017.pdf ; https://arxiv.org/html/2012.13331v2 ."
+    },
+    {
+      "section": "03 / COMPLETED PARAMETER RESULT",
+      "title": "Charging flexibility and vehicle fees jointly determine support.",
+      "columns": [
+        [
+          "Terminal power K and fee f",
+          "For 20 < K ≤ 30:\nl = 30 − K, d = K − 20.\n\nGap > 0 exactly when\nmax(0, 2d(l − 5)/5) < f < 2d."
+        ],
+        [
+          "How to read it",
+          "More charging flexibility can introduce unsupported choices while lowering physical system cost.\n\nBoundary, zero-fee and infeasible cases have separate treatment."
+        ]
+      ],
+      "take": "The proof covers a continuum. Agreement on 20 exact cases checks implementations, not population prevalence.",
+      "notes": "This is the completed 28 October terminal-power/vehicle-fee result, distinct from today's battery expansion. Let l=30−K and d=K−20. Within 20<K≤30 and positive f, gap>0 exactly when max(0,2d(l−5)/5)<f<2d. The proof handles the continuum; 20 predeclared exact cases checked two implementations and preserved infeasible cases and ties. Physical cost can fall with increased flexibility even when support disappears. Sources: research-20261028/paper_core_verification/PROOF.md and RESULTS.md."
+    },
+    {
+      "section": "03 / WHY THE PARTICIPANT MATTERS",
+      "title": "A small aggregate gap can coexist with a whole-owner incentive.",
+      "rows": [
+        [
+          "Replication in the manuscript",
+          "As the number of service pairs n grows"
+        ],
+        [
+          "Physical–hull gap",
+          "At most 5/n, hence vanishes"
+        ],
+        [
+          "Whole-owner absolute regret",
+          "Tends to 351/40 along n = 40k + 1"
+        ],
+        [
+          "One owner per pair, reserved resources",
+          "Each regret at most 20/n, hence vanishes"
+        ]
+      ],
+      "take": "Who may coordinate a deviation matters. Per-bus and relative whole-owner regret still vanish in this family.",
+      "notes": "The replication scales both resources and supply curvature. It is a specific exact family, not a universal fleet-size law. Separate owners need reserved resources or explicit shared-resource rights for unilateral deviation sets. Absolute whole-owner regret need not vanish along the stated sequence, while per-bus and relative regret do vanish. Source: paper/latex/exact_results.tex."
+    },
+    {
+      "section": "04 / NEW: ADDING FEASIBLE ALTERNATIVES",
+      "title": "An old plan stays unsupported. A new plan may restore support.",
+      "columns": [
+        [
+          "At an old plan's own price",
+          "Adding choices can only lower the best alternative bill.\n\nIts regret cannot decrease."
+        ],
+        [
+          "For the enlarged problem",
+          "Both the physical optimum D and hull optimum CH may fall.\n\nA newly feasible plan can make D = CH."
+        ]
+      ],
+      "take": "Do not confuse “this fleet remains unsupported” with “every optimum remains unsupported.”",
+      "notes": "For Z=X union Y and retained x, V_Z(p)=min(V_X(p),V_Y(p))≤V_X(p), so r_Z(x;p)≥r_X(x;p). Global erasure requires a new supported plan. It necessarily requires D_Y≤CH_X, but that is not sufficient. A sufficient survival condition is min(D_X,D_Y)>CH_X. Keep supply costs, participant rights and price conventions unchanged in this comparison. Sources: research-20261029/support_extension/PROOF.md and RESULTS.md."
+    },
+    {
+      "section": "04 / NEW: A SURVIVAL CERTIFICATE",
+      "title": "Extra movement alone cannot remove this obstruction.",
+      "columns": [
+        [
+          "Keep the physical model fixed",
+          "Same services, 20 kWh batteries, charging windows, power and full refill.\n\nAllow added movements with nonnegative energy and extra cost."
+        ],
+        [
+          "Why the proof works",
+          "Every added plan has an old feasible plan with no higher operating cost or load in either interval.\n\nThis dominance also applies inside mixtures."
+        ]
+      ],
+      "take": "D = 97 and CH = 94.8875 remain unchanged for this declared expansion class.",
+      "notes": "No new charge access, battery change, energy recovery or inventory transfer is allowed in the movement-only class. Every feasible added two-bus plan (u,30+w−u,c≥14) is dominated by old (u,30−u,14). A one-bus plan must charge 10 early and is dominated by old (10,20,7). Coordinatewise monotonic supply cost extends this dominance to hull mixtures. More generally, if every added bill at an old hull-dual optimizer p* exceeds V_X(p*) by ε>0, the new gap is at least min(old gap,ε). With weak equality the old hull is preserved, but support requires both fleet-bill equality and supply Fenchel equality. Sources: support_extension/PROOF.md and RESULTS.md."
+    },
+    {
+      "section": "04 / NEW: A PHYSICAL COUNTEREXAMPLE",
+      "title": "A 25 kWh bus can restore support, with complete recharge.",
+      "rows": [
+        [
+          "State / quantity",
+          "Value"
+        ],
+        [
+          "Start / after service A",
+          "25 / 10"
+        ],
+        [
+          "After 5 kWh early charge / after B",
+          "15 / 0"
+        ],
+        [
+          "After 25 kWh terminal charge",
+          "25"
+        ],
+        [
+          "Load / fee / marginal price",
+          "(5,25) kWh / 7 / (5,5) per kWh"
+        ]
+      ],
+      "take": "D = CH = 92 and regret = 0. This adds equipment, not an omitted route of the original homogeneous model.",
+      "notes": "All old buses remain available and at most two buses are used. The independent reference includes every ordered mixed-type assignment. Full refill makes this bus purchase 30 kWh; the result is not a benefit from free initial inventory. The terminal connector supports the 25 kWh refill at 30 kW. Vehicle fee and price are synthetic units, not calibrated currency. With equal fee7, a new battery B restores support iff B≥(55−√95)/2≈22.6266 within 20≤B≤30. The old one-bus fleet remains unsupported at its own price(6,4), with regret13. Sources: support_extension/PROOF.md and RESULTS.md."
+    },
+    {
+      "section": "04 / NEW: WHY BETTER PLANS ARE NOT ENOUGH",
+      "title": "A lower physical optimum need not close the new gap.",
+      "rows": [
+        [
+          "Added 25 kWh bus",
+          "Physical D",
+          "Hull CH",
+          "Gap"
+        ],
+        [
+          "Fee 7",
+          "92",
+          "92",
+          "0"
+        ],
+        [
+          "Fee 8",
+          "93",
+          "92.95",
+          "0.05"
+        ],
+        [
+          "Fee 12",
+          "97",
+          "94.8875",
+          "2.1125"
+        ]
+      ],
+      "take": "At fee 8, D is below the old hull value. Support still fails because the enlarged hull also improves.",
+      "notes": "For the added battery25 bus, D=min(97,85+h). For 7≤h≤10.5, CH=85+h−(h−7)^2/20. For h≥10.5, CH=7591/80. Fee8 gives physical own-price regret1. At fee12, old one-bus(10,20,fee7) and new one-bus(5,25,fee12) tie physically, with regrets13 and5. Every tie is retained. Independent raw SOC-polytope enumeration and generic rational hull minimization matched the formulas in all14 cases. All17 negative controls and the smoke check passed. Finite agreement qualifies implementations; the proof covers the continuous parameter region. Sources: support_extension/PROOF.md and RESULTS.md."
+    },
+    {
+      "section": "05 / WHAT REALISTIC-SIZE EVIDENCE DOES NOT YET SHOW",
+      "title": "The public optimal fleet's support remains unresolved.",
+      "columns": [
+        [
+          "One timetable, two depot variants",
+          "37 public services with partly synthetic energy, charging and economic assumptions.\n\nThese are not independent timetable samples."
+        ],
+        [
+          "The depot-15 bound",
+          "429.22 ≤ CH ≤ D ≤ 512.77\n\nTherefore 0 ≤ gap ≤ 83.55.\nThe interval includes zero."
+        ]
+      ],
+      "take": "An incumbent's profitable deviation is not proof that the unknown optimal fleet is unsupported.",
+      "notes": "One feasible fleet supplies an upper bound on D. Positive regret of that incumbent describes that fleet, not the unknown optimum. A flat-price objective is linear and cannot yield a physical–hull objective gap. The current public nonlinear interval does not identify the sign of the gap. Sources: paper/latex/public_case.tex; research-20261028/paper_core_verification/STATE.md."
+    },
+    {
+      "section": "05 / CLASSICAL CONTROLS CHANGED THE RESEARCH DECISION",
+      "title": "A failed restricted pool is not a physically infeasible timetable.",
+      "rows": [
+        [
+          "Eight cases in four development groups",
+          "Strict deliveries"
+        ],
+        [
+          "Independent fixed-duty discovery",
+          "8 / 8"
+        ],
+        [
+          "Full discovery / simple diving",
+          "4 / 8 each"
+        ],
+        [
+          "Ordinary joint bank completion",
+          "8 / 8"
+        ]
+      ],
+      "take": "The union's mean paired grid gain was about 0.225%, with no larger-case value improvement.",
+      "notes": "The four groups have nested 12/24-service sizes. Full discovery and simple diving failed every larger 24-service integer delivery, while fixed-duty discovery supplied feasible fleets. Union completion was conventional, not learned, and acquisition was paid. One grid-cost gain increased realized electricity cost. There is no omitted-route certificate or unrestricted optimality claim. Earlier pricing-workload full-route event medians were2.540–2.786 seconds and9.76–11.13% of paid stage time, below the frozen effort screen. Event wall includes bookkeeping. Its missing method deliveries made readiness inconclusive. Sources: research-20261027/conventional_recovery_continuation/RESULTS.md; research-20261026/pricing_workload_pilot/RESULTS.md."
+    },
+    {
+      "section": "06 / THE LEARNING EXPERIMENT",
+      "title": "Predict background demand, then optimize the fleet.",
+      "columns": [
+        [
+          "What was learned",
+          "Predict U from observed context, then solve the declared joint continuous-charging problem.\n\nCompare linear/quadratic ridge, trees, neural MSE and decision-focused training."
+        ],
+        [
+          "What was grouped",
+          "12 training, 4 validation and 8 evaluation timetable groups.\n\nEight contexts per evaluation group. Repeated solver assignments are not independent timetables."
+        ]
+      ],
+      "take": "The conditional-information reference matched its fixed-route control. Extra routing information value was not demonstrated.",
+      "notes": "This is a synthetic development experiment with grouped selection and preprocessing. There were128 bank stages plus768 test assignments, all896 primary stages native OPTIMAL and physically admitted. The conditional-mean reference uses privileged knowledge of the synthetic distribution, not an empirically fitted forecast. Price-blind controls were separately trained at comparable capacity. Constant operating cost400 is excluded from expected electricity costs. V2G export and an exact nonlinear realized-load route-pricing oracle are not established. Source: research-20261027/grid_information_pilot/RESULTS.md."
+    },
+    {
+      "section": "06 / FITTED MODELS VS A STRONG CLASSICAL CONTROL",
+      "title": "More capacity helped, but did not establish neural advantage.",
+      "chart": {
+        "categories": [
+          "Small NN",
+          "Large NN",
+          "Quadratic ridge",
+          "Decision-focused",
+          "Conditional ref."
+        ],
+        "values": [
+          0.7580855,
+          0.8669658,
+          0.8895042,
+          0.515328,
+          0.9947648
+        ]
+      },
+      "take": "Mean paired improvement over the unconditional policy, in percent of that policy's electricity cost.",
+      "notes": "Values are means of paired improvement ratios over the unconditional policy, not ratios of mean bills. There are8 evaluation groups. Expected electricity costs excluding constant operations: unconditional71.989536, ridge71.404118, quadratic ridge71.352922, boosted trees71.399253, small NN71.446528, large NN71.368882, DFL71.621344, conditional reference71.276929. Reference headroom above quadratic ridge is about0.10526 percentage points in the paired units. Larger MSE NN improves over the smaller in7/8 groups, while quadratic ridge remains the best fitted method. DFL loses to same-size MSE in all8 groups. The conditional reference is privileged. Source: research-20261027/grid_information_pilot/RESULTS.md."
+    },
+    {
+      "section": "06 / WAS THE MODEL JUST TOO SIMPLE?",
+      "title": "Capacity was tested. Optimization and task limits remain.",
+      "columns": [
+        [
+          "Evidence against a width-only explanation",
+          "A larger MSE network improved in 7 of 8 groups.\n\nA privileged noiseless fit reached normalized RMSE ≈ 0.010."
+        ],
+        [
+          "What that does not prove",
+          "Production fits hit their 500-update limit.\n\nThe decision-focused recipe could not select epoch 0. Neither result establishes universal convergence or diagnoses the old GNN."
+        ]
+      ],
+      "take": "Close the tested recipe, not neural learning as a field. Any new model must beat the strong classical control.",
+      "notes": "Source: research-20261027/grid_information_pilot/RESULTS.md. The privileged diagnostic fit a larger network to 32 noiseless rows and reached normalized RMSE0.009978815292 in bounded training. It was excluded from production comparisons. This establishes representational/optimization ability on that tiny diagnostic, not generalization. The decision-focused checkpoint rule excluded its initial MSE checkpoint. The selected seed29/epoch4 worsened its own MSE-initialized validation score. Seed17 improved but was not selected. These limitations matter when attributing failure. Old GNN input, lineage and supervision uncertainties remain separate."
+    },
+    {
+      "section": "07 / THE PAPER'S CLAIM LADDER",
+      "title": "A narrow physical result is defensible. Broad novelty is not established.",
+      "rows": [
+        [
+          "Evidence level",
+          "Current position"
+        ],
+        [
+          "General pricing / hull theory",
+          "Established prior art"
+        ],
+        [
+          "Physical mechanism and parameter conditions",
+          "Exact proofs plus independent checks"
+        ],
+        [
+          "Prevalence in practical EVSP fleets",
+          "Unresolved"
+        ],
+        [
+          "Distinct ML benefit beyond strong controls",
+          "Not demonstrated"
+        ],
+        [
+          "Implemented V2G contribution",
+          "Not demonstrated in this path"
+        ]
+      ],
+      "take": "Combining domain names is not enough. The claim must identify a new mechanism, theorem or decision improvement.",
+      "notes": "Direct precedents include convex-hull pricing with schedules as columns, self-scheduling oracles, and bus participation in electricity markets. Bounded primary review: research-20261028/paper_core_verification/PRIOR_ART.md. See Hüb​s et al. https://link.springer.com/article/10.1007/s00186-022-00775-z ; Hua and Baldick https://users.ece.utexas.edu/~baldick/papers/convex_hull_2017.pdf ; Andrianesis https://arxiv.org/html/2012.13331v2 ; Żółtowska and Lin https://mdpi-res.com/d_attachment/energies/energies-14-04727/article_deploy/energies-14-04727.pdf?version=1628071003 . This is not exhaustive novelty clearance. Today's new result characterizes how feasible-set expansion preserves or erases the particular physical mechanism."
+    },
+    {
+      "section": "07 / CHECK YOUR UNDERSTANDING",
+      "title": "Four questions worth answering before extending the project.",
+      "columns": [
+        [
+          "Mechanism",
+          "Why can a lower electricity bill raise supply cost?\n\nWhy is a hull mixture different from randomized daily operation?"
+        ],
+        [
+          "Research interpretation",
+          "Why does a cheaper new physical fleet not guarantee support?\n\nWhy does a larger network's improvement not establish an ML contribution?"
+        ]
+      ],
+      "take": "Answers are in the speaker notes and companion guide. Use them to distinguish claims from measurements.",
+      "notes": "1. Posted prices are held fixed during a deviation, whereas physical supply cost changes nonlinearly with the load. 2. A hull objective evaluates supply cost at the mean load; a random daily policy pays the mean of physical costs, generally larger by convexity. 3. Adding the cheaper fleet can also lower the hull optimum. Battery25 at fee8 gives D93 and CH92.95. 4. Capacity can improve a network while a competent classical model still performs better, and the reference headroom may remain small. Future work needs a valuable residual decision with matched costs and provenance, not simply more parameters. See GUIDE.md for the full worked answers."
+    },
+    {
+      "section": "07 / HOW TO USE THIS GUIDE",
+      "title": "Read the proof, inspect the evidence, then state the claim.",
+      "columns": [
+        [
+          "For the mechanism",
+          "GUIDE.md: worked example and glossary\n\nPROOF.md: expansion theorem and physical conditions\n\nRESULTS.md: exact checks and their limits"
+        ],
+        [
+          "For the broader research",
+          "Public case: what the bounds leave open\n\nRecovery study: why strong controls matter\n\nLearning pilot: information value versus model advantage"
+        ]
+      ],
+      "take": "Next scientific gap: a useful, realistic residual decision whose value survives competent classical methods.",
+      "notes": "Companion files are in /Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/research-20261029/support_extension/. Current mathematical work is complete and closed. No automatic new cohort, model fit or recovery solve is authorized by this reading map. All prior experiments remain preserved. This deck is for self-study, not a claim that the paper is ready for ICML. It has editable evidence tables and a native chart; detailed source and qualification notes accompany each slide."
+    }
+  ]
+}

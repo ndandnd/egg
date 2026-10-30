@@ -1,0 +1,69 @@
+{
+  "input": {
+    "revision": "2f386362aa241a8a4f197a88a50fa150b6d47d9c",
+    "path": "data/public/sistig_26088190_v1/hildenbrand_native_cases.json",
+    "bytes": 8046032,
+    "sha256": "af6da4dea220063d1b2486a4c958bff19ae621328f07bde4a95a5c70690ebeb6"
+  },
+  "metadata": {
+    "status": "OD_METADATA_PROJECTED",
+    "location_count": 5,
+    "od_denominator": 25,
+    "triangle_denominator": 125,
+    "selected_depot": 15,
+    "selected_depot_source_flag": true,
+    "distance_unit": "m",
+    "time_unit": "s",
+    "source_units": {
+      "deadhead_trip_matrix.distances": "m; directional matrix values retained exactly",
+      "deadhead_trip_matrix.times": "s; directional matrix values retained exactly"
+    },
+    "source_fields": {
+      "order": "source_data.deadhead_stop_order_source",
+      "arcs": "source_data.deadhead_arcs_directed_row_major",
+      "stops": "source_data.stops"
+    },
+    "numeric_semantics": "Exact rational of retained JSON decimal token; raw token preserved. Not an energy-model binary-rounding audit.",
+    "paired_leg_realizability": "UNKNOWN",
+    "paired_leg_source_claim": "Aligned OD distance/time cells are consumed together by the constructor; no common physical path witness or separate-minima guarantee is recorded in these fields.",
+    "scope": "shared public OD/location metadata only; native_cases and service rows unaccessed",
+    "triangle_status": "UNATTEMPTED",
+    "mode_coverage_status": "UNATTEMPTED",
+    "energy_dominance_status": "UNATTEMPTED",
+    "charging_access_status": "UNATTEMPTED",
+    "physical_witness_replay": false
+  },
+  "claim": {
+    "status": "PASS",
+    "location_count": 5,
+    "arc_count": 25,
+    "expected_arc_count": 25,
+    "distance_entries_checked": 25,
+    "time_entries_checked": 25,
+    "triangle_count_per_metric": 125,
+    "distance_triangle_checks": 125,
+    "time_triangle_checks": 125,
+    "distance_min_slack": "0",
+    "time_min_slack": "0",
+    "distance_violation_count": 0,
+    "time_violation_count": 0,
+    "distance_violations": [],
+    "time_violations": [],
+    "distance_negative_count": 0,
+    "time_negative_count": 0,
+    "distance_nonzero_diagonal_count": 0,
+    "time_nonzero_diagonal_count": 0,
+    "schema_errors": {},
+    "schema_error_count": 0,
+    "continuation": {
+      "canonical_coverage": "UNATTEMPTED",
+      "charging_access": "UNATTEMPTED",
+      "energy_rounding": "UNATTEMPTED",
+      "physical_dominance": "NOT_ESTABLISHED"
+    },
+    "scope": "Necessary gate for the stated sufficient-proof route; no routing/support extension",
+    "native_calls": 0
+  },
+  "public_variants_accessed": false,
+  "native_calls": 0
+}

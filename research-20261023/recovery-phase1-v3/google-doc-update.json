@@ -1,0 +1,11 @@
+{
+  "document_url": "https://docs.google.com/document/d/1NmPC_qo_uOnA48dV6Ibhs3Pj9EgOD-oJTBuVi41p6bg",
+  "tabId": "t.0",
+  "startIndex": 218850,
+  "endIndex": 220375,
+  "revisionId": "AHj4eMQS2pFm60YopglyJg8BSpn1FoRNgw4Lm2mjNX36OeFGyVFWCJrbAzicArD_6YHKnaVlreW5r_h8e_DVz_jy_4Xix79oCSvqPyKBVc4",
+  "text": "Native recovery qualification v3: warm-start acceptance and the 80-trip timing barrier — 23 October 2026\nThe four 40-trip engineering tasks finished within the common 30-second limit and retained independently replayed plans. Gurobi processed and accepted the recovered binary start. An intentionally injected start-setter failure preserved the same valid fallback. No invalid admitted witness, start-mapping error or bound-scope error was found.\n\nThe first 80-trip task finished at 30.38 seconds and was correctly rejected as late; the three remaining tasks were not launched. Its integer solve returned at about 24.06 seconds, but capture and candidate validation had already taken it past the 27-second physical cutoff. Additional replay and repeated serialization then consumed more time. This is a timing failure, not evidence of physical infeasibility. The available timestamps do not separate capture, serialization and replay costs precisely.\n\nThe full qualification therefore remains incomplete. These checks used a nonlearned ranking and establish no improvement in ML quality, tariff responsiveness or solver performance. The next work is to gate additional validation after the physical cutoff, retain each complete durable capture once with checked references, and reserve validation time within the existing deadline. Any further native run needs a prospective design that fits the remaining qualification budget. Earlier failures and all spent time are preserved; the cluster and sealed data remain untouched.\n",
+  "verified_verbatim": true,
+  "marker_count": 1,
+  "prior_prefix_unchanged": true
+}

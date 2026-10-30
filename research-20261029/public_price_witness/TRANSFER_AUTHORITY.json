@@ -1,0 +1,30 @@
+{
+ "status":"ADMITTED_HULL_UPPER",
+ "producer_source_revision":"cddd5072be949c36a8f674dd12298503a73407a7",
+ "producer_control_commit_prefix":"61b14412",
+ "packet_artifact_revision":"f5ec2aa5770188d173af7297620a5fcea99fef9a",
+ "producer_namespace":"research-20261029/public_price_witness/attempt01",
+ "case_input_revision":"253c1e29295e766b3889fc8f5c28d9808e00b3d6",
+ "case_token":"1917409b43c0433b4ac2504b0b28c1bb2aa63a033c79ba1a4057418b63874ed7",
+ "case_path":"research-20261029/public_support_resolution/attempt01/case_descriptor.json",
+ "mixture_path":"research-20261029/public_price_witness/attempt01/MIXTURE.json.gz",
+ "results_path":"research-20261029/public_price_witness/attempt01/results.json",
+ "owner_receipt_path":"research-20261029/public_price_witness/attempt01/owner_receipt.json",
+ "upper_bound":"1443179923968803775290098006217163515009032774663398228930303365915411930614170875502024167442451530845/3271461678119739162838778949479488288386427183774469641575516104263648171125254058271345771399872512",
+ "required_mixture_check_status":"PASS",
+ "new_component_physical_status":"ADMITTED_PRIMAL",
+ "new_component_strict_physical_replays":1,
+ "qualified_incumbent_packet_revision":"0cb3c54de6e8e5c391afb37bcbb68ad3a51925ee",
+ "qualified_incumbent_authority_revision":"3cbb8c9d965e9222ef8a98191bf775b4925382a1",
+ "all_five_states_delivered_timely":true,"resource_pass":true,
+ "owner_exit":0,"worker_exit":0,"worker_reaped":true,
+ "global_hull_optimality_claim":false,"physical_mean_dispatch_claim":false,"global_gap_sign_claim":false,
+ "transfer_rules":[
+  "Use fixed paths at exact pinned commits and cached source buffers; never follow artifact-controlled paths",
+  "Require qualified producer statuses and matching exact upper across authority, compact result and mixture's independent PASS check",
+  "Transfer previous component physical admission without replay, re-optimization or repeated mixture certification",
+  "A new physical lower must be independently verified and strictly exceed this feasible hull upper to establish the gap sign",
+  "Do not reuse a quadratic physical lower as a CH lower or a fixed-route lower as an unrestricted planning lower"
+ ],
+ "evidence_scope":"Compact completed outcomes plus reviewed source acceptance gates and independent interpretation; raw component packets not reopened for this authority"
+}

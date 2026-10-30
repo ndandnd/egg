@@ -1,0 +1,15 @@
+{
+  "stage": "pre-submission guard",
+  "exit_code": 3,
+  "no_checkout_created": true,
+  "no_sbatch_called": true,
+  "no_compute_attempt_started": true,
+  "reported_unrecorded_job": "718830",
+  "resolved_array_job_id": "718744",
+  "resolved_array_task_id": 9,
+  "resolved_state": "COMPLETED",
+  "resolved_workdir": "/home/nc437/egg-route-model128-20260930-v3",
+  "cause": "squeue %A displayed child job identity rather than array parent; guard treated a recorded-array child as unrecorded",
+  "correction": "Use %F array parent for EGG array guard; preserve rejection; safe first submission follows after terminal prior accounting",
+  "scoped_resolution": "scontrol show job718830 and squeue job718744,718830; no scientific outcomes read"
+}

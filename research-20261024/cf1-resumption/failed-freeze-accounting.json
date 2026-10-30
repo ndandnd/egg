@@ -1,0 +1,38 @@
+{
+  "policy": "cf1-entry-repaired-v5",
+  "phase": "failed_metadata_freeze_preservation",
+  "prior_charge_s": 2432.724196631565,
+  "current_charge_s": 11.25,
+  "charged_cpu_s": 2443.974196631565,
+  "freeze_passed": false,
+  "native_dispatch": false,
+  "owned_groups_absent_and_reaped": true,
+  "accounting_observations_complete": true,
+  "accepted_conservative_guard": true,
+  "prior_actual_cpu_s": null,
+  "historical_accounting_observations_complete": false,
+  "hard_ceiling_s": 3000.0,
+  "dispatch_stop_s": 2820.0,
+  "shutdown_reserve_s": 180.0,
+  "source_gate_passed": true,
+  "source_gate_attempt": "attempt04",
+  "components": {
+    "freeze_internal_s": 9.106743,
+    "whole_wrapper_conservative_s": 9.2,
+    "freeze_charged_s": 9.2,
+    "metadata_preparation_s": 0.05,
+    "preservation_finalization_guard_s": 2.0
+  },
+  "evidence_paths": {
+    "source_account": "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/research-20261024/cf1-entry-repaired-checks/attempt04-accounting.json",
+    "failed_receipt": "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/research-20261024/cf1-entry-repaired-v5/freeze-attempt01/result.json",
+    "whole_output": "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/research-20261024/cf1-entry-repaired-v5/freeze-whole-wrapper-output.json",
+    "whole_time": "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/research-20261024/cf1-entry-repaired-v5/freeze-whole-wrapper-time.txt"
+  },
+  "phase_overrun_preserved": {
+    "planned_s": 10.0,
+    "retained_s": 11.25,
+    "status": "failed; conservative closure and observed outer charge retained, no old compliance claim"
+  },
+  "diagnosis": "5s metadata work exhausted; final ps sample received only0.02096s at work endpoint. No evidence to weaken sampling or native clocks. No lock or native worker."
+}

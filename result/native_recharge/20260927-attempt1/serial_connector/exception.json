@@ -1,0 +1,7 @@
+{
+  "cell": "serial_connector",
+  "elapsed_s": 0.07968600001186132,
+  "message": "Simultaneous charging exceeds connector/vehicle count",
+  "traceback": "Traceback (most recent call last):\n  File \"/Users/nadan/Documents/ChatGPT/egg/journal-research-work/src/experiments/native_recharge_qualification.py\", line 158, in worker\n    result = nr.solve_pricing(case, cell[\"prices\"], budget, record=record)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/nadan/Documents/ChatGPT/egg/journal-research-work/src/egglab/native_recharge.py\", line 632, in solve_pricing\n    plan = _extract(case, built)\n           ^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/nadan/Documents/ChatGPT/egg/journal-research-work/src/egglab/native_recharge.py\", line 584, in _extract\n    plan[\"replay\"] = replay_native(case, plan)\n                     ^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/nadan/Documents/ChatGPT/egg/journal-research-work/src/egglab/native_recharge.py\", line 308, in replay_native\n    raise ValueError(\"Simultaneous charging exceeds connector/vehicle count\")\nValueError: Simultaneous charging exceeds connector/vehicle count\n",
+  "type": "ValueError"
+}

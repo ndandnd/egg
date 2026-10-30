@@ -1,0 +1,7 @@
+{
+  "cell": "cyclic_own_price",
+  "elapsed_s": 0.09020025003701448,
+  "message": "Negative/nonfinite extracted native charge",
+  "traceback": "Traceback (most recent call last):\n  File \"/Users/nadan/Documents/ChatGPT/egg/journal-research-work/src/experiments/native_recharge_qualification.py\", line 158, in worker\n    result = nr.solve_pricing(case, cell[\"prices\"], budget, record=record)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/nadan/Documents/ChatGPT/egg/journal-research-work/src/egglab/native_recharge.py\", line 632, in solve_pricing\n    plan = _extract(case, built)\n           ^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/nadan/Documents/ChatGPT/egg/journal-research-work/src/egglab/native_recharge.py\", line 572, in _extract\n    charges = decode_serial(case, built[\"compiled\"], energies)\n              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/nadan/Documents/ChatGPT/egg/journal-research-work/src/egglab/native_recharge.py\", line 519, in decode_serial\n    raise ValueError(\"Negative/nonfinite extracted native charge\")\nValueError: Negative/nonfinite extracted native charge\n",
+  "type": "ValueError"
+}

@@ -1,0 +1,107 @@
+{
+  "case": "scale:50605:80",
+  "case_anchor": 6096347.010213208,
+  "case_deadline": 6096467.010213208,
+  "complete": true,
+  "physical_witness_valid": true,
+  "status": "replayed_fleet_first_witness",
+  "stages": [
+    {
+      "stage": "case_construction",
+      "wall_s": 0.042520416900515556,
+      "cpu_s": 0.04252000000000011,
+      "observed_peak_rss_bytes": 184516608
+    },
+    {
+      "stage": "full_physical_model",
+      "wall_s": 1.6643191669136286,
+      "cpu_s": 1.6565999999999996,
+      "observed_peak_rss_bytes": 257376256
+    },
+    {
+      "stage": "one_physical_inventory",
+      "wall_s": 4.662898665294051,
+      "cpu_s": 4.339137000000001,
+      "observed_peak_rss_bytes": 289832960
+    },
+    {
+      "stage": "one_fleet_native_solve",
+      "wall_s": 60.031509791500866,
+      "cpu_s": 59.116307,
+      "observed_peak_rss_bytes": 465420288
+    },
+    {
+      "stage": "one_capture",
+      "wall_s": 3.293712915852666,
+      "cpu_s": 2.984425999999999,
+      "observed_peak_rss_bytes": 490143744
+    },
+    {
+      "stage": "unchanged_extraction",
+      "wall_s": 1.4827872077003121,
+      "cpu_s": 1.4479520000000008,
+      "observed_peak_rss_bytes": 490143744
+    },
+    {
+      "stage": "independent_replay",
+      "wall_s": 0.0689053749665618,
+      "cpu_s": 0.06880499999999756,
+      "observed_peak_rss_bytes": 490143744
+    },
+    {
+      "stage": "save_physical_witness",
+      "wall_s": 0.004857207648456097,
+      "cpu_s": 0.004481999999995878,
+      "observed_peak_rss_bytes": 490143744
+    }
+  ],
+  "failures": [],
+  "native_seed": null,
+  "seed_policy": "backend default, unmodified; numeric default unknown",
+  "historical_graph_context": {
+    "vehicles": 5,
+    "objective_exact": "117068415545289829852882191815294783197212532069955/91343852333181432387730302044767688728495783936",
+    "directory": "13ec9aa673986e09bfe4",
+    "seed": 17,
+    "interpretation": "unmatched reused-case context only"
+  },
+  "case_identity": "9b2ea49128e8c369b2ff4b50811a7a9dd94c6c9d233fb0b0cd80e2b64886f1c0",
+  "market_identity": "e02470bac03de50d5c549d91b16eedeccd4367df8057d011d156b9988e7b2f0e",
+  "trips": 80,
+  "inventory": {
+    "physical_rows": 190037,
+    "columns": 177958,
+    "single_inventory": true
+  },
+  "native": {
+    "status": "FEASIBLE",
+    "incumbent": 30.0,
+    "lower_bound": 2.0,
+    "raw_incumbent_repr": "30.0",
+    "raw_lower_bound_repr": "2.0",
+    "wall_s": 60.031336166895926,
+    "seconds_cap": 60.0,
+    "threads": 1,
+    "backend": "GRB",
+    "backend_runtime": {
+      "requested": "GRB",
+      "model_solver_name": "GRB",
+      "solver_module": "mip.gurobi",
+      "solver_class": "SolverGurobi",
+      "native_library_path": "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/gurobipy/_batch.cpython-312-darwin.so",
+      "native_library_sha256": "54c2ca41a9a9c80b4dd27df09e6b8a73abbb18de90e95198ae676611910dca96"
+    },
+    "n_vars": 177958,
+    "n_int": 6042,
+    "n_constraints": 190037,
+    "physical_constraints": 190037
+  },
+  "vehicles": 30,
+  "integrated_cost_exact": "752383041837242416389512316637973647885223178084247/182687704666362864775460604089535377456991567872",
+  "fleet_objective_tolerance": 1e-06,
+  "unmatched_relative_cost_context": "-518246210746662756683747933007384081490798113944337/234136831090579659705764383630589566394425064139910",
+  "witness_ready_monotonic": 6096418.341378125,
+  "elapsed_before_receipt_s": 71.3313739579171,
+  "cpu_before_receipt_s": 69.738752,
+  "observed_peak_rss_bytes": 490143744
+}

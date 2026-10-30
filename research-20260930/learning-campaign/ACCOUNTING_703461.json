@@ -1,0 +1,34 @@
+{
+  "job_id": "703461",
+  "recorded_at_utc": "2026-09-30T17:08:06.146282+00:00",
+  "state": "PREEMPTED",
+  "exit_code": "0:0",
+  "elapsed_seconds": 713,
+  "batch_state": "CANCELLED",
+  "batch_exit_code": "0:15",
+  "batch_elapsed_seconds": 714,
+  "allocated_cpus": 1,
+  "requested_memory_gb": 8,
+  "batch_max_rss_kib": 234056,
+  "node": "snavely-cpu-01",
+  "wrapper_receipt_present": false,
+  "summary_present": false,
+  "catalog_rows": 40,
+  "source_rows": 16,
+  "target_rows": 24,
+  "feasible_catalog_rows": 40,
+  "receipted_child_seconds": 667.823461072112,
+  "launched_cells": 41,
+  "receipted_cells": 40,
+  "interrupted_unreceipted_cells": [
+    "physical_v2_s10004_n28_soc20_80_174/state0/source0_charge_late"
+  ],
+  "never_launched_cells": 23,
+  "source": "scoped squeue/sacct; local complete collection of preserved partial artifacts",
+  "sacct_raw": [
+    "703461|egg-physical-labels|PREEMPTED|0:0|713|1|8G||snavely-cpu-01",
+    "703461.batch|batch|CANCELLED|0:15|714|1||234056K|snavely-cpu-01",
+    "703461.extern|extern|COMPLETED|0:0|714|1|||snavely-cpu-01"
+  ],
+  "scientific_disposition": "No wrapper or complete summary; no training admission under v1. The 40 receipted results are preserved for separate partial review, not silently discarded or treated as a completed sample."
+}

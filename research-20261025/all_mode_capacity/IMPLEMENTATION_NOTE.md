@@ -1,0 +1,11 @@
+# Static handoff — all-mode ideal outer capacity cuts
+
+New source/protocol/DRAFT manifest only. No artifact/spec/receipt/READOUT values or original data were opened; no imports, hashes, compilation, tests, calculations on data, replay, native calls, solves, commits or agents were used. The decision and needed existing writer/schema source were the only inputs to implementation.
+
+All4 p90 acquisition metadata/spec pairs are literal paths; external metadata is bound before spec SHA256 comparison and permitted full-case/fleet projection. No paths from data are followed, no excluded cost/plan/price/reference-ID semantics or whole-case identity recomputation occurs. One admitted projection is reused for90/45 controls, not re-read or rehashed. Every control remains in the eight-slot output, including unknown structure/binding.
+
+Narrow prelaunch corrections check projected trip count against fixed services, retain the inherited expected-case-identity token, and preserve permitted exception messages. The existing resource check records/limits observed self RSS≤5GiB (`ru_maxrss` macOS bytes; KiB converted elsewhere), without containment claims. Fraction conversion is exact binary-represented coefficient arithmetic, not intended-rational recovery.
+
+The code uses max(L_in,L_out), not sum; every leg draw is nonnegative, parallel modes remain eligible, and all-mode depot windows are unioned with actual resource intersections. Full-demand SOC bound requires all trip ends/all leg arrivals early; otherwise only completed-service SOC bound applies. The total-demand/postcapacity term stays independent. Reserve-at-opening is explicit. Output is scalar exact margins/assumptions/unknowns, never IDs/route vectors, a sufficient condition, a stored-numerical/native/global EVSP certificate or a new ML gate.
+
+Separate NEW30CPU/60wall budget (25/50 body +5/10 reserve) must be prospectively funded by parent at the current tracking prefix. Manifest prefix remains unset/DRAFT/PENDING; no input is admitted until parent review/freeze. Fresh exclusive attempt01, external final accounting and no automatic retry. Parent can review now and decide the numerical run next wake; this implementation does not launch it.

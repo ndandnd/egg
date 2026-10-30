@@ -1,0 +1,21 @@
+{
+  "status":"FROZEN","run_id":"attempt01","source_revision":"6c2319480239c19c839eeff868a7fc018dacc217",
+  "working_directory":"/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017",
+  "exact_command":"set -o noclobber\nenv OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 VECLIB_MAXIMUM_THREADS=1 NUMEXPR_NUM_THREADS=1 /usr/bin/time -p .venv-local/bin/python -I -S -B research-20261029/public_exact_energy_comparison/run.py --run-id attempt01 > research-20261029/public_exact_energy_comparison/attempt01_owner_console.txt 2> research-20261029/public_exact_energy_comparison/attempt01_process_time.txt",
+  "runtime":"Existing isolated CPython3.12.2; binary64 radix2/mantissa53/maxexp1024/rounds1; stdlib only; no site or bytecode",
+  "global_prefix":{"displayed_cpu_s":23969.11,"elapsed_sum_s":24900.49,"retained_cpu_s":23970.75,"legacy_conditional_guard_separate":2546.091499549272,"parent_tool_static_agent_review_cpu":"UNKNOWN_SEPARATE"},
+  "dispatch_authorized":true,
+  "assigned":["SOURCE","Q0","TRANSFER","COMPARISON"],
+  "resources":{"package_cpu_s":120,"package_wall_s":180,"worker_cpu_s":100,"worker_wall_s":150,"worker_self_hard_cpu_s":100,"closure_cpu_s":20,"closure_wall_s":30,"observed_rss_bytes":5368709120,"native_calls":0},
+  "stages":{"SOURCE":[10,15],"Q0":[10,15],"TRANSFER":[30,45],"COMPARISON":[30,45]},
+  "native_threads":1,
+  "inputs":{
+    "results":["d27f9f13ff8e61721dda39ee680be612c01c8ecc","research-20261029/public_exact_energy_target/attempt01/results.json"],
+    "owner":["d27f9f13ff8e61721dda39ee680be612c01c8ecc","research-20261029/public_exact_energy_target/attempt01/owner_receipt.json"],
+    "worker":["d27f9f13ff8e61721dda39ee680be612c01c8ecc","research-20261029/public_exact_energy_target/attempt01/worker_receipt.json"],
+    "left":["d27f9f13ff8e61721dda39ee680be612c01c8ecc","research-20261029/public_exact_energy_target/attempt01/INCUMBENT_ROUTES.json.gz"],
+    "right":["d27f9f13ff8e61721dda39ee680be612c01c8ecc","research-20261029/public_exact_energy_target/attempt01/RESPONSE_ROUTES.json.gz"],
+    "weights":["f5ec2aa5770188d173af7297620a5fcea99fef9a","research-20261029/public_price_witness/attempt01/MIXTURE.json.gz"]
+  },
+  "scope":"Distinct comparison completion only after separate control review and backup. Failed predecessor unchanged. No semantic/proof/face/physical rerun, native query, new weight or empirical road claim. No dispatch at or after2026-10-29T18:10:45Z."
+}

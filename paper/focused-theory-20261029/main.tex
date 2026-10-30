@@ -1,0 +1,205 @@
+\documentclass[11pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools,booktabs,graphicx,microtype}
+\usepackage[numbers]{natbib}
+\usepackage[colorlinks=true,allcolors=blue]{hyperref}
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}\newtheorem{remark}[theorem]{Remark}
+\newcommand{\R}{\mathbb R}
+\newcommand{\X}{\mathcal X}
+\newcommand{\CH}{\mathrm{CH}}
+\newcommand{\clamp}{\operatorname{clamp}}
+\title{Assignment-Dependent Charging and Marginal-Price Support in Electric-Bus Fleets}
+\author{Nathan Cho}
+\date{Research draft, 29 October 2026}
+\begin{document}
+\maketitle
+\begin{abstract}
+Service assignments change both an electric-bus fleet's charging opportunities
+and its vehicle cost. We derive an exact joint period-load--vehicle-cost projection
+for heterogeneous services in two batches with common charging windows,
+conversion efficiencies, a fixed successor graph and full replenishment.
+When finite repeated charge/discharge actions are allowed without switching
+or cycling penalties, one minimum-requirement matching value per cardinality
+determines a polygon with at most five vertices. A constructive serial
+realization respects individual inventories and the shared gross connector
+limit. Retaining these complete polygons preserves projected planning and
+price-response values even for negative prices; monotone supply costs admit
+a smaller efficient frontier with at most two segments per cardinality.
+The lossless specialization gives a scalar own-price support criterion.
+Matching, conversion accounting and price-support machinery are classical.
+Our physical reduction also has a precise limitation:
+edge-dependent compulsory transition consumption can retain a positive support
+gap on a complete assignment graph even when every perfect matching is feasible.
+The obstruction persists with strongly convex separable supply cost and in a
+relative open numerical neighborhood under fixed timing and access. Separately
+checked rational certificates establish a positive gap on one 37-service
+timetable under explicitly distinguished binary and exact-additive consumption
+models. These are model-specific existence results with synthetic coefficients,
+not evidence of operational prevalence or calibrated savings.
+\end{abstract}
+\section{Introduction}
+An electric-bus operator assigns mandatory services to vehicles and decides
+when to recharge them. Continuous charging offers flexibility, but a vehicle
+cannot cover a fraction of a service. Assigning two services to the same bus
+can therefore impose an intermediate energy requirement that disappears when
+two buses are used. A tariff may reward the resulting change in charging
+without compensating the operator for its additional vehicle.
+
+We ask a precise question. A supplier has a convex incremental cost for
+serving aggregate fleet demand. A tariff is calculated from a candidate
+fleet's load and posted before the operator chooses its complete schedule.
+Holding that tariff fixed, does the candidate minimize the operator's bill
+plus its intrinsic operating cost? This is an own-load price-support test.
+Its participant is one operator controlling the complete fleet. It is not a
+strategic model in which that operator anticipates a new tariff after each
+alternative it considers.
+The support test is classical; our contribution is the physical set
+description that makes its application explicit for a restricted fleet class.
+
+The difficulty need not be a complicated load-only feasible set. Assigning
+services to the same bus can impose an early recharge requirement while
+reducing the number of paid vehicles. A fixed-population charging aggregate
+does not retain that tradeoff. We identify a restricted physical class in
+which it can be described exactly: heterogeneous two-batch services, common
+charging windows and conversion efficiencies, a fixed successor graph, shared
+gross connector use and full terminal replenishment. A minimum-requirement
+matching at each cardinality suffices to construct the joint energy--vehicle-cost
+set. With losses and unrestricted finite early direction changes, this set is
+a union of polygons having at most five vertices each. Their constructive
+realization uses sequential actions, never simultaneous charging and exporting.
+Standard convexification then gives planning and own-price support decisions.
+For monotone objectives, removing dominated cycling actions leaves at most two
+efficient segments per cardinality. Keeping the full polygons avoids that
+economic restriction, but relies on ideal switching and period-aggregate
+settlement. Gross connector use counts both purchases and exports; full
+terminal replenishment prevents free net use of initial battery inventory.
+
+We delineate why this reduction works. A common transition-energy task can
+be included because total energy stays fixed within a matching cardinality.
+Edge-dependent tasks break that property. A complete-graph construction
+admits every perfect matching yet retains a positive gap, even with strongly
+convex supply cost and strict feasibility margins. Its relative-neighborhood
+statement keeps the discrete topology, charging access and ideal common-window
+physics fixed. The example rules out several simple explanations for the
+obstruction without claiming generic routing hardness, exponential hull
+complexity or empirical robustness. V2G, paid idle fleets and ownership
+examples clarify further consequences; their complete arguments are retained
+in the relevant sections and appendices.
+
+The public-timetable analysis serves a different purpose. Exact physical
+lower bounds and independently admitted complete-plan mixture uppers establish
+existence beyond the two-batch class. The original binary-consumption
+certificate concerns its declared movement graph. A separately defined
+exact-additive law, fresh target certificates and a dominance argument cover
+finite walks over specified paired arcs and continuous waiting. These distinct
+models share synthetic economics and do not establish empirical road
+completeness or operational prevalence. Small exact qualification suites and
+the two separately scoped portable verifiers address implementation trust, not
+generalization or third-party replication.
+
+\input{related_work}
+\input{framework}
+\input{core_results}
+
+\section{Implications and limits}
+The obstruction concerns one posted-tariff institution with a complete-fleet
+participant. It is a possibility under characterized conditions, not an
+inevitable failure of marginal tariffs, a strategic tariff-reset equilibrium
+or a convergence claim. Convex-hull pricing and general support duality are
+established theory. The physical contribution is the explicit assignment-dependent
+projection under the stated timing, resource, loss and action assumptions.
+
+The exact analytical projections omit stochastic delays, state-dependent
+degradation, temperature, taper and switching time. A separate setup-time
+approximation bounds the effect of a positive per-action delay when every
+relevant layer has verified connector-time slack; without that premise,
+even value continuity can fail (Proposition~\ref{prop:setupslack}).
+A common affine-throughput wear
+extension remains an ideal cost model, not a battery-aging calibration.
+Common windows and efficiencies enable the finite
+reduction; arbitrary timetables, vehicle-dependent losses, restricted cycling
+and intrawindow price variation require further analysis. Full polygons can
+handle negative period prices; the smaller efficient frontier cannot discard
+larger loads under a nonmonotone objective. The nominal reserve/loss neighborhood
+does not validate those abstractions empirically. The public case uses varied
+times and movement energy, but remains charge-only within fixed declared
+movement modes and charging windows. Its certificate does not prove
+completeness for arbitrary retiming or unlisted access. A separately defined
+exact additive law admits a wider result: under its explicit triangle
+and charging-access premises, a separate certificate covers arbitrary finite
+walks in the paired-arc model. Neither law certifies all empirical road options.
+Synthetic coefficients and one base timetable leave calibrated magnitude
+and prevalence open.
+
+\section{Conclusion}
+Service assignments change the joint load--vehicle-cost set even when its
+load-only projection is simple. For the stated common-window class,
+cardinality-matching values determine the complete load--cost projection
+with common losses and ideal finite cycling. The lossless specialization
+gives an exact scalar support classification; monotone objectives admit a
+smaller efficient frontier. Gross
+connector use, full replacement energy and constructive serial attainment are
+essential to that description. A separately checked public-timetable certificate establishes
+the same qualitative obstruction in a richer declared charge-only model.
+These results identify when continuous charging flexibility does and does
+not remove assignment-induced price-support failure, while leaving empirical
+significance and more general scheduling classes open.
+
+\section*{Evidence and reproducibility}
+Constructive proofs establish the continuum statements. Separate raw
+bus-level enumeration qualified the full common-loss polygons on eight fixed
+cases, including finite-cycle replay and common transition energy.
+Appendix~\ref{app:evidence} preserves all case/control denominators and the
+narrower scopes of earlier checks. Classical native proposals for the public
+case undergo exact physical admission and rational coverage checking.
+Fresh standalone standard-library Python processes rechecked each model's
+retained proof without a solver: construction/check took about 33 seconds
+for the binary model and 48 seconds for the exact-additive model.
+The latter checks the target descriptor, two physical witnesses, all-fleet
+exclusions, a 375-node tree and the fixed mixture; it does not re-audit the
+source-law transformation or broader-walk premises. Neither checker
+substitutes for the other model's evidence. This is author-run verification,
+not external replication. The certificate index binds sources, inputs,
+constants and command; earlier failures and costs remain archived.
+Exports stay local pending redistribution review. No public release or
+substantive learning contribution is claimed.
+
+\clearpage
+\appendix
+\input{heterogeneous}
+\input{v2g}
+\input{lossy}
+\input{transition_energy}
+\input{public_case}
+\input{exact_energy_extension}
+\input{consequences}
+\input{adequate_resources}
+\input{construction}
+\input{expansion}
+\input{ownership}
+\input{heterogeneous_proofs}
+\input{three_batch_boundary}
+\input{v2g_proofs}
+\input{proofs}
+\input{certificates}
+\clearpage
+\LossyProjectionProofs
+\input{setup_time}
+\input{setup_matching_boundary}
+\input{setup_charge_only}
+\input{network_monotonicity}
+\TransitionEnergyProofs
+\input{exponential_transition}
+\input{complete_graph_extension}
+\input{strict_curvature_robustness}
+\input{evidence_details}
+\bibliographystyle{plainnat}
+\bibliography{references}
+\end{document}

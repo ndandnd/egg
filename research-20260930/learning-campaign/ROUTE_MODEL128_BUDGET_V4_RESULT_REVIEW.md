@@ -1,0 +1,3 @@
+# V4 result review
+
+The result note matches the saved replay aggregates. Its 128- and common-32-group MLP deltas use paired timetable-level metrics after averaging seeds and observed sources; all three MLP metrics improve on common 32, while the tree changes are correctly described as mixed and worse on all three common-32 metrics. The 300-epoch MLP and 200-tree anchors are reported as matched; the 1200-epoch cap was reached by three tasks. The note keeps logistic coefficient/prediction drift diagnostic, separates it from budget effects, and makes no route-cost, feasibility, overfit, or speedup claim. No replay or fit was rerun for this review.

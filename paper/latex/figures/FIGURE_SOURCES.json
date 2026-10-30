@@ -1,0 +1,108 @@
+{
+  "inputs": "Previously reviewed public scalar CSV tables only; no solver or raw-event reconstruction.",
+  "pricing_start_effects": [
+    {
+      "case": "public_depot15",
+      "lower_improvement": -5.679076483187373,
+      "query": "linear_tariff",
+      "upper_improvement": -2.8421709430404007e-13
+    },
+    {
+      "case": "public_depot15",
+      "lower_improvement": -3.5933370013976855,
+      "query": "marginal_price",
+      "upper_improvement": 1.1048201066487309
+    },
+    {
+      "case": "public_depot16",
+      "lower_improvement": 0.0,
+      "query": "linear_tariff",
+      "upper_improvement": -3.410605131648481e-13
+    },
+    {
+      "case": "public_depot16",
+      "lower_improvement": 11.784692398281777,
+      "query": "marginal_price",
+      "upper_improvement": -5.684341886080802e-14
+    }
+  ],
+  "public_hull_rows": [
+    {
+      "case": "public_depot15",
+      "lower": null,
+      "method": "reserve_cold_hull",
+      "paid_two_state_s": 347.2029418540187,
+      "status": "failed",
+      "upper": null
+    },
+    {
+      "case": "public_depot15",
+      "lower": 315.7670775111532,
+      "method": "reserve_feasible_hull",
+      "paid_two_state_s": 354.6123316343874,
+      "status": "budget_exhausted",
+      "upper": 469.8839547444164
+    },
+    {
+      "case": "public_depot15",
+      "lower": null,
+      "method": "qp_feasible_hull",
+      "paid_two_state_s": 349.87922910647467,
+      "status": "failed",
+      "upper": null
+    },
+    {
+      "case": "public_depot15",
+      "lower": 405.83313488387836,
+      "method": "qp_cache_feasible_hull",
+      "paid_two_state_s": 352.27476045303047,
+      "status": "budget_exhausted",
+      "upper": 471.513398699477
+    },
+    {
+      "case": "public_depot16",
+      "lower": 377.6598954951502,
+      "method": "reserve_cold_hull",
+      "paid_two_state_s": 351.07601743144915,
+      "status": "budget_exhausted",
+      "upper": 531.8976454977117
+    },
+    {
+      "case": "public_depot16",
+      "lower": 350.87564881770015,
+      "method": "reserve_feasible_hull",
+      "paid_two_state_s": 353.48003327613696,
+      "status": "budget_exhausted",
+      "upper": 490.66169981853903
+    },
+    {
+      "case": "public_depot16",
+      "lower": null,
+      "method": "qp_feasible_hull",
+      "paid_two_state_s": 349.52681310195476,
+      "status": "failed",
+      "upper": null
+    },
+    {
+      "case": "public_depot16",
+      "lower": 420.4551295505442,
+      "method": "qp_cache_feasible_hull",
+      "paid_two_state_s": 352.2229682840407,
+      "status": "budget_exhausted",
+      "upper": 491.45076258594725
+    }
+  ],
+  "qualifications": [
+    "Both public depots share one Hildenbrand base timetable.",
+    "Native tolerance-qualified bounds, not ideal-model exact proofs.",
+    "Failed targets have no displayed interval; spent time remains.",
+    "Paid pair totals include both children and measured parent admission once.",
+    "Pricing starts compare quality at the same 160-second native cap, not speed.",
+    "Changes of at most 1e-5 are displayed as ties."
+  ],
+  "source_files": {
+    "research-20260928/pricing-start-pilot/results-attempt1/analysis/pairs.csv": "b9203b0ec6110d930364a16306bc6e8abf51d2b005821b7035af56c2684f5661",
+    "research-20260928/solver-baseline-comparison/results-attempt1/analysis/cells.csv": "901341b80a4da290c57feba0f1d86dbd3901f91ef16547d905fe677c79731cd2",
+    "research-20260928/solver-baseline-comparison/results-attempt1/analysis/paid_pairs.csv": "bb0da2cebeda09308a5aa88669e535062ca629ed293d1ccd936d86cb5cc1d111"
+  }
+}

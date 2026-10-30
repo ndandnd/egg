@@ -1,0 +1,336 @@
+{
+  "analytical_crosschecks": {
+    "joint_early_headroom_grid_kWh": "8/19",
+    "joint_gap": "94249/28880",
+    "joint_strict_fleet_cost_upper_threshold": "440/19",
+    "left_derivative_polynomial_discriminant": -180,
+    "scope": "Analytical continuity and one-dimensional threshold proof; no extra experiment cases",
+    "terminal_power_positive_gap_threshold_kW": "47/2"
+  },
+  "auditor_sha256": "2416fe4116d5084777f8f4221bf6962a6661a4627b662d28cdfd6692d0891fed",
+  "cases": [
+    {
+      "classification": "positive",
+      "convexified": "7591/80",
+      "gap": "169/80",
+      "parameters": [
+        "0",
+        "1",
+        "10",
+        "30"
+      ],
+      "physical": "97"
+    },
+    {
+      "classification": "positive",
+      "convexified": "7591/80",
+      "gap": "169/80",
+      "parameters": [
+        "0",
+        "1",
+        "11",
+        "30"
+      ],
+      "physical": "97"
+    },
+    {
+      "classification": "positive",
+      "convexified": "7591/80",
+      "gap": "169/80",
+      "parameters": [
+        "0",
+        "1",
+        "12",
+        "30"
+      ],
+      "physical": "97"
+    },
+    {
+      "classification": "zero",
+      "convexified": "38634/361",
+      "gap": "0",
+      "parameters": [
+        "0",
+        "19/20",
+        "10",
+        "30"
+      ],
+      "physical": "38634/361"
+    },
+    {
+      "classification": "positive",
+      "convexified": "859338591/8346320",
+      "gap": "12909649/8346320",
+      "parameters": [
+        "0",
+        "19/20",
+        "11",
+        "30"
+      ],
+      "physical": "37727/361"
+    },
+    {
+      "classification": "positive",
+      "convexified": "859338591/8346320",
+      "gap": "12909649/8346320",
+      "parameters": [
+        "0",
+        "19/20",
+        "12",
+        "30"
+      ],
+      "physical": "37727/361"
+    },
+    {
+      "classification": "zero",
+      "convexified": "99",
+      "gap": "0",
+      "parameters": [
+        "1",
+        "1",
+        "10",
+        "30"
+      ],
+      "physical": "99"
+    },
+    {
+      "classification": "positive",
+      "convexified": "46131/484",
+      "gap": "1785/484",
+      "parameters": [
+        "1",
+        "1",
+        "11",
+        "30"
+      ],
+      "physical": "99"
+    },
+    {
+      "classification": "positive",
+      "convexified": "46131/484",
+      "gap": "1785/484",
+      "parameters": [
+        "1",
+        "1",
+        "12",
+        "30"
+      ],
+      "physical": "99"
+    },
+    {
+      "classification": "zero",
+      "convexified": "38634/361",
+      "gap": "0",
+      "parameters": [
+        "1",
+        "19/20",
+        "10",
+        "30"
+      ],
+      "physical": "38634/361"
+    },
+    {
+      "classification": "zero",
+      "convexified": "38634/361",
+      "gap": "0",
+      "parameters": [
+        "1",
+        "19/20",
+        "11",
+        "30"
+      ],
+      "physical": "38634/361"
+    },
+    {
+      "classification": "positive",
+      "convexified": "2987911/28880",
+      "gap": "94249/28880",
+      "parameters": [
+        "1",
+        "19/20",
+        "12",
+        "30"
+      ],
+      "physical": "38527/361"
+    },
+    {
+      "classification": "infeasible",
+      "parameters": [
+        "0",
+        "1",
+        "10",
+        "10"
+      ]
+    },
+    {
+      "classification": "zero",
+      "convexified": "97",
+      "gap": "0",
+      "parameters": [
+        "0",
+        "1",
+        "10",
+        "20"
+      ],
+      "physical": "97"
+    },
+    {
+      "classification": "zero",
+      "convexified": "97",
+      "gap": "0",
+      "parameters": [
+        "0",
+        "1",
+        "10",
+        "47/2"
+      ],
+      "physical": "97"
+    },
+    {
+      "classification": "positive",
+      "convexified": "6203/64",
+      "gap": "5/64",
+      "parameters": [
+        "0",
+        "1",
+        "10",
+        "24"
+      ],
+      "physical": "97"
+    }
+  ],
+  "classifications": {
+    "infeasible": 1,
+    "positive": 9,
+    "zero": 6
+  },
+  "corruption_controls": [
+    {
+      "control": "wrong_display_only",
+      "reason": "Display value disagrees with exact rational",
+      "rejected": true
+    },
+    {
+      "control": "joint_gap_altered",
+      "reason": "planning gap: 123129/28880 != 94249/28880",
+      "rejected": true
+    },
+    {
+      "control": "lossy_grid_total_not_grossed_up",
+      "reason": "case gross grid total: 30 != 600/19",
+      "rejected": true
+    },
+    {
+      "control": "reserve_lower_bound_removed",
+      "reason": "branch lower: 10 != 11",
+      "rejected": true
+    },
+    {
+      "control": "infeasible_one_bus_marked_feasible",
+      "reason": "Branch feasibility",
+      "rejected": true
+    },
+    {
+      "control": "terminal_infeasibility_hidden_as_zero",
+      "reason": "Infeasible objective reported as a number",
+      "rejected": true
+    },
+    {
+      "control": "interior_branch_optimum_shifted",
+      "reason": "continuous branch minimizer: 6 != 5",
+      "rejected": true
+    },
+    {
+      "control": "endpoint_omitted",
+      "reason": "Complete feasible endpoint set mismatch",
+      "rejected": true
+    },
+    {
+      "control": "hull_vertex_omitted",
+      "reason": "Complete lower-hull vertex set",
+      "rejected": true
+    },
+    {
+      "control": "mixture_weight_altered",
+      "reason": "Mixture does not reconstruct complete-hull minimizer",
+      "rejected": true
+    },
+    {
+      "control": "full_replenishment_lost",
+      "reason": "replayed bus SOC[4]: 19 != 20",
+      "rejected": true
+    },
+    {
+      "control": "battery_efficiency_ignored",
+      "reason": "replayed bus SOC[2]: 315/19 != 16",
+      "rejected": true
+    },
+    {
+      "control": "terminal_sessions_overlap",
+      "reason": "Integrated terminal session energy: 300/19 != 30",
+      "rejected": true
+    },
+    {
+      "control": "terminal_overlap_with_integrals_preserved",
+      "reason": "Terminal overlap or idle gap in constant-power witness",
+      "rejected": true
+    },
+    {
+      "control": "terminal_power_excess_with_integral_preserved",
+      "reason": "Terminal connector power",
+      "rejected": true
+    },
+    {
+      "control": "second_connector_used",
+      "reason": "More than one connector",
+      "rejected": true
+    },
+    {
+      "control": "terminal_integral_corrupted",
+      "reason": "Integrated terminal session energy: 15 != 270/19",
+      "rejected": true
+    },
+    {
+      "control": "own_price_regret_corrupted",
+      "reason": "own-price regret: 0 != 307/19",
+      "rejected": true
+    },
+    {
+      "control": "global_supply_conjugate_corrupted",
+      "reason": "global nonnegative supply conjugate: 0 != 1833129/28880",
+      "rejected": true
+    },
+    {
+      "control": "fleet_LOC_corrupted",
+      "reason": "common-price fleet LOC: 0 != 56/19",
+      "rejected": true
+    },
+    {
+      "control": "supply_LOC_corrupted",
+      "reason": "common-price supply LOC: 0 != 94249/28880",
+      "rejected": true
+    },
+    {
+      "control": "grid_case_omitted",
+      "reason": "Frozen grid size",
+      "rejected": true
+    }
+  ],
+  "counts": {
+    "branch_price_accounts": 26,
+    "bus_replays": 161,
+    "connector_interval_replays": 161,
+    "endpoint_witnesses": 46,
+    "physical_intervals": 32,
+    "positive_mixture_components": 28,
+    "rational_display_pairs": 3301,
+    "schedule_witnesses": 100,
+    "soc_event_replays": 805,
+    "terminal_session_replays": 161
+  },
+  "frozen_head": "bd022ac32ef680446ee17bc4400843a764acb9f6",
+  "independence": "Non-author auditor; standard library only; no author code imports or solver",
+  "raw_manifest_sha256": "16878cadc5ad8cafdfc7da401fef13e3db04d3711e25c6c83c6eea3d0ecf003a",
+  "result_sha256": "3d5c20a39b2c7176b6ece22bbeb464a42ea7b3bc58498c0959e227469e25ed29",
+  "verdict": "PASS"
+}

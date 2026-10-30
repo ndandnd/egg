@@ -1,0 +1,219 @@
+{
+  "arm_orders": {
+    "public_depot15": {
+      "linear_tariff": [
+        "cold",
+        "start"
+      ],
+      "marginal_price": [
+        "start",
+        "cold"
+      ]
+    },
+    "public_depot16": {
+      "linear_tariff": [
+        "start",
+        "cold"
+      ],
+      "marginal_price": [
+        "cold",
+        "start"
+      ]
+    },
+    "synthetic_cyclic": {
+      "linear_tariff": [
+        "cold",
+        "start"
+      ],
+      "marginal_price": [
+        "start",
+        "cold"
+      ]
+    },
+    "synthetic_multivisit": {
+      "linear_tariff": [
+        "start",
+        "cold"
+      ],
+      "marginal_price": [
+        "cold",
+        "start"
+      ]
+    }
+  },
+  "cases": {
+    "public_depot15": {
+      "budget": {
+        "backend": "GRB",
+        "epsilon": 0.0001,
+        "max_rounds": 1,
+        "phase_seconds": 160,
+        "threads": 1,
+        "wall_seconds": 180
+      },
+      "hard_child_seconds": 210,
+      "historical_source_child_seconds": 175.47881774185225,
+      "preparation_seconds": 0.2931125396862626,
+      "queries": {
+        "linear_tariff": {
+          "duplicates_linear_prices": null,
+          "gradient_anchor_key": null,
+          "selected_movement_count": 39,
+          "source_column_key": "3554d3c74ce446861da6c8dd646975b91510922e2ac61701440007c8c74c346c",
+          "source_plan_hash": "7aeaee5eb09cc211e7b1932d43ce5f4f1b3a55e7f194afe211dc4027b35bb4c0",
+          "source_pricing_objective": 414.98644947226705,
+          "source_pricing_objective_exact": "131514455440025272475642890318637/316912650057057350374175801344"
+        },
+        "marginal_price": {
+          "duplicates_linear_prices": false,
+          "gradient_anchor_key": "3554d3c74ce446861da6c8dd646975b91510922e2ac61701440007c8c74c346c",
+          "selected_movement_count": 39,
+          "source_column_key": "1fca3922f513e9f6e7d32d9d8abbde1f9616726549c696738c50b9e624059483",
+          "source_plan_hash": "32153eae262cae29ba1a345f096cda00840637d4b8c4d381e64120d26b9cbb8f",
+          "source_pricing_objective": 429.38644947226635,
+          "source_pricing_objective_exact": "272155995201693362466910467529099/633825300114114700748351602688"
+        }
+      },
+      "reason": null,
+      "source_eligible": true,
+      "source_status": "budget_exhausted"
+    },
+    "public_depot16": {
+      "budget": {
+        "backend": "GRB",
+        "epsilon": 0.0001,
+        "max_rounds": 1,
+        "phase_seconds": 160,
+        "threads": 1,
+        "wall_seconds": 180
+      },
+      "hard_child_seconds": 210,
+      "historical_source_child_seconds": 175.46835627732798,
+      "preparation_seconds": 0.26754704397171736,
+      "queries": {
+        "linear_tariff": {
+          "duplicates_linear_prices": null,
+          "gradient_anchor_key": null,
+          "selected_movement_count": 39,
+          "source_column_key": "0a323baffdb602dfe388b89678174748bfef33fe2250519f9959b53f138967dc",
+          "source_plan_hash": "a328e5169fdeb5a3e323d77bedf880e6689dcca98aa12868851eca2f2110ed9f",
+          "source_pricing_objective": 440.7906436055995,
+          "source_pricing_objective_exact": "2235074095766502893705962330393157/5070602400912917605986812821504"
+        },
+        "marginal_price": {
+          "duplicates_linear_prices": false,
+          "gradient_anchor_key": "0a323baffdb602dfe388b89678174748bfef33fe2250519f9959b53f138967dc",
+          "selected_movement_count": 39,
+          "source_column_key": "e57d56292c8aa77e499a530987b1fa585ba15927e0f785099699e23145a16017",
+          "source_plan_hash": "26cc06627f7c957ad30eee68b64f2e8f2fe6a30d24c62b5946274c87ee1bbfc3",
+          "source_pricing_objective": 448.9390025922121,
+          "source_pricing_objective_exact": "284548898050940159125719627440653/633825300114114700748351602688"
+        }
+      },
+      "reason": null,
+      "source_eligible": true,
+      "source_status": "budget_exhausted"
+    },
+    "synthetic_cyclic": {
+      "budget": {
+        "backend": "GRB",
+        "epsilon": 0.0001,
+        "max_rounds": 1,
+        "phase_seconds": 45,
+        "threads": 1,
+        "wall_seconds": 60
+      },
+      "hard_child_seconds": 90,
+      "historical_source_child_seconds": 3.5311688450165093,
+      "preparation_seconds": 0.049652885645627975,
+      "queries": {
+        "linear_tariff": {
+          "duplicates_linear_prices": null,
+          "gradient_anchor_key": null,
+          "selected_movement_count": 4,
+          "source_column_key": "21c84d7c4727f9f50331c341034d5636132a77a91d0014b838e426d4b764ba45",
+          "source_plan_hash": "33ff9dae87e9ce18a334373453b714ad4fcbeb9049b26f368860bec80a4dd1f2",
+          "source_pricing_objective": 20.0,
+          "source_pricing_objective_exact": "180143985094819843/9007199254740992"
+        },
+        "marginal_price": {
+          "duplicates_linear_prices": false,
+          "gradient_anchor_key": "21c84d7c4727f9f50331c341034d5636132a77a91d0014b838e426d4b764ba45",
+          "selected_movement_count": 3,
+          "source_column_key": "7fa98e87817b9d97c05604f19a0a35a0ae9ca2ced8595df7ec59025e588bb6f7",
+          "source_plan_hash": "a992a7962758d9d90fb5f02f62e6b1bc71e47d2ad41b145073f5e19fa627ff49",
+          "source_pricing_objective": 169.0,
+          "source_pricing_objective_exact": "95138542128201729/562949953421312"
+        }
+      },
+      "reason": null,
+      "source_eligible": true,
+      "source_status": "certified"
+    },
+    "synthetic_multivisit": {
+      "budget": {
+        "backend": "GRB",
+        "epsilon": 0.0001,
+        "max_rounds": 1,
+        "phase_seconds": 45,
+        "threads": 1,
+        "wall_seconds": 60
+      },
+      "hard_child_seconds": 90,
+      "historical_source_child_seconds": 3.7328886850737035,
+      "preparation_seconds": 0.06784421112388372,
+      "queries": {
+        "linear_tariff": {
+          "duplicates_linear_prices": null,
+          "gradient_anchor_key": null,
+          "selected_movement_count": 4,
+          "source_column_key": "bea680ffa7e9004bd7ccd61ad313af974f88806068003d1f838a03b0dd0200ac",
+          "source_plan_hash": "7aa1c8c57178fbb1dc85d9756d5ad05e5ac67da37d25ecb352381cd03c9bf4b1",
+          "source_pricing_objective": 44.83157894736842,
+          "source_pricing_objective_exact": "1818584894777946600923337447061241/40564819207303340847894502572032"
+        },
+        "marginal_price": {
+          "duplicates_linear_prices": false,
+          "gradient_anchor_key": "bea680ffa7e9004bd7ccd61ad313af974f88806068003d1f838a03b0dd0200ac",
+          "selected_movement_count": 4,
+          "source_column_key": "3cb6e1ccf471e5acf27e3776f719428a2c001b5830cdf1056831048f0ee0d9d2",
+          "source_plan_hash": "67a52668c690508c77a792f84fbef47bc35034ec841e1d90e4e455cfbe6beb0e",
+          "source_pricing_objective": 119.18060941828256,
+          "source_pricing_objective_exact": "604317484258608224142993427332889/5070602400912917605986812821504"
+        }
+      },
+      "reason": null,
+      "source_eligible": true,
+      "source_status": "budget_exhausted"
+    }
+  },
+  "complete_freeze_command_seconds": 1.9556663958355784,
+  "controller_cap_seconds": 2700,
+  "environment": {
+    "gurobi_runtime": "12.0.3",
+    "gurobipy": "12.0.3",
+    "mip": "1.17.6",
+    "numpy": "1.26.4",
+    "python_version": "3.12.13",
+    "scipy": "1.13.1"
+  },
+  "freeze_preparation_elapsed_seconds": 1.6516357306391,
+  "frozen_sha256": "3204f528d8ef25b75c76841a5d0ed8d86b914d3f30126f5aabf580fb7aab385a",
+  "job_submitted": false,
+  "native_probe": {
+    "backend_identity": {
+      "model_solver_name": "GRB",
+      "native_library_path": "/home/nc437/evsp_env/lib/python3.12/site-packages/gurobipy/_attrutil.cpython-312-x86_64-linux-gnu.so",
+      "native_library_sha256": "57f87a886aa5a1fd8356494fa1b81e9f9c7d957c898d09e96145440c76c762b7",
+      "requested": "GRB",
+      "solver_class": "SolverGurobi",
+      "solver_module": "mip.gurobi"
+    },
+    "model_seed": 0
+  },
+  "optimization_performed": false,
+  "returncode": 0,
+  "source_commit": "6759daa4eaeb92152607a3d60840d52988093973",
+  "threads": 1,
+  "utc": "2026-09-28T15:24:46.407056+00:00"
+}

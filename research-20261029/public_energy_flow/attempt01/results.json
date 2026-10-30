@@ -1,0 +1,193 @@
+{
+  "status": "CLOSED",
+  "assigned": 5,
+  "rows": [
+    {
+      "id": "Q0",
+      "status": "DELIVERED",
+      "native_allowance_s": 45,
+      "stage_elapsed_s": 0.030036459676921368,
+      "stage_clock_scope": "through complete gzip packet serialization",
+      "packet": "Q0.json.gz",
+      "summary": {
+        "raw_status": 2,
+        "solution_count": 1,
+        "optimize_called": true,
+        "inclusive_elapsed_s": 0.020830582827329636,
+        "raw_objective": 20.25,
+        "raw_bound": 20.249999999740826,
+        "raw_gap": null,
+        "native_start_acceptance": "UNKNOWN",
+        "exact_global_optimum_claim": false,
+        "external_incumbent_substituted": false,
+        "exact_certificate": {
+          "status": "CERTIFIED_LOWER_BOUND",
+          "stage": null,
+          "lower_bound": "177572448928583278230645632073571678635252634016251/8769009823985417509222108996297698117935595257856",
+          "reason": null
+        },
+        "qualification_status": "PASS",
+        "negative_controls": [
+          {
+            "id": "row-rhs",
+            "rejected": true,
+            "stage": "LEDGER_MATCH"
+          },
+          {
+            "id": "finite-bound",
+            "rejected": true,
+            "stage": "LEDGER_MATCH"
+          },
+          {
+            "id": "minimum-fleet-metadata",
+            "rejected": true,
+            "stage": "LEDGER_MATCH"
+          },
+          {
+            "id": "objective",
+            "rejected": true,
+            "stage": "LEDGER_MATCH"
+          }
+        ],
+        "known_exact_value": "93386641873154606591/4611686018427387904"
+      },
+      "resources": {
+        "cpu_s": 0.266736,
+        "peak_rss_bytes": 56606720
+      }
+    },
+    {
+      "id": "ROOT_QP",
+      "status": "DELIVERED",
+      "native_allowance_s": 90,
+      "stage_elapsed_s": 6.039507790468633,
+      "stage_clock_scope": "through complete gzip packet serialization",
+      "packet": "ROOT_QP.json.gz",
+      "summary": {
+        "raw_status": 2,
+        "solution_count": 1,
+        "optimize_called": true,
+        "inclusive_elapsed_s": 2.8556024581193924,
+        "raw_objective": 434.1794832855971,
+        "raw_bound": 434.1794832286502,
+        "raw_gap": null,
+        "native_start_acceptance": "UNKNOWN",
+        "exact_global_optimum_claim": false,
+        "external_incumbent_substituted": false,
+        "exact_certificate": {
+          "status": "CERTIFIED_LOWER_BOUND",
+          "stage": null,
+          "lower_bound": "89305539793542554823848003373759814314980879303792249486127549713/205688069665150755269371147819668813122841983204197482918576128",
+          "reason": null
+        }
+      },
+      "resources": {
+        "cpu_s": 6.203234999999999,
+        "peak_rss_bytes": 168902656
+      }
+    },
+    {
+      "id": "MIQP",
+      "status": "DELIVERED",
+      "native_allowance_s": 300,
+      "stage_elapsed_s": 160.21392841637135,
+      "stage_clock_scope": "through complete gzip packet serialization",
+      "packet": "MIQP.json.gz",
+      "summary": {
+        "raw_status": 2,
+        "solution_count": 2,
+        "optimize_called": true,
+        "inclusive_elapsed_s": 159.18775162566453,
+        "raw_objective": 441.5329120512919,
+        "raw_bound": 441.5329120512918,
+        "raw_gap": 0.0,
+        "native_start_acceptance": "UNKNOWN",
+        "exact_global_optimum_claim": false,
+        "external_incumbent_substituted": false,
+        "replay": {
+          "strict_pass": false,
+          "physical_strict_pass": false,
+          "violations": 80,
+          "classification": "strict-candidate-replay-failure",
+          "certified_physical_upper": null
+        }
+      },
+      "resources": {
+        "cpu_s": 164.127791,
+        "peak_rss_bytes": 228196352
+      }
+    },
+    {
+      "id": "PRICE_LP",
+      "status": "DELIVERED",
+      "native_allowance_s": 60,
+      "stage_elapsed_s": 5.494363999925554,
+      "stage_clock_scope": "through complete gzip packet serialization",
+      "packet": "PRICE_LP.json.gz",
+      "summary": {
+        "raw_status": 2,
+        "solution_count": 1,
+        "optimize_called": true,
+        "inclusive_elapsed_s": 2.622838541865349,
+        "raw_objective": 456.12676089636557,
+        "raw_bound": 456.12676089636557,
+        "raw_gap": null,
+        "native_start_acceptance": "UNKNOWN",
+        "exact_global_optimum_claim": false,
+        "external_incumbent_substituted": false,
+        "exact_certificate": {
+          "status": "CERTIFIED_LOWER_BOUND",
+          "stage": null,
+          "lower_bound": "148021596730186541191215140204622629/324518553658426726783156020576256",
+          "reason": null
+        }
+      },
+      "resources": {
+        "cpu_s": 169.545873,
+        "peak_rss_bytes": 228196352
+      }
+    },
+    {
+      "id": "PRICE_MIP",
+      "status": "DELIVERED",
+      "native_allowance_s": 240,
+      "stage_elapsed_s": 4.3138485830277205,
+      "stage_clock_scope": "through complete gzip packet serialization",
+      "packet": "PRICE_MIP.json.gz",
+      "summary": {
+        "raw_status": 2,
+        "solution_count": 5,
+        "optimize_called": true,
+        "inclusive_elapsed_s": 2.887598874978721,
+        "raw_objective": 459.67995879476524,
+        "raw_bound": 459.67995879476524,
+        "raw_gap": 0.0,
+        "native_start_acceptance": "UNKNOWN",
+        "exact_global_optimum_claim": false,
+        "external_incumbent_substituted": false,
+        "replay": {
+          "strict_pass": false,
+          "physical_strict_pass": false,
+          "violations": 78,
+          "classification": "strict-candidate-replay-failure",
+          "certified_physical_upper": null
+        }
+      },
+      "resources": {
+        "cpu_s": 173.549274,
+        "peak_rss_bytes": 284459008
+      }
+    }
+  ],
+  "failures": [],
+  "resources": {
+    "cpu_s": 173.576597,
+    "peak_rss_bytes": 284459008
+  },
+  "elapsed_s": 176.462044457905,
+  "resource_pass": true,
+  "fixed_prices_source": "separately exact-certified external upper; never reset by this campaign",
+  "scientific_scope": "classical native proposals plus independently reconstructed exact lower bounds and strict integer replay",
+  "exact_public_optimum_or_support_claim": false,
+  "compressed_detail_policy": "native candidates, ledgers and certificates only inside stage gzip packets; no repeated raw exports"
+}

@@ -1,0 +1,6 @@
+diff --git a/ml-prediction-20261017/research-20261027/conventional_recovery_pilot/worker.py b/ml-prediction-20261017/research-20261027/conventional_recovery_pilot/worker.py
+--- a/ml-prediction-20261017/research-20261027/conventional_recovery_pilot/worker.py
++++ b/ml-prediction-20261017/research-20261027/conventional_recovery_pilot/worker.py
+@@ -338 +338 @@
+-            stage='union_native'; gp=sys.modules['gurobipy']; model=gp.Model('complete_union_grid_selection')
++            stage='union_native'; import gurobipy as gp; model=gp.Model('complete_union_grid_selection')

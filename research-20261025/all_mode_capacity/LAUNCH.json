@@ -1,0 +1,43 @@
+{
+  "policy": "all-declared-mode-fixed-N-ideal-capacity-outer-cuts-v1",
+  "mode": "FROZEN",
+  "review_disposition": "PASS",
+  "workdir": "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017",
+  "tracking_prefix": {
+    "closed_displayed_cpu_s": 19811.15,
+    "closed_elapsed_sum_s": 20406.13,
+    "retained_tracking_cpu_s": 19811.37,
+    "legacy_conditional_guard_s_separate": 2546.091499549272,
+    "historical_actual_review_cpu": "UNKNOWN",
+    "new_allowance_cpu_s": 30,
+    "prospective_retained_reservation_end_s": 19841.37,
+    "scope": "Tracking process sums, not exact whole-session CPU; no prior package reopened"
+  },
+  "input_version_provenance": "resource_recourse closed source b9bb166e and receipt backup 13de4822; literal spec bytes must match their external receipt spec_sha256 in this single metered read",
+  "reserve_at_opening_assumed": true,
+  "budgets": {
+    "body_cpu_s": 25,
+    "body_wall_s": 50,
+    "total_cpu_s": 30,
+    "total_wall_s": 60,
+    "publication_cpu_reserve_s": 5,
+    "publication_wall_reserve_s": 10
+  },
+  "inputs": [
+    "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/research-20261025/resource_recourse/attempt01/001-acquisition/external-receipt.json",
+    "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/research-20261025/resource_recourse/attempt01/001-acquisition/spec.json",
+    "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/research-20261025/resource_recourse/attempt01/004-acquisition/external-receipt.json",
+    "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/research-20261025/resource_recourse/attempt01/004-acquisition/spec.json",
+    "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/research-20261025/resource_recourse/attempt01/005-acquisition/external-receipt.json",
+    "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/research-20261025/resource_recourse/attempt01/005-acquisition/spec.json",
+    "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/research-20261025/resource_recourse/attempt01/008-acquisition/external-receipt.json",
+    "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/research-20261025/resource_recourse/attempt01/008-acquisition/spec.json"
+  ],
+  "planned": {"groups": 4, "paired_controls": 8, "grid_levels_kw": [90, 45]},
+  "separate_new_package": true,
+  "closed_resource_packages_reopened": false,
+  "command": "/usr/bin/time -p -o research-20261025/all_mode_capacity/process-time.txt .venv-local/bin/python -I -S -B research-20261025/all_mode_capacity/run.py > research-20261025/all_mode_capacity/stdout.txt 2> research-20261025/all_mode_capacity/stderr.txt",
+  "automatic_retry": false,
+  "native_or_unrestricted_EVSP_certificate": false,
+  "new_performance_gate": false
+}

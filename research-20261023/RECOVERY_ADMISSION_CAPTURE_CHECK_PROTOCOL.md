@@ -1,0 +1,19 @@
+# Admission and capture repair: prospective solver-free check
+
+24 October 2026 UTC. This bounded package implements and tests the timing/evidence repair diagnosed in `RECOVERY_PHASE1_V3_TIMING_DIAGNOSIS.md`. It authorizes no native rerun, timetable generation, model training, cluster use or comparative screen. All failed v1/v2/v3 results, late candidates, locks and spent time remain immutable. The full native qualification is still incomplete.
+
+Carry **543.0194821688248 charged seconds** from `recovery-phase1-v3/accounting.json`. Reserve **20 seconds** for implementation preparation, review, hashing, documentation and closeout. Pre-check charge is **563.0194821688248 seconds**. Authorize one exclusive `admission-capture-checks/attempt01`, with one single-thread worker, 5 GiB process-tree RSS, 30 seconds work and at most 2.5 seconds cleanup. No automatic retry. Keep the shared 900-second hard ceiling, 720-second dispatch stop and 180-second shutdown reserve. Charge maximum allocation/observed children CPU plus supervisor CPU; child CPU includes tests and monitor commands without double counting. Preserve failed/interrupted attempts and source drift. Administration/elapsed allowances are conservative charges, not measured native utilization.
+
+Runtime change is confined to `src/experiments/recovery_qualification.py`. Guard the control's lift immediately after planner return if its physical cutoff has elapsed, retain the post-lift guard, and record explicit anchored stage timestamps. A late candidate cannot become a fallback. No physical/native model, planner core, replay rule, integer cutoff or outer deadline changes.
+
+Persist each complete incumbent capture once as an exclusive durable flat artifact, then forward compact checked references to accumulated events and result receipts. Bind references to lock/attempt/task/case/phase/round, confined artifact identity, byte hash/length and capture schema. Prefix/full round zero cannot collide. Keep complete raw evidence and prior durable fallback. Missing, truncated, corrupt or mismatched evidence and sink failures fail closed. Do not repeatedly reparse/reserialize the complete payload at each forwarding step. Include all capture, integrity verification and materialization costs in the same clock. Passing a lossless-reference test does not establish a native speedup.
+
+Exact check argv:
+
+```sh
+.venv-local/bin/python -m pytest -q src/tests/test_recovery_qualification.py src/tests/test_recovery_supervision_repair.py src/tests/test_recovery_integer_cutoff.py src/tests/test_recovery_admission_capture.py
+```
+
+Native imports are blocked. Existing 86 runner/supervision/cutoff cases are retained because the changed sink/control/materialization paths interact with them. Focused new tests use fake clocks/planners/lifts and deterministic complete capture payloads; no solver or training fixture is needed. Test real control and sink/forward/materialization paths, not only helpers: pre/exact/post-cutoff behavior, valid retained witness, timestamp meaning, lossless single capture, round/phase separation, reference corruption/truncation/identity rejection and sink failure. Prior unrelated physical/model suites are not repeated.
+
+`run_admission_capture_checks.py` records source/prior-evidence hashes, exact argv, resources, output digests and terminal owned-process cleanup. Review stable source/test/wrapper/protocol before running; keep all bound sources unchanged during execution. Preserve a failure without retry. A pass would qualify this engineering repair only; it does not supersede failed native gates or authorize another native launch. Remaining dispatch capacity is limited: any later native qualification needs an explicit feasible prospective design, evidence-reuse limits and resource accounting, or a resolved budget change. Do not silently reset the cumulative allowance or execute an eight-task repeat that cannot fit.

@@ -1,0 +1,15 @@
+# ICML research follow-through handoff
+
+Human request on27 October: assess a mid/late-January ICML target, why the project would be rejected, what research is missing, and follow through. This explicitly reopens focused contribution/novelty/scientific-design work; it does not erase old scoped negatives or authorize implicit reruns.
+
+Read README.md, SCIENTIFIC_TARGET.md, NEXT_EXPERIMENT.md, RESULTS.md and FINAL_RESOURCE_RECEIPT.json. Closest-art comparison is PRIOR_ART.md. One integrated design review passed with limits; parent reviewed the literal source/derivation before its one metered run.
+
+Current package source4a20f8da41c81f75b3a68527371140850606c5e1/control7378c728. Literal check CLOSED_PASS, process exited0 without a persistent session or child;213 assertions,0failures, no native solve. No numerical worker remains. Bounded GPT-6.1 Sol tasks icml_nearest_prior_art, icml_evidence_review and icml_integer_target completed. Do not rerun this check, hash it again or reinterpret it as physical/learning evidence.
+
+New actual progress: closest literature rules out generic integer-aware/set-selection novelty; standard direct joint completion exactly represents the fixed-candidate augmentation comparator; the literal example verifies complementarity plus zero/positive/negative-RC limits; source shows partition-aware diving was disabled in the old pilot and existing IPColGen adaptation is covering-only. The target is still conditional: expensive valuable residual completion after competent classical methods, with useful multiple alternatives. A possible ICML contribution is not yet demonstrated.
+
+Next practical action if continuing this research: implement/qualify the thin supported partition-aware classical recovery and joint-completion comparison, then freeze a genuinely new prospectively justified development cohort and exact metered transport manifest. Do not rerun old failed cells, weaken partition to covering, tune scarcity/size/quotes to force opportunity, copy/edit sibling solver, or start fitting because January is approaching. Resolve proposed promotion-rule details and candidate acquisition/information parity before outcomes. The direct joint master is a required baseline; a reduced-cost ranker alone is inadequate. Missing physical controls/source/clock qualification remain real work, not a pending request for tiny resource permission.
+
+Internal submission-ready target15January2027, official2027deadline unconfirmed. Milestones10Nov/24Nov/15Dec/5Jan/15Jan in README. The hourly automation was deleted in the prior turn and has not been restarted. No new schedule or later autonomous run is implied; no new GoogleDoc append for this mathematical/design package.
+
+New process charge .04displayedCPU/.28wall, retained.06CPU; global displayed20267.71CPU/20889.24elapsed-sum, retained20268.40CPU. Static/tool/Git/review CPU unknown, not zero; existing separatelegacy2546.091499549272 remains. All old failures/denominators/charges and sealed-data/cluster/sibling limits persist. Meaningful milestone is backed up to origin/codex/ml-prediction-20261017 with Nathan Cho as explicit author and committer.

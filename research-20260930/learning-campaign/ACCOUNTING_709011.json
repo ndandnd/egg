@@ -1,0 +1,31 @@
+{
+  "job_id": "709011",
+  "recorded_at_utc": "2026-09-30T18:08:20.787142+00:00",
+  "state": "COMPLETED",
+  "exit_code": "0:0",
+  "elapsed_seconds": 155,
+  "allocated_cpus": 2,
+  "requested_cpus_per_task": 1,
+  "requested_memory_gb": 8,
+  "batch_max_rss_kib": 184868,
+  "node": "snavely-cpu-16",
+  "allocation_cpu_seconds": 310,
+  "native_threads_requested": 1,
+  "wrapper_elapsed_seconds": 149,
+  "wrapper_returncode": 0,
+  "wrapper_receipt_present": true,
+  "summary_present": true,
+  "catalog_rows": 23,
+  "feasible_catalog_rows": 23,
+  "receipted_child_seconds": 107.67477200645953,
+  "parent_job_id": "703461",
+  "parent_allocation_seconds": 713,
+  "parent_completed_cells": 40,
+  "parent_unreceipted_censors": 1,
+  "sacct_raw": [
+    "709011|egg-physical-continuation|COMPLETED|0:0|155|2|8G||snavely-cpu-16",
+    "709011.batch|batch|COMPLETED|0:0|155|2||184868K|snavely-cpu-16",
+    "709011.extern|extern|COMPLETED|0:0|155|2|||snavely-cpu-16"
+  ],
+  "note": "Slurm allocated two logical CPUs despite the one-CPU request. Native and numerical-library thread requests remained one. Allocation, wrapper and child times are separate measurements; do not add nested times."
+}

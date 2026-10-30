@@ -1,0 +1,9 @@
+# Graph budget v8 recovery1 review
+
+**Verdict: no blocker in the recovery wrapper or prospective controls.** The failure diagnosis matches the preserved evidence: all 12 tasks stopped during system-profile startup with `INCLUDE: unbound variable`; their wrapper receipts record guard-phase exit 1 and no native probe. The new wrapper temporarily disables nounset only while sourcing the site profile, immediately restores strict shell mode, and leaves the early EXIT receipt installed. It preserves profile, probe, timeout, and training failure codes, while an incomplete wrapper cannot report success.
+
+The recovery uses a distinct result root and writes an exclusive per-task attempt marker before the probe. Existing task output, markers, or receipts prevent reuse. The unchanged v8 trainer supports the forwarded `--output-root` and rejects existing task output. Original training/scientific source hashes are unchanged; the failed attempt and its 12 allocated CPU-seconds remain part of cumulative accounting.
+
+The prospective recovery envelope is 12 tasks, at most four concurrent, one requested CPU, 8 GB, and one hour per task: at most 12 fresh requested CPU-hours, plus the original 12 accounted CPU-seconds. The 3,500-second child allowance includes startup, guards, and native probes. Actual allocations and runtime evidence still need collection, and every task must pass the existing native probe and scientific anchor/replay gates before result admission.
+
+Focused checks passed: `PYTHONPATH=src python3 -m pytest -q src/tests/test_physical_route_graph_budget_v8_recovery1.py` (9 passed) and `bash -n src/cluster/physical_route_graph_budget_v8_recovery1.sbatch`. The fixtures cover optional profile variables, restored strict mode, guard/profile/probe/training failures, exit-code preservation, and retry refusal. No production probe, fit, or submission ran as part of this review.

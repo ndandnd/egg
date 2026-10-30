@@ -1,0 +1,7 @@
+# Failure boundary
+
+The complete compact owner receipt records four attempted/reaped processes and36unattempted states. F/N/D on62001/12 qualified their physical endpoints and complete new journals. FirstUN failed at union_native with KeyError:'gurobipy'. The directly following gp.Model call and optimize call were not reached. Own F fallback was retained in the worker packet, but fatal_contract excludes that worker endpoint from administrative qualification; the existing independent F fleet remains operationally available separately.
+
+Bootstrap imports the source runner; Gurobi is imported lazily when runner.run executes. F/N/D execute run in their own fresh processes, UN/UD do not. Their module registries are independent. Therefore sys.modules['gurobipy'] is not a valid implicit prerequisite in the union path. The source-only explicit-import repair uses the same pattern as the old independent cache path. No route, physical constraint, model row, budget, objective, cohort, bank selection or solver implementation changes are needed to address this particular KeyError.
+
+No raw banks were reopened for diagnosis. No oldsource file changed, no new backend probe or solve occurred, and no automatic retry was made. Source sufficiency for this registry error is not proof of repaired runtime or full campaign success. Original admissions/costs/failures remain paid and immutable. No empirical conclusion about classical recovery or neural benefit follows.

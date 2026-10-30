@@ -1,0 +1,52 @@
+{
+  "candidate_hashes": {
+    "NOTE.md": "6c0b0ac69e519e3e8251e12c23cbcb235a04f0a985496e9838d00eadaf56a700",
+    "RESULT.json": "7f8bc70ece82c2569c83eea90a4a046f36d161d1f0f9a993c6b1a04a6ba70bac",
+    "check_uniform_bound.py": "443651df15a30fb9c1d974d8e533128035df62a5e6f3e8e0808f4aee399dcf4e"
+  },
+  "case_identity": "1917409b43c0433b4ac2504b0b28c1bb2aa63a033c79ba1a4057418b63874ed7",
+  "convex_mixture_logic": "all physical plans satisfy K*f+p*E >= pricing_lower; linearity preserves it under mixtures, Fenchel applies to the averaged 30-load vector",
+  "independent_verifier_sha256": "01ad4bdcbb84bf5dc8a52fd92cfc03994986ad9b39054512bca691a3aa4e5c3e",
+  "independently_recomputed": {
+    "CH_lower": "37212685765349361762366900450676559743312987906100791/87690098239854175092221089962976981179355952578560",
+    "Emin": "576810456487633549/562949953421312",
+    "Eservice": "250264333071608593/281474976710656",
+    "Lflow": "4106419645886056876377559228024553/10141204801825835211973625643008",
+    "a": "3602879701896397/18014398509481984",
+    "b": "5124095576030431/4611686018427387904",
+    "conjugate": "1704839390233848381099134603050002902248189592587831/87690098239854175092221089962976981179355952578560",
+    "pricing_lower": "19458762577791605071733017526863281322780588749344311/43845049119927087546110544981488490589677976289280",
+    "three_bus_margin": "2970810917322600962115942763650908954120237428078543/43845049119927087546110544981488490589677976289280",
+    "uniform_price": "18532522483900860236424071843325139/77884452878022414427957444938301440"
+  },
+  "method": "stdlib JSON/Fraction/hashlib and pinned git blob reads; no author checker or optimizer",
+  "one_bus": {
+    "battery_exact": "400",
+    "charging_modes_only_depot_or_pullin": true,
+    "forced_unique_direct_transitions": 36,
+    "service_energy_exact": "250264333071608593/281474976710656"
+  },
+  "pinned_input_sha256": {
+    "doc/SISTIG_ONE_BUS_OBSTRUCTION_20260927.md": "a2c4badf085d9d67c205170f8b7460e7efc1b40ac8b87aab4aa846c1815d8bdb",
+    "research-20260927/agent-notes/sistig-one-bus-postpilot-review/REVIEW.md": "7b1d55d1d20fce676ded6aaeb6ae0965cd70fc464581290ad792f2056bce53a2",
+    "result/sistig_cardinality_flow/20260927-attempt1/depot_15.json": "01a818211e68be38093b478308d0780d752aeac150b7959d7bd785552d6bdb39",
+    "result/sistig_cardinality_flow/20260927-attempt1/frozen.json": "bce2293080c3d19d05c37aa8c6bb4a285f1afe59fbde161fa6a6b6505784d103",
+    "result/sistig_cardinality_flow/20260927-attempt1/review/REVIEW.md": "60604b3467c17ec1c833ef56a2634a7e091d6cb677aaea4ec3c684dfdec15c94",
+    "result/sistig_cardinality_flow/20260927-attempt1/review/audit-report.json": "f4d6acdf46bd3cd6839fc727c9786b63c2b63dbb4fb507197c7336a3f3f6260f",
+    "result/sistig_pricing/20260927-grb-job557543-attempt1/frozen.json": "35ce1e07876ca62ee366e598fec884556f8f9ea03e46230f19d5999f087e660b"
+  },
+  "pinned_source_blob_sha256": {
+    "doc/SISTIG_NONLINEAR_PILOT_PROTOCOL_20260927.md": "5fe33d06ddf1a52b611013932107bd2a8583cae02b7f3d9ffb0394a53ec0f326",
+    "src/egglab/native_recharge.py": "0067123a7f71cc6e9c89e1262cdcbd612cafdcfc252e35bcfca7f1f54c45d0f3",
+    "src/experiments/sistig_native_case.py": "f47a7a926d102f948d73e6d450f25a46fe7ad84fc93e4ff7e877da76ffe0e3c9",
+    "src/experiments/sistig_nonlinear_pilot.py": "36195617aa3b5b3955bea3f7fe04011a59d0c8d5458f20ad454a80944a7cb2de"
+  },
+  "separate_exact_witness_nonlinear_upper": {
+    "objective_decimal": "512.7694256264009",
+    "objective_exact": "749413355126211649563801319041034658846056466667585/1461501637330902918203684832716283019655932542976",
+    "scope": "CH <= D <= this exact ideal feasible-plan value; no D-CH gap or optimum claim",
+    "witness_sha256": "fafb2e2721a283b0ef43b94357c497710ad113c79f85427a8aabc4211b8aa325"
+  },
+  "source_commit": "80eb69544f568a7ed346f0d603004a10f61c481a",
+  "verdict": "PASS exact ideal stored-input uniform-price full-hull lower bound"
+}

@@ -1,0 +1,14 @@
+{
+ "status":"DRAFT","run_id":"attempt01","source_revision":null,
+ "assigned":["Q0","PRICE_LP","PRICE_MIP"],
+ "package_cpu_s":600,"package_wall_s":900,"worker_cpu_s":550,"worker_wall_s":780,
+ "worker_self_cpu_limit_s":530,"observed_rss_bytes":5368709120,
+ "native_seconds":{"PRICE_LP":60,"PRICE_MIP":180},
+ "complete_stage_seconds":{"PRICE_LP":150,"PRICE_MIP":270},
+ "case_revision":"253c1e29295e766b3889fc8f5c28d9808e00b3d6",
+ "packet_revision":"0cb3c54de6e8e5c391afb37bcbb68ad3a51925ee",
+ "transfer_authority_revision":"3cbb8c9d965e9222ef8a98191bf775b4925382a1",
+ "frozen_native_source":"3278d50f8323618bd36809b1bbb1a0da081e23ff",
+ "command":["env","OMP_NUM_THREADS=1","OPENBLAS_NUM_THREADS=1","MKL_NUM_THREADS=1","VECLIB_MAXIMUM_THREADS=1","NUMEXPR_NUM_THREADS=1","/usr/bin/time","-p",".venv-local/bin/python","-I","-B","research-20261029/public_certified_price/run.py","--run-id","attempt01"],
+ "authority":"DRAFT only; parent reviews source and freezes separate source/control/command before any dispatch. No computation performed."
+}

@@ -1,0 +1,75 @@
+\documentclass[11pt]{article}
+\usepackage[letterpaper,margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{graphicx,booktabs,array,tabularx}
+\usepackage{natbib,microtype,placeins,caption}
+\usepackage[hidelinks]{hyperref}
+\captionsetup{font=small,labelfont=bf}
+\setlength{\parskip}{0.25em}
+\setlength{\emergencystretch}{1.5em}
+\renewcommand{\arraystretch}{1.15}
+\clubpenalty=10000
+\widowpenalty=10000
+\displaywidowpenalty=10000
+\brokenpenalty=10000
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}{Proposition}
+\newtheorem{lemma}{Lemma}
+\newtheorem{definition}{Definition}
+\newtheorem{corollary}{Corollary}
+\newcommand{\Fleet}{\mathcal X}
+\newcommand{\Loads}{\mathcal L}
+\newcommand{\R}{\mathbb R}
+\let\originalsection\section
+\renewcommand{\section}{\FloatBarrier\originalsection}
+\let\originalsubsection\subsection
+\renewcommand{\subsection}{\FloatBarrier\originalsubsection}
+\title{Marginal-price support of electric-bus fleets\\with full battery replenishment}
+\author{}
+\date{Research draft 0.10 for coauthor discussion --- 29 September 2026}
+\begin{document}
+\maketitle
+\begin{abstract}
+Electric-bus charging combines continuous energy decisions with indivisible service assignments. We ask whether a feasible fleet schedule minimizes its bill at the marginal electricity prices produced by its own load. Fully replenished two-service examples show that it need not, under both quadratic supply and hourly generation with ramp limits. When dispatch admits several prices, the support test considers the whole price set. Replication can drive the planning gap to zero while leaving a whole-fleet operator with a positive incentive to change its schedule; individual incentives vanish with separately reserved service pairs. Column generation computes the convexified planning bound. A separate price-adjustment run approaches that bound while fleet schedules keep switching, although their weighted averages converge. For two depot variants of one public timetable, analytical energy bounds improve computational bounds but leave support at the optimal fleet unresolved. The limiting computation remains the search over complete physical fleets.
+\end{abstract}
+\noindent\textbf{Keywords:} electric-bus scheduling; convex-hull pricing; marginal tariffs; charging coordination; nonconvex scheduling.
+
+\section{Introduction}
+An electric-bus operator must cover mandatory passenger services while assigning vehicles and scheduling charging. A tariff can shift charging toward cheaper periods, but a fleet large enough to affect aggregate electricity demand also changes the marginal cost behind that tariff. Even with continuously adjustable charging, its service assignments remain indivisible. The resulting question is whether a physically realizable fleet schedule minimizes the operator's bill when evaluated at the marginal prices associated with that schedule's load.
+
+We study complete fleet plans, each including all services, vehicle movements, charging and operating cost. Their convex hull gives a lower bound on planning cost, but a point in that hull is usually not an executable daily schedule. Supply cost at the average load also differs from average supply cost across physical schedules. A cheap mixture of plans therefore need not describe a cheap schedule that the operator can actually run.
+
+The contribution has two parts. First, a small continuous-charging construction makes the obstruction explicit under full terminal replenishment. A perturbation permits a positive reserve, charging losses and one finite connector. A replication calculation then separates an aggregate planning gap from the incentives of a whole-fleet operator and of participants with individually reserved resources. A convex hourly generator model adds a separate ramp-constrained example and a support test allowing nonunique dispatch prices. Dual decomposition is interpreted through the fleet hull, with explicit limits on convergence claims. These are application-specific results within established nonconvex pricing theory. Second, an energy argument strengthens the public timetable's lower bounds, and existing computations are organized around physical planning cost, hull cost and own-price regret. This makes the computational evidence answer the same question as the analytical model.
+
+The computations cover small synthetic examples and two depot variants of one public timetable. The public bounds do not yet determine whether its optimal fleet has a positive gap. A separate supplement reports the exploratory solver comparisons, including unsuccessful runs. The present draft establishes the mechanism; its practical size and prevalence require further timetable evidence.
+
+\input{related_work}
+\input{model_theory}
+\input{exact_results}
+\input{generation_dispatch}
+\input{public_case}
+\input{computational_support}
+
+\section{Implications and limits}
+The analytical and computational parts answer complementary questions. The construction proves that continuous charging and full replenishment do not remove the possibility of a marginal-price support failure. The experiments measure how difficult it is to obtain informative full-fleet bounds on declared instances. An unresolved public interval neither confirms the analytical mechanism on that timetable nor refutes it. Likewise, a strong restricted-master solution says little about the cost of discovering an ungenerated physical fleet unless global pricing has supplied a corresponding bound.
+
+The analytical energy floor is a baseline for bounding this model. Strengthening physical pricing remains useful for narrowing global intervals. The underlying two-bus energy floor and fleet-cardinality inequality also hold for the physical price-response problem at suitable positive prices; their use in pricing must preserve the assumptions that produced them. The nonlinear hull objective bound itself does not directly constrain every linear price-response objective.
+
+The exploratory comparisons in the development supplement are sensitive to computational limits. On a three-service case, cold runs stopped at call or arithmetic limits well before their wall-time allowance; public solver-start comparisons used one seed and did not establish whether submitted starts were accepted. Future experiments should size limits, log start acceptance, compare time to common solution quality across repeated seeds, and include independent timetables. Retained complete fleets and nearest-neighbor retrieval should precede learned proposals, with direct proposal quality, physical repair and global verification reported separately. All variants of a base timetable must stay in one data group, with independent test timetables reserved before training.
+
+The two price rules serve different purposes. The own-load tariff reset cycles between two physical responses. Dual coordination instead recovers a convexified cost and load: in the quadratic example their weighted averages converge, while the physical bus count keeps switching. These are results for the specified rules and model, not universal behavior of atomic fleets. A positive duality gap excludes balanced optimal supply and physical fleet responses at a common price. The generator extension uses synthetic hourly offers, and its ramp control does not establish how often this mechanism occurs in operating systems.
+
+The physical model abstracts from stochastic delays, battery degradation, temperature-dependent consumption, nonlinear charging taper and operational switching times. Public service and travel inputs are combined with declared energy and economic assumptions; the results are not estimates of savings for the source operator. Resource rights also delimit the economic interpretation. A whole-fleet price-taking deviation, an individually reserved-pair deviation and a strategic operator anticipating its own price impact are different optimization problems. Conclusions must follow the chosen participant and settlement model.
+
+\section{Conclusion}
+Convex electricity supply need not support an indivisible electric-bus fleet at its own marginal prices, even with continuous charging and full terminal replenishment. The obstruction persists in an explicit hourly generator model with ramps. For nonsmooth supply, existence of support concerns an admissible price set, not an arbitrary solver-selected price. Replication can make the planning gap small without making the incentive of a whole-fleet operator small along every subsequence, while incentives for reserved pairs vanish. Analytical cardinality and energy bounds strengthen the public computations. Joint physical, hull and regret reporting leaves public price support unresolved and separates incumbent incentives from optimal-fleet incentives. Establishing the mechanism's practical prevalence and an effective computational method requires further independent timetable evidence.
+
+\section*{Data and reproducibility}
+The \href{https://github.com/ndandnd/egg}{research repository} contains the analytical constructions, declared public-data transformation, experiment protocols, complete outcome tables including unsuccessful attempts, and figure-generation sources. A companion source map links the manuscript's claims to reviewed evidence and distinguishes exact ideal-model calculations from tolerance-qualified native results. All cases reported here are development cases. No private operational data or reserved evaluation outcomes are used. Public table revisions retain archived results. The new generation example combines exact affine-branch and rational dual certificates with small LP checks; the dual-coordination replay uses closed-form fleet and supply responses. Its full trace distinguishes current from best-so-far dual bounds. No new timetable-scale optimization is claimed. The separate development supplement retains earlier computational comparisons and failures.
+
+\appendix
+\input{proof_appendix}
+\FloatBarrier
+\bibliographystyle{plainnat}
+\bibliography{references}
+\end{document}

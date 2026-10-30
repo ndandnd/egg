@@ -1,0 +1,71 @@
+{
+  "policy": "recovery-phase1-runner-v1",
+  "passed": false,
+  "counts": {
+    "submitted": 0,
+    "accepted": 0,
+    "rejected": 0,
+    "unknown": 0,
+    "native_processing": 0,
+    "fallback": 0,
+    "fault_exercised": 0,
+    "terminal": 1,
+    "planned": 8,
+    "invalid_witnesses": 0,
+    "mapping_violations": 0,
+    "bound_scope_violations": 0,
+    "censored": 1
+  },
+  "rows": [
+    {
+      "task": {
+        "base_id": 50997,
+        "trips": 40,
+        "arm": "static",
+        "seed": 17,
+        "seconds": 30.0,
+        "fault": null,
+        "id": "584067521b4af0cb3da0"
+      },
+      "issues": [
+        "engineering_failure",
+        "censored_endpoint"
+      ],
+      "endpoint_wall_s": null,
+      "censored": true,
+      "charged_cpu_s": 19.080070666968822,
+      "rss_bytes": 208994304,
+      "prefix_bill_exact": null,
+      "fallback_bill_exact": null,
+      "final_bill_exact": null,
+      "selected_witness_sha256": null,
+      "bound_provenance": [],
+      "native": {
+        "submitted": 0,
+        "classified": [],
+        "unattributed_log_matches": []
+      }
+    }
+  ],
+  "unresolved": [
+    "584067521b4af0cb3da0:engineering_failure",
+    "584067521b4af0cb3da0:censored_endpoint",
+    "undispatched:27133bea236c6b35ac75",
+    "undispatched:61cb90ed7e02414d15b8",
+    "undispatched:27f30de636e0d9047cee",
+    "undispatched:de8d8da71bc8d2dd1d5d",
+    "undispatched:85710efee4db820ff4bc",
+    "undispatched:d3de154792c114e78483",
+    "undispatched:00ab4af02ac326472cf4",
+    "normal_recovery_native_partial_start_processing_unobserved",
+    "durable_fallback_start_fault_path_unexercised"
+  ],
+  "cumulative_charged_cpu_s": 169.35546016793765,
+  "hard_ceiling_s": 900.0,
+  "dispatch_stop_s": 720.0,
+  "check_evidence": {
+    "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/research-20261023/runner-checks/attempt02/attempt.json": "0abdf32a535dd36b314c708fe4c56f2e0636e7d1e9a2fcaf151f2839fda60a4c",
+    "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/research-20261023/runner-checks/attempt02/result.json": "76b24601243b2cc610cf71a1209a8eba438b6e34c36267f5d930a9518ead1411"
+  },
+  "claim": "engineering qualification only; no ranking inference"
+}

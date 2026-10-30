@@ -1,0 +1,13 @@
+## Completed ordered solver comparison — 28 September 2026
+
+The 32-calculation development experiment finished in 48 minutes. It produced 11 numerical certifications, 18 results with open bounds at work limits, and three failed calculations. All attempts and their spent time are retained. The four methods compare cold solving, retained fleet plans, a numerical restricted master, and that master with reused physical pricing bounds.
+
+The strongest positive result is bound reuse. Within the two cache-enabled public runs, inherited pricing evidence strengthened the lower bound by 98.82 and 69.83 cost units relative to fresh target pricing. Their final outward-rounded numerical cost intervals were [405.83, 471.52] and [420.45, 491.46], with about 352 seconds paid across the two markets in each case. These intervals remain open; they bound a convex mixture of whole-fleet plans, and do not establish public optimality or an equal-quality speedup. Exact replay checks stored numerical values; native lower bounds retain solver-tolerance qualifications. Both depots belong to one Hildenbrand timetable, so this remains development evidence.
+
+The numerical master stayed within the configured arithmetic limit in the completed public cache runs. Both public targets without the bound cache nevertheless failed, as did one cold target. The physical solver returned no new plan, and the wrapper incorrectly treated the absent plan as an extraction-policy error. The saved evidence does not show an invalid completed physical witness. These attempts remain failed in the reported comparison.
+
+The next package will repair that no-plan return path and check it against the observed failure shape, preserving earlier valid evidence without inventing a new certificate. Then we will assess supplying a known feasible fleet as a starting solution for physical pricing before expanding timetables or claiming benefits from retrieval or machine learning. Python-MIP provides an initial-solution interface; whether it helps this formulation remains an untested hypothesis.
+
+[Python-MIP initial-solution API](https://python-mip.readthedocs.io/en/latest/classes.html).
+
+[Reviewed results and complete tables](https://github.com/ndandnd/egg/blob/5e53dc81ed4a05711e76fa647f23a9f31afae81a/research-20260928/solver-baseline-comparison/results-attempt1/README.md) · [Paid computation time](https://github.com/ndandnd/egg/blob/5e53dc81ed4a05711e76fa647f23a9f31afae81a/research-20260928/solver-baseline-comparison/results-attempt1/analysis/paid_two_state_time.png) · [Public-case bounds](https://github.com/ndandnd/egg/blob/5e53dc81ed4a05711e76fa647f23a9f31afae81a/research-20260928/solver-baseline-comparison/results-attempt1/analysis/public_state1_bounds.png).

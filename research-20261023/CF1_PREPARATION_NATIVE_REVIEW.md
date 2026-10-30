@@ -1,0 +1,17 @@
+# Single-CF1 native configuration review
+
+Static gate: clear for **one focused source-bound check**, selecting only `test_cf1_preparation_preflight.py` (**14 cases in 8 functions**). No imports, tests, native calls, fixture contents, models, or assets were executed/read by this reviewer. Historical test modules supply symbolic fixture definitions only; their matrices are not selected.
+
+The new `experiments.cf1_preparation_preflight.revision2()` installs the explicit `cf1-preparation-native-v2` policy around the existing adapter/worker. Its sole task is engineering base50999/80, CF1, seed17, day, 60 seconds, with `protocol_revision=2` incorporated before hashing. The prospective design records task ID `ca0fa61075b9c6d4e16c`. No recovery suffix, new cohort, model, or automatic retry is included.
+
+The configuration preserves the physical/ACK endpoint60, stop61 and outer62.5, existing native clocks, once-frozen charging window, capture/physical checks and acceptance evidence. Defaults remain the old v1 values outside the context. The context holds the original supervision lock, permits a single owner-thread delegation, rejects nested use, and restores policy, task functions, checked-source function, argv prefix and locks on failure. The subprocess command resolves the new shim's explicit `worker` subcommand, which delegates under the same bindings.
+
+Budget arithmetic matches the prospective design: carry **1416.3727097992353**, ADMIN0, extra **165**, package end **1581.3727097992353**. Planning allocations15 check +10 freeze +62.5 worker +45 supervision +30 analysis/finalization total162.5, leaving2.5 within the package. The combined30 reserve is used in freeze admission/receipt and active cleanup gates, and alongside45 supervision at the next-worker gate. Actual cumulative charges remain authoritative; these allocations are not refunds or authorization for extra work. Global1800/1620/180 and one worker/thread5GiB remain unchanged. The check's own prospective limits are10 work/12.5 outer, within15 inclusive planning.
+
+Receipt convention remains inherited: phase `comparison_native_freeze`, with the new policy. `charged_cpu_s` is allocation plus supervisor TOTAL; cumulative adds that total once. Confirmed absence/reap, complete accounting, checked source closure, hashes and independent later analysis remain required. The new shim additionally binds its own source and focused test in the passing check.
+
+The fakes cover exact task/hash/budget, restored defaults on success/interrupt/nested rejection, worker argv and temporary hook restoration, equality versus exhaustion of launch/active reserves, and policy/phase/TOTAL receipt validation. Two additional direct capture regressions check a valid fixed-binary/continuous inventory and rejection of hidden discrete variables or duplicate mapping after the mapped-set hoist. That source change retains uniqueness, type, membership and fixed-bound checks; it removes repeated set construction only.
+
+No remaining concrete config blocker was found. This gate does not establish a latency improvement, real CF1 feasible fallback, warm-start processing, native qualification or scientific performance. Individual native operations/serialization remain nonpreemptible, and the previous failed native evidence stays failed. A parent-controlled native launch remains conditional on the actual passing source-bound check, fresh freeze/receipt and current budget review; this note alone authorizes no launch.
+
+Owned tests and this review are SOURCE STABLE.

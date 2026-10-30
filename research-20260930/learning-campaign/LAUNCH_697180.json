@@ -1,0 +1,79 @@
+{
+  "job_id": "697180",
+  "submitted_at_utc": "2026-09-30T14:15:07Z",
+  "source_commit": "9232d5250158d7402c896de33c99d0225e8a914a",
+  "source_branch": "codex/journal-research-20260927",
+  "remote_checkout": "/home/nc437/egg-charge-response-learning-20260930",
+  "attempt_relative": "result/learning_campaign/20260930-charge-response-attempt1",
+  "wrapper": "src/cluster/charge_response.sbatch",
+  "protocol": "PROTOCOL_CHARGE_RESPONSE_LEARNING.md",
+  "launch_review": "CHARGE_RESPONSE_LEARNING_LAUNCH_REVIEW.md",
+  "requested": {
+    "cpus_per_task": 1,
+    "memory_gb": 8,
+    "wall_seconds": 6000,
+    "native_threads": 1,
+    "requeue": false,
+    "excluded_nodes": [
+      "scaglione-compute-01"
+    ]
+  },
+  "profile": {
+    "train": {
+      "2022": 12,
+      "2023": 12,
+      "2024": 20,
+      "2025": 20,
+      "2026": 28,
+      "2027": 28
+    },
+    "dev": {
+      "2028": 20,
+      "2029": 28,
+      "2030": 20,
+      "2031": 28
+    }
+  },
+  "test_groups_unobserved": [
+    2004,
+    2005,
+    2020,
+    2021
+  ],
+  "declared_cells": 44,
+  "cell_order_counts": {
+    "source_acquisition_before_labels": 20,
+    "train_charging": 12,
+    "dev_charging_after_frozen_predictions": 8,
+    "dev_cold": 4
+  },
+  "model": "Fixed ridge1.0 predicts per-trip post-charge curved-cost residual; all six training pairs required; training-only normalization; no tuning",
+  "old_model_baseline": "Frozen stage2 EdgePrior, original topology projection and full tie rule",
+  "prediction_order": "All four development predictions frozen before any development LP or cold outcomes",
+  "caps_seconds": {
+    "native_solver_wall": 70,
+    "charging_phase": 45,
+    "charging_wall": 55,
+    "child_hard": 100,
+    "fit_inference_hard": 60,
+    "controller": 5400,
+    "outer_shell": 5700
+  },
+  "source_pin_count": 23,
+  "archived_input_pin_count": 3,
+  "submission_guard": ".submission-charge-response-attempt1/jobid.txt",
+  "submission_checks": {
+    "no_active_egg_job": true,
+    "fresh_checkout": true,
+    "tracked_checkout_clean": true,
+    "exclusive_attempt_absent": true
+  },
+  "launch_script_sha256": "76bf7c7388c25e467b2bae99f498fb609e366f755c276870785703f9c3eaa993",
+  "submission_stdout": "HEAD is now at 9232d52 Add grouped charge-response training and prospective source-selection evaluation\n697180\n2026-09-30T14:15:07Z\n",
+  "observation": {
+    "recorded_at_utc": "2026-09-30T14:16:23.711399+00:00",
+    "state": "SUBMITTED",
+    "queue_state_not_polled_after_submission": true
+  },
+  "scientific_result": "pending; no new outcome inspected"
+}

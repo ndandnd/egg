@@ -1,0 +1,88 @@
+{
+  "policy": "literal-synthetic-duty-market-seam-owner-v1",
+  "mode": "FROZEN",
+  "review_disposition": "PASS",
+  "workdir": "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017",
+  "fixture": "duty-market-seam-v1",
+  "context_ids": [
+    "b0_all",
+    "posted",
+    "system",
+    "strategic"
+  ],
+  "phases": [
+    "target_qp",
+    "fixed_duty",
+    "full"
+  ],
+  "dependent_dispatch_order": {
+    "b0_all": [
+      "fixed_duty",
+      "full"
+    ],
+    "posted": [
+      "full",
+      "fixed_duty"
+    ],
+    "system": [
+      "fixed_duty",
+      "full"
+    ],
+    "strategic": [
+      "full",
+      "fixed_duty"
+    ]
+  },
+  "source_sha256": {
+    "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/research-20261026/duty_market_seam/run.py": "904b5f9e7bf455881cb6685a1afda3deac610ce3598f2f9e0aca185ee5ea83f9",
+    "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/research-20261026/duty_market_seam/adapter.py": "3064410a24992bdd78a19a021b154d832b8455aeb70174b1872c3b7e7fa320dd",
+    "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/research-20261026/duty_market_seam/worker.py": "84665c537919b79580cee511b3302ebc73779aa73eede9f56936a60b70478003",
+    "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/research-20261026/duty_market_seam/prepare.py": "bf82a3386ce31df39d7ea88057db6b81aaa2be965910fc2280693f201ee8ed5c",
+    "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/research-20261025/warm_replication/qp_control.py": "df931eb4b9b533e338dec0c6a4a0be750dae3229769a38a54c96475024d65846",
+    "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/research-20261026/economic_recourse_pilot/miqp_control.py": "572be0a8d871fb13f991d9639cb6f4934ae4fc2bfc28f68c15bd741be6ae8710",
+    "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/src/egglab/__init__.py": "98d97b9995afd57827920e43f16adf5065966a9c50577819e986049e5d35c893",
+    "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/src/egglab/native_recharge.py": "0067123a7f71cc6e9c89e1262cdcbd612cafdcfc252e35bcfca7f1f54c45d0f3",
+    "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/src/egglab/native_hull.py": "1d5000c3e410a8a4477e5e82b805571cfd4255d3bb79b1d732844bc3042cbc9c",
+    "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/src/egglab/native_pathflow.py": "81c366d93d327d3573c4b1d468d36121054b3a59ffe2d33c95b152cf33e3140a",
+    "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/research-20261026/duty_market_seam/PROTOCOL.md": "e1a32a44579ebd10393efa79a3dda40c106c7d79ef9065bc9ea00514d33001bc",
+    "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/research-20261026/duty_market_seam/OWNER_NOTE.md": "8f7386b26970a249f22656ca22eaa87507b7324c727d1e0f4bbfb5d8bde10d86",
+    "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/research-20261026/duty_market_seam/WORKER_NOTE.md": "828577f8318ce9610482def30073e4d778a4468fb3590bf38a1ac5b95bac72ea",
+    "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/research-20261026/evspdr_correspondence/STUDY_DECISION.md": "b5cbc7952e6c5d77d052eff33e5f0b34474780c252d784ba2f417e7405e5968a"
+  },
+  "source_revision": "94b993834274b1b97d4e792fd6da2d556bb2228f",
+  "source_freeze_assumption": "parent-approved-frozen-commit",
+  "command": null,
+  "tracking_prefix": null,
+  "numerical_resource_prefix": null,
+  "environment": null,
+  "mixed_integer_parameters": null,
+  "preparation_accounting": {
+    "external_accepted": false,
+    "charged_cpu_s": null,
+    "elapsed_s": null,
+    "purpose": "Source binding preparation inside preflight60/total1500; external reconciliation pending"
+  },
+  "budgets": {
+    "total_cpu_s": 1500,
+    "total_wall_s": 2400,
+    "dispatch_cpu_s": 1320,
+    "closure_cpu_s": 180,
+    "preflight_cpu_s": 60,
+    "finalization_cpu_s": 60,
+    "finalization_wall_s": 90,
+    "preparation_cpu_s": 10,
+    "preparation_wall_s": 30,
+    "worker_hard_cpu_s": 90,
+    "native_cutoff_s": 52,
+    "endpoint_s": 60,
+    "cleanup_s": 3
+  },
+  "planned_base_units": 1,
+  "planned_contexts": 4,
+  "planned_workers": 12,
+  "input_authority": "NEW literal adapter fixture and economic arrays only; no old rows, plans, metadata or GIRO",
+  "no_pooled_cross_institution_mean": true,
+  "no_execution_authority": true,
+  "no_automatic_retry": true,
+  "no_ML_fit_or_promotion": true
+}

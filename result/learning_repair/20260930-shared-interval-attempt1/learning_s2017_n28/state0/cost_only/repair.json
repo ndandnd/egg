@@ -1,0 +1,44 @@
+{
+  "charging_caps": true,
+  "energy_relaxation": true,
+  "repair_wall_seconds": 5.539007091021631,
+  "result": {
+    "case_identity": "d90b4d889fae5f3df4d9b254b87053333f00da48bbe71e258445840fcc4eb8d0",
+    "charging_caps": true,
+    "charging_subproblem": "fixed-binary native linear program",
+    "cover": {
+      "logit_scale": 0.0,
+      "message": "Time limit reached. (HiGHS Status 13: model_status is Time limit reached; primal_status is At lower/fixed bound)",
+      "mip_gap": null,
+      "mip_gap_raw": "None",
+      "mip_node_count": null,
+      "objective_policy": "cost_only",
+      "random_seed": 0,
+      "selected_movements": null,
+      "status": 1,
+      "threads": 1,
+      "vehicles": null,
+      "wall_seconds": 5.308021490985993
+    },
+    "cover_policy": "cost_only",
+    "energy_relaxation": true,
+    "failure": {
+      "message": "Route cover solver has no integral incumbent",
+      "stage": "cover",
+      "type": "RepairStageFailure"
+    },
+    "inference_attempted": false,
+    "inference_performed": false,
+    "market_identity": "4b9d8b8654d56985e2be9a131308d0adac10433e24f0c7f2deadf9465ab61a5c",
+    "policy": "route-cover-fixed-charge-repair-v1",
+    "raw_topology": null,
+    "repair_status": "fallback",
+    "shared_charging": true,
+    "timing_seconds": {
+      "cover": 5.513027506007347,
+      "topology": 0.0,
+      "total": 5.5389681159867905
+    }
+  },
+  "shared_charging": true
+}

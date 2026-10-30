@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "/Users/nadan/Documents/ChatGPT/egg/journal-research-work/src/experiments/native_pathflow_qualification.py", line 88, in worker
+    result = pf.solve_planner(case, cell["a"], cell["b"], budget, record=record)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/nadan/Documents/ChatGPT/egg/journal-research-work/src/egglab/native_pathflow.py", line 372, in solve_planner
+    plan = _extract(case, built, record=record, round_index=len(records)-1)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/nadan/Documents/ChatGPT/egg/journal-research-work/src/egglab/native_pathflow.py", line 284, in _extract
+    raise ValueError('Positive charge on an unselected movement')
+ValueError: Positive charge on an unselected movement

@@ -1,0 +1,20 @@
+{
+  "status": "FROZEN",
+  "run_id": "attempt01",
+  "source_revision": "eee9c52066ea8c6d6d746e9bd2cc627864f85a57",
+  "exact_command": "env OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 VECLIB_MAXIMUM_THREADS=1 NUMEXPR_NUM_THREADS=1 /usr/bin/time -p .venv-local/bin/python -I -S -B research-20261029/public_canonical_qualification/run.py --run-id attempt01 > research-20261029/public_canonical_qualification/attempt01_owner_console.txt 2> research-20261029/public_canonical_qualification/attempt01_process_time.txt",
+  "command_cwd": "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017",
+  "environment": {"OMP_NUM_THREADS":"1","OPENBLAS_NUM_THREADS":"1","MKL_NUM_THREADS":"1","VECLIB_MAXIMUM_THREADS":"1","NUMEXPR_NUM_THREADS":"1"},
+  "global_prefix": {"displayed_cpu_s":23919.11,"elapsed_sum_s":24848.62,"retained_cpu_s":23920.66,"legacy_conditional_guard_separate":2546.091499549272,"parent_tool_static_agent_review_cpu":"UNKNOWN"},
+  "dispatch_authorized": true,
+  "assigned": ["SOURCE_ADMISSION", "Q0", "PUBLIC_METADATA", "CANONICAL", "INDEPENDENT"],
+  "resources": {"package_cpu_s":180,"package_wall_s":240,"worker_cpu_s":150,"worker_wall_s":210,"worker_self_hard_cpu_s":130,"stage_gate_cpu_s":110,"stage_gate_wall_s":180,"observed_rss_bytes":1073741824,"native_calls":0},
+  "native_threads": 1,
+  "runtime": {"implementation":"cpython","version":"3.12.2","radix":2,"mant_dig":53,"max_exp":1024,"rounds":1},
+  "inputs": {
+    "rich": {"revision":"2f386362aa241a8a4f197a88a50fa150b6d47d9c","path":"data/public/sistig_26088190_v1/hildenbrand_native_cases.json","bytes":8046032,"prior_sha256":"af6da4dea220063d1b2486a4c958bff19ae621328f07bde4a95a5c70690ebeb6"},
+    "descriptor": {"revision":"253c1e29295e766b3889fc8f5c28d9808e00b3d6","path":"research-20261029/public_support_resolution/attempt01/case_descriptor.json"},
+    "od": {"revision":"6f87f052c1a6e30ffb89a984743514e0b2744aa1","paths":["research-20261029/public_movement_qualification/attempt01/results.json","research-20261029/public_movement_qualification/attempt01/PUBLIC_OD.json","research-20261029/public_movement_qualification/attempt01/owner_receipt.json"]}
+  },
+  "scope":"Canonical mapping/provenance only; no physical replay, path dominance, route solve or support-scope extension. Parent and independent static reviews passed. One attempt01; no automatic retry."
+}

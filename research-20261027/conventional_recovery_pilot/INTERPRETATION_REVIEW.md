@@ -1,0 +1,15 @@
+# Closed attempt and import repair: interpretation review
+
+Disposition: **PASS for the bounded interpretation and causal source repair explanation; no runtime qualification or retry authorization.**
+
+Read only `attempt01/READOUT.md`, `IMPORT_REPAIR.patch`, and `REPAIR_REVIEW.md`. No broader source audit, runtime/import/test/hash, raw journal/bank inspection, artifact mutation, or commit.
+
+The compact readout retains all 40 planned states. F, N, and D delivered strict physical endpoints for 62001-N12. UN was attempted and failed at `union_native` with `KeyError: 'gurobipy'`; the remaining 36 states were unattempted after that fatal stage. The attempt is closed with exit 1 as recorded in the repair review. Four reaped children is a parent-supplied closure fact; the compact readout itself does not independently expose child-reaping records.
+
+There is **no completed recovery comparison**: UN versus F, UD versus F, and UD versus UN each have zero qualified strict pairs out of eight; all complete 12/24 group means and full-eight means are null, as are complete pipeline costs. Null means missing evidence, not zero effect. The three successful discovery endpoints establish delivery only for that one base-size cell. They do not establish the benefit or cost of joint recovery, the benefit of diving across the planned cohort, or practical completion speed. Operational F fallback for failed UN and unattempted UD preserves an available fleet; it is not fresh strict delivery. A false finite-bank-optimum flag on failed/unattempted states does not establish that the bank optimum is unreachable.
+
+No learning was trained or evaluated in this minimal experiment. Neither a successful nor failed ML result, a learning opportunity, ML promotion, or an ICML novelty claim follows from these outcomes. The experiment also supplies no V2G, endogenous-pricing, or nonlinear-grid result.
+
+The one-line patch causally addresses the reported fresh-process import assumption. `REPAIR_REVIEW.md` explains that F/N/D call a runner that imports the backend lazily, while UN/UD construct their bank model directly in separate processes. A producer's module registry cannot populate a later union process. Replacing `sys.modules['gurobipy']` with `import gurobipy as gp` binds the backend in the union process before `gp.Model(...)`, removing that specific premature registry lookup. The patch covers the common UN/UD branch. This is source-level causal support, not proof that backend import, licensing, model construction, optimization, timing, physical admission, or publication will succeed.
+
+The patch remains a separate review artifact and does not alter attempt01. Its successful, failed, and unattempted states, denominators, costs, and provenance remain immutable. Applying or prospectively qualifying a repaired source would require separate source/control identity and authorization. This review authorizes no retry, replay, resumed campaign, replacement cell, or reinterpretation of the closed attempt as completed.

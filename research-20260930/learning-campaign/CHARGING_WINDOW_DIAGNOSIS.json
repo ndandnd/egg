@@ -1,0 +1,886 @@
+{
+  "arithmetic": "Decimal sums of serialized JSON numeric spellings, not exact binary-rational floats; no optimization",
+  "cells": [
+    {
+      "case": "learning_s2016_n20",
+      "case_identity": "1a67e5991dca59a6dbd5d0390a2b02647d86a4b7cf2585f9af9f02da9981438e",
+      "cover_independently_rejected": true,
+      "cover_status": "OPTIMAL",
+      "fixed_charge_status": "INFEASIBLE",
+      "individually_rejected_routes": 3,
+      "policy": "cost_only",
+      "repair_json": "result/learning_repair/20260930-energy-aware-attempt1/learning_s2016_n20/state0/cost_only/repair.json",
+      "repair_sha256": "31e1783ff4da1fe440c218108f73052889bb77eb0aeff3eef08f7695de8ca91c",
+      "routes": [
+        {
+          "depot_visits": [
+            {
+              "delivered_cap_kwh": "6.750000000000000000000000000",
+              "grid_cap_kwh": "7.500000000000000000000000000",
+              "movement": "depot_T01_T02",
+              "optimistic_arrival_soc_kwh": "79.34",
+              "optimistic_departure_soc_kwh": "86.09000000000000000000000000",
+              "window_end_min": "401",
+              "window_start_min": "396"
+            },
+            {
+              "delivered_cap_kwh": "1.350000000000000000000000000",
+              "grid_cap_kwh": "1.500000000000000000000000000",
+              "movement": "depot_T08_T13",
+              "optimistic_arrival_soc_kwh": "17.25000000000000000000000000",
+              "optimistic_departure_soc_kwh": "18.60000000000000000000000000",
+              "window_end_min": "509",
+              "window_start_min": "508"
+            },
+            {
+              "delivered_cap_kwh": "6.750000000000000000000000000",
+              "grid_cap_kwh": "7.500000000000000000000000000",
+              "movement": "depot_T14_T19",
+              "optimistic_arrival_soc_kwh": "-29.12000000000000200000000000",
+              "optimistic_departure_soc_kwh": "-22.37000000000000200000000000",
+              "window_end_min": "587",
+              "window_start_min": "582"
+            }
+          ],
+          "first_violation": {
+            "item": "T08",
+            "optimistic_soc_kwh": "18.25000000000000000000000000",
+            "reserve_kwh": "20.0",
+            "shortfall_kwh": "1.75000000000000000000000000",
+            "stage": "service"
+          },
+          "individually_rejected": true,
+          "movements": [
+            "out_T01",
+            "depot_T01_T02",
+            "direct_T02_T07",
+            "direct_T07_T08",
+            "depot_T08_T13",
+            "direct_T13_T14",
+            "depot_T14_T19",
+            "in_T19"
+          ],
+          "optimistic_terminal_arrival_soc_kwh": "-47.12000000000000200000000000",
+          "terminal_delivered_cap_kwh": "972.00",
+          "trips": [
+            "T01",
+            "T02",
+            "T07",
+            "T08",
+            "T13",
+            "T14",
+            "T19"
+          ],
+          "vehicle": 0
+        },
+        {
+          "depot_visits": [
+            {
+              "delivered_cap_kwh": "2.700000000000000000000000000",
+              "grid_cap_kwh": "3.000000000000000000000000000",
+              "movement": "depot_T05_T06",
+              "optimistic_arrival_soc_kwh": "53.470000000000002",
+              "optimistic_departure_soc_kwh": "56.17000000000000200000000000",
+              "window_end_min": "451",
+              "window_start_min": "449"
+            },
+            {
+              "delivered_cap_kwh": "6.750000000000000000000000000",
+              "grid_cap_kwh": "7.500000000000000000000000000",
+              "movement": "depot_T11_T12",
+              "optimistic_arrival_soc_kwh": "-0.61999999999999800000000000",
+              "optimistic_departure_soc_kwh": "6.130000000000002000000000000",
+              "window_end_min": "523",
+              "window_start_min": "518"
+            },
+            {
+              "delivered_cap_kwh": "8.100",
+              "grid_cap_kwh": "9.00",
+              "movement": "depot_T12_T17",
+              "optimistic_arrival_soc_kwh": "-24.32999999999999800000000000",
+              "optimistic_departure_soc_kwh": "-16.22999999999999800000000000",
+              "window_end_min": "561",
+              "window_start_min": "555"
+            },
+            {
+              "delivered_cap_kwh": "32.400",
+              "grid_cap_kwh": "36.00",
+              "movement": "depot_T18_T20",
+              "optimistic_arrival_soc_kwh": "-67.00999999999999800000000000",
+              "optimistic_departure_soc_kwh": "-34.60999999999999800000000000",
+              "window_end_min": "643",
+              "window_start_min": "619"
+            }
+          ],
+          "first_violation": {
+            "item": "T11",
+            "optimistic_soc_kwh": "0.88000000000000200000000000",
+            "reserve_kwh": "20.0",
+            "shortfall_kwh": "19.11999999999999800000000000",
+            "stage": "service"
+          },
+          "individually_rejected": true,
+          "movements": [
+            "out_T03",
+            "direct_T03_T05",
+            "depot_T05_T06",
+            "direct_T06_T11",
+            "depot_T11_T12",
+            "depot_T12_T17",
+            "direct_T17_T18",
+            "depot_T18_T20",
+            "in_T20"
+          ],
+          "optimistic_terminal_arrival_soc_kwh": "-58.70999999999999800000000000",
+          "terminal_delivered_cap_kwh": "972.00",
+          "trips": [
+            "T03",
+            "T05",
+            "T06",
+            "T11",
+            "T12",
+            "T17",
+            "T18",
+            "T20"
+          ],
+          "vehicle": 1
+        },
+        {
+          "depot_visits": [
+            {
+              "delivered_cap_kwh": "21.60000000000000000000000000",
+              "grid_cap_kwh": "24.00000000000000000000000000",
+              "movement": "depot_T04_T09",
+              "optimistic_arrival_soc_kwh": "76.45",
+              "optimistic_departure_soc_kwh": "98.05000000000000000000000000",
+              "window_end_min": "460",
+              "window_start_min": "444"
+            },
+            {
+              "delivered_cap_kwh": "9.450000000000000000000000000",
+              "grid_cap_kwh": "10.50000000000000000000000000",
+              "movement": "depot_T15_T16",
+              "optimistic_arrival_soc_kwh": "21.51000000000000000000000000",
+              "optimistic_departure_soc_kwh": "30.96000000000000000000000000",
+              "window_end_min": "579",
+              "window_start_min": "572"
+            }
+          ],
+          "first_violation": {
+            "item": "T16",
+            "optimistic_soc_kwh": "1.88000000000000000000000000",
+            "reserve_kwh": "20.0",
+            "shortfall_kwh": "18.12000000000000000000000000",
+            "stage": "service"
+          },
+          "individually_rejected": true,
+          "movements": [
+            "out_T04",
+            "depot_T04_T09",
+            "direct_T09_T10",
+            "direct_T10_T15",
+            "depot_T15_T16",
+            "in_T16"
+          ],
+          "optimistic_terminal_arrival_soc_kwh": "0.88000000000000000000000000",
+          "terminal_delivered_cap_kwh": "972.00",
+          "trips": [
+            "T04",
+            "T09",
+            "T10",
+            "T15",
+            "T16"
+          ],
+          "vehicle": 2
+        }
+      ],
+      "selected_bus_count": 3
+    },
+    {
+      "case": "learning_s2016_n20",
+      "case_identity": "1a67e5991dca59a6dbd5d0390a2b02647d86a4b7cf2585f9af9f02da9981438e",
+      "cover_independently_rejected": true,
+      "cover_status": "OPTIMAL",
+      "fixed_charge_status": "INFEASIBLE",
+      "individually_rejected_routes": 3,
+      "policy": "cost_learned",
+      "repair_json": "result/learning_repair/20260930-energy-aware-attempt1/learning_s2016_n20/state0/cost_learned/repair.json",
+      "repair_sha256": "3cdc9950f0af4693331537d503119654c169dbc91716d56fd7128ff179b89d01",
+      "routes": [
+        {
+          "depot_visits": [
+            {
+              "delivered_cap_kwh": "6.750000000000000000000000000",
+              "grid_cap_kwh": "7.500000000000000000000000000",
+              "movement": "depot_T01_T02",
+              "optimistic_arrival_soc_kwh": "79.34",
+              "optimistic_departure_soc_kwh": "86.09000000000000000000000000",
+              "window_end_min": "401",
+              "window_start_min": "396"
+            },
+            {
+              "delivered_cap_kwh": "1.350000000000000000000000000",
+              "grid_cap_kwh": "1.500000000000000000000000000",
+              "movement": "depot_T08_T13",
+              "optimistic_arrival_soc_kwh": "17.25000000000000000000000000",
+              "optimistic_departure_soc_kwh": "18.60000000000000000000000000",
+              "window_end_min": "509",
+              "window_start_min": "508"
+            },
+            {
+              "delivered_cap_kwh": "6.750000000000000000000000000",
+              "grid_cap_kwh": "7.500000000000000000000000000",
+              "movement": "depot_T14_T19",
+              "optimistic_arrival_soc_kwh": "-29.12000000000000200000000000",
+              "optimistic_departure_soc_kwh": "-22.37000000000000200000000000",
+              "window_end_min": "587",
+              "window_start_min": "582"
+            }
+          ],
+          "first_violation": {
+            "item": "T08",
+            "optimistic_soc_kwh": "18.25000000000000000000000000",
+            "reserve_kwh": "20.0",
+            "shortfall_kwh": "1.75000000000000000000000000",
+            "stage": "service"
+          },
+          "individually_rejected": true,
+          "movements": [
+            "out_T01",
+            "depot_T01_T02",
+            "direct_T02_T07",
+            "direct_T07_T08",
+            "depot_T08_T13",
+            "direct_T13_T14",
+            "depot_T14_T19",
+            "direct_T19_T20",
+            "in_T20"
+          ],
+          "optimistic_terminal_arrival_soc_kwh": "-68.50000000000000200000000000",
+          "terminal_delivered_cap_kwh": "972.00",
+          "trips": [
+            "T01",
+            "T02",
+            "T07",
+            "T08",
+            "T13",
+            "T14",
+            "T19",
+            "T20"
+          ],
+          "vehicle": 0
+        },
+        {
+          "depot_visits": [
+            {
+              "delivered_cap_kwh": "21.60000000000000000000000000",
+              "grid_cap_kwh": "24.00000000000000000000000000",
+              "movement": "depot_T04_T09",
+              "optimistic_arrival_soc_kwh": "54.580000000000002",
+              "optimistic_departure_soc_kwh": "76.18000000000000200000000000",
+              "window_end_min": "460",
+              "window_start_min": "444"
+            },
+            {
+              "delivered_cap_kwh": "6.750000000000000000000000000",
+              "grid_cap_kwh": "7.500000000000000000000000000",
+              "movement": "depot_T10_T15",
+              "optimistic_arrival_soc_kwh": "26.95000000000000200000000000",
+              "optimistic_departure_soc_kwh": "33.70000000000000200000000000",
+              "window_end_min": "533",
+              "window_start_min": "528"
+            }
+          ],
+          "first_violation": {
+            "item": "T15",
+            "optimistic_soc_kwh": "6.02000000000000200000000000",
+            "reserve_kwh": "20.0",
+            "shortfall_kwh": "13.97999999999999800000000000",
+            "stage": "service"
+          },
+          "individually_rejected": true,
+          "movements": [
+            "out_T03",
+            "direct_T03_T04",
+            "depot_T04_T09",
+            "direct_T09_T10",
+            "depot_T10_T15",
+            "direct_T15_T16",
+            "in_T16"
+          ],
+          "optimistic_terminal_arrival_soc_kwh": "-22.74999999999999800000000000",
+          "terminal_delivered_cap_kwh": "972.00",
+          "trips": [
+            "T03",
+            "T04",
+            "T09",
+            "T10",
+            "T15",
+            "T16"
+          ],
+          "vehicle": 1
+        },
+        {
+          "depot_visits": [
+            {
+              "delivered_cap_kwh": "6.750000000000000000000000000",
+              "grid_cap_kwh": "7.500000000000000000000000000",
+              "movement": "depot_T11_T12",
+              "optimistic_arrival_soc_kwh": "23.85",
+              "optimistic_departure_soc_kwh": "30.60000000000000000000000000",
+              "window_end_min": "523",
+              "window_start_min": "518"
+            }
+          ],
+          "first_violation": {
+            "item": "T12",
+            "optimistic_soc_kwh": "1.14000000000000000000000000",
+            "reserve_kwh": "20.0",
+            "shortfall_kwh": "18.86000000000000000000000000",
+            "stage": "service"
+          },
+          "individually_rejected": true,
+          "movements": [
+            "out_T05",
+            "direct_T05_T06",
+            "direct_T06_T11",
+            "depot_T11_T12",
+            "direct_T12_T17",
+            "direct_T17_T18",
+            "in_T18"
+          ],
+          "optimistic_terminal_arrival_soc_kwh": "-48.78000000000000000000000000",
+          "terminal_delivered_cap_kwh": "972.00",
+          "trips": [
+            "T05",
+            "T06",
+            "T11",
+            "T12",
+            "T17",
+            "T18"
+          ],
+          "vehicle": 2
+        }
+      ],
+      "selected_bus_count": 3
+    },
+    {
+      "case": "learning_s2017_n28",
+      "case_identity": "d90b4d889fae5f3df4d9b254b87053333f00da48bbe71e258445840fcc4eb8d0",
+      "cover_independently_rejected": true,
+      "cover_status": "OPTIMAL",
+      "fixed_charge_status": "INFEASIBLE",
+      "individually_rejected_routes": 3,
+      "policy": "cost_only",
+      "repair_json": "result/learning_repair/20260930-energy-aware-attempt1/learning_s2017_n28/state0/cost_only/repair.json",
+      "repair_sha256": "80ee883a8f0d38117aca76c120e0d6c1a313486266f2da80a7f3ab712c3e0494",
+      "routes": [
+        {
+          "depot_visits": [
+            {
+              "delivered_cap_kwh": "10.80000000000000000000000000",
+              "grid_cap_kwh": "12.00000000000000000000000000",
+              "movement": "depot_T02_T04",
+              "optimistic_arrival_soc_kwh": "53.63",
+              "optimistic_departure_soc_kwh": "64.43000000000000000000000000",
+              "window_end_min": "439",
+              "window_start_min": "431"
+            },
+            {
+              "delivered_cap_kwh": "10.80000000000000000000000000",
+              "grid_cap_kwh": "12.00000000000000000000000000",
+              "movement": "depot_T04_T10",
+              "optimistic_arrival_soc_kwh": "40.91000000000000000000000000",
+              "optimistic_departure_soc_kwh": "51.71000000000000000000000000",
+              "window_end_min": "488",
+              "window_start_min": "480"
+            },
+            {
+              "delivered_cap_kwh": "28.3500",
+              "grid_cap_kwh": "31.500",
+              "movement": "depot_T10_T15",
+              "optimistic_arrival_soc_kwh": "31.13000000000000000000000000",
+              "optimistic_departure_soc_kwh": "59.48000000000000000000000000",
+              "window_end_min": "537",
+              "window_start_min": "516"
+            },
+            {
+              "delivered_cap_kwh": "18.90000000000000000000000000",
+              "grid_cap_kwh": "21.00000000000000000000000000",
+              "movement": "depot_T16_T23",
+              "optimistic_arrival_soc_kwh": "14.40000000000000000000000000",
+              "optimistic_departure_soc_kwh": "33.30000000000000000000000000",
+              "window_end_min": "639",
+              "window_start_min": "625"
+            }
+          ],
+          "first_violation": {
+            "item": "T16",
+            "optimistic_soc_kwh": "15.40000000000000000000000000",
+            "reserve_kwh": "20.0",
+            "shortfall_kwh": "4.60000000000000000000000000",
+            "stage": "service"
+          },
+          "individually_rejected": true,
+          "movements": [
+            "out_T01",
+            "direct_T01_T02",
+            "depot_T02_T04",
+            "depot_T04_T10",
+            "depot_T10_T15",
+            "direct_T15_T16",
+            "depot_T16_T23",
+            "in_T23"
+          ],
+          "optimistic_terminal_arrival_soc_kwh": "11.84000000000000000000000000",
+          "terminal_delivered_cap_kwh": "972.00",
+          "trips": [
+            "T01",
+            "T02",
+            "T04",
+            "T10",
+            "T15",
+            "T16",
+            "T23"
+          ],
+          "vehicle": 0
+        },
+        {
+          "depot_visits": [
+            {
+              "delivered_cap_kwh": "5.400000000000000000000000000",
+              "grid_cap_kwh": "6.000000000000000000000000000",
+              "movement": "depot_T03_T07",
+              "optimistic_arrival_soc_kwh": "78.55",
+              "optimistic_departure_soc_kwh": "83.95000000000000000000000000",
+              "window_end_min": "433",
+              "window_start_min": "429"
+            },
+            {
+              "delivered_cap_kwh": "70.20000000000000000000000000",
+              "grid_cap_kwh": "78.00000000000000000000000000",
+              "movement": "depot_T09_T12",
+              "optimistic_arrival_soc_kwh": "26.85000000000000200000000000",
+              "optimistic_departure_soc_kwh": "97.05000000000000200000000000",
+              "window_end_min": "540",
+              "window_start_min": "488"
+            },
+            {
+              "delivered_cap_kwh": "33.75000000000000000000000000",
+              "grid_cap_kwh": "37.50000000000000000000000000",
+              "movement": "depot_T12_T18",
+              "optimistic_arrival_soc_kwh": "68.70000000000000200000000000",
+              "optimistic_departure_soc_kwh": "100.0",
+              "window_end_min": "600",
+              "window_start_min": "575"
+            },
+            {
+              "delivered_cap_kwh": "9.450000000000000000000000000",
+              "grid_cap_kwh": "10.50000000000000000000000000",
+              "movement": "depot_T22_T27",
+              "optimistic_arrival_soc_kwh": "49.339999999999998",
+              "optimistic_departure_soc_kwh": "58.78999999999999800000000000",
+              "window_end_min": "689",
+              "window_start_min": "682"
+            }
+          ],
+          "first_violation": null,
+          "individually_rejected": false,
+          "movements": [
+            "out_T03",
+            "depot_T03_T07",
+            "direct_T07_T09",
+            "depot_T09_T12",
+            "depot_T12_T18",
+            "direct_T18_T22",
+            "depot_T22_T27",
+            "in_T27"
+          ],
+          "optimistic_terminal_arrival_soc_kwh": "29.76999999999999800000000000",
+          "terminal_delivered_cap_kwh": "972.00",
+          "trips": [
+            "T03",
+            "T07",
+            "T09",
+            "T12",
+            "T18",
+            "T22",
+            "T27"
+          ],
+          "vehicle": 1
+        },
+        {
+          "depot_visits": [
+            {
+              "delivered_cap_kwh": "5.400000000000000000000000000",
+              "grid_cap_kwh": "6.000000000000000000000000000",
+              "movement": "depot_T05_T06",
+              "optimistic_arrival_soc_kwh": "74.34",
+              "optimistic_departure_soc_kwh": "79.74000000000000000000000000",
+              "window_end_min": "456",
+              "window_start_min": "452"
+            },
+            {
+              "delivered_cap_kwh": "9.450000000000000000000000000",
+              "grid_cap_kwh": "10.50000000000000000000000000",
+              "movement": "depot_T14_T19",
+              "optimistic_arrival_soc_kwh": "6.19000000000000000000000000",
+              "optimistic_departure_soc_kwh": "15.64000000000000000000000000",
+              "window_end_min": "584",
+              "window_start_min": "577"
+            },
+            {
+              "delivered_cap_kwh": "2.700000000000000000000000000",
+              "grid_cap_kwh": "3.000000000000000000000000000",
+              "movement": "depot_T19_T20",
+              "optimistic_arrival_soc_kwh": "-14.06000000000000000000000000",
+              "optimistic_departure_soc_kwh": "-11.36000000000000000000000000",
+              "window_end_min": "624",
+              "window_start_min": "622"
+            },
+            {
+              "delivered_cap_kwh": "2.700000000000000000000000000",
+              "grid_cap_kwh": "3.000000000000000000000000000",
+              "movement": "depot_T25_T26",
+              "optimistic_arrival_soc_kwh": "-60.34000000000000300000000000",
+              "optimistic_departure_soc_kwh": "-57.64000000000000300000000000",
+              "window_end_min": "694",
+              "window_start_min": "692"
+            }
+          ],
+          "first_violation": {
+            "item": "T14",
+            "optimistic_soc_kwh": "7.19000000000000000000000000",
+            "reserve_kwh": "20.0",
+            "shortfall_kwh": "12.81000000000000000000000000",
+            "stage": "service"
+          },
+          "individually_rejected": true,
+          "movements": [
+            "out_T05",
+            "depot_T05_T06",
+            "direct_T06_T13",
+            "direct_T13_T14",
+            "depot_T14_T19",
+            "depot_T19_T20",
+            "direct_T20_T25",
+            "depot_T25_T26",
+            "in_T26"
+          ],
+          "optimistic_terminal_arrival_soc_kwh": "-85.70000000000000300000000000",
+          "terminal_delivered_cap_kwh": "972.00",
+          "trips": [
+            "T05",
+            "T06",
+            "T13",
+            "T14",
+            "T19",
+            "T20",
+            "T25",
+            "T26"
+          ],
+          "vehicle": 2
+        },
+        {
+          "depot_visits": [
+            {
+              "delivered_cap_kwh": "8.100",
+              "grid_cap_kwh": "9.00",
+              "movement": "depot_T17_T21",
+              "optimistic_arrival_soc_kwh": "20.79999999999999997",
+              "optimistic_departure_soc_kwh": "28.89999999999999997",
+              "window_end_min": "609",
+              "window_start_min": "603"
+            },
+            {
+              "delivered_cap_kwh": "49.95000000000000000000000000",
+              "grid_cap_kwh": "55.50000000000000000000000000",
+              "movement": "depot_T21_T24",
+              "optimistic_arrival_soc_kwh": "7.15999999999999997",
+              "optimistic_departure_soc_kwh": "57.10999999999999997000000000",
+              "window_end_min": "678",
+              "window_start_min": "641"
+            },
+            {
+              "delivered_cap_kwh": "39.15000000000000000000000000",
+              "grid_cap_kwh": "43.50000000000000000000000000",
+              "movement": "depot_T24_T28",
+              "optimistic_arrival_soc_kwh": "30.44999999999999997000000000",
+              "optimistic_departure_soc_kwh": "69.59999999999999997000000000",
+              "window_end_min": "742",
+              "window_start_min": "713"
+            }
+          ],
+          "first_violation": {
+            "item": "T21",
+            "optimistic_soc_kwh": "8.65999999999999997",
+            "reserve_kwh": "20.0",
+            "shortfall_kwh": "11.34000000000000003",
+            "stage": "service"
+          },
+          "individually_rejected": true,
+          "movements": [
+            "out_T08",
+            "direct_T08_T11",
+            "direct_T11_T17",
+            "depot_T17_T21",
+            "depot_T21_T24",
+            "depot_T24_T28",
+            "in_T28"
+          ],
+          "optimistic_terminal_arrival_soc_kwh": "41.57999999999999997000000000",
+          "terminal_delivered_cap_kwh": "972.00",
+          "trips": [
+            "T08",
+            "T11",
+            "T17",
+            "T21",
+            "T24",
+            "T28"
+          ],
+          "vehicle": 3
+        }
+      ],
+      "selected_bus_count": 4
+    },
+    {
+      "case": "learning_s2017_n28",
+      "case_identity": "d90b4d889fae5f3df4d9b254b87053333f00da48bbe71e258445840fcc4eb8d0",
+      "cover_independently_rejected": true,
+      "cover_status": "OPTIMAL",
+      "fixed_charge_status": "INFEASIBLE",
+      "individually_rejected_routes": 3,
+      "policy": "cost_learned",
+      "repair_json": "result/learning_repair/20260930-energy-aware-attempt1/learning_s2017_n28/state0/cost_learned/repair.json",
+      "repair_sha256": "8d699ff194d7779be199fda36924313520d2bb49abbddcbdf10c1be6dc163291",
+      "routes": [
+        {
+          "depot_visits": [
+            {
+              "delivered_cap_kwh": "2.700000000000000000000000000",
+              "grid_cap_kwh": "3.000000000000000000000000000",
+              "movement": "depot_T02_T07",
+              "optimistic_arrival_soc_kwh": "53.63",
+              "optimistic_departure_soc_kwh": "56.33000000000000000000000000",
+              "window_end_min": "433",
+              "window_start_min": "431"
+            },
+            {
+              "delivered_cap_kwh": "25.65000000000000000000000000",
+              "grid_cap_kwh": "28.50000000000000000000000000",
+              "movement": "depot_T08_T13",
+              "optimistic_arrival_soc_kwh": "4.29000000000000000000000000",
+              "optimistic_departure_soc_kwh": "29.94000000000000000000000000",
+              "window_end_min": "507",
+              "window_start_min": "488"
+            },
+            {
+              "delivered_cap_kwh": "45.90000000000000000000000000",
+              "grid_cap_kwh": "51.00000000000000000000000000",
+              "movement": "depot_T12_T21",
+              "optimistic_arrival_soc_kwh": "-23.59000000000000000000000000",
+              "optimistic_departure_soc_kwh": "22.31000000000000000000000000",
+              "window_end_min": "609",
+              "window_start_min": "575"
+            },
+            {
+              "delivered_cap_kwh": "9.450000000000000000000000000",
+              "grid_cap_kwh": "10.50000000000000000000000000",
+              "movement": "depot_T22_T27",
+              "optimistic_arrival_soc_kwh": "-20.11000000000000000000000000",
+              "optimistic_departure_soc_kwh": "-10.66000000000000000000000000",
+              "window_end_min": "689",
+              "window_start_min": "682"
+            }
+          ],
+          "first_violation": {
+            "item": "T08",
+            "optimistic_soc_kwh": "5.29000000000000000000000000",
+            "reserve_kwh": "20.0",
+            "shortfall_kwh": "14.71000000000000000000000000",
+            "stage": "service"
+          },
+          "individually_rejected": true,
+          "movements": [
+            "out_T01",
+            "direct_T01_T02",
+            "depot_T02_T07",
+            "direct_T07_T08",
+            "depot_T08_T13",
+            "direct_T13_T12",
+            "depot_T12_T21",
+            "direct_T21_T22",
+            "depot_T22_T27",
+            "direct_T27_T28",
+            "in_T28"
+          ],
+          "optimistic_terminal_arrival_soc_kwh": "-64.99000000000000000000000000",
+          "terminal_delivered_cap_kwh": "972.00",
+          "trips": [
+            "T01",
+            "T02",
+            "T07",
+            "T08",
+            "T13",
+            "T12",
+            "T21",
+            "T22",
+            "T27",
+            "T28"
+          ],
+          "vehicle": 0
+        },
+        {
+          "depot_visits": [
+            {
+              "delivered_cap_kwh": "12.1500",
+              "grid_cap_kwh": "13.500",
+              "movement": "depot_T04_T11",
+              "optimistic_arrival_soc_kwh": "57.81",
+              "optimistic_departure_soc_kwh": "69.9600",
+              "window_end_min": "489",
+              "window_start_min": "480"
+            },
+            {
+              "delivered_cap_kwh": "9.450000000000000000000000000",
+              "grid_cap_kwh": "10.50000000000000000000000000",
+              "movement": "depot_T14_T19",
+              "optimistic_arrival_soc_kwh": "20.4500",
+              "optimistic_departure_soc_kwh": "29.90000000000000000000000000",
+              "window_end_min": "584",
+              "window_start_min": "577"
+            },
+            {
+              "delivered_cap_kwh": "1.350000000000000000000000000",
+              "grid_cap_kwh": "1.500000000000000000000000000",
+              "movement": "depot_T20_T25",
+              "optimistic_arrival_soc_kwh": "-18.70000000000000000000000000",
+              "optimistic_departure_soc_kwh": "-17.35000000000000000000000000",
+              "window_end_min": "661",
+              "window_start_min": "660"
+            }
+          ],
+          "first_violation": {
+            "item": "T19",
+            "optimistic_soc_kwh": "1.70000000000000000000000000",
+            "reserve_kwh": "20.0",
+            "shortfall_kwh": "18.30000000000000000000000000",
+            "stage": "service"
+          },
+          "individually_rejected": true,
+          "movements": [
+            "out_T03",
+            "direct_T03_T04",
+            "depot_T04_T11",
+            "direct_T11_T14",
+            "depot_T14_T19",
+            "direct_T19_T20",
+            "depot_T20_T25",
+            "direct_T25_T26",
+            "in_T26"
+          ],
+          "optimistic_terminal_arrival_soc_kwh": "-71.68000000000000300000000000",
+          "terminal_delivered_cap_kwh": "972.00",
+          "trips": [
+            "T03",
+            "T04",
+            "T11",
+            "T14",
+            "T19",
+            "T20",
+            "T25",
+            "T26"
+          ],
+          "vehicle": 1
+        },
+        {
+          "depot_visits": [
+            {
+              "delivered_cap_kwh": "67.50000000000000000000000000",
+              "grid_cap_kwh": "75.00000000000000000000000000",
+              "movement": "depot_T06_T15",
+              "optimistic_arrival_soc_kwh": "55.21",
+              "optimistic_departure_soc_kwh": "100.0",
+              "window_end_min": "537",
+              "window_start_min": "487"
+            }
+          ],
+          "first_violation": null,
+          "individually_rejected": false,
+          "movements": [
+            "out_T05",
+            "direct_T05_T06",
+            "depot_T06_T15",
+            "direct_T15_T16",
+            "in_T16"
+          ],
+          "optimistic_terminal_arrival_soc_kwh": "54.92",
+          "terminal_delivered_cap_kwh": "972.00",
+          "trips": [
+            "T05",
+            "T06",
+            "T15",
+            "T16"
+          ],
+          "vehicle": 2
+        },
+        {
+          "depot_visits": [
+            {
+              "delivered_cap_kwh": "60.7500",
+              "grid_cap_kwh": "67.500",
+              "movement": "depot_T10_T17",
+              "optimistic_arrival_soc_kwh": "52.040000000000002",
+              "optimistic_departure_soc_kwh": "100.0",
+              "window_end_min": "561",
+              "window_start_min": "516"
+            },
+            {
+              "delivered_cap_kwh": "9.450000000000000000000000000",
+              "grid_cap_kwh": "10.50000000000000000000000000",
+              "movement": "depot_T18_T23",
+              "optimistic_arrival_soc_kwh": "45.919999999999998",
+              "optimistic_departure_soc_kwh": "55.36999999999999800000000000",
+              "window_end_min": "639",
+              "window_start_min": "632"
+            }
+          ],
+          "first_violation": {
+            "item": "T24",
+            "optimistic_soc_kwh": "11.14999999999999800000000000",
+            "reserve_kwh": "20.0",
+            "shortfall_kwh": "8.85000000000000200000000000",
+            "stage": "service"
+          },
+          "individually_rejected": true,
+          "movements": [
+            "out_T09",
+            "direct_T09_T10",
+            "depot_T10_T17",
+            "direct_T17_T18",
+            "depot_T18_T23",
+            "direct_T23_T24",
+            "in_T24"
+          ],
+          "optimistic_terminal_arrival_soc_kwh": "10.14999999999999800000000000",
+          "terminal_delivered_cap_kwh": "972.00",
+          "trips": [
+            "T09",
+            "T10",
+            "T17",
+            "T18",
+            "T23",
+            "T24"
+          ],
+          "vehicle": 3
+        }
+      ],
+      "selected_bus_count": 4
+    }
+  ],
+  "frozen_json": "result/learning_campaign/20260930-stage2-attempt1/frozen.json",
+  "frozen_sha256": "6de8846d024f3a7bc59e6c19e7c30086061b967b8e9fcdcc7a62496dd6b24cb6",
+  "method": "Starting full, sweep each selected route; each depot receives its own exclusive min(per_bus_kw,grid_kw) times window energy at efficiency, capped by battery capacity; check reserve after movement and service and full terminal refill capacity.",
+  "schema": "egg-charging-window-certificate-v1",
+  "scope": "Necessary per-route bound on four selected covers, ignoring shared-connector competition; no claim about alternative covers or global fleet feasibility"
+}

@@ -1,0 +1,102 @@
+{
+  "command": [
+    "sbatch",
+    "--parsable",
+    "--export=ALL,EGG_RUN_COMMIT=07b8ca94798b8872239113e00781ad81fde315d1",
+    "src/cluster/public_economic_sensitivity.sbatch"
+  ],
+  "complete_submission_ssh_seconds": 1.6666511250659823,
+  "completion": {
+    "collection_receipt": "research-20260929/public-economic-sensitivity/results-attempt1/COLLECTION_RECEIPT.json",
+    "elapsed_seconds": 3249,
+    "end_utc": "2026-09-29T03:06:26Z",
+    "exit_code": "0:0",
+    "max_rss": "459100K",
+    "node": "sonic-cpu-01",
+    "results": "research-20260929/public-economic-sensitivity/results-attempt1/",
+    "returned_stages": 24,
+    "start_utc": "2026-09-29T02:12:17Z",
+    "state": "COMPLETED"
+  },
+  "declared_cells": 8,
+  "declared_stages": 24,
+  "independent_review": "pass; completed before submission, final review text added after execution-source publication",
+  "independent_review_sha256": "76100bbe257ed302f8b562ce9c1ea07b3e2986c72cdd07c8fabca08d7d38278c",
+  "initial_inspection": {
+    "complete_ssh_seconds": 0.7312977081164718,
+    "result": {
+      "attempt_exists": true,
+      "completed_stage_receipts": 0,
+      "frozen.json": {
+        "controller_cap_seconds": 5400,
+        "declared_cells": 8,
+        "declared_stages": 24,
+        "protocol": "egg-public-economic-sensitivity-development-20260929-v1",
+        "source_commit": "07b8ca94798b8872239113e00781ad81fde315d1"
+      },
+      "job_id": "600028",
+      "queue": "600028|RUNNING|0:20|1|8G|sonic-cpu-01",
+      "queue_rc": 0,
+      "queue_stderr": ""
+    },
+    "returncode": 0,
+    "stderr": "",
+    "utc": "2026-09-29T02:12:37.552820+00:00"
+  },
+  "initial_progress": {
+    "complete_ssh_seconds": 0.09053625026717782,
+    "result": {
+      "controller_started": true,
+      "stage_launches": [
+        "public_depot15_f100_k1/state0/planner/launch.json",
+        "public_depot15_f100_k1/state0/cold_hull/launch.json"
+      ],
+      "stage_receipts": [
+        {
+          "elapsed_seconds": 183.73565337294713,
+          "hard_timeout": false,
+          "on_time": true,
+          "path": "public_depot15_f100_k1/state0/planner/receipt.json",
+          "returncode": 0
+        }
+      ],
+      "supervisor_started": true
+    },
+    "returncode": 0,
+    "stderr": "",
+    "utc": "2026-09-29T02:15:48.797135+00:00"
+  },
+  "job_id": "600028",
+  "queue_observation": "600028|PENDING|0:00|1|8G|(Priority)",
+  "queue_returncode": 0,
+  "queue_stderr": "",
+  "remote_checkout": "/home/nc437/egg-public-economic-20260929",
+  "requested_resources": {
+    "cpus": 1,
+    "memory": "8G",
+    "time_limit": "01:40:00"
+  },
+  "retry_policy": "none",
+  "source_ci_conclusion": "success",
+  "source_ci_run": 36511357899,
+  "source_ci_status": "completed",
+  "source_ci_status_at_submission": "in_progress",
+  "source_commit": "07b8ca94798b8872239113e00781ad81fde315d1",
+  "submit_returncode": 0,
+  "submit_seconds": 0.8901128070428967,
+  "submit_stderr": "",
+  "submit_stdout": "600028",
+  "user_monitor_preference_check": {
+    "complete_ssh_seconds": 0.3511916669085622,
+    "result": {
+      "queue": "600028|RUNNING|5:25|1|8G|sonic-cpu-01",
+      "queue_rc": 0,
+      "stage_receipts": 1
+    },
+    "returncode": 0,
+    "stderr": "",
+    "utc": "2026-09-29T02:17:42.668242+00:00"
+  },
+  "utc": "2026-09-29T02:11:37.360250+00:00",
+  "validation": "4 focused pure tests passed by implementer and root; shell syntax, compile, source pins and bounded independent review pass; no solver-core changes"
+}

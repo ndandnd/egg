@@ -1,0 +1,13 @@
+Traceback (most recent call last):
+  File "/Users/nadan/Documents/ChatGPT/egg/journal-research-work/src/experiments/native_recharge_qualification.py", line 158, in worker
+    result = nr.solve_pricing(case, cell["prices"], budget, record=record)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/nadan/Documents/ChatGPT/egg/journal-research-work/src/egglab/native_recharge.py", line 632, in solve_pricing
+    plan = _extract(case, built)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/nadan/Documents/ChatGPT/egg/journal-research-work/src/egglab/native_recharge.py", line 572, in _extract
+    charges = decode_serial(case, built["compiled"], energies)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/nadan/Documents/ChatGPT/egg/journal-research-work/src/egglab/native_recharge.py", line 519, in decode_serial
+    raise ValueError("Negative/nonfinite extracted native charge")
+ValueError: Negative/nonfinite extracted native charge

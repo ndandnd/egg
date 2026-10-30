@@ -1,0 +1,96 @@
+{
+  "source_revision": "6665c2b9f045410b4bbf19060b6780b0779f5534",
+  "child_pid": 46365,
+  "child_exit": 1,
+  "reaped": true,
+  "failure": null,
+  "assigned": [
+    "SOURCE_ADMISSION",
+    "Q0",
+    "TARGET",
+    "LOWER",
+    "INCUMBENT_ROUTES",
+    "RESPONSE_ROUTES",
+    "COMPARISON"
+  ],
+  "ledger": [
+    {
+      "id": "SOURCE_ADMISSION",
+      "status": "DELIVERED",
+      "cpu_s": 0.16061999999999999,
+      "elapsed_s": 0.19170662574470043,
+      "summary": {
+        "status": "SOURCE_ADMITTED"
+      }
+    },
+    {
+      "id": "Q0",
+      "status": "DELIVERED",
+      "cpu_s": 0.008610000000000007,
+      "elapsed_s": 0.008895667269825935,
+      "summary": {
+        "status": "PASS"
+      }
+    },
+    {
+      "id": "TARGET",
+      "status": "DELIVERED",
+      "cpu_s": 3.8756309999999994,
+      "elapsed_s": 3.8865436669439077,
+      "summary": {
+        "status": "VALIDATED_TARGET_SEMANTICS"
+      }
+    },
+    {
+      "id": "LOWER",
+      "status": "DELIVERED",
+      "cpu_s": 43.419885,
+      "elapsed_s": 44.9053348749876,
+      "summary": {
+        "status": "COMPLETE_TARGET_BOUND",
+        "target_identity": "1917409b43c0433b4ac2504b0b28c1bb2aa63a033c79ba1a4057418b63874ed7::exact-consumption-v1",
+        "reason": null,
+        "lower": "61540706052614299150673273932274140861925316616741197016088933/139379657490816394634598239204052259412377600000000000000000"
+      }
+    },
+    {
+      "id": "INCUMBENT_ROUTES",
+      "status": "DELIVERED",
+      "cpu_s": 0.48343999999999454,
+      "elapsed_s": 0.5762090841308236,
+      "summary": {
+        "status": "ADMITTED_TARGET_PRIMAL",
+        "target_identity": "1917409b43c0433b4ac2504b0b28c1bb2aa63a033c79ba1a4057418b63874ed7::exact-consumption-v1",
+        "face_attempts": 1,
+        "physical_replays": 1,
+        "objective_exact": "2748885062195568167908628137254966831651354567954767011/6225776124876973670400000000000000000000000000000000",
+        "fleet_count": 2
+      }
+    },
+    {
+      "id": "RESPONSE_ROUTES",
+      "status": "DELIVERED",
+      "cpu_s": 0.8121269999999967,
+      "elapsed_s": 0.8459442919120193,
+      "summary": {
+        "status": "ADMITTED_TARGET_PRIMAL",
+        "target_identity": "1917409b43c0433b4ac2504b0b28c1bb2aa63a033c79ba1a4057418b63874ed7::exact-consumption-v1",
+        "face_attempts": 1,
+        "physical_replays": 1,
+        "objective_exact": "138135556815315781402971333225935472988255689553187837/259407338536540569600000000000000000000000000000000",
+        "fleet_count": 2
+      }
+    },
+    {
+      "id": "COMPARISON",
+      "status": "FAILED",
+      "reason": "ValueError: String dictionary keys required"
+    }
+  ],
+  "cpu_s": 49.40147,
+  "elapsed_s": 51.073821583762765,
+  "peak_rss_bytes": 1824948224,
+  "resource_pass": true,
+  "accounting": "Owner plus waited children; worker CPU overlaps. External inclusive meter adopted once.",
+  "native_calls": 0
+}

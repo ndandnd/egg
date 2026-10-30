@@ -1,0 +1,51 @@
+{
+  "document_id": "1NmPC_qo_uOnA48dV6Ibhs3Pj9EgOD-oJTBuVi41p6bg",
+  "tab_id": "t.0",
+  "revision_id": "ANLCKQmSt9jVaIUfmBPs0cLEE06QKzxHUrAb9G7GK30QF7WUrmCp2XQybRdOlrVWMBOuiy0piTfifoWySiTiQK9s6VzjUE2UFbjPbupyIK8",
+  "append_start": 194858,
+  "append_end": 196321,
+  "append_text_verified": true,
+  "heading": "Physical validation and longer graph training submitted",
+  "heading_font_points": 16,
+  "styles_verified_using_named_style_inheritance": true,
+  "preserved_native_image_ids": [
+    "kix.14qgnlc7qzhp",
+    "kix.1g4t8u3qmu8n",
+    "kix.4yuqnp8k08fl",
+    "kix.fe5jxkrgnniq",
+    "kix.shpddc4n4xg",
+    "kix.uffmv89uhby0",
+    "kix.xjlr68pn1mfz"
+  ],
+  "links": [
+    {
+      "label": "Physical comparison protocol",
+      "url": "https://github.com/ndandnd/egg/blob/5ed3da7e7cd41dc319de9a35fe2f3f9f23035c01/research-20260930/learning-campaign/ROUTE_PROPOSAL_TRAIN_V7_PROTOCOL.md",
+      "textStyle": {
+        "link": {
+          "url": "https://github.com/ndandnd/egg/blob/5ed3da7e7cd41dc319de9a35fe2f3f9f23035c01/research-20260930/learning-campaign/ROUTE_PROPOSAL_TRAIN_V7_PROTOCOL.md"
+        }
+      }
+    },
+    {
+      "label": "Graph training protocol",
+      "url": "https://github.com/ndandnd/egg/blob/5ed3da7e7cd41dc319de9a35fe2f3f9f23035c01/research-20260930/learning-campaign/ROUTE_MODEL_GRAPH_BUDGET_V8_PROTOCOL.md",
+      "textStyle": {
+        "link": {
+          "url": "https://github.com/ndandnd/egg/blob/5ed3da7e7cd41dc319de9a35fe2f3f9f23035c01/research-20260930/learning-campaign/ROUTE_MODEL_GRAPH_BUDGET_V8_PROTOCOL.md"
+        }
+      }
+    }
+  ],
+  "text": "Physical validation and longer graph training submitted\n1 October 2026 UTC. Two reviewed follow-ups have been submitted to Unicorn. The physical comparison uses 16 fixed TRAIN timetables that are held out of each saved model’s fitting and inner selection. It compares the histogram baseline, the inner-selected tree family and the inner-selected graph model against cost-only construction and retained source fleets. Decoding, repair, charging and independent physical replay are measured separately; source fleets receive the same charging opportunity. No route-cost or speedup result is available yet.\n\nThe graph study runs 12 fold/seed tasks on the same 128 TRAIN groups. It raises the maximum from 300 to 900 epochs while retaining the architectures, features, optimizer, grouped inner selection and early stopping. Each fresh fit must reproduce its saved 300-epoch loss trajectory and selected model before later results can be interpreted. This tests additional optimization effort without changing the data or choosing models from outer scores.\n\nThe two arrays permit up to four physical-comparison workers and four training workers together: eight requested CPUs and 64 GB. Their total requested ceilings are eight and twelve CPU-hours respectively; these are budgets, not measured consumption. Failed and censored work will remain in the results. Development and final-test timetables remain sealed.\n\nPhysical comparison protocol\nGraph training protocol\n",
+  "source_commit": "5ed3da7e7cd41dc319de9a35fe2f3f9f23035c01",
+  "launch_receipts": [
+    "LAUNCH_728823.json",
+    "LAUNCH_729522.json"
+  ],
+  "trusted_read_manifest": {
+    "path": "/Users/nadan/Documents/ChatGPT/egg/journal-research-work/tmp/docs-followup-launch-20261001/manifest.json",
+    "bytes": 2409,
+    "sha256": "297010b469d3e7bb241226dde6f5cb0b696385258ec53a22fc940a52dab47029"
+  }
+}

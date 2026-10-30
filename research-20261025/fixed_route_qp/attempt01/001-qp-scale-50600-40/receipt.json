@@ -1,0 +1,102 @@
+{
+  "policy": "original-warm-eight-priors-direct-fixed-route-qp-v1",
+  "case": "scale:50600:40",
+  "seed": 17,
+  "complete": true,
+  "method_endpoint_accepted": false,
+  "qp_success": false,
+  "physical_witness_valid": false,
+  "config_failure": true,
+  "resource_violation": false,
+  "identity_failure": false,
+  "parent_anchor": 6117475.27307,
+  "native_deadline": 6117527.27307,
+  "admission_deadline": 6117535.27307,
+  "failures": [
+    {
+      "stage": "save_qp_stats",
+      "type": "ConfigurationFailure",
+      "message": "QP helper full-model copy/configuration contract failed"
+    }
+  ],
+  "stages": [
+    {
+      "stage": "case_construction",
+      "wall_s": 0.007658833637833595,
+      "cpu_s": 0.007657999999999998,
+      "observed_peak_rss_bytes": 25591808
+    },
+    {
+      "stage": "target_market",
+      "wall_s": 8.624978363513947e-06,
+      "cpu_s": 7.999999999994123e-06,
+      "observed_peak_rss_bytes": 25591808
+    },
+    {
+      "stage": "load_prior_plan",
+      "wall_s": 0.0003386251628398895,
+      "cpu_s": 0.00033900000000000596,
+      "observed_peak_rss_bytes": 25886720
+    },
+    {
+      "stage": "load_prior_replay",
+      "wall_s": 0.00013116654008626938,
+      "cpu_s": 0.00013099999999999223,
+      "observed_peak_rss_bytes": 25968640
+    },
+    {
+      "stage": "independent_prior_replay",
+      "wall_s": 0.014650832861661911,
+      "cpu_s": 0.014650999999999983,
+      "observed_peak_rss_bytes": 28491776
+    },
+    {
+      "stage": "save_replayed_fallback",
+      "wall_s": 0.002866417169570923,
+      "cpu_s": 0.002815999999999999,
+      "observed_peak_rss_bytes": 28934144
+    },
+    {
+      "stage": "one_direct_fixed_topology_qp",
+      "wall_s": 0.6577050415799022,
+      "cpu_s": 0.537679,
+      "observed_peak_rss_bytes": 82411520
+    },
+    {
+      "stage": "save_qp_stats",
+      "wall_s": 0.00037304218858480453,
+      "cpu_s": 0.0003610000000000557,
+      "observed_peak_rss_bytes": 82411520
+    }
+  ],
+  "native_calls": 0,
+  "case_identity": "82000dc7a7025f6636a2ca90574710c10fff048cea52989f4a49065d7bb897c6",
+  "target_market_identity": "456c84516b33195c48a322b13fc1b00146040a673357a18936cdf6ad3c06c225",
+  "fleet_count": 4,
+  "fallback_bill_exact": "572900972276268958900261623837121852172293001977875/730750818665451459101842416358141509827966271488",
+  "selected_source": "retained_prior",
+  "used_fallback": true,
+  "native_call_attempts": 0,
+  "qp_candidate_admitted": false,
+  "helper_failures": [
+    {
+      "stage": "copy_contract",
+      "type": "CopyContractError",
+      "message": "Stored bound/index/continuous read-back differs"
+    }
+  ],
+  "copy_contract": {
+    "passed": false,
+    "failure_stage": "copy_contract"
+  },
+  "stop_signal": null,
+  "resources": {
+    "self_cpu_s": 0.6327889999999999,
+    "waited_children_cpu_s": 0.0,
+    "combined_cpu_s": 0.63279,
+    "observed_peak_rss_bytes": 82411520,
+    "scope": "through receipt preparation; external meter includes publication/exit"
+  },
+  "elapsed_before_receipt_s": 0.7588210413232446,
+  "method_success": false
+}

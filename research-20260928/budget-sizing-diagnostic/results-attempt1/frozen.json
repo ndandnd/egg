@@ -1,0 +1,532 @@
+{
+  "controller_cap_seconds": 900,
+  "declared_cells": 8,
+  "design": {
+    "arm": "cold",
+    "backend": "GRB",
+    "bound_cache_policy": "none",
+    "case": {
+      "battery_kwh": 20,
+      "deadhead_cost_per_min": 0.5,
+      "depot": "D",
+      "efficiency": 0.95,
+      "graph_scope": "declared-movement-modes-only",
+      "market_edges_min": [
+        0,
+        60,
+        120,
+        180,
+        240
+      ],
+      "max_vehicles": 1,
+      "movements": [
+        {
+          "after": "A",
+          "before": null,
+          "depot_split": null,
+          "id": "out_A",
+          "kind": "pullout",
+          "legs": [
+            {
+              "arrive_min": 5,
+              "depart_min": 0,
+              "destination": "X",
+              "energy_kwh": 1,
+              "origin": "D"
+            },
+            {
+              "arrive_min": 10,
+              "depart_min": 5,
+              "destination": "P",
+              "energy_kwh": 1,
+              "origin": "X"
+            }
+          ]
+        },
+        {
+          "after": null,
+          "before": "A",
+          "depot_split": null,
+          "id": "in_A",
+          "kind": "pullin",
+          "legs": [
+            {
+              "arrive_min": 35,
+              "depart_min": 30,
+              "destination": "X",
+              "energy_kwh": 1,
+              "origin": "Q"
+            },
+            {
+              "arrive_min": 40,
+              "depart_min": 35,
+              "destination": "D",
+              "energy_kwh": 1,
+              "origin": "X"
+            }
+          ]
+        },
+        {
+          "after": "B",
+          "before": null,
+          "depot_split": null,
+          "id": "out_B",
+          "kind": "pullout",
+          "legs": [
+            {
+              "arrive_min": 85,
+              "depart_min": 80,
+              "destination": "X",
+              "energy_kwh": 1,
+              "origin": "D"
+            },
+            {
+              "arrive_min": 90,
+              "depart_min": 85,
+              "destination": "P",
+              "energy_kwh": 1,
+              "origin": "X"
+            }
+          ]
+        },
+        {
+          "after": null,
+          "before": "B",
+          "depot_split": null,
+          "id": "in_B",
+          "kind": "pullin",
+          "legs": [
+            {
+              "arrive_min": 115,
+              "depart_min": 110,
+              "destination": "X",
+              "energy_kwh": 1,
+              "origin": "Q"
+            },
+            {
+              "arrive_min": 120,
+              "depart_min": 115,
+              "destination": "D",
+              "energy_kwh": 1,
+              "origin": "X"
+            }
+          ]
+        },
+        {
+          "after": "C",
+          "before": null,
+          "depot_split": null,
+          "id": "out_C",
+          "kind": "pullout",
+          "legs": [
+            {
+              "arrive_min": 165,
+              "depart_min": 160,
+              "destination": "X",
+              "energy_kwh": 1,
+              "origin": "D"
+            },
+            {
+              "arrive_min": 170,
+              "depart_min": 165,
+              "destination": "P",
+              "energy_kwh": 1,
+              "origin": "X"
+            }
+          ]
+        },
+        {
+          "after": null,
+          "before": "C",
+          "depot_split": null,
+          "id": "in_C",
+          "kind": "pullin",
+          "legs": [
+            {
+              "arrive_min": 195,
+              "depart_min": 190,
+              "destination": "X",
+              "energy_kwh": 1,
+              "origin": "Q"
+            },
+            {
+              "arrive_min": 200,
+              "depart_min": 195,
+              "destination": "D",
+              "energy_kwh": 1,
+              "origin": "X"
+            }
+          ]
+        },
+        {
+          "after": "B",
+          "before": "A",
+          "depot_split": 2,
+          "id": "depot_AB",
+          "kind": "depot",
+          "legs": [
+            {
+              "arrive_min": 35,
+              "depart_min": 30,
+              "destination": "X",
+              "energy_kwh": 1,
+              "origin": "Q"
+            },
+            {
+              "arrive_min": 40,
+              "depart_min": 35,
+              "destination": "D",
+              "energy_kwh": 1,
+              "origin": "X"
+            },
+            {
+              "arrive_min": 85,
+              "depart_min": 80,
+              "destination": "X",
+              "energy_kwh": 1,
+              "origin": "D"
+            },
+            {
+              "arrive_min": 90,
+              "depart_min": 85,
+              "destination": "P",
+              "energy_kwh": 1,
+              "origin": "X"
+            }
+          ]
+        },
+        {
+          "after": "C",
+          "before": "B",
+          "depot_split": 2,
+          "id": "depot_BC",
+          "kind": "depot",
+          "legs": [
+            {
+              "arrive_min": 115,
+              "depart_min": 110,
+              "destination": "X",
+              "energy_kwh": 1,
+              "origin": "Q"
+            },
+            {
+              "arrive_min": 120,
+              "depart_min": 115,
+              "destination": "D",
+              "energy_kwh": 1,
+              "origin": "X"
+            },
+            {
+              "arrive_min": 165,
+              "depart_min": 160,
+              "destination": "X",
+              "energy_kwh": 1,
+              "origin": "D"
+            },
+            {
+              "arrive_min": 170,
+              "depart_min": 165,
+              "destination": "P",
+              "energy_kwh": 1,
+              "origin": "X"
+            }
+          ]
+        }
+      ],
+      "name": "three_services_two_depot_visits",
+      "recharge_deadline_min": 240,
+      "reserve_kwh": 1,
+      "resources": [
+        {
+          "connectors": 1,
+          "end_min": 240,
+          "grid_kw": 30,
+          "per_bus_kw": 30,
+          "start_min": 0
+        }
+      ],
+      "terminal_open_min": 0,
+      "trips": [
+        {
+          "end_min": 30,
+          "end_place": "Q",
+          "energy_kwh": 8,
+          "id": "A",
+          "start_min": 10,
+          "start_place": "P"
+        },
+        {
+          "end_min": 110,
+          "end_place": "Q",
+          "energy_kwh": 8,
+          "id": "B",
+          "start_min": 90,
+          "start_place": "P"
+        },
+        {
+          "end_min": 190,
+          "end_place": "Q",
+          "energy_kwh": 8,
+          "id": "C",
+          "start_min": 170,
+          "start_place": "P"
+        }
+      ],
+      "vehicle_cost": 7
+    },
+    "case_identity": "317fb71d02f64d511688e9b5b0008002e6aceeaad20745502341f823bd9d861b",
+    "cells": [
+      {
+        "budget": {
+          "backend": "GRB",
+          "epsilon": 0.0001,
+          "master_calls": 64,
+          "phase_seconds": 45,
+          "polish_seconds": 20,
+          "polish_steps": 64,
+          "pool_cap": 64,
+          "pool_tolerance": 1e-06,
+          "pricing_calls": 4,
+          "rational_bits": 4096,
+          "threads": 1,
+          "wall_seconds": 60
+        },
+        "hard_child_seconds": 90,
+        "name": "c4_b4096",
+        "pricing_calls": 4,
+        "rational_bits": 4096,
+        "state": 0
+      },
+      {
+        "budget": {
+          "backend": "GRB",
+          "epsilon": 0.0001,
+          "master_calls": 64,
+          "phase_seconds": 45,
+          "polish_seconds": 20,
+          "polish_steps": 64,
+          "pool_cap": 64,
+          "pool_tolerance": 1e-06,
+          "pricing_calls": 16,
+          "rational_bits": 4096,
+          "threads": 1,
+          "wall_seconds": 60
+        },
+        "hard_child_seconds": 90,
+        "name": "c16_b4096",
+        "pricing_calls": 16,
+        "rational_bits": 4096,
+        "state": 0
+      },
+      {
+        "budget": {
+          "backend": "GRB",
+          "epsilon": 0.0001,
+          "master_calls": 64,
+          "phase_seconds": 45,
+          "polish_seconds": 20,
+          "polish_steps": 64,
+          "pool_cap": 64,
+          "pool_tolerance": 1e-06,
+          "pricing_calls": 4,
+          "rational_bits": 8192,
+          "threads": 1,
+          "wall_seconds": 60
+        },
+        "hard_child_seconds": 90,
+        "name": "c4_b8192",
+        "pricing_calls": 4,
+        "rational_bits": 8192,
+        "state": 0
+      },
+      {
+        "budget": {
+          "backend": "GRB",
+          "epsilon": 0.0001,
+          "master_calls": 64,
+          "phase_seconds": 45,
+          "polish_seconds": 20,
+          "polish_steps": 64,
+          "pool_cap": 64,
+          "pool_tolerance": 1e-06,
+          "pricing_calls": 16,
+          "rational_bits": 8192,
+          "threads": 1,
+          "wall_seconds": 60
+        },
+        "hard_child_seconds": 90,
+        "name": "c16_b8192",
+        "pricing_calls": 16,
+        "rational_bits": 8192,
+        "state": 0
+      },
+      {
+        "budget": {
+          "backend": "GRB",
+          "epsilon": 0.0001,
+          "master_calls": 64,
+          "phase_seconds": 45,
+          "polish_seconds": 20,
+          "polish_steps": 64,
+          "pool_cap": 64,
+          "pool_tolerance": 1e-06,
+          "pricing_calls": 16,
+          "rational_bits": 8192,
+          "threads": 1,
+          "wall_seconds": 60
+        },
+        "hard_child_seconds": 90,
+        "name": "c16_b8192",
+        "pricing_calls": 16,
+        "rational_bits": 8192,
+        "state": 1
+      },
+      {
+        "budget": {
+          "backend": "GRB",
+          "epsilon": 0.0001,
+          "master_calls": 64,
+          "phase_seconds": 45,
+          "polish_seconds": 20,
+          "polish_steps": 64,
+          "pool_cap": 64,
+          "pool_tolerance": 1e-06,
+          "pricing_calls": 4,
+          "rational_bits": 8192,
+          "threads": 1,
+          "wall_seconds": 60
+        },
+        "hard_child_seconds": 90,
+        "name": "c4_b8192",
+        "pricing_calls": 4,
+        "rational_bits": 8192,
+        "state": 1
+      },
+      {
+        "budget": {
+          "backend": "GRB",
+          "epsilon": 0.0001,
+          "master_calls": 64,
+          "phase_seconds": 45,
+          "polish_seconds": 20,
+          "polish_steps": 64,
+          "pool_cap": 64,
+          "pool_tolerance": 1e-06,
+          "pricing_calls": 16,
+          "rational_bits": 4096,
+          "threads": 1,
+          "wall_seconds": 60
+        },
+        "hard_child_seconds": 90,
+        "name": "c16_b4096",
+        "pricing_calls": 16,
+        "rational_bits": 4096,
+        "state": 1
+      },
+      {
+        "budget": {
+          "backend": "GRB",
+          "epsilon": 0.0001,
+          "master_calls": 64,
+          "phase_seconds": 45,
+          "polish_seconds": 20,
+          "polish_steps": 64,
+          "pool_cap": 64,
+          "pool_tolerance": 1e-06,
+          "pricing_calls": 4,
+          "rational_bits": 4096,
+          "threads": 1,
+          "wall_seconds": 60
+        },
+        "hard_child_seconds": 90,
+        "name": "c4_b4096",
+        "pricing_calls": 4,
+        "rational_bits": 4096,
+        "state": 1
+      }
+    ],
+    "development_only": true,
+    "market_identities": {
+      "0": "259cd55cc9a4de48df27f1d2d0620c91e9f3755918b8ca65410224988b5bbb8b",
+      "1": "0a95acba53dd9ef587375c504716807187e8ce6cd9955ebe7a40e44d101503df"
+    },
+    "markets": {
+      "0": {
+        "a": [
+          0.2,
+          0.2,
+          0.2,
+          0.2
+        ],
+        "b": [
+          0.2,
+          0.2,
+          0.2,
+          0.2
+        ],
+        "name": "synthetic_multivisit-state0"
+      },
+      "1": {
+        "a": [
+          0.18,
+          0.18,
+          0.22,
+          0.22
+        ],
+        "b": [
+          0.2,
+          0.2,
+          0.2,
+          0.2
+        ],
+        "name": "synthetic_multivisit-state1"
+      }
+    },
+    "master_policy": "native_lp",
+    "native_threads": 1,
+    "pricing_reserve_seconds": 0.0,
+    "reuse_policy": "certified_only"
+  },
+  "freeze_host_environment": {
+    "hostname": "unicorn-cpu-74.coecis.cornell.edu",
+    "platform": "Linux-6.8.0-138-generic-x86_64-with-glibc2.39"
+  },
+  "native_probe": {
+    "backend_identity": {
+      "model_solver_name": "GRB",
+      "native_library_path": "/home/nc437/evsp_env/lib/python3.12/site-packages/gurobipy/_attrutil.cpython-312-x86_64-linux-gnu.so",
+      "native_library_sha256": "57f87a886aa5a1fd8356494fa1b81e9f9c7d957c898d09e96145440c76c762b7",
+      "requested": "GRB",
+      "solver_class": "SolverGurobi",
+      "solver_module": "mip.gurobi"
+    },
+    "model_seed": 0
+  },
+  "protocol": "egg-multivisit-budget-sizing-development-20260928-v1",
+  "scientific_admission": "pending independent review",
+  "software_runtime": {
+    "gurobi_runtime": "12.0.3",
+    "gurobipy": "12.0.3",
+    "machine": "x86_64",
+    "mip": "1.17.6",
+    "python_abi": "cpython-312",
+    "python_build": "3.12.13 | packaged by Anaconda, Inc. | (main, Mar 19 2026, 20:20:58) [GCC 14.3.0]",
+    "python_implementation": "cpython",
+    "python_version": "3.12.13"
+  },
+  "source_commit": "1dba007ee4868f0d29373a84b7880171ab3c358c",
+  "source_hashes": {
+    "research-20260928/budget-sizing-diagnostic/DESIGN.md": "8a79cb718bcf05e3545161d5d982a7f95735a2f6c2fcca7d77d96b13b6b49494",
+    "src/cluster/budget_sizing_diagnostic.sbatch": "d5635444d4ece0720cd8569a34c68090fecff9e993ed72c998ac2bb0ca34011b",
+    "src/egglab/native_hull.py": "dc8f04bfeab01fb6aaa4afca61c97887993b4e6181be8cabfa76858265051ffd",
+    "src/egglab/native_pathflow.py": "cd61085c5942248e53cdfbd92056c4ba324dfd81d5d18b726f58715298003df0",
+    "src/egglab/native_pathflow_hull.py": "93177e6e712ae4c407a26202194c250a7c547801b0ee6a18ebcf5e49c90a2eb4",
+    "src/egglab/native_recharge.py": "0067123a7f71cc6e9c89e1262cdcbd612cafdcfc252e35bcfca7f1f54c45d0f3",
+    "src/egglab/solver.py": "4d5ea429a84441d20b23856d903f9a499cb1e7e2d51ec61e6c163617478c6074",
+    "src/experiments/budget_sizing_diagnostic.py": "2b9da59b1699133cd7b5ffdc2465d4e5e8fe0d6a7b4e25560f189a6c4fc7ce23",
+    "src/experiments/computational_benchmark.py": "da96e4601e34dc797526703db68c2d2cbda57d78a9048c8fd7c34889ffca1c8f",
+    "src/experiments/feasible_pool_pilot_report.py": "b03363ce820b55fbb76d6472e2b617daf13e7a40b507a50f9696ac57b1bc8318",
+    "src/experiments/native_pathflow_qualification.py": "09bf4effcd31adab056ecd9d935436e0e26307bbdb129533d0fedc28b892c9ec",
+    "src/tests/test_budget_sizing_diagnostic.py": "79118d1a4465b3aa45a49f320ac9b9bc80f2f1eb785ed0f2eb630433d07b6b36"
+  }
+}

@@ -1,0 +1,133 @@
+{
+  "absent_task_scoped_accounting": [
+    {
+      "AllocCPUS": "1",
+      "ElapsedRaw": "2029",
+      "End": "2026-10-01T03:32:20",
+      "ExitCode": "0:0",
+      "JobID": "738226_2",
+      "JobName": "egg-route-graph-budget128-r1",
+      "MaxRSS": "",
+      "NodeList": "unicorn-cpu-75",
+      "ReqMem": "8G",
+      "Start": "2026-10-01T02:58:31",
+      "State": "COMPLETED",
+      "Submit": "2026-10-01T02:49:01",
+      "User": "nc437"
+    },
+    {
+      "AllocCPUS": "1",
+      "ElapsedRaw": "2029",
+      "End": "2026-10-01T03:32:20",
+      "ExitCode": "0:0",
+      "JobID": "738226_2.batch",
+      "JobName": "batch",
+      "MaxRSS": "548480K",
+      "NodeList": "unicorn-cpu-75",
+      "ReqMem": "",
+      "Start": "2026-10-01T02:58:31",
+      "State": "COMPLETED",
+      "Submit": "2026-10-01T02:58:31",
+      "User": ""
+    },
+    {
+      "AllocCPUS": "1",
+      "ElapsedRaw": "2029",
+      "End": "2026-10-01T03:32:20",
+      "ExitCode": "0:0",
+      "JobID": "738226_2.extern",
+      "JobName": "extern",
+      "MaxRSS": "",
+      "NodeList": "unicorn-cpu-75",
+      "ReqMem": "",
+      "Start": "2026-10-01T02:58:31",
+      "State": "COMPLETED",
+      "Submit": "2026-10-01T02:58:31",
+      "User": ""
+    }
+  ],
+  "heartbeat_at_utc": "2026-10-01T03:34:34.300Z",
+  "no_new_cluster_submission": true,
+  "observed_running_requested_cpus": 3,
+  "observed_running_requested_memory_gb": 24,
+  "one_scoped_queue_check": true,
+  "queue_rows": [
+    {
+      "array_job_id": 738226,
+      "array_tasks": "4-11%4",
+      "cpus": 1,
+      "elapsed": "0:00",
+      "memory": "8G",
+      "reason": "Resources",
+      "state": "PENDING"
+    },
+    {
+      "array_job_id": 738226,
+      "array_tasks": "3",
+      "cpus": 1,
+      "elapsed": "2:24",
+      "memory": "8G",
+      "node": "unicorn-cpu-75",
+      "state": "RUNNING"
+    },
+    {
+      "array_job_id": 738226,
+      "array_tasks": "1",
+      "cpus": 1,
+      "elapsed": "36:24",
+      "memory": "8G",
+      "node": "unicorn-cpu-75",
+      "state": "RUNNING"
+    },
+    {
+      "array_job_id": 738226,
+      "array_tasks": "0",
+      "cpus": 1,
+      "elapsed": "38:23",
+      "memory": "8G",
+      "node": "unicorn-cpu-75",
+      "state": "RUNNING"
+    }
+  ],
+  "recorded_at_utc": "2026-10-01T03:36:59.609168+00:00",
+  "scientific_scores_or_partial_model_results_read": false,
+  "source_of_scientific_claims": null,
+  "task2_allocated_cpu_seconds": 2029,
+  "task2_wrapper": {
+    "receipt": {
+      "allocated_job_cpus": "1",
+      "allocated_memory": "8192",
+      "array_job_id": "738226",
+      "attempt": "manual-recovery1-after-profile-startup-failure",
+      "elapsed_seconds": 2028,
+      "executed_wrapper_sha256": "19fb6bcb02a9b55e4310974bb1b1e61e8850a7f0576317087b2918c1f9a62b78",
+      "graph_python": "/home/nc437/egg-route-graph-env-20260930/bin/python",
+      "hostname": "unicorn-cpu-75.coecis.cornell.edu",
+      "job_id": "739268",
+      "native_threads": 1,
+      "original_failed_array": "729522",
+      "pool_manifest_sha256": "d9aad5b5ea62fd82a8b4f6a3c20a95c57953ba12c7bf0949fa06004aa511c40d",
+      "requested_cpus_per_task": "1",
+      "returncode": 0,
+      "runtime_probe_path": "result/physical_learning/20261001-route-model128-graph-budget-v8-recovery1/task2.runtime_probe.739268.jsonl",
+      "runtime_probe_sha256": "c9a60610547f5eb9dc2c32418ce752eace6ef9f0d96a59ddaef8342bd7cc92f0",
+      "scientific_policy": "unchanged-v8-fresh-fits",
+      "signal_exit": null,
+      "source_commit": "a19f0acc08adf4743cf24c9c82d0f4951f2f0bf3",
+      "source_hashes": {
+        "research-20260930/learning-campaign/LAUNCH_729522.json": "589ccf9b84e647f73c11e61aa5f018b41245b9cc3fdc1918121bbdc5582f9e07",
+        "research-20260930/learning-campaign/ROUTE_MODEL_GRAPH_BUDGET_V8_RECOVERY1_PROTOCOL.md": "5a1e507578c984ac82076a709bde9e8c41d11fb6fe2af81615fc7067061da01d",
+        "src/cluster/physical_route_graph_budget_v8.sbatch": "1b69c398fcffa9a951d679e16e47fd657c7f891d13b04715799d6b13e551f984",
+        "src/cluster/physical_route_graph_budget_v8_recovery1.sbatch": "19fb6bcb02a9b55e4310974bb1b1e61e8850a7f0576317087b2918c1f9a62b78",
+        "src/egglab/physical_route_graph_budget_v8.py": "0cc7ddc190efcef21cbedafd17ce741383e33f798b1a782c3f3a81e1cce47fbd",
+        "src/experiments/train_physical_route_graph_budget_v8.py": "28b06bb59d2d72a141246daf8674d1f19178e1dc9334e68eb241f21afd622f39",
+        "src/tests/test_physical_route_graph_budget_v8_recovery1.py": "b4c4802578ab61d439e0fb56e318fad66f1591b4536fb9043b2935692002d333"
+      },
+      "task_id": 2,
+      "timeout_exit": false,
+      "wrapper_completed": true,
+      "wrapper_phase": "training"
+    },
+    "remote_receipt_path": "/home/nc437/egg-route-graph-budget-20261001-v8-recovery1/result/physical_learning/20261001-route-model128-graph-budget-v8-recovery1/task02.slurm_wrapper_receipt.739268.json"
+  }
+}

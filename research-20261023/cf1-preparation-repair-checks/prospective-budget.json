@@ -1,0 +1,18 @@
+{
+  "policy": "cf1-preparation-repair-source-check-v1",
+  "initial_charge_s": 1414.4127097992352,
+  "additional_hard_cap_s": 25.0,
+  "absolute_package_end_s": 1439.4127097992352,
+  "administration_allowance_s": 0.0,
+  "work_limit_s": 20.0,
+  "outer_limit_s": 22.5,
+  "finalization_reserve_s": 2.5,
+  "rss_limit_bytes": 5368709120,
+  "threads": 1,
+  "selected_tests": [
+    "test_cf1_preparation_repair.py"
+  ],
+  "native_dispatch_allowed": false,
+  "automatic_retry": false,
+  "external_observation": "/usr/bin/time -p; reconcile full-wrapper max(wall,user+sys)+0.02 against internal charge"
+}

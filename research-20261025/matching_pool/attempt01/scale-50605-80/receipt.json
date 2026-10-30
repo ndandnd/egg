@@ -1,0 +1,128 @@
+{
+  "case": "scale:50605:80",
+  "case_anchor": 6097289.813877208,
+  "case_deadline": 6097409.813877208,
+  "complete": true,
+  "physical_witness_valid": true,
+  "status": "replayed_matching_pool_witness",
+  "stages": [
+    {
+      "stage": "case_construction",
+      "wall_s": 0.05225766636431217,
+      "cpu_s": 0.05225100000000005,
+      "observed_peak_rss_bytes": 159039488
+    },
+    {
+      "stage": "three_global_covers",
+      "wall_s": 0.12440699990838766,
+      "cpu_s": 0.12165999999999988,
+      "observed_peak_rss_bytes": 159039488
+    },
+    {
+      "stage": "save_candidate_pool",
+      "wall_s": 0.015911541879177094,
+      "cpu_s": 0.014183000000000057,
+      "observed_peak_rss_bytes": 159039488
+    },
+    {
+      "stage": "full_physical_model",
+      "wall_s": 1.7879492919892073,
+      "cpu_s": 1.737939,
+      "observed_peak_rss_bytes": 236290048
+    },
+    {
+      "stage": "one_physical_inventory",
+      "wall_s": 4.71302037499845,
+      "cpu_s": 4.427872000000001,
+      "observed_peak_rss_bytes": 236290048
+    },
+    {
+      "stage": "pool_upper_bound_restriction",
+      "wall_s": 0.11070908326655626,
+      "cpu_s": 0.09915200000000013,
+      "observed_peak_rss_bytes": 236290048
+    },
+    {
+      "stage": "one_fleet_native_solve",
+      "wall_s": 0.7466506669297814,
+      "cpu_s": 0.7277950000000004,
+      "observed_peak_rss_bytes": 243384320
+    },
+    {
+      "stage": "one_capture",
+      "wall_s": 3.2079372499138117,
+      "cpu_s": 2.931557999999999,
+      "observed_peak_rss_bytes": 426901504
+    },
+    {
+      "stage": "unchanged_extraction",
+      "wall_s": 1.5358938751742244,
+      "cpu_s": 1.4978510000000007,
+      "observed_peak_rss_bytes": 426901504
+    },
+    {
+      "stage": "independent_replay",
+      "wall_s": 0.06678779236972332,
+      "cpu_s": 0.06660600000000017,
+      "observed_peak_rss_bytes": 426901504
+    },
+    {
+      "stage": "save_physical_witness",
+      "wall_s": 0.0038921674713492393,
+      "cpu_s": 0.003842000000000567,
+      "observed_peak_rss_bytes": 426901504
+    }
+  ],
+  "failures": [],
+  "native_seed": null,
+  "seed_policy": "backend default, unmodified; numeric default unknown",
+  "case_identity": "9b2ea49128e8c369b2ff4b50811a7a9dd94c6c9d233fb0b0cd80e2b64886f1c0",
+  "market_identity": "e02470bac03de50d5c549d91b16eedeccd4367df8057d011d156b9988e7b2f0e",
+  "trips": 80,
+  "pool": {
+    "policy": "three-global-path-covers-parallel-mode-union-v1",
+    "declared_movements": 6042,
+    "retained_movements": 273,
+    "route_only_path_counts": [
+      3,
+      3,
+      3
+    ]
+  },
+  "inventory": {
+    "physical_rows": 190037,
+    "columns": 177958,
+    "single_inventory": true
+  },
+  "native": {
+    "status": "OPTIMAL",
+    "incumbent": 24.0,
+    "lower_bound": 24.0,
+    "raw_incumbent_repr": "24.0",
+    "raw_lower_bound_repr": "24.0",
+    "wall_s": 0.7463452080264688,
+    "seconds_cap": 60.0,
+    "threads": 1,
+    "backend": "GRB",
+    "backend_runtime": {
+      "requested": "GRB",
+      "model_solver_name": "GRB",
+      "solver_module": "mip.gurobi",
+      "solver_class": "SolverGurobi",
+      "native_library_path": "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/gurobipy/_batch.cpython-312-darwin.so",
+      "native_library_sha256": "54c2ca41a9a9c80b4dd27df09e6b8a73abbb18de90e95198ae676611910dca96"
+    },
+    "n_vars": 177958,
+    "n_int": 6042,
+    "n_constraints": 190037,
+    "physical_constraints": 190037
+  },
+  "native_bound_scope": "candidate-pool-restricted fleet count, never unrestricted full-model bound",
+  "vehicles": 24,
+  "integrated_cost_exact": "9597970477511656954029715364998240050622407547463127/2923003274661805836407369665432566039311865085952",
+  "fleet_objective_tolerance": 1e-06,
+  "witness_ready_monotonic": 6097302.254103166,
+  "elapsed_before_receipt_s": 12.440322541631758,
+  "cpu_before_receipt_s": 11.753926,
+  "observed_peak_rss_bytes": 426901504
+}

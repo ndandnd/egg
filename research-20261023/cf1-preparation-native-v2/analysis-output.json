@@ -1,0 +1,48 @@
+{
+  "policy": "cf1-preparation-native-v2",
+  "passed": false,
+  "planned": 1,
+  "terminal": 1,
+  "rows": [
+    {
+      "task": {
+        "arm": "cf1",
+        "base_id": 50999,
+        "trips": 80,
+        "seed": 17,
+        "seconds": 60.0,
+        "fault": null,
+        "protocol_revision": 2,
+        "id": "ca0fa61075b9c6d4e16c"
+      },
+      "issues": [
+        "worker_failure",
+        "worker_engineering_failure",
+        "native_partial_start_processing_unobserved",
+        "cf1_fixed_capture_unverified",
+        "cf1_charging_path_unexercised",
+        "cf1_fixed_inventory"
+      ],
+      "endpoint_wall_s": 50.88851687498391,
+      "censored": false,
+      "native": {
+        "submitted": 0,
+        "classified": [],
+        "unattributed_log_matches": []
+      },
+      "fallback_bill_exact": "2474469300669776790102822052892375824920881975301995/730750818665451459101842416358141509827966271488",
+      "selected_bill_exact": "2474469300669776790102822052892375824920881975301995/730750818665451459101842416358141509827966271488"
+    }
+  ],
+  "issues": [
+    "ca0fa61075b9c6d4e16c:worker_failure",
+    "ca0fa61075b9c6d4e16c:worker_engineering_failure",
+    "ca0fa61075b9c6d4e16c:native_partial_start_processing_unobserved",
+    "ca0fa61075b9c6d4e16c:cf1_fixed_capture_unverified",
+    "ca0fa61075b9c6d4e16c:cf1_charging_path_unexercised",
+    "ca0fa61075b9c6d4e16c:cf1_fixed_inventory"
+  ],
+  "cumulative_before_analysis_tail_s": 1500.7811370494985,
+  "package_cap_s": 1581.3727097992353,
+  "scope": "single repaired-CF1 engineering80 preflight; no comparative quality/optimality/generalization claim"
+}

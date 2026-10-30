@@ -1,0 +1,49 @@
+{
+  "failed_bootstrap": {
+    "complete_ssh_seconds": 0.05247825011610985,
+    "error": "/etc/profile.d/slurm.sh: line 2: INCLUDE: unbound variable",
+    "returncode": 1,
+    "scope": "Failed while sourcing Slurm profile before any checkout creation, freeze or submission; source profile before enabling nounset.",
+    "utc": "2026-09-28T18:44:37.693614+00:00"
+  },
+  "freeze_seconds_are_subset_not_additional": true,
+  "optimization_attempts_during_preparation": 0,
+  "raw_logs_private": "/Users/nadan/Documents/ChatGPT/egg/research-20260928/cluster/retrieval-comparison-attempt1",
+  "slurm_submissions": 1,
+  "source_commit": "68cfa64fed41b61b423628b5f112eeb0b43934e2",
+  "successful_preparation": {
+    "cases": [
+      "native_scale_dev_s1006_n08",
+      "native_scale_dev_s1006_n16",
+      "native_scale_dev_s1006_n24",
+      "native_scale_dev_s1009_n16",
+      "native_scale_dev_s1012_n16",
+      "sistig_eberbach_single_depot_36_eb3"
+    ],
+    "checkout": "/home/nc437/egg-retrieval-comparison-20260928",
+    "children_declared": 48,
+    "controller_cap_seconds": 6900,
+    "elapsed_seconds": 2.9059086218476295,
+    "frozen_bytes": 7567527,
+    "frozen_sha256": "9fb6c638cef4c40de79b4084f82129fd5b2c76f634c33f7110ab3c0cf3f51889",
+    "kind": "prospective freeze; no optimization",
+    "native_probe": {
+      "backend_identity": {
+        "model_solver_name": "GRB",
+        "native_library_path": "/home/nc437/evsp_env/lib/python3.12/site-packages/gurobipy/_attrutil.cpython-312-x86_64-linux-gnu.so",
+        "native_library_sha256": "57f87a886aa5a1fd8356494fa1b81e9f9c7d957c898d09e96145440c76c762b7",
+        "requested": "GRB",
+        "solver_class": "SolverGurobi",
+        "solver_module": "mip.gurobi"
+      },
+      "model_seed": 0
+    },
+    "nominal_child_seconds": 6600,
+    "returncode": 0,
+    "source_commit": "68cfa64fed41b61b423628b5f112eeb0b43934e2",
+    "supervisor_cap_seconds": 7100,
+    "utc": "2026-09-28T18:45:42.477443+00:00"
+  },
+  "successful_preparation_complete_ssh_seconds": 32.050908708013594,
+  "total_preparation_complete_ssh_seconds": 32.103386958129704
+}

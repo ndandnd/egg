@@ -1,0 +1,89 @@
+{
+  "job_id": "703461",
+  "submitted_at_utc": "2026-09-30T15:58:56Z",
+  "source_commit": "032d02d3f8f227a0716a3e74a66e55260f5139f8",
+  "source_branch": "codex/journal-research-20260927",
+  "remote_checkout": "/home/nc437/egg-physical-learning-20260930",
+  "attempt_relative": "result/physical_learning/20260930-shard00-attempt1",
+  "shard": 0,
+  "wrapper": "src/cluster/physical_learning.sbatch",
+  "protocol": "PROTOCOL_PHYSICAL_LEARNING.md",
+  "launch_review": "PHYSICAL_LEARNING_LAUNCH_REVIEW.md",
+  "generator": "physical-fleet-learning-v2-full-factorial",
+  "selected_training_ids": [
+    10000,
+    10001,
+    10002,
+    10003,
+    10004,
+    10005,
+    10006,
+    10007
+  ],
+  "registry": {
+    "train": [
+      10000,
+      10127,
+      128
+    ],
+    "dev": [
+      20000,
+      20031,
+      32
+    ],
+    "sealed_test": [
+      30000,
+      30031,
+      32
+    ]
+  },
+  "old_reserved_ids_untouched": [
+    2004,
+    2005,
+    2020,
+    2021
+  ],
+  "declared_cells": 64,
+  "native_source_cells": 16,
+  "fixed_route_charging_cells": 48,
+  "physical_profiles_operating_span_kwh": [
+    80,
+    174.24,
+    232.32
+  ],
+  "requested": {
+    "cpus_per_task": 1,
+    "memory_gb": 8,
+    "wall_seconds": 7200,
+    "native_threads": 1,
+    "requeue": false,
+    "excluded_nodes": [
+      "scaglione-compute-01"
+    ]
+  },
+  "caps_seconds": {
+    "child_hard": 100,
+    "controller": 6600,
+    "outer_shell": 6900
+  },
+  "all_128_training_witnesses_pure_replay_passed": true,
+  "development_test_materialized": false,
+  "model_fit_in_this_job": false,
+  "source_pin_count": 18,
+  "focused_tests_passed": 8,
+  "submission_guard": ".submission-physical-learning-shard0/jobid.txt",
+  "submission_checks": {
+    "no_active_egg_job": true,
+    "fresh_checkout": true,
+    "tracked_checkout_clean": true,
+    "exclusive_attempt_absent": true
+  },
+  "launch_script_sha256": "7573d07f1edef318ed6bc8955b2a4c10ca3aeb84c2f3ce4806d95c377688de44",
+  "submission_stdout": "HEAD is now at 032d02d Add versioned physical training registry and resumable label shards\n703461\n2026-09-30T15:58:56Z\n",
+  "observation": {
+    "recorded_at_utc": "2026-09-30T16:00:21.521977+00:00",
+    "state": "SUBMITTED",
+    "queue_state_not_polled_after_submission": true
+  },
+  "scientific_result": "Pending; data collection only, no trained-model or performance claim"
+}

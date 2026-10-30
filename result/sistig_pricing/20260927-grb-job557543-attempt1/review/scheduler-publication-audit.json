@@ -1,0 +1,108 @@
+{
+  "allocation": {
+    "ExcNodeList": "scaglione-compute-01",
+    "JobId": "557543",
+    "MinMemoryNode": "8G",
+    "NumCPUs": "1",
+    "NumNodes": "1",
+    "Partition": "default_partition",
+    "Requeue": "0",
+    "TimeLimit": "00:12:00"
+  },
+  "audit_status": "PASS scheduler, runtime and publication-omission eligibility",
+  "completion": {
+    "batch_maxrss_kib": 397140,
+    "elapsed_s": 395,
+    "exit": "0:0",
+    "node": "snavely-cpu-16",
+    "state": "COMPLETED"
+  },
+  "expected_public_scientific_files": 15,
+  "job_id": 557543,
+  "post_completion_scontrol": "Expired; original allocation and completed sacct retained. Initial packaging interruption did not rerun scientific work.",
+  "private_outer_log_hashes": {
+    "egg-sistig-pilot-557543.err": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "egg-sistig-pilot-557543.out": {
+      "bytes": 735,
+      "sha256": "bf4d945d4a5d7b4ff68bca0424a1b78ce47815e03bc1952b24f043408a90ead6"
+    }
+  },
+  "publication_scope": "Eligibility verified; future public copy must retain all other scientific files byte-identically and include original raw manifest plus omission manifest. No log contents or license/token-server values are included here.",
+  "raw_bytes": 13587430,
+  "raw_files": 17,
+  "raw_manifest_sha256": "826e79867437b5d1f464e3f54a0f204bb18a8541470e06a2344345881b0b1d01",
+  "routine_receipts": [
+    {
+      "cell": "depot_15_flat",
+      "hard_child_cap_s": 255,
+      "routine_elapsed_s": 184.6948992931284
+    },
+    {
+      "cell": "depot_16_flat",
+      "hard_child_cap_s": 255,
+      "routine_elapsed_s": 184.56842770706862
+    }
+  ],
+  "runtime": {
+    "gurobipy_version": "12.0.3",
+    "mip_version": "1.17.6",
+    "platform": "Linux-6.8.0-138-generic-x86_64-with-glibc2.39",
+    "python": "3.12.13 | packaged by Anaconda, Inc. | (main, Mar 19 2026, 20:20:58) [GCC 14.3.0]"
+  },
+  "scheduler_file_hashes": {
+    "INTENT.txt": {
+      "bytes": 171,
+      "sha256": "00740e7131fb39188f9a086fba37b223fe4fe4254e9843b23212b4e0c456fd9e"
+    },
+    "SACCT_COMPLETED.txt": {
+      "bytes": 188,
+      "sha256": "c9ebc2a04b1c3a8b167c7bacfd6ef6c6424cbc7d627e950a83a720295895db8b"
+    },
+    "SCONTROL.txt": {
+      "bytes": 1315,
+      "sha256": "636a18d228c94a9611c92cf43fc54a34e18b5e142edf49e232fc2a8641f1021f"
+    },
+    "SCONTROL_COMPLETED.txt": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "SCONTROL_COMPLETED_UNAVAILABLE.txt": {
+      "bytes": 249,
+      "sha256": "0ee7fca1b3bbce50b90d7f87f632d2a3be489baa5b671e450de3251ba0cb728b"
+    },
+    "SUBMITTED.txt": {
+      "bytes": 7,
+      "sha256": "2dc3338a969c45160fed03721213c52839629592d864902d3ebb7a6994777a3c"
+    }
+  },
+  "source_commit": "282e00b80b6fd9457006429b089269b2a9e2be92",
+  "supervisor_receipt": {
+    "elapsed_whole_seconds": 375,
+    "kill_grace_s": 10,
+    "outer_cap_s": 560,
+    "returncode": 0,
+    "scope": "Slurm outer timeout wrapper",
+    "start_utc": "2026-09-27T17:14:45Z",
+    "timeout_exit": false
+  },
+  "transfer_archive_sha256": "eda8c161372c4f0c774036b217fed56c072d4749f1865329e9ee314eec321ef5",
+  "verified_publication_omissions": [
+    {
+      "bytes": 152,
+      "reason": "Whole solver stdout contains license identifier and token-server configuration; full original retained locally",
+      "relative_path": "depot_15_flat/stdout.txt",
+      "sensitive_content_verified": true,
+      "sha256": "4d6f5fb03c58ea40fc56b696dedb61dc744dbe9c824576c069c2fb20b8cc6932"
+    },
+    {
+      "bytes": 152,
+      "reason": "Whole solver stdout contains license identifier and token-server configuration; full original retained locally",
+      "relative_path": "depot_16_flat/stdout.txt",
+      "sensitive_content_verified": true,
+      "sha256": "4d6f5fb03c58ea40fc56b696dedb61dc744dbe9c824576c069c2fb20b8cc6932"
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+# Independent source-only runner/resource review
+
+Reviewed worker.py, run.py, PROTOCOL.md and draft LAUNCH.json, including the final pre-stage RSS guard delta. No imports, execution, compilation, tests, hashes, benchmarks, artifacts or numerical outcomes were consumed.
+
+**PASS for prospective resource/source/closure integration.** Parent must freeze sources, separate control, exact command and external meter before any dispatch. This review supplies no execution authority or runtime qualification.
+
+Owner and directly invoked worker both deny DRAFT and validate fixed source/run/resource/denominator declarations. Worker compares all seven source/literal buffers to the frozen commit, caches/hashes each once, and executes only cached modules. Separate control bytes are read once and hashed once. No historical data or actual external artifact is an input.
+
+The eleven assigned states are Q0 plus ten literals; Q0 overlaps the no-edge hand anchor and is not an eleventh independent scientific case. Exact case IDs/order are fixed. Preflight, Q0 and case caps include source admission, arithmetic and compressed output. Full stage allowance plus final reserve must exist before each stage; allowances are never reduced to fit. Preflight subtracts inclusive interpreter-startup usage from its remaining CPU allowance. Stage CPU/wall timers provide bounded interruption; child Git CPU is also captured by the complete observed preflight gate. Active-system limits and outer process gates remain independent safeguards.
+
+Source/Q0/funding failures block dependent states. An ordinary failed case is retained and remaining predeclared literals may receive their one stage only if fully funded. The final pre-stage RSS delta correctly raises FundingStop before a row is appended, making observed resource breach fatal to onward stages rather than repeatedly continuing through an already failed memory gate. All missing identities are retained as UNATTEMPTED in declared order. Stage exceptions preserve FAILED status and partial exclusive output; no rerun or alternate case is selected.
+
+Worker hard self1650CPU, observed inclusive1700CPU/2200wall and the protected final reserve fit the proposed1800CPU/2400wall package. Owner supervision begins before its initial Git child, waits/kills/reaps boundedly, validates fixed terminal master/ledger/resource consistency and preserves UNKNOWN_UNREPORTED if no readable master exists. Final master/receipts/status serialization and shutdown are covered by the reserved/outer clock and external meter, with nested observations overlapping rather than additive. RSS is an observed per-process acceptance gate, not instantaneous aggregate allocation enforcement; this limitation is stated honestly. Native calls remain zero.
+
+No scientific-result success is inferred from administrative closure. Completed finite comparison qualifies the declared implementation cases only; the continuum theorem rests on its proof. All outcomes and actual resource use remain unknown before the single frozen run.

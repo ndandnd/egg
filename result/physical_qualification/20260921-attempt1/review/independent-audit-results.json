@@ -1,0 +1,172 @@
+{
+  "auditor_sha256": "f9cf9158ca07d594453dbabb1970c6a0c7dca017e81de40c10dcad85c6020a34",
+  "cases": [
+    {
+      "ch_components": {
+        "components": 3,
+        "positive_components": 1
+      },
+      "expected_ch": "8",
+      "expected_d": "8",
+      "feasible_structures": 2,
+      "name": "linear_split",
+      "pass": true,
+      "physical_components": 2,
+      "solver_calls": 4,
+      "structures": 3
+    },
+    {
+      "ch_components": {
+        "components": 3,
+        "positive_components": 2
+      },
+      "expected_ch": "61/5",
+      "expected_d": "13",
+      "feasible_structures": 2,
+      "name": "convex_split",
+      "pass": true,
+      "physical_components": 2,
+      "solver_calls": 30,
+      "structures": 3
+    },
+    {
+      "ch_components": {
+        "components": 2,
+        "positive_components": 1
+      },
+      "expected_ch": "13",
+      "expected_d": "13",
+      "feasible_structures": 1,
+      "name": "forced_one_bus",
+      "pass": true,
+      "physical_components": 1,
+      "solver_calls": 33,
+      "structures": 2
+    },
+    {
+      "ch_components": {
+        "components": 3,
+        "positive_components": 1
+      },
+      "expected_ch": "14",
+      "expected_d": "14",
+      "feasible_structures": 1,
+      "name": "capacity_filters_structure",
+      "pass": true,
+      "physical_components": 1,
+      "solver_calls": 4,
+      "structures": 3
+    },
+    {
+      "ch_components": {
+        "components": 2,
+        "positive_components": 1
+      },
+      "expected_ch": "1/2",
+      "expected_d": "1/2",
+      "feasible_structures": 1,
+      "name": "replenished_terminal",
+      "pass": true,
+      "physical_components": 1,
+      "solver_calls": 35,
+      "structures": 2
+    },
+    {
+      "ch_components": {
+        "components": 0,
+        "positive_components": 0
+      },
+      "expected_ch": "None",
+      "expected_d": "None",
+      "feasible_structures": 0,
+      "name": "replenished_infeasible",
+      "pass": true,
+      "physical_components": 0,
+      "solver_calls": 3,
+      "structures": 2
+    },
+    {
+      "ch_components": {
+        "components": 8,
+        "positive_components": 1
+      },
+      "expected_ch": "36",
+      "expected_d": "36",
+      "feasible_structures": 2,
+      "name": "two_bus_uncapped",
+      "pass": true,
+      "physical_components": 2,
+      "solver_calls": 48,
+      "structures": 8
+    },
+    {
+      "ch_components": {
+        "components": 8,
+        "positive_components": 1
+      },
+      "expected_ch": "184/5",
+      "expected_d": "184/5",
+      "feasible_structures": 2,
+      "name": "two_bus_shared_power",
+      "pass": true,
+      "physical_components": 2,
+      "solver_calls": 12,
+      "structures": 8
+    }
+  ],
+  "corrupted_output_rejections": [
+    {
+      "mutation": "missing_structure",
+      "reason": "count/duplicate structures",
+      "rejected": true
+    },
+    {
+      "mutation": "event_outside_window",
+      "reason": "SOC after service",
+      "rejected": true
+    },
+    {
+      "mutation": "forged_load",
+      "reason": "stored aggregate: (3.0029296875000404, 3.1029296875000405)",
+      "rejected": true
+    },
+    {
+      "mutation": "forged_objective",
+      "reason": "true objective recomputation: (12.20000171661377, 12.30000171661377)",
+      "rejected": true
+    },
+    {
+      "mutation": "forged_gap",
+      "reason": "gap lower arithmetic: (0.8999957633855832, 0.7999957633855832)",
+      "rejected": true
+    },
+    {
+      "mutation": "unresolved_status",
+      "reason": "expected optimal solve",
+      "rejected": true
+    },
+    {
+      "mutation": "removed_capacity",
+      "reason": "frozen shared cap",
+      "rejected": true
+    }
+  ],
+  "pass": true,
+  "process": {
+    "cap_s": 240.0,
+    "exit": 0,
+    "timed_out": false,
+    "wall_s": 0.44161179196089506
+  },
+  "result_sha256": {
+    "capacity_filters_structure.json": "42b63b94c5f74806f8d00674c2c182239b3938f886e144993555665ee0172fa6",
+    "convex_split.json": "d744fa1deb39eb8a8fe5a68fade4637c58b3a313b3a698c279794de9726a8d1a",
+    "forced_one_bus.json": "d4ac917c47efa8f841456ca53b98346fdcd10f7bf2e03b658745c7068d4030d5",
+    "linear_split.json": "076912713956aaf2737be9f01f80e9f019a25b4105f29c6dac961b61ae1c24ab",
+    "replenished_infeasible.json": "39db30fac5b365123bc2c290074b322e1797b3e8dd8734410bd89128cabd7ccc",
+    "replenished_terminal.json": "7879c705ce91f8010cdbbfc05886342b48780ae23c9f119af2277527dfd7dfb5",
+    "two_bus_shared_power.json": "a9cacd5290aa593a72e45efb3be1f44fb37cbd03b019b9b81e906dd5e00dabd6",
+    "two_bus_uncapped.json": "11b708133d4a79c5075d1ffe0c26c71ee3b06db2cfd2c903494f6702031076fb"
+  },
+  "scope": "solver-free non-author raw-event and analytic audit"
+}

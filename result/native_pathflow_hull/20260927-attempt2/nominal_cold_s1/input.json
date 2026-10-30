@@ -1,0 +1,243 @@
+{
+  "budget": {
+    "backend": "CBC",
+    "epsilon": 0.0001,
+    "master_calls": 64,
+    "phase_seconds": 10.0,
+    "polish_seconds": 5.0,
+    "polish_steps": 256,
+    "pool_cap": 48,
+    "pool_tolerance": 1e-06,
+    "pricing_calls": 16,
+    "rational_bits": 8192,
+    "threads": 1,
+    "wall_seconds": 60.0
+  },
+  "control": {
+    "arm": "cold",
+    "case": {
+      "battery_kwh": 20.0,
+      "deadhead_cost_per_min": 0.0,
+      "depot": "D",
+      "efficiency": 1.0,
+      "graph_scope": "declared-movement-modes-only",
+      "market_edges_min": [
+        0,
+        60,
+        120,
+        180,
+        240
+      ],
+      "max_vehicles": 2,
+      "movements": [
+        {
+          "after": "A",
+          "before": null,
+          "depot_split": null,
+          "id": "out_A",
+          "kind": "pullout",
+          "legs": [
+            {
+              "arrive_min": 0,
+              "depart_min": 0,
+              "destination": "D",
+              "energy_kwh": 0.0,
+              "origin": "D"
+            }
+          ]
+        },
+        {
+          "after": null,
+          "before": "A",
+          "depot_split": null,
+          "id": "in_A",
+          "kind": "pullin",
+          "legs": [
+            {
+              "arrive_min": 60,
+              "depart_min": 60,
+              "destination": "D",
+              "energy_kwh": 0.0,
+              "origin": "D"
+            }
+          ]
+        },
+        {
+          "after": "B",
+          "before": null,
+          "depot_split": null,
+          "id": "out_B",
+          "kind": "pullout",
+          "legs": [
+            {
+              "arrive_min": 120,
+              "depart_min": 120,
+              "destination": "D",
+              "energy_kwh": 0.0,
+              "origin": "D"
+            }
+          ]
+        },
+        {
+          "after": null,
+          "before": "B",
+          "depot_split": null,
+          "id": "in_B",
+          "kind": "pullin",
+          "legs": [
+            {
+              "arrive_min": 180,
+              "depart_min": 180,
+              "destination": "D",
+              "energy_kwh": 0.0,
+              "origin": "D"
+            }
+          ]
+        },
+        {
+          "after": "B",
+          "before": "A",
+          "depot_split": 1,
+          "id": "depot_AB",
+          "kind": "depot",
+          "legs": [
+            {
+              "arrive_min": 60,
+              "depart_min": 60,
+              "destination": "D",
+              "energy_kwh": 0.0,
+              "origin": "D"
+            },
+            {
+              "arrive_min": 120,
+              "depart_min": 120,
+              "destination": "D",
+              "energy_kwh": 0.0,
+              "origin": "D"
+            }
+          ]
+        },
+        {
+          "after": "B",
+          "before": "A",
+          "depot_split": null,
+          "id": "direct_AB",
+          "kind": "direct",
+          "legs": [
+            {
+              "arrive_min": 60,
+              "depart_min": 60,
+              "destination": "D",
+              "energy_kwh": 0.0,
+              "origin": "D"
+            }
+          ]
+        }
+      ],
+      "name": "cyclic",
+      "recharge_deadline_min": 240,
+      "reserve_kwh": 0.0,
+      "resources": [
+        {
+          "connectors": 0,
+          "end_min": 60,
+          "grid_kw": 0,
+          "per_bus_kw": 0,
+          "start_min": 0
+        },
+        {
+          "connectors": 1,
+          "end_min": 120,
+          "grid_kw": 10.0,
+          "per_bus_kw": 10.0,
+          "start_min": 60
+        },
+        {
+          "connectors": 0,
+          "end_min": 180,
+          "grid_kw": 0,
+          "per_bus_kw": 0,
+          "start_min": 120
+        },
+        {
+          "connectors": 1,
+          "end_min": 240,
+          "grid_kw": 30,
+          "per_bus_kw": 30,
+          "start_min": 180
+        }
+      ],
+      "terminal_open_min": 0,
+      "trips": [
+        {
+          "end_min": 60,
+          "end_place": "D",
+          "energy_kwh": 15.0,
+          "id": "A",
+          "start_min": 0,
+          "start_place": "D"
+        },
+        {
+          "end_min": 180,
+          "end_place": "D",
+          "energy_kwh": 15.0,
+          "id": "B",
+          "start_min": 120,
+          "start_place": "D"
+        }
+      ],
+      "vehicle_cost": 7
+    },
+    "extraction_policy": "native-pathflow-orphan-projection-v1",
+    "id": "nominal_cold_s1",
+    "load_target_exact": [
+      "0",
+      "25/4",
+      "0",
+      "95/4"
+    ],
+    "market": {
+      "a": [
+        0,
+        4.2,
+        0,
+        0
+      ],
+      "b": [
+        0,
+        0.2,
+        0,
+        0.2
+      ],
+      "name": "nominal-s1"
+    },
+    "market_identity": "bb1b79ea5d34d57a5828a960b2353415b5f1a8f1a9a0f79e9b6184a6dc3d2266",
+    "physical_identity": "f24ed85ecec207ad543878c4cb247575629026fe1259ba3226155e439905b140",
+    "predecessor": null,
+    "pricing_oracle": "egg-native-pathflow-v3-energy-band-orphan-projection",
+    "state_identity": "37ecf6cfbd6de58d770e482a0d432ca28c6fc7e1a16ddd487cba11d4c71f4f23",
+    "state_index": 1,
+    "target_exact": "1539/16"
+  },
+  "source_hashes": {
+    "doc/NATIVE_HULL_CERTIFICATION_DESIGN_20260927.md": "690fdbdafe65102a845d4f052f737cf1a9ec938562b360bfa1a06e12f4114a0f",
+    "doc/NATIVE_HULL_QUALIFICATION_PROTOCOL_20260927.md": "4a88398af643902ff7a25c0a0008612eae79300a5347c87a9c9dc7d70785bd4a",
+    "doc/NATIVE_PATHFLOW_ENERGY_BAND_DESIGN_20260927.md": "b14913957f199662808483d052ad2fec778f69f71b14363667c40623c6f8276d",
+    "doc/NATIVE_PATHFLOW_HULL_INTEGRATION_DESIGN_20260927.md": "30f56dc593a7d0afb725d46e4ecc2e8ac35c45c3f8ed5f15526b3b749e694cbb",
+    "doc/NATIVE_PATHFLOW_HULL_QUALIFICATION_PROTOCOL_20260927.md": "30326fd3d8b22818605b836b1ba47c2189b598d76cff2b80137a9094c9ba3537",
+    "doc/NATIVE_PATHFLOW_HULL_V3_IMPLEMENTATION_REVIEW_20260927.md": "a655219c7e5b4ed2000d0612c642ef3a33e46adf2522d6f9b8125084dd785f54",
+    "doc/NATIVE_PATHFLOW_HULL_V3_POLICY_INTEGRATION_20260927.md": "7817c87862ef466c5f64c3ef0cbdc3611035120c85c1d1e035505bf0f55d10cf",
+    "doc/NATIVE_PATHFLOW_HULL_V3_QUALIFICATION_PROTOCOL_20260927.md": "f615369098db9a01c164d0ae840203a859d378e0986bde21ab8499fea09bf6c0",
+    "src/egglab/native_hull.py": "ef7b3ee5a3ab7f11a48a92c1dc4a055d598b609ba4af70b77b2aa38c3277e5cb",
+    "src/egglab/native_pathflow.py": "9b8f5017b5a5cded27ff3d23b047ecb40b5994dc83b75df7d50add96d4dc9682",
+    "src/egglab/native_pathflow_hull.py": "853e590ce6d25c044c5c5c70bfeb04d0d3a3dde56a4144a1d746fad55cf87338",
+    "src/egglab/native_recharge.py": "0067123a7f71cc6e9c89e1262cdcbd612cafdcfc252e35bcfca7f1f54c45d0f3",
+    "src/experiments/native_hull_qualification.py": "4129080d33dd474e4296a02fcc4af5feb18051be814bde016edf3f5450eb8d30",
+    "src/experiments/native_pathflow_hull_qualification.py": "24b6b0c32afdf40117a65b2c5c10626c541c0904233ff24aae7c23a705eb3ca2",
+    "src/experiments/native_recharge_qualification.py": "200c5bec8e6f8c7f7e466ef045b439dceae9fa2b35984cc452d4d29471dfde1e",
+    "src/tests/test_native_hull.py": "9a7c5ab571b35b407d393f03bf38eb6e5f0e8381ee163fead37a3439c7943f32",
+    "src/tests/test_native_pathflow_energy_band.py": "63ec41b04545dd760bf5b049e4b51803441abb91980a2404ab35a66de98791e2",
+    "src/tests/test_native_pathflow_hull.py": "354c518e394302c46dee7aead98b20e9b35244caa4c503f2912a3781c190f891",
+    "src/tests/test_native_pathflow_hull_policy.py": "1891ddbded90507835b7c9bf93ef3b36b99d484ed281d8311fa3e47e07f48f0b"
+  }
+}
