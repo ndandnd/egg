@@ -7,9 +7,17 @@
 set -e
 cd "$(dirname "$0")"
 mkdir -p results figures build
+if [ "${1:-}" = "--pdf-only" ]; then
+  exec tectonic --keep-logs --outdir build main.tex
+fi
 if [ -n "$SISTIG_ROOT" ]; then
   (cd code && python3 calibrate.py "$SISTIG_ROOT" ../data/peak_runs.json)
 fi
 (cd code && python3 study.py > ../results/study_stdout.txt && python3 figures.py)
+review_tmp=$(mktemp -d)
+trap 'rm -f "$review_tmp/gap_bands.json"; rmdir "$review_tmp"' EXIT
+python3 -I -S -B code/gap_bands.py --output "$review_tmp/gap_bands.json"
+mv "$review_tmp/gap_bands.json" results/gap_bands.json
+python3 -B code/check_review.py
 if [ "$1" = "--tests" ]; then (cd code && python3 test_twobatch.py); fi
 tectonic --keep-logs --outdir build main.tex

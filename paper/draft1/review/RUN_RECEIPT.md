@@ -1,0 +1,14 @@
+# November 2 review checks
+
+The paper under review was `b52d0c12657ec8fe47177693e2986fb12d6b1a65` in draft PR 57. All numerical work below was new review work under the user's explicit instruction to check the certificates and challenge the manuscript. Each package used a fresh local directory and a committed prospective command. Earlier results and failed versions remain archived.
+
+| Operation | Control | Completed | Process meter |
+|---|---|---|---:|
+| Fresh private certificate verification | `7388977a`, [command and inputs](CERTIFICATE_REVIEW_PLAN.md) | Original binary and exact-additive checkers both exited 0. Each strictly admitted two witnesses, checked 375 nodes and its own all-fleet bound. Both reproduced the certified positive separation. No optimizer calls. | 69.92 CPU s, 74.31 elapsed s |
+| Complete sensitivity and baseline comparison | Source `81a7993b`, separate control `d94daa24`, [command and inputs](SENSITIVITY_REVIEW_PLAN.md) | All three stages passed. All 9,472 keyed cells agreed with exact open-interval membership. Every historical sweep row, including costs and cycle flags, was reproduced. 64 general assignment solves agreed to maximum absolute difference 5.2296e−12 kWh. The positive-gap exact reference and the exceptional price-tie fixture passed. | 3.28 CPU s, 4.83 elapsed s |
+
+For the certificate run the two copy-and-check times were 37.84 and 36.42 seconds. Peak observed waited-child RSS on macOS was 783,941,632 bytes. For the sensitivity run it was 94,339,072 bytes. The child times overlap their respective process meters. Each check used one configured native thread and stayed inside the approved budget. No failures, missing assignments, retries or new solver search occurred in these two numerical packages. The attempt to invoke the PDF-operation marker by the unqualified name `node` returned 127 before the marker ran. The bundled Node path successfully recorded one edit operation. Authoring and tool CPU are unknown.
+
+The November numerical subtotal is 73.20 displayed CPU seconds and 79.14 elapsed-sum seconds. A 0.04-second CPU rounding allowance per package gives 73.28 retained CPU seconds. Adding only these two packages to the October closed meter gives 24,215.00 displayed CPU, 25,169.11 elapsed-sum and 24,217.36 retained CPU seconds. The historic conditional guard of 2,546.091499549272 is separate. These totals omit unmeasured work, including other authors' independent draft development. PDF compilation and rendering are recorded separately.
+
+The two authenticated private readers' new outputs stay in `/private/tmp/egg-public37-pr57-review-20261102-a01` on this host. The original trusted inputs remain in the archived worktree. The sensitivity checker reads committed decimal peak energies and the reviewed draft's published grid, then reports all intervals and failures at every offset. [Full review output](original_grid_bands.json)

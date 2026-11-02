@@ -23,57 +23,50 @@
 \title{Marginal-Price Support for Electric-Bus Fleets:\\
 An Exact Assignment-Dependent Projection and Its Price Dynamics}
 \author{Nathan Cho}
-\date{Draft, 30 October 2026}
+\date{Research draft, revised 2 November 2026}
 
 \begin{document}
 \maketitle
 
 \begin{abstract}
-An electric-bus operator large enough to move the electricity price faces a
-feedback loop: prices shape the schedule, the schedule shapes the load, and the
-load shapes the price. Because a bus cannot cover a fraction of a service,
-the operator's set of attainable loads and costs is nonconvex, so posted
-marginal prices may fail to support any physically executable schedule. We
-characterize this failure exactly for a stylized but operationally recognizable
-class: morning and afternoon service batches, a shared midday charging window,
-overnight replenishment, and any allowed set of morning--afternoon pairings.
-Our main theorem shows that, for every number of paired services, a single
-minimum-requirement matching determines the complete joint set of grid loads
-and vehicle costs, a polygon with at most five vertices, including charging
-losses and vehicle-to-grid exports. On this exact description we prove three
-results about price formation. A positive support gap requires the marginal-cost
-spread between charging windows to reach the daily vehicle cost divided by the
-largest forced-charging increment, and it is at most one eighth of the spread's
-slope times that increment squared. With a small constant step, price iteration
-converges when the hull optimum is a vertex of the cost frontier and never
-converges when it lies inside a face. A face optimum occurs with or without a
-support gap, so a price cycle is not evidence of nonconvexity. Diminishing steps
-converge to the convex-hull price, and with quadratic supply costs their
-time-averaged schedules recover the convex-hull plan. Edge-dependent transition
-energy and a third service batch mark where the reduction ends. A study of 18
-German bus operators, using public timetable data, shows that with 400\,kWh
-batteries, for 15 operators every morning--afternoon pairing needs no midday
-charging, so support cannot fail at any price. Wherever failure is possible, it needs a spread
-of at least 0.5\,EUR/kWh, and more than 1\,EUR/kWh for the median operator. Undamped price iteration nonetheless
-cycles in 15\% of the scenarios, almost all of them without a support gap.
+Assigning two services to one electric bus saves a vehicle but may force a
+midday recharge. We characterize how that trade-off changes which fleet
+schedules a posted marginal electricity price can induce. Consider morning
+and afternoon service batches, a shared midday connector and full overnight
+replenishment. For each number of paired services, one matching realizes the
+entire set of attainable period loads and vehicle costs across all assignments
+of that size. The set has at most five vertices, including under common
+conversion losses and vehicle-to-grid exports. For lossless charging we derive
+the exact intervals of a tariff offset where marginal-price support fails.
+Changing the daily bus fee moves those intervals while preserving their
+combined width on the full offset axis. In a timetable-based sensitivity
+study at 400\,kWh, 15 of 18 operators admit a maximum-size pairing that
+requires no midday charge. In the specified price grid, support fails in
+7 of 2,664 cases while undamped price updates cycle in 397. At 300\,kWh,
+exact offset intervals reveal possible failures for six of 14 eligible
+operators within the studied range. The sampled offsets detect two. We explain how a
+solver's choice among equally profitable schedules can sustain a cycle even
+when a supporting price exists. A separate rational certificate establishes
+support failure on one 37-service timetable with varied service times.
 \end{abstract}
 
 \section{Introduction}\label{sec:intro}
 
-Electrified bus depots are becoming some of the largest flexible loads on urban
-distribution networks. A depot's charging schedule is no longer a price-taker's
-afterthought: its load can move a local marginal cost, a congestion charge or a
-negotiated tariff, and that price in turn changes the schedule. Classical
-electric-vehicle scheduling treats electricity prices as exogenous
+A depot can shift charging from midday to overnight while keeping the same
+passenger timetable. If supplying that load changes the marginal cost of
+electricity, a tariff calculated from one schedule may give the operator an
+incentive to choose another. Existing scheduling models describe how fleets
+respond to charging costs and infrastructure constraints
 \citep{devos2024capacity,parmentier2023fleets,borndorfer2024integrated,wu2022grid}.
 Once prices respond to the fleet, two questions arise. Is there a posted price at
 which the operator's own cost-minimizing schedule is the system-optimal one? And
 if prices are adjusted iteratively in response to the fleet's load, do they settle?
 
 The obstacle is indivisibility. A bus serves a whole service or none of it, so
-the set of loads and costs the operator can attain is a union of pieces. When
-the system-optimal load lies between pieces, no posted marginal price can
-induce it: the operator either over- or under-reacts. This is the familiar
+the set of loads and costs the operator can attain is a union of pieces. An
+aggregate charging profile may be feasible only with a more expensive fleet
+than the convexified planner assigns to it. A strict gap then rules out a
+physical plan that is optimal for the fleet at its own marginal price. This is the familiar
 nonconvex-pricing problem of electricity markets
 \citep{oneill2005,gribikHoganPope2007,huaBaldick2017,schiro2016}, but here the
 nonconvexity is created by \emph{service assignment}. Pairing two services on
@@ -107,31 +100,36 @@ values is positive only if the marginal-cost spread between the two charging
 windows reaches $f/\eta$, where $f$ is the daily vehicle cost and $\eta$ an
 increment between consecutive forced-charging thresholds. The gap is at most
 $\kappa\eta^2/8$, where $\kappa$ bounds the slope of that spread.
+For an additive shift in the spread, \cref{prop:bands} gives the exact
+failure intervals, including their endpoints' support status. Their total
+width depends only on the variation in marginal spread between the first
+and last forced-charging thresholds.
 \item \textbf{Price dynamics (\cref{thm:iteration}).} For the damped
 price-adjustment loop that posts the marginal cost of the last response, undamped
 prices are eventually periodic with period at most two and can cycle even when a
-supporting price exists. With a small constant step, prices converge if the hull
-optimum is a vertex of the cost frontier, and never converge if it lies in the
-relative interior of a face. In the latter case the loads alternate between the
-face's two endpoints and the prices stay within an $O(a)$ band around the
-convex-hull price. Diminishing steps converge to that price, and with quadratic supply
-costs the step-weighted time averages of the loads recover the hull optimum. A face optimum
-arises both with and without a support gap. Persistent cycling therefore
-diagnoses a degenerate tangency, not nonconvexity.
+supporting price exists. Sufficiently small constant steps converge at a
+strict vertex. At a face-interior optimum, prices become trapped in an $O(a)$
+band. Convergence there requires an exact tie and eventual selection of the
+optimal physical endpoint. Diminishing steps recover the hull spread. With
+quadratic costs the step-weighted load and vehicle fee also converge to the
+hull solution.
 \item \textbf{Where the reduction stops (\cref{sec:boundaries}).} A common
-transition energy per pair preserves the reduction. Edge-dependent transition
-energy breaks it: on a complete assignment graph where every perfect matching is
-feasible, a strongly convex supply cost still leaves a positive gap. With a
+transition energy per pair preserves the reduction. With pair-specific
+transition energy, replacement holds within each group having the same
+cardinality and total transition draw. For a complete, physically feasible
+lossless charge-only perfect layer we characterize exactly when a single
+matching suffices. A separate complete-graph construction gives a positive
+support gap with curvature in the midday load. With a
 third service batch, fleet feasibility alone is strongly NP-complete. On one
 public 37-service timetable outside the two-batch class, rational certificates
 establish a strictly positive gap.
 \item \textbf{Calibrated evidence (\cref{sec:study}).} Using the public
 timetables of 18 German operators \citep{sistig2025dataset,sistig2025electrification},
 we build morning and afternoon peak runs and compute when the obstruction can
-arise. With 400\,kWh batteries, for 15 of 18 operators every morning--afternoon
-pairing needs no midday charging, and support failure is impossible at any price. Across
-battery sizes, failure needs a marginal-cost spread of at least 0.5\,EUR/kWh for a
-150\,EUR/day vehicle cost, and more than 1\,EUR/kWh for the median operator. When it
+arise. With 400\,kWh batteries, 15 of 18 operators admit a maximum-size
+pairing with zero mandatory midday charge, giving a flat cost frontier.
+Among the remaining three, the smallest critical marginal spread is
+0.53\,EUR/kWh at a 150\,EUR/day vehicle cost. When failure
 occurs, the gap is below 0.06\% of total daily cost. Undamped price iteration
 nevertheless cycles in 15\% of scenarios, nearly all of which have no gap.
 \end{enumerate}
@@ -148,9 +146,10 @@ shows which of these abstractions are essential.
 \Cref{sec:model} defines complete plans and support. \Cref{sec:projection}
 proves the projection theorem, \cref{sec:prices} the price-formation results,
 and \cref{sec:boundaries} the limits of the reduction. \Cref{sec:study} reports
-the calibrated study, and \cref{sec:discussion} discusses implications.
-Proofs are in the appendices; code and data reproducing every number and figure
-are in the accompanying repository (\cref{app:repro}).
+the tariff sensitivity study, and \cref{sec:discussion} discusses implications.
+The appendices give the proofs and distinguish reproduction from the committed
+peak-run inputs from verification of the separately held public-case certificates
+(\cref{app:repro}).
 
 \section{Related work}\label{sec:related}
 
@@ -161,9 +160,12 @@ service covering with charging decisions under station capacity
 \citep{parmentier2023fleets}, or integrate flow and set-partitioning models
 \citep{borndorfer2024integrated}. \citet{wu2022grid} add power-grid
 characteristics and endogenous vehicle-to-trip assignment with overnight
-charging. These works optimize schedules at given prices or grid limits; they
-do not characterize the set of loads and vehicle costs attainable across
-assignments, which is what price support requires.
+charging. \citet[Sec.~4.2]{nath2024joint} jointly choose charging locations,
+trip assignments and charging schedules under energy and contracted-power
+charges. At each fleet size, \citet[Sec.~4.2]{dabcevic2026pareto} vary objective
+weights to trace the trade-off between deadheading and charging cost at given
+tariffs. Our question concerns the joint set of loads and fleet costs over
+\emph{all} assignments, from which one can test support across tariffs.
 
 \paragraph{Buses, tariffs and markets.}
 \citet{wu2019gridinteractive} embed bus operations in a bi-level model with
@@ -178,37 +180,51 @@ against energy and balancing prices; and \citet{zhou2025v2g} formulate a
 multi-depot mixed-integer charging and discharging schedule for electric buses
 under vehicle-to-grid tariffs and solve it with an adaptive large-neighbourhood
 search (our comparison with the last is limited to its published abstract). All of
-these optimize a richer operational model. None gives an exact description of
-the assignment-dependent load--cost set or analyses support and price iteration.
+these studies address operational scheduling or market participation. Our
+comparison concerns the proof that one assignment realizes every other
+assignment's attainable loads at the same fleet size.
 
 \paragraph{Aggregate flexibility.}
-Exact characterizations of the flexibility of a given EV population use
-permutahedra and generalized polymatroids
-\citep{mukhiAbate2023exact,mukhiLohoAbate2025exact}; \citet{muller2019aggregation}
-aggregate and disaggregate costs for zonotopic resource sets; \citet{altaha2024flexibility}
-and \citet{altahaBitar2024lossy} treat lossless and lossy storage aggregation;
-and \citet{arvis2026aggregated} integrate aggregated EV flexibility into unit
-commitment. For one fixed matching, our early-energy interval is an elementary
-specialization of such aggregation. The distinct step is the
-\emph{cross-assignment} identity: across all matchings of one cardinality, the
-union of their exact polygons equals the polygon of one minimum-requirement
-matching. Generic disjunctive formulations can encode that union, but they do
-not establish this replacement, and a net-interval aggregate alone loses the
-mandatory-purchase statistic that drives it (\cref{rem:netinterval}).
+For a fixed EV population, aggregate flexibility is a Minkowski sum of
+individual sets \citep{mukhiAbate2023exact,altaha2024flexibility}.
+\citet[Thms.~3 and~7]{mukhiLohoAbate2025exact} characterize that sum and
+disaggregate its schedules for generalized polymatroids.
+\citet[Eqs.~(15)--(17)]{muller2019aggregation} also compute the least cost of
+disaggregation for zonotopic resources with structured costs.
+\citet{arvis2026aggregated} embed aggregate EV flexibility in unit commitment,
+and \citet{altahaBitar2024lossy} give a state-of-charge reformulation for a
+single lossy storage device. In our setting a matching determines which duties
+enter the sum. At a fixed number of pairs the assignments have the same fleet
+cost and aggregate battery bounds. Only their mandatory early purchases
+differ, so one matching realizes the union of all their load polygons
+(\cref{thm:projection,rem:netinterval}).
 
-\paragraph{Nonconvex pricing and price adjustment.}
+\paragraph{Nonconvex pricing.}
 Uplift, convex-hull pricing and their computation are established
-\citep{oneill2005,gribikHoganPope2007,huaBaldick2017,schiro2016,andrianesis2022hull,huembs2022complete};
-the Shapley--Folkman lemma explains why aggregate nonconvexity is small in large
-markets \citep{starr1969,hreinsson2021}. Our support criterion
-(\cref{prop:support}) is the standard one specialized to a complete-fleet
-participant. Iterative price adjustment is a Lagrangian-dual method; for convex
-programs, ergodic averages of subproblem solutions recover primal optima
-\citep{larsson1999ergodic,nedic2009approximate}. \Cref{thm:iteration} is a
-one-dimensional, nonconvex counterpart. The response is set-valued and
-piecewise constant, the update uses the supply's marginal cost rather than a
-dual gradient, and the conclusions are finite-time statements about which
-physical schedules the iteration visits.
+\citep{oneill2005,gribikHoganPope2007,huaBaldick2017,schiro2016,andrianesis2022hull}.
+For linear market participants with a complete linear description,
+\citet[Thm.~1]{huembs2022complete} characterize support by the existence
+of an integral optimum of the relaxed planner's problem. \Cref{prop:support}
+uses the corresponding convex-hull criterion for a complete fleet and a
+convex supplier. Our gap bound uses the distance between adjacent fleet
+choices. Shapley--Folkman bounds instead relate the effect of individual
+nonconvexities to market aggregation \citep{starr1969,hreinsson2021}.
+
+\paragraph{Price adjustment.}
+\citet[Alg.~1, Eq.~(32), Cor.~4.1]{ma2016decentralized} update posted prices
+toward the marginal generation cost of the latest EV response and prove
+convergence under a contraction condition. We study this update with a
+discontinuous response that selects physical layer endpoints. For an affine
+marginal-cost spread $g$ and an initial price $\pi_0=g(q_0)$ at a feasible
+early load $q_0$, the update is the load component of Frank--Wolfe on the hull
+\citep[Alg.~1]{jaggi2013frankwolfe}. Its linear oracle minimizes
+$c+g(q_k)E$, and $q_k=g^{-1}(\pi_k)$ satisfies
+$q_{k+1}=(1-a_k)q_k+a_k E_k$. Ergodic recovery in convex dual methods is
+also classical \citep{larsson1999ergodic,nedic2009approximate}.
+\Cref{thm:iteration} identifies which fleet responses recur and how the
+face they expose determines support. Within its constant-step trapping band,
+the two endpoint branches, away from exact ties, rescale to the contracted
+rotation studied by \citet{laurent2018rotations}.
 
 \section{Complete fleets and the meaning of support}\label{sec:model}
 
@@ -258,7 +274,9 @@ the proof is in \cref{app:support}. Two consequences are used below. A positive
 gap gives every physical plan a regret of at least $\Delta$ at its own marginal
 prices. Conversely, at a maximizer $p^*$ of $V(p)-F^*(p)$ (a convex-hull price), the
 identity in the proof shows that a physical optimum's regret is at most $\Delta$,
-so an uplift payment of at most $\Delta$ supports it.
+so a payment conditional on implementing that particular schedule can remove
+the operator's incentive to deviate at the hull price. A strict gap still
+excludes own-load support as defined above.
 
 \section{An exact assignment-dependent projection}\label{sec:projection}
 
@@ -274,7 +292,10 @@ let $\nu$ be the maximum matching size. Transitions take no time or energy
 throughout the \emph{early} window $[1,2]$, and must be full again after the
 \emph{terminal} window $[3,4]$. One shared early connector moves at most $K\ge0$
 grid-side energy in either direction; one terminal connector delivers at most
-$H\ge0$, charging only. Charging and discharging efficiencies are common,
+$H\ge0$, charging only. Every bus accepts the full connector power throughout
+each corresponding unit window. Service draw is nonnegative throughout a
+run, and there is no auxiliary draw outside the specified tasks.
+Charging and discharging efficiencies are common,
 $\alpha,\delta\in(0,1]$. Early actions may change direction finitely often, are
 sequential on the connector, and incur no switching delay or cycling cost.
 
@@ -290,7 +311,7 @@ the two window loads $(E,L)$.
 \begin{theorem}[Complete common-window projection]\label{thm:projection}
 For $m=0,\dots,\nu$ let
 \[
- r_m=\min_{M\subseteq\Gamma,\,|M|=m}\ \sum_{(i,j)\in M}(a_i+b_j-B)_+,
+ r_m=\min_{\substack{M\text{ matching in }\Gamma\\ |M|=m}}\ \sum_{(i,j)\in M}(a_i+b_j-B)_+,
 \]
 \[
  W_m=\Bigl\{(C,X):\ C\ge r_m/\alpha,\ X\ge0,\ C+X\le K,\
@@ -351,9 +372,13 @@ $-f/\eta_m$ with increment $\eta_m=\ell_m-\ell_{m-1}>0$.
 
 \begin{corollary}[Support classification]\label{cor:support}
 Let $G(E)=F(E,S_0-E)$ be continuous and strictly convex on $[\mathrm{Lo},U]$ and let
-$E^*$ minimize $\bar c+G$. Then $\Delta=0$ if and only if $E^*$ is physical:
-$E^*$ is a breakpoint or lies in the flat face $[\ell_{m_{\max}},U]$. The gap is
-positive exactly when $E^*$ lies strictly between two consecutive breakpoints.
+$E^*$ minimize $\bar c+G$. Every early load in $[\mathrm{Lo},U]$ is attainable.
+A physical plan attains the hull cost $\bar c(E^*)$ at that load if and only if
+$E^*$ is a breakpoint or belongs to $[\ell_{m_{\max}},U]$. In those cases
+$\Delta=0$. The gap is positive exactly when $E^*$ lies strictly between
+consecutive breakpoints. Under the relative-interior condition of
+\cref{prop:support}, the zero-gap cases are exactly those admitting
+own-load support.
 \end{corollary}
 
 For a complete graph, $r_m$ has a closed form: sort both batches
@@ -381,50 +406,70 @@ costs the operator far more in bill terms than the planning gap costs the system
 boundary (dashed); the hull optimum lies strictly inside the sloping face, so
 $\Delta>0$. (b)~Price iteration on the scalar spread $\pi=p_E-p_L$: undamped
 prices enter a 2-cycle that alternates between loads $0$ and $15$. A constant
-step $a=0.2$ keeps prices in a band around the convex-hull spread $\pi^*=7/9$
-while loads alternate between $0$ and $9$. Diminishing steps converge to $\pi^*$.}
+step $a=0.2$ keeps spreads in a band around the convex-hull spread $\pi^*=7/9$
+and repeatedly visits loads $0$ and $9$. Diminishing steps converge to $\pi^*$.}
 \label{fig:anchor}
 \end{figure}
 
 \section{Price formation on the exact class}\label{sec:prices}
 
-We now use the exact description to answer the two questions from the
-introduction for the lossless class \eqref{eq:lossless}. The same arguments apply
-to the lossless bidirectional class, whose layers are intervals
-$[t_m,U]$ with $t_m=\max\{S_0-H,\,S_0-N_mB,\,2r_m-K\}$ (\cref{app:projection}).
+We study the lossless class \eqref{eq:lossless}. With bidirectional exchange
+the layers are $[t_m,U]$ with $t_m=\max\{S_0-H,\,S_0-N_mB,\,2r_m-K\}$.
+The results below apply with $\mathrm{Lo}=t_0$, $\ell_m=t_m$,
+$m_0=\max\{m:t_m=t_0\}$ and $m_{\max}=\max\{m:t_m\le U\}$
+(\cref{app:projection}).
 
 On the physical set, the terminal load is $S_0-E$. A posted price $p=(p_E,p_L)$
 therefore charges $p_LS_0+\pi E$ with $\pi=p_E-p_L$, and the operator's response
 depends only on the \emph{spread} $\pi$. Assume $\mathrm{Lo}<U$, and let $F$ be convex
 and differentiable on a neighbourhood of the attainable loads. Let
-let $g(E)=\partial_EF-\partial_LF$ at $(E,S_0-E)$. This is the marginal-cost spread
+$g(E)=\partial_EF-\partial_LF$ at $(E,S_0-E)$. This is the marginal-cost spread
 at early load $E$, and it equals $G'(E)$. Assume $g$ is continuous and strictly
 increasing on $[\mathrm{Lo},U]$, let $E^*$ be the unique hull optimum, and let
-$\pi^*=g(E^*)$, the \emph{convex-hull spread}. The response correspondence
-$R(\pi)$ is the set of physical loads minimizing $fN_m+\pi E$. We use vertex
-selections, which pick $R(\pi)$ among layer endpoints, as a linear-programming
-solver would.
+$\pi^*=g(E^*)$, the \emph{convex-hull spread}. We study a fleet solver that
+returns a layer endpoint. Write $R(\pi)$ for the loads of all physical layer
+endpoints minimizing $fN_m+\pi E$. This includes an endpoint at a collinear
+breakpoint when several cardinalities tie. At $\pi=0$, interior loads of the
+cheapest layer also minimize the bill and lie outside this selection rule.
 
-\paragraph{Anatomy of the gap.} A positive gap needs a sloping face that is
-expensive enough to straddle, and its size is controlled by the face length.
+\paragraph{Anatomy of the gap.}
 
 \begin{proposition}[Gap conditions]\label{prop:anatomy}
 Let $\eta_{\max}=\max_{m_0<m\le m_{\max}}\eta_m$ (zero if there is no sloping
 face).
 \begin{enumerate}[label=(\roman*),itemsep=1pt]
 \item If $\Delta>0$, then $E^*$ lies strictly between consecutive breakpoints
-$u<u'$ with $\pi^*=f/(u'-u)$. In particular $\max_{[\mathrm{Lo},U]}g\ge f/\eta_{\max}$:
-no gap can occur when the vehicle cost exceeds $\eta_{\max}$ times the largest
-marginal-cost spread.
-\item If $g$ is $\kappa$-Lipschitz, then $\Delta\le\kappa(u'-u)^2/8\le\kappa\eta_{\max}^2/8$.
+$u<u'$ with $\pi^*=f/(u'-u)$. In particular, $\eta_{\max}>0$ and
+$\max_{[\mathrm{Lo},U]}g>f/\eta_{\max}$.
+\item If $g$ is $\kappa$-Lipschitz, then $\Delta\le\kappa\eta_{\max}^2/8$.
+When $\Delta>0$, the sharper bound is $\kappa(u'-u)^2/8$ for the interval in (i).
 \end{enumerate}
 \end{proposition}
 
-Part (i) has a plain reading. Straddling a face means preferring a mixture of
-``one more pair, $u'-u$ more kWh in the early window'' and ``one fewer pair''. That
-is worthwhile only when the marginal spread prices the forced energy at the
-vehicle cost it saves. Part (ii) says the gap, unlike the regret, is of second
-order in the face length.
+For an optimum between consecutive breakpoints, the marginal spread times
+the forced early energy equals the vehicle cost saved by one more pair.
+Varying the spread intercept identifies the supply curves for which a mixture
+improves on every physical schedule.
+
+\begin{proposition}[Exact intercept bands]\label{prop:bands}
+Fix the physical layers and $f>0$. Let $G_s'(E)=s+h(E)$ for $s\in\mathbb R$,
+where $h$ is continuous and strictly increasing. The intercepts producing a
+positive gap are precisely
+\begin{equation}\label{eq:interceptbands}
+ \{s:\Delta(s)>0\}=
+ \bigcup_{m=m_0+1}^{m_{\max}}
+ \left(\frac{f}{\eta_m}-h(\ell_m),\
+       \frac{f}{\eta_m}-h(\ell_{m-1})\right).
+\end{equation}
+These open intervals are disjoint. Their total length on the real line is
+$h(\ell_{m_{\max}})-h(\mathrm{Lo})$, independent of $f>0$. If there are no
+sloping segments the union is empty and its length is zero.
+\end{proposition}
+
+For quadratic window costs with $h(E)=\beta(2E-S_0)$ and $\beta>0$, the total
+length is $2\beta(\ell_{m_{\max}}-\mathrm{Lo})$. The fee sets the location
+of each interval, so the length within a given tariff range and the number of
+hits on a finite grid can depend on $f$.
 
 \paragraph{Price iteration.}
 A natural way to find a supporting price is to post a price, observe the
@@ -433,13 +478,12 @@ fleet's response, and move the price toward the marginal cost of that response:
  \pi_{k+1}=(1-a_k)\pi_k+a_k\,g(E_k),\qquad E_k\in R(\pi_k),\quad a_k\in(0,1].
 \end{equation}
 Applied componentwise to $(p_E,p_L)$, the damped update
-$p_{k+1}=(1-a_k)p_k+a_k\nabla F(e_k)$ induces exactly \eqref{eq:iteration} on the
-spread. It is the natural damped fixed-point scheme for computing a price that
-equals the marginal cost of the response it induces. A fixed point is a
-spread with $\pi=g(E)$ for some selected $E\in R(\pi)$, that is, a supported
-plan. The behaviour hinges on whether $E^*$ is a strict vertex of the hull
-boundary or lies in the relative interior of a maximal face $[w,w']$, which may
-be a sloping face (possibly containing further breakpoints) or the final flat one.
+$p_{k+1}=(1-a_k)p_k+a_k\nabla F(e_k)$ induces \eqref{eq:iteration} on the
+spread. At a fixed spread $\pi=g(E)$ the selected plan is supported by its own
+marginal-price vector. We call a corner or domain endpoint of the lower
+frontier a \emph{strict vertex}. A maximal straight segment of positive length
+is a \emph{face}. Let $\mathcal T$ consist of the negatives of the slopes of
+these faces, the spreads at which their endpoints tie.
 
 \begin{lemma}[Sign property]\label{lem:sign}
 For every $\pi$ and every $E\in R(\pi)$, $(\pi-\pi^*)(g(E)-\pi^*)\le0$.
@@ -449,7 +493,7 @@ $M=\max_{E\in[\mathrm{Lo},U]}|g(E)-\pi^*|$.
 \end{lemma}
 
 \begin{theorem}[Price iteration on the two-batch class]\label{thm:iteration}
-Under the standing assumptions of this section:
+Under the standing assumptions of this section, the following statements hold.
 \begin{enumerate}[label=(\alph*),itemsep=2pt]
 \item \emph{Fixed points.} Some vertex selection has a fixed point if and only if
 $E^*$ is a breakpoint or $E^*=U$. In particular there is no fixed point when $\Delta>0$, nor when $E^*$ lies
@@ -460,24 +504,29 @@ maximal face $[w,w']$ and $\pi_0\neq\pi^*$, the period is two and the cycle's lo
 $E_{\rm lo}\le w<w'\le E_{\rm hi}$.
 \item \emph{Constant step} $a\in(0,1)$. Every orbit enters the interval
 $|\pi-\pi^*|\le aM$ after finitely many steps and remains there. If $E^*$ is a strict
-vertex in the interior of its normal cone, and $aM$ is smaller than the distance
-from $\pi^*$ to the cone's boundary, then $\pi_k\to\pi^*$ geometrically and $E_k=E^*$
-eventually. If $E^*$ lies in the relative interior of a maximal face $[w,w']$, the prices
-converge for at most countably many initial prices, and for none if $E^*$ is not a
-breakpoint. If moreover $aM$ is smaller than the distance from $\pi^*$ to the
-far ends of the normal cones of $w$ and $w'$, then eventually every load lies in
-$[w,w']$ and equals $w$ or $w'$ unless $\pi_k=\pi^*$ exactly; unless the orbit
-reaches $\pi^*$ and the selection then picks $E^*$, both $w$ and $w'$ recur
-infinitely often; and
-$\pi_k\in[\pi^*-a\,d_-,\ \pi^*+a\,d_+]$ with $d_-=\pi^*-g(w)$ and $d_+=g(w')-\pi^*$.
+vertex and $aM<\operatorname{dist}(\pi^*,\mathcal T\setminus\{\pi^*\})$
+(distance to the empty set is infinite), then $E_k=E^*$ eventually and
+$\pi_k\to\pi^*$ geometrically. If $E^*$ lies inside a face $[w,w']$,
+convergence requires an exact hit on $\pi^*$ followed by eventual selection
+of $E^*$ at every step. This is possible for at most countably many initial
+spreads and requires $E^*$ to be a breakpoint. Under the same step bound,
+all sufficiently late responses lie on $[w,w']$ and
+\[
+ \pi_k\in[\pi^*-a\,d_-,\ \pi^*+a\,d_+],\qquad
+ d_-=\pi^*-g(w),\quad d_+=g(w')-\pi^* .
+\]
+Within this band the response is $w$ above $\pi^*$ and $w'$ below $\pi^*$.
+Both endpoints recur infinitely often if the orbit eventually avoids $\pi^*$
+or if the tie rule at $\pi^*$ always chooses an endpoint of the maximal face.
 \item \emph{Diminishing steps} ($a_k\to0$, $\sum_ka_k=\infty$). Then $\pi_k\to\pi^*$,
 and the step-weighted averages of $g(E_k)$ converge to $\pi^*$. If $g$ is affine,
-the step-weighted average load converges to $E^*$.
+the step-weighted averages of load and vehicle cost converge to $E^*$ and
+$\bar c(E^*)$, respectively.
 \end{enumerate}
 \end{theorem}
 
-\Cref{lem:sign} is the whole engine. It follows from monotonicity of the hull
-boundary's subdifferential, and the proofs are in \cref{app:prices}.
+\Cref{lem:sign} follows from monotonicity of the hull frontier's
+subdifferential (\cref{app:prices}).
 \Cref{fig:anchor}b illustrates all three regimes on the worked example. The
 step-size conditions in (c) matter. In the worked example with the steeper supply
 $F(E,L)=16E+(E^2+L^2)/4$, the hull optimum is the supported vertex $E^*=9$, yet
@@ -485,26 +534,29 @@ undamped iteration from $\pi_0=3$ alternates between loads $0$ and $15$ forever,
 while the step $a=1/10$ converges. Part (b) also assumes a selection that depends
 only on the current price; history-dependent tie rules are outside its scope.
 
-\paragraph{What the theorem says about cycling.} With small steps,
-non-convergence of \eqref{eq:iteration} is caused by a \emph{degenerate tangency}: the optimal load
-sits on a face of the frontier, where the linear response jumps between the
-face's endpoints. That happens in two different situations. On a sloping face
-the interior loads are not physical, so $\Delta>0$ and no posted price can
-support any plan; side payments or schedule mixing over days are unavoidable.
-On the flat face (the cheapest fleet has spare midday capacity) every interior
-load is physical and supported at $\pi^*$, but a vertex-returning solver never
-selects it. A tie-breaking rule or a quantity signal is then enough. Damping
-cannot tell these apart, and neither can the presence of a cycle. The gap
-$\Delta$, or equivalently whether $E^*$ is physical, is the right diagnostic.
-The calibrated study in \cref{sec:study} shows that the second situation is the
-common one.
+\paragraph{Ties and support.} An optimum strictly between consecutive
+breakpoints has a positive gap. A breakpoint in the interior of a longer
+sloping face has zero gap and can be selected at the exact tie. An optimum
+inside the flat face also has zero gap. The cheapest fleet can deliver it,
+although the endpoint rule selects only the ends of that layer. These cases can
+all exhibit persistent spread fluctuations. The empirical frequencies in
+\cref{sec:study} refer to the stated tie rule and initial spread.
 
-\paragraph{What averaging buys.} Parts (c) and (d) give the hull a physical
-meaning. Iterating with small steps and operating the visited schedules on
-successive days implements, on average, the convex-hull plan. This is the
-one-dimensional counterpart of ergodic primal recovery in dual subgradient
-methods \citep{larsson1999ergodic,nedic2009approximate}, here with exact
-identification of which two schedules alternate.
+An exact tie can change which loads recur. Take three services in each batch,
+all draws and $B$ equal to one, a complete graph, $K=3$, $H=6$ and $f=1$.
+Here $\ell_m=m$ and $\bar c(E)=6-E$ on $[0,3]$. With
+$F(E,L)=E^2/2+(4/3)L$, the optimal spread $\pi^*=1$ occurs at $E^*=7/3$.
+At $\pi=1$ let the solver choose the physical endpoint $E=1$. Starting there
+with $a=1/2$ gives the spread cycle $1,1/3,1$ and the repeating loads $1,3$.
+The maximal face has left endpoint $0$, which this orbit never visits.
+
+\paragraph{Averaging.} With an affine spread and diminishing steps, part (d)
+recovers the hull load and vehicle cost using weights $a_k/\sum_{j<n}a_j$.
+Convexity gives $G(\sum_k\lambda_kE_k)\le\sum_k\lambda_k G(E_k)$ for any
+mixture weights $\lambda_k$. Every executed day costs at least $D$, even
+when the weighted load and vehicle cost converge to a hull point of cost
+$\CH<D$. A constant step gives the band in (c). Its daily loads can have a
+mean different from $E^*$.
 
 \section{Where the reduction stops}\label{sec:boundaries}
 
@@ -519,9 +571,28 @@ paired interval becomes $[a_i+b_j+d-B,a_i]$, and edges with $b_j+d>B$ are remove
 \Cref{thm:projection} holds with these substitutions
 (\cref{app:boundaries}).
 
-\paragraph{Edge-dependent transition energy breaks it.}
-When the transition energy depends on the pair, total energy depends on the
-matching, and a minimum-requirement matching no longer dominates.
+\begin{proposition}[Matching replacement with transition energy]\label{prop:transitionclasses}
+In the same noncharging interval, let edge $(i,j)$ require a compulsory
+draw $d_{ij}\ge0$. Discard edges with $b_j+d_{ij}>B$. Group matchings by
+cardinality $m$ and transition total $z=\sum_{(i,j)\in M}d_{ij}$. In each
+nonempty group a matching minimizing $R(M)=\sum_{(i,j)\in M}(a_i+b_j+d_{ij}-B)_+$
+realizes the whole group's set of $(E,L,fN_m)$. Its polygon is given by
+\cref{thm:projection} with $S_0+z$ in place of $S_0$ and this minimum in
+place of $r_m$, including losses and exports. Thus an invariant transition
+total suffices for one matching to represent a cardinality layer. In particular,
+if $d_{ij}=u_i+v_j$ on the allowed edges, every perfect matching of two
+equal batches has total $\sum_i u_i+\sum_j v_j$.
+
+For the lossless charge-only perfect layer of a complete $n\times n$ graph
+with $n\ge2$, suppose every perfect matching admits a physical plan. One
+perfect matching realizes every attainable triple of that layer if and only
+if all perfect matchings have the same transition total. This is equivalent
+to $d_{ij}+d_{i'j'}=d_{ij'}+d_{i'j}$ on every $2\times2$ submatrix, or
+equivalently to $d_{ij}=u_i+v_j$ for row and column potentials.
+\end{proposition}
+
+\paragraph{When transition totals differ.}
+Different totals can require different representative matchings.
 
 \begin{proposition}[Support failure on a complete assignment graph]\label{prop:completegraph}
 For every $k\ge1$ there is a charge-only two-batch instance with $2k$
@@ -549,60 +620,65 @@ fleet exists is strongly NP-complete.
 \end{proposition}
 
 The proof reduces from numerical three-dimensional matching
-\citep[problem SP16]{garey1979} (\cref{app:boundaries}). Pairwise matching
-therefore cannot describe longer duties, which is why the exact class stops at
-two batches.
+\citep[problem SP16]{garey1979} (\cref{app:boundaries}). It rules out a
+general polynomial-time extension of the two-batch algorithm to this
+three-batch feasibility problem unless P equals NP.
 
 \paragraph{Positive setup time.} The construction in \cref{thm:projection} uses
 arbitrarily many short neutral cycles and zero switching time. A positive setup
 time per action breaks exactness: it can make a layer infeasible while
 neighbouring layers stay feasible, and the number of buses needing early charge
-then matters separately from $r_m$. A conservative inner approximation with
-explicit slack conditions is possible; we leave a systematic treatment to future
-work.
+then matters separately from $r_m$. The companion proof in the repository
+(\path{paper/focused-theory-20261029/setup_time.tex}) bounds the change in
+the gap when every relevant layer has a feasible point with sufficient
+unused connector time. Whether actual depot windows provide enough slack for
+this bound to be informative remains open.
 
 \paragraph{Beyond the class: one certified public timetable.}
-To show that the obstruction is not an artifact of synchronized batches, we
-certified a strictly positive gap on the 37-service Hildenbrand timetable from
-the Sistig et al.\ dataset, using a single depot with its complete
-deadhead matrix, varied service times, and one shared 360\,kW connector,
-400\,kWh batteries and synthetic economics (vehicle cost 100,
-$F(e)=\sum_{t=1}^{30}(0.2e_t+e_t^2/1800)$ over hourly intervals). A feasible
-two-plan mixture bounds the hull from above. An exhaustive rational
-branch-and-bound certificate, checked independently, bounds every physical fleet
-from below:
+The 37 services in the Hildenbrand timetable of \citet{sistig2025dataset} have
+staggered start times. We use its directed deadhead matrix and model charging at
+one depot with a shared 360\,kW connector, 400\,kWh batteries, a vehicle cost of
+100 and a synthetic quadratic hourly supply cost. A mixture of two feasible
+plans bounds $\CH$ from above. A rational branch proof and separate fleet-count
+bounds cover every physical plan. Two energy models give the same outward bounds,
 \[
- \CH\le 441.142238<441.532912\le D\le 441.532913.
+ \CH\le 441.142238<441.532912\le D\le 441.532913,
+ \qquad D-\CH\ge 0.390674.
 \]
-By \cref{prop:support}, no physical schedule is supported at its own marginal
-prices. The result holds under two separately certified energy models: the
-dataset's stored consumption values on the declared movement graph, and an
-exactly additive law covering arbitrary finite walks under triangle-inequality
-premises. \Cref{app:public} summarizes the certificate and its scope. The gap
-is about $0.09\%$ of $D$, consistent with the magnitudes in \cref{sec:study}.
+The certified separation is at least $0.08848\%$ of $D$. The hull optimum and
+the exact gap remain unknown. By \cref{prop:support}, no physical plan is
+supported at its own marginal prices. The first certificate uses modeled
+consumption stored on a finite movement graph. The second uses exact additive
+consumption and extends to finite walks over the specified location pairs
+under the travel and depot-access assumptions in \cref{app:public}.
 
-\section{A calibrated study with public timetables}\label{sec:study}
+\section{Tariff sensitivity on public peak-run data}\label{sec:study}
 
 The theory says when support can fail and how large the gap can be. We now ask
-whether those conditions arise for real service energies.
+whether those conditions arise for run energies derived from public timetables.
 
 \paragraph{Data and instance construction.}
 The dataset of \citet{sistig2025dataset} (CC BY 4.0) contains timetables, stops
 and directed deadhead matrices for German bus operators. For each of the 20
-operators in the archive we take the weekday day type with the most service
-trips. Trips departing in the morning peak $[05{:}30,09{:}30)$ form the A batch
+operators in the archive we choose the day type with the most service records
+after the speed screen, then retain trips whose endpoints appear in the
+deadhead matrix. Trips departing in the morning peak $[05{:}30,09{:}30)$ form the A batch
 and trips departing in the afternoon peak $[14{:}30,18{:}30)$ form the B batch.
-Within each batch we chain trips into the minimum number of vehicle runs
-(maximum bipartite matching on the reachability graph). Each run's energy uses
+Within each batch one maximum matching on the reachability graph partitions
+trips into a minimum number of vehicle runs. Ties between minimum-run covers
+may give different run energies. We condition on the stored cover. Each run's energy uses
 the source study's vehicle parameters: 1.2\,kWh/km in service, 0.96\,kWh/km
 deadheading, and 16\,kWh/h of auxiliary load away from the depot, including
-pull-out and pull-in to the nearest depot \citep{sistig2025electrification}. We
-drop 108 trip records whose implied speed exceeds 90\,km/h as data errors, and the two
+pull-out and pull-in using separately chosen minimum-energy depot legs
+\citep{sistig2025electrification}. We
+exclude 108 trip records whose implied speed exceeds the 90\,km/h screen and the two
 operators with fewer than five runs per batch. This leaves 18 operators with
 6--413 morning runs and 6--298 afternoon runs. The 3913 run energies have
-median 154\,kWh and interdecile range 110--204\,kWh. The resulting instances keep the real heterogeneity of peak-run
-energies and nothing else: off-peak service, crews and multi-depot structure are
-not modeled.
+median 154\,kWh and interdecile range 110--204\,kWh. We retain these modeled
+run energies, impose common charging windows and allow complete cross-batch
+pairing. The resulting dispatches describe peak-run abstractions. Full-day
+service, crews, consistent depot assignments and alternative within-peak
+chainings require separate validation.
 
 \paragraph{Economics.} We treat economics as a sensitivity grid rather than a
 calibration. The daily vehicle cost is $f=150$\,EUR in the sweeps; critical
@@ -620,20 +696,23 @@ needing more than the usable battery $B$ cannot be served. We exclude such
 operator--battery combinations rather than trimming their runs (57 runs exceed
 250\,kWh, 13 exceed 300\,kWh, 8 exceed 350\,kWh, none exceed 400\,kWh).
 
-\paragraph{Result 1: with today's batteries the obstruction is mostly impossible.}
+\paragraph{Which operators admit a zero-requirement matching?}
 \Cref{prop:anatomy}(i) turns the data into a necessary condition: a gap requires
 a marginal spread of at least $f/\eta_{\max}$, which depends only on run energies
 and battery size. \Cref{fig:critical} shows it per operator. With $B=400$\,kWh,
-15 of 18 operators have $r_m=0$ for every $m$: every pairing of a morning and an
-afternoon run needs no midday charging. The frontier is then flat, and support
-cannot fail at any price. For the remaining three the critical spread is
+15 of 18 operators admit a maximum-size matching with zero mandatory midday
+charge. Removing pairs gives $r_m=0$ at every smaller size. The cheapest
+fleet therefore attains the entire feasible load interval. Only six of the
+18 satisfy the stronger condition that \emph{every individual edge} has zero
+requirement. For the three operators with a positive matching requirement the critical spread is
 0.53\,EUR/kWh or more, and above 35\,EUR/kWh for two of them. Smaller batteries
 make forced charging real. At $B=350$\,kWh, 5 of 17 eligible operators admit a gap,
 from 0.81\,EUR/kWh (median 1.40). At $B=300$\,kWh, 8 of 14 do, from 0.91\,EUR/kWh
 (median 1.27). At $B=250$\,kWh, all 9 eligible operators do, from 0.72\,EUR/kWh
 (median 1.70). These thresholds are several times the 0.15\,EUR/kWh reference
-energy price. Support failure therefore needs capacity or scarcity pricing, or a
-much cheaper vehicle, together with a battery sized close to the paired energy.
+energy price. The thresholds describe the marginal spreads a proposed supply
+and fee model must reach at a feasible load. Medians here are conditional
+on operators with a positive matching increment at the specified capacity.
 
 \begin{figure}[t]
 \centering
@@ -646,16 +725,56 @@ combination is outside the model.}
 \label{fig:critical}
 \end{figure}
 
-\paragraph{Result 2: gaps are rare and small; regret is not.}
+\paragraph{The offset grid and the exact failure intervals.}
 At $B=400$\,kWh the grid has $18\times37\times4=2664$ scenarios. Only 7 have
 $\Delta>0$, all with $s_0>0.3$\,EUR/kWh, and the largest gap is 0.023\% of total
 daily cost. At $B=300$\,kWh (14 eligible operators, 2072 scenarios) there are 6,
 with gaps up to 0.054\%. In gap scenarios, the planner optimum's regret at its own
 marginal prices is a median 8.5 times the gap at $B=400$ (4.2 at $B=300$). The
-operator's incentive to deviate is several times the welfare at stake, as in the
-worked example. Halving the midday budget leaves these gap counts unchanged.
+seven positive cells at 400\,kWh all belong to Pfaffenhofen. Their modeled
+daily planning gaps range from 0.04 to 1.04\,EUR after rounding. The operator's
+corresponding saving from deviating at the physical plan's posted marginal
+prices ranges from 0.30 to 4.56\,EUR. These figures use the assumed supply
+curve and bus fee. Halving the midday budget leaves the reported gap counts
+unchanged.
 
-\paragraph{Result 3: cycling is common and mostly unrelated to the gap.}
+The price grid can skip a narrow failure interval entirely. We evaluated
+\cref{prop:bands} directly on the committed decimal run energies with rational
+arithmetic. For each eligible operator and each of the four slopes we
+intersected the open intervals with $[-0.2,1.6]$ and divided their total
+length by 1.8. The last column of \cref{tab:offsetcoverage} averages that
+fraction equally over operator--slope combinations. It measures coverage of
+the specified offset range. Estimating frequencies in service would also
+require observations of the tariffs and marginal-cost curves depots face.
+
+\begin{table}[ht]
+\centering
+\caption{Exposure to a positive gap within the same price-offset range.
+The main grid has 37 offsets per operator and slope. Both midday capacities
+gave the same entries in this table.}\label{tab:offsetcoverage}
+\begin{tabular}{rrrrr}
+\toprule
+Battery & Eligible & \multicolumn{2}{c}{Operators with a gap} & Mean range\\
+(kWh) & operators & On grid & Anywhere in range & covered (\%)\\
+\midrule
+300 & 14 & 2 & 6 & 0.292\\
+400 & 18 & 1 & 1 & 0.339\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+At 300\,kWh the exact intervals cover a positive length for 19 of 56
+operator--slope combinations, while the grid detects a gap for five.
+At 400\,kWh these counts are four and three of 72. Interval membership
+agreed with the numerical objective comparison in every one of the 9,472
+cells across both capacities and battery sizes, using the study's
+$10^{-9}$ gap threshold. As a separate classical check, a general linear
+assignment solver selected both endpoints of every real pair without using
+the sorted matching formula. At half (rounded down) and maximum matching
+cardinality for every eligible operator and battery size, its 64 objective
+values agreed with the formula within $6\cdot10^{-12}$\,kWh.
+
+\paragraph{Price cycles under an endpoint response.}
 Undamped iteration, started from the spread at the smallest attainable early
 load, cycles in 397 of the 2664 scenarios at $B=400$\,kWh (15\%). Of these, 390 have
 $\Delta=0$ (\cref{fig:sweep}). Classifying the hull optimum explains them: it lies
@@ -681,52 +800,49 @@ $\rho$. Cycling concentrates at small spreads with no gap.}
 
 \section{Discussion}\label{sec:discussion}
 
-\paragraph{For tariff design.} The exact class isolates the economic content of
-assignment nonconvexity. A depot facing a marginal-cost tariff will under- or
-over-charge at midday only when the spread prices forced charging at the
-vehicle cost it saves. That requires battery capacity close to the paired energy
-of peak runs, together with a spread near $f/\eta$. When it happens, the
-welfare loss is second order, at most $\kappa\eta^2/8$, but the operator's bill
-regret is first order. At the convex-hull price an uplift of at most $\Delta$
-supports the planner optimum (\cref{sec:model}). That is far cheaper than
-compensating the regret at the operator's own marginal prices, and it works where
-re-pricing until convergence does not.
+\paragraph{A decision at the depot.} Given a proposed bus fee and a specified
+supplier cost curve, a planner can calculate the interval endpoints before
+choosing a coordination rule. Outside the open failure bands, a feasible
+fleet attains the hull optimum. At a supported tie the supplier can specify
+the desired quantity in addition to the price. Inside a band, let $x_D$ be a
+physical optimum. At its own marginal price the fleet can save at least
+$\Delta$ by changing schedules. At a hull price $p^*$, the supplier can pay
+the operator $r(x_D;p^*)$ conditional on operating $x_D$. The payment
+is bounded above by $\Delta$ (\cref{prop:support}). This compares two
+specified payment rules. Contract enforcement costs, participation rights
+and observed tariff parameters are needed to value a change in practice.
 
-\paragraph{How much the price-maker concern matters.} The calibrated study gives
-a sober answer for peak operations. With current battery sizes, most operators'
-peak runs pair freely, and the assignment nonconvexity is invisible to any
-price. Where it is visible, it needs spreads several times the reference
-energy price, and the welfare at stake is a few hundredths of a percent of daily cost.
-The operator's incentive to deviate, however, is several times larger. The
-binding consideration for tariff design is therefore the incentive problem, not
-the efficiency loss. Battery downsizing, demand charges and scarcity pricing all
-push depots toward the regime where the obstruction appears, so the threshold
-$f/\eta_{\max}$ is the quantity to monitor.
+The study illustrates why a ratio alone is insufficient for that decision.
+At 400\,kWh, regrets in the seven positive grid cells are several times
+their planning gaps, yet the largest modeled saving from deviating is
+4.56\,EUR per day. At 300\,kWh, counting affected operators on the grid
+misses four operators with narrow failure bands. The interval calculation
+identifies both the exposed operators and the range of offsets to check.
 
 \paragraph{For price-coordination algorithms.} \Cref{thm:iteration} separates
-two causes of non-convergence. Degenerate flat-face responses can be removed by
-selection rules, such as choosing the response closest to the previous load or
-announcing a target quantity. Sloping-face gaps cannot be removed by any price.
-Constant damping only narrows the band, and an overly large step can make prices
-cycle even around a supported vertex. Diminishing steps with averaging recover
-the hull plan. Iterative tariff negotiation between a depot and a supplier
-should therefore report the gap, or a certificate that $E^*$ is physical,
-rather than a cycle count.
+two causes of non-convergence. On a flat face a supplier that knows the
+target load can request it at the supporting spread. A tie-breaking rule
+applied only at that spread cannot alter a trajectory that never reaches
+it. An undamped cycle may also surround a supported vertex. Under diminishing
+steps prices converge, and for an affine spread the step-weighted loads and
+fees recover the hull point. A supplier can distinguish these cases by
+checking whether a feasible schedule attains the target load \emph{and}
+the hull vehicle cost.
 
 \paragraph{Limitations.} The exact theorem assumes two synchronized batches,
 common availability and efficiencies, zero-time transitions, ideal switching
 and period-aggregate settlement. \Cref{sec:boundaries} shows that
 edge-dependent transitions and a third batch are genuine boundaries, and that
-setup time requires separate treatment. The calibrated study uses real service
-energies but stylized peak runs and illustrative economics. It is not an
-estimate of savings for any operator. The 37-service certificate establishes
+setup time requires separate treatment. The study derives run energies from
+public timetables and assumed energy rates. Estimating savings for a depot
+would require observed consumption, duty options and settlement terms.
+The 37-service certificate establishes
 existence beyond the class for one timetable with synthetic economics.
 
 \paragraph{Open directions.} Three extensions would most increase reach: a
 characterization for staggered charging windows, where serialization is no
-longer automatic; an approximate reduction with setup time and its error
-bound; and an analysis of the strategic operator who anticipates the
-price change, for which the exact projection is the natural strategy space.
+longer automatic, a measured application of the setup-time bound, and an
+analysis of a strategic fleet operator who anticipates the price change.
 
 \bibliographystyle{plainnat}
 \bibliography{references}

@@ -89,10 +89,16 @@ $-f/\eta_m$ are therefore nondecreasing, followed by the flat segment.
 Endpoints are physical, interpolants are hull mixtures, and every physical
 branch lies on or above this convex graph, so the graph is exactly the lower
 hull boundary. Consecutive breakpoints differ by one cardinality.
+For the bidirectional thresholds $t_m$, each term in the maximum defining
+$t_m$ has a nondecreasing convex piecewise-linear extension in $m$. Their
+pointwise maximum is convex and nondecreasing. Its values at integer $m$
+therefore have nondecreasing increments, giving the same frontier construction
+starting at the last cardinality with $t_m=t_0$.
 
 \subsection{Proof of Corollary~\ref{cor:support}}
 The convex frontier plus strictly convex continuous $G$ has a unique minimizer
-$E^*$. At $\mathrm{Lo}$, at a breakpoint or on the flat segment, a physical plan attains
+$E^*$. The empty matching admits every $E\in[\mathrm{Lo},U]$. At
+$\mathrm{Lo}$, at a breakpoint or on the flat segment, a physical plan attains
 the frontier, so $D=\CH$. Strictly between consecutive breakpoints the frontier's
 operating cost is strictly below that of every physical branch because $f>0$, so no
 physical plan attains the hull optimum; compactness of the finite union of
@@ -150,20 +156,42 @@ The finite candidate set $\mathcal V$ consists of all layer endpoints $(\ell_m,f
 and $(U,fN_m)$. Since a linear function attains its minimum over $\conv\mathcal P$
 at a point of $\mathcal V$, every $E\in R(\pi)$ satisfies $\bar c(E)=fN_m$ for its
 layer and $E\in H(\pi)$. The layer endpoints that lie on $\bar c$ are exactly the
-breakpoints $\mathrm{Lo}$, $r_m$ ($m_0<m\le m_{\max}$) and the point $U$. The hull optimum satisfies
+breakpoints $\mathrm{Lo}$, $\ell_m$ ($m_0<m\le m_{\max}$) and the point $U$,
+using the corresponding thresholds in the bidirectional case. The hull optimum satisfies
 $-\pi^*\in\partial\bar c(E^*)$ because $G$ is differentiable.
 
 \subsection{Proof of Proposition~\ref{prop:anatomy}}
 (i) By \cref{cor:support}, $\Delta>0$ places $E^*$ strictly between consecutive
 breakpoints $u<u'$, where $\bar c$ is affine with slope $-f/(u'-u)$ because
 consecutive breakpoints differ by one cardinality. Optimality at an interior point
-gives $g(E^*)=f/(u'-u)\ge f/\eta_{\max}$, and $\max g\ge g(E^*)$.
+gives $g(E^*)=f/(u'-u)\ge f/\eta_{\max}$. Strict increase of $g$ and
+$E^*<u'\le U$ yield $g(U)>g(E^*)$.
 
 (ii) On $[u,u']$ let $\phi=\bar c+G$. Then $\phi'(E)=-f/(u'-u)+g(E)$ is
 $\kappa$-Lipschitz and vanishes at $E^*$, so $\phi(E)-\phi(E^*)\le\kappa(E-E^*)^2/2$.
 Both $u$ and $u'$ are physical with cost $\bar c$, so
 $D\le\min\{\phi(u),\phi(u')\}$ while $\CH=\phi(E^*)$. One of $u,u'$ is within
-$(u'-u)/2$ of $E^*$, which gives $\Delta\le\kappa(u'-u)^2/8$. \qed
+$(u'-u)/2$ of $E^*$, which gives $\Delta\le\kappa(u'-u)^2/8$. The bound
+using $\eta_{\max}$ also holds when $\Delta=0$. \qed
+
+\subsection{Proof of Proposition~\ref{prop:bands}}
+Write $\tau_m=f/\eta_m$. On the open segment
+$(\ell_{m-1},\ell_m)$ the derivative of $\bar c+G_s$ is
+$s+h(E)-\tau_m$. It vanishes in the segment exactly for the intercepts in
+the corresponding open interval of \eqref{eq:interceptbands}.
+Strict convexity makes this stationary point the unique global optimum.
+\Cref{cor:support} shows that these are precisely the positive-gap cases.
+As $m$ increases the increments $\eta_m$ are nondecreasing, including the
+first increment above $\mathrm{Lo}$. Hence
+$\tau_{m+1}-h(\ell_m)\le\tau_m-h(\ell_m)$. The upper endpoint of band $m+1$
+is at or below the lower endpoint of band $m$. Equality gives a shared
+boundary intercept whose optimal load $\ell_m$ is a physical breakpoint.
+Summing the lengths of the disjoint bands gives
+\[
+ \sum_{m=m_0+1}^{m_{\max}}\bigl[h(\ell_m)-h(\ell_{m-1})\bigr]
+ =h(\ell_{m_{\max}})-h(\mathrm{Lo}),
+\]
+since $\ell_{m_0}=\mathrm{Lo}$. When $m_0=m_{\max}$ both sides vanish. \qed
 
 \subsection{Proof of Lemma~\ref{lem:sign}}
 Let $E\in R(\pi)\subseteq H(\pi)$, so $-\pi\in\partial\bar c(E)$, and recall
@@ -190,9 +218,9 @@ $\hat\pi=\pi^*$.
 layer endpoint on $\bar c$, that is, a breakpoint or $U$. Conversely, if $E^*$ is
 a breakpoint or $U$, then $E^*\in H(\pi^*)$ is a candidate attaining the minimum, so
 $E^*\in R(\pi^*)$ and a selection choosing it makes $\pi^*$ a fixed point. If
-$\Delta>0$, $E^*$ is not physical and hence not a breakpoint; if $E^*$ lies inside
-the open flat face $(\ell_{m_{\max}},U)$ it is physical but neither a breakpoint nor
-$U$.
+$\Delta>0$, every physical plan at $E^*$ has a higher vehicle cost than
+$\bar c(E^*)$. If $E^*$ lies in the open flat face $(\ell_{m_{\max}},U)$,
+the cheapest layer attains the hull cost there but has no endpoint at $E^*$.
 
 \emph{(b)} Let $\sigma$ be the selection, a function of $\pi$ with values in
 $R(\pi)$; by (F1) it is nonincreasing, so $h=g\circ\sigma$ is nonincreasing and
@@ -208,11 +236,21 @@ cycle, (F2) gives $E_a\le w<E^*$, hence $\pi_b=g(E_a)<\pi^*$ and $E_b\ge w'$.
 \emph{(c)} By \cref{lem:sign}, $d_k=|\pi_k-\pi^*|$ satisfies
 $d_{k+1}\le\max\{(1-a)d_k,aM\}$, so $d_k\le\max\{(1-a)^kd_0,aM\}$ and the
 interval $d\le aM$ is reached in finitely many steps and is invariant.
+Here $M>0$ because $\mathrm{Lo}<U$ and $g$ is strictly increasing. Under
+the step bound the interval contains no element of $\mathcal T$ distinct
+from $\pi^*$.
 
-\emph{Vertex case.} If $\pi^*$ is interior to the normal cone
-$\{\pi:E^*\in H(\pi)\}$ and $aM$ is less than its distance to the cone's boundary,
-then inside the invariant interval $H(\pi)=\{E^*\}$, so $E_k=E^*$ and
-$\pi_{k+1}-\pi^*=(1-a)(\pi_k-\pi^*)$.
+\emph{Vertex case.} If $\pi^*\notin\mathcal T$, the unique minimizing load
+throughout the invariant interval is $E^*$, and each step multiplies the
+spread error by $1-a$. If $\pi^*\in\mathcal T$, then $E^*$ is one endpoint
+of the exposed face. Suppose $E^*$ is its left endpoint and $v>E^*$ its
+right endpoint. In the interval above $\pi^*$ the unique response is $E^*$,
+so the spread stays above $\pi^*$ and converges geometrically. Below
+$\pi^*$ the unique response is $v$, whose target $g(v)>\pi^*$ makes the
+spread reach or cross $\pi^*$ after finitely many such steps. At equality,
+choosing $E^*$ keeps the spread there and choosing any larger tied load
+sends it strictly above. Thus eventually every selected load equals $E^*$.
+The case with $E^*$ the right endpoint follows by reversing the inequalities.
 
 \emph{Face case: non-convergence.} Suppose $\pi_k\to\bar\pi$. Then
 $a(g(E_k)-\pi_k)=\pi_{k+1}-\pi_k\to0$, so $g(E_k)\to\bar\pi$. Since $E_k$ ranges over a
@@ -226,39 +264,41 @@ selected loads, $\pi_k$ is affine in $\pi_0$ with slope $(1-a)^k\neq0$, so each
 finite selection sequence admits at most one such $\pi_0$, and there are countably
 many sequences.
 
-\emph{Face case: trapping.} Write $[\pi^*,\sigma]$ for the normal cone of $w$ and
-$[\sigma',\pi^*]$ for that of $w'$ (with $\sigma=+\infty$ if $w=\mathrm{Lo}$ and
-$\sigma'=-\infty$ if $w'=U$), and assume $aM<\min\{\sigma-\pi^*,\pi^*-\sigma'\}$.
-Inside the invariant interval, $\pi>\pi^*$ forces $E=w$ and $\pi<\pi^*$ forces
-$E=w'$; at $\pi=\pi^*$ the selection is a breakpoint in $[w,w']$. With
+\emph{Face case, trapping.} Inside the invariant interval, $\pi>\pi^*$
+forces $E=w$ and $\pi<\pi^*$ forces $E=w'$. At $\pi=\pi^*$ every selected
+endpoint lies in $[w,w']$. With
 $d_-=\pi^*-g(w)>0$ and $d_+=g(w')-\pi^*>0$, an update from $\pi>\pi^*$ gives
-$\pi'=(1-a)\pi+ag(w)\in[\pi^*-ad_-,\pi)$, and symmetrically from below; from
-$\pi^*$ the update stays in $[\pi^*-ad_-,\pi^*+ad_+]$. This band is therefore
-invariant. Above $\pi^*$, prices contract geometrically toward $g(w)<\pi^*$ and cross
-$\pi^*$ in finitely many steps; below, they contract toward $g(w')>\pi^*$. Hence
-the band is entered, and both $w$ and $w'$ recur infinitely often unless some
-$\pi_k=\pi^*$ and the selection picks $E^*$ (possible only if $E^*$ is a breakpoint),
-after which the orbit is fixed. Because $\mathrm{Lo}<U$ and $g$ is strictly
-increasing, $M>0$, so the interval $d\le aM$ is reached in finitely many steps.
+$\pi'=(1-a)\pi+ag(w)\in[\pi^*-ad_-,\pi)$, with the symmetric inequality
+from below. A step from equality stays in $[\pi^*-ad_-,\pi^*+ad_+]$. This
+band is invariant. Repeated steps from one side approach a target strictly on
+the other side and hence enter the band in finite time. If the orbit
+eventually avoids the tie, or if ties always select $w$ or $w'$, the late
+responses belong to $\{w,w'\}$. An eventual constant load $w$ would drive
+the spread to $g(w)<\pi^*$ and force the response $w'$. The symmetric
+argument excludes an eventual constant load $w'$, proving recurrence of both.
 
 \emph{(d)} With $d_{k+1}\le\max\{(1-a_k)d_k,a_kM\}$, fix $\varepsilon>0$ and $k_\varepsilon$ with
 $a_kM<\varepsilon$ for $k\ge k_\varepsilon$. After $k_\varepsilon$, the interval $d\le\varepsilon$ is invariant,
-and outside it $d$ contracts by the factors $1-a_k$, whose product diverges to
+and outside it $d$ contracts by the factors $1-a_k$, whose product converges to
 zero because $\sum a_k=\infty$. Thus $\limsup d_k\le\varepsilon$ for every
 $\varepsilon$. Summing the update gives $\sum_{k<n}a_k(g(E_k)-\pi_k)=\pi_n-\pi_0$,
 which is bounded; dividing by $A_n=\sum_{k<n}a_k\to\infty$ and using
 $\pi_k\to\pi^*$ (Stolz--Ces\`aro) gives $\sum_{k<n}a_kg(E_k)/A_n\to\pi^*$. If $g$
 is affine, this average equals $g\bigl(\sum_{k<n}a_kE_k/A_n\bigr)$, and invertibility
-of $g$ gives the load statement. \qed
+of $g$ gives the load statement. Only finitely many layer endpoints exist.
+Each endpoint that is strictly suboptimal at $\pi^*$ remains so in a
+neighbourhood of $\pi^*$ by continuity. Thus every sufficiently late
+selected endpoint $(E_k,c_k)$ satisfies
+$c_k+\pi^*E_k=\bar c(E^*)+\pi^*E^*$. Taking the same weighted average
+gives convergence of vehicle costs to $\bar c(E^*)$. \qed
 
-\paragraph{Numerical verification.} The repository contains an exact
-rational-arithmetic implementation of the projection, hull, gap and iteration
-(\texttt{code/twobatch.py}) and randomized checks of every statement in this
-section on several thousand instances: the period and bracketing claims in (b);
-the absence of fixed points; trapping, band and recurrence in (c) at half the
-stated step threshold; convergence in (d); and both parts of
-\cref{prop:anatomy}. Instances are drawn so that the hull optimum falls on
-sloping faces, flat faces and vertices.
+\paragraph{Computational checks.} The lossless charge-only implementation
+in \texttt{code/twobatch.py} accepts rational inputs. The tests in
+\texttt{code/test\_twobatch.py} use exact arithmetic for matching, hull and
+gap calculations and for undamped cycles. They also check finite
+floating-point trajectories for damped and diminishing steps. The proofs
+above establish the conclusions for arbitrary run lengths and tie rules
+under their stated hypotheses.
 
 \section{Proofs for Section~\ref{sec:boundaries}}\label{app:boundaries}
 
@@ -272,6 +312,23 @@ violating this are removed. Lower endpoints sum to $S_m-N_mB$ with
 $S_m=S_0+md$, positive lower endpoints to the matching's requirement with $d$
 included, and the upper endpoints still to $P$. Because $S_m$ depends only on $m$,
 the proof of \cref{thm:projection} applies verbatim with $S_0$ replaced by $S_m$.
+
+\subsection{Proof of Proposition~\ref{prop:transitionclasses}}
+For a retained edge, the paired bus has early gain interval
+$[a_i+b_j+d_{ij}-B,a_i]$. With $m$ and $z$ fixed, the lower endpoints sum
+to $S_0+z-N_mB$, the upper endpoints to $P$, and the positive lower endpoints
+to $R(M)$. The serial realization in \cref{app:projection} therefore applies
+with $S_0+z$ in the terminal balance as well. Only the purchase floor
+$C\ge R(M)/\alpha$ varies within the group, proving the replacement.
+
+In the lossless charge-only case every point of a matching's branch satisfies
+$E+L=S_0+z$. Nonempty branches with different totals are disjoint, which
+gives necessity. For the classical exchange equivalence, complete any two
+distinct rows and columns to two perfect matchings identical outside that
+$2\times2$ submatrix. Equality of their totals gives the exchange identity.
+Balancing each such exchange yields $d_{ij}=d_{i1}+d_{1j}-d_{11}$.
+Conversely, a perfect matching sums each row and column potential once,
+so its total is invariant. \qed
 
 \subsection{Proof of Proposition~\ref{prop:completegraph}}
 \emph{A disjoint-block construction.} Let $w_i=2^i$ for $i=0,\dots,k-1$,
@@ -332,42 +389,51 @@ during $[3,3+nB]$. The construction is polynomial and preserves strong hardness;
 membership in NP is immediate. \qed
 
 \section{The certified public timetable}\label{app:public}
-The case uses the Hildenbrand timetable of \citet{sistig2025dataset}: 37 mandatory
-services, the complete directed $5\times5$ deadhead matrix, and depot 15 as the sole
-charging and parking location. Service energy is $1.2$\,kWh/km plus 16\,kWh per
-service hour; deadheads use $0.96$\,kWh/km plus 16\,kWh per hour; off-depot waiting
-uses 16\,kWh/h. Each used bus has 400\,kWh usable energy and 360\,kW acceptance; one
-360\,kW connector is shared; every bus starts full and returns full by 30:00. The
-used-bus cost is 100 and the supply cost is
-$F(e)=\sum_{t=1}^{30}(0.2e_t+e_t^2/1800)$ over hourly intervals, with the exact binary
-values of these coefficients used throughout.
+\citet{sistig2025dataset} supply 37 mandatory Hildenbrand services and directed
+time and distance tables for five locations. We model service and deadhead
+traction at $1.2$ and $0.96$\,kWh/km, respectively, plus 16\,kWh/h during service,
+deadheading and off-depot waiting. Depot 15 alone permits charging and zero-draw
+parking. Up to 37 buses, each with 400\,kWh usable energy, start full and return
+full by 30:00. They share one charge-only 360\,kW connector with unit efficiency
+and zero switching time. Each bus accepts 360\,kW and costs 100 to use.
+Movement has zero monetary cost. The 30 hourly loads enter
+$F(e)=\sum_t(ae_t+be_t^2/2)$, where $a$ and $b$ are the exact
+stored binary64 values of $0.2$ and $1/900$, respectively.
 
-\emph{Upper bound on $\CH$.} An incumbent physical plan and a second admitted
-physical response, which has a higher planning cost but a lower bill at the
-incumbent's marginal prices, are mixed. Exact quadratic evaluation and
-one-dimensional optimality conditions give $\CH\le441.142238$.
+\emph{Upper bound on $\CH$.} In each model two feasible two-bus plans give a
+convex combination with objective at most $441.142238$. For the original
+stored-energy model the weight minimizes the quadratic on the segment between
+the plans. For the additive model the checker evaluates that same fixed weight
+on two separately verified plans. Either feasible mixture suffices for the bound.
 
-\emph{Lower bound on $D$.} A minimum-fleet argument excludes one bus. For three or
-more buses, vehicle cost plus the linear mandatory-service energy term already
-exceeds $477.82$. The two-bus domain is covered by a binary branching tree over
-movement variables. At each leaf, exact tangent planes, signed row multipliers and
-finite-box residual compensation give a valid rational lower bound, and infeasible
-leaves carry rational infeasibility certificates. An independent reconstruction
-checks coverage and every leaf, giving $D\ge441.532912$. A feasible schedule gives
-$D\le441.532913$.
+\emph{Bounds on $D$.} One bus would have to serve all 37 trips in chronological
+order. None of the 36 consecutive connections offers a depot charge, and the
+services alone draw over 889\,kWh. For three or more buses, full replenishment
+and nonnegative consumption imply a lower bound of three vehicle fees plus the
+linear cost of service energy, exceeding $477.82$. For two buses, a 375-node
+tree branches on movement decisions. The checker reconstructs the rows and
+checks both children at each branch. Each leaf certifies infeasibility or uses
+a quadratic tangent, signed row multipliers and a residual bound over the
+variable bounds. These checks give $D\ge441.532912$. A feasible two-bus plan
+gives $D\le441.532913$. With only the fee changed to $f=100+\delta$,
+$\delta\ge0$, the mixture and the two-bus lower bound both rise by $2\delta$.
+The three-or-more-bus floor rises by $3\delta$, so the gap guarantee persists.
 
-\emph{Scope.} The first certificate concerns the declared movement graph (pull-out,
-direct, via-depot and pull-in modes with fixed leg times). A second, separately
-checked certificate uses an exactly additive energy law and, under directed
-triangle inequalities that the source tables satisfy, extends the result to
-arbitrary finite walks over the location pairs with continuous waiting. The
-displayed bounds coincide, but neither certificate is transferred to the other model. The
-gap holds for every vehicle cost $f\ge100$, since both mixture components and the
-two-bus lower bound shift equally. Standalone checkers using only the Python standard
-library re-verify each certificate in under a minute (\cref{app:repro}).
+\emph{Scope.} The original model uses the stored binary64 consumption of each
+service and leg on a finite graph of pull-out, direct, via-depot and pull-in
+modes with fixed leg times. The second model computes the same consumption
+formulas in exact rational arithmetic. A separate argument extends its two
+planning values to finite walks over the paired time--distance arcs with
+continuous waiting. The directed triangle inequalities and verified coverage of
+direct and via-depot connections allow a walk to be shortened while preserving
+its depot charging times. With common terminal access and zero-draw depot
+parking, charging can then be curtailed to respect capacity. This weakly
+reduces each hourly purchase and hence the monotone supply cost for each
+plan and each mixture. The certificate index in \cref{app:repro} identifies
+the separate checks of the source tables and charging access.
 
 \section{Reproducibility}\label{app:repro}
-All code and derived data are in the repository at \texttt{paper/draft1/}:
+The two-batch analysis and calibrated sweep are in \texttt{paper/draft1/}.
 \begingroup\sloppy
 \begin{itemize}[itemsep=1pt]
 \item \texttt{code/twobatch.py}: exact projection, hull, gap and price iteration;
@@ -376,11 +442,25 @@ All code and derived data are in the repository at \texttt{paper/draft1/}:
 \citet{sistig2025dataset}, written to \texttt{data/peak\_runs.json}.
 \item \texttt{code/study.py}: the sweep, written to \texttt{results/summary.json}
 and \texttt{results/study.json}; \texttt{code/figures.py}: all figures.
-\item \texttt{make.sh} regenerates results, figures and the PDF.
+\item \texttt{code/gap\_bands.py} independently constructs the exact open
+offset intervals and checks their membership against every numerical sweep
+row. Its report identifies the operators and offsets behind
+\cref{tab:offsetcoverage}. \texttt{code/check\_review.py} checks the exact
+tie counterexample and two matching cardinalities against a general assignment
+solver for every eligible operator at 300 and 400\,kWh.
+\item \texttt{make.sh} regenerates the sensitivity results, interval report,
+figures and PDF from the committed run energies.
 \end{itemize}
 \endgroup
 \begingroup\sloppy
-The public-timetable certificates and their portable checkers are in the
-repository directory \path{research-20261029/}, and an index binding sources,
-inputs and commands is \path{paper/focused-theory-20261029/CERTIFICATE_INDEX.md}.
+For the public case, \path{paper/focused-theory-20261029/CERTIFICATE_INDEX.md}
+lists the source revisions, input packets, trusted manifest digests and offline
+commands. Under \path{research-20261029/} in the authors' local evidence
+archive, the original export is \path{public_certificate_bundle/attempt01/public-sign-verifier/}
+and the additive export is \path{public_exact_energy_portable/attempt01/bundle/}.
+From a fresh authorized copy of either export, run \texttt{verify.py} with
+CPython 3.12.2, the digest for that model and a new output path as specified in
+the index. The author-run checks took 33 and 36 seconds, respectively, with
+the standard library alone. The repository provides the index and receipts.
+Redistribution of the assembled exports and external replication remain open.
 \par\endgroup

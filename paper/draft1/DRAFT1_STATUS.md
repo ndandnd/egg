@@ -1,63 +1,11 @@
-# Draft 1 status (30 October 2026)
+# Review draft, 2 November 2026
 
-Branch `paper/draft1-20261030`, directory `paper/draft1/`. Build: `./make.sh`
-(add `--tests` for the exact randomized checks, ~8 min). The previous focused
-draft (`paper/focused-theory-20261029/`, PDF v13) is kept unchanged as an archive.
+Read the [revised manuscript](build/main.pdf) and the [independent referee report and responses](review/INDEPENDENT_REVIEW.md). The report identifies the changes from the 21-page October 30 version at revision `b52d0c12` in draft PR 57. The earlier long theory draft is kept under `paper/focused-theory-20261029/`.
 
-## What changed relative to v13
+The matching replacement proof for unequal batches survived review. The revision characterizes the entire tariff-offset region of support failure and proves when heterogeneous transition draws admit one representative perfect matching. It corrects an exceptional price-tie orbit, the interpretation of weighted averages, the public certificate's lower bound, and the distinction between a free maximum matching and every edge being free.
 
-| v13 problem (see the three internal referee notes) | Draft 1 |
-|---|---|
-| 66 pages, 8-page body, appendices A–Y, ~45 negations in the first 8 pages | ~21 pages total; one scope paragraph; proofs in 5 appendices |
-| Competing centres of gravity (support, projection, certificates) | One story: exact projection, then what it implies for support and price iteration, then where it stops, then data |
-| Support failure "inherited from classical theory" | New: gap anatomy (fee/spread condition, κδ²/8 bound) and price-iteration theorem (cycling iff degenerate tangency; damping traps; diminishing steps recover hull) |
-| No practical significance; synthetic only | 18-operator calibrated study from public CC BY timetables (critical spreads, gap incidence, regret/gap, cycling) |
-| Disconnected from the B1–B3 flagship | Theorem explains the flagship's tâtonnement cycles: most cycles in calibrated scenarios have zero gap |
-| Wu 2019 compared from publisher preview only | Read in full (Imperial Spiral accepted version); positioned precisely |
-| Zhou 2025 glyph-limited | Still not accessible in full text from here; the draft claims only what its abstract states |
-| NP-hardness cited to a path-puzzles paper | Garey & Johnson [SP16] |
-| Setup-slack proposition missing anchor membership | Dropped from this draft (discussed qualitatively as an open direction) |
+At 300 kWh the exact intervals identify six of 14 operators with a positive gap somewhere in the studied range. Two were detected on the sampled grid. At 400 kWh one of 18 operators is exposed in that range. All seven positive sampled cases occur at that operator. Both 37-service physical certificates passed a fresh same-host check and distinguish the model-specific trust boundaries. [Numerical checks](review/RUN_RECEIPT.md)
 
-## Established (proof plus exact randomized check)
+Run `sh make.sh --pdf-only` to typeset the manuscript from the committed figures. Run `sh make.sh` to regenerate the timetable sensitivity, figures, exact band report and targeted checks from the committed run energies. The sweep requires NumPy, SciPy and Matplotlib. Setting `SISTIG_ROOT` also regenerates the run energies from the source archive using openpyxl. The optional `--tests` adds the original longer exact and floating-point test suite. The private certificate checks have a separate procedure and require access to both private exports. The full interval report for the original published grid records the original input digest. A fresh report after regeneration uses the revised critical-threshold field names in the study input. All sweep rows were compared for equality.
 
-- Theorem `thm:projection` (vetted v13 proof, restated for n_A ≠ n_B; sorted
-  formula checked for unequal sizes).
-- Corollary `cor:support`, Proposition `prop:support` (classical).
-- Proposition `prop:anatomy` and Theorem `thm:iteration` (new): proofs in
-  Appendix C; `code/test_twobatch.py` checks every clause on several thousand
-  exact instances (vertex, sloping-face and flat-face cases).
-- Propositions `prop:completegraph`, `prop:threebatch` (vetted v13 proofs).
-- Public 37-service certificate (v13 evidence, unchanged; summarized only).
-
-## Calibrated study (code/study.py → results/summary.json)
-
-18 of 20 operators (two have fewer than five peak runs per batch). Operator /
-battery combinations with a run longer than the battery are excluded, not trimmed.
-B=400 kWh (all 18 eligible): 15 have r_m ≡ 0, so no gap at any price; the other
-three need spreads ≥0.53 EUR/kWh (f=150). B=300: 8 of 14 eligible can have a gap,
-from 0.91 EUR/kWh. Sweep at B=400 (2664 scenarios): 7 gap scenarios, max 0.023% of
-total daily cost, regret ≈ 8.5× gap; undamped cycles in 397, of which 390 have Δ=0
-(384 flat-face optima, 7 sloping-face, 6 vertex optima with too large a step).
-
-## Independent referee pass (30 Oct)
-
-A fresh referee subagent checked the new proofs, the n_A≠n_B projection and every
-number. Fixed: an overstated iff for non-convergence (the abstract now separates
-small-step convergence at vertices from cycling with large steps); a consistent
-breakpoint definition; recurrence and M>0 caveats in Theorem (c); the
-undisclosed run filter (now explicit exclusion); relative-cost denominator
-(now total daily cost); κ notation; ρ=0 removed from the grid; the
-"order of magnitude" overstatement; the uncited "our earlier work" claim;
-the stale test log and a non-asserting test branch.
-
-## Open / next
-
-1. External expert read of the projection theorem's novelty (the aggregation
-   comparison is still the main novelty risk).
-2. Zhou et al. (2025) full text (needs library access).
-3. Staggered windows or setup time with an error bound would most extend reach.
-4. Run the price-iteration diagnostic (Δ vs. cycling) on the flagship B2
-   instances. Computing Δ there needs a complete-plan hull bound, which is a
-   separate project.
-5. Economics in the study are a sensitivity grid, not a calibration; a real
-   tariff (e.g. a demand-charge schedule) would sharpen Result 1.
+Operations Research has the closest fit among ICML, Operations Research and Management Science. Priority and significance require independent domain-expert review. Deployment claims would need executable full-day duties and observed tariff and contract data. This version makes no claim of a learned method or a demonstrated advantage for ML. No external reviewer has been contacted.
