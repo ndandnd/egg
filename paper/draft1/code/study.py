@@ -147,6 +147,11 @@ def iterate_float(X, s0, kap, a=1.0, iters=400, tol=1e-10):
 
 
 def check_against_exact():
+    # A positive separation makes a double subtraction of kap*S observable.
+    fixture = tb.Instance([1], [1], 1, 1, 2, 1)
+    fixture_supply = tb.Supply(Fr(5, 4), Fr(1, 4), 0, Fr(1, 4))
+    assert tb.gap(fixture, fixture_supply) == Fr(1, 16)
+    assert FloatClass([1], [1], 1, 1, 2, 1).solve(1.25, 0.25)["gap"] == 1 / 16
     rng = np.random.default_rng(0)
     for _ in range(200):
         n = rng.integers(1, 6)
@@ -161,10 +166,11 @@ def check_against_exact():
         if not tb.layers(I):
             continue
         X = FloatClass(a, b, B, K, H, f)
-        sup = tb.Supply(Fr(s0) - Fr(kap) * I.S, Fr(kap), 0, Fr(kap))  # same g and curvature
-        ex = tb.gap(I, sup)
-        fl = X.solve(s0, kap)["gap"]
-        assert abs(float(ex) - fl) < 1e-7 * (1 + abs(float(ex))), (float(ex), fl)
+        # Supply.g already includes -qL*S. Set the zero-load spread itself.
+        sup = tb.Supply(Fr(s0), Fr(kap), 0, Fr(kap))
+        result = X.solve(s0, kap)
+        for key, reference in (("D", tb.physical_opt(I, sup)[0]), ("CH", tb.hull_opt(I, sup)[0])):
+            assert abs(float(reference) - result[key]) < 1e-8 * (1 + abs(float(reference))), (key, reference, result[key])
 
 
 def load_ops(min_runs=5):
@@ -193,7 +199,8 @@ def critical_spreads(ops, Bs=(250, 300, 350, 400), fs=(50, 100, 150, 200)):
                 lm = X.ell_max()
             for f in fs:
                 out.append(dict(operator=o["operator"], B=B, f=f, nA=len(a), nB=len(b), eligible=ok,
-                                runs_over_B=n_over, all_pairs_free=bool(ok and r.max() == 0),
+                                runs_over_B=n_over, every_edge_free=bool(ok and max(a) + max(b) <= B),
+                                free_maximum_matching=bool(ok and r.max() == 0),
                                 delta_max_kwh=lm, pi_crit=(f / lm if ok and lm > 0 else None)))
     return out
 
@@ -234,7 +241,8 @@ def main():
         base = [c for c in crit if c["B"] == B and c["f"] == 150]
         pc = sorted(c["pi_crit"] for c in base if c["pi_crit"])
         summary[f"B{B}"] = dict(eligible=sum(c["eligible"] for c in base),
-                                all_pairs_free=sum(c["all_pairs_free"] for c in base),
+                                every_edge_free=sum(c["every_edge_free"] for c in base),
+                                free_maximum_matching=sum(c["free_maximum_matching"] for c in base),
                                 n_gap_possible=len(pc), pi_crit_min=pc[0] if pc else None,
                                 pi_crit_median=float(np.median(pc)) if pc else None,
                                 runs_over_B=sum(c["runs_over_B"] for c in base))
