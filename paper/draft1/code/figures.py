@@ -39,7 +39,7 @@ def fig_anchor():
     _, Es, _ = tb.hull_opt(inst, sup)
     ED = tb.physical_opt(inst, sup)[1]
     ax.scatter([float(Es)], [21 - 7 * float(Es) / 9], s=28, color=SERIES[1], zorder=5, edgecolor="white", linewidth=1.2)
-    ax.annotate(r"hull optimum $E^\ast=151/18$", (float(Es), 21 - 7 * float(Es) / 9), (2.2, 16.0), fontsize=7.5,
+    ax.annotate("hull optimum", (float(Es), 21 - 7 * float(Es) / 9), (0.3, 13.0), fontsize=7.5,
                 color=INK, arrowprops=dict(arrowstyle="-", color=INK2, lw=0.6))
     ax.scatter([float(ED)], [14], s=28, color=SERIES[0], zorder=5, edgecolor="white", linewidth=1.2)
     ax.annotate("physical optimum", (float(ED), 14), (10.0, 17.5), fontsize=7.5, color=INK,
@@ -92,8 +92,9 @@ def fig_critical():
                 pts.append((c["pi_crit"], y))
         ax.scatter([p[0] for p in pts], [p[1] for p in pts], s=16, color=SERIES[j], label=f"$B={B}$ kWh",
                    zorder=3, edgecolor="white", linewidth=0.6)
-        ax.scatter([free_x] * len(free), free, s=14, facecolor="none", edgecolor=SERIES[j], linewidth=0.9, zorder=3)
-        ax.scatter([over_x] * len(over), over, s=14, marker="x", color=SERIES[j], linewidth=0.9, zorder=3)
+        shift = np.exp(0.09 * (j - 1.5))  # separate categories on the log axis
+        ax.scatter([free_x * shift] * len(free), free, s=14, facecolor="none", edgecolor=SERIES[j], linewidth=0.9, zorder=3)
+        ax.scatter([over_x * shift] * len(over), over, s=14, marker="x", color=SERIES[j], linewidth=0.9, zorder=3)
     ax.set_xscale("log")
     ax.set_xlim(0.4, 220)
     ax.set_yticks(range(len(order)))
@@ -106,7 +107,8 @@ def fig_critical():
     ax.set_xticks([0.5, 1, 2, 5, 10, 20, 40])
     ax.set_xticklabels(["0.5", "1", "2", "5", "10", "20", "40"])
     ax.set_xlabel(r"critical marginal-cost spread $f/\eta_{\max}$ (EUR/kWh), $f=150$ EUR/day")
-    ax.legend(loc="center", bbox_to_anchor=(0.62, 0.52), fontsize=7.5, ncol=2)
+    ax.legend(loc="upper center", bbox_to_anchor=(0.5, -0.18), fontsize=7, ncol=4,
+              columnspacing=1, handletextpad=0.2)
     ax.grid(axis="y", visible=False)
     fig.tight_layout()
     fig.savefig(os.path.join(FIG, "critical.pdf"))

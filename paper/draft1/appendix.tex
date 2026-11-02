@@ -433,25 +433,16 @@ plan and each mixture. The certificate index in \cref{app:repro} identifies
 the separate checks of the source tables and charging access.
 
 \section{Reproducibility}\label{app:repro}
-The two-batch analysis and calibrated sweep are in \texttt{paper/draft1/}.
-\begingroup\sloppy
-\begin{itemize}[itemsep=1pt]
-\item \texttt{code/twobatch.py}: exact projection, hull, gap and price iteration;
-\texttt{code/test\_twobatch.py}: the randomized checks of \cref{sec:prices}.
-\item \texttt{code/calibrate.py}: builds peak-run energies from the archive of
-\citet{sistig2025dataset}, written to \texttt{data/peak\_runs.json}.
-\item \texttt{code/study.py}: the sweep, written to \texttt{results/summary.json}
-and \texttt{results/study.json}; \texttt{code/figures.py}: all figures.
-\item \texttt{code/gap\_bands.py} independently constructs the exact open
-offset intervals and checks their membership against every numerical sweep
-row. Its report identifies the operators and offsets behind
-\cref{tab:offsetcoverage}. \texttt{code/check\_review.py} checks the exact
-tie counterexample and two matching cardinalities against a general assignment
-solver for every eligible operator at 300 and 400\,kWh.
-\item \texttt{make.sh} regenerates the sensitivity results, interval report,
-figures and PDF from the committed run energies.
-\end{itemize}
-\endgroup
+In \path{paper/draft1/}, \texttt{sh make.sh} rebuilds the sensitivity study,
+figures and paper from the committed peak-run energies. The optional
+\texttt{--tests} adds the original randomized tests. The
+\texttt{SISTIG\_ROOT} environment variable enables reconstruction of the run
+energies from the archive of \citet{sistig2025dataset}. In \path{code/},
+\texttt{twobatch.py} supplies the rational solver and \texttt{study.py} the
+numerical sweep. The independent \texttt{gap\_bands.py} checks every grid
+cell against the exact intervals in \cref{tab:offsetcoverage}.
+\texttt{check\_review.py} reproduces the exceptional tie and the 64 general
+assignment comparisons.
 \begingroup\sloppy
 For the public case, \path{paper/focused-theory-20261029/CERTIFICATE_INDEX.md}
 lists the source revisions, input packets, trusted manifest digests and offline
