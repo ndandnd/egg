@@ -1,4 +1,5 @@
 """Acquire the two prespecified hourly price days and the public SimBench MV archive."""
+import argparse
 from datetime import date, datetime, time, timedelta, timezone
 import hashlib
 import io
@@ -17,17 +18,21 @@ GRID_URL = "https://daks.uni-kassel.de/bitstreams/84ac49bc-fa58-4480-b5ae-2962bf
 PRICE_API = "https://api.energidataservice.dk/dataset/Elspotprices"
 
 
-def fetch(url, max_bytes):
+def fetch(url, max_bytes, timeout):
     # Use the host HTTPS trust configuration. TLS verification stays enabled
     # for the original connection and for any explicitly HTTPS-only redirect.
     reply = subprocess.run(
-        ["/usr/bin/curl", "--fail", "--show-error", "--silent", "--location",
+        ["/usr/bin/curl", "--disable", "--fail-with-body", "--show-error", "--silent", "--location",
          "--proto", "=https", "--proto-redir", "=https", "--max-redirs", "4",
-         "--max-time", "30", "--max-filesize", str(max_bytes), url],
+         "--connect-timeout", "15", "--max-time", str(timeout), "--max-filesize", str(max_bytes),
+         "--write-out", "%{stderr}\nstatus=%{http_code} retry_after=%header{retry-after}", url],
         stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False,
     )
     if reply.returncode:
-        raise OSError(f"curl {reply.returncode}: {reply.stderr.decode(errors='replace').strip()}")
+        error = reply.stderr.decode(errors="replace").strip()
+        if "status=429" in error:
+            error += " " + reply.stdout[:500].decode(errors="replace").strip()
+        raise OSError(f"curl {reply.returncode}: {error}")
     buffer = reply.stdout
     if len(buffer) > max_bytes:
         raise ValueError("source exceeds frozen size limit")
@@ -58,21 +63,29 @@ def check_day(buffer, day):
         if (row["PriceArea"] != "DE" or stamp != start + timedelta(hours=i)
                 or not math.isfinite(row["SpotPriceEUR"])):
             raise ValueError("invalid zone, hour sequence or price")
-    return {"validated_hours": hours, "first_utc": start.isoformat(),
+    return {"validated_hours": hours, "observed_price_areas": sorted({row["PriceArea"] for row in rows}),
+            "first_utc": start.isoformat(),
             "end_utc_exclusive": end.isoformat(), "units": "EUR/MWh"}
 
 
 def main():
-    out = Path(sys.argv[1])
-    out.mkdir(exist_ok=False)
     sources = [(f"DE-{day}.json", price_url(day), 1_000_000, day) for day in PRICE_DAYS]
     sources.append(("1-MV-rural--0-sw.zip", GRID_URL, 100_000_000, None))
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("out", type=Path)
+    parser.add_argument("--only", action="append", choices=[s[0] for s in sources],
+                        help="Fetch only the named inputs. Already admitted inputs can be reused.")
+    args = parser.parse_args()
+    out = args.out
+    out.mkdir(exist_ok=False)
     entries = []
     for name, url, limit, day in sources:
+        if args.only and name not in args.only:
+            continue
         entry = {"file": name, "url": url, "status": "pending"}
         entries.append(entry)
         try:
-            buffer = fetch(url, limit)
+            buffer = fetch(url, limit, 180 if day is None else 30)
             (out / name).write_bytes(buffer)
             entry.update(bytes=len(buffer), sha256=hashlib.sha256(buffer).hexdigest())
             if day is not None:
