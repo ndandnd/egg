@@ -275,6 +275,11 @@ class TwoWindowOPF:
             # CVXPY backends may raise native license or numerical exceptions.
             return dict(out, error=f"{type(exc).__name__}: {exc}")
         out["status"] = problem.status
+        if self.solver=="GUROBI":
+            native=problem.solver_stats.extra_stats
+            out["native_details"]={k:getattr(native,k,None) for k in
+                ("Status","SolCount","BarIterCount","Runtime","IterCount","MaxVio","BoundVio","ConstrVio")}
+
         if problem.status not in (cp.OPTIMAL,cp.OPTIMAL_INACCURATE):
             return out
         loads = 1000*np.asarray(self.energy.value)

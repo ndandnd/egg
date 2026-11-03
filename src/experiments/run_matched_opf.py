@@ -113,7 +113,7 @@ def unavailable(reason):
     return dict(status=reason,qualified=False,objective_eur=None,quarters=[])
 
 
-def evaluate(row, model, ac, hours, hourly, site):
+def evaluate(row, model, ac, hours, hourly, site, *, solver="CLARABEL", hull_only=False):
     days = [q for q in hours if row["window"]=="primary" or q["hour"]!=23]
     windows = [int(q["hour"]!=12) for q in days]
     prices = [hourly[q["hour"]] for q in days]
@@ -131,7 +131,7 @@ def evaluate(row, model, ac, hours, hourly, site):
     network=dict(model["solver"],open_end_leaves=model["passive_open_ends"])
     backup=(index,1.,OFFERS[row["market"]]) if OFFERS[row["market"]] is not None else None
     engine=TwoWindowOPF(network,index,[q["p_mw"] for q in days],[q["q_mvar"] for q in days],
-                        [.25]*len(days),prices,float(fleet.total_grid_kwh),window_ids=windows,backup=backup)
+                        [.25]*len(days),prices,float(fleet.total_grid_kwh),window_ids=windows,backup=backup,solver=solver)
     solves={}
     def dispatch(lo,hi,pieces=()):
         key=(lo,hi,pieces)
@@ -179,6 +179,10 @@ def evaluate(row, model, ac, hours, hourly, site):
     simple=len(lines)==1
     h=dispatch(layers[0].early_min_kwh,layers[0].early_max_kwh,() if simple else lines)
     out["arms"]["hull"]=arm(h,offset=layers[-1].fee_eur if simple else 0)
+    if hull_only:
+        out["state"]="repair_hull_evaluated"
+        out["native_solves"]=len(solves)
+        return out
     out["arms"]["fixed"]=physical(fleet.fixed_cover_layer(),"fixed")
     out["arms"]["strong"]=physical(fleet.strong_cover_layer(),"strong")
     out["identical_lower_envelopes"]=simple
