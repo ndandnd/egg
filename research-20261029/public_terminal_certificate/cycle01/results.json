@@ -1,0 +1,327 @@
+{
+  "status": "PASS",
+  "rows": [
+    {
+      "id": "literal",
+      "status": "PASS",
+      "controls": [
+        {
+          "delta": "-1/1024",
+          "changes": {
+            "scope": "new exact terminal-only construction on unchanged native topology",
+            "independently_replayed": false,
+            "physical_upper_certified": false,
+            "repairs_are_explicit": true,
+            "failure_does_not_prove_topology_infeasible": true,
+            "policy": "remove surplus latest positive pull-in cells, then fill deficits latest eligible shared residual cells",
+            "changed_cells": [
+              {
+                "movement": "in",
+                "interval": 1,
+                "original": "10239/1024",
+                "new": "10",
+                "delta": "1/1024",
+                "newly_created_cell": false
+              }
+            ],
+            "per_bus": [
+              {
+                "vehicle": 0,
+                "movements": [
+                  "out",
+                  "in"
+                ],
+                "terminal_movement": "in",
+                "terminal_arrival_soc": "10",
+                "consumption": "10",
+                "nonterminal_grid": "0",
+                "original_terminal_grid": "10239/1024",
+                "target_terminal_grid": "10",
+                "original_fullness_residual": "-1/1024",
+                "new_terminal_grid": "10",
+                "new_fullness_residual": "0"
+              }
+            ],
+            "dropped_reported_fields": [],
+            "original_candidate_mutated": false,
+            "all_other_allocations_preserved": true,
+            "original_total_grid": "10239/1024",
+            "new_total_grid": "10",
+            "exact_total_grid_change": "1/1024",
+            "next_step": "Independently replay newcandidate against original exact per-leg/window/resource inputs before claiming an upper bound"
+          },
+          "audit": {
+            "strict_pass": true,
+            "physical_strict_pass": true,
+            "objective_is_certified_physical_upper": true,
+            "classification": "exact-feasible-candidate",
+            "violations": [],
+            "exact_semantics": "Fraction of stored float, or supplied rational string",
+            "repairs_applied": false,
+            "tolerance_feasibility": "not assessed",
+            "inference_limit": "Candidate failure does not prove topology infeasibility",
+            "routes": [
+              {
+                "vehicle": 0,
+                "movements": [
+                  "out",
+                  "in"
+                ],
+                "trips": [
+                  "s"
+                ]
+              }
+            ],
+            "intervals": [
+              {
+                "start": "0",
+                "end": "60",
+                "rate": "20",
+                "period": 0
+              },
+              {
+                "start": "60",
+                "end": "120",
+                "rate": "20",
+                "period": 1
+              }
+            ],
+            "sessions": [
+              {
+                "vehicle": 0,
+                "movement": "in",
+                "interval": 1,
+                "start": "60",
+                "end": "90",
+                "power": "20",
+                "energy": "10"
+              }
+            ],
+            "soc_traces": [
+              {
+                "vehicle": 0,
+                "events": [
+                  {
+                    "time": "30",
+                    "event": "movement:out:0",
+                    "delta": "0",
+                    "soc": "20"
+                  },
+                  {
+                    "time": "30",
+                    "event": "before:s",
+                    "delta": "0",
+                    "soc": "20"
+                  },
+                  {
+                    "time": "60",
+                    "event": "movement:in:0",
+                    "delta": "0",
+                    "soc": "20"
+                  },
+                  {
+                    "time": "60",
+                    "event": "service:s",
+                    "delta": "-10",
+                    "soc": "10"
+                  },
+                  {
+                    "time": "60",
+                    "event": "after:s",
+                    "delta": "0",
+                    "soc": "10"
+                  },
+                  {
+                    "time": "90",
+                    "event": "charge:0",
+                    "delta": "10",
+                    "soc": "20"
+                  }
+                ],
+                "terminal_soc": "20"
+              }
+            ],
+            "loads_exact": [
+              "0",
+              "10"
+            ],
+            "ops_exact": "7",
+            "total_grid_exact": "10",
+            "total_consumption_exact": "10",
+            "objective_exact": "20880689472324006599/2305843009213693952",
+            "market_a_exact": "3602879701896397/18014398509481984",
+            "market_b_exact": "5124095576030431/4611686018427387904"
+          }
+        },
+        {
+          "delta": "1/1024",
+          "changes": {
+            "scope": "new exact terminal-only construction on unchanged native topology",
+            "independently_replayed": false,
+            "physical_upper_certified": false,
+            "repairs_are_explicit": true,
+            "failure_does_not_prove_topology_infeasible": true,
+            "policy": "remove surplus latest positive pull-in cells, then fill deficits latest eligible shared residual cells",
+            "changed_cells": [
+              {
+                "movement": "in",
+                "interval": 1,
+                "original": "10241/1024",
+                "new": "10",
+                "delta": "-1/1024",
+                "newly_created_cell": false
+              }
+            ],
+            "per_bus": [
+              {
+                "vehicle": 0,
+                "movements": [
+                  "out",
+                  "in"
+                ],
+                "terminal_movement": "in",
+                "terminal_arrival_soc": "10",
+                "consumption": "10",
+                "nonterminal_grid": "0",
+                "original_terminal_grid": "10241/1024",
+                "target_terminal_grid": "10",
+                "original_fullness_residual": "1/1024",
+                "new_terminal_grid": "10",
+                "new_fullness_residual": "0"
+              }
+            ],
+            "dropped_reported_fields": [],
+            "original_candidate_mutated": false,
+            "all_other_allocations_preserved": true,
+            "original_total_grid": "10241/1024",
+            "new_total_grid": "10",
+            "exact_total_grid_change": "-1/1024",
+            "next_step": "Independently replay newcandidate against original exact per-leg/window/resource inputs before claiming an upper bound"
+          },
+          "audit": {
+            "strict_pass": true,
+            "physical_strict_pass": true,
+            "objective_is_certified_physical_upper": true,
+            "classification": "exact-feasible-candidate",
+            "violations": [],
+            "exact_semantics": "Fraction of stored float, or supplied rational string",
+            "repairs_applied": false,
+            "tolerance_feasibility": "not assessed",
+            "inference_limit": "Candidate failure does not prove topology infeasibility",
+            "routes": [
+              {
+                "vehicle": 0,
+                "movements": [
+                  "out",
+                  "in"
+                ],
+                "trips": [
+                  "s"
+                ]
+              }
+            ],
+            "intervals": [
+              {
+                "start": "0",
+                "end": "60",
+                "rate": "20",
+                "period": 0
+              },
+              {
+                "start": "60",
+                "end": "120",
+                "rate": "20",
+                "period": 1
+              }
+            ],
+            "sessions": [
+              {
+                "vehicle": 0,
+                "movement": "in",
+                "interval": 1,
+                "start": "60",
+                "end": "90",
+                "power": "20",
+                "energy": "10"
+              }
+            ],
+            "soc_traces": [
+              {
+                "vehicle": 0,
+                "events": [
+                  {
+                    "time": "30",
+                    "event": "movement:out:0",
+                    "delta": "0",
+                    "soc": "20"
+                  },
+                  {
+                    "time": "30",
+                    "event": "before:s",
+                    "delta": "0",
+                    "soc": "20"
+                  },
+                  {
+                    "time": "60",
+                    "event": "movement:in:0",
+                    "delta": "0",
+                    "soc": "20"
+                  },
+                  {
+                    "time": "60",
+                    "event": "service:s",
+                    "delta": "-10",
+                    "soc": "10"
+                  },
+                  {
+                    "time": "60",
+                    "event": "after:s",
+                    "delta": "0",
+                    "soc": "10"
+                  },
+                  {
+                    "time": "90",
+                    "event": "charge:0",
+                    "delta": "10",
+                    "soc": "20"
+                  }
+                ],
+                "terminal_soc": "20"
+              }
+            ],
+            "loads_exact": [
+              "0",
+              "10"
+            ],
+            "ops_exact": "7",
+            "total_grid_exact": "10",
+            "total_consumption_exact": "10",
+            "objective_exact": "20880689472324006599/2305843009213693952",
+            "market_a_exact": "3602879701896397/18014398509481984",
+            "market_b_exact": "5124095576030431/4611686018427387904"
+          }
+        },
+        {
+          "zero_power_deficit_rejected": true
+        }
+      ]
+    },
+    {
+      "id": "public",
+      "status": "PASS",
+      "upper_exact": "646163560040323106717695753738470509062723436955679/1461501637330902918203684832716283019655932542976",
+      "upper_display": 442.1230490171687,
+      "fleet_count": 2,
+      "changed_cells": 2,
+      "atleast_three_bus_lower_exact": "2422853006006213058305305267390621/5070602400912917605986812821504",
+      "atleast_three_bus_lower_display": 477.8235038838777,
+      "three_plus_cannot_improve_upper": true,
+      "scope": "Exact physical upper and elementary physical fleet-count exclusion; support unresolved"
+    }
+  ],
+  "failures": [],
+  "cpu_s": 0.703427,
+  "elapsed_s": 0.6803242079913616,
+  "peak_rss_bytes": 320094208,
+  "resource_pass": true
+}

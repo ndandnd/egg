@@ -1,0 +1,23 @@
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/src/experiments/cf1_small_mechanism_approved.py", line 257, in <module>
+    main()
+  File "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/src/experiments/cf1_small_mechanism_approved.py", line 251, in main
+    result = {'freeze':freeze,'run':run,'analyze':analyze,'worker':worker}[args.command](args)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/src/experiments/cf1_small_mechanism_approved.py", line 157, in run
+    return adapter.run(args)
+           ^^^^^^^^^^^^^^^^^
+  File "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/src/experiments/comparison_native_preflight.py", line 356, in run
+    result = q.run(args)
+             ^^^^^^^^^^^
+  File "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/src/experiments/recovery_qualification.py", line 1257, in run
+    completed, spent = resume_state(output,budget_lock,locksha)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/src/experiments/comparison_native_preflight.py", line 321, in resume
+    completed,total = old['resume_state'](*args)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/src/experiments/recovery_qualification.py", line 1010, in resume_state
+    raise ValueError('Missing/corrupt cumulative carry-forward ledger')
+ValueError: Missing/corrupt cumulative carry-forward ledger

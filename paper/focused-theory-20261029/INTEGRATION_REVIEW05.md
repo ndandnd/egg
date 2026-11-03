@@ -1,0 +1,27 @@
+# Integration review 05: new theory and exact-energy additions
+
+Scope: source-only review of the new exact-energy section, transition timing correction, exponential-transition construction and gap corollary, abstract/scope, and the new related-work attribution. The exact-energy comparison's compact RESULTS and INTERPRETATION were consulted. No certificate replay, raw evidence, numerical run, or old-proof re-audit was performed.
+
+## Required premise clarification
+
+In `exact_energy_extension.tex`, explicitly say that mandatory services are **indivisible noncharging intervals with nonnegative consumption throughout**. The present wording specifies fixed services and their nonnegative total consumption, and excludes regeneration, but does not expressly prohibit charging during a service whose location is the selected depot. The proof carries a higher incoming SOC through an unchanged noncharging service; arbitrary in-service charging would require a further curtailment/access argument. This is a premise clarification matching the intended target, rather than a claim that the checked target admits such charging.
+
+Suggested insertion after the prescribed service total: “Services are indivisible noncharging intervals, with nonnegative draw throughout.” No other mathematical blocker was found within the stated model.
+
+## New statements and boundaries
+
+- **Exact-energy extension:** conditional PASS after that clarification. The paired directed arcs, separate exact consumption identity, sole charging/free-parking depot, opening-zero terminal access, zero monetary movement cost, complete endpoint/access representatives, and unchanged service order are explicit. The proof gives componentwise purchase dominance and value equalities under nondecreasing supply, rather than equality of feasible load sets or all posted-price response ties. The original binary certificate is not silently transferred. New target rows, fleet exclusions, endpoints and the fixed-weight mixture are separately checked; the compact comparison supports the displayed positive gap. Neither optimum is identified. Optional clarity: state that the target gap display floors the exact rational difference; it need not equal subtraction of the separately displayed endpoints.
+- **Transition timing:** PASS. The common-transition task now occupies its own noncharging interval, with B and terminal charging shifted later. The charge-only edge-dependent counterexample and `U=min(P/alpha,K)` are correctly scoped. The earlier zero-duration transition seam is resolved.
+- **Exponential branches:** PASS as an analytical construction. The fleet cap and simultaneous batches force full matching; the stronger battery condition `B>=20 max w_i` covers each cross duty. The complete branch is `E in [R,K]`, with terminal load `Smax-2R-E`. The construction has exponentially many explicit physical pieces in the number of blocks, while its collinear corners, common supporting price, growing binary magnitudes and potential symbolic compression are acknowledged. It establishes neither exponential hull complexity nor generic computational hardness.
+- **New positive-gap corollary:** PASS. The affine part is bounded below by `Smax`, the R=0/R=6 mixture attains E=3, and the quadratic penalty vanishes there. Every physical branch is increasing away from its own left endpoint; its closest feasible R values are 0 and 6. Thus the stated gap `9/(2K)` follows. Singular positive-semidefinite curvature suffices here; strict joint convexity is unnecessary. The claim concerns projected loads, not uniqueness of all physical schedules, and its shrinking gap is not a uniform magnitude result.
+- **Abstract and public scope:** coherent. The primary contribution remains the fixed-resource cost-labelled frontier/classification, with classical matching and support tools explicitly credited. The original declared-graph result and the separately certified exact-law finite-walk extension are distinguished. One synthetic-economic public base does not establish prevalence, empirical calibration, ML performance or richer physical realism.
+
+## New primary-source attribution
+
+The Arvis et al. attribution is supported by the inspected author preprint [version 2, 4 August 2026](https://arxiv.org/html/2511.11191v2): Section II defines prescribed individual availability/energy constraints and signed V2G power; Section IV-A/Theorem 3 and Corollary 4 give exact aggregation/separation-based UC optimization, and Section IV-B gives the cutting-plane method. This is material prior operational coupling, correctly acknowledged. It does not by itself supply the present assignment-dependent vehicle-cost frontier or own-load support classification. The inspected title, author list and preprint version/date agree with the new entry. Conference pagination and the separate Mukhi journal DOI metadata were not independently established in this bounded pass; the technical comparison remains tied to the named inspected preprint versions.
+
+Conclusion: source integration is coherent with the single explicit service-physics clarification above. This review does not certify novelty exhaustively, runtime evidence beyond the admitted compact comparison, or submission readiness.
+
+Parent integration: the exact-energy section now explicitly states that services
+are indivisible noncharging intervals with nonnegative draw throughout. This
+implements the requested premise clarification; no numerical product changed.

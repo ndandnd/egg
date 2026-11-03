@@ -1,0 +1,305 @@
+{
+  "status": "COMPLETE",
+  "all_strict": true,
+  "references_qualified": true,
+  "optimization_qualified": true,
+  "methods": {
+    "mean": {
+      "assigned": 64,
+      "attempted": 64,
+      "strict": 64,
+      "native_optimal": 64,
+      "mean_expected_electricity": 71.98953644075655,
+      "mean_realized_electricity": 71.9695559513498,
+      "mean_forecast_rmse": 11.731112091706361,
+      "all_strict": true
+    },
+    "ridge": {
+      "assigned": 64,
+      "attempted": 64,
+      "strict": 64,
+      "native_optimal": 64,
+      "mean_expected_electricity": 71.4041184323016,
+      "mean_realized_electricity": 71.32462833343628,
+      "mean_forecast_rmse": 4.124161060580825,
+      "all_strict": true
+    },
+    "quadratic_ridge": {
+      "assigned": 64,
+      "attempted": 64,
+      "strict": 64,
+      "native_optimal": 64,
+      "mean_expected_electricity": 71.35292239888798,
+      "mean_realized_electricity": 71.33960861894656,
+      "mean_forecast_rmse": 3.9902159772077246,
+      "all_strict": true
+    },
+    "boosted_trees": {
+      "assigned": 64,
+      "attempted": 64,
+      "strict": 64,
+      "native_optimal": 64,
+      "mean_expected_electricity": 71.39925346470692,
+      "mean_realized_electricity": 71.34614597554526,
+      "mean_forecast_rmse": 4.604104830229217,
+      "all_strict": true
+    },
+    "neural_small_mse": {
+      "assigned": 64,
+      "attempted": 64,
+      "strict": 64,
+      "native_optimal": 64,
+      "mean_expected_electricity": 71.44652813437536,
+      "mean_realized_electricity": 71.36349934604893,
+      "mean_forecast_rmse": 7.492835866714415,
+      "all_strict": true
+    },
+    "neural_large_mse": {
+      "assigned": 64,
+      "attempted": 64,
+      "strict": 64,
+      "native_optimal": 64,
+      "mean_expected_electricity": 71.36888205293721,
+      "mean_realized_electricity": 71.33204393830854,
+      "mean_forecast_rmse": 5.230652159497353,
+      "all_strict": true
+    },
+    "neural_large_dfl": {
+      "assigned": 64,
+      "attempted": 64,
+      "strict": 64,
+      "native_optimal": 64,
+      "mean_expected_electricity": 71.62134441826622,
+      "mean_realized_electricity": 71.56466794093512,
+      "mean_forecast_rmse": 8.065245551647473,
+      "all_strict": true
+    },
+    "blind_large_mse": {
+      "assigned": 64,
+      "attempted": 64,
+      "strict": 64,
+      "native_optimal": 64,
+      "mean_expected_electricity": 71.9934613650101,
+      "mean_realized_electricity": 71.9737437135822,
+      "mean_forecast_rmse": 11.791659446363127,
+      "all_strict": true
+    },
+    "blind_large_dfl": {
+      "assigned": 64,
+      "attempted": 64,
+      "strict": 64,
+      "native_optimal": 64,
+      "mean_expected_electricity": 72.1057018799744,
+      "mean_realized_electricity": 72.09831098376908,
+      "mean_forecast_rmse": 12.105250260280881,
+      "all_strict": true
+    },
+    "conditional_mean_reference": {
+      "assigned": 64,
+      "attempted": 64,
+      "strict": 64,
+      "native_optimal": 64,
+      "mean_expected_electricity": 71.27692891240709,
+      "mean_realized_electricity": 71.21133437738838,
+      "mean_forecast_rmse": 0.0,
+      "all_strict": true
+    },
+    "perfect_information_reference": {
+      "assigned": 64,
+      "attempted": 64,
+      "strict": 64,
+      "native_optimal": 64,
+      "mean_expected_electricity": 71.63976921365442,
+      "mean_realized_electricity": 70.8405845868461,
+      "mean_forecast_rmse": 8.961605161481947,
+      "all_strict": true
+    },
+    "fixed_conditional_reference": {
+      "assigned": 64,
+      "attempted": 64,
+      "strict": 64,
+      "native_optimal": 64,
+      "mean_expected_electricity": 71.27692891240709,
+      "mean_realized_electricity": 71.21133437738838,
+      "mean_forecast_rmse": 0.0,
+      "all_strict": true
+    }
+  },
+  "contrasts": {
+    "mean minus conditional_mean_reference": {
+      "qualified": true,
+      "group_means": [
+        0.012779011191436509,
+        0.010952620628235335,
+        0.014077011909655067,
+        0.009780534100491732,
+        0.0026731508379632674,
+        0.010146091652672166,
+        0.006010409336022083,
+        0.013162355593249186
+      ],
+      "mean_paired_ratio": 0.009947648156215669,
+      "positive_groups": 8,
+      "descriptive_t_interval": [
+        0.006710780340096103,
+        0.013184515972335234
+      ]
+    },
+    "fixed_conditional_reference minus conditional_mean_reference": {
+      "qualified": true,
+      "group_means": [
+        -5.209907245846671e-17,
+        -7.325351642288237e-17,
+        9.094215140805973e-19,
+        5.732142697345116e-19,
+        7.37367215841741e-17,
+        5.1390944776276364e-17,
+        -1.8492134215726287e-19,
+        -1.0029633156896228e-16
+      ],
+      "mean_paired_ratio": -1.2402942456025382e-17,
+      "positive_groups": 0,
+      "descriptive_t_interval": [
+        -6.236109786516104e-17,
+        3.755521295311027e-17
+      ]
+    },
+    "neural_small_mse minus neural_large_mse": {
+      "qualified": true,
+      "group_means": [
+        0.0018590633558807931,
+        0.0008350995314833599,
+        -1.4595335508988273e-05,
+        0.0011619176586272503,
+        0.0008129077530134583,
+        0.0011659970272533092,
+        0.0009697454055039884,
+        0.0019202914584107824
+      ],
+      "mean_paired_ratio": 0.001088803356832994,
+      "positive_groups": 7,
+      "descriptive_t_interval": [
+        0.000572576950733293,
+        0.0016050297629326953
+      ]
+    },
+    "neural_large_mse minus neural_large_dfl": {
+      "qualified": true,
+      "group_means": [
+        -0.0026869554968888066,
+        -0.004610567610154279,
+        -0.003191253605471796,
+        -0.0035562198503056213,
+        -0.003682125948411575,
+        -0.0024216781008978066,
+        -0.0051972655265947664,
+        -0.0027849627366519475
+      ],
+      "mean_paired_ratio": -0.003516378609422075,
+      "positive_groups": 0,
+      "descriptive_t_interval": [
+        -0.004326978278055887,
+        -0.002705778940788263
+      ]
+    },
+    "blind_large_dfl minus neural_large_dfl": {
+      "qualified": true,
+      "group_means": [
+        0.0110970557820696,
+        0.0061593931009667775,
+        0.011572996487984794,
+        0.003450356401549123,
+        -0.0005110743858963553,
+        0.006187177038705553,
+        0.0026880996325200504,
+        0.013672630496023679
+      ],
+      "mean_paired_ratio": 0.006789579319240403,
+      "positive_groups": 7,
+      "descriptive_t_interval": [
+        0.0026587531410382295,
+        0.010920405497442576
+      ]
+    },
+    "mean minus neural_large_dfl": {
+      "qualified": true,
+      "group_means": [
+        0.008739482555850917,
+        0.00421385687142302,
+        0.00920978836117639,
+        0.004904706204515348,
+        -0.00162575218501883,
+        0.0065004432771231776,
+        -5.494730187116659e-05,
+        0.00933866095237195
+      ],
+      "mean_paired_ratio": 0.0051532798419463505,
+      "positive_groups": 6,
+      "descriptive_t_interval": [
+        0.001652920259342394,
+        0.008653639424550308
+      ]
+    },
+    "ridge minus neural_large_dfl": {
+      "qualified": true,
+      "group_means": [
+        -0.002477052754354841,
+        -0.0037761186267168297,
+        -0.003657130662116854,
+        -0.0028003310379502147,
+        -0.003344357401657989,
+        -0.0016376741712305542,
+        -0.004270881827050759,
+        -0.0023072902273056388
+      ],
+      "mean_paired_ratio": -0.0030338545885479603,
+      "positive_groups": 0,
+      "descriptive_t_interval": [
+        -0.0037687907676691,
+        -0.0022989184094268206
+      ]
+    },
+    "quadratic_ridge minus neural_large_dfl": {
+      "qualified": true,
+      "group_means": [
+        -0.0028302830155643834,
+        -0.005576684177747574,
+        -0.0035868340097640044,
+        -0.0039006033755121447,
+        -0.0038796649662569986,
+        -0.00234835163756114,
+        -0.0049076583198386,
+        -0.002904014343341266
+      ],
+      "mean_paired_ratio": -0.003741761730698264,
+      "positive_groups": 0,
+      "descriptive_t_interval": [
+        -0.004650536068406723,
+        -0.002832987392989805
+      ]
+    },
+    "boosted_trees minus neural_large_dfl": {
+      "qualified": true,
+      "group_means": [
+        -0.0018374973656967747,
+        -0.004850630615847592,
+        -0.003085012368859817,
+        -0.0029087077423194446,
+        -0.0030680654981037046,
+        -0.0023330787664058708,
+        -0.004253424473336406,
+        -0.002415700811487902
+      ],
+      "mean_paired_ratio": -0.003094014705257189,
+      "positive_groups": 0,
+      "descriptive_t_interval": [
+        -0.003935110624369826,
+        -0.002252918786144552
+      ]
+    }
+  },
+  "information_screen_pass": false,
+  "learning_screen_pass": false,
+  "scope": "Expected-cost ratios use paired mean-policy electricity. 8 independent development timetable groups, no empirical forecasting/generalization/V2G claim.",
+  "reference_scope": "Conditional mean is risk-neutral sufficient statistic; numerical solve bounds/tolerances limit optimized reference. Perfect information is a realized-cost reference only."
+}

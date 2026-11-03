@@ -1,0 +1,18 @@
+{
+ "status":"FROZEN","execution_authorized":true,"run_id":"attempt01",
+ "source_revision":"91554d65dec01272308e48f0b68ef3885ab60059",
+ "command":["/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/.venv-local/bin/python","-I","-S","-B","/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/research-20261029/full_lossy_polygon_qualification/run.py","--run-id","attempt01"],
+ "working_directory":"/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017",
+ "shell_command":"env OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 VECLIB_MAXIMUM_THREADS=1 NUMEXPR_NUM_THREADS=1 /usr/bin/time -p /Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/.venv-local/bin/python -I -S -B /Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/research-20261029/full_lossy_polygon_qualification/run.py --run-id attempt01 > research-20261029/full_lossy_polygon_qualification/process-time-and-owner.txt 2>&1",
+ "external_meter":"research-20261029/full_lossy_polygon_qualification/process-time-and-owner.txt",
+ "assigned":["Q0","lossless-full","charge-loss-full","export-loss-full","both-loss-sparse","terminal-boundary","zero-early-full","zero-terminal-empty","common-transition-full"],
+ "source_files":["worker.py","run.py","reference.py","candidate.py","qualification.py","CASES.json","PROTOCOL.md"],
+ "package_cpu_s":300,"package_wall_s":600,
+ "worker_self_cpu_s":270,"worker_inclusive_cpu_s":275,"worker_wall_s":540,
+ "stage_limits":{"preflight":[20,30],"Q0":[20,30],"case":[20,40],"final_reserve":[40,60]},
+ "native_calls":0,"native_threads":1,"observed_rss_bytes":1073741824,
+ "environment":{"OMP_NUM_THREADS":"1","OPENBLAS_NUM_THREADS":"1","MKL_NUM_THREADS":"1","VECLIB_MAXIMUM_THREADS":"1","NUMEXPR_NUM_THREADS":"1"},
+ "funding_prefix":{"displayed_cpu_s":24001.99,"elapsed_sum_s":24936.31,"retained_cpu_s":24003.81,"legacy_conditional_guard_separate":2546.091499549272},
+ "hard_deadline_utc":"2026-10-29T18:10:45Z","no_automatic_retry":true,
+ "purpose":"Eight exact full-polygon implementation literals plus Q0 and twelve corruption controls, no historical data/native search/training"
+}

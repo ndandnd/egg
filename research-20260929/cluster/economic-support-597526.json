@@ -1,0 +1,53 @@
+{
+  "command": [
+    "sbatch",
+    "--parsable",
+    "--export=ALL,EGG_RUN_COMMIT=41fa5f1e23833922292e2f70e346f386485aaa51",
+    "src/cluster/economic_support_diagnostic.sbatch"
+  ],
+  "complete_submission_ssh_seconds": 3.2092728749848902,
+  "completion": {
+    "collection_receipt": "research-20260929/economic-support-diagnostic/results-attempt1/COLLECTION_RECEIPT.json",
+    "elapsed_seconds": 176,
+    "end_utc": "2026-09-29T01:44:11Z",
+    "exit_code": "0:0",
+    "max_rss": "262736K",
+    "node": "sonic-cpu-01",
+    "results": "research-20260929/economic-support-diagnostic/results-attempt1/",
+    "stages_certified_on_time": 12,
+    "start_utc": "2026-09-29T01:41:15Z",
+    "state": "COMPLETED"
+  },
+  "declared_cells": 6,
+  "declared_stages": 12,
+  "job_id": "597526",
+  "latest_queue_check": {
+    "complete_ssh_seconds": 0.33903029188513756,
+    "returncode": 0,
+    "stderr": "",
+    "stdout": "597526|RUNNING|1:12|1|8G|sonic-cpu-01\n",
+    "utc": "2026-09-29T01:42:27.083867+00:00"
+  },
+  "previous_backup_ci_conclusion": "success",
+  "previous_backup_ci_run": 36506277911,
+  "queue_observation": "597526|PENDING|0:00|1|8G|(Priority)",
+  "queue_returncode": 0,
+  "queue_stderr": "",
+  "remote_checkout": "/home/nc437/egg-economic-support-20260929",
+  "requested_resources": {
+    "cpus": 1,
+    "memory": "8G",
+    "time_limit": "00:40:00"
+  },
+  "retry_policy": "none",
+  "source_ci_conclusion": "success",
+  "source_ci_run": 36508984595,
+  "source_ci_status_at_submission": "in_progress",
+  "source_commit": "41fa5f1e23833922292e2f70e346f386485aaa51",
+  "submit_returncode": 0,
+  "submit_seconds": 2.365832643583417,
+  "submit_stderr": "",
+  "submit_stdout": "597526",
+  "utc": "2026-09-29T01:40:56.648898+00:00",
+  "validation": "5 focused pure tests by implementer and root, shell syntax, bounded independent review passed; solver core unchanged"
+}

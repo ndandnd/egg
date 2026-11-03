@@ -1,0 +1,19 @@
+# Review draft, 3 November 2026
+
+The [27-page revised manuscript](build/main.pdf) now centers on when duty assignment can precede grid pricing. It adds the sharp one-bus-fee rounding bound, the German radial-feeder test, actual price-update loops and the complete 64-instance duty-first boundary comparison. [New evidence and reproduction](review/NOV3_REPRODUCIBILITY.md)
+
+The primary German cohort is 72 assignments: 66 cent-scale numerical cost brackets, four solver-infeasible hulls and two bound widths near €0.70 and €0.81. Impossible one-hour Sistig assignments are an appendix design limitation. The frozen 73-case loop cohort gives 43 fixed points for full, half and diminishing steps, eight infeasible fleet responses and 22 failed grid checks; no nontrivial cycle is established. A recurrence-detector error was corrected using cached responses, and all original labels are retained. The tariff check finds no peak or connection saving from pairing in the tested two-window fleets.
+
+On the 64 synthetic hourly instances, a price-blind minimum-energy tie among zero-price operating-cost optima still has positive regret in 48, maximum upper 46.126 SEK. This supports a conditional representative-matching result, rather than a general claim that zero-price duties are enough. All 128 fixed-duty physical objective and interval checks passed. Exact AC dual certification, unresolved grid loops, and independent external assessment of novelty and significance remain open. No additional experimental cohort is proposed before review.
+
+## Previous independent review, 2 November
+
+Read the [revised manuscript](build/main.pdf) and the [independent referee report and responses](review/INDEPENDENT_REVIEW.md). The report identifies the changes from the 21-page October 30 version at revision `b52d0c12` in draft PR 57. The earlier long theory draft is kept under `paper/focused-theory-20261029/`.
+
+The matching replacement proof for unequal batches survived review. The revision characterizes the entire tariff-offset region of support failure and proves when heterogeneous transition draws admit one representative perfect matching. It corrects an exceptional price-tie orbit, the interpretation of weighted averages, the public certificate's lower bound, and the distinction between a free maximum matching and every edge being free.
+
+At 300 kWh the exact intervals identify six of 14 operators with a positive gap somewhere in the studied range. Two were detected on the sampled grid. At 400 kWh one of 18 operators is exposed in that range. All seven positive sampled cases occur at that operator. Both 37-service physical certificates passed a fresh same-host check and distinguish the model-specific trust boundaries. [Numerical checks](review/RUN_RECEIPT.md)
+
+Run `sh make.sh --pdf-only` to typeset the manuscript from the committed figures. Run `sh make.sh` to regenerate the timetable sensitivity, figures, exact band report and targeted checks from the committed run energies. The sweep requires NumPy, SciPy and Matplotlib. Setting `SISTIG_ROOT` also regenerates the run energies from the source archive using openpyxl. The optional `--tests` adds the original longer exact and floating-point test suite. The private certificate checks have a separate procedure and require access to both private exports. The full interval report for the original published grid records the original input digest. A fresh report after regeneration uses the revised critical-threshold field names in the study input. All sweep rows were compared for equality.
+
+Operations Research has the closest fit among ICML, Operations Research and Management Science. Priority and significance require independent domain-expert review. Deployment claims would need executable full-day duties and observed tariff and contract data. This version makes no claim of a learned method or a demonstrated advantage for ML. No external reviewer has been contacted.

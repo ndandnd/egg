@@ -1,0 +1,30 @@
+# Decision: a new public-base V2G certificate
+
+**Recommendation: do not start this model and certification package in the remaining approximately four-hour window.** Its question is scientifically coherent, but a complete answer would require new physical semantics and proof coverage. A partial numerical V2G candidate would add less than the present analytical persistence/removal classification and complete-assignment counterexample, while inviting confusion about the already resolved charge-only public result.
+
+This assessment reads the current public-case and V2G sections only; no input, implementation, experiment or source audit was performed. The charge-only certificate remains unchanged.
+
+## The question worth asking
+
+On this same timetable, with one prospectively fixed V2G institution and unchanged fee/supply coefficients, does the expanded complete-fleet opportunity set retain a positive own-marginal-price support gap? The answer could be either persistence or restoration. It must quantify over the whole declared V2G set rather than compare a selected discharge schedule with an old charge-only optimum. Old physical witnesses remain feasible under a genuine expansion, but old physical lower bounds generally do not. A lower objective alone answers neither support nor gap magnitude.
+
+Such a result would be a public-base robustness example, not a general V2G novelty claim, empirical grid-service valuation, or independent dataset. The current theory already proves both persistence and restoration under explicit assumptions. Therefore the marginal scientific value depends on obtaining a complete, interpretable certificate—not merely implementing exports.
+
+## A coherent institution needs decisions before computation
+
+- **Signed supply and settlement:** retain `F(u)=sum(.2 u+u^2/1800)` on explicitly bounded signed hourly fleet loads, with the same buy/sell price within each period. This polynomial is convex on signed loads, but its marginal price `.2+u/900` becomes negative below `u=-180`. A 360 kW export bound does not exclude that region. With zero background, negative fleet load also represents negative net system generation in the literal supply interpretation. The result must therefore be labelled an abstract signed settlement model, or use a justified prospectively fixed background/domain restriction. Choosing a background, no-negative-price cutoff or export scarcity after seeing outcomes would change the question.
+- **Connector physics:** charging and exporting must compete for the same connector's time at magnitude at most 360 kW, including simultaneous access exclusion or a proved exact serialization formulation. A bound on net hourly energy is insufficient. Travel, depot auxiliary draw, access windows, battery upper bounds, full start/end SOC and terminal access must all remain explicit. Aggregate cancellation must not manufacture charging capacity.
+- **Idle inventory:** declare a finite total fleet cap and whether paid idle vehicles may export and later refill. The two-batch idle-redundancy theorem does not automatically cover this multi-period timetable. Excluding idle buses would be a distinct institution requiring prominent qualification; admitting them requires their complete routes/access/inventory to be represented. A cap cannot be chosen to retain the desired sign.
+- **Interpretation of cycling:** unit efficiency and symmetric prices permit removal of some battery-neutral cycles, but they do not establish that multi-period arbitrage, initial full inventory, or extra idle buses are irrelevant. Negative prices also invalidate unqualified use of coordinatewise monotone canonicalization arguments.
+
+## Why the current certificate cannot simply be reused
+
+A fresh independent physical screen must validate signed actions, gross occupancy, SOC throughout every action, terminal refill, source-bound loads and objective. The old charge-only screen cannot admit a V2G point. A new lower certificate must cover the expanded signed feasible set, fleet counts and idle policy, with correctly signed finite bounds. Existing tangent/box-dual algebra is reusable mathematics, but existing row semantics, search partition and infeasibility proposals are not thereby valid for a changed model. Any transferred tree proposal needs fresh target-row evaluation and complete coverage; failed old contradictions must remain unresolved.
+
+Similarly, the charge-only two-bus optimum interval is not a V2G optimum interval. A hull witness remains only an upper bound. Showing a positive gap requires a global physical lower above an admitted new-model hull upper; demonstrating restoration requires a physical plan and a valid full-opportunity-set supporting-price certificate (or matching physical/hull values). A native optimum or a few response schedules establishes neither.
+
+## Honest stopping decision
+
+There is no existing reviewed public V2G semantic/checker package or prequalified complete bound in the material assessed here. Building it, independently reviewing its domain and occupancy semantics, qualifying controls, freezing one bounded attempt, and admitting both physical and global pricing evidence is substantial new work. Four hours is not a reliable allowance for a complete result, and failure would primarily measure new engineering rather than the research hypothesis. The remaining uncertainty is not resolved by expanding a runtime cap or trying tariffs until one certificate separates.
+
+Do not dispatch a rushed add-on. Preserve the clear current boundary: public certificates are charge-only; analytical V2G shows that added discharge opportunities can preserve or remove support failure; the complete-graph construction rules out disconnected compatibility as the explanation of its example. A future public V2G study is justified only after its signed economic domain, idle policy, exact connector model and independent admission/lower-checker contract are fixed and reviewed before any outcome is observed. Its prospective stopping rule should admit an unresolved result without retuning prices, instance, fleet cap or scarcity.

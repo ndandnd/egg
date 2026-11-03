@@ -1,0 +1,16 @@
+{
+  "case": "per-file external hash reviews omitted from source ledger",
+  "reviewer_admission": "Two concurrent loops; each main zsh, possible process-substitution shell, jq producer, possible command-substitution shell and one sequential shasum/Perl: conservative five process slots per loop, ten combined; no exact CPU record",
+  "assumptions": [
+    "trusted standard shasum/jq/shell programs are single-threaded for this invocation",
+    "all loop activity lies inside its parent task request-to-completion window",
+    "two-second timestamp/transport guard per window is adequate",
+    "twenty-five-second extra closure provision covers incident recovery and handoff bookkeeping"
+  ],
+  "actual_cpu_s": null,
+  "reported_wait_times_are_not_exact_process_durations": true,
+  "conservative_unmetered_review_charge_s": 862.78,
+  "conservative_incident_closure_s": 25.0,
+  "native_or_training_job_launched": false,
+  "future_hash_method": "only existing metered Python batched preflight/final verification; static peer review without separate hash loops"
+}

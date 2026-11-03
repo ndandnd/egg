@@ -1,0 +1,81 @@
+{
+  "complete": true,
+  "passed": true,
+  "cases": [
+    {
+      "case": "scale:50685:40",
+      "receipt": "research-20261025/classical_competence/attempt01/scale-50685-40/receipt.json",
+      "status": "replayed_offline_witness",
+      "elapsed_including_receipt_s": 13.109029209241271,
+      "cpu_including_receipt_s": 9.294758999999999,
+      "accepted_within_offline60": true,
+      "physical_witness_valid": true,
+      "vehicles": 15,
+      "objective_exact": "339074850655927360937082001877334591199882049321719/182687704666362864775460604089535377456991567872"
+    },
+    {
+      "case": "scale:50605:80",
+      "receipt": "research-20261025/classical_competence/attempt01/scale-50605-80/receipt.json",
+      "status": "failed_or_unresolved",
+      "elapsed_including_receipt_s": 64.6127016665414,
+      "cpu_including_receipt_s": 57.792978999999995,
+      "accepted_within_offline60": false,
+      "physical_witness_valid": false,
+      "vehicles": null,
+      "objective_exact": null
+    }
+  ],
+  "pid": 59570,
+  "scope": "offline classical competence; not main60s comparison or native controller qualification",
+  "seed_policy": "backend default, unmodified; actual numeric default not independently exposed",
+  "seed17_claim": false,
+  "repairs": 0,
+  "pruning": false,
+  "full_search": false,
+  "scientific_qualification": false,
+  "policies": {
+    "construction": "cf1-priceblind-greedy-topology-v1",
+    "completion": "cf1-fixed-discrete-charging-v1"
+  },
+  "feasible_cases": 1,
+  "input_source_sha256": {
+    "research-20261025/classical_competence/run.py": "6eb2c42d754fea3d0f68dbdecfd75800ed40c9314e58947766427987d57e2a26",
+    "research-20261025/classical_competence/PROTOCOL.md": "849ebc6c0abbdce9eeeab949d4105e9fc31f2c3ad9663435d4300f4b8e008ee2",
+    "research-20261017/local-assets-v3.json": "2976ef7fcb9d1c577e11e84757995e90f665faae9fd4ee071911ba5a5138ff87",
+    "research-20261017/screen-analysis-v3-final/summary.json": "2fed17ca84c311bbbafcd728ec8d895ebd5499ef80ba4a5695fb4a6daeb9ca34",
+    "research-20261017/FINAL_REPLAY_VERIFICATION.json": "9a1edb46da4e6928b9789e11854374565dd9493c15f23b7634a5e3aa52ee9dcc",
+    "research-20261017/local-screen-v3/fcd50d4d08ce3ea9129b/result.json": "2e83bf05c843c831c882ccef7243d5f762a8df5248a68b129ee37a13b7194723",
+    "research-20261017/local-screen-v3/fcd50d4d08ce3ea9129b/supervisor.json": "621e7e127be80543d6cb6a7bbc1f9879eea7f6445a2abf0a79686e458257981a",
+    "research-20261017/local-screen-v3/13ec9aa673986e09bfe4/result.json": "bc009a278241750997755e601646e089abf09c6506e288ef9fb6d99e9c7f1f3c",
+    "research-20261017/local-screen-v3/13ec9aa673986e09bfe4/supervisor.json": "a4f9e90a693b674696bad5d6ed674f3724d29b876a52750a8199e094bb8051a9",
+    "src/egglab/__init__.py": "98d97b9995afd57827920e43f16adf5065966a9c50577819e986049e5d35c893",
+    "src/egglab/classical_controls.py": "d8edb7c2c5ef79e0428abea3c67deaeb1e3bbfb75ac857ee47bb85852f8796cc",
+    "src/egglab/claude_cases.py": "28fd97eb4351dfc05da83db9420ed9a3e28943b5b18545970ab4e9b9df10842d",
+    "src/egglab/claude_scale_cases.py": "9d58cf00a89bb320e7b4ce6f2332f7ac77943be31341755570b3578a12481445",
+    "src/egglab/constructive_charging.py": "77d2afb5e62d6e0470e9115c8572ea89888c4eb03c1ca43c603116d20e0f7d96",
+    "src/egglab/constructive_control.py": "a4b3aa85f27b8d2ad2daa91ce5b0a81f8a8b45a799e2695d96072e997457741b",
+    "src/egglab/native_hull.py": "1d5000c3e410a8a4477e5e82b805571cfd4255d3bb79b1d732844bc3042cbc9c",
+    "src/egglab/native_pathflow.py": "81c366d93d327d3573c4b1d468d36121054b3a59ffe2d33c95b152cf33e3140a",
+    "src/egglab/native_recharge.py": "0067123a7f71cc6e9c89e1262cdcbd612cafdcfc252e35bcfca7f1f54c45d0f3",
+    "src/egglab/physical_learning_cases.py": "85f832c80526e02a4531bd0b4a70ed398eb46ae9a6cae2834da163ef3c0c8f1b"
+  },
+  "cpu_s": 67.15812799999999,
+  "stop_signal": null,
+  "wall_s": 77.85192566737533,
+  "observed_peak_rss_bytes": 1178386432,
+  "rusage": {
+    "utime_s": 59.373648,
+    "stime_s": 7.862549,
+    "maxrss_platform_units": 1178386432,
+    "platform": "darwin"
+  },
+  "budget": {
+    "total_cpu_s": 240,
+    "outer_wall_s": 180,
+    "case_s": 60,
+    "constructor_s": 10,
+    "completion_cutoff_s": 55,
+    "replay_final_s": 5
+  },
+  "interpretation": "passed means completed diagnostic records, not feasible construction in every case or comparative superiority"
+}

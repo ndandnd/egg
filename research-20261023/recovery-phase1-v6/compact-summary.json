@@ -1,0 +1,103 @@
+{
+  "counts": {
+    "accepted": 1,
+    "bound_scope_violations": 0,
+    "censored": 0,
+    "fallback": 2,
+    "fault_exercised": 0,
+    "invalid_witnesses": 0,
+    "mapping_violations": 0,
+    "native_processing": 1,
+    "planned": 8,
+    "rejected": 0,
+    "submitted": 1,
+    "terminal": 2,
+    "unknown": 0
+  },
+  "global_gate_limit": "Existing analyzer checks native processing/fault coverage globally. Parent applies stricter prospective per-size coverage; neither size clears V6.",
+  "interpretation": "Engineering development only; no new model training, learned evaluation, speedup or generalization claim. V6 remains failed under its prospective strict handoff policy.",
+  "per_size_required_path_adjudication": {
+    "40": {
+      "all_four_timely_and_issue_free": false,
+      "fault_with_valid_fallback_exercised": false,
+      "normal_recovery_start_processed": false,
+      "required_count": 4,
+      "terminal_count": 0
+    },
+    "80": {
+      "all_four_timely_and_issue_free": false,
+      "fault_with_valid_fallback_exercised": false,
+      "normal_recovery_start_processed": true,
+      "required_count": 4,
+      "terminal_count": 2
+    }
+  },
+  "qualification_passed": false,
+  "rows": [
+    {
+      "endpoint_wall_s": 25.45105487573892,
+      "failures": [],
+      "fallback_retained": true,
+      "groups_absent": true,
+      "issues": [],
+      "native_start_processed": false,
+      "native_start_submitted": 0,
+      "owned_groups": [
+        54029
+      ],
+      "task": {
+        "arm": "static",
+        "base_id": 50999,
+        "fault": null,
+        "id": "de8d8da71bc8d2dd1d5d",
+        "seconds": 30.0,
+        "seed": 17,
+        "trips": 80
+      },
+      "true_bill": 3642.5298555555555
+    },
+    {
+      "endpoint_wall_s": 26.63527891691774,
+      "failures": [
+        {
+          "error": "Planner return exceeded admission handoff",
+          "error_type": "TimeoutError",
+          "stage": "full"
+        }
+      ],
+      "fallback_retained": true,
+      "groups_absent": true,
+      "issues": [
+        "engineering_failure"
+      ],
+      "native_start_processed": true,
+      "native_start_submitted": 1,
+      "owned_groups": [
+        54551
+      ],
+      "task": {
+        "arm": "recovery",
+        "base_id": 50999,
+        "fault": null,
+        "id": "85710efee4db820ff4bc",
+        "seconds": 30.0,
+        "seed": 17,
+        "trips": 80
+      },
+      "true_bill": 3642.5298555555555
+    }
+  ],
+  "tasks_attempted": 2,
+  "tasks_planned": 8,
+  "tasks_undispatched": 6,
+  "unresolved": [
+    "85710efee4db820ff4bc:engineering_failure",
+    "undispatched:d3de154792c114e78483",
+    "undispatched:00ab4af02ac326472cf4",
+    "undispatched:584067521b4af0cb3da0",
+    "undispatched:27133bea236c6b35ac75",
+    "undispatched:61cb90ed7e02414d15b8",
+    "undispatched:27f30de636e0d9047cee",
+    "durable_fallback_start_fault_path_unexercised"
+  ]
+}

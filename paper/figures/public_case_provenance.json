@@ -1,0 +1,157 @@
+{
+  "title": "Public timetable intake and modeled energy reference",
+  "caption": "Source-timetable intake and modeled energy accounting for Hildenbrand's 37 fixed services. (A) Each bar spans source departure to arrival on elapsed time from the selected-day boundary; the 24:00 line preserves the next-day offset rather than wrapping it. (B) Stacked totals separate common EB-3 modeled service energy from depot-specific modeled pullout and pull-in energy for 37 one-trip-per-bus paths. These are constructed, replay-checked feasibility references using one 360 kW connector and terminal recharge by 30:00, not optimized. Energy is model-derived, not source-observed.",
+  "source": {
+    "dataset_title": "Dataset for Evaluating Costs and Operations of Public Bus Fleet Electrification",
+    "dataset_doi": "10.6084/m9.figshare.26088190.v1",
+    "license": "CC BY 4.0",
+    "source_json_path": "data/public/sistig_26088190_v1/hildenbrand_native_cases.json",
+    "source_json_sha256": "af6da4dea220063d1b2486a4c958bff19ae621328f07bde4a95a5c70690ebeb6",
+    "source_archive_included_or_read": false,
+    "source_data_used": "Final derived public JSON only; no workbook, archive, publisher solution, or optimizer read."
+  },
+  "figure_script": {
+    "path": "paper/make_public_case_figure.py",
+    "sha256": "94f77f3e16a5ed1ea2574e47a1ba8fc41b396c38508319b3605d51822fe95c6c"
+  },
+  "outputs": {
+    "public_case_intake.png": "4f69b56c51699674dfc10cfbc0efc6c343a0698e0d2891b45ef74473c111b78e",
+    "public_case_intake.pdf": "9b4d7b384247c837183e7e51f476269b98d6fbca65b25f9d9ae885f8b75be3cd",
+    "public_case_intake.svg": "90034d21619a927b24f1a2676988c30e1eea5627666d20f8a9afaef1be895d2a"
+  },
+  "population": {
+    "mandatory_service_count": 37,
+    "unique_source_trip_ids": 37,
+    "route_groups": [
+      {
+        "source_route_id": 990001,
+        "display_name": "967",
+        "service_count": 19,
+        "trip_ids_in_plot_order": [
+          2,
+          19,
+          18,
+          17,
+          16,
+          15,
+          14,
+          13,
+          12,
+          11,
+          10,
+          9,
+          8,
+          7,
+          6,
+          5,
+          4,
+          3,
+          1
+        ]
+      },
+      {
+        "source_route_id": 990002,
+        "display_name": "968",
+        "service_count": 18,
+        "trip_ids_in_plot_order": [
+          20,
+          37,
+          36,
+          35,
+          34,
+          33,
+          32,
+          31,
+          30,
+          29,
+          28,
+          27,
+          26,
+          25,
+          24,
+          23,
+          22,
+          21
+        ]
+      }
+    ],
+    "source_day_type_ids": [
+      1
+    ],
+    "calendar_date_present": false
+  },
+  "time_axis": {
+    "unit": "hours elapsed from selected-day boundary",
+    "display_range_hours": [
+      0,
+      30
+    ],
+    "day_offset_preserved": true,
+    "day_offset_boundary_hour": 24,
+    "first_departure_sec": 22020,
+    "last_arrival_sec": 87840,
+    "last_arrival_text_source": "01:00:24:00"
+  },
+  "energy_accounting_kwh": {
+    "values_source": "native_cases[*].preflight_witness_and_dimensions in final derived JSON",
+    "source_energy_observed": false,
+    "all_aggregates_exactly_as_stored_in_json": true,
+    "variants": [
+      {
+        "source_depot_id": 15,
+        "reference_classification": "constructed one-trip-per-bus feasible witness; not optimized",
+        "replay_ok": true,
+        "used_vehicle_count": 37,
+        "service_energy_total": 889.1175194193885,
+        "pullout_pullin_energy_total": 1200.758921579206,
+        "combined_reference_energy_total": 2089.8764409985943,
+        "maximum_one_trip_bus_energy": 59.33457453406491,
+        "latest_pullin_arrival_min": 1483.5,
+        "terminal_charge_complete_min": 1490.5238145685698,
+        "solver_invoked": false
+      },
+      {
+        "source_depot_id": 16,
+        "reference_classification": "constructed one-trip-per-bus feasible witness; not optimized",
+        "replay_ok": true,
+        "used_vehicle_count": 37,
+        "service_energy_total": 889.1175194193885,
+        "pullout_pullin_energy_total": 1880.69696,
+        "combined_reference_energy_total": 2769.8144794193886,
+        "maximum_one_trip_bus_energy": 81.3648273318893,
+        "latest_pullin_arrival_min": 1490.5,
+        "terminal_charge_complete_min": 1501.1225345685698,
+        "solver_invoked": false
+      }
+    ],
+    "vehicle_concept": {
+      "paper_vehicle_id": "4103",
+      "paper_vehicle_name": "EB-3",
+      "usable_battery_kwh": 400.0,
+      "installed_battery_kwh_reference_only": 600.0,
+      "service_traction_kwh_per_km": 1.2,
+      "deadhead_traction_kwh_per_km": 0.96,
+      "auxiliary_kwh_per_hour": 16.0,
+      "charging_power_kw_usable": 360.0,
+      "charging_power_kw_installed_reference_only": 450.0
+    }
+  },
+  "rendering": {
+    "matplotlib": "3.11.2",
+    "numpy": "2.5.3",
+    "formats": [
+      "png",
+      "pdf",
+      "svg"
+    ],
+    "grayscale_friendly": true,
+    "solver_invoked": false,
+    "svg_trailing_space_normalization": "XML elements, attributes and tokenized path data unchanged; PNG/PDF unchanged"
+  },
+  "interpretation_limits": [
+    "The two single-depot variants restrict a source two-depot dataset; they are not the source model.",
+    "The one-trip-per-bus schedules are constructive feasibility references, not optimized fleet schedules.",
+    "Energy values use declared EB-3 modeling assumptions and are not measured or source-observed energy.",
+    "The source calendar date is absent; the encoded day offset is retained on the elapsed-time axis."
+  ]
+}

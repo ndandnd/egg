@@ -1,0 +1,40 @@
+{
+  "document_id": "1NmPC_qo_uOnA48dV6Ibhs3Pj9EgOD-oJTBuVi41p6bg",
+  "tab_id": "t.0",
+  "revision_before": "ANLCKQmSt9jVaIUfmBPs0cLEE06QKzxHUrAb9G7GK30QF7WUrmCp2XQybRdOlrVWMBOuiy0piTfifoWySiTiQK9s6VzjUE2UFbjPbupyIK8",
+  "revision_after": "ANLCKQnKspB1ZY57ZDayVtraGIMKmVZ48RzU5heQ7XN21YhS8623XWtCGWadT7j90KRDPBBUeJI_RCIsACyb6O19MfZK5cOCKLDR-mjrOkk",
+  "append_start": 196321,
+  "append_end": 199092,
+  "exact_appended_text_verified": true,
+  "appended_text": "\nPhysical route comparison: ranking gains have not yet reduced fleet cost\n1 October 2026 UTC\n\nThe first physical comparison covers 16 exploratory training timetables, using models fitted without each timetable’s outer fold. It compares learned route proposals with a fixed policy that reuses existing plans and optimizes their charging. It is not a final test-set evaluation.\n\nOn the 15 timetables where all four methods produced a feasible fleet, mean cost differences relative to that reuse policy were +0.48 for the tabular model, +2.83 for the tree-family policy, +4.60 for the graph policy and +21.62 for the cost-only construction. Positive means more expensive. The graph model’s earlier edge-ranking improvement has therefore not yet translated into a general physical cost benefit. The tabular model was closest to reuse on these common cases; its mean across all 16 cases was +7.57 because the extra case was much worse. No model is promoted on these exploratory outcomes.\n\nIndependent replay reproduced all 143 saved fleet-plan costs exactly. Primary proposals were feasible on 16/16 cases for the tabular method and 15/16 for each other method. Three cover repairs reached their five-second limit without an integer solution on the same timetable. Raw edge-by-edge predictions formed a valid topology in only 2 of 48 diagnostics, reinforcing the need for explicit route construction and physical replay. Tiny charging differences around 10^-14 are identified separately from meaningful improvements.\n\nThe global-bound comparison is incomplete: all 32 hull calls stopped before optimization because the caller used an unsupported keyword. These failures are preserved; successful Slurm completion does not certify the experiment. The completed batch used 1,484 allocated CPU-seconds. Failed attempts and the earlier source-plan acquisition cost remain in the ledger; no optimality or online speedup claim is made.\n\nThe longer graph-training batch separately failed during shell startup, before any training, using 12 allocated CPU-seconds. A reviewed startup-only correction was submitted as array 738226 at 02:49 UTC, in a fresh output directory. The scientific settings remain unchanged: up to 900 epochs, the original 300-epoch comparison checks, 12 tasks, at most four concurrent, and a new 12 CPU-hour ceiling. Submission is confirmed; allocation has not yet been observed.\n\nNext, evaluate whether longer training helps, then test physical-context inputs and route construction that accounts for cost under a separate frozen protocol. Keep development and final test timetables sealed. The failed hull interface also needs a separate bounded repair; it is not silently rerun.\n\nVerified physical comparison and limitations\nGraph-training recovery protocol\n",
+  "preserved_inline_image_ids": [
+    "kix.14qgnlc7qzhp",
+    "kix.1g4t8u3qmu8n",
+    "kix.4yuqnp8k08fl",
+    "kix.fe5jxkrgnniq",
+    "kix.shpddc4n4xg",
+    "kix.uffmv89uhby0",
+    "kix.xjlr68pn1mfz"
+  ],
+  "verified_links": [
+    {
+      "start": 199014,
+      "end": 199058,
+      "url": "https://github.com/ndandnd/egg/blob/095dd94d6cfc0bd89aa507da329234aa2d503ec0/research-20260930/learning-campaign/ROUTE_PROPOSAL_TRAIN_V7_RESULTS.md"
+    },
+    {
+      "start": 199059,
+      "end": 199091,
+      "url": "https://github.com/ndandnd/egg/blob/a19f0acc08adf4743cf24c9c82d0f4951f2f0bf3/research-20260930/learning-campaign/ROUTE_MODEL_GRAPH_BUDGET_V8_RECOVERY1_PROTOCOL.md"
+    }
+  ],
+  "resolved_text_sizes_verified": true,
+  "checked_text_runs": 20,
+  "trusted_read_receipt": {
+    "path": "/Users/nadan/Documents/ChatGPT/egg/journal-research-work/tmp/docs-v7-results-v8-recovery-20261001/receipt.json",
+    "bytes": 976,
+    "sha256": "e167c3a107296ab2d920c3452fa0dfc53219af5583595f9b6beff0dfcf15f645"
+  },
+  "source_result_commit": "095dd94d6cfc0bd89aa507da329234aa2d503ec0",
+  "recovery_source_commit": "a19f0acc08adf4743cf24c9c82d0f4951f2f0bf3"
+}

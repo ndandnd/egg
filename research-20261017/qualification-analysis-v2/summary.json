@@ -1,0 +1,402 @@
+{
+  "stage": "qualification",
+  "development_only": true,
+  "complete": true,
+  "planned": 12,
+  "counts_by_arm": {
+    "v8": {
+      "censored": 1,
+      "infrastructure_or_unknown": 1
+    },
+    "catboost_v5": {
+      "valid": 1,
+      "no_plan": 1
+    },
+    "nonlearned": {
+      "censored": 1,
+      "no_plan": 1
+    },
+    "random": {
+      "censored": 2
+    },
+    "full4": {
+      "censored": 1,
+      "no_plan": 1
+    },
+    "cold": {
+      "censored": 2
+    }
+  },
+  "binding_issues": [],
+  "unknown_directories": [],
+  "missing_receipts": [],
+  "cells": [
+    {
+      "task": {
+        "case_key": "scale:50907:40",
+        "seed": 17,
+        "arm": "v8",
+        "block": 0,
+        "seconds": 30
+      },
+      "directory": "b55f52ab243f09c64dd3",
+      "attempted": true,
+      "terminal": true,
+      "accepted_valid_worker": true,
+      "endpoint_valid_supervisor": false,
+      "valid": false,
+      "censored": true,
+      "bill": 655.9597703222762,
+      "category": "censored",
+      "issues": [],
+      "rejected_candidates": {
+        "candidate_rejected": 1
+      },
+      "native_log_corrupt": false,
+      "failure_type": "",
+      "wall_s": 30.51785533223301,
+      "charged_cpu_s": 14.559999999999999,
+      "peak_rss_bytes": 274006016,
+      "invalid_accepted": false,
+      "mapping_violation": false,
+      "overrun_gt_2s": false
+    },
+    {
+      "task": {
+        "case_key": "scale:50907:40",
+        "seed": 17,
+        "arm": "catboost_v5",
+        "block": 0,
+        "seconds": 30
+      },
+      "directory": "e1312c86c7f9d7e09fd1",
+      "attempted": true,
+      "terminal": true,
+      "accepted_valid_worker": true,
+      "endpoint_valid_supervisor": true,
+      "valid": true,
+      "censored": false,
+      "bill": 656.9536972793782,
+      "category": "valid",
+      "issues": [],
+      "rejected_candidates": {},
+      "native_log_corrupt": false,
+      "failure_type": "",
+      "wall_s": 29.696469457820058,
+      "charged_cpu_s": 14.84,
+      "peak_rss_bytes": 237305856,
+      "invalid_accepted": false,
+      "mapping_violation": false,
+      "overrun_gt_2s": false
+    },
+    {
+      "task": {
+        "case_key": "scale:50907:40",
+        "seed": 17,
+        "arm": "nonlearned",
+        "block": 0,
+        "seconds": 30
+      },
+      "directory": "955e127c913e7734a7ca",
+      "attempted": true,
+      "terminal": true,
+      "accepted_valid_worker": false,
+      "endpoint_valid_supervisor": false,
+      "valid": false,
+      "censored": true,
+      "bill": null,
+      "category": "censored",
+      "issues": [],
+      "rejected_candidates": {
+        "candidate_rejected": 1
+      },
+      "native_log_corrupt": false,
+      "failure_type": "TimeoutError",
+      "wall_s": 30.87720820866525,
+      "charged_cpu_s": 11.47,
+      "peak_rss_bytes": 149323776,
+      "invalid_accepted": false,
+      "mapping_violation": false,
+      "overrun_gt_2s": false
+    },
+    {
+      "task": {
+        "case_key": "scale:50907:40",
+        "seed": 17,
+        "arm": "random",
+        "block": 0,
+        "seconds": 30
+      },
+      "directory": "f143b9eb03e3164fa9bc",
+      "attempted": true,
+      "terminal": true,
+      "accepted_valid_worker": true,
+      "endpoint_valid_supervisor": false,
+      "valid": false,
+      "censored": true,
+      "bill": 887.902578195016,
+      "category": "censored",
+      "issues": [],
+      "rejected_candidates": {
+        "candidate_rejected": 1
+      },
+      "native_log_corrupt": false,
+      "failure_type": "",
+      "wall_s": 30.569578541442752,
+      "charged_cpu_s": 11.12,
+      "peak_rss_bytes": 104284160,
+      "invalid_accepted": false,
+      "mapping_violation": false,
+      "overrun_gt_2s": false
+    },
+    {
+      "task": {
+        "case_key": "scale:50907:40",
+        "seed": 17,
+        "arm": "full4",
+        "block": 0,
+        "seconds": 30
+      },
+      "directory": "1468601b3f47dcd02d2c",
+      "attempted": true,
+      "terminal": true,
+      "accepted_valid_worker": false,
+      "endpoint_valid_supervisor": false,
+      "valid": false,
+      "censored": true,
+      "bill": null,
+      "category": "censored",
+      "issues": [],
+      "rejected_candidates": {
+        "candidate_rejected": 1
+      },
+      "native_log_corrupt": false,
+      "failure_type": "TimeoutError",
+      "wall_s": 30.930911334231496,
+      "charged_cpu_s": 18.261654000000004,
+      "peak_rss_bytes": 185335808,
+      "invalid_accepted": false,
+      "mapping_violation": false,
+      "overrun_gt_2s": false
+    },
+    {
+      "task": {
+        "case_key": "scale:50907:40",
+        "seed": 17,
+        "arm": "cold",
+        "block": 0,
+        "seconds": 30
+      },
+      "directory": "31c5b8ae1eadc96e753a",
+      "attempted": true,
+      "terminal": true,
+      "accepted_valid_worker": true,
+      "endpoint_valid_supervisor": false,
+      "valid": false,
+      "censored": true,
+      "bill": 659.2934889403292,
+      "category": "censored",
+      "issues": [],
+      "rejected_candidates": {},
+      "native_log_corrupt": false,
+      "failure_type": "",
+      "wall_s": 30.070025915279984,
+      "charged_cpu_s": 17.94,
+      "peak_rss_bytes": 236781568,
+      "invalid_accepted": false,
+      "mapping_violation": false,
+      "overrun_gt_2s": false
+    },
+    {
+      "task": {
+        "case_key": "scale:50641:80",
+        "seed": 17,
+        "arm": "v8",
+        "block": 1,
+        "seconds": 30
+      },
+      "directory": "ee1c9a18f446dd0ddcec",
+      "attempted": true,
+      "terminal": true,
+      "accepted_valid_worker": false,
+      "endpoint_valid_supervisor": false,
+      "valid": false,
+      "censored": true,
+      "bill": null,
+      "category": "infrastructure_or_unknown",
+      "issues": [],
+      "rejected_candidates": {
+        "candidate_rejected": 1
+      },
+      "native_log_corrupt": false,
+      "failure_type": "TimeoutError",
+      "wall_s": 32.738976624794304,
+      "charged_cpu_s": 17.17,
+      "peak_rss_bytes": 322895872,
+      "invalid_accepted": false,
+      "mapping_violation": false,
+      "overrun_gt_2s": true
+    },
+    {
+      "task": {
+        "case_key": "scale:50641:80",
+        "seed": 17,
+        "arm": "cold",
+        "block": 1,
+        "seconds": 30
+      },
+      "directory": "e12ed320e5150dcf216b",
+      "attempted": true,
+      "terminal": true,
+      "accepted_valid_worker": false,
+      "endpoint_valid_supervisor": false,
+      "valid": false,
+      "censored": true,
+      "bill": null,
+      "category": "censored",
+      "issues": [],
+      "rejected_candidates": {},
+      "native_log_corrupt": false,
+      "failure_type": "",
+      "wall_s": 30.70963212568313,
+      "charged_cpu_s": 16.74,
+      "peak_rss_bytes": 250118144,
+      "invalid_accepted": false,
+      "mapping_violation": false,
+      "overrun_gt_2s": false
+    },
+    {
+      "task": {
+        "case_key": "scale:50641:80",
+        "seed": 17,
+        "arm": "full4",
+        "block": 1,
+        "seconds": 30
+      },
+      "directory": "b20a91849b0fa03bf40d",
+      "attempted": true,
+      "terminal": true,
+      "accepted_valid_worker": false,
+      "endpoint_valid_supervisor": false,
+      "valid": false,
+      "censored": false,
+      "bill": null,
+      "category": "no_plan",
+      "issues": [],
+      "rejected_candidates": {},
+      "native_log_corrupt": false,
+      "failure_type": "",
+      "wall_s": 12.190116874873638,
+      "charged_cpu_s": 7.75,
+      "peak_rss_bytes": 295993344,
+      "invalid_accepted": false,
+      "mapping_violation": false,
+      "overrun_gt_2s": false
+    },
+    {
+      "task": {
+        "case_key": "scale:50641:80",
+        "seed": 17,
+        "arm": "random",
+        "block": 1,
+        "seconds": 30
+      },
+      "directory": "bfcde9458b69347909b6",
+      "attempted": true,
+      "terminal": true,
+      "accepted_valid_worker": true,
+      "endpoint_valid_supervisor": false,
+      "valid": false,
+      "censored": true,
+      "bill": 3359.785940877915,
+      "category": "censored",
+      "issues": [],
+      "rejected_candidates": {},
+      "native_log_corrupt": false,
+      "failure_type": "",
+      "wall_s": 30.474628458730876,
+      "charged_cpu_s": 18.9,
+      "peak_rss_bytes": 276873216,
+      "invalid_accepted": false,
+      "mapping_violation": false,
+      "overrun_gt_2s": false
+    },
+    {
+      "task": {
+        "case_key": "scale:50641:80",
+        "seed": 17,
+        "arm": "nonlearned",
+        "block": 1,
+        "seconds": 30
+      },
+      "directory": "93728984e767864d0d67",
+      "attempted": true,
+      "terminal": true,
+      "accepted_valid_worker": false,
+      "endpoint_valid_supervisor": false,
+      "valid": false,
+      "censored": false,
+      "bill": null,
+      "category": "no_plan",
+      "issues": [],
+      "rejected_candidates": {},
+      "native_log_corrupt": false,
+      "failure_type": "",
+      "wall_s": 10.953090750612319,
+      "charged_cpu_s": 5.699999999999999,
+      "peak_rss_bytes": 281362432,
+      "invalid_accepted": false,
+      "mapping_violation": false,
+      "overrun_gt_2s": false
+    },
+    {
+      "task": {
+        "case_key": "scale:50641:80",
+        "seed": 17,
+        "arm": "catboost_v5",
+        "block": 1,
+        "seconds": 30
+      },
+      "directory": "cfedae0c51486a879695",
+      "attempted": true,
+      "terminal": true,
+      "accepted_valid_worker": false,
+      "endpoint_valid_supervisor": false,
+      "valid": false,
+      "censored": false,
+      "bill": null,
+      "category": "no_plan",
+      "issues": [],
+      "rejected_candidates": {},
+      "native_log_corrupt": false,
+      "failure_type": "",
+      "wall_s": 15.425433707423508,
+      "charged_cpu_s": 6.34,
+      "peak_rss_bytes": 210960384,
+      "invalid_accepted": false,
+      "mapping_violation": false,
+      "overrun_gt_2s": false
+    }
+  ],
+  "resources": {
+    "charged_worker_cpu_s": 160.791654,
+    "wall_s_sum": 315.1539273317903,
+    "peak_worker_rss_bytes": 322895872,
+    "unknown_resource_cells": 0,
+    "freeze_cpu_s": 1.4897680000000002,
+    "supervisor_cpu_s": 2.7022079999999997,
+    "ledger_issues": [],
+    "safety_events": {},
+    "total_charged_cpu_s": 164.98363,
+    "cpu_budget_s": 1800.0
+  },
+  "qualification_health": {
+    "complete": true,
+    "accounting_known_within_budget": true,
+    "no_worker_or_infrastructure_failure": false,
+    "integrity": false,
+    "memory_limit": true
+  },
+  "qualification_engineering_pass": false,
+  "ranking_promotion": "not evaluated on qualification"
+}

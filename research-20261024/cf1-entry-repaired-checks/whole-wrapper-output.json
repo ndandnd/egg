@@ -1,0 +1,109 @@
+{
+  "attempt_id": "attempt01",
+  "revision": 5,
+  "command": [
+    "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/.venv-local/bin/python",
+    "-m",
+    "pytest",
+    "-q",
+    "src/tests/test_cf1_entry_repaired.py"
+  ],
+  "executed_tests": [
+    "test_cf1_entry_repaired.py"
+  ],
+  "hashed_qualified_test_dependencies": [
+    "test_constructive_controls.py",
+    "test_comparison_native_adapter.py",
+    "test_cf1_preparation_preflight.py",
+    "test_cf1_small_mechanism_preflight.py",
+    "test_cf1_small_mechanism_approved.py",
+    "test_launch_accounting.py",
+    "test_launch_prefix_initializer.py",
+    "test_launch_entry_preparation.py"
+  ],
+  "command_sha256": "a582e6ab7b4f8131efd9c4847b045ae3c921a261fc86be3165f65973ba5b10ce",
+  "parent_monotonic": 6073106.854858916,
+  "carried_charge_s": 1527.8351450899538,
+  "prior_charge_s": 1527.8351450899538,
+  "administration_allowance_s": 0.0,
+  "hard_ceiling_s": 1920.0,
+  "dispatch_stop_s": 1740.0,
+  "shutdown_reserve_s": 180.0,
+  "wall_limit_s": 10.0,
+  "outer_limit_s": 12.5,
+  "inclusive_planning_s": 15.0,
+  "absolute_package_end_s": 1547.8351450899538,
+  "analysis_finalization_reserve_s": 5.0,
+  "rss_limit_bytes": 5368709120,
+  "solver_free": true,
+  "policy": "cf1-entry-repaired-v5",
+  "returncode": 1,
+  "failure": {
+    "error_type": "RuntimeError",
+    "error": "Pytest exited with return code 1",
+    "context": "pytest_exit",
+    "command": null,
+    "timeout_s": null,
+    "sample_deadline": null
+  },
+  "secondary_errors": [],
+  "termination": {
+    "owned_pgids": [
+      71595
+    ],
+    "leader_returncode": 1,
+    "reaped": true,
+    "group_absent": true,
+    "surviving_pgids": [],
+    "group_states": [
+      {
+        "pgid": 71595,
+        "state": "absent"
+      }
+    ],
+    "probe_diagnostics": [],
+    "cleanup_errors": [],
+    "cleanup_deadline": 6073119.354858916,
+    "helper_result": {
+      "pgid": 71595,
+      "owned_pgids": [
+        71595
+      ],
+      "group_absent": true,
+      "returncode": 1,
+      "probe_diagnostics": [],
+      "cleanup_errors": [],
+      "group_states": [
+        {
+          "pgid": 71595,
+          "state": "absent"
+        }
+      ],
+      "cleanup_deadline": 6073119.354858916
+    }
+  },
+  "source_changes": [],
+  "passed": false,
+  "sampled_peak_rss_bytes": 76283904,
+  "elapsed_allocation_s": 2.7604796243831515,
+  "sampled_process_tree_cpu_s": 1.56,
+  "observed_children_cpu_s": 2.482171,
+  "monitor_child_cpu_s": 0.9072490000000002,
+  "charged_allocation_s": 2.7604796243831515,
+  "supervisor_cpu_s": 0.897451,
+  "charged_cpu_s": 3.6579306243831518,
+  "sampled_plus_monitor_cpu_s": 2.4672490000000002,
+  "accounting_observations_complete": true,
+  "stdout_sha256": "61f81321ab84b3bc3d5fd145428962c59fa201b1de8c81d828c3b3b562a30069",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "artifact_hashes": {
+    "attempt.json": "7d3851d69db2663d8973682c50b089e4e22c625ca4ea2d5643a4f5ccfe11d191",
+    "ownership.jsonl": "06e376c8736294861713304066259218c835638d9fbd8853f30b36d8c464136d",
+    "resources.jsonl": "a5e5f2007a97ec0209b5bcdce6e69a07c8d30e1a688ce7378c3b3cb217fcdf28",
+    "stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdout.log": "61f81321ab84b3bc3d5fd145428962c59fa201b1de8c81d828c3b3b562a30069"
+  },
+  "cumulative_qualification_charge_s": 1531.493075714337,
+  "administration_scope": "No new administration allowance",
+  "scope": "Fake-execution source qualification only; no research input, real metadata freeze, numerical mechanism qualification or native clearance"
+}

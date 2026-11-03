@@ -1,0 +1,52 @@
+\section{A classical boundary at three service batches}\label{app:threebatch}
+The two-batch reduction uses pairs of services. A third batch can couple
+two adjacent matchings through the battery consumption of an entire duty.
+The following elementary reduction explains this limitation; it is not a
+new general hardness claim for electric-vehicle scheduling or price support.
+
+\begin{proposition}[Three-batch feasibility boundary]\label{prop:threebatch}
+Fleet feasibility is strongly NP-complete even under the following restrictions.
+Each of three successive batches has $n$ simultaneous, positive-duration
+services. Service energies and battery capacity $B$ are positive integers
+encoded in binary, with total service energy $nB$; time data are rationally
+encoded. All transitions between
+successive batches are available and use zero time and energy. At most $n$
+buses start full, reserve and nonservice consumption are zero, and no charging
+or discharging is available before the last batch ends. Every bus must then
+refill to $B$ using one terminal connector of power one, with the same
+individual acceptance power and an adequate common terminal window.
+\end{proposition}
+
+\begin{proof}
+Use Numerical Three-Dimensional Matching: three labelled multisets of $n$
+positive integers must be partitioned into triples, one from each multiset,
+each summing to $B$. Strong hardness follows, for example, from
+\citet[Section 2, Theorem 2.4]{bosboom2019paths}. We may require total sum $nB$
+and every number at most $B$: violations are immediately NO instances and
+can be mapped to the fixed balanced NO instance
+$n=2$, $B=4$, and multisets $(1,1),(1,1),(1,3)$.
+
+Make the three multisets services in intervals $[0,1)$, $[1,2)$ and $[2,3)$,
+with their numbers as battery consumptions. Endpoints may all be the same
+abstract location; its charger remains unavailable before time three.
+Overlap and the fleet cap force exactly $n$ buses, each serving one service
+per batch. A duty with energies $(a,b,c)$ is feasible exactly when
+$a+b+c\le B$, since positive consumption also guarantees all prefix SOC
+constraints. Summing over buses and using the total $nB$ forces equality
+for every triple. Thus any feasible fleet gives the required matching.
+
+Conversely, a matching supplies feasible duties that all end empty. Refill
+the buses serially for $B$ time units each on the one connector during
+$[3,3+nB]$. This restores full terminal inventory without adding an assignment
+constraint. The construction is polynomial, and on the strongly hard source
+family $B$ and $nB$ are polynomially bounded. Membership in NP holds for
+this restricted model: two batch permutations specify the duties, exact
+triple sums verify them, and the stated terminal serialization completes
+the certificate.
+\end{proof}
+
+The result does not assert hardness of every three-batch variant or of
+our price-support decision. In particular, allowing intermediate charging
+changes this reduction. Its point is that complete pairwise compatibility
+and adequate terminal resources do not remove the energy coupling across
+three services.

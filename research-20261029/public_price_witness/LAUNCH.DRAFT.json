@@ -1,0 +1,14 @@
+{
+ "status":"DRAFT","run_id":"attempt01","source_revision":null,
+ "assigned":["Q0","FIXED_PRICE_LP","EXACT_PRIMAL","FIXED_PRICE_DUAL","MIXTURE"],
+ "package_cpu_s":300,"package_wall_s":480,"worker_cpu_s":260,"worker_wall_s":360,
+ "worker_self_cpu_limit_s":240,"observed_rss_bytes":5368709120,
+ "native_price_lp_seconds":60,
+ "complete_stage_seconds":{"Q0":30,"FIXED_PRICE_LP":105,"EXACT_PRIMAL":60,"FIXED_PRICE_DUAL":90,"MIXTURE":30},
+ "route_packet_revision":"fef98584fe130da0c5647426a7ce599846340fd9",
+ "qualified_incumbent_packets":"0cb3c54de6e8e5c391afb37bcbb68ad3a51925ee",
+ "authority_revision":"3cbb8c9d965e9222ef8a98191bf775b4925382a1",
+ "draft_closed_prefix":{"displayed_cpu_s":22234.23,"elapsed_sum_s":23125.37,"retained_cpu_s":22235.44},
+ "command":["env","OMP_NUM_THREADS=1","OPENBLAS_NUM_THREADS=1","MKL_NUM_THREADS=1","VECLIB_MAXIMUM_THREADS=1","NUMEXPR_NUM_THREADS=1","/usr/bin/time","-p",".venv-local/bin/python","-I","-B","research-20261029/public_price_witness/run.py","--run-id","attempt01"],
+ "authority":"DRAFT only; parent reviews/freezes source and separate control before dispatch. No computation performed."
+}

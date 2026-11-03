@@ -1,0 +1,75 @@
+{
+  "candidate": {
+    "flat_objective_exact": "32367329682269897846497216949431/79228162514264337593543950336",
+    "hourly_periods": 30,
+    "max_power_kw": "360",
+    "min_soc_kwh": "1013/562949953421312",
+    "ops_cost": "200",
+    "route_movement_counts": {
+      "0": 24,
+      "1": 15
+    },
+    "services": 37,
+    "sessions": 19,
+    "soc_events": 116,
+    "total_grid_kwh": "4585692153618323/4398046511104",
+    "vehicle_totals": {
+      "0": {
+        "consumption_kwh": "365671797284979723/562949953421312",
+        "grid_kwh": "365671797284979723/562949953421312",
+        "movement_kwh": "56315831996407165/562949953421312",
+        "service_kwh": "154677982644286279/281474976710656",
+        "terminal_soc_kwh": "400"
+      },
+      "1": {
+        "consumption_kwh": "221296798378165621/562949953421312",
+        "grid_kwh": "221296798378165621/562949953421312",
+        "movement_kwh": "30124097523520993/562949953421312",
+        "service_kwh": "47793175213661157/140737488355328",
+        "terminal_soc_kwh": "400"
+      }
+    },
+    "vehicles": 2
+  },
+  "candidate_sha256": "fafb2e2721a283b0ef43b94357c497710ad113c79f85427a8aabc4211b8aa325",
+  "corruption_controls": [
+    {
+      "control": "missing-service",
+      "rejected": true
+    },
+    {
+      "control": "charge-energy-plus-2^-40",
+      "rejected": true
+    },
+    {
+      "control": "hour-bin-plus-2^-40",
+      "rejected": true
+    },
+    {
+      "control": "invalid-connector",
+      "rejected": true
+    }
+  ],
+  "frozen_sha256": "35ce1e07876ca62ee366e598fec884556f8f9ea03e46230f19d5999f087e660b",
+  "ideal_flat_objective_enclosure": {
+    "candidate_upper_decimal": 408.5331358838777,
+    "candidate_upper_exact": "32367329682269897846497216949431/79228162514264337593543950336",
+    "flow_audit_sha256": "f4d6acdf46bd3cd6839fc727c9786b63c2b63dbb4fb507197c7336a3f3f6260f",
+    "flow_review_sha256": "60604b3467c17ec1c833ef56a2634a7e091d6cb677aaea4ec3c684dfdec15c94",
+    "lower_decimal": "404.924239883878",
+    "lower_exact": "4106419645886056876377559228024553/10141204801825835211973625643008",
+    "same_case_identity": "1917409b43c0433b4ac2504b0b28c1bb2aa63a033c79ba1a4057418b63874ed7"
+  },
+  "independent_verifier_sha256": "23b1c2492cfbd8bf25a9c3aa1a049456de93a6eaa4a3bfa2031c01d4f903efa9",
+  "manifest_files_verified": 3,
+  "method": "stdlib JSON/Fraction/hashlib/subprocess only; no optimizer or author checker",
+  "one_bus_obstruction": {
+    "battery_kwh": "400",
+    "forced_direct_transitions": 36,
+    "service_energy_kwh": "250264333071608593/281474976710656"
+  },
+  "saved_result_sha256": "d5a767d738a02db7e68481d1995549f19bd7089fdc758d8ec28cd2a64166cc85",
+  "separate_prior_native_numerical_upper": 408.5331368838794,
+  "source_commit": "282e00b80b6fd9457006429b089269b2a9e2be92",
+  "verdict": "PASS exact ideal depot-15 witness"
+}

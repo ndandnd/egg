@@ -1,0 +1,447 @@
+{
+  "graph_replay_review_gate": "explicit reviewed graph replay SHA required by launch owner",
+  "group_ids": [
+    10064,
+    10065,
+    10066,
+    10067,
+    10068,
+    10069,
+    10070,
+    10071,
+    10072,
+    10073,
+    10074,
+    10075,
+    10076,
+    10077,
+    10078,
+    10079
+  ],
+  "models": {
+    "families_v5": {
+      "0": {
+        "files": {
+          "result/physical_learning/20260930-route-model128-families-v5-recovery1/task00/inner_progress/catboost_inner_selection.json": "4b9ab939b35ec32055ebcf171fbc0496387cbbabc1197d3d09358698db5e2d6e",
+          "result/physical_learning/20260930-route-model128-families-v5-recovery1/task00/inner_progress/extra_trees_inner_selection.json": "9057b94f0c52513208c5c5847d4a75561662fda4c62763d77cd98e409e9598ca",
+          "result/physical_learning/20260930-route-model128-families-v5-recovery1/task00/inner_progress/inner_family_promotion.json": "a671531efc392b557054169d9f283c9a5a76b30d2b746119337bd683f87b1ce2",
+          "result/physical_learning/20260930-route-model128-families-v5-recovery1/task00/inner_progress/xgboost_candidate0_inner.json": "f4024d5924a3b1cdfcaa3407517cf5dcdb9a1bb4389d38164a631cd8ea090336",
+          "result/physical_learning/20260930-route-model128-families-v5-recovery1/task00/inner_progress/xgboost_candidate1.json": "f2f844337c9ece05348ffe89f2b3d00ddaaf7814a9c46b7651592be23fb7ba4c",
+          "result/physical_learning/20260930-route-model128-families-v5-recovery1/task00/inner_progress/xgboost_candidate1_inner.json": "e846186c8e323d9350caa2535d9835b7453d752f76c664be1772fbe7d3490d54",
+          "result/physical_learning/20260930-route-model128-families-v5-recovery1/task00/inner_progress/xgboost_inner_selection.json": "9b718d1b649feaf7275a3c5a3e0c640747c799468601ddf95160c56953a9915c",
+          "result/physical_learning/20260930-route-model128-families-v5-recovery1/task00/receipt.json": "cea465eab43a8fb8729ea1bb67cea5a96864cd9781f6a664aa1129c60599eadb",
+          "result/physical_learning/20260930-route-model128-families-v5-recovery1/task00/result.json": "832e643d489ba607ff3e4e38ee17582dba20c5b291ed3d2d2843be4ea3a43360",
+          "result/physical_learning/20260930-route-model128-families-v5-recovery1/task00/source_identity.json": "4f54f0030d910f14b63b9dfcdf40c646aac0faa532ae104fddf1162a7fa4a59a"
+        },
+        "folder": "result/physical_learning/20260930-route-model128-families-v5-recovery1/task00",
+        "source_commit": "2df1ec9228ea3c18942ae465e73a5488acedcdd2",
+        "training_source_hashes": {
+          "research-20260930/learning-campaign/ROUTE_FAMILY_ENVIRONMENT.json": "fafc3fba43dbd3de6cb6260ae1920e88ef7fd185ef9956707000cccd72ea6a65",
+          "research-20260930/learning-campaign/ROUTE_MODEL32_TRAINING_PROTOCOL.md": "fcea9c19b25ead7e7499f400d4db34595d2c4959d1498b736ce92368534b31f8",
+          "research-20260930/learning-campaign/ROUTE_MODEL64_128_V3_PROTOCOL.md": "2af61b59d53ad660d4306d3bc7e92abdefdbab0b7903b97bd724776d1dfc62a7",
+          "research-20260930/learning-campaign/ROUTE_MODEL_FAMILIES_V5_PROTOCOL.md": "75349fca01065b96fff38ed2b4f590bae79e1dceee8649085c49aad864e0eb9e",
+          "research-20260930/learning-campaign/route-family-requirements-frozen.txt": "b900c1c37eaf7a5408b7085c4f5026d73021da525c12a2cb21b1d252e42adbbf",
+          "src/cluster/physical_route_model_families_v5.sbatch": "36f9fde5d3beedbce95bb8f820502d9046942140446916537a31711c0111d957",
+          "src/cluster/unicorn_env.sh": "1731f65b21fd9c81f5726078490aed384974ac2e4869bdc13e7259d5ab045678",
+          "src/egglab/learned_proposals.py": "5b58b9495ccb401bf7a865ba4058a81838b575f517268e76bad40f0b7dcbd479",
+          "src/egglab/native_pathflow.py": "cd61085c5942248e53cdfbd92056c4ba324dfd81d5d18b726f58715298003df0",
+          "src/egglab/native_recharge.py": "0067123a7f71cc6e9c89e1262cdcbd612cafdcfc252e35bcfca7f1f54c45d0f3",
+          "src/egglab/physical_learning_cases.py": "85f832c80526e02a4531bd0b4a70ed398eb46ae9a6cae2834da163ef3c0c8f1b",
+          "src/egglab/physical_route_model_families_v5.py": "c9a245c7ab8bcb817fc07b2e78562fd6822bfd1b29f593d4941462a7fa5f4469",
+          "src/egglab/physical_route_model_v2.py": "07788c1bd991a5309371fc83adc8fae5599bfc7ae0c731b6e498263784d87e27",
+          "src/egglab/physical_route_model_v3.py": "c500e4ddb88079842e8faefa5e8128f07c1ce82bad3fbfe1c0b5f9aee969cda8",
+          "src/experiments/computational_benchmark.py": "da96e4601e34dc797526703db68c2d2cbda57d78a9048c8fd7c34889ffca1c8f",
+          "src/experiments/pool_physical_route_training_v3.py": "49487ea117da108f87fd4fd8f22641af88ca610f84164a97af70ed5a0389d867",
+          "src/experiments/train_physical_route_model_families_v5.py": "ce76adfa6fa3e2c48ea11e2145b1c4feade168355f5d44bd438a5715e1417350",
+          "src/tests/test_physical_route_model_families_v5.py": "df4249a4c9b611ae78936c37025d187a0d79aedeff0456955091ddb659a92471"
+        }
+      },
+      "3": {
+        "files": {
+          "result/physical_learning/20260930-route-model128-families-v5/task03/inner_progress/catboost_inner_selection.json": "7da5cfb7e896efc465cd688adad8ef55701dd9a1af63c35a483b2421d2b8ebd7",
+          "result/physical_learning/20260930-route-model128-families-v5/task03/inner_progress/extra_trees_inner_selection.json": "7f594267709fcdfa380a383b133793f564caf9243b91fa64c05804f14ac6d877",
+          "result/physical_learning/20260930-route-model128-families-v5/task03/inner_progress/inner_family_promotion.json": "90aa3a6247c46ce005584ecba88245373d650849a02a3922c459028a451d965d",
+          "result/physical_learning/20260930-route-model128-families-v5/task03/inner_progress/xgboost_candidate0.json": "fa925f06a0221e0cb2518cdfd224e70ea4e896bf25887e66849e66c7c2cbec76",
+          "result/physical_learning/20260930-route-model128-families-v5/task03/inner_progress/xgboost_candidate0_inner.json": "b94d0c5028c4f3664e6b1067b7d93d788640601f4cddfe68d930c923862799d2",
+          "result/physical_learning/20260930-route-model128-families-v5/task03/inner_progress/xgboost_candidate1_inner.json": "4754e128877c059f0ff2c62ff0047b782efe4a14c4467353fcd25593b4744070",
+          "result/physical_learning/20260930-route-model128-families-v5/task03/inner_progress/xgboost_inner_selection.json": "eac0a1080931e3a31ddfbf8e61cbf39c644639eea096a63fe8f60bbea6489635",
+          "result/physical_learning/20260930-route-model128-families-v5/task03/receipt.json": "8ca47a06e417b309163ce46fd9bbfd4d46d998ca81de1c29e4e448ef945720a0",
+          "result/physical_learning/20260930-route-model128-families-v5/task03/result.json": "dbf7fca45ac827a7667ce57eb03d0f72f09041dd133f87bcce2535e23be9082c",
+          "result/physical_learning/20260930-route-model128-families-v5/task03/source_identity.json": "71226b091804dd9cf0d8d1ac78c81338c97db0d5bcb603b846f4aaf1456dd352"
+        },
+        "folder": "result/physical_learning/20260930-route-model128-families-v5/task03",
+        "source_commit": "75dd4cf19f1f735cc3dea559567da3b2bd32013e",
+        "training_source_hashes": {
+          "research-20260930/learning-campaign/ROUTE_FAMILY_ENVIRONMENT.json": "fafc3fba43dbd3de6cb6260ae1920e88ef7fd185ef9956707000cccd72ea6a65",
+          "research-20260930/learning-campaign/ROUTE_MODEL32_TRAINING_PROTOCOL.md": "fcea9c19b25ead7e7499f400d4db34595d2c4959d1498b736ce92368534b31f8",
+          "research-20260930/learning-campaign/ROUTE_MODEL64_128_V3_PROTOCOL.md": "2af61b59d53ad660d4306d3bc7e92abdefdbab0b7903b97bd724776d1dfc62a7",
+          "research-20260930/learning-campaign/ROUTE_MODEL_FAMILIES_V5_PROTOCOL.md": "75349fca01065b96fff38ed2b4f590bae79e1dceee8649085c49aad864e0eb9e",
+          "research-20260930/learning-campaign/route-family-requirements-frozen.txt": "b900c1c37eaf7a5408b7085c4f5026d73021da525c12a2cb21b1d252e42adbbf",
+          "src/cluster/physical_route_model_families_v5.sbatch": "36f9fde5d3beedbce95bb8f820502d9046942140446916537a31711c0111d957",
+          "src/cluster/unicorn_env.sh": "1731f65b21fd9c81f5726078490aed384974ac2e4869bdc13e7259d5ab045678",
+          "src/egglab/learned_proposals.py": "5b58b9495ccb401bf7a865ba4058a81838b575f517268e76bad40f0b7dcbd479",
+          "src/egglab/native_pathflow.py": "cd61085c5942248e53cdfbd92056c4ba324dfd81d5d18b726f58715298003df0",
+          "src/egglab/native_recharge.py": "0067123a7f71cc6e9c89e1262cdcbd612cafdcfc252e35bcfca7f1f54c45d0f3",
+          "src/egglab/physical_learning_cases.py": "85f832c80526e02a4531bd0b4a70ed398eb46ae9a6cae2834da163ef3c0c8f1b",
+          "src/egglab/physical_route_model_families_v5.py": "c9a245c7ab8bcb817fc07b2e78562fd6822bfd1b29f593d4941462a7fa5f4469",
+          "src/egglab/physical_route_model_v2.py": "07788c1bd991a5309371fc83adc8fae5599bfc7ae0c731b6e498263784d87e27",
+          "src/egglab/physical_route_model_v3.py": "c500e4ddb88079842e8faefa5e8128f07c1ce82bad3fbfe1c0b5f9aee969cda8",
+          "src/experiments/computational_benchmark.py": "da96e4601e34dc797526703db68c2d2cbda57d78a9048c8fd7c34889ffca1c8f",
+          "src/experiments/pool_physical_route_training_v3.py": "49487ea117da108f87fd4fd8f22641af88ca610f84164a97af70ed5a0389d867",
+          "src/experiments/train_physical_route_model_families_v5.py": "ce76adfa6fa3e2c48ea11e2145b1c4feade168355f5d44bd438a5715e1417350",
+          "src/tests/test_physical_route_model_families_v5.py": "df4249a4c9b611ae78936c37025d187a0d79aedeff0456955091ddb659a92471"
+        }
+      },
+      "6": {
+        "files": {
+          "result/physical_learning/20260930-route-model128-families-v5-recovery1/task06/inner_progress/catboost_inner_selection.json": "a05d131f95d44a3940e59da77c8e6822ece1a8f42bbbddd876a85a11216ac56f",
+          "result/physical_learning/20260930-route-model128-families-v5-recovery1/task06/inner_progress/extra_trees_inner_selection.json": "ac7fb7f2b2874f14423c09287dfc9da291e625c0e357389c103e221c11e82f09",
+          "result/physical_learning/20260930-route-model128-families-v5-recovery1/task06/inner_progress/inner_family_promotion.json": "d93061336ee503f9ea1a01b295da1c6e4bdcbc2eba00708352d30229d76e1467",
+          "result/physical_learning/20260930-route-model128-families-v5-recovery1/task06/inner_progress/xgboost_candidate0_inner.json": "87c6e888d51c0d910a49fdde091ab3b252f1b6ad47e711ed7614e967f97f8f94",
+          "result/physical_learning/20260930-route-model128-families-v5-recovery1/task06/inner_progress/xgboost_candidate1.json": "4cc6062e386b6e076aef5f3fa7eb548bd0761820d39e7c77f419743dbb4c1ed1",
+          "result/physical_learning/20260930-route-model128-families-v5-recovery1/task06/inner_progress/xgboost_candidate1_inner.json": "69c2ee313583bccdb050da44811dc3be2ba229f37e3c51a2ce32d9f50510cf84",
+          "result/physical_learning/20260930-route-model128-families-v5-recovery1/task06/inner_progress/xgboost_inner_selection.json": "d615c1c7700de92b899a4b4fa18b141c216d8c3eac1efb4f3adc4ffee1c890f9",
+          "result/physical_learning/20260930-route-model128-families-v5-recovery1/task06/receipt.json": "00225bb747c1c4fc05ada18aa9d315c32ed3b956e03bcba190361d10e2ef421e",
+          "result/physical_learning/20260930-route-model128-families-v5-recovery1/task06/result.json": "bcd396d114eaebdf99cb323b1f8a1d6938286bf08d4ae0d55fc517826a05efdc",
+          "result/physical_learning/20260930-route-model128-families-v5-recovery1/task06/source_identity.json": "4f54f0030d910f14b63b9dfcdf40c646aac0faa532ae104fddf1162a7fa4a59a"
+        },
+        "folder": "result/physical_learning/20260930-route-model128-families-v5-recovery1/task06",
+        "source_commit": "2df1ec9228ea3c18942ae465e73a5488acedcdd2",
+        "training_source_hashes": {
+          "research-20260930/learning-campaign/ROUTE_FAMILY_ENVIRONMENT.json": "fafc3fba43dbd3de6cb6260ae1920e88ef7fd185ef9956707000cccd72ea6a65",
+          "research-20260930/learning-campaign/ROUTE_MODEL32_TRAINING_PROTOCOL.md": "fcea9c19b25ead7e7499f400d4db34595d2c4959d1498b736ce92368534b31f8",
+          "research-20260930/learning-campaign/ROUTE_MODEL64_128_V3_PROTOCOL.md": "2af61b59d53ad660d4306d3bc7e92abdefdbab0b7903b97bd724776d1dfc62a7",
+          "research-20260930/learning-campaign/ROUTE_MODEL_FAMILIES_V5_PROTOCOL.md": "75349fca01065b96fff38ed2b4f590bae79e1dceee8649085c49aad864e0eb9e",
+          "research-20260930/learning-campaign/route-family-requirements-frozen.txt": "b900c1c37eaf7a5408b7085c4f5026d73021da525c12a2cb21b1d252e42adbbf",
+          "src/cluster/physical_route_model_families_v5.sbatch": "36f9fde5d3beedbce95bb8f820502d9046942140446916537a31711c0111d957",
+          "src/cluster/unicorn_env.sh": "1731f65b21fd9c81f5726078490aed384974ac2e4869bdc13e7259d5ab045678",
+          "src/egglab/learned_proposals.py": "5b58b9495ccb401bf7a865ba4058a81838b575f517268e76bad40f0b7dcbd479",
+          "src/egglab/native_pathflow.py": "cd61085c5942248e53cdfbd92056c4ba324dfd81d5d18b726f58715298003df0",
+          "src/egglab/native_recharge.py": "0067123a7f71cc6e9c89e1262cdcbd612cafdcfc252e35bcfca7f1f54c45d0f3",
+          "src/egglab/physical_learning_cases.py": "85f832c80526e02a4531bd0b4a70ed398eb46ae9a6cae2834da163ef3c0c8f1b",
+          "src/egglab/physical_route_model_families_v5.py": "c9a245c7ab8bcb817fc07b2e78562fd6822bfd1b29f593d4941462a7fa5f4469",
+          "src/egglab/physical_route_model_v2.py": "07788c1bd991a5309371fc83adc8fae5599bfc7ae0c731b6e498263784d87e27",
+          "src/egglab/physical_route_model_v3.py": "c500e4ddb88079842e8faefa5e8128f07c1ce82bad3fbfe1c0b5f9aee969cda8",
+          "src/experiments/computational_benchmark.py": "da96e4601e34dc797526703db68c2d2cbda57d78a9048c8fd7c34889ffca1c8f",
+          "src/experiments/pool_physical_route_training_v3.py": "49487ea117da108f87fd4fd8f22641af88ca610f84164a97af70ed5a0389d867",
+          "src/experiments/train_physical_route_model_families_v5.py": "ce76adfa6fa3e2c48ea11e2145b1c4feade168355f5d44bd438a5715e1417350",
+          "src/tests/test_physical_route_model_families_v5.py": "df4249a4c9b611ae78936c37025d187a0d79aedeff0456955091ddb659a92471"
+        }
+      },
+      "9": {
+        "files": {
+          "result/physical_learning/20260930-route-model128-families-v5-recovery1/task09/inner_progress/catboost_inner_selection.json": "866e0a8144077988d32c2ccedb18b6875ec7a6d4acff9eec8f35e7d900b3b75d",
+          "result/physical_learning/20260930-route-model128-families-v5-recovery1/task09/inner_progress/extra_trees_candidate0_inner.json": "6a3d0d187c4b5850495f3145b807e77a34cd61ecf6a0e7d9bac119a5c9d20499",
+          "result/physical_learning/20260930-route-model128-families-v5-recovery1/task09/inner_progress/extra_trees_candidate1.joblib": "03752ccfe714d7f53fb22680cc1979c727dc1d701ce5796f066df36acb343995",
+          "result/physical_learning/20260930-route-model128-families-v5-recovery1/task09/inner_progress/extra_trees_candidate1_inner.json": "6f94e34756fde8cee601ad67f294d77febfca32b3a4529c099a4bb77df629d0b",
+          "result/physical_learning/20260930-route-model128-families-v5-recovery1/task09/inner_progress/extra_trees_inner_selection.json": "8473b0286442edb72461a520b884f021f6ea629c535303feccce7c6c4e352603",
+          "result/physical_learning/20260930-route-model128-families-v5-recovery1/task09/inner_progress/inner_family_promotion.json": "4c7f13ea666d50ce0e5c60aca16f849248c611fa6a6dd8571d07da75f04e29bc",
+          "result/physical_learning/20260930-route-model128-families-v5-recovery1/task09/inner_progress/xgboost_inner_selection.json": "d5d576425deb763f1223b2684fb010225f27296396cc427a69eaa7937955c884",
+          "result/physical_learning/20260930-route-model128-families-v5-recovery1/task09/receipt.json": "d4129e2135485f6bd5d33e44eba66b80899970ab3996dc288e9c66fcd7808b7c",
+          "result/physical_learning/20260930-route-model128-families-v5-recovery1/task09/result.json": "0aab05268a27de65b56c36c625ad8c774fab2a0d0edba1b2143d8096ec5da1f9",
+          "result/physical_learning/20260930-route-model128-families-v5-recovery1/task09/source_identity.json": "4f54f0030d910f14b63b9dfcdf40c646aac0faa532ae104fddf1162a7fa4a59a"
+        },
+        "folder": "result/physical_learning/20260930-route-model128-families-v5-recovery1/task09",
+        "source_commit": "2df1ec9228ea3c18942ae465e73a5488acedcdd2",
+        "training_source_hashes": {
+          "research-20260930/learning-campaign/ROUTE_FAMILY_ENVIRONMENT.json": "fafc3fba43dbd3de6cb6260ae1920e88ef7fd185ef9956707000cccd72ea6a65",
+          "research-20260930/learning-campaign/ROUTE_MODEL32_TRAINING_PROTOCOL.md": "fcea9c19b25ead7e7499f400d4db34595d2c4959d1498b736ce92368534b31f8",
+          "research-20260930/learning-campaign/ROUTE_MODEL64_128_V3_PROTOCOL.md": "2af61b59d53ad660d4306d3bc7e92abdefdbab0b7903b97bd724776d1dfc62a7",
+          "research-20260930/learning-campaign/ROUTE_MODEL_FAMILIES_V5_PROTOCOL.md": "75349fca01065b96fff38ed2b4f590bae79e1dceee8649085c49aad864e0eb9e",
+          "research-20260930/learning-campaign/route-family-requirements-frozen.txt": "b900c1c37eaf7a5408b7085c4f5026d73021da525c12a2cb21b1d252e42adbbf",
+          "src/cluster/physical_route_model_families_v5.sbatch": "36f9fde5d3beedbce95bb8f820502d9046942140446916537a31711c0111d957",
+          "src/cluster/unicorn_env.sh": "1731f65b21fd9c81f5726078490aed384974ac2e4869bdc13e7259d5ab045678",
+          "src/egglab/learned_proposals.py": "5b58b9495ccb401bf7a865ba4058a81838b575f517268e76bad40f0b7dcbd479",
+          "src/egglab/native_pathflow.py": "cd61085c5942248e53cdfbd92056c4ba324dfd81d5d18b726f58715298003df0",
+          "src/egglab/native_recharge.py": "0067123a7f71cc6e9c89e1262cdcbd612cafdcfc252e35bcfca7f1f54c45d0f3",
+          "src/egglab/physical_learning_cases.py": "85f832c80526e02a4531bd0b4a70ed398eb46ae9a6cae2834da163ef3c0c8f1b",
+          "src/egglab/physical_route_model_families_v5.py": "c9a245c7ab8bcb817fc07b2e78562fd6822bfd1b29f593d4941462a7fa5f4469",
+          "src/egglab/physical_route_model_v2.py": "07788c1bd991a5309371fc83adc8fae5599bfc7ae0c731b6e498263784d87e27",
+          "src/egglab/physical_route_model_v3.py": "c500e4ddb88079842e8faefa5e8128f07c1ce82bad3fbfe1c0b5f9aee969cda8",
+          "src/experiments/computational_benchmark.py": "da96e4601e34dc797526703db68c2d2cbda57d78a9048c8fd7c34889ffca1c8f",
+          "src/experiments/pool_physical_route_training_v3.py": "49487ea117da108f87fd4fd8f22641af88ca610f84164a97af70ed5a0389d867",
+          "src/experiments/train_physical_route_model_families_v5.py": "ce76adfa6fa3e2c48ea11e2145b1c4feade168355f5d44bd438a5715e1417350",
+          "src/tests/test_physical_route_model_families_v5.py": "df4249a4c9b611ae78936c37025d187a0d79aedeff0456955091ddb659a92471"
+        }
+      }
+    },
+    "graph_v6": {
+      "0": {
+        "files": {
+          "result/physical_learning/20260930-route-model128-graph-v6/task00/inner_progress/fit_only_preprocessing_and_groups.json": "f4a5145f9b89ca487f52905d2cda153dd6bc1d1a930d441b577ec9357eae8095",
+          "result/physical_learning/20260930-route-model128-graph-v6/task00/inner_progress/graph_attention_selected.npz": "1480e22aa5fa799465328561d33066cb1c0e656e87d2d43d21b2681359e4f635",
+          "result/physical_learning/20260930-route-model128-graph-v6/task00/inner_progress/graph_attention_selected_inner.json": "ae43ff9ad894d76a12133939a5d8b1a5c9b61b60547ed54a400868bcf83bd2c7",
+          "result/physical_learning/20260930-route-model128-graph-v6/task00/inner_progress/inner_architecture_promotion.json": "63a3fc2b16c7b66041aecfab1b1f19d9764e29cdf186302cc41278e2ffc87ea8",
+          "result/physical_learning/20260930-route-model128-graph-v6/task00/inner_progress/mean_message_selected_inner.json": "95cc6aec84f285aec91fe77327f2a5a4e2658f7217ec685988842cdc7eb9e5ae",
+          "result/physical_learning/20260930-route-model128-graph-v6/task00/launch.json": "8e92c33d7362673d17700f4cdef517a1ed2d2622196fbad20327b8321f84ef46",
+          "result/physical_learning/20260930-route-model128-graph-v6/task00/receipt.json": "01fee2a953a9ceead8accac8ad07920da8f9fafcdcce73141d81577af7f91415",
+          "result/physical_learning/20260930-route-model128-graph-v6/task00/source_identity.json": "b1e3eb464f9fd4d0bb06a6e480fa241e1cd1980c0689dc2b2c605e94cde5604f"
+        },
+        "folder": "result/physical_learning/20260930-route-model128-graph-v6/task00",
+        "source_commit": "ca9c3dbbfd22a83c42a8e18465f8524f7f11c98f",
+        "training_source_hashes": {
+          "research-20260930/learning-campaign/ROUTE_GRAPH_ENVIRONMENT.json": "53f5926baed82105ef8948fef87f15f8adc6f58080e974565755281f482e3366",
+          "research-20260930/learning-campaign/ROUTE_MODEL_GRAPH_V6_PROTOCOL.md": "bcf32d0e745929340f70182f9251348f2397d12e6d1c75e0f80c3c8b3282555d",
+          "research-20260930/learning-campaign/route-graph-requirements-frozen.txt": "d5fc86af003adfd37f03545e13dcc65a173db4d7fe749d6a83ae662c1091b09a",
+          "src/cluster/physical_route_graph_v6.sbatch": "58add4517572c942cb083915ed3e215e97e5c081e563398fa2b439933beeec3d",
+          "src/egglab/learned_proposals.py": "5b58b9495ccb401bf7a865ba4058a81838b575f517268e76bad40f0b7dcbd479",
+          "src/egglab/native_pathflow.py": "cd61085c5942248e53cdfbd92056c4ba324dfd81d5d18b726f58715298003df0",
+          "src/egglab/native_recharge.py": "0067123a7f71cc6e9c89e1262cdcbd612cafdcfc252e35bcfca7f1f54c45d0f3",
+          "src/egglab/physical_learning_cases.py": "85f832c80526e02a4531bd0b4a70ed398eb46ae9a6cae2834da163ef3c0c8f1b",
+          "src/egglab/physical_route_graph_v6.py": "a4d54b2cfcbb2bf3e7c66c991ef5038d0c25bab20aa0163046f1347e856a0402",
+          "src/egglab/physical_route_model_v2.py": "07788c1bd991a5309371fc83adc8fae5599bfc7ae0c731b6e498263784d87e27",
+          "src/egglab/physical_route_model_v3.py": "c500e4ddb88079842e8faefa5e8128f07c1ce82bad3fbfe1c0b5f9aee969cda8",
+          "src/experiments/computational_benchmark.py": "da96e4601e34dc797526703db68c2d2cbda57d78a9048c8fd7c34889ffca1c8f",
+          "src/experiments/pool_physical_route_training_v3.py": "49487ea117da108f87fd4fd8f22641af88ca610f84164a97af70ed5a0389d867",
+          "src/experiments/probe_physical_route_graph_v6.py": "38051a9bee16b104fae79b6a73c1d7f1db0173f3746986f7ccec4f105171f707",
+          "src/experiments/train_physical_route_graph_v6.py": "f08dff25ad07b8a5e7148e93b5d85c358d0752a0811fd8e37cc37f2661e3f29b",
+          "src/tests/test_physical_route_graph_v6.py": "de60858be6f84a2f17b26a2dc073110d088cc2966d5032869d131ad3231bd633"
+        }
+      },
+      "3": {
+        "files": {
+          "result/physical_learning/20260930-route-model128-graph-v6/task03/inner_progress/fit_only_preprocessing_and_groups.json": "0d1e1385b0f040d26051fac98fa4db8138e24b0e4ecff6724d7377099ec4d12a",
+          "result/physical_learning/20260930-route-model128-graph-v6/task03/inner_progress/graph_attention_selected.npz": "ba649d5bb143f936eea22db9dfd40744dfd616c834543e5f152a4c9ac6ff8a31",
+          "result/physical_learning/20260930-route-model128-graph-v6/task03/inner_progress/graph_attention_selected_inner.json": "c40824dc99f21d72217fa5bf46177b1193d719f11acc3e37dcd447a2123fc34c",
+          "result/physical_learning/20260930-route-model128-graph-v6/task03/inner_progress/inner_architecture_promotion.json": "7884b4fbd64ad0d444ae559af49bd5731efe1f33e2fd52c7f15b1f51046ad1da",
+          "result/physical_learning/20260930-route-model128-graph-v6/task03/inner_progress/mean_message_selected_inner.json": "8a916bb4acef6034f756adfb0563afd7d327c77bcd34773bf0b6d48f294ec183",
+          "result/physical_learning/20260930-route-model128-graph-v6/task03/launch.json": "06c56078bb3fb78efb13b3101cc8b2ad418116b728d489afd8788556a772c4ff",
+          "result/physical_learning/20260930-route-model128-graph-v6/task03/receipt.json": "97dfa09142a42c251f6bfd22a6d2b167571d7f88dfba78024410d28d6b6831de",
+          "result/physical_learning/20260930-route-model128-graph-v6/task03/source_identity.json": "b1e3eb464f9fd4d0bb06a6e480fa241e1cd1980c0689dc2b2c605e94cde5604f"
+        },
+        "folder": "result/physical_learning/20260930-route-model128-graph-v6/task03",
+        "source_commit": "ca9c3dbbfd22a83c42a8e18465f8524f7f11c98f",
+        "training_source_hashes": {
+          "research-20260930/learning-campaign/ROUTE_GRAPH_ENVIRONMENT.json": "53f5926baed82105ef8948fef87f15f8adc6f58080e974565755281f482e3366",
+          "research-20260930/learning-campaign/ROUTE_MODEL_GRAPH_V6_PROTOCOL.md": "bcf32d0e745929340f70182f9251348f2397d12e6d1c75e0f80c3c8b3282555d",
+          "research-20260930/learning-campaign/route-graph-requirements-frozen.txt": "d5fc86af003adfd37f03545e13dcc65a173db4d7fe749d6a83ae662c1091b09a",
+          "src/cluster/physical_route_graph_v6.sbatch": "58add4517572c942cb083915ed3e215e97e5c081e563398fa2b439933beeec3d",
+          "src/egglab/learned_proposals.py": "5b58b9495ccb401bf7a865ba4058a81838b575f517268e76bad40f0b7dcbd479",
+          "src/egglab/native_pathflow.py": "cd61085c5942248e53cdfbd92056c4ba324dfd81d5d18b726f58715298003df0",
+          "src/egglab/native_recharge.py": "0067123a7f71cc6e9c89e1262cdcbd612cafdcfc252e35bcfca7f1f54c45d0f3",
+          "src/egglab/physical_learning_cases.py": "85f832c80526e02a4531bd0b4a70ed398eb46ae9a6cae2834da163ef3c0c8f1b",
+          "src/egglab/physical_route_graph_v6.py": "a4d54b2cfcbb2bf3e7c66c991ef5038d0c25bab20aa0163046f1347e856a0402",
+          "src/egglab/physical_route_model_v2.py": "07788c1bd991a5309371fc83adc8fae5599bfc7ae0c731b6e498263784d87e27",
+          "src/egglab/physical_route_model_v3.py": "c500e4ddb88079842e8faefa5e8128f07c1ce82bad3fbfe1c0b5f9aee969cda8",
+          "src/experiments/computational_benchmark.py": "da96e4601e34dc797526703db68c2d2cbda57d78a9048c8fd7c34889ffca1c8f",
+          "src/experiments/pool_physical_route_training_v3.py": "49487ea117da108f87fd4fd8f22641af88ca610f84164a97af70ed5a0389d867",
+          "src/experiments/probe_physical_route_graph_v6.py": "38051a9bee16b104fae79b6a73c1d7f1db0173f3746986f7ccec4f105171f707",
+          "src/experiments/train_physical_route_graph_v6.py": "f08dff25ad07b8a5e7148e93b5d85c358d0752a0811fd8e37cc37f2661e3f29b",
+          "src/tests/test_physical_route_graph_v6.py": "de60858be6f84a2f17b26a2dc073110d088cc2966d5032869d131ad3231bd633"
+        }
+      },
+      "6": {
+        "files": {
+          "result/physical_learning/20260930-route-model128-graph-v6/task06/inner_progress/fit_only_preprocessing_and_groups.json": "f6c497381bf2071785eb827b7c86bdfc7f43175e516b865f5b9cee259d792140",
+          "result/physical_learning/20260930-route-model128-graph-v6/task06/inner_progress/graph_attention_selected.npz": "df44b822169736c95099d1a171b40af881e3beb79566066dc4cded877ebc8ece",
+          "result/physical_learning/20260930-route-model128-graph-v6/task06/inner_progress/graph_attention_selected_inner.json": "3ad4f344ed4c0757597fc13e795739a05df8314c3830040a98f16e8a1d9d8939",
+          "result/physical_learning/20260930-route-model128-graph-v6/task06/inner_progress/inner_architecture_promotion.json": "d90002e18c7445b3be8baf795068c1cfe3365bff6056e19cd888d37e1cf0f47b",
+          "result/physical_learning/20260930-route-model128-graph-v6/task06/inner_progress/mean_message_selected_inner.json": "1773788acc281995172751c2427b4052a2888af7b4d555122ac296425f9ac354",
+          "result/physical_learning/20260930-route-model128-graph-v6/task06/launch.json": "d7dbd305117f862a0b01abb62a7640c6587947390af6cefdcbe6e38719020706",
+          "result/physical_learning/20260930-route-model128-graph-v6/task06/receipt.json": "930c2530400271ab69fe94a1c9732635c5c35a292da49f157ce51490a6dca503",
+          "result/physical_learning/20260930-route-model128-graph-v6/task06/source_identity.json": "b1e3eb464f9fd4d0bb06a6e480fa241e1cd1980c0689dc2b2c605e94cde5604f"
+        },
+        "folder": "result/physical_learning/20260930-route-model128-graph-v6/task06",
+        "source_commit": "ca9c3dbbfd22a83c42a8e18465f8524f7f11c98f",
+        "training_source_hashes": {
+          "research-20260930/learning-campaign/ROUTE_GRAPH_ENVIRONMENT.json": "53f5926baed82105ef8948fef87f15f8adc6f58080e974565755281f482e3366",
+          "research-20260930/learning-campaign/ROUTE_MODEL_GRAPH_V6_PROTOCOL.md": "bcf32d0e745929340f70182f9251348f2397d12e6d1c75e0f80c3c8b3282555d",
+          "research-20260930/learning-campaign/route-graph-requirements-frozen.txt": "d5fc86af003adfd37f03545e13dcc65a173db4d7fe749d6a83ae662c1091b09a",
+          "src/cluster/physical_route_graph_v6.sbatch": "58add4517572c942cb083915ed3e215e97e5c081e563398fa2b439933beeec3d",
+          "src/egglab/learned_proposals.py": "5b58b9495ccb401bf7a865ba4058a81838b575f517268e76bad40f0b7dcbd479",
+          "src/egglab/native_pathflow.py": "cd61085c5942248e53cdfbd92056c4ba324dfd81d5d18b726f58715298003df0",
+          "src/egglab/native_recharge.py": "0067123a7f71cc6e9c89e1262cdcbd612cafdcfc252e35bcfca7f1f54c45d0f3",
+          "src/egglab/physical_learning_cases.py": "85f832c80526e02a4531bd0b4a70ed398eb46ae9a6cae2834da163ef3c0c8f1b",
+          "src/egglab/physical_route_graph_v6.py": "a4d54b2cfcbb2bf3e7c66c991ef5038d0c25bab20aa0163046f1347e856a0402",
+          "src/egglab/physical_route_model_v2.py": "07788c1bd991a5309371fc83adc8fae5599bfc7ae0c731b6e498263784d87e27",
+          "src/egglab/physical_route_model_v3.py": "c500e4ddb88079842e8faefa5e8128f07c1ce82bad3fbfe1c0b5f9aee969cda8",
+          "src/experiments/computational_benchmark.py": "da96e4601e34dc797526703db68c2d2cbda57d78a9048c8fd7c34889ffca1c8f",
+          "src/experiments/pool_physical_route_training_v3.py": "49487ea117da108f87fd4fd8f22641af88ca610f84164a97af70ed5a0389d867",
+          "src/experiments/probe_physical_route_graph_v6.py": "38051a9bee16b104fae79b6a73c1d7f1db0173f3746986f7ccec4f105171f707",
+          "src/experiments/train_physical_route_graph_v6.py": "f08dff25ad07b8a5e7148e93b5d85c358d0752a0811fd8e37cc37f2661e3f29b",
+          "src/tests/test_physical_route_graph_v6.py": "de60858be6f84a2f17b26a2dc073110d088cc2966d5032869d131ad3231bd633"
+        }
+      },
+      "9": {
+        "files": {
+          "result/physical_learning/20260930-route-model128-graph-v6/task09/inner_progress/fit_only_preprocessing_and_groups.json": "2a0ddf3da1ceca2d3f04b9a3e3030894e0de6d6459ed01b515d42af53086b24d",
+          "result/physical_learning/20260930-route-model128-graph-v6/task09/inner_progress/graph_attention_selected_inner.json": "8bb2ec25dafb1c10861f1aec29ee587fbab3bc631b7f9538445ce39ff427dbfd",
+          "result/physical_learning/20260930-route-model128-graph-v6/task09/inner_progress/inner_architecture_promotion.json": "3260ddd14fbcb591060b6bb757acf8a9458bfd63b3582586bc1c9025b74efaa7",
+          "result/physical_learning/20260930-route-model128-graph-v6/task09/inner_progress/mean_message_selected.npz": "cfc82c73ba40c8429f2a063f158c8dcf74bcc31dcd7af901bcb27dba16ae0301",
+          "result/physical_learning/20260930-route-model128-graph-v6/task09/inner_progress/mean_message_selected_inner.json": "03eae724d7efd2d8bb72a4ef44d53aadba50c38e102a2d8fc7bab96dbf07d979",
+          "result/physical_learning/20260930-route-model128-graph-v6/task09/launch.json": "9edc96ab076612d470994a145f36d291b278f347379a477ed926d82d45c63a12",
+          "result/physical_learning/20260930-route-model128-graph-v6/task09/receipt.json": "f15d8a637ef95192c92c86e3fb51837676f74c8ae6426b8bf9113e30dd51f45b",
+          "result/physical_learning/20260930-route-model128-graph-v6/task09/source_identity.json": "b1e3eb464f9fd4d0bb06a6e480fa241e1cd1980c0689dc2b2c605e94cde5604f"
+        },
+        "folder": "result/physical_learning/20260930-route-model128-graph-v6/task09",
+        "source_commit": "ca9c3dbbfd22a83c42a8e18465f8524f7f11c98f",
+        "training_source_hashes": {
+          "research-20260930/learning-campaign/ROUTE_GRAPH_ENVIRONMENT.json": "53f5926baed82105ef8948fef87f15f8adc6f58080e974565755281f482e3366",
+          "research-20260930/learning-campaign/ROUTE_MODEL_GRAPH_V6_PROTOCOL.md": "bcf32d0e745929340f70182f9251348f2397d12e6d1c75e0f80c3c8b3282555d",
+          "research-20260930/learning-campaign/route-graph-requirements-frozen.txt": "d5fc86af003adfd37f03545e13dcc65a173db4d7fe749d6a83ae662c1091b09a",
+          "src/cluster/physical_route_graph_v6.sbatch": "58add4517572c942cb083915ed3e215e97e5c081e563398fa2b439933beeec3d",
+          "src/egglab/learned_proposals.py": "5b58b9495ccb401bf7a865ba4058a81838b575f517268e76bad40f0b7dcbd479",
+          "src/egglab/native_pathflow.py": "cd61085c5942248e53cdfbd92056c4ba324dfd81d5d18b726f58715298003df0",
+          "src/egglab/native_recharge.py": "0067123a7f71cc6e9c89e1262cdcbd612cafdcfc252e35bcfca7f1f54c45d0f3",
+          "src/egglab/physical_learning_cases.py": "85f832c80526e02a4531bd0b4a70ed398eb46ae9a6cae2834da163ef3c0c8f1b",
+          "src/egglab/physical_route_graph_v6.py": "a4d54b2cfcbb2bf3e7c66c991ef5038d0c25bab20aa0163046f1347e856a0402",
+          "src/egglab/physical_route_model_v2.py": "07788c1bd991a5309371fc83adc8fae5599bfc7ae0c731b6e498263784d87e27",
+          "src/egglab/physical_route_model_v3.py": "c500e4ddb88079842e8faefa5e8128f07c1ce82bad3fbfe1c0b5f9aee969cda8",
+          "src/experiments/computational_benchmark.py": "da96e4601e34dc797526703db68c2d2cbda57d78a9048c8fd7c34889ffca1c8f",
+          "src/experiments/pool_physical_route_training_v3.py": "49487ea117da108f87fd4fd8f22641af88ca610f84164a97af70ed5a0389d867",
+          "src/experiments/probe_physical_route_graph_v6.py": "38051a9bee16b104fae79b6a73c1d7f1db0173f3746986f7ccec4f105171f707",
+          "src/experiments/train_physical_route_graph_v6.py": "f08dff25ad07b8a5e7148e93b5d85c358d0752a0811fd8e37cc37f2661e3f29b",
+          "src/tests/test_physical_route_graph_v6.py": "de60858be6f84a2f17b26a2dc073110d088cc2966d5032869d131ad3231bd633"
+        }
+      }
+    },
+    "tabular_v3": {
+      "0": {
+        "files": {
+          "result/physical_learning/20260930-route-model128-v3/task00/hist_boosted.joblib": "62813c8a11ff7b4b07cdf45d388c993fa56f1a6cff14b2d54644d0c08e1cbc09",
+          "result/physical_learning/20260930-route-model128-v3/task00/receipt.json": "145106a79b0e883ae41083ed940f4b76b39b779bf21c1050ea19d013a2e3f4f7",
+          "result/physical_learning/20260930-route-model128-v3/task00/result.json": "8147922456a27471f2daaa941c719dc780040b3177738f77a99541d782c6ffd7",
+          "result/physical_learning/20260930-route-model128-v3/task00/source_identity.json": "1c50b4e94f28dc70b1738a9169e1c04b2a8fd3cc5d4c6e207b484175431a9e6a"
+        },
+        "folder": "result/physical_learning/20260930-route-model128-v3/task00",
+        "source_commit": "b0cc428cd13d3b47fb9b2622bc6b41f102542703",
+        "training_source_hashes": {
+          "research-20260930/learning-campaign/ROUTE_MODEL32_TRAINING_PROTOCOL.md": "fcea9c19b25ead7e7499f400d4db34595d2c4959d1498b736ce92368534b31f8",
+          "research-20260930/learning-campaign/ROUTE_MODEL64_128_V3_PROTOCOL.md": "2af61b59d53ad660d4306d3bc7e92abdefdbab0b7903b97bd724776d1dfc62a7",
+          "src/cluster/physical_route_model_v3.sbatch": "3911452a4955efb93776a0930ad8d67f34505eb89da9745c00689b42761587ef",
+          "src/egglab/learned_proposals.py": "5b58b9495ccb401bf7a865ba4058a81838b575f517268e76bad40f0b7dcbd479",
+          "src/egglab/native_pathflow.py": "cd61085c5942248e53cdfbd92056c4ba324dfd81d5d18b726f58715298003df0",
+          "src/egglab/native_recharge.py": "0067123a7f71cc6e9c89e1262cdcbd612cafdcfc252e35bcfca7f1f54c45d0f3",
+          "src/egglab/physical_learning_cases.py": "85f832c80526e02a4531bd0b4a70ed398eb46ae9a6cae2834da163ef3c0c8f1b",
+          "src/egglab/physical_route_model_v2.py": "07788c1bd991a5309371fc83adc8fae5599bfc7ae0c731b6e498263784d87e27",
+          "src/egglab/physical_route_model_v3.py": "c500e4ddb88079842e8faefa5e8128f07c1ce82bad3fbfe1c0b5f9aee969cda8",
+          "src/experiments/computational_benchmark.py": "da96e4601e34dc797526703db68c2d2cbda57d78a9048c8fd7c34889ffca1c8f",
+          "src/experiments/pool_physical_route_training_v3.py": "49487ea117da108f87fd4fd8f22641af88ca610f84164a97af70ed5a0389d867",
+          "src/experiments/train_physical_route_model_v3.py": "37866418737dbcc4957ea6691049e8793995b0fda3d2c1f877258e6a15464290",
+          "src/tests/test_physical_route_model_v3.py": "2e3efaaba262b2092aba2ea1c58cb0605a52da03234b11b99cfdd3252fae4668"
+        }
+      },
+      "3": {
+        "files": {
+          "result/physical_learning/20260930-route-model128-v3/task03/hist_boosted.joblib": "610eb200563a112da1656d2d9a67f73f96b52a1fbadfb9daa1c78add99bd2c06",
+          "result/physical_learning/20260930-route-model128-v3/task03/receipt.json": "1371f93c13ab883c09cd88d8f7a62920d311308169c29eef1bec1b12ed504e63",
+          "result/physical_learning/20260930-route-model128-v3/task03/result.json": "7046836661ce3a130bec05974c74374a5b63d2673a7dc1074754f9bcfd06edf6",
+          "result/physical_learning/20260930-route-model128-v3/task03/source_identity.json": "1c50b4e94f28dc70b1738a9169e1c04b2a8fd3cc5d4c6e207b484175431a9e6a"
+        },
+        "folder": "result/physical_learning/20260930-route-model128-v3/task03",
+        "source_commit": "b0cc428cd13d3b47fb9b2622bc6b41f102542703",
+        "training_source_hashes": {
+          "research-20260930/learning-campaign/ROUTE_MODEL32_TRAINING_PROTOCOL.md": "fcea9c19b25ead7e7499f400d4db34595d2c4959d1498b736ce92368534b31f8",
+          "research-20260930/learning-campaign/ROUTE_MODEL64_128_V3_PROTOCOL.md": "2af61b59d53ad660d4306d3bc7e92abdefdbab0b7903b97bd724776d1dfc62a7",
+          "src/cluster/physical_route_model_v3.sbatch": "3911452a4955efb93776a0930ad8d67f34505eb89da9745c00689b42761587ef",
+          "src/egglab/learned_proposals.py": "5b58b9495ccb401bf7a865ba4058a81838b575f517268e76bad40f0b7dcbd479",
+          "src/egglab/native_pathflow.py": "cd61085c5942248e53cdfbd92056c4ba324dfd81d5d18b726f58715298003df0",
+          "src/egglab/native_recharge.py": "0067123a7f71cc6e9c89e1262cdcbd612cafdcfc252e35bcfca7f1f54c45d0f3",
+          "src/egglab/physical_learning_cases.py": "85f832c80526e02a4531bd0b4a70ed398eb46ae9a6cae2834da163ef3c0c8f1b",
+          "src/egglab/physical_route_model_v2.py": "07788c1bd991a5309371fc83adc8fae5599bfc7ae0c731b6e498263784d87e27",
+          "src/egglab/physical_route_model_v3.py": "c500e4ddb88079842e8faefa5e8128f07c1ce82bad3fbfe1c0b5f9aee969cda8",
+          "src/experiments/computational_benchmark.py": "da96e4601e34dc797526703db68c2d2cbda57d78a9048c8fd7c34889ffca1c8f",
+          "src/experiments/pool_physical_route_training_v3.py": "49487ea117da108f87fd4fd8f22641af88ca610f84164a97af70ed5a0389d867",
+          "src/experiments/train_physical_route_model_v3.py": "37866418737dbcc4957ea6691049e8793995b0fda3d2c1f877258e6a15464290",
+          "src/tests/test_physical_route_model_v3.py": "2e3efaaba262b2092aba2ea1c58cb0605a52da03234b11b99cfdd3252fae4668"
+        }
+      },
+      "6": {
+        "files": {
+          "result/physical_learning/20260930-route-model128-v3/task06/hist_boosted.joblib": "adb9a27865f045686a9909787b8dc100b1cd074c046194430a9a4747d8c2aa3e",
+          "result/physical_learning/20260930-route-model128-v3/task06/receipt.json": "b06c486831542687d0b4b1996deeb95d2789f94888f308469ab2c6293e0404d2",
+          "result/physical_learning/20260930-route-model128-v3/task06/result.json": "f180c259434f797399eb87be2c3ecfdf6eecd954d4ed16ab4482673589f94390",
+          "result/physical_learning/20260930-route-model128-v3/task06/source_identity.json": "1c50b4e94f28dc70b1738a9169e1c04b2a8fd3cc5d4c6e207b484175431a9e6a"
+        },
+        "folder": "result/physical_learning/20260930-route-model128-v3/task06",
+        "source_commit": "b0cc428cd13d3b47fb9b2622bc6b41f102542703",
+        "training_source_hashes": {
+          "research-20260930/learning-campaign/ROUTE_MODEL32_TRAINING_PROTOCOL.md": "fcea9c19b25ead7e7499f400d4db34595d2c4959d1498b736ce92368534b31f8",
+          "research-20260930/learning-campaign/ROUTE_MODEL64_128_V3_PROTOCOL.md": "2af61b59d53ad660d4306d3bc7e92abdefdbab0b7903b97bd724776d1dfc62a7",
+          "src/cluster/physical_route_model_v3.sbatch": "3911452a4955efb93776a0930ad8d67f34505eb89da9745c00689b42761587ef",
+          "src/egglab/learned_proposals.py": "5b58b9495ccb401bf7a865ba4058a81838b575f517268e76bad40f0b7dcbd479",
+          "src/egglab/native_pathflow.py": "cd61085c5942248e53cdfbd92056c4ba324dfd81d5d18b726f58715298003df0",
+          "src/egglab/native_recharge.py": "0067123a7f71cc6e9c89e1262cdcbd612cafdcfc252e35bcfca7f1f54c45d0f3",
+          "src/egglab/physical_learning_cases.py": "85f832c80526e02a4531bd0b4a70ed398eb46ae9a6cae2834da163ef3c0c8f1b",
+          "src/egglab/physical_route_model_v2.py": "07788c1bd991a5309371fc83adc8fae5599bfc7ae0c731b6e498263784d87e27",
+          "src/egglab/physical_route_model_v3.py": "c500e4ddb88079842e8faefa5e8128f07c1ce82bad3fbfe1c0b5f9aee969cda8",
+          "src/experiments/computational_benchmark.py": "da96e4601e34dc797526703db68c2d2cbda57d78a9048c8fd7c34889ffca1c8f",
+          "src/experiments/pool_physical_route_training_v3.py": "49487ea117da108f87fd4fd8f22641af88ca610f84164a97af70ed5a0389d867",
+          "src/experiments/train_physical_route_model_v3.py": "37866418737dbcc4957ea6691049e8793995b0fda3d2c1f877258e6a15464290",
+          "src/tests/test_physical_route_model_v3.py": "2e3efaaba262b2092aba2ea1c58cb0605a52da03234b11b99cfdd3252fae4668"
+        }
+      },
+      "9": {
+        "files": {
+          "result/physical_learning/20260930-route-model128-v3/task09/hist_boosted.joblib": "ec7961660630a461a3b02ad4e177eec5c29bc290c72ea3b5625f967b312c7eba",
+          "result/physical_learning/20260930-route-model128-v3/task09/receipt.json": "e7019ddc2e31924d1e891149a67a49a839f7f6af4849a42c0c5fc44707465218",
+          "result/physical_learning/20260930-route-model128-v3/task09/result.json": "5501d48969a3b22fbe02aebb344cfd50e497d2912b4cdc2175563bb712a31ae5",
+          "result/physical_learning/20260930-route-model128-v3/task09/source_identity.json": "1c50b4e94f28dc70b1738a9169e1c04b2a8fd3cc5d4c6e207b484175431a9e6a"
+        },
+        "folder": "result/physical_learning/20260930-route-model128-v3/task09",
+        "source_commit": "b0cc428cd13d3b47fb9b2622bc6b41f102542703",
+        "training_source_hashes": {
+          "research-20260930/learning-campaign/ROUTE_MODEL32_TRAINING_PROTOCOL.md": "fcea9c19b25ead7e7499f400d4db34595d2c4959d1498b736ce92368534b31f8",
+          "research-20260930/learning-campaign/ROUTE_MODEL64_128_V3_PROTOCOL.md": "2af61b59d53ad660d4306d3bc7e92abdefdbab0b7903b97bd724776d1dfc62a7",
+          "src/cluster/physical_route_model_v3.sbatch": "3911452a4955efb93776a0930ad8d67f34505eb89da9745c00689b42761587ef",
+          "src/egglab/learned_proposals.py": "5b58b9495ccb401bf7a865ba4058a81838b575f517268e76bad40f0b7dcbd479",
+          "src/egglab/native_pathflow.py": "cd61085c5942248e53cdfbd92056c4ba324dfd81d5d18b726f58715298003df0",
+          "src/egglab/native_recharge.py": "0067123a7f71cc6e9c89e1262cdcbd612cafdcfc252e35bcfca7f1f54c45d0f3",
+          "src/egglab/physical_learning_cases.py": "85f832c80526e02a4531bd0b4a70ed398eb46ae9a6cae2834da163ef3c0c8f1b",
+          "src/egglab/physical_route_model_v2.py": "07788c1bd991a5309371fc83adc8fae5599bfc7ae0c731b6e498263784d87e27",
+          "src/egglab/physical_route_model_v3.py": "c500e4ddb88079842e8faefa5e8128f07c1ce82bad3fbfe1c0b5f9aee969cda8",
+          "src/experiments/computational_benchmark.py": "da96e4601e34dc797526703db68c2d2cbda57d78a9048c8fd7c34889ffca1c8f",
+          "src/experiments/pool_physical_route_training_v3.py": "49487ea117da108f87fd4fd8f22641af88ca610f84164a97af70ed5a0389d867",
+          "src/experiments/train_physical_route_model_v3.py": "37866418737dbcc4957ea6691049e8793995b0fda3d2c1f877258e6a15464290",
+          "src/tests/test_physical_route_model_v3.py": "2e3efaaba262b2092aba2ea1c58cb0605a52da03234b11b99cfdd3252fae4668"
+        }
+      }
+    }
+  },
+  "no_fit": true,
+  "no_outcome_based_selection": true,
+  "policy": "physical-route-proposals-heldout-train-v7",
+  "pool_manifest_sha256": "d9aad5b5ea62fd82a8b4f6a3c20a95c57953ba12c7bf0949fa06004aa511c40d",
+  "pool_path": "result/physical_learning/20260930-route-pool128-v3",
+  "replay_attestations": {
+    "families_v5": {
+      "path": "research-20260930/learning-campaign/ROUTE_FAMILIES_V5_REPLAY.json",
+      "sha256": "7b25967f09cebd5d8411c26e9c0320fba76982626da86196e7668061cfe1885b"
+    },
+    "graph_v6": {
+      "path": "research-20260930/learning-campaign/ROUTE_GRAPH_V6_REPLAY.json",
+      "sha256": "f2034510ef424b70200a075ac9e8d23bbefa51e54f1a21bf0563165fc458e9aa"
+    },
+    "tabular_v3": {
+      "path": "research-20260930/learning-campaign/ROUTE_MODEL128_REPLAY.json",
+      "sha256": "9f274bd9106bc0fa8035dc381e6b698bcf5c3ba6ae19179ea11ecd0767c92192"
+    }
+  },
+  "seed": 17,
+  "source_hashes": {
+    "research-20260930/learning-campaign/ROUTE_PROPOSAL_TRAIN_V7_PROTOCOL.md": "edc89780fe9a47ed42c5a8df9d04a993a8e589fcc0360fb3ac733dbf79f5c747",
+    "src/cluster/physical_route_proposal_pilot_v7.sbatch": "d5c50a5cedaa9f8502d475b3bc0c357eae2ef893ab4e2a440c37eb8fda1d6f57",
+    "src/cluster/unicorn_env.sh": "1731f65b21fd9c81f5726078490aed384974ac2e4869bdc13e7259d5ab045678",
+    "src/egglab/learned_proposals.py": "5b58b9495ccb401bf7a865ba4058a81838b575f517268e76bad40f0b7dcbd479",
+    "src/egglab/native_hull.py": "dc8f04bfeab01fb6aaa4afca61c97887993b4e6181be8cabfa76858265051ffd",
+    "src/egglab/native_pathflow.py": "cd61085c5942248e53cdfbd92056c4ba324dfd81d5d18b726f58715298003df0",
+    "src/egglab/native_pathflow_hull.py": "93177e6e712ae4c407a26202194c250a7c547801b0ee6a18ebcf5e49c90a2eb4",
+    "src/egglab/native_recharge.py": "0067123a7f71cc6e9c89e1262cdcbd612cafdcfc252e35bcfca7f1f54c45d0f3",
+    "src/egglab/physical_learning_cases.py": "85f832c80526e02a4531bd0b4a70ed398eb46ae9a6cae2834da163ef3c0c8f1b",
+    "src/egglab/physical_route_decoder_v1.py": "4a256ee9c25ffae57fcee889a21827b5db96fcdd06ea16b19c23f472fd8159e4",
+    "src/egglab/physical_route_graph_v6.py": "a4d54b2cfcbb2bf3e7c66c991ef5038d0c25bab20aa0163046f1347e856a0402",
+    "src/egglab/physical_route_model_families_v5.py": "c9a245c7ab8bcb817fc07b2e78562fd6822bfd1b29f593d4941462a7fa5f4469",
+    "src/egglab/physical_route_model_v2.py": "07788c1bd991a5309371fc83adc8fae5599bfc7ae0c731b6e498263784d87e27",
+    "src/egglab/physical_route_model_v3.py": "c500e4ddb88079842e8faefa5e8128f07c1ce82bad3fbfe1c0b5f9aee969cda8",
+    "src/egglab/physical_route_proposal_v7.py": "7ea47ff895449d39231f6be6778ee511b2c6f8b55ae655b1616c19e8afd8da17",
+    "src/egglab/restricted_qp_proposal.py": "466edb75dbd619feae37f423967cdd1068ec33abdcc70207fa01a006ba7b53dd",
+    "src/egglab/route_fixed_repair.py": "4be6d534a1aabd0e2adc7f6711d9d8352bbc38340e5bd7456fbae4ab982aa05b",
+    "src/egglab/solver.py": "4d5ea429a84441d20b23856d903f9a499cb1e7e2d51ec61e6c163617478c6074",
+    "src/experiments/computational_benchmark.py": "da96e4601e34dc797526703db68c2d2cbda57d78a9048c8fd7c34889ffca1c8f",
+    "src/experiments/physical_route_proposal_pilot_v7.py": "b1df14edde0edb90d06fa55cbb2a52fe70b980a86b2b7b08d75d6ba3ac8297db",
+    "src/experiments/pool_physical_route_training_v3.py": "49487ea117da108f87fd4fd8f22641af88ca610f84164a97af70ed5a0389d867",
+    "src/experiments/retrieval_comparison.py": "74d2b1f634196ef6450620c9ebdda6421dde29ff03b92c0800afbf158689ed77",
+    "src/experiments/score_physical_route_proposal_v7.py": "e8e7dd2c425b5766a21e691f94af7a4513d5dd938ca3f5700be93e54c0c3ed6e"
+  },
+  "target_kind": "day"
+}

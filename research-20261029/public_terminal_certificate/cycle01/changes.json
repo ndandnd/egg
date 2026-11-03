@@ -1,0 +1,110 @@
+{
+  "scope": "new exact terminal-only construction on unchanged native topology",
+  "independently_replayed": false,
+  "physical_upper_certified": false,
+  "repairs_are_explicit": true,
+  "failure_does_not_prove_topology_infeasible": true,
+  "policy": "remove surplus latest positive pull-in cells, then fill deficits latest eligible shared residual cells",
+  "changed_cells": [
+    {
+      "movement": "pullin_H0027_D15",
+      "interval": 89,
+      "original": "3981961099537295/70368744177664",
+      "new": "31855688796294691/562949953421312",
+      "delta": "-3669/562949953421312",
+      "newly_created_cell": false
+    },
+    {
+      "movement": "pullin_H0001_D15",
+      "interval": 101,
+      "original": "2132295105287211/35184372088832",
+      "new": "34116721684596597/562949953421312",
+      "delta": "1221/562949953421312",
+      "newly_created_cell": false
+    }
+  ],
+  "per_bus": [
+    {
+      "vehicle": 0,
+      "movements": [
+        "pullout_D15_H0002",
+        "direct_H0002_H0020",
+        "direct_H0020_H0019",
+        "direct_H0019_H0037",
+        "direct_H0037_H0018",
+        "direct_H0018_H0036",
+        "direct_H0036_H0017",
+        "direct_H0017_H0035",
+        "direct_H0035_H0016",
+        "direct_H0016_H0034",
+        "direct_H0034_H0015",
+        "direct_H0015_H0033",
+        "depot_D15_H0033_H0008",
+        "direct_H0008_H0026",
+        "direct_H0026_H0007",
+        "direct_H0007_H0025",
+        "direct_H0025_H0006",
+        "direct_H0006_H0024",
+        "direct_H0024_H0005",
+        "direct_H0005_H0023",
+        "direct_H0023_H0004",
+        "direct_H0004_H0022",
+        "direct_H0022_H0003",
+        "direct_H0003_H0021",
+        "direct_H0021_H0001",
+        "pullin_H0001_D15"
+      ],
+      "terminal_movement": "pullin_H0001_D15",
+      "terminal_arrival_soc": "20479651260951323/562949953421312",
+      "consumption": "395834462885358841/562949953421312",
+      "nonterminal_grid": "47783533194446341/140737488355328",
+      "original_terminal_grid": "6396885315861633/17592186044416",
+      "target_terminal_grid": "204700330107573477/562949953421312",
+      "original_fullness_residual": "-1221/562949953421312",
+      "new_terminal_grid": "204700330107573477/562949953421312",
+      "new_fullness_residual": "0"
+    },
+    {
+      "vehicle": 1,
+      "movements": [
+        "pullout_D15_H0014",
+        "direct_H0014_H0032",
+        "direct_H0032_H0013",
+        "direct_H0013_H0031",
+        "direct_H0031_H0012",
+        "direct_H0012_H0030",
+        "direct_H0030_H0011",
+        "direct_H0011_H0029",
+        "direct_H0029_H0010",
+        "direct_H0010_H0028",
+        "direct_H0028_H0009",
+        "direct_H0009_H0027",
+        "pullin_H0027_D15"
+      ],
+      "terminal_movement": "pullin_H0027_D15",
+      "terminal_arrival_soc": "34045848590738297/562949953421312",
+      "consumption": "191134132777786503/562949953421312",
+      "nonterminal_grid": "0",
+      "original_terminal_grid": "47783533194447543/140737488355328",
+      "target_terminal_grid": "191134132777786503/562949953421312",
+      "original_fullness_residual": "3669/562949953421312",
+      "new_terminal_grid": "191134132777786503/562949953421312",
+      "new_fullness_residual": "0"
+    }
+  ],
+  "dropped_reported_fields": [
+    "load",
+    "movement_owners",
+    "ops",
+    "paths",
+    "selection",
+    "soc",
+    "variable_values"
+  ],
+  "original_candidate_mutated": false,
+  "all_other_allocations_preserved": true,
+  "original_total_grid": "36685537228946737/35184372088832",
+  "new_total_grid": "4585692153618323/4398046511104",
+  "exact_total_grid_change": "-153/35184372088832",
+  "next_step": "Independently replay newcandidate against original exact per-leg/window/resource inputs before claiming an upper bound"
+}

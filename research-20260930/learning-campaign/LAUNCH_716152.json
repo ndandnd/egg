@@ -1,0 +1,79 @@
+{
+  "array_job_id": "716152",
+  "submitted_at_utc": "2026-09-30T19:22:15Z",
+  "source_commit": "8fc64fbf64a82f8dc8a2ff36c5ea0230c126b6ff",
+  "source_branch": "codex/journal-research-20260927",
+  "remote_checkout": "/home/nc437/egg-route-model32-20260930-v2",
+  "sparse_checkout_paths": [
+    "src",
+    "research-20260930/learning-campaign",
+    "result/physical_learning/20260930-route-pool32-v1"
+  ],
+  "attempt_relative": "result/physical_learning/20260930-route-model32-v2",
+  "pool_manifest": "result/physical_learning/20260930-route-pool32-v1/pool_manifest.json",
+  "pool_manifest_sha256": "35251cbc8c81787263b51f6259820299e862fba97efa6b8d09c9b1f9c8211842",
+  "protocol": "ROUTE_MODEL32_TRAINING_PROTOCOL.md",
+  "review": "ROUTE_MODEL32_V2_REVIEW.md",
+  "environment_receipt": "ROUTE_TRAINING_ENVIRONMENT.json",
+  "wrapper": "src/cluster/physical_route_model_v2.sbatch",
+  "task_ids": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11
+  ],
+  "concurrent_task_limit": 4,
+  "seeds": [
+    17,
+    29,
+    43
+  ],
+  "outer_folds": 4,
+  "independent_training_groups": 32,
+  "source_fleets": 64,
+  "candidate_movement_rows": 32148,
+  "fit_inner_outer_group_counts": [
+    20,
+    4,
+    8
+  ],
+  "models": [
+    "constant",
+    "kind_frequency",
+    "logistic",
+    "mlp32",
+    "hist_boosted"
+  ],
+  "requested_per_task": {
+    "cpus": 1,
+    "memory_gb": 8,
+    "wall_seconds": 1800,
+    "native_threads": 1,
+    "requeue": false,
+    "excluded_nodes": [
+      "scaglione-compute-01"
+    ]
+  },
+  "total_requested_cpu_hour_cap": 6,
+  "shell_cap_seconds": 1700,
+  "launch_script_sha256": "4cb49ea39f63d7d507584c6b52bb0d8eb3bd42f6c78026f9ce2907ef3cf7ad0c",
+  "submission_guard": ".submission-route-model32-v2/array_jobid.txt",
+  "allowed_preexisting_egg_jobs": [
+    "715490",
+    "715491",
+    "715492",
+    "715493",
+    "715494",
+    "715495",
+    "715496"
+  ],
+  "scientific_outcomes_not_inspected": true
+}

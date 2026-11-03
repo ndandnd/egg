@@ -1,0 +1,156 @@
+\section{An exact assignment-dependent physical projection}
+\label{sec:core}
+The central result retains vehicle cost together with grid load. It applies
+to an ideal common-window class, rather than arbitrary operational timetables.
+There are $n\ge1$ mandatory A services in $[0,1]$ and $n$ mandatory B
+services in $[2,3]$, with battery demands $0<a_i,b_j\le B$ and common
+capacity $B>0$. A fixed bipartite graph $\Gamma$ lists every allowed
+A--B successor pair. Same-batch succession is forbidden: each bus serves
+at most one A service and one B service. Every service also has a standalone option; transitions
+have zero time, energy and monetary cost. A partial matching of size $m$
+uses $N_m=2n-m$ buses, each at fee $f>0$, under fleet cap $2n$.
+Services are indivisible noncharging intervals with nonnegative battery draw
+throughout.
+
+All buses start full, finish full and are available throughout the early
+window $[1,2]$. One shared connector has grid-side power $K\ge0$ in
+that window, in either direction; terminal charging uses one connector of
+power $H\ge0$ in $[3,4]$ and permits charging only. Every bus accepts the
+corresponding powers.
+Charging efficiency is common $\alpha\in(0,1]$ in both windows, and
+export efficiency is common $\delta\in(0,1]$. Reserve and other auxiliary
+draw are zero. Early actions may change direction finitely many times,
+with no switching delay, minimum session, degradation or cycling penalty.
+They are sequential, never simultaneous on the connector. These permissive
+action assumptions matter for exactness.
+
+Let $C,X$ be integrated early grid purchases and exports. The connector
+counts gross use $C+X\le K$, while net early load is $E=C-X$.
+Write
+\[
+ S_0=\sum_i a_i+\sum_j b_j,\quad P=\sum_i a_i,\quad
+ Q=\alpha C-X/\delta.
+\]
+Here $Q$ is net battery exchange, and full replenishment requires terminal
+grid purchase $L=(S_0-Q)/\alpha$. Appendix derivations use the local
+symbol $S$ for this service-energy total; $S_0$ distinguishes it from the
+framework's projected set. Supply and tariff objectives must be defined
+on the resulting signed load domain, or a declared background translation.
+
+\begin{theorem}[Complete common-window projection]\label{thm:coreprojection}
+Let $\nu$ be the maximum matching size in $\Gamma$, and define
+\[
+ r_m=\min_{\substack{M\subseteq\Gamma\ {m matching}\\|M|=m}}
+       \sum_{(i,j)\in M}(a_i+b_j-B)_+,
+ \qquad r_0=0,\qquad m=0,\ldots,\nu.
+\]
+For each $m$, let
+\[
+\begin{split}
+ W_m=\bigl\{(C,X):\;&C\ge r_m/\alpha,\quad X\ge0,\quad C+X\le K,\\
+ &\max\{S_0-N_mB,S_0-\alpha H\}
+       \le\alpha C-X/\delta\le P\bigr\}.
+\end{split}
+\]
+The complete physical load--vehicle-cost projection equals
+\[
+ \mathcal P=\bigcup_{m=0}^{\nu}
+ \left\{\left(C-X,\frac{S_0-Q}{\alpha},fN_m\right):
+          (C,X)\in W_m\right\}.
+\]
+Each point has a finite-action physical realization. Empty polygons are
+discarded; each remaining polygon has at most five vertices. Their affine
+images generate $\operatorname{conv}\mathcal P$ with at most
+$5(\nu+1)$ records, including degenerate and lossless images.
+\end{theorem}
+
+\paragraph{Why one matching statistic suffices.}
+For a fixed matching, each bus's net battery increment has an interval:
+paired buses use $[a_i+b_j-B,a_i]$, A-only buses $[a_i-B,a_i]$, and
+B-only buses $[b_j-B,0]$. Their lower endpoints sum to $S_0-N_mB$,
+upper endpoints to $P$, and positive lower endpoints to the matching's
+requirement $R$. At any admissible $Q$, interval allocation realizes
+positive increments totalling $A_+=\max\{R,Q\}$. One-direction actions
+therefore use $C_0=A_+/\alpha$ and $X_0=\delta(A_+-Q)$.
+
+Any proposed polygon point has residual purchases $z=C-C_0\ge0$ and
+residual exports $\alpha\delta z$. One existing bus can realize them
+by battery-neutral cycles before its baseline exchange. Since
+$N_m\ge n\ge1$ and $B>0$, choose charge-first or export-first according
+to its SOC; chunks of battery depth at most $B/2$ fit and return to that
+SOC. Finitely many chunks realize the finite residual. Serialize all
+actions: total early throughput fits $K$, and terminal refill fits $H$.
+Zero power permits only zero energy, without division. Positive B-service
+demands give $P<S_0$, so terminal purchases are nonnegative. At fixed
+$m$, only $R$ depends on the matching; a matching attaining $r_m$
+contains every other matching's entire polygon at the same $C,X$ and fee.
+This is physical equality, not just economic dominance. The complete proof
+is Theorem~\ref{thm:fulllossyprojection}.
+
+\section{Decisions, boundaries and independently certified existence}
+\label{sec:coreconsequences}
+The exact set preserves arbitrary objectives on period loads and cost,
+including negative posted-price response values. For convex supply $F$,
+physical planning minimizes $c+F(E,L)$ over each polygon and takes the
+smallest value; hull planning uses ordinary convex combinations of their
+vertex records. This uses classical optimization, matching and support
+theory, not a new convexification algorithm. Under the framework's
+nonemptiness assumption (at least one $W_m$ is nonempty) and
+qualification, $D=\CH$ characterizes physical own-load support; a strict
+gap excludes it. Replacing complete-plan weights by a fractional fleet
+cardinality and interpolated $r_m$ need not give the same hull.
+
+Monotone supply objectives permit a smaller efficient description with
+at most two segments per cardinality
+(Theorem~\ref{thm:lossyfrontier}). It cannot replace the full polygons
+for arbitrary negative-price queries. The charge-only lossless scalar classification
+is given in Corollary~\ref{cor:sharedsupport}. Common unequal directional
+powers and affine grid-throughput wear also admit exact polygons, using
+weighted connector occupancy and retaining wear in the joint cost image
+(Corollary~\ref{cor:directionalwear}). Its positive-power finite
+action bound does not transfer the older efficient formulas or cover
+state-dependent degradation and switching time.
+Positive per-action setup time admits a conservative physical inner polygon
+and a quantitative value/gap bound under explicit connector-time slack
+(Proposition~\ref{prop:setupslack}). Without slack, an arbitrarily small
+setup can remove a fleet-cost layer while other fleets stay feasible.
+Even when two perfect matchings remain feasible, setup can invalidate
+minimum-requirement matching replacement: the number of buses needing an
+early charge matters separately (Proposition~\ref{prop:setupmatchingboundary}).
+
+A common compulsory post-early transition task preserves the reduction
+with $S_0+md$ and a restricted graph $b_j+d\le B$
+(Corollary~\ref{cor:commontransitionfull}). Edge-dependent tasks can
+break this sufficient statistic. A complete-graph construction admits
+every perfect matching yet retains a positive support gap, including
+with strongly convex supply and a relative open parameter neighborhood
+(Proposition~\ref{prop:stricttransitionrobustness}). That neighborhood
+fixes topology, timing, access and ideal physics; it supplies no uniform
+radius or empirical robustness claim. The detailed boundary examples,
+lossless/V2G classifications and ownership consequences remain in the
+appendices.
+
+\paragraph{One public timetable, two explicitly distinct energy laws.}
+A separate 37-service case goes beyond the common-window class. Under
+each of two separately certified models, the conservative outward bounds are
+\[
+ \CH\le441.142238<441.532912\le D\le441.532913,
+ \qquad D-\CH\ge0.390674.
+\]
+The physical optimum is tightly enclosed, not known exactly; the hull
+optimum is also unknown. A feasible complete-plan mixture supplies its
+upper, while an all-physical rational branching certificate supplies the
+lower. A mean plan is not an executable daily schedule.
+
+The original binary-consumption result concerns its finite declared
+movement graph. A separately defined exactly additive consumption law,
+fresh target certificates and a canonical dominance proof extend the
+second result to finite walks over specified paired OD arcs and continuous
+linear waiting, under explicit triangle and common-access premises. No
+certificate or feasibility conclusion transfers automatically between
+these laws, even though the displayed decimal bounds coincide. These
+are charge-only models with synthetic consumption/economics, $400$\,kWh
+batteries, one $360$\,kW connector and used-bus fee $100$. They establish neither
+public V2G nor calibrated savings, prevalence or empirical road completeness.
+Section~\ref{sec:public} and Proposition~\ref{prop:exactenergydominance}
+give the full model, exact certificate scopes and extension conditions.

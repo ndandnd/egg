@@ -1,0 +1,219 @@
+{
+  "policy": "original-warm-eight-priors-direct-fixed-route-qp-v2",
+  "case": "scale:50601:80",
+  "seed": 17,
+  "complete": true,
+  "method_endpoint_accepted": true,
+  "qp_success": true,
+  "physical_witness_valid": true,
+  "config_failure": false,
+  "resource_violation": false,
+  "identity_failure": false,
+  "parent_anchor": 6118051.099847375,
+  "native_deadline": 6118103.099847375,
+  "admission_deadline": 6118111.099847375,
+  "failures": [],
+  "stages": [
+    {
+      "stage": "case_construction",
+      "wall_s": 0.0426082918420434,
+      "cpu_s": 0.04260799999999999,
+      "observed_peak_rss_bytes": 28311552
+    },
+    {
+      "stage": "target_market",
+      "wall_s": 1.3708136975765228e-05,
+      "cpu_s": 1.4000000000000123e-05,
+      "observed_peak_rss_bytes": 28311552
+    },
+    {
+      "stage": "load_prior_plan",
+      "wall_s": 0.0011362908408045769,
+      "cpu_s": 0.0007049999999999973,
+      "observed_peak_rss_bytes": 28508160
+    },
+    {
+      "stage": "load_prior_replay",
+      "wall_s": 0.0005670003592967987,
+      "cpu_s": 0.00037199999999999733,
+      "observed_peak_rss_bytes": 28622848
+    },
+    {
+      "stage": "independent_prior_replay",
+      "wall_s": 0.0648266663774848,
+      "cpu_s": 0.06482100000000002,
+      "observed_peak_rss_bytes": 42500096
+    },
+    {
+      "stage": "save_replayed_fallback",
+      "wall_s": 0.004735209047794342,
+      "cpu_s": 0.0036479999999999846,
+      "observed_peak_rss_bytes": 44761088
+    },
+    {
+      "stage": "one_direct_fixed_topology_qp",
+      "wall_s": 10.690759291872382,
+      "cpu_s": 10.394912999999999,
+      "observed_peak_rss_bytes": 563707904
+    },
+    {
+      "stage": "save_qp_stats",
+      "wall_s": 0.0006078751757740974,
+      "cpu_s": 0.0005820000000014147,
+      "observed_peak_rss_bytes": 563707904
+    },
+    {
+      "stage": "independent_qp_candidate_replay",
+      "wall_s": 0.06716620735824108,
+      "cpu_s": 0.0671659999999985,
+      "observed_peak_rss_bytes": 563707904
+    }
+  ],
+  "native_calls": 1,
+  "case_identity": "f843b914f8bc53012a06e4966294d0c378c544ab5efc2f0c5571f134f02b52bb",
+  "target_market_identity": "99606cabdb5ee4a2b07c1ce851a8fe53be52f1cc010dc2508f58f2f749b1866a",
+  "fleet_count": 3,
+  "fallback_bill_exact": "970543302027814370639180475892651155047790929152279/730750818665451459101842416358141509827966271488",
+  "selected_source": "direct_qp",
+  "used_fallback": false,
+  "native_call_attempts": 1,
+  "qp_candidate_admitted": true,
+  "helper_failures": [],
+  "copy_contract": {
+    "passed": true,
+    "original_variables": 174028,
+    "original_physical_rows": 186614,
+    "copied_variables": 174028,
+    "copied_physical_rows": 186614,
+    "source_nonzeros": 1578205,
+    "read_back_nonzeros": 1578205,
+    "fixed_routing_binaries": 6221,
+    "continuous_unfixed_variables": 167807,
+    "linear_objective_terms": 110,
+    "diagonal_quadratic_terms": 30,
+    "mapping": "original var.idx equals copied Var.index, dense zero-based; all checked",
+    "bounds": "side-specific documented unbounded sentinels canonicalized; every other bound exact",
+    "bound_policy": "Gurobi-LB-le-minus1e20-negative-infinity-UB-ge1e20-positive-infinity",
+    "infinite_bound_count": 30,
+    "infinite_variable_count": 30,
+    "infinite_bound_examples": [
+      {
+        "original_index": 173998,
+        "original_name": "var(173998)",
+        "original_type": "C",
+        "copied_index": 173998,
+        "copied_name": "var(173998)",
+        "copied_type": "C",
+        "original_raw_bounds_repr": [
+          "0.0",
+          "1e+100"
+        ],
+        "copied_readback_bounds_repr": [
+          "0.0",
+          "inf"
+        ],
+        "original_canonical_tags_repr": "(('exact_value', 0.0), ('UB_positive_infinity', None))",
+        "copied_canonical_tags_repr": "(('exact_value', 0.0), ('UB_positive_infinity', None))",
+        "raw_bounds_exactly_equal": false,
+        "canonical_equal": true
+      },
+      {
+        "original_index": 173999,
+        "original_name": "var(173999)",
+        "original_type": "C",
+        "copied_index": 173999,
+        "copied_name": "var(173999)",
+        "copied_type": "C",
+        "original_raw_bounds_repr": [
+          "0.0",
+          "1e+100"
+        ],
+        "copied_readback_bounds_repr": [
+          "0.0",
+          "inf"
+        ],
+        "original_canonical_tags_repr": "(('exact_value', 0.0), ('UB_positive_infinity', None))",
+        "copied_canonical_tags_repr": "(('exact_value', 0.0), ('UB_positive_infinity', None))",
+        "raw_bounds_exactly_equal": false,
+        "canonical_equal": true
+      },
+      {
+        "original_index": 174000,
+        "original_name": "var(174000)",
+        "original_type": "C",
+        "copied_index": 174000,
+        "copied_name": "var(174000)",
+        "copied_type": "C",
+        "original_raw_bounds_repr": [
+          "0.0",
+          "1e+100"
+        ],
+        "copied_readback_bounds_repr": [
+          "0.0",
+          "inf"
+        ],
+        "original_canonical_tags_repr": "(('exact_value', 0.0), ('UB_positive_infinity', None))",
+        "copied_canonical_tags_repr": "(('exact_value', 0.0), ('UB_positive_infinity', None))",
+        "raw_bounds_exactly_equal": false,
+        "canonical_equal": true
+      },
+      {
+        "original_index": 174001,
+        "original_name": "var(174001)",
+        "original_type": "C",
+        "copied_index": 174001,
+        "copied_name": "var(174001)",
+        "copied_type": "C",
+        "original_raw_bounds_repr": [
+          "0.0",
+          "1e+100"
+        ],
+        "copied_readback_bounds_repr": [
+          "0.0",
+          "inf"
+        ],
+        "original_canonical_tags_repr": "(('exact_value', 0.0), ('UB_positive_infinity', None))",
+        "copied_canonical_tags_repr": "(('exact_value', 0.0), ('UB_positive_infinity', None))",
+        "raw_bounds_exactly_equal": false,
+        "canonical_equal": true
+      },
+      {
+        "original_index": 174002,
+        "original_name": "var(174002)",
+        "original_type": "C",
+        "copied_index": 174002,
+        "copied_name": "var(174002)",
+        "copied_type": "C",
+        "original_raw_bounds_repr": [
+          "0.0",
+          "1e+100"
+        ],
+        "copied_readback_bounds_repr": [
+          "0.0",
+          "inf"
+        ],
+        "original_canonical_tags_repr": "(('exact_value', 0.0), ('UB_positive_infinity', None))",
+        "copied_canonical_tags_repr": "(('exact_value', 0.0), ('UB_positive_infinity', None))",
+        "raw_bounds_exactly_equal": false,
+        "canonical_equal": true
+      }
+    ],
+    "physical_rows": "all stored coefficients/RHS/senses checked by original index, no tolerance",
+    "objective": "original ops+a*load linear expression plus .5*b*load^2; sparse read-back checked",
+    "original_cffi_variables_retained": true,
+    "text_round_trip": false,
+    "extraction_view": "raw .x-only values for x/charge/loads; compiled/model metadata unchanged"
+  },
+  "objective_exact": "918095730135038012569562644695847223838486228803347/730750818665451459101842416358141509827966271488",
+  "objective": 1256.373180411524,
+  "stop_signal": null,
+  "resources": {
+    "self_cpu_s": 10.72649,
+    "waited_children_cpu_s": 0.0,
+    "combined_cpu_s": 10.726493,
+    "observed_peak_rss_bytes": 563707904,
+    "scope": "through receipt preparation; external meter includes publication/exit"
+  },
+  "elapsed_before_receipt_s": 11.026071790605783,
+  "method_success": true
+}

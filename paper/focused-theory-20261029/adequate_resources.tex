@@ -1,0 +1,126 @@
+\section{A separate adequate-resource specialization}\label{app:adequate_resources}
+We next study a different hardware policy in which the complete assignment set has an exact
+energy projection. There are $n\ge1$ mandatory depot-to-depot services
+$A_i$ occupying $[0,1]$ and $n$ mandatory services $B_j$ occupying $[2,3]$.
+Their consumptions are $a_i$ and $b_j$, with
+\begin{equation}\label{eq:batchassumptions}
+ 0<a_i\le20,\qquad0<b_j\le20,\qquad a_i+b_j\le30
+ \quad\text{for every }i,j.
+\end{equation}
+Every A-to-B assignment is allowed, without movement time, energy or cost.
+At most $2n$ identical buses may be used. Each has capacity 20 kWh,
+starts full and returns full by hour 4. Its operating fee is strictly
+positive, $f>0$.
+
+Early charging in $[1,2]$ uses $n$ connectors of 10 kW each and an
+aggregate grid limit of $10n$ kW. Terminal charging in $[3,4]$ uses $n$
+connectors of 30 kW each and an aggregate grid limit of $30n$ kW. Per-bus
+acceptance matches those connector powers. There is no other charging,
+reserve, loss, taper or switching time. The grid limits are part of the
+assumption: connector counts alone would not establish the simultaneous
+allocation used below.
+
+Since the services in each batch are simultaneous and have positive duration,
+a bus can cover at most one A and one B. Thus a complete assignment is a
+partial bipartite matching $M$. A matched pair uses one bus; unmatched
+services each use a separate bus. All crossmatchings and all cardinalities
+$m=0,\ldots,n$ are retained.
+
+Define
+\begin{align}
+ S&=\sum_i a_i+\sum_j b_j,&u_i&=\min\{a_i,10\},&U&=\sum_i u_i,\\
+ r_{ij}&=[a_i+b_j-20]_+,&
+ r_m&=\min_{|M|=m}\sum_{(i,j)\in M}r_{ij},&c_m&=f(2n-m),
+\end{align}
+where $r_0=0$. The edge cost $r_{ij}$ is the minimum early purchase
+needed by a bus covering $A_i$ then $B_j$. The thresholds $r_m$ are
+minimum-cost cardinality-matching values, not samples from a plan bank.
+
+\begin{theorem}[Exact heterogeneous fleet projection]\label{thm:batchprojection}
+Under \eqref{eq:batchassumptions} and the stated resources, including $f>0$,
+the complete physical projection is exactly
+\begin{equation}\label{eq:batchprojection}
+ \bigcup_{m=0}^n\{(E,S-E,c_m):r_m\le E\le U\}.
+\end{equation}
+The thresholds are nondecreasing and discretely convex:
+\begin{equation}\label{eq:discreteconvex}
+ 0\le r_1-r_0\le r_2-r_1\le\cdots\le r_n-r_{n-1}.
+\end{equation}
+Let $m_0=\max\{m:r_m=0\}$. The lowest operating-cost boundary of the
+complete-plan hull is the affine interpolant through
+$(r_m,c_m)$ for $m=m_0,\ldots,n$, followed by the horizontal segment
+$c_n$ on $[r_n,U]$.
+\end{theorem}
+
+The physical part of the theorem is the battery and connector argument.
+A bus that has served $A_i$ can buy any $x_i\le u_i$ early; pairing it
+with $B_j$ adds the lower bound $x_i\ge r_{ij}$. There are exactly $n$
+A buses, so their individual charge intervals can be allocated simultaneously.
+Terminal replenishment fits by grouping each matched bus alone and each
+unmatched A/B pair together on one connector. The discrete-convexity step
+uses standard bipartite min-cost-flow integrality and convex LP value
+functions. It is not a new matching theorem. The complete proof is in
+Appendix~\ref{app:heterogeneous}.
+
+Use the same scaled supply family as the later replication calculation:
+\begin{equation}\label{eq:batchsupply}
+ F_n(E,L)=4E+\frac{E^2+L^2}{10n},\qquad
+ G(E)=F_n(E,S-E),\qquad E_0=\frac{S-20n}{2}.
+\end{equation}
+Strict convexity makes the hull minimizing early load $E^*$ unique.
+
+\begin{theorem}[A complete support criterion for the two-batch class]
+\label{thm:batchsupport}
+For strictly positive fee $f>0$ under Theorem~\ref{thm:batchprojection},
+\begin{equation}\label{eq:batchzero}
+ D=\CH\quad\Longleftrightarrow\quad
+ E^*\in\{r_m:m=m_0,\ldots,n\}\cup[r_n,U].
+\end{equation}
+The gap is strictly positive exactly when $E^*$ lies strictly inside an
+adjacent threshold interval $(r_{j-1},r_j)$, $j>m_0$.
+If $d_j=r_j-r_{j-1}>0$, an intermediate threshold $r_m$ minimizes the
+hull objective exactly when
+\begin{equation}\label{eq:batchvertex}
+ \frac{f}{d_{m+1}}\le G'(r_m)\le\frac{f}{d_m},
+ \qquad m_0<m<n.
+\end{equation}
+\end{theorem}
+
+The criterion includes weak support at ties. A threshold is physical, but
+an interior point between consecutive thresholds interpolates operating
+costs that no fleet at that early load can attain. Collinear adjacent
+segments do not erase the intervening physical threshold. If $f=0$,
+the conclusion about strict interiors would fail: the zero-matching
+branch realizes every early load at zero operating cost, so the gap is
+always zero. Strict positivity of the fee is therefore substantive.
+
+The values themselves require only matching thresholds and scalar convex
+minimizations. With $\clamp(v;\ell,u)=\min\{u,\max\{\ell,v\}\}$,
+\begin{equation}\label{eq:batchD}
+ D=\min_{0\le m\le n}\{c_m+G(\clamp(E_0;r_m,U))\}.
+\end{equation}
+For each sloping hull edge $j>m_0$, evaluate its objective at
+\begin{equation}\label{eq:batchh}
+ h_j=\clamp\left(E_0+\frac{5nf}{2d_j};r_{j-1},r_j\right).
+\end{equation}
+Compare these values with the minimum on the final horizontal segment.
+Their minimum is $\CH$. If $m_0=n$, that horizontal segment alone
+remains and $D=\CH$.
+
+
+The separate eight-case exact qualification of this hardware policy matched
+raw SOC enumeration against its threshold formulas in all eight fixed cases,
+including assignment ties and continuous response sets. All eighteen negative
+controls and the smoke anchor passed. This is an internal implementation
+qualification of the stated $n$-connector policy, not the fixed single-connector
+model or an operational prevalence estimate.
+
+For the main-text example in \eqref{eq:heteroexample}, the adequate-resource
+policy also gives $U=15$ and the same cost-labelled projection. Its zero-early
+endpoint has terminal demands 19, 15 and 15, fitting two 30 kW connectors by
+serially grouping the last two demands. Its crossed full matching buys 9 early
+on the 15-energy A bus and replenishes both buses by 20 terminally. These are
+witnesses for this separate hardware policy. The main text supplies new serial
+realizations at early power 15 and terminal power 49; the parallel witness
+timings here are not reused as single-connector schedules. Individual allocation
+sets can differ even when the joint load--cost projections coincide.

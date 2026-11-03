@@ -1,0 +1,7 @@
+# V4 bounded launch review
+
+**Disposition: no launch blocker found.** The package pins the admitted 128-group TRAIN pool, four grouped folds and three seeds (80 fit / 16 inner / 32 outer groups per task), and retains fit-only preprocessing and the frozen feature, weighting, and model settings. The only prospective changes are the MLP epoch cap and HistGBDT candidate grid. Both selections use inner log loss; their selection receipts are saved before outer arrays are accessed for evaluation. The loader materializes the admitted rows earlier, as disclosed in the corrected protocol, but outer labels are not used for fitting or selection.
+
+The old 300-epoch MLP and 200-tree settings are preserved as diagnostics. A synthetic fixture confirms the first 300 MLP epochs match the frozen implementation; this is not yet an actual-pool anchor comparison. The 200-tree candidate is retained in the tree grid and progress artifacts. Inner progress and candidate models are hashed, handled failures receive typed receipts, task outputs are exclusive with no retry, and the wrapper requests one CPU, 8 GB, 30 minutes, a 1700-second child cap, one numerical thread, no requeue, and excludes `scaglione-compute-01`.
+
+Sol reports five focused synthetic tests passed and no real-bank fit has run. Any claim that the extended budget improves held-out performance should wait for the completed receipts and a comparison against the frozen 300/200 anchors on identical fold inputs.

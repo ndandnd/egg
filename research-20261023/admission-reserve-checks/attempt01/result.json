@@ -1,0 +1,96 @@
+{
+  "attempt_id": "attempt01",
+  "revision": 2,
+  "returncode": 1,
+  "failure": {
+    "error_type": "RuntimeError",
+    "error": "Pytest exited with return code 1",
+    "context": "pytest_exit",
+    "command": null,
+    "timeout_s": null,
+    "sample_deadline": null
+  },
+  "secondary_errors": [],
+  "termination": {
+    "owned_pgids": [
+      53048,
+      53073,
+      53109
+    ],
+    "leader_returncode": 1,
+    "reaped": true,
+    "group_absent": true,
+    "surviving_pgids": [],
+    "group_states": [
+      {
+        "pgid": 53048,
+        "state": "absent"
+      },
+      {
+        "pgid": 53073,
+        "state": "absent"
+      },
+      {
+        "pgid": 53109,
+        "state": "absent"
+      }
+    ],
+    "probe_diagnostics": [],
+    "cleanup_errors": [],
+    "cleanup_deadline": 6009916.423430958,
+    "helper_result": {
+      "pgid": 53048,
+      "owned_pgids": [
+        53048,
+        53073,
+        53109
+      ],
+      "group_absent": true,
+      "returncode": 1,
+      "probe_diagnostics": [],
+      "cleanup_errors": [],
+      "group_states": [
+        {
+          "pgid": 53048,
+          "state": "absent"
+        },
+        {
+          "pgid": 53073,
+          "state": "absent"
+        },
+        {
+          "pgid": 53109,
+          "state": "absent"
+        }
+      ],
+      "cleanup_deadline": 6009916.423430958
+    }
+  },
+  "source_changes": [],
+  "passed": false,
+  "sampled_peak_rss_bytes": 101679104,
+  "elapsed_allocation_s": 2.6085520423948765,
+  "sampled_process_tree_cpu_s": 0.56,
+  "observed_children_cpu_s": 2.0255929999999998,
+  "monitor_child_cpu_s": 1.3772810000000002,
+  "charged_allocation_s": 2.6085520423948765,
+  "supervisor_cpu_s": 0.457334,
+  "charged_cpu_s": 3.0658860423948764,
+  "accounting_observations_complete": true,
+  "stdout_sha256": "54637d8b6c96285ee5651a71a4ab480614e68a7feeee0018bbc4c8f9c968a669",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "artifact_hashes": {
+    "attempt.json": "21e0b53f0a0f8fa11a5da07249889c386ef881890a6a63ef1f6a8a070890bdfe",
+    "owned-test-groups.jsonl": "93dc58deb51a6c9bc9d1075dc27cf7d4b7c24a41e09ca29338a85e20184f3437",
+    "ownership.jsonl": "32616d9083fdf7bbe12f9efaad211af37174574ed64fcdcd6a7725d315f93550",
+    "resources.jsonl": "5209206931ea46cd405e3cb7819c0974e0871057d281401dda7de1dfb2200672",
+    "stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdout.log": "54637d8b6c96285ee5651a71a4ab480614e68a7feeee0018bbc4c8f9c968a669"
+  },
+  "cumulative_qualification_charge_s": 915.958148670185,
+  "administration_scope": "No new allowance; prior single shared 20 seconds already included",
+  "hard_ceiling_s": 1800.0,
+  "dispatch_stop_s": 1620.0,
+  "shutdown_reserve_s": 180.0,
+  "scope": "One admission-reserve solver-free check; no freeze or native launch follows automatically"
+}

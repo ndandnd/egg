@@ -1,0 +1,46 @@
+{
+  "policy": "comparison-native-preflight-v1",
+  "passed": false,
+  "planned": 2,
+  "terminal": 1,
+  "rows": [
+    {
+      "task": {
+        "arm": "cf1",
+        "base_id": 50999,
+        "trips": 80,
+        "seed": 17,
+        "seconds": 60.0,
+        "fault": null,
+        "id": "61577e6156a9296d7ae3"
+      },
+      "issues": [
+        "worker_failure",
+        "worker_engineering_failure",
+        "native_partial_start_processing_unobserved",
+        "cf1_fixed_capture_unverified",
+        "cf1_charging_path_unexercised"
+      ],
+      "endpoint_wall_s": 57.075134666636586,
+      "censored": false,
+      "native": {
+        "submitted": 0,
+        "classified": [],
+        "unattributed_log_matches": []
+      },
+      "fallback_bill_exact": "2474469300669776790102822052892375824920881975301995/730750818665451459101842416358141509827966271488",
+      "selected_bill_exact": "2474469300669776790102822052892375824920881975301995/730750818665451459101842416358141509827966271488"
+    }
+  ],
+  "issues": [
+    "61577e6156a9296d7ae3:worker_failure",
+    "61577e6156a9296d7ae3:worker_engineering_failure",
+    "61577e6156a9296d7ae3:native_partial_start_processing_unobserved",
+    "61577e6156a9296d7ae3:cf1_fixed_capture_unverified",
+    "61577e6156a9296d7ae3:cf1_charging_path_unexercised",
+    "undispatched:eb4d0da1295ea58592ff"
+  ],
+  "cumulative_before_analysis_tail_s": 1389.7788527992352,
+  "package_cap_s": 1526.29257734018,
+  "scope": "two engineering80 preflight paths only; no comparative quality/optimality/generalization claim"
+}

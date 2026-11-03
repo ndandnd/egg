@@ -1,0 +1,82 @@
+{
+  "base_groups": 8,
+  "complete_groups_all_tariffs": 7,
+  "continuation_job_id": "709011",
+  "continuation_receipted_child_seconds": 107.67477200645953,
+  "continuation_wrapper_elapsed_seconds": 149,
+  "dataset_receipt_sha256": "c9ed1e67356812e60a5986153227029d8eb15e98e2799a0ef87a56284be671d7",
+  "distinct_replayed_source_topologies": 11,
+  "exact_zero_margins": 14,
+  "groups_equal_full_source_plan": 0,
+  "groups_equal_source_topology": 5,
+  "health_sha256": "c2c6d498bc24a3c7db782858867271dd3c87f28be6e88637e44bf38b0bbbacc5",
+  "informative_pairs": [
+    {
+      "base_group": "physical_v2_s10003",
+      "margin_approx": 0.9750414266117984,
+      "margin_exact": "712512320729301344664803245349343304574577295009/730750818665451459101842416358141509827966271488",
+      "tariff": "late",
+      "winner": "source0"
+    },
+    {
+      "base_group": "physical_v2_s10003",
+      "margin_approx": 1.463531687242798,
+      "margin_exact": "33421155581109501735852950955383859981364189165/22835963083295358096932575511191922182123945984",
+      "tariff": "day",
+      "winner": "source1"
+    },
+    {
+      "base_group": "physical_v2_s10003",
+      "margin_approx": 0.5859127572016588,
+      "margin_exact": "107039056747911012312714462423876903419153972771/182687704666362864775460604089535377456991567872",
+      "tariff": "flat",
+      "winner": "source0"
+    }
+  ],
+  "model_fit_performed": false,
+  "next_unchanged_training_shard": {
+    "base_ids": [
+      10008,
+      10009,
+      10010,
+      10011,
+      10012,
+      10013,
+      10014,
+      10015
+    ],
+    "cpu": 1,
+    "index": 1,
+    "memory_gb": 8,
+    "planned_cells": 64,
+    "slurm_seconds": 7200
+  },
+  "nonzero_margins_at_or_below_tie_tolerance": 6,
+  "objective_scope": "Observed curved bill of replayed fixed-route linear-tariff LP procedure; no global curved optimum claim",
+  "paired_comparisons_eligible": 23,
+  "paired_comparisons_excluded": 1,
+  "paired_comparisons_intended": 24,
+  "parent_job_id": "703461",
+  "parent_receipted_child_seconds": 667.823461072112,
+  "parent_slurm_elapsed_seconds": 713,
+  "schema": "physical-learning-shard00-derived-evidence-v1",
+  "source_cells_replayed": 16,
+  "source_native_status_counts": {
+    "budget_exhausted": 13,
+    "certified": 3
+  },
+  "source_paid_child_seconds": 558.8045142570045,
+  "target_cells_intended": 48,
+  "target_cells_replayed": 47,
+  "target_cells_unreceipted_censored": 1,
+  "target_native_status_counts": {
+    "OPTIMAL": 47,
+    "not_reported": 1
+  },
+  "target_paid_child_seconds": 216.69371882156702,
+  "winner_counts": {
+    "source0": 2,
+    "source1": 1,
+    "tie": 20
+  }
+}

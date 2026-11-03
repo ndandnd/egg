@@ -1,0 +1,67 @@
+{
+  "status": "COMPLETED",
+  "assigned": [
+    "Q0",
+    "PRICE_LP",
+    "PRICE_MIP"
+  ],
+  "rows": [
+    {
+      "id": "Q0",
+      "status": "DELIVERED",
+      "qualification_status": "PASS"
+    },
+    {
+      "id": "PRICE_LP",
+      "status": "DELIVERED",
+      "native_allowance_s": 60,
+      "summary": {
+        "optimize_called": true,
+        "raw_status": 2,
+        "solution_count": 1,
+        "raw_objective": 454.3299137110159,
+        "raw_bound": 454.3299137110159,
+        "raw_gap": null,
+        "native_start_acceptance": "UNKNOWN",
+        "exact_certificate_status": "CERTIFIED_LOWER_BOUND",
+        "status": "SUPPORT_UNRESOLVED",
+        "private_score": "8322363609579749808264368038867387883554061441681563/17538019647970835018444217992595396235871190515712",
+        "response_lower": "294876972898760858449654396930031863/649037107316853453566312041152512",
+        "own_price_regret_upper": "354316657977754309301392179036400291054636324997275/17538019647970835018444217992595396235871190515712",
+        "exact_support_equality": false
+      },
+      "stage_elapsed_s": 4.956697000190616,
+      "complete_allowance_s": 150,
+      "stage_clock_scope": "build, solve, exact checking/screen and completed gzip output"
+    },
+    {
+      "id": "PRICE_MIP",
+      "status": "DELIVERED",
+      "native_allowance_s": 180,
+      "summary": {
+        "optimize_called": true,
+        "raw_status": 2,
+        "solution_count": 3,
+        "raw_objective": 461.8026316095547,
+        "raw_bound": 461.8026316095547,
+        "raw_gap": 0.0,
+        "native_start_acceptance": "UNKNOWN",
+        "strict_pass": false,
+        "physical_strict_pass": false
+      },
+      "stage_elapsed_s": 4.598978416994214,
+      "complete_allowance_s": 270,
+      "stage_clock_scope": "build, solve, exact checking/screen and completed gzip output"
+    }
+  ],
+  "fatals": [],
+  "all_assigned_timely": true,
+  "resource_pass": true,
+  "elapsed_s": 10.009905749931931,
+  "cpu_s": 9.86605,
+  "peak_rss_bytes": 309067776,
+  "own_price_regret_lower": "0",
+  "own_price_regret_upper": "354316657977754309301392179036400291054636324997275/17538019647970835018444217992595396235871190515712",
+  "exact_bound_contradiction": false,
+  "scope": "Exact support only if global response lower equals certified private score; native statuses remain diagnostics"
+}

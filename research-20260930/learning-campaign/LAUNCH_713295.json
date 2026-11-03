@@ -1,0 +1,70 @@
+{
+  "array_job_id": "713295",
+  "submitted_at_utc": "2026-09-30T18:40:02Z",
+  "source_commit": "656405c510acffb2408e358379a62ab9c3b361ad",
+  "source_branch": "codex/journal-research-20260927",
+  "remote_checkout": "/home/nc437/egg-route-model-pilot-20260930",
+  "attempt_relative": "result/physical_learning/20260930-route-model-pilot",
+  "task_ids": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11
+  ],
+  "concurrent_task_limit": 4,
+  "protocol": "ROUTE_MODEL_TRAINING_PROTOCOL.md",
+  "resource_protocol": "PARALLEL_LEARNING_RESOURCE_PROTOCOL.md",
+  "review": "ROUTE_MODEL_LAUNCH_REVIEW.md",
+  "wrapper": "src/cluster/physical_route_model.sbatch",
+  "requested_per_task": {
+    "cpus": 1,
+    "memory_gb": 8,
+    "wall_seconds": 1800,
+    "native_threads": 1,
+    "requeue": false,
+    "excluded_nodes": [
+      "scaglione-compute-01"
+    ]
+  },
+  "shell_cap_seconds": 1700,
+  "dataset_receipt_sha256": "c9ed1e67356812e60a5986153227029d8eb15e98e2799a0ef87a56284be671d7",
+  "folds": 4,
+  "seeds": [
+    17,
+    29,
+    43
+  ],
+  "training_base_ids": [
+    10000,
+    10001,
+    10002,
+    10003,
+    10004,
+    10005,
+    10006,
+    10007
+  ],
+  "models": [
+    "constant",
+    "kind_frequency",
+    "linear",
+    "mlp16"
+  ],
+  "epochs": 240,
+  "learning_rate": 0.03,
+  "ridge": 0.001,
+  "hidden_units": 16,
+  "heldout_scope": "exploratory grouped internal cross-validation; no dev or sealed tests",
+  "launch_script_sha256": "214d2b25f2e92f3600bc6eba65950a48db63fdce36f20c981ff03fc8d4bb8900",
+  "submission_guard": ".submission-route-model-pilot/array_jobid.txt",
+  "observed_first_wave_successful": true,
+  "full_results_pending": true
+}

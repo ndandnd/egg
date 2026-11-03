@@ -1,0 +1,58 @@
+{
+  "actual_allocation": null,
+  "anchor_epoch": 300,
+  "array_job_id": 738226,
+  "fixed_training_groups": 128,
+  "input_manifest": "ROUTE_MODEL_GRAPH_BUDGET_V8_INPUTS.json",
+  "input_manifest_sha256": "a311eea9c81f9dcfaa36a41112d9a8a851482bbbb5664ac2dc9143ad928ee642",
+  "launch_helper_sha256": "c780f3f7ef0458554c84afb3adae54e69112bc6bc6457e38c85bb8faef4cfa83",
+  "max_epochs": 900,
+  "models": [
+    "mean_message",
+    "graph_attention"
+  ],
+  "original_allocated_cpu_seconds": 12,
+  "original_failed_array": 729522,
+  "original_failure": "Site Slurm profile read unset INCLUDE under nounset before probe or training.",
+  "pool_manifest_sha256": "d9aad5b5ea62fd82a8b4f6a3c20a95c57953ba12c7bf0949fa06004aa511c40d",
+  "preexisting_active_egg_jobs": [],
+  "protocol": "ROUTE_MODEL_GRAPH_BUDGET_V8_RECOVERY1_PROTOCOL.md",
+  "remote_hash_verification": {
+    "all_hashes_verified": true,
+    "file_count": 150,
+    "input_manifest_sha256": "a311eea9c81f9dcfaa36a41112d9a8a851482bbbb5664ac2dc9143ad928ee642",
+    "source_commit": "a19f0acc08adf4743cf24c9c82d0f4951f2f0bf3",
+    "total_bytes": 469546258,
+    "verified_at_utc": "2026-10-01T02:48:32.872145+00:00"
+  },
+  "remote_root": "/home/nc437/egg-route-graph-budget-20261001-v8-recovery1",
+  "resource_budget": {
+    "array": "0-11%4",
+    "automatic_retries": false,
+    "combined_requested_ceiling_cpus": 4,
+    "combined_requested_ceiling_memory_gb": 32,
+    "cpus_per_task": 1,
+    "excluded_node": "scaglione-compute-01",
+    "max_concurrent": 4,
+    "maximum_requested_cpu_hours": 12,
+    "memory_gb_per_task": 8,
+    "minutes_per_task": 60,
+    "native_threads": 1,
+    "no_requeue": true,
+    "node": "unicorn-cpu-75",
+    "tasks": 12
+  },
+  "result_path": "result/physical_learning/20261001-route-model128-graph-budget-v8-recovery1",
+  "review": "ROUTE_MODEL_GRAPH_BUDGET_V8_RECOVERY1_REVIEW.md",
+  "root_focused_tests": "9 passed in2.62s",
+  "source_commit": "a19f0acc08adf4743cf24c9c82d0f4951f2f0bf3",
+  "source_hashes": {
+    "research-20260930/learning-campaign/ROUTE_MODEL_GRAPH_BUDGET_V8_RECOVERY1_PROTOCOL.md": "5a1e507578c984ac82076a709bde9e8c41d11fb6fe2af81615fc7067061da01d",
+    "research-20260930/learning-campaign/ROUTE_MODEL_GRAPH_BUDGET_V8_RECOVERY1_REVIEW.md": "de04e415998f81788196a340085362e01b0dfc42451fb72759cd92b3c2c7a068",
+    "src/cluster/physical_route_graph_budget_v8_recovery1.sbatch": "19fb6bcb02a9b55e4310974bb1b1e61e8850a7f0576317087b2918c1f9a62b78",
+    "src/tests/test_physical_route_graph_budget_v8_recovery1.py": "b4c4802578ab61d439e0fb56e318fad66f1591b4536fb9043b2935692002d333"
+  },
+  "submission_guard": "No active EGG job; exclusive receipt directory created before one sbatch call. No postsubmission queue or outcome check.",
+  "submitted_at_utc": "2026-10-01T02:49:01Z",
+  "verified_v6_replay_sha256": "f2034510ef424b70200a075ac9e8d23bbefa51e54f1a21bf0563165fc458e9aa"
+}

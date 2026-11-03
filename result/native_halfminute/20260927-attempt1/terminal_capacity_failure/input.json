@@ -1,0 +1,105 @@
+{
+  "budget": {
+    "backend": "CBC",
+    "epsilon": 0.0001,
+    "max_rounds": 48,
+    "phase_seconds": 10,
+    "threads": 1,
+    "wall_seconds": 45
+  },
+  "case": {
+    "battery_kwh": 20,
+    "deadhead_cost_per_min": 0.0,
+    "depot": "D",
+    "efficiency": 1.0,
+    "graph_scope": "declared-movement-modes-only",
+    "market_edges_min": [
+      0,
+      60,
+      120
+    ],
+    "max_vehicles": 2,
+    "movements": [
+      {
+        "after": "A",
+        "before": null,
+        "depot_split": null,
+        "id": "out_A",
+        "kind": "pullout",
+        "legs": [
+          {
+            "arrive_min": 0,
+            "depart_min": 0,
+            "destination": "D",
+            "energy_kwh": 0.0,
+            "origin": "D"
+          }
+        ]
+      },
+      {
+        "after": null,
+        "before": "A",
+        "depot_split": null,
+        "id": "in_A",
+        "kind": "pullin",
+        "legs": [
+          {
+            "arrive_min": 60,
+            "depart_min": 60,
+            "destination": "D",
+            "energy_kwh": 0.0,
+            "origin": "D"
+          }
+        ]
+      }
+    ],
+    "name": "short_terminal",
+    "recharge_deadline_min": 120,
+    "reserve_kwh": 1,
+    "resources": [
+      {
+        "connectors": 0,
+        "end_min": 60,
+        "grid_kw": 0,
+        "per_bus_kw": 0,
+        "start_min": 0
+      },
+      {
+        "connectors": 1,
+        "end_min": 120,
+        "grid_kw": 10,
+        "per_bus_kw": 10,
+        "start_min": 60
+      }
+    ],
+    "terminal_open_min": 0,
+    "trips": [
+      {
+        "end_min": 60,
+        "end_place": "D",
+        "energy_kwh": 15.0,
+        "id": "A",
+        "start_min": 0,
+        "start_place": "D"
+      }
+    ],
+    "vehicle_cost": 7
+  },
+  "case_identity": "30f68698d447a14815a1f741a07ccf127202d72e9dc9e3ee46ed95bab101197f",
+  "expected_status": "infeasible",
+  "id": "terminal_capacity_failure",
+  "objective": "pricing",
+  "prices": [
+    1,
+    1
+  ],
+  "source_hashes": {
+    "doc/NATIVE_HALFMINUTE_QUALIFICATION_PROTOCOL_20260927.md": "bc18bc9d2dfced1b32401bab9ad052d835616e611f0c4d5db4a9fd9dc08a48f5",
+    "src/egglab/native_recharge.py": "0067123a7f71cc6e9c89e1262cdcbd612cafdcfc252e35bcfca7f1f54c45d0f3",
+    "src/experiments/native_halfminute_qualification.py": "1ca683c897828c7033d7d21862aae49aa25f0244c10e12abbd2c19065aa90c63",
+    "src/experiments/native_recharge_qualification.py": "200c5bec8e6f8c7f7e466ef045b439dceae9fa2b35984cc452d4d29471dfde1e",
+    "src/tests/test_native_halfminute.py": "deb6b9ca0ee029004cc01a6c68807f9d5c0ee717094b01d7a487bb808e3aaa5d",
+    "src/tests/test_native_recharge.py": "500ae0e1164511c4e677167038f5decccf809657dc2091e991f5d49a2c6d7bc9"
+  },
+  "target": null
+}

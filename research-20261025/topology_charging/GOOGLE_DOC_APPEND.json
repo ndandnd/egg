@@ -1,0 +1,32 @@
+{
+  "document_id": "1NmPC_qo_uOnA48dV6Ibhs3Pj9EgOD-oJTBuVi41p6bg",
+  "url": "https://docs.google.com/document/d/1NmPC_qo_uOnA48dV6Ibhs3Pj9EgOD-oJTBuVi41p6bg",
+  "tabId": "t.0",
+  "heading": "25 October 2026 — fixed-topology charging changes the target interpretation",
+  "start": 249019,
+  "end": 252221,
+  "body": "\n25 October 2026 — fixed-topology charging changes the target interpretation\nThe separately frozen pilot is complete: eight exposed FIT timetable groups (six different-route pairs and two same-route controls), with all 32 planned route-by-tariff calls attempted once and qualified. Each used the unchanged Method0/seed17 QP helper, one native thread and one optimize call, with original physics, copied-row/objective checks, physical replay and the parent-owned inclusive clock. No retry, replacement, model fit or relabeling occurred. Source/protocol commit e637b623 was pushed before launch.\nAll eight stored full-schedule pairs originally had own-tariff preference reversals. After independently reoptimizing charging, three of the six genuinely different route pairs had candidate-cost differences of at most 1.3e-14 generator cost units at either tariff. One pair (10018) retained a numerical reversal: route1 minus route0 was +0.144435 under source0 and -1.439997 under source1. In two pairs (10010 and 10015), source0's topology was numerically cheaper under both tariffs. Both same-route controls had exactly equal represented candidate costs at each tariff. This is numerical point evidence, not a proof of exact ties or ideal route ordering.\nWithin-group mean charging improvements over the four original witness-by-tariff valuations ranged from 2.2278% to 11.8043% of the same fixed original-witness mean electricity cost Ebar. These are charging-recourse diagnostics, not learned gains or percentages of optimized bills. Absolute costs and fleet/deadhead/linear and quadratic electricity/energy components remain in the receipts. These eight TRAIN groups have 20/28 trips and do not causally explain the separate 40/80-trip warm study.\nAll 32 calls returned native OPTIMAL and admitted new physical candidates; 30 candidate route collections were directly compared, while two candidates were admitted but the slightly cheaper original fallback was retained. Those two route identities use the prospectively reviewed unique-path source inference, not a claimed caller replay of an unreturned candidate. There were no beyond-source-envelope candidate/fallback discrepancies. Native bound attributes were finite in all 32 cells, but their numerical meaning was not converted into a justified exact physical optimization-gap interval. Mathematical route ordering therefore remains unresolved; the earlier 1e-6 fixed-column reporting band was not repurposed as QP accuracy evidence.\nThe scientific concession is that different binary route labels and coherent full-schedule price reversals need not identify valuable price-responsive routing once charging is optimized competently. We should not automatically train more models on these labels or interpret them as decision value. The next question concerns which route-dependent feasible charging/load opportunities create material value under a prospectively fixed resource regime, with classical controls retained. The earlier failed learned-increment margin remains unchanged. This pilot and its bounded readouts used 18.87 displayed CPU seconds and 20.70 elapsed-sum seconds; all historical charges and unknown review CPU remain preserved.\n",
+  "revisionId": "AHj4eMS8ewzDajMDYAdTuUM3QeugQrg1x1ZPO5zdO8ViO86UyZAkcZ3cD9V1T4HCNjH5x00T2bUCm1vpYl0cWNW3iH7xLfjcZHPhmpctfss",
+  "exact_full_text_readback_verified": true,
+  "image_IDs_before": [
+    "kix.14qgnlc7qzhp",
+    "kix.1g4t8u3qmu8n",
+    "kix.4yuqnp8k08fl",
+    "kix.fe5jxkrgnniq",
+    "kix.rgy6ary7miii",
+    "kix.shpddc4n4xg",
+    "kix.uffmv89uhby0",
+    "kix.xjlr68pn1mfz"
+  ],
+  "image_IDs_after": [
+    "kix.14qgnlc7qzhp",
+    "kix.1g4t8u3qmu8n",
+    "kix.4yuqnp8k08fl",
+    "kix.fe5jxkrgnniq",
+    "kix.rgy6ary7miii",
+    "kix.shpddc4n4xg",
+    "kix.uffmv89uhby0",
+    "kix.xjlr68pn1mfz"
+  ],
+  "prior_history_untouched": true
+}

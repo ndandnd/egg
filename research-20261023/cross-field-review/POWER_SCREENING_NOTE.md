@@ -1,0 +1,15 @@
+# Certified power screening: bounded follow-up
+
+Research date: 2026-10-23. No compute, training or commits.
+
+**Verdict: a conservative mathematical certificate within its stated model, not merely empirical reliability.**
+
+Verified source: Nicolas Christianson, Wenqi Cui, Steven Low, Weiwei Yang and Baosen Zhang, *Fast and Reliable N-k Contingency Screening with Input-Convex Neural Networks*, arXiv:2410.00796v1, 1 October 2024. [Primary paper](https://arxiv.org/html/2410.00796); [bibliographic record](https://arxiv.org/abs/2410.00796). Access: full HTML opened, especially Sections 2–4, proofs and Section 5 preprocessing; no reproduction.
+
+The classifier’s accepted region is a convex ICNN sublevel set. Section 3 certifies containment in `F={x:Ax<=b}` by maximizing each row `a_j x` over that sublevel set. Scaling/translation enforces containment. Thus predicted feasible implies model-feasible; predicted infeasible may be conservative. Assumptions include linear DC-flow limits, a fixed non-islanding contingency collection, nonzero constraint rows, origin strictly inside `F`, bounded predicted region for scaling feasibility, and ICNN convexity. Offline work still checks every represented row. Section 5 excludes islanding and contingencies infeasible over 90% of samples and uses a bounded injection domain. Its benchmark therefore does not cover every conceivable contingency. The certificate is model/set-specific; it is not an AC stability guarantee.
+
+**EGG inference and reuse limits.** This is a strong pattern for compressing many fixed linear constraints into a certified sufficient acceptance rule. A candidate application is a repeated continuous charging subproblem **after routes, vehicle presence and charging availability have been fixed**, provided its feasible inputs admit a known polyhedral description and the containment verification covers all relevant constraints. Equality constraints require a suitable reduced coordinate space; EGG should not assume a full-dimensional interior around zero when service or energy requirements exclude zero.
+
+It does not directly certify that a selected edge graph admits an integral route-and-charge completion. An inner approximation of an LP relaxation remains only sufficient for LP feasibility, not integer feasibility. Also distinguish screening directions: this paper certifies acceptance, whereas EGG hard pruning needs proof that excluded edges cannot support an acceptable solution. Conservative rejection could discard valuable EGG completions. Retain the full completion optimizer and fallback outside the accepted region.
+
+A bounded prospective test would compare a certified continuous charging acceptance region against direct checks on fixed routes; measure false acceptance, abstention and amortized time including offline certification. Numerical implementation should use certified upper bounds/tolerances for support-function checks and revalidate the final exported network after parameter changes. Changing topology, limits or the covered contingency set requires renewed certification. No global optimality bound or integral price-support theorem follows.

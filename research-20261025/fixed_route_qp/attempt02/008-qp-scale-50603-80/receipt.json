@@ -1,0 +1,225 @@
+{
+  "policy": "original-warm-eight-priors-direct-fixed-route-qp-v2",
+  "case": "scale:50603:80",
+  "seed": 17,
+  "complete": true,
+  "method_endpoint_accepted": true,
+  "qp_success": false,
+  "physical_witness_valid": true,
+  "config_failure": false,
+  "resource_violation": false,
+  "identity_failure": false,
+  "parent_anchor": 6118075.54872,
+  "native_deadline": 6118127.54872,
+  "admission_deadline": 6118135.54872,
+  "failures": [],
+  "stages": [
+    {
+      "stage": "case_construction",
+      "wall_s": 0.04180154111236334,
+      "cpu_s": 0.041797999999999995,
+      "observed_peak_rss_bytes": 28737536
+    },
+    {
+      "stage": "target_market",
+      "wall_s": 2.262461930513382e-05,
+      "cpu_s": 2.1999999999994246e-05,
+      "observed_peak_rss_bytes": 28737536
+    },
+    {
+      "stage": "load_prior_plan",
+      "wall_s": 0.0010094158351421356,
+      "cpu_s": 0.0006680000000000019,
+      "observed_peak_rss_bytes": 29212672
+    },
+    {
+      "stage": "load_prior_replay",
+      "wall_s": 0.0004063751548528671,
+      "cpu_s": 0.00022300000000000098,
+      "observed_peak_rss_bytes": 29376512
+    },
+    {
+      "stage": "independent_prior_replay",
+      "wall_s": 0.0629352917894721,
+      "cpu_s": 0.06293500000000002,
+      "observed_peak_rss_bytes": 41254912
+    },
+    {
+      "stage": "save_replayed_fallback",
+      "wall_s": 0.0034347083419561386,
+      "cpu_s": 0.003253999999999979,
+      "observed_peak_rss_bytes": 45154304
+    },
+    {
+      "stage": "one_direct_fixed_topology_qp",
+      "wall_s": 10.533146666362882,
+      "cpu_s": 10.240982,
+      "observed_peak_rss_bytes": 525926400
+    },
+    {
+      "stage": "save_qp_stats",
+      "wall_s": 0.0005590841174125671,
+      "cpu_s": 0.0005439999999978795,
+      "observed_peak_rss_bytes": 525926400
+    },
+    {
+      "stage": "independent_qp_candidate_replay",
+      "wall_s": 0.06527370866388083,
+      "cpu_s": 0.06526999999999994,
+      "observed_peak_rss_bytes": 525926400
+    }
+  ],
+  "native_calls": 1,
+  "case_identity": "c4550d0dcc048b21732f5f5dfffa7b6da07d988c40cdc6b967335d660137f145",
+  "target_market_identity": "58707450f9186223e99e7da36635b16d1c4418b9a4205f55efe509c47e78d8f7",
+  "fleet_count": 4,
+  "fallback_bill_exact": "259905773412623650250209642336747288406975125079045/182687704666362864775460604089535377456991567872",
+  "selected_source": "retained_prior",
+  "used_fallback": true,
+  "native_call_attempts": 1,
+  "qp_candidate_admitted": false,
+  "helper_failures": [
+    {
+      "stage": "unchanged_extraction",
+      "type": "ValueError",
+      "message": "Positive charge has no representable interval-contained session"
+    }
+  ],
+  "copy_contract": {
+    "passed": true,
+    "original_variables": 176226,
+    "original_physical_rows": 188572,
+    "copied_variables": 176226,
+    "copied_physical_rows": 188572,
+    "source_nonzeros": 1597919,
+    "read_back_nonzeros": 1597919,
+    "fixed_routing_binaries": 6132,
+    "continuous_unfixed_variables": 170094,
+    "linear_objective_terms": 110,
+    "diagonal_quadratic_terms": 30,
+    "mapping": "original var.idx equals copied Var.index, dense zero-based; all checked",
+    "bounds": "side-specific documented unbounded sentinels canonicalized; every other bound exact",
+    "bound_policy": "Gurobi-LB-le-minus1e20-negative-infinity-UB-ge1e20-positive-infinity",
+    "infinite_bound_count": 30,
+    "infinite_variable_count": 30,
+    "infinite_bound_examples": [
+      {
+        "original_index": 176196,
+        "original_name": "var(176196)",
+        "original_type": "C",
+        "copied_index": 176196,
+        "copied_name": "var(176196)",
+        "copied_type": "C",
+        "original_raw_bounds_repr": [
+          "0.0",
+          "1e+100"
+        ],
+        "copied_readback_bounds_repr": [
+          "0.0",
+          "inf"
+        ],
+        "original_canonical_tags_repr": "(('exact_value', 0.0), ('UB_positive_infinity', None))",
+        "copied_canonical_tags_repr": "(('exact_value', 0.0), ('UB_positive_infinity', None))",
+        "raw_bounds_exactly_equal": false,
+        "canonical_equal": true
+      },
+      {
+        "original_index": 176197,
+        "original_name": "var(176197)",
+        "original_type": "C",
+        "copied_index": 176197,
+        "copied_name": "var(176197)",
+        "copied_type": "C",
+        "original_raw_bounds_repr": [
+          "0.0",
+          "1e+100"
+        ],
+        "copied_readback_bounds_repr": [
+          "0.0",
+          "inf"
+        ],
+        "original_canonical_tags_repr": "(('exact_value', 0.0), ('UB_positive_infinity', None))",
+        "copied_canonical_tags_repr": "(('exact_value', 0.0), ('UB_positive_infinity', None))",
+        "raw_bounds_exactly_equal": false,
+        "canonical_equal": true
+      },
+      {
+        "original_index": 176198,
+        "original_name": "var(176198)",
+        "original_type": "C",
+        "copied_index": 176198,
+        "copied_name": "var(176198)",
+        "copied_type": "C",
+        "original_raw_bounds_repr": [
+          "0.0",
+          "1e+100"
+        ],
+        "copied_readback_bounds_repr": [
+          "0.0",
+          "inf"
+        ],
+        "original_canonical_tags_repr": "(('exact_value', 0.0), ('UB_positive_infinity', None))",
+        "copied_canonical_tags_repr": "(('exact_value', 0.0), ('UB_positive_infinity', None))",
+        "raw_bounds_exactly_equal": false,
+        "canonical_equal": true
+      },
+      {
+        "original_index": 176199,
+        "original_name": "var(176199)",
+        "original_type": "C",
+        "copied_index": 176199,
+        "copied_name": "var(176199)",
+        "copied_type": "C",
+        "original_raw_bounds_repr": [
+          "0.0",
+          "1e+100"
+        ],
+        "copied_readback_bounds_repr": [
+          "0.0",
+          "inf"
+        ],
+        "original_canonical_tags_repr": "(('exact_value', 0.0), ('UB_positive_infinity', None))",
+        "copied_canonical_tags_repr": "(('exact_value', 0.0), ('UB_positive_infinity', None))",
+        "raw_bounds_exactly_equal": false,
+        "canonical_equal": true
+      },
+      {
+        "original_index": 176200,
+        "original_name": "var(176200)",
+        "original_type": "C",
+        "copied_index": 176200,
+        "copied_name": "var(176200)",
+        "copied_type": "C",
+        "original_raw_bounds_repr": [
+          "0.0",
+          "1e+100"
+        ],
+        "copied_readback_bounds_repr": [
+          "0.0",
+          "inf"
+        ],
+        "original_canonical_tags_repr": "(('exact_value', 0.0), ('UB_positive_infinity', None))",
+        "copied_canonical_tags_repr": "(('exact_value', 0.0), ('UB_positive_infinity', None))",
+        "raw_bounds_exactly_equal": false,
+        "canonical_equal": true
+      }
+    ],
+    "physical_rows": "all stored coefficients/RHS/senses checked by original index, no tolerance",
+    "objective": "original ops+a*load linear expression plus .5*b*load^2; sparse read-back checked",
+    "original_cffi_variables_retained": true,
+    "text_round_trip": false,
+    "extraction_view": "raw .x-only values for x/charge/loads; compiled/model metadata unchanged"
+  },
+  "objective_exact": "259905773412623650250209642336747288406975125079045/182687704666362864775460604089535377456991567872",
+  "objective": 1422.6779732510288,
+  "stop_signal": null,
+  "resources": {
+    "self_cpu_s": 10.564438999999998,
+    "waited_children_cpu_s": 0.0,
+    "combined_cpu_s": 10.564441,
+    "observed_peak_rss_bytes": 525926400,
+    "scope": "through receipt preparation; external meter includes publication/exit"
+  },
+  "elapsed_before_receipt_s": 10.858996999450028,
+  "method_success": false
+}

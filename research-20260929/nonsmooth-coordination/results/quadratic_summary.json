@@ -1,0 +1,93 @@
+{
+  "protocol": "SUBGRADIENT_PROTOCOL.md",
+  "iterations": 20000,
+  "analytic_oracle_calls": 20000,
+  "loop_seconds": 0.039543832652270794,
+  "initialization": [
+    6,
+    4
+  ],
+  "step": "0.5/sqrt(k)",
+  "checkpoint_convention": "Before update, current and best dual separate",
+  "exact_reference": {
+    "CH": "7591/80",
+    "prices": [
+      "107/20",
+      "93/20"
+    ],
+    "one_bus_hull_weight": "27/40"
+  },
+  "pasted_price_current_dual": "371/4",
+  "checkpoints": [
+    {
+      "k": 1,
+      "price_early": 6.0,
+      "price_terminal": 4.0,
+      "dual_current": 84.0,
+      "dual_best": 84.0,
+      "buses": 2,
+      "fleet_early": 0.0,
+      "supply_early": 10.0,
+      "supply_terminal": 20.0,
+      "mismatch_l2": 14.142135623730951,
+      "one_bus_share": 0.0,
+      "one_bus_step_weighted_share": 0.0,
+      "mean_early": 0.0,
+      "step_weighted_mean_early": 0.0,
+      "switches": 0
+    },
+    {
+      "k": 100,
+      "price_early": 5.334958273810906,
+      "price_terminal": 4.665041726189094,
+      "dual_current": 94.78859751213714,
+      "dual_best": 94.88693898157365,
+      "buses": 1,
+      "fleet_early": 10.0,
+      "supply_early": 6.674791369054529,
+      "supply_terminal": 23.325208630945472,
+      "mismatch_l2": 4.702555143603157,
+      "one_bus_share": 0.6,
+      "one_bus_step_weighted_share": 0.5559123121781402,
+      "mean_early": 6.0,
+      "step_weighted_mean_early": 5.5591231217814,
+      "switches": 79
+    },
+    {
+      "k": 1000,
+      "price_early": 5.334829378278242,
+      "price_terminal": 4.665170621721758,
+      "dual_current": 94.78774021999142,
+      "dual_best": 94.88693898157365,
+      "buses": 1,
+      "fleet_early": 10.0,
+      "supply_early": 6.674146891391208,
+      "supply_terminal": 23.32585310860879,
+      "mismatch_l2": 4.7034665726552705,
+      "one_bus_share": 0.66,
+      "one_bus_step_weighted_share": 0.6329840810474688,
+      "mean_early": 6.6,
+      "step_weighted_mean_early": 6.329840810474674,
+      "switches": 679
+    },
+    {
+      "k": 20000,
+      "price_early": 5.341217321745262,
+      "price_terminal": 4.658782678254738,
+      "dual_current": 94.83002691415757,
+      "dual_best": 94.88749878122395,
+      "buses": 1,
+      "fleet_early": 10.0,
+      "supply_early": 6.706086608726309,
+      "supply_terminal": 23.29391339127369,
+      "mismatch_l2": 4.658296991221609,
+      "one_bus_share": 0.6682,
+      "one_bus_step_weighted_share": 0.6603150239350339,
+      "mean_early": 6.682,
+      "step_weighted_mean_early": 6.60315023935025,
+      "switches": 13271
+    }
+  ],
+  "last_60_switches": 38,
+  "scope": "Cheap analytic development replay; no fleet MIP or convergence proof"
+}

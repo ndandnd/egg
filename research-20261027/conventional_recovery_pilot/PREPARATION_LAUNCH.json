@@ -1,0 +1,16 @@
+{
+  "policy": "conventional-recovery-source-preparation-v1",
+  "mode": "FROZEN",
+  "review_disposition": "PASS",
+  "workdir": "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017",
+  "source_revision": "234668a879f31c3a49254adf6e313f8fbdfaa1a6",
+  "source_freeze_assumption": "parent-approved-frozen-commit",
+  "source_sha256": null,
+  "command": "/usr/bin/time -p .venv-local/bin/python -I -S -B research-20261027/conventional_recovery_pilot/prepare.py --source-revision 234668a879f31c3a49254adf6e313f8fbdfaa1a6 > research-20261027/conventional_recovery_pilot/preparation-console.txt 2> research-20261027/conventional_recovery_pilot/preparation-time.txt",
+  "budgets": {"cpu_s": 10, "wall_s": 20, "body_cpu_s": 6, "body_wall_s": 15},
+  "purpose": "One new metered source-only AST import closure preparation, inside preflight120CPU180wall and total5100CPU7800wall. Consumed buffers are cached and hashed once. No fixture generation, old bank or outcome, original data, project/native imports, or automatic retries.",
+  "namespace": "research-20261027/conventional_recovery_pilot/preparation01",
+  "control_version_rule": "The commit publishing frozen control is separate from the reviewed implementation revision. The metered preparation consumes and pins this control buffer once; no self-referential digest or repeated hash audit.",
+  "external_meter": "/usr/bin/time -p basic user plus system CPU and real elapsed, with observed RSS retained separately in the self receipt. Preparation cost adopted exactly once by main owner.",
+  "authorization": "Parent and focused integration review PASS. One isolated source-only preparation command in fresh preparation01 is authorized under NEW10CPU20wall (body6/15) inside preflight120/180 and package5100/7800. No project/native imports, generation or automatic retry. Main remains DRAFT/PENDING."
+}

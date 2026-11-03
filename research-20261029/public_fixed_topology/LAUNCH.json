@@ -1,0 +1,18 @@
+{
+  "status": "FROZEN",
+  "run_id": "attempt01",
+  "source_revision": "3278d50f8323618bd36809b1bbb1a0da081e23ff",
+  "package_cpu_s": 1200,
+  "package_wall_s": 1800,
+  "worker_cpu_s": 1100,
+  "worker_wall_s": 1600,
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 VECLIB_MAXIMUM_THREADS=1 NUMEXPR_NUM_THREADS=1 /usr/bin/time -p .venv-local/bin/python -I -B research-20261029/public_fixed_topology/run.py --run-id attempt01 > research-20261029/public_fixed_topology/process-time-and-owner.txt 2>&1",
+  "working_directory": "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017",
+  "environment": {"python": ".venv-local/bin/python -I -B", "gurobipy": "12.0.1", "native_threads": 1, "OMP_NUM_THREADS": "1", "OPENBLAS_NUM_THREADS": "1", "MKL_NUM_THREADS": "1", "VECLIB_MAXIMUM_THREADS": "1", "NUMEXPR_NUM_THREADS": "1"},
+  "pre_package_prefix": {"displayed_cpu_s": 22195.75, "elapsed_sum_s": 23079.93, "retained_cpu_s": 22196.76},
+  "inputs": [
+    {"id": "case", "revision": "253c1e29295e766b3889fc8f5c28d9808e00b3d6", "path": "research-20261029/public_support_resolution/attempt01/case_descriptor.json"},
+    {"id": "topology", "revision": "f8a043132863db5ce631d5691d35b5d788bdf256", "path": "research-20261029/public_energy_flow/attempt01/MIQP.json.gz"}
+  ],
+  "note": "Parent and independent source reviews completed; one fresh bounded dispatch. Runtime qualification remains pending. New fixed-topology charging construction; no old charging proposal reuse, automatic terminal retry, alternate face, or global optimum claim. All failures/dependent unattempted states retained."
+}

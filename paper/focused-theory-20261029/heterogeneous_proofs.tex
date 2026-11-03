@@ -1,0 +1,159 @@
+\section{Heterogeneous complete-assignment proofs}\label{app:heterogeneous}
+\begin{proof}[Proof of Theorem~\ref{thm:sharedprojection}]
+Complete assignments are precisely partial matchings in the declared graph
+$\Gamma$, with every unmatched service retaining a separate bus. For an
+allowed matching $M$, a bus serving A$_i$ has inventory $B-a_i$ before
+early charging. Headroom gives $0\le x_i\le a_i$; pairing B$_j$
+adds $x_i\ge[a_i+b_j-B]_+\le a_i$. An unmatched B bus is full
+throughout the early window. Summing these independent intervals gives
+$[R(M),\sum_i a_i]$. All A buses are present for the entire early
+window. At $K>0$ serial charging takes $E/K$ hours, so exactly
+$E\le K$ is required. When $K=0$, only zero early energy is possible.
+
+Every bus is present at hour 3. Its terminal demand is $a_i+b_j-x_i$
+if paired, $a_i-x_i$ if A-only, or $b_j$ if B-only. These quantities
+are nonnegative, individually no greater than $B$, and total $S-E$.
+At $H>0$ serial replenishment takes $(S-E)/H$ hours, giving precisely
+$S-E\le H$. At $H=0$ no positive terminal demand can be met.
+Monotone charging preserves inventory bounds and restores each bus full.
+Thus each matching has exactly interval $[\max\{L,R(M)\},U]$ when
+nonempty. Finite minima and a common upper endpoint give the stated
+cardinality union for $0\le m\le\nu$. Every such cardinality exists by
+deleting edges from a maximum allowed matching. Since the empty matching
+and every singleton option are retained, feasibility is exactly $L\le U$,
+also when $\nu=0$ or some vertices are isolated.
+
+Deleting an edge from a minimum size-$m$ matching gives
+$r_{m-1}\le r_m$. For discrete convexity, use the standard unit-capacity
+source--A--B--sink network containing only the allowed A--B edges, with
+their costs $r_{ij}$. Its fixed-flow LP is integral at integer flow values
+$m=0,\ldots,\nu$. The LP value is convex in required flow by duality,
+so $2r_m\le r_{m-1}+r_{m+1}$ for $1\le m<\nu$. This reasoning
+uses bipartiteness, not completeness or the sorted-energy shortcut.
+All thresholds at or below $L$ are dominated
+in cost by $m_0$. The first positive retained horizontal increment is
+$r_{m_0+1}-L$, no greater than $r_{m_0+1}-r_{m_0}$; later increments
+are the original nondecreasing matching increments. Hence frontier slopes
+$-f/\text{increment}$ are nondecreasing, followed by zero. Endpoints are
+physical and their interpolants are hull mixtures. Every physical branch
+lies above this convex graph, so every mixture does too. The graph is
+therefore exactly the lower hull boundary. Cardinalities above $m_{\max}$
+have empty physical intervals and supply no endpoint. Cardinalities above
+$\nu$ supply no matching at all. If $m_0=m_{\max}$, including the
+empty-graph case, only the physical horizontal segment remains.
+\end{proof}
+
+\begin{proof}[Proof of Corollary~\ref{cor:sharedsupport}]
+The convex frontier plus strictly convex continuous $G$ has one minimizing
+load. At $L$, at a retained threshold or on the final horizontal segment,
+a physical plan attains the frontier. Strictly between consecutive retained
+thresholds, its operating cost is strictly below that of every physical
+branch because $f>0$. No physical plan attains the hull minimizer; compactness
+of the finite union of physical segments gives $D>\CH$. This retains
+physical thresholds even on a larger collinear hull face. The mathematical
+value equivalence becomes a price-support equivalence only with the
+framework's separate qualifications.
+\end{proof}
+
+\begin{proof}[Proof of Corollary~\ref{cor:sortedmatching}]
+Under the corollary's complete-graph assumption, replacing a selected service
+by an unused smaller energy while keeping its
+partner cannot increase the coordinatewise nondecreasing edge cost. Thus
+some optimal size-$m$ matching uses the $m$ smallest energies in each batch.
+Let $h(t)=[t-B]_+$. For $a\le a'$ and $b\le b'$, monotonicity of
+the convex increment $h(t+a'-a)-h(t)$ gives
+\[
+ h(a+b)+h(a'+b')\ge h(a+b')+h(a'+b).
+\]
+Swapping any two partners ordered in the same increasing direction therefore
+cannot raise cost. Repeating exchanges yields opposite order and the stated
+sum. Ties and zero edge costs require no separate assumption.
+\end{proof}
+
+\begin{proof}[Proof of Theorem~\ref{thm:batchprojection}]
+Every bus serves at most one A and one B, so service assignments are exactly
+partial bipartite matchings. For a fixed matching $M$, let $x_i$ be the
+early purchase on the bus serving $A_i$. After that service it has inventory
+$20-a_i$. Capacity and early acceptance imply $0\le x_i\le u_i$.
+If matched to $B_j$, its inventory after B is $20-a_i+x_i-b_j$, giving
+$x_i\ge r_{ij}$. The assumptions imply $r_{ij}\le a_i$ and
+$r_{ij}\le10$, hence each interval is nonempty. An unmatched B bus
+starts full and has no earlier consumption, so it cannot accept early
+charge. The independent early intervals sum to exactly
+\[
+ \left[\sum_{(i,j)\in M}r_{ij},U\right].
+\]
+There are $n$ A buses and $n$ early connectors, with aggregate grid
+power $10n$, so every choice of these purchases is realizable.
+
+For terminal charging, a matched bus needs $a_i+b_j-x_i\le20$ kWh
+and fits alone on one connector. An unmatched A bus needs $a_i-x_i$;
+an unmatched B bus needs $b_j$. Group unmatched A and B buses arbitrarily;
+each group's sum is at most $a_i+b_j\le30$ and fits serially on one
+30 kW connector during the terminal hour. There are $m$ matched groups
+and $n-m$ unmatched groups. Aggregate power $30n$ allows all groups
+simultaneously. Every bus reaches its own full inventory without intermediate
+overcharge or energy deficit. Full replenishment fixes total purchase $S$.
+
+All size-$m$ matchings have the same operating cost and upper early endpoint
+$U$, and there are finitely many. Their interval union is $[r_m,U]$,
+proving the exact projection without restricting the matching set.
+
+Deleting one edge from a minimum size-$m$ matching proves
+$r_{m-1}\le r_m$. To prove discrete convexity, represent the bipartite
+matching as unit-capacity flow from a source through A and B vertices to
+a sink, charging edge cost $r_{ij}$. At integer required flow the LP is
+integral and has value $r_m$. Its value as a function of required flow is
+convex by LP duality, a supremum of affine functions. Therefore
+$2r_m\le r_{m-1}+r_{m+1}$.
+
+Nonnegative nondecreasing increments can vanish only in an initial block.
+After $m_0$, set $d_j=r_j-r_{j-1}>0$. The interpolant slopes
+$-f/d_j$ are nondecreasing, and the final slope zero is no smaller.
+The graph is convex and no higher than any physical horizontal branch;
+the earlier zero-threshold branches have strictly larger cost because $f>0$.
+Each interpolant edge is a convex combination of physical endpoints, and
+the final horizontal segment is physical. Thus its graph belongs to the
+hull. Conversely every physical point lies on or above this convex graph,
+and therefore so does every convex combination. This proves it is exactly
+the hull's lowest operating-cost boundary.
+\end{proof}
+
+\begin{proof}[Proof of Theorem~\ref{thm:batchsupport} and the value formulas]
+The hull boundary is convex; $G$ is strictly convex with derivative
+$G'(E)=2(E-E_0)/(5n)$. Their sum has a unique minimizing early load.
+At a threshold or on the final horizontal segment, a physical plan attains
+the hull boundary, so $D=\CH$. In an adjacent open threshold interval,
+the hull operating cost is strictly below the cheapest physical branch
+$c_{j-1}$, since $f>0$. No physical plan attains the unique hull-optimal
+projected point, and every other load has larger hull objective. The
+finite union of compact physical segments attains its minimum, proving
+$D>\CH$. Proposition~\ref{prop:support} supplies the support equivalence.
+
+At an intermediate threshold $r_m$, the objective's one-sided slopes are
+$G'(r_m)-f/d_m$ and $G'(r_m)-f/d_{m+1}$. Their signs straddle zero
+exactly under \eqref{eq:batchvertex}, including weak inequalities.
+Strict convexity on each physical branch gives \eqref{eq:batchD}.
+On a sloping hull edge its derivative is $G'(E)-f/d_j$, whose zero is
+$E_0+5nf/(2d_j)$. Clamping to the edge gives \eqref{eq:batchh}; the
+remaining horizontal segment minimizes $c_n+G$ directly. This covers
+the $m_0=n$ case without dividing by a zero threshold increment.
+\end{proof}
+
+\begin{proof}[Details of the heterogeneous example]
+The stated matrix gives $r_0=r_1=0$ and $r_2=9$. Physical minima for
+$m=0,1$ occur at $E=9/2$ and cost $5841/40$ and $5561/40$,
+respectively. For $m=2$, the minimum is the endpoint $E=9$, with value
+$2681/20$. The sloping hull edge objective is
+\[
+ \frac{2821}{20}-\frac{151}{90}E+\frac{E^2}{10},
+\]
+whose minimum is $434201/3240$ at $151/18$. Subtracting gives
+$\Delta=121/3240$. The endpoint weights stated in the text realize the
+same load and operating interpolation. At $p=(49/10,4)$, the price
+difference is positive, so each branch minimizes its bill at its lowest
+early endpoint. Their bills plus operating costs are 224, 217 and
+$2181/10$. Hence the full-set regret is $11/10$, not merely a gain
+against an arbitrarily selected alternative. All calculations are exact
+algebra on the displayed ideal model.
+\end{proof}

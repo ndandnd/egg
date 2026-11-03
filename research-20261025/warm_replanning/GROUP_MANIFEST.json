@@ -1,0 +1,97 @@
+{
+  "schema": "warm-replanning-prospective-cohort-v1",
+  "created_date": "2026-10-25",
+  "status": "static_cohort_design_frozen_pending_executable_source_asset_command_binding",
+  "execution_authorized_by_manifest": false,
+  "generation_performed": false,
+  "generator": "claude-scale-v1",
+  "generator_entry": "egglab.claude_cases.make(scale:<base_id>:<services>)",
+  "sampling": {
+    "candidate_base_id_range_inclusive": [50600, 50999],
+    "rule": "Ascending IDs excluding bases named in checked prior-use metadata, first four; fixed before generation/outcomes",
+    "selected_base_ids": [50600, 50601, 50602, 50603],
+    "random_sample_claim": false,
+    "prior_use_search_globally_exhaustive": false,
+    "future_exposure_discovery_policy": "Retain fixed ID and disclose exposure; no outcome-based replacement"
+  },
+  "groups": [
+    {"group_index": 0, "group_id": "claude-scale-v1:50600", "base_id": 50600, "case_keys": ["scale:50600:40", "scale:50600:80"]},
+    {"group_index": 1, "group_id": "claude-scale-v1:50601", "base_id": 50601, "case_keys": ["scale:50601:40", "scale:50601:80"]},
+    {"group_index": 2, "group_id": "claude-scale-v1:50602", "base_id": 50602, "case_keys": ["scale:50602:40", "scale:50602:80"]},
+    {"group_index": 3, "group_id": "claude-scale-v1:50603", "base_id": 50603, "case_keys": ["scale:50603:40", "scale:50603:80"]}
+  ],
+  "services_order": [40, 80],
+  "native_solver_seeds_order": [17, 41, 73],
+  "active_arms_canonical": ["GNN", "CatBoost", "CA1", "CoverCA1", "random", "full", "fixed_route"],
+  "reference": {"arm": "unchanged", "active_solve": false, "blocks": 24},
+  "active_decisions": 168,
+  "group_count": 4,
+  "case_count": 8,
+  "block_count": 24,
+  "order": {
+    "version": "cyclic-seven-block-direction-v1",
+    "block_index": "b=((group_index*2+size_index)*3+seed_index), all indexes zero-based",
+    "rule": "Left rotate active_arms_canonical by b modulo7, then reverse when floor(b/7) is odd",
+    "position_frequency_per_arm_over_24_blocks": "three or four occurrences in each position",
+    "carryover_balance_claim": false,
+    "adaptive_reordering": false
+  },
+  "physical_design": {
+    "nested_trip_records": true,
+    "shared_trip_ids": "T001 through T040",
+    "fixed_resource_size_comparison": false,
+    "resource_scaling_rule": "90*ceil(services/28) kW shared grid and per-bus power, one connector",
+    "power_kw_by_services": {"40": 180, "80": 270},
+    "intervention": "day-to-late market coefficients only; physical case unchanged within each size variant",
+    "generation_time_shared_record_check_required": true,
+    "generator_modification": false
+  },
+  "prior_plan": {
+    "policy": "one predetermined CoverCA1 day prior per case variant, shared by every target arm and native seed",
+    "acquisition_cost": "measured and reported separately from warm replanning",
+    "failed_acquisition": "retain group/case and missing endpoints for all assigned arms, no replacement",
+    "native_start_policy": "must be frozen separately from retained fallback eligibility"
+  },
+  "generator_sources_inspected": [
+    "src/egglab/claude_cases.py",
+    "src/egglab/claude_scale_cases.py",
+    "src/egglab/physical_learning_cases.py:assignment and physical constants"
+  ],
+  "prior_use_metadata_checked": [
+    "research-20261017/local-assets-v2.json:manifest cohorts",
+    "research-20261017/local-assets-v3.json:manifest cohorts",
+    "research-20261023/native-primitive-lock-v1.json:case identity fields only",
+    "research-20261023/recovery-phase1-v1/design.json:base IDs",
+    "research-20261023/recovery-phase1-v2/design.json:base IDs",
+    "research-20261023/recovery-phase1-v3/design.json:base IDs",
+    "research-20261023/recovery-phase1-v4/design.json:base IDs",
+    "research-20261023/recovery-phase1-v5/design.json:base IDs",
+    "research-20261023/recovery-phase1-v6/design.json:base IDs",
+    "research-20261023/recovery-phase1-v7/design.json:base IDs",
+    "research-20261023/cf1-preparation-native-v2/design.json:base IDs",
+    "research-20261023/cf1-small-approved-v4/design.json:base IDs",
+    "research-20261023/comparison-native-preflight-v1/design.json:base IDs",
+    "research-20261024/cf1-entry-repaired-v5/design.json:base IDs",
+    "research-20261024/cf1-entry-repaired-v5b/design.json:base IDs",
+    "research-20261024/cf1-entry-repaired-v5c/design.json:base IDs",
+    "research-20261024/cf1-entry-repaired-v5d/design.json:base IDs",
+    "research-20261024/cf1-entry-repaired-v5e/design.json:base IDs",
+    "/Users/nadan/Documents/ChatGPT/egg/claude-local/v8/task00/inner_progress/fit_only_preprocessing_and_groups.json:group-field search only",
+    "/Users/nadan/Documents/ChatGPT/egg/claude-local/20260930-route-pool128-v3/pool_manifest.json:base/group metadata only",
+    "research-20261023/CONTINUATION.md:current pilot cohort disclosures"
+  ],
+  "protected_sources_opened": false,
+  "old_outcomes_used_for_selection": false,
+  "source_digests": null,
+  "generated_case_identities": null,
+  "numerical_command": null,
+  "pending_execution_controls": [
+    "exact source/model/preprocessing/asset bindings",
+    "same B/K and fallback/native-start compatibility policy",
+    "common integrated-cost objective and solver completion/restoration schedule",
+    "cold scoring and all endpoint work paid inside each replanning clock",
+    "absolute dispatch/admission/closure resource provisions",
+    "one focused final integration review"
+  ],
+  "interpretation": "Four prospectively selected development groups absent from checked registers; nested timetables with existing size-scaled resources; not globally proven unseen, independent final evaluation or pure fixed-resource scale evidence"
+}

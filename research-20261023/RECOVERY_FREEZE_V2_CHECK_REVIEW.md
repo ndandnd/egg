@@ -1,0 +1,13 @@
+# Freeze-v2 check: independent static gate
+
+24 October2026. **Static go for the one prospectively recorded solver-free check**, subject to parent source freeze and resource supervision. No imports of runtime modules, pytest execution, numerical work or fixture/model contents were used in this review. This is not a passing check receipt or permission to retry the failed freeze.
+
+The diff from immutable `run_admission_capture_budget_check.py` changes only carried policy, prior path, fresh namespace, six-module selection, source inventory and descriptive fields. Sampling, ownership, cleanup, diagnostic, output-audit and charge helper bodies are unchanged. The new wrapper reads `recovery-phase1-v4/accounting.json` at718.8639492101057s and adds **zero administration**; the original single20s allowance is already carried.
+
+The old erroneous `prior/attempt01` artifact loop is removed. The authoritative prior inventory already binds the failed freeze and reconciliation. Standard-library SHA256 verification independently matched all **229 inherited evidence hashes**, **168 command-declared source hashes** and **9 added evidence hashes**. No historical evidence file was rewritten. The actual attempt additionally binds command JSON, avoiding an impossible self-hash requirement in that JSON.
+
+The exact command uses the checked interpreter, same original five modules plus `test_recovery_freeze_v2.py`, and a new exclusive `freeze-v2-checks/attempt01`. The new module contributes11 fake cases: two individual cleanup cases, three absence/reap combinations, four approved/legacy budget combinations and two terminal accounting cases. Thus124+11=**135 expected cases**. The explicit legacy900/720 parameter is a rejection scenario, not a stale dispatch expectation. No further helper parametrization changes the count.
+
+The source inventory includes new freeze-v2 implementation, legacy dependency closure, all six tests, relevant implementation/review/protocol and approval records. Parent argv/environment records one numerical-library thread; the reviewed gate retains5GiB,30s work,32.5s outer cleanup,0.05s target cadence, strict0.25s completed-sample limits, unknown-not-absent ownership and complete child/supervisor accounting. Monitor diagnostics are not charged twice.
+
+No concrete static blocker remains for this check. Passing requires a fresh complete terminal receipt, unchanged source/output hashes, all owned groups confirmed absent and leader reaped, no primary/secondary failures and conservative cumulative spend. Any failed/incomplete result remains evidence and stops progression. Independent receipt review must precede a new externally supervised freeze; the earlier v4 freeze remains failed.

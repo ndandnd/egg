@@ -1,0 +1,25 @@
+{
+  "document_id": "1NmPC_qo_uOnA48dV6Ibhs3Pj9EgOD-oJTBuVi41p6bg",
+  "tab_id": "t.0",
+  "revision_id": "ANLCKQnjlSgObifxTQRf0aq7RsV-9VR65j2KAl53deBzb1boCbmUy2wExrZutBMvfUO2S2OAUMsk0x7u89LFMsnRW6l-iY8zodOTAOoDDP4",
+  "append_start": 190868,
+  "append_end": 193040,
+  "heading": "HEADING_2",
+  "append_text_verified": true,
+  "all_seven_native_image_ids_preserved": [
+    "kix.14qgnlc7qzhp",
+    "kix.1g4t8u3qmu8n",
+    "kix.4yuqnp8k08fl",
+    "kix.fe5jxkrgnniq",
+    "kix.shpddc4n4xg",
+    "kix.uffmv89uhby0",
+    "kix.xjlr68pn1mfz"
+  ],
+  "link_label": "Verified family comparison and numerical replay",
+  "link_url": "https://github.com/ndandnd/egg/blob/469cb8cda4c03b5065a816c4b7a70380027c81e7/research-20260930/learning-campaign/ROUTE_FAMILIES_V5_RESULTS.md",
+  "style_preserved": true,
+  "style_verification": "Resolved omitted direct fields against unchanged NORMAL_TEXT named style; same Arial11, black, not underlined, normal weight and baseline.",
+  "source_commit": "469cb8cda4c03b5065a816c4b7a70380027c81e7",
+  "trusted_read_manifest": "tmp/docs-families-v5-complete-20260930/manifest.json",
+  "text": "Completed comparison: XGBoost, CatBoost and ExtraTrees\nThe complete comparison combines the three successful original tasks with nine recovered tasks, covering 128 independent TRAIN timetables and 255 observed source fleets. All variants of a timetable stayed together. Fit, inner validation and outer evaluation remained separate; development and final-test timetables remain sealed.\n\nThe new tree families are competitive with the existing histogram-boosted baseline, but the gains are small. Equal-timetable outer log loss was 0.06942 for XGBoost, 0.06930 for CatBoost and 0.07050 for ExtraTrees, compared with 0.06989 for the original histogram model. Top-k edge recall was 69.67%, 69.77% and 69.26%, respectively, versus 69.14%. These measure recovery of movements in observed feasible incumbent schedules, not optimal routes or fleet cost.\n\nThe prospectively defined inner-validation selector chose XGBoost in nine fold/seed tasks and ExtraTrees in three. Its outer log loss was 0.07013 and top-k recall 69.39%. CatBoost's slightly better outer mean does not change this frozen selection rule. No model has yet demonstrated a learned fleet-cost or matched online speedup benefit.\n\nSaved-model verification covered 72 candidate models and 36 selected outer evaluations. XGBoost probabilities differed by at most two float32 ULPs between Linux and macOS; complete source rankings, fixed-threshold decisions and inner selections were unchanged. Metrics were separately recomputed from the saved predictions. Original failures remain in the record; original and recovery attempts together consumed 1,973 allocated CPU-seconds, including 79 seconds in the failed tasks. Complete recovery artifacts have a lossless, byte-verified backup.\n\nThe graph and graph-attention comparison was still active at this follow-up's single queue observation. Its complete results will be collected and checked before interpretation. The next scientific test remains whether prediction quality translates into feasible, useful fleet proposals under matched charging and solver baselines. More training alone does not establish that result.\n\nVerified family comparison and numerical replay\n"
+}

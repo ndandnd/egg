@@ -1,0 +1,287 @@
+{
+  "status": "FAILED",
+  "assigned": [
+    "SOURCE_ADMISSION",
+    "Q0",
+    "TARGET",
+    "LOWER",
+    "INCUMBENT_ROUTES",
+    "RESPONSE_ROUTES",
+    "COMPARISON"
+  ],
+  "rows": [
+    {
+      "id": "SOURCE_ADMISSION",
+      "status": "DELIVERED",
+      "cpu_s": 0.16061999999999999,
+      "elapsed_s": 0.19170662574470043,
+      "summary": {
+        "status": "SOURCE_ADMITTED"
+      }
+    },
+    {
+      "id": "Q0",
+      "status": "DELIVERED",
+      "cpu_s": 0.008610000000000007,
+      "elapsed_s": 0.008895667269825935,
+      "summary": {
+        "status": "PASS"
+      }
+    },
+    {
+      "id": "TARGET",
+      "status": "DELIVERED",
+      "cpu_s": 3.8756309999999994,
+      "elapsed_s": 3.8865436669439077,
+      "summary": {
+        "status": "VALIDATED_TARGET_SEMANTICS"
+      }
+    },
+    {
+      "id": "LOWER",
+      "status": "DELIVERED",
+      "cpu_s": 43.419885,
+      "elapsed_s": 44.9053348749876,
+      "summary": {
+        "status": "COMPLETE_TARGET_BOUND",
+        "target_identity": "1917409b43c0433b4ac2504b0b28c1bb2aa63a033c79ba1a4057418b63874ed7::exact-consumption-v1",
+        "reason": null,
+        "lower": "61540706052614299150673273932274140861925316616741197016088933/139379657490816394634598239204052259412377600000000000000000"
+      }
+    },
+    {
+      "id": "INCUMBENT_ROUTES",
+      "status": "DELIVERED",
+      "cpu_s": 0.48343999999999454,
+      "elapsed_s": 0.5762090841308236,
+      "summary": {
+        "status": "ADMITTED_TARGET_PRIMAL",
+        "target_identity": "1917409b43c0433b4ac2504b0b28c1bb2aa63a033c79ba1a4057418b63874ed7::exact-consumption-v1",
+        "face_attempts": 1,
+        "physical_replays": 1,
+        "objective_exact": "2748885062195568167908628137254966831651354567954767011/6225776124876973670400000000000000000000000000000000",
+        "fleet_count": 2
+      }
+    },
+    {
+      "id": "RESPONSE_ROUTES",
+      "status": "DELIVERED",
+      "cpu_s": 0.8121269999999967,
+      "elapsed_s": 0.8459442919120193,
+      "summary": {
+        "status": "ADMITTED_TARGET_PRIMAL",
+        "target_identity": "1917409b43c0433b4ac2504b0b28c1bb2aa63a033c79ba1a4057418b63874ed7::exact-consumption-v1",
+        "face_attempts": 1,
+        "physical_replays": 1,
+        "objective_exact": "138135556815315781402971333225935472988255689553187837/259407338536540569600000000000000000000000000000000",
+        "fleet_count": 2
+      }
+    },
+    {
+      "id": "COMPARISON",
+      "status": "FAILED",
+      "reason": "ValueError: String dictionary keys required"
+    }
+  ],
+  "failure": "ValueError: String dictionary keys required",
+  "resources": {
+    "cpu_s": 49.20138299999999,
+    "self_cpu_s": 48.910397999999994,
+    "peak_rss_bytes": 1824948224
+  },
+  "elapsed_s": 50.84325529076159,
+  "resource_pass": true,
+  "scientific_status": "NOT_CERTIFIED",
+  "comparison": null,
+  "lower": {
+    "status": "COMPLETE_TARGET_BOUND",
+    "target_identity": "1917409b43c0433b4ac2504b0b28c1bb2aa63a033c79ba1a4057418b63874ed7::exact-consumption-v1",
+    "reason": null,
+    "lower": "61540706052614299150673273932274140861925316616741197016088933/139379657490816394634598239204052259412377600000000000000000"
+  },
+  "points": {
+    "INCUMBENT_ROUTES": {
+      "status": "ADMITTED_TARGET_PRIMAL",
+      "target_identity": "1917409b43c0433b4ac2504b0b28c1bb2aa63a033c79ba1a4057418b63874ed7::exact-consumption-v1",
+      "face_attempts": 1,
+      "physical_replays": 1,
+      "objective_exact": "2748885062195568167908628137254966831651354567954767011/6225776124876973670400000000000000000000000000000000",
+      "fleet_count": 2
+    },
+    "RESPONSE_ROUTES": {
+      "status": "ADMITTED_TARGET_PRIMAL",
+      "target_identity": "1917409b43c0433b4ac2504b0b28c1bb2aa63a033c79ba1a4057418b63874ed7::exact-consumption-v1",
+      "face_attempts": 1,
+      "physical_replays": 1,
+      "objective_exact": "138135556815315781402971333225935472988255689553187837/259407338536540569600000000000000000000000000000000",
+      "fleet_count": 2
+    }
+  },
+  "manifest": {
+    "LAUNCH.json": {
+      "bytes": 3968,
+      "sha256": "1412bb1d90a027294869521cbbcf5907c78c2e7a11bf29b15c0b49ee89fa9e6d",
+      "binding": "separate frozen control"
+    },
+    "worker.py": {
+      "revision": "6665c2b9f045410b4bbf19060b6780b0779f5534",
+      "path": "research-20261029/public_exact_energy_target/worker.py",
+      "bytes": 18553,
+      "sha256": "8850440dde736c1a6896ae879e728273070c5265d4fb4130688cb534846ca0d4"
+    },
+    "run.py": {
+      "revision": "6665c2b9f045410b4bbf19060b6780b0779f5534",
+      "path": "research-20261029/public_exact_energy_target/run.py",
+      "bytes": 4790,
+      "sha256": "a37171a8b1b19ddd056e8efe0c313cfa81270bfe63e6d34ac1bb142cd9735426"
+    },
+    "witnesses.py": {
+      "revision": "6665c2b9f045410b4bbf19060b6780b0779f5534",
+      "path": "research-20261029/public_exact_energy_target/witnesses.py",
+      "bytes": 7694,
+      "sha256": "a0ae883a822cec22ddc17bfcfc68da8e147414cfc8e7cbe38d7950e96a1ddbaa"
+    },
+    "target.py": {
+      "revision": "6665c2b9f045410b4bbf19060b6780b0779f5534",
+      "path": "research-20261029/public_exact_energy_target/target.py",
+      "bytes": 8851,
+      "sha256": "2b00c1bb4ba03a005544a603973b0769521c432dfca7daf19ca7e2e8b4da2f6c"
+    },
+    "target_semantics.py": {
+      "revision": "6665c2b9f045410b4bbf19060b6780b0779f5534",
+      "path": "research-20261029/public_exact_energy_target/target_semantics.py",
+      "bytes": 16910,
+      "sha256": "1fe0c4e96f64ab5c701fd74d64ae434b3c8ca863b82815f0cd90a908f8e37113"
+    },
+    "checker.py": {
+      "revision": "6665c2b9f045410b4bbf19060b6780b0779f5534",
+      "path": "research-20261029/public_exact_energy_target/checker.py",
+      "bytes": 25555,
+      "sha256": "acb836d92c70a387c22950cf7561e25be3f5e81c072aa52682cbba864dbfefc6"
+    },
+    "fixtures.py": {
+      "revision": "6665c2b9f045410b4bbf19060b6780b0779f5534",
+      "path": "research-20261029/public_exact_energy_target/fixtures.py",
+      "bytes": 6118,
+      "sha256": "4ad0e5940430c91518f121c9ee5195eb09f3e4f4952df2fdbc26fbd19c32ceb4"
+    },
+    "PROTOCOL.md": {
+      "revision": "6665c2b9f045410b4bbf19060b6780b0779f5534",
+      "path": "research-20261029/public_exact_energy_target/PROTOCOL.md",
+      "bytes": 6721,
+      "sha256": "afcc5488199b653ef3aca0eb0b299aafff47f26247d7bccadac93d31879ea753"
+    },
+    "FIELD_AUTHORITY.md": {
+      "revision": "6665c2b9f045410b4bbf19060b6780b0779f5534",
+      "path": "research-20261029/public_exact_energy_target/FIELD_AUTHORITY.md",
+      "bytes": 6868,
+      "sha256": "bb24bceb41657dffe22c1b783feecf6d3d59d77616b76b8a9e1ae94c170ddb2c"
+    },
+    "API_HANDOFF.md": {
+      "revision": "6665c2b9f045410b4bbf19060b6780b0779f5534",
+      "path": "research-20261029/public_exact_energy_target/API_HANDOFF.md",
+      "bytes": 1815,
+      "sha256": "36b47c19da01b896481bb0175f8bdbe0ca3fce82f53977738e61e868604a28ff"
+    },
+    "WITNESSES_API.md": {
+      "revision": "6665c2b9f045410b4bbf19060b6780b0779f5534",
+      "path": "research-20261029/public_exact_energy_target/WITNESSES_API.md",
+      "bytes": 3668,
+      "sha256": "af946a2210714920eb8c1aab5ec02ec5a0f104b5190d58cec3d423a06e66d4e7"
+    },
+    "affine": {
+      "revision": "3278d50f8323618bd36809b1bbb1a0da081e23ff",
+      "path": "research-20261029/public_support_resolution/exact_fixed_topology.py",
+      "bytes": 15224,
+      "sha256": "62a5ece95751c066facc8859ea0fd3a0e015f76989ffc66a95a468f91d382813"
+    },
+    "original_semantics": {
+      "revision": "3278d50f8323618bd36809b1bbb1a0da081e23ff",
+      "path": "research-20261029/public_support_resolution/exact_dual.py",
+      "bytes": 28067,
+      "sha256": "737e3083e113622f1d9c1ef2739d6a1d35ee87fc35b657b658d59990ce6a0000"
+    },
+    "physical": {
+      "revision": "3278d50f8323618bd36809b1bbb1a0da081e23ff",
+      "path": "research-20261029/public_support_resolution/independent_verify.py",
+      "bytes": 14516,
+      "sha256": "470c925e1bb73a49ae3fbb5eef12697d06a70af0a51b901d073f939954a52d05"
+    },
+    "recovery": {
+      "revision": "425bf35452eb3f5444f20058ad6fd6b540ffed88",
+      "path": "research-20261029/public_rational_recovery/recovery.py",
+      "bytes": 18169,
+      "sha256": "f465374b874cd02d7a5ac92822672521a25aa8dc89447e15575afb98eca31a3f"
+    },
+    "tree": {
+      "revision": "6a171357b65254b52cade63ed95dcce798485f36",
+      "path": "research-20261029/public_support_tree/checker.py",
+      "bytes": 17432,
+      "sha256": "0c75584c22d69fe873bc1faf78f058c49172122d21c49bd4de5107e7286f90c1"
+    },
+    "canonical": {
+      "revision": "76c83d55fe2983138da7b87f9d4d7c5fd36e9573",
+      "path": "research-20261029/public_canonical_qualification/attempt01/results.json",
+      "bytes": 2243,
+      "sha256": "71edda3f56c34507caec595e0e3974632dd6efe34ca255b67bcde8555580e073"
+    },
+    "canonical_metadata": {
+      "revision": "76c83d55fe2983138da7b87f9d4d7c5fd36e9573",
+      "path": "research-20261029/public_canonical_qualification/attempt01/PUBLIC_METADATA.json",
+      "bytes": 4120,
+      "sha256": "f67c8ea45a40c73c690fe4c3e0f039db899edf80007847e110e85410d1a658ed"
+    },
+    "canonical_owner": {
+      "revision": "76c83d55fe2983138da7b87f9d4d7c5fd36e9573",
+      "path": "research-20261029/public_canonical_qualification/attempt01/owner_receipt.json",
+      "bytes": 1084,
+      "sha256": "aa8e5e891e8e01413019d1ab10eeaa9e857466f1663784da535ecd0029d455a5"
+    },
+    "rich": {
+      "revision": "2f386362aa241a8a4f197a88a50fa150b6d47d9c",
+      "path": "data/public/sistig_26088190_v1/hildenbrand_native_cases.json",
+      "bytes": 8046032,
+      "prior_sha256": "af6da4dea220063d1b2486a4c958bff19ae621328f07bde4a95a5c70690ebeb6",
+      "binding": "Same exact Git object; closed prior SHA adopted without rehash"
+    },
+    "original": {
+      "revision": "253c1e29295e766b3889fc8f5c28d9808e00b3d6",
+      "path": "research-20261029/public_support_resolution/attempt01/case_descriptor.json",
+      "bytes": 704642,
+      "sha256": "1525e6628d938c7612ccae22f479fe24d8158f728923abf2f6e25ce14eed50d6"
+    },
+    "oldtree": {
+      "revision": "ef0e08203dba5ac2ddcaff6bd8639cc9a70677b9",
+      "path": "research-20261029/public_support_tree/attempt01/PUBLIC_TREE.json.gz",
+      "bytes": 15817233,
+      "sha256": "949b52caf011b75252ac9754c9e2bf2a87b1ca697fbeb26723fda439cfb723b9"
+    },
+    "refinement": {
+      "revision": "d8e22ffd3753fced3ec825c68714fd549d914230",
+      "path": "research-20261029/public_physical_refinement/attempt01/PUBLIC_REFINEMENT.json.gz",
+      "bytes": 3330943,
+      "sha256": "874b90ae3083ef5933cf635388a5e3e647f663b1b3e350e224c7c8f71a661881"
+    },
+    "INCUMBENT_ROUTES": {
+      "revision": "0cb3c54de6e8e5c391afb37bcbb68ad3a51925ee",
+      "path": "research-20261029/public_rational_recovery/attempt01/PUBLIC_PRIMAL.json.gz",
+      "bytes": 39221,
+      "sha256": "d66b485c30319b37f37ca54fbadcd7bbf6abbdba491b056447ed5cb98fec03a9"
+    },
+    "RESPONSE_ROUTES": {
+      "revision": "f5ec2aa5770188d173af7297620a5fcea99fef9a",
+      "path": "research-20261029/public_price_witness/attempt01/EXACT_PRIMAL.json.gz",
+      "bytes": 5249,
+      "sha256": "93c614652ab7a0560d639394d09ad1ead3c740911b84378ee560deeb3b556108"
+    },
+    "weights": {
+      "revision": "f5ec2aa5770188d173af7297620a5fcea99fef9a",
+      "path": "research-20261029/public_price_witness/attempt01/MIXTURE.json.gz",
+      "bytes": 1182,
+      "sha256": "8b3b30effbeb2234f32f8ce4c927b979b571f112db6adbb4481c84dac935efe0"
+    }
+  },
+  "native_calls": 0,
+  "old_model_unchanged": true,
+  "scope": "NEW exact-energy target only; no empirical paired-road realization, old-gap transfer or native search."
+}

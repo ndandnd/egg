@@ -1,0 +1,39 @@
+{
+  "policy": "cf1-entry-repaired-v5",
+  "phase": "failed_metadata_monitor_preservation",
+  "prior_charge_s": 2480.440429297212,
+  "current_charge_s": 9.735511875913858,
+  "charged_cpu_s": 2490.175941173126,
+  "freeze_passed": false,
+  "native_dispatch": false,
+  "source_gate_passed": true,
+  "source_gate_attempt": "attempt06",
+  "accounting_observations_complete": true,
+  "owned_groups_absent_and_reaped": true,
+  "accepted_conservative_guard": true,
+  "prior_actual_cpu_s": null,
+  "historical_accounting_observations_complete": false,
+  "hard_total_ceiling_s": 3000.0,
+  "dispatch_stop_s": 2820.0,
+  "shutdown_reserve_s": 180.0,
+  "package_hard_end_s": 2701.723449631016,
+  "components": {
+    "internal_freeze_charge_s": 7.635511875913858,
+    "whole_wrapper_precision_bound_s": 7.39,
+    "metadata_preparation_guard_s": 0.1,
+    "preservation_finalization_guard_s": 2.0
+  },
+  "owned_pgids": [
+    8668
+  ],
+  "observation_scope": "Fresh metered failed metadata-only phase; historical actualCPU unknown and guardedcarry retained",
+  "diagnosis": "Process snapshot timeout0.239720250479877s during15s metadatawork, notworklimit exhaustion. No lock/native. Do not conflate monitor cadence failure with model or physical infeasibility.",
+  "evidence_paths": {
+    "source_account": "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/research-20261024/cf1-entry-repaired-checks/attempt06-accounting.json",
+    "result": "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/research-20261024/cf1-entry-repaired-v5c/freeze-attempt01/result.json",
+    "attempt": "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/research-20261024/cf1-entry-repaired-v5c/freeze-attempt01/attempt.json",
+    "resources": "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/research-20261024/cf1-entry-repaired-v5c/freeze-attempt01/resources.jsonl",
+    "whole_output": "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/research-20261024/cf1-entry-repaired-v5c/freeze-whole-wrapper-output.json",
+    "whole_time": "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/research-20261024/cf1-entry-repaired-v5c/freeze-whole-wrapper-time.txt"
+  }
+}

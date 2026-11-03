@@ -1,0 +1,103 @@
+{
+  "array_job_id": "720831",
+  "submitted_at_utc": "2026-09-30T22:19:24Z",
+  "source_commit": "75dd4cf19f1f735cc3dea559567da3b2bd32013e",
+  "source_branch": "codex/journal-research-20260927",
+  "remote_checkout": "/home/nc437/egg-route-families-20260930-v5",
+  "sparse_checkout_paths": [
+    "src",
+    "research-20260930/learning-campaign",
+    "result/physical_learning/20260930-route-pool128-v3"
+  ],
+  "attempt_relative": "result/physical_learning/20260930-route-model128-families-v5",
+  "pool_manifest": "result/physical_learning/20260930-route-pool128-v3/pool_manifest.json",
+  "pool_manifest_sha256": "d9aad5b5ea62fd82a8b4f6a3c20a95c57953ba12c7bf0949fa06004aa511c40d",
+  "protocol": "ROUTE_MODEL_FAMILIES_V5_PROTOCOL.md",
+  "review": "ROUTE_MODEL_FAMILIES_V5_REVIEW.md",
+  "environment_receipt": "ROUTE_FAMILY_ENVIRONMENT.json",
+  "wrapper": "src/cluster/physical_route_model_families_v5.sbatch",
+  "task_ids": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11
+  ],
+  "concurrent_task_limit": 4,
+  "seeds": [
+    17,
+    29,
+    43
+  ],
+  "outer_folds": 4,
+  "independent_training_groups": 128,
+  "source_fleets": 255,
+  "fit_inner_outer_group_counts": [
+    80,
+    16,
+    32
+  ],
+  "models": [
+    "xgboost",
+    "catboost",
+    "extra_trees",
+    "inner_promoted"
+  ],
+  "requested_per_task": {
+    "cpus": 1,
+    "memory_gb": 8,
+    "wall_seconds": 1800,
+    "native_threads": 1,
+    "requeue": false,
+    "excluded_nodes": [
+      "scaglione-compute-01"
+    ]
+  },
+  "total_requested_cpu_hour_cap": 6,
+  "shell_cap_seconds": 1700,
+  "launch_script_sha256": "335c89e6c43a7b30a4a8e8561180400aade7941e3b44a2ef03e0a6af610092de",
+  "submission_guard": ".submission-route-families-v5/array_jobid.txt",
+  "allowed_preexisting_egg_jobs": [
+    "719750"
+  ],
+  "scientific_outcomes_not_inspected": true,
+  "intended_source_fleets": 256,
+  "observed_state": "SUBMITTED",
+  "postsubmission_queue_check_performed": false,
+  "missing_source_labels": [
+    "physical_v2_s10037/source0"
+  ],
+  "model_settings_unchanged_from_32": false,
+  "common_original32_group_comparison_prespecified": true,
+  "submission_guard_observed_no_active_egg_jobs": true,
+  "selection_basis": "Prespecified family menu requested by user; all configuration/round/family promotion from inner validation only; outer reports exploratory.",
+  "checks": "ROUTE_MODEL_FAMILIES_V5_CHECKS.md",
+  "actual_allocation": "Not yet read; collect allocated CPUs separately.",
+  "prior_arrays_completed_collected": [],
+  "dependency": "none",
+  "prior_arrays_completed_uncollected": [
+    "719750"
+  ],
+  "candidate_menu": {
+    "xgboost_max_depth": [
+      3,
+      6
+    ],
+    "catboost_depth": [
+      4,
+      6
+    ],
+    "extra_trees_min_samples_leaf": [
+      5,
+      20
+    ]
+  },
+  "runtime_import_verified": "Pinned family runtime imports verified; no fit performed."
+}

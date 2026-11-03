@@ -1,0 +1,79 @@
+{
+  "status": "COMPLETED",
+  "assigned": [
+    "PREFLIGHT",
+    "Q0",
+    "PUBLIC_REFINEMENT",
+    "INDEPENDENT_REFINEMENT_CHECK"
+  ],
+  "rows": [
+    {
+      "id": "PREFLIGHT",
+      "status": "DELIVERED",
+      "summary": {
+        "status": "SOURCE_BOUND_BASE_ADMITTED",
+        "base_nodes": 303,
+        "frontier_count": 152,
+        "physical_upper": "15487225773558335836678536516523969405935273717647515/35076039295941670036888435985190792471742381031424",
+        "target": "9679513916221503901569708017300231804285016589630882411/21922524559963543773055272490744245294838988144640000"
+      },
+      "stage_cpu_s": 1.142942,
+      "stage_elapsed_s": 1.313324749469757,
+      "clock_scope": "through complete compressed publication"
+    },
+    {
+      "id": "Q0",
+      "status": "DELIVERED",
+      "summary": {
+        "status": "PASS",
+        "checks": 24,
+        "native_calls": 0
+      },
+      "stage_cpu_s": 0.006704000000000043,
+      "stage_elapsed_s": 0.00670416746288538,
+      "clock_scope": "through complete compressed publication"
+    },
+    {
+      "id": "PUBLIC_REFINEMENT",
+      "status": "DELIVERED",
+      "summary": {
+        "status": "TARGET_REFINEMENT_PROPOSED",
+        "new_nodes": 72,
+        "native_calls": 102,
+        "open_nodes": [],
+        "stop_reason": null,
+        "producer_failure": null
+      },
+      "stage_cpu_s": 322.2467050000001,
+      "stage_elapsed_s": 328.465893374756,
+      "clock_scope": "through complete compressed publication"
+    },
+    {
+      "id": "INDEPENDENT_REFINEMENT_CHECK",
+      "status": "DELIVERED",
+      "summary": {
+        "status": "VALID_REFINEMENT",
+        "complete_base_coverage": true,
+        "global_lower_bound": "80662634237282610902559758444585953851595472957985/182687704666362864775460604089535377456991567872",
+        "epsilon_met": true,
+        "scientific_outcome": "EPSILON_MET",
+        "new_nodes_checked": 72,
+        "physical_lower_outward_6dp": "441.532912",
+        "physical_upper_outward_6dp": "441.532913",
+        "width_upper_outward_6dp": "0.000001",
+        "reason": null
+      },
+      "stage_cpu_s": 16.65023100000002,
+      "stage_elapsed_s": 17.651920791715384,
+      "clock_scope": "through complete compressed publication"
+    }
+  ],
+  "failures": [],
+  "resource_pass": true,
+  "scientific_outcome": "EPSILON_MET",
+  "elapsed_s": 347.50457970798016,
+  "opportunity_scope": "declared-movement-modes-only; fixed leg times and selected depot-gap modes",
+  "unrestricted_retiming_or_extra_visit_claim": false,
+  "cpu_s": 340.16433800000004,
+  "peak_rss_bytes": 668319744
+}

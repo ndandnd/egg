@@ -1,0 +1,61 @@
+\section{Convex dispatch can have negative marginal prices}
+\label{app:networkmonotonicity}
+The monotonicity premise in Theorem~\ref{thm:lossyfrontier} is substantive
+when supply cost is obtained by optimizing a network dispatch. Transmission
+congestion can yield negative nodal marginal prices even with nonnegative
+generation offers; this is an established effect
+\citep[Section V-B, Figure 5]{bakerGangammanavar2024prices}.
+The following independently checked symbolic example makes the distinction
+explicit with strictly increasing, strictly convex generator costs. It is
+a scope illustration, not a new negative-price result or empirical network.
+
+Consider a lossless three-bus DC network with unit susceptance on each
+of lines $12,13,23$, oriented flows $f_{ij}=\theta_i-\theta_j$, and
+$\theta_3=0$. Symmetric line limits are $5,1/2,5$, respectively.
+Background demand is $(4,0,1)$ and an additional depot withdrawal
+$x\in[0,1]$ occurs at bus 3. Generators at buses 1 and 2 satisfy
+$0\le g_1,g_2\le10$, with costs
+\[
+ C_1(g_1)=3g_1+g_1^2/100,\qquad
+ C_2(g_2)=g_2+g_2^2/100.
+\]
+All quantities use consistent power and per-period cost units; a fixed
+period converts them to energies. Nodal balance is generation minus
+demand equal to outgoing flow. Let $J(x)$ be the minimum total generation
+cost under these constraints.
+
+Bus-3 balance and total balance give
+$\theta_1+\theta_2=1+x$ and $g_2=5+x-g_1$. Bus-1 balance then implies
+\[
+ \theta_1=(g_1-3+x)/3,\qquad g_1\ge3/2-x,
+\]
+where the inequality follows from the lower limit on line 13. The point
+\[
+ g_1=3/2-x,\quad g_2=7/2+2x,\quad
+ \theta_1=-1/2,\quad\theta_2=3/2+x
+\]
+attains that lower bound and is feasible throughout the stated interval:
+its flows are $(-2-x,-1/2,3/2+x)$, and all generator limits hold.
+After eliminating $g_2$, the objective derivative with respect to $g_1$ is
+\[
+ 2+\frac{2g_1-5-x}{50}\ge2-\frac6{50}>0.
+\]
+Thus every feasible point has cost at least that of the displayed point;
+this establishes global optimality, not merely stationarity at a proposed
+active set. Direct expansion yields
+\[
+ J(x)-J(0)=-\frac{89}{100}x+\frac{x^2}{20}.
+\]
+This incremental cost is strictly convex and strictly decreasing on
+$[0,1]$. More withdrawal at bus 3 relieves the congested reverse flow
+toward bus 1, reducing output at the expensive generator at bus 1 while
+increasing cheaper generation at bus 2. The redispatch saving exceeds the cost of the
+extra supply. Both generators' own cost derivatives remain positive.
+
+Consequently convexity of the optimized supply value and positive
+generation marginal costs do not ensure monotonicity in nodal load.
+A network application of the efficient-frontier reduction must establish
+the required load-domain monotonicity, or retain the alternatives that
+coordinatewise dominance would discard. The example does not invalidate
+the theorem under its hypotheses, change the public synthetic supply
+objective, or establish AC feasibility, prevalence or a learning advantage.

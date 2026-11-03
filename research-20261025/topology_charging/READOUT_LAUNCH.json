@@ -1,0 +1,16 @@
+{
+  "schema":"topology-charging-compact-readout-v1",
+  "scope":"Read closed owned receipt once; format rational point contrasts, qualification flags and resource metadata; no row inputs/project imports/replay/solver",
+  "input":"attempt01/receipt.json",
+  "output":"COMPACT_READOUT.json",
+  "cpu_s":60,
+  "wall_s":90,
+  "inside_total_cpu_s":3600,
+  "inside_closure_cpu_s":360,
+  "main_external_cpu_s":18.81,
+  "main_external_elapsed_s":20.59,
+  "stageA_retained_cpu_s":0.03,
+  "admission":"Completed main exit0; 18.84 retained main+StageA plus60 readout fits3240/3600 and closure",
+  "command":"/usr/bin/time -p -o research-20261025/topology_charging/readout-time.txt .venv-local/bin/python research-20261025/topology_charging/compact_readout.py > research-20261025/topology_charging/readout-stdout.txt 2> research-20261025/topology_charging/readout-stderr.txt",
+  "automatic_retry":false
+}

@@ -1,0 +1,100 @@
+\section{Relation to existing work}
+\paragraph{Operational coupling.}
+Grid-aware scheduling, capacitated charging and scalable route-and-recharge
+models already combine bus duties with charging access
+\citep{wu2022grid,devos2024capacity,parmentier2023fleets}; integrated flow
+and set-partitioning models also choose assignments and charging slots
+\citep[Sections 2.1 and 4]{borndorfer2024integrated}. \citet{wu2022grid} include endogenous
+vehicle-to-trip assignment and full overnight charging. Integer bus-charging
+aggregation/disaggregation around auction bids is studied by
+\citet{zoltowskaLin2021}, while \citet{wu2019gridinteractive} couple service
+planning to market clearing and distribution marginal prices in a bilevel
+model.\footnote{Our comparison with \citet{wu2019gridinteractive} is limited
+to the publisher's preview. Its full tariff timing and complete-fleet
+deviation formulation remain unverified; we do not infer their absence.}
+Thus assignment, full charging and endogenous electricity prices are
+not sufficient novelty claims. We instead ask whether a fixed posted
+marginal tariff supports a complete fleet over alternatives that change
+both used-bus costs and duty-created charging opportunities.
+
+Transport and V2G are also established: \citet[Sections 2.1--2.2]{blatiak2022v2g}
+optimize commercial-fleet trip timing and charging against energy and
+balancing prices. The author manuscript of \citet[Section 2]{zhou2025v2g}
+chooses bus use, connections and partial charging/discharging under input
+purchase/export tariffs, including vehicle fees, deadheading, charging,
+export revenue and degradation, with full-depot inventory/overnight
+recharging. These materially overlap
+our physics; the manuscript's imperfectly extracted mathematical glyphs
+preclude detailed claims about its connector or terminal constraints.
+Our distinction is an exact cost-labelled threshold and own-load support
+classification, not richer V2G operations, first transport--V2G coupling
+or first use of spare buses for grid services.
+
+\paragraph{Joint loads and vehicle cost.}
+\citet{mukhiAbate2023exact} characterize fixed-population charging polytopes
+with prescribed availability and full departure charge using permutahedra.
+\citet{mukhiLohoAbate2025exact} give generalized-polymatroid representations
+and exact Minkowski aggregation for convex individual flexibility sets.
+\citet{arvis2026aggregated} integrate prescribed EV flexibility, including
+V2G, into unit commitment using exact aggregation and separation. Coupling
+vehicle flexibility with grid dispatch is therefore not itself our novelty.
+\citet[author version, Sections IV--V, equations~(12)--(17)]{muller2019aggregation}
+already aggregate flexibility costs and optimize disaggregation for supplied
+resource sets with common-generator zonotopes and separable piecewise-linear
+convex costs; their aggregate can be updated when resources are added, removed
+or changed. Our fixed-matching lossless interval aggregation is an elementary
+specialization. The remaining claim is the constructive identity that, at each
+cardinality, one minimum-requirement matching realizes the entire polygon of
+every assignment. Classical extended formulations can encode the union, but
+encoding it alone does not establish this replacement. This distinction does
+not by itself establish novelty relative to broader aggregation theory.
+\citet[Section II, Example 1]{altaha2024flexibility} likewise aggregate
+lossless bidirectional batteries with initial/final requirements.
+Our lossless load-only projection is an interval, not a new nonconvex
+flexibility set. Theorem~\ref{thm:sharedprojection} instead retains every attainable
+load--vehicle-cost layer as successor matching and fleet size change;
+Corollary~\ref{cor:sharedsupport} tests hull-optimum physical attainment.
+Fixed-matching interval aggregation and ordered matching remain classical.
+The V2G thresholds and capped paid-idle elimination concern this restricted
+class with shared gross throughput; persistence/restoration examples do
+not establish a first signed-aggregation or V2G support result.
+
+\paragraph{Common losses.}
+\citet[Theorems 1--3]{altahaBitar2024lossy} establish a piecewise-affine
+grid-power/SOC bijection, convex feasibility in a single store's SOC variables,
+and sufficient monotonicity conditions for convex reformulation. These
+transformations and conditions are prior art. Their discrete signed control
+has one direction per time step. Our complete projection explicitly permits
+successive actions inside one common window; its purchases and exports are
+integrated totals, not simultaneous physical controls. Dropping complementarity
+alone would not establish exactness. Theorem~\ref{thm:fulllossyprojection}
+instead constructs serial actions respecting SOC and joint polygons for
+loads and vehicle cost, with at most five vertices per matching cardinality.
+Theorem~\ref{thm:lossyfrontier} gives the smaller efficient frontier with at
+most two segments. Common windows and monotone economics are essential to
+discarding dominated points in that smaller representation. Conversion
+bookkeeping, time sharing, box aggregation and planar vertex counting are
+classical; the physical replacement across all assignments is the claim here.
+
+\paragraph{Support, lost opportunity cost and ownership.}
+Nonconvex pricing and uplift are established
+\citep{oneill2005,gribikHoganPope2007}; convex-hull pricing supplies the
+convexification and lost-opportunity-cost framework
+\citep{schiro2016,huaBaldick2017}. Complete linear descriptions address
+support with integralities \citep{huembs2022complete}, and whole-participant
+schedule columns with fixed-price self-scheduling oracles have established
+decomposition treatments \citep{andrianesis2022hull}. Our support equivalence
+and complete-fleet unit apply these tools, not new pricing duality or
+column-generation machinery. Classical aggregation
+\citep{starr1969,hreinsson2021} explains small aggregate nonconvexities;
+our replication calculation distinguishes the planning gap, a composite
+owner's absolute fixed-price incentive and independently reserved pairs'
+incentives. Its rates do not contradict approximate aggregation results.
+
+The contribution is a physical classification under explicit assumptions,
+not a richer operational model or faster general scheduling algorithm.
+Matching integrality, value-function convexity and price-support duality
+remain the underlying tools. Capacity, fee and equipment examples explain
+the classification; the public certificate establishes existence within
+its declared movement graph, without extending the closed-form theorem
+to arbitrary timetables.

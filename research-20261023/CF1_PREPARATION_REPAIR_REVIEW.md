@@ -1,0 +1,15 @@
+# CF1 preparation repair review
+
+Static review is clear for one source-bound focused check of `test_cf1_preparation_repair.py`: **10 cases in 6 functions**. No tests, runtime imports, native calls, assets, or benchmarks were run by this reviewer. Imported historical modules supply symbolic fixture definitions; their historical test matrices must not be selected.
+
+The charging diff constructs the movement-index set once per inventory invocation. It still checks identities, complete physical-row signatures and their before/after equality, variable/movement uniqueness, object identity, binary types and exact fixed bounds, and continuous types for every unmapped variable. Cooperative checks cover coefficient traversal, rows, variable/mapping traversal, bounds, unmapped variables, and binary fixing. Compact preparation timings remain local when deadline exhaustion prevents event emission. They bind stage, absolute deadline, observed start/end, elapsed time, and completion/error state.
+
+The provider now retains compact charging stages, inventory and preparation timings before checking the returned clock. Helper failures appear once at top level; raw plans, replay, captures/events and duplicate failures are excluded from that audit copy. The deadline check still precedes candidate admission and repair. Completed work at equality remains eligible; a return past the original deadline has no admitted plan, new repair, or renewed window. The same cumulative allowance object is retained, and preparation wall time does not become an extra native-time debit.
+
+Worker build observations bind the actual phase, case identity, stage cutoff and measured build interval. The fresh post-build deadline gate remains; timing events do not prove successful optimization, start acceptance, or feasibility.
+
+The focused regressions exercise interruption inside a coefficient row and variable traversal; row, fixed-bound, hidden-discrete and mapping violations after an initially valid inventory; timeout timings retained before any fake optimize call; helper diagnostics/failures retained exactly once with equality versus late-return rejection and unchanged quota; and timestamps from the actual worker build hook with a fake model builder. Backend imports are forbidden.
+
+This is a preparation/diagnostic unit gate only. Cooperative checks cannot preempt an individual native operation, sorting, identity computation, or serialization. No speedup, large-model latency, native CF1 feasibility, or completed comparison is established. Old receipts remain unchanged. Parent owns the single check under the prospective 25-second additional maximum (20-second work, 22.5-second outer allocation), carry **1414.4127097992352 seconds**, ADMIN0. There is no native attempt in this package; a later native attempt requires its own frozen design, current source binding and budget.
+
+Tests and this review are SOURCE STABLE, subject only to a concrete fake/API mismatch reported before parent freezes hashes.

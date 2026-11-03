@@ -1,0 +1,4087 @@
+{
+  "receipt_complete": true,
+  "audit_completed": true,
+  "checks_passed": true,
+  "failures": [],
+  "unknowns": [],
+  "input_sha256": {
+    "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/research-20261025/train_readiness/audit_metadata.py": "f5a66d9874663ba4b3514298b8369b5979e8ba623b1d1e35a323d1423638d0fd",
+    "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/research-20261025/train_readiness/PROTOCOL.md": "75e10325674030479fc8ada41947c891d3c8764da07f52e10005f2636b3475d5",
+    "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/research-20261025/train_readiness/LAUNCH.json": "a837ac4322c73d91d88c07623434445d041d3d2bcc55910bea0fdb2632f3fe4a",
+    "/Users/nadan/Documents/ChatGPT/egg/claude-local/v8/task00/inner_progress/fit_only_preprocessing_and_groups.json": "f4a5145f9b89ca487f52905d2cda153dd6bc1d1a930d441b577ec9357eae8095",
+    "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/research-20261017/classical-training/attempt1/catboost/preprocessing.json": "5c0ac1277ab68024ddc58ad468cf35d2fca18959906ae739bd946b21512f1ea6",
+    "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/research-20261017/classical-training/attempt1/catboost/metadata.json": "9f1fef8b98993e461d58d4ddb3e6bc061ac692159c922171ac0f09de8cc62c73",
+    "/Users/nadan/Documents/ChatGPT/egg/claude-local/20260930-route-pool128-v3/pool_manifest.json": "d9aad5b5ea62fd82a8b4f6a3c20a95c57953ba12c7bf0949fa06004aa511c40d"
+  },
+  "input_bytes": {
+    "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/research-20261025/train_readiness/audit_metadata.py": 16125,
+    "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/research-20261025/train_readiness/PROTOCOL.md": 5312,
+    "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/research-20261025/train_readiness/LAUNCH.json": 2979,
+    "/Users/nadan/Documents/ChatGPT/egg/claude-local/v8/task00/inner_progress/fit_only_preprocessing_and_groups.json": 4599,
+    "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/research-20261017/classical-training/attempt1/catboost/preprocessing.json": 4693,
+    "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/research-20261017/classical-training/attempt1/catboost/metadata.json": 2092,
+    "/Users/nadan/Documents/ChatGPT/egg/claude-local/20260930-route-pool128-v3/pool_manifest.json": 876376
+  },
+  "files": {
+    "GNN_preprocessing": {
+      "top_level_keys_and_types": {
+        "features": "list",
+        "fit_groups": "list",
+        "inner_groups": "list",
+        "mean_fit_only": "list",
+        "outer_groups": "list",
+        "scale_fit_only": "list"
+      },
+      "selected": {
+        "features": {
+          "present": true,
+          "value": [
+            "pullout",
+            "direct",
+            "depot",
+            "pullin",
+            "start_time",
+            "end_time",
+            "duration",
+            "movement_energy",
+            "before_energy",
+            "after_energy",
+            "charge_window",
+            "window_price_mean",
+            "window_price_min",
+            "market_mean",
+            "market_spread",
+            "same_place",
+            "intercept"
+          ]
+        },
+        "fit_groups": {
+          "present": true,
+          "value": [
+            "physical_v2_s10001",
+            "physical_v2_s10002",
+            "physical_v2_s10005",
+            "physical_v2_s10006",
+            "physical_v2_s10007",
+            "physical_v2_s10009",
+            "physical_v2_s10010",
+            "physical_v2_s10013",
+            "physical_v2_s10014",
+            "physical_v2_s10015",
+            "physical_v2_s10017",
+            "physical_v2_s10018",
+            "physical_v2_s10021",
+            "physical_v2_s10022",
+            "physical_v2_s10023",
+            "physical_v2_s10025",
+            "physical_v2_s10026",
+            "physical_v2_s10029",
+            "physical_v2_s10030",
+            "physical_v2_s10031",
+            "physical_v2_s10033",
+            "physical_v2_s10034",
+            "physical_v2_s10037",
+            "physical_v2_s10038",
+            "physical_v2_s10039",
+            "physical_v2_s10041",
+            "physical_v2_s10042",
+            "physical_v2_s10045",
+            "physical_v2_s10046",
+            "physical_v2_s10047",
+            "physical_v2_s10049",
+            "physical_v2_s10050",
+            "physical_v2_s10053",
+            "physical_v2_s10054",
+            "physical_v2_s10055",
+            "physical_v2_s10057",
+            "physical_v2_s10058",
+            "physical_v2_s10061",
+            "physical_v2_s10062",
+            "physical_v2_s10063",
+            "physical_v2_s10065",
+            "physical_v2_s10066",
+            "physical_v2_s10069",
+            "physical_v2_s10070",
+            "physical_v2_s10071",
+            "physical_v2_s10073",
+            "physical_v2_s10074",
+            "physical_v2_s10077",
+            "physical_v2_s10078",
+            "physical_v2_s10079",
+            "physical_v2_s10081",
+            "physical_v2_s10082",
+            "physical_v2_s10085",
+            "physical_v2_s10086",
+            "physical_v2_s10087",
+            "physical_v2_s10089",
+            "physical_v2_s10090",
+            "physical_v2_s10093",
+            "physical_v2_s10094",
+            "physical_v2_s10095",
+            "physical_v2_s10097",
+            "physical_v2_s10098",
+            "physical_v2_s10101",
+            "physical_v2_s10102",
+            "physical_v2_s10103",
+            "physical_v2_s10105",
+            "physical_v2_s10106",
+            "physical_v2_s10109",
+            "physical_v2_s10110",
+            "physical_v2_s10111",
+            "physical_v2_s10113",
+            "physical_v2_s10114",
+            "physical_v2_s10117",
+            "physical_v2_s10118",
+            "physical_v2_s10119",
+            "physical_v2_s10121",
+            "physical_v2_s10122",
+            "physical_v2_s10125",
+            "physical_v2_s10126",
+            "physical_v2_s10127"
+          ]
+        },
+        "inner_groups": {
+          "present": true,
+          "value": [
+            "physical_v2_s10003",
+            "physical_v2_s10011",
+            "physical_v2_s10019",
+            "physical_v2_s10027",
+            "physical_v2_s10035",
+            "physical_v2_s10043",
+            "physical_v2_s10051",
+            "physical_v2_s10059",
+            "physical_v2_s10067",
+            "physical_v2_s10075",
+            "physical_v2_s10083",
+            "physical_v2_s10091",
+            "physical_v2_s10099",
+            "physical_v2_s10107",
+            "physical_v2_s10115",
+            "physical_v2_s10123"
+          ]
+        },
+        "outer_groups": {
+          "present": true,
+          "value": [
+            "physical_v2_s10000",
+            "physical_v2_s10004",
+            "physical_v2_s10008",
+            "physical_v2_s10012",
+            "physical_v2_s10016",
+            "physical_v2_s10020",
+            "physical_v2_s10024",
+            "physical_v2_s10028",
+            "physical_v2_s10032",
+            "physical_v2_s10036",
+            "physical_v2_s10040",
+            "physical_v2_s10044",
+            "physical_v2_s10048",
+            "physical_v2_s10052",
+            "physical_v2_s10056",
+            "physical_v2_s10060",
+            "physical_v2_s10064",
+            "physical_v2_s10068",
+            "physical_v2_s10072",
+            "physical_v2_s10076",
+            "physical_v2_s10080",
+            "physical_v2_s10084",
+            "physical_v2_s10088",
+            "physical_v2_s10092",
+            "physical_v2_s10096",
+            "physical_v2_s10100",
+            "physical_v2_s10104",
+            "physical_v2_s10108",
+            "physical_v2_s10112",
+            "physical_v2_s10116",
+            "physical_v2_s10120",
+            "physical_v2_s10124"
+          ]
+        }
+      },
+      "structure_only": {
+        "mean_fit_only": {
+          "present": true,
+          "type": "list",
+          "length": 17
+        },
+        "scale_fit_only": {
+          "present": true,
+          "type": "list",
+          "length": 17
+        },
+        "pool_manifest_sha256": {
+          "present": false,
+          "type": "missing"
+        },
+        "seed": {
+          "present": false,
+          "type": "missing"
+        }
+      }
+    },
+    "CatBoost_preprocessing": {
+      "top_level_keys_and_types": {
+        "features": "list",
+        "fit_groups": "list",
+        "inner_groups": "list",
+        "mean_fit_only": "list",
+        "outer_groups": "list",
+        "scale_fit_only": "list",
+        "pool_manifest_sha256": "str"
+      },
+      "selected": {
+        "features": {
+          "present": true,
+          "value": [
+            "pullout",
+            "direct",
+            "depot",
+            "pullin",
+            "start_time",
+            "end_time",
+            "duration",
+            "movement_energy",
+            "before_energy",
+            "after_energy",
+            "charge_window",
+            "window_price_mean",
+            "window_price_min",
+            "market_mean",
+            "market_spread",
+            "same_place",
+            "intercept"
+          ]
+        },
+        "fit_groups": {
+          "present": true,
+          "value": [
+            "physical_v2_s10001",
+            "physical_v2_s10002",
+            "physical_v2_s10005",
+            "physical_v2_s10006",
+            "physical_v2_s10007",
+            "physical_v2_s10009",
+            "physical_v2_s10010",
+            "physical_v2_s10013",
+            "physical_v2_s10014",
+            "physical_v2_s10015",
+            "physical_v2_s10017",
+            "physical_v2_s10018",
+            "physical_v2_s10021",
+            "physical_v2_s10022",
+            "physical_v2_s10023",
+            "physical_v2_s10025",
+            "physical_v2_s10026",
+            "physical_v2_s10029",
+            "physical_v2_s10030",
+            "physical_v2_s10031",
+            "physical_v2_s10033",
+            "physical_v2_s10034",
+            "physical_v2_s10037",
+            "physical_v2_s10038",
+            "physical_v2_s10039",
+            "physical_v2_s10041",
+            "physical_v2_s10042",
+            "physical_v2_s10045",
+            "physical_v2_s10046",
+            "physical_v2_s10047",
+            "physical_v2_s10049",
+            "physical_v2_s10050",
+            "physical_v2_s10053",
+            "physical_v2_s10054",
+            "physical_v2_s10055",
+            "physical_v2_s10057",
+            "physical_v2_s10058",
+            "physical_v2_s10061",
+            "physical_v2_s10062",
+            "physical_v2_s10063",
+            "physical_v2_s10065",
+            "physical_v2_s10066",
+            "physical_v2_s10069",
+            "physical_v2_s10070",
+            "physical_v2_s10071",
+            "physical_v2_s10073",
+            "physical_v2_s10074",
+            "physical_v2_s10077",
+            "physical_v2_s10078",
+            "physical_v2_s10079",
+            "physical_v2_s10081",
+            "physical_v2_s10082",
+            "physical_v2_s10085",
+            "physical_v2_s10086",
+            "physical_v2_s10087",
+            "physical_v2_s10089",
+            "physical_v2_s10090",
+            "physical_v2_s10093",
+            "physical_v2_s10094",
+            "physical_v2_s10095",
+            "physical_v2_s10097",
+            "physical_v2_s10098",
+            "physical_v2_s10101",
+            "physical_v2_s10102",
+            "physical_v2_s10103",
+            "physical_v2_s10105",
+            "physical_v2_s10106",
+            "physical_v2_s10109",
+            "physical_v2_s10110",
+            "physical_v2_s10111",
+            "physical_v2_s10113",
+            "physical_v2_s10114",
+            "physical_v2_s10117",
+            "physical_v2_s10118",
+            "physical_v2_s10119",
+            "physical_v2_s10121",
+            "physical_v2_s10122",
+            "physical_v2_s10125",
+            "physical_v2_s10126",
+            "physical_v2_s10127"
+          ]
+        },
+        "inner_groups": {
+          "present": true,
+          "value": [
+            "physical_v2_s10003",
+            "physical_v2_s10011",
+            "physical_v2_s10019",
+            "physical_v2_s10027",
+            "physical_v2_s10035",
+            "physical_v2_s10043",
+            "physical_v2_s10051",
+            "physical_v2_s10059",
+            "physical_v2_s10067",
+            "physical_v2_s10075",
+            "physical_v2_s10083",
+            "physical_v2_s10091",
+            "physical_v2_s10099",
+            "physical_v2_s10107",
+            "physical_v2_s10115",
+            "physical_v2_s10123"
+          ]
+        },
+        "outer_groups": {
+          "present": true,
+          "value": [
+            "physical_v2_s10000",
+            "physical_v2_s10004",
+            "physical_v2_s10008",
+            "physical_v2_s10012",
+            "physical_v2_s10016",
+            "physical_v2_s10020",
+            "physical_v2_s10024",
+            "physical_v2_s10028",
+            "physical_v2_s10032",
+            "physical_v2_s10036",
+            "physical_v2_s10040",
+            "physical_v2_s10044",
+            "physical_v2_s10048",
+            "physical_v2_s10052",
+            "physical_v2_s10056",
+            "physical_v2_s10060",
+            "physical_v2_s10064",
+            "physical_v2_s10068",
+            "physical_v2_s10072",
+            "physical_v2_s10076",
+            "physical_v2_s10080",
+            "physical_v2_s10084",
+            "physical_v2_s10088",
+            "physical_v2_s10092",
+            "physical_v2_s10096",
+            "physical_v2_s10100",
+            "physical_v2_s10104",
+            "physical_v2_s10108",
+            "physical_v2_s10112",
+            "physical_v2_s10116",
+            "physical_v2_s10120",
+            "physical_v2_s10124"
+          ]
+        },
+        "pool_manifest_sha256": {
+          "present": true,
+          "value": "d9aad5b5ea62fd82a8b4f6a3c20a95c57953ba12c7bf0949fa06004aa511c40d"
+        }
+      },
+      "structure_only": {
+        "mean_fit_only": {
+          "present": true,
+          "type": "list",
+          "length": 17
+        },
+        "scale_fit_only": {
+          "present": true,
+          "type": "list",
+          "length": 17
+        }
+      }
+    },
+    "CatBoost_metadata": {
+      "top_level_keys_and_types": {
+        "arm": "str",
+        "seed": "int",
+        "selection": "dict",
+        "qualification": "str",
+        "model_sha256": "str",
+        "training_source_hashes": "dict",
+        "pool_table_hashes": "dict",
+        "features": "list"
+      },
+      "selected": {
+        "arm": {
+          "present": true,
+          "value": "catboost"
+        },
+        "seed": {
+          "present": true,
+          "value": 17
+        },
+        "qualification": {
+          "present": true,
+          "value": "Exploratory historical TRAIN-bank grouped CV; single feasible-incumbent labels, not optimum; no independent benchmark."
+        },
+        "features": {
+          "present": true,
+          "value": [
+            "pullout",
+            "direct",
+            "depot",
+            "pullin",
+            "start_time",
+            "end_time",
+            "duration",
+            "movement_energy",
+            "before_energy",
+            "after_energy",
+            "charge_window",
+            "window_price_mean",
+            "window_price_min",
+            "market_mean",
+            "market_spread",
+            "same_place",
+            "intercept"
+          ]
+        },
+        "model_sha256": {
+          "present": true,
+          "value": "1b3d6e00149aa4f712d84b8ba0e859496b295f9f266c593cf62164f92bbac237"
+        },
+        "training_source_hashes": {
+          "present": true,
+          "declared_digests": {
+            "/Users/nadan/Documents/ChatGPT/egg/claude-local/20260930-route-pool128-v3/pool_manifest.json": "d9aad5b5ea62fd82a8b4f6a3c20a95c57953ba12c7bf0949fa06004aa511c40d",
+            "/Users/nadan/Documents/ChatGPT/egg/claude-local/v8/task00/inner_progress/fit_only_preprocessing_and_groups.json": "f4a5145f9b89ca487f52905d2cda153dd6bc1d1a930d441b577ec9357eae8095",
+            "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/src/experiments/codex_train_classical.py": "bcfeeb5333cb0db1fec9e0ae2dc1103270e12f2a73a1d6fb08d76906072a1193",
+            "src/egglab/learned_proposals.py": "5b58b9495ccb401bf7a865ba4058a81838b575f517268e76bad40f0b7dcbd479",
+            "src/egglab/physical_route_model_v2.py": "07788c1bd991a5309371fc83adc8fae5599bfc7ae0c731b6e498263784d87e27",
+            "src/egglab/physical_route_model_v3.py": "c500e4ddb88079842e8faefa5e8128f07c1ce82bad3fbfe1c0b5f9aee969cda8",
+            "src/egglab/physical_route_model_families_v5.py": "c9a245c7ab8bcb817fc07b2e78562fd6822bfd1b29f593d4941462a7fa5f4469",
+            "research-20261017/classical-training/PROTOCOL.md": "8a834a7c78a52061b4f40aaba5286d85d5a07076bacb66d8cb0f575c1773d34d"
+          },
+          "invalid_entry_key_names": [],
+          "referenced_files_verified": false
+        },
+        "pool_table_hashes": {
+          "present": true,
+          "declared_digests": {
+            "cases.jsonl": "faf0428f79744a9e26fa04e80baec4734443e3cfe538e404d74f41f626a294d6",
+            "source_inputs.jsonl": "7c5fab4c648b27fda5e9ecc55cd418f0a066c8e46196bc31d5f9405e5a6409d5"
+          },
+          "invalid_entry_key_names": [],
+          "referenced_files_verified": false
+        },
+        "selection": {
+          "candidate_index": {
+            "present": true,
+            "value": 1
+          },
+          "config": {
+            "present": true,
+            "value": {
+              "depth": 6
+            },
+            "status": "declared_flat_configuration"
+          }
+        }
+      },
+      "structure_only": {},
+      "selection_key_names_and_types": {
+        "candidate_index": "int",
+        "config": "dict",
+        "inner_weighted_log_loss": "float"
+      }
+    },
+    "TRAIN_manifest": {
+      "top_level_keys_and_types": {
+        "adapter_source_hashes": "dict",
+        "admitted_shards": "list",
+        "base_ids": "list",
+        "feature_policy": "str",
+        "group_eligibility": "list",
+        "groups_eligible_full_pair": "int",
+        "groups_eligible_observed": "int",
+        "independent_groups_intended": "int",
+        "output_hashes": "dict",
+        "policy": "str",
+        "source_fleets_intended": "int",
+        "source_fleets_observed": "int",
+        "target_outcomes_not_exported": "bool",
+        "train_only": "bool"
+      },
+      "selected": {
+        "policy": {
+          "present": true,
+          "value": "physical-route-source-pool-prefix-v3"
+        },
+        "train_only": {
+          "present": true,
+          "value": true
+        },
+        "base_ids": {
+          "present": true,
+          "value": [
+            10000,
+            10001,
+            10002,
+            10003,
+            10004,
+            10005,
+            10006,
+            10007,
+            10008,
+            10009,
+            10010,
+            10011,
+            10012,
+            10013,
+            10014,
+            10015,
+            10016,
+            10017,
+            10018,
+            10019,
+            10020,
+            10021,
+            10022,
+            10023,
+            10024,
+            10025,
+            10026,
+            10027,
+            10028,
+            10029,
+            10030,
+            10031,
+            10032,
+            10033,
+            10034,
+            10035,
+            10036,
+            10037,
+            10038,
+            10039,
+            10040,
+            10041,
+            10042,
+            10043,
+            10044,
+            10045,
+            10046,
+            10047,
+            10048,
+            10049,
+            10050,
+            10051,
+            10052,
+            10053,
+            10054,
+            10055,
+            10056,
+            10057,
+            10058,
+            10059,
+            10060,
+            10061,
+            10062,
+            10063,
+            10064,
+            10065,
+            10066,
+            10067,
+            10068,
+            10069,
+            10070,
+            10071,
+            10072,
+            10073,
+            10074,
+            10075,
+            10076,
+            10077,
+            10078,
+            10079,
+            10080,
+            10081,
+            10082,
+            10083,
+            10084,
+            10085,
+            10086,
+            10087,
+            10088,
+            10089,
+            10090,
+            10091,
+            10092,
+            10093,
+            10094,
+            10095,
+            10096,
+            10097,
+            10098,
+            10099,
+            10100,
+            10101,
+            10102,
+            10103,
+            10104,
+            10105,
+            10106,
+            10107,
+            10108,
+            10109,
+            10110,
+            10111,
+            10112,
+            10113,
+            10114,
+            10115,
+            10116,
+            10117,
+            10118,
+            10119,
+            10120,
+            10121,
+            10122,
+            10123,
+            10124,
+            10125,
+            10126,
+            10127
+          ]
+        },
+        "independent_groups_intended": {
+          "present": true,
+          "value": 128
+        },
+        "groups_eligible_observed": {
+          "present": true,
+          "value": 128
+        },
+        "groups_eligible_full_pair": {
+          "present": true,
+          "value": 127
+        },
+        "source_fleets_intended": {
+          "present": true,
+          "value": 256
+        },
+        "source_fleets_observed": {
+          "present": true,
+          "value": 255
+        },
+        "feature_policy": {
+          "present": true,
+          "value": "case/source-market numeric edge features only; no outcome table"
+        },
+        "target_outcomes_not_exported": {
+          "present": true,
+          "value": true
+        },
+        "output_hashes": {
+          "present": true,
+          "declared_digests": {
+            "cases.jsonl": "faf0428f79744a9e26fa04e80baec4734443e3cfe538e404d74f41f626a294d6",
+            "source_inputs.jsonl": "7c5fab4c648b27fda5e9ecc55cd418f0a066c8e46196bc31d5f9405e5a6409d5"
+          },
+          "invalid_entry_key_names": [],
+          "referenced_files_verified": false
+        },
+        "adapter_source_hashes": {
+          "present": true,
+          "declared_digests": {
+            "src/experiments/physical_learning_dataset.py": "00f85a388bc47a0b4622dcfe55812915b9ffe8f5171d5d3a6886e53f3577629c",
+            "src/experiments/pool_physical_route_training_v3.py": "49487ea117da108f87fd4fd8f22641af88ca610f84164a97af70ed5a0389d867"
+          },
+          "invalid_entry_key_names": [],
+          "referenced_files_verified": false
+        }
+      },
+      "structure_only": {},
+      "group_eligibility_item_key_names": [
+        "base_group",
+        "base_id",
+        "eligible_for_full_pair_supervision",
+        "eligible_for_observed_source_supervision",
+        "intended_source_count",
+        "missing_source_labels",
+        "observed_source_count",
+        "observed_sources",
+        "registered_censor"
+      ]
+    }
+  },
+  "whitelist": {
+    "/Users/nadan/Documents/ChatGPT/egg/claude-local/v8/task00/inner_progress/fit_only_preprocessing_and_groups.json": {
+      "kind": "GNN_preprocessing",
+      "values": [
+        "features",
+        "fit_groups",
+        "inner_groups",
+        "outer_groups"
+      ],
+      "structure_only": [
+        "mean_fit_only",
+        "scale_fit_only",
+        "pool_manifest_sha256",
+        "seed"
+      ]
+    },
+    "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/research-20261017/classical-training/attempt1/catboost/preprocessing.json": {
+      "kind": "CatBoost_preprocessing",
+      "values": [
+        "features",
+        "fit_groups",
+        "inner_groups",
+        "outer_groups",
+        "pool_manifest_sha256"
+      ],
+      "structure_only": [
+        "mean_fit_only",
+        "scale_fit_only"
+      ]
+    },
+    "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/research-20261017/classical-training/attempt1/catboost/metadata.json": {
+      "kind": "CatBoost_metadata",
+      "values": [
+        "arm",
+        "seed",
+        "qualification",
+        "features",
+        "model_sha256"
+      ],
+      "selection": [
+        "candidate_index",
+        "config"
+      ],
+      "digest_maps": [
+        "training_source_hashes",
+        "pool_table_hashes"
+      ]
+    },
+    "/Users/nadan/Documents/ChatGPT/egg/claude-local/20260930-route-pool128-v3/pool_manifest.json": {
+      "kind": "TRAIN_manifest",
+      "values": [
+        "policy",
+        "train_only",
+        "base_ids",
+        "independent_groups_intended",
+        "groups_eligible_observed",
+        "groups_eligible_full_pair",
+        "source_fleets_intended",
+        "source_fleets_observed",
+        "feature_policy",
+        "target_outcomes_not_exported"
+      ],
+      "digest_maps": [
+        "output_hashes",
+        "adapter_source_hashes"
+      ],
+      "FIT_entry_values": [
+        "base_id",
+        "base_group",
+        "intended_source_count",
+        "observed_source_count",
+        "observed_sources",
+        "missing_source_labels",
+        "eligible_for_observed_source_supervision",
+        "eligible_for_full_pair_supervision"
+      ],
+      "shard_values": [
+        "shard",
+        "dataset"
+      ],
+      "shard_digests": [
+        "dataset_receipt_sha256",
+        "case_table_sha256",
+        "source_table_sha256",
+        "health_sha256_from_receipt"
+      ]
+    }
+  },
+  "readiness_qualified": false,
+  "FIT_group_provenance": [
+    {
+      "base_id": {
+        "present": true,
+        "value": 10001
+      },
+      "base_group": {
+        "present": true,
+        "value": "physical_v2_s10001"
+      },
+      "intended_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_sources": {
+        "present": true,
+        "value": [
+          "source0",
+          "source1"
+        ]
+      },
+      "missing_source_labels": {
+        "present": true,
+        "value": []
+      },
+      "eligible_for_observed_source_supervision": {
+        "present": true,
+        "value": true
+      },
+      "eligible_for_full_pair_supervision": {
+        "present": true,
+        "value": true
+      }
+    },
+    {
+      "base_id": {
+        "present": true,
+        "value": 10002
+      },
+      "base_group": {
+        "present": true,
+        "value": "physical_v2_s10002"
+      },
+      "intended_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_sources": {
+        "present": true,
+        "value": [
+          "source0",
+          "source1"
+        ]
+      },
+      "missing_source_labels": {
+        "present": true,
+        "value": []
+      },
+      "eligible_for_observed_source_supervision": {
+        "present": true,
+        "value": true
+      },
+      "eligible_for_full_pair_supervision": {
+        "present": true,
+        "value": true
+      }
+    },
+    {
+      "base_id": {
+        "present": true,
+        "value": 10005
+      },
+      "base_group": {
+        "present": true,
+        "value": "physical_v2_s10005"
+      },
+      "intended_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_sources": {
+        "present": true,
+        "value": [
+          "source0",
+          "source1"
+        ]
+      },
+      "missing_source_labels": {
+        "present": true,
+        "value": []
+      },
+      "eligible_for_observed_source_supervision": {
+        "present": true,
+        "value": true
+      },
+      "eligible_for_full_pair_supervision": {
+        "present": true,
+        "value": true
+      }
+    },
+    {
+      "base_id": {
+        "present": true,
+        "value": 10006
+      },
+      "base_group": {
+        "present": true,
+        "value": "physical_v2_s10006"
+      },
+      "intended_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_sources": {
+        "present": true,
+        "value": [
+          "source0",
+          "source1"
+        ]
+      },
+      "missing_source_labels": {
+        "present": true,
+        "value": []
+      },
+      "eligible_for_observed_source_supervision": {
+        "present": true,
+        "value": true
+      },
+      "eligible_for_full_pair_supervision": {
+        "present": true,
+        "value": true
+      }
+    },
+    {
+      "base_id": {
+        "present": true,
+        "value": 10007
+      },
+      "base_group": {
+        "present": true,
+        "value": "physical_v2_s10007"
+      },
+      "intended_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_sources": {
+        "present": true,
+        "value": [
+          "source0",
+          "source1"
+        ]
+      },
+      "missing_source_labels": {
+        "present": true,
+        "value": []
+      },
+      "eligible_for_observed_source_supervision": {
+        "present": true,
+        "value": true
+      },
+      "eligible_for_full_pair_supervision": {
+        "present": true,
+        "value": true
+      }
+    },
+    {
+      "base_id": {
+        "present": true,
+        "value": 10009
+      },
+      "base_group": {
+        "present": true,
+        "value": "physical_v2_s10009"
+      },
+      "intended_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_sources": {
+        "present": true,
+        "value": [
+          "source0",
+          "source1"
+        ]
+      },
+      "missing_source_labels": {
+        "present": true,
+        "value": []
+      },
+      "eligible_for_observed_source_supervision": {
+        "present": true,
+        "value": true
+      },
+      "eligible_for_full_pair_supervision": {
+        "present": true,
+        "value": true
+      }
+    },
+    {
+      "base_id": {
+        "present": true,
+        "value": 10010
+      },
+      "base_group": {
+        "present": true,
+        "value": "physical_v2_s10010"
+      },
+      "intended_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_sources": {
+        "present": true,
+        "value": [
+          "source0",
+          "source1"
+        ]
+      },
+      "missing_source_labels": {
+        "present": true,
+        "value": []
+      },
+      "eligible_for_observed_source_supervision": {
+        "present": true,
+        "value": true
+      },
+      "eligible_for_full_pair_supervision": {
+        "present": true,
+        "value": true
+      }
+    },
+    {
+      "base_id": {
+        "present": true,
+        "value": 10013
+      },
+      "base_group": {
+        "present": true,
+        "value": "physical_v2_s10013"
+      },
+      "intended_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_sources": {
+        "present": true,
+        "value": [
+          "source0",
+          "source1"
+        ]
+      },
+      "missing_source_labels": {
+        "present": true,
+        "value": []
+      },
+      "eligible_for_observed_source_supervision": {
+        "present": true,
+        "value": true
+      },
+      "eligible_for_full_pair_supervision": {
+        "present": true,
+        "value": true
+      }
+    },
+    {
+      "base_id": {
+        "present": true,
+        "value": 10014
+      },
+      "base_group": {
+        "present": true,
+        "value": "physical_v2_s10014"
+      },
+      "intended_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_sources": {
+        "present": true,
+        "value": [
+          "source0",
+          "source1"
+        ]
+      },
+      "missing_source_labels": {
+        "present": true,
+        "value": []
+      },
+      "eligible_for_observed_source_supervision": {
+        "present": true,
+        "value": true
+      },
+      "eligible_for_full_pair_supervision": {
+        "present": true,
+        "value": true
+      }
+    },
+    {
+      "base_id": {
+        "present": true,
+        "value": 10015
+      },
+      "base_group": {
+        "present": true,
+        "value": "physical_v2_s10015"
+      },
+      "intended_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_sources": {
+        "present": true,
+        "value": [
+          "source0",
+          "source1"
+        ]
+      },
+      "missing_source_labels": {
+        "present": true,
+        "value": []
+      },
+      "eligible_for_observed_source_supervision": {
+        "present": true,
+        "value": true
+      },
+      "eligible_for_full_pair_supervision": {
+        "present": true,
+        "value": true
+      }
+    },
+    {
+      "base_id": {
+        "present": true,
+        "value": 10017
+      },
+      "base_group": {
+        "present": true,
+        "value": "physical_v2_s10017"
+      },
+      "intended_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_sources": {
+        "present": true,
+        "value": [
+          "source0",
+          "source1"
+        ]
+      },
+      "missing_source_labels": {
+        "present": true,
+        "value": []
+      },
+      "eligible_for_observed_source_supervision": {
+        "present": true,
+        "value": true
+      },
+      "eligible_for_full_pair_supervision": {
+        "present": true,
+        "value": true
+      }
+    },
+    {
+      "base_id": {
+        "present": true,
+        "value": 10018
+      },
+      "base_group": {
+        "present": true,
+        "value": "physical_v2_s10018"
+      },
+      "intended_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_sources": {
+        "present": true,
+        "value": [
+          "source0",
+          "source1"
+        ]
+      },
+      "missing_source_labels": {
+        "present": true,
+        "value": []
+      },
+      "eligible_for_observed_source_supervision": {
+        "present": true,
+        "value": true
+      },
+      "eligible_for_full_pair_supervision": {
+        "present": true,
+        "value": true
+      }
+    },
+    {
+      "base_id": {
+        "present": true,
+        "value": 10021
+      },
+      "base_group": {
+        "present": true,
+        "value": "physical_v2_s10021"
+      },
+      "intended_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_sources": {
+        "present": true,
+        "value": [
+          "source0",
+          "source1"
+        ]
+      },
+      "missing_source_labels": {
+        "present": true,
+        "value": []
+      },
+      "eligible_for_observed_source_supervision": {
+        "present": true,
+        "value": true
+      },
+      "eligible_for_full_pair_supervision": {
+        "present": true,
+        "value": true
+      }
+    },
+    {
+      "base_id": {
+        "present": true,
+        "value": 10022
+      },
+      "base_group": {
+        "present": true,
+        "value": "physical_v2_s10022"
+      },
+      "intended_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_sources": {
+        "present": true,
+        "value": [
+          "source0",
+          "source1"
+        ]
+      },
+      "missing_source_labels": {
+        "present": true,
+        "value": []
+      },
+      "eligible_for_observed_source_supervision": {
+        "present": true,
+        "value": true
+      },
+      "eligible_for_full_pair_supervision": {
+        "present": true,
+        "value": true
+      }
+    },
+    {
+      "base_id": {
+        "present": true,
+        "value": 10023
+      },
+      "base_group": {
+        "present": true,
+        "value": "physical_v2_s10023"
+      },
+      "intended_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_sources": {
+        "present": true,
+        "value": [
+          "source0",
+          "source1"
+        ]
+      },
+      "missing_source_labels": {
+        "present": true,
+        "value": []
+      },
+      "eligible_for_observed_source_supervision": {
+        "present": true,
+        "value": true
+      },
+      "eligible_for_full_pair_supervision": {
+        "present": true,
+        "value": true
+      }
+    },
+    {
+      "base_id": {
+        "present": true,
+        "value": 10025
+      },
+      "base_group": {
+        "present": true,
+        "value": "physical_v2_s10025"
+      },
+      "intended_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_sources": {
+        "present": true,
+        "value": [
+          "source0",
+          "source1"
+        ]
+      },
+      "missing_source_labels": {
+        "present": true,
+        "value": []
+      },
+      "eligible_for_observed_source_supervision": {
+        "present": true,
+        "value": true
+      },
+      "eligible_for_full_pair_supervision": {
+        "present": true,
+        "value": true
+      }
+    },
+    {
+      "base_id": {
+        "present": true,
+        "value": 10026
+      },
+      "base_group": {
+        "present": true,
+        "value": "physical_v2_s10026"
+      },
+      "intended_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_sources": {
+        "present": true,
+        "value": [
+          "source0",
+          "source1"
+        ]
+      },
+      "missing_source_labels": {
+        "present": true,
+        "value": []
+      },
+      "eligible_for_observed_source_supervision": {
+        "present": true,
+        "value": true
+      },
+      "eligible_for_full_pair_supervision": {
+        "present": true,
+        "value": true
+      }
+    },
+    {
+      "base_id": {
+        "present": true,
+        "value": 10029
+      },
+      "base_group": {
+        "present": true,
+        "value": "physical_v2_s10029"
+      },
+      "intended_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_sources": {
+        "present": true,
+        "value": [
+          "source0",
+          "source1"
+        ]
+      },
+      "missing_source_labels": {
+        "present": true,
+        "value": []
+      },
+      "eligible_for_observed_source_supervision": {
+        "present": true,
+        "value": true
+      },
+      "eligible_for_full_pair_supervision": {
+        "present": true,
+        "value": true
+      }
+    },
+    {
+      "base_id": {
+        "present": true,
+        "value": 10030
+      },
+      "base_group": {
+        "present": true,
+        "value": "physical_v2_s10030"
+      },
+      "intended_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_sources": {
+        "present": true,
+        "value": [
+          "source0",
+          "source1"
+        ]
+      },
+      "missing_source_labels": {
+        "present": true,
+        "value": []
+      },
+      "eligible_for_observed_source_supervision": {
+        "present": true,
+        "value": true
+      },
+      "eligible_for_full_pair_supervision": {
+        "present": true,
+        "value": true
+      }
+    },
+    {
+      "base_id": {
+        "present": true,
+        "value": 10031
+      },
+      "base_group": {
+        "present": true,
+        "value": "physical_v2_s10031"
+      },
+      "intended_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_sources": {
+        "present": true,
+        "value": [
+          "source0",
+          "source1"
+        ]
+      },
+      "missing_source_labels": {
+        "present": true,
+        "value": []
+      },
+      "eligible_for_observed_source_supervision": {
+        "present": true,
+        "value": true
+      },
+      "eligible_for_full_pair_supervision": {
+        "present": true,
+        "value": true
+      }
+    },
+    {
+      "base_id": {
+        "present": true,
+        "value": 10033
+      },
+      "base_group": {
+        "present": true,
+        "value": "physical_v2_s10033"
+      },
+      "intended_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_sources": {
+        "present": true,
+        "value": [
+          "source0",
+          "source1"
+        ]
+      },
+      "missing_source_labels": {
+        "present": true,
+        "value": []
+      },
+      "eligible_for_observed_source_supervision": {
+        "present": true,
+        "value": true
+      },
+      "eligible_for_full_pair_supervision": {
+        "present": true,
+        "value": true
+      }
+    },
+    {
+      "base_id": {
+        "present": true,
+        "value": 10034
+      },
+      "base_group": {
+        "present": true,
+        "value": "physical_v2_s10034"
+      },
+      "intended_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_sources": {
+        "present": true,
+        "value": [
+          "source0",
+          "source1"
+        ]
+      },
+      "missing_source_labels": {
+        "present": true,
+        "value": []
+      },
+      "eligible_for_observed_source_supervision": {
+        "present": true,
+        "value": true
+      },
+      "eligible_for_full_pair_supervision": {
+        "present": true,
+        "value": true
+      }
+    },
+    {
+      "base_id": {
+        "present": true,
+        "value": 10037
+      },
+      "base_group": {
+        "present": true,
+        "value": "physical_v2_s10037"
+      },
+      "intended_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_source_count": {
+        "present": true,
+        "value": 1
+      },
+      "observed_sources": {
+        "present": true,
+        "value": [
+          "source1"
+        ]
+      },
+      "missing_source_labels": {
+        "present": true,
+        "value": [
+          "source0"
+        ]
+      },
+      "eligible_for_observed_source_supervision": {
+        "present": true,
+        "value": true
+      },
+      "eligible_for_full_pair_supervision": {
+        "present": true,
+        "value": false
+      }
+    },
+    {
+      "base_id": {
+        "present": true,
+        "value": 10038
+      },
+      "base_group": {
+        "present": true,
+        "value": "physical_v2_s10038"
+      },
+      "intended_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_sources": {
+        "present": true,
+        "value": [
+          "source0",
+          "source1"
+        ]
+      },
+      "missing_source_labels": {
+        "present": true,
+        "value": []
+      },
+      "eligible_for_observed_source_supervision": {
+        "present": true,
+        "value": true
+      },
+      "eligible_for_full_pair_supervision": {
+        "present": true,
+        "value": true
+      }
+    },
+    {
+      "base_id": {
+        "present": true,
+        "value": 10039
+      },
+      "base_group": {
+        "present": true,
+        "value": "physical_v2_s10039"
+      },
+      "intended_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_sources": {
+        "present": true,
+        "value": [
+          "source0",
+          "source1"
+        ]
+      },
+      "missing_source_labels": {
+        "present": true,
+        "value": []
+      },
+      "eligible_for_observed_source_supervision": {
+        "present": true,
+        "value": true
+      },
+      "eligible_for_full_pair_supervision": {
+        "present": true,
+        "value": true
+      }
+    },
+    {
+      "base_id": {
+        "present": true,
+        "value": 10041
+      },
+      "base_group": {
+        "present": true,
+        "value": "physical_v2_s10041"
+      },
+      "intended_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_sources": {
+        "present": true,
+        "value": [
+          "source0",
+          "source1"
+        ]
+      },
+      "missing_source_labels": {
+        "present": true,
+        "value": []
+      },
+      "eligible_for_observed_source_supervision": {
+        "present": true,
+        "value": true
+      },
+      "eligible_for_full_pair_supervision": {
+        "present": true,
+        "value": true
+      }
+    },
+    {
+      "base_id": {
+        "present": true,
+        "value": 10042
+      },
+      "base_group": {
+        "present": true,
+        "value": "physical_v2_s10042"
+      },
+      "intended_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_sources": {
+        "present": true,
+        "value": [
+          "source0",
+          "source1"
+        ]
+      },
+      "missing_source_labels": {
+        "present": true,
+        "value": []
+      },
+      "eligible_for_observed_source_supervision": {
+        "present": true,
+        "value": true
+      },
+      "eligible_for_full_pair_supervision": {
+        "present": true,
+        "value": true
+      }
+    },
+    {
+      "base_id": {
+        "present": true,
+        "value": 10045
+      },
+      "base_group": {
+        "present": true,
+        "value": "physical_v2_s10045"
+      },
+      "intended_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_sources": {
+        "present": true,
+        "value": [
+          "source0",
+          "source1"
+        ]
+      },
+      "missing_source_labels": {
+        "present": true,
+        "value": []
+      },
+      "eligible_for_observed_source_supervision": {
+        "present": true,
+        "value": true
+      },
+      "eligible_for_full_pair_supervision": {
+        "present": true,
+        "value": true
+      }
+    },
+    {
+      "base_id": {
+        "present": true,
+        "value": 10046
+      },
+      "base_group": {
+        "present": true,
+        "value": "physical_v2_s10046"
+      },
+      "intended_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_sources": {
+        "present": true,
+        "value": [
+          "source0",
+          "source1"
+        ]
+      },
+      "missing_source_labels": {
+        "present": true,
+        "value": []
+      },
+      "eligible_for_observed_source_supervision": {
+        "present": true,
+        "value": true
+      },
+      "eligible_for_full_pair_supervision": {
+        "present": true,
+        "value": true
+      }
+    },
+    {
+      "base_id": {
+        "present": true,
+        "value": 10047
+      },
+      "base_group": {
+        "present": true,
+        "value": "physical_v2_s10047"
+      },
+      "intended_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_sources": {
+        "present": true,
+        "value": [
+          "source0",
+          "source1"
+        ]
+      },
+      "missing_source_labels": {
+        "present": true,
+        "value": []
+      },
+      "eligible_for_observed_source_supervision": {
+        "present": true,
+        "value": true
+      },
+      "eligible_for_full_pair_supervision": {
+        "present": true,
+        "value": true
+      }
+    },
+    {
+      "base_id": {
+        "present": true,
+        "value": 10049
+      },
+      "base_group": {
+        "present": true,
+        "value": "physical_v2_s10049"
+      },
+      "intended_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_sources": {
+        "present": true,
+        "value": [
+          "source0",
+          "source1"
+        ]
+      },
+      "missing_source_labels": {
+        "present": true,
+        "value": []
+      },
+      "eligible_for_observed_source_supervision": {
+        "present": true,
+        "value": true
+      },
+      "eligible_for_full_pair_supervision": {
+        "present": true,
+        "value": true
+      }
+    },
+    {
+      "base_id": {
+        "present": true,
+        "value": 10050
+      },
+      "base_group": {
+        "present": true,
+        "value": "physical_v2_s10050"
+      },
+      "intended_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_sources": {
+        "present": true,
+        "value": [
+          "source0",
+          "source1"
+        ]
+      },
+      "missing_source_labels": {
+        "present": true,
+        "value": []
+      },
+      "eligible_for_observed_source_supervision": {
+        "present": true,
+        "value": true
+      },
+      "eligible_for_full_pair_supervision": {
+        "present": true,
+        "value": true
+      }
+    },
+    {
+      "base_id": {
+        "present": true,
+        "value": 10053
+      },
+      "base_group": {
+        "present": true,
+        "value": "physical_v2_s10053"
+      },
+      "intended_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_sources": {
+        "present": true,
+        "value": [
+          "source0",
+          "source1"
+        ]
+      },
+      "missing_source_labels": {
+        "present": true,
+        "value": []
+      },
+      "eligible_for_observed_source_supervision": {
+        "present": true,
+        "value": true
+      },
+      "eligible_for_full_pair_supervision": {
+        "present": true,
+        "value": true
+      }
+    },
+    {
+      "base_id": {
+        "present": true,
+        "value": 10054
+      },
+      "base_group": {
+        "present": true,
+        "value": "physical_v2_s10054"
+      },
+      "intended_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_sources": {
+        "present": true,
+        "value": [
+          "source0",
+          "source1"
+        ]
+      },
+      "missing_source_labels": {
+        "present": true,
+        "value": []
+      },
+      "eligible_for_observed_source_supervision": {
+        "present": true,
+        "value": true
+      },
+      "eligible_for_full_pair_supervision": {
+        "present": true,
+        "value": true
+      }
+    },
+    {
+      "base_id": {
+        "present": true,
+        "value": 10055
+      },
+      "base_group": {
+        "present": true,
+        "value": "physical_v2_s10055"
+      },
+      "intended_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_sources": {
+        "present": true,
+        "value": [
+          "source0",
+          "source1"
+        ]
+      },
+      "missing_source_labels": {
+        "present": true,
+        "value": []
+      },
+      "eligible_for_observed_source_supervision": {
+        "present": true,
+        "value": true
+      },
+      "eligible_for_full_pair_supervision": {
+        "present": true,
+        "value": true
+      }
+    },
+    {
+      "base_id": {
+        "present": true,
+        "value": 10057
+      },
+      "base_group": {
+        "present": true,
+        "value": "physical_v2_s10057"
+      },
+      "intended_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_sources": {
+        "present": true,
+        "value": [
+          "source0",
+          "source1"
+        ]
+      },
+      "missing_source_labels": {
+        "present": true,
+        "value": []
+      },
+      "eligible_for_observed_source_supervision": {
+        "present": true,
+        "value": true
+      },
+      "eligible_for_full_pair_supervision": {
+        "present": true,
+        "value": true
+      }
+    },
+    {
+      "base_id": {
+        "present": true,
+        "value": 10058
+      },
+      "base_group": {
+        "present": true,
+        "value": "physical_v2_s10058"
+      },
+      "intended_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_sources": {
+        "present": true,
+        "value": [
+          "source0",
+          "source1"
+        ]
+      },
+      "missing_source_labels": {
+        "present": true,
+        "value": []
+      },
+      "eligible_for_observed_source_supervision": {
+        "present": true,
+        "value": true
+      },
+      "eligible_for_full_pair_supervision": {
+        "present": true,
+        "value": true
+      }
+    },
+    {
+      "base_id": {
+        "present": true,
+        "value": 10061
+      },
+      "base_group": {
+        "present": true,
+        "value": "physical_v2_s10061"
+      },
+      "intended_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_sources": {
+        "present": true,
+        "value": [
+          "source0",
+          "source1"
+        ]
+      },
+      "missing_source_labels": {
+        "present": true,
+        "value": []
+      },
+      "eligible_for_observed_source_supervision": {
+        "present": true,
+        "value": true
+      },
+      "eligible_for_full_pair_supervision": {
+        "present": true,
+        "value": true
+      }
+    },
+    {
+      "base_id": {
+        "present": true,
+        "value": 10062
+      },
+      "base_group": {
+        "present": true,
+        "value": "physical_v2_s10062"
+      },
+      "intended_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_sources": {
+        "present": true,
+        "value": [
+          "source0",
+          "source1"
+        ]
+      },
+      "missing_source_labels": {
+        "present": true,
+        "value": []
+      },
+      "eligible_for_observed_source_supervision": {
+        "present": true,
+        "value": true
+      },
+      "eligible_for_full_pair_supervision": {
+        "present": true,
+        "value": true
+      }
+    },
+    {
+      "base_id": {
+        "present": true,
+        "value": 10063
+      },
+      "base_group": {
+        "present": true,
+        "value": "physical_v2_s10063"
+      },
+      "intended_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_sources": {
+        "present": true,
+        "value": [
+          "source0",
+          "source1"
+        ]
+      },
+      "missing_source_labels": {
+        "present": true,
+        "value": []
+      },
+      "eligible_for_observed_source_supervision": {
+        "present": true,
+        "value": true
+      },
+      "eligible_for_full_pair_supervision": {
+        "present": true,
+        "value": true
+      }
+    },
+    {
+      "base_id": {
+        "present": true,
+        "value": 10065
+      },
+      "base_group": {
+        "present": true,
+        "value": "physical_v2_s10065"
+      },
+      "intended_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_sources": {
+        "present": true,
+        "value": [
+          "source0",
+          "source1"
+        ]
+      },
+      "missing_source_labels": {
+        "present": true,
+        "value": []
+      },
+      "eligible_for_observed_source_supervision": {
+        "present": true,
+        "value": true
+      },
+      "eligible_for_full_pair_supervision": {
+        "present": true,
+        "value": true
+      }
+    },
+    {
+      "base_id": {
+        "present": true,
+        "value": 10066
+      },
+      "base_group": {
+        "present": true,
+        "value": "physical_v2_s10066"
+      },
+      "intended_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_sources": {
+        "present": true,
+        "value": [
+          "source0",
+          "source1"
+        ]
+      },
+      "missing_source_labels": {
+        "present": true,
+        "value": []
+      },
+      "eligible_for_observed_source_supervision": {
+        "present": true,
+        "value": true
+      },
+      "eligible_for_full_pair_supervision": {
+        "present": true,
+        "value": true
+      }
+    },
+    {
+      "base_id": {
+        "present": true,
+        "value": 10069
+      },
+      "base_group": {
+        "present": true,
+        "value": "physical_v2_s10069"
+      },
+      "intended_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_sources": {
+        "present": true,
+        "value": [
+          "source0",
+          "source1"
+        ]
+      },
+      "missing_source_labels": {
+        "present": true,
+        "value": []
+      },
+      "eligible_for_observed_source_supervision": {
+        "present": true,
+        "value": true
+      },
+      "eligible_for_full_pair_supervision": {
+        "present": true,
+        "value": true
+      }
+    },
+    {
+      "base_id": {
+        "present": true,
+        "value": 10070
+      },
+      "base_group": {
+        "present": true,
+        "value": "physical_v2_s10070"
+      },
+      "intended_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_sources": {
+        "present": true,
+        "value": [
+          "source0",
+          "source1"
+        ]
+      },
+      "missing_source_labels": {
+        "present": true,
+        "value": []
+      },
+      "eligible_for_observed_source_supervision": {
+        "present": true,
+        "value": true
+      },
+      "eligible_for_full_pair_supervision": {
+        "present": true,
+        "value": true
+      }
+    },
+    {
+      "base_id": {
+        "present": true,
+        "value": 10071
+      },
+      "base_group": {
+        "present": true,
+        "value": "physical_v2_s10071"
+      },
+      "intended_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_sources": {
+        "present": true,
+        "value": [
+          "source0",
+          "source1"
+        ]
+      },
+      "missing_source_labels": {
+        "present": true,
+        "value": []
+      },
+      "eligible_for_observed_source_supervision": {
+        "present": true,
+        "value": true
+      },
+      "eligible_for_full_pair_supervision": {
+        "present": true,
+        "value": true
+      }
+    },
+    {
+      "base_id": {
+        "present": true,
+        "value": 10073
+      },
+      "base_group": {
+        "present": true,
+        "value": "physical_v2_s10073"
+      },
+      "intended_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_sources": {
+        "present": true,
+        "value": [
+          "source0",
+          "source1"
+        ]
+      },
+      "missing_source_labels": {
+        "present": true,
+        "value": []
+      },
+      "eligible_for_observed_source_supervision": {
+        "present": true,
+        "value": true
+      },
+      "eligible_for_full_pair_supervision": {
+        "present": true,
+        "value": true
+      }
+    },
+    {
+      "base_id": {
+        "present": true,
+        "value": 10074
+      },
+      "base_group": {
+        "present": true,
+        "value": "physical_v2_s10074"
+      },
+      "intended_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_sources": {
+        "present": true,
+        "value": [
+          "source0",
+          "source1"
+        ]
+      },
+      "missing_source_labels": {
+        "present": true,
+        "value": []
+      },
+      "eligible_for_observed_source_supervision": {
+        "present": true,
+        "value": true
+      },
+      "eligible_for_full_pair_supervision": {
+        "present": true,
+        "value": true
+      }
+    },
+    {
+      "base_id": {
+        "present": true,
+        "value": 10077
+      },
+      "base_group": {
+        "present": true,
+        "value": "physical_v2_s10077"
+      },
+      "intended_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_sources": {
+        "present": true,
+        "value": [
+          "source0",
+          "source1"
+        ]
+      },
+      "missing_source_labels": {
+        "present": true,
+        "value": []
+      },
+      "eligible_for_observed_source_supervision": {
+        "present": true,
+        "value": true
+      },
+      "eligible_for_full_pair_supervision": {
+        "present": true,
+        "value": true
+      }
+    },
+    {
+      "base_id": {
+        "present": true,
+        "value": 10078
+      },
+      "base_group": {
+        "present": true,
+        "value": "physical_v2_s10078"
+      },
+      "intended_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_sources": {
+        "present": true,
+        "value": [
+          "source0",
+          "source1"
+        ]
+      },
+      "missing_source_labels": {
+        "present": true,
+        "value": []
+      },
+      "eligible_for_observed_source_supervision": {
+        "present": true,
+        "value": true
+      },
+      "eligible_for_full_pair_supervision": {
+        "present": true,
+        "value": true
+      }
+    },
+    {
+      "base_id": {
+        "present": true,
+        "value": 10079
+      },
+      "base_group": {
+        "present": true,
+        "value": "physical_v2_s10079"
+      },
+      "intended_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_sources": {
+        "present": true,
+        "value": [
+          "source0",
+          "source1"
+        ]
+      },
+      "missing_source_labels": {
+        "present": true,
+        "value": []
+      },
+      "eligible_for_observed_source_supervision": {
+        "present": true,
+        "value": true
+      },
+      "eligible_for_full_pair_supervision": {
+        "present": true,
+        "value": true
+      }
+    },
+    {
+      "base_id": {
+        "present": true,
+        "value": 10081
+      },
+      "base_group": {
+        "present": true,
+        "value": "physical_v2_s10081"
+      },
+      "intended_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_sources": {
+        "present": true,
+        "value": [
+          "source0",
+          "source1"
+        ]
+      },
+      "missing_source_labels": {
+        "present": true,
+        "value": []
+      },
+      "eligible_for_observed_source_supervision": {
+        "present": true,
+        "value": true
+      },
+      "eligible_for_full_pair_supervision": {
+        "present": true,
+        "value": true
+      }
+    },
+    {
+      "base_id": {
+        "present": true,
+        "value": 10082
+      },
+      "base_group": {
+        "present": true,
+        "value": "physical_v2_s10082"
+      },
+      "intended_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_sources": {
+        "present": true,
+        "value": [
+          "source0",
+          "source1"
+        ]
+      },
+      "missing_source_labels": {
+        "present": true,
+        "value": []
+      },
+      "eligible_for_observed_source_supervision": {
+        "present": true,
+        "value": true
+      },
+      "eligible_for_full_pair_supervision": {
+        "present": true,
+        "value": true
+      }
+    },
+    {
+      "base_id": {
+        "present": true,
+        "value": 10085
+      },
+      "base_group": {
+        "present": true,
+        "value": "physical_v2_s10085"
+      },
+      "intended_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_sources": {
+        "present": true,
+        "value": [
+          "source0",
+          "source1"
+        ]
+      },
+      "missing_source_labels": {
+        "present": true,
+        "value": []
+      },
+      "eligible_for_observed_source_supervision": {
+        "present": true,
+        "value": true
+      },
+      "eligible_for_full_pair_supervision": {
+        "present": true,
+        "value": true
+      }
+    },
+    {
+      "base_id": {
+        "present": true,
+        "value": 10086
+      },
+      "base_group": {
+        "present": true,
+        "value": "physical_v2_s10086"
+      },
+      "intended_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_sources": {
+        "present": true,
+        "value": [
+          "source0",
+          "source1"
+        ]
+      },
+      "missing_source_labels": {
+        "present": true,
+        "value": []
+      },
+      "eligible_for_observed_source_supervision": {
+        "present": true,
+        "value": true
+      },
+      "eligible_for_full_pair_supervision": {
+        "present": true,
+        "value": true
+      }
+    },
+    {
+      "base_id": {
+        "present": true,
+        "value": 10087
+      },
+      "base_group": {
+        "present": true,
+        "value": "physical_v2_s10087"
+      },
+      "intended_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_sources": {
+        "present": true,
+        "value": [
+          "source0",
+          "source1"
+        ]
+      },
+      "missing_source_labels": {
+        "present": true,
+        "value": []
+      },
+      "eligible_for_observed_source_supervision": {
+        "present": true,
+        "value": true
+      },
+      "eligible_for_full_pair_supervision": {
+        "present": true,
+        "value": true
+      }
+    },
+    {
+      "base_id": {
+        "present": true,
+        "value": 10089
+      },
+      "base_group": {
+        "present": true,
+        "value": "physical_v2_s10089"
+      },
+      "intended_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_sources": {
+        "present": true,
+        "value": [
+          "source0",
+          "source1"
+        ]
+      },
+      "missing_source_labels": {
+        "present": true,
+        "value": []
+      },
+      "eligible_for_observed_source_supervision": {
+        "present": true,
+        "value": true
+      },
+      "eligible_for_full_pair_supervision": {
+        "present": true,
+        "value": true
+      }
+    },
+    {
+      "base_id": {
+        "present": true,
+        "value": 10090
+      },
+      "base_group": {
+        "present": true,
+        "value": "physical_v2_s10090"
+      },
+      "intended_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_sources": {
+        "present": true,
+        "value": [
+          "source0",
+          "source1"
+        ]
+      },
+      "missing_source_labels": {
+        "present": true,
+        "value": []
+      },
+      "eligible_for_observed_source_supervision": {
+        "present": true,
+        "value": true
+      },
+      "eligible_for_full_pair_supervision": {
+        "present": true,
+        "value": true
+      }
+    },
+    {
+      "base_id": {
+        "present": true,
+        "value": 10093
+      },
+      "base_group": {
+        "present": true,
+        "value": "physical_v2_s10093"
+      },
+      "intended_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_sources": {
+        "present": true,
+        "value": [
+          "source0",
+          "source1"
+        ]
+      },
+      "missing_source_labels": {
+        "present": true,
+        "value": []
+      },
+      "eligible_for_observed_source_supervision": {
+        "present": true,
+        "value": true
+      },
+      "eligible_for_full_pair_supervision": {
+        "present": true,
+        "value": true
+      }
+    },
+    {
+      "base_id": {
+        "present": true,
+        "value": 10094
+      },
+      "base_group": {
+        "present": true,
+        "value": "physical_v2_s10094"
+      },
+      "intended_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_sources": {
+        "present": true,
+        "value": [
+          "source0",
+          "source1"
+        ]
+      },
+      "missing_source_labels": {
+        "present": true,
+        "value": []
+      },
+      "eligible_for_observed_source_supervision": {
+        "present": true,
+        "value": true
+      },
+      "eligible_for_full_pair_supervision": {
+        "present": true,
+        "value": true
+      }
+    },
+    {
+      "base_id": {
+        "present": true,
+        "value": 10095
+      },
+      "base_group": {
+        "present": true,
+        "value": "physical_v2_s10095"
+      },
+      "intended_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_sources": {
+        "present": true,
+        "value": [
+          "source0",
+          "source1"
+        ]
+      },
+      "missing_source_labels": {
+        "present": true,
+        "value": []
+      },
+      "eligible_for_observed_source_supervision": {
+        "present": true,
+        "value": true
+      },
+      "eligible_for_full_pair_supervision": {
+        "present": true,
+        "value": true
+      }
+    },
+    {
+      "base_id": {
+        "present": true,
+        "value": 10097
+      },
+      "base_group": {
+        "present": true,
+        "value": "physical_v2_s10097"
+      },
+      "intended_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_sources": {
+        "present": true,
+        "value": [
+          "source0",
+          "source1"
+        ]
+      },
+      "missing_source_labels": {
+        "present": true,
+        "value": []
+      },
+      "eligible_for_observed_source_supervision": {
+        "present": true,
+        "value": true
+      },
+      "eligible_for_full_pair_supervision": {
+        "present": true,
+        "value": true
+      }
+    },
+    {
+      "base_id": {
+        "present": true,
+        "value": 10098
+      },
+      "base_group": {
+        "present": true,
+        "value": "physical_v2_s10098"
+      },
+      "intended_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_sources": {
+        "present": true,
+        "value": [
+          "source0",
+          "source1"
+        ]
+      },
+      "missing_source_labels": {
+        "present": true,
+        "value": []
+      },
+      "eligible_for_observed_source_supervision": {
+        "present": true,
+        "value": true
+      },
+      "eligible_for_full_pair_supervision": {
+        "present": true,
+        "value": true
+      }
+    },
+    {
+      "base_id": {
+        "present": true,
+        "value": 10101
+      },
+      "base_group": {
+        "present": true,
+        "value": "physical_v2_s10101"
+      },
+      "intended_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_sources": {
+        "present": true,
+        "value": [
+          "source0",
+          "source1"
+        ]
+      },
+      "missing_source_labels": {
+        "present": true,
+        "value": []
+      },
+      "eligible_for_observed_source_supervision": {
+        "present": true,
+        "value": true
+      },
+      "eligible_for_full_pair_supervision": {
+        "present": true,
+        "value": true
+      }
+    },
+    {
+      "base_id": {
+        "present": true,
+        "value": 10102
+      },
+      "base_group": {
+        "present": true,
+        "value": "physical_v2_s10102"
+      },
+      "intended_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_sources": {
+        "present": true,
+        "value": [
+          "source0",
+          "source1"
+        ]
+      },
+      "missing_source_labels": {
+        "present": true,
+        "value": []
+      },
+      "eligible_for_observed_source_supervision": {
+        "present": true,
+        "value": true
+      },
+      "eligible_for_full_pair_supervision": {
+        "present": true,
+        "value": true
+      }
+    },
+    {
+      "base_id": {
+        "present": true,
+        "value": 10103
+      },
+      "base_group": {
+        "present": true,
+        "value": "physical_v2_s10103"
+      },
+      "intended_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_sources": {
+        "present": true,
+        "value": [
+          "source0",
+          "source1"
+        ]
+      },
+      "missing_source_labels": {
+        "present": true,
+        "value": []
+      },
+      "eligible_for_observed_source_supervision": {
+        "present": true,
+        "value": true
+      },
+      "eligible_for_full_pair_supervision": {
+        "present": true,
+        "value": true
+      }
+    },
+    {
+      "base_id": {
+        "present": true,
+        "value": 10105
+      },
+      "base_group": {
+        "present": true,
+        "value": "physical_v2_s10105"
+      },
+      "intended_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_sources": {
+        "present": true,
+        "value": [
+          "source0",
+          "source1"
+        ]
+      },
+      "missing_source_labels": {
+        "present": true,
+        "value": []
+      },
+      "eligible_for_observed_source_supervision": {
+        "present": true,
+        "value": true
+      },
+      "eligible_for_full_pair_supervision": {
+        "present": true,
+        "value": true
+      }
+    },
+    {
+      "base_id": {
+        "present": true,
+        "value": 10106
+      },
+      "base_group": {
+        "present": true,
+        "value": "physical_v2_s10106"
+      },
+      "intended_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_sources": {
+        "present": true,
+        "value": [
+          "source0",
+          "source1"
+        ]
+      },
+      "missing_source_labels": {
+        "present": true,
+        "value": []
+      },
+      "eligible_for_observed_source_supervision": {
+        "present": true,
+        "value": true
+      },
+      "eligible_for_full_pair_supervision": {
+        "present": true,
+        "value": true
+      }
+    },
+    {
+      "base_id": {
+        "present": true,
+        "value": 10109
+      },
+      "base_group": {
+        "present": true,
+        "value": "physical_v2_s10109"
+      },
+      "intended_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_sources": {
+        "present": true,
+        "value": [
+          "source0",
+          "source1"
+        ]
+      },
+      "missing_source_labels": {
+        "present": true,
+        "value": []
+      },
+      "eligible_for_observed_source_supervision": {
+        "present": true,
+        "value": true
+      },
+      "eligible_for_full_pair_supervision": {
+        "present": true,
+        "value": true
+      }
+    },
+    {
+      "base_id": {
+        "present": true,
+        "value": 10110
+      },
+      "base_group": {
+        "present": true,
+        "value": "physical_v2_s10110"
+      },
+      "intended_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_sources": {
+        "present": true,
+        "value": [
+          "source0",
+          "source1"
+        ]
+      },
+      "missing_source_labels": {
+        "present": true,
+        "value": []
+      },
+      "eligible_for_observed_source_supervision": {
+        "present": true,
+        "value": true
+      },
+      "eligible_for_full_pair_supervision": {
+        "present": true,
+        "value": true
+      }
+    },
+    {
+      "base_id": {
+        "present": true,
+        "value": 10111
+      },
+      "base_group": {
+        "present": true,
+        "value": "physical_v2_s10111"
+      },
+      "intended_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_sources": {
+        "present": true,
+        "value": [
+          "source0",
+          "source1"
+        ]
+      },
+      "missing_source_labels": {
+        "present": true,
+        "value": []
+      },
+      "eligible_for_observed_source_supervision": {
+        "present": true,
+        "value": true
+      },
+      "eligible_for_full_pair_supervision": {
+        "present": true,
+        "value": true
+      }
+    },
+    {
+      "base_id": {
+        "present": true,
+        "value": 10113
+      },
+      "base_group": {
+        "present": true,
+        "value": "physical_v2_s10113"
+      },
+      "intended_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_sources": {
+        "present": true,
+        "value": [
+          "source0",
+          "source1"
+        ]
+      },
+      "missing_source_labels": {
+        "present": true,
+        "value": []
+      },
+      "eligible_for_observed_source_supervision": {
+        "present": true,
+        "value": true
+      },
+      "eligible_for_full_pair_supervision": {
+        "present": true,
+        "value": true
+      }
+    },
+    {
+      "base_id": {
+        "present": true,
+        "value": 10114
+      },
+      "base_group": {
+        "present": true,
+        "value": "physical_v2_s10114"
+      },
+      "intended_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_sources": {
+        "present": true,
+        "value": [
+          "source0",
+          "source1"
+        ]
+      },
+      "missing_source_labels": {
+        "present": true,
+        "value": []
+      },
+      "eligible_for_observed_source_supervision": {
+        "present": true,
+        "value": true
+      },
+      "eligible_for_full_pair_supervision": {
+        "present": true,
+        "value": true
+      }
+    },
+    {
+      "base_id": {
+        "present": true,
+        "value": 10117
+      },
+      "base_group": {
+        "present": true,
+        "value": "physical_v2_s10117"
+      },
+      "intended_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_sources": {
+        "present": true,
+        "value": [
+          "source0",
+          "source1"
+        ]
+      },
+      "missing_source_labels": {
+        "present": true,
+        "value": []
+      },
+      "eligible_for_observed_source_supervision": {
+        "present": true,
+        "value": true
+      },
+      "eligible_for_full_pair_supervision": {
+        "present": true,
+        "value": true
+      }
+    },
+    {
+      "base_id": {
+        "present": true,
+        "value": 10118
+      },
+      "base_group": {
+        "present": true,
+        "value": "physical_v2_s10118"
+      },
+      "intended_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_sources": {
+        "present": true,
+        "value": [
+          "source0",
+          "source1"
+        ]
+      },
+      "missing_source_labels": {
+        "present": true,
+        "value": []
+      },
+      "eligible_for_observed_source_supervision": {
+        "present": true,
+        "value": true
+      },
+      "eligible_for_full_pair_supervision": {
+        "present": true,
+        "value": true
+      }
+    },
+    {
+      "base_id": {
+        "present": true,
+        "value": 10119
+      },
+      "base_group": {
+        "present": true,
+        "value": "physical_v2_s10119"
+      },
+      "intended_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_sources": {
+        "present": true,
+        "value": [
+          "source0",
+          "source1"
+        ]
+      },
+      "missing_source_labels": {
+        "present": true,
+        "value": []
+      },
+      "eligible_for_observed_source_supervision": {
+        "present": true,
+        "value": true
+      },
+      "eligible_for_full_pair_supervision": {
+        "present": true,
+        "value": true
+      }
+    },
+    {
+      "base_id": {
+        "present": true,
+        "value": 10121
+      },
+      "base_group": {
+        "present": true,
+        "value": "physical_v2_s10121"
+      },
+      "intended_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_sources": {
+        "present": true,
+        "value": [
+          "source0",
+          "source1"
+        ]
+      },
+      "missing_source_labels": {
+        "present": true,
+        "value": []
+      },
+      "eligible_for_observed_source_supervision": {
+        "present": true,
+        "value": true
+      },
+      "eligible_for_full_pair_supervision": {
+        "present": true,
+        "value": true
+      }
+    },
+    {
+      "base_id": {
+        "present": true,
+        "value": 10122
+      },
+      "base_group": {
+        "present": true,
+        "value": "physical_v2_s10122"
+      },
+      "intended_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_sources": {
+        "present": true,
+        "value": [
+          "source0",
+          "source1"
+        ]
+      },
+      "missing_source_labels": {
+        "present": true,
+        "value": []
+      },
+      "eligible_for_observed_source_supervision": {
+        "present": true,
+        "value": true
+      },
+      "eligible_for_full_pair_supervision": {
+        "present": true,
+        "value": true
+      }
+    },
+    {
+      "base_id": {
+        "present": true,
+        "value": 10125
+      },
+      "base_group": {
+        "present": true,
+        "value": "physical_v2_s10125"
+      },
+      "intended_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_sources": {
+        "present": true,
+        "value": [
+          "source0",
+          "source1"
+        ]
+      },
+      "missing_source_labels": {
+        "present": true,
+        "value": []
+      },
+      "eligible_for_observed_source_supervision": {
+        "present": true,
+        "value": true
+      },
+      "eligible_for_full_pair_supervision": {
+        "present": true,
+        "value": true
+      }
+    },
+    {
+      "base_id": {
+        "present": true,
+        "value": 10126
+      },
+      "base_group": {
+        "present": true,
+        "value": "physical_v2_s10126"
+      },
+      "intended_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_sources": {
+        "present": true,
+        "value": [
+          "source0",
+          "source1"
+        ]
+      },
+      "missing_source_labels": {
+        "present": true,
+        "value": []
+      },
+      "eligible_for_observed_source_supervision": {
+        "present": true,
+        "value": true
+      },
+      "eligible_for_full_pair_supervision": {
+        "present": true,
+        "value": true
+      }
+    },
+    {
+      "base_id": {
+        "present": true,
+        "value": 10127
+      },
+      "base_group": {
+        "present": true,
+        "value": "physical_v2_s10127"
+      },
+      "intended_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_source_count": {
+        "present": true,
+        "value": 2
+      },
+      "observed_sources": {
+        "present": true,
+        "value": [
+          "source0",
+          "source1"
+        ]
+      },
+      "missing_source_labels": {
+        "present": true,
+        "value": []
+      },
+      "eligible_for_observed_source_supervision": {
+        "present": true,
+        "value": true
+      },
+      "eligible_for_full_pair_supervision": {
+        "present": true,
+        "value": true
+      }
+    }
+  ],
+  "FIT_coverage": {
+    "GNN": {
+      "declared_unique_FIT_groups": 80,
+      "mapped_groups": 80,
+      "missing_group_IDs": [],
+      "ambiguous_group_IDs": []
+    },
+    "CatBoost": {
+      "declared_unique_FIT_groups": 80,
+      "mapped_groups": 80,
+      "missing_group_IDs": [],
+      "ambiguous_group_IDs": []
+    }
+  },
+  "FIT_source_availability": {
+    "GNN": {
+      "planned_FIT_groups": 80,
+      "mapped_groups": 80,
+      "known_pair_flag_groups": 80,
+      "declared_full_pair_eligible_groups": 79,
+      "declared_incomplete_pair_group_IDs": [
+        "physical_v2_s10037"
+      ],
+      "unknown_pair_flag_group_IDs": [],
+      "known_observed_source_count_groups": 80,
+      "declared_observed_source_fleets_sum": 159,
+      "interpretation": "Declared FIT metadata availability, not verified tariffs, label differences or teacher quality"
+    },
+    "CatBoost": {
+      "planned_FIT_groups": 80,
+      "mapped_groups": 80,
+      "known_pair_flag_groups": 80,
+      "declared_full_pair_eligible_groups": 79,
+      "declared_incomplete_pair_group_IDs": [
+        "physical_v2_s10037"
+      ],
+      "unknown_pair_flag_group_IDs": [],
+      "known_observed_source_count_groups": 80,
+      "declared_observed_source_fleets_sum": 159,
+      "interpretation": "Declared FIT metadata availability, not verified tariffs, label differences or teacher quality"
+    }
+  },
+  "declared_shard_provenance": [
+    {
+      "shard": {
+        "present": true,
+        "value": 0
+      },
+      "dataset": {
+        "present": true,
+        "value": "result/physical_learning/20260930-shard00-composite-v2"
+      },
+      "dataset_receipt_sha256": "c9ed1e67356812e60a5986153227029d8eb15e98e2799a0ef87a56284be671d7",
+      "case_table_sha256": "46ddb9960af59230e9d3e20b963f78acfea0e1c7245da25f9e922af7bb4fe72f",
+      "source_table_sha256": "4d4d37d29a42e9e22d512d01e2afad2ccd76512ff34e3f2d01a008c0e5140826",
+      "health_sha256_from_receipt": "c2c6d498bc24a3c7db782858867271dd3c87f28be6e88637e44bf38b0bbbacc5"
+    },
+    {
+      "shard": {
+        "present": true,
+        "value": 1
+      },
+      "dataset": {
+        "present": true,
+        "value": "result/physical_learning/20260930-shard01-dataset-v1"
+      },
+      "dataset_receipt_sha256": "b08b38059cd65d786fd842ff9ee7cd83df0a96d34190f2ab2c480b5ad26d5e30",
+      "case_table_sha256": "5bc0262ff9c261d797ad6ce3c54884b064d1f1d6d61f9c015123688c764d042e",
+      "source_table_sha256": "71310516e3cadc6e727e982b5166fe15d2fe8909f500ac09b0bb3cbba2964324",
+      "health_sha256_from_receipt": "4bcde2ac9217b82a237ad3dd54457b1bd603143da602a229e2b21643661b3233"
+    },
+    {
+      "shard": {
+        "present": true,
+        "value": 2
+      },
+      "dataset": {
+        "present": true,
+        "value": "result/physical_learning/20260930-shard02-dataset-v1"
+      },
+      "dataset_receipt_sha256": "28bd65ffdd851984a028ae15180f7d5ffaf3bdacb8e2cca48ca42ff48f1a00df",
+      "case_table_sha256": "3f783935979c6c1d28e35ddb623a6f31554e8c5f990406cece1af2de34ff586b",
+      "source_table_sha256": "0286de4697aff05aa76bfc440ccb3efae1a16e8bac9fdc87ce3a82e2cd6b0a22",
+      "health_sha256_from_receipt": "6dc6f1740aa613bc79b7f34f4a0c19817a66fafee56e11640583d7535519282f"
+    },
+    {
+      "shard": {
+        "present": true,
+        "value": 3
+      },
+      "dataset": {
+        "present": true,
+        "value": "result/physical_learning/20260930-shard03-dataset-v1"
+      },
+      "dataset_receipt_sha256": "35613c977c0f59c4f1c666f0165af763efbe9d9d3751e671cd72d88d80834f13",
+      "case_table_sha256": "e157acc3ee615926236e39a85d9dc536747bb69f0f719b16da842955d5913bec",
+      "source_table_sha256": "a9563d7a33399ea147f8613880722693a1302b9b314fedbae64809d5933984a6",
+      "health_sha256_from_receipt": "22713d5f9ca28ab965b450c5fccde46c04f777baa1e33bfd40ac5b615932bda6"
+    },
+    {
+      "shard": {
+        "present": true,
+        "value": 4
+      },
+      "dataset": {
+        "present": true,
+        "value": "result/physical_learning/20260930-shard04-dataset-v1"
+      },
+      "dataset_receipt_sha256": "c2f9593ef5502ad86a0cff69fc102cdd26f3778e6e0db284fd524e0507194dc6",
+      "case_table_sha256": "2fe039f0039e5d6525ccb5be6ac42df60a25c67d5c6947d4f6a5f7099cc4fab3",
+      "source_table_sha256": "f57466bd487490e0e34aaa7e617cc60dfa513e8b000a9b6554004edf929cf09b",
+      "health_sha256_from_receipt": "369e09113c741f67c1b7bc54288fc72cefc8b0544250ff764577a277ff2388bf"
+    },
+    {
+      "shard": {
+        "present": true,
+        "value": 5
+      },
+      "dataset": {
+        "present": true,
+        "value": "result/physical_learning/20260930-shard05-dataset-v1"
+      },
+      "dataset_receipt_sha256": "1f779eadb495e1ce3cff2e2e20f6f8bf5f16bf4a8400661981c019224193c08b",
+      "case_table_sha256": "ff07f025d1ee2c9f13619b31d57b94fcc99e4e476b80b7807831f91913763567",
+      "source_table_sha256": "a5a76995aa704139ce32e114a5b87e7633feffd9824a95328ecb661d707894e3",
+      "health_sha256_from_receipt": "75bac63b38a5cd9adf778d67a242b86778fd489825d8d93378a8284ce839b83a"
+    },
+    {
+      "shard": {
+        "present": true,
+        "value": 6
+      },
+      "dataset": {
+        "present": true,
+        "value": "result/physical_learning/20260930-shard06-dataset-v1"
+      },
+      "dataset_receipt_sha256": "ed1362e1aa3e7748810951fa9d50645ee64a88ddfc3df2b43a2ca2ee17a7773d",
+      "case_table_sha256": "8448b11127fa07fc01da41864437553f9af2d83c5ba70fdb708d5ad81b4e0a1f",
+      "source_table_sha256": "3e1fdca0ae6d9cd2ad43de2b59e42af08cba1279322eccc14b0606e94153ba25",
+      "health_sha256_from_receipt": "427ce0e4e194fe74ab9b0a45763dde049b971cbae7224635e846311c24320f77"
+    },
+    {
+      "shard": {
+        "present": true,
+        "value": 7
+      },
+      "dataset": {
+        "present": true,
+        "value": "result/physical_learning/20260930-shard07-dataset-v1"
+      },
+      "dataset_receipt_sha256": "6cd6613fb06dd01096c5a4bbf8f3bcf213c3c8c9c2cfd84fdc64d628d7500658",
+      "case_table_sha256": "c1c7ddd080ff7296dc4b8ba4bcd622f7dc66cea4094cdd870112434d2b8b5d57",
+      "source_table_sha256": "f32ef4047c6d14418200c1cc503207834a94c8ebf4573d13b2b2748b6c851e58",
+      "health_sha256_from_receipt": "b32b7cd14750abda1b2dda9dcc2fee209effae7e84a54c31be75c5e84eb74c50"
+    },
+    {
+      "shard": {
+        "present": true,
+        "value": 8
+      },
+      "dataset": {
+        "present": true,
+        "value": "result/physical_learning/20260930-shard08-dataset-v1"
+      },
+      "dataset_receipt_sha256": "a220afb1d168dae12f0ef142856768fe322e1d7ed1f8780bc0ecdb38fa925c6d",
+      "case_table_sha256": "f218c2a9eeb858df849af2e9b0a6ccae8bbb0a967007ec3c5fc341296fc81f46",
+      "source_table_sha256": "372327992d09603b8492d4af3bc187309ebeff0e247085dd9a33750635ed10c5",
+      "health_sha256_from_receipt": "5fca1897102b31bb220f29670b670f32989f0a3d89e0f30b645d1355e1b0a7dd"
+    },
+    {
+      "shard": {
+        "present": true,
+        "value": 9
+      },
+      "dataset": {
+        "present": true,
+        "value": "result/physical_learning/20260930-shard09-dataset-v1"
+      },
+      "dataset_receipt_sha256": "798d580efb066f93ec2df78e69f61b5b23cab68dab7c0a9ca74eec0700b34132",
+      "case_table_sha256": "811392affde8ba882fb0ca969dede5bad2ae865567cb603b75eb685b7d298936",
+      "source_table_sha256": "fecc30c44cb360ee7c3b8354f81b65392323fa5aa6bd8bdd4ba67e644a050eff",
+      "health_sha256_from_receipt": "c732de28697f9d8141359e0933611c8b92d9ec83a1a7b0724ce2a15cdaebc828"
+    },
+    {
+      "shard": {
+        "present": true,
+        "value": 10
+      },
+      "dataset": {
+        "present": true,
+        "value": "result/physical_learning/20260930-shard10-dataset-v1"
+      },
+      "dataset_receipt_sha256": "686f2b3dc8906288ce692e7be8cbca15e6e7f69507fecb3c3101e5f5047bf516",
+      "case_table_sha256": "5840343ca3aa61324a1d60575a7987ea571a3a0844f65ffb615a6e696a5052eb",
+      "source_table_sha256": "e075e8b445e5a5f62f56c19cd6df3f8fb633b2c9a8da49a03a6f1c5eefaef3ed",
+      "health_sha256_from_receipt": "801cf0cae6c1342b80a7231ce49ea237a42e1070335ff11b80c22b906df4197d"
+    },
+    {
+      "shard": {
+        "present": true,
+        "value": 11
+      },
+      "dataset": {
+        "present": true,
+        "value": "result/physical_learning/20260930-shard11-dataset-v1"
+      },
+      "dataset_receipt_sha256": "aee64720e2721e51d64b62bbaf64572aa232a9ebaee84138e87af270fdcc8025",
+      "case_table_sha256": "507cf7700e98085ef1f72ff196bfaeb9a5e4b5e78bf35264928c9c8f7466f69f",
+      "source_table_sha256": "47284f97725f037495f44af4d5917f7eb589f017ffbba4994fdbee24927d8d85",
+      "health_sha256_from_receipt": "c02d2c5644fd9a5f655e0e26f758353019d8fa9997001c18d2c989ff66dd2af6"
+    },
+    {
+      "shard": {
+        "present": true,
+        "value": 12
+      },
+      "dataset": {
+        "present": true,
+        "value": "result/physical_learning/20260930-shard12-dataset-v1"
+      },
+      "dataset_receipt_sha256": "d134bbb8a6007a61183a2887e4e06e55450106b93d48e0b46371b5da28c8312b",
+      "case_table_sha256": "d44b137258045170d0368573d246674bcca300634a4fa3c14dbbcca218e1b0f3",
+      "source_table_sha256": "9d145e7e4aac06225c5da2ea69c7bfe4a6c20f6461387929d17dd46848418f24",
+      "health_sha256_from_receipt": "d3e136193d2b28cb6208819f7e011eea4ed87cc79943916536c4f6073ae97bad"
+    },
+    {
+      "shard": {
+        "present": true,
+        "value": 13
+      },
+      "dataset": {
+        "present": true,
+        "value": "result/physical_learning/20260930-shard13-dataset-v1"
+      },
+      "dataset_receipt_sha256": "2cd0e8128a509890ea4c919c0d751c05cd3adc99ffdac2789e3966b2463e597f",
+      "case_table_sha256": "a3fed97588130656f452bca6ecd30fd3257f91727c3747d1ae90f6196e517daf",
+      "source_table_sha256": "0177725cca59041a7d3e325ff8016f9566be225c9c7541ee5e78e0fb4a531eee",
+      "health_sha256_from_receipt": "2932054ed23ce6882e1f121066e4714ddd01ca136903a79e85565a2c932c8034"
+    },
+    {
+      "shard": {
+        "present": true,
+        "value": 14
+      },
+      "dataset": {
+        "present": true,
+        "value": "result/physical_learning/20260930-shard14-dataset-v1"
+      },
+      "dataset_receipt_sha256": "c0a4eee9321462dd9e41baf488365ab8252adfd8addb48e3be48c7b2ab485611",
+      "case_table_sha256": "e1f09f61ae913861f01928739c5519de938f1b70edcd3994a871d61313ff7953",
+      "source_table_sha256": "ceaeb7a17632917db0ea71ba10394e4446943b127321dc81725bda1036751243",
+      "health_sha256_from_receipt": "69d456668097966fdde5b1e74879ad441ee11cb920849d618e238244e64fa9ce"
+    },
+    {
+      "shard": {
+        "present": true,
+        "value": 15
+      },
+      "dataset": {
+        "present": true,
+        "value": "result/physical_learning/20260930-shard15-dataset-v1"
+      },
+      "dataset_receipt_sha256": "a4f841010e106d1b76ad43d88436716b7576366c72eb985ecc348f947893a033",
+      "case_table_sha256": "37c012ef42ffd6168fca1bbc5ede536f5bb885974e1efda09db8024c40bc9241",
+      "source_table_sha256": "782f039b4968b2ea111658a26957d781ae5fc6122b76f0e1879b8635e8820e4d",
+      "health_sha256_from_receipt": "c0488535a2ae67f419cc4101c8a96830f38a7ee4253a9827f934ce78cfcd8e8f"
+    }
+  ],
+  "readiness_limits": {
+    "GNN_training_pool_identity": "unknown; preprocessing pin is not a TRAIN-pool lineage pin",
+    "actual_within_case_prices": "unknown; source labels/availability do not verify numeric tariffs",
+    "conditional_binary_target_variation": "unknown; no labels read",
+    "teacher_quality": "unknown; no outcomes read",
+    "candidate_bank_and_search_provenance": "declared digests only; referenced files not verified",
+    "alias_closure": "unknown; no cross-generator crosswalk",
+    "matched_blind_training": "not established by metadata"
+  },
+  "resources": {
+    "user_s": 0.024804999999999997,
+    "system_s": 0.020898999999999997,
+    "elapsed_before_publication_s": 0.04452574998140335,
+    "peak_rss_bytes": 22822912,
+    "python_threads": 1,
+    "body_cpu_s": 45,
+    "body_wall_s": 60,
+    "total_cpu_s": 60,
+    "total_wall_s": 90,
+    "max_rss_bytes": 5368709120,
+    "prior_closed_cpu_s": 19638.1,
+    "prior_closed_elapsed_sum_s": 20223.65,
+    "legacy_guard_s": 2546.091499549272,
+    "legacy_actual_review_cpu": "UNKNOWN",
+    "external_meter_needed_for_complete_cost": true
+  },
+  "metadata_files_read": 4,
+  "hash_calls": 7,
+  "referenced_paths_followed": 0,
+  "weight_reads": 0,
+  "row_table_reads": 0,
+  "subprocesses": 0,
+  "solver_calls": 0,
+  "inference_calls": 0,
+  "normalization_values_exported": false
+}

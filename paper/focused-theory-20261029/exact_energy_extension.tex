@@ -1,0 +1,151 @@
+\section{A conditional extension to exact additive consumption}
+\label{sec:exactenergyextension}
+The public result in Section~\ref{sec:public} uses the original stored
+binary consumption coefficients. It does not automatically cover a change
+to unrounded energy formulas. Here we state a separate, conditional model
+extension with a separately checked positive-gap certificate. No physical
+bound or feasible point from \eqref{eq:publicbounds} is assumed to survive
+the coefficient change. The argument is a classical triangle-inequality and
+charging-curtailment argument, not a new generic routing result.
+
+\paragraph{The new law and opportunity set.}
+Each ordered pair of a fixed finite location set is an available primitive
+arc with jointly specified time $\tau_{ij}$ and distance $d_{ij}$.
+These are abstract modeled pairs; their simultaneous realization by an
+empirical road path is not inferred. Assume both directed tables are
+nonnegative, have zero diagonals and satisfy their directed triangle
+inequalities. In hours and kilometres, define the following quantities
+by \emph{exact rational arithmetic}:
+\[
+ s_v=\frac65\,\ell_v+16h_v,\qquad
+ q_{ij}=\frac{24}{25}d_{ij}+16\tau_{ij},\qquad
+ w_{ij}=q_{ij}-16\tau_{ij}=\frac{24}{25}d_{ij}.
+\]
+Services have fixed endpoints and times; $s_v$ is their prescribed total.
+They are indivisible noncharging intervals with nonnegative draw throughout.
+Every bus starts full at the selected depot,
+serves at least one mandatory service and returns full by the common
+deadline. Retain the same battery/fleet limits and charge-only,
+unit-efficiency shared charging resources. There is no taper, switching
+time or minimum session. Only the selected depot admits charging and
+zero-draw parking; all other stationary waiting consumes exactly 16 per
+hour. A second source-flagged depot does not acquire free parking or
+charging. Post-last-service charging opens at absolute time zero with the
+same deadline and access policy for every visit label. All operating
+costs other than grid supply are unchanged by the replacements below;
+in particular, monetary movement cost is zero.
+
+The broader set $\mathcal W$ permits arbitrary \emph{finite} primitive-arc
+walks and continuous waits between the same fixed services, with no extra
+task, regeneration, charging location or time-dependent arc attributes.
+The canonical set $\mathcal C$ contains each time-feasible direct and
+one-via-selected-depot representative: immediate inbound travel, latest
+outbound departure, the entire intervening depot window, latest full
+pullout and earliest final return. Its coefficients use this same exact
+law, so $\mathcal C\subseteq\mathcal W$.
+
+Completeness includes zero-length depot-endpoint arcs and their access
+interpretation. A gap starting or ending at the selected depot is a
+depot-visit case, not an off-depot stationary wait. A constructor that
+rejects a needed endpoint or a wait at another source-flagged depot must
+either establish that it never occurs here or supply the appropriate
+canonical representative; table triangles alone do not prove inclusion
+or mode completeness. These requirements are premises of the following
+statement, not consequences of a coefficient-name or mode-count match.
+
+\begin{proposition}[Canonical value preservation under the exact law]
+\label{prop:exactenergydominance}
+Under these assumptions, every feasible schedule in $\mathcal W$ has a
+schedule in $\mathcal C$ with the same fleet and service assignment/order
+and componentwise no greater grid purchases in every market interval.
+For any coordinatewise nondecreasing supply objective $F$, physical and
+complete-plan convexified infimum values therefore satisfy
+\[
+ D_{\mathcal W}^{\rm rat}=D_{\mathcal C}^{\rm rat},\qquad
+ \CH_{\mathcal W}^{\rm rat}=\CH_{\mathcal C}^{\rm rat}.
+\]
+These are value equalities, not equality of attainable load sets. For
+nonnegative posted prices the private-score infimum also agrees, but all
+response ties need not be canonical. No negative-price conclusion is made.
+\end{proposition}
+
+\begin{proof}
+Both $q$ and $w$ satisfy directed triangles, by their nonnegative linear
+dependence on the assumed metric tables. Consider a gap of duration $T$
+between fixed services that never visits the selected depot. Its total
+consumption is $16T+\sum w_{ij}$, including its off-depot waits. Repeated
+triangles make this at least $16T+w_{ab}$ for its endpoints $a,b$.
+Direct travel and the remaining off-depot wait attain that value and fit
+the gap by the time triangle. There is no charging, and consumption is
+nonnegative: a no-smaller final SOC suffices for all intermediate lower
+inventory bounds, while no charging can violate capacity.
+
+For a gap visiting the selected depot, replace the prefix to its first
+arrival by immediate direct travel, and its suffix from its last departure
+by latest direct travel. Time triangles enlarge the depot window; $q$
+triangles and nonnegative waiting weakly lower prefix and suffix energy.
+Delete all intermediate excursions and remain parked. Keep old charging
+at its original clocks, curtailing only when the larger SOC would exceed
+capacity. Unit efficiency, zero depot draw and the absence of minimum
+sessions make this feasible. The new SOC dominates the old at its charging
+times because the removed excursions consumed nonnegative energy. The
+no-more-costly suffix then preserves feasibility of the next service.
+Each purchase and instantaneous rate only decreases, so shared connector
+and market-period constraints are preserved.
+
+Latest direct pullout from a full initial battery eliminates unnecessary
+pre-service consumption. Earliest final return contains the former
+terminal charging clocks; the common opening-zero policy excludes a
+visit-label access loophole. Keeping those clocks with capacity curtailment
+restores full terminal inventory because the original schedule ended
+full. Zero-diagonal arcs and finite repeated cycles cause no exception;
+the same argument deletes them without removing an extra task or access
+right, which the assumptions explicitly exclude. Apply the replacements
+successively along each duty, preserving its next service's SOC. Services
+and fleet cost do not change.
+
+Canonical inclusion gives one infimum inequality. The componentwise
+dominance and monotonicity of $F$ give its reverse. Apply the replacement
+to every component of a finite complete-plan mixture to obtain the hull
+inequality: its mean load decreases componentwise and its mean operating
+cost is unchanged. This proves the stated equalities. The nonnegative
+posted-price assertion uses the same argument with a linear supply term.
+\end{proof}
+
+\paragraph{A fresh certificate for the public-derived target.}
+The original binary supply objective in \eqref{eq:publicF} may be retained;
+it need not be rounded again when consumption changes. A new target
+certificate must nevertheless revalidate every lower-bound row and fleet
+exclusion and admit each proposed upper component under the exact law.
+We performed those checks on the retained 375-node partition, using its
+fixed multiplier/tangent proposals and two predetermined route sets.
+Each route set received one exact charging reconstruction and one independent
+physical replay under the new law. Their fixed historical mixture weight
+was retained without optimizing it again. Direct mixed-load evaluation and
+an independent quadratic-variance identity give
+\begin{equation}\label{eq:exacttargetbounds}
+ \CH_{\mathcal C}^{\rm rat}\le441.142238<441.532912
+ \le D_{\mathcal C}^{\rm rat}\le441.532913,
+ \qquad D_{\mathcal C}^{\rm rat}-\CH_{\mathcal C}^{\rm rat}\ge0.390674.
+\end{equation}
+The six-decimal outward numbers coincide with \eqref{eq:publicbounds},
+but their exact rational certificates differ. Neither exact optimum is known.
+The complete canonical time/access qualification and unchanged nonenergy
+fields establish the representative-coverage premise; the exact law and
+qualified time/distance tables establish the triangle premises.
+Proposition~\ref{prop:exactenergydominance} therefore transfers the new
+separation to $\mathcal W$. Under the usual convex
+differentiable supply and attainment assumptions,
+Proposition~\ref{prop:support} then gives the own-marginal-price conclusion.
+The finite canonical formulation supplies compactness when its charging
+variables have closed bounded constraints; value preservation does not
+require the unrestricted finite-walk set itself to be compact.
+The first target computation retained valid bounds and physical points but
+failed in a diagnostic-object identity guard before evaluating the mixture.
+A separately frozen summary-only consumer completed that comparison; it
+repeated no branch proof, charging reconstruction or physical replay. The
+failed attempt and its costs remain recorded. This is internal independent
+verification, not external replication. The existing binary-model conclusion
+remains exactly as scoped in Section~\ref{sec:public}.
+Neither result establishes empirical road completeness,
+energy calibration or operational prevalence.

@@ -1,0 +1,86 @@
+{
+  "complete": true,
+  "passed": true,
+  "cases": [
+    {
+      "case": "scale:50685:40",
+      "status": "replayed_fleet_first_witness",
+      "receipt": "research-20261025/classical_competence/fleet-first-attempt01/scale-50685-40/receipt.json",
+      "elapsed_including_receipt_s": 3.7242251243442297,
+      "cpu_including_receipt_s": 3.326799,
+      "accepted_within_offline120": true,
+      "physical_witness_valid": true,
+      "vehicles": 3,
+      "integrated_cost_exact": "1993706180265888499457838615098925629052635027918747/2923003274661805836407369665432566039311865085952"
+    },
+    {
+      "case": "scale:50605:80",
+      "status": "replayed_fleet_first_witness",
+      "receipt": "research-20261025/classical_competence/fleet-first-attempt01/scale-50605-80/receipt.json",
+      "elapsed_including_receipt_s": 71.33174758218229,
+      "cpu_including_receipt_s": 69.739241,
+      "accepted_within_offline120": true,
+      "physical_witness_valid": true,
+      "vehicles": 30,
+      "integrated_cost_exact": "752383041837242416389512316637973647885223178084247/182687704666362864775460604089535377456991567872"
+    }
+  ],
+  "pid": 66116,
+  "objective": "minimize vehicle count only; economic cost evaluated after replay",
+  "scope": "exposed-case offline competence; no matched GNN or main60s qualification",
+  "native_seed": null,
+  "seed_policy": "backend default, unmodified; numeric default unknown",
+  "scientific_qualification": false,
+  "repairs": 0,
+  "retries": 0,
+  "secondary_solves": 0,
+  "formulation": "egg-native-pathflow-v3-energy-band-orphan-projection",
+  "native_matrix": "egg-native-pathflow-v2-energy-band",
+  "extraction_policy": "native-pathflow-orphan-projection-v1",
+  "mip_version": "1.17.6",
+  "old_greedy_context": {
+    "scale:50685:40": "15 independently replayed vehicles",
+    "scale:50605:80": "29 constructed vehicles; no independently timely admitted endpoint"
+  },
+  "feasible_cases": 2,
+  "stop_signal": null,
+  "input_source_sha256": {
+    "research-20261025/classical_competence/fleet_first.py": "8d677b41cd5958c1aff93bcc4e50a012c86dba7c093c2e5257a41fd28443b2bc",
+    "research-20261025/classical_competence/NEXT_BASELINE_PROTOCOL.md": "a58c7e753d1ede1165da7cc3496420f001a864f008c2e0adef47a03a46f5797d",
+    "research-20261025/classical_competence/STATIC_DIAGNOSIS.md": "f5582baacdf80a938f29629b0495bf15d636f3c917722f48fc387f2c25ddf69c",
+    "research-20261017/local-assets-v3.json": "2976ef7fcb9d1c577e11e84757995e90f665faae9fd4ee071911ba5a5138ff87",
+    "research-20261017/screen-analysis-v3-final/summary.json": "2fed17ca84c311bbbafcd728ec8d895ebd5499ef80ba4a5695fb4a6daeb9ca34",
+    "research-20261017/FINAL_REPLAY_VERIFICATION.json": "9a1edb46da4e6928b9789e11854374565dd9493c15f23b7634a5e3aa52ee9dcc",
+    "research-20261017/local-screen-v3/fcd50d4d08ce3ea9129b/result.json": "2e83bf05c843c831c882ccef7243d5f762a8df5248a68b129ee37a13b7194723",
+    "research-20261017/local-screen-v3/fcd50d4d08ce3ea9129b/supervisor.json": "621e7e127be80543d6cb6a7bbc1f9879eea7f6445a2abf0a79686e458257981a",
+    "research-20261017/local-screen-v3/13ec9aa673986e09bfe4/result.json": "bc009a278241750997755e601646e089abf09c6506e288ef9fb6d99e9c7f1f3c",
+    "research-20261017/local-screen-v3/13ec9aa673986e09bfe4/supervisor.json": "a4f9e90a693b674696bad5d6ed674f3724d29b876a52750a8199e094bb8051a9",
+    "src/egglab/__init__.py": "98d97b9995afd57827920e43f16adf5065966a9c50577819e986049e5d35c893",
+    "src/egglab/claude_cases.py": "28fd97eb4351dfc05da83db9420ed9a3e28943b5b18545970ab4e9b9df10842d",
+    "src/egglab/claude_scale_cases.py": "9d58cf00a89bb320e7b4ce6f2332f7ac77943be31341755570b3578a12481445",
+    "src/egglab/constructive_charging.py": "77d2afb5e62d6e0470e9115c8572ea89888c4eb03c1ca43c603116d20e0f7d96",
+    "src/egglab/native_hull.py": "1d5000c3e410a8a4477e5e82b805571cfd4255d3bb79b1d732844bc3042cbc9c",
+    "src/egglab/native_pathflow.py": "81c366d93d327d3573c4b1d468d36121054b3a59ffe2d33c95b152cf33e3140a",
+    "src/egglab/native_recharge.py": "0067123a7f71cc6e9c89e1262cdcbd612cafdcfc252e35bcfca7f1f54c45d0f3",
+    "src/egglab/physical_learning_cases.py": "85f832c80526e02a4531bd0b4a70ed398eb46ae9a6cae2834da163ef3c0c8f1b"
+  },
+  "cpu_s": 73.17676499999999,
+  "wall_s": 75.24994037486613,
+  "observed_peak_rss_bytes": 490143744,
+  "rusage": {
+    "utime_s": 71.246344,
+    "stime_s": 1.966052,
+    "maxrss_platform_units": 490143744,
+    "platform": "darwin"
+  },
+  "budget": {
+    "cpu_s": 360,
+    "wall_s": 300,
+    "case_s": 120,
+    "preparation_s": 30,
+    "native_deadline_s": 90,
+    "native_cap_s": 60,
+    "capture_replay_final_s": 30
+  },
+  "interpretation": "Diagnostic completion is not feasibility of both cases, economic optimality or a paired performance result"
+}

@@ -1,0 +1,138 @@
+\section{Aggregation and the owner of the deviation}\label{sec:ownership}
+The homogeneous specialization of Section~\ref{sec:heterogeneous} provides
+a separate way to distinguish a planning-value gap from a participant's
+incentive. Replicate the nominal services to $n$
+simultaneous copies of A and $n$ copies of B. Retain the per-bus physical
+parameters and fee 7. Provide $n$ early connectors of power 10 kW and $n$
+terminal connectors of power 30 kW. Supply scales with the market:
+\begin{equation}\label{eq:scaledF}
+ F_n(E,L)=4E+\frac{E^2+L^2}{10n}.
+\end{equation}
+This scaling keeps the marginal-price range bounded; it is an assumption
+of the family, not an asymptotic claim for an unchanged supply curve.
+
+If $m$ buses each cover an A--B pair, the remaining services use $n-m$
+A-only and $n-m$ B-only buses. Operating cost is $14n-7m$, early energy
+is in $[10m,10n]$, and terminal energy is $30n-E$. All terminal charges
+fit: each paired bus takes one connector, while each unpaired A/B pair
+shares one connector serially. Thus the projected opportunities used below
+have explicit physical realizations.
+All A-to-B crossmatchings are admitted in this aggregate model. Identical
+energies make their projected outcomes depend only on $m$; fixed pair duties
+are not being imposed here. In the threshold notation, $r_m=10m$.
+
+\begin{theorem}[Planning gap and whole-owner regret]\label{thm:replication}
+The hull value is $\CH_n=7591n/80$. Every physical planner optimum takes
+an integer $m$ nearest to $27n/40$, retaining both choices at a tie.
+Writing $\delta=m-27n/40$,
+\begin{equation}\label{eq:scaledgap}
+ \Delta_n=\frac{20\delta^2}{n}\le\frac5n.
+\end{equation}
+For one owner controlling all services and buses, the own-price regret is
+\begin{equation}\label{eq:scaledregret}
+ r_n=
+ \begin{cases}
+ m\,40\delta/n,&\delta\ge0,\\
+ (n-m)(-40\delta/n),&\delta<0.
+ \end{cases}
+\end{equation}
+In particular, along $n=40k+1$,
+\[
+ \Delta_n=\frac{169}{80n}\longrightarrow0,\qquad
+ r_n=\frac{351}{40}+\frac{169}{40n}
+ \longrightarrow\frac{351}{40}.
+\]
+For multiples of 40, both quantities are zero.
+\end{theorem}
+
+Approximate convexity of an aggregate does not by itself bound a composite
+owner's absolute incentive to replace its entire aggregate. This is consistent
+with aggregation perspectives \citep{starr1969,hreinsson2021}. In this
+family regret per bus and regret relative to physical cost vanish; the
+nonvanishing statement concerns the whole owner's \emph{absolute} fixed-price
+gain along a declared subsequence.
+
+Now divide ownership among $n$ operators, each responsible for one A/B
+pair, with a reserved early connector and a reserved terminal connector.
+Each may use one or two buses and choose its two-bus early charge in
+$[0,10]$. Those reserved rights ensure unilateral deviations remain feasible
+with every other participant's plan held fixed.
+An aggregate optimum may pair A and B copies across these ownership labels.
+Before making an individual comparison, implement its same projected outcome
+by assigning $m$ owners a one-bus plan and the remaining $n-m$ owners a
+two-bus plan on their own reserved service pairs. Identical service copies
+and the explicit connector assignment make this possible with unchanged
+aggregate load, operating cost and marginal price. This is a reimplementation
+of the economic outcome, not a claim that a cross-matched literal schedule
+already respects the newly imposed ownership rights.
+This step is specific to identical services. In the heterogeneous example
+of Section~\ref{sec:heterogeneous}, fixed pairs with energies $(5,14)$
+and $(15,15)$ require 10 early kWh when both use one bus, whereas the
+crossed complete assignment requires only 9. The latter outcome cannot
+be transferred to that fixed-pair institution by relabeling. No individual
+regret bound for heterogeneous fixed ownership is asserted below.
+
+\begin{corollary}[Reserved participants]\label{cor:individual}
+For any physical planner optimum reimplemented in the reserved-pair
+institution as above, each reserved pair's regret at its marginal price
+is at most $20/n$. The regrets sum to
+\eqref{eq:scaledregret}. Along $n=40k+1$, each dissatisfied one-bus owner
+can gain only $13/n$.
+\end{corollary}
+The proof is the same per-pair bill comparison
+(Appendix~\ref{app:replication}). At $n=20$ the two tied physical planner
+optima with $m=13$ and $m=14$ have whole-owner regrets 7 and 14,
+respectively. Neither the whole-owner calculation
+nor the reserved-pair calculation specifies an institution for unreserved
+shared chargers or strategic anticipation of a tariff reset.
+
+\subsection{Which uniform controls make a small gap informative?}
+The preceding example does not imply that planning error and incentives are
+unrelated. The selected price matters in the classical link between lost
+opportunity cost and duality gaps \citep{huaBaldick2017}. The following
+elementary convex-analysis bound makes the relevant uniform controls explicit;
+it is an explanatory consequence, not a new general pricing principle.
+
+\begin{proposition}[Gap and own-price regret under uniform curvature]
+\label{prop:regretbound}
+Let the projected complete-plan set $S=\{(u(x),c(x)):x\in\X\}$ be nonempty
+and compact, and let $K$ be its load projection, of diameter $R_K$.
+Suppose $F$ is differentiable, $\mu$-strongly convex and has
+$\Lambda$-Lipschitz gradient on a relative neighborhood of
+$\operatorname{conv}K$, where $0<\mu\le\Lambda$.
+Use one fixed Euclidean norm on its affine hull.
+For any physical planner optimum $x$, at $p=\nabla F(u(x))$,
+\[
+ \Delta\le r(x;p)\le
+ \Delta+\Lambda R_K\sqrt{2\Delta/\mu}.
+\]
+If loads lie in a proper affine subspace, gradients and norms can be taken
+tangentially: normal price components add the same amount to every bill.
+Economic price admissibility is a separate qualification.
+\end{proposition}
+\begin{proof}
+Let $(u^*,c^*)$ minimize $c+F(u)$ on $\operatorname{conv}S$ and put
+$q=\nabla F(u^*)$. Hull optimality and linear minimization give
+$V(q)=c^*+q\cdot u^*$. With the Bregman difference
+$B_F(u,u^*)=F(u)-F(u^*)-q\cdot(u-u^*)$, this yields the exact identity
+\[
+ c(x)+q\cdot u(x)-V(q)=\Delta-B_F(u(x),u^*)\ge0.
+\]
+Consequently $\|u(x)-u^*\|\le\sqrt{2\Delta/\mu}$.
+For this fixed plan, regret is the maximum of affine price functions with
+slopes $u(x)-u(y)$, so it is $R_K$-Lipschitz in price. Transfer from $q$ to
+$p$, use gradient smoothness and discard the nonpositive Bregman term to
+obtain the upper bound. The lower bound is the tangent inequality from
+Proposition~\ref{prop:support}.
+\end{proof}
+
+Uniformly bounded $R_K,\Lambda$ and a uniform positive lower bound on
+$\mu$ therefore make planner regret vanish as $\Delta\to0$. In our
+replication family, however,
+$\mu_n=\Lambda_n=1/(5n)$ and $R_{K,n}=10\sqrt2\,n$ in two-load
+coordinates. The displayed upper becomes $\Delta_n+40|\delta|$.
+Indeed the fixed-$q$ score gap is zero there, so retaining its Bregman
+term sharpens this to $40|\delta|$. The exact nonvanishing whole-owner
+regret is thus consistent with the bound. Arbitrary nonoptimal plans require
+their own excess $c(x)+F(u(x))-\CH$ in place of $\Delta$; nonsmooth supply
+or vanishing curvature needs a different argument.

@@ -1,0 +1,206 @@
+{
+  "a": [
+    0,
+    4,
+    0,
+    0
+  ],
+  "b": [
+    0,
+    0.2,
+    0,
+    0.2
+  ],
+  "budget": {
+    "backend": "GRB",
+    "epsilon": 0.0001,
+    "max_rounds": 48,
+    "phase_seconds": 10,
+    "threads": 1,
+    "wall_seconds": 45
+  },
+  "case": {
+    "battery_kwh": 21,
+    "deadhead_cost_per_min": 0.0,
+    "depot": "D",
+    "efficiency": 1.0,
+    "graph_scope": "declared-movement-modes-only",
+    "market_edges_min": [
+      0,
+      60,
+      120,
+      180,
+      240
+    ],
+    "max_vehicles": 2,
+    "movements": [
+      {
+        "after": "A",
+        "before": null,
+        "depot_split": null,
+        "id": "out_A",
+        "kind": "pullout",
+        "legs": [
+          {
+            "arrive_min": 0,
+            "depart_min": 0,
+            "destination": "D",
+            "energy_kwh": 0.0,
+            "origin": "D"
+          }
+        ]
+      },
+      {
+        "after": null,
+        "before": "A",
+        "depot_split": null,
+        "id": "in_A",
+        "kind": "pullin",
+        "legs": [
+          {
+            "arrive_min": 60,
+            "depart_min": 60,
+            "destination": "D",
+            "energy_kwh": 0.0,
+            "origin": "D"
+          }
+        ]
+      },
+      {
+        "after": "B",
+        "before": null,
+        "depot_split": null,
+        "id": "out_B",
+        "kind": "pullout",
+        "legs": [
+          {
+            "arrive_min": 120,
+            "depart_min": 120,
+            "destination": "D",
+            "energy_kwh": 0.0,
+            "origin": "D"
+          }
+        ]
+      },
+      {
+        "after": null,
+        "before": "B",
+        "depot_split": null,
+        "id": "in_B",
+        "kind": "pullin",
+        "legs": [
+          {
+            "arrive_min": 180,
+            "depart_min": 180,
+            "destination": "D",
+            "energy_kwh": 0.0,
+            "origin": "D"
+          }
+        ]
+      },
+      {
+        "after": "B",
+        "before": "A",
+        "depot_split": 1,
+        "id": "depot_AB",
+        "kind": "depot",
+        "legs": [
+          {
+            "arrive_min": 60,
+            "depart_min": 60,
+            "destination": "D",
+            "energy_kwh": 0.0,
+            "origin": "D"
+          },
+          {
+            "arrive_min": 120,
+            "depart_min": 120,
+            "destination": "D",
+            "energy_kwh": 0.0,
+            "origin": "D"
+          }
+        ]
+      },
+      {
+        "after": "B",
+        "before": "A",
+        "depot_split": null,
+        "id": "direct_AB",
+        "kind": "direct",
+        "legs": [
+          {
+            "arrive_min": 60,
+            "depart_min": 60,
+            "destination": "D",
+            "energy_kwh": 0.0,
+            "origin": "D"
+          }
+        ]
+      }
+    ],
+    "name": "reserve_usable",
+    "recharge_deadline_min": 240,
+    "reserve_kwh": 1,
+    "resources": [
+      {
+        "connectors": 0,
+        "end_min": 60,
+        "grid_kw": 0,
+        "per_bus_kw": 0,
+        "start_min": 0
+      },
+      {
+        "connectors": 1,
+        "end_min": 120,
+        "grid_kw": 10.0,
+        "per_bus_kw": 10.0,
+        "start_min": 60
+      },
+      {
+        "connectors": 0,
+        "end_min": 180,
+        "grid_kw": 0,
+        "per_bus_kw": 0,
+        "start_min": 120
+      },
+      {
+        "connectors": 1,
+        "end_min": 240,
+        "grid_kw": 30,
+        "per_bus_kw": 30,
+        "start_min": 180
+      }
+    ],
+    "terminal_open_min": 0,
+    "trips": [
+      {
+        "end_min": 60,
+        "end_place": "D",
+        "energy_kwh": 15.0,
+        "id": "A",
+        "start_min": 0,
+        "start_place": "D"
+      },
+      {
+        "end_min": 180,
+        "end_place": "D",
+        "energy_kwh": 15.0,
+        "id": "B",
+        "start_min": 120,
+        "start_place": "D"
+      }
+    ],
+    "vehicle_cost": 7
+  },
+  "case_identity": "5ac54720e0e93c1fd2eb9a2ad2dfa63ea3071d058f8493a362100c82dd5c0421",
+  "expected_status": "certified",
+  "id": "preserved_reserve_planner",
+  "objective": "planner",
+  "source_hashes": {
+    "doc/NATIVE_RECHARGE_QUALIFICATION_PROTOCOL_20260927.md": "5de2d7ad1ef5ae41c7069a6b3b0159009130e25c611eaf259ee50d667e5b617a",
+    "src/egglab/native_recharge.py": "52d4429299918ae1e98c2f523f0bfcef97d606de2a6d281d8addbe3d7459f9dd",
+    "src/experiments/native_recharge_qualification.py": "200c5bec8e6f8c7f7e466ef045b439dceae9fa2b35984cc452d4d29471dfde1e",
+    "src/tests/test_native_recharge.py": "500ae0e1164511c4e677167038f5decccf809657dc2091e991f5d49a2c6d7bc9"
+  },
+  "target": 97
+}

@@ -1,0 +1,110 @@
+{
+  "policy": "first-two-per-declared-profile-exposed-FIT-cohort-v1",
+  "receipt_complete": true,
+  "selection_passed": true,
+  "failures": [],
+  "groups": [
+    {
+      "group": "physical_v2_s10007",
+      "base_id": 10007,
+      "services": 20,
+      "profile_source": "source-derived declared assignment service projection; stored case must later match"
+    },
+    {
+      "group": "physical_v2_s10013",
+      "base_id": 10013,
+      "services": 20,
+      "profile_source": "source-derived declared assignment service projection; stored case must later match"
+    },
+    {
+      "group": "physical_v2_s10017",
+      "base_id": 10017,
+      "services": 28,
+      "profile_source": "source-derived declared assignment service projection; stored case must later match"
+    },
+    {
+      "group": "physical_v2_s10021",
+      "base_id": 10021,
+      "services": 28,
+      "profile_source": "source-derived declared assignment service projection; stored case must later match"
+    }
+  ],
+  "input_sha256": {
+    "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/research-20261026/economic_recourse_pilot/SELECTION_LAUNCH.json": "672e518ea8577adec76cdc8632e5c5ef958c226f4ec08a0321de88aff7083979",
+    "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/research-20261026/economic_recourse_pilot/select_cohort.py": "04dc4e0a8138daa11df1f7b66ab73677f396dbd288539437ef0df23d535fce16",
+    "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/research-20261026/economic_recourse_pilot/SELECTION_PROTOCOL.md": "b06a8d21f6e5f6b5b92363311e65738687998560f5771e24f754b6deb7da5150",
+    "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/research-20261025/fit_target_support/attempt01/receipt.json": "d44a54af447c5c680698eaf98d02be5c3c9699a963163180cb0a31e536deead3"
+  },
+  "budgets": {
+    "total_cpu_s": 10,
+    "total_wall_s": 30,
+    "body_cpu_s": 5,
+    "body_wall_s": 20,
+    "publication_cpu_s": 5,
+    "publication_wall_s": 10
+  },
+  "tracking_prefix": {
+    "base_displayed_cpu_s": 19811.22,
+    "base_elapsed_sum_s": 20406.22,
+    "base_retained_tracking_cpu_s": 19811.46,
+    "metadata_package_cpu_s": 20,
+    "metadata_package_wall_s": 60,
+    "source_preparation_external_acceptance": {
+      "exit_code": 0,
+      "receipt_complete": true,
+      "phase_complete": true,
+      "displayed_cpu_s": 0.02,
+      "displayed_elapsed_s": 0.05,
+      "retained_cpu_charge_s": 0.04,
+      "within_5CPU_15wall": true
+    },
+    "current_displayed_cpu_s": 19811.24,
+    "current_elapsed_sum_s": 20406.27,
+    "current_retained_tracking_cpu_s": 19811.5,
+    "already_carried_metadata_components": [
+      "source_preparation"
+    ],
+    "separate_legacy_conditional_guard_s": 2546.091499549272,
+    "historical_actual_review_cpu": "UNKNOWN"
+  },
+  "input_version": {
+    "repository_root": "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017",
+    "repository_path": "research-20261025/fit_target_support/attempt01/receipt.json",
+    "git_revision": "21bd18e8fdedfbb4895c8e21008df1fd68ad50ec",
+    "freeze_assumption": "tracked-receipt-unchanged-from-named-revision"
+  },
+  "inside_campaign_preflight_120_and_total_2400": true,
+  "no_original_row_or_plan_access": true,
+  "statistical_scope": "Four exposed FIT development groups, not unseen confirmation",
+  "no_group_replacement": true,
+  "no_native_or_child_process": true,
+  "admitted_FIT_identity_count": 80,
+  "metadata_flags": {
+    "receipt_complete": true,
+    "checks_passed": true,
+    "support_report_complete": true
+  },
+  "excluded_prior_pilot_union": [
+    10001,
+    10002,
+    10018,
+    10006,
+    10009,
+    10010,
+    10015,
+    10005
+  ],
+  "eligible_counts": {
+    "20": 35,
+    "28": 37
+  },
+  "selection_rule": "First2 ascending numeric canonical FIT base IDs per declared20/28 profile after uniform full8pilot exclusion",
+  "profile_formula": "j=(7*(base_id-10000))%54;20 if(j//3)%2==0 else28",
+  "stopped_signal": null,
+  "resources_prepublication": {
+    "cpu_s": 0.027948999999999995,
+    "elapsed_s": 0.019900583662092686,
+    "observed_peak_rss_bytes": 20168704
+  },
+  "external_total_acceptance_pending": true
+}

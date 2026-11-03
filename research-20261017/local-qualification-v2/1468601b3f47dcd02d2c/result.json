@@ -1,0 +1,52 @@
+{
+  "task": {
+    "case_key": "scale:50907:40",
+    "seed": 17,
+    "arm": "full4",
+    "block": 0,
+    "seconds": 30
+  },
+  "started_utc": "2026-10-17T18:10:53Z",
+  "lock_sha256": "9cc2bcb836b65f38e2bbb5fc5f2076b4515673620340846b3846e958161a5230",
+  "events_file": "native.jsonl",
+  "host": {
+    "system": "Darwin",
+    "node": "Nathans-MacBook-Pro-2.local",
+    "release": "25.5.0",
+    "version": "Darwin Kernel Version 25.5.0: Tue Jun  9 22:28:29 PDT 2026; root:xnu-12377.121.10~1/RELEASE_ARM64_T6030",
+    "machine": "arm64",
+    "processor": "arm"
+  },
+  "case_identity": "6aa68d2406af65b873b2e43544059a45acc7c73eaf7ec5e79acde4b4a6d7531e",
+  "movement_ids_sha256": "e48cc6a779448f543b3ca07e7d6ae1004ea8c993e85b87b8a0653865222c978a",
+  "preparation_total_s": 0.1977415420114994,
+  "score_prune_s": 0.015078208409249783,
+  "movements_full": 1444,
+  "movements_kept": 1444,
+  "retained_ids_sha256": "e48cc6a779448f543b3ca07e7d6ae1004ea8c993e85b87b8a0653865222c978a",
+  "search_phase_cap_s": 6.450395228806883,
+  "completion_reserve_s": 3.0,
+  "status": "failure",
+  "source_bound": 578.5242506919666,
+  "source_bound_scope": "full_model",
+  "global_certificate_claim": false,
+  "accepted_valid": false,
+  "bill_exact": "7802504042348080557359757819777692188040016819714751/11692013098647223345629478661730264157247460343808",
+  "bill": 667.3362385516689,
+  "vehicles": 4,
+  "failure": {
+    "type": "TimeoutError",
+    "message": "Finalization exceeded end-to-end deadline",
+    "traceback": "Traceback (most recent call last):\n  File \"/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/src/experiments/codex_local_campaign.py\", line 223, in worker\n    raise TimeoutError('Finalization exceeded end-to-end deadline')\nTimeoutError: Finalization exceeded end-to-end deadline\n"
+  },
+  "wall_s": 30.014633250422776,
+  "cpu_s": 18.261654000000004,
+  "peak_rss_bytes": 188923904,
+  "versions": {
+    "mip": "1.17.6",
+    "gurobipy": "12.0.1",
+    "torch": "2.4.1",
+    "numpy": "1.26.4",
+    "catboost": "1.2.8"
+  }
+}

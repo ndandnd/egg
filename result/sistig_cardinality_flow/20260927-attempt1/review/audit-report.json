@@ -1,0 +1,332 @@
+{
+  "archived_v1_matching_comparison": {
+    "attempt": "result/sistig_matching/20260927-attempt1",
+    "audit_verdict": "PASS",
+    "cases": [
+      {
+        "depot": 15,
+        "matching_lower_decimal_display": "301.315343883878",
+        "matching_lower_exact": "1527850306129491653603056061110569/5070602400912917605986812821504",
+        "matching_review_passed": true
+      },
+      {
+        "depot": 16,
+        "matching_lower_decimal_display": "305.633807883878",
+        "matching_lower_exact": "1549747520056147657492789450008273/5070602400912917605986812821504",
+        "matching_review_passed": true
+      }
+    ],
+    "raw_archive_integrity": {
+      "all_bytes_and_hashes_match": true,
+      "files": 9
+    }
+  },
+  "cases": [
+    {
+      "allowed_connection_pairs": 666,
+      "baseline_exact": "10440307691622779244267870777729591/2535301200456458802993406410752",
+      "case_identity": "1917409b43c0433b4ac2504b0b28c1bb2aa63a033c79ba1a4057418b63874ed7",
+      "connection_modes_across_pairs": 1296,
+      "corruptions": [
+        {
+          "control": "remove one expected arc",
+          "rejected": true
+        },
+        {
+          "control": "change an arc capacity",
+          "rejected": true
+        },
+        {
+          "control": "break gate flow balance",
+          "rejected": true
+        },
+        {
+          "control": "corrupt one potential",
+          "rejected": true
+        },
+        {
+          "control": "change network objective",
+          "rejected": true
+        },
+        {
+          "control": "change published lower bound",
+          "rejected": true
+        }
+      ],
+      "decoded_objective_equal": true,
+      "depot": 15,
+      "dual_value_exact": "-37654811120605060100693923882893811/10141204801825835211973625643008",
+      "gate_flow": 35,
+      "lower_decimal_display": "404.924239883878",
+      "lower_exact": "4106419645886056876377559228024553/10141204801825835211973625643008",
+      "mode_omission_control": {
+        "control": "omit depot connection modes during reconstruction",
+        "rejected": true
+      },
+      "movement_counts": {
+        "depot": 630,
+        "direct": 666,
+        "pullin": 37,
+        "pullout": 37
+      },
+      "movement_modes": 1370,
+      "network_arcs": 778,
+      "network_cost_exact": "-37654811120605060100693923882893811/10141204801825835211973625643008",
+      "paths_in_relaxation": 2,
+      "primal_dual_equal": true,
+      "real_edges_selected": 35,
+      "relaxations": 116836,
+      "selected_movement_count": 39,
+      "service_constant_exact": "901672285732337776509261420939421/5070602400912917605986812821504",
+      "services": 37,
+      "unmatched_rows": 2,
+      "unused_columns": 2
+    },
+    {
+      "allowed_connection_pairs": 666,
+      "baseline_exact": "21570154473263258087687455045970013/5070602400912917605986812821504",
+      "case_identity": "216693551f2e58ec8aab3cba68352656ec99bab8db13c671edd028542acfeb3d",
+      "connection_modes_across_pairs": 1261,
+      "corruptions": [
+        {
+          "control": "remove one expected arc",
+          "rejected": true
+        },
+        {
+          "control": "change an arc capacity",
+          "rejected": true
+        },
+        {
+          "control": "break gate flow balance",
+          "rejected": true
+        },
+        {
+          "control": "corrupt one potential",
+          "rejected": true
+        },
+        {
+          "control": "change network objective",
+          "rejected": true
+        },
+        {
+          "control": "change published lower bound",
+          "rejected": true
+        }
+      ],
+      "decoded_objective_equal": true,
+      "depot": 16,
+      "dual_value_exact": "-19468924882725433704086956770663309/5070602400912917605986812821504",
+      "gate_flow": 35,
+      "lower_decimal_display": "414.394469217211",
+      "lower_exact": "131326849408614023975031142206669/316912650057057350374175801344",
+      "mode_omission_control": {
+        "control": "omit depot connection modes during reconstruction",
+        "rejected": true
+      },
+      "movement_counts": {
+        "depot": 595,
+        "direct": 666,
+        "pullin": 37,
+        "pullout": 37
+      },
+      "movement_modes": 1335,
+      "network_arcs": 778,
+      "network_cost_exact": "-19468924882725433704086956770663309/5070602400912917605986812821504",
+      "paths_in_relaxation": 2,
+      "primal_dual_equal": true,
+      "real_edges_selected": 35,
+      "relaxations": 116836,
+      "selected_movement_count": 39,
+      "service_constant_exact": "901672285732337776509261420939421/5070602400912917605986812821504",
+      "services": 37,
+      "unmatched_rows": 2,
+      "unused_columns": 2
+    }
+  ],
+  "flat_price_exact": "3602879701896397/18014398509481984",
+  "frozen_sha256": "bce2293080c3d19d05c37aa8c6bb4a285f1afe59fbde161fa6a6b6505784d103",
+  "native_two_bus_numerical_witnesses": {
+    "audit_status": "PASS numerical evidence",
+    "cases": [
+      {
+        "depot": 15,
+        "native_evidence_verdict": "PASS conditional numerical interval and independent physical replay",
+        "native_two_bus_witness_upper": 408.5331368838794,
+        "native_used_buses": 2,
+        "tolerance_qualified": true
+      },
+      {
+        "depot": 16,
+        "native_evidence_verdict": "PASS conditional numerical interval and independent physical replay",
+        "native_two_bus_witness_upper": 433.74608621721006,
+        "native_used_buses": 2,
+        "tolerance_qualified": true
+      }
+    ],
+    "note": "Reported separately as tolerance-qualified numerical witnesses; not subtracted from exact stored-input bounds.",
+    "source": "result/sistig_pricing/20260927-grb-job557543-attempt1/review/numerical-audit.json"
+  },
+  "parallel_mode_minimum_witness": {
+    "cheapest_pullin": {
+      "cost_exact": "13151796145816786296143631134159/2535301200456458802993406410752",
+      "movement_id": "pullin_H0002_D15"
+    },
+    "cheapest_pullout": {
+      "cost_exact": "4562893123714308596131208376229/2535301200456458802993406410752",
+      "movement_id": "pullout_D15_H0018"
+    },
+    "chosen_mode": {
+      "kind": "depot",
+      "movement_id": "depot_D15_H0002_H0018"
+    },
+    "minimum_and_arc_match": true,
+    "mode_count": 2,
+    "modes_sorted_by_exact_cost_then_id": [
+      {
+        "kind": "depot",
+        "movement_cost_exact": "4428672317382773723068709877597/633825300114114700748351602688",
+        "movement_id": "depot_D15_H0002_H0018"
+      },
+      {
+        "kind": "direct",
+        "movement_cost_exact": "42009857597296549445223932177387/5070602400912917605986812821504",
+        "movement_id": "direct_H0002_H0018"
+      }
+    ],
+    "pair": "H0002->H0018",
+    "reconstructed_increment_exact": "-100",
+    "saved_increment_exact": "-100",
+    "vehicle_cost_exact": "100"
+  },
+  "public_payload_and_case_checks": {
+    "cases": [
+      {
+        "depot": 15,
+        "identity": "1917409b43c0433b4ac2504b0b28c1bb2aa63a033c79ba1a4057418b63874ed7",
+        "movement_modes": 1370,
+        "movements_match_public_payload": true,
+        "services": 37,
+        "trips_match_public_payload": true
+      },
+      {
+        "depot": 16,
+        "identity": "216693551f2e58ec8aab3cba68352656ec99bab8db13c671edd028542acfeb3d",
+        "movement_modes": 1335,
+        "movements_match_public_payload": true,
+        "services": 37,
+        "trips_match_public_payload": true
+      }
+    ],
+    "payload_sha256": "af6da4dea220063d1b2486a4c958bff19ae621328f07bde4a95a5c70690ebeb6"
+  },
+  "raw_archive_integrity": {
+    "all_bytes_and_hashes_match": true,
+    "files": 9
+  },
+  "scope": "Exact ideal stored-input lower bounds for the frozen declared movement graph; no physical optimum, exact native-matrix optimum, or physical optimality gap is asserted.",
+  "source_integrity": {
+    "commit": "dd5ad1659248b93d53f7f1515282d9530343567f",
+    "commit_is_available": true,
+    "dependencies": {
+      "data/public/sistig_26088190_v1/hildenbrand_native_cases.json": {
+        "commit_matches": true,
+        "frozen_sha256": "af6da4dea220063d1b2486a4c958bff19ae621328f07bde4a95a5c70690ebeb6",
+        "live_matches": true
+      },
+      "doc/SISTIG_CARDINALITY_FLOW_PROTOCOL_20260927.md": {
+        "commit_matches": true,
+        "frozen_sha256": "14abfc0a9100d11626416a589bf1d7b13cd7f42be7035d03d711b6051f541e73",
+        "live_matches": true
+      },
+      "doc/SISTIG_FLEET_CARDINALITY_RELAXATION_DESIGN_20260927.md": {
+        "commit_matches": true,
+        "frozen_sha256": "3c4e132439547c5827f54f96952cd52e2d28f1169cb5799e91bc622d874b00a2",
+        "live_matches": true
+      },
+      "doc/SISTIG_FLEET_CARDINALITY_RELAXATION_REVIEW_20260927.md": {
+        "commit_matches": true,
+        "frozen_sha256": "f45507cf3db3493b1dc4bc561a1b8b61a3d5692d51e365c716b06a54f8dd7c90",
+        "live_matches": true
+      },
+      "doc/SISTIG_ONE_BUS_OBSTRUCTION_20260927.md": {
+        "commit_matches": true,
+        "frozen_sha256": "a2c4badf085d9d67c205170f8b7460e7efc1b40ac8b87aab4aa846c1815d8bdb",
+        "live_matches": true
+      },
+      "research-20260927/agent-notes/sistig-cardinality-flow-independent-review/REVIEW.md": {
+        "commit_matches": true,
+        "frozen_sha256": "73fb97fc10ec48fa5cd34ebc0e3e5aa6ca8a2dd375ea3be9f307e23e2426aed4",
+        "live_matches": true
+      },
+      "research-20260927/agent-notes/sistig-one-bus-postpilot-review/REVIEW.md": {
+        "commit_matches": true,
+        "frozen_sha256": "7b1d55d1d20fce676ded6aaeb6ae0965cd70fc464581290ad792f2056bce53a2",
+        "live_matches": true
+      },
+      "research-20260927/agent-notes/sistig-one-bus-postpilot/diagnostic.py": {
+        "commit_matches": true,
+        "frozen_sha256": "fada2a1ef1fc2b1aa0f54f8c847d0f84cfa6659f56f8638f02ed9550094d4b5f",
+        "live_matches": true
+      },
+      "research-20260927/agent-notes/sistig-one-bus-postpilot/result.json": {
+        "commit_matches": true,
+        "frozen_sha256": "cdc2603b1e53dba7fdff757e63c2f64265b0d190aef1174f4792d607ecf2b3e9",
+        "live_matches": true
+      },
+      "result/sistig_pricing/20260927-grb-job557543-attempt1/frozen.json": {
+        "commit_matches": true,
+        "frozen_sha256": "35ce1e07876ca62ee366e598fec884556f8f9ea03e46230f19d5999f087e660b",
+        "live_matches": true
+      },
+      "src/egglab/cardinality_flow.py": {
+        "commit_matches": true,
+        "frozen_sha256": "511b9d5ed25da22641019f2d91558b5c30a9254315163ffaa59bffe7cb2e3b45",
+        "live_matches": true
+      },
+      "src/egglab/cardinality_flow_verify.py": {
+        "commit_matches": true,
+        "frozen_sha256": "2ff64a436201962ec93db7ed623691c219ab00942bf81dea5b6b5f6fdddc0efa",
+        "live_matches": true
+      },
+      "src/egglab/flat_energy_relaxation.py": {
+        "commit_matches": true,
+        "frozen_sha256": "5f3e9e2047abc1b4af586b062966334ae737fae2cb0d5cbea98a87a6026b71cb",
+        "live_matches": true
+      },
+      "src/egglab/native_recharge.py": {
+        "commit_matches": true,
+        "frozen_sha256": "0067123a7f71cc6e9c89e1262cdcbd612cafdcfc252e35bcfca7f1f54c45d0f3",
+        "live_matches": true
+      },
+      "src/experiments/sistig_cardinality_flow.py": {
+        "commit_matches": true,
+        "frozen_sha256": "1504904e190e7f408b4a4aef032ead2282f01471cfa824e4753f0267329d7eeb",
+        "live_matches": true
+      },
+      "src/experiments/sistig_native_case.py": {
+        "commit_matches": true,
+        "frozen_sha256": "f47a7a926d102f948d73e6d450f25a46fe7ad84fc93e4ff7e877da76ffe0e3c9",
+        "live_matches": true
+      },
+      "src/tests/test_cardinality_flow.py": {
+        "commit_matches": true,
+        "frozen_sha256": "1939beaf5865db513012024707b60c8fb3ee90b2cc9e488bbede16e212dbb038",
+        "live_matches": true
+      }
+    },
+    "head_matches_pinned_commit": false,
+    "working_head": "5d7f2563db2ad8ce72e6fab9720f5a53214ab624"
+  },
+  "supervisor": {
+    "algorithm_calls": 2,
+    "child_exit_code": 0,
+    "elapsed_seconds": 0.569450041744858,
+    "exit_code": 0,
+    "hard_cap_seconds": 150,
+    "source_hashes_unchanged": true,
+    "stderr_bytes": 0,
+    "stdout_bytes": 0,
+    "timed_out": false
+  },
+  "verdict": "PASS independent exact certificate and provenance audit"
+}

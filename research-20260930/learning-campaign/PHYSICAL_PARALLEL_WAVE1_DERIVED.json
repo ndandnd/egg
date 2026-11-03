@@ -1,0 +1,958 @@
+{
+  "admission": {
+    "adapter_command": "PYTHONPATH=src python3 -m experiments.physical_learning_dataset --attempt <one explicit shard attempt> --output <new immutable dataset directory>",
+    "adapter_exit_codes": {
+      "02": 0,
+      "03": 0,
+      "04": 0,
+      "05": 0,
+      "06": 0,
+      "07": 0,
+      "08": 0
+    },
+    "adapter_invocations": 7,
+    "adapter_schema": "physical-learning-dataset-v1",
+    "admitted_shards": [
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "development_or_test_materialized": false,
+    "policy_path": "research-20260930/learning-campaign/PHYSICAL_DATASET_INTERFACE.md",
+    "solver_or_model_invocations_during_admission": 0,
+    "status": "complete"
+  },
+  "aggregate": {
+    "censored_physical_labels": 4,
+    "failure_incidents": [
+      {
+        "base_group": "physical_v2_s10037",
+        "censored": true,
+        "kind": "source",
+        "label_key": "physical_v2_s10037_n20_soc20_80_174/source0",
+        "message": "Whole-incumbent charge projection exceeds roundoff budget",
+        "paid_seconds": 3.925978,
+        "status": "failed"
+      },
+      {
+        "base_group": "physical_v2_s10037",
+        "censored": true,
+        "kind": "target",
+        "label_key": "physical_v2_s10037_n20_soc20_80_174/source0_charge_late",
+        "message": "No replayed same-base source plan",
+        "paid_seconds": 2.672887,
+        "status": "failed"
+      },
+      {
+        "base_group": "physical_v2_s10037",
+        "censored": true,
+        "kind": "target",
+        "label_key": "physical_v2_s10037_n20_soc20_80_174/source0_charge_day",
+        "message": "No replayed same-base source plan",
+        "paid_seconds": 2.726326,
+        "status": "failed"
+      },
+      {
+        "base_group": "physical_v2_s10037",
+        "censored": true,
+        "kind": "target",
+        "label_key": "physical_v2_s10037_n20_soc20_80_174/source0_charge_flat",
+        "message": "No replayed same-base source plan",
+        "paid_seconds": 2.774522,
+        "status": "failed"
+      }
+    ],
+    "independent_training_groups": 56,
+    "intended_physical_labels": 448,
+    "paired_tariffs": {
+      "eligible": 165,
+      "exact_ties": 66,
+      "excluded": 3,
+      "groups_with_winner_change_across_tariffs": 20,
+      "intended": 168,
+      "nonzero_near_ties_within_1e-6": 15,
+      "pair_tolerance_exact": "1/1000000",
+      "winner_change_definition": "Counts a group when its eligible tariff outcomes contain more than one recorded category among source0, source1, and tie. Transitions to or from ties are included; this is not a strict source0-to-source1 reversal count.",
+      "winner_counts": {
+        "source0": 39,
+        "source1": 45,
+        "tie": 81
+      },
+      "winners_by_tariff": {
+        "day": {
+          "source0": 18,
+          "source1": 10,
+          "tie": 27
+        },
+        "flat": {
+          "source0": 15,
+          "source1": 14,
+          "tie": 26
+        },
+        "late": {
+          "source0": 6,
+          "source1": 21,
+          "tie": 28
+        }
+      }
+    },
+    "replayed_feasible_physical_labels": 444,
+    "source_labels": {
+      "censored": 1,
+      "curved_optimality_uncertified": 111,
+      "intended": 112,
+      "native_status_counts": {
+        "budget_exhausted": 82,
+        "certified": 29,
+        "not_reported": 1
+      },
+      "provisional_after_native_limit": 82,
+      "replayed_feasible": 111,
+      "status_counts": {
+        "failed": 1,
+        "returned": 111
+      }
+    },
+    "source_topology": {
+      "distinct_movement_sets_across_admitted_shards": 88,
+      "distinct_movement_sets_per_shard": {
+        "02": 14,
+        "03": 13,
+        "04": 13,
+        "05": 12,
+        "06": 14,
+        "07": 11,
+        "08": 15
+      },
+      "identical_source_full_plan_groups": 0,
+      "identical_source_topology_groups": 18,
+      "source_fleets_intended": 112,
+      "source_pairs_with_both_full_plans_available": 55,
+      "source_pairs_with_both_topologies_available": 55
+    },
+    "target_labels": {
+      "censored": 3,
+      "curved_optimality_uncertified": 333,
+      "feasible_after_child_failure": 0,
+      "intended": 336,
+      "native_status_counts": {
+        "OPTIMAL": 333,
+        "not_reported": 3
+      },
+      "provisional_after_native_limit": 0,
+      "replayed_feasible": 333,
+      "status_counts": {
+        "failed": 3,
+        "returned": 333
+      }
+    },
+    "time_seconds": {
+      "all_child_paid": 4172.289083,
+      "failed_or_censored_outcomes_paid": 12.099713,
+      "scheduler_elapsed_source": "Root-provided per-job accounting for jobs 712946-712952; no cluster query from admission agent.",
+      "slurm_elapsed_sum": 4690,
+      "slurm_elapsed_sum_is_campaign_wall_time": false,
+      "source_child_paid": 2959.321225,
+      "target_child_paid": 1212.967858,
+      "wrapper_receipt_elapsed_sum": 4648
+    }
+  },
+  "schema": "physical-parallel-wave1-derived-v1",
+  "shards": [
+    {
+      "failures": [],
+      "independent_training_groups": 8,
+      "lineage": {
+        "attempt_directory": "result/physical_learning/20260930-shard02-attempt1",
+        "catalog_sha256": "15634989264229ada51de60c8a5246086902dc914b6253013de3cb9dcd2fb0c6",
+        "cell_receipt_files_hashed_by_dataset_receipt": 64,
+        "dataset_directory": "result/physical_learning/20260930-shard02-dataset-v1",
+        "dataset_receipt_input_hash_count": 197,
+        "dataset_receipt_path": "result/physical_learning/20260930-shard02-dataset-v1/dataset_receipt.json",
+        "dataset_receipt_sha256": "28bd65ffdd851984a028ae15180f7d5ffaf3bdacb8e2cca48ca42ff48f1a00df",
+        "frozen_sha256": "66807a349d515fa8b74fe8e4f98fbd82a83fdbfa025720b1a51b29ae80db5f05",
+        "frozen_source_commit": "25aee9b6b36795f9f8c20227703602e2fba16084",
+        "manifest_sha256": "b570236f67e4521fb48da553aff9dd439eb7d203f40573bf5ee508c2e24bec51",
+        "summary_sha256": "a86749b006e03bdb323a9a5d2a51b7ec8b2666d99982a2a9d0814ff798197c3c",
+        "wrapper_receipt_path": "result/physical_learning/20260930-shard02-attempt1.slurm_wrapper_receipt.712946.json",
+        "wrapper_receipt_sha256": "9ad98cbb6f68d2b0250ff96177fd6422ef91a17c3a730c9bb2819b4e51f22b6e"
+      },
+      "paired_tariffs": {
+        "eligible": 24,
+        "exact_ties": 8,
+        "excluded": 0,
+        "groups_with_winner_change_across_tariffs": 2,
+        "intended": 24,
+        "nonzero_near_ties_within_1e-6": 4,
+        "winner_change_definition": "Counts a group when its eligible tariff outcomes contain more than one recorded category among source0, source1, and tie. Transitions to or from ties are included; this is not a strict source0-to-source1 reversal count.",
+        "winner_counts": {
+          "source0": 7,
+          "source1": 5,
+          "tie": 12
+        },
+        "winners_by_tariff": {
+          "day": {
+            "source0": 3,
+            "source1": 1,
+            "tie": 4
+          },
+          "flat": {
+            "source0": 3,
+            "source1": 1,
+            "tie": 4
+          },
+          "late": {
+            "source0": 1,
+            "source1": 3,
+            "tie": 4
+          }
+        }
+      },
+      "shard": 2,
+      "source_labels": {
+        "censored": 0,
+        "curved_optimality_uncertified": 16,
+        "failure_count": 0,
+        "intended": 16,
+        "native_status_counts": {
+          "budget_exhausted": 14,
+          "certified": 2
+        },
+        "paid_seconds": 391.267929,
+        "provisional_after_native_limit": 14,
+        "replayed_feasible": 16,
+        "returned": 16,
+        "status_counts": {
+          "returned": 16
+        }
+      },
+      "source_topology": {
+        "distinct_movement_sets_within_shard": 14,
+        "identical_source_full_plan_groups": 0,
+        "identical_source_topology_groups": 2,
+        "source_pairs_with_both_full_plans_available": 8,
+        "source_pairs_with_both_topologies_available": 8
+      },
+      "target_labels": {
+        "censored": 0,
+        "curved_optimality_uncertified": 48,
+        "failure_count": 0,
+        "feasible_after_child_failure": 0,
+        "intended": 48,
+        "native_status_counts": {
+          "OPTIMAL": 48
+        },
+        "paid_seconds": 211.423842,
+        "provisional_after_native_limit": 0,
+        "replayed_feasible": 48,
+        "status_counts": {
+          "returned": 48
+        }
+      },
+      "time_seconds": {
+        "all_child_paid": 602.691771,
+        "failed_or_censored_outcomes_paid": 0,
+        "slurm_elapsed_seconds": 693,
+        "source_child_paid": 391.267929,
+        "target_child_paid": 211.423842,
+        "wrapper_receipt_elapsed_whole_seconds": 688
+      },
+      "wrapper": {
+        "allocated_job_cpus": 1,
+        "controller_returncode": 0,
+        "freeze_returncode": 0,
+        "job_id": "712946",
+        "preflight_returncode": 0,
+        "returncode": 0
+      }
+    },
+    {
+      "failures": [],
+      "independent_training_groups": 8,
+      "lineage": {
+        "attempt_directory": "result/physical_learning/20260930-shard03-attempt1",
+        "catalog_sha256": "8478392208b9cb35d4a7e03761f7979b09930d725239c2a9add70c14b5360205",
+        "cell_receipt_files_hashed_by_dataset_receipt": 64,
+        "dataset_directory": "result/physical_learning/20260930-shard03-dataset-v1",
+        "dataset_receipt_input_hash_count": 197,
+        "dataset_receipt_path": "result/physical_learning/20260930-shard03-dataset-v1/dataset_receipt.json",
+        "dataset_receipt_sha256": "35613c977c0f59c4f1c666f0165af763efbe9d9d3751e671cd72d88d80834f13",
+        "frozen_sha256": "b52aa2c26085afe42d1a71e59758261e9dedb023bad1693bed4cc1d9750970d1",
+        "frozen_source_commit": "25aee9b6b36795f9f8c20227703602e2fba16084",
+        "manifest_sha256": "9dba2d135c3002a66b2dc7ef5603e3f6019d26315867974b08f5af4f3869b023",
+        "summary_sha256": "4e6d84195b5c33640fbb3c5c469a9ba47a6ab16ce3874e76ed8c226f5d2ad8e8",
+        "wrapper_receipt_path": "result/physical_learning/20260930-shard03-attempt1.slurm_wrapper_receipt.712947.json",
+        "wrapper_receipt_sha256": "182e04c8ac4671b8e4b34a4c5cccffee4004d94c88be6d0f71522c411ee6e2c4"
+      },
+      "paired_tariffs": {
+        "eligible": 24,
+        "exact_ties": 12,
+        "excluded": 0,
+        "groups_with_winner_change_across_tariffs": 5,
+        "intended": 24,
+        "nonzero_near_ties_within_1e-6": 0,
+        "winner_change_definition": "Counts a group when its eligible tariff outcomes contain more than one recorded category among source0, source1, and tie. Transitions to or from ties are included; this is not a strict source0-to-source1 reversal count.",
+        "winner_counts": {
+          "source0": 8,
+          "source1": 4,
+          "tie": 12
+        },
+        "winners_by_tariff": {
+          "day": {
+            "source0": 3,
+            "source1": 1,
+            "tie": 4
+          },
+          "flat": {
+            "source0": 3,
+            "source1": 1,
+            "tie": 4
+          },
+          "late": {
+            "source0": 2,
+            "source1": 2,
+            "tie": 4
+          }
+        }
+      },
+      "shard": 3,
+      "source_labels": {
+        "censored": 0,
+        "curved_optimality_uncertified": 16,
+        "failure_count": 0,
+        "intended": 16,
+        "native_status_counts": {
+          "budget_exhausted": 10,
+          "certified": 6
+        },
+        "paid_seconds": 435.662105,
+        "provisional_after_native_limit": 10,
+        "replayed_feasible": 16,
+        "returned": 16,
+        "status_counts": {
+          "returned": 16
+        }
+      },
+      "source_topology": {
+        "distinct_movement_sets_within_shard": 13,
+        "identical_source_full_plan_groups": 0,
+        "identical_source_topology_groups": 3,
+        "source_pairs_with_both_full_plans_available": 8,
+        "source_pairs_with_both_topologies_available": 8
+      },
+      "target_labels": {
+        "censored": 0,
+        "curved_optimality_uncertified": 48,
+        "failure_count": 0,
+        "feasible_after_child_failure": 0,
+        "intended": 48,
+        "native_status_counts": {
+          "OPTIMAL": 48
+        },
+        "paid_seconds": 200.411283,
+        "provisional_after_native_limit": 0,
+        "replayed_feasible": 48,
+        "status_counts": {
+          "returned": 48
+        }
+      },
+      "time_seconds": {
+        "all_child_paid": 636.073389,
+        "failed_or_censored_outcomes_paid": 0,
+        "slurm_elapsed_seconds": 723,
+        "source_child_paid": 435.662105,
+        "target_child_paid": 200.411283,
+        "wrapper_receipt_elapsed_whole_seconds": 714
+      },
+      "wrapper": {
+        "allocated_job_cpus": 2,
+        "controller_returncode": 0,
+        "freeze_returncode": 0,
+        "job_id": "712947",
+        "preflight_returncode": 0,
+        "returncode": 0
+      }
+    },
+    {
+      "failures": [
+        {
+          "base_group": "physical_v2_s10037",
+          "censored": true,
+          "kind": "source",
+          "label_key": "physical_v2_s10037_n20_soc20_80_174/source0",
+          "message": "Whole-incumbent charge projection exceeds roundoff budget",
+          "paid_seconds": 3.925978,
+          "status": "failed"
+        },
+        {
+          "base_group": "physical_v2_s10037",
+          "censored": true,
+          "kind": "target",
+          "label_key": "physical_v2_s10037_n20_soc20_80_174/source0_charge_late",
+          "message": "No replayed same-base source plan",
+          "paid_seconds": 2.672887,
+          "status": "failed"
+        },
+        {
+          "base_group": "physical_v2_s10037",
+          "censored": true,
+          "kind": "target",
+          "label_key": "physical_v2_s10037_n20_soc20_80_174/source0_charge_day",
+          "message": "No replayed same-base source plan",
+          "paid_seconds": 2.726326,
+          "status": "failed"
+        },
+        {
+          "base_group": "physical_v2_s10037",
+          "censored": true,
+          "kind": "target",
+          "label_key": "physical_v2_s10037_n20_soc20_80_174/source0_charge_flat",
+          "message": "No replayed same-base source plan",
+          "paid_seconds": 2.774522,
+          "status": "failed"
+        }
+      ],
+      "independent_training_groups": 8,
+      "lineage": {
+        "attempt_directory": "result/physical_learning/20260930-shard04-attempt1",
+        "catalog_sha256": "d710bf5a7d64d7bfd040ee9983ea4249cb2b8696f7173938b8b5c4a84a0b829c",
+        "cell_receipt_files_hashed_by_dataset_receipt": 64,
+        "dataset_directory": "result/physical_learning/20260930-shard04-dataset-v1",
+        "dataset_receipt_input_hash_count": 189,
+        "dataset_receipt_path": "result/physical_learning/20260930-shard04-dataset-v1/dataset_receipt.json",
+        "dataset_receipt_sha256": "c2f9593ef5502ad86a0cff69fc102cdd26f3778e6e0db284fd524e0507194dc6",
+        "frozen_sha256": "e01492b9026955e2f8afb70a5f8551b499795ca4eefb61d9e0c922fa345526ae",
+        "frozen_source_commit": "25aee9b6b36795f9f8c20227703602e2fba16084",
+        "manifest_sha256": "8983c2e58dfdde908881778c8b9b97b9764c04d3e01735ba27e2aa3c51bbdb18",
+        "summary_sha256": "9369a7c4eeb499bd70bca92acd955171aa00c9f1281925061324de8dddc49721",
+        "wrapper_receipt_path": "result/physical_learning/20260930-shard04-attempt1.slurm_wrapper_receipt.712948.json",
+        "wrapper_receipt_sha256": "762b9576c3b91c07caf2ec2b2b0ce18b951a32fc5a1d2177b0f62c90d6a0047f"
+      },
+      "paired_tariffs": {
+        "eligible": 21,
+        "exact_ties": 7,
+        "excluded": 3,
+        "groups_with_winner_change_across_tariffs": 2,
+        "intended": 24,
+        "nonzero_near_ties_within_1e-6": 2,
+        "winner_change_definition": "Counts a group when its eligible tariff outcomes contain more than one recorded category among source0, source1, and tie. Transitions to or from ties are included; this is not a strict source0-to-source1 reversal count.",
+        "winner_counts": {
+          "source0": 6,
+          "source1": 6,
+          "tie": 9
+        },
+        "winners_by_tariff": {
+          "day": {
+            "source0": 2,
+            "source1": 2,
+            "tie": 3
+          },
+          "flat": {
+            "source0": 2,
+            "source1": 2,
+            "tie": 3
+          },
+          "late": {
+            "source0": 2,
+            "source1": 2,
+            "tie": 3
+          }
+        }
+      },
+      "shard": 4,
+      "source_labels": {
+        "censored": 1,
+        "curved_optimality_uncertified": 15,
+        "failure_count": 1,
+        "intended": 16,
+        "native_status_counts": {
+          "budget_exhausted": 10,
+          "certified": 5,
+          "not_reported": 1
+        },
+        "paid_seconds": 410.427998,
+        "provisional_after_native_limit": 10,
+        "replayed_feasible": 15,
+        "returned": 15,
+        "status_counts": {
+          "failed": 1,
+          "returned": 15
+        }
+      },
+      "source_topology": {
+        "distinct_movement_sets_within_shard": 13,
+        "identical_source_full_plan_groups": 0,
+        "identical_source_topology_groups": 2,
+        "source_pairs_with_both_full_plans_available": 7,
+        "source_pairs_with_both_topologies_available": 7
+      },
+      "target_labels": {
+        "censored": 3,
+        "curved_optimality_uncertified": 45,
+        "failure_count": 3,
+        "feasible_after_child_failure": 0,
+        "intended": 48,
+        "native_status_counts": {
+          "OPTIMAL": 45,
+          "not_reported": 3
+        },
+        "paid_seconds": 149.706132,
+        "provisional_after_native_limit": 0,
+        "replayed_feasible": 45,
+        "status_counts": {
+          "failed": 3,
+          "returned": 45
+        }
+      },
+      "time_seconds": {
+        "all_child_paid": 560.13413,
+        "failed_or_censored_outcomes_paid": 12.099713,
+        "slurm_elapsed_seconds": 623,
+        "source_child_paid": 410.427998,
+        "target_child_paid": 149.706132,
+        "wrapper_receipt_elapsed_whole_seconds": 618
+      },
+      "wrapper": {
+        "allocated_job_cpus": 2,
+        "controller_returncode": 0,
+        "freeze_returncode": 0,
+        "job_id": "712948",
+        "preflight_returncode": 0,
+        "returncode": 0
+      }
+    },
+    {
+      "failures": [],
+      "independent_training_groups": 8,
+      "lineage": {
+        "attempt_directory": "result/physical_learning/20260930-shard05-attempt1",
+        "catalog_sha256": "c67c2c79aef1e3ced63067e92b2ba9e02c0df3b4cebfd5da9fcf6c14c20aa930",
+        "cell_receipt_files_hashed_by_dataset_receipt": 64,
+        "dataset_directory": "result/physical_learning/20260930-shard05-dataset-v1",
+        "dataset_receipt_input_hash_count": 197,
+        "dataset_receipt_path": "result/physical_learning/20260930-shard05-dataset-v1/dataset_receipt.json",
+        "dataset_receipt_sha256": "1f779eadb495e1ce3cff2e2e20f6f8bf5f16bf4a8400661981c019224193c08b",
+        "frozen_sha256": "830c04bced6237d73c8e292070b6dd61320eabf0531070e7fd9150e412001cf3",
+        "frozen_source_commit": "25aee9b6b36795f9f8c20227703602e2fba16084",
+        "manifest_sha256": "d6f1a6897434db409b4104371ab888406d17a6eaf2b32bf7b86700e5f5eada73",
+        "summary_sha256": "7f2ead13fe8f5e450fd79e53a2329793a387e731d62673bfb79cad1f751ba272",
+        "wrapper_receipt_path": "result/physical_learning/20260930-shard05-attempt1.slurm_wrapper_receipt.712949.json",
+        "wrapper_receipt_sha256": "5d125a2c18650e7263a1b467652c650f23f4037af20aeaf9381f6e0acbfa7b2b"
+      },
+      "paired_tariffs": {
+        "eligible": 24,
+        "exact_ties": 12,
+        "excluded": 0,
+        "groups_with_winner_change_across_tariffs": 2,
+        "intended": 24,
+        "nonzero_near_ties_within_1e-6": 3,
+        "winner_change_definition": "Counts a group when its eligible tariff outcomes contain more than one recorded category among source0, source1, and tie. Transitions to or from ties are included; this is not a strict source0-to-source1 reversal count.",
+        "winner_counts": {
+          "source0": 2,
+          "source1": 7,
+          "tie": 15
+        },
+        "winners_by_tariff": {
+          "day": {
+            "source0": 2,
+            "source1": 1,
+            "tie": 5
+          },
+          "flat": {
+            "source0": 0,
+            "source1": 3,
+            "tie": 5
+          },
+          "late": {
+            "source0": 0,
+            "source1": 3,
+            "tie": 5
+          }
+        }
+      },
+      "shard": 5,
+      "source_labels": {
+        "censored": 0,
+        "curved_optimality_uncertified": 16,
+        "failure_count": 0,
+        "intended": 16,
+        "native_status_counts": {
+          "budget_exhausted": 13,
+          "certified": 3
+        },
+        "paid_seconds": 448.529623,
+        "provisional_after_native_limit": 13,
+        "replayed_feasible": 16,
+        "returned": 16,
+        "status_counts": {
+          "returned": 16
+        }
+      },
+      "source_topology": {
+        "distinct_movement_sets_within_shard": 12,
+        "identical_source_full_plan_groups": 0,
+        "identical_source_topology_groups": 4,
+        "source_pairs_with_both_full_plans_available": 8,
+        "source_pairs_with_both_topologies_available": 8
+      },
+      "target_labels": {
+        "censored": 0,
+        "curved_optimality_uncertified": 48,
+        "failure_count": 0,
+        "feasible_after_child_failure": 0,
+        "intended": 48,
+        "native_status_counts": {
+          "OPTIMAL": 48
+        },
+        "paid_seconds": 168.14688,
+        "provisional_after_native_limit": 0,
+        "replayed_feasible": 48,
+        "status_counts": {
+          "returned": 48
+        }
+      },
+      "time_seconds": {
+        "all_child_paid": 616.676503,
+        "failed_or_censored_outcomes_paid": 0,
+        "slurm_elapsed_seconds": 688,
+        "source_child_paid": 448.529623,
+        "target_child_paid": 168.14688,
+        "wrapper_receipt_elapsed_whole_seconds": 682
+      },
+      "wrapper": {
+        "allocated_job_cpus": 1,
+        "controller_returncode": 0,
+        "freeze_returncode": 0,
+        "job_id": "712949",
+        "preflight_returncode": 0,
+        "returncode": 0
+      }
+    },
+    {
+      "failures": [],
+      "independent_training_groups": 8,
+      "lineage": {
+        "attempt_directory": "result/physical_learning/20260930-shard06-attempt1",
+        "catalog_sha256": "3c8dc46544ad41fef254167345de5b241a85cffaaab733e7380d9721596908f2",
+        "cell_receipt_files_hashed_by_dataset_receipt": 64,
+        "dataset_directory": "result/physical_learning/20260930-shard06-dataset-v1",
+        "dataset_receipt_input_hash_count": 197,
+        "dataset_receipt_path": "result/physical_learning/20260930-shard06-dataset-v1/dataset_receipt.json",
+        "dataset_receipt_sha256": "ed1362e1aa3e7748810951fa9d50645ee64a88ddfc3df2b43a2ca2ee17a7773d",
+        "frozen_sha256": "0c4933e96397da7500a63f37e4c18c064a3a4afcca322075fc2f52ce71aa289f",
+        "frozen_source_commit": "25aee9b6b36795f9f8c20227703602e2fba16084",
+        "manifest_sha256": "010ed5ecade0aa549e6bbe8e11785f3929b3430f6b7c27746687cc49fd238ca8",
+        "summary_sha256": "c96df74a6b69cde33ce9deeed481523230e01ebab3dffe621b9d211fb84b0de1",
+        "wrapper_receipt_path": "result/physical_learning/20260930-shard06-attempt1.slurm_wrapper_receipt.712950.json",
+        "wrapper_receipt_sha256": "97b9a30609f6608f81e6159e7fbc3e3b0373cdda918470f2ec1d937920d0034f"
+      },
+      "paired_tariffs": {
+        "eligible": 24,
+        "exact_ties": 8,
+        "excluded": 0,
+        "groups_with_winner_change_across_tariffs": 3,
+        "intended": 24,
+        "nonzero_near_ties_within_1e-6": 1,
+        "winner_change_definition": "Counts a group when its eligible tariff outcomes contain more than one recorded category among source0, source1, and tie. Transitions to or from ties are included; this is not a strict source0-to-source1 reversal count.",
+        "winner_counts": {
+          "source0": 7,
+          "source1": 8,
+          "tie": 9
+        },
+        "winners_by_tariff": {
+          "day": {
+            "source0": 4,
+            "source1": 1,
+            "tie": 3
+          },
+          "flat": {
+            "source0": 2,
+            "source1": 3,
+            "tie": 3
+          },
+          "late": {
+            "source0": 1,
+            "source1": 4,
+            "tie": 3
+          }
+        }
+      },
+      "shard": 6,
+      "source_labels": {
+        "censored": 0,
+        "curved_optimality_uncertified": 16,
+        "failure_count": 0,
+        "intended": 16,
+        "native_status_counts": {
+          "budget_exhausted": 12,
+          "certified": 4
+        },
+        "paid_seconds": 418.929916,
+        "provisional_after_native_limit": 12,
+        "replayed_feasible": 16,
+        "returned": 16,
+        "status_counts": {
+          "returned": 16
+        }
+      },
+      "source_topology": {
+        "distinct_movement_sets_within_shard": 14,
+        "identical_source_full_plan_groups": 0,
+        "identical_source_topology_groups": 2,
+        "source_pairs_with_both_full_plans_available": 8,
+        "source_pairs_with_both_topologies_available": 8
+      },
+      "target_labels": {
+        "censored": 0,
+        "curved_optimality_uncertified": 48,
+        "failure_count": 0,
+        "feasible_after_child_failure": 0,
+        "intended": 48,
+        "native_status_counts": {
+          "OPTIMAL": 48
+        },
+        "paid_seconds": 153.505686,
+        "provisional_after_native_limit": 0,
+        "replayed_feasible": 48,
+        "status_counts": {
+          "returned": 48
+        }
+      },
+      "time_seconds": {
+        "all_child_paid": 572.435602,
+        "failed_or_censored_outcomes_paid": 0,
+        "slurm_elapsed_seconds": 638,
+        "source_child_paid": 418.929916,
+        "target_child_paid": 153.505686,
+        "wrapper_receipt_elapsed_whole_seconds": 632
+      },
+      "wrapper": {
+        "allocated_job_cpus": 1,
+        "controller_returncode": 0,
+        "freeze_returncode": 0,
+        "job_id": "712950",
+        "preflight_returncode": 0,
+        "returncode": 0
+      }
+    },
+    {
+      "failures": [],
+      "independent_training_groups": 8,
+      "lineage": {
+        "attempt_directory": "result/physical_learning/20260930-shard07-attempt1",
+        "catalog_sha256": "3dcac03a2f683912728942ed4e2c03e5f5da56ef9f94eda74265618b9ed227cc",
+        "cell_receipt_files_hashed_by_dataset_receipt": 64,
+        "dataset_directory": "result/physical_learning/20260930-shard07-dataset-v1",
+        "dataset_receipt_input_hash_count": 197,
+        "dataset_receipt_path": "result/physical_learning/20260930-shard07-dataset-v1/dataset_receipt.json",
+        "dataset_receipt_sha256": "6cd6613fb06dd01096c5a4bbf8f3bcf213c3c8c9c2cfd84fdc64d628d7500658",
+        "frozen_sha256": "db2c49714043840666e7adff9bcfd024fe4f093ab6a141480b74dc0976352de6",
+        "frozen_source_commit": "25aee9b6b36795f9f8c20227703602e2fba16084",
+        "manifest_sha256": "29cb833fe3ba3a4f2dc8568c130ba47161273d11057b72a88afc7a4c55c8c7e6",
+        "summary_sha256": "73d993f42f62fbfc41f5c131265b159f3b0dfbc2325f3243e87138b887aed6c5",
+        "wrapper_receipt_path": "result/physical_learning/20260930-shard07-attempt1.slurm_wrapper_receipt.712951.json",
+        "wrapper_receipt_sha256": "4b5dc7e084999ae67e682087e58d28046fd7bb3adb5c085ca74cccb10a7a7495"
+      },
+      "paired_tariffs": {
+        "eligible": 24,
+        "exact_ties": 12,
+        "excluded": 0,
+        "groups_with_winner_change_across_tariffs": 2,
+        "intended": 24,
+        "nonzero_near_ties_within_1e-6": 0,
+        "winner_change_definition": "Counts a group when its eligible tariff outcomes contain more than one recorded category among source0, source1, and tie. Transitions to or from ties are included; this is not a strict source0-to-source1 reversal count.",
+        "winner_counts": {
+          "source0": 2,
+          "source1": 10,
+          "tie": 12
+        },
+        "winners_by_tariff": {
+          "day": {
+            "source0": 1,
+            "source1": 3,
+            "tie": 4
+          },
+          "flat": {
+            "source0": 1,
+            "source1": 3,
+            "tie": 4
+          },
+          "late": {
+            "source0": 0,
+            "source1": 4,
+            "tie": 4
+          }
+        }
+      },
+      "shard": 7,
+      "source_labels": {
+        "censored": 0,
+        "curved_optimality_uncertified": 16,
+        "failure_count": 0,
+        "intended": 16,
+        "native_status_counts": {
+          "budget_exhausted": 11,
+          "certified": 5
+        },
+        "paid_seconds": 441.152876,
+        "provisional_after_native_limit": 11,
+        "replayed_feasible": 16,
+        "returned": 16,
+        "status_counts": {
+          "returned": 16
+        }
+      },
+      "source_topology": {
+        "distinct_movement_sets_within_shard": 11,
+        "identical_source_full_plan_groups": 0,
+        "identical_source_topology_groups": 4,
+        "source_pairs_with_both_full_plans_available": 8,
+        "source_pairs_with_both_topologies_available": 8
+      },
+      "target_labels": {
+        "censored": 0,
+        "curved_optimality_uncertified": 48,
+        "failure_count": 0,
+        "feasible_after_child_failure": 0,
+        "intended": 48,
+        "native_status_counts": {
+          "OPTIMAL": 48
+        },
+        "paid_seconds": 160.973325,
+        "provisional_after_native_limit": 0,
+        "replayed_feasible": 48,
+        "status_counts": {
+          "returned": 48
+        }
+      },
+      "time_seconds": {
+        "all_child_paid": 602.1262,
+        "failed_or_censored_outcomes_paid": 0,
+        "slurm_elapsed_seconds": 672,
+        "source_child_paid": 441.152876,
+        "target_child_paid": 160.973325,
+        "wrapper_receipt_elapsed_whole_seconds": 666
+      },
+      "wrapper": {
+        "allocated_job_cpus": 1,
+        "controller_returncode": 0,
+        "freeze_returncode": 0,
+        "job_id": "712951",
+        "preflight_returncode": 0,
+        "returncode": 0
+      }
+    },
+    {
+      "failures": [],
+      "independent_training_groups": 8,
+      "lineage": {
+        "attempt_directory": "result/physical_learning/20260930-shard08-attempt1",
+        "catalog_sha256": "d6d7ee007337f9c64271ec14fa52b05d4911f93f1c9a6b1aa1a959cb3e17b381",
+        "cell_receipt_files_hashed_by_dataset_receipt": 64,
+        "dataset_directory": "result/physical_learning/20260930-shard08-dataset-v1",
+        "dataset_receipt_input_hash_count": 197,
+        "dataset_receipt_path": "result/physical_learning/20260930-shard08-dataset-v1/dataset_receipt.json",
+        "dataset_receipt_sha256": "a220afb1d168dae12f0ef142856768fe322e1d7ed1f8780bc0ecdb38fa925c6d",
+        "frozen_sha256": "2d989f8f324271a510a0f5f7baa064115b6e533f73128fe89445ecd5864a45bb",
+        "frozen_source_commit": "25aee9b6b36795f9f8c20227703602e2fba16084",
+        "manifest_sha256": "b14c06884739f955f5351b8484929a056651d12f4e5b3cd8129241912bb938a7",
+        "summary_sha256": "4ce067c328f32abbe84cda94f974ce56e803558d1a4c053563476a3f8e371f9e",
+        "wrapper_receipt_path": "result/physical_learning/20260930-shard08-attempt1.slurm_wrapper_receipt.712952.json",
+        "wrapper_receipt_sha256": "d04fae3643903b250dcd19761bfca5669176eaac0e1d4454d786814e835a558a"
+      },
+      "paired_tariffs": {
+        "eligible": 24,
+        "exact_ties": 7,
+        "excluded": 0,
+        "groups_with_winner_change_across_tariffs": 4,
+        "intended": 24,
+        "nonzero_near_ties_within_1e-6": 5,
+        "winner_change_definition": "Counts a group when its eligible tariff outcomes contain more than one recorded category among source0, source1, and tie. Transitions to or from ties are included; this is not a strict source0-to-source1 reversal count.",
+        "winner_counts": {
+          "source0": 7,
+          "source1": 5,
+          "tie": 12
+        },
+        "winners_by_tariff": {
+          "day": {
+            "source0": 3,
+            "source1": 1,
+            "tie": 4
+          },
+          "flat": {
+            "source0": 4,
+            "source1": 1,
+            "tie": 3
+          },
+          "late": {
+            "source0": 0,
+            "source1": 3,
+            "tie": 5
+          }
+        }
+      },
+      "shard": 8,
+      "source_labels": {
+        "censored": 0,
+        "curved_optimality_uncertified": 16,
+        "failure_count": 0,
+        "intended": 16,
+        "native_status_counts": {
+          "budget_exhausted": 12,
+          "certified": 4
+        },
+        "paid_seconds": 413.350778,
+        "provisional_after_native_limit": 12,
+        "replayed_feasible": 16,
+        "returned": 16,
+        "status_counts": {
+          "returned": 16
+        }
+      },
+      "source_topology": {
+        "distinct_movement_sets_within_shard": 15,
+        "identical_source_full_plan_groups": 0,
+        "identical_source_topology_groups": 1,
+        "source_pairs_with_both_full_plans_available": 8,
+        "source_pairs_with_both_topologies_available": 8
+      },
+      "target_labels": {
+        "censored": 0,
+        "curved_optimality_uncertified": 48,
+        "failure_count": 0,
+        "feasible_after_child_failure": 0,
+        "intended": 48,
+        "native_status_counts": {
+          "OPTIMAL": 48
+        },
+        "paid_seconds": 168.800709,
+        "provisional_after_native_limit": 0,
+        "replayed_feasible": 48,
+        "status_counts": {
+          "returned": 48
+        }
+      },
+      "time_seconds": {
+        "all_child_paid": 582.151487,
+        "failed_or_censored_outcomes_paid": 0,
+        "slurm_elapsed_seconds": 653,
+        "source_child_paid": 413.350778,
+        "target_child_paid": 168.800709,
+        "wrapper_receipt_elapsed_whole_seconds": 648
+      },
+      "wrapper": {
+        "allocated_job_cpus": 1,
+        "controller_returncode": 0,
+        "freeze_returncode": 0,
+        "job_id": "712952",
+        "preflight_returncode": 0,
+        "returncode": 0
+      }
+    }
+  ],
+  "train_only": true
+}

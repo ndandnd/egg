@@ -1,0 +1,642 @@
+{
+  "assessment": {
+    "load_errors": [
+      0.0,
+      1.7508799965421434e-12,
+      0.0,
+      -3.1730312821663546e-12
+    ],
+    "pass": true,
+    "reason": "analytical target/enclosure check",
+    "target_exact": "7591/80"
+  },
+  "elapsed_s": 10.137085708789527,
+  "environment": {
+    "executable": "/Users/nadan/Documents/ChatGPT/egg/.research-venv-repaired-1176/bin/python",
+    "gurobipy_version": null,
+    "mip_version": "1.17.6",
+    "platform": "macOS-26.5.2-arm64-arm-64bit",
+    "python": "3.12.2 (v3.12.2:6abddd9f6a, Feb  6 2024, 17:02:06) [Clang 13.0.0 (clang-1300.0.29.30)]"
+  },
+  "result": {
+    "arm": "cold",
+    "columns": [
+      {
+        "extraction_policy": "native-pathflow-orphan-projection-v1",
+        "key": "437b6c0d0da33fb07d340fdb0dcd44b0a45761ffcb19902b793c192661b25c7c",
+        "load": [
+          0.0,
+          0.0,
+          0.0,
+          30.000000000000007
+        ],
+        "ops_cost": 14.0,
+        "physical_identity": "f24ed85ecec207ad543878c4cb247575629026fe1259ba3226155e439905b140",
+        "plan": {
+          "case_identity": "f24ed85ecec207ad543878c4cb247575629026fe1259ba3226155e439905b140",
+          "charges": [
+            {
+              "connector": 0,
+              "end_min": 210.0,
+              "grid_kwh": 15.000000000000002,
+              "movement": "in_A",
+              "start_min": 180.0,
+              "vehicle": 0
+            },
+            {
+              "connector": 0,
+              "end_min": 240.0,
+              "grid_kwh": 15.000000000000005,
+              "movement": "in_B",
+              "start_min": 210.0,
+              "vehicle": 1
+            }
+          ],
+          "extraction_policy": "native-pathflow-orphan-projection-v1",
+          "formulation": "egg-native-pathflow-v3-energy-band-orphan-projection",
+          "load": [
+            0.0,
+            0.0,
+            0.0,
+            30.000000000000007
+          ],
+          "native_matrix": "egg-native-pathflow-v2-energy-band",
+          "ops_cost": 14.0,
+          "raw_charge_load": [
+            0.0,
+            0.0,
+            0.0,
+            30.000000000000007
+          ],
+          "raw_solver_load": [
+            0.0,
+            0.0,
+            0.0,
+            30.00000000000001
+          ],
+          "replay": {
+            "consumption_kwh": 30.0,
+            "grid_kwh": 30.000000000000007,
+            "load": [
+              0.0,
+              0.0,
+              0.0,
+              30.000000000000007
+            ],
+            "max_grid_kw": 30.00000000000001,
+            "ops_cost": 14.0,
+            "replay_ok": true,
+            "soc_trajectories": [
+              [
+                {
+                  "kind": "initial",
+                  "soc_kwh": 20.0,
+                  "time_min": 0.0
+                },
+                {
+                  "kind": "movement",
+                  "soc_kwh": 20.0,
+                  "time_min": 0.0
+                },
+                {
+                  "kind": "movement",
+                  "soc_kwh": 20.0,
+                  "time_min": 60.0
+                },
+                {
+                  "kind": "service",
+                  "soc_kwh": 5.0,
+                  "time_min": 60.0
+                },
+                {
+                  "kind": "charge",
+                  "soc_kwh": 20.0,
+                  "time_min": 210.0
+                }
+              ],
+              [
+                {
+                  "kind": "initial",
+                  "soc_kwh": 20.0,
+                  "time_min": 0.0
+                },
+                {
+                  "kind": "movement",
+                  "soc_kwh": 20.0,
+                  "time_min": 120.0
+                },
+                {
+                  "kind": "movement",
+                  "soc_kwh": 20.0,
+                  "time_min": 180.0
+                },
+                {
+                  "kind": "service",
+                  "soc_kwh": 5.0,
+                  "time_min": 180.0
+                },
+                {
+                  "kind": "charge",
+                  "soc_kwh": 20.000000000000007,
+                  "time_min": 240.0
+                }
+              ]
+            ]
+          },
+          "roundoff": {
+            "load_delta_kwh": [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "native_load_delta_kwh": [
+              0.0,
+              0.0,
+              0.0,
+              -3.552713678800501e-15
+            ],
+            "negative_correction": {
+              "accepted": true,
+              "budget_kwh": 1e-08,
+              "negative_l1_exact": "0",
+              "negative_l1_kwh": 0.0,
+              "negative_to_zero": [],
+              "policy": "native-roundoff-qualification-v2"
+            },
+            "projection": {
+              "accepted": true,
+              "budget_exact": "3022314549036573/302231454903657293676544",
+              "budget_kwh": 1e-08,
+              "changes": [],
+              "interval_capacity_excess_exact": "1/140737488355328",
+              "negative_l1_exact": "0",
+              "orphan_positive_l1_exact": "0",
+              "periods": [
+                {
+                  "native_minus_raw_charge_exact": "0",
+                  "period": 0,
+                  "physical_plan_load_kwh": 0.0,
+                  "physical_plan_load_repr": "0.0",
+                  "plan_minus_native_exact": "0",
+                  "plan_minus_projected_exact": "0",
+                  "projected_charge_sum_exact": "0",
+                  "projected_minus_raw_charge_exact": "0",
+                  "raw_charge_sum_exact": "0",
+                  "raw_solver_load_kwh": 0.0,
+                  "raw_solver_load_repr": "0.0"
+                },
+                {
+                  "native_minus_raw_charge_exact": "0",
+                  "period": 1,
+                  "physical_plan_load_kwh": 0.0,
+                  "physical_plan_load_repr": "0.0",
+                  "plan_minus_native_exact": "0",
+                  "plan_minus_projected_exact": "0",
+                  "projected_charge_sum_exact": "0",
+                  "projected_minus_raw_charge_exact": "0",
+                  "raw_charge_sum_exact": "0",
+                  "raw_solver_load_kwh": 0.0,
+                  "raw_solver_load_repr": "0.0"
+                },
+                {
+                  "native_minus_raw_charge_exact": "0",
+                  "period": 2,
+                  "physical_plan_load_kwh": 0.0,
+                  "physical_plan_load_repr": "0.0",
+                  "plan_minus_native_exact": "0",
+                  "plan_minus_projected_exact": "0",
+                  "projected_charge_sum_exact": "0",
+                  "projected_minus_raw_charge_exact": "0",
+                  "raw_charge_sum_exact": "0",
+                  "raw_solver_load_kwh": 0.0,
+                  "raw_solver_load_repr": "0.0"
+                },
+                {
+                  "native_minus_raw_charge_exact": "1/281474976710656",
+                  "period": 3,
+                  "physical_plan_load_kwh": 30.000000000000007,
+                  "physical_plan_load_repr": "30.000000000000007",
+                  "plan_minus_native_exact": "-1/281474976710656",
+                  "plan_minus_projected_exact": "0",
+                  "projected_charge_sum_exact": "4222124650659841/140737488355328",
+                  "projected_minus_raw_charge_exact": "0",
+                  "raw_charge_sum_exact": "4222124650659841/140737488355328",
+                  "raw_solver_load_kwh": 30.00000000000001,
+                  "raw_solver_load_repr": "30.00000000000001"
+                }
+              ],
+              "plan_sum_residual_l1_exact": "0",
+              "policy": "native-pathflow-orphan-projection-v1",
+              "pre_decode_accepted": true,
+              "pre_decode_total_exact": "1/281474976710656",
+              "pre_replay_accepted": true,
+              "pre_replay_total_exact": "5/281474976710656",
+              "raw_load_row_residual_l1_exact": "1/281474976710656",
+              "raw_to_projected_l1_exact": "0",
+              "raw_to_projected_l1_kwh": 0.0,
+              "remaining_budget_exact": "3022309180327453/302231454903657293676544",
+              "replay_load_residual_l1_exact": "0",
+              "session_capacity_excess_exact": "1/140737488355328",
+              "shared_negative_normalizer_policy": "native-roundoff-qualification-v2",
+              "whole_incumbent_total_exact": "5/281474976710656",
+              "whole_incumbent_total_kwh": 1.7763568394002505e-14
+            },
+            "serial_decoding": {
+              "budget_kwh": 1e-08,
+              "capacity_excess_exact": "1/140737488355328",
+              "capacity_excess_kwh": 7.105427357601002e-15,
+              "combined_roundoff_exact": "1/140737488355328",
+              "combined_roundoff_kwh": 7.105427357601002e-15,
+              "endpoint_rule": "exact-energy-proportional-full-interval",
+              "intervals": [
+                {
+                  "capacity_excess_exact": "1/140737488355328",
+                  "capacity_excess_kwh": 7.105427357601002e-15,
+                  "capacity_kwh": 30.0,
+                  "end_min": 240,
+                  "grid_kwh": 30.000000000000007,
+                  "interval": 3,
+                  "saturated_roundoff_adjustment": true,
+                  "start_min": 180
+                }
+              ],
+              "materialized_session_excess_exact": "1/140737488355328",
+              "materialized_session_excess_kwh": 7.105427357601002e-15,
+              "policy": "native-roundoff-qualification-v2"
+            }
+          },
+          "schema": "egg-native-recharge-v1",
+          "vehicles": [
+            {
+              "movements": [
+                "out_A",
+                "in_A"
+              ],
+              "trips": [
+                "A"
+              ],
+              "vehicle": 0
+            },
+            {
+              "movements": [
+                "out_B",
+                "in_B"
+              ],
+              "trips": [
+                "B"
+              ],
+              "vehicle": 1
+            }
+          ]
+        },
+        "schema": "egg-native-hull-v2",
+        "source": {
+          "pricing_call": 0,
+          "pricing_oracle": "egg-native-pathflow-v3-energy-band-orphan-projection",
+          "state_identity": "c9168f158b81119c8658356a2aaa3fe51b228b93512986589f0407c5a5376fb1"
+        },
+        "witness_hash": "32c0aef14e2e35d298183a534b9e5d39ad21c263b05cd20ce6cc98053c3d364a"
+      },
+      {
+        "extraction_policy": "native-pathflow-orphan-projection-v1",
+        "key": "a779fadb6ff7edd612121888b8328c7a3b4ab07077b9259060a1752a3ea47529",
+        "load": [
+          0.0,
+          10.0,
+          0.0,
+          19.99999999999789
+        ],
+        "ops_cost": 7.0,
+        "physical_identity": "f24ed85ecec207ad543878c4cb247575629026fe1259ba3226155e439905b140",
+        "plan": {
+          "case_identity": "f24ed85ecec207ad543878c4cb247575629026fe1259ba3226155e439905b140",
+          "charges": [
+            {
+              "connector": 0,
+              "end_min": 120.0,
+              "grid_kwh": 10.0,
+              "movement": "depot_AB",
+              "start_min": 60.0,
+              "vehicle": 0
+            },
+            {
+              "connector": 0,
+              "end_min": 240.0,
+              "grid_kwh": 19.99999999999789,
+              "movement": "in_B",
+              "start_min": 180.0,
+              "vehicle": 0
+            }
+          ],
+          "extraction_policy": "native-pathflow-orphan-projection-v1",
+          "formulation": "egg-native-pathflow-v3-energy-band-orphan-projection",
+          "load": [
+            0.0,
+            10.0,
+            0.0,
+            19.99999999999789
+          ],
+          "native_matrix": "egg-native-pathflow-v2-energy-band",
+          "ops_cost": 7.0,
+          "raw_charge_load": [
+            0.0,
+            10.0,
+            0.0,
+            19.99999999999789
+          ],
+          "raw_solver_load": [
+            0.0,
+            10.000000000000002,
+            0.0,
+            19.99999999999789
+          ],
+          "replay": {
+            "consumption_kwh": 30.0,
+            "grid_kwh": 29.99999999999789,
+            "load": [
+              0.0,
+              10.0,
+              0.0,
+              19.99999999999789
+            ],
+            "max_grid_kw": 19.99999999999789,
+            "ops_cost": 7.0,
+            "replay_ok": true,
+            "soc_trajectories": [
+              [
+                {
+                  "kind": "initial",
+                  "soc_kwh": 20.0,
+                  "time_min": 0.0
+                },
+                {
+                  "kind": "movement",
+                  "soc_kwh": 20.0,
+                  "time_min": 0.0
+                },
+                {
+                  "kind": "movement",
+                  "soc_kwh": 20.0,
+                  "time_min": 60.0
+                },
+                {
+                  "kind": "service",
+                  "soc_kwh": 5.0,
+                  "time_min": 60.0
+                },
+                {
+                  "kind": "charge",
+                  "soc_kwh": 15.0,
+                  "time_min": 120.0
+                },
+                {
+                  "kind": "movement",
+                  "soc_kwh": 15.0,
+                  "time_min": 120.0
+                },
+                {
+                  "kind": "movement",
+                  "soc_kwh": 15.0,
+                  "time_min": 180.0
+                },
+                {
+                  "kind": "service",
+                  "soc_kwh": 0.0,
+                  "time_min": 180.0
+                },
+                {
+                  "kind": "charge",
+                  "soc_kwh": 19.99999999999789,
+                  "time_min": 240.0
+                }
+              ]
+            ]
+          },
+          "roundoff": {
+            "load_delta_kwh": [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "native_load_delta_kwh": [
+              0.0,
+              -1.7763568394002505e-15,
+              0.0,
+              0.0
+            ],
+            "negative_correction": {
+              "accepted": true,
+              "budget_kwh": 1e-08,
+              "negative_l1_exact": "0",
+              "negative_l1_kwh": 0.0,
+              "negative_to_zero": [],
+              "policy": "native-roundoff-qualification-v2"
+            },
+            "projection": {
+              "accepted": true,
+              "budget_exact": "3022314549036573/302231454903657293676544",
+              "budget_kwh": 1e-08,
+              "changes": [],
+              "interval_capacity_excess_exact": "0",
+              "negative_l1_exact": "0",
+              "orphan_positive_l1_exact": "0",
+              "periods": [
+                {
+                  "native_minus_raw_charge_exact": "0",
+                  "period": 0,
+                  "physical_plan_load_kwh": 0.0,
+                  "physical_plan_load_repr": "0.0",
+                  "plan_minus_native_exact": "0",
+                  "plan_minus_projected_exact": "0",
+                  "projected_charge_sum_exact": "0",
+                  "projected_minus_raw_charge_exact": "0",
+                  "raw_charge_sum_exact": "0",
+                  "raw_solver_load_kwh": 0.0,
+                  "raw_solver_load_repr": "0.0"
+                },
+                {
+                  "native_minus_raw_charge_exact": "1/562949953421312",
+                  "period": 1,
+                  "physical_plan_load_kwh": 10.0,
+                  "physical_plan_load_repr": "10.0",
+                  "plan_minus_native_exact": "-1/562949953421312",
+                  "plan_minus_projected_exact": "0",
+                  "projected_charge_sum_exact": "10",
+                  "projected_minus_raw_charge_exact": "0",
+                  "raw_charge_sum_exact": "10",
+                  "raw_solver_load_kwh": 10.000000000000002,
+                  "raw_solver_load_repr": "10.000000000000002"
+                },
+                {
+                  "native_minus_raw_charge_exact": "0",
+                  "period": 2,
+                  "physical_plan_load_kwh": 0.0,
+                  "physical_plan_load_repr": "0.0",
+                  "plan_minus_native_exact": "0",
+                  "plan_minus_projected_exact": "0",
+                  "projected_charge_sum_exact": "0",
+                  "projected_minus_raw_charge_exact": "0",
+                  "raw_charge_sum_exact": "0",
+                  "raw_solver_load_kwh": 0.0,
+                  "raw_solver_load_repr": "0.0"
+                },
+                {
+                  "native_minus_raw_charge_exact": "0",
+                  "period": 3,
+                  "physical_plan_load_kwh": 19.99999999999789,
+                  "physical_plan_load_repr": "19.99999999999789",
+                  "plan_minus_native_exact": "0",
+                  "plan_minus_projected_exact": "0",
+                  "projected_charge_sum_exact": "2814749767106263/140737488355328",
+                  "projected_minus_raw_charge_exact": "0",
+                  "raw_charge_sum_exact": "2814749767106263/140737488355328",
+                  "raw_solver_load_kwh": 19.99999999999789,
+                  "raw_solver_load_repr": "19.99999999999789"
+                }
+              ],
+              "plan_sum_residual_l1_exact": "0",
+              "policy": "native-pathflow-orphan-projection-v1",
+              "pre_decode_accepted": true,
+              "pre_decode_total_exact": "1/562949953421312",
+              "pre_replay_accepted": true,
+              "pre_replay_total_exact": "1/562949953421312",
+              "raw_load_row_residual_l1_exact": "1/562949953421312",
+              "raw_to_projected_l1_exact": "0",
+              "raw_to_projected_l1_kwh": 0.0,
+              "remaining_budget_exact": "3022314012165661/302231454903657293676544",
+              "replay_load_residual_l1_exact": "0",
+              "session_capacity_excess_exact": "0",
+              "shared_negative_normalizer_policy": "native-roundoff-qualification-v2",
+              "whole_incumbent_total_exact": "1/562949953421312",
+              "whole_incumbent_total_kwh": 1.7763568394002505e-15
+            },
+            "serial_decoding": {
+              "budget_kwh": 1e-08,
+              "capacity_excess_exact": "0",
+              "capacity_excess_kwh": 0.0,
+              "combined_roundoff_exact": "0",
+              "combined_roundoff_kwh": 0.0,
+              "endpoint_rule": "exact-energy-proportional-full-interval",
+              "intervals": [
+                {
+                  "capacity_excess_exact": "0",
+                  "capacity_excess_kwh": 0.0,
+                  "capacity_kwh": 10.0,
+                  "end_min": 120,
+                  "grid_kwh": 10.0,
+                  "interval": 1,
+                  "saturated_roundoff_adjustment": false,
+                  "start_min": 60
+                },
+                {
+                  "capacity_excess_exact": "0",
+                  "capacity_excess_kwh": 0.0,
+                  "capacity_kwh": 30.0,
+                  "end_min": 240,
+                  "grid_kwh": 19.99999999999789,
+                  "interval": 3,
+                  "saturated_roundoff_adjustment": false,
+                  "start_min": 180
+                }
+              ],
+              "materialized_session_excess_exact": "0",
+              "materialized_session_excess_kwh": 0.0,
+              "policy": "native-roundoff-qualification-v2"
+            }
+          },
+          "schema": "egg-native-recharge-v1",
+          "vehicles": [
+            {
+              "movements": [
+                "out_A",
+                "depot_AB",
+                "in_B"
+              ],
+              "trips": [
+                "A",
+                "B"
+              ],
+              "vehicle": 0
+            }
+          ]
+        },
+        "schema": "egg-native-hull-v2",
+        "source": {
+          "pricing_call": 1,
+          "pricing_oracle": "egg-native-pathflow-v3-energy-band-orphan-projection",
+          "state_identity": "c9168f158b81119c8658356a2aaa3fe51b228b93512986589f0407c5a5376fb1"
+        },
+        "witness_hash": "c40b4097f05a783f83f669b0aede41afb08613a68dee590d99dfefbb8cfa4985"
+      }
+    ],
+    "counts": {
+      "master_calls": 2,
+      "max_rational_bits": 213,
+      "polish_checks": 3,
+      "polish_steps": 1,
+      "polish_wall_s": 0.0017315000295639038,
+      "pricing_requests": 3,
+      "seed_requests": 1
+    },
+    "epsilon": 0.0001,
+    "extraction_policy": "native-pathflow-orphan-projection-v1",
+    "gap": 1.0000000361287677e-06,
+    "gap_exact": "128555048185281733071362865482986687365080722592678025729/128555043540746449647590721867309560546980341468127519431458816",
+    "lower": 94.88749899999334,
+    "lower_certificate": {
+      "conjugate_exact": "401622544896548045828189986637/6852165406639078226299715584",
+      "lower": 94.88749899999334,
+      "lower_exact": "650184838170254589899507809903/6852165406639078226299715584",
+      "prices": [
+        0.0,
+        5.3500000000003505,
+        0.0,
+        4.649999999999365
+      ],
+      "pricing_lower": 153.49999899998096
+    },
+    "market_identity": "4c2281a29609d7442d09ee280ad5bb6ed9da821564a56433ac1a530be135c47f",
+    "mixture": {
+      "column_keys": [
+        "437b6c0d0da33fb07d340fdb0dcd44b0a45761ffcb19902b793c192661b25c7c",
+        "a779fadb6ff7edd612121888b8328c7a3b4ab07077b9259060a1752a3ea47529"
+      ],
+      "load": [
+        0.0,
+        6.750000000001751,
+        0.0,
+        23.249999999996827
+      ],
+      "load_exact": [
+        "0",
+        "24084804814424421436786712675830231316348010645/3568119231765655420473857314037345893258944037",
+        "0",
+        "82958772138540166772076290745426442504279949312/3568119231765655420473857314037345893258944037"
+      ],
+      "objective_exact": "12198266693971729024258472720729429773535328777102954594304000001/128555043540746449647590721867309560546980341468127519431458816",
+      "ops_exact": "66188611749244161761766607046883361168363218133/7136238463531310840947714628074691786517888074",
+      "replayed_columns": 2,
+      "simplex": {
+        "mass_exact": "1",
+        "positive_weights": 2,
+        "source": "exact-pairwise-polish",
+        "weights_exact": [
+          "2319277500646426553590372092908645523248285945/7136238463531310840947714628074691786517888074",
+          "4816960962884884287357342535166046263269602129/7136238463531310840947714628074691786517888074"
+        ]
+      },
+      "supply_exact": "11005918665131463262895001843475481942676172892448025253278384129/128555043540746449647590721867309560546980341468127519431458816",
+      "upper": 94.8874999999934
+    },
+    "physical_identity": "f24ed85ecec207ad543878c4cb247575629026fe1259ba3226155e439905b140",
+    "pricing_oracle": "egg-native-pathflow-v3-energy-band-orphan-projection",
+    "reason": null,
+    "schema": "egg-native-hull-v2",
+    "state_identity": "c9168f158b81119c8658356a2aaa3fe51b228b93512986589f0407c5a5376fb1",
+    "state_index": 2,
+    "status": "certified",
+    "upper": 94.8874999999934
+  }
+}

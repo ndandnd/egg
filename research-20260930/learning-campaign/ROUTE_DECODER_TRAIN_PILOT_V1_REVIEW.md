@@ -1,0 +1,9 @@
+# Bounded review: TRAIN route-decoder pilot v1
+
+No launch blocker found in the prospective protocol and runner. The four targets (10036–10039) are TRAIN groups outside the 32-group bank and held out by their corresponding 64-group fold. The pilot uses fixed seed-17 logistic and HistGBDT scorers from both banks, with a frozen movement-feature list and case/target-market inputs. It performs no fit or model selection and reads no target outcome table. Acquisition timing/status is joined only after candidate and control decisions; the single-source censor at 10037 remains explicit.
+
+Each learned arm and the score-free `cost_only` control uses the same bounded cover and fixed-route charging stages. Only independently replayed plans are called feasible; failed arms receive no fallback credit. Source, cold, and proposal hulls are reported separately, and the protocol scopes charging `OPTIMAL` to its fixed-route linear subproblem. Source acquisition, model scoring, cover, charging, replay, and hull work have separate timing fields.
+
+The wrapper requests one CPU and 8 GB for four 30-minute tasks, disables requeue, excludes `scaglione-compute-01`, and caps each shell at 1,700 seconds. Per-task limits are 120 seconds for the scoring child, 5 seconds per path cover, 55 seconds per fixed-charge solve, and 70 seconds per hull. It pins both model-bank manifests and waits for the pinned 128-group array to finish. The shared cluster environment checks the Gurobi backend/license before scoring, and the wrapper checks the pinned scikit-learn interpreter. Task outputs are immutable; failures preserve typed receipts, and score-child stdout/stderr and timeout output are retained.
+
+Sol reports five focused decoder fixtures passed, including the failed-score receipt and censor control. I did not rerun them or execute the pilot. This is a bounded design review, not a claim about decoder performance or physical-optimality.

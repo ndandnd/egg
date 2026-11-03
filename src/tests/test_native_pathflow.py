@@ -1,0 +1,322 @@
+"""Pure path recovery, replay and fake-native admission; no optimizer."""
+from dataclasses import replace
+import itertools
+import math
+from types import SimpleNamespace as Box
+
+import pytest
+from egglab import native_recharge as nr, native_pathflow as pf
+from experiments import native_recharge_qualification as q
+
+
+def test_complete_cyclic_path_covers_are_recovered_without_vehicle_labels():
+    case = q.cyclic_case()
+    valid = []
+    for flags in itertools.product((0,1), repeat=len(case.movements)):
+        chosen = [m.id for m,flag in zip(case.movements,flags) if flag]
+        try:
+            paths,owners = pf.recover_paths(case,chosen)
+        except ValueError:
+            continue
+        assert set(owners)==set(chosen)
+        assert sorted(t for p in paths for t in p['trips'])==['A','B']
+        valid.append((len(paths),tuple(sorted(chosen))))
+    assert sorted(n for n,_ in valid)==[1,1,2]
+    assert {n for n,ids in valid if 'depot_AB' in ids}=={1}
+    assert {n for n,ids in valid if 'direct_AB' in ids}=={1}
+    one = replace(case,max_vehicles=1)
+    with pytest.raises(ValueError,match='path count'):
+        pf.recover_paths(one,['out_A','in_A','out_B','in_B'])
+
+
+@pytest.mark.parametrize('selected', [[], ['unknown'], ['out_A','in_A'],
+    ['out_A','in_A','out_B','in_B','in_B'],
+    ['out_A','depot_AB','direct_AB','in_B'],
+    ['out_A','depot_AB','in_B','out_B']])
+def test_corrupt_selected_graphs_fail(selected):
+    with pytest.raises(ValueError):
+        pf.recover_paths(q.cyclic_case(),selected)
+
+
+def test_timestamps_preclude_disconnected_circulations():
+    c = q.cyclic_case()
+    bad = nr.Movement('backwards','direct','B','A',(nr.Leg('D','D',180,180,0),))
+    with pytest.raises(ValueError,match='timing'):
+        pf.recover_paths(replace(c,movements=c.movements+(bad,)),['backwards'])
+
+
+def fake_built(case,two=False):
+    selected = {'out_A','in_A','out_B','in_B'} if two else {'out_A','depot_AB','in_B'}
+    compiled = nr.compile_case(case)
+    ids = {m.id:j for j,m in enumerate(case.movements)}
+    energy = {(ids['in_A'],1):5,(ids['in_A'],3):10,(ids['in_B'],3):15} if two else {
+        (ids['depot_AB'],1):10,(ids['in_B'],3):20}
+    charge = {(ids[mid],k):Box(x=energy.get((ids[mid],k),0.))
+        for k,it in enumerate(compiled['intervals']) if it['rate_kw']>0 for mid in it['visits']}
+    return {'x':[Box(x=float(m.id in selected)) for m in case.movements],
+            'compiled':compiled,'charge':charge,
+            'loads':[Box(x=l) for l in ([0,5,0,25] if two else [0,10,0,20])]}
+
+
+@pytest.mark.parametrize('two',[False,True])
+def test_unlabelled_charges_lift_to_replay_valid_owned_paths(two):
+    c=q.cyclic_case();events=[]
+    plan=pf._extract(c,fake_built(c,two),record=events.append)
+    r=nr.replay_native(c,plan)
+    assert r['grid_kwh']==30 and r['consumption_kwh']==30
+    assert len(plan['vehicles'])==2 if two else len(plan['vehicles'])==1
+    assert plan['formulation']==pf.FORMULATION
+    assert [x['event'] for x in events]==['charge_normalization','charge_projection',
+        'charge_projection','serial_decoding','charge_projection','charge_projection']
+    assert plan['roundoff']['projection']['whole_incumbent_total_exact']=='0'
+    for v in r['soc_trajectories']:
+        assert v[-1]['soc_kwh']==20
+    assert all(a['end_min']<=b['start_min'] for a,b in zip(plan['charges'],plan['charges'][1:]))
+
+
+def test_tiny_positive_orphan_is_disclosed_and_removed_only_after_replay():
+    c=q.cyclic_case();b=fake_built(c)
+    unused=next(j for j,m in enumerate(c.movements) if m.id=='in_A')
+    b['charge'][unused,1].x=1e-12
+    b['loads'][1].x=10+1e-12
+    events=[]
+    plan=pf._extract(c,b,record=events.append)
+    assert plan['extraction_policy']==pf.EXTRACTION_POLICY
+    assert plan['raw_solver_load'][1]>plan['load'][1]
+    assert all(s['movement']!='in_A' for s in plan['charges'])
+    ledger=plan['roundoff']['projection']
+    assert ledger['accepted'] and len(ledger['changes'])==1
+    assert ledger['changes'][0]['reason']=='positive-unselected-to-zero'
+    assert ledger['periods'][1]['native_minus_raw_charge_exact']!='0'
+    assert any(e['event']=='charge_projection' and e['stage']=='final' for e in events)
+
+
+def test_orphan_and_negative_share_one_exact_budget():
+    c=q.cyclic_case();b=fake_built(c)
+    unused=next(j for j,m in enumerate(c.movements) if m.id=='in_A')
+    b['charge'][unused,1].x=6e-9
+    b['charge'][unused,3].x=-6e-9
+    b['loads'][1].x=10+6e-9
+    b['loads'][3].x=20-6e-9
+    events=[]
+    with pytest.raises(ValueError,match='roundoff budget'):
+        pf._extract(c,b,record=events.append)
+    assert any(e['event']=='charge_projection' and e['stage']=='before_budget'
+        and pf.Fraction(e['raw_to_projected_l1_exact'])>pf.Fraction(nr.ROUNDOFF_BUDGET_KWH)
+        for e in events)
+
+
+def test_negative_over_budget_still_logs_positive_orphan_and_full_load_ledger():
+    c=q.cyclic_case();b=fake_built(c)
+    ids={m.id:j for j,m in enumerate(c.movements)}
+    b['charge'][ids['in_A'],1].x=1e-9
+    b['charge'][ids['in_A'],3].x=-2e-8
+    b['loads'][1].x=10+1e-9
+    b['loads'][3].x=20-2e-8
+    events=[]
+    with pytest.raises(ValueError,match='roundoff budget'):
+        pf._extract(c,b,record=events.append)
+    first=next(e for e in events if e['event']=='charge_normalization')
+    full=next(e for e in events if e['event']=='charge_projection' and e['stage']=='before_budget')
+    assert not first['accepted']
+    assert pf.Fraction(full['negative_l1_exact'])==pf.Fraction(2e-8)
+    assert pf.Fraction(full['orphan_positive_l1_exact'])==pf.Fraction(1e-9)
+    assert len(full['changes'])==2 and len(full['periods'])==4
+    assert full['periods'][1]['raw_solver_load_repr']==repr(10+1e-9)
+
+
+def test_projection_exact_budget_boundary_and_selected_positive_survival():
+    c=q.cyclic_case();grid=nr.compile_case(c)
+    ids={m.id:j for j,m in enumerate(c.movements)}
+    raw={(ids['in_A'],1):nr.ROUNDOFF_BUDGET_KWH}
+    projected,_,ledger,_,_=pf._project_charge_energy(c,grid,{},raw,
+        [0.,nr.ROUNDOFF_BUDGET_KWH,0.,0.])
+    assert projected[ids['in_A'],1]==0
+    assert ledger['raw_to_projected_l1_exact']==str(pf.Fraction(nr.ROUNDOFF_BUDGET_KWH))
+    raw={(ids['in_A'],1):2e-15,(ids['depot_AB'],1):1e-15}
+    projected,_,_,_,_=pf._project_charge_energy(c,grid,{'depot_AB':0},raw,
+        [0.,3e-15,0.,0.])
+    assert projected[ids['in_A'],1]==0 and projected[ids['depot_AB'],1]==1e-15
+
+
+def test_projection_rejects_bad_keys_and_replay_still_rejects_bad_soc():
+    c=q.cyclic_case();grid=nr.compile_case(c)
+    with pytest.raises(ValueError,match='Unknown compact charge key'):
+        pf._project_charge_energy(c,grid,{}, {(len(c.movements),1):1e-12},[0.]*4)
+    ids={m.id:j for j,m in enumerate(c.movements)}
+    with pytest.raises(ValueError,match='unavailable visit'):
+        pf._project_charge_energy(c,grid,{}, {(ids['in_B'],1):1e-12},[0.]*4)
+    b=fake_built(c)
+    b['charge'][ids['depot_AB'],1].x=9.9
+    b['charge'][ids['in_A'],1].x=1e-12
+    b['loads'][1].x=9.9+1e-12
+    events=[]
+    with pytest.raises(ValueError,match='SOC violates|fully replenished'):
+        pf._extract(c,b,record=events.append)
+    assert any(e['event']=='charge_projection' and e['stage']=='before_replay' for e in events)
+
+
+def test_interval_and_session_excess_share_final_budget():
+    c=q.cyclic_case();b=fake_built(c)
+    ids={m.id:j for j,m in enumerate(c.movements)}
+    b['charge'][ids['depot_AB'],1].x=10+6e-9
+    b['loads'][1].x=10+6e-9
+    events=[]
+    with pytest.raises(ValueError,match='decoding correction exceeds roundoff budget'):
+        pf._extract(c,b,record=events.append)
+    final=next(e for e in events if e['event']=='charge_projection' and e['stage']=='before_replay')
+    cap=pf.Fraction(nr.ROUNDOFF_BUDGET_KWH)
+    i=pf.Fraction(final['interval_capacity_excess_exact'])
+    j=pf.Fraction(final['session_capacity_excess_exact'])
+    assert 0<i<cap and 0<j<cap and i+j>cap
+    assert not final['pre_replay_accepted']
+
+
+def test_materialized_and_replay_load_residuals_enter_exact_total():
+    c=q.cyclic_case();ids={m.id:j for j,m in enumerate(c.movements)}
+    for early, expected in ((0.1,'plan_sum_residual_l1_exact'),
+                            (5.3,'replay_load_residual_l1_exact')):
+        b=fake_built(c,True)
+        b['charge'][ids['in_A'],1].x=early
+        b['charge'][ids['in_A'],3].x=15-early
+        b['loads'][1].x=early
+        b['loads'][3].x=(15-early)+15
+        ledger=pf._extract(c,b)['roundoff']['projection']
+        assert ledger['accepted'] and pf.Fraction(ledger[expected])>0
+        parts=('negative_l1_exact','orphan_positive_l1_exact',
+            'raw_load_row_residual_l1_exact','plan_sum_residual_l1_exact',
+            'interval_capacity_excess_exact','session_capacity_excess_exact',
+            'replay_load_residual_l1_exact')
+        assert pf.Fraction(ledger['whole_incumbent_total_exact'])==sum(
+            (pf.Fraction(ledger[k]) for k in parts),pf.Fraction(0))
+
+
+def test_negative_roundoff_preserves_qualified_budget_and_raw_mapping():
+    c=q.cyclic_case();b=fake_built(c)
+    unused=next(j for j,m in enumerate(c.movements) if m.id=='in_A')
+    b['charge'][unused,1].x=-1e-12
+    plan=pf._extract(c,b)
+    correction=plan['roundoff']['negative_correction']
+    assert correction['negative_to_zero'][0]['key']==[unused,1]
+    assert correction['negative_l1_kwh']==1e-12
+    b['charge'][unused,1].x=-1e-7
+    with pytest.raises(ValueError,match='roundoff'):
+        pf._extract(c,b)
+
+
+def test_aggregate_load_mismatch_fails():
+    c=q.cyclic_case();b=fake_built(c);b['loads'][1].x=11
+    with pytest.raises(ValueError,match='roundoff budget'):
+        pf._extract(c,b)
+
+
+@pytest.mark.parametrize('x',[float('nan'),float('inf'),None])
+def test_raw_nonfinite_selection_fails(x):
+    c=q.cyclic_case();b=fake_built(c);b['x'][0].x=x
+    with pytest.raises(ValueError,match='nonfinite'):
+        pf._extract(c,b)
+
+
+def setup_fake(monkeypatch,stats):
+    built=[]
+    def builder(c,backend):
+        b=fake_built(c);built.append(b);return b
+    monkeypatch.setattr(pf,'build_feasible_model',builder)
+    monkeypatch.setattr(pf,'attach_objective',lambda *a:None)
+    monkeypatch.setattr(pf,'capture_incumbent',lambda *a:{'formulation':pf.FORMULATION,'fake':True})
+    iterator=iter(stats)
+    monkeypatch.setattr(pf,'_optimize_once',lambda *a:next(iterator))
+    return built
+
+
+def test_pricing_retains_qualified_lower_bound_not_incumbent(monkeypatch):
+    setup_fake(monkeypatch,[{'status':'FEASIBLE','incumbent':37.,'lower_bound':36.}])
+    result=pf.solve_pricing(q.cyclic_case(),[1]*4)
+    assert result['status']=='bounded' and result['stats']['status']=='FEASIBLE'
+    assert result['lower']==36-nr.BOUND_GUARD
+    assert result['upper']==37+nr.BOUND_GUARD
+
+
+def test_pricing_objective_delta_uses_native_load_not_raw_charge_sum(monkeypatch):
+    raw=37+1e-9
+    built=setup_fake(monkeypatch,[{'status':'OPTIMAL','incumbent':raw,'lower_bound':raw}])
+    original=pf.build_feasible_model
+    def with_load_residual(case,backend):
+        model=original(case,backend)
+        model['loads'][1].x=10+1e-9
+        return model
+    monkeypatch.setattr(pf,'build_feasible_model',with_load_residual)
+    events=[]
+    result=pf.solve_pricing(q.cyclic_case(),[1]*4,record=events.append)
+    assert len(built)==1
+    assert result['plan']['raw_charge_load'][1]==10
+    assert result['plan']['raw_solver_load'][1]>10
+    assert result['charge_correction_objective_delta_exact']==str(
+        pf.Fraction(10)-pf.Fraction(10+1e-9))
+    reconstructed=next(e for e in events if e['event']=='objective_reconstruction')
+    assert reconstructed['raw_solver_load_objective']==pytest.approx(raw,abs=nr.OBJECTIVE_TOL)
+
+
+def test_planner_keeps_true_upper_and_fresh_tangent_objective(monkeypatch):
+    setup_fake(monkeypatch,[{'status':'OPTIMAL','incumbent':47.,'lower_bound':47.},
+                           {'status':'OPTIMAL','incumbent':97.,'lower_bound':97.}])
+    events=[]
+    result=pf.solve_planner(q.cyclic_case(),[0,4,0,0],[0,.2,0,.2],record=events.append)
+    assert result['status']=='certified' and len(result['rounds'])==2
+    assert result['lower']==97-nr.BOUND_GUARD and result['upper']==97+nr.BOUND_GUARD
+    first=next(e for e in events if e['event']=='native_start')
+    assert first['tangents']==[[[0.,0.]],[[4.,0.]],[[0.,0.]],[[0.,0.]]]
+
+
+def test_planner_reconstructs_nonzero_native_to_physical_objective_delta(monkeypatch):
+    setup_fake(monkeypatch,[{'status':'OPTIMAL','incumbent':47.,'lower_bound':47.},
+                           {'status':'OPTIMAL','incumbent':97.,'lower_bound':97.}])
+    builder=pf.build_feasible_model
+    def with_native_load_residual(case,backend):
+        built=builder(case,backend)
+        built['loads'][1].x=10+1e-9
+        return built
+    monkeypatch.setattr(pf,'build_feasible_model',with_native_load_residual)
+    events=[]
+    result=pf.solve_planner(q.cyclic_case(),[0,4,0,0],[0,.2,0,.2],record=events.append)
+    assert result['status']=='certified'
+    rows=[e for e in events if e['event']=='objective_reconstruction']
+    assert len(rows)==2
+    assert all(pf.Fraction(e['pwl_charge_correction_delta_exact'])!=0 for e in rows)
+    assert all(pf.Fraction(e['true_charge_correction_delta_exact'])!=0 for e in rows)
+
+
+
+
+def test_three_service_two_multileg_visits_lift_with_reserve_efficiency_and_cost():
+    from experiments.native_pathflow_qualification import multivisit_case,controls
+    c=multivisit_case();grid=nr.compile_case(c)
+    chosen=['out_A','depot_AB','depot_BC','in_C']
+    paths,owners=pf.recover_paths(c,chosen)
+    assert len(paths)==1 and paths[0]['trips']==['A','B','C']
+    charges=[]
+    for mid,lo,hi in [('depot_AB',40,80),('depot_BC',120,160),('in_C',200,240)]:
+        charges.append({'vehicle':0,'movement':mid,'connector':0,'start_min':lo,'end_min':hi,'grid_kwh':12/c.efficiency})
+    loads=[sum(z['grid_kwh']*max(0,min(b,z['end_min'])-max(a,z['start_min']))/(z['end_min']-z['start_min'])
+               for z in charges) for a,b in zip(c.market_edges_min,c.market_edges_min[1:])]
+    plan={'schema':nr.SCHEMA,'case_identity':c.identity(),'vehicles':paths,'charges':charges,'load':loads,'ops_cost':37}
+    replay=nr.replay_native(c,plan,[1]*4)
+    assert replay['pricing_objective']==pytest.approx(1423/19)
+    assert replay['grid_kwh']==pytest.approx(720/19)
+    assert min(e['soc_kwh'] for e in replay['soc_trajectories'][0])>=1
+    # Recover the identical physical charge allocation from compact raw keys.
+    ids={m.id:j for j,m in enumerate(c.movements)}
+    energy={}
+    for k,it in enumerate(grid['intervals']):
+        for z in charges:
+            if z['start_min']<=it['start'] and it['end']<=z['end_min']:
+                energy[ids[z['movement']],k]=z['grid_kwh']*(it['end']-it['start'])/(z['end_min']-z['start_min'])
+    built={'x':[Box(x=float(m.id in chosen)) for m in c.movements],
+           'compiled':grid,'loads':[Box(x=x) for x in loads],
+           'charge':{(ids[mid],k):Box(x=energy.get((ids[mid],k),0.))
+                     for k,it in enumerate(grid['intervals']) for mid in it['visits']}}
+    recovered=pf._extract(c,built)
+    assert nr.replay_native(c,recovered,[1]*4)['pricing_objective']==pytest.approx(1423/19)
+    cells=controls();assert len(cells)==20
+    assert sum(x['expected_status']=='infeasible' for x in cells)==4
+    for cell in cells:nr.validate_case(cell['case'])

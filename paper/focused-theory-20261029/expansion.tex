@@ -1,0 +1,131 @@
+\section{Does failure survive additional alternatives?}\label{sec:expansion}
+Let $X$ be an old set of complete plans, $Y$ a set of additions, and
+$Z=X\cup Y$. Use the same supply function and compact projected-image
+assumptions as before, with attained hull-dual prices where needed. Write
+$D_A,\CH_A,V_A$ for the values associated with a set $A$. Suppose
+$\Delta_X>0$. The following distinction is essential: a retained old plan
+cannot be rescued by more deviations, but a newly admitted plan can become
+a supported optimum.
+
+\begin{proposition}[Expansion and an old dual certificate]\label{prop:expansion}
+For every old $x$ and unchanged own-load price $p$,
+\[
+ r_Z(x;p)\ge r_X(x;p)>0.
+\]
+Erasure of global failure therefore requires a new supported plan and,
+necessarily, $D_Y\le\CH_X$. A sufficient condition for survival is
+$\min\{D_X,D_Y\}>\CH_X$.
+
+Fix an attained old hull-dual optimizer $p^*$. If every added plan satisfies
+\begin{equation}\label{eq:dualsafe}
+ c(y)+(p^*)^\top e(y)\ge V_X(p^*),
+\end{equation}
+then $\CH_Z=\CH_X$. Under this condition, failure is erased exactly when
+some added plan attains equality in \eqref{eq:dualsafe} and also satisfies
+$p^*\in\partial F(e(y))$. If \eqref{eq:dualsafe} holds with a uniform
+margin $\varepsilon>0$, then
+\[
+ \Delta_Z\ge\min\{\Delta_X,\varepsilon\}>0.
+\]
+\end{proposition}
+
+These are elementary consequences of the classical dual certificate
+(Appendix~\ref{app:expansion}). They provide a useful way to ask whether
+a restricted physical mechanism survives genuinely richer alternatives.
+With strictly convex supply, supply equality at $p^*$ fixes the old
+hull-optimal load; fleet equality then fixes its operating cost. Under
+\eqref{eq:dualsafe}, erasure means physically implementing that projected
+hull optimum. Without \eqref{eq:dualsafe}, the hull can move, and comparison
+with its old value is not enough.
+
+\subsection{Movement additions under unchanged resources}
+In the nominal model of Section~\ref{sec:construction}, retain all original
+plans and allow additional movements consuming nonnegative energy and
+incurring nonnegative extra operating cost. Preserve the two services,
+at most two buses with 20 kWh batteries, fee 7, full initial and terminal
+inventories, the early 10 and terminal 30 kW power limits, charging windows and access.
+There is no energy recovery, inventory transfer or new charging opportunity.
+
+\begin{theorem}[Movement-only stability]\label{thm:movement}
+Every feasible added plan is componentwise dominated in purchased-energy
+and operating-cost space by an old physical plan. Consequently
+\[
+ D_Z=97,\qquad\CH_Z=\frac{7591}{80},\qquad
+ \Delta_Z=\frac{169}{80}.
+\]
+\end{theorem}
+
+To see the physical reason, any added plan buys $30+w$ total energy,
+$w\ge0$, and at most 10 early kWh. A two-bus plan with early purchase $u$
+is dominated by the old two-bus plan $(u,30-u)$ of cost 14. A one-bus
+plan must still obtain at least 10 early kWh to complete both services;
+the early limit forces $u=10$, and the old one-bus plan $(10,20)$ of
+cost 7 dominates it. The same replacement works inside every hull mixture
+because $F$ is coordinatewise nondecreasing. The theorem therefore preserves
+both values, not merely positivity of their difference.
+
+This is an unchanged-resource result. The original no-movement construction
+already includes both possible service partitions and every continuous
+charging choice. A new projected point cannot be called an overlooked
+feasible duty without explaining which physical assumption admits it.
+
+\subsection{An explicitly enlarged battery choice}
+Now change the equipment. Keep buses with 20 kWh batteries and fee 7, and add buses
+of capacity $B\in[20,30]$ and fee $q\ge7$. Two of each type are available,
+but at most two buses total are used. Every used bus starts and ends at
+its own full capacity. All service and charging constraints are unchanged.
+
+Put $a=30-B$. The new one-bus branch buys $x\in[a,10]$ early and
+$30-x$ terminally, with operating cost $q$. Every two-bus type assignment
+permits the old interval $[0,10]$ and costs at least 14; the old--old
+assignment therefore dominates mixed and new--new assignments in projected
+economic comparisons. Their physical records and equal-fee ties remain
+part of the complete alternative set.
+
+\begin{theorem}[Battery and fee conditions for erasure]\label{thm:battery}
+For $20\le B\le30$ and $q\ge7$, let $a=30-B$ and
+\[
+ A(a)=14+2a-\frac25a^2,\qquad
+ C(a)=7+(10-a)\left(\frac25a-2\right).
+\]
+The enlarged model has a supported physical plan exactly when
+\begin{equation}\label{eq:batteryregion}
+ \bigl(a\le5\ \hbox{and}\ q=7\bigr)
+ \quad\hbox{or}\quad
+ \bigl(a>5\ \hbox{and}\ 7\le q\le\min\{A(a),C(a)\}\bigr).
+\end{equation}
+The inequalities include weak support at ties. At fee $q=7$, this becomes
+\begin{equation}\label{eq:batterythreshold}
+ B\ge\frac{55-\sqrt{95}}2\simeq22.6266.
+\end{equation}
+Outside \eqref{eq:batteryregion}, the physical--hull gap is positive.
+\end{theorem}
+
+The new branch's physical minimizer is $t=\max\{5,a\}$. If $a\le5$,
+its marginal prices at $t=5$ are equal; the new plan minimizes its bill
+against the cheaper old one-bus plan only at fee 7. If $a>5$, the two
+inequalities in \eqref{eq:batteryregion} compare it respectively with
+the old zero-early two-bus plan and old one-bus plan. The proof in
+Appendix~\ref{app:battery} checks the entire continuous opportunity set.
+
+The case $B=25$ shows why a new plan's physical cost is not the whole
+story. For $q\ge7$,
+\begin{align}
+ D_Z&=\min\{97,85+q\},\label{eq:B25D}\\
+ \CH_Z&=
+ \begin{cases}
+ 85+q-(q-7)^2/20,&7\le q\le21/2,\\
+ 7591/80,&q\ge21/2.
+ \end{cases}\label{eq:B25CH}
+\end{align}
+At fee 7, the new one-bus load $(5,25)$ has total cost 92 and is supported
+at $(5,5)$. At fee 8, its physical cost 93 is below the \emph{old} hull
+value 94.8875, but the \emph{new} hull value is 92.95. Its regret is 1 and
+the gap remains $1/20$. Thus the necessary condition $D_Y\le\CH_X$
+in Proposition~\ref{prop:expansion} is not sufficient.
+
+At fee 12, the old one-bus load $(10,20)$ and new one-bus load $(5,25)$
+both have physical cost 97. Their own-price regrets are 13 and 5,
+respectively; $\CH_Z=7591/80$. Reporting a single selected planner
+optimum would hide this incentive difference. The new equipment can erase
+failure, but its presence alone does not do so.

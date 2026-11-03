@@ -1,0 +1,7 @@
+# QP master resolves the remaining baseline stops — 29 September 2026
+
+Changing only the restricted-master method allowed all six 8-, 16- and 24-service development cases to meet the declared numerical accuracy target, compared with three of six under the previous method. The three flat-price cases no longer reached the arithmetic-size limit. The new cluster run completed in 1 minute 47 seconds on one CPU; all six outcomes and their full costs are preserved and independently checked. This is a usable cold-solving baseline for this nested timetable family, not yet evidence across independent networks.
+
+The timing effects were mixed: the 16-service flat-price case took longer and required more pricing calls, while the 24-service case was faster. We therefore claim resolution of the observed arithmetic barrier, not a general speedup. These numerical bounds do not by themselves establish a physical-plan cost gap or a failure of price support. The next package will pair them with physical-planner bounds and own-price-response regret on the same six cases, followed by a separately designed cold/retained-column/nearest-neighbor comparison. Independent test timetables remain reserved; machine learning waits for a measured advantage worth learning.
+
+[Paired results and figure](https://github.com/ndandnd/egg/blob/codex/journal-research-20260927/research-20260929/qp-baseline-diagnostic/results-attempt1/RESULTS.md)

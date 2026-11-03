@@ -1,0 +1,21 @@
+# Thirty-two-group source-route scorer: saved-model replay
+
+All 12 grouped-fold/seed jobs in array 716152 completed. The [strict replay script](replay_route_model32.py) loaded the saved logistic/MLP parameters and boosted-tree joblib models under a separate isolated scikit-learn **1.7.2** environment matching the training library versions. It checked task and wrapper receipts, model hashes, the exact 32-group pool manifest, 20-fit/4-inner/8-outer group partitions, fit-only preprocessing and controls, every held-out movement label/probability, and reported metrics. All checks passed. The [machine-readable replay](ROUTE_MODEL32_REPLAY.json) retains per-group seed/source averages and paired differences. No model was refit or selected using outer-fold outcomes.
+
+The [grouped comparison figure](figures/route_model32_grouped_comparison.png) shows all 32 timetable means, with paired lines and a mean diamond for each scorer. A [PDF version](figures/route_model32_grouped_comparison.pdf) and its [plotting script](plot_route_model32.py) are generated solely from the replay JSON.
+
+Each number below first averages the three seeds within each timetable and source fleet, then gives the two source fleets equal weight and averages the **32 independent timetable groups**. The source-fleet label is observed movement selection in a feasible incumbent; an unselected edge is not known to be infeasible or inferior.
+
+| Scorer | Log loss ↓ | Brier ↓ | Average precision ↑ | Trip-count top-k recall ↑ | Positive recall at 0.5 ↑ | Negative recall at 0.5 ↑ |
+|---|---:|---:|---:|---:|---:|---:|
+| Constant prevalence | 0.2257 | 0.0559 | 0.0594 | 0.1424 | 0.0000 | 1.0000 |
+| Movement-kind frequency | 0.2046 | 0.0536 | 0.1127 | 0.1424 | 0.0000 | 1.0000 |
+| Regularized logistic | 0.1137 | 0.0323 | 0.6554 | 0.6055 | 0.4561 | 0.9908 |
+| 32-unit MLP | 0.0919 | 0.0263 | 0.7197 | 0.6624 | 0.6049 | 0.9900 |
+| Histogram boosted trees | **0.0738** | **0.0207** | **0.8152** | **0.6879** | **0.7709** | 0.9854 |
+
+The boosted scorer beats the kind-frequency control on log loss, Brier, average precision and input-trip-count top-k recall in **all 32 paired timetables**. Its mean group-wise improvements are 0.1308 lower log loss, 0.0330 lower Brier, 0.7025 higher average precision and 0.5455 higher top-k recall. The improved positive recall at the fixed 0.5 threshold trades a small decrease in negative recall (1.0000 to 0.9854). The constant and kind controls select no positive edges at that threshold, illustrating why accuracy alone would mislead on sparse selections. Top-k uses the number of trips available before solving; held-out selected-edge counts enter only the retrospective recall denominator.
+
+The logistic solver recorded **no convergence warnings**, with 127–168 LBFGS iterations. All 12 MLP runs selected their final allowed epoch 300, and all 12 tree runs selected the maximum tested 200 boosting iterations using their **inner** timetable groups. Mean MLP inner log loss fell from about 0.5688 at its first recorded checkpoint to 0.0812 at epoch 300. Mean tree inner log loss fell from about 0.0826 at 25 iterations to 0.0616 at 200. The selected tree inner-minus-fit log-loss gap averaged 0.0134; this shows some fit advantage but no inner-score reversal within the frozen range. The boundary selections are a sign that neither model was stopped by its inner curve here; they are **not** permission to retune on these outer results. No hyperparameter or threshold change was made.
+
+The 12 task receipts sum to 351.79 seconds of model-worker wall time; Slurm accounting records 784 allocated CPU-seconds across the array. These are training and evaluation costs, not online solver savings. The common synthetic generator and source-solver procedure may impose regularities that the models learn; outer timetables are independent within that generator, but this does not establish transfer to new generators or prices. Edge probabilities can branch or omit a complete vehicle path. Any later proposal must be decoded/projected to a complete fleet, charged, independently physically replayed, and compared against native controls before a route-quality or speed claim. The separate 64/128-group continuation must preserve censored source labels and use a prospective protocol; these 32 outer outcomes do not tune it.

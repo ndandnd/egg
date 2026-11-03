@@ -1,0 +1,379 @@
+{
+  "bound_scope": "numerical CBC and replay tolerance conditional",
+  "calls": [
+    {
+      "iteration": 0,
+      "phase": "ch",
+      "status": "OPTIMAL",
+      "structures": 3,
+      "threads": 1,
+      "wall_s": 0.02477595815435052
+    },
+    {
+      "iteration": 0,
+      "phase": "physical",
+      "status": "INFEASIBLE",
+      "structures": 1,
+      "threads": 1,
+      "wall_s": 0.00028287479653954506
+    },
+    {
+      "iteration": 0,
+      "phase": "physical",
+      "status": "OPTIMAL",
+      "structures": 1,
+      "threads": 1,
+      "wall_s": 0.0002797078341245651
+    },
+    {
+      "iteration": 0,
+      "phase": "physical",
+      "status": "OPTIMAL",
+      "structures": 1,
+      "threads": 1,
+      "wall_s": 0.00014845887199044228
+    }
+  ],
+  "ch": {
+    "exact_evaluation": 8.0,
+    "load": [
+      0.0,
+      10.0,
+      0.0,
+      0.0
+    ],
+    "lower": 7.9999992,
+    "model_value": 8.0,
+    "numerical_allowance": 8e-07,
+    "refinements": 0,
+    "solver_bound": 8.0,
+    "status": "OPTIMAL",
+    "upper": 8.0000008,
+    "witness": [
+      {
+        "charges": [],
+        "replay": {
+          "load": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "replay_ok": true,
+          "scaled_ops": -0.0
+        },
+        "structure": {
+          "kinds": [
+            [
+              "dir"
+            ]
+          ],
+          "ops_cost": 7.0,
+          "sequences": [
+            [
+              "t0",
+              "t1"
+            ]
+          ]
+        },
+        "weight": -0.0
+      },
+      {
+        "charges": [
+          {
+            "chain": 0,
+            "edge": 0,
+            "energy": 10.0,
+            "slot": 1
+          },
+          {
+            "chain": 0,
+            "edge": 0,
+            "energy": -0.0,
+            "slot": 2
+          }
+        ],
+        "replay": {
+          "load": [
+            0.0,
+            10.0,
+            0.0,
+            0.0
+          ],
+          "replay_ok": true,
+          "scaled_ops": 7.0
+        },
+        "structure": {
+          "kinds": [
+            [
+              "dep"
+            ]
+          ],
+          "ops_cost": 7.0,
+          "sequences": [
+            [
+              "t0",
+              "t1"
+            ]
+          ]
+        },
+        "weight": 1.0
+      },
+      {
+        "charges": [],
+        "replay": {
+          "load": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "replay_ok": true,
+          "scaled_ops": -0.0
+        },
+        "structure": {
+          "kinds": [
+            [],
+            []
+          ],
+          "ops_cost": 14.0,
+          "sequences": [
+            [
+              "t0"
+            ],
+            [
+              "t1"
+            ]
+          ]
+        },
+        "weight": -0.0
+      }
+    ]
+  },
+  "d_lower": 7.9999992,
+  "d_upper": 8.0000008,
+  "gap_interval": [
+    -1.600000000046009e-06,
+    1.600000000046009e-06
+  ],
+  "instance": {
+    "battery_kwh": 20.0,
+    "charge_power_kw": 10.0,
+    "depot": "D",
+    "dh_cost_per_min": 1.0,
+    "dh_kwh": [],
+    "dh_min": [],
+    "max_vehicles": 2,
+    "meta": {
+      "source": "direct seed-free engineering fixture",
+      "terminal_marker": false
+    },
+    "n_slots": 4,
+    "name": "linear_split",
+    "slot_min": 60,
+    "soc0_kwh": 20.0,
+    "soc_end_kwh": 0.0,
+    "soc_min_kwh": 0.0,
+    "trips": [
+      {
+        "end_loc": "D",
+        "end_min": 60,
+        "energy_kwh": 15.0,
+        "id": "t0",
+        "start_loc": "D",
+        "start_min": 0
+      },
+      {
+        "end_loc": "D",
+        "end_min": 240,
+        "energy_kwh": 15.0,
+        "id": "t1",
+        "start_loc": "D",
+        "start_min": 180
+      }
+    ],
+    "vehicle_fixed_cost": 7.0
+  },
+  "instance_hash": "14e5dff73581",
+  "market": {
+    "U": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "a": [
+      0.1,
+      0.1,
+      0.1,
+      0.1
+    ],
+    "b": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  "name": "linear_split",
+  "physical": [
+    {
+      "status": "INFEASIBLE"
+    },
+    {
+      "exact_evaluation": 8.0,
+      "load": [
+        0.0,
+        10.0,
+        0.0,
+        0.0
+      ],
+      "lower": 7.9999992,
+      "model_value": 8.0,
+      "numerical_allowance": 8e-07,
+      "refinements": 0,
+      "solver_bound": 8.0,
+      "status": "OPTIMAL",
+      "upper": 8.0000008,
+      "witness": [
+        {
+          "charges": [
+            {
+              "chain": 0,
+              "edge": 0,
+              "energy": 10.0,
+              "slot": 1
+            },
+            {
+              "chain": 0,
+              "edge": 0,
+              "energy": -0.0,
+              "slot": 2
+            }
+          ],
+          "replay": {
+            "load": [
+              0.0,
+              10.0,
+              0.0,
+              0.0
+            ],
+            "replay_ok": true,
+            "scaled_ops": 7.0
+          },
+          "structure": {
+            "kinds": [
+              [
+                "dep"
+              ]
+            ],
+            "ops_cost": 7.0,
+            "sequences": [
+              [
+                "t0",
+                "t1"
+              ]
+            ]
+          },
+          "weight": 1.0
+        }
+      ]
+    },
+    {
+      "exact_evaluation": 14.0,
+      "load": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "lower": 13.9999986,
+      "model_value": 14.0,
+      "numerical_allowance": 1.4e-06,
+      "refinements": 0,
+      "solver_bound": 14.0,
+      "status": "OPTIMAL",
+      "upper": 14.0000014,
+      "witness": [
+        {
+          "charges": [],
+          "replay": {
+            "load": [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "replay_ok": true,
+            "scaled_ops": 14.0
+          },
+          "structure": {
+            "kinds": [
+              [],
+              []
+            ],
+            "ops_cost": 14.0,
+            "sequences": [
+              [
+                "t0"
+              ],
+              [
+                "t1"
+              ]
+            ]
+          },
+          "weight": 1.0
+        }
+      ]
+    }
+  ],
+  "physical_best": 1,
+  "shared_power_slot_kwh": null,
+  "status": "OPTIMAL",
+  "structures": [
+    {
+      "kinds": [
+        [
+          "dir"
+        ]
+      ],
+      "ops_cost": 7.0,
+      "sequences": [
+        [
+          "t0",
+          "t1"
+        ]
+      ]
+    },
+    {
+      "kinds": [
+        [
+          "dep"
+        ]
+      ],
+      "ops_cost": 7.0,
+      "sequences": [
+        [
+          "t0",
+          "t1"
+        ]
+      ]
+    },
+    {
+      "kinds": [
+        [],
+        []
+      ],
+      "ops_cost": 14.0,
+      "sequences": [
+        [
+          "t0"
+        ],
+        [
+          "t1"
+        ]
+      ]
+    }
+  ],
+  "wall_s": 0.11001333314925432
+}

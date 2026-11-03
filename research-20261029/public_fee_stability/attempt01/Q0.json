@@ -1,0 +1,86 @@
+{
+  "status": "PASS",
+  "arithmetic": {
+    "status": "PASS",
+    "arithmetic_controls": 9,
+    "transfer_controls": "consumer must exercise check with frozen literal metadata"
+  },
+  "anchor": {
+    "status": "CERTIFIED_SUFFICIENT_REGION",
+    "tau_interval": {
+      "empty": false,
+      "lower": "-6",
+      "lower_closed": false,
+      "upper": "2",
+      "upper_closed": false
+    },
+    "fee_interval": {
+      "empty": false,
+      "lower": "94",
+      "lower_closed": false,
+      "upper": "102",
+      "upper_closed": false
+    },
+    "Nbar": "5/2",
+    "inequalities": [
+      [
+        "1",
+        "-1/2"
+      ],
+      [
+        "3",
+        "1/2"
+      ]
+    ],
+    "nominal_tau": "0",
+    "nominal_gap_lower": "1",
+    "scope": "fixed mixture and transferred lower bounds; not maximal"
+  },
+  "negative_controls": [
+    {
+      "id": "changed_fee",
+      "rejected": true
+    },
+    {
+      "id": "changed_upper",
+      "rejected": true
+    },
+    {
+      "id": "changed_case",
+      "rejected": true
+    },
+    {
+      "id": "noninteger_count",
+      "rejected": true
+    },
+    {
+      "id": "changed_weight",
+      "rejected": true
+    },
+    {
+      "id": "changed_ops",
+      "rejected": true
+    },
+    {
+      "id": "wrong_floor",
+      "rejected": true
+    },
+    {
+      "id": "changed_floor",
+      "rejected": true
+    },
+    {
+      "id": "open_tree",
+      "rejected": true
+    },
+    {
+      "id": "unadmitted_component",
+      "rejected": true
+    },
+    {
+      "id": "closed_strict_endpoint",
+      "rejected": true
+    }
+  ],
+  "native_calls": 0
+}

@@ -1,0 +1,33 @@
+# Independent rational-recovery helper source review
+
+Scoped mathematical/source PASS for the stated fresh-problem and admitted-callback contract. Read `recovery.py` and `METHOD_DECISION.md` only. No execution, imports, native calls, tests, hashes, actual gzip/input inspection, frozen edits or commits. Numerical qualification and worker input admission remain pending.
+
+## Phase-I proof trace
+
+The simplex tableau represents the original normalized equations plus artificial identity columns. A negative original RHS is multiplied by minus one, including its stored original-row transformation; all initial RHS values are nonnegative. Initial artificial variables therefore form a feasible basis even for zero/dependent equations.
+
+The artificial objective is the sum of artificial variables. Recomputing reduced coefficients as original artificial costs minus the sum of artificial-basic tableau rows is correct. A negative nonbasic reduced coefficient permits objective decrease; smallest entering index and minimum ratio with smallest basic-variable index tie-break implement Bland's rule. Positive entering coefficients bound the step; row elimination and the corresponding transformation elimination preserve both the original equations and nonnegative basic RHS. A missing leaving row is treated as an unresolved invariant failure, not infeasibility.
+
+At no negative reduced coefficients, artificial objective zero supplies a nonnegative original-variable vector satisfying every original equation. Artificial basics may remain zero; cleanup/phase II is unnecessary for feasibility. At positive objective, summing the original-row transformations of artificial basics yields unrestricted y. Optimal reduced costs of original columns imply y*A<=0, and the tableau objective gives y*b>0. Thus any hypothetical z>=0 with A*z=b would imply y*b=y*A*z<=0, a contradiction. Negative RHS normalization is undone by the stored signed transformations.
+
+`verify_phase_one` independently checks these original-equation identities and signs. It does not accept a positive artificial objective or native/simplex status as sufficient evidence. For FEASIBLE it checks all nonnegativity and original equalities; for INFEASIBLE it recomputes all original-column products, positive separation and the reported objective. This is a genuine externally inspectable primal/Farkas certificate, not solver self-agreement. Empty/zero rows and dependent rows are mathematically covered. Resource or invariant failure sets UNRESOLVED even if partial certificate fields already exist; consumers must gate on status.
+
+## Normal cone and original-QP certificate
+
+For minimization with residual rho=g-A^T*pi, >= multipliers are nonnegative and <= multipliers nonpositive; equality multipliers are free. The helper correctly represents those signs by nonnegative normal columns, splitting equality multipliers. Only tight inequalities may carry nonzero multipliers. Zero-coefficient tight rows can receive zero without losing any normal direction.
+
+At a lower-bound coordinate the box condition is rho>=0, equivalently A^T*pi<=g. At an upper bound it is rho<=0, equivalently A^T*pi>=g. Interior coordinates require equality; fixed boxes impose no residual restriction. Slack signs in the phase-I equations are correct. Identical coordinate conditions can be coalesced because their coefficient vectors, senses and gradients agree; every original coordinate is checked again afterward.
+
+Successful phase I is not the final acceptance condition. `check_certificate` independently checks the full exact primal, the original multiplier row set/signs, all row complementarity, and `rho*x=min(rho*lower,rho*upper)` on every variable, including proposed zeros. The tangent constant `ops-sum(b*load^2/2)` plus row RHS and finite-box compensation is a global lower for the original convex QP; equality with the original exact objective establishes fixed-topology optimality. Wrong signs, omitted zero-coordinate residual conditions, altered objective/lower/residual fields and violated original primal rows cannot pass this checker. This relies on the source-built problem's nonnegative quadratic curvature, exact binary coefficients and unique semantic row names; arbitrary caller-supplied matrices are outside the contract.
+
+If phase I proves infeasible, its Farkas result concerns this exact point's normal-cone system. Under the fresh convex-polyhedral problem assumptions that excludes a fixed-topology optimality certificate at that point; it does not invalidate an already admitted feasible physical point or prove routing infeasibility. The cautious returned label and method text preserve that distinction.
+
+## Physical admission, interfaces and limits
+
+Primal recovery uses the old affine arithmetic callbacks with one fixed 1e-7 proposed face and no dual Pi seed. It checks every original box/prefix/resource/refill row before calling the admitted physical verifier. Candidate and replay are retained before a later checkpoint or rejection. Strict replay plus exact objective agreement is sufficient under the specifically admitted original verifier (whose strict pass implies the other physical/upper flags). Successful primal admission remains logically independent of later dual success.
+
+The integration must rebuild the problem from the pinned descriptor and selected topology, compare variable-order metadata against the saved proposal, and pass only the admitted cached callback modules. It must not treat serialized old rows as semantic authority or infer certification from a raw status. Every use of an objective or physical upper must gate on ADMITTED_PRIMAL; every fixed-topology optimum claim must additionally gate on the full dual certificate status.
+
+Default phase-I time is 30 seconds and can be prospectively configured to 60. Pivot, row/column, checkpoint and fraction-size limits fail closed. These are checkpoints, not complete process timers: equation normalization, model/normal construction, verification sums, temporary fractions and some affine/physical work are not individually interruptible or completely operation-counted. Outer complete clocks/resources remain essential. Limits should be frozen valid positive values rather than user/data-controlled dictionaries. Worst-case simplex complexity is not improved by Bland termination.
+
+No clear helper bug requiring repair was found. Prospective literal qualification should include feasible and infeasible systems with negative RHS and zero/dependent rows, independently rejected corrupt Farkas/primal vectors, and original-QP wrong-sign/zero-coordinate/altered-value controls. Those checks have not been executed in this review.

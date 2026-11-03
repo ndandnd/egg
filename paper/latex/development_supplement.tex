@@ -1,0 +1,76 @@
+\documentclass[11pt]{article}
+\usepackage[letterpaper,margin=1in]{geometry}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{graphicx,booktabs,array,tabularx}
+\usepackage{microtype}
+\usepackage[hidelinks]{hyperref}
+\usepackage{placeins}
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf}
+\setlength{\parskip}{0.28em}
+\setlength{\emergencystretch}{1em}
+\renewcommand{\arraystretch}{1.15}
+\clubpenalty=10000
+\widowpenalty=10000
+\displaywidowpenalty=10000
+\brokenpenalty=10000
+\let\originalsubsection\subsection
+\renewcommand{\subsection}{\FloatBarrier\originalsubsection}
+\title{Repeated optimization of electric-bus fleets\\[0.35em]
+\large Computational chapter for the journal draft}
+\author{}
+\date{28 September 2026}
+\begin{document}
+\begin{center}
+{\LARGE Development supplement\par}
+\vspace{0.5em}
+{\large Marginal-price support of electric-bus fleets\par}
+\vspace{0.5em}
+Research draft 0.7 --- 28 September 2026
+\end{center}
+\section*{How to read this record}
+This supplement preserves the computational chapter of draft 0.6 as a
+historical development record. Its tables and figures have not been rerun or
+reclassified. The main paper now reports joint physical, hull and regret
+quantities and stronger analytical lower bounds. The observations below
+do not establish systematic acceleration or generalization.
+
+\begin{itemize}
+\item On the three-service multivisit case, source runs exhausted four pricing
+calls after about 3.5 seconds of a 60-second wall allowance. In the changed
+market, cold methods reached the projected 4096-bit rational-polishing limit;
+the reuse method certified after one pricing call. The reported difference
+is conditional on these limits. Certification or runtime under a different
+cold budget has not been measured.
+\item Three failed cells in the ordered comparison exposed the handling of a
+pricing call without an incumbent. That code path was subsequently repaired
+and tested; the historical failures and spent time remain. A new comparison
+would be a separate experiment, not a replacement of these observations.
+\item The fixed-price start pilot did not establish native acceptance of
+submitted starts and used one seed. Its public objective differences cannot
+identify a start effect or a speedup.
+\item The feasible-pool pilot and ordered comparison are different campaigns.
+For example, depot 16's reused target lower bounds of 329.22 and 350.87 refer
+to those distinct campaigns. The tables cannot be pooled as independent trials.
+\item These computed hull lower bounds omit the stronger energy-floor baseline
+now given in the main paper. Their historical plots are not comparisons
+against the best currently available lower bound. Capped runtime panels
+cannot establish time to equal quality.
+\end{itemize}
+
+The word ``established'' in the historical evidence map refers only to the
+specified run outcomes, with the qualifications above. It does not designate
+a validated computational method. No new optimization was performed to
+assemble this supplement.
+\clearpage
+\input{computational_results}
+\FloatBarrier
+\subsection*{Data and reproduction}
+The historical tables and figures use published scalar summaries from the
+feasible-pool pilot, ordered solver-baseline comparison and fixed-price
+pricing-start pilot in the \href{https://github.com/ndandnd/egg}{EGG research
+repository}. The companion source map records the input tables and figure
+script. Native bounds remain numerical and tolerance-qualified. The v0.7
+review-response record documents the analytical baseline and the reasons
+these development comparisons were removed from the main paper.
+\end{document}

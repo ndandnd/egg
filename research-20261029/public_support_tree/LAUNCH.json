@@ -1,0 +1,25 @@
+{
+ "status":"FROZEN","run_id":"attempt01",
+ "source_revision":"6a171357b65254b52cade63ed95dcce798485f36",
+ "command":"env OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 VECLIB_MAXIMUM_THREADS=1 NUMEXPR_NUM_THREADS=1 /usr/bin/time -p .venv-local/bin/python -I -B research-20261029/public_support_tree/run.py --run-id attempt01 > research-20261029/public_support_tree/process-time-and-owner.txt 2>&1",
+ "working_directory":"/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017",
+ "supplied_closed_prefix":{"displayed_cpu_s":22235.40,"elapsed_sum_s":23126.65,"retained_cpu_s":22236.63},
+ "package_cpu_s":3600,"package_wall_s":5400,"worker_cpu_s":3540,"worker_wall_s":5200,
+ "audit_reserve_cpu_s":600,"audit_reserve_wall_s":900,
+ "audit_context_and_checker_wall_s":550,
+ "native_threads":1,"observed_rss_allowance_bytes":5368709120,
+ "search_limits":{"nodes":500,"native_calls":1000,"seconds":4200,"cpu_seconds":3000,
+   "qp_seconds":30,"infeasibility_lp_seconds":15,"checker_seconds":60,
+   "closure_seconds":10,"closure_cpu_seconds":5},
+ "inputs":[
+  {"id":"case","revision":"253c1e29295e766b3889fc8f5c28d9808e00b3d6","path":"research-20261029/public_support_resolution/attempt01/case_descriptor.json"},
+  {"id":"target","revision":"c5f056b90ca895786c44f96903cdaafff97fce52","path":"research-20261029/public_price_witness/TRANSFER_AUTHORITY.json"},
+  {"id":"target_results","revision":"f5ec2aa5770188d173af7297620a5fcea99fef9a","path":"research-20261029/public_price_witness/attempt01/results.json"}
+ ],
+ "target_binding":{"producer_source_revision":"cddd5072be949c36a8f674dd12298503a73407a7",
+   "producer_control_commit_prefix":"61b14412","producer_namespace":"research-20261029/public_price_witness/attempt01"},
+ "target_upper_bound":"1443179923968803775290098006217163515009032774663398228930303365915411930614170875502024167442451530845/3271461678119739162838778949479488288386427183774469641575516104263648171125254058271345771399872512",
+ "semantic_source_revision":"3278d50f8323618bd36809b1bbb1a0da081e23ff",
+ "scope":"Physical D_two plus independently checked original-case-derived physical>=3 service floor; not CH",
+ "authority":"One prospectively reviewed source-bound physical-tree attempt with complete literal qualification and independent coverage audit. No old root input, old replay, new mixture computation, automatic retry or extension. All work inclusive; preserve failures and unresolved branches."
+}

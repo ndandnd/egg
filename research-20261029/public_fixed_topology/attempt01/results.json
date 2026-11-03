@@ -1,0 +1,86 @@
+{
+  "status": "CLOSED",
+  "assigned": 4,
+  "rows": [
+    {
+      "id": "Q0",
+      "status": "DELIVERED",
+      "complete_action_allowance_s": 50,
+      "packet": "Q0.json.gz",
+      "summary": {
+        "raw_status": 2,
+        "solution_count": 1,
+        "raw_objective": 9.027777777777779,
+        "raw_bound": null,
+        "exact_global_optimum_claim": false,
+        "recovery": {
+          "status": "CERTIFIED_FIXED_TOPOLOGY_OPTIMUM",
+          "stage": null,
+          "reason": null,
+          "objective_exact": "41633276555247252423/4611686018427387904",
+          "lower_exact": "41633276555247252423/4611686018427387904",
+          "exact_operations": 82,
+          "elapsed_s": 0.00043341703712940216
+        },
+        "known_exact_value": "41633276555247252423/4611686018427387904",
+        "qualification_status": "PASS",
+        "qualification_failure": null
+      },
+      "stage_elapsed_s": 0.03703216649591923,
+      "stage_clock_scope": "through complete gzip packet serialization",
+      "resources": {
+        "cpu_s": 0.34765499999999994,
+        "peak_rss_bytes": 113229824
+      }
+    },
+    {
+      "id": "FIXED_QP_RECOVERY",
+      "status": "DELIVERED",
+      "complete_action_allowance_s": 90,
+      "packet": "FIXED_QP_RECOVERY.json.gz",
+      "summary": {
+        "raw_status": 2,
+        "solution_count": 1,
+        "raw_objective": 441.53291205116824,
+        "raw_bound": null,
+        "exact_global_optimum_claim": false,
+        "recovery": {
+          "status": "RECOVERY_FAILED",
+          "stage": "ALL_COORDINATE_BOX_CERTIFICATE",
+          "reason": "Recovered multiplier has wrong sign",
+          "objective_exact": null,
+          "lower_exact": null,
+          "exact_operations": 12728,
+          "elapsed_s": 0.012263249605894089
+        }
+      },
+      "stage_elapsed_s": 0.9304382912814617,
+      "stage_clock_scope": "through complete gzip packet serialization",
+      "resources": {
+        "cpu_s": 1.27685,
+        "peak_rss_bytes": 113229824
+      }
+    },
+    {
+      "id": "OWN_PRICE_LP",
+      "status": "UNATTEMPTED",
+      "reason": "Exact fixed-topology recovery did not certify a new physical candidate"
+    },
+    {
+      "id": "OWN_PRICE_MIP",
+      "status": "UNATTEMPTED",
+      "reason": "Exact fixed-topology recovery did not certify a new physical candidate"
+    }
+  ],
+  "failures": [],
+  "resource_pass": true,
+  "resources": {
+    "cpu_s": 1.280335,
+    "peak_rss_bytes": 113229824
+  },
+  "elapsed_s": 1.2638285411521792,
+  "recovery_status": "UNRESOLVED",
+  "no_automatic_retries": true,
+  "original_native_charging_not_reused": true,
+  "scope": "Fixed-topology exact charging certificate and conditional full-graph own-price diagnostics; native OPTIMAL is not a global certificate"
+}

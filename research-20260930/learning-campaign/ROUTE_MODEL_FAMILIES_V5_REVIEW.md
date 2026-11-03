@@ -1,0 +1,7 @@
+# V5 model-family comparison review
+
+**Disposition: no launch blocker found.** The runner uses the pinned exact-128 TRAIN pool and grouped 80/16/32 fit/inner/outer partitions with the existing features and relative timetable/fleet/movement weights. XGBoost and CatBoost receive those weights in both fit and inner evaluation; their selected iterations/tree counts are explicitly used for scoring. ExtraTrees is single-threaded and uses the same fit weights. Candidate configurations and the promoted-family choice are selected from inner weighted log loss and saved before outer arrays are accessed.
+
+The fixed menu, library/runtime pins, one-thread settings, 12-task `%4` array, one CPU/8 GB/30-minute cap, no-requeue/excluded-node settings, immutable task directories, and partial candidate-start/model receipts are consistent. The updated five synthetic fixtures pass, including real tiny fits and portable model round-trips, weighted inner-loss agreement for XGBoost/CatBoost, outer-access guards, promotion selection, and failure/no-retry receipts. No admitted-bank fit or dev/test access was part of this review.
+
+Interpret reported scores as prediction of observed feasible-incumbent movement membership. Candidate/depth selection on the 16 inner groups may be noisy; aggregate seeds within timetable and timetables as the independent units. Classification gains alone do not establish feasible route proposals, lower fleet cost, or solver savings.

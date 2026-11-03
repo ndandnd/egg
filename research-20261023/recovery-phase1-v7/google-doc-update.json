@@ -1,0 +1,16 @@
+{
+  "document_id": "1NmPC_qo_uOnA48dV6Ibhs3Pj9EgOD-oJTBuVi41p6bg",
+  "document_url": "https://docs.google.com/document/d/1NmPC_qo_uOnA48dV6Ibhs3Pj9EgOD-oJTBuVi41p6bg",
+  "tab_id": "t.0",
+  "revision_before": "AHj4eMQcRqY-pM7WAUCMZdPFTkb0wJaqoEN--omBNSIBCawMz6Kw5Qg_ahF3_auMJ1_aqB-N1az-Q5NHkkYtELGCBPYErH9LOL5A32Hh7Vg",
+  "revision_after": "AHj4eMSfgKGhuVySXhHSjia3f7IQl6InwaW4lRT8WC5kx_aK-GVj3qo5jb8gquR8JoQKa9ks0H_Za-u0KnFuc4QEBSm9ewzml_K9ASIz7Fw",
+  "heading": "24 October 2026: local replay and recovery pipeline qualified",
+  "append_text": "\n24 October 2026: local replay and recovery pipeline qualified\nThe original eight-task local qualification completed on two engineering timetables, with 40 and 80 trips, one solver seed and the day tariff. All eight outputs contained independently replay-valid plans within the common 30-second output limit. Native partial starts were accepted and processed at both sizes; injected start-setter failures retained the valid fallback at both sizes. This establishes the tested replay/recovery paths on these cases, not model quality or generalization.\n\nThe new protocol prospectively treats 13/25-second planner handoffs as budget targets while keeping independent physical and durable admission hard at 15/27 seconds. The 80-trip recovery completed its full independent admission before 27 seconds despite missing the internal target. Earlier failed revisions remain failed and all their spending remains charged. The complete ledger now carries 21.55 charged CPU minutes within the approved 30-minute total.\n\nOn the 80-trip engineering case, recovery improved its restricted fallback bill from 3642.53 to 3628.91, but cold full solving returned 3386.20 with 24 vehicles rather than 27. No learned ranking was used. This single-case result supports keeping strong cold and classical controls; it does not demonstrate an ML or recovery advantage. No task established optimality, and some full-model lower bounds remain uninformative.\n\nNext, implement equal-cardinality connection selection and credible charging-aware and constructive classical controls, then freeze the independent timetable cohort and matched evaluation. The proposed 60-second comparison also needs a validated clock allocation before launch. Manuscript drafting remains deferred; sealed data and the cluster remain untouched.\n",
+  "append_index": 222180,
+  "existing_structure_unchanged": true,
+  "exact_append_verified": true,
+  "heading_unique": true,
+  "heading_named_style": "HEADING_2",
+  "scope": "Consolidated verified native-v7 engineering milestone; no older entries or visuals removed.",
+  "verification_note": "Native append and single readback succeeded; exact append and prior structure were verified. A local result-print helper naming collision occurred after this receipt was written; no Doc retry or duplicate append was performed."
+}

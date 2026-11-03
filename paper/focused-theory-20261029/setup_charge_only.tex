@@ -1,0 +1,104 @@
+\subsection{Classical exact formulations for charge-only setup}
+\label{app:setupchargeonly}
+Loss of the minimum-$r_m$ summary does not require enumerating all matchings
+or using a learned method. The common-window charge-only model admits
+ordinary resource allocation and a compact duty formulation.
+These are classical baselines, not new optimization algorithms.
+
+Assume common capacity $B$, zero other draw/reserve, full initial and
+terminal inventories, common efficiency $\alpha\in(0,1]$ in both windows,
+early accepted grid power $K_c>0$, terminal accepted power/budget $H\ge0$,
+and common setup $\tau\ge0$ assessed separately for each bus's nonzero
+early action. Each used bus pays $f>0$. Both windows
+have unit duration and all used buses are available throughout them.
+Both windows permit charging only, and allowed transitions have zero
+time, energy and cost. Terminal actions have no setup. No minimum session, taper or intrawindow
+access change is allowed. Early sessions on one bus can then be merged
+without changing endpoint SOC or increasing transfer time or setup count.
+
+\subsubsection{An exact interval for a fixed matching}
+Fix the duties. A bus consuming $A_v$ before the early window and $B_v$
+afterward has the true grid-energy box
+\[
+ r_v=\frac{(A_v+B_v-B)_+}{\alpha},\qquad
+ u_v=\frac{A_v}{\alpha},\qquad r_v\le q_v\le u_v.
+\]
+Absent services have energy zero; require $A_v,B_v\in[0,B]$.
+Let $R=\sum_vr_v$, let $h$ count the mandatory recipients $r_v>0$,
+and put $U_h=\sum_{r_v>0}u_v$. Sort the positive optional capacities
+as $v_1\ge\cdots\ge v_p>0$. Zero-capacity buses remain in the fleet
+and fee count, but need not enter this scan. If
+$R>K_c(1-\tau h)$, early charging is infeasible. Otherwise define
+\[
+ C_{\max}=\max_{h\le k\le h+p}
+ \min\left\{U_h+\sum_{j=1}^{k-h}v_j,\ K_c(1-\tau k)\right\}.
+\]
+The attainable early totals are exactly $[R,C_{\max}]$. A $k$-recipient
+schedule cannot exceed either the largest available capacity or its
+remaining transfer time. Conversely those top optional capacities and
+the mandatory intervals attain every total above $R$ up to their sum,
+with arbitrarily small positive optional allocations when needed. If
+the maximum equals $R$, use only mandatory recipients. Decreasing charges
+toward their lower bounds never increases active count, proving there
+are no holes. Negative later scan terms cannot improve the feasible
+mandatory baseline. In particular $h=0$ admits zero actions for every
+$\tau$, even when all optional capacities vanish.
+
+Write $G=\sum_v(A_v+B_v)/\alpha$ for total grid replacement energy,
+not the planner value $D$. Terminal refill gives the exact final interval
+\[
+ \max\{R,G-H,0\}\le C\le\min\{C_{\max},G\},
+ \qquad E=C,\quad L=G-C,\quad c=fN,
+\]
+when its endpoints are ordered. Valid individual boxes, not merely
+aggregate clipping, ensure physical inventories. For $K_c=0$ separately,
+only $C=0$ is possible, requiring all $r_v=0$ and $G\le H$.
+The scan uses mandatory count and ordered capacities as well as $R$;
+it is not an exact joint-matching reduction.
+
+\subsubsection{A compact duty MILP}
+Use each allowed pair $(i,j)$ and each standalone $(i,*)$, $(*,j)$
+as a candidate duty $d$, at most $n^2+2n$ in total. Let $A_d,B_d$ be
+its energies before/after the early window, with zero for an absent
+service, and $s_d=A_d+B_d$. Variables are duty activation $y_d\in\{0,1\}$,
+setup permission $z_d\in\{0,1\}$, early purchase $q_d\ge0$ and terminal
+purchase $t_d\ge0$. Impose exact service cover
+\[
+ y_{i,*}+\sum_{j:(i,j)\in\Gamma}y_{ij}=1,\qquad
+ y_{*,j}+\sum_{i:(i,j)\in\Gamma}y_{ij}=1,
+\]
+and, for every duty,
+\begin{align*}
+ z_d&\le y_d,&\alpha q_d&\le A_dz_d,&
+ \alpha q_d&\ge(s_d-B)y_d,\\
+ \alpha(q_d+t_d)&=s_dy_d,&0\le\alpha t_d&\le By_d.
+\end{align*}
+The shared constraints are
+\[
+ \sum_d q_d/K_c+\tau\sum_dz_d\le1,\qquad
+ \sum_dt_d\le H.
+\]
+An additional fleet limit may bound $\sum_dy_d$; cover alone gives
+$n\le\sum_dy_d\le2n$. Define $E=\sum q_d$, $L=\sum t_d$ and
+$c=f\sum y_d$, optionally adding common affine energy wear.
+
+Every physical bus induces one duty. Merging its charge-only early
+sessions yields these inequalities and sets $z_d=1$ for positive $q_d$.
+Conversely, serialize each positive $q_d$ with one setup at power $K_c$.
+The capacity and reserve inequalities keep SOC between zero and $B$
+before and after B; nonnegative service consumption preserves prefixes.
+Serialize terminal charges using the shared budget; the equality restores
+every used battery exactly full. A permitted $z_d=1,q_d=0$ only
+overcounts setup time: omit that action, preserving projected feasibility.
+Thus the formulation is exact for aggregate energy/cost decisions, not
+for rewarding the literal count of nonzero sessions.
+
+Any affine aggregate query is an MILP; convex quadratic grid cost gives
+a convex MIQP. Polynomial formulation size does not mean polynomial
+solution time, nor is its continuous relaxation automatically the
+complete-plan hull. Exact sets here exclude counted idle buses; with
+positive fee they cannot improve $c+F(E,L)$ in this charge-only,
+full-start/end model, because they exchange no energy and only add cost.
+The result does not extend the session-merging argument to V2G or
+state/session-dependent degradation. It supplies no hardness, numerical
+advantage, public-data or ML claim.

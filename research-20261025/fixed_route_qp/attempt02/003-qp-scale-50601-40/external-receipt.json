@@ -1,0 +1,239 @@
+{
+  "case": "scale:50601:40",
+  "folder": "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/research-20261025/fixed_route_qp/attempt02/003-qp-scale-50601-40",
+  "parent_anchor": 6118049.566626125,
+  "attempted": true,
+  "pid": 25212,
+  "reaped": true,
+  "returncode": 0,
+  "timed_out": false,
+  "config_failure": false,
+  "resource_violation": false,
+  "identity_failure": false,
+  "failures": [],
+  "worker": {
+    "policy": "original-warm-eight-priors-direct-fixed-route-qp-v2",
+    "case": "scale:50601:40",
+    "seed": 17,
+    "complete": true,
+    "method_endpoint_accepted": true,
+    "qp_success": true,
+    "physical_witness_valid": true,
+    "config_failure": false,
+    "resource_violation": false,
+    "identity_failure": false,
+    "parent_anchor": 6118049.566626125,
+    "native_deadline": 6118101.566626125,
+    "admission_deadline": 6118109.566626125,
+    "failures": [],
+    "stages": [
+      {
+        "stage": "case_construction",
+        "wall_s": 0.008076708763837814,
+        "cpu_s": 0.008076000000000007,
+        "observed_peak_rss_bytes": 25182208
+      },
+      {
+        "stage": "target_market",
+        "wall_s": 1.3000331819057465e-05,
+        "cpu_s": 1.4000000000000123e-05,
+        "observed_peak_rss_bytes": 25182208
+      },
+      {
+        "stage": "load_prior_plan",
+        "wall_s": 0.0006759166717529297,
+        "cpu_s": 0.0004330000000000028,
+        "observed_peak_rss_bytes": 25378816
+      },
+      {
+        "stage": "load_prior_replay",
+        "wall_s": 0.0003892919048666954,
+        "cpu_s": 0.00018900000000000167,
+        "observed_peak_rss_bytes": 25444352
+      },
+      {
+        "stage": "independent_prior_replay",
+        "wall_s": 0.014955166727304459,
+        "cpu_s": 0.014953000000000008,
+        "observed_peak_rss_bytes": 29130752
+      },
+      {
+        "stage": "save_replayed_fallback",
+        "wall_s": 0.0033333348110318184,
+        "cpu_s": 0.0028379999999999933,
+        "observed_peak_rss_bytes": 30441472
+      },
+      {
+        "stage": "one_direct_fixed_topology_qp",
+        "wall_s": 1.3486287500709295,
+        "cpu_s": 1.3123490000000002,
+        "observed_peak_rss_bytes": 128122880
+      },
+      {
+        "stage": "save_qp_stats",
+        "wall_s": 0.0004887087270617485,
+        "cpu_s": 0.000468000000000135,
+        "observed_peak_rss_bytes": 128122880
+      },
+      {
+        "stage": "independent_qp_candidate_replay",
+        "wall_s": 0.015813957899808884,
+        "cpu_s": 0.015807999999999822,
+        "observed_peak_rss_bytes": 128122880
+      }
+    ],
+    "native_calls": 1,
+    "case_identity": "5daf2b4354d0fd8288628bd2add43a46ca6a61d35a58f0315c48754f1b778b5b",
+    "target_market_identity": "da6fc75a383359ddad4612ce6fd1aa92e4b6b4c3312c854527964c2d974884ad",
+    "fleet_count": 3,
+    "fallback_bill_exact": "134771965659349076549897782800382553794335828415199/182687704666362864775460604089535377456991567872",
+    "selected_source": "direct_qp",
+    "used_fallback": false,
+    "native_call_attempts": 1,
+    "qp_candidate_admitted": true,
+    "helper_failures": [],
+    "copy_contract": {
+      "passed": true,
+      "original_variables": 19747,
+      "original_physical_rows": 22872,
+      "copied_variables": 19747,
+      "copied_physical_rows": 22872,
+      "source_nonzeros": 180689,
+      "read_back_nonzeros": 180689,
+      "fixed_routing_binaries": 1520,
+      "continuous_unfixed_variables": 18227,
+      "linear_objective_terms": 70,
+      "diagonal_quadratic_terms": 30,
+      "mapping": "original var.idx equals copied Var.index, dense zero-based; all checked",
+      "bounds": "side-specific documented unbounded sentinels canonicalized; every other bound exact",
+      "bound_policy": "Gurobi-LB-le-minus1e20-negative-infinity-UB-ge1e20-positive-infinity",
+      "infinite_bound_count": 30,
+      "infinite_variable_count": 30,
+      "infinite_bound_examples": [
+        {
+          "original_index": 19717,
+          "original_name": "var(19717)",
+          "original_type": "C",
+          "copied_index": 19717,
+          "copied_name": "var(19717)",
+          "copied_type": "C",
+          "original_raw_bounds_repr": [
+            "0.0",
+            "1e+100"
+          ],
+          "copied_readback_bounds_repr": [
+            "0.0",
+            "inf"
+          ],
+          "original_canonical_tags_repr": "(('exact_value', 0.0), ('UB_positive_infinity', None))",
+          "copied_canonical_tags_repr": "(('exact_value', 0.0), ('UB_positive_infinity', None))",
+          "raw_bounds_exactly_equal": false,
+          "canonical_equal": true
+        },
+        {
+          "original_index": 19718,
+          "original_name": "var(19718)",
+          "original_type": "C",
+          "copied_index": 19718,
+          "copied_name": "var(19718)",
+          "copied_type": "C",
+          "original_raw_bounds_repr": [
+            "0.0",
+            "1e+100"
+          ],
+          "copied_readback_bounds_repr": [
+            "0.0",
+            "inf"
+          ],
+          "original_canonical_tags_repr": "(('exact_value', 0.0), ('UB_positive_infinity', None))",
+          "copied_canonical_tags_repr": "(('exact_value', 0.0), ('UB_positive_infinity', None))",
+          "raw_bounds_exactly_equal": false,
+          "canonical_equal": true
+        },
+        {
+          "original_index": 19719,
+          "original_name": "var(19719)",
+          "original_type": "C",
+          "copied_index": 19719,
+          "copied_name": "var(19719)",
+          "copied_type": "C",
+          "original_raw_bounds_repr": [
+            "0.0",
+            "1e+100"
+          ],
+          "copied_readback_bounds_repr": [
+            "0.0",
+            "inf"
+          ],
+          "original_canonical_tags_repr": "(('exact_value', 0.0), ('UB_positive_infinity', None))",
+          "copied_canonical_tags_repr": "(('exact_value', 0.0), ('UB_positive_infinity', None))",
+          "raw_bounds_exactly_equal": false,
+          "canonical_equal": true
+        },
+        {
+          "original_index": 19720,
+          "original_name": "var(19720)",
+          "original_type": "C",
+          "copied_index": 19720,
+          "copied_name": "var(19720)",
+          "copied_type": "C",
+          "original_raw_bounds_repr": [
+            "0.0",
+            "1e+100"
+          ],
+          "copied_readback_bounds_repr": [
+            "0.0",
+            "inf"
+          ],
+          "original_canonical_tags_repr": "(('exact_value', 0.0), ('UB_positive_infinity', None))",
+          "copied_canonical_tags_repr": "(('exact_value', 0.0), ('UB_positive_infinity', None))",
+          "raw_bounds_exactly_equal": false,
+          "canonical_equal": true
+        },
+        {
+          "original_index": 19721,
+          "original_name": "var(19721)",
+          "original_type": "C",
+          "copied_index": 19721,
+          "copied_name": "var(19721)",
+          "copied_type": "C",
+          "original_raw_bounds_repr": [
+            "0.0",
+            "1e+100"
+          ],
+          "copied_readback_bounds_repr": [
+            "0.0",
+            "inf"
+          ],
+          "original_canonical_tags_repr": "(('exact_value', 0.0), ('UB_positive_infinity', None))",
+          "copied_canonical_tags_repr": "(('exact_value', 0.0), ('UB_positive_infinity', None))",
+          "raw_bounds_exactly_equal": false,
+          "canonical_equal": true
+        }
+      ],
+      "physical_rows": "all stored coefficients/RHS/senses checked by original index, no tolerance",
+      "objective": "original ops+a*load linear expression plus .5*b*load^2; sparse read-back checked",
+      "original_cffi_variables_retained": true,
+      "text_round_trip": false,
+      "extraction_view": "raw .x-only values for x/charge/loads; compiled/model metadata unchanged"
+    },
+    "objective_exact": "2002406049270583368156939654118536237683297277522221/2923003274661805836407369665432566039311865085952",
+    "objective": 685.0509086419903,
+    "stop_signal": null,
+    "resources": {
+      "self_cpu_s": 1.43532,
+      "waited_children_cpu_s": 0.0,
+      "combined_cpu_s": 1.435322,
+      "observed_peak_rss_bytes": 128122880,
+      "scope": "through receipt preparation; external meter includes publication/exit"
+    },
+    "elapsed_before_receipt_s": 1.4837212078273296,
+    "method_success": true
+  },
+  "complete_receipt_read_monotonic": 6118051.099011666,
+  "waited_child_cpu_s": 1.4539120000000008,
+  "parent_cpu_s": 0.002012000000000007,
+  "unresolved_cpu_reserve_s": 0.0,
+  "parent_elapsed_s": 1.532385541126132,
+  "method_endpoint_accepted": true
+}

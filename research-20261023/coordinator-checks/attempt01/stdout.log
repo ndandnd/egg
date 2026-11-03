@@ -1,0 +1,354 @@
+....FFFFFFF..........FF.....FF.F..                                       [100%]
+=================================== FAILURES ===================================
+________ test_admitted_fallback_survives_every_later_failure[exception] ________
+
+physical = (NativeCase(name='source', trips=(Trip(id='A', start_min=0, end_min=60, start_place='D', end_place='D', energy_kwh=15....nts': ['out', 'home']}], 'charges': [{'vehicle': 0, 'movement': 'home', 'connector': 0, 'start_min': 60.0, ...}], ...})
+failure = 'exception'
+
+    @pytest.mark.parametrize('failure', ['exception', 'start_rejected', 'start_unknown', 'timeout',
+                                         'no_incumbent', 'bad_replay', 'infeasible'])
+    def test_admitted_fallback_survives_every_later_failure(physical, failure):
+        source, full, plan = physical
+    
+        def planner(case, a, b, budget, record, **kw):
+            if case is source:
+                return {'plan':plan, 'lower':1e12}
+            # A failing/mutating solver cannot corrupt the retained physical witness.
+            kw['start_plan']['charges'][0]['grid_kwh'] = 0.
+            if failure in ('exception', 'timeout'):
+                raise (TimeoutError if failure == 'timeout' else RuntimeError)('injected')
+            if failure == 'bad_replay':
+                return {'plan':kw['start_plan'], 'lower':1e15, 'status':'certified'}
+            return {'status':'infeasible' if failure == 'infeasible' else 'unresolved',
+                    'recovery':{'solver_start_status':failure}, 'upper':0., 'lower':1e15}
+    
+        result = run(physical, planner)['result']
+>       assert result['fallback']['true_bill_exact'] == '119/2'
+E       AssertionError: assert '214371342262...8797018963968' == '119/2'
+E         
+E         - 119/2
+E         + 2143713422628356141/36028797018963968
+
+src/tests/test_recovery_coordinator.py:171: AssertionError
+_____ test_admitted_fallback_survives_every_later_failure[start_rejected] ______
+
+physical = (NativeCase(name='source', trips=(Trip(id='A', start_min=0, end_min=60, start_place='D', end_place='D', energy_kwh=15....nts': ['out', 'home']}], 'charges': [{'vehicle': 0, 'movement': 'home', 'connector': 0, 'start_min': 60.0, ...}], ...})
+failure = 'start_rejected'
+
+    @pytest.mark.parametrize('failure', ['exception', 'start_rejected', 'start_unknown', 'timeout',
+                                         'no_incumbent', 'bad_replay', 'infeasible'])
+    def test_admitted_fallback_survives_every_later_failure(physical, failure):
+        source, full, plan = physical
+    
+        def planner(case, a, b, budget, record, **kw):
+            if case is source:
+                return {'plan':plan, 'lower':1e12}
+            # A failing/mutating solver cannot corrupt the retained physical witness.
+            kw['start_plan']['charges'][0]['grid_kwh'] = 0.
+            if failure in ('exception', 'timeout'):
+                raise (TimeoutError if failure == 'timeout' else RuntimeError)('injected')
+            if failure == 'bad_replay':
+                return {'plan':kw['start_plan'], 'lower':1e15, 'status':'certified'}
+            return {'status':'infeasible' if failure == 'infeasible' else 'unresolved',
+                    'recovery':{'solver_start_status':failure}, 'upper':0., 'lower':1e15}
+    
+        result = run(physical, planner)['result']
+>       assert result['fallback']['true_bill_exact'] == '119/2'
+E       AssertionError: assert '214371342262...8797018963968' == '119/2'
+E         
+E         - 119/2
+E         + 2143713422628356141/36028797018963968
+
+src/tests/test_recovery_coordinator.py:171: AssertionError
+______ test_admitted_fallback_survives_every_later_failure[start_unknown] ______
+
+physical = (NativeCase(name='source', trips=(Trip(id='A', start_min=0, end_min=60, start_place='D', end_place='D', energy_kwh=15....nts': ['out', 'home']}], 'charges': [{'vehicle': 0, 'movement': 'home', 'connector': 0, 'start_min': 60.0, ...}], ...})
+failure = 'start_unknown'
+
+    @pytest.mark.parametrize('failure', ['exception', 'start_rejected', 'start_unknown', 'timeout',
+                                         'no_incumbent', 'bad_replay', 'infeasible'])
+    def test_admitted_fallback_survives_every_later_failure(physical, failure):
+        source, full, plan = physical
+    
+        def planner(case, a, b, budget, record, **kw):
+            if case is source:
+                return {'plan':plan, 'lower':1e12}
+            # A failing/mutating solver cannot corrupt the retained physical witness.
+            kw['start_plan']['charges'][0]['grid_kwh'] = 0.
+            if failure in ('exception', 'timeout'):
+                raise (TimeoutError if failure == 'timeout' else RuntimeError)('injected')
+            if failure == 'bad_replay':
+                return {'plan':kw['start_plan'], 'lower':1e15, 'status':'certified'}
+            return {'status':'infeasible' if failure == 'infeasible' else 'unresolved',
+                    'recovery':{'solver_start_status':failure}, 'upper':0., 'lower':1e15}
+    
+        result = run(physical, planner)['result']
+>       assert result['fallback']['true_bill_exact'] == '119/2'
+E       AssertionError: assert '214371342262...8797018963968' == '119/2'
+E         
+E         - 119/2
+E         + 2143713422628356141/36028797018963968
+
+src/tests/test_recovery_coordinator.py:171: AssertionError
+_________ test_admitted_fallback_survives_every_later_failure[timeout] _________
+
+physical = (NativeCase(name='source', trips=(Trip(id='A', start_min=0, end_min=60, start_place='D', end_place='D', energy_kwh=15....nts': ['out', 'home']}], 'charges': [{'vehicle': 0, 'movement': 'home', 'connector': 0, 'start_min': 60.0, ...}], ...})
+failure = 'timeout'
+
+    @pytest.mark.parametrize('failure', ['exception', 'start_rejected', 'start_unknown', 'timeout',
+                                         'no_incumbent', 'bad_replay', 'infeasible'])
+    def test_admitted_fallback_survives_every_later_failure(physical, failure):
+        source, full, plan = physical
+    
+        def planner(case, a, b, budget, record, **kw):
+            if case is source:
+                return {'plan':plan, 'lower':1e12}
+            # A failing/mutating solver cannot corrupt the retained physical witness.
+            kw['start_plan']['charges'][0]['grid_kwh'] = 0.
+            if failure in ('exception', 'timeout'):
+                raise (TimeoutError if failure == 'timeout' else RuntimeError)('injected')
+            if failure == 'bad_replay':
+                return {'plan':kw['start_plan'], 'lower':1e15, 'status':'certified'}
+            return {'status':'infeasible' if failure == 'infeasible' else 'unresolved',
+                    'recovery':{'solver_start_status':failure}, 'upper':0., 'lower':1e15}
+    
+        result = run(physical, planner)['result']
+>       assert result['fallback']['true_bill_exact'] == '119/2'
+E       AssertionError: assert '214371342262...8797018963968' == '119/2'
+E         
+E         - 119/2
+E         + 2143713422628356141/36028797018963968
+
+src/tests/test_recovery_coordinator.py:171: AssertionError
+______ test_admitted_fallback_survives_every_later_failure[no_incumbent] _______
+
+physical = (NativeCase(name='source', trips=(Trip(id='A', start_min=0, end_min=60, start_place='D', end_place='D', energy_kwh=15....nts': ['out', 'home']}], 'charges': [{'vehicle': 0, 'movement': 'home', 'connector': 0, 'start_min': 60.0, ...}], ...})
+failure = 'no_incumbent'
+
+    @pytest.mark.parametrize('failure', ['exception', 'start_rejected', 'start_unknown', 'timeout',
+                                         'no_incumbent', 'bad_replay', 'infeasible'])
+    def test_admitted_fallback_survives_every_later_failure(physical, failure):
+        source, full, plan = physical
+    
+        def planner(case, a, b, budget, record, **kw):
+            if case is source:
+                return {'plan':plan, 'lower':1e12}
+            # A failing/mutating solver cannot corrupt the retained physical witness.
+            kw['start_plan']['charges'][0]['grid_kwh'] = 0.
+            if failure in ('exception', 'timeout'):
+                raise (TimeoutError if failure == 'timeout' else RuntimeError)('injected')
+            if failure == 'bad_replay':
+                return {'plan':kw['start_plan'], 'lower':1e15, 'status':'certified'}
+            return {'status':'infeasible' if failure == 'infeasible' else 'unresolved',
+                    'recovery':{'solver_start_status':failure}, 'upper':0., 'lower':1e15}
+    
+        result = run(physical, planner)['result']
+>       assert result['fallback']['true_bill_exact'] == '119/2'
+E       AssertionError: assert '214371342262...8797018963968' == '119/2'
+E         
+E         - 119/2
+E         + 2143713422628356141/36028797018963968
+
+src/tests/test_recovery_coordinator.py:171: AssertionError
+_______ test_admitted_fallback_survives_every_later_failure[bad_replay] ________
+
+physical = (NativeCase(name='source', trips=(Trip(id='A', start_min=0, end_min=60, start_place='D', end_place='D', energy_kwh=15....nts': ['out', 'home']}], 'charges': [{'vehicle': 0, 'movement': 'home', 'connector': 0, 'start_min': 60.0, ...}], ...})
+failure = 'bad_replay'
+
+    @pytest.mark.parametrize('failure', ['exception', 'start_rejected', 'start_unknown', 'timeout',
+                                         'no_incumbent', 'bad_replay', 'infeasible'])
+    def test_admitted_fallback_survives_every_later_failure(physical, failure):
+        source, full, plan = physical
+    
+        def planner(case, a, b, budget, record, **kw):
+            if case is source:
+                return {'plan':plan, 'lower':1e12}
+            # A failing/mutating solver cannot corrupt the retained physical witness.
+            kw['start_plan']['charges'][0]['grid_kwh'] = 0.
+            if failure in ('exception', 'timeout'):
+                raise (TimeoutError if failure == 'timeout' else RuntimeError)('injected')
+            if failure == 'bad_replay':
+                return {'plan':kw['start_plan'], 'lower':1e15, 'status':'certified'}
+            return {'status':'infeasible' if failure == 'infeasible' else 'unresolved',
+                    'recovery':{'solver_start_status':failure}, 'upper':0., 'lower':1e15}
+    
+        result = run(physical, planner)['result']
+>       assert result['fallback']['true_bill_exact'] == '119/2'
+E       AssertionError: assert '214371342262...8797018963968' == '119/2'
+E         
+E         - 119/2
+E         + 2143713422628356141/36028797018963968
+
+src/tests/test_recovery_coordinator.py:171: AssertionError
+_______ test_admitted_fallback_survives_every_later_failure[infeasible] ________
+
+physical = (NativeCase(name='source', trips=(Trip(id='A', start_min=0, end_min=60, start_place='D', end_place='D', energy_kwh=15....nts': ['out', 'home']}], 'charges': [{'vehicle': 0, 'movement': 'home', 'connector': 0, 'start_min': 60.0, ...}], ...})
+failure = 'infeasible'
+
+    @pytest.mark.parametrize('failure', ['exception', 'start_rejected', 'start_unknown', 'timeout',
+                                         'no_incumbent', 'bad_replay', 'infeasible'])
+    def test_admitted_fallback_survives_every_later_failure(physical, failure):
+        source, full, plan = physical
+    
+        def planner(case, a, b, budget, record, **kw):
+            if case is source:
+                return {'plan':plan, 'lower':1e12}
+            # A failing/mutating solver cannot corrupt the retained physical witness.
+            kw['start_plan']['charges'][0]['grid_kwh'] = 0.
+            if failure in ('exception', 'timeout'):
+                raise (TimeoutError if failure == 'timeout' else RuntimeError)('injected')
+            if failure == 'bad_replay':
+                return {'plan':kw['start_plan'], 'lower':1e15, 'status':'certified'}
+            return {'status':'infeasible' if failure == 'infeasible' else 'unresolved',
+                    'recovery':{'solver_start_status':failure}, 'upper':0., 'lower':1e15}
+    
+        result = run(physical, planner)['result']
+>       assert result['fallback']['true_bill_exact'] == '119/2'
+E       AssertionError: assert '214371342262...8797018963968' == '119/2'
+E         
+E         - 119/2
+E         + 2143713422628356141/36028797018963968
+
+src/tests/test_recovery_coordinator.py:171: AssertionError
+______________ test_only_unrestricted_guarded_mip_lower_survives _______________
+
+physical = (NativeCase(name='source', trips=(Trip(id='A', start_min=0, end_min=60, start_place='D', end_place='D', energy_kwh=15....nts': ['out', 'home']}], 'charges': [{'vehicle': 0, 'movement': 'home', 'connector': 0, 'start_min': 60.0, ...}], ...})
+
+    def test_only_unrestricted_guarded_mip_lower_survives(physical):
+        source, full, plan = physical
+        full_plan = lift_plan(source, full, plan, a=[1.,2.], b=[0.,.2])['plan']
+        native = admitted_full_result(full, full_plan)
+        native['plan']['completion_stats'] = {'incumbent':37., 'lower_bound':10**12}
+        native['rounds'][0]['plan']['completion_stats'] = native['plan']['completion_stats']
+    
+        def planner(case, *args, **kw):
+            return {'plan':plan, 'lower':10**15} if case is source else native
+    
+        result = run(physical, planner)['result']
+        assert result['global_lower_bound'] == 30.-pf.BOUND_GUARD
+        assert result['bound_provenance'][0]['raw_lower_bound'] == 30.
+        assert result['bound_provenance'][0]['guard'] == pf.BOUND_GUARD
+>       assert result['selected']['true_bill_exact'] == '119/2'
+E       AssertionError: assert '214371342262...8797018963968' == '119/2'
+E         
+E         - 119/2
+E         + 2143713422628356141/36028797018963968
+
+src/tests/test_recovery_coordinator.py:358: AssertionError
+______ test_fallback_objective_not_overwritten_by_later_solver_objective _______
+
+physical = (NativeCase(name='source', trips=(Trip(id='A', start_min=0, end_min=60, start_place='D', end_place='D', energy_kwh=15....nts': ['out', 'home']}], 'charges': [{'vehicle': 0, 'movement': 'home', 'connector': 0, 'start_min': 60.0, ...}], ...})
+
+    def test_fallback_objective_not_overwritten_by_later_solver_objective(physical):
+        source, full, plan = physical
+        full_plan = lift_plan(source, full, plan, a=[1.,2.], b=[0.,.2])['plan']
+        native = admitted_full_result(full, full_plan)
+        native['upper'] = 30.
+        native['rounds'][0]['stats']['incumbent'] = 30.  # Does not match raw envelope 37.
+    
+        def planner(case, *args, **kw):
+            return {'plan':plan} if case is source else native
+    
+        result = run(physical, planner)['result']
+>       assert result['selected']['true_bill_exact'] == '119/2'
+E       AssertionError: assert '214371342262...8797018963968' == '119/2'
+E         
+E         - 119/2
+E         + 2143713422628356141/36028797018963968
+
+src/tests/test_recovery_coordinator.py:373: AssertionError
+________ test_more_expensive_full_witness_does_not_replace_prefix_bill _________
+
+physical = (NativeCase(name='source', trips=(Trip(id='A', start_min=0, end_min=60, start_place='D', end_place='D', energy_kwh=15....nts': ['out', 'home']}], 'charges': [{'vehicle': 0, 'movement': 'home', 'connector': 0, 'start_min': 60.0, ...}], ...})
+
+    def test_more_expensive_full_witness_does_not_replace_prefix_bill(physical):
+        source, full, plan = physical
+        source = replace(source, deadhead_cost_per_min=1.)
+        full = replace(full, deadhead_cost_per_min=1.)
+        plan = deepcopy(plan)
+        plan['case_identity'] = source.identity()
+        alternative = lift_plan(source, full, plan, a=[1.,2.], b=[0.,.2])['plan']
+        alternative['vehicles'][0]['movements'] = ['out', 'extra']
+        alternative['charges'][0].update(movement='extra', start_min=75., end_min=105.)
+        alternative['ops_cost'] = 22.
+    
+        def planner(case, *args, **kw):
+            return {'plan':plan} if case is source else {'plan':alternative, 'upper':74.5}
+    
+        outcome = coordinate(source, full, [1.,2.], [0.,.2], parent_monotonic=0., deadline=30.,
+                             storage=MemoryStorage(Clock()), clock=Clock(), planner=planner)
+>       assert outcome['result']['selected']['true_bill_exact'] == '119/2'
+E       AssertionError: assert '214371342262...8797018963968' == '119/2'
+E         
+E         - 119/2
+E         + 2143713422628356141/36028797018963968
+
+src/tests/test_recovery_coordinator.py:460: AssertionError
+_________ test_prefix_save_just_past_15_retains_witness_and_stops_full _________
+
+physical = (NativeCase(name='source', trips=(Trip(id='A', start_min=0, end_min=60, start_place='D', end_place='D', energy_kwh=15....nts': ['out', 'home']}], 'charges': [{'vehicle': 0, 'movement': 'home', 'connector': 0, 'start_min': 60.0, ...}], ...})
+
+    def test_prefix_save_just_past_15_retains_witness_and_stops_full(physical):
+        source, _, plan = physical
+        clock = Clock()
+        store = MemoryStorage(clock, save_seconds=5.)
+    
+        def planner(case, *args, **kw):
+            assert case is source
+            clock.now = 11.
+            return {'plan':plan}
+    
+        result = run(physical, planner, clock, store)['result']
+        assert clock.now == 16.
+>       assert result['selected']['true_bill_exact'] == '119/2'
+E       AssertionError: assert '214371342262...8797018963968' == '119/2'
+E         
+E         - 119/2
+E         + 2143713422628356141/36028797018963968
+
+src/tests/test_recovery_coordinator.py:476: AssertionError
+_____________ test_slow_full_bound_replay_cannot_import_late_lower _____________
+
+physical = (NativeCase(name='source', trips=(Trip(id='A', start_min=0, end_min=60, start_place='D', end_place='D', energy_kwh=15....nts': ['out', 'home']}], 'charges': [{'vehicle': 0, 'movement': 'home', 'connector': 0, 'start_min': 60.0, ...}], ...})
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x1093777a0>
+
+    def test_slow_full_bound_replay_cannot_import_late_lower(physical, monkeypatch):
+        source, full, plan = physical
+        full_plan = lift_plan(source, full, plan, a=[1.,2.], b=[0.,.2])['plan']
+        native = admitted_full_result(full, full_plan)
+        clock = Clock()
+        original = pf._candidate_score
+    
+        def slow_admission(*args):
+            value = original(*args)
+            clock.now = 28.
+            return value
+    
+        monkeypatch.setattr(pf, '_candidate_score', slow_admission)
+    
+        def planner(case, *args, **kw):
+            return {'plan':plan} if case is source else native
+    
+        result = run(physical, planner, clock)['result']
+        assert result['global_lower_bound'] is None
+>       assert result['selected']['true_bill_exact'] == '119/2'
+E       AssertionError: assert '214371342262...8797018963968' == '119/2'
+E         
+E         - 119/2
+E         + 2143713422628356141/36028797018963968
+
+src/tests/test_recovery_coordinator.py:518: AssertionError
+=========================== short test summary info ============================
+FAILED src/tests/test_recovery_coordinator.py::test_admitted_fallback_survives_every_later_failure[exception]
+FAILED src/tests/test_recovery_coordinator.py::test_admitted_fallback_survives_every_later_failure[start_rejected]
+FAILED src/tests/test_recovery_coordinator.py::test_admitted_fallback_survives_every_later_failure[start_unknown]
+FAILED src/tests/test_recovery_coordinator.py::test_admitted_fallback_survives_every_later_failure[timeout]
+FAILED src/tests/test_recovery_coordinator.py::test_admitted_fallback_survives_every_later_failure[no_incumbent]
+FAILED src/tests/test_recovery_coordinator.py::test_admitted_fallback_survives_every_later_failure[bad_replay]
+FAILED src/tests/test_recovery_coordinator.py::test_admitted_fallback_survives_every_later_failure[infeasible]
+FAILED src/tests/test_recovery_coordinator.py::test_only_unrestricted_guarded_mip_lower_survives
+FAILED src/tests/test_recovery_coordinator.py::test_fallback_objective_not_overwritten_by_later_solver_objective
+FAILED src/tests/test_recovery_coordinator.py::test_more_expensive_full_witness_does_not_replace_prefix_bill
+FAILED src/tests/test_recovery_coordinator.py::test_prefix_save_just_past_15_retains_witness_and_stops_full
+FAILED src/tests/test_recovery_coordinator.py::test_slow_full_bound_replay_cannot_import_late_lower
+12 failed, 22 passed in 0.19s

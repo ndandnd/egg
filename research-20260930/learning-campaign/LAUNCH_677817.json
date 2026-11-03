@@ -1,0 +1,37 @@
+{
+  "job_id": "677817",
+  "submitted_at_utc": "2026-09-30T04:44:39Z",
+  "source_commit": "79ad457765e5815c3ff6200d3941434238f3c5d7",
+  "source_branch": "codex/journal-research-20260927",
+  "remote_checkout": "/home/nc437/egg-learning-campaign-20260930",
+  "remote_attempt": "/home/nc437/egg-learning-campaign-20260930/result/learning_campaign/20260930-attempt1",
+  "wrapper": "src/cluster/learning_campaign.sbatch",
+  "observed_initial_state": "PENDING",
+  "initial_reason": "Priority",
+  "requested": {
+    "partition": "default_partition",
+    "cpus": 1,
+    "memory_gb": 8,
+    "wall_seconds": 2700,
+    "native_threads": 1,
+    "requeue": false,
+    "excluded_nodes": [
+      "scaglione-compute-01"
+    ]
+  },
+  "design": {
+    "native_cells": 17,
+    "train_groups": 2,
+    "dev_groups": 1,
+    "reserved_test_groups": 2,
+    "services_per_group": 8,
+    "trainer_hard_seconds": 45,
+    "native_wall_seconds_per_cell": 70,
+    "child_hard_seconds": 100,
+    "controller_seconds": 2100,
+    "outer_shell_seconds": 2200
+  },
+  "submission_guard": ".submission-learning-20260930-attempt1/jobid.txt",
+  "duplicate_guard": "Refuse existing attempt/submission marker or an active egg-* queue entry; controller also holds an exclusive run lock",
+  "verification": "sbatch returned job ID; scoped squeue confirmed requested resources. No scientific outcome yet."
+}

@@ -1,0 +1,1 @@
+These descriptive reports were written by the experiment implementation/analysis agent, not by the independent reviewer. They are copied without edits from the latest 20260927-attempt1-analysis-v2 deliverable. They are descriptive author analysis; the independent audit and its scope are documented in the parent review directory.

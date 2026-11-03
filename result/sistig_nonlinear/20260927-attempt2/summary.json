@@ -1,0 +1,120 @@
+{
+  "complete": true,
+  "elapsed_seconds": 559.0939701320603,
+  "frozen_sha256": "eb1d9f5dc8b8f7f1561c21dd8f8cad6105f8cfbc272c23b8c8a334e6a626f352",
+  "independent_result_audit_pending": true,
+  "protocol": "sistig-nonlinear-one-cell-20260927-v2",
+  "report": {
+    "claim_scope": "synthetic one-cell numerical enclosure; independent result audit pending",
+    "gap_classification": "unresolved_at_five",
+    "gap_interval_exact_stored": [
+      "-812067732769553/17592186044416",
+      "932325842598373/8796093022208"
+    ],
+    "negative_guard": "1/10000",
+    "own_price_plan_value_exact_stored": "786601898153812088449365085132971/1267650600228229401496703205376",
+    "own_price_regret_interval_exact_stored": [
+      "268724621969842881144566664272043/1267650600228229401496703205376",
+      "268724624505144075200005273688235/1267650600228229401496703205376"
+    ],
+    "own_price_vector": [
+      0.2,
+      0.2,
+      0.2,
+      0.2,
+      0.2,
+      0.2,
+      0.2,
+      0.2,
+      0.2,
+      0.2,
+      0.2,
+      0.2,
+      0.2,
+      0.24349250601858652,
+      0.2733333333333333,
+      0.2733333333333333,
+      0.2733333333333333,
+      0.2733333333333333,
+      0.2,
+      0.2,
+      0.3305804711140508,
+      0.36,
+      0.2866666666666667,
+      0.2,
+      0.2,
+      0.2,
+      0.6000000000000001,
+      0.2,
+      0.24444444444444446,
+      0.2
+    ],
+    "planner_plan_hash": "142e86d1d62b2087d3bfa017fcea60d4c873c0b940eaed967a2ffb6384e94bfc",
+    "regret_subject": "named_planner_incumbent",
+    "resolution": "5",
+    "used_buses": 2
+  },
+  "report_error": null,
+  "source_check_error": null,
+  "source_hashes_unchanged": true,
+  "stages": [
+    {
+      "accounting": {
+        "native_accounting_complete": true,
+        "native_returns": 2,
+        "native_starts": 2
+      },
+      "elapsed_seconds": 228.3880770020187,
+      "evidence_issues": [],
+      "hard_timeout": false,
+      "launch_error": null,
+      "pass": true,
+      "returncode": 0,
+      "stage": "planner",
+      "status": "bounded"
+    },
+    {
+      "accounting": {
+        "master_starts": 3,
+        "native_accounting_complete": true,
+        "native_returns": 6,
+        "native_starts": 6,
+        "native_wall_s": 247.6861859462224,
+        "polish_accounting_complete": true,
+        "polish_checks": 19,
+        "polish_returns": 3,
+        "polish_starts": 3,
+        "polish_steps": 17,
+        "polish_wall_s": 5.190904918592423,
+        "pricing_requests": 3,
+        "pricing_starts": 3,
+        "seed_requests": 1
+      },
+      "elapsed_seconds": 272.143855875358,
+      "evidence_issues": [],
+      "hard_timeout": false,
+      "launch_error": null,
+      "pass": true,
+      "returncode": 0,
+      "stage": "hull",
+      "status": "budget_exhausted"
+    },
+    {
+      "accounting": {
+        "native_accounting_complete": true,
+        "native_returns": 1,
+        "native_starts": 1
+      },
+      "elapsed_seconds": 58.40843175025657,
+      "evidence_issues": [],
+      "hard_timeout": false,
+      "launch_error": null,
+      "pass": true,
+      "returncode": 0,
+      "stage": "own_price",
+      "status": "certified"
+    }
+  ],
+  "stop_reason": null,
+  "unstarted_stages": []
+}

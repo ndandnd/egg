@@ -1,0 +1,28 @@
+{
+  "protocol": "PROTOCOL.md",
+  "failures": [
+    "Traceback (most recent call last):\n  File \"/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/src/experiments/codex_offline_rank.py\", line 71, in main\n    ranks={'v8':score['logits'],'heuristic':heuristic(case)}\n                                            ^^^^^^^^^^^^^^^\n  File \"/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/src/experiments/codex_offline_rank.py\", line 16, in heuristic\n    moving = sum(l.arrive_min-l.depart_min for l in m.legs if l.start_place != l.end_place)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/src/experiments/codex_offline_rank.py\", line 16, in <genexpr>\n    moving = sum(l.arrive_min-l.depart_min for l in m.legs if l.start_place != l.end_place)\n                                                              ^^^^^^^^^^^^^\nAttributeError: 'Leg' object has no attribute 'start_place'\n"
+  ],
+  "cases": [],
+  "hashes": {
+    "/Users/nadan/Documents/ChatGPT/egg/claude-local/e5-public-20261001/scores_v8_day.json": "9caa60106d7ae5d162b0ef25ee9936806b0d2884fd5dca64d320848647a69bfa",
+    "/Users/nadan/Documents/ChatGPT/egg/claude-local/runs/local-validate/h15-learned4-T180-k30/e3.json": "f52825ec90b26530bddc6d2febf03fbf6ffeaea25051e379679ba4804e7872b4",
+    "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/src/experiments/codex_offline_rank.py": "17accd7836d22194175ac67f1e207f1054d2ecc3b5513753c82c642b23ba3d5c",
+    "research-20261017/offline-ranking/PROTOCOL.md": "09bb9f36c096437fe10d1e5ba4a4b7b92895f9e5b376a4c8c8cd06d4cf8fa026",
+    "src/egglab/claude_cases.py": "28fd97eb4351dfc05da83db9420ed9a3e28943b5b18545970ab4e9b9df10842d",
+    "src/egglab/native_recharge.py": "0067123a7f71cc6e9c89e1262cdcbd612cafdcfc252e35bcfca7f1f54c45d0f3"
+  },
+  "unavailable": [
+    "CatBoost v5 artifact",
+    "scale saved reference plans",
+    "cold-found reference plans",
+    "historical best public plans"
+  ],
+  "limits": "Two reused networks; learned-generated references favor v8; no optimum/test/generalization claim.",
+  "seconds": 0.0892275832593441,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1"
+  }
+}

@@ -1,0 +1,17 @@
+# Independent computational claim review
+
+Reviewed `paper/latex/computational_results.tex` at SHA-256 `50fda5437632c7286bff016df8c688e7d9a0e5b54896393e271d62834913ffdb` against the listed public scalar reports and the two authorized model-definition ranges. No numerical discrepancies remain in the claims checked.
+
+The cell counts and outcomes agree: the feasible-pool pilot has 24 cells (7 certified, 17 budget-exhausted); the solver-baseline comparison has 32 (11 certified, 18 budget-exhausted, 3 failed); the pricing-start pilot returned all 16 calls. The two public depot variants share one Hildenbrand timetable group, so the chapter correctly avoids treating them as independent public replications.
+
+The interval endpoints, outward rounding, paid times, stopping outcomes, and first-pilot comparisons match the public tables. The solver-baseline table includes all eight public target outcomes; its three failed cells have no imputed intervals and retain their paid time. The cached-run restricted-pool residuals, global gaps, and within-run inherited-versus-fresh lower-bound differences agree with the scalar report. Pricing-start endpoint pairs, effect directions, 160-second public caps, source costs, and the $1,677.67 source-inclusive total also match. The current text does not turn these observations into equal-quality speedup, causal cache, or learning claims.
+
+The permitted model-definition ranges confirm the public-market coefficients and 30-period horizon, the four-period synthetic cases, and the fixed-price query and marginal-anchor construction. The chapter distinguishes feasible-mixture uppers from physical-pricing lowers, finite-pool residuals from global intervals, and native-tolerance-qualified enclosures from exact ideal-model proofs. Its stated scope for the public-hull figure matches the eight solver-baseline target rows.
+
+## Source pins
+
+- Feasible-pool pilot (`research-20260928/feasible-pool-pilot/results-attempt1/analysis/`): `README.md` SHA-256 `3f1d8d3f3712039fc293a244f1506a86a638ffcb53aff11a45fbf5dabd4036c6`; `cells.csv` `cfc4601984030e0ec79e1a3b90d10a0166d3df44e6db13e1d9590bcc98c5f741`; `paid_totals.csv` `0a2d11f5662031ea44c0b4014fb8847f89512487bb9a9779930857e1c03f36dc`; `paired_comparisons.csv` `c00e5f85b124bb093e5e8872e47011c7501a96f493b4e32260382e922d8ad03f`.
+- Solver-baseline comparison (`research-20260928/solver-baseline-comparison/results-attempt1/`): `README.md` SHA-256 `740b1aaac127221e584b6863c1a440ce34a593006646616980d970cc69117414`; `analysis/cells.csv` `901341b80a4da290c57feba0f1d86dbd3901f91ef16547d905fe677c79731cd2`; `analysis/paid_pairs.csv` `bb0da2cebeda09308a5aa88669e535062ca629ed293d1ccd936d86cb5cc1d111`.
+- Pricing-start pilot (`research-20260928/pricing-start-pilot/results-attempt1/analysis/`): `ANALYSIS.md` SHA-256 `3f0e876247d8c7071c5a3d641f4a3f30e12d9183772d95565786b71b4657b014`; `pairs.csv` `b9203b0ec6110d930364a16306bc6e8abf51d2b005821b7035af56c2684f5661`; `source_costs.csv` `4788111b491d31031dabe6baa7dd1ae11182828013702163a29cb40ddd799e45`; `accounting.json` `a96c5f1ae69f3d4b066cb2b45221181bf27086a3878b33ba24667bd658278587`.
+- Figure data pin: `paper/latex/figures/FIGURE_SOURCES.json` SHA-256 `eab948e74df33d994399e8e728744a7ab95ddfa405fbfcd569c3c2f7f52af9fe`.
+- Model definitions: `src/experiments/computational_benchmark.py:119-131` SHA-256 `da96e4601e34dc797526703db68c2d2cbda57d78a9048c8fd7c34889ffca1c8f`; `src/experiments/pricing_start_pilot.py:172-202` `0efaa2fa49eee3d979bdc1569e26bbe2c98d5785f11f9602a001cad185e35937`.

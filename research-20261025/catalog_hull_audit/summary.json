@@ -1,0 +1,118 @@
+{
+  "source_result_sha256": "7eb5b4e43d9af2a7061ae6355e9923cc3b21499ce06b8d0615f11ed3a7244f0f",
+  "summary": [
+    {
+      "tariff": "day",
+      "curvature_multiplier": 0,
+      "cells": 20,
+      "positive_gap_groups": 0,
+      "median_gap_percent_interval": [
+        0.0,
+        0.0
+      ],
+      "max_gap_upper_percent": 0.0
+    },
+    {
+      "tariff": "day",
+      "curvature_multiplier": 1,
+      "cells": 20,
+      "positive_gap_groups": 15,
+      "median_gap_percent_interval": [
+        0.025454605803281297,
+        0.025454614623917446
+      ],
+      "max_gap_upper_percent": 1.0218346836475167
+    },
+    {
+      "tariff": "day",
+      "curvature_multiplier": 5,
+      "cells": 20,
+      "positive_gap_groups": 16,
+      "median_gap_percent_interval": [
+        0.22583015143501178,
+        0.22583028209894285
+      ],
+      "max_gap_upper_percent": 1.8419819767951828
+    },
+    {
+      "tariff": "late",
+      "curvature_multiplier": 0,
+      "cells": 20,
+      "positive_gap_groups": 0,
+      "median_gap_percent_interval": [
+        0.0,
+        0.0
+      ],
+      "max_gap_upper_percent": 0.0
+    },
+    {
+      "tariff": "late",
+      "curvature_multiplier": 1,
+      "cells": 20,
+      "positive_gap_groups": 10,
+      "median_gap_percent_interval": [
+        3.9941557968881225e-05,
+        3.9941557997748934e-05
+      ],
+      "max_gap_upper_percent": 0.8460634557828106
+    },
+    {
+      "tariff": "late",
+      "curvature_multiplier": 5,
+      "cells": 20,
+      "positive_gap_groups": 16,
+      "median_gap_percent_interval": [
+        0.14803832845371043,
+        0.14803851207998164
+      ],
+      "max_gap_upper_percent": 2.8747421868871346
+    }
+  ],
+  "preserved_failures": [
+    {
+      "case": "scale:50730:40",
+      "tariff": "late",
+      "curvature_multiplier": 5,
+      "optimizer": {
+        "method": "SLSQP",
+        "calls": 1,
+        "success": false,
+        "status": 8,
+        "message": "Positive directional derivative for linesearch",
+        "iterations": 10,
+        "function_evaluations": 17,
+        "raw_weights": [
+          3.536799877086452e-12,
+          0.0,
+          1.3089190195011365e-11,
+          0.0,
+          0.16569265874498873,
+          0.0,
+          0.3050575535333352,
+          0.0,
+          1.3734165178654321e-12,
+          0.0,
+          0.5292497877251705,
+          1.0165399921972283e-11,
+          0.0,
+          0.0,
+          1.3602039254482209e-12
+        ],
+        "initial_point": "uniform",
+        "maxiter": 300,
+        "ftol": 1e-12,
+        "retries": 0,
+        "returned": true
+      },
+      "numerical_catalog_qualification": true,
+      "catalog_optimization_gap": "27157298571232920757129030142184348094318165568259476536380611896850366011306073047358282531/24886052690864485161067246295928657741749991132956905701471064197508392943005385972813458782405263360",
+      "failure": null
+    }
+  ],
+  "median_dimensions95": 2.5,
+  "dimensions95_range": [
+    0,
+    6
+  ],
+  "cpu_s": 0.005199000000000002
+}

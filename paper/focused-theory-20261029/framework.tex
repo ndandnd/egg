@@ -1,0 +1,95 @@
+\section{Complete fleets and the meaning of support}\label{sec:framework}
+Fix mandatory services, directed movement opportunities, a charging horizon
+and physical equipment. A complete plan $x\in\X$ covers every mandatory
+service exactly once, assigns the services to used buses, routes those buses,
+and schedules charging subject to battery and shared-resource constraints.
+Uncounted buses neither exchange energy nor incur operating cost. When a
+variant admits paid idle buses, they count as used participants under that
+variant's fleet and access rules. Let $e(x)\in\R^T$ denote net grid energy
+by market interval, positive for purchases and negative for exports, and let
+$c(x)$ be intrinsic operating cost. Charge-only variants restrict
+$e(x)\in\R_+^T$. Each used battery starts full and finishes at the
+same required full inventory. Assume the projected image
+\[
+ S=\{(e(x),c(x)):x\in\X\}
+\]
+is nonempty and compact. All physical planning, price-response and hull
+problems below use exactly this common set.
+
+Let $F:\R^T\to\R\cup\{+\infty\}$ be proper, closed and convex, finite on
+all feasible loads. It represents incremental supply cost conditional on
+fixed background demand, on the declared feasible signed-load domain when
+exports are allowed. Define
+\begin{align}
+ D&=\min_{x\in\X}\{c(x)+F(e(x))\},\label{eq:D}\\
+ \CH&=\min_{(e,c)\in\operatorname{conv}S}\{c+F(e)\},
+ \qquad\Delta=D-\CH\ge0.\label{eq:CH}
+\end{align}
+The hull mixes \emph{complete feasible plans}; it is not a duty-column
+relaxation unless equivalence is separately proved. Its mean load need not
+be executable as a physical daily schedule. Evaluating supply cost at that
+mean also differs from averaging the costs of plans operated on different
+days.
+
+For a posted tariff $p\in\R^T$, the complete-fleet response and regret are
+\begin{equation}\label{eq:regret}
+ V(p)=\min_{y\in\X}\{c(y)+p^\top e(y)\},\qquad
+ r(x;p)=c(x)+p^\top e(x)-V(p).
+\end{equation}
+The posted tariff is fixed across alternatives $y$. A strategic operator
+anticipating a tariff reset would face a different objective and needs a
+separate settlement model.
+
+\begin{definition}[Weak own-load support]
+A physical plan $x$ is supported if there exists an admissible marginal
+price $p\in\partial F(e(x))$ for which $r(x;p)=0$. Alternative plans may
+tie. If an economic convention restricts the price set, existence is tested
+only in that declared subset.
+\end{definition}
+For differentiable supply we use its gradient. For our quadratic examples
+this means the gradient of the unrestricted quadratic formula, including
+at a zero load. In charge-only variants, orthant-domain normals are not additional
+generation-price choices. With nonsmooth supply, a failed support test at
+one chosen multiplier does not exclude support at another admissible price.
+
+For the following classical equivalence, assume either
+\[
+ \operatorname{ri}\operatorname{conv}e(\X)
+ \cap\operatorname{ri}\operatorname{dom}F\ne\varnothing,
+\]
+or that a finite convex minorant on $\R^T$ agrees with $F$ on all hull
+loads. The latter applies to our quadratic. These assumptions ensure an
+attained hull-dual price; a restricted economic price set must contain such
+a price for the corresponding converse.
+
+\begin{proposition}[Classical support criterion]\label{prop:support}
+For every physical $x$ and $p\in\partial F(e(x))$,
+\begin{equation}\label{eq:lower}
+ r(x;p)\ge c(x)+F(e(x))-\CH\ge\Delta.
+\end{equation}
+Under the stated qualification, $D=\CH$ if and only if some physical plan
+is supported. If $D=\CH$, every physical planner optimum is supported by
+every \emph{admissible} attained maximizer of $V(p)-F^*(p)$, where
+$F^*(p)=\sup_u\{p^\top u-F(u)\}$.
+\end{proposition}
+This specializes established nonconvex support and convexification
+arguments \citep{oneill2005,gribikHoganPope2007,huaBaldick2017}; the proof
+is included in Appendix~\ref{app:support} to make assumptions and quantifiers
+explicit. It does not say that every subgradient supports a planner optimum,
+or that a price-adjustment algorithm converges. Without a price restriction,
+every attained dual maximizer has zero regret and is a subgradient at each
+physical planner optimum. An external price restriction adds a separate
+admissibility test to that mathematical conclusion.
+
+\begin{remark}[Admissibility is a separate quantifier]
+For a single physical point $(e,c)=(0,0)$ and $F(e)=|e|$, both values
+are zero and every $p\in[-1,1]$ attains the hull dual. If the declared
+admissible price set is $\{0\}$, the plan has admissible support at zero;
+the dual maximizer $p=1$ remains mathematically supporting but is inadmissible.
+Containing one dual maximizer does not mean containing them all.
+\end{remark}
+
+The participant in \eqref{eq:regret} controls all buses. Shared infrastructure
+does not automatically define unilateral alternatives for separately owned
+vehicles. Section~\ref{sec:ownership} introduces reserved rights before
+making an individual-participant comparison.

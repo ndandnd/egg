@@ -1,0 +1,56 @@
+{
+  "controls": [
+    "first_source",
+    "nearest_price",
+    "cheapest_bill"
+  ],
+  "dev_proposal_count": 1,
+  "dev_target_count": 1,
+  "leave_one_group_out": [
+    {
+      "candidate_bills": {
+        "learning_s2001_n08/source0": 448.9145562351914,
+        "learning_s2001_n08/source1": 468.72707656607224
+      },
+      "chosen_source_row_id": "learning_s2001_n08/source0",
+      "controls": {
+        "cheapest_bill": "learning_s2001_n08/source0",
+        "first_source": "learning_s2001_n08/source0",
+        "nearest_price": "learning_s2001_n08/source0"
+      },
+      "held_out_group": "learning_s2001",
+      "target_row_id": "learning_s2001_n08/cold"
+    },
+    {
+      "candidate_bills": {
+        "learning_s2002_n08/source0": 356.1640066654196,
+        "learning_s2002_n08/source1": 376.1186118198445
+      },
+      "chosen_source_row_id": "learning_s2002_n08/source1",
+      "controls": {
+        "cheapest_bill": "learning_s2002_n08/source0",
+        "first_source": "learning_s2002_n08/source0",
+        "nearest_price": "learning_s2002_n08/source0"
+      },
+      "held_out_group": "learning_s2002",
+      "target_row_id": "learning_s2002_n08/cold"
+    }
+  ],
+  "omitted": [],
+  "policy": "edge-logistic-route-topology-pool-projection-v1",
+  "scientific_status": "developmental; best-known incumbent labels are provisional; no solve-time gain established",
+  "test_policy": "reserved test groups excluded from fit and this evaluation",
+  "train_group_count": 2,
+  "training_groups": [
+    "learning_s2001",
+    "learning_s2002"
+  ],
+  "training_rows": [
+    "learning_s2001_n08/source0",
+    "learning_s2001_n08/source1",
+    "learning_s2001_n08/cold",
+    "learning_s2002_n08/source0",
+    "learning_s2002_n08/source1",
+    "learning_s2002_n08/cold"
+  ]
+}

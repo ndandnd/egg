@@ -1,0 +1,4826 @@
+{
+  "id": "Q0",
+  "status": "DELIVERED",
+  "stage_elapsed_s": 0.572198124602437,
+  "stage_clock_scope": "prepublication; complete duration in master results",
+  "native_allowance_s": 45,
+  "result": {
+    "status": "PASS",
+    "checked": [
+      {
+        "method": "oa",
+        "native": {
+          "raw_status": 2,
+          "solution_count": 1,
+          "runtime_s": 0.0012810230255126953,
+          "native_only": true,
+          "physical_feasibility": "unverified",
+          "exact_certificate": false,
+          "optimization_called": true,
+          "diagnostic_outcome": "OA_NATIVE_INTERVAL_TOLERANCE",
+          "solved_matrix_revision": 3,
+          "raw_objective": 9.055555555555555,
+          "raw_bound": 9.055555555555555,
+          "raw_gap": 0.0,
+          "node_count": 0.0,
+          "candidate": {
+            "selected_movement_ids": [
+              "out",
+              "in"
+            ],
+            "selection": [
+              1.0,
+              1.0
+            ],
+            "charge_by_interval": [
+              {
+                "movement": "in",
+                "interval": 1,
+                "energy": 10.0
+              }
+            ],
+            "load": [
+              0.0,
+              10.0
+            ],
+            "ops": 7.0,
+            "soc": [
+              {
+                "trip": "s",
+                "before": 20.0,
+                "after": 10.0
+              }
+            ],
+            "variable_values": [
+              1.0,
+              1.0,
+              20.0,
+              10.0,
+              10.0,
+              0.0,
+              10.0
+            ],
+            "paths": [
+              {
+                "vehicle": 0,
+                "trips": [
+                  "s"
+                ],
+                "movements": [
+                  "out",
+                  "in"
+                ]
+              }
+            ],
+            "movement_owners": {
+              "out": 0,
+              "in": 0
+            }
+          },
+          "solved_formulation": {
+            "matrix_revision": 3,
+            "source_linear_rows": [
+              {
+                "name": "r0",
+                "sense": "<",
+                "constant": -1.0,
+                "coefficients": [
+                  [
+                    0,
+                    1.0
+                  ]
+                ]
+              },
+              {
+                "name": "r1",
+                "sense": "=",
+                "constant": 0.0,
+                "coefficients": [
+                  [
+                    0,
+                    1.0
+                  ],
+                  [
+                    1,
+                    -1.0
+                  ]
+                ]
+              },
+              {
+                "name": "r2",
+                "sense": "=",
+                "constant": -1.0,
+                "coefficients": [
+                  [
+                    0,
+                    1.0
+                  ]
+                ]
+              },
+              {
+                "name": "r3",
+                "sense": "=",
+                "constant": -1.0,
+                "coefficients": [
+                  [
+                    1,
+                    1.0
+                  ]
+                ]
+              },
+              {
+                "name": "r4",
+                "sense": "=",
+                "constant": 10.0,
+                "coefficients": [
+                  [
+                    2,
+                    -1.0
+                  ],
+                  [
+                    3,
+                    1.0
+                  ]
+                ]
+              },
+              {
+                "name": "r5",
+                "sense": "<",
+                "constant": -10.0,
+                "coefficients": []
+              },
+              {
+                "name": "r6",
+                "sense": "<",
+                "constant": 0.0,
+                "coefficients": [
+                  [
+                    1,
+                    -10.0
+                  ],
+                  [
+                    4,
+                    1.0
+                  ]
+                ]
+              },
+              {
+                "name": "r7",
+                "sense": "<",
+                "constant": -10.0,
+                "coefficients": [
+                  [
+                    4,
+                    1.0
+                  ]
+                ]
+              },
+              {
+                "name": "r8",
+                "sense": "<",
+                "constant": -40.0,
+                "coefficients": [
+                  [
+                    0,
+                    20.0
+                  ],
+                  [
+                    2,
+                    1.0
+                  ]
+                ]
+              },
+              {
+                "name": "r9",
+                "sense": ">",
+                "constant": 0.0,
+                "coefficients": [
+                  [
+                    0,
+                    -20.0
+                  ],
+                  [
+                    2,
+                    1.0
+                  ]
+                ]
+              },
+              {
+                "name": "r10",
+                "sense": ">",
+                "constant": 20.0,
+                "coefficients": [
+                  [
+                    1,
+                    -20.0
+                  ],
+                  [
+                    3,
+                    1.0
+                  ]
+                ]
+              },
+              {
+                "name": "r11",
+                "sense": "<",
+                "constant": -40.0,
+                "coefficients": [
+                  [
+                    1,
+                    20.0
+                  ],
+                  [
+                    3,
+                    1.0
+                  ],
+                  [
+                    4,
+                    1.0
+                  ]
+                ]
+              },
+              {
+                "name": "r12",
+                "sense": ">",
+                "constant": 0.0,
+                "coefficients": [
+                  [
+                    1,
+                    -20.0
+                  ],
+                  [
+                    3,
+                    1.0
+                  ],
+                  [
+                    4,
+                    1.0
+                  ]
+                ]
+              },
+              {
+                "name": "r13",
+                "sense": ">",
+                "constant": -10.0,
+                "coefficients": [
+                  [
+                    4,
+                    1.0
+                  ]
+                ]
+              },
+              {
+                "name": "r14",
+                "sense": "<",
+                "constant": -10.0,
+                "coefficients": [
+                  [
+                    4,
+                    1.0
+                  ]
+                ]
+              },
+              {
+                "name": "r15",
+                "sense": "=",
+                "constant": 0.0,
+                "coefficients": [
+                  [
+                    5,
+                    1.0
+                  ]
+                ]
+              },
+              {
+                "name": "r16",
+                "sense": "=",
+                "constant": 0.0,
+                "coefficients": [
+                  [
+                    4,
+                    -1.0
+                  ],
+                  [
+                    6,
+                    1.0
+                  ]
+                ]
+              }
+            ],
+            "oa_cut_rows": [
+              {
+                "name": "cut0_0",
+                "sense": ">=",
+                "constant": 0.0,
+                "coefficients": [
+                  [
+                    7,
+                    1.0
+                  ],
+                  [
+                    5,
+                    -0.2
+                  ]
+                ],
+                "generation_round": 0,
+                "tangent_load": 0.0
+              },
+              {
+                "name": "cut0_1",
+                "sense": ">=",
+                "constant": 0.0,
+                "coefficients": [
+                  [
+                    8,
+                    1.0
+                  ],
+                  [
+                    6,
+                    -0.2
+                  ]
+                ],
+                "generation_round": 0,
+                "tangent_load": 0.0
+              },
+              {
+                "name": "cut1_0",
+                "sense": ">=",
+                "constant": 0.0,
+                "coefficients": [
+                  [
+                    7,
+                    1.0
+                  ],
+                  [
+                    5,
+                    -0.2
+                  ]
+                ],
+                "generation_round": 1,
+                "tangent_load": 0.0
+              },
+              {
+                "name": "cut1_1",
+                "sense": ">=",
+                "constant": 0.05555555555555556,
+                "coefficients": [
+                  [
+                    8,
+                    1.0
+                  ],
+                  [
+                    6,
+                    -0.2111111111111111
+                  ]
+                ],
+                "generation_round": 1,
+                "tangent_load": 10.0
+              }
+            ],
+            "row_convention": "sum(coefficients_i*x_i)+constant sense 0",
+            "objective": {
+              "sense": "minimize",
+              "constant": 0.0,
+              "linear_coefficients": [
+                [
+                  0,
+                  7.0
+                ],
+                [
+                  1,
+                  0.0
+                ],
+                [
+                  7,
+                  1.0
+                ],
+                [
+                  8,
+                  1.0
+                ]
+              ],
+              "quadratic_diagonal": [],
+              "convention": "constant + sum(linear_i*x_i) + 0.5*sum(diagonal_i*x_i^2)",
+              "arithmetic": "binary-float diagnostic coefficients; not ideal rational inputs"
+            },
+            "source_operations": {
+              "constant": 0.0,
+              "coefficients": [
+                [
+                  0,
+                  7.0
+                ],
+                [
+                  1,
+                  0.0
+                ]
+              ]
+            },
+            "load_variable_indices": [
+              5,
+              6
+            ],
+            "variables": [
+              {
+                "index": 0,
+                "name": "v0",
+                "source_name": "var(0)",
+                "lower_bound": 0.0,
+                "upper_bound": 1.0,
+                "variable_type": "B"
+              },
+              {
+                "index": 1,
+                "name": "v1",
+                "source_name": "var(1)",
+                "lower_bound": 0.0,
+                "upper_bound": 1.0,
+                "variable_type": "B"
+              },
+              {
+                "index": 2,
+                "name": "v2",
+                "source_name": "var(2)",
+                "lower_bound": 0.0,
+                "upper_bound": 20.0,
+                "variable_type": "C"
+              },
+              {
+                "index": 3,
+                "name": "v3",
+                "source_name": "var(3)",
+                "lower_bound": 0.0,
+                "upper_bound": 20.0,
+                "variable_type": "C"
+              },
+              {
+                "index": 4,
+                "name": "v4",
+                "source_name": "var(4)",
+                "lower_bound": 0.0,
+                "upper_bound": 10.0,
+                "variable_type": "C"
+              },
+              {
+                "index": 5,
+                "name": "v5",
+                "source_name": "var(5)",
+                "lower_bound": 0.0,
+                "upper_bound": "+infinity",
+                "variable_type": "C"
+              },
+              {
+                "index": 6,
+                "name": "v6",
+                "source_name": "var(6)",
+                "lower_bound": 0.0,
+                "upper_bound": "+infinity",
+                "variable_type": "C"
+              },
+              {
+                "index": 7,
+                "name": "cost0",
+                "source_name": null,
+                "lower_bound": "-infinity",
+                "upper_bound": "+infinity",
+                "variable_type": "C"
+              },
+              {
+                "index": 8,
+                "name": "cost1",
+                "source_name": null,
+                "lower_bound": "-infinity",
+                "upper_bound": "+infinity",
+                "variable_type": "C"
+              }
+            ],
+            "bounds_semantics": "native optimized variable bounds; finite backend infinity sentinels retained",
+            "native_infinity": 1e+100,
+            "physical_feasibility": "unverified",
+            "exact_certificate": false
+          },
+          "oa_rounds": [
+            {
+              "event": "oa_round",
+              "round": 0,
+              "upper": 9.055555555555555,
+              "best_upper": 9.055555555555555,
+              "best_bound": 9.0,
+              "best_candidate_round": 0,
+              "best_bound_round": 0,
+              "raw_status": 2,
+              "solution_count": 1,
+              "runtime_s": 0.0061130523681640625,
+              "raw_objective": 9.0,
+              "raw_bound": 9.0,
+              "raw_gap": 0.0,
+              "node_count": 0.0,
+              "solved_matrix_revision": 2,
+              "candidate_load": [
+                0.0,
+                10.0
+              ],
+              "candidate_operations": 7.0,
+              "evaluated_nonlinear_gap": 0.05555555555555536,
+              "negative_numerical_gap": false,
+              "raw_gap_semantics": "piecewise-linear OA model, not original quadratic",
+              "elapsed_s": 0.45539754163473845
+            },
+            {
+              "event": "oa_round",
+              "round": 1,
+              "upper": 9.055555555555555,
+              "best_upper": 9.055555555555555,
+              "best_bound": 9.055555555555555,
+              "best_candidate_round": 0,
+              "best_bound_round": 1,
+              "raw_status": 2,
+              "solution_count": 1,
+              "runtime_s": 0.0012810230255126953,
+              "raw_objective": 9.055555555555555,
+              "raw_bound": 9.055555555555555,
+              "raw_gap": 0.0,
+              "node_count": 0.0,
+              "solved_matrix_revision": 3,
+              "candidate_load": [
+                0.0,
+                10.0
+              ],
+              "candidate_operations": 7.0,
+              "evaluated_nonlinear_gap": 0.0,
+              "negative_numerical_gap": false,
+              "raw_gap_semantics": "piecewise-linear OA model, not original quadratic",
+              "elapsed_s": 0.45714654214680195
+            }
+          ],
+          "best_evaluated_upper": 9.055555555555555,
+          "best_native_lower": 9.055555555555555,
+          "best_candidate": {
+            "selected_movement_ids": [
+              "out",
+              "in"
+            ],
+            "selection": [
+              1.0,
+              1.0
+            ],
+            "charge_by_interval": [
+              {
+                "movement": "in",
+                "interval": 1,
+                "energy": 10.0
+              }
+            ],
+            "load": [
+              0.0,
+              10.0
+            ],
+            "ops": 7.0,
+            "soc": [
+              {
+                "trip": "s",
+                "before": 20.0,
+                "after": 10.0
+              }
+            ],
+            "variable_values": [
+              1.0,
+              1.0,
+              20.0,
+              10.0,
+              10.0,
+              0.0,
+              10.0
+            ],
+            "paths": [
+              {
+                "vehicle": 0,
+                "trips": [
+                  "s"
+                ],
+                "movements": [
+                  "out",
+                  "in"
+                ]
+              }
+            ],
+            "movement_owners": {
+              "out": 0,
+              "in": 0
+            }
+          },
+          "best_candidate_round": 0,
+          "best_bound_round": 1,
+          "native_interval_closed": true,
+          "numerical_interval_contradiction": false,
+          "raw_final_fields_semantics": "last actually solved OA model, not nonlinear optimum",
+          "last_solved_snapshot": {
+            "raw_status": 2,
+            "solution_count": 1,
+            "runtime_s": 0.0012810230255126953,
+            "native_only": true,
+            "physical_feasibility": "unverified",
+            "exact_certificate": false,
+            "optimization_called": true,
+            "diagnostic_outcome": "OPTIMIZED_NATIVE",
+            "solved_matrix_revision": 3,
+            "raw_objective": 9.055555555555555,
+            "raw_bound": 9.055555555555555,
+            "raw_gap": 0.0,
+            "node_count": 0.0,
+            "candidate": {
+              "selected_movement_ids": [
+                "out",
+                "in"
+              ],
+              "selection": [
+                1.0,
+                1.0
+              ],
+              "charge_by_interval": [
+                {
+                  "movement": "in",
+                  "interval": 1,
+                  "energy": 10.0
+                }
+              ],
+              "load": [
+                0.0,
+                10.0
+              ],
+              "ops": 7.0,
+              "soc": [
+                {
+                  "trip": "s",
+                  "before": 20.0,
+                  "after": 10.0
+                }
+              ],
+              "variable_values": [
+                1.0,
+                1.0,
+                20.0,
+                10.0,
+                10.0,
+                0.0,
+                10.0
+              ],
+              "paths": [
+                {
+                  "vehicle": 0,
+                  "trips": [
+                    "s"
+                  ],
+                  "movements": [
+                    "out",
+                    "in"
+                  ]
+                }
+              ],
+              "movement_owners": {
+                "out": 0,
+                "in": 0
+              }
+            },
+            "solved_formulation": {
+              "matrix_revision": 3,
+              "source_linear_rows": [
+                {
+                  "name": "r0",
+                  "sense": "<",
+                  "constant": -1.0,
+                  "coefficients": [
+                    [
+                      0,
+                      1.0
+                    ]
+                  ]
+                },
+                {
+                  "name": "r1",
+                  "sense": "=",
+                  "constant": 0.0,
+                  "coefficients": [
+                    [
+                      0,
+                      1.0
+                    ],
+                    [
+                      1,
+                      -1.0
+                    ]
+                  ]
+                },
+                {
+                  "name": "r2",
+                  "sense": "=",
+                  "constant": -1.0,
+                  "coefficients": [
+                    [
+                      0,
+                      1.0
+                    ]
+                  ]
+                },
+                {
+                  "name": "r3",
+                  "sense": "=",
+                  "constant": -1.0,
+                  "coefficients": [
+                    [
+                      1,
+                      1.0
+                    ]
+                  ]
+                },
+                {
+                  "name": "r4",
+                  "sense": "=",
+                  "constant": 10.0,
+                  "coefficients": [
+                    [
+                      2,
+                      -1.0
+                    ],
+                    [
+                      3,
+                      1.0
+                    ]
+                  ]
+                },
+                {
+                  "name": "r5",
+                  "sense": "<",
+                  "constant": -10.0,
+                  "coefficients": []
+                },
+                {
+                  "name": "r6",
+                  "sense": "<",
+                  "constant": 0.0,
+                  "coefficients": [
+                    [
+                      1,
+                      -10.0
+                    ],
+                    [
+                      4,
+                      1.0
+                    ]
+                  ]
+                },
+                {
+                  "name": "r7",
+                  "sense": "<",
+                  "constant": -10.0,
+                  "coefficients": [
+                    [
+                      4,
+                      1.0
+                    ]
+                  ]
+                },
+                {
+                  "name": "r8",
+                  "sense": "<",
+                  "constant": -40.0,
+                  "coefficients": [
+                    [
+                      0,
+                      20.0
+                    ],
+                    [
+                      2,
+                      1.0
+                    ]
+                  ]
+                },
+                {
+                  "name": "r9",
+                  "sense": ">",
+                  "constant": 0.0,
+                  "coefficients": [
+                    [
+                      0,
+                      -20.0
+                    ],
+                    [
+                      2,
+                      1.0
+                    ]
+                  ]
+                },
+                {
+                  "name": "r10",
+                  "sense": ">",
+                  "constant": 20.0,
+                  "coefficients": [
+                    [
+                      1,
+                      -20.0
+                    ],
+                    [
+                      3,
+                      1.0
+                    ]
+                  ]
+                },
+                {
+                  "name": "r11",
+                  "sense": "<",
+                  "constant": -40.0,
+                  "coefficients": [
+                    [
+                      1,
+                      20.0
+                    ],
+                    [
+                      3,
+                      1.0
+                    ],
+                    [
+                      4,
+                      1.0
+                    ]
+                  ]
+                },
+                {
+                  "name": "r12",
+                  "sense": ">",
+                  "constant": 0.0,
+                  "coefficients": [
+                    [
+                      1,
+                      -20.0
+                    ],
+                    [
+                      3,
+                      1.0
+                    ],
+                    [
+                      4,
+                      1.0
+                    ]
+                  ]
+                },
+                {
+                  "name": "r13",
+                  "sense": ">",
+                  "constant": -10.0,
+                  "coefficients": [
+                    [
+                      4,
+                      1.0
+                    ]
+                  ]
+                },
+                {
+                  "name": "r14",
+                  "sense": "<",
+                  "constant": -10.0,
+                  "coefficients": [
+                    [
+                      4,
+                      1.0
+                    ]
+                  ]
+                },
+                {
+                  "name": "r15",
+                  "sense": "=",
+                  "constant": 0.0,
+                  "coefficients": [
+                    [
+                      5,
+                      1.0
+                    ]
+                  ]
+                },
+                {
+                  "name": "r16",
+                  "sense": "=",
+                  "constant": 0.0,
+                  "coefficients": [
+                    [
+                      4,
+                      -1.0
+                    ],
+                    [
+                      6,
+                      1.0
+                    ]
+                  ]
+                }
+              ],
+              "oa_cut_rows": [
+                {
+                  "name": "cut0_0",
+                  "sense": ">=",
+                  "constant": 0.0,
+                  "coefficients": [
+                    [
+                      7,
+                      1.0
+                    ],
+                    [
+                      5,
+                      -0.2
+                    ]
+                  ],
+                  "generation_round": 0,
+                  "tangent_load": 0.0
+                },
+                {
+                  "name": "cut0_1",
+                  "sense": ">=",
+                  "constant": 0.0,
+                  "coefficients": [
+                    [
+                      8,
+                      1.0
+                    ],
+                    [
+                      6,
+                      -0.2
+                    ]
+                  ],
+                  "generation_round": 0,
+                  "tangent_load": 0.0
+                },
+                {
+                  "name": "cut1_0",
+                  "sense": ">=",
+                  "constant": 0.0,
+                  "coefficients": [
+                    [
+                      7,
+                      1.0
+                    ],
+                    [
+                      5,
+                      -0.2
+                    ]
+                  ],
+                  "generation_round": 1,
+                  "tangent_load": 0.0
+                },
+                {
+                  "name": "cut1_1",
+                  "sense": ">=",
+                  "constant": 0.05555555555555556,
+                  "coefficients": [
+                    [
+                      8,
+                      1.0
+                    ],
+                    [
+                      6,
+                      -0.2111111111111111
+                    ]
+                  ],
+                  "generation_round": 1,
+                  "tangent_load": 10.0
+                }
+              ],
+              "row_convention": "sum(coefficients_i*x_i)+constant sense 0",
+              "objective": {
+                "sense": "minimize",
+                "constant": 0.0,
+                "linear_coefficients": [
+                  [
+                    0,
+                    7.0
+                  ],
+                  [
+                    1,
+                    0.0
+                  ],
+                  [
+                    7,
+                    1.0
+                  ],
+                  [
+                    8,
+                    1.0
+                  ]
+                ],
+                "quadratic_diagonal": [],
+                "convention": "constant + sum(linear_i*x_i) + 0.5*sum(diagonal_i*x_i^2)",
+                "arithmetic": "binary-float diagnostic coefficients; not ideal rational inputs"
+              },
+              "source_operations": {
+                "constant": 0.0,
+                "coefficients": [
+                  [
+                    0,
+                    7.0
+                  ],
+                  [
+                    1,
+                    0.0
+                  ]
+                ]
+              },
+              "load_variable_indices": [
+                5,
+                6
+              ],
+              "variables": [
+                {
+                  "index": 0,
+                  "name": "v0",
+                  "source_name": "var(0)",
+                  "lower_bound": 0.0,
+                  "upper_bound": 1.0,
+                  "variable_type": "B"
+                },
+                {
+                  "index": 1,
+                  "name": "v1",
+                  "source_name": "var(1)",
+                  "lower_bound": 0.0,
+                  "upper_bound": 1.0,
+                  "variable_type": "B"
+                },
+                {
+                  "index": 2,
+                  "name": "v2",
+                  "source_name": "var(2)",
+                  "lower_bound": 0.0,
+                  "upper_bound": 20.0,
+                  "variable_type": "C"
+                },
+                {
+                  "index": 3,
+                  "name": "v3",
+                  "source_name": "var(3)",
+                  "lower_bound": 0.0,
+                  "upper_bound": 20.0,
+                  "variable_type": "C"
+                },
+                {
+                  "index": 4,
+                  "name": "v4",
+                  "source_name": "var(4)",
+                  "lower_bound": 0.0,
+                  "upper_bound": 10.0,
+                  "variable_type": "C"
+                },
+                {
+                  "index": 5,
+                  "name": "v5",
+                  "source_name": "var(5)",
+                  "lower_bound": 0.0,
+                  "upper_bound": "+infinity",
+                  "variable_type": "C"
+                },
+                {
+                  "index": 6,
+                  "name": "v6",
+                  "source_name": "var(6)",
+                  "lower_bound": 0.0,
+                  "upper_bound": "+infinity",
+                  "variable_type": "C"
+                },
+                {
+                  "index": 7,
+                  "name": "cost0",
+                  "source_name": null,
+                  "lower_bound": "-infinity",
+                  "upper_bound": "+infinity",
+                  "variable_type": "C"
+                },
+                {
+                  "index": 8,
+                  "name": "cost1",
+                  "source_name": null,
+                  "lower_bound": "-infinity",
+                  "upper_bound": "+infinity",
+                  "variable_type": "C"
+                }
+              ],
+              "bounds_semantics": "native optimized variable bounds; finite backend infinity sentinels retained",
+              "native_infinity": 1e+100,
+              "physical_feasibility": "unverified",
+              "exact_certificate": false
+            }
+          },
+          "current_matrix_revision": 3,
+          "model_modified_since_last_solve": false,
+          "optimize_calls": 2,
+          "deadline_exhausted": false,
+          "final_optimization_skipped": false,
+          "method": "oa",
+          "market": {
+            "a": [
+              0.2,
+              0.2
+            ],
+            "b": [
+              0.0011111111111111111,
+              0.0011111111111111111
+            ],
+            "semantics": "binary-stored Python float coefficients"
+          },
+          "inclusive_elapsed_s": 0.4573194170370698,
+          "continuous": false,
+          "all_bus_counts_retained": true,
+          "start_policy": "cold",
+          "native_start_acceptance": "UNKNOWN",
+          "formulation": "egg-native-pathflow-v3-energy-band-orphan-projection",
+          "interpretation": "Native binary-float matrix diagnostic; independent ideal-model replay pending"
+        },
+        "replay": {
+          "strict_pass": true,
+          "physical_strict_pass": true,
+          "objective_is_certified_physical_upper": true,
+          "classification": "exact-feasible-candidate",
+          "violations": [],
+          "exact_semantics": "Fraction of stored float, or supplied rational string",
+          "repairs_applied": false,
+          "tolerance_feasibility": "not assessed",
+          "inference_limit": "Candidate failure does not prove topology infeasibility",
+          "routes": [
+            {
+              "vehicle": 0,
+              "movements": [
+                "out",
+                "in"
+              ],
+              "trips": [
+                "s"
+              ]
+            }
+          ],
+          "intervals": [
+            {
+              "start": "0",
+              "end": "60",
+              "rate": "10",
+              "period": 0
+            },
+            {
+              "start": "60",
+              "end": "120",
+              "rate": "10",
+              "period": 1
+            }
+          ],
+          "sessions": [
+            {
+              "vehicle": 0,
+              "movement": "in",
+              "interval": 1,
+              "start": "60",
+              "end": "120",
+              "power": "10",
+              "energy": "10"
+            }
+          ],
+          "soc_traces": [
+            {
+              "vehicle": 0,
+              "events": [
+                {
+                  "time": "30",
+                  "event": "movement:out:0",
+                  "delta": "0",
+                  "soc": "20"
+                },
+                {
+                  "time": "30",
+                  "event": "before:s",
+                  "delta": "0",
+                  "soc": "20"
+                },
+                {
+                  "time": "60",
+                  "event": "movement:in:0",
+                  "delta": "0",
+                  "soc": "20"
+                },
+                {
+                  "time": "60",
+                  "event": "service:s",
+                  "delta": "-10",
+                  "soc": "10"
+                },
+                {
+                  "time": "60",
+                  "event": "after:s",
+                  "delta": "0",
+                  "soc": "10"
+                },
+                {
+                  "time": "120",
+                  "event": "charge:0",
+                  "delta": "10",
+                  "soc": "20"
+                }
+              ],
+              "terminal_soc": "20"
+            }
+          ],
+          "loads_exact": [
+            "0",
+            "10"
+          ],
+          "ops_exact": "7",
+          "total_grid_exact": "10",
+          "total_consumption_exact": "10",
+          "objective_exact": "20880689472324006599/2305843009213693952",
+          "market_a_exact": "3602879701896397/18014398509481984",
+          "market_b_exact": "5124095576030431/4611686018427387904"
+        }
+      },
+      {
+        "method": "miqp",
+        "native": {
+          "raw_status": 2,
+          "solution_count": 1,
+          "runtime_s": 0.00048804283142089844,
+          "native_only": true,
+          "physical_feasibility": "unverified",
+          "exact_certificate": false,
+          "optimization_called": true,
+          "diagnostic_outcome": "OPTIMIZED_NATIVE",
+          "solved_matrix_revision": 1,
+          "raw_objective": 9.055555555555555,
+          "raw_bound": 9.055555555555555,
+          "raw_gap": 0.0,
+          "node_count": 0.0,
+          "candidate": {
+            "selected_movement_ids": [
+              "out",
+              "in"
+            ],
+            "selection": [
+              1.0,
+              1.0
+            ],
+            "charge_by_interval": [
+              {
+                "movement": "in",
+                "interval": 1,
+                "energy": 10.0
+              }
+            ],
+            "load": [
+              0.0,
+              10.0
+            ],
+            "ops": 7.0,
+            "soc": [
+              {
+                "trip": "s",
+                "before": 20.0,
+                "after": 10.0
+              }
+            ],
+            "variable_values": [
+              1.0,
+              1.0,
+              20.0,
+              10.0,
+              10.0,
+              0.0,
+              10.0
+            ],
+            "paths": [
+              {
+                "vehicle": 0,
+                "trips": [
+                  "s"
+                ],
+                "movements": [
+                  "out",
+                  "in"
+                ]
+              }
+            ],
+            "movement_owners": {
+              "out": 0,
+              "in": 0
+            }
+          },
+          "solved_formulation": {
+            "matrix_revision": 1,
+            "source_linear_rows": [
+              {
+                "name": "r0",
+                "sense": "<",
+                "constant": -1.0,
+                "coefficients": [
+                  [
+                    0,
+                    1.0
+                  ]
+                ]
+              },
+              {
+                "name": "r1",
+                "sense": "=",
+                "constant": 0.0,
+                "coefficients": [
+                  [
+                    0,
+                    1.0
+                  ],
+                  [
+                    1,
+                    -1.0
+                  ]
+                ]
+              },
+              {
+                "name": "r2",
+                "sense": "=",
+                "constant": -1.0,
+                "coefficients": [
+                  [
+                    0,
+                    1.0
+                  ]
+                ]
+              },
+              {
+                "name": "r3",
+                "sense": "=",
+                "constant": -1.0,
+                "coefficients": [
+                  [
+                    1,
+                    1.0
+                  ]
+                ]
+              },
+              {
+                "name": "r4",
+                "sense": "=",
+                "constant": 10.0,
+                "coefficients": [
+                  [
+                    2,
+                    -1.0
+                  ],
+                  [
+                    3,
+                    1.0
+                  ]
+                ]
+              },
+              {
+                "name": "r5",
+                "sense": "<",
+                "constant": -10.0,
+                "coefficients": []
+              },
+              {
+                "name": "r6",
+                "sense": "<",
+                "constant": 0.0,
+                "coefficients": [
+                  [
+                    1,
+                    -10.0
+                  ],
+                  [
+                    4,
+                    1.0
+                  ]
+                ]
+              },
+              {
+                "name": "r7",
+                "sense": "<",
+                "constant": -10.0,
+                "coefficients": [
+                  [
+                    4,
+                    1.0
+                  ]
+                ]
+              },
+              {
+                "name": "r8",
+                "sense": "<",
+                "constant": -40.0,
+                "coefficients": [
+                  [
+                    0,
+                    20.0
+                  ],
+                  [
+                    2,
+                    1.0
+                  ]
+                ]
+              },
+              {
+                "name": "r9",
+                "sense": ">",
+                "constant": 0.0,
+                "coefficients": [
+                  [
+                    0,
+                    -20.0
+                  ],
+                  [
+                    2,
+                    1.0
+                  ]
+                ]
+              },
+              {
+                "name": "r10",
+                "sense": ">",
+                "constant": 20.0,
+                "coefficients": [
+                  [
+                    1,
+                    -20.0
+                  ],
+                  [
+                    3,
+                    1.0
+                  ]
+                ]
+              },
+              {
+                "name": "r11",
+                "sense": "<",
+                "constant": -40.0,
+                "coefficients": [
+                  [
+                    1,
+                    20.0
+                  ],
+                  [
+                    3,
+                    1.0
+                  ],
+                  [
+                    4,
+                    1.0
+                  ]
+                ]
+              },
+              {
+                "name": "r12",
+                "sense": ">",
+                "constant": 0.0,
+                "coefficients": [
+                  [
+                    1,
+                    -20.0
+                  ],
+                  [
+                    3,
+                    1.0
+                  ],
+                  [
+                    4,
+                    1.0
+                  ]
+                ]
+              },
+              {
+                "name": "r13",
+                "sense": ">",
+                "constant": -10.0,
+                "coefficients": [
+                  [
+                    4,
+                    1.0
+                  ]
+                ]
+              },
+              {
+                "name": "r14",
+                "sense": "<",
+                "constant": -10.0,
+                "coefficients": [
+                  [
+                    4,
+                    1.0
+                  ]
+                ]
+              },
+              {
+                "name": "r15",
+                "sense": "=",
+                "constant": 0.0,
+                "coefficients": [
+                  [
+                    5,
+                    1.0
+                  ]
+                ]
+              },
+              {
+                "name": "r16",
+                "sense": "=",
+                "constant": 0.0,
+                "coefficients": [
+                  [
+                    4,
+                    -1.0
+                  ],
+                  [
+                    6,
+                    1.0
+                  ]
+                ]
+              }
+            ],
+            "oa_cut_rows": [],
+            "row_convention": "sum(coefficients_i*x_i)+constant sense 0",
+            "objective": {
+              "sense": "minimize",
+              "constant": 0.0,
+              "linear_coefficients": [
+                [
+                  0,
+                  7.0
+                ],
+                [
+                  1,
+                  0.0
+                ],
+                [
+                  5,
+                  0.2
+                ],
+                [
+                  6,
+                  0.2
+                ]
+              ],
+              "quadratic_diagonal": [
+                [
+                  5,
+                  0.0011111111111111111
+                ],
+                [
+                  6,
+                  0.0011111111111111111
+                ]
+              ],
+              "convention": "constant + sum(linear_i*x_i) + 0.5*sum(diagonal_i*x_i^2)",
+              "arithmetic": "binary-float diagnostic coefficients; not ideal rational inputs"
+            },
+            "source_operations": {
+              "constant": 0.0,
+              "coefficients": [
+                [
+                  0,
+                  7.0
+                ],
+                [
+                  1,
+                  0.0
+                ]
+              ]
+            },
+            "load_variable_indices": [
+              5,
+              6
+            ],
+            "variables": [
+              {
+                "index": 0,
+                "name": "v0",
+                "source_name": "var(0)",
+                "lower_bound": 0.0,
+                "upper_bound": 1.0,
+                "variable_type": "B"
+              },
+              {
+                "index": 1,
+                "name": "v1",
+                "source_name": "var(1)",
+                "lower_bound": 0.0,
+                "upper_bound": 1.0,
+                "variable_type": "B"
+              },
+              {
+                "index": 2,
+                "name": "v2",
+                "source_name": "var(2)",
+                "lower_bound": 0.0,
+                "upper_bound": 20.0,
+                "variable_type": "C"
+              },
+              {
+                "index": 3,
+                "name": "v3",
+                "source_name": "var(3)",
+                "lower_bound": 0.0,
+                "upper_bound": 20.0,
+                "variable_type": "C"
+              },
+              {
+                "index": 4,
+                "name": "v4",
+                "source_name": "var(4)",
+                "lower_bound": 0.0,
+                "upper_bound": 10.0,
+                "variable_type": "C"
+              },
+              {
+                "index": 5,
+                "name": "v5",
+                "source_name": "var(5)",
+                "lower_bound": 0.0,
+                "upper_bound": "+infinity",
+                "variable_type": "C"
+              },
+              {
+                "index": 6,
+                "name": "v6",
+                "source_name": "var(6)",
+                "lower_bound": 0.0,
+                "upper_bound": "+infinity",
+                "variable_type": "C"
+              }
+            ],
+            "bounds_semantics": "native optimized variable bounds; finite backend infinity sentinels retained",
+            "native_infinity": 1e+100,
+            "physical_feasibility": "unverified",
+            "exact_certificate": false
+          },
+          "last_solved_snapshot": {
+            "raw_status": 2,
+            "solution_count": 1,
+            "runtime_s": 0.00048804283142089844,
+            "native_only": true,
+            "physical_feasibility": "unverified",
+            "exact_certificate": false,
+            "optimization_called": true,
+            "diagnostic_outcome": "OPTIMIZED_NATIVE",
+            "solved_matrix_revision": 1,
+            "raw_objective": 9.055555555555555,
+            "raw_bound": 9.055555555555555,
+            "raw_gap": 0.0,
+            "node_count": 0.0,
+            "candidate": {
+              "selected_movement_ids": [
+                "out",
+                "in"
+              ],
+              "selection": [
+                1.0,
+                1.0
+              ],
+              "charge_by_interval": [
+                {
+                  "movement": "in",
+                  "interval": 1,
+                  "energy": 10.0
+                }
+              ],
+              "load": [
+                0.0,
+                10.0
+              ],
+              "ops": 7.0,
+              "soc": [
+                {
+                  "trip": "s",
+                  "before": 20.0,
+                  "after": 10.0
+                }
+              ],
+              "variable_values": [
+                1.0,
+                1.0,
+                20.0,
+                10.0,
+                10.0,
+                0.0,
+                10.0
+              ],
+              "paths": [
+                {
+                  "vehicle": 0,
+                  "trips": [
+                    "s"
+                  ],
+                  "movements": [
+                    "out",
+                    "in"
+                  ]
+                }
+              ],
+              "movement_owners": {
+                "out": 0,
+                "in": 0
+              }
+            },
+            "solved_formulation": {
+              "matrix_revision": 1,
+              "source_linear_rows": [
+                {
+                  "name": "r0",
+                  "sense": "<",
+                  "constant": -1.0,
+                  "coefficients": [
+                    [
+                      0,
+                      1.0
+                    ]
+                  ]
+                },
+                {
+                  "name": "r1",
+                  "sense": "=",
+                  "constant": 0.0,
+                  "coefficients": [
+                    [
+                      0,
+                      1.0
+                    ],
+                    [
+                      1,
+                      -1.0
+                    ]
+                  ]
+                },
+                {
+                  "name": "r2",
+                  "sense": "=",
+                  "constant": -1.0,
+                  "coefficients": [
+                    [
+                      0,
+                      1.0
+                    ]
+                  ]
+                },
+                {
+                  "name": "r3",
+                  "sense": "=",
+                  "constant": -1.0,
+                  "coefficients": [
+                    [
+                      1,
+                      1.0
+                    ]
+                  ]
+                },
+                {
+                  "name": "r4",
+                  "sense": "=",
+                  "constant": 10.0,
+                  "coefficients": [
+                    [
+                      2,
+                      -1.0
+                    ],
+                    [
+                      3,
+                      1.0
+                    ]
+                  ]
+                },
+                {
+                  "name": "r5",
+                  "sense": "<",
+                  "constant": -10.0,
+                  "coefficients": []
+                },
+                {
+                  "name": "r6",
+                  "sense": "<",
+                  "constant": 0.0,
+                  "coefficients": [
+                    [
+                      1,
+                      -10.0
+                    ],
+                    [
+                      4,
+                      1.0
+                    ]
+                  ]
+                },
+                {
+                  "name": "r7",
+                  "sense": "<",
+                  "constant": -10.0,
+                  "coefficients": [
+                    [
+                      4,
+                      1.0
+                    ]
+                  ]
+                },
+                {
+                  "name": "r8",
+                  "sense": "<",
+                  "constant": -40.0,
+                  "coefficients": [
+                    [
+                      0,
+                      20.0
+                    ],
+                    [
+                      2,
+                      1.0
+                    ]
+                  ]
+                },
+                {
+                  "name": "r9",
+                  "sense": ">",
+                  "constant": 0.0,
+                  "coefficients": [
+                    [
+                      0,
+                      -20.0
+                    ],
+                    [
+                      2,
+                      1.0
+                    ]
+                  ]
+                },
+                {
+                  "name": "r10",
+                  "sense": ">",
+                  "constant": 20.0,
+                  "coefficients": [
+                    [
+                      1,
+                      -20.0
+                    ],
+                    [
+                      3,
+                      1.0
+                    ]
+                  ]
+                },
+                {
+                  "name": "r11",
+                  "sense": "<",
+                  "constant": -40.0,
+                  "coefficients": [
+                    [
+                      1,
+                      20.0
+                    ],
+                    [
+                      3,
+                      1.0
+                    ],
+                    [
+                      4,
+                      1.0
+                    ]
+                  ]
+                },
+                {
+                  "name": "r12",
+                  "sense": ">",
+                  "constant": 0.0,
+                  "coefficients": [
+                    [
+                      1,
+                      -20.0
+                    ],
+                    [
+                      3,
+                      1.0
+                    ],
+                    [
+                      4,
+                      1.0
+                    ]
+                  ]
+                },
+                {
+                  "name": "r13",
+                  "sense": ">",
+                  "constant": -10.0,
+                  "coefficients": [
+                    [
+                      4,
+                      1.0
+                    ]
+                  ]
+                },
+                {
+                  "name": "r14",
+                  "sense": "<",
+                  "constant": -10.0,
+                  "coefficients": [
+                    [
+                      4,
+                      1.0
+                    ]
+                  ]
+                },
+                {
+                  "name": "r15",
+                  "sense": "=",
+                  "constant": 0.0,
+                  "coefficients": [
+                    [
+                      5,
+                      1.0
+                    ]
+                  ]
+                },
+                {
+                  "name": "r16",
+                  "sense": "=",
+                  "constant": 0.0,
+                  "coefficients": [
+                    [
+                      4,
+                      -1.0
+                    ],
+                    [
+                      6,
+                      1.0
+                    ]
+                  ]
+                }
+              ],
+              "oa_cut_rows": [],
+              "row_convention": "sum(coefficients_i*x_i)+constant sense 0",
+              "objective": {
+                "sense": "minimize",
+                "constant": 0.0,
+                "linear_coefficients": [
+                  [
+                    0,
+                    7.0
+                  ],
+                  [
+                    1,
+                    0.0
+                  ],
+                  [
+                    5,
+                    0.2
+                  ],
+                  [
+                    6,
+                    0.2
+                  ]
+                ],
+                "quadratic_diagonal": [
+                  [
+                    5,
+                    0.0011111111111111111
+                  ],
+                  [
+                    6,
+                    0.0011111111111111111
+                  ]
+                ],
+                "convention": "constant + sum(linear_i*x_i) + 0.5*sum(diagonal_i*x_i^2)",
+                "arithmetic": "binary-float diagnostic coefficients; not ideal rational inputs"
+              },
+              "source_operations": {
+                "constant": 0.0,
+                "coefficients": [
+                  [
+                    0,
+                    7.0
+                  ],
+                  [
+                    1,
+                    0.0
+                  ]
+                ]
+              },
+              "load_variable_indices": [
+                5,
+                6
+              ],
+              "variables": [
+                {
+                  "index": 0,
+                  "name": "v0",
+                  "source_name": "var(0)",
+                  "lower_bound": 0.0,
+                  "upper_bound": 1.0,
+                  "variable_type": "B"
+                },
+                {
+                  "index": 1,
+                  "name": "v1",
+                  "source_name": "var(1)",
+                  "lower_bound": 0.0,
+                  "upper_bound": 1.0,
+                  "variable_type": "B"
+                },
+                {
+                  "index": 2,
+                  "name": "v2",
+                  "source_name": "var(2)",
+                  "lower_bound": 0.0,
+                  "upper_bound": 20.0,
+                  "variable_type": "C"
+                },
+                {
+                  "index": 3,
+                  "name": "v3",
+                  "source_name": "var(3)",
+                  "lower_bound": 0.0,
+                  "upper_bound": 20.0,
+                  "variable_type": "C"
+                },
+                {
+                  "index": 4,
+                  "name": "v4",
+                  "source_name": "var(4)",
+                  "lower_bound": 0.0,
+                  "upper_bound": 10.0,
+                  "variable_type": "C"
+                },
+                {
+                  "index": 5,
+                  "name": "v5",
+                  "source_name": "var(5)",
+                  "lower_bound": 0.0,
+                  "upper_bound": "+infinity",
+                  "variable_type": "C"
+                },
+                {
+                  "index": 6,
+                  "name": "v6",
+                  "source_name": "var(6)",
+                  "lower_bound": 0.0,
+                  "upper_bound": "+infinity",
+                  "variable_type": "C"
+                }
+              ],
+              "bounds_semantics": "native optimized variable bounds; finite backend infinity sentinels retained",
+              "native_infinity": 1e+100,
+              "physical_feasibility": "unverified",
+              "exact_certificate": false
+            }
+          },
+          "current_matrix_revision": 1,
+          "model_modified_since_last_solve": false,
+          "optimize_calls": 1,
+          "deadline_exhausted": false,
+          "final_optimization_skipped": false,
+          "method": "miqp",
+          "market": {
+            "a": [
+              0.2,
+              0.2
+            ],
+            "b": [
+              0.0011111111111111111,
+              0.0011111111111111111
+            ],
+            "semantics": "binary-stored Python float coefficients"
+          },
+          "inclusive_elapsed_s": 0.004669582471251488,
+          "continuous": false,
+          "all_bus_counts_retained": true,
+          "start_policy": "cold",
+          "native_start_acceptance": "UNKNOWN",
+          "formulation": "egg-native-pathflow-v3-energy-band-orphan-projection",
+          "interpretation": "Native binary-float matrix diagnostic; independent ideal-model replay pending"
+        },
+        "replay": {
+          "strict_pass": true,
+          "physical_strict_pass": true,
+          "objective_is_certified_physical_upper": true,
+          "classification": "exact-feasible-candidate",
+          "violations": [],
+          "exact_semantics": "Fraction of stored float, or supplied rational string",
+          "repairs_applied": false,
+          "tolerance_feasibility": "not assessed",
+          "inference_limit": "Candidate failure does not prove topology infeasibility",
+          "routes": [
+            {
+              "vehicle": 0,
+              "movements": [
+                "out",
+                "in"
+              ],
+              "trips": [
+                "s"
+              ]
+            }
+          ],
+          "intervals": [
+            {
+              "start": "0",
+              "end": "60",
+              "rate": "10",
+              "period": 0
+            },
+            {
+              "start": "60",
+              "end": "120",
+              "rate": "10",
+              "period": 1
+            }
+          ],
+          "sessions": [
+            {
+              "vehicle": 0,
+              "movement": "in",
+              "interval": 1,
+              "start": "60",
+              "end": "120",
+              "power": "10",
+              "energy": "10"
+            }
+          ],
+          "soc_traces": [
+            {
+              "vehicle": 0,
+              "events": [
+                {
+                  "time": "30",
+                  "event": "movement:out:0",
+                  "delta": "0",
+                  "soc": "20"
+                },
+                {
+                  "time": "30",
+                  "event": "before:s",
+                  "delta": "0",
+                  "soc": "20"
+                },
+                {
+                  "time": "60",
+                  "event": "movement:in:0",
+                  "delta": "0",
+                  "soc": "20"
+                },
+                {
+                  "time": "60",
+                  "event": "service:s",
+                  "delta": "-10",
+                  "soc": "10"
+                },
+                {
+                  "time": "60",
+                  "event": "after:s",
+                  "delta": "0",
+                  "soc": "10"
+                },
+                {
+                  "time": "120",
+                  "event": "charge:0",
+                  "delta": "10",
+                  "soc": "20"
+                }
+              ],
+              "terminal_soc": "20"
+            }
+          ],
+          "loads_exact": [
+            "0",
+            "10"
+          ],
+          "ops_exact": "7",
+          "total_grid_exact": "10",
+          "total_consumption_exact": "10",
+          "objective_exact": "20880689472324006599/2305843009213693952",
+          "market_a_exact": "3602879701896397/18014398509481984",
+          "market_b_exact": "5124095576030431/4611686018427387904"
+        }
+      },
+      {
+        "method": "root",
+        "native": {
+          "raw_status": 2,
+          "solution_count": 1,
+          "runtime_s": 0.0005729198455810547,
+          "native_only": true,
+          "physical_feasibility": "unverified",
+          "exact_certificate": false,
+          "optimization_called": true,
+          "diagnostic_outcome": "OPTIMIZED_NATIVE",
+          "solved_matrix_revision": 1,
+          "raw_objective": 9.055555555555555,
+          "raw_bound": 9.055555555555555,
+          "raw_gap": null,
+          "node_count": 0.0,
+          "candidate": {
+            "selected_movement_ids": [
+              "out",
+              "in"
+            ],
+            "selection": [
+              1.0,
+              1.0
+            ],
+            "charge_by_interval": [
+              {
+                "movement": "in",
+                "interval": 1,
+                "energy": 10.0
+              }
+            ],
+            "load": [
+              0.0,
+              10.0
+            ],
+            "ops": 7.0,
+            "soc": [
+              {
+                "trip": "s",
+                "before": 20.0,
+                "after": 10.0
+              }
+            ],
+            "variable_values": [
+              1.0,
+              1.0,
+              20.0,
+              10.0,
+              10.0,
+              0.0,
+              10.0
+            ]
+          },
+          "duals": [
+            {
+              "name": "r0",
+              "pi": -0.0,
+              "slack": 0.0
+            },
+            {
+              "name": "r1",
+              "pi": -0.0,
+              "slack": 0.0
+            },
+            {
+              "name": "r2",
+              "pi": 7.0,
+              "slack": 0.0
+            },
+            {
+              "name": "r3",
+              "pi": -0.0,
+              "slack": 0.0
+            },
+            {
+              "name": "r4",
+              "pi": -0.0,
+              "slack": 0.0
+            },
+            {
+              "name": "r5",
+              "pi": -0.0,
+              "slack": 10.0
+            },
+            {
+              "name": "r6",
+              "pi": -0.0,
+              "slack": 0.0
+            },
+            {
+              "name": "r7",
+              "pi": -0.0,
+              "slack": 0.0
+            },
+            {
+              "name": "r8",
+              "pi": -0.0,
+              "slack": 0.0
+            },
+            {
+              "name": "r9",
+              "pi": 0.0,
+              "slack": 0.0
+            },
+            {
+              "name": "r10",
+              "pi": 0.0,
+              "slack": -10.0
+            },
+            {
+              "name": "r11",
+              "pi": -0.0,
+              "slack": 0.0
+            },
+            {
+              "name": "r12",
+              "pi": 0.0,
+              "slack": 0.0
+            },
+            {
+              "name": "r13",
+              "pi": 0.2111111111111111,
+              "slack": -0.0
+            },
+            {
+              "name": "r14",
+              "pi": -0.0,
+              "slack": 0.0
+            },
+            {
+              "name": "r15",
+              "pi": -0.0,
+              "slack": 0.0
+            },
+            {
+              "name": "r16",
+              "pi": 0.2111111111111111,
+              "slack": 0.0
+            }
+          ],
+          "reduced_costs": [
+            {
+              "name": "v0",
+              "value": 1.0,
+              "rc": 0.0,
+              "lb": 0.0,
+              "ub": 1.0,
+              "objective": 7.0
+            },
+            {
+              "name": "v1",
+              "value": 1.0,
+              "rc": 0.0,
+              "lb": 0.0,
+              "ub": 1.0,
+              "objective": 0.0
+            },
+            {
+              "name": "v2",
+              "value": 20.0,
+              "rc": 0.0,
+              "lb": 0.0,
+              "ub": 20.0,
+              "objective": 0.0
+            },
+            {
+              "name": "v3",
+              "value": 10.0,
+              "rc": 0.0,
+              "lb": 0.0,
+              "ub": 20.0,
+              "objective": 0.0
+            },
+            {
+              "name": "v4",
+              "value": 10.0,
+              "rc": 0.0,
+              "lb": 0.0,
+              "ub": 10.0,
+              "objective": 0.0
+            },
+            {
+              "name": "v5",
+              "value": 0.0,
+              "rc": 0.2,
+              "lb": 0.0,
+              "ub": "+infinity",
+              "objective": 0.2
+            },
+            {
+              "name": "v6",
+              "value": 10.0,
+              "rc": 0.0,
+              "lb": 0.0,
+              "ub": "+infinity",
+              "objective": 0.2
+            }
+          ],
+          "source_linear_rows": [
+            {
+              "name": "r0",
+              "sense": "<",
+              "constant": -1.0,
+              "coefficients": [
+                [
+                  0,
+                  1.0
+                ]
+              ]
+            },
+            {
+              "name": "r1",
+              "sense": "=",
+              "constant": 0.0,
+              "coefficients": [
+                [
+                  0,
+                  1.0
+                ],
+                [
+                  1,
+                  -1.0
+                ]
+              ]
+            },
+            {
+              "name": "r2",
+              "sense": "=",
+              "constant": -1.0,
+              "coefficients": [
+                [
+                  0,
+                  1.0
+                ]
+              ]
+            },
+            {
+              "name": "r3",
+              "sense": "=",
+              "constant": -1.0,
+              "coefficients": [
+                [
+                  1,
+                  1.0
+                ]
+              ]
+            },
+            {
+              "name": "r4",
+              "sense": "=",
+              "constant": 10.0,
+              "coefficients": [
+                [
+                  2,
+                  -1.0
+                ],
+                [
+                  3,
+                  1.0
+                ]
+              ]
+            },
+            {
+              "name": "r5",
+              "sense": "<",
+              "constant": -10.0,
+              "coefficients": []
+            },
+            {
+              "name": "r6",
+              "sense": "<",
+              "constant": 0.0,
+              "coefficients": [
+                [
+                  1,
+                  -10.0
+                ],
+                [
+                  4,
+                  1.0
+                ]
+              ]
+            },
+            {
+              "name": "r7",
+              "sense": "<",
+              "constant": -10.0,
+              "coefficients": [
+                [
+                  4,
+                  1.0
+                ]
+              ]
+            },
+            {
+              "name": "r8",
+              "sense": "<",
+              "constant": -40.0,
+              "coefficients": [
+                [
+                  0,
+                  20.0
+                ],
+                [
+                  2,
+                  1.0
+                ]
+              ]
+            },
+            {
+              "name": "r9",
+              "sense": ">",
+              "constant": 0.0,
+              "coefficients": [
+                [
+                  0,
+                  -20.0
+                ],
+                [
+                  2,
+                  1.0
+                ]
+              ]
+            },
+            {
+              "name": "r10",
+              "sense": ">",
+              "constant": 20.0,
+              "coefficients": [
+                [
+                  1,
+                  -20.0
+                ],
+                [
+                  3,
+                  1.0
+                ]
+              ]
+            },
+            {
+              "name": "r11",
+              "sense": "<",
+              "constant": -40.0,
+              "coefficients": [
+                [
+                  1,
+                  20.0
+                ],
+                [
+                  3,
+                  1.0
+                ],
+                [
+                  4,
+                  1.0
+                ]
+              ]
+            },
+            {
+              "name": "r12",
+              "sense": ">",
+              "constant": 0.0,
+              "coefficients": [
+                [
+                  1,
+                  -20.0
+                ],
+                [
+                  3,
+                  1.0
+                ],
+                [
+                  4,
+                  1.0
+                ]
+              ]
+            },
+            {
+              "name": "r13",
+              "sense": ">",
+              "constant": -10.0,
+              "coefficients": [
+                [
+                  4,
+                  1.0
+                ]
+              ]
+            },
+            {
+              "name": "r14",
+              "sense": "<",
+              "constant": -10.0,
+              "coefficients": [
+                [
+                  4,
+                  1.0
+                ]
+              ]
+            },
+            {
+              "name": "r15",
+              "sense": "=",
+              "constant": 0.0,
+              "coefficients": [
+                [
+                  5,
+                  1.0
+                ]
+              ]
+            },
+            {
+              "name": "r16",
+              "sense": "=",
+              "constant": 0.0,
+              "coefficients": [
+                [
+                  4,
+                  -1.0
+                ],
+                [
+                  6,
+                  1.0
+                ]
+              ]
+            }
+          ],
+          "solved_formulation": {
+            "matrix_revision": 1,
+            "source_linear_rows": [
+              {
+                "name": "r0",
+                "sense": "<",
+                "constant": -1.0,
+                "coefficients": [
+                  [
+                    0,
+                    1.0
+                  ]
+                ]
+              },
+              {
+                "name": "r1",
+                "sense": "=",
+                "constant": 0.0,
+                "coefficients": [
+                  [
+                    0,
+                    1.0
+                  ],
+                  [
+                    1,
+                    -1.0
+                  ]
+                ]
+              },
+              {
+                "name": "r2",
+                "sense": "=",
+                "constant": -1.0,
+                "coefficients": [
+                  [
+                    0,
+                    1.0
+                  ]
+                ]
+              },
+              {
+                "name": "r3",
+                "sense": "=",
+                "constant": -1.0,
+                "coefficients": [
+                  [
+                    1,
+                    1.0
+                  ]
+                ]
+              },
+              {
+                "name": "r4",
+                "sense": "=",
+                "constant": 10.0,
+                "coefficients": [
+                  [
+                    2,
+                    -1.0
+                  ],
+                  [
+                    3,
+                    1.0
+                  ]
+                ]
+              },
+              {
+                "name": "r5",
+                "sense": "<",
+                "constant": -10.0,
+                "coefficients": []
+              },
+              {
+                "name": "r6",
+                "sense": "<",
+                "constant": 0.0,
+                "coefficients": [
+                  [
+                    1,
+                    -10.0
+                  ],
+                  [
+                    4,
+                    1.0
+                  ]
+                ]
+              },
+              {
+                "name": "r7",
+                "sense": "<",
+                "constant": -10.0,
+                "coefficients": [
+                  [
+                    4,
+                    1.0
+                  ]
+                ]
+              },
+              {
+                "name": "r8",
+                "sense": "<",
+                "constant": -40.0,
+                "coefficients": [
+                  [
+                    0,
+                    20.0
+                  ],
+                  [
+                    2,
+                    1.0
+                  ]
+                ]
+              },
+              {
+                "name": "r9",
+                "sense": ">",
+                "constant": 0.0,
+                "coefficients": [
+                  [
+                    0,
+                    -20.0
+                  ],
+                  [
+                    2,
+                    1.0
+                  ]
+                ]
+              },
+              {
+                "name": "r10",
+                "sense": ">",
+                "constant": 20.0,
+                "coefficients": [
+                  [
+                    1,
+                    -20.0
+                  ],
+                  [
+                    3,
+                    1.0
+                  ]
+                ]
+              },
+              {
+                "name": "r11",
+                "sense": "<",
+                "constant": -40.0,
+                "coefficients": [
+                  [
+                    1,
+                    20.0
+                  ],
+                  [
+                    3,
+                    1.0
+                  ],
+                  [
+                    4,
+                    1.0
+                  ]
+                ]
+              },
+              {
+                "name": "r12",
+                "sense": ">",
+                "constant": 0.0,
+                "coefficients": [
+                  [
+                    1,
+                    -20.0
+                  ],
+                  [
+                    3,
+                    1.0
+                  ],
+                  [
+                    4,
+                    1.0
+                  ]
+                ]
+              },
+              {
+                "name": "r13",
+                "sense": ">",
+                "constant": -10.0,
+                "coefficients": [
+                  [
+                    4,
+                    1.0
+                  ]
+                ]
+              },
+              {
+                "name": "r14",
+                "sense": "<",
+                "constant": -10.0,
+                "coefficients": [
+                  [
+                    4,
+                    1.0
+                  ]
+                ]
+              },
+              {
+                "name": "r15",
+                "sense": "=",
+                "constant": 0.0,
+                "coefficients": [
+                  [
+                    5,
+                    1.0
+                  ]
+                ]
+              },
+              {
+                "name": "r16",
+                "sense": "=",
+                "constant": 0.0,
+                "coefficients": [
+                  [
+                    4,
+                    -1.0
+                  ],
+                  [
+                    6,
+                    1.0
+                  ]
+                ]
+              }
+            ],
+            "oa_cut_rows": [],
+            "row_convention": "sum(coefficients_i*x_i)+constant sense 0",
+            "objective": {
+              "sense": "minimize",
+              "constant": 0.0,
+              "linear_coefficients": [
+                [
+                  0,
+                  7.0
+                ],
+                [
+                  1,
+                  0.0
+                ],
+                [
+                  5,
+                  0.2
+                ],
+                [
+                  6,
+                  0.2
+                ]
+              ],
+              "quadratic_diagonal": [
+                [
+                  5,
+                  0.0011111111111111111
+                ],
+                [
+                  6,
+                  0.0011111111111111111
+                ]
+              ],
+              "convention": "constant + sum(linear_i*x_i) + 0.5*sum(diagonal_i*x_i^2)",
+              "arithmetic": "binary-float diagnostic coefficients; not ideal rational inputs"
+            },
+            "source_operations": {
+              "constant": 0.0,
+              "coefficients": [
+                [
+                  0,
+                  7.0
+                ],
+                [
+                  1,
+                  0.0
+                ]
+              ]
+            },
+            "load_variable_indices": [
+              5,
+              6
+            ],
+            "variables": [
+              {
+                "index": 0,
+                "name": "v0",
+                "source_name": "var(0)",
+                "lower_bound": 0.0,
+                "upper_bound": 1.0,
+                "variable_type": "C"
+              },
+              {
+                "index": 1,
+                "name": "v1",
+                "source_name": "var(1)",
+                "lower_bound": 0.0,
+                "upper_bound": 1.0,
+                "variable_type": "C"
+              },
+              {
+                "index": 2,
+                "name": "v2",
+                "source_name": "var(2)",
+                "lower_bound": 0.0,
+                "upper_bound": 20.0,
+                "variable_type": "C"
+              },
+              {
+                "index": 3,
+                "name": "v3",
+                "source_name": "var(3)",
+                "lower_bound": 0.0,
+                "upper_bound": 20.0,
+                "variable_type": "C"
+              },
+              {
+                "index": 4,
+                "name": "v4",
+                "source_name": "var(4)",
+                "lower_bound": 0.0,
+                "upper_bound": 10.0,
+                "variable_type": "C"
+              },
+              {
+                "index": 5,
+                "name": "v5",
+                "source_name": "var(5)",
+                "lower_bound": 0.0,
+                "upper_bound": "+infinity",
+                "variable_type": "C"
+              },
+              {
+                "index": 6,
+                "name": "v6",
+                "source_name": "var(6)",
+                "lower_bound": 0.0,
+                "upper_bound": "+infinity",
+                "variable_type": "C"
+              }
+            ],
+            "bounds_semantics": "native optimized variable bounds; finite backend infinity sentinels retained",
+            "native_infinity": 1e+100,
+            "physical_feasibility": "unverified",
+            "exact_certificate": false
+          },
+          "last_solved_snapshot": {
+            "raw_status": 2,
+            "solution_count": 1,
+            "runtime_s": 0.0005729198455810547,
+            "native_only": true,
+            "physical_feasibility": "unverified",
+            "exact_certificate": false,
+            "optimization_called": true,
+            "diagnostic_outcome": "OPTIMIZED_NATIVE",
+            "solved_matrix_revision": 1,
+            "raw_objective": 9.055555555555555,
+            "raw_bound": 9.055555555555555,
+            "raw_gap": null,
+            "node_count": 0.0,
+            "candidate": {
+              "selected_movement_ids": [
+                "out",
+                "in"
+              ],
+              "selection": [
+                1.0,
+                1.0
+              ],
+              "charge_by_interval": [
+                {
+                  "movement": "in",
+                  "interval": 1,
+                  "energy": 10.0
+                }
+              ],
+              "load": [
+                0.0,
+                10.0
+              ],
+              "ops": 7.0,
+              "soc": [
+                {
+                  "trip": "s",
+                  "before": 20.0,
+                  "after": 10.0
+                }
+              ],
+              "variable_values": [
+                1.0,
+                1.0,
+                20.0,
+                10.0,
+                10.0,
+                0.0,
+                10.0
+              ]
+            },
+            "duals": [
+              {
+                "name": "r0",
+                "pi": -0.0,
+                "slack": 0.0
+              },
+              {
+                "name": "r1",
+                "pi": -0.0,
+                "slack": 0.0
+              },
+              {
+                "name": "r2",
+                "pi": 7.0,
+                "slack": 0.0
+              },
+              {
+                "name": "r3",
+                "pi": -0.0,
+                "slack": 0.0
+              },
+              {
+                "name": "r4",
+                "pi": -0.0,
+                "slack": 0.0
+              },
+              {
+                "name": "r5",
+                "pi": -0.0,
+                "slack": 10.0
+              },
+              {
+                "name": "r6",
+                "pi": -0.0,
+                "slack": 0.0
+              },
+              {
+                "name": "r7",
+                "pi": -0.0,
+                "slack": 0.0
+              },
+              {
+                "name": "r8",
+                "pi": -0.0,
+                "slack": 0.0
+              },
+              {
+                "name": "r9",
+                "pi": 0.0,
+                "slack": 0.0
+              },
+              {
+                "name": "r10",
+                "pi": 0.0,
+                "slack": -10.0
+              },
+              {
+                "name": "r11",
+                "pi": -0.0,
+                "slack": 0.0
+              },
+              {
+                "name": "r12",
+                "pi": 0.0,
+                "slack": 0.0
+              },
+              {
+                "name": "r13",
+                "pi": 0.2111111111111111,
+                "slack": -0.0
+              },
+              {
+                "name": "r14",
+                "pi": -0.0,
+                "slack": 0.0
+              },
+              {
+                "name": "r15",
+                "pi": -0.0,
+                "slack": 0.0
+              },
+              {
+                "name": "r16",
+                "pi": 0.2111111111111111,
+                "slack": 0.0
+              }
+            ],
+            "reduced_costs": [
+              {
+                "name": "v0",
+                "value": 1.0,
+                "rc": 0.0,
+                "lb": 0.0,
+                "ub": 1.0,
+                "objective": 7.0
+              },
+              {
+                "name": "v1",
+                "value": 1.0,
+                "rc": 0.0,
+                "lb": 0.0,
+                "ub": 1.0,
+                "objective": 0.0
+              },
+              {
+                "name": "v2",
+                "value": 20.0,
+                "rc": 0.0,
+                "lb": 0.0,
+                "ub": 20.0,
+                "objective": 0.0
+              },
+              {
+                "name": "v3",
+                "value": 10.0,
+                "rc": 0.0,
+                "lb": 0.0,
+                "ub": 20.0,
+                "objective": 0.0
+              },
+              {
+                "name": "v4",
+                "value": 10.0,
+                "rc": 0.0,
+                "lb": 0.0,
+                "ub": 10.0,
+                "objective": 0.0
+              },
+              {
+                "name": "v5",
+                "value": 0.0,
+                "rc": 0.2,
+                "lb": 0.0,
+                "ub": "+infinity",
+                "objective": 0.2
+              },
+              {
+                "name": "v6",
+                "value": 10.0,
+                "rc": 0.0,
+                "lb": 0.0,
+                "ub": "+infinity",
+                "objective": 0.2
+              }
+            ],
+            "source_linear_rows": [
+              {
+                "name": "r0",
+                "sense": "<",
+                "constant": -1.0,
+                "coefficients": [
+                  [
+                    0,
+                    1.0
+                  ]
+                ]
+              },
+              {
+                "name": "r1",
+                "sense": "=",
+                "constant": 0.0,
+                "coefficients": [
+                  [
+                    0,
+                    1.0
+                  ],
+                  [
+                    1,
+                    -1.0
+                  ]
+                ]
+              },
+              {
+                "name": "r2",
+                "sense": "=",
+                "constant": -1.0,
+                "coefficients": [
+                  [
+                    0,
+                    1.0
+                  ]
+                ]
+              },
+              {
+                "name": "r3",
+                "sense": "=",
+                "constant": -1.0,
+                "coefficients": [
+                  [
+                    1,
+                    1.0
+                  ]
+                ]
+              },
+              {
+                "name": "r4",
+                "sense": "=",
+                "constant": 10.0,
+                "coefficients": [
+                  [
+                    2,
+                    -1.0
+                  ],
+                  [
+                    3,
+                    1.0
+                  ]
+                ]
+              },
+              {
+                "name": "r5",
+                "sense": "<",
+                "constant": -10.0,
+                "coefficients": []
+              },
+              {
+                "name": "r6",
+                "sense": "<",
+                "constant": 0.0,
+                "coefficients": [
+                  [
+                    1,
+                    -10.0
+                  ],
+                  [
+                    4,
+                    1.0
+                  ]
+                ]
+              },
+              {
+                "name": "r7",
+                "sense": "<",
+                "constant": -10.0,
+                "coefficients": [
+                  [
+                    4,
+                    1.0
+                  ]
+                ]
+              },
+              {
+                "name": "r8",
+                "sense": "<",
+                "constant": -40.0,
+                "coefficients": [
+                  [
+                    0,
+                    20.0
+                  ],
+                  [
+                    2,
+                    1.0
+                  ]
+                ]
+              },
+              {
+                "name": "r9",
+                "sense": ">",
+                "constant": 0.0,
+                "coefficients": [
+                  [
+                    0,
+                    -20.0
+                  ],
+                  [
+                    2,
+                    1.0
+                  ]
+                ]
+              },
+              {
+                "name": "r10",
+                "sense": ">",
+                "constant": 20.0,
+                "coefficients": [
+                  [
+                    1,
+                    -20.0
+                  ],
+                  [
+                    3,
+                    1.0
+                  ]
+                ]
+              },
+              {
+                "name": "r11",
+                "sense": "<",
+                "constant": -40.0,
+                "coefficients": [
+                  [
+                    1,
+                    20.0
+                  ],
+                  [
+                    3,
+                    1.0
+                  ],
+                  [
+                    4,
+                    1.0
+                  ]
+                ]
+              },
+              {
+                "name": "r12",
+                "sense": ">",
+                "constant": 0.0,
+                "coefficients": [
+                  [
+                    1,
+                    -20.0
+                  ],
+                  [
+                    3,
+                    1.0
+                  ],
+                  [
+                    4,
+                    1.0
+                  ]
+                ]
+              },
+              {
+                "name": "r13",
+                "sense": ">",
+                "constant": -10.0,
+                "coefficients": [
+                  [
+                    4,
+                    1.0
+                  ]
+                ]
+              },
+              {
+                "name": "r14",
+                "sense": "<",
+                "constant": -10.0,
+                "coefficients": [
+                  [
+                    4,
+                    1.0
+                  ]
+                ]
+              },
+              {
+                "name": "r15",
+                "sense": "=",
+                "constant": 0.0,
+                "coefficients": [
+                  [
+                    5,
+                    1.0
+                  ]
+                ]
+              },
+              {
+                "name": "r16",
+                "sense": "=",
+                "constant": 0.0,
+                "coefficients": [
+                  [
+                    4,
+                    -1.0
+                  ],
+                  [
+                    6,
+                    1.0
+                  ]
+                ]
+              }
+            ],
+            "solved_formulation": {
+              "matrix_revision": 1,
+              "source_linear_rows": [
+                {
+                  "name": "r0",
+                  "sense": "<",
+                  "constant": -1.0,
+                  "coefficients": [
+                    [
+                      0,
+                      1.0
+                    ]
+                  ]
+                },
+                {
+                  "name": "r1",
+                  "sense": "=",
+                  "constant": 0.0,
+                  "coefficients": [
+                    [
+                      0,
+                      1.0
+                    ],
+                    [
+                      1,
+                      -1.0
+                    ]
+                  ]
+                },
+                {
+                  "name": "r2",
+                  "sense": "=",
+                  "constant": -1.0,
+                  "coefficients": [
+                    [
+                      0,
+                      1.0
+                    ]
+                  ]
+                },
+                {
+                  "name": "r3",
+                  "sense": "=",
+                  "constant": -1.0,
+                  "coefficients": [
+                    [
+                      1,
+                      1.0
+                    ]
+                  ]
+                },
+                {
+                  "name": "r4",
+                  "sense": "=",
+                  "constant": 10.0,
+                  "coefficients": [
+                    [
+                      2,
+                      -1.0
+                    ],
+                    [
+                      3,
+                      1.0
+                    ]
+                  ]
+                },
+                {
+                  "name": "r5",
+                  "sense": "<",
+                  "constant": -10.0,
+                  "coefficients": []
+                },
+                {
+                  "name": "r6",
+                  "sense": "<",
+                  "constant": 0.0,
+                  "coefficients": [
+                    [
+                      1,
+                      -10.0
+                    ],
+                    [
+                      4,
+                      1.0
+                    ]
+                  ]
+                },
+                {
+                  "name": "r7",
+                  "sense": "<",
+                  "constant": -10.0,
+                  "coefficients": [
+                    [
+                      4,
+                      1.0
+                    ]
+                  ]
+                },
+                {
+                  "name": "r8",
+                  "sense": "<",
+                  "constant": -40.0,
+                  "coefficients": [
+                    [
+                      0,
+                      20.0
+                    ],
+                    [
+                      2,
+                      1.0
+                    ]
+                  ]
+                },
+                {
+                  "name": "r9",
+                  "sense": ">",
+                  "constant": 0.0,
+                  "coefficients": [
+                    [
+                      0,
+                      -20.0
+                    ],
+                    [
+                      2,
+                      1.0
+                    ]
+                  ]
+                },
+                {
+                  "name": "r10",
+                  "sense": ">",
+                  "constant": 20.0,
+                  "coefficients": [
+                    [
+                      1,
+                      -20.0
+                    ],
+                    [
+                      3,
+                      1.0
+                    ]
+                  ]
+                },
+                {
+                  "name": "r11",
+                  "sense": "<",
+                  "constant": -40.0,
+                  "coefficients": [
+                    [
+                      1,
+                      20.0
+                    ],
+                    [
+                      3,
+                      1.0
+                    ],
+                    [
+                      4,
+                      1.0
+                    ]
+                  ]
+                },
+                {
+                  "name": "r12",
+                  "sense": ">",
+                  "constant": 0.0,
+                  "coefficients": [
+                    [
+                      1,
+                      -20.0
+                    ],
+                    [
+                      3,
+                      1.0
+                    ],
+                    [
+                      4,
+                      1.0
+                    ]
+                  ]
+                },
+                {
+                  "name": "r13",
+                  "sense": ">",
+                  "constant": -10.0,
+                  "coefficients": [
+                    [
+                      4,
+                      1.0
+                    ]
+                  ]
+                },
+                {
+                  "name": "r14",
+                  "sense": "<",
+                  "constant": -10.0,
+                  "coefficients": [
+                    [
+                      4,
+                      1.0
+                    ]
+                  ]
+                },
+                {
+                  "name": "r15",
+                  "sense": "=",
+                  "constant": 0.0,
+                  "coefficients": [
+                    [
+                      5,
+                      1.0
+                    ]
+                  ]
+                },
+                {
+                  "name": "r16",
+                  "sense": "=",
+                  "constant": 0.0,
+                  "coefficients": [
+                    [
+                      4,
+                      -1.0
+                    ],
+                    [
+                      6,
+                      1.0
+                    ]
+                  ]
+                }
+              ],
+              "oa_cut_rows": [],
+              "row_convention": "sum(coefficients_i*x_i)+constant sense 0",
+              "objective": {
+                "sense": "minimize",
+                "constant": 0.0,
+                "linear_coefficients": [
+                  [
+                    0,
+                    7.0
+                  ],
+                  [
+                    1,
+                    0.0
+                  ],
+                  [
+                    5,
+                    0.2
+                  ],
+                  [
+                    6,
+                    0.2
+                  ]
+                ],
+                "quadratic_diagonal": [
+                  [
+                    5,
+                    0.0011111111111111111
+                  ],
+                  [
+                    6,
+                    0.0011111111111111111
+                  ]
+                ],
+                "convention": "constant + sum(linear_i*x_i) + 0.5*sum(diagonal_i*x_i^2)",
+                "arithmetic": "binary-float diagnostic coefficients; not ideal rational inputs"
+              },
+              "source_operations": {
+                "constant": 0.0,
+                "coefficients": [
+                  [
+                    0,
+                    7.0
+                  ],
+                  [
+                    1,
+                    0.0
+                  ]
+                ]
+              },
+              "load_variable_indices": [
+                5,
+                6
+              ],
+              "variables": [
+                {
+                  "index": 0,
+                  "name": "v0",
+                  "source_name": "var(0)",
+                  "lower_bound": 0.0,
+                  "upper_bound": 1.0,
+                  "variable_type": "C"
+                },
+                {
+                  "index": 1,
+                  "name": "v1",
+                  "source_name": "var(1)",
+                  "lower_bound": 0.0,
+                  "upper_bound": 1.0,
+                  "variable_type": "C"
+                },
+                {
+                  "index": 2,
+                  "name": "v2",
+                  "source_name": "var(2)",
+                  "lower_bound": 0.0,
+                  "upper_bound": 20.0,
+                  "variable_type": "C"
+                },
+                {
+                  "index": 3,
+                  "name": "v3",
+                  "source_name": "var(3)",
+                  "lower_bound": 0.0,
+                  "upper_bound": 20.0,
+                  "variable_type": "C"
+                },
+                {
+                  "index": 4,
+                  "name": "v4",
+                  "source_name": "var(4)",
+                  "lower_bound": 0.0,
+                  "upper_bound": 10.0,
+                  "variable_type": "C"
+                },
+                {
+                  "index": 5,
+                  "name": "v5",
+                  "source_name": "var(5)",
+                  "lower_bound": 0.0,
+                  "upper_bound": "+infinity",
+                  "variable_type": "C"
+                },
+                {
+                  "index": 6,
+                  "name": "v6",
+                  "source_name": "var(6)",
+                  "lower_bound": 0.0,
+                  "upper_bound": "+infinity",
+                  "variable_type": "C"
+                }
+              ],
+              "bounds_semantics": "native optimized variable bounds; finite backend infinity sentinels retained",
+              "native_infinity": 1e+100,
+              "physical_feasibility": "unverified",
+              "exact_certificate": false
+            }
+          },
+          "current_matrix_revision": 1,
+          "model_modified_since_last_solve": false,
+          "optimize_calls": 1,
+          "deadline_exhausted": false,
+          "final_optimization_skipped": false,
+          "method": "miqp",
+          "market": {
+            "a": [
+              0.2,
+              0.2
+            ],
+            "b": [
+              0.0011111111111111111,
+              0.0011111111111111111
+            ],
+            "semantics": "binary-stored Python float coefficients"
+          },
+          "inclusive_elapsed_s": 0.005100167356431484,
+          "continuous": true,
+          "all_bus_counts_retained": true,
+          "start_policy": "cold",
+          "native_start_acceptance": "UNKNOWN",
+          "formulation": "egg-native-pathflow-v3-energy-band-orphan-projection",
+          "interpretation": "Native binary-float matrix diagnostic; independent ideal-model replay pending"
+        },
+        "replay": {
+          "strict_pass": true,
+          "physical_strict_pass": true,
+          "objective_is_certified_physical_upper": true,
+          "classification": "exact-feasible-candidate",
+          "violations": [],
+          "exact_semantics": "Fraction of stored float, or supplied rational string",
+          "repairs_applied": false,
+          "tolerance_feasibility": "not assessed",
+          "inference_limit": "Candidate failure does not prove topology infeasibility",
+          "routes": [
+            {
+              "vehicle": 0,
+              "movements": [
+                "out",
+                "in"
+              ],
+              "trips": [
+                "s"
+              ]
+            }
+          ],
+          "intervals": [
+            {
+              "start": "0",
+              "end": "60",
+              "rate": "10",
+              "period": 0
+            },
+            {
+              "start": "60",
+              "end": "120",
+              "rate": "10",
+              "period": 1
+            }
+          ],
+          "sessions": [
+            {
+              "vehicle": 0,
+              "movement": "in",
+              "interval": 1,
+              "start": "60",
+              "end": "120",
+              "power": "10",
+              "energy": "10"
+            }
+          ],
+          "soc_traces": [
+            {
+              "vehicle": 0,
+              "events": [
+                {
+                  "time": "30",
+                  "event": "movement:out:0",
+                  "delta": "0",
+                  "soc": "20"
+                },
+                {
+                  "time": "30",
+                  "event": "before:s",
+                  "delta": "0",
+                  "soc": "20"
+                },
+                {
+                  "time": "60",
+                  "event": "movement:in:0",
+                  "delta": "0",
+                  "soc": "20"
+                },
+                {
+                  "time": "60",
+                  "event": "service:s",
+                  "delta": "-10",
+                  "soc": "10"
+                },
+                {
+                  "time": "60",
+                  "event": "after:s",
+                  "delta": "0",
+                  "soc": "10"
+                },
+                {
+                  "time": "120",
+                  "event": "charge:0",
+                  "delta": "10",
+                  "soc": "20"
+                }
+              ],
+              "terminal_soc": "20"
+            }
+          ],
+          "loads_exact": [
+            "0",
+            "10"
+          ],
+          "ops_exact": "7",
+          "total_grid_exact": "10",
+          "total_consumption_exact": "10",
+          "objective_exact": "20880689472324006599/2305843009213693952",
+          "market_a_exact": "3602879701896397/18014398509481984",
+          "market_b_exact": "5124095576030431/4611686018427387904"
+        }
+      },
+      {
+        "method": "linear",
+        "native": {
+          "raw_status": 2,
+          "solution_count": 1,
+          "runtime_s": 0.0004570484161376953,
+          "native_only": true,
+          "physical_feasibility": "unverified",
+          "exact_certificate": false,
+          "optimization_called": true,
+          "diagnostic_outcome": "OPTIMIZED_NATIVE",
+          "solved_matrix_revision": 1,
+          "raw_objective": 10.0,
+          "raw_bound": 10.0,
+          "raw_gap": 0.0,
+          "node_count": 0.0,
+          "candidate": {
+            "selected_movement_ids": [
+              "out",
+              "in"
+            ],
+            "selection": [
+              1.0,
+              1.0
+            ],
+            "charge_by_interval": [
+              {
+                "movement": "in",
+                "interval": 1,
+                "energy": 10.0
+              }
+            ],
+            "load": [
+              0.0,
+              10.0
+            ],
+            "ops": 7.0,
+            "soc": [
+              {
+                "trip": "s",
+                "before": 20.0,
+                "after": 10.0
+              }
+            ],
+            "variable_values": [
+              1.0,
+              1.0,
+              20.0,
+              10.0,
+              10.0,
+              0.0,
+              10.0
+            ],
+            "paths": [
+              {
+                "vehicle": 0,
+                "trips": [
+                  "s"
+                ],
+                "movements": [
+                  "out",
+                  "in"
+                ]
+              }
+            ],
+            "movement_owners": {
+              "out": 0,
+              "in": 0
+            }
+          },
+          "solved_formulation": {
+            "matrix_revision": 1,
+            "source_linear_rows": [
+              {
+                "name": "r0",
+                "sense": "<",
+                "constant": -1.0,
+                "coefficients": [
+                  [
+                    0,
+                    1.0
+                  ]
+                ]
+              },
+              {
+                "name": "r1",
+                "sense": "=",
+                "constant": 0.0,
+                "coefficients": [
+                  [
+                    0,
+                    1.0
+                  ],
+                  [
+                    1,
+                    -1.0
+                  ]
+                ]
+              },
+              {
+                "name": "r2",
+                "sense": "=",
+                "constant": -1.0,
+                "coefficients": [
+                  [
+                    0,
+                    1.0
+                  ]
+                ]
+              },
+              {
+                "name": "r3",
+                "sense": "=",
+                "constant": -1.0,
+                "coefficients": [
+                  [
+                    1,
+                    1.0
+                  ]
+                ]
+              },
+              {
+                "name": "r4",
+                "sense": "=",
+                "constant": 10.0,
+                "coefficients": [
+                  [
+                    2,
+                    -1.0
+                  ],
+                  [
+                    3,
+                    1.0
+                  ]
+                ]
+              },
+              {
+                "name": "r5",
+                "sense": "<",
+                "constant": -10.0,
+                "coefficients": []
+              },
+              {
+                "name": "r6",
+                "sense": "<",
+                "constant": 0.0,
+                "coefficients": [
+                  [
+                    1,
+                    -10.0
+                  ],
+                  [
+                    4,
+                    1.0
+                  ]
+                ]
+              },
+              {
+                "name": "r7",
+                "sense": "<",
+                "constant": -10.0,
+                "coefficients": [
+                  [
+                    4,
+                    1.0
+                  ]
+                ]
+              },
+              {
+                "name": "r8",
+                "sense": "<",
+                "constant": -40.0,
+                "coefficients": [
+                  [
+                    0,
+                    20.0
+                  ],
+                  [
+                    2,
+                    1.0
+                  ]
+                ]
+              },
+              {
+                "name": "r9",
+                "sense": ">",
+                "constant": 0.0,
+                "coefficients": [
+                  [
+                    0,
+                    -20.0
+                  ],
+                  [
+                    2,
+                    1.0
+                  ]
+                ]
+              },
+              {
+                "name": "r10",
+                "sense": ">",
+                "constant": 20.0,
+                "coefficients": [
+                  [
+                    1,
+                    -20.0
+                  ],
+                  [
+                    3,
+                    1.0
+                  ]
+                ]
+              },
+              {
+                "name": "r11",
+                "sense": "<",
+                "constant": -40.0,
+                "coefficients": [
+                  [
+                    1,
+                    20.0
+                  ],
+                  [
+                    3,
+                    1.0
+                  ],
+                  [
+                    4,
+                    1.0
+                  ]
+                ]
+              },
+              {
+                "name": "r12",
+                "sense": ">",
+                "constant": 0.0,
+                "coefficients": [
+                  [
+                    1,
+                    -20.0
+                  ],
+                  [
+                    3,
+                    1.0
+                  ],
+                  [
+                    4,
+                    1.0
+                  ]
+                ]
+              },
+              {
+                "name": "r13",
+                "sense": ">",
+                "constant": -10.0,
+                "coefficients": [
+                  [
+                    4,
+                    1.0
+                  ]
+                ]
+              },
+              {
+                "name": "r14",
+                "sense": "<",
+                "constant": -10.0,
+                "coefficients": [
+                  [
+                    4,
+                    1.0
+                  ]
+                ]
+              },
+              {
+                "name": "r15",
+                "sense": "=",
+                "constant": 0.0,
+                "coefficients": [
+                  [
+                    5,
+                    1.0
+                  ]
+                ]
+              },
+              {
+                "name": "r16",
+                "sense": "=",
+                "constant": 0.0,
+                "coefficients": [
+                  [
+                    4,
+                    -1.0
+                  ],
+                  [
+                    6,
+                    1.0
+                  ]
+                ]
+              }
+            ],
+            "oa_cut_rows": [],
+            "row_convention": "sum(coefficients_i*x_i)+constant sense 0",
+            "objective": {
+              "sense": "minimize",
+              "constant": 0.0,
+              "linear_coefficients": [
+                [
+                  0,
+                  7.0
+                ],
+                [
+                  1,
+                  0.0
+                ],
+                [
+                  5,
+                  0.2
+                ],
+                [
+                  6,
+                  0.3
+                ]
+              ],
+              "quadratic_diagonal": [],
+              "convention": "constant + sum(linear_i*x_i) + 0.5*sum(diagonal_i*x_i^2)",
+              "arithmetic": "binary-float diagnostic coefficients; not ideal rational inputs"
+            },
+            "source_operations": {
+              "constant": 0.0,
+              "coefficients": [
+                [
+                  0,
+                  7.0
+                ],
+                [
+                  1,
+                  0.0
+                ]
+              ]
+            },
+            "load_variable_indices": [
+              5,
+              6
+            ],
+            "variables": [
+              {
+                "index": 0,
+                "name": "v0",
+                "source_name": "var(0)",
+                "lower_bound": 0.0,
+                "upper_bound": 1.0,
+                "variable_type": "B"
+              },
+              {
+                "index": 1,
+                "name": "v1",
+                "source_name": "var(1)",
+                "lower_bound": 0.0,
+                "upper_bound": 1.0,
+                "variable_type": "B"
+              },
+              {
+                "index": 2,
+                "name": "v2",
+                "source_name": "var(2)",
+                "lower_bound": 0.0,
+                "upper_bound": 20.0,
+                "variable_type": "C"
+              },
+              {
+                "index": 3,
+                "name": "v3",
+                "source_name": "var(3)",
+                "lower_bound": 0.0,
+                "upper_bound": 20.0,
+                "variable_type": "C"
+              },
+              {
+                "index": 4,
+                "name": "v4",
+                "source_name": "var(4)",
+                "lower_bound": 0.0,
+                "upper_bound": 10.0,
+                "variable_type": "C"
+              },
+              {
+                "index": 5,
+                "name": "v5",
+                "source_name": "var(5)",
+                "lower_bound": 0.0,
+                "upper_bound": "+infinity",
+                "variable_type": "C"
+              },
+              {
+                "index": 6,
+                "name": "v6",
+                "source_name": "var(6)",
+                "lower_bound": 0.0,
+                "upper_bound": "+infinity",
+                "variable_type": "C"
+              }
+            ],
+            "bounds_semantics": "native optimized variable bounds; finite backend infinity sentinels retained",
+            "native_infinity": 1e+100,
+            "physical_feasibility": "unverified",
+            "exact_certificate": false
+          },
+          "last_solved_snapshot": {
+            "raw_status": 2,
+            "solution_count": 1,
+            "runtime_s": 0.0004570484161376953,
+            "native_only": true,
+            "physical_feasibility": "unverified",
+            "exact_certificate": false,
+            "optimization_called": true,
+            "diagnostic_outcome": "OPTIMIZED_NATIVE",
+            "solved_matrix_revision": 1,
+            "raw_objective": 10.0,
+            "raw_bound": 10.0,
+            "raw_gap": 0.0,
+            "node_count": 0.0,
+            "candidate": {
+              "selected_movement_ids": [
+                "out",
+                "in"
+              ],
+              "selection": [
+                1.0,
+                1.0
+              ],
+              "charge_by_interval": [
+                {
+                  "movement": "in",
+                  "interval": 1,
+                  "energy": 10.0
+                }
+              ],
+              "load": [
+                0.0,
+                10.0
+              ],
+              "ops": 7.0,
+              "soc": [
+                {
+                  "trip": "s",
+                  "before": 20.0,
+                  "after": 10.0
+                }
+              ],
+              "variable_values": [
+                1.0,
+                1.0,
+                20.0,
+                10.0,
+                10.0,
+                0.0,
+                10.0
+              ],
+              "paths": [
+                {
+                  "vehicle": 0,
+                  "trips": [
+                    "s"
+                  ],
+                  "movements": [
+                    "out",
+                    "in"
+                  ]
+                }
+              ],
+              "movement_owners": {
+                "out": 0,
+                "in": 0
+              }
+            },
+            "solved_formulation": {
+              "matrix_revision": 1,
+              "source_linear_rows": [
+                {
+                  "name": "r0",
+                  "sense": "<",
+                  "constant": -1.0,
+                  "coefficients": [
+                    [
+                      0,
+                      1.0
+                    ]
+                  ]
+                },
+                {
+                  "name": "r1",
+                  "sense": "=",
+                  "constant": 0.0,
+                  "coefficients": [
+                    [
+                      0,
+                      1.0
+                    ],
+                    [
+                      1,
+                      -1.0
+                    ]
+                  ]
+                },
+                {
+                  "name": "r2",
+                  "sense": "=",
+                  "constant": -1.0,
+                  "coefficients": [
+                    [
+                      0,
+                      1.0
+                    ]
+                  ]
+                },
+                {
+                  "name": "r3",
+                  "sense": "=",
+                  "constant": -1.0,
+                  "coefficients": [
+                    [
+                      1,
+                      1.0
+                    ]
+                  ]
+                },
+                {
+                  "name": "r4",
+                  "sense": "=",
+                  "constant": 10.0,
+                  "coefficients": [
+                    [
+                      2,
+                      -1.0
+                    ],
+                    [
+                      3,
+                      1.0
+                    ]
+                  ]
+                },
+                {
+                  "name": "r5",
+                  "sense": "<",
+                  "constant": -10.0,
+                  "coefficients": []
+                },
+                {
+                  "name": "r6",
+                  "sense": "<",
+                  "constant": 0.0,
+                  "coefficients": [
+                    [
+                      1,
+                      -10.0
+                    ],
+                    [
+                      4,
+                      1.0
+                    ]
+                  ]
+                },
+                {
+                  "name": "r7",
+                  "sense": "<",
+                  "constant": -10.0,
+                  "coefficients": [
+                    [
+                      4,
+                      1.0
+                    ]
+                  ]
+                },
+                {
+                  "name": "r8",
+                  "sense": "<",
+                  "constant": -40.0,
+                  "coefficients": [
+                    [
+                      0,
+                      20.0
+                    ],
+                    [
+                      2,
+                      1.0
+                    ]
+                  ]
+                },
+                {
+                  "name": "r9",
+                  "sense": ">",
+                  "constant": 0.0,
+                  "coefficients": [
+                    [
+                      0,
+                      -20.0
+                    ],
+                    [
+                      2,
+                      1.0
+                    ]
+                  ]
+                },
+                {
+                  "name": "r10",
+                  "sense": ">",
+                  "constant": 20.0,
+                  "coefficients": [
+                    [
+                      1,
+                      -20.0
+                    ],
+                    [
+                      3,
+                      1.0
+                    ]
+                  ]
+                },
+                {
+                  "name": "r11",
+                  "sense": "<",
+                  "constant": -40.0,
+                  "coefficients": [
+                    [
+                      1,
+                      20.0
+                    ],
+                    [
+                      3,
+                      1.0
+                    ],
+                    [
+                      4,
+                      1.0
+                    ]
+                  ]
+                },
+                {
+                  "name": "r12",
+                  "sense": ">",
+                  "constant": 0.0,
+                  "coefficients": [
+                    [
+                      1,
+                      -20.0
+                    ],
+                    [
+                      3,
+                      1.0
+                    ],
+                    [
+                      4,
+                      1.0
+                    ]
+                  ]
+                },
+                {
+                  "name": "r13",
+                  "sense": ">",
+                  "constant": -10.0,
+                  "coefficients": [
+                    [
+                      4,
+                      1.0
+                    ]
+                  ]
+                },
+                {
+                  "name": "r14",
+                  "sense": "<",
+                  "constant": -10.0,
+                  "coefficients": [
+                    [
+                      4,
+                      1.0
+                    ]
+                  ]
+                },
+                {
+                  "name": "r15",
+                  "sense": "=",
+                  "constant": 0.0,
+                  "coefficients": [
+                    [
+                      5,
+                      1.0
+                    ]
+                  ]
+                },
+                {
+                  "name": "r16",
+                  "sense": "=",
+                  "constant": 0.0,
+                  "coefficients": [
+                    [
+                      4,
+                      -1.0
+                    ],
+                    [
+                      6,
+                      1.0
+                    ]
+                  ]
+                }
+              ],
+              "oa_cut_rows": [],
+              "row_convention": "sum(coefficients_i*x_i)+constant sense 0",
+              "objective": {
+                "sense": "minimize",
+                "constant": 0.0,
+                "linear_coefficients": [
+                  [
+                    0,
+                    7.0
+                  ],
+                  [
+                    1,
+                    0.0
+                  ],
+                  [
+                    5,
+                    0.2
+                  ],
+                  [
+                    6,
+                    0.3
+                  ]
+                ],
+                "quadratic_diagonal": [],
+                "convention": "constant + sum(linear_i*x_i) + 0.5*sum(diagonal_i*x_i^2)",
+                "arithmetic": "binary-float diagnostic coefficients; not ideal rational inputs"
+              },
+              "source_operations": {
+                "constant": 0.0,
+                "coefficients": [
+                  [
+                    0,
+                    7.0
+                  ],
+                  [
+                    1,
+                    0.0
+                  ]
+                ]
+              },
+              "load_variable_indices": [
+                5,
+                6
+              ],
+              "variables": [
+                {
+                  "index": 0,
+                  "name": "v0",
+                  "source_name": "var(0)",
+                  "lower_bound": 0.0,
+                  "upper_bound": 1.0,
+                  "variable_type": "B"
+                },
+                {
+                  "index": 1,
+                  "name": "v1",
+                  "source_name": "var(1)",
+                  "lower_bound": 0.0,
+                  "upper_bound": 1.0,
+                  "variable_type": "B"
+                },
+                {
+                  "index": 2,
+                  "name": "v2",
+                  "source_name": "var(2)",
+                  "lower_bound": 0.0,
+                  "upper_bound": 20.0,
+                  "variable_type": "C"
+                },
+                {
+                  "index": 3,
+                  "name": "v3",
+                  "source_name": "var(3)",
+                  "lower_bound": 0.0,
+                  "upper_bound": 20.0,
+                  "variable_type": "C"
+                },
+                {
+                  "index": 4,
+                  "name": "v4",
+                  "source_name": "var(4)",
+                  "lower_bound": 0.0,
+                  "upper_bound": 10.0,
+                  "variable_type": "C"
+                },
+                {
+                  "index": 5,
+                  "name": "v5",
+                  "source_name": "var(5)",
+                  "lower_bound": 0.0,
+                  "upper_bound": "+infinity",
+                  "variable_type": "C"
+                },
+                {
+                  "index": 6,
+                  "name": "v6",
+                  "source_name": "var(6)",
+                  "lower_bound": 0.0,
+                  "upper_bound": "+infinity",
+                  "variable_type": "C"
+                }
+              ],
+              "bounds_semantics": "native optimized variable bounds; finite backend infinity sentinels retained",
+              "native_infinity": 1e+100,
+              "physical_feasibility": "unverified",
+              "exact_certificate": false
+            }
+          },
+          "current_matrix_revision": 1,
+          "model_modified_since_last_solve": false,
+          "optimize_calls": 1,
+          "deadline_exhausted": false,
+          "final_optimization_skipped": false,
+          "method": "own-price-mip",
+          "prices": [
+            0.2,
+            0.3
+          ],
+          "inclusive_elapsed_s": 0.004334375262260437,
+          "continuous": false,
+          "all_bus_counts_retained": true,
+          "start_policy": "cold",
+          "native_start_acceptance": "UNKNOWN",
+          "formulation": "egg-native-pathflow-v3-energy-band-orphan-projection",
+          "interpretation": "Native binary-float matrix diagnostic; independent ideal-model replay pending"
+        },
+        "replay": {
+          "strict_pass": true,
+          "physical_strict_pass": true,
+          "objective_is_certified_physical_upper": true,
+          "classification": "exact-feasible-candidate",
+          "violations": [],
+          "exact_semantics": "Fraction of stored float, or supplied rational string",
+          "repairs_applied": false,
+          "tolerance_feasibility": "not assessed",
+          "inference_limit": "Candidate failure does not prove topology infeasibility",
+          "routes": [
+            {
+              "vehicle": 0,
+              "movements": [
+                "out",
+                "in"
+              ],
+              "trips": [
+                "s"
+              ]
+            }
+          ],
+          "intervals": [
+            {
+              "start": "0",
+              "end": "60",
+              "rate": "10",
+              "period": 0
+            },
+            {
+              "start": "60",
+              "end": "120",
+              "rate": "10",
+              "period": 1
+            }
+          ],
+          "sessions": [
+            {
+              "vehicle": 0,
+              "movement": "in",
+              "interval": 1,
+              "start": "60",
+              "end": "120",
+              "power": "10",
+              "energy": "10"
+            }
+          ],
+          "soc_traces": [
+            {
+              "vehicle": 0,
+              "events": [
+                {
+                  "time": "30",
+                  "event": "movement:out:0",
+                  "delta": "0",
+                  "soc": "20"
+                },
+                {
+                  "time": "30",
+                  "event": "before:s",
+                  "delta": "0",
+                  "soc": "20"
+                },
+                {
+                  "time": "60",
+                  "event": "movement:in:0",
+                  "delta": "0",
+                  "soc": "20"
+                },
+                {
+                  "time": "60",
+                  "event": "service:s",
+                  "delta": "-10",
+                  "soc": "10"
+                },
+                {
+                  "time": "60",
+                  "event": "after:s",
+                  "delta": "0",
+                  "soc": "10"
+                },
+                {
+                  "time": "120",
+                  "event": "charge:0",
+                  "delta": "10",
+                  "soc": "20"
+                }
+              ],
+              "terminal_soc": "20"
+            }
+          ],
+          "loads_exact": [
+            "0",
+            "10"
+          ],
+          "ops_exact": "7",
+          "total_grid_exact": "10",
+          "total_consumption_exact": "10",
+          "objective_exact": "20880689472324006599/2305843009213693952",
+          "market_a_exact": "3602879701896397/18014398509481984",
+          "market_b_exact": "5124095576030431/4611686018427387904"
+        }
+      }
+    ],
+    "negative_controls": [
+      {
+        "kind": "missing-energy",
+        "rejected": true
+      },
+      {
+        "kind": "extra-energy",
+        "rejected": true
+      },
+      {
+        "kind": "missing-movement",
+        "rejected": true
+      },
+      {
+        "kind": "duplicate-allocation",
+        "rejected": true
+      }
+    ]
+  },
+  "resources": {
+    "cpu_s": 0.551827,
+    "peak_rss_bytes": 69156864
+  }
+}

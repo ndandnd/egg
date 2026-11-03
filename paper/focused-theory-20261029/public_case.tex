@@ -1,0 +1,146 @@
+\section{An exact positive gap on one public timetable}\label{sec:public}
+For the stated charge-only movement-graph model of one public 37-service timetable, an
+independently checked physical lower bound strictly exceeds a feasible
+complete-plan mixture's hull upper. The outward bounds are
+\begin{equation}\label{eq:publicbounds}
+ \CH_{15}\le441.142238<441.532912\le D_{15}\le441.532913,
+ \qquad D_{15}-\CH_{15}\ge0.390674.
+\end{equation}
+The gap lower is the conservative difference of the down-rounded physical
+lower and up-rounded hull upper shown here; it is not an exact gap value.
+The upper on $D_{15}$ rounds upward the qualified exact witness value
+$441.532912\ldots$. Neither $D_{15}$ nor $\CH_{15}$ is known exactly.
+By Proposition~\ref{prop:support}, no physical fleet is supported at its
+own marginal prices under this declared model and tariff convention.
+This is an exact sign certificate with a conservative separation; it
+is not evidence of a practically large loss or operational prevalence.
+
+\subsection{The declared case and objective}
+The case uses the Hildenbrand timetable from the Sistig data
+\citep{sistig2025dataset,sistig2025electrification}: 37 mandatory services
+and the complete directed deadhead matrix. Depot 15 and depot 16 are
+separate one-depot modifications of the same base timetable, not independent
+operational samples. The nonlinear sign certificate concerns depot 15.
+Source timetable offsets, including next-day services, are retained; the
+source data do not supply the energy or economic calibration below.
+
+The opportunity set is the explicitly declared finite movement graph and
+its descriptor's fleet cap.
+Its pullout, direct service-to-service, via-depot and pullin modes have
+fixed leg times and specified depot charging gaps. Services may be assigned
+to any compatible complete path in this graph; charging allocations within
+the declared gaps remain continuous and share the connector. The complete
+directed deadhead matrix supplies movement data, but does not by itself
+authorize arbitrary retiming, extra depot visits or unlisted movement modes.
+The certificate quantifies over all fleets admitted by this graph. Extending
+that claim to a larger continuous-routing opportunity set requires an
+additional coverage or dominance argument, not merely the same timetable.
+
+Two separate exact metadata checks narrow this limitation. The source's
+five-location directed time and distance tables satisfy every triangle
+inequality. Independent comparisons also verified all 37 service mappings,
+all 1370 emitted modes and their 2648 legs against the certified descriptor,
+including every required or time-infeasible direct and via-depot incidence.
+Thus the declared graph is complete for the stated canonical constructor.
+These checks establish correspondence and stored-energy provenance, not
+energy dominance over arbitrary additional walks or continuously retimed
+waiting. In particular, small coefficient differences can cross battery or
+charging-feasibility thresholds; a positive objective gap alone does not
+justify changing the energy law. The declared-graph scope is retained.
+Section~\ref{sec:exactenergyextension} defines a separate exact-consumption
+model and obtains fresh certificates before extending its scope.
+
+Service consumption is 1.20 kWh/km plus 16 kWh per service hour; directed
+deadheads use 0.96 kWh/km plus 16 kWh per travel hour, and explicit off-depot
+waiting uses 16 kWh/h. Depot-parked auxiliary draw is zero. Each used bus
+has 400 kWh usable inventory, zero reserve, unit efficiency and 360 kW
+acceptance. One 360 kW connector is shared. Every used bus starts full
+and returns full by a synthetic 30:00 service-block boundary. There is
+no taper or switching time. Monetary movement cost is zero, but movement
+time and energy remain physical constraints. The used-bus fee is 100.
+This finite block is not a certificate of repeating daily operation.
+The public model remains charge-only; the preceding V2G classification
+is a separate analytical model and was not applied to this timetable.
+Service, movement and waiting energies use the original stored binary64
+values produced in the source's operation order; the formulas above describe
+their provenance, not a replacement by unrounded rational coefficients.
+
+For its 30 hourly market intervals, the convex supply objective is
+\begin{equation}\label{eq:publicF}
+ F(e)=\sum_{t=1}^{30}\left(0.2e_t+\frac{e_t^2}{1800}\right).
+\end{equation}
+These familiar decimal coefficients denote the original stored binary
+values used in every exact certificate.\footnote{The linear coefficient is
+$3602879701896397/18014398509481984$ and the quadratic Hessian coefficient is
+$5124095576030431/4611686018427387904$; the quadratic term is half the latter
+coefficient times $e_t^2$.} The coefficients are synthetic. The result
+therefore concerns a specified ideal scheduling and supply-cost instance,
+not calibrated market behavior, a strategic pricing equilibrium or an ML
+experiment.
+
+\subsection{What establishes the strict separation}
+The physical upper is a rational charging allocation on selected routes,
+independently replayed against every service, movement, battery bound,
+shared connector and full terminal inventory. A separate rational dual
+certificate establishes its charging optimum conditional on those routes,
+not global fleet optimality.
+
+A different strictly admitted physical response has a higher nonlinear
+planning cost but a lower bill at this incumbent's fixed marginal prices.
+It therefore supplies a genuine deviation, rather than a raw floating
+candidate. An exact two-plan mixture of these admitted plans, checked by
+direct quadratic evaluation and one-dimensional optimality conditions,
+supplies the hull upper in \eqref{eq:publicbounds}. A mean complete-plan
+load is not a physical daily dispatch; the mixture upper is not asserted
+to be the global hull optimum.
+
+The missing global step is supplied by a new physical branch proof.
+An independently reconstructed minimum-fleet obstruction rules out one bus
+within the declared movement graph.
+For every fleet with at least three buses, the vehicle fee and only the
+linear mandatory-service-energy term already exceed 477.82; omitted
+movement consumption and quadratic supply cost are nonnegative. These
+facts permit searching the two-bus physical domain while covering every
+other fleet count separately. They do not exclude larger-fleet components
+from arbitrary hull mixtures or from response problems at other tariffs.
+
+Binary branching retains both values of each selected movement variable.
+For every fringe region, exact tangent planes, signed row multipliers and
+finite-box residual compensation give a valid lower; an infeasible region
+requires an exact positive contradiction. Independent semantic reconstruction
+and complete branch coverage make these bounds exhaustive. A bounded
+refinement retains the original partition and strengthens its leaves under
+their inherited decisions, yielding \eqref{eq:publicbounds}. The outward
+physical interval has width at most $10^{-6}$, but equality of the exact
+bounds is not claimed. Appendix~\ref{app:certificates} gives the checkable
+algebra and Appendix~\ref{app:publichistory} records the search and
+qualification stages. This is a global physical lower, not a hull lower;
+a native OPTIMAL status, finite plan bank or small solver gap would not
+establish it.
+
+\subsection{Stability to the vehicle fee}
+Holding physics and the supply objective fixed, every used-bus fee
+$f\ge100$ retains the positive gap guarantee in \eqref{eq:publicbounds}.
+Both admitted mixture components use two buses, so their fee shift cancels
+that of the two-bus lower; a separate nonnegative-fee floor covers larger
+fleets. An independently checked exact interval calculation also gives an
+open sufficient range below 100. Appendix~\ref{app:publicfee} gives the
+derivation and endpoint qualifications. This varies one economic parameter,
+not losses, battery capacity or station resources.
+
+\subsection{Interpretation and limitations}
+Classical native planning already found an objective near 441.532912;
+the contribution of the certificate chain is exact admission and exhaustive
+coverage, not a better heuristic objective or an ML advantage. Earlier
+failed physical screens and multiplier recovery remain failures in
+Table~\ref{tab:publichistory}; later certificates do not relabel them.
+The earlier continuous relaxation's valid hull lower $434.17$ remains
+distinct from the branched physical lower. Appendix~\ref{app:publichistory}
+also separates flat-tariff comparisons, internal qualifications and the
+new portable retained-evidence check. The physical value is tightly
+enclosed, but the hull optimum and exact gap remain unknown.
+One timetable with synthetic energy and economic assumptions cannot
+estimate prevalence, operating savings or welfare effects in bus systems.
+The result extends the analytical possibility to this fully specified
+varied-time charge-only instance; it does not validate the simplified
+common-window model empirically or establish a learning contribution.

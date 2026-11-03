@@ -2,9 +2,84 @@
 __pycache__/
 *.pyc
 .venv/
+.venv-local/
+# Keep complete local run logs for diagnostics; publish hashes and distilled receipts.
+research-20261017/**/stdout.txt
+research-20261017/**/stderr.txt
 # experiment artifacts (raw runs stay local/cluster; distilled results go in result/)
 src/runs/
 slurm-*.out
 .pytest_cache/
 *.egg-info/
 gurobi.log
+
+# Preserve complete GRB license diagnostics locally; public omissions are hashed.
+result/native_pathflow_grb/20260927-attempt1/*/stdout.txt
+result/native_pathflow_hull_grb/20260927-attempt1/*/stdout.txt
+result/sistig_nonlinear/20260927-attempt1/planner/stdout.txt
+
+result/sistig_nonlinear/20260927-attempt2/planner/stdout.txt
+result/sistig_nonlinear/20260927-attempt2/hull/stdout.txt
+result/sistig_nonlinear/20260927-attempt2/own_price/stdout.txt
+
+result/learning_campaign/**/stdout.txt
+result/learning_repair/**/stdout.txt
+research-20260930/learning-campaign/egg-route-repair-*.out
+research-20260930/learning-campaign/egg-cost-aware-repair-*.out
+research-20260930/learning-campaign/egg-learning-campaign-677817.out
+research-20260930/learning-campaign/egg-learning-stage2-678708.out
+research-20260930/learning-campaign/egg-energy-aware-repair-*.out
+research-20260930/learning-campaign/egg-charging-cap-repair-*.out
+research-20260930/learning-campaign/egg-shared-interval-repair-*.out
+research-20260930/learning-campaign/egg-shared-budget-repair-*.out
+research-20260930/learning-campaign/egg-transfer-campaign-*.out
+research-20260930/learning-campaign/egg-fixed-source-charge-*.out
+research-20260930/learning-campaign/egg-charge-response-*.out
+research-20260930/learning-campaign/egg-tariff-response-*.out
+result/learning_campaign/**/inference_stdout.txt
+
+result/physical_learning/**/stdout.txt
+
+research-20260930/learning-campaign/egg-physical-labels-*.out
+research-20260930/learning-campaign/egg-physical-continuation-*.out
+research-20260930/learning-campaign/egg-route-train-*.out
+research-20260930/learning-campaign/egg-route32-*.out
+research-20260930/learning-campaign/egg-route-prefix-*.out
+research-20260930/learning-campaign/egg-route-decode-train-*.out
+research-20260930/learning-campaign/egg-route-budget128-*.out
+research-20260930/learning-campaign/egg-route-families128-*.out
+
+# Exact recovery artifacts are backed up in per-task lossless archives; see manifest.
+result/physical_learning/20260930-route-model128-families-v5-recovery1/
+result/physical_learning/20260930-route-model128-graph-v6/
+result/physical_learning/20260930-route-proposal-train-v7/
+
+# Local campaign raw solver logs retain license diagnostics locally.
+research-20261017/**/stdout.log
+research-20261017/**/stderr.log
+
+# Complete native traces are backed up as verified lossless gzip archives.
+research-20261017/**/native.jsonl
+
+# Completed screen raw runs remain local; reviewed plans/receipts are archived in REVIEW_BUNDLE_20261017.zip.
+# Full native trace hashes are preserved in screen-analysis-v3-final/artifact_hashes.json.
+research-20261017/local-screen-v3/
+
+# Local native logs can include license/environment diagnostics; compact receipts are tracked.
+research-20261023/native-primitive-*/*/stdout.log
+research-20261023/native-primitive-*/*/stderr.log
+
+# Timetable recovery qualification retains raw native/license diagnostics locally.
+research-20261023/recovery-phase1-*/**/stdout.log
+research-20261023/recovery-phase1-*/**/stderr.log
+research-20261023/recovery-phase1-*/runs/**/native.jsonl
+
+# Native preflight logs may contain license/environment diagnostics; hash-index only.
+research-20261023/comparison-native-preflight-*/runs/**/stdout.log
+research-20261023/comparison-native-preflight-*/runs/**/stderr.log
+
+research-20261023/comparison-native-preflight-*/runs/**/capture-*.json
+
+research-20261023/cf1-preparation-native-*/runs/**/stdout.log
+research-20261023/cf1-preparation-native-*/runs/**/stderr.log
+research-20261023/cf1-preparation-native-*/runs/**/capture-*.json

@@ -1,0 +1,5 @@
+# PDF12 visual review — editorial defect retained
+
+Parent inspected actual PNG pages 1–12. Pages 1–8 and 10–12 are readable, with no observed clipping, missing glyphs or overlap. Page 9 contains only the final two lines of the evidence paragraph, followed by an otherwise empty page. This avoidable orphan page fails the final editorial layout gate. Parent stopped its remaining pages 13–23 after finding this defect; those pages are NOT claimed inspected. Independent disjoint reviews of pages 24–45 and 46–67 passed, as recorded separately.
+
+PDF12 compiled and rendered once. It remains a 67-page completed build with an editorial defect, not a scientific failure. No sources or results were recomputed. Parent decision: shorten only the evidence paragraph while preserving every trust-boundary statement, then make a separately frozen final review snapshot in a fresh namespace. This is an explicit reviewed editorial continuation, not an automatic retry; PDF12 and all its costs remain retained. The new text requires no new scientific computation.

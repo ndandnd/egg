@@ -1,0 +1,457 @@
+{
+  "policy": "resource-recourse-current-physics-exact-N-worker-v1",
+  "receipt_complete": true,
+  "method_endpoint_accepted": true,
+  "cell_qualified": true,
+  "full_method_success": true,
+  "physical_new_prior_valid": false,
+  "config_failure": false,
+  "fatal_contract": false,
+  "identity_failure": false,
+  "resource_violation": false,
+  "failures": [],
+  "helper_failures": [],
+  "parent_anchor": 6160631.192562625,
+  "first_routing_native_deadline": 6160648.692562625,
+  "routing_deadline": 6160666.192562625,
+  "native_deadline": 6160683.192562625,
+  "admission_deadline": 6160691.192562625,
+  "qp_success": true,
+  "qp_candidate_admitted": true,
+  "route_search_candidate_admitted": false,
+  "candidate_bill_exact": "56369751237339355814454753660595456874181760090941/91343852333181432387730302044767688728495783936",
+  "fallback_bill_exact": "1871010272575772656518787355792570241074278451833/2854495385411919762116571938898990272765493248",
+  "retained_bill_exact": "56369751237339355814454753660595456874181760090941/91343852333181432387730302044767688728495783936",
+  "native_point": 617.1159831504359,
+  "native_bound": 617.1159831504359,
+  "native_lower_bound": 617.1159831504359,
+  "route_identity_method": "direct_candidate_canonical_comparison",
+  "fixed_path_recovery_verified": true,
+  "global_lower_bound": null,
+  "certificate_claim": false,
+  "route_ordering": "UNRESOLVED",
+  "optimization_bound_supported": false,
+  "task_id": "D020-g10009-p90-tsource1-fixed",
+  "phase": "fixed",
+  "group": "physical_v2_s10009",
+  "base_id": 10009,
+  "services": 28,
+  "grid_kw": 90.0,
+  "fleet_N": 4,
+  "original_source0_plan_hash": "6aea648b51486d0e66318721904b7f28d7b13c0463a3d9337675559522419b81",
+  "E_ref_exact": "41235264615457835282765152047200162004058448276583/182687704666362864775460604089535377456991567872",
+  "original_reference_bill_exact": "120158226041632008784865068187138277440132812057703/182687704666362864775460604089535377456991567872",
+  "case_identity": "74caea19fb90fabf60c7be000c3897d513db5a5e27aca21bd4d7a790308c95b7",
+  "native_seed": 17,
+  "expected_native_method": 0,
+  "original_reference_role": "Parent-only no-solve counterfactual, never worker fallback",
+  "target_source": "source1",
+  "target_market_identity": "c71d13eda5e52116672069d15cc699c9eedd22de0363d89379b8ba42d6697f72",
+  "common_prior_bill_exact": "1871010272575772656518787355792570241074278451833/2854495385411919762116571938898990272765493248",
+  "current_acquisition_available": true,
+  "QP_fixed_route_changed_from_reference": false,
+  "qp_status": "QP_admitted",
+  "helper_true_bill_exact": "56369751237339355814454753660595456874181760090941/91343852333181432387730302044767688728495783936",
+  "stats": {
+    "entered_monotonic": 6160631.966348458,
+    "returned_monotonic": 6160631.972979458,
+    "wall_s": 0.006630999967455864,
+    "cpu_s": 0.006628999999999996,
+    "native_overrun_s": 0.0,
+    "Status": 2,
+    "SolCount": 1,
+    "ObjVal": 617.1159831504359,
+    "ObjBound": 617.1159831504359,
+    "Runtime": 0.006600856781005859,
+    "Work": 0.009915783993918261,
+    "IterCount": 30.0,
+    "BarIterCount": 0,
+    "MaxVio": 7.392830380792003e-13,
+    "ConstrVio": 0.0,
+    "BoundVio": 0.0,
+    "DualVio": 0.0,
+    "ComplVio": 0.0,
+    "ConstrResidual": 7.392830380792003e-13,
+    "DualResidual": 7.105427357601002e-15,
+    "solver": "gurobipy",
+    "package_version": "12.0.1",
+    "native_version": [
+      12,
+      0,
+      1
+    ],
+    "threads": 1,
+    "seed": 17,
+    "Method": 0,
+    "FeasibilityTol": 1e-09,
+    "OptimalityTol": 1e-09,
+    "BarConvTol": 1e-10,
+    "TimeLimit": 51.2262616250664,
+    "native_lower_bound": 617.1159831504359,
+    "lower_bound_scope": "raw numerical fixed-topology QP attribute, null if unsupported",
+    "native_optimal": true,
+    "raw_objective_exact": "112739502474678711155112418979887902005562455640475/182687704666362864775460604089535377456991567872",
+    "replay_objective_exact": "56369751237339355814454753660595456874181760090941/91343852333181432387730302044767688728495783936",
+    "native_to_physical_cost_delta": -1.5916157281026244e-12,
+    "raw_to_physical_cost_delta_exact": "473797088341303011742801064541407/182687704666362864775460604089535377456991567872"
+  },
+  "copy_contract": {
+    "passed": true,
+    "original_variables": 7179,
+    "original_physical_rows": 8704,
+    "copied_variables": 7179,
+    "copied_physical_rows": 8704,
+    "source_nonzeros": 65608,
+    "read_back_nonzeros": 65608,
+    "fixed_routing_binaries": 721,
+    "continuous_unfixed_variables": 6458,
+    "linear_objective_terms": 58,
+    "diagonal_quadratic_terms": 30,
+    "mapping": "original var.idx equals copied Var.index, dense zero-based; all checked",
+    "bounds": "side-specific documented unbounded sentinels canonicalized; every other bound exact",
+    "bound_policy": "Gurobi-LB-le-minus1e20-negative-infinity-UB-ge1e20-positive-infinity",
+    "infinite_bound_count": 30,
+    "infinite_variable_count": 30,
+    "infinite_bound_examples": [
+      {
+        "original_index": 7149,
+        "original_name": "var(7149)",
+        "original_type": "C",
+        "copied_index": 7149,
+        "copied_name": "var(7149)",
+        "copied_type": "C",
+        "original_raw_bounds_repr": [
+          "0.0",
+          "1e+100"
+        ],
+        "copied_readback_bounds_repr": [
+          "0.0",
+          "inf"
+        ],
+        "original_canonical_tags_repr": "(('exact_value', 0.0), ('UB_positive_infinity', None))",
+        "copied_canonical_tags_repr": "(('exact_value', 0.0), ('UB_positive_infinity', None))",
+        "raw_bounds_exactly_equal": false,
+        "canonical_equal": true
+      },
+      {
+        "original_index": 7150,
+        "original_name": "var(7150)",
+        "original_type": "C",
+        "copied_index": 7150,
+        "copied_name": "var(7150)",
+        "copied_type": "C",
+        "original_raw_bounds_repr": [
+          "0.0",
+          "1e+100"
+        ],
+        "copied_readback_bounds_repr": [
+          "0.0",
+          "inf"
+        ],
+        "original_canonical_tags_repr": "(('exact_value', 0.0), ('UB_positive_infinity', None))",
+        "copied_canonical_tags_repr": "(('exact_value', 0.0), ('UB_positive_infinity', None))",
+        "raw_bounds_exactly_equal": false,
+        "canonical_equal": true
+      },
+      {
+        "original_index": 7151,
+        "original_name": "var(7151)",
+        "original_type": "C",
+        "copied_index": 7151,
+        "copied_name": "var(7151)",
+        "copied_type": "C",
+        "original_raw_bounds_repr": [
+          "0.0",
+          "1e+100"
+        ],
+        "copied_readback_bounds_repr": [
+          "0.0",
+          "inf"
+        ],
+        "original_canonical_tags_repr": "(('exact_value', 0.0), ('UB_positive_infinity', None))",
+        "copied_canonical_tags_repr": "(('exact_value', 0.0), ('UB_positive_infinity', None))",
+        "raw_bounds_exactly_equal": false,
+        "canonical_equal": true
+      },
+      {
+        "original_index": 7152,
+        "original_name": "var(7152)",
+        "original_type": "C",
+        "copied_index": 7152,
+        "copied_name": "var(7152)",
+        "copied_type": "C",
+        "original_raw_bounds_repr": [
+          "0.0",
+          "1e+100"
+        ],
+        "copied_readback_bounds_repr": [
+          "0.0",
+          "inf"
+        ],
+        "original_canonical_tags_repr": "(('exact_value', 0.0), ('UB_positive_infinity', None))",
+        "copied_canonical_tags_repr": "(('exact_value', 0.0), ('UB_positive_infinity', None))",
+        "raw_bounds_exactly_equal": false,
+        "canonical_equal": true
+      },
+      {
+        "original_index": 7153,
+        "original_name": "var(7153)",
+        "original_type": "C",
+        "copied_index": 7153,
+        "copied_name": "var(7153)",
+        "copied_type": "C",
+        "original_raw_bounds_repr": [
+          "0.0",
+          "1e+100"
+        ],
+        "copied_readback_bounds_repr": [
+          "0.0",
+          "inf"
+        ],
+        "original_canonical_tags_repr": "(('exact_value', 0.0), ('UB_positive_infinity', None))",
+        "copied_canonical_tags_repr": "(('exact_value', 0.0), ('UB_positive_infinity', None))",
+        "raw_bounds_exactly_equal": false,
+        "canonical_equal": true
+      }
+    ],
+    "physical_rows": "all stored coefficients/RHS/senses checked by original index, no tolerance",
+    "objective": "original ops+a*load linear expression plus .5*b*load^2; sparse read-back checked",
+    "original_cffi_variables_retained": true,
+    "text_round_trip": false,
+    "extraction_view": "raw .x-only values for x/charge/loads; compiled/model metadata unchanged"
+  },
+  "used_fallback": false,
+  "qp_selected_source": "direct_qp",
+  "qp_native_calls": 1,
+  "qp_native_call_attempts": 1,
+  "numerical_agreement": {
+    "available": true,
+    "source_guards_passed": true,
+    "objective_tol_binary_exact": "4722366482869645/4722366482869645213696",
+    "raw_conversion_exact": "4676622122035169777962174437935515/182687704666362864775460604089535377456991567872",
+    "subtraction_rounding_exact": "0",
+    "e_agree_exact": "365375414009347835052163821445706241296795/182687704666362864775460604089535377456991567872",
+    "candidate_minus_raw_exact": "473797088341303011742801064541407/182687704666362864775460604089535377456991567872",
+    "candidate_minus_native_point_exact": "-142809102433786937204001409466924227/91343852333181432387730302044767688728495783936",
+    "candidate_minus_fallback_exact": "-3502577485085369194146441724766790840195150367715/91343852333181432387730302044767688728495783936",
+    "optimal_candidate_fallback_discrepancy": false,
+    "interpretation": "Source-point agreement only; optimization uncertainty unbounded here"
+  },
+  "optimal_candidate_fallback_discrepancy": false,
+  "physical_witness_valid": true,
+  "selected_decomposition": {
+    "replay_ok": true,
+    "fleet_count": 4,
+    "vehicle_cost_exact": "400",
+    "deadhead_minutes_exact": "381",
+    "deadhead_cost_exact": "0",
+    "ops_cost_exact": "400",
+    "ops_component_residual_exact": "0",
+    "linear_electricity_exact": "227077069020216534819052349608283/1267650600228229401496703205376",
+    "quadratic_electricity_exact": "3469583049285477460418139731109876835088863822653/91343852333181432387730302044767688728495783936",
+    "electricity_exact": "19832210304066782859362632842688381382783446516541/91343852333181432387730302044767688728495783936",
+    "total_exact": "56369751237339355814454753660595456874181760090941/91343852333181432387730302044767688728495783936",
+    "grid_kwh_exact": "3668606063645673/4398046511104",
+    "consumption_kwh_exact": "6603490914562215/8796093022208",
+    "max_grid_kw": 90.00000000000064,
+    "units": "generator cost units; kWh; minutes",
+    "period_loads": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      58.50000000000001,
+      88.15185185185175,
+      88.15185185185187,
+      88.15185185185186,
+      87.0,
+      41.63333333333332,
+      27.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      88.88888888888889,
+      88.88888888888889,
+      88.88888888888889,
+      88.88888888888889,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "service_energy_exact": "179499407398152431/281474976710656",
+    "movement_energy_exact": "2035987319541653811/18014398509481984",
+    "ideal_grid_demand_exact": "13523949393023409395/16212958658533786",
+    "replay_grid_minus_ideal_exact": "-251001401107051/35652673131418952796704079872",
+    "opportunity_diagnostics": {
+      "available": true,
+      "diagnostic_only": true,
+      "native_feasibility_certificate": false,
+      "projected_load_set_equality_claim": false,
+      "price_optimality_claim": false,
+      "source1_cheap_period_indices": [
+        18,
+        19,
+        20,
+        21
+      ],
+      "unavailable_reasons": [],
+      "per_vehicle": [
+        {
+          "vehicle": 0,
+          "service_energy_exact": "52405011163989931/281474976710656",
+          "movement_energy_exact": "526741012417253209/18014398509481984",
+          "total_consumption_exact": "3880661726912608793/18014398509481984",
+          "ideal_grid_kwh_exact": "3880661726912608793/16212958658533786",
+          "no_midday_soc_margin_kwh_exact": "-2439509846154050073/18014398509481984",
+          "no_midday_soc_sufficient": false,
+          "last_pullin_return_min_exact": "798"
+        },
+        {
+          "vehicle": 1,
+          "service_energy_exact": "11264628567960453/70368744177664",
+          "movement_energy_exact": "556284625972803657/18014398509481984",
+          "total_consumption_exact": "3440029539370679625/18014398509481984",
+          "ideal_grid_kwh_exact": "3440029539370679625/16212958658533786",
+          "no_midday_soc_margin_kwh_exact": "-1998877658612120905/18014398509481984",
+          "no_midday_soc_sufficient": false,
+          "last_pullin_return_min_exact": "787"
+        },
+        {
+          "vehicle": 2,
+          "service_energy_exact": "9305562730054287/70368744177664",
+          "movement_energy_exact": "99799767742530191/4503599627370496",
+          "total_consumption_exact": "695355782466004559/4503599627370496",
+          "ideal_grid_kwh_exact": "1390711564932009118/8106479329266893",
+          "no_midday_soc_margin_kwh_exact": "-335067812276364879/4503599627370496",
+          "no_midday_soc_sufficient": false,
+          "last_pullin_return_min_exact": "744"
+        },
+        {
+          "vehicle": 3,
+          "service_energy_exact": "11203407760525885/70368744177664",
+          "movement_energy_exact": "553762610181476181/18014398509481984",
+          "total_consumption_exact": "3421834996876102741/18014398509481984",
+          "ideal_grid_kwh_exact": "3421834996876102741/16212958658533786",
+          "no_midday_soc_margin_kwh_exact": "-1980683116117544021/18014398509481984",
+          "no_midday_soc_sufficient": false,
+          "last_pullin_return_min_exact": "832"
+        }
+      ],
+      "selected_depot_windows": [
+        {
+          "vehicle": 0,
+          "movement": "depot_T02_T09",
+          "lo_min_exact": "441",
+          "hi_min_exact": "482"
+        },
+        {
+          "vehicle": 0,
+          "movement": "depot_T10_T17",
+          "lo_min_exact": "559",
+          "hi_min_exact": "598"
+        },
+        {
+          "vehicle": 0,
+          "movement": "depot_T18_T25",
+          "lo_min_exact": "679",
+          "hi_min_exact": "718"
+        },
+        {
+          "vehicle": 1,
+          "movement": "depot_T04_T11",
+          "lo_min_exact": "469",
+          "hi_min_exact": "511"
+        },
+        {
+          "vehicle": 1,
+          "movement": "depot_T12_T19",
+          "lo_min_exact": "591",
+          "hi_min_exact": "634"
+        },
+        {
+          "vehicle": 1,
+          "movement": "depot_T20_T27",
+          "lo_min_exact": "722",
+          "hi_min_exact": "750"
+        },
+        {
+          "vehicle": 2,
+          "movement": "depot_T06_T13",
+          "lo_min_exact": "495",
+          "hi_min_exact": "536"
+        },
+        {
+          "vehicle": 2,
+          "movement": "depot_T14_T21",
+          "lo_min_exact": "614",
+          "hi_min_exact": "660"
+        },
+        {
+          "vehicle": 3,
+          "movement": "depot_T08_T15",
+          "lo_min_exact": "530",
+          "hi_min_exact": "571"
+        },
+        {
+          "vehicle": 3,
+          "movement": "depot_T16_T23",
+          "lo_min_exact": "654",
+          "hi_min_exact": "688"
+        },
+        {
+          "vehicle": 3,
+          "movement": "depot_T24_T28",
+          "lo_min_exact": "762",
+          "hi_min_exact": "798"
+        }
+      ],
+      "total_ideal_grid_kwh_exact": "13523949393023409395/16212958658533786",
+      "common_terminal_start_min_exact": "1080",
+      "all_return_by_terminal_open": true,
+      "all_no_midday_soc_sufficient": false,
+      "common_terminal_capacity_grid_kwh_exact": "1080",
+      "source1_cheap_resource_capacity_grid_kwh_exact": "360",
+      "common_terminal_cheap_capacity_grid_kwh_exact": "360",
+      "total_grid_le_common_terminal_capacity": true,
+      "total_grid_le_common_terminal_cheap_capacity": false,
+      "E_le_cheapcap_conditional": null,
+      "conditional_assumptions": "Admitted paths; nonnegative consumption; full initial/final batteries; constant efficiency; common deadline; zero/one serial connector; all return by opening and each bus can reach terminal without midday charging",
+      "interpretation": "Ideal demand/window/capacity diagnostics only. Optional daytime charging can still lower quadratic cost; no feasibility, set-equality or optimality claim."
+    }
+  },
+  "retained_route_changed_from_reference": false,
+  "true_bill_exact": "56369751237339355814454753660595456874181760090941/91343852333181432387730302044767688728495783936",
+  "retained_cost_over_E_ref": "37579834158226237209636502440396971249454506727294/13745088205152611760921717349066720668019482758861",
+  "stage_native_calls": {
+    "acquisition_linear": 0,
+    "routing_MIP": 0,
+    "QP": 1
+  },
+  "native_calls": 1,
+  "event_counts": {
+    "charge_normalization": 1,
+    "charge_projection": 4,
+    "serial_decoding": 1
+  },
+  "stop_signal": null,
+  "resources": {
+    "user_s": 0.730995,
+    "system_s": 0.067052,
+    "cpu_s": 0.798047,
+    "peak_rss_bytes": 77971456,
+    "cpu_limit_s": 90,
+    "rss_limit_bytes": 5368709120,
+    "python_threads": 1
+  },
+  "returned_monotonic": 6160632.055658583,
+  "elapsed_s": 0.8630959577858448
+}

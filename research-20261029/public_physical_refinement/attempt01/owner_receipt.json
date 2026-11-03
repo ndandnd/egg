@@ -1,0 +1,70 @@
+{
+  "source_revision": "a2156a0cce74cefaa9e457f3e766d952e09f59c5",
+  "child_pid": 611,
+  "child_exit": 0,
+  "reaped": true,
+  "failure": null,
+  "assigned": [
+    "PREFLIGHT",
+    "Q0",
+    "PUBLIC_REFINEMENT",
+    "INDEPENDENT_REFINEMENT_CHECK"
+  ],
+  "ledger": [
+    {
+      "id": "PREFLIGHT",
+      "status": "DELIVERED",
+      "summary": {
+        "status": "SOURCE_BOUND_BASE_ADMITTED",
+        "base_nodes": 303,
+        "frontier_count": 152,
+        "physical_upper": "15487225773558335836678536516523969405935273717647515/35076039295941670036888435985190792471742381031424",
+        "target": "9679513916221503901569708017300231804285016589630882411/21922524559963543773055272490744245294838988144640000"
+      }
+    },
+    {
+      "id": "Q0",
+      "status": "DELIVERED",
+      "summary": {
+        "status": "PASS",
+        "checks": 24,
+        "native_calls": 0
+      }
+    },
+    {
+      "id": "PUBLIC_REFINEMENT",
+      "status": "DELIVERED",
+      "summary": {
+        "status": "TARGET_REFINEMENT_PROPOSED",
+        "new_nodes": 72,
+        "native_calls": 102,
+        "open_nodes": [],
+        "stop_reason": null,
+        "producer_failure": null
+      }
+    },
+    {
+      "id": "INDEPENDENT_REFINEMENT_CHECK",
+      "status": "DELIVERED",
+      "summary": {
+        "status": "VALID_REFINEMENT",
+        "complete_base_coverage": true,
+        "global_lower_bound": "80662634237282610902559758444585953851595472957985/182687704666362864775460604089535377456991567872",
+        "epsilon_met": true,
+        "scientific_outcome": "EPSILON_MET",
+        "new_nodes_checked": 72,
+        "physical_lower_outward_6dp": "441.532912",
+        "physical_upper_outward_6dp": "441.532913",
+        "width_upper_outward_6dp": "0.000001",
+        "reason": null
+      }
+    }
+  ],
+  "result_status": "COMPLETED",
+  "cpu_s": 340.46791300000007,
+  "elapsed_s": 347.7015032907948,
+  "peak_rss_bytes": 668319744,
+  "resource_pass": true,
+  "scope": "Administrative closure is separate from epsilon success or exact optimum",
+  "accounting": "Owner plus waited children overlap worker; external meter includes complete publication/shutdown"
+}

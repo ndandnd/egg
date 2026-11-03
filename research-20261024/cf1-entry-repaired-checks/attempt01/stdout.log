@@ -1,0 +1,1170 @@
+.F...F.FF...........                                                                   [100%]
+=================================== FAILURES ===================================
+_ OwnerTests.test_actual_popen_guard_one_use_exact_command_and_final_expiry (damage='none') _
+
+self = <test_cf1_entry_repaired.OwnerTests testMethod=test_actual_popen_guard_one_use_exact_command_and_final_expiry>
+
+    def test_actual_popen_guard_one_use_exact_command_and_final_expiry(self):
+        for damage in ('none', 'expired', 'command', 'binding', 'permit'):
+            with self.subTest(damage=damage), tempfile.TemporaryDirectory() as temporary:
+>               h = owner_harness(temporary)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+
+src/tests/test_cf1_entry_repaired.py:438: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+src/tests/test_cf1_entry_repaired.py:148: in owner_harness
+    client = owner.EntryClient(channel, root_path=root_path,
+src/experiments/cf1_entry_owner.py:96: in __init__
+    self._identity()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <isolated_cf1_entry_owner.EntryClient object at 0x105657350>
+check_time = True
+
+    def _identity(self, *, check_time=True):
+        root = self.root
+        _require(threading.get_ident() == self.owner_thread
+                 and threading.active_count() == 1, 'Entry gate crossed threads')
+        _require(q.sha(self.root_path) == self.root_sha256
+                 and q.read(self.root_path) == root, 'Entry owner root changed')
+        _require(root.get('schema') == 'cf1-entry-owner-v1'
+                 and root.get('policy') == self.policy == POLICY
+                 and root.get('nonce') == self.nonce
+                 and root.get('owner_pid') == os.getppid()
+                 and root.get('output') == self.output
+                 and root.get('roots') == self.roots
+                 and root.get('task') == self.task
+                 and root.get('entry_allocation_s') == ENTRY_S
+                 and root.get('suffix_s') == SUFFIX_S
+                 and root.get('permit_lifetime_s') == PERMIT_S
+>                and root.get('capacity_cpu_count') == os.cpu_count()
+                                                       ^^^^^^^^^^^^
+                 and q.finite(root.get('anchor')),
+                 'Entry owner/root/nonce/task/path binding differs')
+E       AttributeError: 'types.SimpleNamespace' object has no attribute 'cpu_count'
+
+src/experiments/cf1_entry_owner.py:114: AttributeError
+_ OwnerTests.test_actual_popen_guard_one_use_exact_command_and_final_expiry (damage='expired') _
+
+self = <test_cf1_entry_repaired.OwnerTests testMethod=test_actual_popen_guard_one_use_exact_command_and_final_expiry>
+
+    def test_actual_popen_guard_one_use_exact_command_and_final_expiry(self):
+        for damage in ('none', 'expired', 'command', 'binding', 'permit'):
+            with self.subTest(damage=damage), tempfile.TemporaryDirectory() as temporary:
+>               h = owner_harness(temporary)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+
+src/tests/test_cf1_entry_repaired.py:438: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+src/tests/test_cf1_entry_repaired.py:148: in owner_harness
+    client = owner.EntryClient(channel, root_path=root_path,
+src/experiments/cf1_entry_owner.py:96: in __init__
+    self._identity()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <isolated_cf1_entry_owner.EntryClient object at 0x105657d40>
+check_time = True
+
+    def _identity(self, *, check_time=True):
+        root = self.root
+        _require(threading.get_ident() == self.owner_thread
+                 and threading.active_count() == 1, 'Entry gate crossed threads')
+        _require(q.sha(self.root_path) == self.root_sha256
+                 and q.read(self.root_path) == root, 'Entry owner root changed')
+        _require(root.get('schema') == 'cf1-entry-owner-v1'
+                 and root.get('policy') == self.policy == POLICY
+                 and root.get('nonce') == self.nonce
+                 and root.get('owner_pid') == os.getppid()
+                 and root.get('output') == self.output
+                 and root.get('roots') == self.roots
+                 and root.get('task') == self.task
+                 and root.get('entry_allocation_s') == ENTRY_S
+                 and root.get('suffix_s') == SUFFIX_S
+                 and root.get('permit_lifetime_s') == PERMIT_S
+>                and root.get('capacity_cpu_count') == os.cpu_count()
+                                                       ^^^^^^^^^^^^
+                 and q.finite(root.get('anchor')),
+                 'Entry owner/root/nonce/task/path binding differs')
+E       AttributeError: 'types.SimpleNamespace' object has no attribute 'cpu_count'
+
+src/experiments/cf1_entry_owner.py:114: AttributeError
+_ OwnerTests.test_actual_popen_guard_one_use_exact_command_and_final_expiry (damage='command') _
+
+self = <test_cf1_entry_repaired.OwnerTests testMethod=test_actual_popen_guard_one_use_exact_command_and_final_expiry>
+
+    def test_actual_popen_guard_one_use_exact_command_and_final_expiry(self):
+        for damage in ('none', 'expired', 'command', 'binding', 'permit'):
+            with self.subTest(damage=damage), tempfile.TemporaryDirectory() as temporary:
+>               h = owner_harness(temporary)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+
+src/tests/test_cf1_entry_repaired.py:438: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+src/tests/test_cf1_entry_repaired.py:148: in owner_harness
+    client = owner.EntryClient(channel, root_path=root_path,
+src/experiments/cf1_entry_owner.py:96: in __init__
+    self._identity()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <isolated_cf1_entry_owner.EntryClient object at 0x10563a060>
+check_time = True
+
+    def _identity(self, *, check_time=True):
+        root = self.root
+        _require(threading.get_ident() == self.owner_thread
+                 and threading.active_count() == 1, 'Entry gate crossed threads')
+        _require(q.sha(self.root_path) == self.root_sha256
+                 and q.read(self.root_path) == root, 'Entry owner root changed')
+        _require(root.get('schema') == 'cf1-entry-owner-v1'
+                 and root.get('policy') == self.policy == POLICY
+                 and root.get('nonce') == self.nonce
+                 and root.get('owner_pid') == os.getppid()
+                 and root.get('output') == self.output
+                 and root.get('roots') == self.roots
+                 and root.get('task') == self.task
+                 and root.get('entry_allocation_s') == ENTRY_S
+                 and root.get('suffix_s') == SUFFIX_S
+                 and root.get('permit_lifetime_s') == PERMIT_S
+>                and root.get('capacity_cpu_count') == os.cpu_count()
+                                                       ^^^^^^^^^^^^
+                 and q.finite(root.get('anchor')),
+                 'Entry owner/root/nonce/task/path binding differs')
+E       AttributeError: 'types.SimpleNamespace' object has no attribute 'cpu_count'
+
+src/experiments/cf1_entry_owner.py:114: AttributeError
+_ OwnerTests.test_actual_popen_guard_one_use_exact_command_and_final_expiry (damage='binding') _
+
+self = <test_cf1_entry_repaired.OwnerTests testMethod=test_actual_popen_guard_one_use_exact_command_and_final_expiry>
+
+    def test_actual_popen_guard_one_use_exact_command_and_final_expiry(self):
+        for damage in ('none', 'expired', 'command', 'binding', 'permit'):
+            with self.subTest(damage=damage), tempfile.TemporaryDirectory() as temporary:
+>               h = owner_harness(temporary)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+
+src/tests/test_cf1_entry_repaired.py:438: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+src/tests/test_cf1_entry_repaired.py:148: in owner_harness
+    client = owner.EntryClient(channel, root_path=root_path,
+src/experiments/cf1_entry_owner.py:96: in __init__
+    self._identity()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <isolated_cf1_entry_owner.EntryClient object at 0x1056200b0>
+check_time = True
+
+    def _identity(self, *, check_time=True):
+        root = self.root
+        _require(threading.get_ident() == self.owner_thread
+                 and threading.active_count() == 1, 'Entry gate crossed threads')
+        _require(q.sha(self.root_path) == self.root_sha256
+                 and q.read(self.root_path) == root, 'Entry owner root changed')
+        _require(root.get('schema') == 'cf1-entry-owner-v1'
+                 and root.get('policy') == self.policy == POLICY
+                 and root.get('nonce') == self.nonce
+                 and root.get('owner_pid') == os.getppid()
+                 and root.get('output') == self.output
+                 and root.get('roots') == self.roots
+                 and root.get('task') == self.task
+                 and root.get('entry_allocation_s') == ENTRY_S
+                 and root.get('suffix_s') == SUFFIX_S
+                 and root.get('permit_lifetime_s') == PERMIT_S
+>                and root.get('capacity_cpu_count') == os.cpu_count()
+                                                       ^^^^^^^^^^^^
+                 and q.finite(root.get('anchor')),
+                 'Entry owner/root/nonce/task/path binding differs')
+E       AttributeError: 'types.SimpleNamespace' object has no attribute 'cpu_count'
+
+src/experiments/cf1_entry_owner.py:114: AttributeError
+_ OwnerTests.test_actual_popen_guard_one_use_exact_command_and_final_expiry (damage='permit') _
+
+self = <test_cf1_entry_repaired.OwnerTests testMethod=test_actual_popen_guard_one_use_exact_command_and_final_expiry>
+
+    def test_actual_popen_guard_one_use_exact_command_and_final_expiry(self):
+        for damage in ('none', 'expired', 'command', 'binding', 'permit'):
+            with self.subTest(damage=damage), tempfile.TemporaryDirectory() as temporary:
+>               h = owner_harness(temporary)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+
+src/tests/test_cf1_entry_repaired.py:438: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+src/tests/test_cf1_entry_repaired.py:148: in owner_harness
+    client = owner.EntryClient(channel, root_path=root_path,
+src/experiments/cf1_entry_owner.py:96: in __init__
+    self._identity()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <isolated_cf1_entry_owner.EntryClient object at 0x105654cb0>
+check_time = True
+
+    def _identity(self, *, check_time=True):
+        root = self.root
+        _require(threading.get_ident() == self.owner_thread
+                 and threading.active_count() == 1, 'Entry gate crossed threads')
+        _require(q.sha(self.root_path) == self.root_sha256
+                 and q.read(self.root_path) == root, 'Entry owner root changed')
+        _require(root.get('schema') == 'cf1-entry-owner-v1'
+                 and root.get('policy') == self.policy == POLICY
+                 and root.get('nonce') == self.nonce
+                 and root.get('owner_pid') == os.getppid()
+                 and root.get('output') == self.output
+                 and root.get('roots') == self.roots
+                 and root.get('task') == self.task
+                 and root.get('entry_allocation_s') == ENTRY_S
+                 and root.get('suffix_s') == SUFFIX_S
+                 and root.get('permit_lifetime_s') == PERMIT_S
+>                and root.get('capacity_cpu_count') == os.cpu_count()
+                                                       ^^^^^^^^^^^^
+                 and q.finite(root.get('anchor')),
+                 'Entry owner/root/nonce/task/path binding differs')
+E       AttributeError: 'types.SimpleNamespace' object has no attribute 'cpu_count'
+
+src/experiments/cf1_entry_owner.py:114: AttributeError
+_ OwnerTests.test_entry_scope_blocks_unregistered_spawn_and_restores_on_failure _
+
+self = <test_cf1_entry_repaired.OwnerTests testMethod=test_entry_scope_blocks_unregistered_spawn_and_restores_on_failure>
+
+    def test_entry_scope_blocks_unregistered_spawn_and_restores_on_failure(self):
+        with tempfile.TemporaryDirectory() as temporary:
+>           h = owner_harness(temporary)
+                ^^^^^^^^^^^^^^^^^^^^^^^^
+
+src/tests/test_cf1_entry_repaired.py:376: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+src/tests/test_cf1_entry_repaired.py:148: in owner_harness
+    client = owner.EntryClient(channel, root_path=root_path,
+src/experiments/cf1_entry_owner.py:96: in __init__
+    self._identity()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <isolated_cf1_entry_owner.EntryClient object at 0x1056205f0>
+check_time = True
+
+    def _identity(self, *, check_time=True):
+        root = self.root
+        _require(threading.get_ident() == self.owner_thread
+                 and threading.active_count() == 1, 'Entry gate crossed threads')
+        _require(q.sha(self.root_path) == self.root_sha256
+                 and q.read(self.root_path) == root, 'Entry owner root changed')
+        _require(root.get('schema') == 'cf1-entry-owner-v1'
+                 and root.get('policy') == self.policy == POLICY
+                 and root.get('nonce') == self.nonce
+                 and root.get('owner_pid') == os.getppid()
+                 and root.get('output') == self.output
+                 and root.get('roots') == self.roots
+                 and root.get('task') == self.task
+                 and root.get('entry_allocation_s') == ENTRY_S
+                 and root.get('suffix_s') == SUFFIX_S
+                 and root.get('permit_lifetime_s') == PERMIT_S
+>                and root.get('capacity_cpu_count') == os.cpu_count()
+                                                       ^^^^^^^^^^^^
+                 and q.finite(root.get('anchor')),
+                 'Entry owner/root/nonce/task/path binding differs')
+E       AttributeError: 'types.SimpleNamespace' object has no attribute 'cpu_count'
+
+src/experiments/cf1_entry_owner.py:114: AttributeError
+_ OwnerTests.test_identity_rejects_changed_root_late_entry_and_unowned_controller (damage='root') _
+
+self = <test_cf1_entry_repaired.OwnerTests testMethod=test_identity_rejects_changed_root_late_entry_and_unowned_controller>
+
+    def test_identity_rejects_changed_root_late_entry_and_unowned_controller(self):
+        for damage in ('root', 'late', 'unowned'):
+            with self.subTest(damage=damage), tempfile.TemporaryDirectory() as temporary:
+>               h = owner_harness(temporary)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+
+src/tests/test_cf1_entry_repaired.py:345: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+src/tests/test_cf1_entry_repaired.py:148: in owner_harness
+    client = owner.EntryClient(channel, root_path=root_path,
+src/experiments/cf1_entry_owner.py:96: in __init__
+    self._identity()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <isolated_cf1_entry_owner.EntryClient object at 0x1056572f0>
+check_time = True
+
+    def _identity(self, *, check_time=True):
+        root = self.root
+        _require(threading.get_ident() == self.owner_thread
+                 and threading.active_count() == 1, 'Entry gate crossed threads')
+        _require(q.sha(self.root_path) == self.root_sha256
+                 and q.read(self.root_path) == root, 'Entry owner root changed')
+        _require(root.get('schema') == 'cf1-entry-owner-v1'
+                 and root.get('policy') == self.policy == POLICY
+                 and root.get('nonce') == self.nonce
+                 and root.get('owner_pid') == os.getppid()
+                 and root.get('output') == self.output
+                 and root.get('roots') == self.roots
+                 and root.get('task') == self.task
+                 and root.get('entry_allocation_s') == ENTRY_S
+                 and root.get('suffix_s') == SUFFIX_S
+                 and root.get('permit_lifetime_s') == PERMIT_S
+>                and root.get('capacity_cpu_count') == os.cpu_count()
+                                                       ^^^^^^^^^^^^
+                 and q.finite(root.get('anchor')),
+                 'Entry owner/root/nonce/task/path binding differs')
+E       AttributeError: 'types.SimpleNamespace' object has no attribute 'cpu_count'
+
+src/experiments/cf1_entry_owner.py:114: AttributeError
+_ OwnerTests.test_identity_rejects_changed_root_late_entry_and_unowned_controller (damage='late') _
+
+self = <test_cf1_entry_repaired.OwnerTests testMethod=test_identity_rejects_changed_root_late_entry_and_unowned_controller>
+
+    def test_identity_rejects_changed_root_late_entry_and_unowned_controller(self):
+        for damage in ('root', 'late', 'unowned'):
+            with self.subTest(damage=damage), tempfile.TemporaryDirectory() as temporary:
+>               h = owner_harness(temporary)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+
+src/tests/test_cf1_entry_repaired.py:345: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+src/tests/test_cf1_entry_repaired.py:148: in owner_harness
+    client = owner.EntryClient(channel, root_path=root_path,
+src/experiments/cf1_entry_owner.py:96: in __init__
+    self._identity()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <isolated_cf1_entry_owner.EntryClient object at 0x105657950>
+check_time = True
+
+    def _identity(self, *, check_time=True):
+        root = self.root
+        _require(threading.get_ident() == self.owner_thread
+                 and threading.active_count() == 1, 'Entry gate crossed threads')
+        _require(q.sha(self.root_path) == self.root_sha256
+                 and q.read(self.root_path) == root, 'Entry owner root changed')
+        _require(root.get('schema') == 'cf1-entry-owner-v1'
+                 and root.get('policy') == self.policy == POLICY
+                 and root.get('nonce') == self.nonce
+                 and root.get('owner_pid') == os.getppid()
+                 and root.get('output') == self.output
+                 and root.get('roots') == self.roots
+                 and root.get('task') == self.task
+                 and root.get('entry_allocation_s') == ENTRY_S
+                 and root.get('suffix_s') == SUFFIX_S
+                 and root.get('permit_lifetime_s') == PERMIT_S
+>                and root.get('capacity_cpu_count') == os.cpu_count()
+                                                       ^^^^^^^^^^^^
+                 and q.finite(root.get('anchor')),
+                 'Entry owner/root/nonce/task/path binding differs')
+E       AttributeError: 'types.SimpleNamespace' object has no attribute 'cpu_count'
+
+src/experiments/cf1_entry_owner.py:114: AttributeError
+_ OwnerTests.test_identity_rejects_changed_root_late_entry_and_unowned_controller (damage='unowned') _
+
+self = <test_cf1_entry_repaired.OwnerTests testMethod=test_identity_rejects_changed_root_late_entry_and_unowned_controller>
+
+    def test_identity_rejects_changed_root_late_entry_and_unowned_controller(self):
+        for damage in ('root', 'late', 'unowned'):
+            with self.subTest(damage=damage), tempfile.TemporaryDirectory() as temporary:
+>               h = owner_harness(temporary)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+
+src/tests/test_cf1_entry_repaired.py:345: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+src/tests/test_cf1_entry_repaired.py:148: in owner_harness
+    client = owner.EntryClient(channel, root_path=root_path,
+src/experiments/cf1_entry_owner.py:96: in __init__
+    self._identity()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <isolated_cf1_entry_owner.EntryClient object at 0x10563b8c0>
+check_time = True
+
+    def _identity(self, *, check_time=True):
+        root = self.root
+        _require(threading.get_ident() == self.owner_thread
+                 and threading.active_count() == 1, 'Entry gate crossed threads')
+        _require(q.sha(self.root_path) == self.root_sha256
+                 and q.read(self.root_path) == root, 'Entry owner root changed')
+        _require(root.get('schema') == 'cf1-entry-owner-v1'
+                 and root.get('policy') == self.policy == POLICY
+                 and root.get('nonce') == self.nonce
+                 and root.get('owner_pid') == os.getppid()
+                 and root.get('output') == self.output
+                 and root.get('roots') == self.roots
+                 and root.get('task') == self.task
+                 and root.get('entry_allocation_s') == ENTRY_S
+                 and root.get('suffix_s') == SUFFIX_S
+                 and root.get('permit_lifetime_s') == PERMIT_S
+>                and root.get('capacity_cpu_count') == os.cpu_count()
+                                                       ^^^^^^^^^^^^
+                 and q.finite(root.get('anchor')),
+                 'Entry owner/root/nonce/task/path binding differs')
+E       AttributeError: 'types.SimpleNamespace' object has no attribute 'cpu_count'
+
+src/experiments/cf1_entry_owner.py:114: AttributeError
+_ OwnerTests.test_live_guard_refuses_stale_status_owner_reserve_and_package_exhaustion (damage='none') _
+
+self = <test_cf1_entry_repaired.OwnerTests testMethod=test_live_guard_refuses_stale_status_owner_reserve_and_package_exhaustion>
+
+    def test_live_guard_refuses_stale_status_owner_reserve_and_package_exhaustion(self):
+        for damage in ('none', 'stale', 'owner-reserve', 'package'):
+            with self.subTest(damage=damage), tempfile.TemporaryDirectory() as temporary:
+>               h = owner_harness(temporary)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+
+src/tests/test_cf1_entry_repaired.py:191: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+src/tests/test_cf1_entry_repaired.py:148: in owner_harness
+    client = owner.EntryClient(channel, root_path=root_path,
+src/experiments/cf1_entry_owner.py:96: in __init__
+    self._identity()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <isolated_cf1_entry_owner.EntryClient object at 0x105656ea0>
+check_time = True
+
+    def _identity(self, *, check_time=True):
+        root = self.root
+        _require(threading.get_ident() == self.owner_thread
+                 and threading.active_count() == 1, 'Entry gate crossed threads')
+        _require(q.sha(self.root_path) == self.root_sha256
+                 and q.read(self.root_path) == root, 'Entry owner root changed')
+        _require(root.get('schema') == 'cf1-entry-owner-v1'
+                 and root.get('policy') == self.policy == POLICY
+                 and root.get('nonce') == self.nonce
+                 and root.get('owner_pid') == os.getppid()
+                 and root.get('output') == self.output
+                 and root.get('roots') == self.roots
+                 and root.get('task') == self.task
+                 and root.get('entry_allocation_s') == ENTRY_S
+                 and root.get('suffix_s') == SUFFIX_S
+                 and root.get('permit_lifetime_s') == PERMIT_S
+>                and root.get('capacity_cpu_count') == os.cpu_count()
+                                                       ^^^^^^^^^^^^
+                 and q.finite(root.get('anchor')),
+                 'Entry owner/root/nonce/task/path binding differs')
+E       AttributeError: 'types.SimpleNamespace' object has no attribute 'cpu_count'
+
+src/experiments/cf1_entry_owner.py:114: AttributeError
+_ OwnerTests.test_live_guard_refuses_stale_status_owner_reserve_and_package_exhaustion (damage='stale') _
+
+self = <test_cf1_entry_repaired.OwnerTests testMethod=test_live_guard_refuses_stale_status_owner_reserve_and_package_exhaustion>
+
+    def test_live_guard_refuses_stale_status_owner_reserve_and_package_exhaustion(self):
+        for damage in ('none', 'stale', 'owner-reserve', 'package'):
+            with self.subTest(damage=damage), tempfile.TemporaryDirectory() as temporary:
+>               h = owner_harness(temporary)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+
+src/tests/test_cf1_entry_repaired.py:191: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+src/tests/test_cf1_entry_repaired.py:148: in owner_harness
+    client = owner.EntryClient(channel, root_path=root_path,
+src/experiments/cf1_entry_owner.py:96: in __init__
+    self._identity()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <isolated_cf1_entry_owner.EntryClient object at 0x1056567e0>
+check_time = True
+
+    def _identity(self, *, check_time=True):
+        root = self.root
+        _require(threading.get_ident() == self.owner_thread
+                 and threading.active_count() == 1, 'Entry gate crossed threads')
+        _require(q.sha(self.root_path) == self.root_sha256
+                 and q.read(self.root_path) == root, 'Entry owner root changed')
+        _require(root.get('schema') == 'cf1-entry-owner-v1'
+                 and root.get('policy') == self.policy == POLICY
+                 and root.get('nonce') == self.nonce
+                 and root.get('owner_pid') == os.getppid()
+                 and root.get('output') == self.output
+                 and root.get('roots') == self.roots
+                 and root.get('task') == self.task
+                 and root.get('entry_allocation_s') == ENTRY_S
+                 and root.get('suffix_s') == SUFFIX_S
+                 and root.get('permit_lifetime_s') == PERMIT_S
+>                and root.get('capacity_cpu_count') == os.cpu_count()
+                                                       ^^^^^^^^^^^^
+                 and q.finite(root.get('anchor')),
+                 'Entry owner/root/nonce/task/path binding differs')
+E       AttributeError: 'types.SimpleNamespace' object has no attribute 'cpu_count'
+
+src/experiments/cf1_entry_owner.py:114: AttributeError
+_ OwnerTests.test_live_guard_refuses_stale_status_owner_reserve_and_package_exhaustion (damage='owner-reserve') _
+
+self = <test_cf1_entry_repaired.OwnerTests testMethod=test_live_guard_refuses_stale_status_owner_reserve_and_package_exhaustion>
+
+    def test_live_guard_refuses_stale_status_owner_reserve_and_package_exhaustion(self):
+        for damage in ('none', 'stale', 'owner-reserve', 'package'):
+            with self.subTest(damage=damage), tempfile.TemporaryDirectory() as temporary:
+>               h = owner_harness(temporary)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+
+src/tests/test_cf1_entry_repaired.py:191: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+src/tests/test_cf1_entry_repaired.py:148: in owner_harness
+    client = owner.EntryClient(channel, root_path=root_path,
+src/experiments/cf1_entry_owner.py:96: in __init__
+    self._identity()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <isolated_cf1_entry_owner.EntryClient object at 0x105621580>
+check_time = True
+
+    def _identity(self, *, check_time=True):
+        root = self.root
+        _require(threading.get_ident() == self.owner_thread
+                 and threading.active_count() == 1, 'Entry gate crossed threads')
+        _require(q.sha(self.root_path) == self.root_sha256
+                 and q.read(self.root_path) == root, 'Entry owner root changed')
+        _require(root.get('schema') == 'cf1-entry-owner-v1'
+                 and root.get('policy') == self.policy == POLICY
+                 and root.get('nonce') == self.nonce
+                 and root.get('owner_pid') == os.getppid()
+                 and root.get('output') == self.output
+                 and root.get('roots') == self.roots
+                 and root.get('task') == self.task
+                 and root.get('entry_allocation_s') == ENTRY_S
+                 and root.get('suffix_s') == SUFFIX_S
+                 and root.get('permit_lifetime_s') == PERMIT_S
+>                and root.get('capacity_cpu_count') == os.cpu_count()
+                                                       ^^^^^^^^^^^^
+                 and q.finite(root.get('anchor')),
+                 'Entry owner/root/nonce/task/path binding differs')
+E       AttributeError: 'types.SimpleNamespace' object has no attribute 'cpu_count'
+
+src/experiments/cf1_entry_owner.py:114: AttributeError
+_ OwnerTests.test_live_guard_refuses_stale_status_owner_reserve_and_package_exhaustion (damage='package') _
+
+self = <test_cf1_entry_repaired.OwnerTests testMethod=test_live_guard_refuses_stale_status_owner_reserve_and_package_exhaustion>
+
+    def test_live_guard_refuses_stale_status_owner_reserve_and_package_exhaustion(self):
+        for damage in ('none', 'stale', 'owner-reserve', 'package'):
+            with self.subTest(damage=damage), tempfile.TemporaryDirectory() as temporary:
+>               h = owner_harness(temporary)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+
+src/tests/test_cf1_entry_repaired.py:191: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+src/tests/test_cf1_entry_repaired.py:148: in owner_harness
+    client = owner.EntryClient(channel, root_path=root_path,
+src/experiments/cf1_entry_owner.py:96: in __init__
+    self._identity()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <isolated_cf1_entry_owner.EntryClient object at 0x1056550d0>
+check_time = True
+
+    def _identity(self, *, check_time=True):
+        root = self.root
+        _require(threading.get_ident() == self.owner_thread
+                 and threading.active_count() == 1, 'Entry gate crossed threads')
+        _require(q.sha(self.root_path) == self.root_sha256
+                 and q.read(self.root_path) == root, 'Entry owner root changed')
+        _require(root.get('schema') == 'cf1-entry-owner-v1'
+                 and root.get('policy') == self.policy == POLICY
+                 and root.get('nonce') == self.nonce
+                 and root.get('owner_pid') == os.getppid()
+                 and root.get('output') == self.output
+                 and root.get('roots') == self.roots
+                 and root.get('task') == self.task
+                 and root.get('entry_allocation_s') == ENTRY_S
+                 and root.get('suffix_s') == SUFFIX_S
+                 and root.get('permit_lifetime_s') == PERMIT_S
+>                and root.get('capacity_cpu_count') == os.cpu_count()
+                                                       ^^^^^^^^^^^^
+                 and q.finite(root.get('anchor')),
+                 'Entry owner/root/nonce/task/path binding differs')
+E       AttributeError: 'types.SimpleNamespace' object has no attribute 'cpu_count'
+
+src/experiments/cf1_entry_owner.py:114: AttributeError
+_ OwnerTests.test_missing_incomplete_overcap_and_changed_binding_permits_reject (damage='none') _
+
+self = <test_cf1_entry_repaired.OwnerTests testMethod=test_missing_incomplete_overcap_and_changed_binding_permits_reject>
+
+    def test_missing_incomplete_overcap_and_changed_binding_permits_reject(self):
+        for damage in ('none', 'missing', 'incomplete', 'overcap', 'unowned', 'binding', 'late'):
+            with self.subTest(damage=damage), tempfile.TemporaryDirectory() as temporary:
+>               h = owner_harness(temporary)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+
+src/tests/test_cf1_entry_repaired.py:406: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+src/tests/test_cf1_entry_repaired.py:148: in owner_harness
+    client = owner.EntryClient(channel, root_path=root_path,
+src/experiments/cf1_entry_owner.py:96: in __init__
+    self._identity()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <isolated_cf1_entry_owner.EntryClient object at 0x105659cd0>
+check_time = True
+
+    def _identity(self, *, check_time=True):
+        root = self.root
+        _require(threading.get_ident() == self.owner_thread
+                 and threading.active_count() == 1, 'Entry gate crossed threads')
+        _require(q.sha(self.root_path) == self.root_sha256
+                 and q.read(self.root_path) == root, 'Entry owner root changed')
+        _require(root.get('schema') == 'cf1-entry-owner-v1'
+                 and root.get('policy') == self.policy == POLICY
+                 and root.get('nonce') == self.nonce
+                 and root.get('owner_pid') == os.getppid()
+                 and root.get('output') == self.output
+                 and root.get('roots') == self.roots
+                 and root.get('task') == self.task
+                 and root.get('entry_allocation_s') == ENTRY_S
+                 and root.get('suffix_s') == SUFFIX_S
+                 and root.get('permit_lifetime_s') == PERMIT_S
+>                and root.get('capacity_cpu_count') == os.cpu_count()
+                                                       ^^^^^^^^^^^^
+                 and q.finite(root.get('anchor')),
+                 'Entry owner/root/nonce/task/path binding differs')
+E       AttributeError: 'types.SimpleNamespace' object has no attribute 'cpu_count'
+
+src/experiments/cf1_entry_owner.py:114: AttributeError
+_ OwnerTests.test_missing_incomplete_overcap_and_changed_binding_permits_reject (damage='missing') _
+
+self = <test_cf1_entry_repaired.OwnerTests testMethod=test_missing_incomplete_overcap_and_changed_binding_permits_reject>
+
+    def test_missing_incomplete_overcap_and_changed_binding_permits_reject(self):
+        for damage in ('none', 'missing', 'incomplete', 'overcap', 'unowned', 'binding', 'late'):
+            with self.subTest(damage=damage), tempfile.TemporaryDirectory() as temporary:
+>               h = owner_harness(temporary)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+
+src/tests/test_cf1_entry_repaired.py:406: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+src/tests/test_cf1_entry_repaired.py:148: in owner_harness
+    client = owner.EntryClient(channel, root_path=root_path,
+src/experiments/cf1_entry_owner.py:96: in __init__
+    self._identity()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <isolated_cf1_entry_owner.EntryClient object at 0x1055f7c50>
+check_time = True
+
+    def _identity(self, *, check_time=True):
+        root = self.root
+        _require(threading.get_ident() == self.owner_thread
+                 and threading.active_count() == 1, 'Entry gate crossed threads')
+        _require(q.sha(self.root_path) == self.root_sha256
+                 and q.read(self.root_path) == root, 'Entry owner root changed')
+        _require(root.get('schema') == 'cf1-entry-owner-v1'
+                 and root.get('policy') == self.policy == POLICY
+                 and root.get('nonce') == self.nonce
+                 and root.get('owner_pid') == os.getppid()
+                 and root.get('output') == self.output
+                 and root.get('roots') == self.roots
+                 and root.get('task') == self.task
+                 and root.get('entry_allocation_s') == ENTRY_S
+                 and root.get('suffix_s') == SUFFIX_S
+                 and root.get('permit_lifetime_s') == PERMIT_S
+>                and root.get('capacity_cpu_count') == os.cpu_count()
+                                                       ^^^^^^^^^^^^
+                 and q.finite(root.get('anchor')),
+                 'Entry owner/root/nonce/task/path binding differs')
+E       AttributeError: 'types.SimpleNamespace' object has no attribute 'cpu_count'
+
+src/experiments/cf1_entry_owner.py:114: AttributeError
+_ OwnerTests.test_missing_incomplete_overcap_and_changed_binding_permits_reject (damage='incomplete') _
+
+self = <test_cf1_entry_repaired.OwnerTests testMethod=test_missing_incomplete_overcap_and_changed_binding_permits_reject>
+
+    def test_missing_incomplete_overcap_and_changed_binding_permits_reject(self):
+        for damage in ('none', 'missing', 'incomplete', 'overcap', 'unowned', 'binding', 'late'):
+            with self.subTest(damage=damage), tempfile.TemporaryDirectory() as temporary:
+>               h = owner_harness(temporary)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+
+src/tests/test_cf1_entry_repaired.py:406: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+src/tests/test_cf1_entry_repaired.py:148: in owner_harness
+    client = owner.EntryClient(channel, root_path=root_path,
+src/experiments/cf1_entry_owner.py:96: in __init__
+    self._identity()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <isolated_cf1_entry_owner.EntryClient object at 0x10563b500>
+check_time = True
+
+    def _identity(self, *, check_time=True):
+        root = self.root
+        _require(threading.get_ident() == self.owner_thread
+                 and threading.active_count() == 1, 'Entry gate crossed threads')
+        _require(q.sha(self.root_path) == self.root_sha256
+                 and q.read(self.root_path) == root, 'Entry owner root changed')
+        _require(root.get('schema') == 'cf1-entry-owner-v1'
+                 and root.get('policy') == self.policy == POLICY
+                 and root.get('nonce') == self.nonce
+                 and root.get('owner_pid') == os.getppid()
+                 and root.get('output') == self.output
+                 and root.get('roots') == self.roots
+                 and root.get('task') == self.task
+                 and root.get('entry_allocation_s') == ENTRY_S
+                 and root.get('suffix_s') == SUFFIX_S
+                 and root.get('permit_lifetime_s') == PERMIT_S
+>                and root.get('capacity_cpu_count') == os.cpu_count()
+                                                       ^^^^^^^^^^^^
+                 and q.finite(root.get('anchor')),
+                 'Entry owner/root/nonce/task/path binding differs')
+E       AttributeError: 'types.SimpleNamespace' object has no attribute 'cpu_count'
+
+src/experiments/cf1_entry_owner.py:114: AttributeError
+_ OwnerTests.test_missing_incomplete_overcap_and_changed_binding_permits_reject (damage='overcap') _
+
+self = <test_cf1_entry_repaired.OwnerTests testMethod=test_missing_incomplete_overcap_and_changed_binding_permits_reject>
+
+    def test_missing_incomplete_overcap_and_changed_binding_permits_reject(self):
+        for damage in ('none', 'missing', 'incomplete', 'overcap', 'unowned', 'binding', 'late'):
+            with self.subTest(damage=damage), tempfile.TemporaryDirectory() as temporary:
+>               h = owner_harness(temporary)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+
+src/tests/test_cf1_entry_repaired.py:406: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+src/tests/test_cf1_entry_repaired.py:148: in owner_harness
+    client = owner.EntryClient(channel, root_path=root_path,
+src/experiments/cf1_entry_owner.py:96: in __init__
+    self._identity()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <isolated_cf1_entry_owner.EntryClient object at 0x105656810>
+check_time = True
+
+    def _identity(self, *, check_time=True):
+        root = self.root
+        _require(threading.get_ident() == self.owner_thread
+                 and threading.active_count() == 1, 'Entry gate crossed threads')
+        _require(q.sha(self.root_path) == self.root_sha256
+                 and q.read(self.root_path) == root, 'Entry owner root changed')
+        _require(root.get('schema') == 'cf1-entry-owner-v1'
+                 and root.get('policy') == self.policy == POLICY
+                 and root.get('nonce') == self.nonce
+                 and root.get('owner_pid') == os.getppid()
+                 and root.get('output') == self.output
+                 and root.get('roots') == self.roots
+                 and root.get('task') == self.task
+                 and root.get('entry_allocation_s') == ENTRY_S
+                 and root.get('suffix_s') == SUFFIX_S
+                 and root.get('permit_lifetime_s') == PERMIT_S
+>                and root.get('capacity_cpu_count') == os.cpu_count()
+                                                       ^^^^^^^^^^^^
+                 and q.finite(root.get('anchor')),
+                 'Entry owner/root/nonce/task/path binding differs')
+E       AttributeError: 'types.SimpleNamespace' object has no attribute 'cpu_count'
+
+src/experiments/cf1_entry_owner.py:114: AttributeError
+_ OwnerTests.test_missing_incomplete_overcap_and_changed_binding_permits_reject (damage='unowned') _
+
+self = <test_cf1_entry_repaired.OwnerTests testMethod=test_missing_incomplete_overcap_and_changed_binding_permits_reject>
+
+    def test_missing_incomplete_overcap_and_changed_binding_permits_reject(self):
+        for damage in ('none', 'missing', 'incomplete', 'overcap', 'unowned', 'binding', 'late'):
+            with self.subTest(damage=damage), tempfile.TemporaryDirectory() as temporary:
+>               h = owner_harness(temporary)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+
+src/tests/test_cf1_entry_repaired.py:406: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+src/tests/test_cf1_entry_repaired.py:148: in owner_harness
+    client = owner.EntryClient(channel, root_path=root_path,
+src/experiments/cf1_entry_owner.py:96: in __init__
+    self._identity()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <isolated_cf1_entry_owner.EntryClient object at 0x10563a900>
+check_time = True
+
+    def _identity(self, *, check_time=True):
+        root = self.root
+        _require(threading.get_ident() == self.owner_thread
+                 and threading.active_count() == 1, 'Entry gate crossed threads')
+        _require(q.sha(self.root_path) == self.root_sha256
+                 and q.read(self.root_path) == root, 'Entry owner root changed')
+        _require(root.get('schema') == 'cf1-entry-owner-v1'
+                 and root.get('policy') == self.policy == POLICY
+                 and root.get('nonce') == self.nonce
+                 and root.get('owner_pid') == os.getppid()
+                 and root.get('output') == self.output
+                 and root.get('roots') == self.roots
+                 and root.get('task') == self.task
+                 and root.get('entry_allocation_s') == ENTRY_S
+                 and root.get('suffix_s') == SUFFIX_S
+                 and root.get('permit_lifetime_s') == PERMIT_S
+>                and root.get('capacity_cpu_count') == os.cpu_count()
+                                                       ^^^^^^^^^^^^
+                 and q.finite(root.get('anchor')),
+                 'Entry owner/root/nonce/task/path binding differs')
+E       AttributeError: 'types.SimpleNamespace' object has no attribute 'cpu_count'
+
+src/experiments/cf1_entry_owner.py:114: AttributeError
+_ OwnerTests.test_missing_incomplete_overcap_and_changed_binding_permits_reject (damage='binding') _
+
+self = <test_cf1_entry_repaired.OwnerTests testMethod=test_missing_incomplete_overcap_and_changed_binding_permits_reject>
+
+    def test_missing_incomplete_overcap_and_changed_binding_permits_reject(self):
+        for damage in ('none', 'missing', 'incomplete', 'overcap', 'unowned', 'binding', 'late'):
+            with self.subTest(damage=damage), tempfile.TemporaryDirectory() as temporary:
+>               h = owner_harness(temporary)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+
+src/tests/test_cf1_entry_repaired.py:406: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+src/tests/test_cf1_entry_repaired.py:148: in owner_harness
+    client = owner.EntryClient(channel, root_path=root_path,
+src/experiments/cf1_entry_owner.py:96: in __init__
+    self._identity()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <isolated_cf1_entry_owner.EntryClient object at 0x1055f60c0>
+check_time = True
+
+    def _identity(self, *, check_time=True):
+        root = self.root
+        _require(threading.get_ident() == self.owner_thread
+                 and threading.active_count() == 1, 'Entry gate crossed threads')
+        _require(q.sha(self.root_path) == self.root_sha256
+                 and q.read(self.root_path) == root, 'Entry owner root changed')
+        _require(root.get('schema') == 'cf1-entry-owner-v1'
+                 and root.get('policy') == self.policy == POLICY
+                 and root.get('nonce') == self.nonce
+                 and root.get('owner_pid') == os.getppid()
+                 and root.get('output') == self.output
+                 and root.get('roots') == self.roots
+                 and root.get('task') == self.task
+                 and root.get('entry_allocation_s') == ENTRY_S
+                 and root.get('suffix_s') == SUFFIX_S
+                 and root.get('permit_lifetime_s') == PERMIT_S
+>                and root.get('capacity_cpu_count') == os.cpu_count()
+                                                       ^^^^^^^^^^^^
+                 and q.finite(root.get('anchor')),
+                 'Entry owner/root/nonce/task/path binding differs')
+E       AttributeError: 'types.SimpleNamespace' object has no attribute 'cpu_count'
+
+src/experiments/cf1_entry_owner.py:114: AttributeError
+_ OwnerTests.test_missing_incomplete_overcap_and_changed_binding_permits_reject (damage='late') _
+
+self = <test_cf1_entry_repaired.OwnerTests testMethod=test_missing_incomplete_overcap_and_changed_binding_permits_reject>
+
+    def test_missing_incomplete_overcap_and_changed_binding_permits_reject(self):
+        for damage in ('none', 'missing', 'incomplete', 'overcap', 'unowned', 'binding', 'late'):
+            with self.subTest(damage=damage), tempfile.TemporaryDirectory() as temporary:
+>               h = owner_harness(temporary)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+
+src/tests/test_cf1_entry_repaired.py:406: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+src/tests/test_cf1_entry_repaired.py:148: in owner_harness
+    client = owner.EntryClient(channel, root_path=root_path,
+src/experiments/cf1_entry_owner.py:96: in __init__
+    self._identity()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <isolated_cf1_entry_owner.EntryClient object at 0x105657ec0>
+check_time = True
+
+    def _identity(self, *, check_time=True):
+        root = self.root
+        _require(threading.get_ident() == self.owner_thread
+                 and threading.active_count() == 1, 'Entry gate crossed threads')
+        _require(q.sha(self.root_path) == self.root_sha256
+                 and q.read(self.root_path) == root, 'Entry owner root changed')
+        _require(root.get('schema') == 'cf1-entry-owner-v1'
+                 and root.get('policy') == self.policy == POLICY
+                 and root.get('nonce') == self.nonce
+                 and root.get('owner_pid') == os.getppid()
+                 and root.get('output') == self.output
+                 and root.get('roots') == self.roots
+                 and root.get('task') == self.task
+                 and root.get('entry_allocation_s') == ENTRY_S
+                 and root.get('suffix_s') == SUFFIX_S
+                 and root.get('permit_lifetime_s') == PERMIT_S
+>                and root.get('capacity_cpu_count') == os.cpu_count()
+                                                       ^^^^^^^^^^^^
+                 and q.finite(root.get('anchor')),
+                 'Entry owner/root/nonce/task/path binding differs')
+E       AttributeError: 'types.SimpleNamespace' object has no attribute 'cpu_count'
+
+src/experiments/cf1_entry_owner.py:114: AttributeError
+___ OwnerTests.test_owner_fake_process_anchor_argv_ready_and_cleanup_receipt ___
+
+self = <test_cf1_entry_repaired.OwnerTests testMethod=test_owner_fake_process_anchor_argv_ready_and_cleanup_receipt>
+
+    def test_owner_fake_process_anchor_argv_ready_and_cleanup_receipt(self):
+        with tempfile.TemporaryDirectory() as temporary:
+>           h = owner_harness(temporary)
+                ^^^^^^^^^^^^^^^^^^^^^^^^
+
+src/tests/test_cf1_entry_repaired.py:239: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+src/tests/test_cf1_entry_repaired.py:148: in owner_harness
+    client = owner.EntryClient(channel, root_path=root_path,
+src/experiments/cf1_entry_owner.py:96: in __init__
+    self._identity()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <isolated_cf1_entry_owner.EntryClient object at 0x1054e72f0>
+check_time = True
+
+    def _identity(self, *, check_time=True):
+        root = self.root
+        _require(threading.get_ident() == self.owner_thread
+                 and threading.active_count() == 1, 'Entry gate crossed threads')
+        _require(q.sha(self.root_path) == self.root_sha256
+                 and q.read(self.root_path) == root, 'Entry owner root changed')
+        _require(root.get('schema') == 'cf1-entry-owner-v1'
+                 and root.get('policy') == self.policy == POLICY
+                 and root.get('nonce') == self.nonce
+                 and root.get('owner_pid') == os.getppid()
+                 and root.get('output') == self.output
+                 and root.get('roots') == self.roots
+                 and root.get('task') == self.task
+                 and root.get('entry_allocation_s') == ENTRY_S
+                 and root.get('suffix_s') == SUFFIX_S
+                 and root.get('permit_lifetime_s') == PERMIT_S
+>                and root.get('capacity_cpu_count') == os.cpu_count()
+                                                       ^^^^^^^^^^^^
+                 and q.finite(root.get('anchor')),
+                 'Entry owner/root/nonce/task/path binding differs')
+E       AttributeError: 'types.SimpleNamespace' object has no attribute 'cpu_count'
+
+src/experiments/cf1_entry_owner.py:114: AttributeError
+_ OwnerTests.test_parent_fake_observations_bound_entry_and_capacity_scaled_suffix (damage='none') _
+
+self = <test_cf1_entry_repaired.OwnerTests testMethod=test_parent_fake_observations_bound_entry_and_capacity_scaled_suffix>
+
+    def test_parent_fake_observations_bound_entry_and_capacity_scaled_suffix(self):
+        for damage in ('none', 'overcap', 'missing-observation'):
+            with self.subTest(damage=damage), tempfile.TemporaryDirectory() as temporary:
+>               h = owner_harness(temporary)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+
+src/tests/test_cf1_entry_repaired.py:287: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+src/tests/test_cf1_entry_repaired.py:148: in owner_harness
+    client = owner.EntryClient(channel, root_path=root_path,
+src/experiments/cf1_entry_owner.py:96: in __init__
+    self._identity()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <isolated_cf1_entry_owner.EntryClient object at 0x1055f5460>
+check_time = True
+
+    def _identity(self, *, check_time=True):
+        root = self.root
+        _require(threading.get_ident() == self.owner_thread
+                 and threading.active_count() == 1, 'Entry gate crossed threads')
+        _require(q.sha(self.root_path) == self.root_sha256
+                 and q.read(self.root_path) == root, 'Entry owner root changed')
+        _require(root.get('schema') == 'cf1-entry-owner-v1'
+                 and root.get('policy') == self.policy == POLICY
+                 and root.get('nonce') == self.nonce
+                 and root.get('owner_pid') == os.getppid()
+                 and root.get('output') == self.output
+                 and root.get('roots') == self.roots
+                 and root.get('task') == self.task
+                 and root.get('entry_allocation_s') == ENTRY_S
+                 and root.get('suffix_s') == SUFFIX_S
+                 and root.get('permit_lifetime_s') == PERMIT_S
+>                and root.get('capacity_cpu_count') == os.cpu_count()
+                                                       ^^^^^^^^^^^^
+                 and q.finite(root.get('anchor')),
+                 'Entry owner/root/nonce/task/path binding differs')
+E       AttributeError: 'types.SimpleNamespace' object has no attribute 'cpu_count'
+
+src/experiments/cf1_entry_owner.py:114: AttributeError
+_ OwnerTests.test_parent_fake_observations_bound_entry_and_capacity_scaled_suffix (damage='overcap') _
+
+self = <test_cf1_entry_repaired.OwnerTests testMethod=test_parent_fake_observations_bound_entry_and_capacity_scaled_suffix>
+
+    def test_parent_fake_observations_bound_entry_and_capacity_scaled_suffix(self):
+        for damage in ('none', 'overcap', 'missing-observation'):
+            with self.subTest(damage=damage), tempfile.TemporaryDirectory() as temporary:
+>               h = owner_harness(temporary)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+
+src/tests/test_cf1_entry_repaired.py:287: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+src/tests/test_cf1_entry_repaired.py:148: in owner_harness
+    client = owner.EntryClient(channel, root_path=root_path,
+src/experiments/cf1_entry_owner.py:96: in __init__
+    self._identity()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <isolated_cf1_entry_owner.EntryClient object at 0x1056237d0>
+check_time = True
+
+    def _identity(self, *, check_time=True):
+        root = self.root
+        _require(threading.get_ident() == self.owner_thread
+                 and threading.active_count() == 1, 'Entry gate crossed threads')
+        _require(q.sha(self.root_path) == self.root_sha256
+                 and q.read(self.root_path) == root, 'Entry owner root changed')
+        _require(root.get('schema') == 'cf1-entry-owner-v1'
+                 and root.get('policy') == self.policy == POLICY
+                 and root.get('nonce') == self.nonce
+                 and root.get('owner_pid') == os.getppid()
+                 and root.get('output') == self.output
+                 and root.get('roots') == self.roots
+                 and root.get('task') == self.task
+                 and root.get('entry_allocation_s') == ENTRY_S
+                 and root.get('suffix_s') == SUFFIX_S
+                 and root.get('permit_lifetime_s') == PERMIT_S
+>                and root.get('capacity_cpu_count') == os.cpu_count()
+                                                       ^^^^^^^^^^^^
+                 and q.finite(root.get('anchor')),
+                 'Entry owner/root/nonce/task/path binding differs')
+E       AttributeError: 'types.SimpleNamespace' object has no attribute 'cpu_count'
+
+src/experiments/cf1_entry_owner.py:114: AttributeError
+_ OwnerTests.test_parent_fake_observations_bound_entry_and_capacity_scaled_suffix (damage='missing-observation') _
+
+self = <test_cf1_entry_repaired.OwnerTests testMethod=test_parent_fake_observations_bound_entry_and_capacity_scaled_suffix>
+
+    def test_parent_fake_observations_bound_entry_and_capacity_scaled_suffix(self):
+        for damage in ('none', 'overcap', 'missing-observation'):
+            with self.subTest(damage=damage), tempfile.TemporaryDirectory() as temporary:
+>               h = owner_harness(temporary)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+
+src/tests/test_cf1_entry_repaired.py:287: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+src/tests/test_cf1_entry_repaired.py:148: in owner_harness
+    client = owner.EntryClient(channel, root_path=root_path,
+src/experiments/cf1_entry_owner.py:96: in __init__
+    self._identity()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <isolated_cf1_entry_owner.EntryClient object at 0x105620a70>
+check_time = True
+
+    def _identity(self, *, check_time=True):
+        root = self.root
+        _require(threading.get_ident() == self.owner_thread
+                 and threading.active_count() == 1, 'Entry gate crossed threads')
+        _require(q.sha(self.root_path) == self.root_sha256
+                 and q.read(self.root_path) == root, 'Entry owner root changed')
+        _require(root.get('schema') == 'cf1-entry-owner-v1'
+                 and root.get('policy') == self.policy == POLICY
+                 and root.get('nonce') == self.nonce
+                 and root.get('owner_pid') == os.getppid()
+                 and root.get('output') == self.output
+                 and root.get('roots') == self.roots
+                 and root.get('task') == self.task
+                 and root.get('entry_allocation_s') == ENTRY_S
+                 and root.get('suffix_s') == SUFFIX_S
+                 and root.get('permit_lifetime_s') == PERMIT_S
+>                and root.get('capacity_cpu_count') == os.cpu_count()
+                                                       ^^^^^^^^^^^^
+                 and q.finite(root.get('anchor')),
+                 'Entry owner/root/nonce/task/path binding differs')
+E       AttributeError: 'types.SimpleNamespace' object has no attribute 'cpu_count'
+
+src/experiments/cf1_entry_owner.py:114: AttributeError
+_ OwnerTests.test_precharge_is_exact_nonrefundable_once_and_real_resume_consumes_it _
+
+self = <test_cf1_entry_repaired.OwnerTests testMethod=test_precharge_is_exact_nonrefundable_once_and_real_resume_consumes_it>
+
+    def test_precharge_is_exact_nonrefundable_once_and_real_resume_consumes_it(self):
+        with tempfile.TemporaryDirectory() as temporary:
+>           h = owner_harness(temporary)
+                ^^^^^^^^^^^^^^^^^^^^^^^^
+
+src/tests/test_cf1_entry_repaired.py:326: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+src/tests/test_cf1_entry_repaired.py:148: in owner_harness
+    client = owner.EntryClient(channel, root_path=root_path,
+src/experiments/cf1_entry_owner.py:96: in __init__
+    self._identity()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <isolated_cf1_entry_owner.EntryClient object at 0x1056578f0>
+check_time = True
+
+    def _identity(self, *, check_time=True):
+        root = self.root
+        _require(threading.get_ident() == self.owner_thread
+                 and threading.active_count() == 1, 'Entry gate crossed threads')
+        _require(q.sha(self.root_path) == self.root_sha256
+                 and q.read(self.root_path) == root, 'Entry owner root changed')
+        _require(root.get('schema') == 'cf1-entry-owner-v1'
+                 and root.get('policy') == self.policy == POLICY
+                 and root.get('nonce') == self.nonce
+                 and root.get('owner_pid') == os.getppid()
+                 and root.get('output') == self.output
+                 and root.get('roots') == self.roots
+                 and root.get('task') == self.task
+                 and root.get('entry_allocation_s') == ENTRY_S
+                 and root.get('suffix_s') == SUFFIX_S
+                 and root.get('permit_lifetime_s') == PERMIT_S
+>                and root.get('capacity_cpu_count') == os.cpu_count()
+                                                       ^^^^^^^^^^^^
+                 and q.finite(root.get('anchor')),
+                 'Entry owner/root/nonce/task/path binding differs')
+E       AttributeError: 'types.SimpleNamespace' object has no attribute 'cpu_count'
+
+src/experiments/cf1_entry_owner.py:114: AttributeError
+___ OwnerTests.test_runtime_status_keeps_owner_binding_and_monotone_sequence ___
+
+self = <test_cf1_entry_repaired.OwnerTests testMethod=test_runtime_status_keeps_owner_binding_and_monotone_sequence>
+
+    def test_runtime_status_keeps_owner_binding_and_monotone_sequence(self):
+        with tempfile.TemporaryDirectory() as temporary:
+>           h = owner_harness(temporary)
+                ^^^^^^^^^^^^^^^^^^^^^^^^
+
+src/tests/test_cf1_entry_repaired.py:216: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+src/tests/test_cf1_entry_repaired.py:148: in owner_harness
+    client = owner.EntryClient(channel, root_path=root_path,
+src/experiments/cf1_entry_owner.py:96: in __init__
+    self._identity()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <isolated_cf1_entry_owner.EntryClient object at 0x105658fb0>
+check_time = True
+
+    def _identity(self, *, check_time=True):
+        root = self.root
+        _require(threading.get_ident() == self.owner_thread
+                 and threading.active_count() == 1, 'Entry gate crossed threads')
+        _require(q.sha(self.root_path) == self.root_sha256
+                 and q.read(self.root_path) == root, 'Entry owner root changed')
+        _require(root.get('schema') == 'cf1-entry-owner-v1'
+                 and root.get('policy') == self.policy == POLICY
+                 and root.get('nonce') == self.nonce
+                 and root.get('owner_pid') == os.getppid()
+                 and root.get('output') == self.output
+                 and root.get('roots') == self.roots
+                 and root.get('task') == self.task
+                 and root.get('entry_allocation_s') == ENTRY_S
+                 and root.get('suffix_s') == SUFFIX_S
+                 and root.get('permit_lifetime_s') == PERMIT_S
+>                and root.get('capacity_cpu_count') == os.cpu_count()
+                                                       ^^^^^^^^^^^^
+                 and q.finite(root.get('anchor')),
+                 'Entry owner/root/nonce/task/path binding differs')
+E       AttributeError: 'types.SimpleNamespace' object has no attribute 'cpu_count'
+
+src/experiments/cf1_entry_owner.py:114: AttributeError
+=========================== short test summary info ============================
+SUBFAILED(damage='none') src/tests/test_cf1_entry_repaired.py::OwnerTests::test_actual_popen_guard_one_use_exact_command_and_final_expiry
+SUBFAILED(damage='expired') src/tests/test_cf1_entry_repaired.py::OwnerTests::test_actual_popen_guard_one_use_exact_command_and_final_expiry
+SUBFAILED(damage='command') src/tests/test_cf1_entry_repaired.py::OwnerTests::test_actual_popen_guard_one_use_exact_command_and_final_expiry
+SUBFAILED(damage='binding') src/tests/test_cf1_entry_repaired.py::OwnerTests::test_actual_popen_guard_one_use_exact_command_and_final_expiry
+SUBFAILED(damage='permit') src/tests/test_cf1_entry_repaired.py::OwnerTests::test_actual_popen_guard_one_use_exact_command_and_final_expiry
+FAILED src/tests/test_cf1_entry_repaired.py::OwnerTests::test_entry_scope_blocks_unregistered_spawn_and_restores_on_failure
+SUBFAILED(damage='root') src/tests/test_cf1_entry_repaired.py::OwnerTests::test_identity_rejects_changed_root_late_entry_and_unowned_controller
+SUBFAILED(damage='late') src/tests/test_cf1_entry_repaired.py::OwnerTests::test_identity_rejects_changed_root_late_entry_and_unowned_controller
+SUBFAILED(damage='unowned') src/tests/test_cf1_entry_repaired.py::OwnerTests::test_identity_rejects_changed_root_late_entry_and_unowned_controller
+SUBFAILED(damage='none') src/tests/test_cf1_entry_repaired.py::OwnerTests::test_live_guard_refuses_stale_status_owner_reserve_and_package_exhaustion
+SUBFAILED(damage='stale') src/tests/test_cf1_entry_repaired.py::OwnerTests::test_live_guard_refuses_stale_status_owner_reserve_and_package_exhaustion
+SUBFAILED(damage='owner-reserve') src/tests/test_cf1_entry_repaired.py::OwnerTests::test_live_guard_refuses_stale_status_owner_reserve_and_package_exhaustion
+SUBFAILED(damage='package') src/tests/test_cf1_entry_repaired.py::OwnerTests::test_live_guard_refuses_stale_status_owner_reserve_and_package_exhaustion
+SUBFAILED(damage='none') src/tests/test_cf1_entry_repaired.py::OwnerTests::test_missing_incomplete_overcap_and_changed_binding_permits_reject
+SUBFAILED(damage='missing') src/tests/test_cf1_entry_repaired.py::OwnerTests::test_missing_incomplete_overcap_and_changed_binding_permits_reject
+SUBFAILED(damage='incomplete') src/tests/test_cf1_entry_repaired.py::OwnerTests::test_missing_incomplete_overcap_and_changed_binding_permits_reject
+SUBFAILED(damage='overcap') src/tests/test_cf1_entry_repaired.py::OwnerTests::test_missing_incomplete_overcap_and_changed_binding_permits_reject
+SUBFAILED(damage='unowned') src/tests/test_cf1_entry_repaired.py::OwnerTests::test_missing_incomplete_overcap_and_changed_binding_permits_reject
+SUBFAILED(damage='binding') src/tests/test_cf1_entry_repaired.py::OwnerTests::test_missing_incomplete_overcap_and_changed_binding_permits_reject
+SUBFAILED(damage='late') src/tests/test_cf1_entry_repaired.py::OwnerTests::test_missing_incomplete_overcap_and_changed_binding_permits_reject
+FAILED src/tests/test_cf1_entry_repaired.py::OwnerTests::test_owner_fake_process_anchor_argv_ready_and_cleanup_receipt
+SUBFAILED(damage='none') src/tests/test_cf1_entry_repaired.py::OwnerTests::test_parent_fake_observations_bound_entry_and_capacity_scaled_suffix
+SUBFAILED(damage='overcap') src/tests/test_cf1_entry_repaired.py::OwnerTests::test_parent_fake_observations_bound_entry_and_capacity_scaled_suffix
+SUBFAILED(damage='missing-observation') src/tests/test_cf1_entry_repaired.py::OwnerTests::test_parent_fake_observations_bound_entry_and_capacity_scaled_suffix
+FAILED src/tests/test_cf1_entry_repaired.py::OwnerTests::test_precharge_is_exact_nonrefundable_once_and_real_resume_consumes_it
+FAILED src/tests/test_cf1_entry_repaired.py::OwnerTests::test_runtime_status_keeps_owner_binding_and_monotone_sequence
+26 failed, 16 passed, 36 subtests passed in 1.46s

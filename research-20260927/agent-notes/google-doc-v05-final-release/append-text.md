@@ -1,0 +1,12 @@
+# Reviewed research draft 0.5 — 27 September 2026
+
+For the declared 37-service, single-depot-15 ideal case, the exact certificate establishes a minimum fleet of two and encloses the flat-cost optimum in **[404.924239, 408.533136]**. Under the declared nonlinear objective, the exact ideal-model enclosure is **424.365880 ≤ CH ≤ D ≤ 512.769426**. Displayed endpoints are rounded outward to six decimals. These are enclosures, not identified optima, and they do not establish a positive physical-versus-hull gap.
+
+The matched nonlinear v2 attempt has **conditional numerical reconstruction: PASS** and **strict protocol compliance: FAIL**. Its hull polishing time was 5.1909049186 seconds against the frozen cumulative 5-second cap, so the calculation is reported only as off-protocol secondary diagnostic evidence. Solver-conditioned physical and full-fleet-hull intervals are **[408.533134, 514.526312]** and **[408.533134, 454.693842]**, respectively; the resulting physical-minus-hull enclosure **[−46.160707, 105.993177]** remains unresolved at five. Displayed endpoints are rounded outward to six decimals. The approximately **211.98635** own-price regret is for the named bounded planner incumbent only, not a proven physical optimum. No positive public gap is inferred, and no further experiment or broad campaign is planned.
+
+The focused three-source literature update is recorded in `paper/related-work/RECENT_SCOPE_CHECK_20260927.md`: Lacombe et al. (2024) is acknowledged as a bus-charging decomposition antecedent; Ricard et al. (2026) addresses chance-constrained battery reliability; and Manzolli et al. (2026) is identified as a preprint on agentic fleet pricing. This targeted check is not exhaustive and supports no novelty-priority claim.
+
+The 27-page, 8-figure, 5-table manuscript has passed independent final review and is ready for expert user review; it is not a submission. No EGG jobs remain, and no further experiment or campaign is planned.
+
+**Final reviewed manuscript PDF:** [egg-journal-working-draft-v05-reviewed.pdf](https://github.com/ndandnd/egg/blob/10d3381ea725ae893cadbf574a220bbb0157c704/output/pdf/egg-journal-working-draft-v05-reviewed.pdf) — SHA-256 `8c8192c6259b5294449c655047313f7799ee1aa74092fc669748362bbfdad8eb` (1,954,122 bytes).  
+**Published source commit:** [10d3381](https://github.com/ndandnd/egg/commit/10d3381ea725ae893cadbf574a220bbb0157c704) (draft PR 56 remains unmerged).

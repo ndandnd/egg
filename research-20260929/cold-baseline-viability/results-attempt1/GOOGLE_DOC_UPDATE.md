@@ -1,0 +1,7 @@
+## Six larger-case runs completed — 29 September 2026
+
+The six-run cold-baseline screen completed successfully in 1 minute 54 seconds and was collected in the same work session. All three cheap-window target cases reached the prescribed numerical tolerance. The three flat-price source cases stopped at the rational-arithmetic limit, leaving native bound widths below 0.35, 0.19 and 0.06 cost units for 8, 16 and 24 services. No child failed or exceeded its deadline. These are useful near-optimal enclosures even where the stricter certification target was not reached.
+
+The stopping mechanism and the time bottleneck differ. Arithmetic prevented certification in the flat-price cases, but route pricing was the largest recorded cost at 24 services: 35.43 seconds versus 9.15 seconds of numerical refinement in the flat-price run. The next bounded diagnosis will test the existing numerical-QP master on these same six cells with other controls held fixed, before expanding the reuse comparison. Route proposals may still help with pricing work; this screen establishes no learned-method benefit or speedup. All sizes remain variants of one development family, and native numerical bounds remain distinct from exact ideal-model proofs.
+
+[Fully accounted six-cell results and independent review](https://github.com/ndandnd/egg/tree/codex/journal-research-20260927/research-20260929/cold-baseline-viability/results-attempt1)

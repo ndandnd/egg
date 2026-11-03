@@ -1,0 +1,68 @@
+{
+  "job_id": "696684",
+  "submitted_at_utc": "2026-09-30T13:09:07Z",
+  "source_commit": "c9f50bfc6a5cc916da4ea10f9e2747e6ccd4a338",
+  "source_branch": "codex/journal-research-20260927",
+  "remote_checkout": "/home/nc437/egg-fixed-source-charge-20260930",
+  "attempt_relative": "result/learning_repair/20260930-fixed-source-charge-attempt1",
+  "wrapper": "src/cluster/fixed_source_charge.sbatch",
+  "protocol": "PROTOCOL_FIXED_SOURCE_CHARGE.md",
+  "launch_review": "FIXED_SOURCE_CHARGE_LAUNCH_REVIEW.md",
+  "requested": {
+    "cpus_per_task": 1,
+    "memory_gb": 8,
+    "wall_seconds": 1800,
+    "native_threads": 1,
+    "requeue": false,
+    "excluded_nodes": [
+      "scaglione-compute-01"
+    ]
+  },
+  "profile": {
+    "seeds": [
+      2016,
+      2017,
+      2018,
+      2019
+    ],
+    "split": "dev",
+    "sources": [
+      "source0",
+      "source1"
+    ],
+    "declared_cells": 8,
+    "model_refit": false,
+    "fresh_hull": false,
+    "charging_objective": "linear market.a with exact nonlinear target rescoring"
+  },
+  "test_groups_unobserved": [
+    2004,
+    2005,
+    2020,
+    2021
+  ],
+  "caps_seconds": {
+    "charging_phase": 45,
+    "charging_wall": 55,
+    "child_hard": 100,
+    "controller": 1200,
+    "outer_shell": 1350
+  },
+  "source_pin_count": 12,
+  "archived_input_pin_count": 18,
+  "submission_guard": ".submission-fixed-source-charge-attempt1/jobid.txt",
+  "submission_checks": {
+    "no_active_egg_job": true,
+    "fresh_checkout": true,
+    "tracked_checkout_clean": true,
+    "exclusive_attempt_absent": true
+  },
+  "launch_script_sha256": "cc95ba421d331738b5d1e3d93b4fc7c26ae543a1677febe90e41c5fa92bebc0c",
+  "submission_stdout": "HEAD is now at c9f50bf Add fixed-source charging baseline with preserved failure accounting\n696684\n2026-09-30T13:09:07Z\n",
+  "observation": {
+    "recorded_at_utc": "2026-09-30T13:10:10.092360+00:00",
+    "state": "SUBMITTED",
+    "queue_state_not_polled_after_submission": true
+  },
+  "scientific_result": "pending; no new outcome inspected"
+}

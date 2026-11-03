@@ -1,0 +1,11 @@
+# Proposed check-supervision amendment
+
+24 October 2026 UTC. Proposal only following the failed single admission/capture check. Carry **565.0277991267408 charged seconds**, preserving source/output hashes, original receipt and separate cleanup reconciliation. No run or retry is authorized by this note. The 900/720/180 qualification limits and 0.25-second complete-sample policy remain unchanged.
+
+The next bounded package should repair the check supervisor rather than change the unverified admission/capture runtime or loosen test expectations. Reuse the already reviewed native supervisor's shared monitor-deadline/early-scheduling and bounded cleanup principles instead of continuing to duplicate older timeout/cleanup helpers. Keep scope to a new check-wrapper revision and its necessary focused checks. Earlier scheduling preserves slack but cannot guarantee an overlong `ps` query succeeds; that query must still fail closed.
+
+Always retain the known owned PGID inventory, process reap state, primary stop reason and all secondary cleanup/audit errors, even when cleanup cannot return normally. Permission-denied probes are unknown, not absence. Use an absolute cleanup budget, confirm no survivor, and keep separate later reconciliation when a terminal audit is incomplete. Count monitor children once together with test children or via an explicitly equivalent accounting rule. Do not hide failed overhead.
+
+Review exact source hashes, argv, prior evidence, fresh exclusive attempt namespace, resource/clock/receipt policy and cumulative allowance before a deliberate new check. The current four-module suite and the 26 focused cases remain pending verification. The previous attempt must remain failed and immutable; a deliberate separately recorded revision is not automatic retry. Stop on another failure and preserve it. No native experiment, training or comparison launch follows automatically from a check pass.
+
+After a passing check, any native qualification requires a feasible prospective protocol and explicit cross-revision evidence limits, or resolution of a changed resource budget. Do not schedule an unconditional eight-task repeat under the remaining allowance. The scientific comparison still requires a common frozen evidence policy across all arms; engineering logging changes provide no retrospective ML or speedup claim.

@@ -1,0 +1,4117 @@
+{
+  "arm_totals": {
+    "cold": {
+      "calls_clean": 108,
+      "calls_proposal": 0,
+      "calls_seed": 15,
+      "certified_and_checked": 14,
+      "clean_master_lp_calls": 420,
+      "complete_wall_s": 99.59345108782873,
+      "failed_or_unchecked": 1,
+      "optimizer_wrapper_calls": 543,
+      "oracle_calls": 123,
+      "planned_cells": 15,
+      "solver_wall_s": 92.0912013053894,
+      "warm_cells_needing_multiple_clean_calls": [
+        {
+          "calls_clean": 6,
+          "fixture": "depleted_f20",
+          "oracle_calls": 7,
+          "state_index": 1
+        },
+        {
+          "calls_clean": 4,
+          "fixture": "depleted_f20",
+          "oracle_calls": 5,
+          "state_index": 2
+        },
+        {
+          "calls_clean": 5,
+          "fixture": "depleted_f20",
+          "oracle_calls": 6,
+          "state_index": 3
+        },
+        {
+          "calls_clean": 5,
+          "fixture": "depleted_f26",
+          "oracle_calls": 6,
+          "state_index": 1
+        },
+        {
+          "calls_clean": 3,
+          "fixture": "depleted_f26",
+          "oracle_calls": 4,
+          "state_index": 2
+        },
+        {
+          "calls_clean": 5,
+          "fixture": "depleted_f26",
+          "oracle_calls": 6,
+          "state_index": 3
+        },
+        {
+          "calls_clean": 5,
+          "fixture": "depleted_f26",
+          "oracle_calls": 6,
+          "state_index": 4
+        },
+        {
+          "calls_clean": 13,
+          "fixture": "replenished_two_bus",
+          "oracle_calls": 14,
+          "state_index": 1
+        },
+        {
+          "calls_clean": 10,
+          "fixture": "replenished_two_bus",
+          "oracle_calls": 11,
+          "state_index": 2
+        },
+        {
+          "calls_clean": 9,
+          "fixture": "replenished_two_bus",
+          "oracle_calls": 10,
+          "state_index": 3
+        },
+        {
+          "calls_clean": 13,
+          "fixture": "replenished_two_bus",
+          "oracle_calls": 14,
+          "state_index": 4
+        }
+      ],
+      "warm_clean_calls_beyond_one": 67
+    },
+    "retained": {
+      "calls_clean": 41,
+      "calls_proposal": 0,
+      "calls_seed": 3,
+      "certified_and_checked": 15,
+      "clean_master_lp_calls": 192,
+      "complete_wall_s": 28.06184470653534,
+      "failed_or_unchecked": 0,
+      "optimizer_wrapper_calls": 236,
+      "oracle_calls": 44,
+      "planned_cells": 15,
+      "solver_wall_s": 23.23714852333069,
+      "warm_cells_needing_multiple_clean_calls": [
+        {
+          "calls_clean": 2,
+          "fixture": "depleted_f20",
+          "oracle_calls": 2,
+          "state_index": 2
+        },
+        {
+          "calls_clean": 3,
+          "fixture": "depleted_f20",
+          "oracle_calls": 3,
+          "state_index": 3
+        },
+        {
+          "calls_clean": 2,
+          "fixture": "depleted_f26",
+          "oracle_calls": 2,
+          "state_index": 3
+        },
+        {
+          "calls_clean": 2,
+          "fixture": "replenished_two_bus",
+          "oracle_calls": 2,
+          "state_index": 3
+        }
+      ],
+      "warm_clean_calls_beyond_one": 5
+    },
+    "retained_shift": {
+      "calls_clean": 41,
+      "calls_proposal": 12,
+      "calls_seed": 3,
+      "certified_and_checked": 15,
+      "clean_master_lp_calls": 192,
+      "complete_wall_s": 31.880634791683406,
+      "failed_or_unchecked": 0,
+      "optimizer_wrapper_calls": 248,
+      "oracle_calls": 56,
+      "planned_cells": 15,
+      "solver_wall_s": 27.12245774269104,
+      "warm_cells_needing_multiple_clean_calls": [
+        {
+          "calls_clean": 2,
+          "fixture": "depleted_f20",
+          "oracle_calls": 3,
+          "state_index": 2
+        },
+        {
+          "calls_clean": 3,
+          "fixture": "depleted_f20",
+          "oracle_calls": 4,
+          "state_index": 3
+        },
+        {
+          "calls_clean": 2,
+          "fixture": "depleted_f26",
+          "oracle_calls": 3,
+          "state_index": 3
+        },
+        {
+          "calls_clean": 2,
+          "fixture": "replenished_two_bus",
+          "oracle_calls": 3,
+          "state_index": 3
+        }
+      ],
+      "warm_clean_calls_beyond_one": 5
+    }
+  },
+  "cells": [
+    {
+      "accounting_complete": true,
+      "arm": "cold",
+      "calls_clean": 6,
+      "calls_proposal": 0,
+      "calls_seed": 1,
+      "clean_calls_after_first": 5,
+      "clean_master_lp_calls": 26,
+      "clean_projection_novel_count": 5,
+      "complete_wall_s": 1.3267321670427918,
+      "distinct_fleets": [
+        1,
+        2
+      ],
+      "error": null,
+      "fixture": "depleted_f20",
+      "gap": 0.0009570141227897011,
+      "last_optimizer_wrapper": {
+        "backend": "CBC",
+        "bound": 49.1517857142856,
+        "elapsed_s": 0.06947720795869827,
+        "extra": {
+          "threads": 1
+        },
+        "lp_mip_gap_abs": 29.1517857142856,
+        "lp_obj": 20.0,
+        "lp_wall_s": 0.0006902217864990234,
+        "max_mip_gap": 1e-09,
+        "mip_gap": 0.0,
+        "model": "evsp",
+        "model_time_cap_s": 10,
+        "n_constrs": 91,
+        "n_int": 32,
+        "n_vars": 69,
+        "obj": 49.1517857142856,
+        "status": "OPTIMAL",
+        "time_limit_s": 10,
+        "wall_s": 0.06635785102844238
+      },
+      "lower": 40.704832302794145,
+      "optimizer_wrapper_attempts_observed": 33,
+      "optimizer_wrapper_calls": 33,
+      "oracle_calls": 7,
+      "parse_error": null,
+      "pool_columns": 7,
+      "pricing_attempts_observed": 7,
+      "proposal_events": [],
+      "proposal_projection_novel": 0,
+      "reference_check": {
+        "guard": 1e-06,
+        "intervals_overlap_with_guard": true,
+        "reference_lower": 40.70486844232949,
+        "reference_upper": 40.70488292523947
+      },
+      "result": "depleted_f20-cold-s0/state.json",
+      "runtime": {
+        "machine": "arm64",
+        "platform": "macOS-26.5.2-arm64-arm-64bit",
+        "selected_cbc_library": {
+          "path": "/Users/nadan/Documents/ChatGPT/egg/.research-venv-repaired-1176/lib/python3.12/site-packages/cbcbox/cbc_dist/lib/libCbc.dylib",
+          "sha256": "fe44771023b133390daf7b72790c2ce65d1ccb2e5ac77c7a04c8d8f8648aff7d"
+        },
+        "versions": {
+          "cbcbox": "2.929",
+          "mip": "1.17.6",
+          "numpy": "2.5.3"
+        }
+      },
+      "solver_wall_s": 0.6330661773681641,
+      "state_index": 0,
+      "status": "certified",
+      "subprocess_cap_s": 60,
+      "timed_out": false,
+      "upper": 40.705789316916935,
+      "worker_cpu_s": 0.827969,
+      "worker_exit": 0
+    },
+    {
+      "accounting_complete": true,
+      "arm": "retained",
+      "calls_clean": 6,
+      "calls_proposal": 0,
+      "calls_seed": 1,
+      "clean_calls_after_first": 5,
+      "clean_master_lp_calls": 26,
+      "clean_projection_novel_count": 5,
+      "complete_wall_s": 0.994205666705966,
+      "distinct_fleets": [
+        1,
+        2
+      ],
+      "error": null,
+      "fixture": "depleted_f20",
+      "gap": 0.0009570141227897011,
+      "last_optimizer_wrapper": {
+        "backend": "CBC",
+        "bound": 49.1517857142856,
+        "elapsed_s": 0.06734208390116692,
+        "extra": {
+          "threads": 1
+        },
+        "lp_mip_gap_abs": 29.1517857142856,
+        "lp_obj": 20.0,
+        "lp_wall_s": 0.0006260871887207031,
+        "max_mip_gap": 1e-09,
+        "mip_gap": 0.0,
+        "model": "evsp",
+        "model_time_cap_s": 10,
+        "n_constrs": 91,
+        "n_int": 32,
+        "n_vars": 69,
+        "obj": 49.1517857142856,
+        "status": "OPTIMAL",
+        "time_limit_s": 10,
+        "wall_s": 0.06447410583496094
+      },
+      "lower": 40.704832302794145,
+      "optimizer_wrapper_attempts_observed": 33,
+      "optimizer_wrapper_calls": 33,
+      "oracle_calls": 7,
+      "parse_error": null,
+      "pool_columns": 7,
+      "pricing_attempts_observed": 7,
+      "proposal_events": [],
+      "proposal_projection_novel": 0,
+      "reference_check": {
+        "guard": 1e-06,
+        "intervals_overlap_with_guard": true,
+        "reference_lower": 40.70486844232949,
+        "reference_upper": 40.70488292523947
+      },
+      "result": "depleted_f20-retained-s0/state.json",
+      "runtime": {
+        "machine": "arm64",
+        "platform": "macOS-26.5.2-arm64-arm-64bit",
+        "selected_cbc_library": {
+          "path": "/Users/nadan/Documents/ChatGPT/egg/.research-venv-repaired-1176/lib/python3.12/site-packages/cbcbox/cbc_dist/lib/libCbc.dylib",
+          "sha256": "fe44771023b133390daf7b72790c2ce65d1ccb2e5ac77c7a04c8d8f8648aff7d"
+        },
+        "versions": {
+          "cbcbox": "2.929",
+          "mip": "1.17.6",
+          "numpy": "2.5.3"
+        }
+      },
+      "solver_wall_s": 0.6174807548522949,
+      "state_index": 0,
+      "status": "certified",
+      "subprocess_cap_s": 60,
+      "timed_out": false,
+      "upper": 40.705789316916935,
+      "worker_cpu_s": 0.804204,
+      "worker_exit": 0
+    },
+    {
+      "accounting_complete": true,
+      "arm": "retained_shift",
+      "calls_clean": 6,
+      "calls_proposal": 0,
+      "calls_seed": 1,
+      "clean_calls_after_first": 5,
+      "clean_master_lp_calls": 26,
+      "clean_projection_novel_count": 5,
+      "complete_wall_s": 0.985100083053112,
+      "distinct_fleets": [
+        1,
+        2
+      ],
+      "error": null,
+      "fixture": "depleted_f20",
+      "gap": 0.0009570141227897011,
+      "last_optimizer_wrapper": {
+        "backend": "CBC",
+        "bound": 49.1517857142856,
+        "elapsed_s": 0.06695724977180362,
+        "extra": {
+          "threads": 1
+        },
+        "lp_mip_gap_abs": 29.1517857142856,
+        "lp_obj": 20.0,
+        "lp_wall_s": 0.0006330013275146484,
+        "max_mip_gap": 1e-09,
+        "mip_gap": 0.0,
+        "model": "evsp",
+        "model_time_cap_s": 10,
+        "n_constrs": 91,
+        "n_int": 32,
+        "n_vars": 69,
+        "obj": 49.1517857142856,
+        "status": "OPTIMAL",
+        "time_limit_s": 10,
+        "wall_s": 0.06364011764526367
+      },
+      "lower": 40.704832302794145,
+      "optimizer_wrapper_attempts_observed": 33,
+      "optimizer_wrapper_calls": 33,
+      "oracle_calls": 7,
+      "parse_error": null,
+      "pool_columns": 7,
+      "pricing_attempts_observed": 7,
+      "proposal_events": [],
+      "proposal_projection_novel": 0,
+      "reference_check": {
+        "guard": 1e-06,
+        "intervals_overlap_with_guard": true,
+        "reference_lower": 40.70486844232949,
+        "reference_upper": 40.70488292523947
+      },
+      "result": "depleted_f20-retained_shift-s0/state.json",
+      "runtime": {
+        "machine": "arm64",
+        "platform": "macOS-26.5.2-arm64-arm-64bit",
+        "selected_cbc_library": {
+          "path": "/Users/nadan/Documents/ChatGPT/egg/.research-venv-repaired-1176/lib/python3.12/site-packages/cbcbox/cbc_dist/lib/libCbc.dylib",
+          "sha256": "fe44771023b133390daf7b72790c2ce65d1ccb2e5ac77c7a04c8d8f8648aff7d"
+        },
+        "versions": {
+          "cbcbox": "2.929",
+          "mip": "1.17.6",
+          "numpy": "2.5.3"
+        }
+      },
+      "solver_wall_s": 0.6307404041290283,
+      "state_index": 0,
+      "status": "certified",
+      "subprocess_cap_s": 60,
+      "timed_out": false,
+      "upper": 40.705789316916935,
+      "worker_cpu_s": 0.817354,
+      "worker_exit": 0
+    },
+    {
+      "accounting_complete": true,
+      "arm": "retained",
+      "calls_clean": 1,
+      "calls_proposal": 0,
+      "calls_seed": 0,
+      "clean_calls_after_first": 0,
+      "clean_master_lp_calls": 7,
+      "clean_projection_novel_count": 0,
+      "complete_wall_s": 0.3995877499692142,
+      "distinct_fleets": [
+        1,
+        2
+      ],
+      "error": null,
+      "fixture": "depleted_f20",
+      "gap": 0.00039423230229118644,
+      "last_optimizer_wrapper": {
+        "backend": "CBC",
+        "bound": 49.12499999999994,
+        "elapsed_s": 0.09982341714203358,
+        "extra": {
+          "threads": 1
+        },
+        "lp_mip_gap_abs": 29.124999999999943,
+        "lp_obj": 20.0,
+        "lp_wall_s": 0.0006721019744873047,
+        "max_mip_gap": 1e-09,
+        "mip_gap": 0.0,
+        "model": "evsp",
+        "model_time_cap_s": 10,
+        "n_constrs": 91,
+        "n_int": 32,
+        "n_vars": 69,
+        "obj": 49.12499999999994,
+        "status": "OPTIMAL",
+        "time_limit_s": 10,
+        "wall_s": 0.0982820987701416
+      },
+      "lower": 40.70462053571427,
+      "optimizer_wrapper_attempts_observed": 8,
+      "optimizer_wrapper_calls": 8,
+      "oracle_calls": 1,
+      "parse_error": null,
+      "pool_columns": 7,
+      "pricing_attempts_observed": 1,
+      "proposal_events": [],
+      "proposal_projection_novel": 0,
+      "reference_check": {
+        "guard": 1e-06,
+        "intervals_overlap_with_guard": true,
+        "reference_lower": 40.70486844232949,
+        "reference_upper": 40.70488292523947
+      },
+      "result": "depleted_f20-retained-s1/state.json",
+      "runtime": {
+        "machine": "arm64",
+        "platform": "macOS-26.5.2-arm64-arm-64bit",
+        "selected_cbc_library": {
+          "path": "/Users/nadan/Documents/ChatGPT/egg/.research-venv-repaired-1176/lib/python3.12/site-packages/cbcbox/cbc_dist/lib/libCbc.dylib",
+          "sha256": "fe44771023b133390daf7b72790c2ce65d1ccb2e5ac77c7a04c8d8f8648aff7d"
+        },
+        "versions": {
+          "cbcbox": "2.929",
+          "mip": "1.17.6",
+          "numpy": "2.5.3"
+        }
+      },
+      "solver_wall_s": 0.19087696075439453,
+      "state_index": 1,
+      "status": "certified",
+      "subprocess_cap_s": 60,
+      "timed_out": false,
+      "upper": 40.70501476801656,
+      "worker_cpu_s": 0.258009,
+      "worker_exit": 0
+    },
+    {
+      "accounting_complete": true,
+      "arm": "retained_shift",
+      "calls_clean": 1,
+      "calls_proposal": 1,
+      "calls_seed": 0,
+      "clean_calls_after_first": 0,
+      "clean_master_lp_calls": 7,
+      "clean_projection_novel_count": 0,
+      "complete_wall_s": 0.506204416975379,
+      "distinct_fleets": [
+        1,
+        2
+      ],
+      "error": null,
+      "fixture": "depleted_f20",
+      "gap": 0.00039423230229118644,
+      "last_optimizer_wrapper": {
+        "backend": "CBC",
+        "bound": 49.12499999999994,
+        "elapsed_s": 0.12442979123443365,
+        "extra": {
+          "threads": 1
+        },
+        "lp_mip_gap_abs": 29.124999999999943,
+        "lp_obj": 20.0,
+        "lp_wall_s": 0.0012938976287841797,
+        "max_mip_gap": 1e-09,
+        "mip_gap": 0.0,
+        "model": "evsp",
+        "model_time_cap_s": 10,
+        "n_constrs": 91,
+        "n_int": 32,
+        "n_vars": 69,
+        "obj": 49.12499999999994,
+        "status": "OPTIMAL",
+        "time_limit_s": 10,
+        "wall_s": 0.12198185920715332
+      },
+      "lower": 40.70462053571427,
+      "optimizer_wrapper_attempts_observed": 9,
+      "optimizer_wrapper_calls": 9,
+      "oracle_calls": 2,
+      "parse_error": null,
+      "pool_columns": 7,
+      "pricing_attempts_observed": 2,
+      "proposal_events": [
+        {
+          "column_key": "7dfcac7ad97d055d110d1fc95f61e95048fa05937bcf8e49ef80536193db0b5e",
+          "elapsed_s": 0.11019929172471166,
+          "novel": false,
+          "projection_novel": false,
+          "purpose": "analytic_proposal",
+          "status": "completed"
+        }
+      ],
+      "proposal_projection_novel": 0,
+      "reference_check": {
+        "guard": 1e-06,
+        "intervals_overlap_with_guard": true,
+        "reference_lower": 40.70486844232949,
+        "reference_upper": 40.70488292523947
+      },
+      "result": "depleted_f20-retained_shift-s1/state.json",
+      "runtime": {
+        "machine": "arm64",
+        "platform": "macOS-26.5.2-arm64-arm-64bit",
+        "selected_cbc_library": {
+          "path": "/Users/nadan/Documents/ChatGPT/egg/.research-venv-repaired-1176/lib/python3.12/site-packages/cbcbox/cbc_dist/lib/libCbc.dylib",
+          "sha256": "fe44771023b133390daf7b72790c2ce65d1ccb2e5ac77c7a04c8d8f8648aff7d"
+        },
+        "versions": {
+          "cbcbox": "2.929",
+          "mip": "1.17.6",
+          "numpy": "2.5.3"
+        }
+      },
+      "solver_wall_s": 0.27988409996032715,
+      "state_index": 1,
+      "status": "certified",
+      "subprocess_cap_s": 60,
+      "timed_out": false,
+      "upper": 40.70501476801656,
+      "worker_cpu_s": 0.33921599999999996,
+      "worker_exit": 0
+    },
+    {
+      "accounting_complete": true,
+      "arm": "cold",
+      "calls_clean": 6,
+      "calls_proposal": 0,
+      "calls_seed": 1,
+      "clean_calls_after_first": 5,
+      "clean_master_lp_calls": 26,
+      "clean_projection_novel_count": 5,
+      "complete_wall_s": 1.031565791927278,
+      "distinct_fleets": [
+        1,
+        2
+      ],
+      "error": null,
+      "fixture": "depleted_f20",
+      "gap": 0.0009570141227897011,
+      "last_optimizer_wrapper": {
+        "backend": "CBC",
+        "bound": 49.1517857142856,
+        "elapsed_s": 0.07301625004038215,
+        "extra": {
+          "threads": 1
+        },
+        "lp_mip_gap_abs": 29.1517857142856,
+        "lp_obj": 20.0,
+        "lp_wall_s": 0.0006620883941650391,
+        "max_mip_gap": 1e-09,
+        "mip_gap": 0.0,
+        "model": "evsp",
+        "model_time_cap_s": 10,
+        "n_constrs": 91,
+        "n_int": 32,
+        "n_vars": 69,
+        "obj": 49.1517857142856,
+        "status": "OPTIMAL",
+        "time_limit_s": 10,
+        "wall_s": 0.07003498077392578
+      },
+      "lower": 40.704832302794145,
+      "optimizer_wrapper_attempts_observed": 33,
+      "optimizer_wrapper_calls": 33,
+      "oracle_calls": 7,
+      "parse_error": null,
+      "pool_columns": 7,
+      "pricing_attempts_observed": 7,
+      "proposal_events": [],
+      "proposal_projection_novel": 0,
+      "reference_check": {
+        "guard": 1e-06,
+        "intervals_overlap_with_guard": true,
+        "reference_lower": 40.70486844232949,
+        "reference_upper": 40.70488292523947
+      },
+      "result": "depleted_f20-cold-s1/state.json",
+      "runtime": {
+        "machine": "arm64",
+        "platform": "macOS-26.5.2-arm64-arm-64bit",
+        "selected_cbc_library": {
+          "path": "/Users/nadan/Documents/ChatGPT/egg/.research-venv-repaired-1176/lib/python3.12/site-packages/cbcbox/cbc_dist/lib/libCbc.dylib",
+          "sha256": "fe44771023b133390daf7b72790c2ce65d1ccb2e5ac77c7a04c8d8f8648aff7d"
+        },
+        "versions": {
+          "cbcbox": "2.929",
+          "mip": "1.17.6",
+          "numpy": "2.5.3"
+        }
+      },
+      "solver_wall_s": 0.6646504402160645,
+      "state_index": 1,
+      "status": "certified",
+      "subprocess_cap_s": 60,
+      "timed_out": false,
+      "upper": 40.705789316916935,
+      "worker_cpu_s": 0.8312600000000001,
+      "worker_exit": 0
+    },
+    {
+      "accounting_complete": true,
+      "arm": "retained_shift",
+      "calls_clean": 2,
+      "calls_proposal": 1,
+      "calls_seed": 0,
+      "clean_calls_after_first": 1,
+      "clean_master_lp_calls": 10,
+      "clean_projection_novel_count": 1,
+      "complete_wall_s": 0.6106531671248376,
+      "distinct_fleets": [
+        1,
+        2
+      ],
+      "error": null,
+      "fixture": "depleted_f20",
+      "gap": 0.0008864749976638109,
+      "last_optimizer_wrapper": {
+        "backend": "CBC",
+        "bound": 47.438244047618966,
+        "elapsed_s": 0.05669470923021436,
+        "extra": {
+          "threads": 1
+        },
+        "lp_mip_gap_abs": 27.438244047618966,
+        "lp_obj": 20.0,
+        "lp_wall_s": 0.0007102489471435547,
+        "max_mip_gap": 1e-09,
+        "mip_gap": 0.0,
+        "model": "evsp",
+        "model_time_cap_s": 10,
+        "n_constrs": 91,
+        "n_int": 32,
+        "n_vars": 69,
+        "obj": 47.438244047618966,
+        "status": "OPTIMAL",
+        "time_limit_s": 10,
+        "wall_s": 0.05286884307861328
+      },
+      "lower": 39.32748387712289,
+      "optimizer_wrapper_attempts_observed": 13,
+      "optimizer_wrapper_calls": 13,
+      "oracle_calls": 3,
+      "parse_error": null,
+      "pool_columns": 8,
+      "pricing_attempts_observed": 3,
+      "proposal_events": [
+        {
+          "column_key": "2a61c80bd4df7ab2e4dee3fdf8ca9666fd1fa1a35d632b7f34c0513a9ac284b8",
+          "elapsed_s": 0.09016600018367171,
+          "novel": false,
+          "projection_novel": false,
+          "purpose": "analytic_proposal",
+          "status": "completed"
+        }
+      ],
+      "proposal_projection_novel": 0,
+      "reference_check": {
+        "guard": 1e-06,
+        "intervals_overlap_with_guard": true,
+        "reference_lower": 39.327969141585456,
+        "reference_upper": 39.327981460972474
+      },
+      "result": "depleted_f20-retained_shift-s2/state.json",
+      "runtime": {
+        "machine": "arm64",
+        "platform": "macOS-26.5.2-arm64-arm-64bit",
+        "selected_cbc_library": {
+          "path": "/Users/nadan/Documents/ChatGPT/egg/.research-venv-repaired-1176/lib/python3.12/site-packages/cbcbox/cbc_dist/lib/libCbc.dylib",
+          "sha256": "fe44771023b133390daf7b72790c2ce65d1ccb2e5ac77c7a04c8d8f8648aff7d"
+        },
+        "versions": {
+          "cbcbox": "2.929",
+          "mip": "1.17.6",
+          "numpy": "2.5.3"
+        }
+      },
+      "solver_wall_s": 0.31708812713623047,
+      "state_index": 2,
+      "status": "certified",
+      "subprocess_cap_s": 60,
+      "timed_out": false,
+      "upper": 39.32837035212055,
+      "worker_cpu_s": 0.405298,
+      "worker_exit": 0
+    },
+    {
+      "accounting_complete": true,
+      "arm": "cold",
+      "calls_clean": 4,
+      "calls_proposal": 0,
+      "calls_seed": 1,
+      "clean_calls_after_first": 3,
+      "clean_master_lp_calls": 14,
+      "clean_projection_novel_count": 3,
+      "complete_wall_s": 0.5623547090217471,
+      "distinct_fleets": [
+        1,
+        2
+      ],
+      "error": null,
+      "fixture": "depleted_f20",
+      "gap": 0.0002820151193176912,
+      "last_optimizer_wrapper": {
+        "backend": "CBC",
+        "bound": 47.44196428571419,
+        "elapsed_s": 0.052298666909337044,
+        "extra": {
+          "threads": 1
+        },
+        "lp_mip_gap_abs": 27.441964285714242,
+        "lp_obj": 20.0,
+        "lp_wall_s": 0.0006749629974365234,
+        "max_mip_gap": 1e-09,
+        "mip_gap": 1.0483965462236174e-15,
+        "model": "evsp",
+        "model_time_cap_s": 10,
+        "n_constrs": 91,
+        "n_int": 32,
+        "n_vars": 69,
+        "obj": 47.44196428571424,
+        "status": "OPTIMAL",
+        "time_limit_s": 10,
+        "wall_s": 0.0500330924987793
+      },
+      "lower": 39.32786061812415,
+      "optimizer_wrapper_attempts_observed": 19,
+      "optimizer_wrapper_calls": 19,
+      "oracle_calls": 5,
+      "parse_error": null,
+      "pool_columns": 5,
+      "pricing_attempts_observed": 5,
+      "proposal_events": [],
+      "proposal_projection_novel": 0,
+      "reference_check": {
+        "guard": 1e-06,
+        "intervals_overlap_with_guard": true,
+        "reference_lower": 39.327969141585456,
+        "reference_upper": 39.327981460972474
+      },
+      "result": "depleted_f20-cold-s2/state.json",
+      "runtime": {
+        "machine": "arm64",
+        "platform": "macOS-26.5.2-arm64-arm-64bit",
+        "selected_cbc_library": {
+          "path": "/Users/nadan/Documents/ChatGPT/egg/.research-venv-repaired-1176/lib/python3.12/site-packages/cbcbox/cbc_dist/lib/libCbc.dylib",
+          "sha256": "fe44771023b133390daf7b72790c2ce65d1ccb2e5ac77c7a04c8d8f8648aff7d"
+        },
+        "versions": {
+          "cbcbox": "2.929",
+          "mip": "1.17.6",
+          "numpy": "2.5.3"
+        }
+      },
+      "solver_wall_s": 0.29036951065063477,
+      "state_index": 2,
+      "status": "certified",
+      "subprocess_cap_s": 60,
+      "timed_out": false,
+      "upper": 39.328142633243466,
+      "worker_cpu_s": 0.38486,
+      "worker_exit": 0
+    },
+    {
+      "accounting_complete": true,
+      "arm": "retained",
+      "calls_clean": 2,
+      "calls_proposal": 0,
+      "calls_seed": 0,
+      "clean_calls_after_first": 1,
+      "clean_master_lp_calls": 10,
+      "clean_projection_novel_count": 1,
+      "complete_wall_s": 0.5655501247383654,
+      "distinct_fleets": [
+        1,
+        2
+      ],
+      "error": null,
+      "fixture": "depleted_f20",
+      "gap": 0.0008864749976638109,
+      "last_optimizer_wrapper": {
+        "backend": "CBC",
+        "bound": 47.438244047618966,
+        "elapsed_s": 0.05895479116588831,
+        "extra": {
+          "threads": 1
+        },
+        "lp_mip_gap_abs": 27.438244047618966,
+        "lp_obj": 20.0,
+        "lp_wall_s": 0.0006248950958251953,
+        "max_mip_gap": 1e-09,
+        "mip_gap": 0.0,
+        "model": "evsp",
+        "model_time_cap_s": 10,
+        "n_constrs": 91,
+        "n_int": 32,
+        "n_vars": 69,
+        "obj": 47.438244047618966,
+        "status": "OPTIMAL",
+        "time_limit_s": 10,
+        "wall_s": 0.05715298652648926
+      },
+      "lower": 39.32748387712289,
+      "optimizer_wrapper_attempts_observed": 12,
+      "optimizer_wrapper_calls": 12,
+      "oracle_calls": 2,
+      "parse_error": null,
+      "pool_columns": 8,
+      "pricing_attempts_observed": 2,
+      "proposal_events": [],
+      "proposal_projection_novel": 0,
+      "reference_check": {
+        "guard": 1e-06,
+        "intervals_overlap_with_guard": true,
+        "reference_lower": 39.327969141585456,
+        "reference_upper": 39.327981460972474
+      },
+      "result": "depleted_f20-retained-s2/state.json",
+      "runtime": {
+        "machine": "arm64",
+        "platform": "macOS-26.5.2-arm64-arm-64bit",
+        "selected_cbc_library": {
+          "path": "/Users/nadan/Documents/ChatGPT/egg/.research-venv-repaired-1176/lib/python3.12/site-packages/cbcbox/cbc_dist/lib/libCbc.dylib",
+          "sha256": "fe44771023b133390daf7b72790c2ce65d1ccb2e5ac77c7a04c8d8f8648aff7d"
+        },
+        "versions": {
+          "cbcbox": "2.929",
+          "mip": "1.17.6",
+          "numpy": "2.5.3"
+        }
+      },
+      "solver_wall_s": 0.2626981735229492,
+      "state_index": 2,
+      "status": "certified",
+      "subprocess_cap_s": 60,
+      "timed_out": false,
+      "upper": 39.32837035212055,
+      "worker_cpu_s": 0.34582199999999996,
+      "worker_exit": 0
+    },
+    {
+      "accounting_complete": true,
+      "arm": "cold",
+      "calls_clean": 5,
+      "calls_proposal": 0,
+      "calls_seed": 1,
+      "clean_calls_after_first": 4,
+      "clean_master_lp_calls": 19,
+      "clean_projection_novel_count": 4,
+      "complete_wall_s": 0.8407912920229137,
+      "distinct_fleets": [
+        1,
+        2
+      ],
+      "error": null,
+      "fixture": "depleted_f20",
+      "gap": 0.00022615705218953508,
+      "last_optimizer_wrapper": {
+        "backend": "CBC",
+        "bound": 50.49999999999996,
+        "elapsed_s": 0.05994416680186987,
+        "extra": {
+          "threads": 1
+        },
+        "lp_mip_gap_abs": 30.499999999999986,
+        "lp_obj": 20.0,
+        "lp_wall_s": 0.0006468296051025391,
+        "max_mip_gap": 1e-09,
+        "mip_gap": 5.62806127334733e-16,
+        "model": "evsp",
+        "model_time_cap_s": 10,
+        "n_constrs": 91,
+        "n_int": 32,
+        "n_vars": 69,
+        "obj": 50.499999999999986,
+        "status": "OPTIMAL",
+        "time_limit_s": 10,
+        "wall_s": 0.05713319778442383
+      },
+      "lower": 40.82779491191005,
+      "optimizer_wrapper_attempts_observed": 25,
+      "optimizer_wrapper_calls": 25,
+      "oracle_calls": 6,
+      "parse_error": null,
+      "pool_columns": 6,
+      "pricing_attempts_observed": 6,
+      "proposal_events": [],
+      "proposal_projection_novel": 0,
+      "reference_check": {
+        "guard": 1e-06,
+        "intervals_overlap_with_guard": true,
+        "reference_lower": 40.827970157187515,
+        "reference_upper": 40.82798049172958
+      },
+      "result": "depleted_f20-cold-s3/state.json",
+      "runtime": {
+        "machine": "arm64",
+        "platform": "macOS-26.5.2-arm64-arm-64bit",
+        "selected_cbc_library": {
+          "path": "/Users/nadan/Documents/ChatGPT/egg/.research-venv-repaired-1176/lib/python3.12/site-packages/cbcbox/cbc_dist/lib/libCbc.dylib",
+          "sha256": "fe44771023b133390daf7b72790c2ce65d1ccb2e5ac77c7a04c8d8f8648aff7d"
+        },
+        "versions": {
+          "cbcbox": "2.929",
+          "mip": "1.17.6",
+          "numpy": "2.5.3"
+        }
+      },
+      "solver_wall_s": 0.42631983757019043,
+      "state_index": 3,
+      "status": "certified",
+      "subprocess_cap_s": 60,
+      "timed_out": false,
+      "upper": 40.82802106896224,
+      "worker_cpu_s": 0.557773,
+      "worker_exit": 0
+    },
+    {
+      "accounting_complete": true,
+      "arm": "retained",
+      "calls_clean": 3,
+      "calls_proposal": 0,
+      "calls_seed": 0,
+      "clean_calls_after_first": 2,
+      "clean_master_lp_calls": 9,
+      "clean_projection_novel_count": 2,
+      "complete_wall_s": 0.6121681248769164,
+      "distinct_fleets": [
+        1,
+        2
+      ],
+      "error": null,
+      "fixture": "depleted_f20",
+      "gap": 3.269740513189845e-05,
+      "last_optimizer_wrapper": {
+        "backend": "CBC",
+        "bound": 50.5446428571429,
+        "elapsed_s": 0.0736082922667265,
+        "extra": {
+          "threads": 1
+        },
+        "lp_mip_gap_abs": 30.544642857142904,
+        "lp_obj": 20.0,
+        "lp_wall_s": 0.0006971359252929688,
+        "max_mip_gap": 1e-09,
+        "mip_gap": 1.4057725915055846e-16,
+        "model": "evsp",
+        "model_time_cap_s": 10,
+        "n_constrs": 91,
+        "n_int": 32,
+        "n_vars": 69,
+        "obj": 50.544642857142904,
+        "status": "OPTIMAL",
+        "time_limit_s": 10,
+        "wall_s": 0.07143187522888184
+      },
+      "lower": 40.82796805245533,
+      "optimizer_wrapper_attempts_observed": 12,
+      "optimizer_wrapper_calls": 12,
+      "oracle_calls": 3,
+      "parse_error": null,
+      "pool_columns": 10,
+      "pricing_attempts_observed": 3,
+      "proposal_events": [],
+      "proposal_projection_novel": 0,
+      "reference_check": {
+        "guard": 1e-06,
+        "intervals_overlap_with_guard": true,
+        "reference_lower": 40.827970157187515,
+        "reference_upper": 40.82798049172958
+      },
+      "result": "depleted_f20-retained-s3/state.json",
+      "runtime": {
+        "machine": "arm64",
+        "platform": "macOS-26.5.2-arm64-arm-64bit",
+        "selected_cbc_library": {
+          "path": "/Users/nadan/Documents/ChatGPT/egg/.research-venv-repaired-1176/lib/python3.12/site-packages/cbcbox/cbc_dist/lib/libCbc.dylib",
+          "sha256": "fe44771023b133390daf7b72790c2ce65d1ccb2e5ac77c7a04c8d8f8648aff7d"
+        },
+        "versions": {
+          "cbcbox": "2.929",
+          "mip": "1.17.6",
+          "numpy": "2.5.3"
+        }
+      },
+      "solver_wall_s": 0.3150060176849365,
+      "state_index": 3,
+      "status": "certified",
+      "subprocess_cap_s": 60,
+      "timed_out": false,
+      "upper": 40.828000749860465,
+      "worker_cpu_s": 0.38726000000000005,
+      "worker_exit": 0
+    },
+    {
+      "accounting_complete": true,
+      "arm": "retained_shift",
+      "calls_clean": 3,
+      "calls_proposal": 1,
+      "calls_seed": 0,
+      "clean_calls_after_first": 2,
+      "clean_master_lp_calls": 9,
+      "clean_projection_novel_count": 2,
+      "complete_wall_s": 0.6069200001657009,
+      "distinct_fleets": [
+        1,
+        2
+      ],
+      "error": null,
+      "fixture": "depleted_f20",
+      "gap": 3.269740513189845e-05,
+      "last_optimizer_wrapper": {
+        "backend": "CBC",
+        "bound": 50.5446428571429,
+        "elapsed_s": 0.06067079212516546,
+        "extra": {
+          "threads": 1
+        },
+        "lp_mip_gap_abs": 30.544642857142904,
+        "lp_obj": 20.0,
+        "lp_wall_s": 0.0005939006805419922,
+        "max_mip_gap": 1e-09,
+        "mip_gap": 1.4057725915055846e-16,
+        "model": "evsp",
+        "model_time_cap_s": 10,
+        "n_constrs": 91,
+        "n_int": 32,
+        "n_vars": 69,
+        "obj": 50.544642857142904,
+        "status": "OPTIMAL",
+        "time_limit_s": 10,
+        "wall_s": 0.05849814414978027
+      },
+      "lower": 40.82796805245533,
+      "optimizer_wrapper_attempts_observed": 13,
+      "optimizer_wrapper_calls": 13,
+      "oracle_calls": 4,
+      "parse_error": null,
+      "pool_columns": 10,
+      "pricing_attempts_observed": 4,
+      "proposal_events": [
+        {
+          "column_key": "4efde8cee7d429fb418654cd084a197d7c0ec75356a1478ff3bac504f8d72773",
+          "elapsed_s": 0.077373499982059,
+          "novel": false,
+          "projection_novel": false,
+          "purpose": "analytic_proposal",
+          "status": "completed"
+        }
+      ],
+      "proposal_projection_novel": 0,
+      "reference_check": {
+        "guard": 1e-06,
+        "intervals_overlap_with_guard": true,
+        "reference_lower": 40.827970157187515,
+        "reference_upper": 40.82798049172958
+      },
+      "result": "depleted_f20-retained_shift-s3/state.json",
+      "runtime": {
+        "machine": "arm64",
+        "platform": "macOS-26.5.2-arm64-arm-64bit",
+        "selected_cbc_library": {
+          "path": "/Users/nadan/Documents/ChatGPT/egg/.research-venv-repaired-1176/lib/python3.12/site-packages/cbcbox/cbc_dist/lib/libCbc.dylib",
+          "sha256": "fe44771023b133390daf7b72790c2ce65d1ccb2e5ac77c7a04c8d8f8648aff7d"
+        },
+        "versions": {
+          "cbcbox": "2.929",
+          "mip": "1.17.6",
+          "numpy": "2.5.3"
+        }
+      },
+      "solver_wall_s": 0.32468223571777344,
+      "state_index": 3,
+      "status": "certified",
+      "subprocess_cap_s": 60,
+      "timed_out": false,
+      "upper": 40.828000749860465,
+      "worker_cpu_s": 0.412073,
+      "worker_exit": 0
+    },
+    {
+      "accounting_complete": true,
+      "arm": "retained",
+      "calls_clean": 1,
+      "calls_proposal": 0,
+      "calls_seed": 0,
+      "clean_calls_after_first": 0,
+      "clean_master_lp_calls": 7,
+      "clean_projection_novel_count": 0,
+      "complete_wall_s": 0.4059087918139994,
+      "distinct_fleets": [
+        1,
+        2
+      ],
+      "error": null,
+      "fixture": "depleted_f20",
+      "gap": 0.00039423230229118644,
+      "last_optimizer_wrapper": {
+        "backend": "CBC",
+        "bound": 49.12499999999994,
+        "elapsed_s": 0.10324154095724225,
+        "extra": {
+          "threads": 1
+        },
+        "lp_mip_gap_abs": 29.124999999999943,
+        "lp_obj": 20.0,
+        "lp_wall_s": 0.0006809234619140625,
+        "max_mip_gap": 1e-09,
+        "mip_gap": 0.0,
+        "model": "evsp",
+        "model_time_cap_s": 10,
+        "n_constrs": 91,
+        "n_int": 32,
+        "n_vars": 69,
+        "obj": 49.12499999999994,
+        "status": "OPTIMAL",
+        "time_limit_s": 10,
+        "wall_s": 0.10139703750610352
+      },
+      "lower": 40.70462053571427,
+      "optimizer_wrapper_attempts_observed": 8,
+      "optimizer_wrapper_calls": 8,
+      "oracle_calls": 1,
+      "parse_error": null,
+      "pool_columns": 10,
+      "pricing_attempts_observed": 1,
+      "proposal_events": [],
+      "proposal_projection_novel": 0,
+      "reference_check": {
+        "guard": 1e-06,
+        "intervals_overlap_with_guard": true,
+        "reference_lower": 40.70486844232949,
+        "reference_upper": 40.70488292523947
+      },
+      "result": "depleted_f20-retained-s4/state.json",
+      "runtime": {
+        "machine": "arm64",
+        "platform": "macOS-26.5.2-arm64-arm-64bit",
+        "selected_cbc_library": {
+          "path": "/Users/nadan/Documents/ChatGPT/egg/.research-venv-repaired-1176/lib/python3.12/site-packages/cbcbox/cbc_dist/lib/libCbc.dylib",
+          "sha256": "fe44771023b133390daf7b72790c2ce65d1ccb2e5ac77c7a04c8d8f8648aff7d"
+        },
+        "versions": {
+          "cbcbox": "2.929",
+          "mip": "1.17.6",
+          "numpy": "2.5.3"
+        }
+      },
+      "solver_wall_s": 0.1970367431640625,
+      "state_index": 4,
+      "status": "certified",
+      "subprocess_cap_s": 60,
+      "timed_out": false,
+      "upper": 40.70501476801656,
+      "worker_cpu_s": 0.267154,
+      "worker_exit": 0
+    },
+    {
+      "accounting_complete": true,
+      "arm": "retained_shift",
+      "calls_clean": 1,
+      "calls_proposal": 1,
+      "calls_seed": 0,
+      "clean_calls_after_first": 0,
+      "clean_master_lp_calls": 7,
+      "clean_projection_novel_count": 0,
+      "complete_wall_s": 0.5056325420737267,
+      "distinct_fleets": [
+        1,
+        2
+      ],
+      "error": null,
+      "fixture": "depleted_f20",
+      "gap": 0.00039423230229118644,
+      "last_optimizer_wrapper": {
+        "backend": "CBC",
+        "bound": 49.12499999999994,
+        "elapsed_s": 0.11444870801642537,
+        "extra": {
+          "threads": 1
+        },
+        "lp_mip_gap_abs": 29.124999999999943,
+        "lp_obj": 20.0,
+        "lp_wall_s": 0.0006730556488037109,
+        "max_mip_gap": 1e-09,
+        "mip_gap": 0.0,
+        "model": "evsp",
+        "model_time_cap_s": 10,
+        "n_constrs": 91,
+        "n_int": 32,
+        "n_vars": 69,
+        "obj": 49.12499999999994,
+        "status": "OPTIMAL",
+        "time_limit_s": 10,
+        "wall_s": 0.11240005493164062
+      },
+      "lower": 40.70462053571427,
+      "optimizer_wrapper_attempts_observed": 9,
+      "optimizer_wrapper_calls": 9,
+      "oracle_calls": 2,
+      "parse_error": null,
+      "pool_columns": 10,
+      "pricing_attempts_observed": 2,
+      "proposal_events": [
+        {
+          "column_key": "2a61c80bd4df7ab2e4dee3fdf8ca9666fd1fa1a35d632b7f34c0513a9ac284b8",
+          "elapsed_s": 0.0965015422552824,
+          "novel": false,
+          "projection_novel": false,
+          "purpose": "analytic_proposal",
+          "status": "completed"
+        }
+      ],
+      "proposal_projection_novel": 0,
+      "reference_check": {
+        "guard": 1e-06,
+        "intervals_overlap_with_guard": true,
+        "reference_lower": 40.70486844232949,
+        "reference_upper": 40.70488292523947
+      },
+      "result": "depleted_f20-retained_shift-s4/state.json",
+      "runtime": {
+        "machine": "arm64",
+        "platform": "macOS-26.5.2-arm64-arm-64bit",
+        "selected_cbc_library": {
+          "path": "/Users/nadan/Documents/ChatGPT/egg/.research-venv-repaired-1176/lib/python3.12/site-packages/cbcbox/cbc_dist/lib/libCbc.dylib",
+          "sha256": "fe44771023b133390daf7b72790c2ce65d1ccb2e5ac77c7a04c8d8f8648aff7d"
+        },
+        "versions": {
+          "cbcbox": "2.929",
+          "mip": "1.17.6",
+          "numpy": "2.5.3"
+        }
+      },
+      "solver_wall_s": 0.2621588706970215,
+      "state_index": 4,
+      "status": "certified",
+      "subprocess_cap_s": 60,
+      "timed_out": false,
+      "upper": 40.70501476801656,
+      "worker_cpu_s": 0.33396099999999995,
+      "worker_exit": 0
+    },
+    {
+      "accounting_complete": false,
+      "arm": "cold",
+      "calls_clean": 6,
+      "calls_proposal": 0,
+      "calls_seed": 1,
+      "clean_master_lp_calls": 26,
+      "clean_projection_novel_count": 5,
+      "complete_wall_s": 21.087888041045517,
+      "distinct_fleets": [
+        1,
+        2
+      ],
+      "error": "RuntimeError: Unresolved solve: FEASIBLE",
+      "fixture": "depleted_f20",
+      "last_optimizer_wrapper": {
+        "backend": "CBC",
+        "bound": 49.15176464954228,
+        "elapsed_s": 10.090311957988888,
+        "extra": {
+          "threads": 1
+        },
+        "lp_mip_gap_abs": 29.1517857142856,
+        "lp_obj": 20.0,
+        "lp_wall_s": 0.00067901611328125,
+        "max_mip_gap": 1e-09,
+        "mip_gap": 4.2856516840573956e-07,
+        "model": "evsp",
+        "model_time_cap_s": 10,
+        "n_constrs": 91,
+        "n_int": 32,
+        "n_vars": 69,
+        "obj": 49.1517857142856,
+        "status": "FEASIBLE",
+        "time_limit_s": 10,
+        "wall_s": 10.08722186088562
+      },
+      "optimizer_wrapper_attempts_observed": 33,
+      "optimizer_wrapper_calls": 33,
+      "oracle_calls": 7,
+      "parse_error": null,
+      "pool_columns": 6,
+      "pricing_attempts_observed": 7,
+      "proposal_events": [],
+      "result": "depleted_f20-cold-s4/state.json",
+      "runtime": {
+        "machine": "arm64",
+        "platform": "macOS-26.5.2-arm64-arm-64bit",
+        "selected_cbc_library": {
+          "path": "/Users/nadan/Documents/ChatGPT/egg/.research-venv-repaired-1176/lib/python3.12/site-packages/cbcbox/cbc_dist/lib/libCbc.dylib",
+          "sha256": "fe44771023b133390daf7b72790c2ce65d1ccb2e5ac77c7a04c8d8f8648aff7d"
+        },
+        "versions": {
+          "cbcbox": "2.929",
+          "mip": "1.17.6",
+          "numpy": "2.5.3"
+        }
+      },
+      "solver_wall_s": 20.682809114456177,
+      "state_index": 4,
+      "status": "failed",
+      "subprocess_cap_s": 60,
+      "timed_out": false,
+      "worker_cpu_s": 0.8484689999999999,
+      "worker_exit": 1
+    },
+    {
+      "accounting_complete": true,
+      "arm": "retained",
+      "calls_clean": 5,
+      "calls_proposal": 0,
+      "calls_seed": 1,
+      "clean_calls_after_first": 4,
+      "clean_master_lp_calls": 25,
+      "clean_projection_novel_count": 4,
+      "complete_wall_s": 0.9304358325898647,
+      "distinct_fleets": [
+        1,
+        2
+      ],
+      "error": null,
+      "fixture": "depleted_f26",
+      "gap": 0.000865982989878944,
+      "last_optimizer_wrapper": {
+        "backend": "CBC",
+        "bound": 58.76785714285703,
+        "elapsed_s": 0.05542045785114169,
+        "extra": {
+          "threads": 1
+        },
+        "lp_mip_gap_abs": 32.76785714285703,
+        "lp_obj": 26.0,
+        "lp_wall_s": 0.0008058547973632812,
+        "max_mip_gap": 1e-09,
+        "mip_gap": 0.0,
+        "model": "evsp",
+        "model_time_cap_s": 10,
+        "n_constrs": 91,
+        "n_int": 32,
+        "n_vars": 69,
+        "obj": 58.76785714285703,
+        "status": "OPTIMAL",
+        "time_limit_s": 10,
+        "wall_s": 0.052523136138916016
+      },
+      "lower": 48.19680051219704,
+      "optimizer_wrapper_attempts_observed": 31,
+      "optimizer_wrapper_calls": 31,
+      "oracle_calls": 6,
+      "parse_error": null,
+      "pool_columns": 6,
+      "pricing_attempts_observed": 6,
+      "proposal_events": [],
+      "proposal_projection_novel": 0,
+      "reference_check": {
+        "guard": 1e-06,
+        "intervals_overlap_with_guard": true,
+        "reference_lower": 48.19755205738004,
+        "reference_upper": 48.197566888457004
+      },
+      "result": "depleted_f26-retained-s0/state.json",
+      "runtime": {
+        "machine": "arm64",
+        "platform": "macOS-26.5.2-arm64-arm-64bit",
+        "selected_cbc_library": {
+          "path": "/Users/nadan/Documents/ChatGPT/egg/.research-venv-repaired-1176/lib/python3.12/site-packages/cbcbox/cbc_dist/lib/libCbc.dylib",
+          "sha256": "fe44771023b133390daf7b72790c2ce65d1ccb2e5ac77c7a04c8d8f8648aff7d"
+        },
+        "versions": {
+          "cbcbox": "2.929",
+          "mip": "1.17.6",
+          "numpy": "2.5.3"
+        }
+      },
+      "solver_wall_s": 0.5067150592803955,
+      "state_index": 0,
+      "status": "certified",
+      "subprocess_cap_s": 60,
+      "timed_out": false,
+      "upper": 48.19766649518692,
+      "worker_cpu_s": 0.6615549999999999,
+      "worker_exit": 0
+    },
+    {
+      "accounting_complete": true,
+      "arm": "retained_shift",
+      "calls_clean": 5,
+      "calls_proposal": 0,
+      "calls_seed": 1,
+      "clean_calls_after_first": 4,
+      "clean_master_lp_calls": 25,
+      "clean_projection_novel_count": 4,
+      "complete_wall_s": 0.8779668747447431,
+      "distinct_fleets": [
+        1,
+        2
+      ],
+      "error": null,
+      "fixture": "depleted_f26",
+      "gap": 0.000865982989878944,
+      "last_optimizer_wrapper": {
+        "backend": "CBC",
+        "bound": 58.76785714285703,
+        "elapsed_s": 0.05488195829093456,
+        "extra": {
+          "threads": 1
+        },
+        "lp_mip_gap_abs": 32.76785714285703,
+        "lp_obj": 26.0,
+        "lp_wall_s": 0.0006048679351806641,
+        "max_mip_gap": 1e-09,
+        "mip_gap": 0.0,
+        "model": "evsp",
+        "model_time_cap_s": 10,
+        "n_constrs": 91,
+        "n_int": 32,
+        "n_vars": 69,
+        "obj": 58.76785714285703,
+        "status": "OPTIMAL",
+        "time_limit_s": 10,
+        "wall_s": 0.052345991134643555
+      },
+      "lower": 48.19680051219704,
+      "optimizer_wrapper_attempts_observed": 31,
+      "optimizer_wrapper_calls": 31,
+      "oracle_calls": 6,
+      "parse_error": null,
+      "pool_columns": 6,
+      "pricing_attempts_observed": 6,
+      "proposal_events": [],
+      "proposal_projection_novel": 0,
+      "reference_check": {
+        "guard": 1e-06,
+        "intervals_overlap_with_guard": true,
+        "reference_lower": 48.19755205738004,
+        "reference_upper": 48.197566888457004
+      },
+      "result": "depleted_f26-retained_shift-s0/state.json",
+      "runtime": {
+        "machine": "arm64",
+        "platform": "macOS-26.5.2-arm64-arm-64bit",
+        "selected_cbc_library": {
+          "path": "/Users/nadan/Documents/ChatGPT/egg/.research-venv-repaired-1176/lib/python3.12/site-packages/cbcbox/cbc_dist/lib/libCbc.dylib",
+          "sha256": "fe44771023b133390daf7b72790c2ce65d1ccb2e5ac77c7a04c8d8f8648aff7d"
+        },
+        "versions": {
+          "cbcbox": "2.929",
+          "mip": "1.17.6",
+          "numpy": "2.5.3"
+        }
+      },
+      "solver_wall_s": 0.5058720111846924,
+      "state_index": 0,
+      "status": "certified",
+      "subprocess_cap_s": 60,
+      "timed_out": false,
+      "upper": 48.19766649518692,
+      "worker_cpu_s": 0.668028,
+      "worker_exit": 0
+    },
+    {
+      "accounting_complete": true,
+      "arm": "cold",
+      "calls_clean": 5,
+      "calls_proposal": 0,
+      "calls_seed": 1,
+      "clean_calls_after_first": 4,
+      "clean_master_lp_calls": 25,
+      "clean_projection_novel_count": 4,
+      "complete_wall_s": 0.8257445837371051,
+      "distinct_fleets": [
+        1,
+        2
+      ],
+      "error": null,
+      "fixture": "depleted_f26",
+      "gap": 0.000865982989878944,
+      "last_optimizer_wrapper": {
+        "backend": "CBC",
+        "bound": 58.76785714285703,
+        "elapsed_s": 0.05375495832413435,
+        "extra": {
+          "threads": 1
+        },
+        "lp_mip_gap_abs": 32.76785714285703,
+        "lp_obj": 26.0,
+        "lp_wall_s": 0.0006570816040039062,
+        "max_mip_gap": 1e-09,
+        "mip_gap": 0.0,
+        "model": "evsp",
+        "model_time_cap_s": 10,
+        "n_constrs": 91,
+        "n_int": 32,
+        "n_vars": 69,
+        "obj": 58.76785714285703,
+        "status": "OPTIMAL",
+        "time_limit_s": 10,
+        "wall_s": 0.05102109909057617
+      },
+      "lower": 48.19680051219704,
+      "optimizer_wrapper_attempts_observed": 31,
+      "optimizer_wrapper_calls": 31,
+      "oracle_calls": 6,
+      "parse_error": null,
+      "pool_columns": 6,
+      "pricing_attempts_observed": 6,
+      "proposal_events": [],
+      "proposal_projection_novel": 0,
+      "reference_check": {
+        "guard": 1e-06,
+        "intervals_overlap_with_guard": true,
+        "reference_lower": 48.19755205738004,
+        "reference_upper": 48.197566888457004
+      },
+      "result": "depleted_f26-cold-s0/state.json",
+      "runtime": {
+        "machine": "arm64",
+        "platform": "macOS-26.5.2-arm64-arm-64bit",
+        "selected_cbc_library": {
+          "path": "/Users/nadan/Documents/ChatGPT/egg/.research-venv-repaired-1176/lib/python3.12/site-packages/cbcbox/cbc_dist/lib/libCbc.dylib",
+          "sha256": "fe44771023b133390daf7b72790c2ce65d1ccb2e5ac77c7a04c8d8f8648aff7d"
+        },
+        "versions": {
+          "cbcbox": "2.929",
+          "mip": "1.17.6",
+          "numpy": "2.5.3"
+        }
+      },
+      "solver_wall_s": 0.4859962463378906,
+      "state_index": 0,
+      "status": "certified",
+      "subprocess_cap_s": 60,
+      "timed_out": false,
+      "upper": 48.19766649518692,
+      "worker_cpu_s": 0.657144,
+      "worker_exit": 0
+    },
+    {
+      "accounting_complete": true,
+      "arm": "retained_shift",
+      "calls_clean": 1,
+      "calls_proposal": 1,
+      "calls_seed": 0,
+      "clean_calls_after_first": 0,
+      "clean_master_lp_calls": 7,
+      "clean_projection_novel_count": 0,
+      "complete_wall_s": 0.44717154186218977,
+      "distinct_fleets": [
+        1,
+        2
+      ],
+      "error": null,
+      "fixture": "depleted_f26",
+      "gap": 0.0003268494897952223,
+      "last_optimizer_wrapper": {
+        "backend": "CBC",
+        "bound": 58.857142857142804,
+        "elapsed_s": 0.060370624996721745,
+        "extra": {
+          "threads": 1
+        },
+        "lp_mip_gap_abs": 32.85714285714281,
+        "lp_obj": 26.0,
+        "lp_wall_s": 0.0005650520324707031,
+        "max_mip_gap": 1e-09,
+        "mip_gap": 1.2072328034758993e-16,
+        "model": "evsp",
+        "model_time_cap_s": 10,
+        "n_constrs": 91,
+        "n_int": 32,
+        "n_vars": 69,
+        "obj": 58.85714285714281,
+        "status": "OPTIMAL",
+        "time_limit_s": 10,
+        "wall_s": 0.05885601043701172
+      },
+      "lower": 48.1972576530612,
+      "optimizer_wrapper_attempts_observed": 9,
+      "optimizer_wrapper_calls": 9,
+      "oracle_calls": 2,
+      "parse_error": null,
+      "pool_columns": 6,
+      "pricing_attempts_observed": 2,
+      "proposal_events": [
+        {
+          "column_key": "418078695c0ab11b9c368ce41764c4f73ae2e29b24d3e1f5b51d229a1d92bf69",
+          "elapsed_s": 0.08490883279591799,
+          "novel": false,
+          "projection_novel": false,
+          "purpose": "analytic_proposal",
+          "status": "completed"
+        }
+      ],
+      "proposal_projection_novel": 0,
+      "reference_check": {
+        "guard": 1e-06,
+        "intervals_overlap_with_guard": true,
+        "reference_lower": 48.19755205738004,
+        "reference_upper": 48.197566888457004
+      },
+      "result": "depleted_f26-retained_shift-s1/state.json",
+      "runtime": {
+        "machine": "arm64",
+        "platform": "macOS-26.5.2-arm64-arm-64bit",
+        "selected_cbc_library": {
+          "path": "/Users/nadan/Documents/ChatGPT/egg/.research-venv-repaired-1176/lib/python3.12/site-packages/cbcbox/cbc_dist/lib/libCbc.dylib",
+          "sha256": "fe44771023b133390daf7b72790c2ce65d1ccb2e5ac77c7a04c8d8f8648aff7d"
+        },
+        "versions": {
+          "cbcbox": "2.929",
+          "mip": "1.17.6",
+          "numpy": "2.5.3"
+        }
+      },
+      "solver_wall_s": 0.19353675842285156,
+      "state_index": 1,
+      "status": "certified",
+      "subprocess_cap_s": 60,
+      "timed_out": false,
+      "upper": 48.197584502550995,
+      "worker_cpu_s": 0.25580400000000003,
+      "worker_exit": 0
+    },
+    {
+      "accounting_complete": true,
+      "arm": "cold",
+      "calls_clean": 5,
+      "calls_proposal": 0,
+      "calls_seed": 1,
+      "clean_calls_after_first": 4,
+      "clean_master_lp_calls": 25,
+      "clean_projection_novel_count": 4,
+      "complete_wall_s": 0.8273546672426164,
+      "distinct_fleets": [
+        1,
+        2
+      ],
+      "error": null,
+      "fixture": "depleted_f26",
+      "gap": 0.000865982989878944,
+      "last_optimizer_wrapper": {
+        "backend": "CBC",
+        "bound": 58.76785714285703,
+        "elapsed_s": 0.055443041026592255,
+        "extra": {
+          "threads": 1
+        },
+        "lp_mip_gap_abs": 32.76785714285703,
+        "lp_obj": 26.0,
+        "lp_wall_s": 0.0006163120269775391,
+        "max_mip_gap": 1e-09,
+        "mip_gap": 0.0,
+        "model": "evsp",
+        "model_time_cap_s": 10,
+        "n_constrs": 91,
+        "n_int": 32,
+        "n_vars": 69,
+        "obj": 58.76785714285703,
+        "status": "OPTIMAL",
+        "time_limit_s": 10,
+        "wall_s": 0.052887916564941406
+      },
+      "lower": 48.19680051219704,
+      "optimizer_wrapper_attempts_observed": 31,
+      "optimizer_wrapper_calls": 31,
+      "oracle_calls": 6,
+      "parse_error": null,
+      "pool_columns": 6,
+      "pricing_attempts_observed": 6,
+      "proposal_events": [],
+      "proposal_projection_novel": 0,
+      "reference_check": {
+        "guard": 1e-06,
+        "intervals_overlap_with_guard": true,
+        "reference_lower": 48.19755205738004,
+        "reference_upper": 48.197566888457004
+      },
+      "result": "depleted_f26-cold-s1/state.json",
+      "runtime": {
+        "machine": "arm64",
+        "platform": "macOS-26.5.2-arm64-arm-64bit",
+        "selected_cbc_library": {
+          "path": "/Users/nadan/Documents/ChatGPT/egg/.research-venv-repaired-1176/lib/python3.12/site-packages/cbcbox/cbc_dist/lib/libCbc.dylib",
+          "sha256": "fe44771023b133390daf7b72790c2ce65d1ccb2e5ac77c7a04c8d8f8648aff7d"
+        },
+        "versions": {
+          "cbcbox": "2.929",
+          "mip": "1.17.6",
+          "numpy": "2.5.3"
+        }
+      },
+      "solver_wall_s": 0.48270297050476074,
+      "state_index": 1,
+      "status": "certified",
+      "subprocess_cap_s": 60,
+      "timed_out": false,
+      "upper": 48.19766649518692,
+      "worker_cpu_s": 0.64977,
+      "worker_exit": 0
+    },
+    {
+      "accounting_complete": true,
+      "arm": "retained",
+      "calls_clean": 1,
+      "calls_proposal": 0,
+      "calls_seed": 0,
+      "clean_calls_after_first": 0,
+      "clean_master_lp_calls": 7,
+      "clean_projection_novel_count": 0,
+      "complete_wall_s": 0.34376104176044464,
+      "distinct_fleets": [
+        1,
+        2
+      ],
+      "error": null,
+      "fixture": "depleted_f26",
+      "gap": 0.0003268494897952223,
+      "last_optimizer_wrapper": {
+        "backend": "CBC",
+        "bound": 58.857142857142804,
+        "elapsed_s": 0.03988483268767595,
+        "extra": {
+          "threads": 1
+        },
+        "lp_mip_gap_abs": 32.85714285714281,
+        "lp_obj": 26.0,
+        "lp_wall_s": 0.0006010532379150391,
+        "max_mip_gap": 1e-09,
+        "mip_gap": 1.2072328034758993e-16,
+        "model": "evsp",
+        "model_time_cap_s": 10,
+        "n_constrs": 91,
+        "n_int": 32,
+        "n_vars": 69,
+        "obj": 58.85714285714281,
+        "status": "OPTIMAL",
+        "time_limit_s": 10,
+        "wall_s": 0.03851509094238281
+      },
+      "lower": 48.1972576530612,
+      "optimizer_wrapper_attempts_observed": 8,
+      "optimizer_wrapper_calls": 8,
+      "oracle_calls": 1,
+      "parse_error": null,
+      "pool_columns": 6,
+      "pricing_attempts_observed": 1,
+      "proposal_events": [],
+      "proposal_projection_novel": 0,
+      "reference_check": {
+        "guard": 1e-06,
+        "intervals_overlap_with_guard": true,
+        "reference_lower": 48.19755205738004,
+        "reference_upper": 48.197566888457004
+      },
+      "result": "depleted_f26-retained-s1/state.json",
+      "runtime": {
+        "machine": "arm64",
+        "platform": "macOS-26.5.2-arm64-arm-64bit",
+        "selected_cbc_library": {
+          "path": "/Users/nadan/Documents/ChatGPT/egg/.research-venv-repaired-1176/lib/python3.12/site-packages/cbcbox/cbc_dist/lib/libCbc.dylib",
+          "sha256": "fe44771023b133390daf7b72790c2ce65d1ccb2e5ac77c7a04c8d8f8648aff7d"
+        },
+        "versions": {
+          "cbcbox": "2.929",
+          "mip": "1.17.6",
+          "numpy": "2.5.3"
+        }
+      },
+      "solver_wall_s": 0.12999629974365234,
+      "state_index": 1,
+      "status": "certified",
+      "subprocess_cap_s": 60,
+      "timed_out": false,
+      "upper": 48.197584502550995,
+      "worker_cpu_s": 0.19705899999999998,
+      "worker_exit": 0
+    },
+    {
+      "accounting_complete": true,
+      "arm": "cold",
+      "calls_clean": 3,
+      "calls_proposal": 0,
+      "calls_seed": 1,
+      "clean_calls_after_first": 2,
+      "clean_master_lp_calls": 16,
+      "clean_projection_novel_count": 2,
+      "complete_wall_s": 0.5062755420804024,
+      "distinct_fleets": [
+        1,
+        2
+      ],
+      "error": null,
+      "fixture": "depleted_f26",
+      "gap": 0.0002325148809703137,
+      "last_optimizer_wrapper": {
+        "backend": "CBC",
+        "bound": 57.142857142856904,
+        "elapsed_s": 0.05387212475761771,
+        "extra": {
+          "threads": 1
+        },
+        "lp_mip_gap_abs": 31.142857142856904,
+        "lp_obj": 26.0,
+        "lp_wall_s": 0.0006000995635986328,
+        "max_mip_gap": 1e-09,
+        "mip_gap": 0.0,
+        "model": "evsp",
+        "model_time_cap_s": 10,
+        "n_constrs": 91,
+        "n_int": 32,
+        "n_vars": 69,
+        "obj": 57.142857142856904,
+        "status": "OPTIMAL",
+        "time_limit_s": 10,
+        "wall_s": 0.051912784576416016
+      },
+      "lower": 47.07068452380948,
+      "optimizer_wrapper_attempts_observed": 20,
+      "optimizer_wrapper_calls": 20,
+      "oracle_calls": 4,
+      "parse_error": null,
+      "pool_columns": 3,
+      "pricing_attempts_observed": 4,
+      "proposal_events": [],
+      "proposal_projection_novel": 0,
+      "reference_check": {
+        "guard": 1e-06,
+        "intervals_overlap_with_guard": true,
+        "reference_lower": 47.07082171740934,
+        "reference_upper": 47.070838681497804
+      },
+      "result": "depleted_f26-cold-s2/state.json",
+      "runtime": {
+        "machine": "arm64",
+        "platform": "macOS-26.5.2-arm64-arm-64bit",
+        "selected_cbc_library": {
+          "path": "/Users/nadan/Documents/ChatGPT/egg/.research-venv-repaired-1176/lib/python3.12/site-packages/cbcbox/cbc_dist/lib/libCbc.dylib",
+          "sha256": "fe44771023b133390daf7b72790c2ce65d1ccb2e5ac77c7a04c8d8f8648aff7d"
+        },
+        "versions": {
+          "cbcbox": "2.929",
+          "mip": "1.17.6",
+          "numpy": "2.5.3"
+        }
+      },
+      "solver_wall_s": 0.23940753936767578,
+      "state_index": 2,
+      "status": "certified",
+      "subprocess_cap_s": 60,
+      "timed_out": false,
+      "upper": 47.07091703869045,
+      "worker_cpu_s": 0.34007,
+      "worker_exit": 0
+    },
+    {
+      "accounting_complete": true,
+      "arm": "retained",
+      "calls_clean": 1,
+      "calls_proposal": 0,
+      "calls_seed": 0,
+      "clean_calls_after_first": 0,
+      "clean_master_lp_calls": 7,
+      "clean_projection_novel_count": 0,
+      "complete_wall_s": 0.3407991249114275,
+      "distinct_fleets": [
+        1,
+        2
+      ],
+      "error": null,
+      "fixture": "depleted_f26",
+      "gap": 0.00023251488094899742,
+      "last_optimizer_wrapper": {
+        "backend": "CBC",
+        "bound": 57.142857142856926,
+        "elapsed_s": 0.04334070906043053,
+        "extra": {
+          "threads": 1
+        },
+        "lp_mip_gap_abs": 31.142857142856926,
+        "lp_obj": 26.0,
+        "lp_wall_s": 0.0006210803985595703,
+        "max_mip_gap": 1e-09,
+        "mip_gap": 0.0,
+        "model": "evsp",
+        "model_time_cap_s": 10,
+        "n_constrs": 91,
+        "n_int": 32,
+        "n_vars": 69,
+        "obj": 57.142857142856926,
+        "status": "OPTIMAL",
+        "time_limit_s": 10,
+        "wall_s": 0.041918039321899414
+      },
+      "lower": 47.070684523809504,
+      "optimizer_wrapper_attempts_observed": 8,
+      "optimizer_wrapper_calls": 8,
+      "oracle_calls": 1,
+      "parse_error": null,
+      "pool_columns": 6,
+      "pricing_attempts_observed": 1,
+      "proposal_events": [],
+      "proposal_projection_novel": 0,
+      "reference_check": {
+        "guard": 1e-06,
+        "intervals_overlap_with_guard": true,
+        "reference_lower": 47.07082171740934,
+        "reference_upper": 47.070838681497804
+      },
+      "result": "depleted_f26-retained-s2/state.json",
+      "runtime": {
+        "machine": "arm64",
+        "platform": "macOS-26.5.2-arm64-arm-64bit",
+        "selected_cbc_library": {
+          "path": "/Users/nadan/Documents/ChatGPT/egg/.research-venv-repaired-1176/lib/python3.12/site-packages/cbcbox/cbc_dist/lib/libCbc.dylib",
+          "sha256": "fe44771023b133390daf7b72790c2ce65d1ccb2e5ac77c7a04c8d8f8648aff7d"
+        },
+        "versions": {
+          "cbcbox": "2.929",
+          "mip": "1.17.6",
+          "numpy": "2.5.3"
+        }
+      },
+      "solver_wall_s": 0.12488436698913574,
+      "state_index": 2,
+      "status": "certified",
+      "subprocess_cap_s": 60,
+      "timed_out": false,
+      "upper": 47.07091703869045,
+      "worker_cpu_s": 0.19151999999999997,
+      "worker_exit": 0
+    },
+    {
+      "accounting_complete": true,
+      "arm": "retained_shift",
+      "calls_clean": 1,
+      "calls_proposal": 1,
+      "calls_seed": 0,
+      "clean_calls_after_first": 0,
+      "clean_master_lp_calls": 7,
+      "clean_projection_novel_count": 0,
+      "complete_wall_s": 0.4013226251117885,
+      "distinct_fleets": [
+        1,
+        2
+      ],
+      "error": null,
+      "fixture": "depleted_f26",
+      "gap": 0.00023251488094899742,
+      "last_optimizer_wrapper": {
+        "backend": "CBC",
+        "bound": 57.142857142856926,
+        "elapsed_s": 0.05169237498193979,
+        "extra": {
+          "threads": 1
+        },
+        "lp_mip_gap_abs": 31.142857142856926,
+        "lp_obj": 26.0,
+        "lp_wall_s": 0.0006327629089355469,
+        "max_mip_gap": 1e-09,
+        "mip_gap": 0.0,
+        "model": "evsp",
+        "model_time_cap_s": 10,
+        "n_constrs": 91,
+        "n_int": 32,
+        "n_vars": 69,
+        "obj": 57.142857142856926,
+        "status": "OPTIMAL",
+        "time_limit_s": 10,
+        "wall_s": 0.05006575584411621
+      },
+      "lower": 47.070684523809504,
+      "optimizer_wrapper_attempts_observed": 9,
+      "optimizer_wrapper_calls": 9,
+      "oracle_calls": 2,
+      "parse_error": null,
+      "pool_columns": 6,
+      "pricing_attempts_observed": 2,
+      "proposal_events": [
+        {
+          "column_key": "92c85511688befe5088e9ae90ca4bc481fd0ed342bf6765e899d3d4377645471",
+          "elapsed_s": 0.08022949984297156,
+          "novel": false,
+          "projection_novel": false,
+          "purpose": "analytic_proposal",
+          "status": "completed"
+        }
+      ],
+      "proposal_projection_novel": 0,
+      "reference_check": {
+        "guard": 1e-06,
+        "intervals_overlap_with_guard": true,
+        "reference_lower": 47.07082171740934,
+        "reference_upper": 47.070838681497804
+      },
+      "result": "depleted_f26-retained_shift-s2/state.json",
+      "runtime": {
+        "machine": "arm64",
+        "platform": "macOS-26.5.2-arm64-arm-64bit",
+        "selected_cbc_library": {
+          "path": "/Users/nadan/Documents/ChatGPT/egg/.research-venv-repaired-1176/lib/python3.12/site-packages/cbcbox/cbc_dist/lib/libCbc.dylib",
+          "sha256": "fe44771023b133390daf7b72790c2ce65d1ccb2e5ac77c7a04c8d8f8648aff7d"
+        },
+        "versions": {
+          "cbcbox": "2.929",
+          "mip": "1.17.6",
+          "numpy": "2.5.3"
+        }
+      },
+      "solver_wall_s": 0.1712937355041504,
+      "state_index": 2,
+      "status": "certified",
+      "subprocess_cap_s": 60,
+      "timed_out": false,
+      "upper": 47.07091703869045,
+      "worker_cpu_s": 0.24372600000000003,
+      "worker_exit": 0
+    },
+    {
+      "accounting_complete": true,
+      "arm": "retained",
+      "calls_clean": 2,
+      "calls_proposal": 0,
+      "calls_seed": 0,
+      "clean_calls_after_first": 1,
+      "clean_master_lp_calls": 7,
+      "clean_projection_novel_count": 1,
+      "complete_wall_s": 0.4414972076192498,
+      "distinct_fleets": [
+        1,
+        2
+      ],
+      "error": null,
+      "fixture": "depleted_f26",
+      "gap": 0.0003114038584257628,
+      "last_optimizer_wrapper": {
+        "backend": "CBC",
+        "bound": 60.24107142857155,
+        "elapsed_s": 0.0683175828307867,
+        "extra": {
+          "threads": 1
+        },
+        "lp_mip_gap_abs": 34.24107142857155,
+        "lp_obj": 26.0,
+        "lp_wall_s": 0.0006380081176757812,
+        "max_mip_gap": 1e-09,
+        "mip_gap": 0.0,
+        "model": "evsp",
+        "model_time_cap_s": 10,
+        "n_constrs": 91,
+        "n_int": 32,
+        "n_vars": 69,
+        "obj": 60.24107142857155,
+        "status": "OPTIMAL",
+        "time_limit_s": 10,
+        "wall_s": 0.06651091575622559
+      },
+      "lower": 47.99922273596935,
+      "optimizer_wrapper_attempts_observed": 9,
+      "optimizer_wrapper_calls": 9,
+      "oracle_calls": 2,
+      "parse_error": null,
+      "pool_columns": 7,
+      "pricing_attempts_observed": 2,
+      "proposal_events": [],
+      "proposal_projection_novel": 0,
+      "reference_check": {
+        "guard": 1e-06,
+        "intervals_overlap_with_guard": true,
+        "reference_lower": 47.99939883572,
+        "reference_upper": 47.99941293906367
+      },
+      "result": "depleted_f26-retained-s3/state.json",
+      "runtime": {
+        "machine": "arm64",
+        "platform": "macOS-26.5.2-arm64-arm-64bit",
+        "selected_cbc_library": {
+          "path": "/Users/nadan/Documents/ChatGPT/egg/.research-venv-repaired-1176/lib/python3.12/site-packages/cbcbox/cbc_dist/lib/libCbc.dylib",
+          "sha256": "fe44771023b133390daf7b72790c2ce65d1ccb2e5ac77c7a04c8d8f8648aff7d"
+        },
+        "versions": {
+          "cbcbox": "2.929",
+          "mip": "1.17.6",
+          "numpy": "2.5.3"
+        }
+      },
+      "solver_wall_s": 0.19452309608459473,
+      "state_index": 3,
+      "status": "certified",
+      "subprocess_cap_s": 60,
+      "timed_out": false,
+      "upper": 47.99953413982777,
+      "worker_cpu_s": 0.251738,
+      "worker_exit": 0
+    },
+    {
+      "accounting_complete": true,
+      "arm": "retained_shift",
+      "calls_clean": 2,
+      "calls_proposal": 1,
+      "calls_seed": 0,
+      "clean_calls_after_first": 1,
+      "clean_master_lp_calls": 7,
+      "clean_projection_novel_count": 1,
+      "complete_wall_s": 0.4555129171349108,
+      "distinct_fleets": [
+        1,
+        2
+      ],
+      "error": null,
+      "fixture": "depleted_f26",
+      "gap": 0.0003114038584257628,
+      "last_optimizer_wrapper": {
+        "backend": "CBC",
+        "bound": 60.24107142857155,
+        "elapsed_s": 0.0482106669805944,
+        "extra": {
+          "threads": 1
+        },
+        "lp_mip_gap_abs": 34.24107142857155,
+        "lp_obj": 26.0,
+        "lp_wall_s": 0.0006809234619140625,
+        "max_mip_gap": 1e-09,
+        "mip_gap": 0.0,
+        "model": "evsp",
+        "model_time_cap_s": 10,
+        "n_constrs": 91,
+        "n_int": 32,
+        "n_vars": 69,
+        "obj": 60.24107142857155,
+        "status": "OPTIMAL",
+        "time_limit_s": 10,
+        "wall_s": 0.04628610610961914
+      },
+      "lower": 47.99922273596935,
+      "optimizer_wrapper_attempts_observed": 10,
+      "optimizer_wrapper_calls": 10,
+      "oracle_calls": 3,
+      "parse_error": null,
+      "pool_columns": 7,
+      "pricing_attempts_observed": 3,
+      "proposal_events": [
+        {
+          "column_key": "b50415f8a459f35b1b37f76144dba2965b0e691eda306d395b45df5a67c674ad",
+          "elapsed_s": 0.07971249986439943,
+          "novel": false,
+          "projection_novel": false,
+          "purpose": "analytic_proposal",
+          "status": "completed"
+        }
+      ],
+      "proposal_projection_novel": 0,
+      "reference_check": {
+        "guard": 1e-06,
+        "intervals_overlap_with_guard": true,
+        "reference_lower": 47.99939883572,
+        "reference_upper": 47.99941293906367
+      },
+      "result": "depleted_f26-retained_shift-s3/state.json",
+      "runtime": {
+        "machine": "arm64",
+        "platform": "macOS-26.5.2-arm64-arm-64bit",
+        "selected_cbc_library": {
+          "path": "/Users/nadan/Documents/ChatGPT/egg/.research-venv-repaired-1176/lib/python3.12/site-packages/cbcbox/cbc_dist/lib/libCbc.dylib",
+          "sha256": "fe44771023b133390daf7b72790c2ce65d1ccb2e5ac77c7a04c8d8f8648aff7d"
+        },
+        "versions": {
+          "cbcbox": "2.929",
+          "mip": "1.17.6",
+          "numpy": "2.5.3"
+        }
+      },
+      "solver_wall_s": 0.23707962036132812,
+      "state_index": 3,
+      "status": "certified",
+      "subprocess_cap_s": 60,
+      "timed_out": false,
+      "upper": 47.99953413982777,
+      "worker_cpu_s": 0.303115,
+      "worker_exit": 0
+    },
+    {
+      "accounting_complete": true,
+      "arm": "cold",
+      "calls_clean": 5,
+      "calls_proposal": 0,
+      "calls_seed": 1,
+      "clean_calls_after_first": 4,
+      "clean_master_lp_calls": 16,
+      "clean_projection_novel_count": 4,
+      "complete_wall_s": 0.6773698753677309,
+      "distinct_fleets": [
+        1,
+        2
+      ],
+      "error": null,
+      "fixture": "depleted_f26",
+      "gap": 5.157626409157956e-05,
+      "last_optimizer_wrapper": {
+        "backend": "CBC",
+        "bound": 60.245535714285666,
+        "elapsed_s": 0.04666441725566983,
+        "extra": {
+          "threads": 1
+        },
+        "lp_mip_gap_abs": 34.24553571428571,
+        "lp_obj": 26.0,
+        "lp_wall_s": 0.0006079673767089844,
+        "max_mip_gap": 1e-09,
+        "mip_gap": 7.076468594750461e-16,
+        "model": "evsp",
+        "model_time_cap_s": 10,
+        "n_constrs": 91,
+        "n_int": 32,
+        "n_vars": 69,
+        "obj": 60.24553571428571,
+        "status": "OPTIMAL",
+        "time_limit_s": 10,
+        "wall_s": 0.04418802261352539
+      },
+      "lower": 47.99936629314806,
+      "optimizer_wrapper_attempts_observed": 22,
+      "optimizer_wrapper_calls": 22,
+      "oracle_calls": 6,
+      "parse_error": null,
+      "pool_columns": 6,
+      "pricing_attempts_observed": 6,
+      "proposal_events": [],
+      "proposal_projection_novel": 0,
+      "reference_check": {
+        "guard": 1e-06,
+        "intervals_overlap_with_guard": true,
+        "reference_lower": 47.99939883572,
+        "reference_upper": 47.99941293906367
+      },
+      "result": "depleted_f26-cold-s3/state.json",
+      "runtime": {
+        "machine": "arm64",
+        "platform": "macOS-26.5.2-arm64-arm-64bit",
+        "selected_cbc_library": {
+          "path": "/Users/nadan/Documents/ChatGPT/egg/.research-venv-repaired-1176/lib/python3.12/site-packages/cbcbox/cbc_dist/lib/libCbc.dylib",
+          "sha256": "fe44771023b133390daf7b72790c2ce65d1ccb2e5ac77c7a04c8d8f8648aff7d"
+        },
+        "versions": {
+          "cbcbox": "2.929",
+          "mip": "1.17.6",
+          "numpy": "2.5.3"
+        }
+      },
+      "solver_wall_s": 0.3645620346069336,
+      "state_index": 3,
+      "status": "certified",
+      "subprocess_cap_s": 60,
+      "timed_out": false,
+      "upper": 47.99941786941215,
+      "worker_cpu_s": 0.47067299999999995,
+      "worker_exit": 0
+    },
+    {
+      "accounting_complete": true,
+      "arm": "retained_shift",
+      "calls_clean": 1,
+      "calls_proposal": 1,
+      "calls_seed": 0,
+      "clean_calls_after_first": 0,
+      "clean_master_lp_calls": 7,
+      "clean_projection_novel_count": 0,
+      "complete_wall_s": 0.4049287079833448,
+      "distinct_fleets": [
+        1,
+        2
+      ],
+      "error": null,
+      "fixture": "depleted_f26",
+      "gap": 0.0003268494897952223,
+      "last_optimizer_wrapper": {
+        "backend": "CBC",
+        "bound": 58.857142857142804,
+        "elapsed_s": 0.051226708106696606,
+        "extra": {
+          "threads": 1
+        },
+        "lp_mip_gap_abs": 32.85714285714281,
+        "lp_obj": 26.0,
+        "lp_wall_s": 0.0005838871002197266,
+        "max_mip_gap": 1e-09,
+        "mip_gap": 1.2072328034758993e-16,
+        "model": "evsp",
+        "model_time_cap_s": 10,
+        "n_constrs": 91,
+        "n_int": 32,
+        "n_vars": 69,
+        "obj": 58.85714285714281,
+        "status": "OPTIMAL",
+        "time_limit_s": 10,
+        "wall_s": 0.0496671199798584
+      },
+      "lower": 48.1972576530612,
+      "optimizer_wrapper_attempts_observed": 9,
+      "optimizer_wrapper_calls": 9,
+      "oracle_calls": 2,
+      "parse_error": null,
+      "pool_columns": 7,
+      "pricing_attempts_observed": 2,
+      "proposal_events": [
+        {
+          "column_key": "92c85511688befe5088e9ae90ca4bc481fd0ed342bf6765e899d3d4377645471",
+          "elapsed_s": 0.08051504101604223,
+          "novel": false,
+          "projection_novel": false,
+          "purpose": "analytic_proposal",
+          "status": "completed"
+        }
+      ],
+      "proposal_projection_novel": 0,
+      "reference_check": {
+        "guard": 1e-06,
+        "intervals_overlap_with_guard": true,
+        "reference_lower": 48.19755205738004,
+        "reference_upper": 48.197566888457004
+      },
+      "result": "depleted_f26-retained_shift-s4/state.json",
+      "runtime": {
+        "machine": "arm64",
+        "platform": "macOS-26.5.2-arm64-arm-64bit",
+        "selected_cbc_library": {
+          "path": "/Users/nadan/Documents/ChatGPT/egg/.research-venv-repaired-1176/lib/python3.12/site-packages/cbcbox/cbc_dist/lib/libCbc.dylib",
+          "sha256": "fe44771023b133390daf7b72790c2ce65d1ccb2e5ac77c7a04c8d8f8648aff7d"
+        },
+        "versions": {
+          "cbcbox": "2.929",
+          "mip": "1.17.6",
+          "numpy": "2.5.3"
+        }
+      },
+      "solver_wall_s": 0.18310308456420898,
+      "state_index": 4,
+      "status": "certified",
+      "subprocess_cap_s": 60,
+      "timed_out": false,
+      "upper": 48.197584502550995,
+      "worker_cpu_s": 0.255514,
+      "worker_exit": 0
+    },
+    {
+      "accounting_complete": true,
+      "arm": "cold",
+      "calls_clean": 5,
+      "calls_proposal": 0,
+      "calls_seed": 1,
+      "clean_calls_after_first": 4,
+      "clean_master_lp_calls": 25,
+      "clean_projection_novel_count": 4,
+      "complete_wall_s": 0.8709619999863207,
+      "distinct_fleets": [
+        1,
+        2
+      ],
+      "error": null,
+      "fixture": "depleted_f26",
+      "gap": 0.000865982989878944,
+      "last_optimizer_wrapper": {
+        "backend": "CBC",
+        "bound": 58.76785714285703,
+        "elapsed_s": 0.07537120813503861,
+        "extra": {
+          "threads": 1
+        },
+        "lp_mip_gap_abs": 32.76785714285703,
+        "lp_obj": 26.0,
+        "lp_wall_s": 0.0006420612335205078,
+        "max_mip_gap": 1e-09,
+        "mip_gap": 0.0,
+        "model": "evsp",
+        "model_time_cap_s": 10,
+        "n_constrs": 91,
+        "n_int": 32,
+        "n_vars": 69,
+        "obj": 58.76785714285703,
+        "status": "OPTIMAL",
+        "time_limit_s": 10,
+        "wall_s": 0.0726020336151123
+      },
+      "lower": 48.19680051219704,
+      "optimizer_wrapper_attempts_observed": 31,
+      "optimizer_wrapper_calls": 31,
+      "oracle_calls": 6,
+      "parse_error": null,
+      "pool_columns": 6,
+      "pricing_attempts_observed": 6,
+      "proposal_events": [],
+      "proposal_projection_novel": 0,
+      "reference_check": {
+        "guard": 1e-06,
+        "intervals_overlap_with_guard": true,
+        "reference_lower": 48.19755205738004,
+        "reference_upper": 48.197566888457004
+      },
+      "result": "depleted_f26-cold-s4/state.json",
+      "runtime": {
+        "machine": "arm64",
+        "platform": "macOS-26.5.2-arm64-arm-64bit",
+        "selected_cbc_library": {
+          "path": "/Users/nadan/Documents/ChatGPT/egg/.research-venv-repaired-1176/lib/python3.12/site-packages/cbcbox/cbc_dist/lib/libCbc.dylib",
+          "sha256": "fe44771023b133390daf7b72790c2ce65d1ccb2e5ac77c7a04c8d8f8648aff7d"
+        },
+        "versions": {
+          "cbcbox": "2.929",
+          "mip": "1.17.6",
+          "numpy": "2.5.3"
+        }
+      },
+      "solver_wall_s": 0.5241451263427734,
+      "state_index": 4,
+      "status": "certified",
+      "subprocess_cap_s": 60,
+      "timed_out": false,
+      "upper": 48.19766649518692,
+      "worker_cpu_s": 0.665142,
+      "worker_exit": 0
+    },
+    {
+      "accounting_complete": true,
+      "arm": "retained",
+      "calls_clean": 1,
+      "calls_proposal": 0,
+      "calls_seed": 0,
+      "clean_calls_after_first": 0,
+      "clean_master_lp_calls": 7,
+      "clean_projection_novel_count": 0,
+      "complete_wall_s": 0.3465391667559743,
+      "distinct_fleets": [
+        1,
+        2
+      ],
+      "error": null,
+      "fixture": "depleted_f26",
+      "gap": 0.0003268494897952223,
+      "last_optimizer_wrapper": {
+        "backend": "CBC",
+        "bound": 58.857142857142804,
+        "elapsed_s": 0.04236249998211861,
+        "extra": {
+          "threads": 1
+        },
+        "lp_mip_gap_abs": 32.85714285714281,
+        "lp_obj": 26.0,
+        "lp_wall_s": 0.0006167888641357422,
+        "max_mip_gap": 1e-09,
+        "mip_gap": 1.2072328034758993e-16,
+        "model": "evsp",
+        "model_time_cap_s": 10,
+        "n_constrs": 91,
+        "n_int": 32,
+        "n_vars": 69,
+        "obj": 58.85714285714281,
+        "status": "OPTIMAL",
+        "time_limit_s": 10,
+        "wall_s": 0.04096508026123047
+      },
+      "lower": 48.1972576530612,
+      "optimizer_wrapper_attempts_observed": 8,
+      "optimizer_wrapper_calls": 8,
+      "oracle_calls": 1,
+      "parse_error": null,
+      "pool_columns": 7,
+      "pricing_attempts_observed": 1,
+      "proposal_events": [],
+      "proposal_projection_novel": 0,
+      "reference_check": {
+        "guard": 1e-06,
+        "intervals_overlap_with_guard": true,
+        "reference_lower": 48.19755205738004,
+        "reference_upper": 48.197566888457004
+      },
+      "result": "depleted_f26-retained-s4/state.json",
+      "runtime": {
+        "machine": "arm64",
+        "platform": "macOS-26.5.2-arm64-arm-64bit",
+        "selected_cbc_library": {
+          "path": "/Users/nadan/Documents/ChatGPT/egg/.research-venv-repaired-1176/lib/python3.12/site-packages/cbcbox/cbc_dist/lib/libCbc.dylib",
+          "sha256": "fe44771023b133390daf7b72790c2ce65d1ccb2e5ac77c7a04c8d8f8648aff7d"
+        },
+        "versions": {
+          "cbcbox": "2.929",
+          "mip": "1.17.6",
+          "numpy": "2.5.3"
+        }
+      },
+      "solver_wall_s": 0.13264012336730957,
+      "state_index": 4,
+      "status": "certified",
+      "subprocess_cap_s": 60,
+      "timed_out": false,
+      "upper": 48.197584502550995,
+      "worker_cpu_s": 0.199751,
+      "worker_exit": 0
+    },
+    {
+      "accounting_complete": true,
+      "arm": "retained_shift",
+      "calls_clean": 13,
+      "calls_proposal": 0,
+      "calls_seed": 1,
+      "clean_calls_after_first": 12,
+      "clean_master_lp_calls": 45,
+      "clean_projection_novel_count": 12,
+      "complete_wall_s": 15.598029249813408,
+      "distinct_fleets": [
+        2
+      ],
+      "error": null,
+      "fixture": "replenished_two_bus",
+      "gap": 0.0004724291917170831,
+      "last_optimizer_wrapper": {
+        "backend": "CBC",
+        "bound": 78.48073013859177,
+        "elapsed_s": 1.0499928747303784,
+        "extra": {
+          "threads": 1
+        },
+        "lp_mip_gap_abs": 58.48073013859177,
+        "lp_obj": 20.0,
+        "lp_wall_s": 0.0013251304626464844,
+        "max_mip_gap": 1e-09,
+        "mip_gap": 0.0,
+        "model": "evsp",
+        "model_time_cap_s": 10,
+        "n_constrs": 205,
+        "n_int": 68,
+        "n_vars": 189,
+        "obj": 78.48073013859177,
+        "status": "OPTIMAL",
+        "time_limit_s": 10,
+        "wall_s": 1.042341947555542
+      },
+      "lower": 55.999873560698504,
+      "optimizer_wrapper_attempts_observed": 59,
+      "optimizer_wrapper_calls": 59,
+      "oracle_calls": 14,
+      "parse_error": null,
+      "pool_columns": 13,
+      "pricing_attempts_observed": 14,
+      "proposal_events": [],
+      "proposal_projection_novel": 0,
+      "reference_check": {
+        "guard": 1e-06,
+        "intervals_overlap_with_guard": true,
+        "reference_lower": 55.999994399999714,
+        "reference_upper": 56.000008487100274
+      },
+      "result": "replenished_two_bus-retained_shift-s0/state.json",
+      "runtime": {
+        "machine": "arm64",
+        "platform": "macOS-26.5.2-arm64-arm-64bit",
+        "selected_cbc_library": {
+          "path": "/Users/nadan/Documents/ChatGPT/egg/.research-venv-repaired-1176/lib/python3.12/site-packages/cbcbox/cbc_dist/lib/libCbc.dylib",
+          "sha256": "fe44771023b133390daf7b72790c2ce65d1ccb2e5ac77c7a04c8d8f8648aff7d"
+        },
+        "versions": {
+          "cbcbox": "2.929",
+          "mip": "1.17.6",
+          "numpy": "2.5.3"
+        }
+      },
+      "solver_wall_s": 14.753048419952393,
+      "state_index": 0,
+      "status": "certified",
+      "subprocess_cap_s": 60,
+      "timed_out": false,
+      "upper": 56.00034598989022,
+      "worker_cpu_s": 15.070656,
+      "worker_exit": 0
+    },
+    {
+      "accounting_complete": true,
+      "arm": "cold",
+      "calls_clean": 13,
+      "calls_proposal": 0,
+      "calls_seed": 1,
+      "clean_calls_after_first": 12,
+      "clean_master_lp_calls": 45,
+      "clean_projection_novel_count": 12,
+      "complete_wall_s": 15.87918791687116,
+      "distinct_fleets": [
+        2
+      ],
+      "error": null,
+      "fixture": "replenished_two_bus",
+      "gap": 0.0004724291917170831,
+      "last_optimizer_wrapper": {
+        "backend": "CBC",
+        "bound": 78.48073013859177,
+        "elapsed_s": 1.044605083297938,
+        "extra": {
+          "threads": 1
+        },
+        "lp_mip_gap_abs": 58.48073013859177,
+        "lp_obj": 20.0,
+        "lp_wall_s": 0.0015909671783447266,
+        "max_mip_gap": 1e-09,
+        "mip_gap": 0.0,
+        "model": "evsp",
+        "model_time_cap_s": 10,
+        "n_constrs": 205,
+        "n_int": 68,
+        "n_vars": 189,
+        "obj": 78.48073013859177,
+        "status": "OPTIMAL",
+        "time_limit_s": 10,
+        "wall_s": 1.0366079807281494
+      },
+      "lower": 55.999873560698504,
+      "optimizer_wrapper_attempts_observed": 59,
+      "optimizer_wrapper_calls": 59,
+      "oracle_calls": 14,
+      "parse_error": null,
+      "pool_columns": 13,
+      "pricing_attempts_observed": 14,
+      "proposal_events": [],
+      "proposal_projection_novel": 0,
+      "reference_check": {
+        "guard": 1e-06,
+        "intervals_overlap_with_guard": true,
+        "reference_lower": 55.999994399999714,
+        "reference_upper": 56.000008487100274
+      },
+      "result": "replenished_two_bus-cold-s0/state.json",
+      "runtime": {
+        "machine": "arm64",
+        "platform": "macOS-26.5.2-arm64-arm-64bit",
+        "selected_cbc_library": {
+          "path": "/Users/nadan/Documents/ChatGPT/egg/.research-venv-repaired-1176/lib/python3.12/site-packages/cbcbox/cbc_dist/lib/libCbc.dylib",
+          "sha256": "fe44771023b133390daf7b72790c2ce65d1ccb2e5ac77c7a04c8d8f8648aff7d"
+        },
+        "versions": {
+          "cbcbox": "2.929",
+          "mip": "1.17.6",
+          "numpy": "2.5.3"
+        }
+      },
+      "solver_wall_s": 14.998464345932007,
+      "state_index": 0,
+      "status": "certified",
+      "subprocess_cap_s": 60,
+      "timed_out": false,
+      "upper": 56.00034598989022,
+      "worker_cpu_s": 15.161517,
+      "worker_exit": 0
+    },
+    {
+      "accounting_complete": true,
+      "arm": "retained",
+      "calls_clean": 13,
+      "calls_proposal": 0,
+      "calls_seed": 1,
+      "clean_calls_after_first": 12,
+      "clean_master_lp_calls": 45,
+      "clean_projection_novel_count": 12,
+      "complete_wall_s": 15.584729791153222,
+      "distinct_fleets": [
+        2
+      ],
+      "error": null,
+      "fixture": "replenished_two_bus",
+      "gap": 0.0004724291917170831,
+      "last_optimizer_wrapper": {
+        "backend": "CBC",
+        "bound": 78.48073013859177,
+        "elapsed_s": 1.078273834194988,
+        "extra": {
+          "threads": 1
+        },
+        "lp_mip_gap_abs": 58.48073013859177,
+        "lp_obj": 20.0,
+        "lp_wall_s": 0.0012750625610351562,
+        "max_mip_gap": 1e-09,
+        "mip_gap": 0.0,
+        "model": "evsp",
+        "model_time_cap_s": 10,
+        "n_constrs": 205,
+        "n_int": 68,
+        "n_vars": 189,
+        "obj": 78.48073013859177,
+        "status": "OPTIMAL",
+        "time_limit_s": 10,
+        "wall_s": 1.0709619522094727
+      },
+      "lower": 55.999873560698504,
+      "optimizer_wrapper_attempts_observed": 59,
+      "optimizer_wrapper_calls": 59,
+      "oracle_calls": 14,
+      "parse_error": null,
+      "pool_columns": 13,
+      "pricing_attempts_observed": 14,
+      "proposal_events": [],
+      "proposal_projection_novel": 0,
+      "reference_check": {
+        "guard": 1e-06,
+        "intervals_overlap_with_guard": true,
+        "reference_lower": 55.999994399999714,
+        "reference_upper": 56.000008487100274
+      },
+      "result": "replenished_two_bus-retained-s0/state.json",
+      "runtime": {
+        "machine": "arm64",
+        "platform": "macOS-26.5.2-arm64-arm-64bit",
+        "selected_cbc_library": {
+          "path": "/Users/nadan/Documents/ChatGPT/egg/.research-venv-repaired-1176/lib/python3.12/site-packages/cbcbox/cbc_dist/lib/libCbc.dylib",
+          "sha256": "fe44771023b133390daf7b72790c2ce65d1ccb2e5ac77c7a04c8d8f8648aff7d"
+        },
+        "versions": {
+          "cbcbox": "2.929",
+          "mip": "1.17.6",
+          "numpy": "2.5.3"
+        }
+      },
+      "solver_wall_s": 14.709973812103271,
+      "state_index": 0,
+      "status": "certified",
+      "subprocess_cap_s": 60,
+      "timed_out": false,
+      "upper": 56.00034598989022,
+      "worker_cpu_s": 15.038215,
+      "worker_exit": 0
+    },
+    {
+      "accounting_complete": true,
+      "arm": "cold",
+      "calls_clean": 13,
+      "calls_proposal": 0,
+      "calls_seed": 1,
+      "clean_calls_after_first": 12,
+      "clean_master_lp_calls": 45,
+      "clean_projection_novel_count": 12,
+      "complete_wall_s": 15.609506083186716,
+      "distinct_fleets": [
+        2
+      ],
+      "error": null,
+      "fixture": "replenished_two_bus",
+      "gap": 0.0004724291917170831,
+      "last_optimizer_wrapper": {
+        "backend": "CBC",
+        "bound": 78.48073013859177,
+        "elapsed_s": 1.039650833234191,
+        "extra": {
+          "threads": 1
+        },
+        "lp_mip_gap_abs": 58.48073013859177,
+        "lp_obj": 20.0,
+        "lp_wall_s": 0.001310110092163086,
+        "max_mip_gap": 1e-09,
+        "mip_gap": 0.0,
+        "model": "evsp",
+        "model_time_cap_s": 10,
+        "n_constrs": 205,
+        "n_int": 68,
+        "n_vars": 189,
+        "obj": 78.48073013859177,
+        "status": "OPTIMAL",
+        "time_limit_s": 10,
+        "wall_s": 1.0318422317504883
+      },
+      "lower": 55.999873560698504,
+      "optimizer_wrapper_attempts_observed": 59,
+      "optimizer_wrapper_calls": 59,
+      "oracle_calls": 14,
+      "parse_error": null,
+      "pool_columns": 13,
+      "pricing_attempts_observed": 14,
+      "proposal_events": [],
+      "proposal_projection_novel": 0,
+      "reference_check": {
+        "guard": 1e-06,
+        "intervals_overlap_with_guard": true,
+        "reference_lower": 55.999994399999714,
+        "reference_upper": 56.000008487100274
+      },
+      "result": "replenished_two_bus-cold-s1/state.json",
+      "runtime": {
+        "machine": "arm64",
+        "platform": "macOS-26.5.2-arm64-arm-64bit",
+        "selected_cbc_library": {
+          "path": "/Users/nadan/Documents/ChatGPT/egg/.research-venv-repaired-1176/lib/python3.12/site-packages/cbcbox/cbc_dist/lib/libCbc.dylib",
+          "sha256": "fe44771023b133390daf7b72790c2ce65d1ccb2e5ac77c7a04c8d8f8648aff7d"
+        },
+        "versions": {
+          "cbcbox": "2.929",
+          "mip": "1.17.6",
+          "numpy": "2.5.3"
+        }
+      },
+      "solver_wall_s": 14.772436618804932,
+      "state_index": 1,
+      "status": "certified",
+      "subprocess_cap_s": 60,
+      "timed_out": false,
+      "upper": 56.00034598989022,
+      "worker_cpu_s": 15.072109,
+      "worker_exit": 0
+    },
+    {
+      "accounting_complete": true,
+      "arm": "retained",
+      "calls_clean": 1,
+      "calls_proposal": 0,
+      "calls_seed": 0,
+      "clean_calls_after_first": 0,
+      "clean_master_lp_calls": 8,
+      "clean_projection_novel_count": 0,
+      "complete_wall_s": 1.363126749638468,
+      "distinct_fleets": [
+        2
+      ],
+      "error": null,
+      "fixture": "replenished_two_bus",
+      "gap": 0.0002908233046881037,
+      "last_optimizer_wrapper": {
+        "backend": "CBC",
+        "bound": 78.4999999999998,
+        "elapsed_s": 0.9037483329884708,
+        "extra": {
+          "threads": 1
+        },
+        "lp_mip_gap_abs": 58.4999999999998,
+        "lp_obj": 20.0,
+        "lp_wall_s": 0.0013659000396728516,
+        "max_mip_gap": 1e-09,
+        "mip_gap": 0.0,
+        "model": "evsp",
+        "model_time_cap_s": 10,
+        "n_constrs": 205,
+        "n_int": 68,
+        "n_vars": 189,
+        "obj": 78.4999999999998,
+        "status": "OPTIMAL",
+        "time_limit_s": 10,
+        "wall_s": 0.9008100032806396
+      },
+      "lower": 55.99984819480043,
+      "optimizer_wrapper_attempts_observed": 9,
+      "optimizer_wrapper_calls": 9,
+      "oracle_calls": 1,
+      "parse_error": null,
+      "pool_columns": 14,
+      "pricing_attempts_observed": 1,
+      "proposal_events": [],
+      "proposal_projection_novel": 0,
+      "reference_check": {
+        "guard": 1e-06,
+        "intervals_overlap_with_guard": true,
+        "reference_lower": 55.999994399999714,
+        "reference_upper": 56.000008487100274
+      },
+      "result": "replenished_two_bus-retained-s1/state.json",
+      "runtime": {
+        "machine": "arm64",
+        "platform": "macOS-26.5.2-arm64-arm-64bit",
+        "selected_cbc_library": {
+          "path": "/Users/nadan/Documents/ChatGPT/egg/.research-venv-repaired-1176/lib/python3.12/site-packages/cbcbox/cbc_dist/lib/libCbc.dylib",
+          "sha256": "fe44771023b133390daf7b72790c2ce65d1ccb2e5ac77c7a04c8d8f8648aff7d"
+        },
+        "versions": {
+          "cbcbox": "2.929",
+          "mip": "1.17.6",
+          "numpy": "2.5.3"
+        }
+      },
+      "solver_wall_s": 1.0800347328186035,
+      "state_index": 1,
+      "status": "certified",
+      "subprocess_cap_s": 60,
+      "timed_out": false,
+      "upper": 56.000139018105116,
+      "worker_cpu_s": 1.1653010000000001,
+      "worker_exit": 0
+    },
+    {
+      "accounting_complete": true,
+      "arm": "retained_shift",
+      "calls_clean": 1,
+      "calls_proposal": 1,
+      "calls_seed": 0,
+      "clean_calls_after_first": 0,
+      "clean_master_lp_calls": 8,
+      "clean_projection_novel_count": 0,
+      "complete_wall_s": 2.7196989580988884,
+      "distinct_fleets": [
+        2
+      ],
+      "error": null,
+      "fixture": "replenished_two_bus",
+      "gap": 0.0002908233046881037,
+      "last_optimizer_wrapper": {
+        "backend": "CBC",
+        "bound": 78.4999999999998,
+        "elapsed_s": 0.9347967500798404,
+        "extra": {
+          "threads": 1
+        },
+        "lp_mip_gap_abs": 58.4999999999998,
+        "lp_obj": 20.0,
+        "lp_wall_s": 0.001257181167602539,
+        "max_mip_gap": 1e-09,
+        "mip_gap": 0.0,
+        "model": "evsp",
+        "model_time_cap_s": 10,
+        "n_constrs": 205,
+        "n_int": 68,
+        "n_vars": 189,
+        "obj": 78.4999999999998,
+        "status": "OPTIMAL",
+        "time_limit_s": 10,
+        "wall_s": 0.9319150447845459
+      },
+      "lower": 55.99984819480043,
+      "optimizer_wrapper_attempts_observed": 10,
+      "optimizer_wrapper_calls": 10,
+      "oracle_calls": 2,
+      "parse_error": null,
+      "pool_columns": 14,
+      "pricing_attempts_observed": 2,
+      "proposal_events": [
+        {
+          "column_key": "a85b91c761b7f52a92c08b1e93cf13ab65cd9bd0ae1c75189c2d22b7cd63c8cf",
+          "elapsed_s": 1.3540641670115292,
+          "novel": false,
+          "projection_novel": false,
+          "purpose": "analytic_proposal",
+          "status": "completed"
+        }
+      ],
+      "proposal_projection_novel": 0,
+      "reference_check": {
+        "guard": 1e-06,
+        "intervals_overlap_with_guard": true,
+        "reference_lower": 55.999994399999714,
+        "reference_upper": 56.000008487100274
+      },
+      "result": "replenished_two_bus-retained_shift-s1/state.json",
+      "runtime": {
+        "machine": "arm64",
+        "platform": "macOS-26.5.2-arm64-arm-64bit",
+        "selected_cbc_library": {
+          "path": "/Users/nadan/Documents/ChatGPT/egg/.research-venv-repaired-1176/lib/python3.12/site-packages/cbcbox/cbc_dist/lib/libCbc.dylib",
+          "sha256": "fe44771023b133390daf7b72790c2ce65d1ccb2e5ac77c7a04c8d8f8648aff7d"
+        },
+        "versions": {
+          "cbcbox": "2.929",
+          "mip": "1.17.6",
+          "numpy": "2.5.3"
+        }
+      },
+      "solver_wall_s": 2.424773693084717,
+      "state_index": 1,
+      "status": "certified",
+      "subprocess_cap_s": 60,
+      "timed_out": false,
+      "upper": 56.000139018105116,
+      "worker_cpu_s": 2.269153,
+      "worker_exit": 0
+    },
+    {
+      "accounting_complete": true,
+      "arm": "retained",
+      "calls_clean": 1,
+      "calls_proposal": 0,
+      "calls_seed": 0,
+      "clean_calls_after_first": 0,
+      "clean_master_lp_calls": 7,
+      "clean_projection_novel_count": 0,
+      "complete_wall_s": 1.378956959117204,
+      "distinct_fleets": [
+        2
+      ],
+      "error": null,
+      "fixture": "replenished_two_bus",
+      "gap": 0.0009844338274689335,
+      "last_optimizer_wrapper": {
+        "backend": "CBC",
+        "bound": 82.24999999999952,
+        "elapsed_s": 0.9501594589091837,
+        "extra": {
+          "threads": 1
+        },
+        "lp_mip_gap_abs": 62.24999999999952,
+        "lp_obj": 20.0,
+        "lp_wall_s": 0.0012629032135009766,
+        "max_mip_gap": 1e-09,
+        "mip_gap": 0.0,
+        "model": "evsp",
+        "model_time_cap_s": 10,
+        "n_constrs": 205,
+        "n_int": 68,
+        "n_vars": 189,
+        "obj": 82.24999999999952,
+        "status": "OPTIMAL",
+        "time_limit_s": 10,
+        "wall_s": 0.947181224822998
+      },
+      "lower": 59.7496179769525,
+      "optimizer_wrapper_attempts_observed": 8,
+      "optimizer_wrapper_calls": 8,
+      "oracle_calls": 1,
+      "parse_error": null,
+      "pool_columns": 14,
+      "pricing_attempts_observed": 1,
+      "proposal_events": [],
+      "proposal_projection_novel": 0,
+      "reference_check": {
+        "guard": 1e-06,
+        "intervals_overlap_with_guard": true,
+        "reference_lower": 59.74999342895279,
+        "reference_upper": 59.75001364909878
+      },
+      "result": "replenished_two_bus-retained-s2/state.json",
+      "runtime": {
+        "machine": "arm64",
+        "platform": "macOS-26.5.2-arm64-arm-64bit",
+        "selected_cbc_library": {
+          "path": "/Users/nadan/Documents/ChatGPT/egg/.research-venv-repaired-1176/lib/python3.12/site-packages/cbcbox/cbc_dist/lib/libCbc.dylib",
+          "sha256": "fe44771023b133390daf7b72790c2ce65d1ccb2e5ac77c7a04c8d8f8648aff7d"
+        },
+        "versions": {
+          "cbcbox": "2.929",
+          "mip": "1.17.6",
+          "numpy": "2.5.3"
+        }
+      },
+      "solver_wall_s": 1.119349479675293,
+      "state_index": 2,
+      "status": "certified",
+      "subprocess_cap_s": 60,
+      "timed_out": false,
+      "upper": 59.75060241077997,
+      "worker_cpu_s": 1.181514,
+      "worker_exit": 0
+    },
+    {
+      "accounting_complete": true,
+      "arm": "retained_shift",
+      "calls_clean": 1,
+      "calls_proposal": 1,
+      "calls_seed": 0,
+      "clean_calls_after_first": 0,
+      "clean_master_lp_calls": 7,
+      "clean_projection_novel_count": 1,
+      "complete_wall_s": 2.2804443328641355,
+      "distinct_fleets": [
+        2
+      ],
+      "error": null,
+      "fixture": "replenished_two_bus",
+      "gap": 0.000687143239275656,
+      "last_optimizer_wrapper": {
+        "backend": "CBC",
+        "bound": 82.23660714285701,
+        "elapsed_s": 0.9294529999606311,
+        "extra": {
+          "threads": 1
+        },
+        "lp_mip_gap_abs": 62.23660714285701,
+        "lp_obj": 20.0,
+        "lp_wall_s": 0.0013608932495117188,
+        "max_mip_gap": 1e-09,
+        "mip_gap": 0.0,
+        "model": "evsp",
+        "model_time_cap_s": 10,
+        "n_constrs": 205,
+        "n_int": 68,
+        "n_vars": 189,
+        "obj": 82.23660714285701,
+        "status": "OPTIMAL",
+        "time_limit_s": 10,
+        "wall_s": 0.9258010387420654
+      },
+      "lower": 59.74976291717613,
+      "optimizer_wrapper_attempts_observed": 9,
+      "optimizer_wrapper_calls": 9,
+      "oracle_calls": 2,
+      "parse_error": null,
+      "pool_columns": 16,
+      "pricing_attempts_observed": 2,
+      "proposal_events": [
+        {
+          "column_key": "f2c0f484d78e854571b31378ac03971ea2043032e1e2c88929209e4d26d82ad4",
+          "elapsed_s": 0.9720719172619283,
+          "novel": true,
+          "projection_novel": true,
+          "purpose": "analytic_proposal",
+          "status": "completed"
+        }
+      ],
+      "proposal_projection_novel": 1,
+      "reference_check": {
+        "guard": 1e-06,
+        "intervals_overlap_with_guard": true,
+        "reference_lower": 59.74999342895279,
+        "reference_upper": 59.75001364909878
+      },
+      "result": "replenished_two_bus-retained_shift-s2/state.json",
+      "runtime": {
+        "machine": "arm64",
+        "platform": "macOS-26.5.2-arm64-arm-64bit",
+        "selected_cbc_library": {
+          "path": "/Users/nadan/Documents/ChatGPT/egg/.research-venv-repaired-1176/lib/python3.12/site-packages/cbcbox/cbc_dist/lib/libCbc.dylib",
+          "sha256": "fe44771023b133390daf7b72790c2ce65d1ccb2e5ac77c7a04c8d8f8648aff7d"
+        },
+        "versions": {
+          "cbcbox": "2.929",
+          "mip": "1.17.6",
+          "numpy": "2.5.3"
+        }
+      },
+      "solver_wall_s": 2.0267906188964844,
+      "state_index": 2,
+      "status": "certified",
+      "subprocess_cap_s": 60,
+      "timed_out": false,
+      "upper": 59.7504500604154,
+      "worker_cpu_s": 2.085562,
+      "worker_exit": 0
+    },
+    {
+      "accounting_complete": true,
+      "arm": "cold",
+      "calls_clean": 10,
+      "calls_proposal": 0,
+      "calls_seed": 1,
+      "clean_calls_after_first": 9,
+      "clean_master_lp_calls": 36,
+      "clean_projection_novel_count": 10,
+      "complete_wall_s": 13.076843708753586,
+      "distinct_fleets": [
+        2
+      ],
+      "error": null,
+      "fixture": "replenished_two_bus",
+      "gap": 0.0006653179041791191,
+      "last_optimizer_wrapper": {
+        "backend": "CBC",
+        "bound": 82.1886160714279,
+        "elapsed_s": 0.9062265842221677,
+        "extra": {
+          "threads": 1
+        },
+        "lp_mip_gap_abs": 62.1886160714279,
+        "lp_obj": 20.0,
+        "lp_wall_s": 0.0012891292572021484,
+        "max_mip_gap": 1e-09,
+        "mip_gap": 0.0,
+        "model": "evsp",
+        "model_time_cap_s": 10,
+        "n_constrs": 205,
+        "n_int": 68,
+        "n_vars": 189,
+        "obj": 82.1886160714279,
+        "status": "OPTIMAL",
+        "time_limit_s": 10,
+        "wall_s": 0.9000959396362305
+      },
+      "lower": 59.749522909258594,
+      "optimizer_wrapper_attempts_observed": 47,
+      "optimizer_wrapper_calls": 47,
+      "oracle_calls": 11,
+      "parse_error": null,
+      "pool_columns": 11,
+      "pricing_attempts_observed": 11,
+      "proposal_events": [],
+      "proposal_projection_novel": 0,
+      "reference_check": {
+        "guard": 1e-06,
+        "intervals_overlap_with_guard": true,
+        "reference_lower": 59.74999342895279,
+        "reference_upper": 59.75001364909878
+      },
+      "result": "replenished_two_bus-cold-s2/state.json",
+      "runtime": {
+        "machine": "arm64",
+        "platform": "macOS-26.5.2-arm64-arm-64bit",
+        "selected_cbc_library": {
+          "path": "/Users/nadan/Documents/ChatGPT/egg/.research-venv-repaired-1176/lib/python3.12/site-packages/cbcbox/cbc_dist/lib/libCbc.dylib",
+          "sha256": "fe44771023b133390daf7b72790c2ce65d1ccb2e5ac77c7a04c8d8f8648aff7d"
+        },
+        "versions": {
+          "cbcbox": "2.929",
+          "mip": "1.17.6",
+          "numpy": "2.5.3"
+        }
+      },
+      "solver_wall_s": 12.43761134147644,
+      "state_index": 2,
+      "status": "certified",
+      "subprocess_cap_s": 60,
+      "timed_out": false,
+      "upper": 59.750188227162774,
+      "worker_cpu_s": 12.652436,
+      "worker_exit": 0
+    },
+    {
+      "accounting_complete": true,
+      "arm": "retained_shift",
+      "calls_clean": 2,
+      "calls_proposal": 1,
+      "calls_seed": 0,
+      "clean_calls_after_first": 1,
+      "clean_master_lp_calls": 12,
+      "clean_projection_novel_count": 2,
+      "complete_wall_s": 3.314692582935095,
+      "distinct_fleets": [
+        2
+      ],
+      "error": null,
+      "fixture": "replenished_two_bus",
+      "gap": 0.00031203372009969144,
+      "last_optimizer_wrapper": {
+        "backend": "CBC",
+        "bound": 74.74640920306175,
+        "elapsed_s": 1.060318499803543,
+        "extra": {
+          "threads": 1
+        },
+        "lp_mip_gap_abs": 54.746409203061745,
+        "lp_obj": 20.0,
+        "lp_wall_s": 0.0013949871063232422,
+        "max_mip_gap": 1e-09,
+        "mip_gap": 0.0,
+        "model": "evsp",
+        "model_time_cap_s": 10,
+        "n_constrs": 205,
+        "n_int": 68,
+        "n_vars": 189,
+        "obj": 74.74640920306175,
+        "status": "OPTIMAL",
+        "time_limit_s": 10,
+        "wall_s": 1.0552010536193848
+      },
+      "lower": 50.99973810436284,
+      "optimizer_wrapper_attempts_observed": 15,
+      "optimizer_wrapper_calls": 15,
+      "oracle_calls": 3,
+      "parse_error": null,
+      "pool_columns": 19,
+      "pricing_attempts_observed": 3,
+      "proposal_events": [
+        {
+          "column_key": "3c7fd3eae636cd8c14a55eee7338428ebebb8ef3ff05784895c8328416629b6c",
+          "elapsed_s": 1.0222925837151706,
+          "novel": true,
+          "projection_novel": true,
+          "purpose": "analytic_proposal",
+          "status": "completed"
+        }
+      ],
+      "proposal_projection_novel": 1,
+      "reference_check": {
+        "guard": 1e-06,
+        "intervals_overlap_with_guard": true,
+        "reference_lower": 50.999990131628266,
+        "reference_upper": 51.00000659011627
+      },
+      "result": "replenished_two_bus-retained_shift-s3/state.json",
+      "runtime": {
+        "machine": "arm64",
+        "platform": "macOS-26.5.2-arm64-arm-64bit",
+        "selected_cbc_library": {
+          "path": "/Users/nadan/Documents/ChatGPT/egg/.research-venv-repaired-1176/lib/python3.12/site-packages/cbcbox/cbc_dist/lib/libCbc.dylib",
+          "sha256": "fe44771023b133390daf7b72790c2ce65d1ccb2e5ac77c7a04c8d8f8648aff7d"
+        },
+        "versions": {
+          "cbcbox": "2.929",
+          "mip": "1.17.6",
+          "numpy": "2.5.3"
+        }
+      },
+      "solver_wall_s": 2.9529314041137695,
+      "state_index": 3,
+      "status": "certified",
+      "subprocess_cap_s": 60,
+      "timed_out": false,
+      "upper": 51.00005013808294,
+      "worker_cpu_s": 3.0347310000000003,
+      "worker_exit": 0
+    },
+    {
+      "accounting_complete": true,
+      "arm": "cold",
+      "calls_clean": 9,
+      "calls_proposal": 0,
+      "calls_seed": 1,
+      "clean_calls_after_first": 8,
+      "clean_master_lp_calls": 31,
+      "clean_projection_novel_count": 9,
+      "complete_wall_s": 10.842170209158212,
+      "distinct_fleets": [
+        2
+      ],
+      "error": null,
+      "fixture": "replenished_two_bus",
+      "gap": 0.00011825732260462019,
+      "last_optimizer_wrapper": {
+        "backend": "CBC",
+        "bound": 74.79973278674568,
+        "elapsed_s": 0.8221571249887347,
+        "extra": {
+          "threads": 1
+        },
+        "lp_mip_gap_abs": 54.79973278674568,
+        "lp_obj": 20.0,
+        "lp_wall_s": 0.0012469291687011719,
+        "max_mip_gap": 1e-09,
+        "mip_gap": 0.0,
+        "model": "evsp",
+        "model_time_cap_s": 10,
+        "n_constrs": 205,
+        "n_int": 68,
+        "n_vars": 189,
+        "obj": 74.79973278674568,
+        "status": "OPTIMAL",
+        "time_limit_s": 10,
+        "wall_s": 0.816892147064209
+      },
+      "lower": 50.99991848980952,
+      "optimizer_wrapper_attempts_observed": 41,
+      "optimizer_wrapper_calls": 41,
+      "oracle_calls": 10,
+      "parse_error": null,
+      "pool_columns": 10,
+      "pricing_attempts_observed": 10,
+      "proposal_events": [],
+      "proposal_projection_novel": 0,
+      "reference_check": {
+        "guard": 1e-06,
+        "intervals_overlap_with_guard": true,
+        "reference_lower": 50.999990131628266,
+        "reference_upper": 51.00000659011627
+      },
+      "result": "replenished_two_bus-cold-s3/state.json",
+      "runtime": {
+        "machine": "arm64",
+        "platform": "macOS-26.5.2-arm64-arm-64bit",
+        "selected_cbc_library": {
+          "path": "/Users/nadan/Documents/ChatGPT/egg/.research-venv-repaired-1176/lib/python3.12/site-packages/cbcbox/cbc_dist/lib/libCbc.dylib",
+          "sha256": "fe44771023b133390daf7b72790c2ce65d1ccb2e5ac77c7a04c8d8f8648aff7d"
+        },
+        "versions": {
+          "cbcbox": "2.929",
+          "mip": "1.17.6",
+          "numpy": "2.5.3"
+        }
+      },
+      "solver_wall_s": 10.293923139572144,
+      "state_index": 3,
+      "status": "certified",
+      "subprocess_cap_s": 60,
+      "timed_out": false,
+      "upper": 51.00003674713212,
+      "worker_cpu_s": 10.295539,
+      "worker_exit": 0
+    },
+    {
+      "accounting_complete": true,
+      "arm": "retained",
+      "calls_clean": 2,
+      "calls_proposal": 0,
+      "calls_seed": 0,
+      "clean_calls_after_first": 1,
+      "clean_master_lp_calls": 12,
+      "clean_projection_novel_count": 2,
+      "complete_wall_s": 2.826309708878398,
+      "distinct_fleets": [
+        2
+      ],
+      "error": null,
+      "fixture": "replenished_two_bus",
+      "gap": 0.0006426688517180423,
+      "last_optimizer_wrapper": {
+        "backend": "CBC",
+        "bound": 74.7082498177864,
+        "elapsed_s": 1.0746963331475854,
+        "extra": {
+          "threads": 1
+        },
+        "lp_mip_gap_abs": 54.708249817786395,
+        "lp_obj": 20.0,
+        "lp_wall_s": 0.0012998580932617188,
+        "max_mip_gap": 1e-09,
+        "mip_gap": 0.0,
+        "model": "evsp",
+        "model_time_cap_s": 10,
+        "n_constrs": 205,
+        "n_int": 68,
+        "n_vars": 189,
+        "obj": 74.7082498177864,
+        "status": "OPTIMAL",
+        "time_limit_s": 10,
+        "wall_s": 1.0710327625274658
+      },
+      "lower": 50.999422618536244,
+      "optimizer_wrapper_attempts_observed": 14,
+      "optimizer_wrapper_calls": 14,
+      "oracle_calls": 2,
+      "parse_error": null,
+      "pool_columns": 16,
+      "pricing_attempts_observed": 2,
+      "proposal_events": [],
+      "proposal_projection_novel": 0,
+      "reference_check": {
+        "guard": 1e-06,
+        "intervals_overlap_with_guard": true,
+        "reference_lower": 50.999990131628266,
+        "reference_upper": 51.00000659011627
+      },
+      "result": "replenished_two_bus-retained-s3/state.json",
+      "runtime": {
+        "machine": "arm64",
+        "platform": "macOS-26.5.2-arm64-arm-64bit",
+        "selected_cbc_library": {
+          "path": "/Users/nadan/Documents/ChatGPT/egg/.research-venv-repaired-1176/lib/python3.12/site-packages/cbcbox/cbc_dist/lib/libCbc.dylib",
+          "sha256": "fe44771023b133390daf7b72790c2ce65d1ccb2e5ac77c7a04c8d8f8648aff7d"
+        },
+        "versions": {
+          "cbcbox": "2.929",
+          "mip": "1.17.6",
+          "numpy": "2.5.3"
+        }
+      },
+      "solver_wall_s": 2.463097333908081,
+      "state_index": 3,
+      "status": "certified",
+      "subprocess_cap_s": 60,
+      "timed_out": false,
+      "upper": 51.00006528738796,
+      "worker_cpu_s": 2.5352419999999998,
+      "worker_exit": 0
+    },
+    {
+      "accounting_complete": true,
+      "arm": "cold",
+      "calls_clean": 13,
+      "calls_proposal": 0,
+      "calls_seed": 1,
+      "clean_calls_after_first": 12,
+      "clean_master_lp_calls": 45,
+      "clean_projection_novel_count": 12,
+      "complete_wall_s": 15.628704500384629,
+      "distinct_fleets": [
+        2
+      ],
+      "error": null,
+      "fixture": "replenished_two_bus",
+      "gap": 0.0004724291917170831,
+      "last_optimizer_wrapper": {
+        "backend": "CBC",
+        "bound": 78.48073013859177,
+        "elapsed_s": 1.0527692502364516,
+        "extra": {
+          "threads": 1
+        },
+        "lp_mip_gap_abs": 58.48073013859177,
+        "lp_obj": 20.0,
+        "lp_wall_s": 0.0013339519500732422,
+        "max_mip_gap": 1e-09,
+        "mip_gap": 0.0,
+        "model": "evsp",
+        "model_time_cap_s": 10,
+        "n_constrs": 205,
+        "n_int": 68,
+        "n_vars": 189,
+        "obj": 78.48073013859177,
+        "status": "OPTIMAL",
+        "time_limit_s": 10,
+        "wall_s": 1.044881820678711
+      },
+      "lower": 55.999873560698504,
+      "optimizer_wrapper_attempts_observed": 59,
+      "optimizer_wrapper_calls": 59,
+      "oracle_calls": 14,
+      "parse_error": null,
+      "pool_columns": 13,
+      "pricing_attempts_observed": 14,
+      "proposal_events": [],
+      "proposal_projection_novel": 0,
+      "reference_check": {
+        "guard": 1e-06,
+        "intervals_overlap_with_guard": true,
+        "reference_lower": 55.999994399999714,
+        "reference_upper": 56.000008487100274
+      },
+      "result": "replenished_two_bus-cold-s4/state.json",
+      "runtime": {
+        "machine": "arm64",
+        "platform": "macOS-26.5.2-arm64-arm-64bit",
+        "selected_cbc_library": {
+          "path": "/Users/nadan/Documents/ChatGPT/egg/.research-venv-repaired-1176/lib/python3.12/site-packages/cbcbox/cbc_dist/lib/libCbc.dylib",
+          "sha256": "fe44771023b133390daf7b72790c2ce65d1ccb2e5ac77c7a04c8d8f8648aff7d"
+        },
+        "versions": {
+          "cbcbox": "2.929",
+          "mip": "1.17.6",
+          "numpy": "2.5.3"
+        }
+      },
+      "solver_wall_s": 14.794736862182617,
+      "state_index": 4,
+      "status": "certified",
+      "subprocess_cap_s": 60,
+      "timed_out": false,
+      "upper": 56.00034598989022,
+      "worker_cpu_s": 15.0429,
+      "worker_exit": 0
+    },
+    {
+      "accounting_complete": true,
+      "arm": "retained",
+      "calls_clean": 1,
+      "calls_proposal": 0,
+      "calls_seed": 0,
+      "clean_calls_after_first": 0,
+      "clean_master_lp_calls": 8,
+      "clean_projection_novel_count": 1,
+      "complete_wall_s": 1.5282686660066247,
+      "distinct_fleets": [
+        2
+      ],
+      "error": null,
+      "fixture": "replenished_two_bus",
+      "gap": 0.0005352288157780549,
+      "last_optimizer_wrapper": {
+        "backend": "CBC",
+        "bound": 78.49999999999977,
+        "elapsed_s": 1.0068585416302085,
+        "extra": {
+          "threads": 1
+        },
+        "lp_mip_gap_abs": 58.49999999999977,
+        "lp_obj": 20.0,
+        "lp_wall_s": 0.001352071762084961,
+        "max_mip_gap": 1e-09,
+        "mip_gap": 0.0,
+        "model": "evsp",
+        "model_time_cap_s": 10,
+        "n_constrs": 205,
+        "n_int": 68,
+        "n_vars": 189,
+        "obj": 78.49999999999977,
+        "status": "OPTIMAL",
+        "time_limit_s": 10,
+        "wall_s": 1.003708839416504
+      },
+      "lower": 55.99985669194433,
+      "optimizer_wrapper_attempts_observed": 9,
+      "optimizer_wrapper_calls": 9,
+      "oracle_calls": 1,
+      "parse_error": null,
+      "pool_columns": 17,
+      "pricing_attempts_observed": 1,
+      "proposal_events": [],
+      "proposal_projection_novel": 0,
+      "reference_check": {
+        "guard": 1e-06,
+        "intervals_overlap_with_guard": true,
+        "reference_lower": 55.999994399999714,
+        "reference_upper": 56.000008487100274
+      },
+      "result": "replenished_two_bus-retained-s4/state.json",
+      "runtime": {
+        "machine": "arm64",
+        "platform": "macOS-26.5.2-arm64-arm-64bit",
+        "selected_cbc_library": {
+          "path": "/Users/nadan/Documents/ChatGPT/egg/.research-venv-repaired-1176/lib/python3.12/site-packages/cbcbox/cbc_dist/lib/libCbc.dylib",
+          "sha256": "fe44771023b133390daf7b72790c2ce65d1ccb2e5ac77c7a04c8d8f8648aff7d"
+        },
+        "versions": {
+          "cbcbox": "2.929",
+          "mip": "1.17.6",
+          "numpy": "2.5.3"
+        }
+      },
+      "solver_wall_s": 1.1928355693817139,
+      "state_index": 4,
+      "status": "certified",
+      "subprocess_cap_s": 60,
+      "timed_out": false,
+      "upper": 56.00039192076011,
+      "worker_cpu_s": 1.2784060000000002,
+      "worker_exit": 0
+    },
+    {
+      "accounting_complete": true,
+      "arm": "retained_shift",
+      "calls_clean": 1,
+      "calls_proposal": 1,
+      "calls_seed": 0,
+      "clean_calls_after_first": 0,
+      "clean_master_lp_calls": 8,
+      "clean_projection_novel_count": 1,
+      "complete_wall_s": 2.166356791742146,
+      "distinct_fleets": [
+        2
+      ],
+      "error": null,
+      "fixture": "replenished_two_bus",
+      "gap": 0.0005235342212444039,
+      "last_optimizer_wrapper": {
+        "backend": "CBC",
+        "bound": 78.49999999999994,
+        "elapsed_s": 0.785954958293587,
+        "extra": {
+          "threads": 1
+        },
+        "lp_mip_gap_abs": 58.49999999999994,
+        "lp_obj": 20.0,
+        "lp_wall_s": 0.0013108253479003906,
+        "max_mip_gap": 1e-09,
+        "mip_gap": 0.0,
+        "model": "evsp",
+        "model_time_cap_s": 10,
+        "n_constrs": 205,
+        "n_int": 68,
+        "n_vars": 189,
+        "obj": 78.49999999999994,
+        "status": "OPTIMAL",
+        "time_limit_s": 10,
+        "wall_s": 0.7824409008026123
+      },
+      "lower": 55.99988166653369,
+      "optimizer_wrapper_attempts_observed": 10,
+      "optimizer_wrapper_calls": 10,
+      "oracle_calls": 2,
+      "parse_error": null,
+      "pool_columns": 21,
+      "pricing_attempts_observed": 2,
+      "proposal_events": [
+        {
+          "column_key": "3cac518b933a8dda39dfc991ff13990a27c309ece53435511d496e50a2a99f8c",
+          "elapsed_s": 0.9286050000227988,
+          "novel": true,
+          "projection_novel": true,
+          "purpose": "analytic_proposal",
+          "status": "completed"
+        }
+      ],
+      "proposal_projection_novel": 1,
+      "reference_check": {
+        "guard": 1e-06,
+        "intervals_overlap_with_guard": true,
+        "reference_lower": 55.999994399999714,
+        "reference_upper": 56.000008487100274
+      },
+      "result": "replenished_two_bus-retained_shift-s4/state.json",
+      "runtime": {
+        "machine": "arm64",
+        "platform": "macOS-26.5.2-arm64-arm-64bit",
+        "selected_cbc_library": {
+          "path": "/Users/nadan/Documents/ChatGPT/egg/.research-venv-repaired-1176/lib/python3.12/site-packages/cbcbox/cbc_dist/lib/libCbc.dylib",
+          "sha256": "fe44771023b133390daf7b72790c2ce65d1ccb2e5ac77c7a04c8d8f8648aff7d"
+        },
+        "versions": {
+          "cbcbox": "2.929",
+          "mip": "1.17.6",
+          "numpy": "2.5.3"
+        }
+      },
+      "solver_wall_s": 1.8594746589660645,
+      "state_index": 4,
+      "status": "certified",
+      "subprocess_cap_s": 60,
+      "timed_out": false,
+      "upper": 56.00040520075493,
+      "worker_cpu_s": 1.9421220000000001,
+      "worker_exit": 0
+    }
+  ],
+  "complete": false,
+  "failed_cells": [
+    {
+      "accounting_complete": false,
+      "arm": "cold",
+      "calls_clean": 6,
+      "calls_proposal": 0,
+      "calls_seed": 1,
+      "clean_master_lp_calls": 26,
+      "clean_projection_novel_count": 5,
+      "complete_wall_s": 21.087888041045517,
+      "distinct_fleets": [
+        1,
+        2
+      ],
+      "error": "RuntimeError: Unresolved solve: FEASIBLE",
+      "fixture": "depleted_f20",
+      "last_optimizer_wrapper": {
+        "backend": "CBC",
+        "bound": 49.15176464954228,
+        "elapsed_s": 10.090311957988888,
+        "extra": {
+          "threads": 1
+        },
+        "lp_mip_gap_abs": 29.1517857142856,
+        "lp_obj": 20.0,
+        "lp_wall_s": 0.00067901611328125,
+        "max_mip_gap": 1e-09,
+        "mip_gap": 4.2856516840573956e-07,
+        "model": "evsp",
+        "model_time_cap_s": 10,
+        "n_constrs": 91,
+        "n_int": 32,
+        "n_vars": 69,
+        "obj": 49.1517857142856,
+        "status": "FEASIBLE",
+        "time_limit_s": 10,
+        "wall_s": 10.08722186088562
+      },
+      "optimizer_wrapper_attempts_observed": 33,
+      "optimizer_wrapper_calls": 33,
+      "oracle_calls": 7,
+      "parse_error": null,
+      "pool_columns": 6,
+      "pricing_attempts_observed": 7,
+      "proposal_events": [],
+      "result": "depleted_f20-cold-s4/state.json",
+      "runtime": {
+        "machine": "arm64",
+        "platform": "macOS-26.5.2-arm64-arm-64bit",
+        "selected_cbc_library": {
+          "path": "/Users/nadan/Documents/ChatGPT/egg/.research-venv-repaired-1176/lib/python3.12/site-packages/cbcbox/cbc_dist/lib/libCbc.dylib",
+          "sha256": "fe44771023b133390daf7b72790c2ce65d1ccb2e5ac77c7a04c8d8f8648aff7d"
+        },
+        "versions": {
+          "cbcbox": "2.929",
+          "mip": "1.17.6",
+          "numpy": "2.5.3"
+        }
+      },
+      "solver_wall_s": 20.682809114456177,
+      "state_index": 4,
+      "status": "failed",
+      "subprocess_cap_s": 60,
+      "timed_out": false,
+      "worker_cpu_s": 0.8484689999999999,
+      "worker_exit": 1
+    }
+  ],
+  "frozen_head": "7d3d76472ddf412e7af9e3b533d2d1fdcdac73ac",
+  "matched_complete_cells": {
+    "cold": {
+      "cells": 14,
+      "complete_wall_s": 78.50556304678321,
+      "pricing_calls": 116,
+      "warm_cells": 11,
+      "warm_complete_wall_s": 60.47389837913215,
+      "warm_pricing_calls": 89
+    },
+    "retained": {
+      "cells": 14,
+      "complete_wall_s": 27.65593591472134,
+      "pricing_calls": 43,
+      "warm_cells": 11,
+      "warm_complete_wall_s": 10.146564624272287,
+      "warm_pricing_calls": 16
+    },
+    "retained_shift": {
+      "cells": 14,
+      "complete_wall_s": 31.37500224960968,
+      "pricing_calls": 54,
+      "warm_cells": 11,
+      "warm_complete_wall_s": 13.913906041998416,
+      "warm_pricing_calls": 27
+    }
+  },
+  "matched_keys": [
+    [
+      "depleted_f20",
+      0
+    ],
+    [
+      "depleted_f20",
+      1
+    ],
+    [
+      "depleted_f20",
+      2
+    ],
+    [
+      "depleted_f20",
+      3
+    ],
+    [
+      "depleted_f26",
+      0
+    ],
+    [
+      "depleted_f26",
+      1
+    ],
+    [
+      "depleted_f26",
+      2
+    ],
+    [
+      "depleted_f26",
+      3
+    ],
+    [
+      "depleted_f26",
+      4
+    ],
+    [
+      "replenished_two_bus",
+      0
+    ],
+    [
+      "replenished_two_bus",
+      1
+    ],
+    [
+      "replenished_two_bus",
+      2
+    ],
+    [
+      "replenished_two_bus",
+      3
+    ],
+    [
+      "replenished_two_bus",
+      4
+    ]
+  ],
+  "run": "/Users/nadan/Documents/ChatGPT/egg/journal-research-work/result/reuse_frontier/20260927-attempt1",
+  "run_file_sha256": {
+    "depleted_f20-cold-s0/process.json": "b0346e8288822bb4608a7de75c98292db9dd02e21feb1eff3f930c490ac19ffa",
+    "depleted_f20-cold-s0/state.json": "8696a2f3eb4e85b35bcd4ed89c00291e6d06bd1d8acd6968e5338366fe031976",
+    "depleted_f20-cold-s0/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "depleted_f20-cold-s0/stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "depleted_f20-cold-s1/process.json": "7c919e6e2411be6a3b70a514f2bf95c7c0402731021d4bb8f3b257dd91065ef7",
+    "depleted_f20-cold-s1/state.json": "b0079a67eafeac0ca1e7f4f9608da94713ff27f3f68f8f63610c78ef6fd0efc3",
+    "depleted_f20-cold-s1/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "depleted_f20-cold-s1/stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "depleted_f20-cold-s2/process.json": "0f6096a564fcf14de6e9158a1d11a6362d354414b2f23931bae63dee96ca0859",
+    "depleted_f20-cold-s2/state.json": "48d00d7c8dc1b8d26ce66184afdeac3cba99263c1b166b6e59942a2a6bf2182a",
+    "depleted_f20-cold-s2/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "depleted_f20-cold-s2/stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "depleted_f20-cold-s3/process.json": "99ee9c1e271f41bfd3787b7501062138ff380fae44a851b219d056699d59072f",
+    "depleted_f20-cold-s3/state.json": "85fa7d42dc4edba28bec961cf1ba096391f7c857da2fb61c247e2735581a6667",
+    "depleted_f20-cold-s3/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "depleted_f20-cold-s3/stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "depleted_f20-cold-s4/process.json": "59ecf041ffc9b63d33577cb64f3cfc58572384d5090b305f802aadf133baae3f",
+    "depleted_f20-cold-s4/state.json": "aec058eae72f057b8b211f7b65d7d18da3f96d37e40c60476df24715cf91c404",
+    "depleted_f20-cold-s4/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "depleted_f20-cold-s4/stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "depleted_f20-reference-s0/process.json": "a5651e0e4c6c75f592c561af4f94765b46a84a4929e64133791f19f28948a938",
+    "depleted_f20-reference-s0/state.json": "6437202ef5a4a912c540bdee0e4c1cdd001751e6d46c3f931ca6169ac45da18f",
+    "depleted_f20-reference-s0/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "depleted_f20-reference-s0/stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "depleted_f20-reference-s1/process.json": "0fe9d5b77d86eb8619aa937263f04bba931599b33e06abd07deab871e0ac3772",
+    "depleted_f20-reference-s1/state.json": "4dbdbac12e964915b203ab52bf1cac0e4c86eedbf0d88ddacec536df0da0a2de",
+    "depleted_f20-reference-s1/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "depleted_f20-reference-s1/stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "depleted_f20-reference-s2/process.json": "b58b284fb457711ad972ebadf05332fe192f14ea3186922061fcd8057a36e16b",
+    "depleted_f20-reference-s2/state.json": "7072b7f5212522aebac7567706aea8ee12b47e0dcbf16aa4775062e992873ef3",
+    "depleted_f20-reference-s2/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "depleted_f20-reference-s2/stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "depleted_f20-reference-s3/process.json": "af4a1fdd0b3bbd7e3b7b1abd5596550ce040146280579d526c79163213e906bf",
+    "depleted_f20-reference-s3/state.json": "fffff919e568205094ed3e83b08f42f7fbe40223d02e5b3a82f79da998e25e31",
+    "depleted_f20-reference-s3/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "depleted_f20-reference-s3/stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "depleted_f20-reference-s4/process.json": "ac20d7514557eff5b0bf2bd4b74ae08644aec19d929469f2407e0bcca4f3a1ff",
+    "depleted_f20-reference-s4/state.json": "57f93159711a1ae01d0a9d25648ad92ec670a714039d87644a841780aa4a9c67",
+    "depleted_f20-reference-s4/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "depleted_f20-reference-s4/stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "depleted_f20-retained-s0/process.json": "38ec7cc7f42af28ad9ce354156aa6d763d95a6b327439b4d83954bd25791c62a",
+    "depleted_f20-retained-s0/state.json": "c1a30b9ef37d8185161c4b99ef1368fd271585700d1d207eab297a96b24e4012",
+    "depleted_f20-retained-s0/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "depleted_f20-retained-s0/stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "depleted_f20-retained-s1/process.json": "30fdf47c93abdb5b612ec75de9ef720195ce802ce5b5f8577b11f170d2d2d1a9",
+    "depleted_f20-retained-s1/state.json": "61eff47fde327f102b16486c0410df8bddca09d68b44da6c23cd7fa32e3613df",
+    "depleted_f20-retained-s1/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "depleted_f20-retained-s1/stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "depleted_f20-retained-s2/process.json": "172e3899c67e793cfa9f1640d0d6415c7c0f996b721cad2f011dd02dfc95f5db",
+    "depleted_f20-retained-s2/state.json": "e54ef82fa4137aed214491a97fb559de35ed281235e5499fa54106859aa48cbb",
+    "depleted_f20-retained-s2/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "depleted_f20-retained-s2/stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "depleted_f20-retained-s3/process.json": "80dad5c89a546bd0a027656e82310820a98a18b44571d501c8981c480fd81a6d",
+    "depleted_f20-retained-s3/state.json": "79b781ae71480de7cf810d76d173720607193389fd4acb5f962f0d821df85a3a",
+    "depleted_f20-retained-s3/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "depleted_f20-retained-s3/stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "depleted_f20-retained-s4/process.json": "167618b8b92b0139be51096613d049c5c837ac0f91b83b908f72c92396b27b36",
+    "depleted_f20-retained-s4/state.json": "f8646cf00a54ad7914d1f22d2c8ef040e6ef158f120421a137b50bef0835948e",
+    "depleted_f20-retained-s4/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "depleted_f20-retained-s4/stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "depleted_f20-retained_shift-s0/process.json": "d08446214aaf4f6c88c704d51fe0001d8b8570a6d2f92cf904b4aaab0799384e",
+    "depleted_f20-retained_shift-s0/state.json": "ba91508da173d782319c2994b9e50460dde6bf8fcc7a1c0940a9d8eb54990a09",
+    "depleted_f20-retained_shift-s0/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "depleted_f20-retained_shift-s0/stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "depleted_f20-retained_shift-s1/process.json": "c670b5f23b1d7f010e9f834cda42c49b03e3753cae5ab264b3b5b23a2392e521",
+    "depleted_f20-retained_shift-s1/state.json": "29cba91d4d56cd651f129943be38f10554bddc59fafcb8c8c0ec552d3270ab7f",
+    "depleted_f20-retained_shift-s1/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "depleted_f20-retained_shift-s1/stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "depleted_f20-retained_shift-s2/process.json": "64a2c1aaea937ec113cf9af012d05241311f61977cfede93d2cb846c9e853624",
+    "depleted_f20-retained_shift-s2/state.json": "64c2da305be1ac885a26db6edbca2000193cf6ce879df77ab918ee2dbaaf3a31",
+    "depleted_f20-retained_shift-s2/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "depleted_f20-retained_shift-s2/stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "depleted_f20-retained_shift-s3/process.json": "b5ea5e2a9c8bc267479c12becb1c53914e49f127c356127624007c42f7165f5e",
+    "depleted_f20-retained_shift-s3/state.json": "851151e3a9b9ea1f9205744037a52817688a4ed1efa5412fba31edd6a08029ba",
+    "depleted_f20-retained_shift-s3/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "depleted_f20-retained_shift-s3/stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "depleted_f20-retained_shift-s4/process.json": "aca827a4f6a76ef798fc667943ad712c0d3c5cac6d981203fced58b0d8292d28",
+    "depleted_f20-retained_shift-s4/state.json": "a3824060c78e76b4f20e59d6d90363a3aba3599b876fb9d87b3eb389959f9cfa",
+    "depleted_f20-retained_shift-s4/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "depleted_f20-retained_shift-s4/stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "depleted_f26-cold-s0/process.json": "c2f7619cf5f4e18e28168f90520709a172710a9735f92d6400142b37161f3c5d",
+    "depleted_f26-cold-s0/state.json": "2bf2aa3b9d5ca44595c1373a8660219cd089ebdf4ecd0c98a566b2aa8732df32",
+    "depleted_f26-cold-s0/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "depleted_f26-cold-s0/stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "depleted_f26-cold-s1/process.json": "acc262905337385788eef8216905a831129d7cdc6c5ec4a4ec66799de1339b6a",
+    "depleted_f26-cold-s1/state.json": "1146bbef5f6297ceeb021db2848464c8fdb8562b4f248a35a1426a173235ea54",
+    "depleted_f26-cold-s1/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "depleted_f26-cold-s1/stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "depleted_f26-cold-s2/process.json": "e42d210c68619f757f41b2cb855f1b5ae66914d205c61a4a8e8b6ec8b2273ee2",
+    "depleted_f26-cold-s2/state.json": "b1e6934d95700438699cce4fea501a08a241c5720cc05604337f01ccd1ac1293",
+    "depleted_f26-cold-s2/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "depleted_f26-cold-s2/stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "depleted_f26-cold-s3/process.json": "21c64fe385b30829a0f06784203e5200d587983ec50966e7dae41ad60b519bc1",
+    "depleted_f26-cold-s3/state.json": "69f74cee921454d7e5dce3e81dca2e59f26c45b905204a881f905e3fd71ba560",
+    "depleted_f26-cold-s3/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "depleted_f26-cold-s3/stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "depleted_f26-cold-s4/process.json": "b400826c68c242f2301391bac08e6d8fff5793aa3df15840731d247d1b915890",
+    "depleted_f26-cold-s4/state.json": "9b5d232256e78a0669d510903b1554f9d2fd702b2a8370372109544efc40ab2e",
+    "depleted_f26-cold-s4/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "depleted_f26-cold-s4/stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "depleted_f26-reference-s0/process.json": "9d789a00df2809ce56361d7e955566b321e1d96154b74266f7668ddc175d8efe",
+    "depleted_f26-reference-s0/state.json": "7906137cc49f03a51ddca60a172d2970aa462fd6dbf54559e71cdbba4b1559d9",
+    "depleted_f26-reference-s0/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "depleted_f26-reference-s0/stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "depleted_f26-reference-s1/process.json": "999389f34987686cd76842f4ce4c2afbdcc856ab4e6e9473669a8d265343589e",
+    "depleted_f26-reference-s1/state.json": "f4b0e1a2f16a3fb31d12feb9add35675e6879b1c222a123f4b30d52c18463870",
+    "depleted_f26-reference-s1/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "depleted_f26-reference-s1/stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "depleted_f26-reference-s2/process.json": "b3d1d73b7ece3a46584bbdce323fd7df8a6f92792042cef5a4eeca5bc7c692e9",
+    "depleted_f26-reference-s2/state.json": "0f2d86f0b83043255ed3d23ed55fc11b286119044db3e72b36a5c9c5897ac401",
+    "depleted_f26-reference-s2/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "depleted_f26-reference-s2/stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "depleted_f26-reference-s3/process.json": "0bee079fc041ddc806bd188b1d75f2f11f3c2974ee4f94cbf54163f462d932af",
+    "depleted_f26-reference-s3/state.json": "e0470a32e2d0720fd88230cee7f472735bf48664b78e19e23d7a73e770b98094",
+    "depleted_f26-reference-s3/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "depleted_f26-reference-s3/stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "depleted_f26-reference-s4/process.json": "f56e83895deeaa07efd746f952d4ca9a8236a0b38a9dd22b207c18b1db6e4387",
+    "depleted_f26-reference-s4/state.json": "664234f27e24685073a44ce1446c31d71dbe3093931bc9eaf69fadcf938e2d7a",
+    "depleted_f26-reference-s4/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "depleted_f26-reference-s4/stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "depleted_f26-retained-s0/process.json": "a781fb61bef593c0025c8c6a41cba541dd407a557d61e4a999ed813b82bf6faa",
+    "depleted_f26-retained-s0/state.json": "51ebb8e2bd5b950661f05f851db220fe2d101b04374d955a0ed1deb87464e11f",
+    "depleted_f26-retained-s0/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "depleted_f26-retained-s0/stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "depleted_f26-retained-s1/process.json": "48d09da645a369e3e3e7bb2d9c821dcc8fb5ac3dcf80674ea423dc5866744daf",
+    "depleted_f26-retained-s1/state.json": "f2fc4e7e9244bf8c4987b3ff9d13b0516fea4b42a072a0382588a82a29673d85",
+    "depleted_f26-retained-s1/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "depleted_f26-retained-s1/stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "depleted_f26-retained-s2/process.json": "8df81f7b97b66ee81af3bfbbc31e24ecb32269f8268d4a4729b757e69e53af3d",
+    "depleted_f26-retained-s2/state.json": "20fbc91a08a3638bd58043ced9d8e413a2e09aa5e86162cb93d566dd5dc2a727",
+    "depleted_f26-retained-s2/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "depleted_f26-retained-s2/stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "depleted_f26-retained-s3/process.json": "96528df0fbe9afc21f79c3a51be001fb4011b14deea8f5e7eee2ef0455671b39",
+    "depleted_f26-retained-s3/state.json": "ab568627b6859023d8ebbfe9165d61a54ae7879f7f0361093c296fd263ae49c8",
+    "depleted_f26-retained-s3/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "depleted_f26-retained-s3/stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "depleted_f26-retained-s4/process.json": "90a9a0da2d803baf6bd6cd44ca53eea558d15f7c15238e2549ff16952a0d3dda",
+    "depleted_f26-retained-s4/state.json": "110eca5346ee75c826dbc36dad9801db780fe4fc8566981903f2aa391fb01e52",
+    "depleted_f26-retained-s4/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "depleted_f26-retained-s4/stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "depleted_f26-retained_shift-s0/process.json": "d35196c5b400ef55e5926cfc3c1dd7cbb3937a8174c7bd8903a12b0cfbf7b5e4",
+    "depleted_f26-retained_shift-s0/state.json": "66d3779e7b17a1a78523650e170ce3f53d7d27a5372cf2f7fb370f7e379e8658",
+    "depleted_f26-retained_shift-s0/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "depleted_f26-retained_shift-s0/stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "depleted_f26-retained_shift-s1/process.json": "82db8b690cb58ccf7e3a60808e07aa53e1e57aec422817e045eb7a517e29a699",
+    "depleted_f26-retained_shift-s1/state.json": "cb01f6a399ee5e5b11ecccec6d2710308a3d36d874284f2dbbfafbb4566365f5",
+    "depleted_f26-retained_shift-s1/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "depleted_f26-retained_shift-s1/stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "depleted_f26-retained_shift-s2/process.json": "51194c4f3abb1319f1bffecdc1d24657d31346421033f644960377db767242f7",
+    "depleted_f26-retained_shift-s2/state.json": "4e3e5c5c831635735d7312928325c96c6e553c4cc14b7effd40efb4bb42d8a38",
+    "depleted_f26-retained_shift-s2/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "depleted_f26-retained_shift-s2/stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "depleted_f26-retained_shift-s3/process.json": "2d27cd938c95855adaa56d4db0d52e52d5fdb1100fcd4c25942ba1634ed0d71c",
+    "depleted_f26-retained_shift-s3/state.json": "c357a34428e37034bbc677f86494c218c911cd3c343d0c045c39596e4d9c38d7",
+    "depleted_f26-retained_shift-s3/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "depleted_f26-retained_shift-s3/stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "depleted_f26-retained_shift-s4/process.json": "36b041416ba3c587871acef77ec6e9ffb4920e1d3f771d39685f6a2a7983c034",
+    "depleted_f26-retained_shift-s4/state.json": "32ff2411be21fdf6966c9b092d4379b3b653900bf2054de06f188c174e1d16a2",
+    "depleted_f26-retained_shift-s4/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "depleted_f26-retained_shift-s4/stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "frozen-config.json": "10f116f1af97945f9ab4a1c7fd9519d342be0090a00261acbfaadd38087795f6",
+    "frozen-fixtures.json": "dfeee97d1007535ae34563dc6a22331c4da725a4a169aa8da46e5f595a5cb939",
+    "provenance.json": "55f86e60dcbadeada39789fd9e65077b8e7f13d6fb49d4c3b9ffbf455c1cb678",
+    "replenished_two_bus-cold-s0/process.json": "804959f1bec990158b97eca2bdd1fedb9c2c4f4d3a225a146041f055e4a99539",
+    "replenished_two_bus-cold-s0/state.json": "e2fd4ef44351776ba709e659dea3cbf5b023155a93aae9aefcc10087a2f2cbcf",
+    "replenished_two_bus-cold-s0/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "replenished_two_bus-cold-s0/stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "replenished_two_bus-cold-s1/process.json": "ae16c9cf36852e5252ece306970ac8f13dce241759d16d94d06803973defdef1",
+    "replenished_two_bus-cold-s1/state.json": "e79e55cc3516e31134b2d837945e386039c161e27f9e4c0279ad692f25b494c6",
+    "replenished_two_bus-cold-s1/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "replenished_two_bus-cold-s1/stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "replenished_two_bus-cold-s2/process.json": "e0ef0e76298195def5937ff1bb5de0ceab0e86fe2b0e1faf0c051c3d467bf9d7",
+    "replenished_two_bus-cold-s2/state.json": "ff4a0c7c67af720ffcd6da92f2d4e688f0f10399728d5b312b771062d9a19fa6",
+    "replenished_two_bus-cold-s2/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "replenished_two_bus-cold-s2/stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "replenished_two_bus-cold-s3/process.json": "80baeea9f1cf8b2685376f1e9c5a488c1e9832ffdaaac0728e55f9c0e54155a6",
+    "replenished_two_bus-cold-s3/state.json": "ffd1e7e568de05c8d88f861b123f60e18f195c9b8609c1a0bf1a072840eda372",
+    "replenished_two_bus-cold-s3/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "replenished_two_bus-cold-s3/stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "replenished_two_bus-cold-s4/process.json": "eaf960202ab464b7e882f4686d0b2305e91511ffbc148a61516c6c58cc98eaa3",
+    "replenished_two_bus-cold-s4/state.json": "4ce86c7c7cac04639c00b74c165b6878048ca4167ac23a49872f578f4982f461",
+    "replenished_two_bus-cold-s4/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "replenished_two_bus-cold-s4/stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "replenished_two_bus-reference-s0/process.json": "e2ba76551f8357d94e8a1691ef70eb9dd3a4ffb1548afc3ae5ae261f82d7d8e7",
+    "replenished_two_bus-reference-s0/state.json": "c9dcdac49d42f344dca87ea7ca52366cb552d78cf2e679a3e3f105559a969e2f",
+    "replenished_two_bus-reference-s0/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "replenished_two_bus-reference-s0/stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "replenished_two_bus-reference-s1/process.json": "35010878e9e34b6f79cdf092f5b8653d879ca179c204828295b90759b9fbb8c3",
+    "replenished_two_bus-reference-s1/state.json": "0412d634c75235fadcd5523bb9472494fe9e79f05b3ff39ef54d199760d02e33",
+    "replenished_two_bus-reference-s1/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "replenished_two_bus-reference-s1/stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "replenished_two_bus-reference-s2/process.json": "2699483164899e0581318c1e47be100c0be51ce9ca0df57448973dc03bd902fe",
+    "replenished_two_bus-reference-s2/state.json": "536b896410246f861826a64360b2f8ba4be3ee84235c8445dd63acd572d2c7df",
+    "replenished_two_bus-reference-s2/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "replenished_two_bus-reference-s2/stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "replenished_two_bus-reference-s3/process.json": "a2190bb4bff7fcbc860e66adc34fb1b326eae071adb08388fcc5b161cb8a694c",
+    "replenished_two_bus-reference-s3/state.json": "7c994efd8a94e6791e665538320b078f103653c6bacec7cb7b2698ad396cb541",
+    "replenished_two_bus-reference-s3/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "replenished_two_bus-reference-s3/stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "replenished_two_bus-reference-s4/process.json": "5db8f50d473f0f5c55e0ed9f9c6103a9096571f45c567c01c81c5c68b0947cb9",
+    "replenished_two_bus-reference-s4/state.json": "9bea1cea995810a0cde9b59a33ccf681439ae0920aa1ceb5ee67df14deadb0d4",
+    "replenished_two_bus-reference-s4/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "replenished_two_bus-reference-s4/stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "replenished_two_bus-retained-s0/process.json": "e2d94b8d60fecc879c1e70fb60eb36df29cda1fa1301b9c5947890c66b26fcb5",
+    "replenished_two_bus-retained-s0/state.json": "8df6c95f30b7ad9401aa176a3034b500414e113a34eff17009e96ab91a4d5f17",
+    "replenished_two_bus-retained-s0/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "replenished_two_bus-retained-s0/stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "replenished_two_bus-retained-s1/process.json": "fa92ff41932ef61e52e8b3d3a8e773e4004f3b8e6f17e635b7784ca54586ebb2",
+    "replenished_two_bus-retained-s1/state.json": "1231a85cee2fc6be2fa843a1f5a4d68f62855a3f76ccd22d7d9d099d48c10a2b",
+    "replenished_two_bus-retained-s1/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "replenished_two_bus-retained-s1/stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "replenished_two_bus-retained-s2/process.json": "a927f78ad363540adacb44502d0357856bb8ad9ca60f9b56888f0e5129677679",
+    "replenished_two_bus-retained-s2/state.json": "6b20bfae7daaedb12bc56fb2918ef4b1d3780677683cdeb89d3b5ed360437e8b",
+    "replenished_two_bus-retained-s2/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "replenished_two_bus-retained-s2/stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "replenished_two_bus-retained-s3/process.json": "e02cedf3970dc7c6ef8277aad740309d36b152a433efc3e9c69ab088c18390fe",
+    "replenished_two_bus-retained-s3/state.json": "d0ad48f8d41accf811eab7628fb88602663e09e947e0ba2c65a849141014ff03",
+    "replenished_two_bus-retained-s3/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "replenished_two_bus-retained-s3/stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "replenished_two_bus-retained-s4/process.json": "5e9ba48b204952e902f6e835f5352dd15621276451404bc04541b128a7e83b87",
+    "replenished_two_bus-retained-s4/state.json": "63e8ad79d3068875b6f7d9070e0e4bc4a2efd7506ee1ecd9b9421e8085357144",
+    "replenished_two_bus-retained-s4/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "replenished_two_bus-retained-s4/stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "replenished_two_bus-retained_shift-s0/process.json": "fa187c1ee4a4ac049337a5c8005ea100c6a29f4240ea235e3c1f87a25d6b3d85",
+    "replenished_two_bus-retained_shift-s0/state.json": "50cfeaafe0d51bfd05bda13d4709cd343c9e16a7bced6c3f85cb5d84fd68e351",
+    "replenished_two_bus-retained_shift-s0/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "replenished_two_bus-retained_shift-s0/stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "replenished_two_bus-retained_shift-s1/process.json": "589d7c36a898857c00bff4d48a2e3a7a5758e49903d99a82970d1647614df8ea",
+    "replenished_two_bus-retained_shift-s1/state.json": "0e1d7325a621dd6d8df151ae297a24e0f3ca7a0f79eb32de4e678174816b9761",
+    "replenished_two_bus-retained_shift-s1/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "replenished_two_bus-retained_shift-s1/stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "replenished_two_bus-retained_shift-s2/process.json": "edecaa3716c673e3cccc2ddda20541f4daf75cd8d04827b58a0b521b5e7f533a",
+    "replenished_two_bus-retained_shift-s2/state.json": "2f501e1da77b697aa63faa0e4bb7752c3257cde85e1103ac376cced84c00211f",
+    "replenished_two_bus-retained_shift-s2/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "replenished_two_bus-retained_shift-s2/stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "replenished_two_bus-retained_shift-s3/process.json": "63bd630ac794047c58166cd1ecb7e3d892197ca638e97319bc0afddbd36e5a06",
+    "replenished_two_bus-retained_shift-s3/state.json": "4c369794dc93eb9cb4a04ec9d6c5457d5ef2643eace5baa8ddf17feb5bc299b9",
+    "replenished_two_bus-retained_shift-s3/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "replenished_two_bus-retained_shift-s3/stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "replenished_two_bus-retained_shift-s4/process.json": "d4b6c435ce4349bcda4ccc79dfd3df7409bf561722279597ac3e2be5c3399dcc",
+    "replenished_two_bus-retained_shift-s4/state.json": "f2da8000211b95347357a5853dc55049ca915cb841bd2be174c87c03ac402b5d",
+    "replenished_two_bus-retained_shift-s4/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "replenished_two_bus-retained_shift-s4/stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "summary.json": "96780d5ef79a4fba68cff2df59fb56c10fbf16b8ddd687ae8949ea091e3da332"
+  },
+  "total_wall_s": 164.2948005828075
+}

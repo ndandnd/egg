@@ -1,0 +1,81 @@
+{
+  "classification": "independent no-solver source, arithmetic and finite-graph audit; not optimization or performance evidence",
+  "solver_imported": false,
+  "input_sha256": "af6da4dea220063d1b2486a4c958bff19ae621328f07bde4a95a5c70690ebeb6",
+  "source_archive_sha256": "3c6c2ed7c45fc441f4cb6108d830769b60c0de5e44e1a3a6fc72bed4f5f07317",
+  "checks": {
+    "workbook-row-count": 4,
+    "no-blank-source-row": 47,
+    "physical-row": 47,
+    "exact-source-field": 785,
+    "matrix-order": 1,
+    "directed-endpoints": 25,
+    "exact-matrix-cell": 75,
+    "member-size": 6,
+    "member-hash": 6,
+    "member-crc": 6,
+    "trip-time-exact": 37,
+    "duration-exact": 37,
+    "itinerary-consistency": 259,
+    "no-service-at-either-depot": 37,
+    "half-minute-directed-time": 25,
+    "matrix-orientation-height": 25,
+    "unique-mode-keys": 2,
+    "exact-complete-finite-mode-set": 2,
+    "depot-split": 2705,
+    "leg-count": 2705,
+    "provenance-mode": 2705,
+    "exact-native-leg": 20904,
+    "modeled-leg-energy": 5226,
+    "provenance-time": 5226,
+    "provenance-energy": 5226,
+    "provenance-directed-source": 3930,
+    "wait-not-depot": 1296,
+    "wait-not-source-travel": 1296,
+    "service-modeled-energy": 74,
+    "service-native-time": 74,
+    "constructive-single-bus-energy": 74,
+    "constructive-serial-deadline": 2,
+    "constructive-last-end": 2,
+    "constructive-energy-total": 2,
+    "archive-sha256": 1
+  },
+  "check_count": 52874,
+  "service_count": 37,
+  "source_departure_range_sec": [
+    22020,
+    86820
+  ],
+  "latest_arrival_sec": 87840,
+  "matrix_offdiagonal_half_not_whole_minutes": 15,
+  "variants": [
+    {
+      "depot": 15,
+      "movement_counts": {
+        "pullout": 37,
+        "pullin": 37,
+        "direct": 666,
+        "depot": 630
+      },
+      "movement_legs_checked": 2648,
+      "off_depot_waits_checked": 648,
+      "independent_constructive_energy_kwh": 2089.8764409985934,
+      "independent_constructive_final_charge_min": 1490.5238145685698,
+      "candidate_charge_variables_at_max_vehicles": 751914
+    },
+    {
+      "depot": 16,
+      "movement_counts": {
+        "pullout": 37,
+        "pullin": 37,
+        "direct": 666,
+        "depot": 595
+      },
+      "movement_legs_checked": 2578,
+      "off_depot_waits_checked": 648,
+      "independent_constructive_energy_kwh": 2769.8144794193895,
+      "independent_constructive_final_charge_min": 1501.1225345685698,
+      "candidate_charge_variables_at_max_vehicles": 705294
+    }
+  ]
+}

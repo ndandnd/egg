@@ -1,0 +1,88 @@
+{
+  "policy": "cf1-entry-repaired-v5",
+  "backend": "GRB",
+  "tariff": "day",
+  "models": {},
+  "case_specs": [
+    {
+      "base_id": 50997,
+      "trips": 40,
+      "fixture": "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/research-20261023/recovery-phase1-v7/fixtures/base50997-n40.json",
+      "full_identity": "58b3e0628e6ad1e3876bb142cec2636cb7bc826738da0f6a34f60555954370f8",
+      "market_sha256": "f1da29dda920210565f103a311f47b5b5f460e3704050ae711966ca852425be2"
+    }
+  ],
+  "tasks": [
+    {
+      "arm": "cf1",
+      "base_id": 50997,
+      "trips": 40,
+      "seed": 17,
+      "seconds": 60.0,
+      "fault": null,
+      "protocol_revision": 5,
+      "id": "cca533d3cc5125d6cadf"
+    }
+  ],
+  "native_library": {
+    "path": "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/gurobipy/_batch.cpython-312-darwin.so",
+    "sha256": "54c2ca41a9a9c80b4dd27df09e6b8a73abbb18de90e95198ae676611910dca96"
+  },
+  "package_budget": {
+    "initial_charged_cpu_s": 2426.723449631016,
+    "non_native_sample_policy": {
+      "scope": "source-tests-and-metadata-only",
+      "process_sample_timeout_s": 1.0,
+      "completed_sample_gap_limit_s": 1.25,
+      "poll_interval_s": 0.05,
+      "absolute_work_deadline_clipping": true,
+      "numerical_monitor_changed": false
+    },
+    "additional_hard_cap_s": 275.0,
+    "absolute_package_ceiling_s": 2701.723449631016,
+    "analysis_reserve_s": 30.0,
+    "next_worker_allocation_s": 62.5,
+    "next_worker_supervision_reservation_s": 45.0,
+    "physical_and_ack_endpoint_s": 60.0,
+    "supervisor_stop_s": 61.0,
+    "outer_allocation_s": 62.5,
+    "global_hard_ceiling_s": 3000.0,
+    "global_dispatch_stop_s": 2820.0,
+    "global_shutdown_reserve_s": 180.0,
+    "threads": 1,
+    "numerical_workers": 1,
+    "rss_limit_bytes": 5368709120,
+    "automatic_retry": false,
+    "check_planning_s": 20.0,
+    "freeze_planning_s": 25.0,
+    "metadata_work_s": 15.0,
+    "metadata_outer_s": 17.5,
+    "metadata_phase_s": 25.0,
+    "entry_precharge_planning_s": 7.5,
+    "independent_analysis_planning_s": 20.0,
+    "artifact_finalization_planning_s": 10.0
+  },
+  "evidence": {
+    "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/research-20261024/cf1-resumption/approval4.json": "c9d5a1ff694a08d0175a46d5aaf1da19ec6ca25fa2a86f1fb572bee784b29b86",
+    "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/research-20261024/cf1-resumption/accepted-carry.json": "095890c9c95012a9d04e06cd0f39699af992f829d0aca18ebe8d4f410b5621a7",
+    "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/research-20261024/cf1-resumption/failed-monitor-accounting.json": "4e5910e8a816f0c9b39c2f7c82e4e0b4b1a60f0c8f5082f14a14ed2851f9a8b5",
+    "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/research-20261024/cf1-resumption/native-launcher-v5d.py": "5c289a1b45ea4af3a2a07b772d3fdcf60c0905065690ef1ff4555a8951ce4c29",
+    "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/research-20261024/cf1-entry-repaired-checks/attempt07-accounting.json": "7f31ad262f813fb76919fa35b13952efa6b1fc34a55da9371f035e83a2342884",
+    "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/research-20261024/cf1-resumption/freeze-preparation4.py": "86a2e73dc9508d6e8b80da187dd1a3a77dbdb4e8a2fa6dd5b8cf8ae402f53367",
+    "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/research-20261024/CF1_RESUMPTION_PROTOCOL.md": "69ee8559e38b7ff033f229d91e42dd5fe3f95b5647ad4bbd92191232671afaa8",
+    "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/research-20261024/CF1_RESUMPTION_REVIEW.md": "160bfe458cefb9e7f6e4947bdefb74a259266c8a35ebb5635a40aa64ffacb227",
+    "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/research-20261024/CF1_RESUMPTION_WRAPPERS.md": "d5d0e9311b909e693d273bfdb75b2ff3cfead379083d969ef371cf35b2018a5e",
+    "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/research-20261024/CF1_RESUMPTION2_PROTOCOL.md": "3d3290d9aaf27f958ecfa05789249e077aa69920c56869d9002759a9862ac664",
+    "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/research-20261024/CF1_RESUMPTION2_WRAPPERS.md": "13b639775edb4b55ab962d5f0d60dfb887c0ee8b33f98e4d6ddda67539a2bdea",
+    "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/research-20261024/CF1_RESUMPTION3_PROTOCOL.md": "3c49f452277cb137a859a3f1dfdf4c8a764f5b75ea5f6ce22bf12739c804dfc6",
+    "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/research-20261024/CF1_RESUMPTION3_WRAPPERS.md": "e2046cf1ff40f00bf7d05a48a66d890b59c2b7f69cee11776d52512008ab83df",
+    "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/research-20261024/CF1_METADATA_MONITOR_DIRECTION.md": "059b45432c123544c5171fcf43a20f80db46fd19d867e7b6e77fea32ee19acb1",
+    "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/research-20261024/CF1_RESUMPTION4_WRAPPERS.md": "c8a441beb88b3052b7a2f10233c7894b1dec7e0fdeb7a8c7aeced20af777961e",
+    "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/research-20261024/cf1-resumption/finalize-source07.py": "80b48d54c9b718cd62994ae8f6dada6f61b53cae5201341eaf91b090309a2a57",
+    "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/research-20261024/cf1-resumption/finalize-freeze-v5d.py": "b4a30d1a03ff398c52dc5523a13d8c1e5cbe253772f05bbec5583db917451439",
+    "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/research-20261024/cf1-entry-repaired-v5d/analysis-command.json": "158547c20d5acc46d547604a4c25fd8f99a9bff200e75874400012f716efc3c3",
+    "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/research-20261024/cf1-entry-repaired-v5d/run-command-template.json": "a0464480094b9fc721e72a058a6ffae53058a3b3ff07df8baea512e255883d74"
+  },
+  "scope": "One inspected40 CF1 mechanism under approved resumption; no ML quality or comparative claim",
+  "automatic_retry": false
+}

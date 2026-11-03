@@ -1,0 +1,26 @@
+........................................................................ [ 37%]
+........................................................................ [ 75%]
+................F..............................                          [100%]
+=================================== FAILURES ===================================
+________ test_late_serialization_is_censored_and_failure_still_charged _________
+
+physical = (NativeCase(name='source', trips=(Trip(id='A', start_min=0, end_min=60, start_place='D', end_place='D', energy_kwh=15....nts': ['out', 'home']}], 'charges': [{'vehicle': 0, 'movement': 'home', 'connector': 0, 'start_min': 60.0, ...}], ...})
+
+    def test_late_serialization_is_censored_and_failure_still_charged(physical):
+        clock = Clock(23.)
+        store = MemoryStorage(clock, serialize_seconds=8.)
+    
+        def planner(*args, **kw):
+            raise RuntimeError('failed native work')
+    
+        outcome = run(physical, planner, clock, store)
+        assert outcome['censored'] is True
+        assert outcome['completion']['elapsed_s'] == 31.
+>       assert outcome['result']['failures'][-1]['error_type'] == 'RuntimeError'
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       IndexError: list index out of range
+
+src/tests/test_recovery_coordinator.py:410: IndexError
+=========================== short test summary info ============================
+FAILED src/tests/test_recovery_coordinator.py::test_late_serialization_is_censored_and_failure_still_charged
+1 failed, 190 passed in 2.33s

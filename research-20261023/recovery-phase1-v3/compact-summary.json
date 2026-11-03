@@ -1,0 +1,141 @@
+{
+  "native_entry_charge_s": 320.3288348765555,
+  "ledger_charges": [
+    {
+      "event": "finish",
+      "task_id": "584067521b4af0cb3da0",
+      "phase": null,
+      "charged_cpu_s": 25.337125500664115,
+      "monitor_child_cpu_s": 0
+    },
+    {
+      "event": "finish",
+      "task_id": "27133bea236c6b35ac75",
+      "phase": null,
+      "charged_cpu_s": 27.21316875051707,
+      "monitor_child_cpu_s": 0
+    },
+    {
+      "event": "finish",
+      "task_id": "61cb90ed7e02414d15b8",
+      "phase": null,
+      "charged_cpu_s": 26.12377820815891,
+      "monitor_child_cpu_s": 0
+    },
+    {
+      "event": "finish",
+      "task_id": "27f30de636e0d9047cee",
+      "phase": null,
+      "charged_cpu_s": 14.059098625555634,
+      "monitor_child_cpu_s": 0
+    },
+    {
+      "event": "finish",
+      "task_id": "de8d8da71bc8d2dd1d5d",
+      "phase": null,
+      "charged_cpu_s": 31.039251207374036,
+      "monitor_child_cpu_s": 0
+    },
+    {
+      "event": "supervisor_cpu",
+      "task_id": null,
+      "phase": null,
+      "charged_cpu_s": 96.94560999999948,
+      "monitor_child_cpu_s": 83.90231099999947
+    },
+    {
+      "event": "supervisor_cpu",
+      "task_id": null,
+      "phase": "analyze",
+      "charged_cpu_s": 1.9726150000000002,
+      "monitor_child_cpu_s": 0
+    }
+  ],
+  "authoritative_cumulative_charge_s": 543.0194821688248,
+  "gate_passed": false,
+  "counts": {
+    "submitted": 1,
+    "accepted": 1,
+    "rejected": 0,
+    "unknown": 0,
+    "native_processing": 1,
+    "fallback": 4,
+    "fault_exercised": 1,
+    "terminal": 5,
+    "planned": 8,
+    "invalid_witnesses": 0,
+    "mapping_violations": 0,
+    "bound_scope_violations": 0,
+    "censored": 1
+  },
+  "rows": [
+    {
+      "task_id": "584067521b4af0cb3da0",
+      "trips": 40,
+      "arm": "static",
+      "issues": [],
+      "endpoint_s": 24.766397792845964,
+      "status": "feasible",
+      "bill": 658.6846914951989,
+      "vehicles": null,
+      "expected_cutoffs": 1,
+      "fault_exercised": false
+    },
+    {
+      "task_id": "27133bea236c6b35ac75",
+      "trips": 40,
+      "arm": "recovery",
+      "issues": [],
+      "endpoint_s": 26.567754374817014,
+      "status": "bounded",
+      "bill": 658.6846914951989,
+      "vehicles": null,
+      "expected_cutoffs": 2,
+      "fault_exercised": false
+    },
+    {
+      "task_id": "61cb90ed7e02414d15b8",
+      "trips": 40,
+      "arm": "cold",
+      "issues": [],
+      "endpoint_s": 25.542544749565423,
+      "status": "bounded",
+      "bill": 658.7068249657065,
+      "vehicles": null,
+      "expected_cutoffs": 1,
+      "fault_exercised": false
+    },
+    {
+      "task_id": "27f30de636e0d9047cee",
+      "trips": 40,
+      "arm": "start_fault",
+      "issues": [],
+      "endpoint_s": 13.494762333109975,
+      "status": "feasible",
+      "bill": 658.6846914951989,
+      "vehicles": null,
+      "expected_cutoffs": 1,
+      "fault_exercised": true
+    },
+    {
+      "task_id": "de8d8da71bc8d2dd1d5d",
+      "trips": 80,
+      "arm": "static",
+      "issues": [
+        "engineering_failure",
+        "censored_endpoint"
+      ],
+      "endpoint_s": 30.38386187516153,
+      "status": "no_plan",
+      "bill": null,
+      "vehicles": null,
+      "expected_cutoffs": 0,
+      "fault_exercised": false
+    }
+  ],
+  "resource_samples": 2107,
+  "max_recorded_sample_gap_s": 0.13502433337271214,
+  "peak_rss_bytes": 518848512,
+  "min_free_percent": 23.0,
+  "undispatched": 3
+}

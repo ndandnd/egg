@@ -1,0 +1,58 @@
+{
+  "job_id": "709011",
+  "submitted_at_utc": "2026-09-30T17:34:24Z",
+  "source_commit": "2460d43d4161449aaeeda0699e2f4ac10418f739",
+  "source_branch": "codex/journal-research-20260927",
+  "remote_checkout": "/home/nc437/egg-physical-continuation-20260930",
+  "attempt_relative": "result/physical_learning/20260930-shard00-continuation-attempt1",
+  "parent_job_id": "703461",
+  "parent_attempt_relative": "result/physical_learning/20260930-shard00-attempt1",
+  "parent_execution_commit": "032d02d3f8f227a0716a3e74a66e55260f5139f8",
+  "wrapper": "src/cluster/physical_learning_continuation.sbatch",
+  "protocol": "PROTOCOL_PHYSICAL_CONTINUATION.md",
+  "launch_review": "PHYSICAL_CONTINUATION_REVIEW.md",
+  "parent_accounting": "ACCOUNTING_703461.json",
+  "parent_file_inventory": "RESULT_MANIFEST_PHYSICAL_SHARD00_PREEMPTED.json",
+  "parent_completed_cells_preserved": 40,
+  "parent_interrupted_cells_not_retried": 1,
+  "new_never_launched_cells": 23,
+  "new_source_milp_cells": 0,
+  "new_fixed_route_charging_cells": 23,
+  "combined_accounted_cells_if_complete": 64,
+  "combined_feasible_count_not_yet_known": true,
+  "requested": {
+    "cpus_per_task": 1,
+    "memory_gb": 8,
+    "wall_seconds": 2700,
+    "native_threads": 1,
+    "requeue": false,
+    "excluded_nodes": [
+      "scaglione-compute-01"
+    ]
+  },
+  "caps_seconds": {
+    "child_hard": 100,
+    "controller": 2500,
+    "outer_shell": 2600
+  },
+  "development_test_materialized": false,
+  "model_fit_in_this_job": false,
+  "source_pin_count": 16,
+  "focused_tests_passed": 7,
+  "submission_guard": ".submission-physical-continuation-shard0/jobid.txt",
+  "submission_checks": {
+    "no_active_egg_job": true,
+    "fresh_checkout": true,
+    "tracked_checkout_clean": true,
+    "exclusive_attempt_absent": true,
+    "parent_tree_including_ignored_stdout_copied": true
+  },
+  "launch_script_sha256": "f411a7e535e054b7a6d7941241ac4e124d651803b32b952adc5eaec3ac44b29e",
+  "submission_stdout": "Previous HEAD position was 032d02d Add versioned physical training registry and resumable label shards\nHEAD is now at 2460d43 Continue untouched physical labels after preemption without retrying censored cells\n709011\n2026-09-30T17:34:24Z\n",
+  "observation": {
+    "recorded_at_utc": "2026-09-30T17:35:22.152308+00:00",
+    "state": "SUBMITTED",
+    "queue_state_not_polled_after_submission": true
+  },
+  "scientific_result": "Pending new charging labels; prior 40 outcomes retained, one interrupted outcome censored. No model-training or performance claim."
+}

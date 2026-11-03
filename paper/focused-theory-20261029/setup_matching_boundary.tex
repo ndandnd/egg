@@ -1,0 +1,75 @@
+\subsection{Setup time can break minimum-requirement replacement}
+\label{app:setupmatchingboundary}
+The setup-free theorem replaces every same-cardinality matching by one
+with minimum summed early requirement. Positive setup can invalidate
+that exact replacement even when the assignment graph is complete and
+both perfect matchings remain feasible. Here setup is charged for each
+nonzero early charge/export action separately on each bus and occupies the shared
+connector; it is not merely a penalty for changing charge/export direction.
+
+\begin{proposition}[A setup-dependent assignment boundary]
+\label{prop:setupmatchingboundary}
+Take $n=2$, $B=\alpha=\delta=1$, $a=b=(9/10,2/5)$,
+the complete successor graph, early directional powers $K_c=K_d=1$,
+terminal power/budget $H=2$, fee $f=1$ and setup time $\tau=3/20$.
+Retain the common windows, full inventory, zero other consumption and
+no terminal setup. The uniquely minimum-requirement perfect matching
+cannot reproduce every feasible load--cost point of the other matching.
+\end{proposition}
+
+\begin{proof}
+The two perfect matchings have the following requirements:
+\begin{center}
+\begin{tabular}{lcc}
+\toprule
+Matching & Summed early requirement & Mandatory charging recipients\\
+\midrule
+Diagonal & $4/5$ & One\\
+Cross & $3/5$ & Two, each requiring $3/10$\\
+\bottomrule
+\end{tabular}
+\end{center}
+On the diagonal, purchase $C=4/5$, $X=0$ on the high bus in one
+early action. Setup plus charge takes $3/20+4/5=19/20$.
+After A its SOC is $1/10$; charging raises it to $9/10$, and its
+B service leaves zero. The low bus moves from $3/5$ after A to $1/5$
+after B without early charging. Terminal purchases $1$ and $4/5$
+restore full inventory, using $(9/5)/2=9/10$ of the terminal window.
+Thus $(E,L,c)=(4/5,9/5,2)$ is physically feasible.
+
+The cross matching requires positive early charge on two different buses.
+At $C=4/5,X=0$ it needs at least $4/5+2(3/20)=11/10$ early time.
+Splitting actions or lowering power cannot help. Nor can cycling rescue
+the net-load point: $E=4/5$ implies $C=4/5+X$, increasing gross use
+when $X>0$, while both mandatory recipients remain. Setup cannot overlap
+another action on the shared connector, and terminal charging cannot
+repair an earlier service inventory violation.
+
+The cross matching is nevertheless feasible at $C=3/5,X=0$: charge
+$3/10$ on each bus in total early time $9/10$, then purchase $2$ terminal
+units at power $2$. A partial matching or paid idle bus cannot reproduce
+$c=2$, since the two simultaneous services in each batch force at least
+two buses, and any such extra-bus alternative costs at least $3$.
+\end{proof}
+
+A monotone linear query also exposes the omission. For $F(E,L)=E+2L$,
+full unit-efficiency refill gives $E+L=13/5$, so total objective is
+$c+26/5-E$. Any early action leaves at most $17/20$ energy-transfer
+time; the diagonal attains $E=17/20$ with one high-bus charge.
+The cross requires two actions and attains at most $E=7/10$, realized
+by purchases $3/10$ and $2/5$. Their optimal values are therefore
+$127/20$ and $13/2$. Every fleet costing at least $3$ has value at least
+$147/20$, so lower-cardinality alternatives do not repair the restricted
+minimum. The error from retaining only minimum-$r_m$ matchings is $3/20$.
+Because the objective is linear, the true physical and hull values agree;
+this is not a positive support-gap example.
+
+The setup-free outer polygons and the slack-anchor inner bounds in
+Appendix~\ref{app:setuptime} remain valid. What fails is exact matching
+replacement: concentration of recharge among buses matters when each
+recipient/action consumes setup time. This supplies neither a minimal
+replacement statistic nor a hardness, public-timetable, empirical or
+learning claim.
+For charge-only operation, Appendix~\ref{app:setupchargeonly} gives exact
+classical fixed-matching and joint-duty baselines that retain this setup
+information explicitly.

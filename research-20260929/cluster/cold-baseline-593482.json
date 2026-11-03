@@ -1,0 +1,54 @@
+{
+  "attempt": "result/cold_baseline_viability/20260929-attempt1",
+  "command": [
+    "sbatch",
+    "--parsable",
+    "--export=ALL,EGG_RUN_COMMIT=e3ac75fc53c00594572126413b704ab1de42086e",
+    "src/cluster/cold_baseline_viability.sbatch"
+  ],
+  "complete_submission_ssh_seconds": 0.5785360001027584,
+  "completion": {
+    "collected_in_same_session": true,
+    "completed_child_receipts": 6,
+    "elapsed_seconds": 114,
+    "end_local": "2026-09-28T20:31:58",
+    "exit_code": "0:0",
+    "start_local": "2026-09-28T20:30:04",
+    "state": "COMPLETED",
+    "timezone": "America/New_York"
+  },
+  "declared_cells": 6,
+  "freeze_location": "compute node before optimization",
+  "job_id": "593482",
+  "previous_result_ci_conclusion": "success",
+  "previous_result_ci_run": 36502491981,
+  "queue_observation": "593482|PENDING|0:00|1|8G|(Priority)",
+  "queue_returncode": 0,
+  "queue_stderr": "",
+  "remote_checkout": "/home/nc437/egg-cold-baseline-20260929",
+  "requested_resources": {
+    "cpus": 1,
+    "memory": "8G",
+    "time_limit": "00:30:00"
+  },
+  "retry_policy": "none",
+  "same_session_observation": {
+    "job_elapsed_seconds": 63,
+    "queue": "593482|RUNNING|1:03|1|8G|unicorn-cpu-87",
+    "returncode": 0
+  },
+  "source_ci_final": {
+    "conclusion": "success",
+    "head_sha": "e3ac75fc53c00594572126413b704ab1de42086e",
+    "run_id": 36503342208
+  },
+  "source_ci_run": 36503342208,
+  "source_ci_status_at_submission": "in_progress",
+  "source_commit": "e3ac75fc53c00594572126413b704ab1de42086e",
+  "submit_returncode": 0,
+  "submit_seconds": 0.059985906817018986,
+  "submit_stderr": "",
+  "submit_stdout": "593482",
+  "utc": "2026-09-29T00:30:01.247818+00:00",
+  "validation": "4 root focused pure checks; 7 implementer focused+adjacent; bash syntax; bounded independent review; core/shared sources unchanged from full-CI-passed601102a"
+}

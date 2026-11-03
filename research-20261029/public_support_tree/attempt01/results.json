@@ -1,0 +1,80 @@
+{
+  "status": "CLOSED",
+  "assigned": 3,
+  "rows": [
+    {
+      "id": "Q0",
+      "status": "DELIVERED",
+      "packet": "Q0.json.gz",
+      "summary": {
+        "status": "PASS",
+        "controls": 39,
+        "backend_calls": 0
+      },
+      "stage_elapsed_s": 0.004498249851167202,
+      "stage_clock_scope": "through complete compressed packet publication",
+      "resources": {
+        "cpu_s": 0.29833,
+        "peak_rss_bytes": 40828928
+      }
+    },
+    {
+      "id": "PUBLIC_TREE",
+      "status": "DELIVERED",
+      "packet": "PUBLIC_TREE.json.gz",
+      "summary": {
+        "status": "TARGET_COVERAGE_PROPOSED",
+        "search_complete": true,
+        "nodes": 303,
+        "proofs": 304,
+        "native_calls": 353,
+        "open_fringe": [],
+        "stop_reason": null,
+        "cpu_s": 1019.078771,
+        "elapsed_s": 1041.0955758336931
+      },
+      "stage_elapsed_s": 1049.883758334443,
+      "stage_clock_scope": "through complete compressed packet publication",
+      "resources": {
+        "cpu_s": 1027.2107700000001,
+        "peak_rss_bytes": 727711744
+      }
+    },
+    {
+      "id": "INDEPENDENT_TREE_CHECK",
+      "status": "DELIVERED",
+      "packet": "INDEPENDENT_TREE_CHECK.json.gz",
+      "summary": {
+        "status": "COMPLETE",
+        "complete": true,
+        "global_lower_bound": "161185737312360042121870470606817314079130382670151/365375409332725729550921208179070754913983135744",
+        "supplied_target": "1443179923968803775290098006217163515009032774663398228930303365915411930614170875502024167442451530845/3271461678119739162838778949479488288386427183774469641575516104263648171125254058271345771399872512",
+        "strict_excess": "28757315678009341708588197937979967078054123344385860826329513296439211419698507473389021538473603/3271461678119739162838778949479488288386427183774469641575516104263648171125254058271345771399872512",
+        "positive_gap_certified": true,
+        "scientific_outcome": "POSITIVE_GAP_CERTIFIED",
+        "checked_nodes": 303,
+        "reason": null,
+        "target_upper_outward_6dp": "441.142238",
+        "physical_lower_outward_6dp": "441.151027",
+        "gap_lower_outward_6dp": "0.008790"
+      },
+      "stage_elapsed_s": 28.811516165733337,
+      "stage_clock_scope": "through complete compressed packet publication",
+      "resources": {
+        "cpu_s": 1055.020175,
+        "peak_rss_bytes": 816250880
+      }
+    }
+  ],
+  "failures": [],
+  "resource_pass": true,
+  "resources": {
+    "cpu_s": 1055.020514,
+    "peak_rss_bytes": 816332800
+  },
+  "elapsed_s": 1078.9938576659188,
+  "scientific_outcome": "POSITIVE_GAP_CERTIFIED",
+  "administrative_close_is_not_optimality": true,
+  "no_fresh_physical_replay": true,
+  "no_old_root_input": true
+}

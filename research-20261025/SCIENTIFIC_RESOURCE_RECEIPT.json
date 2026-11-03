@@ -1,0 +1,25 @@
+{
+  "date": "2026-10-25",
+  "scope": "completed reset experiments and their numerical summary/archive processes",
+  "measurement": "/usr/bin/time -p whole-process user+sys, rounded to 0.01 seconds; startup and finalization included",
+  "processes": [
+    {"path": "price_signal_audit/process-time.txt", "elapsed_s": 0.71, "cpu_s": 0.46},
+    {"path": "price_signal_audit/summary-time.txt", "elapsed_s": 0.04, "cpu_s": 0.03},
+    {"path": "catalog_hull_audit/process-time.txt", "elapsed_s": 1.03, "cpu_s": 0.70, "exit_code": 1},
+    {"path": "catalog_hull_audit/summary-time.txt", "elapsed_s": 0.07, "cpu_s": 0.04},
+    {"path": "classical_competence/process-time.txt", "elapsed_s": 78.45, "cpu_s": 67.64},
+    {"path": "classical_competence/summary-time.txt", "elapsed_s": 3.90, "cpu_s": 3.42},
+    {"path": "classical_competence/fleet-first-process-time.txt", "elapsed_s": 75.39, "cpu_s": 73.30},
+    {"path": "classical_competence/fleet-first-summary-time.txt", "elapsed_s": 0.92, "cpu_s": 0.88}
+  ],
+  "sum_rounded_cpu_s": 146.47,
+  "sum_rounded_elapsed_s": 160.51,
+  "legacy_conditional_guard_s": 2546.091499549272,
+  "legacy_actual_review_cpu": "UNKNOWN",
+  "reset_legacy_ledger": false,
+  "whole_session_exact_cpu_claim": false,
+  "excluded_from_measured_numerical_total": ["LLM work", "routine documentation/source reads", "Git publication", "document connector calls"],
+  "all_numerical_attempts_retained": true,
+  "automatic_retries": 0,
+  "new_numerical_workers_active": 0
+}

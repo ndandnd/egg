@@ -1,0 +1,72 @@
+{
+  "U": 0.0,
+  "a_level": 0.3,
+  "arms": [
+    "cold",
+    "retained",
+    "retained_shift"
+  ],
+  "b": 0.2,
+  "battery_kwh": 20.0,
+  "charge_power_kw": 10.0,
+  "epsilon": 0.01,
+  "fixtures": [
+    "depleted_f20",
+    "depleted_f26",
+    "replenished_two_bus"
+  ],
+  "max_vehicles": 2,
+  "pool_cap": 240,
+  "pricing_call_cap": 48,
+  "pricing_mip_gap": 1e-09,
+  "process_cap_s": 900,
+  "projection_tolerance": 1e-07,
+  "pwl_tol": 0.001,
+  "reference_cap_s": 60,
+  "reference_interval_guard": 1e-06,
+  "reference_structure_cap": 256,
+  "schema": "egg-reuse-frontier-v1",
+  "seed": null,
+  "slot_min": 60,
+  "solve_cap_s": 10,
+  "state_cap_s": 60,
+  "states": [
+    "base",
+    "unchanged",
+    "early_cheap",
+    "late_cheap",
+    "return_base"
+  ],
+  "tariff_offsets": [
+    0.0,
+    0.0,
+    0.25,
+    -0.25,
+    0.0
+  ],
+  "terminal_markers_min": [
+    600,
+    660
+  ],
+  "threads": 1,
+  "trip_energy_kwh": 15.0,
+  "trip_intervals_min": [
+    [
+      0,
+      60
+    ],
+    [
+      180,
+      240
+    ],
+    [
+      360,
+      420
+    ]
+  ],
+  "vehicle_costs": {
+    "depleted_f20": 20.0,
+    "depleted_f26": 26.0,
+    "replenished_two_bus": 10.0
+  }
+}

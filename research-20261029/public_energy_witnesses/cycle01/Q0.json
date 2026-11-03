@@ -1,0 +1,36 @@
+{
+  "status": "PASS",
+  "result": {
+    "lambda_right": "1/4",
+    "lambda_left": "3/4",
+    "loads": [
+      "1/2"
+    ],
+    "ops": "3/4",
+    "objective": "7/8",
+    "weight_minimizer_interval": [
+      "1/4",
+      "1/4"
+    ],
+    "linear_coefficient": "-1",
+    "quadratic_coefficient": "2"
+  },
+  "independent_check": {
+    "status": "PASS",
+    "objective_exact": "7/8",
+    "derivative": "0",
+    "curvature": "4",
+    "check": "direct quadratic plus endpoint/interior KKT"
+  },
+  "negative_controls": [
+    {
+      "id": "changed-weight-KKT",
+      "rejected": true
+    },
+    {
+      "id": "changed-objective",
+      "rejected": true
+    }
+  ],
+  "scope": "New abstract mixture helper only; no old construction/replay qualification repeated"
+}

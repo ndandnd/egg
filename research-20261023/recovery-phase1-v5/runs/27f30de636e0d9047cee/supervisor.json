@@ -1,0 +1,64 @@
+{
+  "policy": "recovery-phase1-runner-v1",
+  "terminal": true,
+  "task": {
+    "base_id": 50997,
+    "trips": 40,
+    "arm": "start_fault",
+    "seed": 17,
+    "seconds": 30.0,
+    "fault": "start_setter_exception",
+    "id": "27f30de636e0d9047cee"
+  },
+  "lock_sha256": "2c91d5137100d9831ce37126f5e63942b6688f0efd95dcdf6c5ddf6e887e8214",
+  "parent_monotonic": 6005853.442019791,
+  "charged_cpu_s": 13.372585916891694,
+  "sampled_tree_cpu_s": 12.51,
+  "peak_tree_rss_bytes": 223772672,
+  "failure": null,
+  "monitor_failure": null,
+  "secondary_errors": [],
+  "returncode": 0,
+  "group_absent": true,
+  "artifacts": {
+    "stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "plan.json": "aee61ff678c8b9437ceba2a8e0b3e93774943c7f6604c28d84827de27106c83a",
+    "native.jsonl": "ea610e2bf529d983ffbb25844a400cfacaf5feb38f911ca00cc15e5d5fb4e1b6",
+    "result.json": "11d133aad01636c09d2840e8ef1f3f4febc5a39a05e9e40a277ffa4c135804ab",
+    "start-evidence.json": "548ef312badb740c93ef261100ca24c91d1fb66a0afc8125569b3070fad0c0cf",
+    "materialization-reference.json": "1ce51c8ee2804e630082691f0b8260b898e523a1a2292d5721a3a03870369e78",
+    "fallback.json": "a01acb9d0e76865f05617a9ad0cfa0d4379e8387b58f9c0f502ddb4d9963721a",
+    "replay.json": "e1db5b14b7fb8c5be4517c0eb2fba3cb74e59a4ecd9f02d14bf7d2d563f7a742",
+    "stdout.log": "1a96f7d7ba0b4e824b7e579e6855d8957c8035e0ab5f6285c8a2f8bfe480480f",
+    "incumbent-prefix-round0.json": "5c2781f3a37214f656c3bed95f68bc28498ffe7befde80c9a377757bdf4f967d",
+    "attempt.json": "d039f7016842b600946f2a77db07ad263188a6731dbb20f23ac758bf63e2589b",
+    "resources.jsonl": "2866bedece8e0ce7992c6911726a9c5d9504f500ca86f79efe56b0a40448aadd",
+    "completion.json": "342a24dccd1d154552fc9dddc0e127aa1f6c89b7805e400b8928289bd1a3d4bc"
+  },
+  "endpoint_wall_s": 12.79067633394152,
+  "endpoint_censored": false,
+  "completion_issue": null,
+  "owned_pgids": [
+    45542
+  ],
+  "cleanup_probe_diagnostics": [
+    {
+      "pgid": 45542,
+      "state": "unknown",
+      "error_type": "PermissionError",
+      "errno": 1,
+      "error": "[Errno 1] Operation not permitted"
+    }
+  ],
+  "completion_acknowledgment": {
+    "completion_monotonic": 6005866.2331545,
+    "completion_sha256": "342a24dccd1d154552fc9dddc0e127aa1f6c89b7805e400b8928289bd1a3d4bc",
+    "lock_sha256": "2c91d5137100d9831ce37126f5e63942b6688f0efd95dcdf6c5ddf6e887e8214",
+    "parent_monotonic": 6005853.442019791,
+    "result_sha256": "11d133aad01636c09d2840e8ef1f3f4febc5a39a05e9e40a277ffa4c135804ab",
+    "task_id": "27f30de636e0d9047cee"
+  },
+  "cleanup_wall_s": 0.5425666244700551,
+  "allocation_elapsed_s": 13.372585916891694,
+  "worker_failure": false
+}

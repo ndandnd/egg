@@ -1,0 +1,2616 @@
+{
+  "audit_status": "PASS for GRB replication of frozen V2 fixtures and numerical witness policy; first CBC attempt remains separately FAILED",
+  "audit_wall_s": 0.1561692920513451,
+  "auditor_sha256": "1536864af277cdcaf1905a001ad50a823f7771d42faeda57a37983ba2604e22c",
+  "backend_verification": {
+    "CBC_control_definitions_sha256": "064ce4f4879de27a62da17b770ec63fcb280fa8a40b4b4e4a6a199fb7dfbb1ca",
+    "gurobipy_version": "12.0.3",
+    "mip_version": "1.17.6",
+    "model_solver_name": "GRB",
+    "reported_interface_sha256": "57f87a886aa5a1fd8356494fa1b81e9f9c7d957c898d09e96145440c76c762b7",
+    "requested": "GRB",
+    "solver_class": "SolverGurobi",
+    "solver_module": "mip.gurobi"
+  },
+  "cells": [
+    {
+      "cell": "single_linear",
+      "certified_interval": [
+        21.999999,
+        22.000001
+      ],
+      "failure": null,
+      "independent_true_optimum": {
+        "exact_binary_rational": "22",
+        "value": 22.0
+      },
+      "native_rounds": [
+        {
+          "native_incumbent": 22.0,
+          "native_lower_bound": 22.0,
+          "native_status": "OPTIMAL",
+          "physical_witness_saved": true,
+          "reference": {
+            "exact_binary_rational": "22",
+            "value": 22.0
+          },
+          "round": 0
+        }
+      ],
+      "original_pass": true,
+      "physical_witnesses": [
+        {
+          "load": [
+            0.0,
+            15.0
+          ],
+          "ops": 7.0,
+          "peak_kw": 15.0,
+          "sessions": 1,
+          "soc_events": 4,
+          "worst_soc_residual_kwh": 0.0
+        }
+      ],
+      "raw_incumbent_audit": [
+        {
+          "charge_correction_objective_delta": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "combined_correction": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "constraint_checks": {
+            "grid energy aggregation": 4,
+            "incoming path flow": 4,
+            "movement SOC lower": 4,
+            "movement SOC upper": 4,
+            "outgoing path flow": 4,
+            "owned SOC capacity": 4,
+            "owned SOC reserve": 4,
+            "pullin count": 4,
+            "pullout count": 4,
+            "return reserve": 2,
+            "selected energy": 2,
+            "service SOC equality": 4,
+            "service coverage": 2,
+            "shared interval capacity": 2,
+            "single active vehicle visit": 4,
+            "used vehicle symmetry": 1,
+            "variable lower": 16,
+            "variable upper": 16
+          },
+          "interval_capacity_excess": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "materialized_session_capacity_excess": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "max_raw_constraint_residual": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "negative_l1": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "negative_variables": 0,
+          "positive_sessions_retained": 1,
+          "raw_objective": {
+            "exact_binary_rational": "22",
+            "value": 22.0
+          },
+          "raw_variables": 16,
+          "round": 0
+        }
+      ],
+      "status": "certified"
+    },
+    {
+      "cell": "efficiency_linear",
+      "certified_interval": [
+        22.789472684210526,
+        22.78947468421053
+      ],
+      "failure": null,
+      "independent_true_optimum": {
+        "exact_binary_rational": "32500977310857079/1426139882000657",
+        "value": 22.789473684210527
+      },
+      "native_rounds": [
+        {
+          "native_incumbent": 22.789473684210527,
+          "native_lower_bound": 22.789473684210527,
+          "native_status": "OPTIMAL",
+          "physical_witness_saved": true,
+          "reference": {
+            "exact_binary_rational": "32500977310857079/1426139882000657",
+            "value": 22.789473684210527
+          },
+          "round": 0
+        }
+      ],
+      "original_pass": true,
+      "physical_witnesses": [
+        {
+          "load": [
+            0.0,
+            15.789473684210527
+          ],
+          "ops": 7.0,
+          "peak_kw": 15.789473684210527,
+          "sessions": 1,
+          "soc_events": 4,
+          "worst_soc_residual_kwh": 0.0
+        }
+      ],
+      "raw_incumbent_audit": [
+        {
+          "charge_correction_objective_delta": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "combined_correction": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "constraint_checks": {
+            "grid energy aggregation": 4,
+            "incoming path flow": 4,
+            "movement SOC lower": 4,
+            "movement SOC upper": 4,
+            "outgoing path flow": 4,
+            "owned SOC capacity": 4,
+            "owned SOC reserve": 4,
+            "pullin count": 4,
+            "pullout count": 4,
+            "return reserve": 2,
+            "selected energy": 2,
+            "service SOC equality": 4,
+            "service coverage": 2,
+            "shared interval capacity": 2,
+            "single active vehicle visit": 4,
+            "used vehicle symmetry": 1,
+            "variable lower": 16,
+            "variable upper": 16
+          },
+          "interval_capacity_excess": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "materialized_session_capacity_excess": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "max_raw_constraint_residual": {
+            "exact_binary_rational": "231105770351907/633825300114114700748351602688",
+            "value": 3.6462061440320926e-16
+          },
+          "negative_l1": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "negative_variables": 0,
+          "positive_sessions_retained": 1,
+          "raw_objective": {
+            "exact_binary_rational": "3207333287255633/140737488355328",
+            "value": 22.789473684210527
+          },
+          "raw_variables": 16,
+          "round": 0
+        }
+      ],
+      "status": "certified"
+    },
+    {
+      "cell": "cyclic_flat",
+      "certified_interval": [
+        36.999999,
+        37.000001
+      ],
+      "failure": null,
+      "independent_true_optimum": {
+        "exact_binary_rational": "37",
+        "value": 37.0
+      },
+      "native_rounds": [
+        {
+          "native_incumbent": 37.0,
+          "native_lower_bound": 37.0,
+          "native_status": "OPTIMAL",
+          "physical_witness_saved": true,
+          "reference": {
+            "exact_binary_rational": "37",
+            "value": 37.0
+          },
+          "round": 0
+        }
+      ],
+      "original_pass": true,
+      "physical_witnesses": [
+        {
+          "load": [
+            0.0,
+            10.0,
+            0.0,
+            20.0
+          ],
+          "ops": 7.0,
+          "peak_kw": 20.0,
+          "sessions": 2,
+          "soc_events": 8,
+          "worst_soc_residual_kwh": 0.0
+        }
+      ],
+      "raw_incumbent_audit": [
+        {
+          "charge_correction_objective_delta": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "combined_correction": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "constraint_checks": {
+            "depot arrival reserve": 2,
+            "depot charge capacity": 2,
+            "grid energy aggregation": 8,
+            "incoming path flow": 8,
+            "movement SOC lower": 12,
+            "movement SOC upper": 12,
+            "outgoing path flow": 8,
+            "owned SOC capacity": 8,
+            "owned SOC reserve": 8,
+            "pullin count": 4,
+            "pullout count": 4,
+            "return reserve": 4,
+            "selected energy": 8,
+            "service SOC equality": 8,
+            "service coverage": 4,
+            "shared interval capacity": 4,
+            "single active vehicle visit": 8,
+            "used vehicle symmetry": 1,
+            "variable lower": 38,
+            "variable upper": 38
+          },
+          "interval_capacity_excess": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "materialized_session_capacity_excess": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "max_raw_constraint_residual": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "negative_l1": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "negative_variables": 0,
+          "positive_sessions_retained": 2,
+          "raw_objective": {
+            "exact_binary_rational": "37",
+            "value": 37.0
+          },
+          "raw_variables": 38,
+          "round": 0
+        }
+      ],
+      "status": "certified"
+    },
+    {
+      "cell": "cyclic_own_price",
+      "certified_interval": [
+        133.999999,
+        134.000001
+      ],
+      "failure": null,
+      "independent_true_optimum": {
+        "exact_binary_rational": "134",
+        "value": 134.0
+      },
+      "native_rounds": [
+        {
+          "native_incumbent": 134.0,
+          "native_lower_bound": 134.0,
+          "native_status": "OPTIMAL",
+          "physical_witness_saved": true,
+          "reference": {
+            "exact_binary_rational": "134",
+            "value": 134.0
+          },
+          "round": 0
+        }
+      ],
+      "original_pass": true,
+      "physical_witnesses": [
+        {
+          "load": [
+            0.0,
+            0.0,
+            0.0,
+            30.0
+          ],
+          "ops": 14.0,
+          "peak_kw": 30.0,
+          "sessions": 2,
+          "soc_events": 8,
+          "worst_soc_residual_kwh": 0.0
+        }
+      ],
+      "raw_incumbent_audit": [
+        {
+          "charge_correction_objective_delta": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "combined_correction": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "constraint_checks": {
+            "depot arrival reserve": 2,
+            "depot charge capacity": 2,
+            "grid energy aggregation": 8,
+            "incoming path flow": 8,
+            "movement SOC lower": 12,
+            "movement SOC upper": 12,
+            "outgoing path flow": 8,
+            "owned SOC capacity": 8,
+            "owned SOC reserve": 8,
+            "pullin count": 4,
+            "pullout count": 4,
+            "return reserve": 4,
+            "selected energy": 8,
+            "service SOC equality": 8,
+            "service coverage": 4,
+            "shared interval capacity": 4,
+            "single active vehicle visit": 8,
+            "used vehicle symmetry": 1,
+            "variable lower": 38,
+            "variable upper": 38
+          },
+          "interval_capacity_excess": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "materialized_session_capacity_excess": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "max_raw_constraint_residual": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "negative_l1": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "negative_variables": 0,
+          "positive_sessions_retained": 2,
+          "raw_objective": {
+            "exact_binary_rational": "134",
+            "value": 134.0
+          },
+          "raw_variables": 38,
+          "round": 0
+        }
+      ],
+      "status": "certified"
+    },
+    {
+      "cell": "cyclic_hull_price",
+      "certified_interval": [
+        153.499999,
+        153.500001
+      ],
+      "failure": null,
+      "independent_true_optimum": {
+        "exact_binary_rational": "43206408925085697/281474976710656",
+        "value": 153.5
+      },
+      "native_rounds": [
+        {
+          "native_incumbent": 153.5,
+          "native_lower_bound": 153.5,
+          "native_status": "OPTIMAL",
+          "physical_witness_saved": true,
+          "reference": {
+            "exact_binary_rational": "43206408925085697/281474976710656",
+            "value": 153.5
+          },
+          "round": 0
+        }
+      ],
+      "original_pass": true,
+      "physical_witnesses": [
+        {
+          "load": [
+            0.0,
+            0.0,
+            0.0,
+            30.0
+          ],
+          "ops": 14.0,
+          "peak_kw": 30.0,
+          "sessions": 2,
+          "soc_events": 8,
+          "worst_soc_residual_kwh": 0.0
+        }
+      ],
+      "raw_incumbent_audit": [
+        {
+          "charge_correction_objective_delta": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "combined_correction": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "constraint_checks": {
+            "depot arrival reserve": 2,
+            "depot charge capacity": 2,
+            "grid energy aggregation": 8,
+            "incoming path flow": 8,
+            "movement SOC lower": 12,
+            "movement SOC upper": 12,
+            "outgoing path flow": 8,
+            "owned SOC capacity": 8,
+            "owned SOC reserve": 8,
+            "pullin count": 4,
+            "pullout count": 4,
+            "return reserve": 4,
+            "selected energy": 8,
+            "service SOC equality": 8,
+            "service coverage": 4,
+            "shared interval capacity": 4,
+            "single active vehicle visit": 8,
+            "used vehicle symmetry": 1,
+            "variable lower": 38,
+            "variable upper": 38
+          },
+          "interval_capacity_excess": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "materialized_session_capacity_excess": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "max_raw_constraint_residual": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "negative_l1": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "negative_variables": 0,
+          "positive_sessions_retained": 2,
+          "raw_objective": {
+            "exact_binary_rational": "43206408925085699/281474976710656",
+            "value": 153.5
+          },
+          "raw_variables": 38,
+          "round": 0
+        }
+      ],
+      "status": "certified"
+    },
+    {
+      "cell": "cyclic_planner",
+      "certified_interval": [
+        96.999999,
+        97.000001
+      ],
+      "failure": null,
+      "independent_true_optimum": {
+        "exact_binary_rational": "873698327709876249/9007199254740992",
+        "value": 97.0
+      },
+      "native_rounds": [
+        {
+          "native_incumbent": 14.0,
+          "native_lower_bound": 14.0,
+          "native_status": "OPTIMAL",
+          "physical_witness_saved": true,
+          "reference": {
+            "exact_binary_rational": "14",
+            "value": 14.0
+          },
+          "round": 0
+        },
+        {
+          "native_incumbent": 77.0,
+          "native_lower_bound": 77.0,
+          "native_status": "OPTIMAL",
+          "physical_witness_saved": true,
+          "reference": {
+            "exact_binary_rational": "77",
+            "value": 77.0
+          },
+          "round": 1
+        },
+        {
+          "native_incumbent": 94.0,
+          "native_lower_bound": 94.0,
+          "native_status": "OPTIMAL",
+          "physical_witness_saved": true,
+          "reference": {
+            "exact_binary_rational": "94",
+            "value": 94.0
+          },
+          "round": 2
+        },
+        {
+          "native_incumbent": 97.0,
+          "native_lower_bound": 97.0,
+          "native_status": "OPTIMAL",
+          "physical_witness_saved": true,
+          "reference": {
+            "exact_binary_rational": "97",
+            "value": 97.0
+          },
+          "round": 3
+        }
+      ],
+      "original_pass": true,
+      "physical_witnesses": [
+        {
+          "load": [
+            0.0,
+            0.0,
+            0.0,
+            30.0
+          ],
+          "ops": 14.0,
+          "peak_kw": 30.0,
+          "sessions": 2,
+          "soc_events": 8,
+          "worst_soc_residual_kwh": 0.0
+        },
+        {
+          "load": [
+            0.0,
+            10.0,
+            0.0,
+            20.0
+          ],
+          "ops": 7.0,
+          "peak_kw": 20.0,
+          "sessions": 2,
+          "soc_events": 8,
+          "worst_soc_residual_kwh": 0.0
+        },
+        {
+          "load": [
+            0.0,
+            5.0,
+            0.0,
+            25.0
+          ],
+          "ops": 14.0,
+          "peak_kw": 25.0,
+          "sessions": 3,
+          "soc_events": 9,
+          "worst_soc_residual_kwh": 0.0
+        },
+        {
+          "load": [
+            0.0,
+            10.0,
+            0.0,
+            20.0
+          ],
+          "ops": 7.0,
+          "peak_kw": 20.0,
+          "sessions": 2,
+          "soc_events": 8,
+          "worst_soc_residual_kwh": 0.0
+        }
+      ],
+      "raw_incumbent_audit": [
+        {
+          "charge_correction_objective_delta": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "combined_correction": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "constraint_checks": {
+            "depot arrival reserve": 2,
+            "depot charge capacity": 2,
+            "grid energy aggregation": 8,
+            "incoming path flow": 8,
+            "movement SOC lower": 12,
+            "movement SOC upper": 12,
+            "outgoing path flow": 8,
+            "owned SOC capacity": 8,
+            "owned SOC reserve": 8,
+            "pullin count": 4,
+            "pullout count": 4,
+            "return reserve": 4,
+            "saved tangent epigraph": 4,
+            "selected energy": 8,
+            "service SOC equality": 8,
+            "service coverage": 4,
+            "shared interval capacity": 4,
+            "single active vehicle visit": 8,
+            "used vehicle symmetry": 1,
+            "variable lower": 38,
+            "variable upper": 38
+          },
+          "interval_capacity_excess": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "materialized_session_capacity_excess": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "max_raw_constraint_residual": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "negative_l1": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "negative_variables": 0,
+          "positive_sessions_retained": 2,
+          "raw_objective": {
+            "exact_binary_rational": "14",
+            "value": 14.0
+          },
+          "raw_variables": 42,
+          "round": 0
+        },
+        {
+          "charge_correction_objective_delta": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "combined_correction": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "constraint_checks": {
+            "depot arrival reserve": 2,
+            "depot charge capacity": 2,
+            "grid energy aggregation": 8,
+            "incoming path flow": 8,
+            "movement SOC lower": 12,
+            "movement SOC upper": 12,
+            "outgoing path flow": 8,
+            "owned SOC capacity": 8,
+            "owned SOC reserve": 8,
+            "pullin count": 4,
+            "pullout count": 4,
+            "return reserve": 4,
+            "saved tangent epigraph": 8,
+            "selected energy": 8,
+            "service SOC equality": 8,
+            "service coverage": 4,
+            "shared interval capacity": 4,
+            "single active vehicle visit": 8,
+            "used vehicle symmetry": 1,
+            "variable lower": 38,
+            "variable upper": 38
+          },
+          "interval_capacity_excess": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "materialized_session_capacity_excess": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "max_raw_constraint_residual": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "negative_l1": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "negative_variables": 0,
+          "positive_sessions_retained": 2,
+          "raw_objective": {
+            "exact_binary_rational": "77",
+            "value": 77.0
+          },
+          "raw_variables": 42,
+          "round": 1
+        },
+        {
+          "charge_correction_objective_delta": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "combined_correction": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "constraint_checks": {
+            "depot arrival reserve": 2,
+            "depot charge capacity": 2,
+            "grid energy aggregation": 8,
+            "incoming path flow": 8,
+            "movement SOC lower": 12,
+            "movement SOC upper": 12,
+            "outgoing path flow": 8,
+            "owned SOC capacity": 8,
+            "owned SOC reserve": 8,
+            "pullin count": 4,
+            "pullout count": 4,
+            "return reserve": 4,
+            "saved tangent epigraph": 12,
+            "selected energy": 8,
+            "service SOC equality": 8,
+            "service coverage": 4,
+            "shared interval capacity": 4,
+            "single active vehicle visit": 8,
+            "used vehicle symmetry": 1,
+            "variable lower": 38,
+            "variable upper": 38
+          },
+          "interval_capacity_excess": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "materialized_session_capacity_excess": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "max_raw_constraint_residual": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "negative_l1": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "negative_variables": 0,
+          "positive_sessions_retained": 3,
+          "raw_objective": {
+            "exact_binary_rational": "94",
+            "value": 94.0
+          },
+          "raw_variables": 42,
+          "round": 2
+        },
+        {
+          "charge_correction_objective_delta": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "combined_correction": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "constraint_checks": {
+            "depot arrival reserve": 2,
+            "depot charge capacity": 2,
+            "grid energy aggregation": 8,
+            "incoming path flow": 8,
+            "movement SOC lower": 12,
+            "movement SOC upper": 12,
+            "outgoing path flow": 8,
+            "owned SOC capacity": 8,
+            "owned SOC reserve": 8,
+            "pullin count": 4,
+            "pullout count": 4,
+            "return reserve": 4,
+            "saved tangent epigraph": 16,
+            "selected energy": 8,
+            "service SOC equality": 8,
+            "service coverage": 4,
+            "shared interval capacity": 4,
+            "single active vehicle visit": 8,
+            "used vehicle symmetry": 1,
+            "variable lower": 38,
+            "variable upper": 38
+          },
+          "interval_capacity_excess": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "materialized_session_capacity_excess": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "max_raw_constraint_residual": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "negative_l1": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "negative_variables": 0,
+          "positive_sessions_retained": 2,
+          "raw_objective": {
+            "exact_binary_rational": "97",
+            "value": 97.0
+          },
+          "raw_variables": 42,
+          "round": 3
+        }
+      ],
+      "status": "certified"
+    },
+    {
+      "cell": "preserved_reserve_planner",
+      "certified_interval": [
+        96.999999,
+        97.000001
+      ],
+      "failure": null,
+      "independent_true_optimum": {
+        "exact_binary_rational": "873698327709876249/9007199254740992",
+        "value": 97.0
+      },
+      "native_rounds": [
+        {
+          "native_incumbent": 14.0,
+          "native_lower_bound": 14.0,
+          "native_status": "OPTIMAL",
+          "physical_witness_saved": true,
+          "reference": {
+            "exact_binary_rational": "14",
+            "value": 14.0
+          },
+          "round": 0
+        },
+        {
+          "native_incumbent": 77.0,
+          "native_lower_bound": 77.0,
+          "native_status": "OPTIMAL",
+          "physical_witness_saved": true,
+          "reference": {
+            "exact_binary_rational": "77",
+            "value": 77.0
+          },
+          "round": 1
+        },
+        {
+          "native_incumbent": 94.0,
+          "native_lower_bound": 94.0,
+          "native_status": "OPTIMAL",
+          "physical_witness_saved": true,
+          "reference": {
+            "exact_binary_rational": "94",
+            "value": 94.0
+          },
+          "round": 2
+        },
+        {
+          "native_incumbent": 97.0,
+          "native_lower_bound": 97.0,
+          "native_status": "OPTIMAL",
+          "physical_witness_saved": true,
+          "reference": {
+            "exact_binary_rational": "97",
+            "value": 97.0
+          },
+          "round": 3
+        }
+      ],
+      "original_pass": true,
+      "physical_witnesses": [
+        {
+          "load": [
+            0.0,
+            0.0,
+            0.0,
+            30.0
+          ],
+          "ops": 14.0,
+          "peak_kw": 30.0,
+          "sessions": 2,
+          "soc_events": 8,
+          "worst_soc_residual_kwh": 0.0
+        },
+        {
+          "load": [
+            0.0,
+            10.0,
+            0.0,
+            20.0
+          ],
+          "ops": 7.0,
+          "peak_kw": 20.0,
+          "sessions": 2,
+          "soc_events": 8,
+          "worst_soc_residual_kwh": 0.0
+        },
+        {
+          "load": [
+            0.0,
+            5.0,
+            0.0,
+            25.0
+          ],
+          "ops": 14.0,
+          "peak_kw": 25.0,
+          "sessions": 3,
+          "soc_events": 9,
+          "worst_soc_residual_kwh": 0.0
+        },
+        {
+          "load": [
+            0.0,
+            10.0,
+            0.0,
+            20.0
+          ],
+          "ops": 7.0,
+          "peak_kw": 20.0,
+          "sessions": 2,
+          "soc_events": 8,
+          "worst_soc_residual_kwh": 0.0
+        }
+      ],
+      "raw_incumbent_audit": [
+        {
+          "charge_correction_objective_delta": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "combined_correction": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "constraint_checks": {
+            "depot arrival reserve": 2,
+            "depot charge capacity": 2,
+            "grid energy aggregation": 8,
+            "incoming path flow": 8,
+            "movement SOC lower": 12,
+            "movement SOC upper": 12,
+            "outgoing path flow": 8,
+            "owned SOC capacity": 8,
+            "owned SOC reserve": 8,
+            "pullin count": 4,
+            "pullout count": 4,
+            "return reserve": 4,
+            "saved tangent epigraph": 4,
+            "selected energy": 8,
+            "service SOC equality": 8,
+            "service coverage": 4,
+            "shared interval capacity": 4,
+            "single active vehicle visit": 8,
+            "used vehicle symmetry": 1,
+            "variable lower": 38,
+            "variable upper": 38
+          },
+          "interval_capacity_excess": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "materialized_session_capacity_excess": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "max_raw_constraint_residual": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "negative_l1": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "negative_variables": 0,
+          "positive_sessions_retained": 2,
+          "raw_objective": {
+            "exact_binary_rational": "14",
+            "value": 14.0
+          },
+          "raw_variables": 42,
+          "round": 0
+        },
+        {
+          "charge_correction_objective_delta": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "combined_correction": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "constraint_checks": {
+            "depot arrival reserve": 2,
+            "depot charge capacity": 2,
+            "grid energy aggregation": 8,
+            "incoming path flow": 8,
+            "movement SOC lower": 12,
+            "movement SOC upper": 12,
+            "outgoing path flow": 8,
+            "owned SOC capacity": 8,
+            "owned SOC reserve": 8,
+            "pullin count": 4,
+            "pullout count": 4,
+            "return reserve": 4,
+            "saved tangent epigraph": 8,
+            "selected energy": 8,
+            "service SOC equality": 8,
+            "service coverage": 4,
+            "shared interval capacity": 4,
+            "single active vehicle visit": 8,
+            "used vehicle symmetry": 1,
+            "variable lower": 38,
+            "variable upper": 38
+          },
+          "interval_capacity_excess": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "materialized_session_capacity_excess": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "max_raw_constraint_residual": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "negative_l1": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "negative_variables": 0,
+          "positive_sessions_retained": 2,
+          "raw_objective": {
+            "exact_binary_rational": "77",
+            "value": 77.0
+          },
+          "raw_variables": 42,
+          "round": 1
+        },
+        {
+          "charge_correction_objective_delta": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "combined_correction": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "constraint_checks": {
+            "depot arrival reserve": 2,
+            "depot charge capacity": 2,
+            "grid energy aggregation": 8,
+            "incoming path flow": 8,
+            "movement SOC lower": 12,
+            "movement SOC upper": 12,
+            "outgoing path flow": 8,
+            "owned SOC capacity": 8,
+            "owned SOC reserve": 8,
+            "pullin count": 4,
+            "pullout count": 4,
+            "return reserve": 4,
+            "saved tangent epigraph": 12,
+            "selected energy": 8,
+            "service SOC equality": 8,
+            "service coverage": 4,
+            "shared interval capacity": 4,
+            "single active vehicle visit": 8,
+            "used vehicle symmetry": 1,
+            "variable lower": 38,
+            "variable upper": 38
+          },
+          "interval_capacity_excess": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "materialized_session_capacity_excess": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "max_raw_constraint_residual": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "negative_l1": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "negative_variables": 0,
+          "positive_sessions_retained": 3,
+          "raw_objective": {
+            "exact_binary_rational": "94",
+            "value": 94.0
+          },
+          "raw_variables": 42,
+          "round": 2
+        },
+        {
+          "charge_correction_objective_delta": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "combined_correction": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "constraint_checks": {
+            "depot arrival reserve": 2,
+            "depot charge capacity": 2,
+            "grid energy aggregation": 8,
+            "incoming path flow": 8,
+            "movement SOC lower": 12,
+            "movement SOC upper": 12,
+            "outgoing path flow": 8,
+            "owned SOC capacity": 8,
+            "owned SOC reserve": 8,
+            "pullin count": 4,
+            "pullout count": 4,
+            "return reserve": 4,
+            "saved tangent epigraph": 16,
+            "selected energy": 8,
+            "service SOC equality": 8,
+            "service coverage": 4,
+            "shared interval capacity": 4,
+            "single active vehicle visit": 8,
+            "used vehicle symmetry": 1,
+            "variable lower": 38,
+            "variable upper": 38
+          },
+          "interval_capacity_excess": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "materialized_session_capacity_excess": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "max_raw_constraint_residual": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "negative_l1": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "negative_variables": 0,
+          "positive_sessions_retained": 2,
+          "raw_objective": {
+            "exact_binary_rational": "97",
+            "value": 97.0
+          },
+          "raw_variables": 42,
+          "round": 3
+        }
+      ],
+      "status": "certified"
+    },
+    {
+      "cell": "joint_flat",
+      "certified_interval": [
+        38.578946368421036,
+        38.57894836842103
+      ],
+      "failure": null,
+      "independent_true_optimum": {
+        "exact_binary_rational": "55018975447709559/1426139882000657",
+        "value": 38.578947368421055
+      },
+      "native_rounds": [
+        {
+          "native_incumbent": 38.578947368421034,
+          "native_lower_bound": 38.578947368421034,
+          "native_status": "OPTIMAL",
+          "physical_witness_saved": true,
+          "reference": {
+            "exact_binary_rational": "55018975447709559/1426139882000657",
+            "value": 38.578947368421055
+          },
+          "round": 0
+        }
+      ],
+      "original_pass": true,
+      "physical_witnesses": [
+        {
+          "load": [
+            0.0,
+            11.578947368421032,
+            0.0,
+            20.0
+          ],
+          "ops": 7.0,
+          "peak_kw": 20.0,
+          "sessions": 2,
+          "soc_events": 8,
+          "worst_soc_residual_kwh": 1.9539925233402755e-14
+        }
+      ],
+      "raw_incumbent_audit": [
+        {
+          "charge_correction_objective_delta": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "combined_correction": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "constraint_checks": {
+            "depot arrival reserve": 2,
+            "depot charge capacity": 2,
+            "grid energy aggregation": 8,
+            "incoming path flow": 8,
+            "movement SOC lower": 12,
+            "movement SOC upper": 12,
+            "outgoing path flow": 8,
+            "owned SOC capacity": 8,
+            "owned SOC reserve": 8,
+            "pullin count": 4,
+            "pullout count": 4,
+            "return reserve": 4,
+            "selected energy": 8,
+            "service SOC equality": 8,
+            "service coverage": 4,
+            "shared interval capacity": 4,
+            "single active vehicle visit": 8,
+            "used vehicle symmetry": 1,
+            "variable lower": 38,
+            "variable upper": 38
+          },
+          "interval_capacity_excess": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "materialized_session_capacity_excess": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "max_raw_constraint_residual": {
+            "exact_binary_rational": "51518809421525119/2535301200456458802993406410752",
+            "value": 2.032058731808655e-14
+          },
+          "negative_l1": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "negative_variables": 0,
+          "positive_sessions_retained": 2,
+          "raw_objective": {
+            "exact_binary_rational": "21718016624095867/562949953421312",
+            "value": 38.578947368421034
+          },
+          "raw_variables": 38,
+          "round": 0
+        }
+      ],
+      "status": "certified"
+    },
+    {
+      "cell": "joint_planner",
+      "certified_interval": [
+        106.72299068975069,
+        106.7229926897507
+      ],
+      "failure": null,
+      "independent_true_optimum": {
+        "exact_binary_rational": "1953550986999719768715663155889439/18304874667295630846244535884841",
+        "value": 106.7229916897507
+      },
+      "native_rounds": [
+        {
+          "native_incumbent": 20.315789473684212,
+          "native_lower_bound": 20.315789473684212,
+          "native_status": "OPTIMAL",
+          "physical_witness_saved": true,
+          "reference": {
+            "exact_binary_rational": "28973157602750198/1426139882000657",
+            "value": 20.315789473684216
+          },
+          "round": 0
+        },
+        {
+          "native_incumbent": 86.01385041551248,
+          "native_lower_bound": 86.01385041551248,
+          "native_status": "OPTIMAL",
+          "physical_witness_saved": true,
+          "reference": {
+            "exact_binary_rational": "4419572635810442532600563484498533/51382104329250896005413235326976",
+            "value": 86.01385041551248
+          },
+          "round": 1
+        },
+        {
+          "native_incumbent": 101.78947368421055,
+          "native_lower_bound": 101.78947368421055,
+          "native_status": "OPTIMAL",
+          "physical_witness_saved": true,
+          "reference": {
+            "exact_binary_rational": "12273152302333271422534909287342489915693000203535/120573885079799448877523960844207753806938636288",
+            "value": 101.78947368421053
+          },
+          "round": 2
+        },
+        {
+          "native_incumbent": 106.17728531855957,
+          "native_lower_bound": 106.17728531855957,
+          "native_status": "OPTIMAL",
+          "physical_witness_saved": true,
+          "reference": {
+            "exact_binary_rational": "6401103899042542085094405352985749454781517381597/60286942539899750129814145047551879610086981632",
+            "value": 106.17728531855957
+          },
+          "round": 3
+        },
+        {
+          "native_incumbent": 106.68753462603877,
+          "native_lower_bound": 106.68753462603877,
+          "native_status": "OPTIMAL",
+          "physical_witness_saved": true,
+          "reference": {
+            "exact_binary_rational": "42826797146763223774655270009011/401422690072272625042290900992",
+            "value": 106.6875346260388
+          },
+          "round": 4
+        },
+        {
+          "native_incumbent": 106.69833795013851,
+          "native_lower_bound": 106.69833795013851,
+          "native_status": "OPTIMAL",
+          "physical_witness_saved": true,
+          "reference": {
+            "exact_binary_rational": "100508071392231338066177511748739642534148199179/941983477185933595778346016367998118907609088",
+            "value": 106.69833795013852
+          },
+          "round": 5
+        },
+        {
+          "native_incumbent": 106.72299168975069,
+          "native_lower_bound": 106.72299168975069,
+          "native_status": "OPTIMAL",
+          "physical_witness_saved": true,
+          "reference": {
+            "exact_binary_rational": "128523091249981565469732986222861/1204268070216817875126872702976",
+            "value": 106.7229916897507
+          },
+          "round": 6
+        }
+      ],
+      "original_pass": true,
+      "physical_witnesses": [
+        {
+          "load": [
+            0.0,
+            1.5789473684210529,
+            0.0,
+            30.0
+          ],
+          "ops": 14.0,
+          "peak_kw": 30.000000000000014,
+          "sessions": 3,
+          "soc_events": 9,
+          "worst_soc_residual_kwh": 0.0
+        },
+        {
+          "load": [
+            0.0,
+            12.0,
+            0.0,
+            19.578947368421055
+          ],
+          "ops": 7.0,
+          "peak_kw": 19.578947368421055,
+          "sessions": 2,
+          "soc_events": 8,
+          "worst_soc_residual_kwh": 0.0
+        },
+        {
+          "load": [
+            0.0,
+            6.789473684210528,
+            0.0,
+            24.789473684210527
+          ],
+          "ops": 14.0,
+          "peak_kw": 24.789473684210527,
+          "sessions": 3,
+          "soc_events": 9,
+          "worst_soc_residual_kwh": 0.0
+        },
+        {
+          "load": [
+            0.0,
+            4.184210526315789,
+            0.0,
+            27.394736842105264
+          ],
+          "ops": 14.0,
+          "peak_kw": 27.394736842105274,
+          "sessions": 3,
+          "soc_events": 9,
+          "worst_soc_residual_kwh": 0.0
+        },
+        {
+          "load": [
+            0.0,
+            11.578947368421053,
+            0.0,
+            20.0
+          ],
+          "ops": 7.0,
+          "peak_kw": 20.0,
+          "sessions": 2,
+          "soc_events": 8,
+          "worst_soc_residual_kwh": 0.0
+        },
+        {
+          "load": [
+            0.0,
+            5.486842105263157,
+            0.0,
+            26.092105263157897
+          ],
+          "ops": 14.0,
+          "peak_kw": 26.092105263157908,
+          "sessions": 3,
+          "soc_events": 9,
+          "worst_soc_residual_kwh": 0.0
+        },
+        {
+          "load": [
+            0.0,
+            11.578947368421053,
+            0.0,
+            20.0
+          ],
+          "ops": 7.0,
+          "peak_kw": 20.0,
+          "sessions": 2,
+          "soc_events": 8,
+          "worst_soc_residual_kwh": 0.0
+        }
+      ],
+      "raw_incumbent_audit": [
+        {
+          "charge_correction_objective_delta": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "combined_correction": {
+            "exact_binary_rational": "1/140737488355328",
+            "value": 7.105427357601002e-15
+          },
+          "constraint_checks": {
+            "depot arrival reserve": 2,
+            "depot charge capacity": 2,
+            "grid energy aggregation": 8,
+            "incoming path flow": 8,
+            "movement SOC lower": 12,
+            "movement SOC upper": 12,
+            "outgoing path flow": 8,
+            "owned SOC capacity": 8,
+            "owned SOC reserve": 8,
+            "pullin count": 4,
+            "pullout count": 4,
+            "return reserve": 4,
+            "saved tangent epigraph": 4,
+            "selected energy": 8,
+            "service SOC equality": 8,
+            "service coverage": 4,
+            "shared interval capacity": 4,
+            "single active vehicle visit": 8,
+            "used vehicle symmetry": 1,
+            "variable lower": 38,
+            "variable upper": 38
+          },
+          "interval_capacity_excess": {
+            "exact_binary_rational": "1/562949953421312",
+            "value": 1.7763568394002505e-15
+          },
+          "materialized_session_capacity_excess": {
+            "exact_binary_rational": "1/140737488355328",
+            "value": 7.105427357601002e-15
+          },
+          "max_raw_constraint_residual": {
+            "exact_binary_rational": "1/562949953421312",
+            "value": 1.7763568394002505e-15
+          },
+          "negative_l1": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "negative_variables": 0,
+          "positive_sessions_retained": 3,
+          "raw_objective": {
+            "exact_binary_rational": "2859193184481927/140737488355328",
+            "value": 20.315789473684212
+          },
+          "raw_variables": 42,
+          "round": 0
+        },
+        {
+          "charge_correction_objective_delta": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "combined_correction": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "constraint_checks": {
+            "depot arrival reserve": 2,
+            "depot charge capacity": 2,
+            "grid energy aggregation": 8,
+            "incoming path flow": 8,
+            "movement SOC lower": 12,
+            "movement SOC upper": 12,
+            "outgoing path flow": 8,
+            "owned SOC capacity": 8,
+            "owned SOC reserve": 8,
+            "pullin count": 4,
+            "pullout count": 4,
+            "return reserve": 4,
+            "saved tangent epigraph": 8,
+            "selected energy": 8,
+            "service SOC equality": 8,
+            "service coverage": 4,
+            "shared interval capacity": 4,
+            "single active vehicle visit": 8,
+            "used vehicle symmetry": 1,
+            "variable lower": 38,
+            "variable upper": 38
+          },
+          "interval_capacity_excess": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "materialized_session_capacity_excess": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "max_raw_constraint_residual": {
+            "exact_binary_rational": "277/36028797018963968",
+            "value": 7.688294445529209e-15
+          },
+          "negative_l1": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "negative_variables": 0,
+          "positive_sessions_retained": 2,
+          "raw_objective": {
+            "exact_binary_rational": "12105373271250111/140737488355328",
+            "value": 86.01385041551248
+          },
+          "raw_variables": 42,
+          "round": 1
+        },
+        {
+          "charge_correction_objective_delta": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "combined_correction": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "constraint_checks": {
+            "depot arrival reserve": 2,
+            "depot charge capacity": 2,
+            "grid energy aggregation": 8,
+            "incoming path flow": 8,
+            "movement SOC lower": 12,
+            "movement SOC upper": 12,
+            "outgoing path flow": 8,
+            "owned SOC capacity": 8,
+            "owned SOC reserve": 8,
+            "pullin count": 4,
+            "pullout count": 4,
+            "return reserve": 4,
+            "saved tangent epigraph": 12,
+            "selected energy": 8,
+            "service SOC equality": 8,
+            "service coverage": 4,
+            "shared interval capacity": 4,
+            "single active vehicle visit": 8,
+            "used vehicle symmetry": 1,
+            "variable lower": 38,
+            "variable upper": 38
+          },
+          "interval_capacity_excess": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "materialized_session_capacity_excess": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "max_raw_constraint_residual": {
+            "exact_binary_rational": "191106694714077/79228162514264337593543950336",
+            "value": 2.4121056029750773e-15
+          },
+          "negative_l1": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "negative_variables": 0,
+          "positive_sessions_retained": 3,
+          "raw_objective": {
+            "exact_binary_rational": "28651189734653095/281474976710656",
+            "value": 101.78947368421055
+          },
+          "raw_variables": 42,
+          "round": 2
+        },
+        {
+          "charge_correction_objective_delta": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "combined_correction": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "constraint_checks": {
+            "depot arrival reserve": 2,
+            "depot charge capacity": 2,
+            "grid energy aggregation": 8,
+            "incoming path flow": 8,
+            "movement SOC lower": 12,
+            "movement SOC upper": 12,
+            "outgoing path flow": 8,
+            "owned SOC capacity": 8,
+            "owned SOC reserve": 8,
+            "pullin count": 4,
+            "pullout count": 4,
+            "return reserve": 4,
+            "saved tangent epigraph": 16,
+            "selected energy": 8,
+            "service SOC equality": 8,
+            "service coverage": 4,
+            "shared interval capacity": 4,
+            "single active vehicle visit": 8,
+            "used vehicle symmetry": 1,
+            "variable lower": 38,
+            "variable upper": 38
+          },
+          "interval_capacity_excess": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "materialized_session_capacity_excess": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "max_raw_constraint_residual": {
+            "exact_binary_rational": "2457681995403943/158456325028528675187087900672",
+            "value": 1.5510153949117896e-14
+          },
+          "negative_l1": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "negative_variables": 0,
+          "positive_sessions_retained": 3,
+          "raw_objective": {
+            "exact_binary_rational": "29886248912242231/281474976710656",
+            "value": 106.17728531855957
+          },
+          "raw_variables": 42,
+          "round": 3
+        },
+        {
+          "charge_correction_objective_delta": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "combined_correction": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "constraint_checks": {
+            "depot arrival reserve": 2,
+            "depot charge capacity": 2,
+            "grid energy aggregation": 8,
+            "incoming path flow": 8,
+            "movement SOC lower": 12,
+            "movement SOC upper": 12,
+            "outgoing path flow": 8,
+            "owned SOC capacity": 8,
+            "owned SOC reserve": 8,
+            "pullin count": 4,
+            "pullout count": 4,
+            "return reserve": 4,
+            "saved tangent epigraph": 20,
+            "selected energy": 8,
+            "service SOC equality": 8,
+            "service coverage": 4,
+            "shared interval capacity": 4,
+            "single active vehicle visit": 8,
+            "used vehicle symmetry": 1,
+            "variable lower": 38,
+            "variable upper": 38
+          },
+          "interval_capacity_excess": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "materialized_session_capacity_excess": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "max_raw_constraint_residual": {
+            "exact_binary_rational": "1665146704330407/158456325028528675187087900672",
+            "value": 1.0508553092030955e-14
+          },
+          "negative_l1": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "negative_variables": 0,
+          "positive_sessions_retained": 2,
+          "raw_objective": {
+            "exact_binary_rational": "15014935662090783/140737488355328",
+            "value": 106.68753462603877
+          },
+          "raw_variables": 42,
+          "round": 4
+        },
+        {
+          "charge_correction_objective_delta": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "combined_correction": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "constraint_checks": {
+            "depot arrival reserve": 2,
+            "depot charge capacity": 2,
+            "grid energy aggregation": 8,
+            "incoming path flow": 8,
+            "movement SOC lower": 12,
+            "movement SOC upper": 12,
+            "outgoing path flow": 8,
+            "owned SOC capacity": 8,
+            "owned SOC reserve": 8,
+            "pullin count": 4,
+            "pullout count": 4,
+            "return reserve": 4,
+            "saved tangent epigraph": 24,
+            "selected energy": 8,
+            "service SOC equality": 8,
+            "service coverage": 4,
+            "shared interval capacity": 4,
+            "single active vehicle visit": 8,
+            "used vehicle symmetry": 1,
+            "variable lower": 38,
+            "variable upper": 38
+          },
+          "interval_capacity_excess": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "materialized_session_capacity_excess": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "max_raw_constraint_residual": {
+            "exact_binary_rational": "3683189736802761/1267650600228229401496703205376",
+            "value": 2.9055243898749663e-15
+          },
+          "negative_l1": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "negative_variables": 0,
+          "positive_sessions_retained": 3,
+          "raw_objective": {
+            "exact_binary_rational": "30032912189580941/281474976710656",
+            "value": 106.69833795013851
+          },
+          "raw_variables": 42,
+          "round": 5
+        },
+        {
+          "charge_correction_objective_delta": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "combined_correction": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "constraint_checks": {
+            "depot arrival reserve": 2,
+            "depot charge capacity": 2,
+            "grid energy aggregation": 8,
+            "incoming path flow": 8,
+            "movement SOC lower": 12,
+            "movement SOC upper": 12,
+            "outgoing path flow": 8,
+            "owned SOC capacity": 8,
+            "owned SOC reserve": 8,
+            "pullin count": 4,
+            "pullout count": 4,
+            "return reserve": 4,
+            "saved tangent epigraph": 28,
+            "selected energy": 8,
+            "service SOC equality": 8,
+            "service coverage": 4,
+            "shared interval capacity": 4,
+            "single active vehicle visit": 8,
+            "used vehicle symmetry": 1,
+            "variable lower": 38,
+            "variable upper": 38
+          },
+          "interval_capacity_excess": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "materialized_session_capacity_excess": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "max_raw_constraint_residual": {
+            "exact_binary_rational": "1/562949953421312",
+            "value": 1.7763568394002505e-15
+          },
+          "negative_l1": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "negative_variables": 0,
+          "positive_sessions_retained": 2,
+          "raw_objective": {
+            "exact_binary_rational": "7509962900091027/70368744177664",
+            "value": 106.72299168975069
+          },
+          "raw_variables": 42,
+          "round": 6
+        }
+      ],
+      "status": "certified"
+    },
+    {
+      "cell": "fixed_reserve_planner",
+      "certified_interval": [
+        98.999999,
+        99.000001
+      ],
+      "failure": null,
+      "independent_true_optimum": {
+        "exact_binary_rational": "6425467362436849781178760318418953/64903710731685348959510906011648",
+        "value": 99.0
+      },
+      "native_rounds": [
+        {
+          "native_incumbent": 14.0,
+          "native_lower_bound": 14.0,
+          "native_status": "OPTIMAL",
+          "physical_witness_saved": true,
+          "reference": {
+            "exact_binary_rational": "14",
+            "value": 14.0
+          },
+          "round": 0
+        },
+        {
+          "native_incumbent": 84.0,
+          "native_lower_bound": 84.0,
+          "native_status": "OPTIMAL",
+          "physical_witness_saved": true,
+          "reference": {
+            "exact_binary_rational": "84",
+            "value": 84.0
+          },
+          "round": 1
+        },
+        {
+          "native_incumbent": 94.0,
+          "native_lower_bound": 94.0,
+          "native_status": "OPTIMAL",
+          "physical_witness_saved": true,
+          "reference": {
+            "exact_binary_rational": "94",
+            "value": 94.0
+          },
+          "round": 2
+        },
+        {
+          "native_incumbent": 99.0,
+          "native_lower_bound": 99.0,
+          "native_status": "OPTIMAL",
+          "physical_witness_saved": true,
+          "reference": {
+            "exact_binary_rational": "99",
+            "value": 99.0
+          },
+          "round": 3
+        }
+      ],
+      "original_pass": true,
+      "physical_witnesses": [
+        {
+          "load": [
+            0.0,
+            0.0,
+            0.0,
+            30.0
+          ],
+          "ops": 14.0,
+          "peak_kw": 30.0,
+          "sessions": 2,
+          "soc_events": 8,
+          "worst_soc_residual_kwh": 0.0
+        },
+        {
+          "load": [
+            0.0,
+            10.0,
+            0.0,
+            20.0
+          ],
+          "ops": 14.0,
+          "peak_kw": 20.0,
+          "sessions": 3,
+          "soc_events": 9,
+          "worst_soc_residual_kwh": 0.0
+        },
+        {
+          "load": [
+            0.0,
+            5.0,
+            0.0,
+            25.0
+          ],
+          "ops": 14.0,
+          "peak_kw": 25.0,
+          "sessions": 3,
+          "soc_events": 9,
+          "worst_soc_residual_kwh": 0.0
+        },
+        {
+          "load": [
+            0.0,
+            2.5,
+            0.0,
+            27.5
+          ],
+          "ops": 14.0,
+          "peak_kw": 27.500000000000007,
+          "sessions": 3,
+          "soc_events": 9,
+          "worst_soc_residual_kwh": 0.0
+        }
+      ],
+      "raw_incumbent_audit": [
+        {
+          "charge_correction_objective_delta": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "combined_correction": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "constraint_checks": {
+            "depot arrival reserve": 2,
+            "depot charge capacity": 2,
+            "grid energy aggregation": 8,
+            "incoming path flow": 8,
+            "movement SOC lower": 12,
+            "movement SOC upper": 12,
+            "outgoing path flow": 8,
+            "owned SOC capacity": 8,
+            "owned SOC reserve": 8,
+            "pullin count": 4,
+            "pullout count": 4,
+            "return reserve": 4,
+            "saved tangent epigraph": 4,
+            "selected energy": 8,
+            "service SOC equality": 8,
+            "service coverage": 4,
+            "shared interval capacity": 4,
+            "single active vehicle visit": 8,
+            "used vehicle symmetry": 1,
+            "variable lower": 38,
+            "variable upper": 38
+          },
+          "interval_capacity_excess": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "materialized_session_capacity_excess": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "max_raw_constraint_residual": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "negative_l1": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "negative_variables": 0,
+          "positive_sessions_retained": 2,
+          "raw_objective": {
+            "exact_binary_rational": "14",
+            "value": 14.0
+          },
+          "raw_variables": 42,
+          "round": 0
+        },
+        {
+          "charge_correction_objective_delta": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "combined_correction": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "constraint_checks": {
+            "depot arrival reserve": 2,
+            "depot charge capacity": 2,
+            "grid energy aggregation": 8,
+            "incoming path flow": 8,
+            "movement SOC lower": 12,
+            "movement SOC upper": 12,
+            "outgoing path flow": 8,
+            "owned SOC capacity": 8,
+            "owned SOC reserve": 8,
+            "pullin count": 4,
+            "pullout count": 4,
+            "return reserve": 4,
+            "saved tangent epigraph": 8,
+            "selected energy": 8,
+            "service SOC equality": 8,
+            "service coverage": 4,
+            "shared interval capacity": 4,
+            "single active vehicle visit": 8,
+            "used vehicle symmetry": 1,
+            "variable lower": 38,
+            "variable upper": 38
+          },
+          "interval_capacity_excess": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "materialized_session_capacity_excess": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "max_raw_constraint_residual": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "negative_l1": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "negative_variables": 0,
+          "positive_sessions_retained": 3,
+          "raw_objective": {
+            "exact_binary_rational": "84",
+            "value": 84.0
+          },
+          "raw_variables": 42,
+          "round": 1
+        },
+        {
+          "charge_correction_objective_delta": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "combined_correction": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "constraint_checks": {
+            "depot arrival reserve": 2,
+            "depot charge capacity": 2,
+            "grid energy aggregation": 8,
+            "incoming path flow": 8,
+            "movement SOC lower": 12,
+            "movement SOC upper": 12,
+            "outgoing path flow": 8,
+            "owned SOC capacity": 8,
+            "owned SOC reserve": 8,
+            "pullin count": 4,
+            "pullout count": 4,
+            "return reserve": 4,
+            "saved tangent epigraph": 12,
+            "selected energy": 8,
+            "service SOC equality": 8,
+            "service coverage": 4,
+            "shared interval capacity": 4,
+            "single active vehicle visit": 8,
+            "used vehicle symmetry": 1,
+            "variable lower": 38,
+            "variable upper": 38
+          },
+          "interval_capacity_excess": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "materialized_session_capacity_excess": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "max_raw_constraint_residual": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "negative_l1": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "negative_variables": 0,
+          "positive_sessions_retained": 3,
+          "raw_objective": {
+            "exact_binary_rational": "94",
+            "value": 94.0
+          },
+          "raw_variables": 42,
+          "round": 2
+        },
+        {
+          "charge_correction_objective_delta": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "combined_correction": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "constraint_checks": {
+            "depot arrival reserve": 2,
+            "depot charge capacity": 2,
+            "grid energy aggregation": 8,
+            "incoming path flow": 8,
+            "movement SOC lower": 12,
+            "movement SOC upper": 12,
+            "outgoing path flow": 8,
+            "owned SOC capacity": 8,
+            "owned SOC reserve": 8,
+            "pullin count": 4,
+            "pullout count": 4,
+            "return reserve": 4,
+            "saved tangent epigraph": 16,
+            "selected energy": 8,
+            "service SOC equality": 8,
+            "service coverage": 4,
+            "shared interval capacity": 4,
+            "single active vehicle visit": 8,
+            "used vehicle symmetry": 1,
+            "variable lower": 38,
+            "variable upper": 38
+          },
+          "interval_capacity_excess": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "materialized_session_capacity_excess": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "max_raw_constraint_residual": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "negative_l1": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "negative_variables": 0,
+          "positive_sessions_retained": 3,
+          "raw_objective": {
+            "exact_binary_rational": "99",
+            "value": 99.0
+          },
+          "raw_variables": 42,
+          "round": 3
+        }
+      ],
+      "status": "certified"
+    },
+    {
+      "cell": "fixed_reserve_one_bus",
+      "certified_interval": null,
+      "failure": null,
+      "independent_true_optimum": null,
+      "native_rounds": [
+        {
+          "native_incumbent": null,
+          "native_lower_bound": null,
+          "native_status": "INFEASIBLE",
+          "physical_witness_saved": false,
+          "reference": null,
+          "round": 0
+        }
+      ],
+      "original_pass": true,
+      "physical_witnesses": [],
+      "raw_incumbent_audit": [],
+      "status": "infeasible"
+    },
+    {
+      "cell": "terminal_capacity_failure",
+      "certified_interval": null,
+      "failure": null,
+      "independent_true_optimum": null,
+      "native_rounds": [
+        {
+          "native_incumbent": null,
+          "native_lower_bound": null,
+          "native_status": "INFEASIBLE",
+          "physical_witness_saved": false,
+          "reference": null,
+          "round": 0
+        }
+      ],
+      "original_pass": true,
+      "physical_witnesses": [],
+      "raw_incumbent_audit": [],
+      "status": "infeasible"
+    },
+    {
+      "cell": "partial_overlap_failure",
+      "certified_interval": null,
+      "failure": null,
+      "independent_true_optimum": null,
+      "native_rounds": [
+        {
+          "native_incumbent": null,
+          "native_lower_bound": null,
+          "native_status": "INFEASIBLE",
+          "physical_witness_saved": false,
+          "reference": null,
+          "round": 0
+        }
+      ],
+      "original_pass": true,
+      "physical_witnesses": [],
+      "raw_incumbent_audit": [],
+      "status": "infeasible"
+    },
+    {
+      "cell": "serial_connector",
+      "certified_interval": [
+        23.999999,
+        24.000001
+      ],
+      "failure": null,
+      "independent_true_optimum": {
+        "exact_binary_rational": "24",
+        "value": 24.0
+      },
+      "native_rounds": [
+        {
+          "native_incumbent": 24.0,
+          "native_lower_bound": 24.0,
+          "native_status": "OPTIMAL",
+          "physical_witness_saved": true,
+          "reference": {
+            "exact_binary_rational": "24",
+            "value": 24.0
+          },
+          "round": 0
+        }
+      ],
+      "original_pass": true,
+      "physical_witnesses": [
+        {
+          "load": [
+            5.0,
+            5.0
+          ],
+          "ops": 14.0,
+          "peak_kw": 10.0,
+          "sessions": 4,
+          "soc_events": 10,
+          "worst_soc_residual_kwh": 0.0
+        }
+      ],
+      "raw_incumbent_audit": [
+        {
+          "charge_correction_objective_delta": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "combined_correction": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "constraint_checks": {
+            "grid energy aggregation": 4,
+            "incoming path flow": 8,
+            "movement SOC lower": 8,
+            "movement SOC upper": 8,
+            "outgoing path flow": 8,
+            "owned SOC capacity": 8,
+            "owned SOC reserve": 8,
+            "pullin count": 4,
+            "pullout count": 4,
+            "return reserve": 4,
+            "selected energy": 8,
+            "service SOC equality": 8,
+            "service coverage": 4,
+            "shared interval capacity": 3,
+            "single active vehicle visit": 6,
+            "used vehicle symmetry": 1,
+            "variable lower": 32,
+            "variable upper": 32
+          },
+          "interval_capacity_excess": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "materialized_session_capacity_excess": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "max_raw_constraint_residual": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "negative_l1": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "negative_variables": 0,
+          "positive_sessions_retained": 4,
+          "raw_objective": {
+            "exact_binary_rational": "24",
+            "value": 24.0
+          },
+          "raw_variables": 32,
+          "round": 0
+        }
+      ],
+      "status": "certified"
+    },
+    {
+      "cell": "directed_multileg",
+      "certified_interval": [
+        35.999999,
+        36.000001
+      ],
+      "failure": null,
+      "independent_true_optimum": {
+        "exact_binary_rational": "36",
+        "value": 36.0
+      },
+      "native_rounds": [
+        {
+          "native_incumbent": 36.0,
+          "native_lower_bound": 36.0,
+          "native_status": "OPTIMAL",
+          "physical_witness_saved": true,
+          "reference": {
+            "exact_binary_rational": "36",
+            "value": 36.0
+          },
+          "round": 0
+        }
+      ],
+      "original_pass": true,
+      "physical_witnesses": [
+        {
+          "load": [
+            0.0,
+            14.0
+          ],
+          "ops": 22.0,
+          "peak_kw": 18.666666666666668,
+          "sessions": 1,
+          "soc_events": 6,
+          "worst_soc_residual_kwh": 0.0
+        }
+      ],
+      "raw_incumbent_audit": [
+        {
+          "charge_correction_objective_delta": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "combined_correction": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "constraint_checks": {
+            "grid energy aggregation": 4,
+            "incoming path flow": 4,
+            "movement SOC lower": 4,
+            "movement SOC upper": 4,
+            "outgoing path flow": 4,
+            "owned SOC capacity": 4,
+            "owned SOC reserve": 4,
+            "pullin count": 4,
+            "pullout count": 4,
+            "return reserve": 2,
+            "selected energy": 2,
+            "service SOC equality": 4,
+            "service coverage": 2,
+            "shared interval capacity": 3,
+            "single active vehicle visit": 6,
+            "used vehicle symmetry": 1,
+            "variable lower": 16,
+            "variable upper": 16
+          },
+          "interval_capacity_excess": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "materialized_session_capacity_excess": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "max_raw_constraint_residual": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "negative_l1": {
+            "exact_binary_rational": "0",
+            "value": 0.0
+          },
+          "negative_variables": 0,
+          "positive_sessions_retained": 1,
+          "raw_objective": {
+            "exact_binary_rational": "36",
+            "value": 36.0
+          },
+          "raw_variables": 16,
+          "round": 0
+        }
+      ],
+      "status": "certified"
+    }
+  ],
+  "certified_width_min_max": [
+    1.9999999949504854e-06,
+    2.00000000916134e-06
+  ],
+  "corruption_controls": [
+    {
+      "control": "raw SOC equality",
+      "reason": "raw owned SOC capacity residual 3.0 exceeds native tolerance",
+      "rejected": true
+    },
+    {
+      "control": "raw assignment coverage",
+      "reason": "binary integrality",
+      "rejected": true
+    },
+    {
+      "control": "missing raw snapshot",
+      "reason": "complete ordered V2 evidence stages",
+      "rejected": true
+    },
+    {
+      "control": "raw variable representation",
+      "reason": "raw numeric representation",
+      "rejected": true
+    },
+    {
+      "control": "raw semantic mapping duplication",
+      "reason": "every raw variable mapped exactly once",
+      "rejected": true
+    },
+    {
+      "control": "compiled interval capacity",
+      "reason": "independently compiled elementary intervals",
+      "rejected": true
+    },
+    {
+      "control": "negative correction exact total",
+      "reason": "negative exact L1 ledger",
+      "rejected": true
+    },
+    {
+      "control": "fabricated negative correction",
+      "reason": "exact negative correction list",
+      "rejected": true
+    },
+    {
+      "control": "materialized correction total",
+      "reason": "exact materialized_session_excess ledger",
+      "rejected": true
+    },
+    {
+      "control": "endpoint spill",
+      "reason": "exact retained energies and emitted endpoints",
+      "rejected": true
+    },
+    {
+      "control": "positive energy deleted",
+      "reason": "exact retained energies and emitted endpoints",
+      "rejected": true
+    },
+    {
+      "control": "objective correction accounting",
+      "reason": "linear correction objective delta: 1 versus 0.0",
+      "rejected": true
+    },
+    {
+      "control": "saved SOC",
+      "reason": "saved SOC value: 19 versus 20.0",
+      "rejected": true
+    },
+    {
+      "control": "native lower bound",
+      "reason": "independent global native lower bound: 23 versus 22.0",
+      "rejected": true
+    },
+    {
+      "control": "certificate interval",
+      "reason": "final upper: 21 versus 22.000001",
+      "rejected": true
+    },
+    {
+      "control": "tangent history",
+      "reason": "immutable round snapshot",
+      "rejected": true
+    },
+    {
+      "control": "CBC backend fallback",
+      "reason": "actual backend identity",
+      "rejected": true
+    },
+    {
+      "control": "wrong native implementation",
+      "reason": "GRB loaded implementation/recorded binary identity",
+      "rejected": true
+    }
+  ],
+  "counts": {
+    "SOC_events": 217,
+    "certified_controls": 12,
+    "controls": 15,
+    "corrected_negative_variables": 0,
+    "expected_infeasibilities": 3,
+    "independently_minimized_native_objectives": 27,
+    "native_calls": 30,
+    "nonzero_correction_incumbents": 1,
+    "physical_witness_instances": 27,
+    "raw_files": 107,
+    "raw_incumbents": 27,
+    "raw_variable_values": 1030,
+    "sessions": 62
+  },
+  "frozen_commit": "24c7e4ef30777700e4ea17ddfaacae2de92155ce",
+  "independent_core_sha256": "717ebd14560669f5ec7200f93af22425e7991f6ca747a7c5c49c926ecccca546",
+  "max_SOC_residual_kwh": 1.9539925233402755e-14,
+  "max_combined_correction": {
+    "exact_binary_rational": "1/140737488355328",
+    "value": 7.105427357601002e-15
+  },
+  "max_interval_capacity_excess": {
+    "exact_binary_rational": "1/562949953421312",
+    "value": 1.7763568394002505e-15
+  },
+  "max_raw_constraint_residual": {
+    "exact_binary_rational": "51518809421525119/2535301200456458802993406410752",
+    "value": 2.032058731808655e-14
+  },
+  "native_status_counts": {
+    "INFEASIBLE": 3,
+    "OPTIMAL": 27
+  },
+  "original_manifest_sha256": "5227bfa17bc1d8721e62990bbe53480c5315ed334be51c913ac10aa2a9905030",
+  "scope": "No author imports or optimizer. Raw variable/mapping/primal checks, exact binary-rational normalization/endpoint/capacity ledgers, unchanged floating physical replay and exact fixture-specific global objective/PWL minimization. Numerical feasibility, not exact repaired physical feasibility.",
+  "total_negative_charge_correction": {
+    "exact_binary_rational": "0",
+    "value": 0.0
+  }
+}

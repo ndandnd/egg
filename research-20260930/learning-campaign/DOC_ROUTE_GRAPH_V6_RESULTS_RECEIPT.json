@@ -1,0 +1,24 @@
+{
+  "document_id": "1NmPC_qo_uOnA48dV6Ibhs3Pj9EgOD-oJTBuVi41p6bg",
+  "tab_id": "t.0",
+  "revision_id": "ANLCKQnWlQOrI7URkPDa-OB8LAxjA7eYWaI_h09Jkohk-SSTwwWUN_RlWVhvxd6H9QDzN-ft2BiGp6Zaco-3g-Zp6VQd-oXnMHdGLegR6jU",
+  "append_start": 193040,
+  "append_end": 194858,
+  "append_text_verified": true,
+  "heading": "HEADING_2",
+  "preserved_native_image_ids": [
+    "kix.14qgnlc7qzhp",
+    "kix.1g4t8u3qmu8n",
+    "kix.4yuqnp8k08fl",
+    "kix.fe5jxkrgnniq",
+    "kix.shpddc4n4xg",
+    "kix.uffmv89uhby0",
+    "kix.xjlr68pn1mfz"
+  ],
+  "source_link": "https://github.com/ndandnd/egg/blob/615d1d4dcb6b4ec7e68c0d82cb0ca69989aa3e89/research-20260930/learning-campaign/ROUTE_GRAPH_V6_RESULTS.md",
+  "link_label": "Verified graph results and paired figure",
+  "style_preserved_with_named_style_inheritance": true,
+  "source_commit": "615d1d4dcb6b4ec7e68c0d82cb0ca69989aa3e89",
+  "trusted_read_manifest": "tmp/docs-graph-v6-results-20261001/manifest.json",
+  "text": "Graph models improve route-edge ranking\nThe first graph comparison is verified on the same 128 TRAIN timetables. The policy chosen using inner validation increases top-k edge recall from 69.39% for the tree-family policy to 73.96%, and average precision from 0.8263 to 0.8426. Probability log loss worsens from 0.07013 to 0.07189. The useful finding is better edge ranking, with a tradeoff in probability quality; it does not yet establish cheaper feasible fleets or faster online solving.\n\nThe graph policy selected attention in eleven fold/seed tasks and mean message passing in one. Both architectures completed all 300 epochs in every task, and their selected checkpoints were near that cap. A separately specified longer-training study is being prepared; reaching the cap is a reason to test further optimization, not evidence that more training must generalize better. Development and final-test timetables remain sealed.\n\nIndependent saved-state calculations reproduced model outputs to numerical precision, including the full edge rankings and selection decisions. All twelve cluster tasks completed, consuming 2.87 allocated CPU-hours. Full histories and failures are preserved in the Git backup. The linked report includes a paired figure showing one point per timetable, making the ranking improvement and loss tradeoff visible.\n\nThe next physical comparison is being implemented on sixteen predeclared TRAIN timetables. It will compare the frozen tabular, tree-family and graph policies with cost-only decoding, retained source plans, matched source charging and cold solving. Direct prediction, repair, charging and physical verification remain separate. This retains the control that removed the apparent learned-route gains in the earlier four-timetable pilot.\n\nVerified graph results and paired figure\n"
+}

@@ -1,0 +1,18 @@
+# Manuscript 0.4 layout and metadata review
+
+This review covers the initial and R2 candidates plus the final reviewed working render. The previous version 0.3 PDF (17 pages, six figures; SHA-256 `fac524aff668c2c1d81d027bf67a74894ad943953bf0638ca09d0ab51d035500`) remains in Git history. The canonical working path now contains the verified 0.4 PDF.
+
+| Render | File | Bytes | Pages | PDF SHA-256 |
+|---|---|---:|---:|---|
+| Initial candidate | `../output/pdf/egg-journal-working-draft-v04-candidate.pdf` | 1,593,531 | 22 | `d9734a9dcca90cf893c3bf2ce00732bad7fa57799487e8af97e2b01dfc14b2a7` |
+| R2 pagination candidate | `../output/pdf/egg-journal-working-draft-v04-r2-candidate.pdf` | 1,593,394 | 22 | `ceaac0bb385b4e34d07371988a365d824d63a7e1d47a7f5028cbd173a3c32d3f` |
+| Reviewed 0.4 render | `../output/pdf/egg-journal-working-draft-v04-reviewed.pdf` | 1,593,375 | 22 | `acae4e1bc915fdf7e7a4cafcd997b91aa6941afe73a9075b37cb6b50514663ca` |
+| Canonical working PDF (same bytes) | `../output/pdf/egg-journal-working-draft.pdf` | 1,593,375 | 22 | `acae4e1bc915fdf7e7a4cafcd997b91aa6941afe73a9075b37cb6b50514663ca` |
+
+**Source and renderer.** The current manuscript source SHA-256 is `454ec4fd010ed06e5609c49e500ca4493a0cd51faf86b533c413e5c4fae3ecf5`; the renderer SHA-256 is `0a9c0e8563d72dcf9a8d5d00d7fe3a05dc9a6704073b756aae92cca973278c3c`. The source change from R2 is limited to the metadata line: `Research draft 0.4 | 27 September 2026 | Working manuscript; nonlinear timetable study pending`. R2 adds a renderer `PageBreak()` before References, so the heading and all 15 references begin together on page 22. The reviewed 0.4 render has 22 pages and seven figures. Its normalized extracted text, after removing the metadata line and normalizing whitespace, is identical to R2 (62,192 characters; SHA-256 `6a768aa99943f9ff79ecafd5fa8232a142637adde8db99437ba93fc842e59906`); per-page extracted text also matches after removing metadata.
+
+**Visual review.** Contact sheets cover all 22 pages; full-resolution pages 7, 14-17, and 21-22 were inspected in R2. In the final render, page 1 was reviewed full-resolution before and after the metadata update; the new line fits on one line and leaves the abstract and introduction clear. Pages 2-22 are pixel-identical to R2 at 1.6 render scale, and pagination is unchanged. No clipping, overlap, broken glyphs, or truncated figures are visible. Page 22 starts with References and contains entries [1]-[15]. Figure labels and captions on pages 7, 15, and 17 remain legible; the image-caption groups stay intact. Page 14 and 16 whitespace is retained to keep Figures 6 and 7 with their captions at readable size. R2 pages are in `/Users/nadan/Documents/ChatGPT/egg/research-20260927/agent-notes/manuscript-qa-v04-r2/`; the before/after page 1 comparison is in `/Users/nadan/Documents/ChatGPT/egg/journal-research-work/research-20260927/agent-notes/manuscript-qa-v04-reviewed/`.
+
+`equation_provenance.json` was refreshed for the updated source hash. All nine equation PNG hashes are unchanged from before the metadata edit. The review covers document layout and text integrity; it does not establish the pending nonlinear public timetable result or complete whole-manuscript scientific review.
+
+Pages 14 and 16 retain open lower space. The next items are the complete Figure 6 and Figure 7 image-caption groups, respectively; neither group fits the remaining space at its current readable size. Shrinking either enough to move it up would reduce chart labels materially. The images and captions were therefore kept together at their current size, leaving the whitespace as a consequence of the layout flow.

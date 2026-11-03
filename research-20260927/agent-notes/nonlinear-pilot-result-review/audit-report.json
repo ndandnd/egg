@@ -1,0 +1,275 @@
+{
+  "attempt": "result/sistig_nonlinear/20260927-attempt1",
+  "audit_status": "FAILED_OR_INCOMPLETE_ATTEMPT_INTEGRITY_AUDITED; NO SCIENTIFIC PASS",
+  "audit_wall_seconds": 7.740935875102878,
+  "controller_elapsed_seconds": 243.34768786281347,
+  "controller_stop_reason": "planner failed or timed out",
+  "interpretation": "This is an integrity and failure-preservation report only. Failed or unstarted stages are not treated as scientific results; no optimization was retried.",
+  "license_stdout_or_stderr_content_read": false,
+  "manifest_bytes": 13228884,
+  "manifest_files": 15,
+  "manifest_sha256": "796a9c26b968a35a616269043708ba71f95defe1848547ce191d12ecc11f0c2d",
+  "native_runtime_records": 2,
+  "scientific_admission": false,
+  "slurm_scheduler_evidence": {
+    "allocated_cpus": 2,
+    "allocated_memory": null,
+    "directives_sha256": "c3e2bef697d276cdfe66e1f1df06a7b4a7b932f4b0c8301305f836497fb07303",
+    "elapsed": "00:04:22",
+    "excluded_node": "scaglione-compute-01",
+    "exit_code": "1:0",
+    "job_id": "559683",
+    "max_rss": "351628K",
+    "requested_cpus": 1,
+    "requested_memory": "8G",
+    "requeue": false,
+    "sacct_rows": {
+      "559683": [
+        "FAILED",
+        "1:0",
+        "00:04:22",
+        "2",
+        ""
+      ],
+      "559683.batch": [
+        "FAILED",
+        "1:0",
+        "00:04:22",
+        "2",
+        "351628K"
+      ],
+      "559683.extern": [
+        "COMPLETED",
+        "0:0",
+        "00:04:22",
+        "2",
+        ""
+      ]
+    },
+    "scontrol_snapshot_state": "PENDING before allocation; used only for requested TRES",
+    "source_commit": "80eb69544f568a7ed346f0d603004a10f61c481a",
+    "state": "FAILED",
+    "submission_utc": "2026-09-27T21:14:53.573593+00:00"
+  },
+  "source_commit": "80eb69544f568a7ed346f0d603004a10f61c481a",
+  "stage_rows": [
+    {
+      "copy_only_corruption_controls": [
+        {
+          "control": "raw variable representation",
+          "reason": "could not convert string to float: 'not-a-number'",
+          "rejected": true
+        },
+        {
+          "control": "final whole-incumbent charge correction",
+          "reason": "whole-incumbent budget: exact whole_incumbent_total_exact",
+          "rejected": true
+        },
+        {
+          "control": "replayed terminal SOC",
+          "reason": "saved SOC value: 0 versus 399.99999999997874",
+          "rejected": true
+        }
+      ],
+      "elapsed_seconds": 243.2175579420291,
+      "event_types": [
+        "native_start",
+        "native_status",
+        "native_incumbent",
+        "charge_normalization",
+        "charge_projection",
+        "charge_projection",
+        "serial_decoding",
+        "charge_projection",
+        "charge_projection",
+        "objective_reconstruction",
+        "replayed_iteration",
+        "native_start",
+        "native_status",
+        "native_incumbent",
+        "charge_normalization",
+        "charge_projection",
+        "charge_projection",
+        "serial_decoding",
+        "charge_projection",
+        "charge_projection",
+        "objective_reconstruction",
+        "replayed_iteration"
+      ],
+      "events": 22,
+      "exception": {
+        "message": "Scientific routine/admission cap exceeded",
+        "type": "TimeoutError"
+      },
+      "hard_timeout": false,
+      "independent_raw_reconstruction": {
+        "child_elapsed_seconds": 243.2175579420291,
+        "child_hard_cap_seconds": 255,
+        "overall_result_admitted": false,
+        "physical_upper_is_replayed": true,
+        "rounds": [
+          {
+            "lower_display": 408.53313488387835,
+            "lower_exact": "1796747728546421/4398046511104",
+            "max_primal_residual_exact": "1749/35184372088832",
+            "native_status": "OPTIMAL",
+            "phase_cap_excess_seconds": 0.0,
+            "phase_cap_seconds": 180.0,
+            "phase_wall_seconds": 88.96950810216367,
+            "physical_witness": {
+              "charge_sessions": 11,
+              "grid_load": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                78.0,
+                234.0,
+                0.0,
+                0.0,
+                0.0,
+                255.0,
+                138.1020813364583,
+                337.56359808293416,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "ops_cost": 200.0,
+              "peak_grid_kw": 360.0,
+              "soc_events": 106,
+              "worst_soc_residual_kwh": 2.5693225325085223e-11
+            },
+            "raw_variables": 21826,
+            "round": 0,
+            "roundoff_projection": {
+              "accepted": true,
+              "budget_exact": "3022314549036573/302231454903657293676544",
+              "interval_capacity_excess_exact": "0",
+              "negative_l1_exact": "0",
+              "orphan_positive_l1_exact": "0",
+              "plan_sum_residual_l1_exact": "1/70368744177664",
+              "raw_load_row_residual_l1_exact": "3/70368744177664",
+              "replay_load_residual_l1_exact": "0",
+              "session_capacity_excess_exact": "0",
+              "whole_incumbent_total_exact": "1/17592186044416"
+            },
+            "solver_incumbent": 408.53313588387846,
+            "solver_lower_bound": 408.53313588387834,
+            "upper_display": 552.3588966728554,
+            "upper_exact": "4858600236778613/8796093022208"
+          },
+          {
+            "lower_display": 403.76922888387793,
+            "lower_exact": "7103183393535567/17592186044416",
+            "max_primal_residual_exact": "7167/562949953421312",
+            "native_status": "FEASIBLE",
+            "phase_cap_excess_seconds": 0.008894739206880331,
+            "phase_cap_seconds": 144.58227342413738,
+            "phase_wall_seconds": 144.59116816334426,
+            "physical_witness": {
+              "charge_sessions": 12,
+              "grid_load": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                39.14325541672787,
+                66.0,
+                66.0,
+                66.0,
+                66.0,
+                0.0,
+                0.0,
+                117.52242400264572,
+                144.0,
+                78.0,
+                0.0,
+                0.0,
+                0.0,
+                360.0,
+                0.0,
+                40.0,
+                0.0
+              ],
+              "ops_cost": 200.0,
+              "peak_grid_kw": 360.0,
+              "soc_events": 107,
+              "worst_soc_residual_kwh": 3.6770586575585185e-12
+            },
+            "raw_variables": 21826,
+            "round": 1,
+            "roundoff_projection": {
+              "accepted": true,
+              "budget_exact": "3022314549036573/302231454903657293676544",
+              "interval_capacity_excess_exact": "0",
+              "negative_l1_exact": "0",
+              "orphan_positive_l1_exact": "0",
+              "plan_sum_residual_l1_exact": "0",
+              "raw_load_row_residual_l1_exact": "0",
+              "replay_load_residual_l1_exact": "1/140737488355328",
+              "session_capacity_excess_exact": "0",
+              "whole_incumbent_total_exact": "1/140737488355328"
+            },
+            "solver_incumbent": 408.5331358838747,
+            "solver_lower_bound": 403.7692298838779,
+            "upper_display": 514.5263116550285,
+            "upper_exact": "4525821299691215/8796093022208"
+          }
+        ],
+        "routine_cap_exceeded": true,
+        "routine_cap_excess_seconds": 2.315324111841619,
+        "status": "bounded",
+        "stored_interval_exact": [
+          "1796747728546421/4398046511104",
+          "4525821299691215/8796093022208"
+        ],
+        "used_buses": 2,
+        "worker_elapsed_seconds": 242.31532411184162
+      },
+      "native_runtime_records": 2,
+      "native_statuses": [
+        "OPTIMAL",
+        "FEASIBLE"
+      ],
+      "pass": false,
+      "raw_result_present": true,
+      "result_package_present": false,
+      "returncode": 2,
+      "routine_cap_seconds": 240,
+      "stage": "planner"
+    }
+  ],
+  "supervisor_child_returncode": 1,
+  "supervisor_elapsed_seconds": 244.28091002907604,
+  "supervisor_returncode": 1,
+  "supervisor_timed_out": false,
+  "unstarted_stages": [
+    "hull",
+    "own_price"
+  ]
+}

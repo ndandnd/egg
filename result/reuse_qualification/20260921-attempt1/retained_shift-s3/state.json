@@ -1,0 +1,938 @@
+{
+  "analytic": {
+    "explanation": "one bus; x+(10-x)=10 kWh; 0<=x<=10",
+    "load": [
+      0.0,
+      5.999999999999999,
+      4.000000000000001,
+      0.0
+    ],
+    "objective": 17.8
+  },
+  "arm": "retained_shift",
+  "bound_source": "fresh clean RMP dual plus full-pricing lower bound only",
+  "calls_clean": 1,
+  "calls_proposal": 1,
+  "calls_seed": 0,
+  "columns": [
+    {
+      "arc_kinds": [
+        [
+          "dep"
+        ]
+      ],
+      "charges": [
+        {
+          "after_trip": "t0",
+          "before_trip": "t1",
+          "kwh": 9.999999999999991,
+          "slot": 2,
+          "vehicle": 0
+        }
+      ],
+      "column_key": "c3702ea0af34d53d6a9e70c0a36f28e0e5efe4aea8ee1fd94a6d71da22e03d82",
+      "fleet": 1,
+      "instance_hash": "f930a91e6393",
+      "load": [
+        0.0,
+        0.0,
+        9.999999999999991,
+        0.0
+      ],
+      "load_hash": "3d31d029eb2b",
+      "ops_cost": 10.0,
+      "oracle_stats": {
+        "backend": "CBC",
+        "bound": 13.0,
+        "extra": {
+          "load_reconstruction": {
+            "max_abs_residual_kwh": 0.0,
+            "max_abs_residual_slot": 0,
+            "physical_min_kwh": 0.0,
+            "policy_version": 1,
+            "raw_load_kwh": [
+              0.0,
+              0.0,
+              9.999999999999991,
+              0.0
+            ],
+            "raw_min_kwh": 0.0,
+            "residual_kwh": [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "tolerance_kwh": 0.0001
+          },
+          "pricing_objective_reconstruction": {
+            "abs_adjustment": 3.552713678800501e-15,
+            "model_obj": 13.0,
+            "physical_obj": 12.999999999999996,
+            "policy_version": 1,
+            "prices": [
+              0.3,
+              0.3,
+              0.3,
+              0.3
+            ]
+          },
+          "threads": 1
+        },
+        "lp_mip_gap_abs": 3.0,
+        "lp_obj": 10.0,
+        "lp_wall_s": 0.002103090286254883,
+        "max_mip_gap": 1e-09,
+        "mip_gap": 0.0,
+        "n_constrs": 26,
+        "n_int": 9,
+        "n_vars": 19,
+        "obj": 13.0,
+        "status": "OPTIMAL",
+        "time_limit_s": 10,
+        "wall_s": 0.002275228500366211
+      },
+      "replay_ok": true,
+      "replay_violations": [],
+      "schedule_hash": "6f746b902944",
+      "sequences": [
+        [
+          "t0",
+          "t1"
+        ]
+      ]
+    },
+    {
+      "arc_kinds": [
+        [
+          "dep"
+        ]
+      ],
+      "charges": [
+        {
+          "after_trip": "t0",
+          "before_trip": "t1",
+          "kwh": 9.999999999999991,
+          "slot": 1,
+          "vehicle": 0
+        }
+      ],
+      "column_key": "bfef0ca8cba1203e48d099b4608474bb03e25bb9084c8a425cb645f2fd849f68",
+      "fleet": 1,
+      "instance_hash": "f930a91e6393",
+      "load": [
+        0.0,
+        9.999999999999991,
+        0.0,
+        0.0
+      ],
+      "load_hash": "d5a04e9764b1",
+      "ops_cost": 10.0,
+      "oracle_stats": {
+        "backend": "CBC",
+        "bound": 10.0,
+        "extra": {
+          "load_reconstruction": {
+            "max_abs_residual_kwh": 0.0,
+            "max_abs_residual_slot": 0,
+            "physical_min_kwh": 0.0,
+            "policy_version": 1,
+            "raw_load_kwh": [
+              0.0,
+              9.999999999999991,
+              0.0,
+              0.0
+            ],
+            "raw_min_kwh": 0.0,
+            "residual_kwh": [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "tolerance_kwh": 0.0001
+          },
+          "pricing_objective_reconstruction": {
+            "abs_adjustment": 0.0,
+            "model_obj": 10.0,
+            "physical_obj": 10.0,
+            "policy_version": 1,
+            "prices": [
+              0.0,
+              0.0,
+              2.3,
+              0.0
+            ]
+          },
+          "threads": 1
+        },
+        "lp_mip_gap_abs": 0.0,
+        "lp_obj": 10.0,
+        "lp_wall_s": 0.0002002716064453125,
+        "max_mip_gap": 1e-09,
+        "mip_gap": 0.0,
+        "n_constrs": 26,
+        "n_int": 9,
+        "n_vars": 19,
+        "obj": 10.0,
+        "status": "OPTIMAL",
+        "time_limit_s": 10,
+        "wall_s": 0.0020728111267089844
+      },
+      "replay_ok": true,
+      "replay_violations": [],
+      "schedule_hash": "6f746b902944",
+      "sequences": [
+        [
+          "t0",
+          "t1"
+        ]
+      ]
+    },
+    {
+      "arc_kinds": [
+        [
+          "dep"
+        ]
+      ],
+      "charges": [
+        {
+          "after_trip": "t0",
+          "before_trip": "t1",
+          "kwh": 9.999999999999998,
+          "slot": 2,
+          "vehicle": 0
+        }
+      ],
+      "column_key": "ca73826cf22ee04478aa71fd155c9e5c0f2521d93fccf4cbc7197c8af680779b",
+      "fleet": 1,
+      "instance_hash": "f930a91e6393",
+      "load": [
+        0.0,
+        0.0,
+        9.999999999999998,
+        0.0
+      ],
+      "load_hash": "3d31d029eb2b",
+      "ops_cost": 10.0,
+      "oracle_stats": {
+        "backend": "CBC",
+        "bound": 20.99999999999999,
+        "extra": {
+          "load_reconstruction": {
+            "max_abs_residual_kwh": 0.0,
+            "max_abs_residual_slot": 0,
+            "physical_min_kwh": 0.0,
+            "policy_version": 1,
+            "raw_load_kwh": [
+              0.0,
+              0.0,
+              9.999999999999998,
+              0.0
+            ],
+            "raw_min_kwh": 0.0,
+            "residual_kwh": [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "tolerance_kwh": 0.0001
+          },
+          "pricing_objective_reconstruction": {
+            "abs_adjustment": 3.552713678800501e-15,
+            "model_obj": 20.99999999999999,
+            "physical_obj": 20.999999999999986,
+            "policy_version": 1,
+            "prices": [
+              0.0,
+              1.499999999999999,
+              1.099999999999999,
+              0.0
+            ]
+          },
+          "threads": 1
+        },
+        "lp_mip_gap_abs": 10.99999999999999,
+        "lp_obj": 10.0,
+        "lp_wall_s": 0.0031731128692626953,
+        "max_mip_gap": 1e-09,
+        "mip_gap": 0.0,
+        "n_constrs": 26,
+        "n_int": 9,
+        "n_vars": 19,
+        "obj": 20.99999999999999,
+        "status": "OPTIMAL",
+        "time_limit_s": 10,
+        "wall_s": 0.0030601024627685547
+      },
+      "replay_ok": true,
+      "replay_violations": [],
+      "schedule_hash": "6f746b902944",
+      "sequences": [
+        [
+          "t0",
+          "t1"
+        ]
+      ]
+    },
+    {
+      "arc_kinds": [
+        [
+          "dep"
+        ]
+      ],
+      "charges": [
+        {
+          "after_trip": "t0",
+          "before_trip": "t1",
+          "kwh": 9.999999999999998,
+          "slot": 1,
+          "vehicle": 0
+        }
+      ],
+      "column_key": "cae0d915f2e7f78bae0594675fe8078bc536e5b86856abbc6375e5a48d5ab863",
+      "fleet": 1,
+      "instance_hash": "f930a91e6393",
+      "load": [
+        0.0,
+        9.999999999999998,
+        0.0,
+        0.0
+      ],
+      "load_hash": "d5a04e9764b1",
+      "ops_cost": 10.0,
+      "oracle_stats": {
+        "backend": "CBC",
+        "bound": 23.035714285714214,
+        "extra": {
+          "load_reconstruction": {
+            "max_abs_residual_kwh": 0.0,
+            "max_abs_residual_slot": 0,
+            "physical_min_kwh": 0.0,
+            "policy_version": 1,
+            "raw_load_kwh": [
+              0.0,
+              9.999999999999998,
+              0.0,
+              0.0
+            ],
+            "raw_min_kwh": 0.0,
+            "residual_kwh": [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "tolerance_kwh": 0.0001
+          },
+          "pricing_objective_reconstruction": {
+            "abs_adjustment": 0.0,
+            "model_obj": 23.035714285714214,
+            "physical_obj": 23.035714285714214,
+            "policy_version": 1,
+            "prices": [
+              0.0,
+              1.3035714285714215,
+              1.3035714285714217,
+              0.0
+            ]
+          },
+          "threads": 1
+        },
+        "lp_mip_gap_abs": 13.035714285714214,
+        "lp_obj": 10.0,
+        "lp_wall_s": 0.00034809112548828125,
+        "max_mip_gap": 1e-09,
+        "mip_gap": 0.0,
+        "n_constrs": 26,
+        "n_int": 9,
+        "n_vars": 19,
+        "obj": 23.035714285714214,
+        "status": "OPTIMAL",
+        "time_limit_s": 10,
+        "wall_s": 0.0025281906127929688
+      },
+      "replay_ok": true,
+      "replay_violations": [],
+      "schedule_hash": "6f746b902944",
+      "sequences": [
+        [
+          "t0",
+          "t1"
+        ]
+      ]
+    }
+  ],
+  "config_sha256": "2c1c6d7807948ec9044bc69ffa53fe9034558bfc1f8c06490c34924170240c22",
+  "final_load": [
+    0.0,
+    6.026785714285767,
+    3.973214285714224,
+    0.0
+  ],
+  "gap": 0.00039859693877630775,
+  "imported_column_keys": [
+    "c3702ea0af34d53d6a9e70c0a36f28e0e5efe4aea8ee1fd94a6d71da22e03d82",
+    "bfef0ca8cba1203e48d099b4608474bb03e25bb9084c8a425cb645f2fd849f68",
+    "ca73826cf22ee04478aa71fd155c9e5c0f2521d93fccf4cbc7197c8af680779b",
+    "cae0d915f2e7f78bae0594675fe8078bc536e5b86856abbc6375e5a48d5ab863"
+  ],
+  "initial_replay_wall_s": 0.000886125024408102,
+  "instance_hash": "f930a91e6393",
+  "iterations": [
+    {
+      "gap": 0.00039859693877630775,
+      "lb_best": 17.799744897959172,
+      "lower": 17.799744897959172,
+      "master_dual_price": [
+        -0.0,
+        1.3035714285714324,
+        1.3035714285714324,
+        -0.0
+      ],
+      "oracle_call": 1,
+      "pwl_slack": 0.00039859693877630775,
+      "reduced_lower": 1.4210854715202004e-14,
+      "reduced_upper": 3.552713678800501e-15,
+      "sigma": 23.03571428571431,
+      "upper": 17.80014349489795
+    }
+  ],
+  "last_clean_price": [
+    -0.0,
+    1.3035714285714324,
+    1.3035714285714324,
+    -0.0
+  ],
+  "lower": 17.799744897959172,
+  "market": {
+    "U": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "a": [
+      0.3,
+      0.09999999999999998,
+      0.5,
+      0.3
+    ],
+    "b": [
+      0.2,
+      0.2,
+      0.2,
+      0.2
+    ]
+  },
+  "market_hash": "eb840e523f2cc25a5362d515bf5bfa7330bbf5cb4a4e19959a16549dd219c482",
+  "master_events": [
+    {
+      "L": [
+        0.0,
+        6.026785714285767,
+        3.973214285714224,
+        0.0
+      ],
+      "lambdas": [
+        0.3973214285714228,
+        0.6026785714285773,
+        0.0,
+        0.0
+      ],
+      "master_solves": [
+        {
+          "backend": "CBC",
+          "bound": 17.73469387755101,
+          "mip_gap": 0.0,
+          "n_constrs": 37,
+          "n_int": 0,
+          "n_vars": 12,
+          "obj": 17.73469387755101,
+          "solve_id": "retained_shift-s3-i0-r0",
+          "status": "OPTIMAL",
+          "threads": 1,
+          "wall_s": 0.0048220157623291016
+        },
+        {
+          "backend": "CBC",
+          "bound": 17.77551020408162,
+          "mip_gap": 0.0,
+          "n_constrs": 41,
+          "n_int": 0,
+          "n_vars": 12,
+          "obj": 17.77551020408162,
+          "solve_id": "retained_shift-s3-i0-r1",
+          "status": "OPTIMAL",
+          "threads": 1,
+          "wall_s": 0.004642009735107422
+        },
+        {
+          "backend": "CBC",
+          "bound": 17.795918367346925,
+          "mip_gap": 0.0,
+          "n_constrs": 45,
+          "n_int": 0,
+          "n_vars": 12,
+          "obj": 17.795918367346925,
+          "solve_id": "retained_shift-s3-i0-r2",
+          "status": "OPTIMAL",
+          "threads": 1,
+          "wall_s": 0.006239891052246094
+        },
+        {
+          "backend": "CBC",
+          "bound": 17.798469387755087,
+          "mip_gap": 0.0,
+          "n_constrs": 49,
+          "n_int": 0,
+          "n_vars": 12,
+          "obj": 17.798469387755087,
+          "solve_id": "retained_shift-s3-i0-r3",
+          "status": "OPTIMAL",
+          "threads": 1,
+          "wall_s": 0.0060961246490478516
+        },
+        {
+          "backend": "CBC",
+          "bound": 17.799744897959172,
+          "mip_gap": 0.0,
+          "n_constrs": 53,
+          "n_int": 0,
+          "n_vars": 12,
+          "obj": 17.799744897959172,
+          "solve_id": "retained_shift-s3-i0-r4",
+          "status": "OPTIMAL",
+          "threads": 1,
+          "wall_s": 0.0072290897369384766
+        }
+      ],
+      "master_wall_s": 0.029029130935668945,
+      "n_refinements": 4,
+      "pi": [
+        0.0,
+        -1.3035714285714324,
+        -1.3035714285714324,
+        0.0
+      ],
+      "sigma": 23.03571428571431,
+      "tangent_points": [
+        [
+          0.0,
+          6.428571428571426,
+          3.5714285714285654,
+          0.0
+        ],
+        [
+          0.0,
+          6.07142857142857,
+          3.92857142857142,
+          0.0
+        ],
+        [
+          0.0,
+          5.892857142857139,
+          4.107142857142852,
+          0.0
+        ],
+        [
+          0.0,
+          5.98214285714283,
+          4.017857142857161,
+          0.0
+        ]
+      ],
+      "ub": 17.80014349489795,
+      "z_model": 17.799744897959172
+    }
+  ],
+  "max_load_error": 0.02678571428577703,
+  "native_solves": [
+    {
+      "backend": "CBC",
+      "bound": 19.035714285714214,
+      "elapsed_s": 0.0059517077170312405,
+      "extra": {
+        "threads": 1
+      },
+      "lp_mip_gap_abs": 9.035714285714214,
+      "lp_obj": 10.0,
+      "lp_wall_s": 0.0029680728912353516,
+      "max_mip_gap": 1e-09,
+      "mip_gap": 0.0,
+      "model": "evsp",
+      "model_time_cap_s": 10,
+      "n_constrs": 26,
+      "n_int": 9,
+      "n_vars": 19,
+      "obj": 19.035714285714214,
+      "status": "OPTIMAL",
+      "time_limit_s": 10,
+      "wall_s": 0.0029211044311523438
+    },
+    {
+      "backend": "CBC",
+      "bound": 17.73469387755101,
+      "elapsed_s": 0.004848542157560587,
+      "extra": {
+        "threads": 1
+      },
+      "lp_mip_gap_abs": null,
+      "lp_obj": null,
+      "lp_wall_s": 0.0,
+      "max_mip_gap": 1e-06,
+      "mip_gap": 0.0,
+      "model": "b2a2-rmp",
+      "model_time_cap_s": 10,
+      "n_constrs": 37,
+      "n_int": 0,
+      "n_vars": 12,
+      "obj": 17.73469387755101,
+      "status": "OPTIMAL",
+      "time_limit_s": 10,
+      "wall_s": 0.0048220157623291016
+    },
+    {
+      "backend": "CBC",
+      "bound": 17.77551020408162,
+      "elapsed_s": 0.004667207598686218,
+      "extra": {
+        "threads": 1
+      },
+      "lp_mip_gap_abs": null,
+      "lp_obj": null,
+      "lp_wall_s": 0.0,
+      "max_mip_gap": 1e-06,
+      "mip_gap": 0.0,
+      "model": "b2a2-rmp",
+      "model_time_cap_s": 10,
+      "n_constrs": 41,
+      "n_int": 0,
+      "n_vars": 12,
+      "obj": 17.77551020408162,
+      "status": "OPTIMAL",
+      "time_limit_s": 10,
+      "wall_s": 0.004642009735107422
+    },
+    {
+      "backend": "CBC",
+      "bound": 17.795918367346925,
+      "elapsed_s": 0.006270249839872122,
+      "extra": {
+        "threads": 1
+      },
+      "lp_mip_gap_abs": null,
+      "lp_obj": null,
+      "lp_wall_s": 0.0,
+      "max_mip_gap": 1e-06,
+      "mip_gap": 0.0,
+      "model": "b2a2-rmp",
+      "model_time_cap_s": 10,
+      "n_constrs": 45,
+      "n_int": 0,
+      "n_vars": 12,
+      "obj": 17.795918367346925,
+      "status": "OPTIMAL",
+      "time_limit_s": 10,
+      "wall_s": 0.006239891052246094
+    },
+    {
+      "backend": "CBC",
+      "bound": 17.798469387755087,
+      "elapsed_s": 0.006126249674707651,
+      "extra": {
+        "threads": 1
+      },
+      "lp_mip_gap_abs": null,
+      "lp_obj": null,
+      "lp_wall_s": 0.0,
+      "max_mip_gap": 1e-06,
+      "mip_gap": 0.0,
+      "model": "b2a2-rmp",
+      "model_time_cap_s": 10,
+      "n_constrs": 49,
+      "n_int": 0,
+      "n_vars": 12,
+      "obj": 17.798469387755087,
+      "status": "OPTIMAL",
+      "time_limit_s": 10,
+      "wall_s": 0.0060961246490478516
+    },
+    {
+      "backend": "CBC",
+      "bound": 17.799744897959172,
+      "elapsed_s": 0.0072585418820381165,
+      "extra": {
+        "threads": 1
+      },
+      "lp_mip_gap_abs": null,
+      "lp_obj": null,
+      "lp_wall_s": 0.0,
+      "max_mip_gap": 1e-06,
+      "mip_gap": 0.0,
+      "model": "b2a2-rmp",
+      "model_time_cap_s": 10,
+      "n_constrs": 53,
+      "n_int": 0,
+      "n_vars": 12,
+      "obj": 17.799744897959172,
+      "status": "OPTIMAL",
+      "time_limit_s": 10,
+      "wall_s": 0.0072290897369384766
+    },
+    {
+      "backend": "CBC",
+      "bound": 23.035714285714324,
+      "elapsed_s": 0.002773541957139969,
+      "extra": {
+        "threads": 1
+      },
+      "lp_mip_gap_abs": 13.035714285714324,
+      "lp_obj": 10.0,
+      "lp_wall_s": 0.0002868175506591797,
+      "max_mip_gap": 1e-09,
+      "mip_gap": 0.0,
+      "model": "evsp",
+      "model_time_cap_s": 10,
+      "n_constrs": 26,
+      "n_int": 9,
+      "n_vars": 19,
+      "obj": 23.035714285714324,
+      "status": "OPTIMAL",
+      "time_limit_s": 10,
+      "wall_s": 0.0024640560150146484
+    }
+  ],
+  "oracle_calls": 2,
+  "oracle_events": [
+    {
+      "call": 0,
+      "column_key": "cae0d915f2e7f78bae0594675fe8078bc536e5b86856abbc6375e5a48d5ab863",
+      "elapsed_s": 0.0475146658718586,
+      "lower": 19.035714285714214,
+      "novel": false,
+      "prices": [
+        0.0,
+        0.9035714285714214,
+        1.7035714285714216,
+        0.0
+      ],
+      "purpose": "analytic_proposal",
+      "replay_ok": true,
+      "solver": {
+        "backend": "CBC",
+        "bound": 19.035714285714214,
+        "extra": {
+          "load_reconstruction": {
+            "max_abs_residual_kwh": 0.0,
+            "max_abs_residual_slot": 0,
+            "physical_min_kwh": 0.0,
+            "policy_version": 1,
+            "raw_load_kwh": [
+              0.0,
+              9.999999999999998,
+              0.0,
+              0.0
+            ],
+            "raw_min_kwh": 0.0,
+            "residual_kwh": [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "tolerance_kwh": 0.0001
+          },
+          "pricing_objective_reconstruction": {
+            "abs_adjustment": 0.0,
+            "model_obj": 19.035714285714214,
+            "physical_obj": 19.035714285714214,
+            "policy_version": 1,
+            "prices": [
+              0.0,
+              0.9035714285714214,
+              1.7035714285714216,
+              0.0
+            ]
+          },
+          "threads": 1
+        },
+        "lp_mip_gap_abs": 9.035714285714214,
+        "lp_obj": 10.0,
+        "lp_wall_s": 0.0029680728912353516,
+        "max_mip_gap": 1e-09,
+        "mip_gap": 0.0,
+        "n_constrs": 26,
+        "n_int": 9,
+        "n_vars": 19,
+        "obj": 19.035714285714214,
+        "status": "OPTIMAL",
+        "time_limit_s": 10,
+        "wall_s": 0.0029211044311523438
+      },
+      "upper": 19.035714285714214,
+      "used_for_lower_bound": false
+    },
+    {
+      "call": 1,
+      "column_key": "c3702ea0af34d53d6a9e70c0a36f28e0e5efe4aea8ee1fd94a6d71da22e03d82",
+      "elapsed_s": 0.0034486246295273304,
+      "lower": 23.035714285714324,
+      "novel": false,
+      "prices": [
+        -0.0,
+        1.3035714285714324,
+        1.3035714285714324,
+        -0.0
+      ],
+      "purpose": "clean",
+      "replay_ok": true,
+      "solver": {
+        "backend": "CBC",
+        "bound": 23.035714285714324,
+        "extra": {
+          "load_reconstruction": {
+            "max_abs_residual_kwh": 0.0,
+            "max_abs_residual_slot": 0,
+            "physical_min_kwh": 0.0,
+            "policy_version": 1,
+            "raw_load_kwh": [
+              0.0,
+              0.0,
+              9.999999999999991,
+              0.0
+            ],
+            "raw_min_kwh": 0.0,
+            "residual_kwh": [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "tolerance_kwh": 0.0001
+          },
+          "pricing_objective_reconstruction": {
+            "abs_adjustment": 1.0658141036401503e-14,
+            "model_obj": 23.035714285714324,
+            "physical_obj": 23.035714285714313,
+            "policy_version": 1,
+            "prices": [
+              0.0,
+              1.3035714285714324,
+              1.3035714285714324,
+              0.0
+            ]
+          },
+          "threads": 1
+        },
+        "lp_mip_gap_abs": 13.035714285714324,
+        "lp_obj": 10.0,
+        "lp_wall_s": 0.0002868175506591797,
+        "max_mip_gap": 1e-09,
+        "mip_gap": 0.0,
+        "n_constrs": 26,
+        "n_int": 9,
+        "n_vars": 19,
+        "obj": 23.035714285714324,
+        "status": "OPTIMAL",
+        "time_limit_s": 10,
+        "wall_s": 0.0024640560150146484
+      },
+      "upper": 23.035714285714313,
+      "used_for_lower_bound": true
+    }
+  ],
+  "previous_state": {
+    "digest": "a358ebbafe9cbd26518fc0e23ce3bf41474b4e9e733a55a74065c9dbaf858ea7",
+    "index": 2
+  },
+  "proposal": {
+    "call": 0,
+    "column_key": "cae0d915f2e7f78bae0594675fe8078bc536e5b86856abbc6375e5a48d5ab863",
+    "elapsed_s": 0.0475146658718586,
+    "lower": 19.035714285714214,
+    "novel": false,
+    "prices": [
+      0.0,
+      0.9035714285714214,
+      1.7035714285714216,
+      0.0
+    ],
+    "purpose": "analytic_proposal",
+    "replay_ok": true,
+    "solver": {
+      "backend": "CBC",
+      "bound": 19.035714285714214,
+      "extra": {
+        "load_reconstruction": {
+          "max_abs_residual_kwh": 0.0,
+          "max_abs_residual_slot": 0,
+          "physical_min_kwh": 0.0,
+          "policy_version": 1,
+          "raw_load_kwh": [
+            0.0,
+            9.999999999999998,
+            0.0,
+            0.0
+          ],
+          "raw_min_kwh": 0.0,
+          "residual_kwh": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "tolerance_kwh": 0.0001
+        },
+        "pricing_objective_reconstruction": {
+          "abs_adjustment": 0.0,
+          "model_obj": 19.035714285714214,
+          "physical_obj": 19.035714285714214,
+          "policy_version": 1,
+          "prices": [
+            0.0,
+            0.9035714285714214,
+            1.7035714285714216,
+            0.0
+          ]
+        },
+        "threads": 1
+      },
+      "lp_mip_gap_abs": 9.035714285714214,
+      "lp_obj": 10.0,
+      "lp_wall_s": 0.0029680728912353516,
+      "max_mip_gap": 1e-09,
+      "mip_gap": 0.0,
+      "n_constrs": 26,
+      "n_int": 9,
+      "n_vars": 19,
+      "obj": 19.035714285714214,
+      "status": "OPTIMAL",
+      "time_limit_s": 10,
+      "wall_s": 0.0029211044311523438
+    },
+    "upper": 19.035714285714214,
+    "used_for_lower_bound": false
+  },
+  "runtime": {
+    "machine": "arm64",
+    "platform": "macOS-26.5.2-arm64-arm-64bit",
+    "selected_cbc_library": {
+      "path": "/Users/nadan/Documents/ChatGPT/egg/.research-venv-repaired-1176/lib/python3.12/site-packages/cbcbox/cbc_dist/lib/libCbc.dylib",
+      "sha256": "fe44771023b133390daf7b72790c2ce65d1ccb2e5ac77c7a04c8d8f8648aff7d"
+    },
+    "versions": {
+      "cbcbox": "2.929",
+      "mip": "1.17.6",
+      "numpy": "2.5.3"
+    }
+  },
+  "schema": "egg-reuse-qualification-v1",
+  "solver_wall_s": 0.03766918182373047,
+  "state_index": 3,
+  "status": "certified",
+  "upper": 17.80014349489795,
+  "worker_cpu_s": 0.091087,
+  "worker_wall_s": 0.10118204215541482
+}

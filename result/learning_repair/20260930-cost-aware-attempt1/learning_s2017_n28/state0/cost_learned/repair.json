@@ -1,0 +1,231 @@
+{
+  "repair_wall_seconds": 1.0698527990025468,
+  "result": {
+    "case_identity": "d90b4d889fae5f3df4d9b254b87053333f00da48bbe71e258445840fcc4eb8d0",
+    "charging_subproblem": "fixed-binary native linear program",
+    "cover": {
+      "cover_objective": 3.9937991468518885,
+      "logit_scale": 0.00014201831228309247,
+      "meaning": "legal path cover only; battery and charging not yet checked",
+      "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+      "minimum_bus_count_scope": "declared structural route covers, ignoring charging",
+      "mip_gap": 0.0,
+      "mip_gap_raw": "0.0",
+      "mip_node_count": 1,
+      "native_minimum_bus_count_reported": true,
+      "objective_policy": "cost_learned",
+      "pullout_count": 4,
+      "random_seed": 0,
+      "score": 43.66234923107066,
+      "selected_movements": [
+        "out_T01",
+        "out_T03",
+        "out_T05",
+        "out_T09",
+        "in_T16",
+        "in_T24",
+        "in_T26",
+        "in_T28",
+        "direct_T01_T02",
+        "direct_T02_T07",
+        "direct_T03_T04",
+        "depot_T04_T17",
+        "direct_T05_T06",
+        "direct_T06_T11",
+        "direct_T07_T08",
+        "direct_T08_T13",
+        "direct_T09_T10",
+        "direct_T10_T15",
+        "direct_T11_T14",
+        "direct_T12_T21",
+        "direct_T13_T12",
+        "direct_T14_T19",
+        "direct_T15_T16",
+        "direct_T17_T18",
+        "direct_T18_T23",
+        "direct_T19_T20",
+        "direct_T20_T25",
+        "direct_T21_T22",
+        "direct_T22_T27",
+        "direct_T23_T24",
+        "direct_T25_T26",
+        "direct_T27_T28"
+      ],
+      "status": 0,
+      "threads": 1,
+      "vehicles": [
+        {
+          "movements": [
+            "out_T01",
+            "direct_T01_T02",
+            "direct_T02_T07",
+            "direct_T07_T08",
+            "direct_T08_T13",
+            "direct_T13_T12",
+            "direct_T12_T21",
+            "direct_T21_T22",
+            "direct_T22_T27",
+            "direct_T27_T28",
+            "in_T28"
+          ],
+          "trips": [
+            "T01",
+            "T02",
+            "T07",
+            "T08",
+            "T13",
+            "T12",
+            "T21",
+            "T22",
+            "T27",
+            "T28"
+          ],
+          "vehicle": 0
+        },
+        {
+          "movements": [
+            "out_T03",
+            "direct_T03_T04",
+            "depot_T04_T17",
+            "direct_T17_T18",
+            "direct_T18_T23",
+            "direct_T23_T24",
+            "in_T24"
+          ],
+          "trips": [
+            "T03",
+            "T04",
+            "T17",
+            "T18",
+            "T23",
+            "T24"
+          ],
+          "vehicle": 1
+        },
+        {
+          "movements": [
+            "out_T05",
+            "direct_T05_T06",
+            "direct_T06_T11",
+            "direct_T11_T14",
+            "direct_T14_T19",
+            "direct_T19_T20",
+            "direct_T20_T25",
+            "direct_T25_T26",
+            "in_T26"
+          ],
+          "trips": [
+            "T05",
+            "T06",
+            "T11",
+            "T14",
+            "T19",
+            "T20",
+            "T25",
+            "T26"
+          ],
+          "vehicle": 2
+        },
+        {
+          "movements": [
+            "out_T09",
+            "direct_T09_T10",
+            "direct_T10_T15",
+            "direct_T15_T16",
+            "in_T16"
+          ],
+          "trips": [
+            "T09",
+            "T10",
+            "T15",
+            "T16"
+          ],
+          "vehicle": 3
+        }
+      ],
+      "wall_seconds": 0.014759741956368089
+    },
+    "cover_policy": "cost_learned",
+    "failure": {
+      "message": "Fixed-route charging has no native incumbent: INFEASIBLE",
+      "stage": "charging",
+      "type": "RepairStageFailure"
+    },
+    "inference_attempted": true,
+    "inference_performed": true,
+    "market_identity": "4b9d8b8654d56985e2be9a131308d0adac10433e24f0c7f2deadf9465ab61a5c",
+    "native_stats": {
+      "backend": "GRB",
+      "backend_runtime": {
+        "model_solver_name": "GRB",
+        "native_library_path": "/home/nc437/evsp_env/lib/python3.12/site-packages/gurobipy/_attrutil.cpython-312-x86_64-linux-gnu.so",
+        "native_library_sha256": "57f87a886aa5a1fd8356494fa1b81e9f9c7d957c898d09e96145440c76c762b7",
+        "requested": "GRB",
+        "solver_class": "SolverGurobi",
+        "solver_module": "mip.gurobi"
+      },
+      "incumbent": null,
+      "lower_bound": null,
+      "n_constraints": 7736,
+      "n_int": 715,
+      "n_vars": 6235,
+      "physical_constraints": 7736,
+      "raw_incumbent_repr": "None",
+      "raw_lower_bound_repr": "None",
+      "seconds_cap": 45.0,
+      "status": "INFEASIBLE",
+      "threads": 1,
+      "wall_s": 0.015697568014729768
+    },
+    "policy": "route-cover-fixed-charge-repair-v1",
+    "raw_topology": [
+      "direct_T01_T02",
+      "direct_T02_T07",
+      "direct_T03_T04",
+      "direct_T05_T06",
+      "direct_T06_T11",
+      "direct_T07_T06",
+      "direct_T07_T08",
+      "direct_T08_T11",
+      "direct_T09_T10",
+      "direct_T11_T12",
+      "direct_T13_T12",
+      "direct_T13_T14",
+      "direct_T14_T19",
+      "direct_T15_T16",
+      "direct_T17_T18",
+      "direct_T18_T23",
+      "direct_T19_T20",
+      "direct_T20_T25",
+      "direct_T21_T22",
+      "direct_T22_T27",
+      "direct_T23_T24",
+      "direct_T25_T26",
+      "direct_T27_T28",
+      "in_T04",
+      "in_T10",
+      "in_T12",
+      "in_T14",
+      "in_T16",
+      "in_T22",
+      "in_T24",
+      "in_T26",
+      "in_T28",
+      "out_T01",
+      "out_T03",
+      "out_T05",
+      "out_T09",
+      "out_T13",
+      "out_T15",
+      "out_T17",
+      "out_T21"
+    ],
+    "repair_status": "fallback",
+    "timing_seconds": {
+      "charging_and_replay": 0.5527779709664173,
+      "cover": 0.4398178920382634,
+      "topology": 0.07587463996605948,
+      "total": 1.0698155759600922
+    }
+  }
+}

@@ -1,0 +1,18 @@
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/src/experiments/cf1_entry_repaired.py", line 357, in <module>
+    main()
+  File "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/src/experiments/cf1_entry_repaired.py", line 351, in main
+    result = {'freeze': freeze, 'run': run, 'analyze': analyze, 'worker': worker}[args.command](args)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/src/experiments/cf1_entry_repaired.py", line 193, in run
+    return run_prepared(args, roots=roots, owner_gate=owner)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/src/experiments/cf1_entry_repaired.py", line 207, in run_prepared
+    prepare_new_output(args.output, **roots)
+  File "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/src/experiments/launch_entry_preparation.py", line 113, in prepare_new_output
+    _account(account, lock, roots, expected_policy, expected_cumulative_charge_s)
+  File "/Users/nadan/Documents/ChatGPT/egg/ml-prediction-20261017/src/experiments/launch_entry_preparation.py", line 80, in _account
+    raise ValueError("Accounting limits or next-worker funding differ from installed policy")
+ValueError: Accounting limits or next-worker funding differ from installed policy

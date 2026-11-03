@@ -1,0 +1,52 @@
+{
+  "arms": [
+    "cold",
+    "retained",
+    "retained_shift"
+  ],
+  "epsilon": 0.01,
+  "fixture": {
+    "U": 0.0,
+    "a_level": 0.3,
+    "all_locations": "D",
+    "b": 0.2,
+    "battery_kwh": 20.0,
+    "charge_power_kw": 10.0,
+    "dh_cost_per_min": 1.0,
+    "max_vehicles": 1,
+    "n_slots": 4,
+    "name": "seed-free-two-trip-two-window-reuse",
+    "slot_min": 60,
+    "soc0_kwh": 20.0,
+    "soc_end_kwh": 0.0,
+    "soc_min_kwh": 0.0,
+    "trip_energy_kwh": 15.0,
+    "trip_intervals_min": [
+      [
+        0,
+        60
+      ],
+      [
+        180,
+        240
+      ]
+    ],
+    "vehicle_fixed_cost": 10.0
+  },
+  "pool_cap": 96,
+  "pricing_call_cap": 24,
+  "pricing_mip_gap": 1e-09,
+  "process_cap_s": 300,
+  "pwl_tol": 0.001,
+  "schema": "egg-reuse-qualification-v1",
+  "seed": null,
+  "solve_cap_s": 10,
+  "state_cap_s": 40,
+  "tariff_tilts": [
+    0.0,
+    0.0,
+    0.2,
+    -0.2
+  ],
+  "threads": 1
+}

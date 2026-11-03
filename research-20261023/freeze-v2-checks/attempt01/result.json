@@ -1,0 +1,89 @@
+{
+  "attempt_id": "attempt01",
+  "revision": 2,
+  "returncode": 0,
+  "failure": null,
+  "secondary_errors": [],
+  "termination": {
+    "owned_pgids": [
+      43046,
+      43064,
+      43099
+    ],
+    "leader_returncode": 0,
+    "reaped": true,
+    "group_absent": true,
+    "surviving_pgids": [],
+    "group_states": [
+      {
+        "pgid": 43046,
+        "state": "absent"
+      },
+      {
+        "pgid": 43064,
+        "state": "absent"
+      },
+      {
+        "pgid": 43099,
+        "state": "absent"
+      }
+    ],
+    "probe_diagnostics": [],
+    "cleanup_errors": [],
+    "cleanup_deadline": 6005692.37582625,
+    "helper_result": {
+      "pgid": 43046,
+      "owned_pgids": [
+        43046,
+        43064,
+        43099
+      ],
+      "group_absent": true,
+      "returncode": 0,
+      "probe_diagnostics": [],
+      "cleanup_errors": [],
+      "group_states": [
+        {
+          "pgid": 43046,
+          "state": "absent"
+        },
+        {
+          "pgid": 43064,
+          "state": "absent"
+        },
+        {
+          "pgid": 43099,
+          "state": "absent"
+        }
+      ],
+      "cleanup_deadline": 6005692.37582625
+    }
+  },
+  "source_changes": [],
+  "passed": true,
+  "sampled_peak_rss_bytes": 97632256,
+  "elapsed_allocation_s": 2.5343006663024426,
+  "sampled_process_tree_cpu_s": 0.49,
+  "observed_children_cpu_s": 2.011642,
+  "monitor_child_cpu_s": 1.4538130000000011,
+  "charged_allocation_s": 2.5343006663024426,
+  "supervisor_cpu_s": 0.40044500000000005,
+  "charged_cpu_s": 2.9347456663024425,
+  "accounting_observations_complete": true,
+  "stdout_sha256": "9416d6e4d50c3bbfe55c5be4929f53ac1e46cf2b82ad28d929d5de9a92d265c2",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "artifact_hashes": {
+    "attempt.json": "11b785ec1319e8733b8776126a4ef87ca729e50a55e1de7cf3bb017ac32c2244",
+    "owned-test-groups.jsonl": "33ee88350b0cc6d0bae0ae629c710ea14b5d4e17a909ddafe60e717aeec3a12d",
+    "ownership.jsonl": "a5688f05573d3c9b7d02ebd59b45d6707e2e3d44ec6e1880d2cfbb45819c0c27",
+    "resources.jsonl": "088d24f06969971535b2eaacccbd5dabd6fb23891aa26b300f6238789a1c7a35",
+    "stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdout.log": "9416d6e4d50c3bbfe55c5be4929f53ac1e46cf2b82ad28d929d5de9a92d265c2"
+  },
+  "cumulative_qualification_charge_s": 721.7986948764081,
+  "administration_scope": "No new allowance; prior single shared 20 seconds already included",
+  "hard_ceiling_s": 1800.0,
+  "dispatch_stop_s": 1620.0,
+  "shutdown_reserve_s": 180.0,
+  "scope": "One freeze-v2 solver-free check; no freeze or native launch follows automatically"
+}
