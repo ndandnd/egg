@@ -104,7 +104,7 @@ def wholesale(fleet,lines,prices):
 
 
 def snapshot(point):
-    return {k:point.get(k) for k in ("status","error","physical_pass","early_kwh","fleet_kwh",
+    return {k:point.get(k) for k in ("status","error","native_details","physical_pass","early_kwh","fleet_kwh",
             "fee_eur","grid_cost","objective","native_bound","energy_residual_kwh",
             "fee_residual_eur","depot_price_per_mwh")}
 

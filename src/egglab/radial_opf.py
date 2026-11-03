@@ -39,7 +39,7 @@ def conic_options(solver):
         return dict(direct_solve_method="qdldl", max_iter=500, tol_feas=1e-10,
                     tol_gap_abs=1e-10, tol_gap_rel=1e-10)
     if solver == "GUROBI":
-        return dict(Threads=1, QCPDual=1, BarQCPConvTol=1e-10, FeasibilityTol=1e-9,
+        return dict(Threads=1, QCPDual=1, BarQCPConvTol=1e-8, FeasibilityTol=1e-9,
                     OptimalityTol=1e-9, OutputFlag=0)
     raise ValueError("choose CLARABEL or GUROBI")
 
