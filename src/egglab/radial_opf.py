@@ -1,8 +1,9 @@
-"""Balanced radial series-line OPF for one delivery interval.
+"""Balanced radial branch-flow OPF for one delivery interval.
 
 Edges are oriented from parent to child. Positive nodal demand consumes power.
-The model prices a fixed network topology. No shunts, taps or phase imbalance
-are implicit in this feeder representation.
+Fixed taps, branch pi shunts, and bus shunts are optional. Voltage angles are
+free on this single-slack tree. Fixed transformer phase shifts affect recovered
+angles but disappear from squared magnitudes and complex power balances.
 """
 
 from __future__ import annotations
@@ -35,13 +36,27 @@ def _index(value):
 
 def solve_radial(parent, r, x, p_mw, q_mvar, *, base_mva=1., price=50.,
                  curvature=0., hours=1., vmin=.90, vmax=1.10, imax_pu=None,
-                 pwl=None, linearized=False, backup=None, root_import_cap_mw=None):
+                 pwl=None, linearized=False, backup=None, root_import_cap_mw=None,
+                 slack_vm_pu=1., tap_ratio=1., g_from_pu=0., b_from_pu=0.,
+                 g_to_pu=0., b_to_pu=0., imax_from_pu=None, imax_to_pu=None,
+                 g_bus_pu=0., b_bus_pu=0.):
     """Return CLARABEL's status, a primal witness, balance prices and residuals.
 
     Buses are ordered 0..n-1. parent[j-1] is upstream of bus j. r and x are
     per-unit series impedances on base_mva. vmin and vmax bound voltage
     magnitudes. imax_pu bounds series current magnitude, with None or +inf
     denoting an absent limit. Each bound may be a scalar or a full vector.
+
+    tap_ratio is the fixed positive turns ratio on the per-unit voltage bases,
+    with transformed sending voltage W = V_parent / tap (phase omitted).
+    The series impedance joins W to V_child. The from/to shunt admittances
+    g + jb are attached at W and V_child respectively, so positive b injects
+    reactive power. g_bus_pu and b_bus_pu are additional nodal admittances.
+    imax_from_pu and imax_to_pu bound terminal currents in their respective
+    bus bases, including excitation/charging current. Terminal powers are
+    positive into the branch. current_sq_pu is the series squared current.
+    loss_mw includes all shunt conductances in addition to series losses.
+    The linearized model omits series losses and the quadratic voltage term.
 
     The slack buys signed MW at marginal price price + curvature * import_mw.
     Alternatively pwl=(break_mw, left_slope, right_slope) specifies a convex
@@ -67,10 +82,35 @@ def solve_radial(parent, r, x, p_mw, q_mvar, *, base_mva=1., price=50.,
     q = _vector(q_mvar, n, "q_mvar")
     low = _vector(vmin, n, "vmin", allow_scalar=True)
     high = _vector(vmax, n, "vmax", allow_scalar=True)
-    limits = _vector(np.inf if imax_pu is None else imax_pu, n - 1, "imax_pu",
-                     allow_scalar=True, allow_infinity=True)
-    if np.any(r < 0) or np.any(x < 0) or np.any(limits < 0):
-        raise ValueError("impedances and current ratings must be nonnegative")
+    tap = _vector(tap_ratio, n - 1, "tap_ratio", allow_scalar=True)
+    if np.any(tap <= 0) or not np.isfinite(slack_vm_pu) or slack_vm_pu <= 0:
+        raise ValueError("tap ratios and slack magnitude must be finite and positive")
+    g_from = _vector(g_from_pu, n - 1, "g_from_pu", allow_scalar=True)
+    b_from = _vector(b_from_pu, n - 1, "b_from_pu", allow_scalar=True)
+    g_to = _vector(g_to_pu, n - 1, "g_to_pu", allow_scalar=True)
+    b_to = _vector(b_to_pu, n - 1, "b_to_pu", allow_scalar=True)
+    # Collect the pi terminal shunts into the bus balances. The sending-side
+    # shunt draws (g - jb) |V_parent|² / tap². The ideal tap consumes no power.
+    shunt_g = _vector(g_bus_pu, n, "g_bus_pu", allow_scalar=True).copy()
+    shunt_b = _vector(b_bus_pu, n, "b_bus_pu", allow_scalar=True).copy()
+    parent_idx = np.asarray(parents, dtype=int)
+    np.add.at(shunt_g, parent_idx, g_from / tap**2)
+    np.add.at(shunt_b, parent_idx, b_from / tap**2)
+    shunt_g[1:] += g_to
+    shunt_b[1:] += b_to
+
+    def ratings(values, name):
+        values = _vector(np.inf if values is None else values, n - 1, name,
+                         allow_scalar=True, allow_infinity=True)
+        if np.any(values < 0):
+            raise ValueError(f"{name} must be nonnegative")
+        return values
+
+    limits = ratings(imax_pu, "imax_pu")
+    limits_from = ratings(imax_from_pu, "imax_from_pu")
+    limits_to = ratings(imax_to_pu, "imax_to_pu")
+    if np.any(r < 0) or np.any(x < 0):
+        raise ValueError("series impedance components must be nonnegative")
     if np.any(low <= 0) or np.any(low > high):
         raise ValueError("voltage bounds require 0 < vmin <= vmax")
     if not np.all(np.isfinite([base_mva, price, curvature, hours])):
@@ -81,11 +121,11 @@ def solve_radial(parent, r, x, p_mw, q_mvar, *, base_mva=1., price=50.,
         raise ValueError("supply a finite signed root import cap or None")
 
     # Index 0 of each incoming vector denotes the slack injection. Entry j>0
-    # denotes the sending end of the line terminating at bus j.
+    # denotes the series-element input, excluding both terminal shunts.
     incoming_p = cp.Variable(n, name="incoming_P_pu")
     incoming_q = cp.Variable(n, name="incoming_Q_pu")
     v = cp.Variable(n, name="voltage_squared")
-    constraints = [v[0] == 1., v >= low**2, v <= high**2]
+    constraints = [v[0] == slack_vm_pu**2, v >= low**2, v <= high**2]
     import_mw = incoming_p[0] * base_mva
     if root_import_cap_mw is not None:
         constraints.append(import_mw <= root_import_cap_mw)
@@ -116,28 +156,51 @@ def solve_radial(parent, r, x, p_mw, q_mvar, *, base_mva=1., price=50.,
     for j in range(n):
         required_p = p[j] / base_mva + sum(incoming_p[k] for k in children[j])
         required_q = q[j] / base_mva + sum(incoming_q[k] for k in children[j])
+        if shunt_g[j]:
+            required_p += shunt_g[j] * v[j]
+        if shunt_b[j]:
+            required_q -= shunt_b[j] * v[j]
         if j == backup_bus:
             required_p -= g / base_mva
         if j:
             edge = j - 1
             i = parents[edge]
+            w = v[i] if tap[edge] == 1. else v[i] / tap[edge]**2
             drop = 2 * (r[edge] * incoming_p[j] + x[edge] * incoming_q[j])
-            v_child = v[i] - drop
+            v_child = w - drop
             if not linearized and (r[edge] or x[edge]):
                 ell = cp.Variable(nonneg=True, name=f"current_squared_{j}")
                 series_current[j] = ell
                 required_p += r[edge] * ell
                 required_q += x[edge] * ell
                 v_child += (r[edge]**2 + x[edge]**2) * ell
-                constraints.append(cp.SOC(v[i] + ell, cp.hstack([
-                    2 * incoming_p[j], 2 * incoming_q[j], v[i] - ell])))
+                constraints.append(cp.SOC(w + ell, cp.hstack([
+                    2 * incoming_p[j], 2 * incoming_q[j], w - ell])))
                 if np.isfinite(limits[edge]):
                     constraints.append(ell <= limits[edge]**2)
-            elif np.isfinite(limits[edge]):
-                # In the linearized or ideal branch, eliminate the current
-                # variable but still enforce S^2 <= v_parent * Imax^2.
-                constraints.append(cp.norm(cp.hstack([incoming_p[j], incoming_q[j]])) <=
-                                   limits[edge] * cp.sqrt(v[i]))
+                # If U_child = W - zI, the terminal currents are
+                # (I + y_from W)/tap and -I + y_to U_child (angle gauge).
+                # Their squared norms are affine in the lifted variables.
+                if np.isfinite(limits_from[edge]):
+                    cross = g_from[edge] * incoming_p[j] - b_from[edge] * incoming_q[j]
+                    y_sq = g_from[edge]**2 + b_from[edge]**2
+                    constraints.append(ell + 2*cross + y_sq*w <=
+                                       (limits_from[edge] * tap[edge])**2)
+                if np.isfinite(limits_to[edge]):
+                    cross = (g_to[edge] * (incoming_p[j] - r[edge]*ell)
+                             - b_to[edge] * (incoming_q[j] - x[edge]*ell))
+                    y_sq = g_to[edge]**2 + b_to[edge]**2
+                    constraints.append(ell - 2*cross + y_sq*v[j] <= limits_to[edge]**2)
+            else:
+                # No free current variable for an ideal or linearized edge.
+                for limit, vp, real, imag in (
+                    (limits[edge], w, incoming_p[j], incoming_q[j]),
+                    (limits_from[edge], v[i], incoming_p[j] + g_from[edge]*w,
+                     incoming_q[j] - b_from[edge]*w),
+                    (limits_to[edge], v[j], -incoming_p[j] + g_to[edge]*v[j],
+                     -incoming_q[j] - b_to[edge]*v[j])):
+                    if np.isfinite(limit):
+                        constraints.append(cp.norm(cp.hstack([real, imag])) <= limit * cp.sqrt(vp))
             constraints.append(v[j] == v_child)
         # Required minus available makes the multipliers consumption prices.
         balance_p.append(required_p - incoming_p[j] == 0)
@@ -145,7 +208,9 @@ def solve_radial(parent, r, x, p_mw, q_mvar, *, base_mva=1., price=50.,
 
     problem = cp.Problem(cp.Minimize(hours * cost), constraints + balance_p + balance_q)
     fields = ("objective", "import_mw", "import_mvar", "voltage_pu", "p_send_mw",
-              "q_send_mvar", "dlmp", "dlmp_q", "loss_mw", "current_sq_pu", "backup_mw",
+              "q_send_mvar", "p_to_mw", "q_to_mvar", "p_series_send_mw", "q_series_send_mvar",
+              "dlmp", "dlmp_q", "loss_mw", "series_loss_mw", "shunt_loss_mw",
+              "current_sq_pu", "current_from_pu", "current_to_pu", "backup_mw",
               "cone_abs", "cone_rel", "balance_max_pu", "voltage_eq_max_pu",
               "limit_violation_max_pu", "point_ac_residuals_pass")
     out = dict.fromkeys(fields)
@@ -166,16 +231,29 @@ def solve_radial(parent, r, x, p_mw, q_mvar, *, base_mva=1., price=50.,
     if not np.all(np.isfinite([ps, qs, vs])) or np.any(vs <= 0):
         return dict(out, error="nonfinite powers or invalid voltage witness")
     gen = float(g.value) if g is not None else 0.
-    sending_v = vs[np.asarray(parents, dtype=int)]
+    sending_v = vs[parent_idx] / tap**2
     apparent_sq = ps[1:]**2 + qs[1:]**2
     ell = apparent_sq / sending_v
     for j, variable in series_current.items():
         ell[j - 1] = float(variable.value)
     loss_p = np.zeros(n - 1) if linearized else r * ell
     loss_q = np.zeros(n - 1) if linearized else x * ell
+    p_series, q_series = ps[1:], qs[1:]
+    p_from, q_from = p_series + g_from*sending_v, q_series - b_from*sending_v
+    p_to, q_to = -p_series + loss_p + g_to*vs[1:], -q_series + loss_q - b_to*vs[1:]
+    if linearized:
+        from_sq = (p_from**2 + q_from**2) / vs[parent_idx]
+        to_sq = (p_to**2 + q_to**2) / vs[1:]
+    else:
+        from_sq = (ell + 2*(g_from*p_series - b_from*q_series)
+                   + (g_from**2 + b_from**2)*sending_v) / tap**2
+        to_sq = (ell - 2*(g_to*(p_series-loss_p) - b_to*(q_series-loss_q))
+                 + (g_to**2 + b_to**2)*vs[1:])
+    i_from = np.sqrt(np.maximum(from_sq, 0.))
+    i_to = np.sqrt(np.maximum(to_sq, 0.))
 
-    residual_p = p / base_mva - ps
-    residual_q = q / base_mva - qs
+    residual_p = p / base_mva + shunt_g * vs - ps
+    residual_q = q / base_mva - shunt_b * vs - qs
     if backup_bus is not None:
         residual_p[backup_bus] -= gen / base_mva
     for j, i in enumerate(parents, start=1):
@@ -185,11 +263,13 @@ def solve_radial(parent, r, x, p_mw, q_mvar, *, base_mva=1., price=50.,
     residual_q[1:] += loss_q
     balance_err = max(np.max(np.abs(residual_p)), np.max(np.abs(residual_q)))
     v_error = vs[1:] - sending_v + 2*(r * ps[1:] + x * qs[1:]) - r*loss_p - x*loss_q
-    voltage_eq_err = max(abs(vs[0] - 1.), np.max(np.abs(v_error), initial=0.))
+    voltage_eq_err = max(abs(vs[0] - slack_vm_pu**2), np.max(np.abs(v_error), initial=0.))
     vmag = np.sqrt(vs)
     # Voltage and current violations use magnitudes. Powers use per unit.
     limit_err = max(0., np.max(low - vmag), np.max(vmag - high), np.max(-ell, initial=0.),
-                    np.max(np.sqrt(np.maximum(ell, 0.)) - limits, initial=0.))
+                    np.max(np.sqrt(np.maximum(ell, 0.)) - limits, initial=0.),
+                    np.max(-from_sq, initial=0.), np.max(-to_sq, initial=0.),
+                    np.max(i_from - limits_from, initial=0.), np.max(i_to - limits_to, initial=0.))
     if backup_bus is not None:
         limit_err = max(limit_err, -gen / base_mva, (gen - capacity) / base_mva)
     if root_import_cap_mw is not None:
@@ -207,10 +287,16 @@ def solve_radial(parent, r, x, p_mw, q_mvar, *, base_mva=1., price=50.,
     dual_scale = float(hours * base_mva)
     out.update(objective=float(problem.value), import_mw=float(ps[0] * base_mva),
                import_mvar=float(qs[0] * base_mva), voltage_pu=vmag.tolist(),
-               p_send_mw=(ps[1:] * base_mva).tolist(), q_send_mvar=(qs[1:] * base_mva).tolist(),
+               p_send_mw=(p_from * base_mva).tolist(), q_send_mvar=(q_from * base_mva).tolist(),
+               p_to_mw=(p_to * base_mva).tolist(), q_to_mvar=(q_to * base_mva).tolist(),
+               p_series_send_mw=(p_series * base_mva).tolist(),
+               q_series_send_mvar=(q_series * base_mva).tolist(),
                dlmp=[float(row.dual_value) / dual_scale for row in balance_p],
                dlmp_q=[float(row.dual_value) / dual_scale for row in balance_q],
-               loss_mw=float(np.sum(loss_p) * base_mva), current_sq_pu=ell.tolist(),
+               loss_mw=float((np.sum(loss_p) + shunt_g @ vs) * base_mva),
+               series_loss_mw=float(np.sum(loss_p) * base_mva),
+               shunt_loss_mw=float((shunt_g @ vs) * base_mva), current_sq_pu=ell.tolist(),
+               current_from_pu=i_from.tolist(), current_to_pu=i_to.tolist(),
                backup_mw=gen, balance_max_pu=float(balance_err),
                voltage_eq_max_pu=float(voltage_eq_err), limit_violation_max_pu=float(limit_err))
     return out
