@@ -45,11 +45,16 @@ def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument("inputs",type=Path)
     parser.add_argument("output",type=Path)
+    parser.add_argument("--repaired-only",action="store_true")
     args=parser.parse_args()
     args.output.mkdir(exist_ok=False)
     assigned=json.loads((args.inputs/"roster.json").read_text())
     if assigned!=roster():
         raise ValueError("original roster mismatch")
+    if args.repaired_only:
+        old=ROOT/"src/runs/opf-matched-20261103-attempt01/cells"
+        assigned=[r for r in assigned if json.loads((old/(r["id"]+".json")).read_text())["arms"]["hull"]["status"]=="optimal_inaccurate"]
+        if len(assigned)!=25: raise ValueError("repair cohort mismatch")
     model=read_simbench_radial(ARCHIVE)
     profiles=read_matched_profiles(ARCHIVE,model)
     validator=NativeACValidator(ARCHIVE,model)
@@ -129,7 +134,7 @@ def main():
                     bill+=.25*(ac["grid_import_mw"]*prices[r["date"],hour]+gen*(offer or 0))
             ok=len(steps)==(12 if r["window"]=="primary" else 8) and all(z["ok"] for z in steps)
             difference=bill-lb if ok and lb is not None else None
-            bound_ok=(h["qualified"] and lb is not None and abs(h["objective_eur"]-lb)<=.01)
+            bound_ok=(h["status"]=="optimal" and lb is not None and abs(h["objective_eur"]-lb)<=.01)
             out["arms"][cover]=dict(qualified=ok,buses=layer.buses,early_kwh_exact=str(target),
                  early_adjustment_kwh=float(target-e),fee_eur=float(layer.fee_eur),ac_total_eur=bill if ok else None,
                  upper_minus_native_lower_eur=difference,bracket_within_cent=bool(bound_ok and difference is not None and abs(difference)<=.01),
