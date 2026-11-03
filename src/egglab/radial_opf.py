@@ -204,7 +204,7 @@ def solve_radial(parent, r, x, p_mw, q_mvar, *, base_mva=1., price=50.,
             max(balance_err, voltage_eq_err, limit_err, out["cone_abs"]) <= out["point_abs_tol"] and
             out["cone_rel"] <= out["point_cone_rel_tol"])
 
-    dual_scale = hours * base_mva
+    dual_scale = float(hours * base_mva)
     out.update(objective=float(problem.value), import_mw=float(ps[0] * base_mva),
                import_mvar=float(qs[0] * base_mva), voltage_pu=vmag.tolist(),
                p_send_mw=(ps[1:] * base_mva).tolist(), q_send_mvar=(qs[1:] * base_mva).tolist(),
@@ -217,13 +217,16 @@ def solve_radial(parent, r, x, p_mw, q_mvar, *, base_mva=1., price=50.,
 
 
 def price_depot_day(parent, r, x, background_mw, reactive_mvar, depot, fleet_kwh,
-                    hours, upstream_prices, *, fd_steps_mw=(0.01, 0.001), **network):
+                    hours, upstream_prices, *, fd_steps_mw=(0.01, 0.001),
+                    pwl_surcharge=None, **network):
     """Price a day of prescribed depot energy on independent feeder intervals.
 
     The depot uses unity power factor. Negative energy exports to the feeder.
     Each returned central or perturbed dispatch includes its physical checks.
     A price for the AC market requires subsequent independent AC validation.
-    This interface deliberately returns no finite secant for an infeasible side.
+    A PWL surcharge (knot, left, right) adds marginal slopes to each period's
+    upstream price. The totals are relaxed-grid outputs. This interface
+    returns no finite secant for an infeasible side.
     """
     energy = np.asarray(fleet_kwh, dtype=float)
     if energy.ndim != 1 or not energy.size or not np.all(np.isfinite(energy)):
@@ -237,6 +240,14 @@ def price_depot_day(parent, r, x, background_mw, reactive_mvar, depot, fleet_kwh
     if (p.shape != (periods, len(parent)+1) or q.shape != p.shape
             or not 0 <= depot < p.shape[1] or np.any(durations <= 0)):
         raise ValueError("invalid day dimensions, depot or slot lengths")
+    if not np.isfinite(p).all() or not np.isfinite(q).all():
+        raise ValueError("background powers must be finite")
+    if "pwl" in network:
+        raise ValueError("use pwl_surcharge to retain the period-specific upstream price")
+    if pwl_surcharge is not None:
+        knot, left, right = _vector(pwl_surcharge, 3, "pwl_surcharge")
+        if left > right or network.get("curvature", 0):
+            raise ValueError("PWL surcharge needs ordered slopes and zero curvature")
     steps = tuple(float(step) for step in fd_steps_mw)
     if not steps or not all(np.isfinite(step) and step > 0 for step in steps):
         raise ValueError("finite-difference steps must be positive")
@@ -245,11 +256,13 @@ def price_depot_day(parent, r, x, background_mw, reactive_mvar, depot, fleet_kwh
         load = p[i].copy()
         load[depot] += energy[i] / (1000 * durations[i])
 
+        offer = None if pwl_surcharge is None else (knot, prices[i] + left, prices[i] + right)
+
         def evaluate(shift_mw):
             shifted = load.copy()
             shifted[depot] += shift_mw
             return solve_radial(parent, r, x, shifted, q[i], price=prices[i], hours=durations[i],
-                                **network)
+                                pwl=offer, **network)
 
         center = evaluate(0)
         sides = []
@@ -267,7 +280,9 @@ def price_depot_day(parent, r, x, background_mw, reactive_mvar, depot, fleet_kwh
         dispatches.append(dict(center=center, sides=sides))
     complete = all(d["center"]["status"] == cp.OPTIMAL and d["center"]["objective"] is not None
                    and d["center"]["dlmp"] is not None for d in dispatches)
-    return {"periods": dispatches,
+    return {"periods": dispatches, "price_scope": "network_model_balance_dual",
+            "all_center_point_checks_pass": all(d["center"]["point_ac_residuals_pass"] is True
+                                                for d in dispatches),
             "grid_cost": sum(d["center"]["objective"] for d in dispatches) if complete else None,
             "depot_price_per_mwh": [d["center"]["dlmp"][depot] for d in dispatches] if complete
                                    else None}

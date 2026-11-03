@@ -32,7 +32,7 @@ def main():
     comparisons["detect_artificial_losses"] = (bad["status"] == "optimal"
                                  and bad["point_ac_residuals_pass"] is False
                                  and bad["cone_abs"] > 1.)
-    print(json.dumps(dict(checks=comparisons, grid_cost=day["grid_cost"],
+    print(json.dumps(dict(checks={name: bool(ok) for name, ok in comparisons.items()}, grid_cost=day["grid_cost"],
                           depot_prices=day["depot_price_per_mwh"], secants=sides,
                           negative_price_control=bad), allow_nan=False))
     return int(not all(comparisons.values()))

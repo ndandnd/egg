@@ -7,7 +7,7 @@ import math
 from pathlib import Path
 import sys
 from urllib.parse import urlencode
-from urllib.request import Request, urlopen
+import subprocess
 from zipfile import ZipFile
 from zoneinfo import ZoneInfo
 
@@ -18,9 +18,17 @@ PRICE_API = "https://api.energidataservice.dk/dataset/Elspotprices"
 
 
 def fetch(url, max_bytes):
-    request = Request(url, headers={"User-Agent": "EGG-research-data-client/1.0"})
-    with urlopen(request, timeout=30) as response:
-        buffer = response.read(max_bytes + 1)
+    # Use the host HTTPS trust configuration. TLS verification stays enabled
+    # for the original connection and for any explicitly HTTPS-only redirect.
+    reply = subprocess.run(
+        ["/usr/bin/curl", "--fail", "--show-error", "--silent", "--location",
+         "--proto", "=https", "--proto-redir", "=https", "--max-redirs", "4",
+         "--max-time", "30", "--max-filesize", str(max_bytes), url],
+        stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False,
+    )
+    if reply.returncode:
+        raise OSError(f"curl {reply.returncode}: {reply.stderr.decode(errors='replace').strip()}")
+    buffer = reply.stdout
     if len(buffer) > max_bytes:
         raise ValueError("source exceeds frozen size limit")
     return buffer

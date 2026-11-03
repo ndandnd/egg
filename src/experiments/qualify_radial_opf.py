@@ -224,9 +224,9 @@ def standard_feeder(result):
             observe(result, "lindistflow_lossless", point["loss_mw"], 0.0, AC_TOL)
 
 
-def main():
+def main(cases=("ideal_affine", "resistive_ac", "pwl_kink", "binding_unique", "case33bw")):
     report = {}
-    for name in ("ideal_affine", "resistive_ac", "pwl_kink", "binding_unique", "case33bw"):
+    for name in cases:
         result = dict(checks={}, solves={}, failures=[])
         report[name] = result
         try:
@@ -242,4 +242,8 @@ def main():
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--case33-only", action="store_true", help="qualify only the canonical feeder")
+    args = parser.parse_args()
+    raise SystemExit(main(("case33bw",)) if args.case33_only else main())
