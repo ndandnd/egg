@@ -1,0 +1,84 @@
+{
+  "zone_readback": [
+    {
+      "file": "DE-2024-01-17.json",
+      "area_row_counts": {
+        "DE": 24
+      },
+      "validated_hours": 24,
+      "observed_price_areas": [
+        "DE"
+      ],
+      "first_utc": "2024-01-16T23:00:00+00:00",
+      "end_utc_exclusive": "2024-01-17T23:00:00+00:00",
+      "units": "EUR/MWh"
+    },
+    {
+      "file": "DE-2024-07-17.json",
+      "area_row_counts": {
+        "DE": 24
+      },
+      "validated_hours": 24,
+      "observed_price_areas": [
+        "DE"
+      ],
+      "first_utc": "2024-07-16T22:00:00+00:00",
+      "end_utc_exclusive": "2024-07-17T22:00:00+00:00",
+      "units": "EUR/MWh"
+    }
+  ],
+  "downloads": {
+    "grid": {
+      "sources": [
+        {
+          "file": "1-MV-rural--0-sw.zip",
+          "url": "https://daks.uni-kassel.de/bitstreams/84ac49bc-fa58-4480-b5ae-2962bf287a70/download",
+          "status": "received",
+          "bytes": 3095018,
+          "sha256": "3b7e623dbb76646b7d9fb09a70c382aa7c6721093e6ca7288d3d160a7be8bb45",
+          "present_tables": [
+            "Line.csv",
+            "Load.csv",
+            "LoadProfile.csv",
+            "Node.csv",
+            "RESProfile.csv",
+            "Switch.csv",
+            "Transformer.csv"
+          ]
+        }
+      ],
+      "note": "Archive structure and hourly coverage only. No case evaluation."
+    },
+    "summer": {
+      "sources": [
+        {
+          "file": "DE-2024-07-17.json",
+          "url": "https://api.energidataservice.dk/dataset/Elspotprices?start=2024-07-17&end=2024-07-18&filter=%7B%22PriceArea%22%3A%5B%22DE%22%5D%7D&columns=HourUTC%2CPriceArea%2CSpotPriceEUR&sort=HourUTC&limit=100",
+          "status": "failed",
+          "error": "OSError: curl 22: curl: (22) The requested URL returned error: 429\n\nstatus=429 retry_after=182 { \"statusCode\": 429, \"message\": \"Rate limit is exceeded. Try again in 182 seconds.\" }"
+        }
+      ],
+      "note": "Archive structure and hourly coverage only. No case evaluation."
+    },
+    "summer-after-cooldown": {
+      "sources": [
+        {
+          "file": "DE-2024-07-17.json",
+          "url": "https://api.energidataservice.dk/dataset/Elspotprices?start=2024-07-17&end=2024-07-18&filter=%7B%22PriceArea%22%3A%5B%22DE%22%5D%7D&columns=HourUTC%2CPriceArea%2CSpotPriceEUR&sort=HourUTC&limit=100",
+          "status": "received",
+          "bytes": 1944,
+          "sha256": "21231b4aaba43ef193b6873258228e33d249829092c4b7039be1d229b417a5e4",
+          "validated_hours": 24,
+          "observed_price_areas": [
+            "DE"
+          ],
+          "first_utc": "2024-07-16T22:00:00+00:00",
+          "end_utc_exclusive": "2024-07-17T22:00:00+00:00",
+          "units": "EUR/MWh"
+        }
+      ],
+      "note": "Archive structure and hourly coverage only. No case evaluation."
+    }
+  },
+  "attribution": "Unmodified source DE spot prices: Energinet, Energi Data Service Elspotprices. Feeder: SimBench 1-MV-rural--0-sw, Open Database License 1.0. Raw inputs remain local."
+}

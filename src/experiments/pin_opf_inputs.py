@@ -6,7 +6,8 @@ import io
 import json
 import math
 from pathlib import Path
-import sys
+import re
+import time as clock
 from urllib.parse import urlencode
 import subprocess
 from zipfile import ZipFile
@@ -18,19 +19,27 @@ GRID_URL = "https://daks.uni-kassel.de/bitstreams/84ac49bc-fa58-4480-b5ae-2962bf
 PRICE_API = "https://api.energidataservice.dk/dataset/Elspotprices"
 
 
-def fetch(url, max_bytes, timeout):
+def fetch(url, max_bytes, timeout, attempts):
     # Use the host HTTPS trust configuration. TLS verification stays enabled
     # for the original connection and for any explicitly HTTPS-only redirect.
-    reply = subprocess.run(
-        ["/usr/bin/curl", "--disable", "--fail-with-body", "--show-error", "--silent", "--location",
-         "--proto", "=https", "--proto-redir", "=https", "--max-redirs", "4",
-         "--connect-timeout", "15", "--max-time", str(timeout), "--max-filesize", str(max_bytes),
-         "--write-out", "%{stderr}\nstatus=%{http_code} retry_after=%header{retry-after}", url],
-        stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False,
-    )
-    if reply.returncode:
+    command = ["/usr/bin/curl", "--disable", "--fail-with-body", "--show-error", "--silent", "--location",
+               "--proto", "=https", "--proto-redir", "=https", "--max-redirs", "4",
+               "--connect-timeout", "15", "--max-time", str(timeout), "--max-filesize", str(max_bytes),
+               "--write-out", "%{stderr}\nstatus=%{http_code} retry_after=%header{retry-after}", url]
+    for attempt in (1, 2):
+        reply = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False)
+        if not reply.returncode:
+            attempts.append({"attempt": attempt, "received_bytes": len(reply.stdout)})
+            break
         error = reply.stderr.decode(errors="replace").strip()
+        attempts.append({"attempt": attempt, "error": error})
         if "status=429" in error:
+            delay = re.search(r"status=429 retry_after=(\d+)\s*$", error)
+            if attempt == 1 and delay and int(delay[1]) <= 300:
+                seconds = int(delay[1]) + 1
+                attempts[-1]["wait_seconds"] = seconds
+                clock.sleep(seconds)
+                continue
             error += " " + reply.stdout[:500].decode(errors="replace").strip()
         raise OSError(f"curl {reply.returncode}: {error}")
     buffer = reply.stdout
@@ -82,10 +91,10 @@ def main():
     for name, url, limit, day in sources:
         if args.only and name not in args.only:
             continue
-        entry = {"file": name, "url": url, "status": "pending"}
+        entry = {"file": name, "url": url, "status": "pending", "attempts": []}
         entries.append(entry)
         try:
-            buffer = fetch(url, limit, 180 if day is None else 30)
+            buffer = fetch(url, limit, 180 if day is None else 30, entry["attempts"])
             (out / name).write_bytes(buffer)
             entry.update(bytes=len(buffer), sha256=hashlib.sha256(buffer).hexdigest())
             if day is not None:

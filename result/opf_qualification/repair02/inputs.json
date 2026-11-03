@@ -1,0 +1,28 @@
+{
+  "sources": [
+    {
+      "file": "DE-2024-01-17.json",
+      "url": "https://api.energidataservice.dk/dataset/Elspotprices?start=2024-01-17&end=2024-01-18&filter=%7B%22PriceArea%22%3A%5B%22DE%22%5D%7D&columns=HourUTC%2CPriceArea%2CSpotPriceEUR&sort=HourUTC&limit=100",
+      "status": "received",
+      "bytes": 1952,
+      "sha256": "8d5b19cfa9402b8172f1768dad486e384e0ab043f84236d53cdc345b8beabfdf",
+      "validated_hours": 24,
+      "first_utc": "2024-01-16T23:00:00+00:00",
+      "end_utc_exclusive": "2024-01-17T23:00:00+00:00",
+      "units": "EUR/MWh"
+    },
+    {
+      "file": "DE-2024-07-17.json",
+      "url": "https://api.energidataservice.dk/dataset/Elspotprices?start=2024-07-17&end=2024-07-18&filter=%7B%22PriceArea%22%3A%5B%22DE%22%5D%7D&columns=HourUTC%2CPriceArea%2CSpotPriceEUR&sort=HourUTC&limit=100",
+      "status": "failed",
+      "error": "OSError: curl 56: curl: (56) The requested URL returned error: 429"
+    },
+    {
+      "file": "1-MV-rural--0-sw.zip",
+      "url": "https://daks.uni-kassel.de/bitstreams/84ac49bc-fa58-4480-b5ae-2962bf287a70/download",
+      "status": "failed",
+      "error": "OSError: curl 28: curl: (28) Operation timed out after 29130 milliseconds with 1367123 out of 3095018 bytes received"
+    }
+  ],
+  "note": "Archive structure and hourly coverage only. No case evaluation."
+}
