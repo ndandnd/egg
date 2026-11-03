@@ -20,61 +20,65 @@
 \newcommand{\conv}{\operatorname{conv}}
 \newcommand{\relint}{\operatorname{relint}}
 
-\title{Marginal-Price Support for Electric-Bus Fleets:\\
-An Exact Assignment-Dependent Projection and Its Price Dynamics}
+\title{Duty Assignment Before Grid Pricing in Electric-Bus Fleets:\\
+An Exact Projection, Support Bounds and Their Limits}
 \author{Nathan Cho}
-\date{Research draft, revised 2 November 2026}
+\date{Research draft, revised 3 November 2026}
 
 \begin{document}
 \maketitle
 
 \begin{abstract}
-Assigning two services to one electric bus saves a vehicle but may force a
-midday recharge. We characterize how that trade-off changes which fleet
-schedules a posted marginal electricity price can induce. Consider morning
-and afternoon service batches, a shared midday connector and full overnight
-replenishment. For each number of paired services, one matching realizes the
-entire set of attainable period loads and vehicle costs across all assignments
-of that size. The set has at most five vertices, including under common
-conversion losses and vehicle-to-grid exports. For lossless charging we derive
-the exact intervals of a tariff offset where marginal-price support fails.
-Changing the daily bus fee moves those intervals while preserving their
-combined width on the full offset axis. In a timetable-based sensitivity
-study at 400\,kWh, 15 of 18 operators admit a maximum-size pairing that
-requires no midday charge. In the specified price grid, support fails in
-7 of 2,664 cases while undamped price updates cycle in 397. At 300\,kWh,
-exact offset intervals reveal possible failures for six of 14 eligible
-operators within the studied range. The sampled offsets detect two. We explain how a
-solver's choice among equally profitable schedules can sustain a cycle even
-when a supporting price exists. A separate rational certificate establishes
-support failure on one 37-service timetable with varied service times.
+Can a bus operator commit to duties before observing grid prices? For two
+common charging windows, we prove that one price-independent matching per
+fleet size preserves the entire attainable load--cost set, including under
+common conversion losses and vehicle-to-grid exports. The grid then selects
+fleet size and charging, while alternative pairings of that size add no
+flexibility. In a charge-only extension with consecutive convex load
+thresholds, the physical-versus-convexified cost gap is strictly less than
+one bus-day fee, even with hard grid limits and local backup. We characterize
+exact support-failure intervals in a lossless subclass and distinguish them
+from cycling price updates. On public German peak-run data at 400\,kWh,
+support fails in 7 of 2,664 sampled scenarios while undamped prices cycle
+in 397. On a German distribution-feeder study, physical minimum-bus duties
+match numerical conic lower estimates within one cent in 66 of 72 primary
+assignments; four are solver-infeasible and two retain wider bounds.
+Binding voltage limits require local supply at the largest far depot, but
+we find no additional capacity-charge saving from pairing. The reduction's
+boundary matters: in 64 general hourly scheduling instances, a zero-price
+duty commitment remains measurably suboptimal in 48 after a price-blind
+minimum-energy tie rule. These results identify when duty choice can precede
+pricing and where that simplification needs a separate certificate.
 \end{abstract}
 
 \section{Introduction}\label{sec:intro}
 
-A depot can shift charging from midday to overnight while keeping the same
-passenger timetable. If supplying that load changes the marginal cost of
-electricity, a tariff calculated from one schedule may give the operator an
-incentive to choose another. Existing scheduling models describe how fleets
-respond to charging costs and infrastructure constraints
-\citep{devos2024capacity,parmentier2023fleets,borndorfer2024integrated,wu2022grid}.
-Once prices respond to the fleet, two questions arise. Is there a posted price at
-which the operator's own cost-minimizing schedule is the system-optimal one? And
-if prices are adjusted iteratively in response to the fleet's load, do they settle?
+A bus operator can often solve duty assignment before optimizing charging.
+The computational attraction is clear: retain the chosen services on each
+bus and adjust charging as electricity prices change. The unresolved question
+is what this commitment loses. A cheap duty may force energy into an expensive
+or grid-constrained window, and another assignment with exactly the same
+number of buses may offer a different charging set. A valid separation
+therefore needs a physical dominance argument, or a measured and bounded
+commitment penalty.
 
-The obstacle is indivisibility. A bus serves a whole service or none of it, so
-the set of loads and costs the operator can attain is a union of pieces. An
-aggregate charging profile may be feasible only with a more expensive fleet
-than the convexified planner assigns to it. A strict gap then rules out a
-physical plan that is optimal for the fleet at its own marginal price. This is the familiar
-nonconvex-pricing problem of electricity markets
-\citep{oneill2005,gribikHoganPope2007,huaBaldick2017,schiro2016}, but here the
-nonconvexity is created by \emph{service assignment}. Pairing two services on
-one bus saves a vehicle but may force that bus to recharge between them. A
-fixed-population charging aggregate, however fine-grained
+We give such an argument for two synchronized service batches. For each
+number of paired services, a matching minimizing mandatory early charging
+contains the load--cost set of every other matching at that count. It can be
+chosen before observing electricity prices or specifying the feeder cost.
+This is one representative per fleet size; prices and network feasibility
+may still determine which size to use. The distinction is essential outside
+the class, where hourly charging and transitions can change the ranking of
+committed duties.
+
+Marginal-price support supplies a second diagnostic. Whole fleets create a
+nonconvex load--cost set: a charging profile can be attainable only with a
+more expensive fleet than a convexified planner assigns to it. This connects
+assignment to the established nonconvex-pricing problem in electricity
+markets \citep{oneill2005,gribikHoganPope2007,huaBaldick2017,schiro2016}.
+Fixed-population charging aggregates, however detailed
 \citep{mukhiAbate2023exact,mukhiLohoAbate2025exact,muller2019aggregation},
-does not retain that trade-off because the population of vehicle duties is
-itself a decision.
+do not retain a choice of the population of vehicle duties.
 
 This paper gives an exact account of that trade-off for a class that is simple
 enough to solve and recognizable enough to matter: buses serve a morning peak
@@ -132,6 +136,10 @@ Among the remaining three, the smallest critical marginal spread is
 0.53\,EUR/kWh at a 150\,EUR/day vehicle cost. When failure
 occurs, the gap is below 0.06\% of total daily cost. Undamped price iteration
 nevertheless cycles in 15\% of scenarios, nearly all of which have no gap.
+A German feeder comparison resolves numerical duty-first cost brackets
+within one cent in 66/72 primary assignments (\cref{sec:feeder}).
+The separate 64-instance hourly test in \cref{sec:boundaries} records the
+limits of zero-price commitment, including an energy-aware tie control.
 \end{enumerate}
 
 The support criterion itself, matching integrality and convex-hull pricing are
@@ -471,6 +479,42 @@ length is $2\beta(\ell_{m_{\max}}-\mathrm{Lo})$. The fee sets the location
 of each interval, so the length within a given tariff range and the number of
 hits on a finite grid can depend on $f$.
 
+\begin{proposition}[One-fee rounding bound]\label{prop:onefee}
+In a charge-only two-window projection, suppose consecutive pair counts
+$m=0,\ldots,\nu$ have early-energy intervals $[\ell_m,U]$ with a common
+upper endpoint, nondecreasing discrete-convex $\ell_m$, and fee $f(N-m)$,
+where $f>0$. Let $G(E)$ be any common grid and supply cost, possibly taking
+value $+\infty$ to impose hard feasibility. If the convexified optimum is
+finite and attained at mean count $t$ and energy $E$, then
+\[
+ 0\le D-\CH\le f\bigl(t-\lfloor t\rfloor\bigr)<f.
+\]
+\end{proposition}
+\begin{proof}
+Let $\ell(t)$ interpolate consecutive lower endpoints. Discrete convexity
+makes $\ell(t)$ convex. Jensen's inequality and mixing the neighboring
+layers show that the hull at mean count $t$ has exactly the energy interval
+$[\ell(t),U]$. Its fee is $f(N-t)$. The integer count $\lfloor t\rfloor$
+admits the same $E$, because $\ell_{\lfloor t\rfloor}\le\ell(t)\le E\le U$.
+Keep its entire grid dispatch and any backup supply. Only the fee changes,
+by $f(t-\lfloor t\rfloor)$. A physical optimum can do no worse.
+\end{proof}
+
+The constant is sharp. Two services each draw one unit, the usable battery
+holds one, and pairing forces one unit of early charge. Two singleton buses
+admit $[0,1]$. With free supply below an early cap $1-\varepsilon$ and
+infeasibility above, subtract the common one-bus fee. The physical cost is
+$f$ and the hull cost $f\varepsilon$, approaching a gap of $f$.
+The bound applies to the entire schedule, irrespective of the number of
+binding network constraints. It does not extend by counting binding windows
+in an arbitrary multidimensional scheduling problem.
+
+A cap between forced levels is insufficient for a positive gap: the optimum
+may occur elsewhere or at a supported tie. Price ambiguity is also
+unnecessary. With fee one on $[0,1]$, fee zero at $E=1$, and smooth cost
+$G(E)=E^2$, physical cost is one and hull cost is $3/4$, at the unique
+marginal price one. Support failure and an update orbit need separate tests.
+
 \paragraph{Price iteration.}
 A natural way to find a supporting price is to post a price, observe the
 fleet's response, and move the price toward the marginal cost of that response:
@@ -628,8 +672,7 @@ three-batch feasibility problem unless P equals NP.
 arbitrarily many short neutral cycles and zero switching time. A positive setup
 time per action breaks exactness: it can make a layer infeasible while
 neighbouring layers stay feasible, and the number of buses needing early charge
-then matters separately from $r_m$. The companion proof in the repository
-(\path{paper/focused-theory-20261029/setup_time.tex}) bounds the change in
+then matters separately from $r_m$. The companion setup-time proof in the repository bounds the change in
 the gap when every relevant layer has a feasible point with sufficient
 unused connector time. Whether actual depot windows provide enough slack for
 this bound to be informative remains open.
@@ -651,6 +694,32 @@ supported at its own marginal prices. The first certificate uses modeled
 consumption stored on a finite movement graph. The second uses exact additive
 consumption and extends to finite walks over the specified location pairs
 under the travel and depot-access assumptions in \cref{app:public}.
+
+\paragraph{A duty-first boundary test on hourly schedules.}
+We also use all 64 previously certified synthetic development instances
+(16 seeds, 8 or 12 trips, and two affine supply slopes). These have
+hourly depot charging, travel between services, 60\,kWh batteries and
+terminal reserve rather than full replenishment. Costs are in SEK.
+Choose operating-cost-minimum duties at zero electricity price, retain
+their ordered trip partition, and reoptimize charging and direct/depot
+transitions against the original system objective. Adaptive tangent MILPs
+and the original joint certificates give a regret interval for every cell.
+All 64 fixed-duty problems meet a 0.01\,SEK optimality tolerance. The
+arbitrary zero-price tie gives a regret lower endpoint above 0.01 in
+53 cases, mean regret interval $[12.192,12.207]$\,SEK, and maximum upper
+endpoint 54.094\,SEK.
+
+To test the role of that tie, a separate prespecified sensitivity chooses
+minimum charging energy among the zero-price operating-cost optima, before
+observing the time-dependent prices. It still loses more than 0.01\,SEK
+in 48 of 64 cells. The mean regret interval is $[7.753,7.769]$\,SEK and
+the largest upper endpoint 46.126\,SEK; the largest total-cost percentage
+upper bound is 2.043\%. No interval contradicts the original joint
+certificate. This marks a boundary of these duty-first rules. It does not
+rule out a better price-independent rule or establish a population claim.
+The historical joint bounds were reused, with the original instance and
+market sources; neither the German feeder nor its tariffs were attached to
+these synthetic cases.
 
 \section{Tariff sensitivity on public peak-run data}\label{sec:study}
 
@@ -798,6 +867,116 @@ $\rho$. Cycling concentrates at small spreads with no gap.}
 \label{fig:sweep}
 \end{figure}
 
+\section{Duty commitment on a German distribution feeder}\label{sec:feeder}
+
+\paragraph{Matched design.}
+The primary design has 72 assignments: two German price days (17 January and
+17 July 2024), two depot sites, three charger sizes, two matched fleet
+classes, and three supply rules. The heterogeneous fleet resamples published
+Euskirchen peak-run energies by fixed midpoint ranks to 5--51 services per
+batch. The homogeneous control uses the same batch means. Both have 320\,kWh
+usable batteries, efficiency 0.95, 125\,kW plugs, a common one-hour midday
+window and a two-hour terminal window. These are constructed depot-scale
+schedules with complete successor compatibility.
+
+We use the native radial SimBench rural medium-voltage feeder
+\citep{meinecke2020simbench}. Each 15-minute snapshot retains native load and
+renewable profiles, taps, switches, shunts, voltage limits and terminal
+current ratings. SimBench's 2016 same-week/weekday profiles proxy the two
+2024 operating dates; Energinet records are explicitly filtered to the DE
+price area and billed at their German delivery hour. A branch-flow conic
+relaxation \citep{farivar2013branch} supplies numerical lower estimates;
+independent pandapower Newton flows check constructed whole-bus upper costs.
+No exactness theorem is presumed for this feeder.
+
+Primary supply has hard native limits and no substitute supply. Two
+sensitivities allow a 1\,MW unit at the depot at 414.7235 or
+510.5304\,EUR/MWh, linear fuel-cost proxies from a published 1\,MW diesel
+unit and Germany's 2024 average diesel price
+\citep{cat3512,adac2024diesel}. These are scenarios, not local
+bids or valuations of unserved service. A single constant depot MW per
+window is realized by plug-sharing with variable power, pausing and migration.
+We compare a predetermined rank pairing, an energy-aware minimum-bus
+matching chosen before prices, joint physical scheduling and convexification.
+
+\paragraph{Cost brackets and numerical limits.}
+The primary comparison resolves 66/72 assignments within one cent: the
+minimum-bus matching admits a whole-fleet schedule whose independently
+computed AC cost matches the numerical hull lower estimate. Four conic
+hulls are reported infeasible; two retain numerical bound widths of about
+0.70 and 0.81\,EUR. These are tolerance-based computations, with unverified
+exact-arithmetic dual feasibility. The first conic integer-count selection
+passed all strict checks in only three assignments. Its original statuses
+remain intact. Physical schedule construction and a second conic backend
+provide the separate brackets reported here.
+
+The secondary one-hour terminal comparison resolves all 30 assignments
+with a numerical hull point; six are solver-infeasible. The additional
+36 one-hour heterogeneous assignments fail a per-bus terminal charging
+condition. They are a design limitation and are excluded from the primary
+headline. Earlier residual failures are retained. Before date runs we
+replaced an unstable pure relative cone screen by a declared absolute-plus-relative
+screen in physical units, with independent AC agreement and native limits.
+Five repaired Gurobi primals still fail that cone screen. A relaxation
+can nevertheless bound a separately constructed physical point; solver
+status alone is never used as a physical witness.
+
+\paragraph{Binding limits without extra buses.}
+At the largest far depot, the hard-supply hull is solver-infeasible for
+both fleet classes on both days. With local backup the same 51-bus duties
+are AC-feasible and match the hull lower estimates within one cent.
+All twelve quarters reach the depot's native 0.965\,p.u. floor; no native
+thermal constraint binds. Backup energy is 2.471\,MWh in January and
+2.241\,MWh in July. Both window marginal prices equal the active backup
+offer within numerical tolerance. The absolute price rises, but the spread
+needed to buy an extra bus does not. The full wholesale ranges, 71.05 and
+177.15\,EUR/MWh, are also below the original homogeneous fixture's
+527.78\,EUR/MWh threshold. In the 36 distinct feasible wholesale comparisons,
+all choose minimum fleet size. A predetermined pairing costs 0.40--6.54\,EUR
+more in six January designs; the strong classical matching captures this
+benefit before prices are observed.
+
+\paragraph{Actual price updates.}
+We freeze and run price $\to$ fleet response $\to$ fixed-load OPF $\to$
+price on the original 73 admitted hull assignments, including 51 primary
+assignments. All fleet responses use the complete count projection. Four
+rules start at the wholesale window prices: steps 1, 0.5 and 0.1 and
+$1/(k+1)$, with at most 100 iterations. Every grid price requires the
+physical conic screen and independent AC agreement. For steps 1, 0.5 and
+the diminishing rule, 43/73 reach a numerical fixed point; eight leave grid
+feasibility and 22 fail grid admission. Primary counts are 27/51 fixed,
+eight infeasible responses and 16 unresolved grid checks. With step 0.1,
+16/51 reach the fixed-point test, eleven exhaust the iteration budget,
+and the same eight and sixteen fail feasibility and admission. A small damped
+price change alone is insufficient. Slow contracting sequences triggered
+an overly permissive approximate-recurrence detector for step 0.1; we retain
+those histories, withdraw their cycle labels and complete available traces
+using only cached grid responses. No nontrivial cycle is established.
+Prespecified flags cover positive support gap, price ambiguity, fleet ties
+and a verified step-size mechanism. Unresolved paths are not assigned a
+cause. Local two-sided price probes are recorded, with infeasible sides and
+solver failures retained. These results give no empirical support for the
+hypothesis of frequent cycles among the admitted fixed points.
+
+\paragraph{Annual capacity and connection stakes.}
+E-regio Netz serves Euskirchen. Its 2026 medium-voltage annual capacity
+rates are 12.22 and 88.64\,EUR/kW-year below and above 2,500 utilization
+hours, respectively; its one-time connection contribution is
+95.64\,EUR/kW \citep{eregio2026network,eregio2026bkz}.
+The 53.63--549.04\,kWh spread in mandatory early charging across pairings
+is not automatically a reduction in the depot's peak. For window lengths
+one and two hours, minimum peak is
+$\min_{E\in[\ell,U]}\max\{E,(S-E)/2\}$ in kW when energies are kWh.
+Every feasible matching at minimum fleet size admits the balanced point
+$E=S/3$ in all six
+primary heterogeneous designs and their homogeneous controls. Their minimum
+peaks are identical, ranging from 453 to 4,660\,kW. The demonstrated annual
+capacity and connection savings from choosing between these covers are
+therefore zero in this fleet projection. Feeder feasibility and backup
+requirements are separate from that minimum-power calculation. Repeating these three-hour windows every day gives at most
+1,095 utilization hours. Other depot loads, annual peaks and contracted
+connection capacity would be needed to value a different design.
+
 \section{Discussion}\label{sec:discussion}
 
 \paragraph{A decision at the depot.} Given a proposed bus fee and a specified
@@ -811,6 +990,10 @@ the operator $r(x_D;p^*)$ conditional on operating $x_D$. The payment
 is bounded above by $\Delta$ (\cref{prop:support}). This compares two
 specified payment rules. Contract enforcement costs, participation rights
 and observed tariff parameters are needed to value a change in practice.
+
+The new feeder study supports representative matching within its two-window
+class, while the hourly boundary test prevents a general recommendation to
+fix arbitrary zero-price duties.
 
 The study illustrates why a ratio alone is insufficient for that decision.
 At 400\,kWh, regrets in the seven positive grid cells are several times
@@ -839,7 +1022,7 @@ would require observed consumption, duty options and settlement terms.
 The 37-service certificate establishes
 existence beyond the class for one timetable with synthetic economics.
 
-\paragraph{Open directions.} Three extensions would most increase reach: a
+\paragraph{Open directions.} Further work beyond the present tests could examine: a
 characterization for staggered charging windows, where serialization is no
 longer automatic, a measured application of the setup-time bound, and an
 analysis of a strategic fleet operator who anticipates the price change.

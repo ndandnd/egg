@@ -433,25 +433,28 @@ plan and each mixture. The certificate index in \cref{app:repro} identifies
 the separate checks of the source tables and charging access.
 
 \section{Reproducibility}\label{app:repro}
+
+The feeder and duty-first sources, launchers, dependencies, repairs and
+archived outcomes are indexed in
+\path{paper/draft1/review/NOV3_REPRODUCIBILITY.md}.
+The record retains all denominators and the cached-only loop correction.
+
 In \path{paper/draft1/}, \texttt{sh make.sh} rebuilds the sensitivity study,
-figures and paper from the committed peak-run energies. The optional
-\texttt{--tests} adds the original randomized tests. The
-\texttt{SISTIG\_ROOT} environment variable enables reconstruction of the run
-energies from the archive of \citet{sistig2025dataset}. In \path{code/},
-\texttt{twobatch.py} supplies the rational solver and \texttt{study.py} the
-numerical sweep. The independent \texttt{gap\_bands.py} checks every grid
-cell against the exact intervals in \cref{tab:offsetcoverage}.
-\texttt{check\_review.py} reproduces the exceptional tie and the 64 general
-assignment comparisons.
+figures and paper from committed peak-run energies; \texttt{--tests} adds
+the original randomized tests. Setting \texttt{SISTIG\_ROOT} reconstructs
+energies from \citet{sistig2025dataset}. In \path{code/},
+\texttt{twobatch.py} supplies the rational solver, \texttt{study.py} the sweep,
+and \texttt{gap\_bands.py} checks every grid cell against the exact failure
+intervals. \texttt{check\_review.py} reproduces the exceptional tie and
+the 64 general assignment checks.
+
 \begingroup\sloppy
-For the public case, \path{paper/focused-theory-20261029/CERTIFICATE_INDEX.md}
-lists the source revisions, input packets, trusted manifest digests and offline
-commands. Under \path{research-20261029/} in the authors' local evidence
-archive, the original export is \path{public_certificate_bundle/attempt01/public-sign-verifier/}
-and the additive export is \path{public_exact_energy_portable/attempt01/bundle/}.
-From a fresh authorized copy of either export, run \texttt{verify.py} with
-CPython 3.12.2, the digest for that model and a new output path as specified in
-the index. The author-run checks took 33 and 36 seconds, respectively, with
-the standard library alone. The repository provides the index and receipts.
+For the 37-service certificates,
+\path{paper/focused-theory-20261029/CERTIFICATE_INDEX.md} gives the source
+revisions, trusted digests, export locations and offline commands.
+From an authorized copy of either export, run \texttt{verify.py} with
+CPython 3.12.2, the model's digest and a fresh output path as specified in
+that index. The author-run checks took 33 and 36 seconds with the standard
+library alone. The repository provides the index and receipts.
 Redistribution of the assembled exports and external replication remain open.
 \par\endgroup
