@@ -209,6 +209,7 @@ def solve_evsp(
     energy_cost: tuple,
     max_mip_gap: float = 1e-6,
     time_limit_s: float | None = None,
+    ops_cap: float | None = None,
 ) -> Solution:
     """energy_cost: ('linear', p) with p per-kWh prices per slot, or
     ('pwl', segments) with segments[t] = [(slope, intercept), ...] describing
@@ -339,6 +340,8 @@ def solve_evsp(
         + inst.dh_cost_per_min * dh_expr
     )
 
+    if ops_cap is not None:
+        m += ops <= float(ops_cap)
     kind, payload = energy_cost
     if kind == "linear":
         p = payload
