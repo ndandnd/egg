@@ -41,6 +41,7 @@ for r in loops:
                 for e in set((l.early_min_kwh,l.early_max_kwh)):
                     choices.append((float(l.fee_eur)+(price[0]*float(e)+price[1]*float(fleet.total_grid_kwh-e))/1000,l.buses,e,l))
             best=min(z[0] for z in choices); _,b,e,l=min((z for z in choices if z[0]<=best+1e-6),key=lambda z:(z[1],z[2]))
+            e=min(max(Fraction(str(float(e))),l.early_min_kwh),l.early_max_kwh)
             loads=(float(e),float(fleet.total_grid_kwh-e))
             oracle=lookup.get(loads)
             if oracle is None or not oracle["qualified"]:
@@ -77,9 +78,11 @@ for row in capacity:
     original=next((ROOT/"src/runs/opf-matched-20261103-attempt01/cells").glob(f"primary-2024-01-17-*-{'near' if row['node'].endswith('78') else 'far'}-hard-{row['fleet']}.json"))
     # The original diagnostics for the exact same fleet size supply the all-pairing floor bound.
     for p in (ROOT/"src/runs/opf-matched-20261103-attempt01/cells").glob(f"primary-2024-01-17-*-{'near' if row['node'].endswith('78') else 'far'}-hard-{row['fleet']}.json"):
-        cell=json.loads(p.read_text()); layers=cell["layer_diagnostics"]["by_count"]
+        cell=json.loads(p.read_text())
+        if abs(cell["total_grid_kwh"]-row["daily_kwh"])>1e-5: continue
+        layers=cell["layer_diagnostics"]["by_count"]
         l=next(x for x in layers if x["pairs"]==row["n"])
-        if cell["arms"].get("strong",{}).get("buses")==row["n"]:
+        if l["best_chargeable"]:
             # Different site designs have different total service energy.
             if abs(cell["total_grid_kwh"]-row["daily_kwh"])>1e-5:continue
             row["worst_matching_floor_kwh"]=l["max_floor_grid_kwh"]
