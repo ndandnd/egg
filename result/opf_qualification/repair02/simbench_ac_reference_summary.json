@@ -1,0 +1,82 @@
+{
+  "grid": "1-MV-rural--0-sw",
+  "scope": "unscaled static operating point, no depot or controls",
+  "status": "AC_CONVERGED",
+  "converged": true,
+  "within_native_limits": true,
+  "versions": {
+    "numpy": "1.26.4",
+    "pandapower_distribution": "2.14.11",
+    "pandapower_module": "2.14.10",
+    "pandas": "2.2.1",
+    "python": "3.12.2",
+    "scipy": "1.13.1",
+    "simbench": "1.5.3"
+  },
+  "runpp": {
+    "algorithm": "nr",
+    "calculate_voltage_angles": true,
+    "check_connectivity": true,
+    "init": "dc",
+    "numba": false,
+    "run_control": false,
+    "tolerance_mva": 1E-9,
+    "trafo_loading": "current",
+    "trafo_model": "t",
+    "voltage_depend_loads": false
+  },
+  "csv2pp": {
+    "no_generic_coord": true,
+    "sep": ";",
+    "static_tables": [
+      "Coordinates",
+      "ExternalNet",
+      "Line",
+      "LineType",
+      "Load",
+      "Measurement",
+      "Node",
+      "RES",
+      "Substation",
+      "Switch",
+      "Transformer",
+      "TransformerType"
+    ]
+  },
+  "slack_vm_pu": 1.025,
+  "source_injections": {
+    "load_p_mw": 17.256,
+    "load_q_mvar": 6.817499999999999,
+    "sgen_p_mw": 25.565,
+    "sgen_q_mvar": 0.0
+  },
+  "import_mw": -8.088519179577439,
+  "import_mvar": 5.211553477690618,
+  "loss_mw": 0.22048082095486712,
+  "net_absorption_mvar": -1.6059465219858025,
+  "balance_residual": {
+    "mvar": -3.235784973298905E-10,
+    "mw": -5.323050056293965E-10
+  },
+  "coverage": {
+    "fixed_tap_position_by_transformer": {
+      "HV1-MV1.101-Trafo1": 0.0,
+      "HV1-MV1.101-Trafo2": 0.0
+    },
+    "official_pp_buses": 97,
+    "original_nodes": 299,
+    "original_switch_states": {
+      "0": 6,
+      "1": 198
+    },
+    "recovered_branch_terminal_nodes": 202
+  },
+  "native_limits": {
+    "max_overload_percentage_points": 0.0,
+    "max_voltage_violation_pu": 0.0,
+    "overloads_percentage_points": {},
+    "voltage_max_pu": 1.0446237605979392,
+    "voltage_min_pu": 1.0030160635228647,
+    "voltage_violations_pu": {}
+  }
+}
