@@ -34,13 +34,23 @@ def _index(value):
         raise ValueError("a bus index must be an integer") from exc
 
 
+def conic_options(solver):
+    if solver == "CLARABEL":
+        return dict(direct_solve_method="qdldl", max_iter=500, tol_feas=1e-10,
+                    tol_gap_abs=1e-10, tol_gap_rel=1e-10)
+    if solver == "GUROBI":
+        return dict(Threads=1, QCPDual=1, BarQCPConvTol=1e-10, FeasibilityTol=1e-9,
+                    OptimalityTol=1e-9, OutputFlag=0)
+    raise ValueError("choose CLARABEL or GUROBI")
+
+
 def solve_radial(parent, r, x, p_mw, q_mvar, *, base_mva=1., price=50.,
                  curvature=0., hours=1., vmin=.90, vmax=1.10, imax_pu=None,
                  pwl=None, linearized=False, backup=None, root_import_cap_mw=None,
                  slack_vm_pu=1., tap_ratio=1., g_from_pu=0., b_from_pu=0.,
                  g_to_pu=0., b_to_pu=0., imax_from_pu=None, imax_to_pu=None,
-                 g_bus_pu=0., b_bus_pu=0., open_end_leaves=()):
-    """Return CLARABEL's status, a primal witness, balance prices and residuals.
+                 g_bus_pu=0., b_bus_pu=0., open_end_leaves=(), solver="CLARABEL"):
+    """Return the conic solver's status, primal witness, balance prices and residuals.
 
     Buses are ordered 0..n-1. parent[j-1] is upstream of bus j. r and x are
     per-unit series impedances on base_mva. vmin and vmax bound voltage
@@ -235,15 +245,17 @@ def solve_radial(parent, r, x, p_mw, q_mvar, *, base_mva=1., price=50.,
               "cone_abs", "cone_rel", "balance_max_pu", "voltage_eq_max_pu",
               "limit_violation_max_pu", "point_ac_residuals_pass")
     out = dict.fromkeys(fields)
-    out.update(cone_rel_floor=1e-8, solver="CLARABEL", model="lindistflow" if linearized else "socp",
+    solver = solver.upper()
+    options = conic_options(solver)
+    out.update(cone_rel_floor=1e-8, solver=solver, model="lindistflow" if linearized else "socp",
                formulation="passive_open_end_reduction" if open_ends else "general",
                open_end_leaves=sorted(open_ends),
                point_abs_tol=1e-7, point_cone_rel_tol=1e-5, price_scope="network_model_balance_dual")
     try:
-        problem.solve(solver=cp.CLARABEL, direct_solve_method="qdldl", max_iter=500,
-                      tol_feas=1e-10, tol_gap_abs=1e-10, tol_gap_rel=1e-10)
-    except cp.error.SolverError as exc:
-        return dict(out, status="solver_error", error=str(exc))
+        problem.solve(solver=solver, **options)
+    except Exception as exc:
+        # CVXPY may propagate an external solver's license/initialization exception.
+        return dict(out, status="solver_error", error=f"{type(exc).__name__}: {exc}")
     out["status"] = problem.status
     if problem.status not in (cp.OPTIMAL, cp.OPTIMAL_INACCURATE):
         return out
@@ -314,9 +326,9 @@ def solve_radial(parent, r, x, p_mw, q_mvar, *, base_mva=1., price=50.,
                p_to_mw=(p_to * base_mva).tolist(), q_to_mvar=(q_to * base_mva).tolist(),
                p_series_send_mw=(p_series * base_mva).tolist(),
                q_series_send_mvar=(q_series * base_mva).tolist(),
-               dlmp=[None if j in open_ends else float(row.dual_value) / dual_scale
+               dlmp=[None if j in open_ends or row.dual_value is None else float(row.dual_value) / dual_scale
                      for j, row in enumerate(balance_p)],
-               dlmp_q=[None if j in open_ends else float(row.dual_value) / dual_scale
+               dlmp_q=[None if j in open_ends or row.dual_value is None else float(row.dual_value) / dual_scale
                        for j, row in enumerate(balance_q)],
                loss_mw=float((np.sum(loss_p) + shunt_g @ vs) * base_mva),
                series_loss_mw=float(np.sum(loss_p) * base_mva),

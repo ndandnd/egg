@@ -1,0 +1,66 @@
+{
+  "scope": "Three retrospective numerical labels; one new reduced static Gurobi solve.",
+  "archive": "1-MV-rural--0-sw.zip",
+  "base_mva": 10.0,
+  "prior_decisions_immutable": true,
+  "per_branch_criterion": "abs(P\u00b2+Q\u00b2-v*l*Sbase\u00b2) <= 1e-5 MVA\u00b2 + 1e-5 max(abs(P\u00b2+Q\u00b2),abs(v*l*Sbase\u00b2)); P,Q in MW/MVAr",
+  "background": "independent static raw CSV, no fleet",
+  "prior": {
+    "point.json": {
+      "status": "optimal",
+      "original_scope_pass": false,
+      "import_mw": -8.08851917907704,
+      "import_mvar": 5.211553477991954,
+      "loss_mw": 0.22048082092296484,
+      "legacy_cone_abs_pu": 2.642735365573806e-10,
+      "legacy_cone_rel": 0.0006769614672957457,
+      "other_residual_max_pu": 7.957699163908225e-11,
+      "cone_max_mva2": 2.6427353655741447e-08,
+      "cone_max_mixed_ratio": 0.0026426322019833673,
+      "cone_worst_edge": 20,
+      "cone_failed_edges": [],
+      "cone_abs_tol_mva2": 1e-05,
+      "cone_rel_tol": 1e-05,
+      "mixed_physical_pass": true
+    },
+    "open-ends-point.json": {
+      "status": "optimal_inaccurate",
+      "original_scope_pass": false,
+      "import_mw": -8.0885191790751,
+      "import_mvar": 5.211553477987496,
+      "loss_mw": 0.2204808209252087,
+      "legacy_cone_abs_pu": 9.263648181878636e-11,
+      "legacy_cone_rel": 6.562037537122589e-07,
+      "other_residual_max_pu": 1.6857022911874117e-15,
+      "cone_max_mva2": 9.263649403123964e-09,
+      "cone_max_mixed_ratio": 0.0006327644058296605,
+      "cone_worst_edge": 10,
+      "cone_failed_edges": [],
+      "cone_abs_tol_mva2": 1e-05,
+      "cone_rel_tol": 1e-05,
+      "mixed_physical_pass": false
+    },
+    "native-base-point.json": {
+      "status": "optimal",
+      "original_scope_pass": false,
+      "import_mw": -8.088519179066132,
+      "import_mvar": 5.211553477281353,
+      "loss_mw": 0.22048082091434656,
+      "legacy_cone_abs_pu": 3.053170587463683e-07,
+      "legacy_cone_rel": 2.2668010566741162e-07,
+      "other_residual_max_pu": 3.538082152371825e-13,
+      "cone_max_mva2": 3.05317072957223e-07,
+      "cone_max_mixed_ratio": 0.0003258184703680865,
+      "cone_worst_edge": 0,
+      "cone_failed_edges": [],
+      "cone_abs_tol_mva2": 1e-05,
+      "cone_rel_tol": 1e-05,
+      "mixed_physical_pass": true
+    }
+  },
+  "gurobi": {
+    "status": "user_limit",
+    "mixed_physical_pass": false,
+    "error": null
+  }
+}
