@@ -156,6 +156,19 @@ def read_simbench_radial(archive_path, base_mva=10.0):
             solver["p_mw"][i] += sign * number(row[p])
             solver["q_mvar"][i] += sign * number(row[q])
 
+    # Native switches disconnect terminal *classes*, while the energized line
+    # and its pi charging remain. A zero net injection is insufficient: a
+    # co-located generator and load might cancel only for this one dispatch.
+    open_classes = set()
+    for switch in tables["Switch"].values():
+        a, b = rep[switch["nodeA"]], rep[switch["nodeB"]]
+        if switch["cond"] == "0" and a != b:
+            open_classes.update((a, b))
+    device_classes = {rep[row["node"]] for device in ("Load", "RES", "ExternalNet")
+                      for row in tables[device].values()}
+    nonleaf_classes = set(parents.values())
+    passive_candidates = open_classes - device_classes - nonleaf_classes
+    passive_open_ends = []
     phase_shifts, branch_members = [], []
     for key in ("r", "x", "tap_ratio", "g_from_pu", "b_from_pu", "g_to_pu",
                 "b_to_pu", "imax_from_pu", "imax_to_pu"):
@@ -169,6 +182,11 @@ def read_simbench_radial(archive_path, base_mva=10.0):
         z = first["z"] / len(members)
         y = first["y_half"] * len(members)
         cap = edge["operating_rating_mva"] / base
+        if (child in passive_candidates and len(members) == 1 and first["kind"] == "line"
+                and z.real > 0 and z.imag > 0 and y.imag > 0):
+            # BUS index (edge index + 1). This is metadata, not a solver option.
+            # At this unoccupied open terminal KCL gives I_series = y_to V_child.
+            passive_open_ends.append(position[child])
         solver["r"].append(z.real)
         solver["x"].append(z.imag)
         solver["tap_ratio"].append(1.)  # matched nominal bases and frozen neutral taps
@@ -189,7 +207,7 @@ def read_simbench_radial(archive_path, base_mva=10.0):
 
     return {"solver": solver, "bus_index": index, "bus_classes": buses,
             "bus_kv": {n: number(row["vmR"]) for n, row in nodes.items()},
-            "branch_terminal_nodes": terminal_nodes,
+            "branch_terminal_nodes": terminal_nodes, "passive_open_ends": passive_open_ends,
             "branch_members": branch_members, "phase_shift_degree": phase_shifts,
             "slack_angle_degree": number(nodes[source]["vaSetp"]), "source_node": source,
             "n_static_loads": len(tables["Load"]), "n_static_res": len(tables["RES"]),

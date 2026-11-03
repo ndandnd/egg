@@ -39,7 +39,7 @@ def solve_radial(parent, r, x, p_mw, q_mvar, *, base_mva=1., price=50.,
                  pwl=None, linearized=False, backup=None, root_import_cap_mw=None,
                  slack_vm_pu=1., tap_ratio=1., g_from_pu=0., b_from_pu=0.,
                  g_to_pu=0., b_to_pu=0., imax_from_pu=None, imax_to_pu=None,
-                 g_bus_pu=0., b_bus_pu=0.):
+                 g_bus_pu=0., b_bus_pu=0., open_end_leaves=()):
     """Return CLARABEL's status, a primal witness, balance prices and residuals.
 
     Buses are ordered 0..n-1. parent[j-1] is upstream of bus j. r and x are
@@ -57,6 +57,12 @@ def solve_radial(parent, r, x, p_mw, q_mvar, *, base_mva=1., price=50.,
     positive into the branch. current_sq_pu is the series squared current.
     loss_mw includes all shunt conductances in addition to series losses.
     The linearized model omits series losses and the quadratic voltage term.
+
+    For the SOCP, open_end_leaves optionally lists downstream BUS indices of
+    known passive open ends. Each marked bus must have zero external P and Q,
+    no child, and no backup. Its shunts remain energized. The physical affine
+    series-current identity at each such end tightens the general relaxation.
+    Its demand cannot be varied in this model, so its balance price is None.
 
     The slack buys signed MW at marginal price price + curvature * import_mw.
     Alternatively pwl=(break_mw, left_slope, right_slope) specifies a convex
@@ -80,6 +86,13 @@ def solve_radial(parent, r, x, p_mw, q_mvar, *, base_mva=1., price=50.,
     x = _vector(x, n - 1, "x")
     p = _vector(p_mw, n, "p_mw")
     q = _vector(q_mvar, n, "q_mvar")
+    marked = tuple(_index(j) for j in open_end_leaves)
+    open_ends = set(marked)
+    if len(open_ends) != len(marked) or (linearized and open_ends):
+        raise ValueError("open ends require distinct bus indices and the SOCP model")
+    for j in open_ends:
+        if not 0 < j < n or children[j] or p[j] != 0. or q[j] != 0.:
+            raise ValueError("each open end must be a downstream leaf with zero external P and Q")
     low = _vector(vmin, n, "vmin", allow_scalar=True)
     high = _vector(vmax, n, "vmax", allow_scalar=True)
     tap = _vector(tap_ratio, n - 1, "tap_ratio", allow_scalar=True)
@@ -145,6 +158,8 @@ def solve_radial(parent, r, x, p_mw, q_mvar, *, base_mva=1., price=50.,
     if backup is not None:
         backup_bus, capacity, marginal_cost = backup
         backup_bus = _index(backup_bus)
+        if backup_bus in open_ends:
+            raise ValueError("a passive open end cannot have a backup source")
         if not 0 <= backup_bus < n or not np.all(np.isfinite([capacity, marginal_cost])) or capacity < 0:
             raise ValueError("backup needs a valid bus, nonnegative finite capacity and finite cost")
         g = cp.Variable(nonneg=True, name="backup_MW")
@@ -168,14 +183,20 @@ def solve_radial(parent, r, x, p_mw, q_mvar, *, base_mva=1., price=50.,
             w = v[i] if tap[edge] == 1. else v[i] / tap[edge]**2
             drop = 2 * (r[edge] * incoming_p[j] + x[edge] * incoming_q[j])
             v_child = w - drop
-            if not linearized and (r[edge] or x[edge]):
-                ell = cp.Variable(nonneg=True, name=f"current_squared_{j}")
+            if not linearized and (r[edge] or x[edge] or j in open_ends):
+                if j in open_ends:
+                    # KCL at a passive leaf: I_series = (y_to + y_bus) V_child.
+                    # Together with V_child = W - z I_series, this identity
+                    # implies the series cone equality without a lifted variable.
+                    ell = (shunt_g[j]**2 + shunt_b[j]**2) * v[j]
+                else:
+                    ell = cp.Variable(nonneg=True, name=f"current_squared_{j}")
+                    constraints.append(cp.SOC(w + ell, cp.hstack([
+                        2 * incoming_p[j], 2 * incoming_q[j], w - ell])))
                 series_current[j] = ell
                 required_p += r[edge] * ell
                 required_q += x[edge] * ell
                 v_child += (r[edge]**2 + x[edge]**2) * ell
-                constraints.append(cp.SOC(w + ell, cp.hstack([
-                    2 * incoming_p[j], 2 * incoming_q[j], w - ell])))
                 if np.isfinite(limits[edge]):
                     constraints.append(ell <= limits[edge]**2)
                 # If U_child = W - zI, the terminal currents are
@@ -215,6 +236,8 @@ def solve_radial(parent, r, x, p_mw, q_mvar, *, base_mva=1., price=50.,
               "limit_violation_max_pu", "point_ac_residuals_pass")
     out = dict.fromkeys(fields)
     out.update(cone_rel_floor=1e-8, solver="CLARABEL", model="lindistflow" if linearized else "socp",
+               formulation="passive_open_end_reduction" if open_ends else "general",
+               open_end_leaves=sorted(open_ends),
                point_abs_tol=1e-7, point_cone_rel_tol=1e-5, price_scope="network_model_balance_dual")
     try:
         problem.solve(solver=cp.CLARABEL, direct_solve_method="qdldl", max_iter=500,
@@ -291,8 +314,10 @@ def solve_radial(parent, r, x, p_mw, q_mvar, *, base_mva=1., price=50.,
                p_to_mw=(p_to * base_mva).tolist(), q_to_mvar=(q_to * base_mva).tolist(),
                p_series_send_mw=(p_series * base_mva).tolist(),
                q_series_send_mvar=(q_series * base_mva).tolist(),
-               dlmp=[float(row.dual_value) / dual_scale for row in balance_p],
-               dlmp_q=[float(row.dual_value) / dual_scale for row in balance_q],
+               dlmp=[None if j in open_ends else float(row.dual_value) / dual_scale
+                     for j, row in enumerate(balance_p)],
+               dlmp_q=[None if j in open_ends else float(row.dual_value) / dual_scale
+                       for j, row in enumerate(balance_q)],
                loss_mw=float((np.sum(loss_p) + shunt_g @ vs) * base_mva),
                series_loss_mw=float(np.sum(loss_p) * base_mva),
                shunt_loss_mw=float((shunt_g @ vs) * base_mva), current_sq_pu=ell.tolist(),
@@ -328,6 +353,12 @@ def price_depot_day(parent, r, x, background_mw, reactive_mvar, depot, fleet_kwh
         raise ValueError("invalid day dimensions, depot or slot lengths")
     if not np.isfinite(p).all() or not np.isfinite(q).all():
         raise ValueError("background powers must be finite")
+    if "open_end_leaves" in network:
+        marked = tuple(_index(j) for j in network["open_end_leaves"])
+        for j in marked:
+            if not 0 < j < p.shape[1] or j == depot or np.any(p[:, j]) or np.any(q[:, j]):
+                raise ValueError("a passive open end cannot take a depot or background injection")
+        network["open_end_leaves"] = marked  # also preserve one-shot iterables across solves
     if "pwl" in network:
         raise ValueError("use pwl_surcharge to retain the period-specific upstream price")
     if pwl_surcharge is not None:

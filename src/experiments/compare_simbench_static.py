@@ -75,16 +75,23 @@ def main():
     parser.add_argument("archive", type=Path)
     parser.add_argument("ac_reference", type=Path)
     parser.add_argument("--save-point", type=Path, help="Retain raw conic arrays for diagnosis before comparison")
+    parser.add_argument("--reduce-open-ends", action="store_true",
+                        help="Eliminate the free series-current variable only at native sealed cable ends")
+    parser.add_argument("--base-mva", type=float, default=10.,
+                        help="Common power base for the numerical representation (official converter uses 1 MVA)")
     args = parser.parse_args()
     ac = json.loads(args.ac_reference.read_text())
-    model = read_simbench_radial(args.archive)
-    point = solve_radial(**model["solver"], price=50., hours=1.)
+    model = read_simbench_radial(args.archive, base_mva=args.base_mva)
+    special = {"open_end_leaves": model["passive_open_ends"]} if args.reduce_open_ends else {}
+    point = solve_radial(**model["solver"], price=50., hours=1., **special)
     if args.save_point is not None:
         with args.save_point.open("x") as output:
             json.dump(point, output, allow_nan=False)
     keys = ("status", "import_mw", "import_mvar", "loss_mw", "cone_abs", "cone_rel", "cone_rel_floor",
             "balance_max_pu", "voltage_eq_max_pu", "limit_violation_max_pu", "point_ac_residuals_pass")
     result = dict(scope="Static CSV injections, no fleet, fixed taps, positive linear procurement.",
+                  base_mva=args.base_mva,
+                  exact_passive_ends=[model["bus_classes"][i] for i in special.get("open_end_leaves", ())],
                   tolerance_by_unit=1e-4, solver={k: point[k] for k in keys},
                   ac={k: ac[k] for k in ("import_mw", "import_mvar", "loss_mw", "converged",
                                           "within_native_limits")})

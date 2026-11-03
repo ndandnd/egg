@@ -1,0 +1,50 @@
+{
+  "scope": "Static CSV injections, no fleet, fixed taps, positive linear procurement.",
+  "exact_passive_ends": [
+    "MV1.101 Bus 77_2",
+    "MV1.101 Bus 11_3",
+    "MV1.101 Bus 47_2",
+    "MV1.101 Bus 63_3",
+    "MV1.101 Bus 96_2",
+    "MV1.101 Bus 63_4"
+  ],
+  "tolerance_by_unit": 0.0001,
+  "solver": {
+    "status": "optimal_inaccurate",
+    "import_mw": -8.0885191790751,
+    "import_mvar": 5.211553477987496,
+    "loss_mw": 0.2204808209252087,
+    "cone_abs": 9.263648181878636e-11,
+    "cone_rel": 6.562037537122589e-07,
+    "cone_rel_floor": 1e-08,
+    "balance_max_pu": 1.6857022911874117e-15,
+    "voltage_eq_max_pu": 3.784161803623572e-16,
+    "limit_violation_max_pu": 2.5732860937585644e-18,
+    "point_ac_residuals_pass": false
+  },
+  "ac": {
+    "import_mw": -8.088519179577439,
+    "import_mvar": 5.211553477690618,
+    "loss_mw": 0.22048082095486712,
+    "converged": true,
+    "within_native_limits": true
+  },
+  "max_abs_discrepancies": {
+    "voltage_pu": 5.340172748447003e-12,
+    "terminal_mw": 4.4874237659087157e-10,
+    "terminal_mvar": 2.2132945476371901e-10,
+    "terminal_ka": 7.954293066228524e-10,
+    "import_mw": 5.023395033276756e-10,
+    "import_mvar": 2.9687807767686536e-10,
+    "loss_mw": 2.9658414613109585e-11
+  },
+  "unmatched_or_nonfinite": [],
+  "covered_voltage_classes": 101,
+  "total_voltage_classes": 101,
+  "uncovered_voltage_classes": [],
+  "native_assets": 101,
+  "matched_terminal_count": 202,
+  "peak_ac_loading_percent": 54.5208476607716,
+  "comparison_pass": true,
+  "qualified": false
+}
