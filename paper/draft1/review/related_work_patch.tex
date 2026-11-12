@@ -81,6 +81,34 @@ whenever the hull optimum lies inside a face, with or without a support gap. Onl
 geometry, not the cycle, reveals whether a supporting price exists.
 
 %----------------------------------------------------------------------
-% (4) Electric-bus scheduling: sequential vs integrated -- see block (4) below,
-%     added after topic C search completed.
+% (4) ADD at the end of "Electric-bus scheduling with charging." :
 %----------------------------------------------------------------------
+Whether duties can be fixed before charging is optimized has so far been
+answered computationally. \citet{sassiOulamara2017} assign tours first and
+schedule charging as a minimum-cost flow. Reviews treat vehicle and charge
+scheduling as separate but linked problems \citep{perumal2022review}.
+On 14 transit networks, \citet{nath2024joint} report that integrating
+charge scheduling into trip assignment lowers total cost by 4.1\% on average
+relative to a sequential plan, including charger siting. In logistics,
+flexible departures save up to about 5\% under day-ahead prices
+\citep{kleinSchiffer2023flexible}. Much larger savings arise from optimizing
+charging on a fixed schedule: 16.5\% against greedy rules under day-ahead
+prices \citep{abdelwahed2020opportunity}, and more where demand charges
+dominate \citep{heLiuSong2020}. They also arise from choosing fleet size
+jointly with time-of-use-aware charging \citep{wu2022grid,zhang2024tou}.
+We are not aware of a result stating conditions under which a
+price-independent duty choice loses nothing. \Cref{thm:projection} gives
+such conditions for a narrow class, and the boundary test in
+\cref{sec:boundaries} (at most about 2\%) is in line with the measured
+sequential-versus-integrated gaps.
+
+%----------------------------------------------------------------------
+% (5) REPLACE the clause on Zhou et al. in "Buses, tariffs and markets."
+%     ("...and \citet{zhou2025v2g} formulate ... published abstract).")
+%     with (full text now read, Kyoto repository accepted manuscript):
+%----------------------------------------------------------------------
+and \citet{zhou2025v2g} jointly choose fleet size, trip chains and
+charging and discharging for 418 trips at two depots under a three-level
+time-of-use tariff, solved by adaptive large-neighbourhood search; in their
+case cross-line operation lowers daily cost by about 17\% relative to
+single-line operation (their Table~6).
