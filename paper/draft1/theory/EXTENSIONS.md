@@ -26,13 +26,13 @@ re-derived).
 | T1(b) | Refined ordering (min r_m, then majorization) restores dominance | **refuted** (in Ex. 1 no size-2 matching dominates) |
 | T1(b) | One-fee bound under Cor 3.1 or Cor 3.2 | **proved** (Cor 3.3) |
 | T1(b) | Strict one-fee bound in general | **refuted**: D - CH = f in Ex. 1, also for the smooth cost c\|d - z\|^2 with c >= 8f |
-| T1(b) | D - CH <= f in general | **Conjecture 3.4** (random check, no violation); proved: D - CH <= f t <= f nu |
+| T1(b) | D - CH <= f in general | **Open** (Conjecture 3.4; weak evidence: <= 8 services, <= 4 slots, two-point mixtures); proved: D - CH <= f t <= f nu |
 | T2 | Embedding: one tripper class with the mixing property + convex rest of depot, coupled through aggregate slot loads and convex constraints | **proved** (Thm 4) |
 | T2 | Couplings that break it | identified and checked: per-bus tripper coupling (binding plug limits), a second nonconvex class with a different window (D - CH = 2f(1-eps), Ex. 3), nonconvex rest of depot |
 | T3 | Linear prices: price-independent iff conv S_M* contains every S_M (common fee); general fees; representative families | **proved** (Thm 5) |
 | T3 | Convex costs: iff S_M* contains every S_M and has minimal fee; family version is a union condition | **proved** (Thm 5) |
 | T4 | Homogeneous energies, time-compatibility graph, pooled connector: FIFO matching dominates each layer and the one-fee bound holds | **proved** (Thm 6) |
-| T4 | Heterogeneous energies, complete compatibility: dominating matching | **refuted**: 3 services, 1 early slot (Ex. 4); worst commitment regret min(\|spread\|, f) |
+| T4 | Heterogeneous energies, complete compatibility: dominating matching | **refuted**: 3 services, 1 early slot (Ex. 4); over spreads in [-P, P] each commitment has worst-case regret min(P, f) |
 | T4 | One-fee bound with staggering | **refuted**: D - CH = k(1-eps) f with k pairs and k slots (Ex. 5; k = 2 has complete compatibility) |
 | T4 | Bound on D - CH with staggering | proved D - CH <= f t <= f nu; whether D - CH <= f min(nu, T1) is **Open** |
 | T5 | Shapley-Folkman relation | **proved** (Prop 7): SF gives the sum of the min(k, T) largest fees for k independent classes, attained in the limit by Ex. 3; SF does not imply the one-fee bound for one fleet |
@@ -183,9 +183,11 @@ box. The maximum of d(D) over A(M) is Gk_M(D) = min over Y in D of
 pointwise; both sets have total S_0.
 *Cross-validation* (`test_T1b_cut_vs_flow`): an independent exact
 integer network-simplex feasibility check (networkx; per-bus network with lower
-bounds, no cut formula) agrees with the formula at every test point. In
-development, 400 instances and 90,255 points gave 0 disagreements; the
-committed test repeats this on 150 instances (counts in the log).
+bounds, no cut formula) agrees with the formula at every test point (150
+instances, 36,189 points, 0 disagreements). The test also checks tightness:
+greedy vertices of each nonempty layer (used by `contains`, `greedy_min`) are
+flow-feasible for that layer, and no test point is flow-feasible for a layer
+the formula calls empty.
 
 **Terminal adequacy.** The terminal window is *adequate* if pi'_s >= B for
 every terminal slot, so each terminal slot alone can refill any bus. The
@@ -241,10 +243,9 @@ h(x) = (x - B - y)_+ for each y >= 0 gives phi_{M*_m}(y) <= phi_M(y) for all y,
 and Thm 3(a) applies. []
 
 **Conjecture 3.2'.** Cor 3.2 holds without terminal adequacy. Evidence:
-`test_T1b_complete_graph`, random complete instances (n_A, n_B <= 3,
-T1, T2 <= 3, binding terminal per-bus caps in about 60%), with no layer in
-which the sorted matching fails (counts in the log). In development, 6,000
-instances also gave 0 failures. The proof above does not cover this case,
+`test_T1b_complete_graph`, 1,500 random complete instances (n_A, n_B <= 3,
+T1, T2 <= 3, binding terminal per-bus caps in about 60%): the sorted matching
+dominates in all 1,619 nonempty layers with binding terminal limits. The proof above does not cover this case,
 because terminal per-bus limits see pair sums and not only requirements.
 
 **Corollary 3.3 (one-fee bound under 3.1 or 3.2).** Suppose the terminal is
@@ -298,10 +299,9 @@ B = 6, a = (4, 1), b = (1, 6), Gamma = {(A1,B1), (A1,B2), (A2,B2)} (a path).
 One early slot with pi = 1 and kappa = 10. Two terminal slots with per-bus caps
 (5, 1) and aggregate caps (9, 11). The feasible size-1 matchings are
 {(A2,B2)} (pair draw 7, requirement 1) and {(A1,B1)} (pair draw 5,
-requirement 0). {(A1,B2)} needs 4 > pi. Neither set contains the other;
-witness points are in the log and are confirmed by the flow check. In
-development, a random search of 20,000 instances with n_A + n_B <= 4 found
-failures only with 4 services.
+requirement 0). {(A1,B2)} needs 4 > pi. Neither set contains the other:
+(e, l1, l2) = (2, 7, 3) is attainable only with (A2,B2) and (0, 9, 3) only with
+(A1,B1), both confirmed by the flow check.
 Three services cannot work when n_A = 1: pairing the smallest feasible b
 dominates (proof: the requirement is smaller; the A bus keeps its early
 profile; the terminal profiles u of the paired bus and v of the B-only bus
@@ -327,13 +327,14 @@ strictly convex supply costs.
 **Surviving bounds.** (i) Always D - CH <= f t <= f nu. Splitting a pair into
 two singles raises g pointwise; casework on whether pi'(D2) >= b gives
 g_A + g_B >= g_pair for every D. So A(empty matching) contains every A(M)
-(`test_T1b_pair_split`, any terminal and windows), and Lemma A applies to
-the trivially nested family. (ii) Under Cor 3.3 the bound is < f.
-**Conjecture 3.4.** In the plug model with a common window, D - CH <= f.
-Evidence: `test_T1b_gap_search` (random two-point mixtures, n <= 8 services,
-T1 <= 4). The largest t - kmax(z) observed is at most 1. Development runs
-(6,000 + 3,000 instances) gave a maximum of 7/8 for fractional t, and exactly 1
-only for integer t, as in Ex. 1.
+(`test_T1b_pair_split`, any terminal and windows). Being convex, it contains
+every hull load, so the no-pair plan realizes the hull load at fee excess
+f t (direct argument; this family need not have MP). (ii) Under Cor 3.3 the bound is < f.
+**Conjecture 3.4 (open; weak evidence).** In the plug model with a common
+window, D - CH <= f. Evidence is limited to `test_T1b_gap_search`: 1,500
+random instances, at most 8 services, at most 4 early slots, two-point
+mixtures only; the largest t - kmax(z) observed is 7/8. A violation may need
+more pairs or mixtures of more points than this search covers.
 
 ---
 
@@ -377,7 +378,9 @@ coupling constraint. []
    plan (weight 1 - eps) with its two-singles plan, for a total fee
    2f(1 + eps) above the common 2f. Physical: every plan with a pair has
    e_t >= 1 in that pair's slot (checked), so no class can pair, and the
-   physical fee is 4f. Hence D - CH = 2f(1 - eps), which exceeds f for
+   physical fee is 4f. Every pair needs one unit of early energy, so any
+   hull representation of the point has mean count at most its early total
+   2(1 - eps); hence D - CH = 2f(1 - eps) exactly, which exceeds f for
    eps < 1/2 and tends to the Shapley-Folkman bound 2f of Section 6.
 3. *A nonconvex rest of depot* (binary battery modes, minimum stable power,
    unit commitment): the gap then includes the rest's own nonconvexity.
@@ -526,14 +529,15 @@ single B have only one matching, and two size-1 matchings need a second
 service in one batch, so at least 3 services and 1 slot are needed.
 *Loss.* Commit to one size-1 matching before prices, and choose between it and
 the all-singles plan (which contains everything) after prices. At early-minus-
-terminal spread pi, with fee f, the worst regret of the better commitment is
-exactly min(|pi|, f) (checked at spreads -3, -1/2, 1/3, 2 with f = 1). The loss
-grows with the price spread until it reaches one fee, and fee fallback caps it
-at f. Mixing the two size-1 points gives e = 1/2, which lies only in the
+terminal spread pi, with fee f, committing to (A,B1) has regret min(-pi, f) for
+pi < 0 and 0 otherwise; committing to (A,B2) has regret min(pi, f) for pi > 0
+and 0 otherwise (checked at spreads -3, -1/2, 1/3, 2 with f = 1). So over
+spreads in [-P, P] every commitment has worst-case regret min(P, f): the loss
+grows with the price range until it reaches one fee, where fee fallback caps it. Mixing the two size-1 points gives e = 1/2, which lies only in the
 size-0 layer, so D - CH = f.
 Random search (`test_T4_complete_compat_search`): with heterogeneous energies
-and complete time-compatibility, a positive fraction of nonempty layers have
-no dominating matching (log); in development, 318 of 3,645.
+and complete time-compatibility, 147 of 1,904 nonempty layers have no
+dominating matching.
 
 **Example 5 (staggering breaks the one-fee bound by any multiple).** For
 k >= 1 let B = 2k + 2. A run i ends at boundary i - 1 and B run j starts at
@@ -546,8 +550,10 @@ needs 1 in its own slot. Pair (i, j) with j > i needs more than
 window and requirement delta > 0, so it is infeasible. The hull point mixes the
 k-pair diagonal plan (each pair charging 1 in its slot) with weight 1 - eps and
 the no-pair plan with weight eps. That point has e_t = 1 - eps in every slot
-and lies in no layer except m = 0. So with F the indicator of that point,
-D - CH = k(1 - eps) f. `test_T4_example5` checks k = 1..4 with eps = 1/10 and
+and lies in no layer except m = 0. Every feasible pair needs at least one unit
+of early energy, so any hull representation has mean count at most the early
+total k(1 - eps). So with F the indicator of that point, D - CH = k(1 - eps) f
+exactly. `test_T4_example5` checks k = 1..4 with eps = 1/10 and
 delta = 1/20 exhaustively over all matchings: (D - CH)/f = 9/10, 9/5, 27/10,
 18/5. Hence, with staggering, D - CH is not bounded by any fixed multiple of
 f; the general bound D - CH <= f t <= f nu holds (pair splitting).
@@ -572,7 +578,8 @@ for each i. Each i uses at least one, so at most d use two or more. []
 and fleet, and with per-cardinality layers that have MP and fee f_i, be
 coupled only through a proper closed convex cost F of the total slot vector
 in R^T. Then D - CH is at most the sum of the min(k, T) largest f_i. Example 3
-(k = 2, T = 3) attains 2f in the limit, so the bound is sharp.
+(k = 2, T = 3) attains 2f in the limit, so the bound is sharp for k = 2 <= T;
+sharpness for larger k is not shown.
 (b) For one fleet, the Shapley-Folkman route gives nothing beyond the one-fee
 bound and does not imply it.
 *Derivation.* (a) Class i's image P_i (load, cost closed upward) lies in
@@ -592,7 +599,10 @@ does not help. Those units are coupled by the n_A + n_B service-coverage
 equalities, which become coupling coordinates, so d = T + n_A + n_B. A duty's
 coverage vector takes only the values 0 and 1, so a fractional hull point
 cannot be replaced by a physical one with the same coverage coordinates:
-rho_i = +inf, and the estimate is vacuous. The one-fee bound comes instead from
+rho_i = +inf, and the estimate is vacuous. Relaxing coverage to a set-cover
+inequality (>= 1) does not rescue it: rounding a fractional duty of weight w
+up keeps coverage feasible but changes its energy contribution from w s_v to
+s_v, so the load coordinates, which carry F, cannot be held fixed either. The one-fee bound comes instead from
 the integrality of the bipartite min-cost-flow structure: r_m is the integer
 restriction of a convex function, so mixing cardinalities costs at most one
 fractional pair. Combining SF with that per-class fact gives (a), which is
@@ -611,7 +621,10 @@ in every random family); incomplete graphs (random edge sets). The code uses
 alpha = 1; a common alpha is a rescaling, as argued in the text. Randomized
 families use fixed seeds; counts are printed in the log. The cut formula used
 by most tests is validated against an independent flow computation, so the
-dominance tests do not rest on the formula they test.
+dominance tests do not rest on the formula they test; tightness of the
+truncated cut function (used by containment and the greedy) is checked the same
+way. Lemma A, Lemma B, Theorem 5 (T3) and Prop 7 are proof-only; the log does
+not cover them beyond the examples.
 
 ## 8. Re-checks of the paper
 

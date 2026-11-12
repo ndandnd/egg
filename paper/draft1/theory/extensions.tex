@@ -292,7 +292,9 @@ exceeds $(j-i+1)(1-\varepsilon)$. Pair $(i,i-1)$ has an empty window and
 requirement $\delta>0$, and the remaining pairs are incompatible. So the
 point $e_t=1-\varepsilon$ admits no pair. It is the mixture, with weight
 $1-\varepsilon$, of the diagonal plan (one unit per slot, $k$ pairs) with
-the plan without pairs, so $t=k(1-\varepsilon)$.
+the plan without pairs, so $t=k(1-\varepsilon)$. Every feasible pair
+needs one unit of early energy, so no hull representation of the point has
+mean count above its early total $k(1-\varepsilon)$; the gap is exact.
 \end{proof}
 
 \subsection*{Relation to Shapley--Folkman}
@@ -301,7 +303,7 @@ the plan without pairs, so $t=k(1-\varepsilon)$.
 Let $k$ independent two-batch classes, each with layers having MP and fee
 $f_i$, be coupled only through a proper closed convex cost of the total slot
 vector in $\R^T$. Then $D-\CH$ is at most the sum of the $\min\{k,T\}$ largest
-$f_i$, and this is attained in the limit.
+$f_i$; for $k=2\le T$ this is attained in the limit.
 \end{proposition}
 \begin{proof}
 Each class image lies in a translate of a $T$-dimensional subspace, because

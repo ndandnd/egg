@@ -68,6 +68,12 @@ def test_T1b_cut_vs_flow(n_inst=150):
                 mu = Fr(rng.randint(0, 4), 4)
                 pts.append([mu * x + (1 - mu) * y for x, y in zip(p, q)])
         for L in Ls:
+            if L.nonempty:   # tightness: greedy vertices of a layer are flow-feasible for it
+                for _ in range(3):
+                    v = L.greedy_min([rng.randint(-5, 5) for _ in range(inst.T)])[1]
+                    assert flow_member(inst, L.M, v)
+            else:            # emptiness: no test point is flow-feasible
+                assert not any(flow_member(inst, L.M, d) for d in pts)
             for d in pts:
                 x = L.member(d)
                 assert x == flow_member(inst, L.M, d), (inst, L.M, d)
@@ -425,9 +431,10 @@ def test_T4_example4():
         h = {k: L.greedy_min(w)[0] for k, L in (("B1", L1), ("B2", L2), ("0", L0))}
         V = min(2 * f + min(h["B1"], h["B2"]), 3 * f + h["0"])
         reg = {k: min(2 * f + h[k], 3 * f + h["0"]) - V for k in ("B1", "B2")}
-        assert max(reg.values()) == min(abs(pi), f)
+        assert reg["B1"] == (min(-pi, f) if pi < 0 else 0)
+        assert reg["B2"] == (min(pi, f) if pi > 0 else 0)
     print("ok test_T4_example4: 3 services, 1 early slot, complete compatibility: no dominating matching; "
-          "D - CH = f; worst commitment regret = min(|spread|, f)")
+          "D - CH = f; committing to (A,B1) loses min(-pi, f) at spread pi < 0, (A,B2) loses min(pi, f) at pi > 0")
 
 
 def example5(k, delta):
