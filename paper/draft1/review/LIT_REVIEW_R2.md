@@ -74,7 +74,97 @@ Write the planner's problem as two "agents" coupled by T = 2 equalities (early l
 
 ## C. Sequential versus integrated electric-bus planning
 
-*Pending — delegated web search in progress; filled in below when complete.*
+A delegated search covered 33 queries; the list is in the delegated report and summarized at the end of this section. All DOIs below are Crossref-verified by me. The figures for Nath et al. and Abdelwahed et al. were re-checked by me: the Nath abstract on arXiv, and the Abdelwahed EUR repository PDF (§5.3; Table 4 row "OPT 796.30 / FIFS 953.33"). Other numbers are as read by the delegated search from the full texts noted.
+
+**The literature uses three different baselines. Only group (i) measures what the paper's duty-first test measures.**
+- (i) Duties or assignments fixed first, then charging optimized, compared with joint optimization.
+- (ii) Optimized vs. naive charging on a fixed schedule. This is the value of the second stage, not the integration loss.
+- (iii) Integrated optimization vs. rule heuristics.
+
+### (i) Sequential vs. integrated
+
+**C1. Nath, R. B., T. Rambha and M. Schiffer (2024).** *Transportation Research Part C* 167, 104839, DOI 10.1016/j.trc.2024.104839. Already in the paper as `nath2024joint`.
+- Access: full text read (arXiv:2403.09763) by the delegated search; I re-checked the abstract.
+- Sequential = charger location plus E-VSP first, then charge scheduling with rotations fixed. Joint = charge scheduling inside an iterated local search.
+- Instances: 14 GTFS networks with 432–3,337 trips and 20–195 buses.
+- **Joint vs. sequential: operating cost −14.1%; total cost −4.1% on average** (abstract), per network 0.13% (SCMTD, 1,830 trips) to 7.7% (Cornwall, Intercity) (Table 9).
+- Total cost includes charger-siting effects.
+- Prices: PG&E 2023 TOU (peak 4–9 pm roughly 3× off-peak) plus contracted capacity of 654 $/kW. The delegated agent reports the arXiv table prints the tariff in scaled units; per-kWh levels are its inference, unverified.
+- **This is the closest empirical comparator to the paper's §5 hourly test.**
+
+**C2. Klein, P. S. and M. Schiffer (2023).** "Electric Vehicle Charge Scheduling with Flexible Service Operations." *Transportation Science*, DOI 10.1287/trsc.2022.0272. Volume and pages are not returned by Crossref; the delegated search reports 57(6), 1605–1626, unverified.
+- Access: full text (arXiv:2201.03972v2) by the delegated search.
+- Logistics vans with a fixed vehicle-to-operation assignment. "Integration" means flexible departure times.
+- Prices: ENTSO-E day-ahead.
+- Savings of 2.5% (1 h of flexibility) rising to about 4.6–5.4% (plateau). Savings scale with price variance: 1.1% / 1.95% / 3.7% for low / medium / high-variance TOU.
+
+**C3. Wang, Jin, Ibarra-Rojas, Xu, Cao (2026).** "A branch-and-price algorithm for integrated optimization on vehicle and crew scheduling of electric bus system." *Transportation Research Part B* 206, 103430, DOI 10.1016/j.trb.2026.103430.
+- Access: **not accessible** (ScienceDirect 403; PolyU repository embargoed or timing out).
+- A search snippet says sequential vehicle–crew then charging scheduling "did not affect global optimality". If true, this supports the paper's direction. **Unverified; do not cite for that claim without reading.**
+
+**C4. Teng, Chen, Fan (2020).** *Journal of Transportation Engineering, Part A* 146(2), 04019073, DOI 10.1061/JTEPBS.0000306. Not accessible (ASCE 403). A circulating "4.37% vs sequential" figure is unverified.
+
+**C5. Sassi, O. and A. Oulamara (2017).** "Electric vehicle scheduling and optimal charging problem: complexity, exact and heuristic approaches." *International Journal of Production Research* 55(2), 519–535, DOI 10.1080/00207543.2016.1192695.
+- Access: abstract plus ROADEF 2014 abstract.
+- The joint problem is NP-hard. Their heuristic assigns tours first and then schedules charging as a min-cost flow.
+- This is a structural analogue of "assign, then charge", **not** a separation result.
+
+### (ii) Charging-only value on a fixed schedule
+
+**C6. Abdelwahed, van den Berg, Brandt, Collins, Ketter (2020).** *Transportation Science* 54(6), 1601–1615, DOI 10.1287/trsc.2020.0982.
+- Access: full text (EUR repository).
+- Rotterdam: 7 lines, 47 buses, opportunity fast charging, hourly day-ahead prices.
+- Optimal charging costs €796.30 vs €953.33 for FIFS and LCHP heuristics, **−16.5%** (re-verified, §5.3).
+
+**C7. He, Y., Z. Liu and Z. Song (2020).** *Transportation Research Part E* 142, 102056, DOI 10.1016/j.tre.2020.102056.
+- Access: full text (OSTI accepted manuscript) by the delegated search.
+- Salt Lake City: 19 buses, with a large case of 170 buses. Rocky Mountain Power tariff.
+- Demand charges: 12.765 $/kW without TOU; 15.40 $/kW on-peak (May–Sep) with TOU.
+- Optimized vs. uncontrolled: −47.8% (no TOU), −66 to −78% (TOU); large network −34 to −66%.
+- Savings come mainly from demand charges.
+
+**C8. Jahic, Eskander, Schulz (2019).** *Applied Sciences* 9(9), 1748, DOI 10.3390/app9091748. Open access, read by the delegated search. Hamburg depot for 240 buses: peak 7.5 → 5.47 MW in winter (−27%) and 5.7 → 3.27 MW in summer (−43%). No prices.
+
+**C9.** Lacombe et al. (arXiv:2309.00523) and Caustur et al. (arXiv:2509.05940) are preprints with fixed schedules: 11–20% and 5% (demand-charge component). Not Crossref-checked; context only.
+
+### (iii) Integrated vs. heuristics; TOU-aware vs. TOU-blind
+
+**C10. Wu et al. (2022)**, `wu2022grid`. Guangzhou: 379 trips, 5 depots. The integrated model costs $10,866 vs. $13,884 (FIFO) and $14,975 (TOU-aware FIFO). The gain comes from fleet size (28 vs. 39/43 buses). **Charging cost is higher under integration.**
+
+**C11. Zhang, Wang, Gu, Han, Chung, Qu (2024).** "On the role of time-of-use electricity price in charge scheduling for electric bus fleets." *Computer-Aided Civil and Infrastructure Engineering* 39(8), 1218–1237, DOI 10.1111/mice.13134. Abstract only (Wiley 403). Including TOU "can reduce costs by up to 22%". The baseline is unverified.
+
+**C12. Lu, Xing, Li (2025).** *Transportation Research Part E* 196, 104021, DOI 10.1016/j.tre.2025.104021. Abstract only. TOU-aware E-VSP by branch-and-price; no numbers in the abstract.
+
+### Context only (no price-integration numbers)
+
+All abstract-only unless noted; DOIs verified.
+- van Kooten Niekerk, van den Akker, Hoogeveen (2017), "Scheduling electric vehicles," *Public Transport* 9(1–2), 155–176, DOI 10.1007/s12469-017-0164-0. **Note: Public Transport, not TR-D.** Model 2 has time-varying prices.
+- Perumal, Lusby, Larsen (2022), *EJOR* 301(2), 395–413, DOI 10.1016/j.ejor.2021.10.058. The abstract calls integrated planning crucial; the body was not accessible.
+- Li (2014), *Transportation Science* 48(4), 521–539, DOI 10.1287/trsc.2013.0468.
+- Wen et al. (2016), *Computers & OR* 76, 73–83, DOI 10.1016/j.cor.2016.06.013.
+- Rogge et al. (2018), *Applied Energy* 211, 282–295, DOI 10.1016/j.apenergy.2017.11.051.
+- Dirks, Schiffer, Walther (2022), *TR-C* 139, 103628, DOI 10.1016/j.trc.2022.103628.
+- Olsen and Kliewer (2020), *Logistics Research* 13:4. Open access was opened by the delegated search, but **the DOI 10.23773/2020_4 does not resolve in Crossref**; cite by URL only.
+- Gkiotsalitis, Iliopoulou, Kepaptsoglou (2023), *EJOR* 306(1), 189–206 (as cited in Zhou et al. 2025; DOI not checked).
+
+**Ambiguous / not identified.** "Zhang et al. 2021", "Gkiotsalitis" (several papers; the TR-C 2025 paper by Rizopoulos and Gkiotsalitis is unverified), "Janovec" (no price paper found).
+
+### Synthesis for the paper's "duty-first" claim
+
+- **Theory.** No theoretical separation result was found: no conditions under which duties-then-charging is optimal under TOU, dynamic prices or demand charges, and no bound on the integration loss. The paper's projection theorem appears to be the first such statement, for a narrow class.
+- **True sequential-vs-integrated evidence.**
+  - Nath et al.: 0.13–7.7%, mean 4.1%, of total cost on 432–3,337-trip networks, including charger siting.
+  - Klein and Schiffer: 1–5% in logistics.
+  - The paper's 64-instance test (≤ 2.04% upper bound, mean regret ~8 SEK) is consistent with that range and at its low end.
+- **Larger figures measure something else.**
+  - Charging-only optimization on fixed duties: 14–78% (Abdelwahed; He et al.).
+  - Fleet-size reduction vs. FIFO rules: Wu et al.
+  - These support the paper's design point that the second stage, charging, carries most of the value once duties are fixed.
+- **Price assumptions where integration matters.**
+  - TOU peak around 2–3× off-peak (PG&E, Guangzhou, Shanghai).
+  - Demand charges of 11–15 $/kW·month (US).
+  - Day-ahead variance (ENTSO-E).
+  - None is in the 0.5–3 EUR/kWh spread range the two-batch analysis says is needed for a support failure. This is consistent with the paper's §6.
 
 ---
 

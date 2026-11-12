@@ -8,7 +8,7 @@ One entry per claim: the closest prior statement found, a verdict, and what the 
 | 2 | One-fee bound (`prop:onefee`) | **Partly known.** Not a Shapley–Folkman corollary, but a short consequence of classical matching facts |
 | 3 | Support-failure anatomy and bands (`prop:anatomy`, `prop:bands`) | **New but incremental.** Elementary consequences of the 1-D frontier; no prior statement found |
 | 4 | Price iteration (`thm:iteration`) | **Partly known.** Frank–Wolfe/ergodic parts known; myopic 2-cycles in coupled EV-grid pricing published (Alizadeh et al. 2017) |
-| 5 | Separation message (duty-first) | see section 5 below |
+| 5 | Separation message (duty-first) | **New as a theorem, for a narrow class.** Empirical sequential-vs-integrated gaps are published (Nath et al. 2024: 4.1% mean) |
 
 ---
 
@@ -75,4 +75,22 @@ One entry per claim: the closest prior statement found, a verdict, and what the 
 
 ## 5. Separation message (duty-first)
 
-*Pending completion of topic C search.*
+**Closest prior statements.**
+- *Sequential vs. joint, transit:* Nath, Rambha and Schiffer (2024, TR-C; already cited). Joint charge scheduling and trip assignment lowers total cost by 4.1% on average and operating cost by 14.1% vs. sequential, over 14 networks with 432–3,337 trips. The per-network range is 0.13–7.7%, and the totals include charger siting.
+- *Logistics:* Klein and Schiffer (2023, Transportation Science). Flexible departure times save 1–5% under day-ahead prices, scaling with price variance.
+- *Assign first, then charge as a min-cost flow:* Sassi and Oulamara (2017, IJPR). A heuristic, with an NP-hardness result for the joint problem.
+- *Possible near-match, unverified:* Wang et al. (2026, TR-B 206, 103430). A snippet states that sequential vehicle–crew then charging scheduling did not affect global optimality in their experiments. Full text not accessible.
+
+**Search result.** No theorem giving conditions under which duties chosen before prices lose nothing, and no bound on the integration loss (33 queries; see `LIT_REVIEW_R2.md` §C).
+
+**Verdict.**
+- The theorem-backed statement "in this class an operator can fix duties before prices without loss of attainable load–cost set" is new, as far as this search found.
+- Its scope is narrow (two synchronized batches, common windows). The empirical side of the message is partly known. That integration helps on general instances by a few percent is established (Nath et al.). The paper's ≤ 2.04% upper bound on 64 synthetic hourly instances is consistent with and below Nath's 4.1% mean, so it adds a data point but not a new finding.
+
+**Concede or cite.**
+- Add patch block (4): Sassi–Oulamara, Perumal et al., Nath et al. numbers, Klein–Schiffer, Abdelwahed et al., He et al., Zhang et al. 2024.
+- State that published integration gains are computational and of order 0–8% of total cost (Nath et al.).
+- Distinguish them from charging-only gains on fixed schedules (14–78%), which are larger and support duty-first plus optimized charging.
+- Do not cite Wang et al. (2026) until read.
+- Replace the Zhou et al. "abstract only" caveat. The full accepted manuscript is now read (patch block 5). Note that its abstract's "8.5%" disagrees with its own Table 6 (16.9%).
+
