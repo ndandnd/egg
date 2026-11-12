@@ -24,7 +24,7 @@ max-flow check of the same set used to validate the cut formula.
 """
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from fractions import Fraction as Fr
 from functools import reduce
 from math import lcm
@@ -154,11 +154,9 @@ class Layer:
         kaps = inst.kap + inst.kap2
         n = 1 << T
         capsum = [Fr(0)] * n
-        kapsum = [Fr(0)] * n
         for D in range(1, n):
             t = (D & -D).bit_length() - 1
             capsum[D] = capsum[D & (D - 1)] + caps[t]
-            kapsum[D] = kapsum[D & (D - 1)] + kaps[t]
         emask = (1 << T1) - 1
         G = [Fr(0)] * n
         for (s, lam, hi, W) in self.bus:
@@ -249,7 +247,10 @@ def flow_member(inst: SInst, M, d) -> bool:
     bus = buses(inst, M)
     vals = d + inst.pi + inst.pi2 + [x for bb in bus for x in bb[:3]]
     L = reduce(lcm, (x.denominator for x in vals), 1)
-    sc = lambda x: int(F(x) * L)
+
+    def sc(x):
+        return int(F(x) * L)
+
     G = nx.DiGraph()
     dem = {}
 
@@ -303,17 +304,3 @@ def dominating(inst: SInst, m, lays=None):
 
 def phi(lams, y):
     return sum(max(Fr(0), x - y) for x in lams)
-
-
-def weakly_submajorized(x, y):
-    """x <_w y: every top-k partial sum of x is <= that of y (zero padded)."""
-    n = max(len(x), len(y))
-    xs = sorted(list(x) + [Fr(0)] * (n - len(x)), reverse=True)
-    ys = sorted(list(y) + [Fr(0)] * (n - len(y)), reverse=True)
-    sx = sy = Fr(0)
-    for u, v in zip(xs, ys):
-        sx += u
-        sy += v
-        if sx > sy:
-            return False
-    return True

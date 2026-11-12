@@ -1,0 +1,322 @@
+% Theory extensions for draft1 (branch wp/theory-ext-20261112).
+% Paste-ready: uses the paper's macros (\R, \CH, \conv) and its theorem
+% environments (theorem, proposition, lemma, corollary, definition, remark).
+% Labels use the prefix ext:. Exact checks: code/test_extensions.py.
+
+\subsection*{A mixing lemma}
+
+Let $\Lambda_0,\dots,\Lambda_\nu\subseteq\R^d$ be convex sets of slot-load
+vectors, with vehicle cost $f(N-m)$ on $\Lambda_m$ and $f>0$; empty sets are
+allowed. The family has the \emph{mixing property} (MP) if for all
+$z_k\in\Lambda_{m_k}$ and weights $\mu_k\ge0$ with $\sum_k\mu_k=1$ and
+$t=\sum_k\mu_km_k$, the point $\sum_k\mu_kz_k$ lies in $\Lambda_{\lfloor t\rfloor}$.
+
+\begin{lemma}[One-fee bound under mixing]\label{ext:lemA}
+Assume MP. Let $F:\R^d\to\R\cup\{+\infty\}$ be proper, closed and convex. Let
+the rest of the depot have decisions $y$, a convex set $\mathcal K$ of
+admissible pairs $(z,y)$ (its own constraints and any convex coupling with the
+tripper's slot vector $z$), a convex cost $c(y)$ and an affine load $w(y)$.
+Let $D$ be the infimum of $f(N-m)+c(y)+F(z+w(y))$ over $m$,
+$z\in\Lambda_m$ and $(z,y)\in\mathcal K$, and let $\CH$ be the same infimum
+over the convex hull of the image $\{(z+w(y),f(N-m)+c(y))\}$. Every hull point
+with mean count $t$ is matched by a physical plan with the same total load
+and cost at most the hull cost plus $f(t-\lfloor t\rfloor)$. Hence
+$D-\CH\le f(t-\lfloor t\rfloor)<f$ when $\CH$ is attained at mean count $t$,
+and $D-\CH\le f$ in general.
+\end{lemma}
+\begin{proof}
+A hull point is $\sum_k\mu_k\bigl(z_k+w(y_k),f(N-m_k)+c(y_k)\bigr)$. Put
+$z=\sum_k\mu_kz_k$ and $y=\sum_k\mu_ky_k$. By MP, $z\in\Lambda_{\lfloor t\rfloor}$;
+by convexity, $(z,y)\in\mathcal K$ and $c(y)\le\sum_k\mu_kc(y_k)$; the total
+load is unchanged because $w$ is affine. The fee at $\lfloor t\rfloor$
+exceeds $f(N-t)$ by $f(t-\lfloor t\rfloor)$.
+\end{proof}
+
+\begin{lemma}[Monotone bounds give mixing]\label{ext:lemB}
+Let $\Lambda_m=\{z\in Q:\ z(J)\ge L_m(J),\ z(J)\le U_m(J)\ \forall J\in\mathcal J\}$
+with $Q$ convex. Suppose that for every $J$, $m\mapsto L_m(J)$ is
+nondecreasing and discretely convex and $m\mapsto U_m(J)$ is nonincreasing
+and discretely concave. Then MP holds.
+\end{lemma}
+\begin{proof}
+Let $\hat L$ be the piecewise-linear interpolation of $L_\cdot(J)$; it is
+convex and nondecreasing. Then
+$\sum_k\mu_kz_k(J)\ge\sum_k\mu_kL_{m_k}(J)\ge\hat L(t)\ge L_{\lfloor t\rfloor}(J)$.
+The upper bounds follow symmetrically, and $Q$ is convex.
+\end{proof}
+
+\begin{remark}
+If the fee $\phi(m)$ is nonincreasing and convex in $m$, the proof of
+\cref{ext:lemA} gives
+$D-\CH\le\phi(\lfloor t\rfloor)-\phi(\lfloor t\rfloor+1)$.
+\end{remark}
+
+\subsection*{Many price slots with a pooled connector}
+
+Early slots $t=1,\dots,T_1$ have connector limits $K_t\ge0$, and terminal slots
+$s=1,\dots,T_2$ have limits $H_s\ge0$. Any bus accepts the full connector
+power. The model is charge-only with common efficiency $\alpha$. The load
+vector is $d=(e,\ell)\in\R^{T_1}\times\R^{T_2}$, and the supply cost $F(d)$ is
+proper, closed and convex. For a matching $M$ let
+$R_M=\sum_{(i,j)\in M}(a_i+b_j-B)_+$.
+
+\begin{theorem}[Slot projection]\label{ext:thm1}
+The load vectors attainable with matching $M$ are exactly
+\[
+\Lambda(M)=\Bigl\{(e,\ell):0\le e_t\le K_t,\ 0\le \ell_s\le H_s,\
+R_M\le\alpha\textstyle\sum_te_t\le P,\ \alpha\bigl(\sum_te_t+\sum_s\ell_s\bigr)=S_0\Bigr\}.
+\]
+A matching attaining $r_m$ realizes $\Lambda_m=\bigcup_{|M|=m}\Lambda(M)$, and
+$\Lambda_{m+1}\subseteq\Lambda_m$. The layers have MP, so
+$D-\CH\le f(t-\lfloor t\rfloor)<f$ for every proper closed convex $F$.
+\end{theorem}
+\begin{proof}
+With charging only, bus $v$ gains $x_v=\alpha c_v$ during the early window,
+where $c_v$ is its early purchase. The gain lies in $[(a_i+b_j-B)_+,a_i]$ for a
+paired bus, in $[0,a_i]$ for an A-only bus and in $\{0\}$ for a B-only bus;
+this gives necessity, together with full refill and the slot limits.
+Conversely, choose gains in these intervals with total $\alpha\sum_te_t$,
+possible because the lower ends sum to $R_M$ and the upper ends to $P$. Then
+split each bus's purchase over slots by a transportation plan with column sums
+$e_t$; one exists because totals are equal and cells are unbounded. Serve each
+slot serially at full power. Terminal deficits are split the same way. Only
+$R_M$ depends on $M$. The layer $\Lambda_m$ is the threshold set
+$\alpha\sum_te_t\ge r_m$, with $r_m$ nondecreasing and discretely convex
+(\cref{app:projection}), so \cref{ext:lemB,ext:lemA} apply.
+\end{proof}
+
+\subsection*{Per-bus power limits and plugs}
+
+Slot $t$ has length $h_t$. Each bus charges at power at most $p$, at most $C$
+buses charge at once, and the site limit is $K_t$. Charging is preemptive with
+no switching time. McNaughton's rule shows that per-bus slot energies are
+realizable if and only if $c_{v,t}\le\pi_t:=ph_t$ and
+$\sum_vc_{v,t}\le\kappa_t:=\min\{Cph_t,K_t\}$; terminal slots have $\pi'_s$
+and $\kappa'_s$. Bus $v$ has total draw $s_v$, required early gain
+$\lambda_v=(s_v-B)_+$ if paired and $0$ otherwise, maximum early gain
+$\overline h_v$ (equal to $a_i$ for an A-bus and $0$ for a B-only bus), and
+early availability $W_v$. Write $\pi(D)=\sum_{t\in D}\pi_t$.
+
+\begin{theorem}[Cut description]\label{ext:thm2}
+Let $D_1$ and $D_2$ be the early and terminal parts of a slot set $D$. A load
+vector $d$ is attainable with $M$ if and only if $0\le d\le\kappa$,
+$d(T)=S_0$, and $d(D)\le G_M(D):=\sum_vg_v(D)$ for every $D$, where
+\[
+g_v(D)=\min\bigl\{s_v,\ \min\{\overline h_v,\pi(D_1\cap W_v)\}+\min\{s_v-\lambda_v,\pi'(D_2)\}\bigr\}.
+\]
+\end{theorem}
+\begin{proof}
+Build a flow network. The source feeds bus $v$ with capacity $s_v$. Bus $v$
+feeds an early hub (capacity $\overline h_v$) and a terminal hub (capacity
+$s_v-\lambda_v$). The hubs feed slots with capacities $\pi_t$ and $\pi'_s$,
+and slots feed the sink with capacities $d$. The vector $d$ is attainable if
+and only if the maximum flow is $S_0$. A cut whose sink side contains the
+slots $D$ costs $d(T\setminus D)$ plus, for each bus, its gadget's minimum
+cut. The gadget is a tree, and its minimum cut equals its maximum flow into
+$D$, namely $g_v(D)$. Max-flow/min-cut then gives the condition.
+\end{proof}
+
+\begin{theorem}[Matching dependence]\label{ext:thm3}
+Assume the early window is common and the terminal is adequate
+($\pi'_s\ge B$ for all $s$). For $D_2\neq\emptyset$,
+$G_M(D)=S_0-\varphi_M(\pi(D_1))$ with
+$\varphi_M(y)=\sum_{(i,j)\in M}(a_i+b_j-B-y)_+$. For $D_2=\emptyset$,
+$G_M(D)=\sum_i\min\{a_i,\pi(D_1)\}$, which does not depend on $M$. Let
+$Y=\{\pi(D_1)\}$ be the set of subset sums of the early caps. If
+$\varphi_{M^*}\le\varphi_M$ on $Y$, then the attainable set of $M^*$ contains
+that of $M$. If the aggregate caps do not truncate, the converse also holds.
+\end{theorem}
+\begin{proof}
+For $D_2\ne\emptyset$, $\pi'(D_2)\ge B\ge s_v-\lambda_v$, so
+$g_v=s_v-(\lambda_v-\pi(D_1))_+$. For $D_2=\emptyset$,
+$g_v=\min\{\overline h_v,\pi(D_1)\}$. Containment follows from
+\cref{ext:thm2}. For the converse, the minimum of $e(T_1\setminus D_1)$ over
+$M$'s set equals $\varphi_M(\pi(D_1))$ by polymatroid tightness.
+\end{proof}
+
+\begin{corollary}\label{ext:cor}
+Assume an adequate terminal.
+(i) If $\min_t\pi_t\ge\max_{(i,j)\in\Gamma}(a_i+b_j-B)_+$, every
+$r_m$-minimizer dominates its cardinality.
+(ii) If $\Gamma$ is complete, the sorted matching of \cref{app:projection}
+dominates its cardinality for every slot structure.
+(iii) In both cases $D-\CH\le f(t-\lfloor t\rfloor)<f$ for every proper closed
+convex cost of the slot vector.
+\end{corollary}
+\begin{proof}
+(i) For $y\in Y\setminus\{0\}$ we have $y\ge\min_t\pi_t$, so the
+minimizer's $\varphi$ vanishes there, and $\varphi(0)=r_m$.
+(ii) Replacing a service by an unused smaller one, and uncrossing two pairs
+with partners in the same order, never increase $\sum_Mh(a_i+b_j)$ for any
+convex nondecreasing $h$. These moves lead to the sorted matching. Apply this
+with $h(x)=(x-B-y)_+$ for every $y\ge0$.
+(iii) The representative attains $\varphi^*_m(y)=\min_{|M|=m}\varphi_M(y)$
+for every $y\in Y$. For fixed $y$, this is a min-cost matching value with
+battery $B+y$, so it is nondecreasing and discretely convex in $m$. Apply
+\cref{ext:lemB,ext:lemA}.
+\end{proof}
+
+\begin{proposition}[No representative matching with plug limits]\label{ext:ex1}
+Let $B=10$, $a=(5,7)$, $b=(7,5,6)$, and let $\Gamma$ be the path with edges
+$(1,1),(1,2),(2,2),(2,3)$. Take two early slots with $\pi=(2,2)$ and
+$\kappa=(10,10)$, and one adequate terminal slot. Then no matching of size two
+contains the attainable set of every other. The $r_2$-minimizer
+$\{(1,2),(2,3)\}$ misses $(4,0,26)$, and $\{(1,1),(2,2)\}$ misses
+$(2,1,27)$. Their midpoint $z=(3,\tfrac12,\tfrac{53}{2})$ is attainable with
+one pair and not with two. Hence, for $F$ the indicator of $z$, or
+$F(d)=c\lvert d-z\rvert^2$ with $c\ge 8f$, $D-\CH=f$. No instance with fewer
+services, fewer early slots or a single pair has this property when the
+terminal is adequate.
+\end{proposition}
+\begin{proof}
+The requirement vectors are $(2,2)$ and $(3,0)$, and $Y=\{0,2,4\}$. By
+\cref{ext:thm3}, $\{(1,1),(2,2)\}$ needs early total at least $4$, and
+$\{(1,2),(2,3)\}$ needs at least $\varphi(2)=1$ in each early slot. This
+gives both exclusions. The third matching needs both. At $z$ the early total
+$7/2<4$ excludes the first matching, $e_2=1/2<1$ excludes the second and
+third, and the requirement-free edge $(1,2)$ admits $z$. The violated cuts
+give squared distances at least $1/8$ to every two-pair set, so for
+$c\ge8f$ the physical optimum uses one pair. Minimality: for one pair,
+$\varphi$ is monotone in the scalar requirement. With one early slot only
+$\varphi(0)=r_m$ matters, because feasibility forces $\lambda_v\le\pi_1$.
+With four services and two pairs the graph is $K_{2,2}$, covered by
+\cref{ext:cor}(ii).
+\end{proof}
+
+\subsection*{Embedding}
+
+\begin{theorem}[Embedding]\label{ext:thm4}
+Let the tripper class have layers with MP
+(\cref{ext:thm1}, \cref{ext:cor}, \cref{ext:thm6}). Let the rest of the depot
+be convex: decisions in a convex set, convex cost and affine slot load.
+Examples are a base fleet with fixed duties, stationary loads, PV with
+curtailment, and a stationary battery in LP form. Allow any convex coupling
+constraint on the tripper's aggregate slot vector and the rest's decisions,
+and a proper closed convex grid cost of the total load. Then the
+representative matching of each cardinality loses nothing for every cost, and
+$D-\CH\le f(t-\lfloor t\rfloor)<f$ for the whole system.
+\end{theorem}
+\begin{proof}
+The coupling and the cost see the tripper only through its aggregate slot
+vector. Apply \cref{ext:lemA}.
+\end{proof}
+
+The hypothesis that the rest is convex cannot be dropped. With two tripper
+classes, each of one A and one B service of draw one and battery one, one
+class charging only in early slot~1 and the other only in slot~2, and $F=0$
+when $e_1,e_2\le1-\varepsilon$ ($+\infty$ otherwise), we get
+$D-\CH=2f(1-\varepsilon)$.
+
+\subsection*{When duties can be chosen before prices}
+
+Let $\mathcal M$ be finite. Duty set $M$ has a compact attainable load set
+$S_M\subseteq\R^T$ and a fee $\phi_M$. A subfamily $\mathcal R$ is
+\emph{sufficient} for a class of costs if restricting to $\mathcal R$ leaves
+$\min_M\{\phi_M+\min_{S_M}F\}$ unchanged for every $F$ in the class.
+
+\begin{theorem}[Characterization]\label{ext:thm5}
+\begin{enumerate}[label=(\alph*),itemsep=1pt]
+\item For all linear prices on $\R^T$, $\mathcal R$ is sufficient if and only
+if $S_M\times\{\phi_M\}\subseteq\conv\bigcup_{M'\in\mathcal R}(S_{M'}\times\{\phi_{M'}\})+\{0\}\times\R_+$
+for every $M$. A single $M^*$ is sufficient if and only if
+$\phi_{M^*}\le\phi_M$ and $S_M\subseteq\conv S_{M^*}$ for every $M$. For
+nonnegative prices, replace $\{0\}\times\R_+$ by $\R^T_+\times\R_+$.
+\item For every class of costs containing $c\lvert\cdot-e_0\rvert^2$ for all
+$c>0$ and $e_0$, $\mathcal R$ is sufficient if and only if every $e_0\in S_M$
+lies in some $S_{M'}$ with $M'\in\mathcal R$ and $\phi_{M'}\le\phi_M$. A single
+$M^*$ is sufficient if and only if $\phi_{M^*}\le\phi_M$ and
+$S_M\subseteq S_{M^*}$ for every $M$.
+\item If fees strictly decrease with cardinality and the representatives are
+nested, per-cardinality containment is necessary and sufficient for convex
+costs.
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+(a) Let $X$ be the right-hand side. It is closed and convex, and the reduced
+value at price $p$ is $\min_{(e,c)\in X}p^\top e+c$; this gives sufficiency.
+If a point $(e_0,\phi_M)\notin X$, separate it strictly by $(p,\beta)$; the
+cone forces $\beta\ge0$. If $\beta>0$, the price $p/\beta$ is a
+counterexample. If $\beta=0$, the price $\lambda p$ with $\lambda$ large is
+one. The nonnegative case uses the dual cone.
+(b) Sufficiency is immediate. For necessity, if $(M,e_0)$ has no match, every
+$M'\in\mathcal R$ has a larger fee or positive distance $\delta$ from $e_0$.
+Then $c\lvert\cdot-e_0\rvert^2$ with $c$ large makes the reduced value exceed
+$\phi_M$.
+(c) Apply (b): admissible $M'$ have cardinality at least $m$, and nesting
+reduces the union to $S_{M^*_m}$.
+\end{proof}
+
+\subsection*{Staggered availability}
+
+A run $i$ ends at slot boundary $e_i$ and B run $j$ starts at $s_j$. Pair
+$(i,j)$ may charge only in early slots $e_i\le t<s_j$, and it is compatible if
+and only if $e_i\le s_j$. The connector is pooled.
+
+\begin{theorem}[Homogeneous energies]\label{ext:thm6}
+Let all A draws be equal, all B draws be equal, and let $\Gamma$ be the
+time-compatibility graph. The FIFO matching, which pairs the $m$
+earliest-ending A runs with the $m$ latest-starting B runs in order, dominates
+cardinality $m$. These representatives have MP, so
+$D-\CH\le f(t-\lfloor t\rfloor)<f$.
+\end{theorem}
+\begin{proof}
+The attainable set is
+$\{e(J)\ge\lambda\,\#\{\text{paired }W_v\subseteq J\},\ e(D_1)\le a\,\#\{\text{A-bus }W_v\cap D_1\ne\emptyset\}\}$,
+together with the box and the total. Three moves weakly relax every
+constraint and preserve compatibility: replacing a paired B run by a later
+one, replacing a paired A run by an earlier one, and uncrossing nested pairs.
+They rely on supermodularity of $W\mapsto1[W\subseteq J]$ and submodularity of
+$W\mapsto1[W\cap J\ne\emptyset]$, and they reach FIFO. For FIFO, the number of
+windows inside a maximal run of $J$ is $(m-c)_+$, which is convex. The A-bus
+windows inside the final run of the complement are counted independently of
+$m$. \Cref{ext:lemB} applies.
+\end{proof}
+
+\begin{proposition}[Staggering breaks both properties]\label{ext:ex45}
+(i) With one A run of draw $1$ ending at $0$, B runs of draws $1$ and $2$
+starting at $0$ and $1$, $B=2$ and one early slot, no size-one matching
+dominates, and $D-\CH=f$. (ii) For $k\ge1$, let $B=2k+2$,
+$a_i=B/2-(1-\delta)i$, $b_j=B/2+1+(1-\delta)j$, let A run $i$ end at $i-1$
+and B run $j$ start at $j$, and let $0<\delta<\varepsilon$. Then
+$D-\CH=k(1-\varepsilon)f$ for the indicator of the point
+$e_t=1-\varepsilon$. So with staggered availability the gap is not bounded by
+any fixed multiple of $f$.
+\end{proposition}
+\begin{proof}
+(i) Pairing with the first B run leaves an empty window, so the early load
+is $0$. Pairing with the second requires $1$, the full A draw, in the single
+slot, so the early load is $1$. The two sets are disjoint, and the midpoint
+$1/2$ is attained only without pairs. (ii) Pair $(i,j)$ requires
+$1+(1-\delta)(j-i)$ in the $j-i+1$ slots $i-1,\dots,j-1$. For $j>i$ this
+exceeds $(j-i+1)(1-\varepsilon)$. Pair $(i,i-1)$ has an empty window and
+requirement $\delta>0$, and the remaining pairs are incompatible. So the
+point $e_t=1-\varepsilon$ admits no pair. It is the mixture, with weight
+$1-\varepsilon$, of the diagonal plan (one unit per slot, $k$ pairs) with
+the plan without pairs, so $t=k(1-\varepsilon)$.
+\end{proof}
+
+\subsection*{Relation to Shapley--Folkman}
+
+\begin{proposition}\label{ext:sf}
+Let $k$ independent two-batch classes, each with layers having MP and fee
+$f_i$, be coupled only through a proper closed convex cost of the total slot
+vector in $\R^T$. Then $D-\CH$ is at most the sum of the $\min\{k,T\}$ largest
+$f_i$, and this is attained in the limit.
+\end{proposition}
+\begin{proof}
+Each class image lies in a translate of a $T$-dimensional subspace, because
+its total energy is fixed. By the Shapley--Folkman lemma, at most $T$ classes
+are not at physical points in a decomposition of the hull optimum. For each of
+them, \cref{ext:lemA} gives a physical point with the same load at extra cost
+below $f_i$. The two-class example after \cref{ext:thm4} attains $2f$ in the
+limit.
+\end{proof}
+
+For a single fleet, Shapley--Folkman does not imply \cref{prop:onefee}. Its
+input is the nonconvexity of each unit, and for one fleet that quantity is
+exactly what \cref{prop:onefee} bounds. Splitting the fleet into buses or
+duties makes the $n_A+n_B$ coverage equalities coupling coordinates. A duty's
+coverage takes only the values $0$ and $1$, so a fractional unit cannot be
+replaced with its coupling coordinates held fixed, and the estimate is
+vacuous. The bound comes instead from the integrality of the bipartite flow
+structure, which makes $r_m$ discretely convex.
