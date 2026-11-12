@@ -212,7 +212,7 @@ See `TARIFF_FACTS.md`.
 
 ## G. Other "this is known" risks
 
-1. **One-agent duality-gap bound (A).** A referee will note that D − CH ≤ ρ(fleet value function) is trivial and that ρ < f follows from convexity of min-cost flow in the flow value (B2) or from budgeted-matching adjacency (A6). **Highest risk for `prop:onefee`.**
+1. **One-fee bound is a Shapley–Folkman/Udell–Boyd corollary (A).** Under a per-marginal-pair blocking with one coupling constraint, the bound follows directly (it is the fractional-knapsack gap). **Highest risk for `prop:onefee`.**
 2. **Sorted pairing / Monge (B3) and k-cardinality assignment (B1).** Currently uncited; cite them.
 3. **Myopic price cycling in coupled systems (D).** Alizadeh et al. 2017 Table II is a direct published 2-cycle. `thm:iteration`(b) must cite it.
 4. **Support = integral hull optimum.** Already conceded (Hümbs, Martin and Schewe 2022, `huembs2022complete`; Gribik–Hogan–Pope; Hua–Baldick).
