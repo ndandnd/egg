@@ -48,7 +48,8 @@ The EUR/kWh columns are LP × kW / (95 kWh × days). Break-even LP for 0.53 EUR/
 
 **Reading.**
 - Daily shifting into a 2–4 h window never reaches the f/η range. Daily shifting into a **1-hour window above 2,500 h** reaches **0.46–0.66 EUR/kWh**, which is the low end of the range (f ≈ 50–60 EUR/bus-day).
-- Depots charging mostly overnight are often below 2,500 h. There the effect is 0.01–0.04 EUR/kWh.
+- **The paper's own depot is below 2,500 h.** §8 of the paper states that repeating its windows daily gives at most 1,095 utilisation hours. Under the general tariff, the < 2,500 h Leistungspreis applies (12.22–20.88 EUR/kW·a at MS). Even with a 1-h window that is only 95 kW × 12.22–20.88 / (95 kWh × 250) = **0.05–0.08 EUR/kWh**.
+- **The ≥ 2,500 h rows apply to such a depot only in two cases:** other site loads lift its utilisation above 2,500 h, or it uses the §19(2) Wahloption (§2 below). Treat the 0.31–0.66 EUR/kWh row as conditional on that.
 - **Direction.** The charge penalizes whichever window sets the annual peak, not "early" per se. With a short midday window and a long overnight window, adding midday energy raises the peak once E/len_early exceeds L/len_late.
 - **Ratchet.** If the shift happens on only a few days, one quarter-hour sets the whole year's charge. At 88.64 EUR/kW·a, the first 95 kWh shifted into a 2-h window costs 4,210 EUR, i.e. 44 EUR/kWh. That stays above 3.2 EUR/kWh for the first ~14 shift days and above 0.53 EUR/kWh for ~84 days *(delegated arithmetic, checked)*. A per-day, per-kWh spread cannot represent this cost. It is a max-type, nonseparable cost, which is a convex F(E, L) of the kind the paper already allows: F = LP·max{E/ℓ_E, L/ℓ_L, background} + ….
 
@@ -58,12 +59,12 @@ The EUR/kWh columns are LP × kW / (95 kWh × days). Break-even LP for 0.53 EUR/
 
 **Mechanism.**
 - Law text: gesetze-im-internet.de/stromnev/__19.html *(delegated)*. The network operator must offer an individual charge if the customer's peak is foreseeably and significantly off the network's coincident peak. The individual charge is at least 20% of the published charge.
-- Implementation per BNetzA BK4-13-739 (11 Dec 2013) *(delegated)*: <https://www.bundesnetzagentur.de/DE/Beschlusskammern/1_GZ/BK4-GZ/2013/2013_bis0999/2013_bis799/BK4-13-0739/BK4-13-0739_Beschluss_DL.pdf?__blob=publicationFile&v=1>
+- Implementation per BNetzA BK4-13-739 (11 Dec 2013) **re-verified by me** (decision text pp. 4–5): <https://www.bundesnetzagentur.de/DE/Beschlusskammern/1_GZ/BK4-GZ/2013/2013_bis0999/2013_bis799/BK4-13-0739/BK4-13-0739_Beschluss_DL.pdf?__blob=publicationFile&v=1>
   - The Leistungspreis is billed on the customer's highest load **inside the published HLZF**, not on its annual peak.
   - A customer below 2,500 h may opt for the ≥ 2,500 h price pair.
 
 **Eligibility.**
-- Window peak must be below the annual peak by a significance threshold (Erheblichkeitsschwelle). Per BK4-13-739 *(delegated)*: 20% at MS, 30% at MS/NS and NS.
+- Window peak must be below the annual peak by a significance threshold (Erheblichkeitsschwelle). Per BK4-13-739 (re-verified, p. 5 table): HöS 5%, HöS/HS 10%, HS 10%, HS/MS 20%, **MS 20%**, MS/NS 30%, NS 30%.
 - Minimum shift: **100 kW at all levels** (re-verified on the EAM HLZF sheet, p. 2).
 - Minimum saving (Bagatellgrenze): **500 EUR/a** (re-verified on the EAM sheet, p. 2).
 - Caveat: the EAM sheet's threshold column did not extract in reliable order. Its prose confirms 30% for NS.
@@ -95,7 +96,7 @@ e-regio Netz windows were **not found**, and none were fabricated. Without them,
   - 0.08–0.11 EUR/kWh if the charge is spread over 4 h
 - **N-ERGIE MS.** Neither the 10–14 nor the 20–05 window lies in an HLZF, so the spread is 0.
 - **Cliff.** If midday charging pushes the window peak above (1 − 20%) of the annual peak at MS, eligibility is lost and the whole general charge returns. That is a discrete jump of up to tens of thousands of EUR/a for a ~1 MW depot (illustrative). It is another nonconvexity, on the *supply* side.
-- **Relevance to the bus-fee comparison.** Under atypical billing, the billed quantity is the midday peak, and minimizing it means E = ℓ_m = max(Lo, r_m). So the matching's forced early charge r_m enters the bill directly. One extra pair with forced charge η adds about η/len_early kW of window peak. Example: η = 95 kWh in a 1-h window adds 95 kW × 114.12 = 10,841 EUR/a. That is comparable to one bus-day fee of 50 EUR over 217 days (10,850 EUR). At EAM-type windows the tariff reaches the f/η threshold only for cheap buses (f ≈ 50) and short windows.
+- **Relevance to the bus-fee comparison.** Under atypical billing with the Wahloption (re-verified in BK4-13-739), the billed quantity is the midday peak, and minimizing it means E = ℓ_m = max(Lo, r_m). So the matching's forced early charge r_m enters the bill directly. One extra pair with forced charge η adds about η/len_early kW of window peak. Example: η = 95 kWh in a 1-h window adds 95 kW × 114.12 = 10,841 EUR/a. That is comparable to one bus-day fee of 50 EUR over 217 days (10,850 EUR). At EAM-type windows the tariff reaches the f/η threshold only for cheap buses (f ≈ 50) and short windows.
 
 **Legal status, November 2026.**
 - StromNEV rules lapse on **31 Dec 2028**. Re-verified in the BNetzA AgNes background paper of 27 May 2026: the provisions "zum 31.12.2028 vom Deutschen Bundestag aufgehoben werden mussten" ("had to be repealed by the Bundestag as of 31.12.2028"). <https://www.bundesnetzagentur.de/SharedDocs/Pressemitteilungen/20260527_AgnesPapier.pdf?__blob=publicationFile&v=1>
@@ -153,9 +154,10 @@ Both spreads are below 0.05 EUR/kWh.
 |---|---|---|---|---|
 | Annual-peak LP, < 2,500 h | yes | whichever window sets the peak | 0.01–0.04 | no |
 | Annual-peak LP, ≥ 2,500 h, 2-h window | yes | same | 0.12–0.33 | no |
-| Annual-peak LP, ≥ 2,500 h, 1-h window | yes | same | **0.31–0.66** | **low end only** (f ≈ 50–60) |
+| Annual-peak LP, ≥ 2,500 h, 1-h window | only if the site is ≥ 2,500 h (not the paper's depot, ≤ 1,095 h from buses) | same | 0.31–0.66 | low end only (f ≈ 50–60), conditional |
+| Annual-peak LP, < 2,500 h, 1-h window (the paper's depot) | yes | same | **0.05–0.08** | no |
 | Ratchet (few shift days) | yes | same | up to 44 on the first day | yes, but a max-type cost, not a spread |
-| §19(2) S.1 atypical, EAM-type windows | yes until 2028 | midday penalized, night free | 0.08–0.46 | low end only, 1-h window |
+| §19(2) S.1 atypical, EAM-type windows, with Wahloption (≥ 2,500 h pair billed on window peak) | yes until 2028 (if thresholds met) | midday penalized, night free | 0.08–0.46 | approaches the low end only with a 1-h window |
 | §19(2) S.1, N-ERGIE-type windows | yes until 2028 | neither | 0 | no |
 | §14a Modul 3 | no | — | < 0.05 | no |
 | Day-ahead spot / §41a | via contract | midday cheaper | 0.02–0.07 | no |
@@ -163,6 +165,9 @@ Both spreads are below 0.05 EUR/kWh.
 
 **For the planned experiment.**
 - Model the capacity charge as a convex max-type cost on window peaks, not as a per-kWh spread.
-- Use EAM Netz MS 2026 (LP 114.12 EUR/kW·a ≥ 2,500 h; HLZF winter 10:00–14:15) as the one documented case where the midday window is penalized and the overnight window is not.
-- Test 1-h and 2-h midday windows. The bus-fee threshold is reachable only for f ≈ 50–60 EUR/bus-day with a 1-h window.
+- The relevant case for a ≤ 1,095 h depot is §19(2) atypical use with the Wahloption. BK4-13-739 (re-verified) lets a < 2,500 h customer bill the ≥ 2,500 h Leistungspreis on its **highest load inside the HLZF**, with the ≥ 2,500 h Arbeitspreis on all energy.
+- Use EAM Netz MS 2026 (LP 114.12 EUR/kW·a; HLZF winter 10:00–14:15) as the one documented case where the midday window is penalized and the overnight window is not.
+- Billed quantity = midday peak. Its minimum is ℓ_m/len_early, so r_m enters directly. Eligibility also requires a ≥ 20% gap between window peak and annual peak and a ≥ 100 kW shift, and the regime ends in 2028 for depots below 10 GWh/a.
+- Test 1-h and 2-h midday windows. The bus-fee threshold is approached only for f ≈ 50–60 EUR/bus-day with a 1-h window.
+- Under the general tariff, the paper's depot sees at most 0.05–0.08 EUR/kWh and no support failure is expected.
 - Present the result as a boundary, not as typical German exposure.

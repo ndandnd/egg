@@ -12,8 +12,8 @@ individual sets \citep{mukhiAbate2023exact,altaha2024flexibility}.
 \citet[Thms.~3 and~7]{mukhiLohoAbate2025exact} characterize that sum and
 disaggregate its schedules for generalized polymatroids;
 \citet{pandaTindemans2024} give a representation whose size depends only on
-the number of time steps, and majorization-type conditions characterize
-fleets of rate-limited loads \citep{nayyar2016duration}.
+the number of time steps, and \citet{nayyar2016duration} give conditions
+under which variable supply can serve a population of fixed-duration loads.
 \citet[Eqs.~(15)--(17)]{muller2019aggregation} also compute the least cost of
 disaggregation for zonotopic resources with structured costs.
 \citet{arvis2026aggregated} embed aggregate EV flexibility in unit commitment,
@@ -38,21 +38,20 @@ $(a_i+b_j-B)_+$ \citep{burkard1996monge}.
 %     with:
 %----------------------------------------------------------------------
 Shapley--Folkman-type bounds control the gap between a separable
-nonconvex problem and its convexification by the number of coupling
-constraints times the largest individual nonconvexity
+nonconvex problem and its convexification by the sum of the largest
+individual nonconvexities, one per active coupling constraint
 \citep{starr1969,aubinEkeland1976,bertsekas1983scheduling,udellBoyd2016gap};
-\citet{hreinsson2021} apply this to dispatchable demand, and
-\citet{chao2019incentives} shows that side payments become negligible
-relative to surplus as markets grow. Applied to a fleet with buses or
-services as blocks, these bounds scale with the number of services, because
-the matching constraints couple the blocks. Our hull convexifies whole-fleet
-plans, so the gap is at most the nonconvexity of a single fleet value
-function. \Cref{prop:onefee} shows that this nonconvexity is below one
-bus-day fee. The argument is the convexity of minimum-cost matching in its
-cardinality; equivalently, an optimum of the matching polytope with one side
-constraint lies between two adjacent matchings, whose sizes differ by at
-most one \citep{raviGoemans1996cmst,berger2011budgeted}. We use these
-classical facts rather than claim a new duality-gap technique.
+\citet{hreinsson2021} apply this to dispatchable demand.
+\Cref{prop:onefee} is such a corollary. Write the fleet as one block per
+marginal pair, with the $m$th block completing at early energy
+$\ell_m-\ell_{m-1}$ and saving one fee, and with a single coupling
+constraint on early energy. Discrete convexity of $\ell_m$ makes this
+blocking exact for both the physical and the convexified problem, and
+\citet[Thm.~1]{udellBoyd2016gap} then bounds the gap by one fee. The
+same bound follows from adjacency of matchings under one side constraint
+\citep{raviGoemans1996cmst,berger2011budgeted}. What is specific to fleets
+is the discrete convexity of the forced-charging thresholds, a property of
+minimum-cost matching \citep{murota2003dca}.
 
 %----------------------------------------------------------------------
 % (3) ADD after the paragraph "Price adjustment." (or merge into it):
@@ -65,8 +64,9 @@ and charging into a two-period alternation, although the coupled problem is
 convex and has a socially optimal price. \citet{wei2018equilibrium} compute
 equilibria of a traffic-assignment and distribution-OPF loop. They establish
 existence under continuity and only local, initialization-dependent
-convergence. \citet{roozbehani2012volatility} give
-elasticity conditions under which real-time pricing feedback is unstable.
+convergence. \citet{roozbehani2012volatility} show that
+real-time pricing feedback can amplify volatility and give a sufficient
+stability condition in terms of price elasticity.
 Distribution prices can decentralize divisible EV charging at a
 clearing price \citep{liWuOren2014dlmp}. Proximal or damped updates restore
 convergence for continuous charging
@@ -98,9 +98,9 @@ dominate \citep{heLiuSong2020}. They also arise from choosing fleet size
 jointly with time-of-use-aware charging \citep{wu2022grid,zhang2024tou}.
 We are not aware of a result stating conditions under which a
 price-independent duty choice loses nothing. \Cref{thm:projection} gives
-such conditions for a narrow class, and the boundary test in
-\cref{sec:boundaries} (at most about 2\%) is in line with the measured
-sequential-versus-integrated gaps.
+such conditions for a narrow class. The boundary test in
+\cref{sec:boundaries} (at most about 2\% on small synthetic instances) is
+not directly comparable with these network-scale estimates.
 
 %----------------------------------------------------------------------
 % (5) REPLACE the clause on Zhou et al. in "Buses, tariffs and markets."
@@ -109,6 +109,5 @@ sequential-versus-integrated gaps.
 %----------------------------------------------------------------------
 and \citet{zhou2025v2g} jointly choose fleet size, trip chains and
 charging and discharging for 418 trips at two depots under a three-level
-time-of-use tariff, solved by adaptive large-neighbourhood search; in their
-case cross-line operation lowers daily cost by about 17\% relative to
-single-line operation (their Table~6).
+time-of-use tariff, solved by adaptive large-neighbourhood search, and
+compare cross-line with single-line operation.

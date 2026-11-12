@@ -5,7 +5,7 @@ One entry per claim: the closest prior statement found, a verdict, and what the 
 | # | Claim | Verdict |
 |---|---|---|
 | 1 | Projection theorem (`thm:projection`) | **New but incremental.** Lossless charge-only core is near-folklore; the losses, exports and gross-budget version is new as far as found |
-| 2 | One-fee bound (`prop:onefee`) | **Partly known.** Not a Shapley–Folkman corollary, but a short consequence of classical matching facts |
+| 2 | One-fee bound (`prop:onefee`) | **Known, up to presentation.** Non-strict form is a Udell–Boyd/Shapley–Folkman corollary under a per-marginal-pair blocking |
 | 3 | Support-failure anatomy and bands (`prop:anatomy`, `prop:bands`) | **New but incremental.** Elementary consequences of the 1-D frontier; no prior statement found |
 | 4 | Price iteration (`thm:iteration`) | **Partly known.** Frank–Wolfe/ergodic parts known; myopic 2-cycles in coupled EV-grid pricing published (Alizadeh et al. 2017) |
 | 5 | Separation message (duty-first) | **New as a theorem, for a narrow class.** Empirical sequential-vs-integrated gaps are published (Nath et al. 2024: 4.1% mean) |
@@ -31,25 +31,25 @@ One entry per claim: the closest prior statement found, a verdict, and what the 
 
 ## 2. One-fee bound
 
-**Closest prior statements.**
-- *Udell–Boyd (2016) Thm. 1 and Aubin–Ekeland (1976):* gap ≤ Σ of the min(m̃, n) largest ρᵢ, or ≤ min(m+1, n)·ρ_max. Bertsekas et al. (1983) apply the same idea to unit commitment.
-- *Ravi–Goemans (1996), Berger–Bonifaci–Grandoni–Schäfer (2011):* the Lagrangian optimum of a matching problem with one side constraint lies between two adjacent matchings, which differ by one alternating path or cycle.
+**Closest prior statement.** Udell–Boyd (2016) Theorem 1; see also Aubin–Ekeland (1976) and Bertsekas et al. (1983). For a separable objective with m̃ simultaneously active coupling constraints, the gap is at most the sum of the m̃ largest nonconvexities ρᵢ.
 
-**Analysis.**
-- With buses or services as blocks, the matching gives n_B coupling constraints. Shapley–Folkman-type bounds then give about (n_B + 2)·f, which grows with fleet size. **The one-fee bound is therefore not their corollary, and is tighter by a factor of order n_B.**
-- Treating the fleet as one block (as the paper's CH does) gives the trivial bound D − CH ≤ ρ(c), where c is the fleet value function in (E, L). `prop:onefee` is exactly the claim ρ(c) < f.
-- ρ(c) < f follows in two lines from discrete convexity of the min-cost k-matching value. Equivalently, for the lossless charge-only matching case: the hull equals the matching-polytope LP with one side constraint, whose optimum lies on an edge between two matchings of cardinality differing by ≤ 1.
-- Independence of G ("any convex grid cost including hard limits") is automatic once the bound is written as ρ(c). It is not an additional result.
+**Derivation** (`LIT_REVIEW_R2.md` §A, item 3). Write the fleet with one block per marginal pair:
+- x_m ∈ [0, η_m], where η_m = ℓ_m − ℓ_{m−1};
+- the block earns −f only at x_m = η_m;
+- one coupling constraint, ℓ₀ + Σx_m ≤ E;
+- the convex grid cost G is a separate block, with hard limits as its domain.
 
-**Verdict: partly known.** The statement does not appear in this exact form in what I found, but every step is classical. An OR referee will likely regard it as a remark.
+The paper's discrete convexity of ℓ_m (η_m nondecreasing) makes this block problem's physical value equal D. Its convexification is a fractional knapsack that reproduces the paper's hull frontier. Since ρ(f_m) = f and m̃ = 1, Theorem 1 gives **D − CH ≤ f**, for any G and any fleet size. The adjacency device for budgeted matching (Ravi–Goemans 1996; Berger et al. 2011) gives the same bound directly on the matching polytope.
+
+**Verdict: known, up to presentation.** The non-strict bound is a direct corollary of the Shapley–Folkman family (or of the fractional-knapsack LP gap). The model-specific ingredient is discrete convexity of the min-cost k-matching value, which is classical. The strict inequality and the f(t − ⌊t⌋) form add one line.
+- Caution: ρ(fleet value function) equals f, not less. Strictness comes from evaluating at the attained hull optimum.
+- An earlier draft of this note said the bound was "not a corollary, tighter by a factor of n_B". That held only for a per-service blocking and is withdrawn.
 
 **Concede or cite.**
-- Rewrite the paragraph after `prop:onefee` along the lines of patch block (2): cite `aubinEkeland1976`, `bertsekas1983scheduling` and `udellBoyd2016gap` for what Shapley–Folkman gives, and why that is weaker here.
-- Cite `raviGoemans1996cmst` and `berger2011budgeted` for the adjacency route.
-- Drop "independent of fleet size" as a selling point. Say instead that the nonconvexity is one-dimensional in the pair count.
-- Consider demoting `prop:onefee` to a corollary or remark.
-- Keep the sharpness example; it is useful.
-- Do **not** cite Chao (2019) for any "one unit's cost" uplift bound; none was found in its accessible abstract.
+- Demote `prop:onefee` to a remark or corollary. State that it follows from Udell–Boyd Thm. 1 (`udellBoyd2016gap`; also `aubinEkeland1976`, `bertsekas1983scheduling`) applied to a per-marginal-pair blocking, given discrete convexity of the thresholds (`murota2003dca`).
+- Do not sell fleet-size or grid-cost independence as contributions.
+- Keep the sharpness example and the counterexample showing discrete convexity is needed.
+- Do not cite Chao (2019) for any "one unit's cost" bound; none was found in its accessible abstract.
 
 ## 3. Support-failure anatomy and intercept bands
 
@@ -85,7 +85,7 @@ One entry per claim: the closest prior statement found, a verdict, and what the 
 
 **Verdict.**
 - The theorem-backed statement "in this class an operator can fix duties before prices without loss of attainable load–cost set" is new, as far as this search found.
-- Its scope is narrow (two synchronized batches, common windows). The empirical side of the message is partly known. That integration helps on general instances by a few percent is established (Nath et al.). The paper's ≤ 2.04% upper bound on 64 synthetic hourly instances is consistent with and below Nath's 4.1% mean, so it adds a data point but not a new finding.
+- Its scope is narrow (two synchronized batches, common windows). The empirical side of the message is partly known. That integration helps on general instances by a few percent is established (Nath et al.). The paper's ≤ 2.04% upper bound on 64 small synthetic hourly instances (8–12 trips) is numerically below Nath's 4.1% mean. The settings differ too much (real networks of 432–3,337 trips, charger siting included) to claim agreement. Wang et al. (2026, TR-B), which reportedly finds sequential charging scheduling harmless, could not be read and is the most direct unread threat.
 
 **Concede or cite.**
 - Add patch block (4): Sassi–Oulamara, Perumal et al., Nath et al. numbers, Klein–Schiffer, Abdelwahed et al., He et al., Zhang et al. 2024.

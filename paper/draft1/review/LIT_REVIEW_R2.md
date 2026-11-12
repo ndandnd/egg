@@ -22,7 +22,7 @@ Absence of a match in these searches is not proof of priority.
 
 **A5. Chao, H.-p. (2019). "Incentives for efficient pricing mechanism in markets with non-convexities." *Journal of Regulatory Economics* 56(1), 33–58. DOI 10.1007/s11149-019-09385-w.** Crossref-verified. **Abstract only.** Springer redirected to a login. The PJM-hosted report URL returned an HTML page instead of a PDF, and I did not retry. From the RePEc abstract, the paper separates a nonconvex allocation problem from a convexified pricing problem (Lagrangian, convex hull and integer relaxation). Quasi-equilibrium pricing becomes incentive compatible *in the limit*, and side payments become negligible relative to total surplus as the market grows. That is a Starr-type asymptotic statement. **I found no "uplift at most one unit's fixed cost" theorem attributed to Chao in what I could access.** Do not cite Chao for such a bound.
 
-**A6. Berger, A., V. Bonifaci, F. Grandoni and G. Schäfer (2011; online 2009). "Budgeted matching and budgeted matroid intersection via the gasoline puzzle." *Mathematical Programming* 128(1–2), 355–372. DOI 10.1007/s10107-009-0307-4.** Crossref-verified. Full text read (author copy, CWI repository ir.cwi.nl/pub/14736, §§1–3). They dualize the single budget constraint of a maximum-weight matching. Two Lagrangian-optimal matchings M₁, M₂ with c(M₁) ≤ B ≤ c(M₂) are moved along the optimal face until they are *adjacent* in the matching polytope. "For matchings it is known that two solutions are adjacent in the matching polytope if and only if their symmetric difference is an alternating cycle or path" (§1). Lemma 4 gives a feasible matching of weight ≥ opt − 2w_max. The device goes back to **Ravi and Goemans (1996)**, "The constrained minimum spanning tree problem," SWAT 1996, LNCS 1097, 66–75, DOI 10.1007/3-540-61422-2_121 (Crossref-verified; not read).
+**A6. Berger, A., V. Bonifaci, F. Grandoni and G. Schäfer (2011; online 2009). "Budgeted matching and budgeted matroid intersection via the gasoline puzzle." *Mathematical Programming* 128(1–2), 355–372. DOI 10.1007/s10107-009-0307-4.** Crossref-verified. Full text read (author copy, CWI repository ir.cwi.nl/pub/14736, §§1–3). They dualize the single budget constraint of a maximum-weight matching. Two Lagrangian-optimal matchings M₁, M₂ with c(M₁) ≤ B ≤ c(M₂) are moved along the optimal face until they are *adjacent* in the matching polytope. "For matchings it is known that two solutions are adjacent in the matching polytope if and only if their symmetric difference is an alternating cycle or path" (§1). Lemma 4 gives a feasible matching of weight ≥ opt − 2w_max. The device goes back to **Ravi and Goemans (1996)**, "The constrained minimum spanning tree problem," SWAT 1996, LNCS 1097, 66–75, DOI 10.1007/3-540-61422-2_121 (Crossref-verified; the LNCS volume number 1097 is not in the Crossref record and is unverified; not read).
 
 **A7. Chvátal, V. (1975). "On certain polytopes associated with graphs." *Journal of Combinatorial Theory, Series B* 18(2), 138–154. DOI 10.1016/0095-8956(75)90041-6.** Crossref-verified. Not read. Commonly cited for adjacency on the matching polytope. The adjacency statement used below is quoted from A6 rather than verified in Chvátal.
 
@@ -34,15 +34,21 @@ Absence of a match in these searches is not proof of priority.
 
 Write the planner's problem as two "agents" coupled by T = 2 equalities (early load E, late load L): the fleet with value function c(E, L) = min{fN : a whole-fleet plan with loads (E, L) and N buses} (+∞ if infeasible), and the supplier with convex G. The paper's CH (eq. `eq:DCH`) convexifies **complete fleet plans**, i.e. it replaces c by its envelope ĉ. It does not convexify per bus.
 
-1. **Fleet as a single agent (the paper's hull).** Udell–Boyd / Aubin–Ekeland with n = 2 blocks and ρ(G) = 0 give D − CH ≤ ρ(c). This is also the trivial one-line bound: evaluate c at the hull optimum E*. So **`prop:onefee` is exactly the statement ρ(c) < f**, together with the observation that ρ(c) does not depend on G (hard limits included, because they only restrict where E* can lie). Shapley–Folkman adds nothing here, since there is one nonconvex block.
-2. **Per-service or per-bus blocks with the matching as coupling.** Take each A service as a block choosing a partner or none. Each B service gives an equality "served exactly once", so there are m = n_B + 2 complicating constraints. Each block's ρ is of order f (a binary pairing choice saves f). Udell–Boyd then gives a gap ≤ Σ of the (n_B + 2) largest ρᵢ ≈ (n_B + 2)·f, and Aubin–Ekeland ≈ (n_B + 3)·f. Both **grow with fleet size**. A per-bus formulation does no better, because the matching constraints remain coupling constraints. **So `prop:onefee` is not implied by Shapley–Folkman-type bounds. It is tighter by a factor of order n_B, and it is a different kind of argument.**
-3. **Where the fleet-size independence comes from.** It does not come from aggregation. It comes from the integral structure of bipartite matching:
-   - (a) **The paper's route.** r_m is convex in m (min-cost flow value is convex in the flow amount; classical, Murota 2003, see B2). So the breakpoints (ℓ_m, fN_m) are in convex position, the envelope interpolates *adjacent* cardinalities, and the pointwise gap c − ĉ is below f.
-   - (b) **An equivalent known route.** The lossless charge-only CH equals the LP over the bipartite matching polytope with a side constraint E ≥ Σ_e w_e x_e, where w_e = (a_i + b_j − B)_+. The matching polytope is integral, and the image of a polytope under a linear map is the hull of its vertex images. The constraint S₀ − N_m B ≤ E is a cardinality upper bound that only tightens with m. Fix E = E*. The LP optimum then lies on an edge of the matching polytope between two *adjacent* matchings (the Lagrangian/adjacency device of A6 and Ravi–Goemans). Adjacent matchings differ by one alternating path or cycle, so their cardinalities differ by at most one. The budget-feasible endpoint loses at most one fee f. With uniform per-pair savings f this reproduces `prop:onefee` for the matching case, **including general (non-complete) compatibility graphs**.
-   - Neither route needs anything beyond classical combinatorial optimization.
-4. **Hypothesis doing the work.** The discrete convexity of ℓ_m. Without it the bound fails. Example: ℓ₀ = 0, ℓ₁ = ℓ₂ = … = ℓ_{k−1} = 10 − ε, ℓ_k = 10. A mixture of counts 0 and k at E ≈ 5 has mean count k/2, but only count 0 is feasible, so the gap is ≈ (k/2)·f. In the matching application, convexity is automatic, which is why the bound is fleet-size independent there. The "common upper endpoint U" assumption is also used: the hull at count t must not have a smaller upper endpoint than ⌊t⌋.
+1. **Fleet as a single agent (the paper's hull).** Udell–Boyd / Aubin–Ekeland with n = 2 blocks and ρ(G) = 0 give D − CH ≤ ρ(c). This is the trivial one-line bound: evaluate c at the hull optimum E*. Note that ρ(c) = f exactly in the lossless charge-only case. On (ℓ_{m−1}, ℓ_m), c = fN_{m−1} while ĉ falls linearly to fN_m, so the difference tends to f but never reaches it. The paper's strict inequality D − CH < f therefore comes from the pointwise difference at the (attained) hull optimum, not from ρ(c) < f.
+2. **Per-service blocks with the matching as coupling.** Each A service is a block; each B service gives a coupling equality, so there are about n_B + 2 complicating constraints. The bound is then of order (n_B + 2)·f. This blocking is uninformative, but it is not the only one.
+3. **Per-marginal-pair blocks: `prop:onefee` IS a Udell–Boyd corollary (non-strict form).**
+   - Use the paper's own layers ℓ_m. Let η_m = ℓ_m − ℓ_{m−1}, nondecreasing for m > m₀ by the paper's discrete convexity, with the first increment clipped as in the appendix.
+   - Introduce one block per marginal pair: x_m ∈ [0, η_m], with f_m(x_m) = −f if x_m = η_m and 0 otherwise. f_m is lower semicontinuous on a compact domain.
+   - Add one convex block G(E) with dom G ⊆ [Lo, U]; hard limits enter as a domain restriction. Impose a single coupling constraint ℓ₀ + Σ_m x_m ≤ E.
+   - **Physical value.** Because η_m is nondecreasing, completing any k blocks needs at least Σ_{m≤k} η_m = ℓ_k − ℓ₀ energy. So the block problem's value equals D, with fee measured relative to N₀.
+   - **Hull value.** Each envelope is f̂_m(x) = −f·x/η_m. The summed envelopes under the single coupling constraint are a fractional knapsack, which fills blocks in order of decreasing f/η_m, i.e. increasing m. This reproduces the paper's lower hull frontier, so the convexified value equals CH.
+   - **Bound.** ρ(f_m) = f, m̃ = 1. Udell–Boyd Theorem 1 then gives **D − CH ≤ f**, independent of fleet size and of G. Equivalently, the LP relaxation of a knapsack with equal item profits loses at most one item's profit.
+   - So the non-strict one-fee bound **is** a direct corollary of the Shapley–Folkman family, once the fleet is written by marginal pairs. The only model-specific input is the discrete convexity of ℓ_m, which is itself classical (min-cost flow convexity, B2).
+   - The strict "< f" and the refinement f(t − ⌊t⌋) are one more line.
+   - Alternative classical route for matchings: the LP over the bipartite matching polytope with the side constraint E ≥ Σ_e w_e x_e, where w_e = (a_i + b_j − B)_+. Its optimum lies between two adjacent matchings, whose cardinalities differ by at most one (adjacency device of A6 and Ravi–Goemans).
+4. **Hypothesis doing the work.** The discrete convexity of ℓ_m. Without it, the bound fails. Example: ℓ₀ = 0, ℓ₁ = … = ℓ_{k−1} = 10 − ε, ℓ_k = 10. A mixture of counts 0 and k at E ≈ 5 has mean count k/2, but only count 0 is feasible, so the gap is ≈ (k/2)·f. In the per-marginal-pair blocking this is exactly where the "physical value = D" step breaks: with non-monotone η_m, the cheapest blocks are not the first ones. The common upper endpoint U is also used.
 
-**Verdict for A.** Not a corollary of Shapley–Folkman / Aubin–Ekeland / Bertsekas / Udell–Boyd. Those give O(n_B)·f here, or the trivial ρ(c) bound once the fleet is treated as one agent. The bound is, however, a short consequence of classical matching-polytope facts: convexity of min-cost flow in the flow value, or adjacency of matchings under one side constraint (Berger et al. 2011; Ravi–Goemans 1996). It should be presented as such, not as a result about grid costs. "Any convex grid cost including hard limits" is inherited automatically from ρ(c) and is not an extra contribution.
+**Verdict for A. Known, up to presentation.** The non-strict bound D − CH ≤ f follows from Udell–Boyd Theorem 1 (equivalently Aubin–Ekeland/Shapley–Folkman, or the fractional-knapsack LP gap) applied to a per-marginal-pair blocking with one coupling constraint. Fleet-size independence and G-independence are automatic in that blocking. What remains model-specific is (i) the discrete convexity of ℓ_m, which is classical for min-cost matching, and (ii) the strict version and the f(t − ⌊t⌋) refinement, which are trivial. The paper should present `prop:onefee` as a corollary or remark and cite Udell–Boyd and Aubin–Ekeland for it.
 
 ---
 
@@ -74,7 +80,7 @@ Write the planner's problem as two "agents" coupled by T = 2 equalities (early l
 
 ## C. Sequential versus integrated electric-bus planning
 
-A delegated search covered 33 queries; the list is in the delegated report and summarized at the end of this section. All DOIs below are Crossref-verified by me. The figures for Nath et al. and Abdelwahed et al. were re-checked by me: the Nath abstract on arXiv, and the Abdelwahed EUR repository PDF (§5.3; Table 4 row "OPT 796.30 / FIFS 953.33"). Other numbers are as read by the delegated search from the full texts noted.
+A delegated search covered 33 queries (listed in the Search record at the end of this file). All DOIs below are Crossref-verified by me. The figures for Nath et al. and Abdelwahed et al. were re-checked by me: the Nath abstract on arXiv, and the Abdelwahed EUR repository PDF (§5.3; Table 4 row "OPT 796.30 / FIFS 953.33"). Other numbers are as read by the delegated search from the full texts noted.
 
 **The literature uses three different baselines. Only group (i) measures what the paper's duty-first test measures.**
 - (i) Duties or assignments fixed first, then charging optimized, compared with joint optimization.
@@ -155,7 +161,7 @@ All abstract-only unless noted; DOIs verified.
 - **True sequential-vs-integrated evidence.**
   - Nath et al.: 0.13–7.7%, mean 4.1%, of total cost on 432–3,337-trip networks, including charger siting.
   - Klein and Schiffer: 1–5% in logistics.
-  - The paper's 64-instance test (≤ 2.04% upper bound, mean regret ~8 SEK) is consistent with that range and at its low end.
+  - The paper's 64-instance test (≤ 2.04% upper bound, mean regret ~8 SEK) is numerically within that range. The comparison is loose: 8–12-trip synthetic instances vs. 432–3,337-trip real networks whose gaps include charger siting. It is not evidence that the gaps agree.
 - **Larger figures measure something else.**
   - Charging-only optimization on fixed duties: 14–78% (Abdelwahed; He et al.).
   - Fleet-size reduction vs. FIFO rules: Wu et al.
@@ -191,7 +197,7 @@ See `TARIFF_FACTS.md`.
 
 ## F. Zhou, An and Schmöcker (2025)
 
-**Zhou, X., K. An and J.-D. Schmöcker (2025). "Optimization of charging and discharging schedules for battery electric buses under the V2G environment." *Transportmetrica B: Transport Dynamics* 13(1), 2506689. DOI 10.1080/21680566.2025.2506689.** Crossref-verified. **Full text read: the accepted manuscript (41 pp.) in the Kyoto University Research Information Repository, hdl:2433/300766.** The publisher embargo ended 26 May 2026 and the record states the file is public under T&F self-archiving terms; it was retrieved through the repository's normal public file link. The publisher page (tandfonline.com) returned HTTP 403 and was not retried.
+**Zhou, X., K. An and J.-D. Schmöcker (2025). "Optimization of charging and discharging schedules for battery electric buses under the V2G environment." *Transportmetrica B: Transport Dynamics* 13(1), 2506689. DOI 10.1080/21680566.2025.2506689.** Crossref-verified. **Full text read: the accepted manuscript (41 pp.) in the Kyoto University Research Information Repository, hdl:2433/300766.** **Versions:** the published abstract says cross-line operation is 8.5% cheaper; the accepted manuscript's Tables 6 and 7 imply 16.9% and 15.9%. The published tables were not seen. The publisher embargo ended 26 May 2026 and the record states the file is public under T&F self-archiving terms; it was retrieved through the repository's normal public file link. The publisher page (tandfonline.com) returned HTTP 403 and was not retried.
 
 - **Model (§2).** Multi-depot connection-network MILP with *binary trip-to-trip assignment* x_kij, fleet size Σz_k at a fixed cost per bus, and charge/discharge between consecutive trips at the nearest depot (y/w/v arcs). Partial charging. Per-depot charger count and power limits (17)–(18). It is therefore a **joint** fleet-size + trip-assignment + (dis)charging model, not a fixed-duty charging model. Overnight charging, 23:30–05:30, is assumed full and outside the optimization (§4.1).
 - **Data (§4, Tables 3–4).** Jiading District, Shanghai: 5 routes, 2 depots (1,200 and 1,800 kW), 418 trips; 100 kWh battery, SOC 20–100%; 60 kW chargers (1 kWh/min); fixed cost c_f = 171.2 ¥/bus-day; deadhead 0.5 ¥/min; degradation 0.1 ¥/kWh. Shanghai 2023 commercial TOU: **peak 10:00–15:00 and 18:00–21:00, 1.2893 ¥/kWh; normal 0.8731; off-peak 23:00–07:00, 0.4570**. Discharge revenue = charging TOU price.
@@ -213,3 +219,77 @@ See `TARIFF_FACTS.md`.
 5. **Convex hull pricing for a single nonconvex demand participant.** Madani et al. (arXiv:1804.00048) treat indivisible multi-hour demand bids (per OPF review). The fleet is a structured instance; cite as context.
 6. **Recent depot-charging work (2026).** Widmer, Pinter, Moradi and Onder, "Optimal Electric Bus Depot Charging: Cost Savings, Grid Limits, and Robustness Trade-Offs," arXiv:2607.29304 (31 July 2026; abstract only). Four Swiss depots, 7–35 buses, schedules apparently given; >40% grid-capacity reduction and >50% cost reduction vs charge-on-arrival for small depots. Relevant as evidence that the *charging* decision carries most of the value once duties are fixed. Bibliographic status: preprint, not peer reviewed.
 7. **Frank–Wolfe / ergodic recovery (`thm:iteration`).** Already conceded; nothing new found.
+
+---
+
+## Search record
+
+**Topic A** (my own searches, 12 Nov 2026):
+- `Chao 2019 "Incentives for efficient pricing mechanism in markets with non-convexities" Journal of Regulatory Economics`
+- `convex hull pricing uplift bounded by largest single unit fixed cost duality gap bound unit commitment theorem` (extended mode)
+- `Hreinsson Scaglione Alizadeh Chen "Shapley-Folkman" dispatchable demand arXiv duality gap bound`
+- `Berger Bonifaci Grandoni Schäfer "Budgeted matching and budgeted matroid intersection via the gasoline puzzle" arXiv`
+
+The extended search found no "uplift ≤ one unit's fixed cost" theorem. Its hits were Hua–Baldick, Bragin et al. arXiv:2304.07990, a FERC Guan presentation and an Optimization Online convex-hull-pricing formulation paper; these were not opened beyond snippets.
+
+Chao (2019): Springer redirected to a login; the PJM report URL returned HTML, not a PDF; a retry was declined by the session's permission system and not pursued. Only the RePEc abstract was read; its direct quote is "quasi-equilibrium pricing is dominant strategy incentive compatible in the limit".
+
+**Topic B:**
+- `Dell'Amico Martello "k-cardinality assignment problem" Discrete Applied Mathematics 1997`
+- `vehicle-to-trip assignment maximizes aggregate charging flexibility electric fleet trip assignment flexibility envelope dominance` (extended)
+- `electric bus pairing morning peak and afternoon peak blocks midday depot charging assignment matching problem` (extended)
+- `Nayyar Negrete-Pincetic Poolla Varaiya "Duration-differentiated energy services with a continuum of loads" arXiv abstract`
+- Crossref bibliographic queries for Panda–Tindemans, Nayyar et al., Mukhi–Loho–Abate
+
+**Topic C** (delegated; verbatim list from the delegated report, abbreviated):
+1. van Kooten Niekerk 2017 scheduling electric vehicles
+2. sequential vs integrated vehicle scheduling charging TOU savings
+3. Perumal Lusby Larsen review
+4. Nath Rambha Schiffer
+5. Olsen Kliewer
+6. Li 2014
+7. He Liu Song 2020 demand charge
+8. Zhang Liu Wang 2021 TOU
+9. Wu 2022 MDEVSP
+10. "On the role of time-of-use electricity price…"
+11. He et al. results
+12. Abdelwahed
+13. Rogge
+14. Dirks
+15. Jahic
+16. Gkiotsalitis TOU
+17. Sassi Oulamara
+18. Rizopoulos Gkiotsalitis 2025
+19. "sequential approach" compared integrated TOU percent
+20. two-stage vs integrated branch-and-price 2023–2025
+21. Klein Schiffer
+22. Teng Chen Fan 4.37%
+23. Wang et al. B&P vehicle–crew TR-B
+24. Wen et al. ALNS
+25. Perumal orbit.dtu.dk
+26. Janovec Koháni TOU
+27. Liu Ceder 2020
+28. van Kooten Niekerk results/pdf
+29. sequential decomposition theorem conditions / integration gap bound
+30. "value of integration" / "cost of sequential planning"
+31. fixed schedule charging min-cost-flow / TU / polynomial
+32. hierarchical price-agnostic duties worst-case bound
+33. fix blocks before prices known robust two-stage
+
+Blocked (not bypassed): Springer (login redirect), ScienceDirect (403), Wiley (403), ASCE (403), Utrecht portal (403), HAL and dblp (bot check), core.ac.uk (403), PolyU repository (timeout/500).
+
+**Topic E** (delegated, plus my re-checks):
+- Opened: EAM 2026 price sheet and HLZF sheet (re-verified); BK4-13-739 (re-verified); BNetzA AgNes paper of 27 May 2026 (re-verified); e-regio 2026 sheet; N-ERGIE HLZF 2026; BK8-22/010-A; StromNEV §§16, 17, 19 and Anlage 4; EnWG §§14a, 41a, 118; AgNes draft GBK-25-01-1#3; SMARD API.
+- Failed: BNetzA Orientierungspunkte_Industr_NetzE.pdf (404); AgNes procedure .html (404); Westnetz 2026 price sheet (403).
+- Not found: e-regio HLZF publication; Bayernwerk, Netze BW, Stromnetz Berlin and SWM 2026 sheets and windows; BK6-22-300 original text; any adoption of the AgNes determination after 21 Sep 2026.
+
+**Topic F:** Kyoto repository record and DSpace REST metadata, then the public bitstream; the tandfonline.com full-text page returned 403.
+
+**Could not access (most consequential):**
+1. Wang, Jin, Ibarra-Rojas, Xu, Cao (2026, TR-B 206, 103430). This is the most direct unread threat to claim 5.
+2. Chao (2019) full text.
+3. Perumal et al. (2022) body.
+4. van Kooten Niekerk et al. (2017) full text.
+5. Zhang et al. (2024) full text.
+6. Teng et al. (2020).
+7. Bertsekas et al. (1983) and Aubin–Ekeland (1976) originals; their constants are quoted via Udell–Boyd.
