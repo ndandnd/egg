@@ -1,0 +1,19 @@
+ok test_T1b_cut_vs_flow: 150 instances, 34998 points agree (23050 inside, 11948 outside), 0 disagreements
+ok test_T1a_pooled_projection: 300 instances, 572 nonempty layers, 17431 closed-form membership checks; r_m-minimizer dominates, layers nested, MP holds
+   Example 1 prices (e1,e2,l)=[0, 10, 1]: energy bills M1,M2,M3 = ['26', '35', '35']; prices [5, 5, 0]: ['20', '15', '25']
+   Example 1 mixture z=['3', '1/2', '53/2']: in no size-2 set, in the size-1 set of (A1,B2); squared distances to the size-2 sets >= ['1/4', '1/8', '9/4']
+ok test_T1b_example1: no dominating size-2 matching; r_2-minimizer fails; D - CH = f (indicator of z, and c|d-z|^2 for every c >= 8f)
+ok test_T1b_example2: binding terminal, 4 services, m=1, T1=1: ['2', '7', '3'] only for (A2,B2); ['0', '9', '3'] only for (A1,B1)
+ok test_T1b_small_exhaustive: n_A=2, n_B=1: 156528 instances, 0 without a dominating matching
+ok test_T1b_nA1: 1121 instances with n_A = 1: smallest feasible b dominates
+ok test_T1b_complete_graph: sorted matching dominates in 1308 layers with adequate terminal (Cor 3.2) and in 1619 layers with binding terminal limits (Conjecture 3.2' evidence)
+ok test_T1b_cor31_and_mixing: 800 instances (pi_min >= max edge requirement): r_m-minimizer dominates, representatives have MP
+ok test_T1b_complete_mixing: 600 complete-graph instances, sorted representatives have MP
+ok test_T1b_pair_split: 4723 matchings: G_empty >= G_M pointwise, A(empty) contains A(M)
+ok test_T1b_gap_search: 1500 plug-model instances, two-point mixtures: largest (t - kmax) = 7/8 <= 1 (Conjecture 3.4 evidence)
+ok test_T2_two_classes: (eps, (D-CH)/f) = [('1/4', '3/2'), ('1/10', '9/5'), ('1/100', '99/50')]; > 1 for eps < 1/2, tends to the SF bound 2
+ok test_T4_homogeneous: 1200 instances, 2211 nonempty layers: FIFO dominates, MP holds; earliest-end-with-latest-start fails (incompatible or not dominating) in 156
+ok test_T4_example4: 3 services, 1 early slot, complete compatibility: no dominating matching; D - CH = f; worst commitment regret = min(|spread|, f)
+ok test_T4_example5: staggered, heterogeneous, Gamma = time-compatible pairs (complete for k <= 2), eps = 1/10, delta = 1/20: (k, (D-CH)/f) = [(1, '9/10'), (2, '9/5'), (3, '27/10'), (4, '18/5')]
+ok test_T4_complete_compat_search: heterogeneous energies, complete time-compatibility: 147 of 1904 nonempty layers have no dominating matching
+all tests passed in 426s
