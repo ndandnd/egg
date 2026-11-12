@@ -1,0 +1,86 @@
+% related_work_patch.tex -- proposed changes to Section 2 (Related work) of main.tex.
+% Round-2 literature review, 12 November 2026. Not \input anywhere; copy by hand.
+% New keys are in review/references_r2.bib; existing keys are from references.bib.
+% Each block says whether it REPLACES or is ADDED to an existing paragraph.
+
+%----------------------------------------------------------------------
+% (1) REPLACE the paragraph "Aggregate flexibility." with:
+%----------------------------------------------------------------------
+\paragraph{Aggregate flexibility.}
+For a fixed EV population, aggregate flexibility is a Minkowski sum of
+individual sets \citep{mukhiAbate2023exact,altaha2024flexibility}.
+\citet[Thms.~3 and~7]{mukhiLohoAbate2025exact} characterize that sum and
+disaggregate its schedules for generalized polymatroids;
+\citet{pandaTindemans2024} give a representation whose size depends only on
+the number of time steps, and majorization-type conditions characterize
+fleets of rate-limited loads \citep{nayyar2016duration}.
+\citet[Eqs.~(15)--(17)]{muller2019aggregation} also compute the least cost of
+disaggregation for zonotopic resources with structured costs.
+\citet{arvis2026aggregated} embed aggregate EV flexibility in unit commitment,
+and \citet{altahaBitar2024lossy} give a state-of-charge reformulation for a
+single lossy storage device. All of these take the population of vehicle
+tasks as given. In our setting a matching determines which duties enter the
+sum. For lossless charging only, a fixed matching's aggregate is an interval
+and is covered by the results above; the content of
+\cref{thm:projection} is that, at a fixed number of pairs, one matching's
+set \emph{contains} every other matching's, and that this survives
+conversion losses, exports and a shared gross connector budget, where the
+net-interval aggregate is no longer exact (\cref{rem:netinterval}).
+Computing the representative is a minimum-cost $k$-cardinality assignment
+\citep{dellamicoMartello1997kcard}; its value is convex in $k$ as a
+minimum-cost flow value \citep{murota2003dca}, and for the complete graph
+the opposite-order pairing follows from the Monge property of
+$(a_i+b_j-B)_+$ \citep{burkard1996monge}.
+
+%----------------------------------------------------------------------
+% (2) REPLACE the last two sentences of "Nonconvex pricing."
+%     ("Our gap bound uses the distance ... \citep{starr1969,hreinsson2021}.")
+%     with:
+%----------------------------------------------------------------------
+Shapley--Folkman-type bounds control the gap between a separable
+nonconvex problem and its convexification by the number of coupling
+constraints times the largest individual nonconvexity
+\citep{starr1969,aubinEkeland1976,bertsekas1983scheduling,udellBoyd2016gap};
+\citet{hreinsson2021} apply this to dispatchable demand, and
+\citet{chao2019incentives} shows that side payments become negligible
+relative to surplus as markets grow. Applied to a fleet with buses or
+services as blocks, these bounds scale with the number of services, because
+the matching constraints couple the blocks. Our hull convexifies whole-fleet
+plans, so the gap is at most the nonconvexity of a single fleet value
+function. \Cref{prop:onefee} shows that this nonconvexity is below one
+bus-day fee. The argument is the convexity of minimum-cost matching in its
+cardinality; equivalently, an optimum of the matching polytope with one side
+constraint lies between two adjacent matchings, whose sizes differ by at
+most one \citep{raviGoemans1996cmst,berger2011budgeted}. We use these
+classical facts rather than claim a new duality-gap technique.
+
+%----------------------------------------------------------------------
+% (3) ADD after the paragraph "Price adjustment." (or merge into it):
+%----------------------------------------------------------------------
+\paragraph{Coupled power and transport prices.}
+Price-response loops between electric mobility and the grid are known to
+cycle. In \citet[Sec.~V-A and Table~II]{alizadeh2017coupled}, a power
+operator that prices the previous period's charging pattern drives traffic
+and charging into a two-period alternation, although the coupled problem is
+convex and has a socially optimal price. \citet{wei2018equilibrium} compute
+equilibria of a traffic-assignment and distribution-OPF loop. They establish
+existence under continuity and only local, initialization-dependent
+convergence. \citet{roozbehani2012volatility} give
+elasticity conditions under which real-time pricing feedback is unstable.
+Distribution prices can decentralize divisible EV charging at a
+clearing price \citep{liWuOren2014dlmp}. Proximal or damped updates restore
+convergence for continuous charging
+\citep{ganTopcuLow2013,ma2016decentralized}, and set-valued LMP updates
+converge to equilibria of divisible flexible loads \citep{gong2019lmp}.
+Closer to buses, \citet{yetkin2024cooptimizing} co-optimize transit V2G and
+DC dispatch with nodal prices, and \citet{najafi2025joint} couple binary
+trip chains to a conic distribution model after fixing the cover.
+A price cycle therefore says little on its own. \Cref{thm:iteration} adds
+that, with an indivisible whole-fleet response, undamped updates cycle
+whenever the hull optimum lies inside a face, with or without a support gap. Only the face's
+geometry, not the cycle, reveals whether a supporting price exists.
+
+%----------------------------------------------------------------------
+% (4) Electric-bus scheduling: sequential vs integrated -- see block (4) below,
+%     added after topic C search completed.
+%----------------------------------------------------------------------
